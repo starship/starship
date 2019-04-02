@@ -1,0 +1,8 @@
+[package]
+name = "starship"
+version = "0.1.0"
+authors = ["Matan Kushner <hello@matchai.me>"]
+edition = "2018"
+
+[dependencies]
+clap = "2.32.0"
