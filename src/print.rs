@@ -1,11 +1,12 @@
 use crate::modules;
 use crate::Segment;
+use clap::ArgMatches;
 
-pub fn prompt() {
+pub fn prompt(args: ArgMatches) {
     let default_prompt = vec!["char"];
 
     for module in default_prompt {
-        let segment = modules::handle(module);
+        let segment = modules::handle(module, &args);
         print_segment(segment);
     }
 }

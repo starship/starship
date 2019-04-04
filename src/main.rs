@@ -6,7 +6,7 @@ mod modules;
 mod print;
 
 use ansi_term::Style;
-use clap::App;
+use clap::{App, Arg};
 
 pub struct Segment {
     style: Style,
@@ -16,14 +16,19 @@ pub struct Segment {
 }
 
 fn main() {
-    App::new("Starship")
+    let args = App::new("Starship")
         .about("The cross-platform prompt for astronauts. ✨🚀")
         // pull the version number from Cargo.toml
         .version(crate_version!())
         // pull the authors from Cargo.toml
         .author(crate_authors!())
         .after_help("https://github.com/matchai/starship")
+        .arg(
+            Arg::with_name("status_code")
+                .help("The status code of the previously run command")
+                .required(true),
+        )
         .get_matches();
 
-    print::prompt();
+    print::prompt(args);
 }
