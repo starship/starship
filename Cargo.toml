@@ -7,3 +7,4 @@ edition = "2018"
 [dependencies]
 clap = "2.32.0"
 ansi_term = "0.11.0"
+dirs = "1.0.5"

@@ -1,4 +1,5 @@
 mod char;
+mod dir;
 
 use clap::ArgMatches;
 use ansi_term::Style;
@@ -12,11 +13,18 @@ pub struct Segment {
 
 impl Default for Segment {
     fn default() -> Segment {
+        let default_suffix = Some(Box::new(Segment {
+            style: Style::default(),
+            value: String::from(" "),
+            prefix: None,
+            suffix: None
+        }));
+
         Segment {
             style: Style::default(),
             value: String::from(""),
             prefix: None,
-            suffix: None
+            suffix: default_suffix
         }
     }
 }
@@ -24,6 +32,7 @@ impl Default for Segment {
 pub fn handle(module: &str, args: &ArgMatches) -> Segment {
     match module {
         "char" => char::segment(&args),
+        "dir" => dir::segment(&args),
 
         _ => panic!("Unknown module: {}", module),
     }
