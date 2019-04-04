@@ -11,7 +11,7 @@ pub fn prompt(args: ArgMatches) {
     }
 }
 
-fn print_segment(segment: Segment) {
+pub fn print_segment(segment: Segment) {
     let Segment {
         prefix,
         value,
