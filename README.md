@@ -1,4 +1,4 @@
-<h3 align="center">Starship 🌠🚀</h3>
+<h3 align="center">Starship ✨🚀</h3>
 <p align="center">The cross-platform prompt for astronauts.</p>
 
 ---
