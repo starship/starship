@@ -1,5 +1,5 @@
 use crate::modules;
-use crate::Segment;
+use crate::modules::Segment;
 use clap::ArgMatches;
 
 pub fn prompt(args: ArgMatches) {

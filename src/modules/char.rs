@@ -1,7 +1,15 @@
-use crate::Segment;
+use super::Segment;
 use ansi_term::{Color, Style};
 use clap::ArgMatches;
 
+/// Prints the prompt character
+/// 
+/// The char segment prints an arrow character in a color dependant on the exit-
+/// code of the last executed command:
+/// - If the exit-code was "0", the arrow will be formatted with `COLOR_SUCCESS`
+/// (green by default)
+/// - If the exit-code was anything else, the arrow will be formatted with
+/// `COLOR_FAILURE` (red by default)
 pub fn segment(args: &ArgMatches) -> Segment {
     const PROMPT_CHAR: &str = "➜ ";
     const COLOR_SUCCESS: Color = Color::Green;
@@ -15,10 +23,9 @@ pub fn segment(args: &ArgMatches) -> Segment {
     }
 
     Segment {
-        prefix: None,
         value: String::from(PROMPT_CHAR),
         style: Style::from(color),
-        suffix: None,
+        ..Default::default()
     }
 }
 

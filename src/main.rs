@@ -5,15 +5,7 @@ extern crate ansi_term;
 mod modules;
 mod print;
 
-use ansi_term::Style;
 use clap::{App, Arg};
-
-pub struct Segment {
-    style: Style,
-    value: String,
-    prefix: Option<Box<Segment>>,
-    suffix: Option<Box<Segment>>,
-}
 
 fn main() {
     let args = App::new("Starship")
