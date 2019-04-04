@@ -5,7 +5,7 @@ use ansi_term::{Color, Style};
 use clap::ArgMatches;
 
 /// Creates a segment with the current directory
-pub fn segment(args: &ArgMatches) -> Segment {
+pub fn segment(_: &ArgMatches) -> Segment {
     const COLOR_DIR: Color = Color::Cyan;
     const HOME_SYMBOL: char = '~';
 
@@ -28,14 +28,12 @@ pub fn segment(args: &ArgMatches) -> Segment {
     }
 }
 
-// fn truncate_dir(directory: PathBuf, truncate_to: u8) {
-
-// }
-
 #[cfg(test)]
 mod tests {
+    // TODO: Look into stubbing `env` so that tests can be run in parallel
     use super::*;
     use clap::{App, Arg};
+    use std::path::Path;
 
     #[test]
     fn truncate_home_dir() {
@@ -43,8 +41,23 @@ mod tests {
             .arg(Arg::with_name("status_code"))
             .get_matches_from(vec!["starship", "0"]);
 
-        env::set_current_dir("~/dev/");
+        let home_dir = dirs::home_dir().unwrap();
+        env::set_current_dir(&home_dir).unwrap();
+
         let segment = segment(&args);
-        assert_eq!(segment.style, Style::from(Color::Green));
+        assert_eq!(segment.value, "~");
+    }
+
+    #[test]
+    fn dont_truncate_non_home_dir() {
+        let args = App::new("starship")
+            .arg(Arg::with_name("status_code"))
+            .get_matches_from(vec!["starship", "0"]);
+
+        let root_dir = Path::new("/");
+        env::set_current_dir(&root_dir).unwrap();
+
+        let segment = segment(&args);
+        assert_eq!(segment.value, "/");
     }
 }

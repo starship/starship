@@ -54,5 +54,6 @@ jobs:
         condition: eq( variables['Agent.OS'], 'Windows_NT' )
       - script: cargo build --all
         displayName: Cargo build
-      - script: cargo test --all
+        # Until env stubbing is solved, make tests run on a single thread
+      - script: cargo test --all -- --test-threads=1
         displayName: Cargo test
