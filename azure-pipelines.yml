@@ -1,21 +1,58 @@
-strategy:
-  matrix:
-    stable:
-      rustup_toolchain: stable
-    beta:
-      rustup_toolchain: beta
-    nightly:
-      rustup_toolchain: nightly
+jobs:
+  - job: "Clippy"
+    pool:
+      vmImage: "ubuntu-16.04"
+    container: "rust:latest"
+    steps:
+      - script: rustup component add clippy
+        displayName: Install Clippy
+      - script: cargo clippy --all
+        displayName: Run clippy
 
-pool:
-  vmImage: 'ubuntu-16.04'
+  - job: "Rustfmt"
+    pool:
+      vmImage: "ubuntu-16.04"
+    container: "rust:latest"
+    condition: eq(variables['Build.Reason'], 'PullRequest')
+    steps:
+      - script: rustup component add rustfmt
+        displayName: Install Rustfmt
+      - script: cargo fmt --all -- --check
+        displayName: Run Rustfmt
 
-steps:
-  - script: |
-      curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain $RUSTUP_TOOLCHAIN
-      echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
-    displayName: Install rust
-  - script: cargo build --all
-    displayName: Cargo build
-  - script: cargo test --all
-    displayName: Cargo test
+  - job: "Test"
+    strategy:
+      matrix:
+        windows-stable:
+          imageName: "vs2017-win2016"
+          rustup_toolchain: stable
+        mac-stable:
+          imageName: "macos-10.13"
+          rustup_toolchain: stable
+        linux-stable:
+          imageName: "ubuntu-16.04"
+          rustup_toolchain: stable
+        linux-beta:
+          imageName: "ubuntu-16.04"
+          rustup_toolchain: beta
+        linux-nightly:
+          imageName: "ubuntu-16.04"
+          rustup_toolchain: nightly
+    pool:
+      vmImage: "ubuntu-16.04"
+    steps:
+      - script: |
+          curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain $RUSTUP_TOOLCHAIN
+          echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+        displayName: Install rust
+        condition: ne( variables['Agent.OS'], 'Windows_NT' )
+      - script: |
+          curl -sSf -o rustup-init.exe https://win.rustup.rs
+          rustup-init.exe -y --default-toolchain %RUSTUP_TOOLCHAIN%
+          echo "##vso[task.setvariable variable=PATH;]%PATH%;%USERPROFILE%\.cargo\bin"
+        displayName: Windows install rust
+        condition: eq( variables['Agent.OS'], 'Windows_NT' )
+      - script: cargo build --all
+        displayName: Cargo build
+      - script: cargo test --all
+        displayName: Cargo test
