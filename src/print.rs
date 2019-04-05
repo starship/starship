@@ -3,7 +3,7 @@ use crate::modules::Segment;
 use clap::ArgMatches;
 
 pub fn prompt(args: ArgMatches) {
-    let default_prompt = vec!["dir", "line_sep", "char"];
+    let default_prompt = vec!["directory", "line_break", "character"];
 
     default_prompt.into_iter()
         .map(|module| modules::handle(module, &args))

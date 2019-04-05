@@ -1,6 +1,5 @@
 #[macro_use]
 extern crate clap;
-extern crate rayon;
 extern crate ansi_term;
 extern crate dirs;
 
