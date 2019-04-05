@@ -1,9 +1,9 @@
-mod char;
+mod character;
 mod directory;
 mod line_break;
 
-use clap::ArgMatches;
 use ansi_term::Style;
+use clap::ArgMatches;
 
 pub struct Segment {
     pub style: Style,
@@ -18,21 +18,21 @@ impl Default for Segment {
             style: Style::default(),
             value: String::from(" "),
             prefix: None,
-            suffix: None
+            suffix: None,
         }));
 
         Segment {
             style: Style::default(),
             value: String::from(""),
             prefix: None,
-            suffix: default_suffix
+            suffix: default_suffix,
         }
     }
 }
 
 pub fn handle(module: &str, args: &ArgMatches) -> Segment {
     match module {
-        "char" | "character" => char::segment(&args),
+        "char" | "character" => character::segment(&args),
         "dir" | "directory" => directory::segment(&args),
         "line_break" => line_break::segment(&args),
 

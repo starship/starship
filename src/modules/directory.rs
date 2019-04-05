@@ -1,8 +1,8 @@
 use super::Segment;
-use dirs;
-use std::env;
 use ansi_term::{Color, Style};
 use clap::ArgMatches;
+use dirs;
+use std::env;
 
 /// Creates a segment with the current directory
 pub fn segment(_: &ArgMatches) -> Segment {

@@ -3,7 +3,7 @@ use ansi_term::{Color, Style};
 use clap::ArgMatches;
 
 /// Creates a segment for the prompt character
-/// 
+///
 /// The char segment prints an arrow character in a color dependant on the exit-
 /// code of the last executed command:
 /// - If the exit-code was "0", the arrow will be formatted with `COLOR_SUCCESS`
