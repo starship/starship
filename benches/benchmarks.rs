@@ -27,7 +27,7 @@ mod tests {
                 .get_matches_from(vec!["starship", "0"]);
             
             let segment = modules::handle("char", &args);
-            print::print_segment(segment)
+            print::stringify_segment(segment)
         });
     }
 
@@ -39,7 +39,7 @@ mod tests {
                 .get_matches_from(vec!["starship", "0"]);
             
             let segment = modules::handle("dir", &args);
-            print::print_segment(segment)
+            print::stringify_segment(segment)
         });
     }
 }

@@ -1,5 +1,6 @@
 mod char;
 mod dir;
+mod line_sep;
 
 use clap::ArgMatches;
 use ansi_term::Style;
@@ -33,6 +34,7 @@ pub fn handle(module: &str, args: &ArgMatches) -> Segment {
     match module {
         "char" => char::segment(&args),
         "dir" => dir::segment(&args),
+        "line_sep" => line_sep::segment(&args),
 
         _ => panic!("Unknown module: {}", module),
     }

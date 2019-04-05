@@ -3,29 +3,33 @@ use crate::modules::Segment;
 use clap::ArgMatches;
 
 pub fn prompt(args: ArgMatches) {
-    let default_prompt = vec!["dir", "char"];
+    let default_prompt = vec!["dir", "line_sep", "char"];
 
-    for module in default_prompt {
-        let segment = modules::handle(module, &args);
-        print_segment(segment);
-    }
+    default_prompt.into_iter()
+        .map(|module| modules::handle(module, &args))
+        .map(|segment| stringify_segment(segment))
+        .for_each(|segment_string| print!("{}", segment_string));
 }
 
-pub fn print_segment(segment: Segment) {
+pub fn stringify_segment(segment: Segment) -> String {
     let Segment {
         prefix,
         value,
         style,
         suffix,
-    } = segment;
+    } = segment;    
+
+    let mut segment_string = String::new();
 
     if let Some(prefix) = prefix {
-        print_segment(*prefix);
+        segment_string += &stringify_segment(*prefix);
     }
-
-    print!("{}", style.paint(value));
+    
+    segment_string += &style.paint(value).to_string();
 
     if let Some(suffix) = suffix {
-        print_segment(*suffix);
+        segment_string += &stringify_segment(*suffix);
     }
+
+    segment_string
 }
