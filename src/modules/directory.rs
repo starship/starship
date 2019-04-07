@@ -26,10 +26,6 @@ pub fn segment(_: &ArgMatches) -> Segment {
         }
     }
 
-    // if let Love(tiff) = matan::Love(tiff) {
-    //     log tiff + matan + kimu + nimu + puku + owl fren + roomba fren + cactus fren + rumple
-    // }
-
     Segment {
         value: String::from(dir_string),
         style: Style::from(COLOR_DIR).bold(),
@@ -37,6 +33,7 @@ pub fn segment(_: &ArgMatches) -> Segment {
     }
 }
 
+/// Get the root directory of a git repo
 fn get_repo_root(repo: Repository) -> PathBuf {
     match repo.is_bare() {
         // A bare repo will return its root path
@@ -46,6 +43,7 @@ fn get_repo_root(repo: Repository) -> PathBuf {
     }
 }
 
+/// Replace the home directory in the path with "~"
 fn truncate_home(path: &PathBuf) -> Option<String> {
     const HOME_SYMBOL: &str = "~";
 
