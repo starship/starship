@@ -1,5 +1,5 @@
 use std::env;
-use std::path::{Path, PathBuf};
+use std::path::{PathBuf};
 use super::Segment;
 use git2::{Repository};
 use ansi_term::{Color, Style};
@@ -12,36 +12,26 @@ pub fn segment(_: &ArgMatches) -> Segment {
 
     let current_dir = env::current_dir().expect("Unable to identify current directory");
 
-    let dirname;
+    let dir_string;
     if let Ok(repo) = git2::Repository::discover(&current_dir) {
         let repo_root = get_repo_root(repo);
+        // The last dir in the path
         let repo_root_basename = repo_root.components().last().unwrap();
         let basename_str_slice = repo_root_basename.as_os_str();
-        dirname = basename_str_slice.to_str().unwrap().to_string();
+        dir_string = basename_str_slice.to_str().unwrap().to_string();
     } else {
-        dirname = String::from("test");
+        dir_string = match truncate_home(&current_dir) {
+            Some(dir) => dir.to_string(),
+            None => current_dir.to_str().unwrap().to_string()
+        }
     }
-
-    // let dir_string;
-    // if let Ok(repo) = git2::Repository::discover(&current_dir) {
-    //     let repo_root = get_repo_root(repo);
-    //     let repo_root_basename = repo_root.components().last().unwrap();
-    //     dir_string = *repo_root_basename.as_os_str().to_str().unwrap();
-    // } else {
-    //     dir_string = match truncate_home(current_dir) {
-    //         Some(dir) => &dir.to_string(),
-    //         None => &current_dir.to_str().unwrap()
-    //     }
-    // }
 
     // if let Love(tiff) = matan::Love(tiff) {
     //     log tiff + matan + kimu + nimu + puku + owl fren + roomba fren + cactus fren + rumple
     // }
 
-    // let mut dir_string = String::from(current_dir.to_str().unwrap());
-
     Segment {
-        value: String::from(dirname),
+        value: String::from(dir_string),
         style: Style::from(COLOR_DIR).bold(),
         ..Default::default()
     }
@@ -56,24 +46,24 @@ fn get_repo_root(repo: Repository) -> PathBuf {
     }
 }
 
-// fn truncate_home(path: PathBuf) -> Option<String> {
-//     const HOME_SYMBOL: &str = "~";
+fn truncate_home(path: &PathBuf) -> Option<String> {
+    const HOME_SYMBOL: &str = "~";
 
-//     if dirs::home_dir() == None {
-//         return None;
-//     }
+    if dirs::home_dir() == None {
+        return None;
+    }
 
-//     if let Some(home_dir) = dirs::home_dir() {
-//         if path.strip_prefix(home_dir).is_ok() {
-//             let path_str = path.to_str().unwrap();
-//             let home_dir = home_dir.to_str().unwrap();
+    if let Some(home_dir) = dirs::home_dir() {
+        if path.strip_prefix(&home_dir).is_ok() {
+            let path_str = path.to_str().unwrap();
+            let home_dir = home_dir.to_str().unwrap();
             
-//             return Some(path_str.replace(home_dir, HOME_SYMBOL));
-//         }
-//     }
+            return Some(path_str.replace(home_dir, HOME_SYMBOL));
+        }
+    }
 
-//     None
-// }
+    None
+}
 
 #[cfg(test)]
 mod tests {
