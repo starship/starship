@@ -1,28 +1,37 @@
-use std::env;
-use std::path::{PathBuf};
 use super::Segment;
-use git2::{Repository};
 use ansi_term::{Color, Style};
 use clap::ArgMatches;
 use dirs;
+use git2::Repository;
+use std::env;
+use std::path::PathBuf;
 
 /// Creates a segment with the current directory
 pub fn segment(_: &ArgMatches) -> Segment {
     const COLOR_DIR: Color = Color::Cyan;
+    const DIR_TRUNCATION_LENGTH: u8 = 3;
 
-    let current_dir = env::current_dir().expect("Unable to identify current directory");
+    let current_dir = env::current_dir()
+        .expect("Unable to identify current directory")
+        .canonicalize()
+        .expect("Unable to canonicalize current directory");
 
     let dir_string;
     if let Ok(repo) = git2::Repository::discover(&current_dir) {
         let repo_root = get_repo_root(repo);
-        // The last dir in the path
-        let repo_root_basename = repo_root.components().last().unwrap();
-        let basename_str_slice = repo_root_basename.as_os_str();
-        dir_string = basename_str_slice.to_str().unwrap().to_string();
+        let repo_root_depth = repo_root.components().count();
+
+        // Skip the path components that are before the repo root
+        let path = current_dir
+            .iter()
+            .skip(repo_root_depth - 1)
+            .collect::<PathBuf>();
+
+        dir_string = path.to_str().unwrap().to_string();
     } else {
         dir_string = match truncate_home(&current_dir) {
-            Some(dir) => dir.to_string(),
-            None => current_dir.to_str().unwrap().to_string()
+            Some(dir) => dir,
+            None => current_dir.to_str().unwrap().to_string(),
         }
     }
 
@@ -39,7 +48,7 @@ fn get_repo_root(repo: Repository) -> PathBuf {
         // A bare repo will return its root path
         true => repo.path().to_path_buf(),
         // Non-bare repos will return the path of `.git`
-        false => repo.path().parent().unwrap().to_path_buf()
+        false => repo.path().parent().unwrap().to_path_buf(),
     }
 }
 
@@ -55,7 +64,7 @@ fn truncate_home(path: &PathBuf) -> Option<String> {
         if path.strip_prefix(&home_dir).is_ok() {
             let path_str = path.to_str().unwrap();
             let home_dir = home_dir.to_str().unwrap();
-            
+
             return Some(path_str.replace(home_dir, HOME_SYMBOL));
         }
     }
