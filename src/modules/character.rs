@@ -15,12 +15,11 @@ pub fn segment(args: &ArgMatches) -> Segment {
     const COLOR_SUCCESS: Color = Color::Green;
     const COLOR_FAILURE: Color = Color::Red;
 
-    let color;
-    if args.value_of("status_code").unwrap() == "0" {
-        color = COLOR_SUCCESS;
+    let color = if args.value_of("status_code").unwrap() == "0" {
+        COLOR_SUCCESS
     } else {
-        color = COLOR_FAILURE;
-    }
+        COLOR_FAILURE
+    };
 
     Segment {
         value: String::from(PROMPT_CHAR),

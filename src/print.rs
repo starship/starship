@@ -8,7 +8,7 @@ pub fn prompt(args: ArgMatches) {
     default_prompt
         .into_iter()
         .map(|module| modules::handle(module, &args))
-        .map(|segment| stringify_segment(segment))
+        .map(stringify_segment)
         .for_each(|segment_string| print!("{}", segment_string));
 }
 

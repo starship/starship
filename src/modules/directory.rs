@@ -36,7 +36,7 @@ pub fn segment(_: &ArgMatches) -> Segment {
     }
 
     Segment {
-        value: String::from(dir_string),
+        value: dir_string,
         style: Style::from(COLOR_DIR).bold(),
         ..Default::default()
     }
@@ -44,11 +44,12 @@ pub fn segment(_: &ArgMatches) -> Segment {
 
 /// Get the root directory of a git repo
 fn get_repo_root(repo: Repository) -> PathBuf {
-    match repo.is_bare() {
-        // A bare repo will return its root path
-        true => repo.path().to_path_buf(),
+    if repo.is_bare() {
+        // Bare repos will return the repo root
+        repo.path().to_path_buf()
+    } else {
         // Non-bare repos will return the path of `.git`
-        false => repo.path().parent().unwrap().to_path_buf(),
+        repo.path().parent().unwrap().to_path_buf()
     }
 }
 
