@@ -9,30 +9,42 @@ use std::path::PathBuf;
 /// Creates a segment with the current directory
 pub fn segment(_: &ArgMatches) -> Segment {
     const COLOR_DIR: Color = Color::Cyan;
-    const DIR_TRUNCATION_LENGTH: u8 = 3;
+    const DIR_TRUNCATION_LENGTH: usize = 3;
+    const HOME_SYMBOL: &str = "~";
 
-    let current_dir = env::current_dir()
+    let current_path = env::current_dir()
         .expect("Unable to identify current directory")
         .canonicalize()
         .expect("Unable to canonicalize current directory");
 
     let dir_string;
-    if let Ok(repo) = git2::Repository::discover(&current_dir) {
+    if let Ok(repo) = git2::Repository::discover(&current_path) {
         let repo_root = get_repo_root(repo);
-        let repo_root_depth = repo_root.components().count();
 
-        // Skip the path components that are before the repo root
-        let path = current_dir
-            .iter()
-            .skip(repo_root_depth - 1)
-            .collect::<PathBuf>();
+        // The folder name is the last component to the repo path
+        let repo_folder_name = repo_root
+            .components()
+            .last()
+            .unwrap()
+            .as_os_str()
+            .to_str()
+            .unwrap();
 
-        dir_string = path.to_str().unwrap().to_string();
+        dir_string = truncate_path(
+            &DIR_TRUNCATION_LENGTH,
+            &current_path,
+            &repo_root,
+            &repo_folder_name,
+        );
     } else {
-        dir_string = match truncate_home(&current_dir) {
-            Some(dir) => dir,
-            None => current_dir.to_str().unwrap().to_string(),
-        }
+        let home_dir = dirs::home_dir().unwrap();
+
+        dir_string = truncate_path(
+            &DIR_TRUNCATION_LENGTH,
+            &current_path,
+            &home_dir,
+            HOME_SYMBOL,
+        );
     }
 
     Segment {
@@ -53,24 +65,42 @@ fn get_repo_root(repo: Repository) -> PathBuf {
     }
 }
 
-/// Replace the home directory in the path with "~"
-fn truncate_home(path: &PathBuf) -> Option<String> {
-    const HOME_SYMBOL: &str = "~";
-
-    if dirs::home_dir() == None {
-        return None;
+/// Truncate a path to a predefined number of path components
+fn truncate_path(
+    length: &usize,
+    full_path: &PathBuf,
+    top_level_path: &PathBuf,
+    top_level_replacement: &str,
+) -> String {
+    if full_path == top_level_path {
+        return top_level_replacement.to_string();
     }
 
-    if let Some(home_dir) = dirs::home_dir() {
-        if path.strip_prefix(&home_dir).is_ok() {
-            let path_str = path.to_str().unwrap();
-            let home_dir = home_dir.to_str().unwrap();
+    let full_path_depth = full_path.components().count();
+    let top_level_path_depth = top_level_path.components().count();
 
-            return Some(path_str.replace(home_dir, HOME_SYMBOL));
-        }
+    // Don't bother with replacing top level path if length is long enough
+    if full_path_depth - top_level_path_depth >= *length {
+        return full_path
+            .iter()
+            .skip(full_path_depth - length)
+            .collect::<PathBuf>()
+            .to_str()
+            .unwrap()
+            .to_string();
     }
 
-    None
+    format!(
+        "{}{}{}",
+        top_level_replacement,
+        std::path::MAIN_SEPARATOR,
+        full_path
+            .iter()
+            .skip(top_level_path_depth)
+            .collect::<PathBuf>()
+            .to_str()
+            .unwrap()
+    )
 }
 
 #[cfg(test)]
