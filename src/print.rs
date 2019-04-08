@@ -1,15 +1,23 @@
+use std::io::{self, Write};
+use clap::ArgMatches;
+
 use crate::modules;
 use crate::modules::Segment;
-use clap::ArgMatches;
 
 pub fn prompt(args: ArgMatches) {
     let default_prompt = vec!["directory", "line_break", "character"];
 
+    let stdout = io::stdout();
+    let mut handle = stdout.lock();
+
+    // Write a new line before the prompt
+    write!(handle, "{}", "\n").unwrap();
+    
     default_prompt
         .into_iter()
         .map(|module| modules::handle(module, &args))
         .map(stringify_segment)
-        .for_each(|segment_string| print!("{}", segment_string));
+        .for_each(|segment_string| write!(handle, "{}", segment_string).unwrap());
 }
 
 /// Create a string with the formatted contents of a segment

@@ -66,6 +66,11 @@ fn get_repo_root(repo: Repository) -> PathBuf {
 }
 
 /// Truncate a path to a predefined number of path components
+/// 
+/// Trim the path in the prompt to only have the last few paths, set by `length`.
+/// This function also serves to replace the top-level path of the prompt.
+/// This can be used to replace the path to a git repo with only the repo
+/// directory name.
 fn truncate_path(
     length: &usize,
     full_path: &PathBuf,
@@ -91,10 +96,10 @@ fn truncate_path(
     }
 
     format!(
-        "{}{}{}",
-        top_level_replacement,
-        std::path::MAIN_SEPARATOR,
-        full_path
+        "{replacement}{separator}{path}",
+        replacement = top_level_replacement,
+        separator = std::path::MAIN_SEPARATOR,
+        path = full_path
             .iter()
             .skip(top_level_path_depth)
             .collect::<PathBuf>()
