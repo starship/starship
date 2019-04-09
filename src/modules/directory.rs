@@ -20,10 +20,9 @@ pub fn segment(_: &ArgMatches) -> Segment {
     const DIR_TRUNCATION_LENGTH: usize = 3;
     const HOME_SYMBOL: &str = "~";
 
+    // TODO: Currently gets the physical directory. Get the logical directory.
     let current_path = env::current_dir()
-        .expect("Unable to identify current directory")
-        .canonicalize()
-        .expect("Unable to canonicalize current directory");
+        .expect("Unable to identify current directory");
 
     let dir_string;
     if let Ok(repo) = git2::Repository::discover(&current_path) {
@@ -137,5 +136,18 @@ mod tests {
 
         let segment = segment(&args);
         assert_eq!(segment.value, "/");
+    }
+
+    #[test]
+    fn do_not_canonicalize_paths() {
+        let args = App::new("starship")
+            .arg(Arg::with_name("status_code"))
+            .get_matches_from(vec!["starship", "0"]);
+
+        let root_dir = Path::new("/var");
+        env::set_current_dir(&root_dir).unwrap();
+
+        let segment = segment(&args);
+        assert_eq!(segment.value, "/var");
     }
 }
