@@ -1,12 +1,20 @@
 use super::Segment;
+use std::env;
+use std::path::PathBuf;
 use ansi_term::{Color, Style};
 use clap::ArgMatches;
 use dirs;
 use git2::Repository;
-use std::env;
-use std::path::PathBuf;
 
 /// Creates a segment with the current directory
+/// 
+/// Will perform path contraction and truncation.
+/// **Contraction**
+///     - Paths begining with the home directory will be contracted to `~`
+///     - Paths containing a git repo will contract to begin at the repo root
+/// 
+/// **Truncation**
+/// Paths will be limited in length to `3` path components by default.
 pub fn segment(_: &ArgMatches) -> Segment {
     const COLOR_DIR: Color = Color::Cyan;
     const DIR_TRUNCATION_LENGTH: usize = 3;
@@ -19,9 +27,9 @@ pub fn segment(_: &ArgMatches) -> Segment {
 
     let dir_string;
     if let Ok(repo) = git2::Repository::discover(&current_path) {
+        // Contract the path to the git repo root
         let repo_root = get_repo_root(repo);
 
-        // The folder name is the last component to the repo path
         let repo_folder_name = repo_root
             .components()
             .last()
@@ -30,25 +38,18 @@ pub fn segment(_: &ArgMatches) -> Segment {
             .to_str()
             .unwrap();
 
-        dir_string = truncate_path(
-            &DIR_TRUNCATION_LENGTH,
-            &current_path,
-            &repo_root,
-            &repo_folder_name,
-        );
+        dir_string = contract_path(&current_path, &repo_root, &repo_folder_name);
     } else {
+        // Contract the path to the home directory
         let home_dir = dirs::home_dir().unwrap();
-
-        dir_string = truncate_path(
-            &DIR_TRUNCATION_LENGTH,
-            &current_path,
-            &home_dir,
-            HOME_SYMBOL,
-        );
+        dir_string = contract_path(&current_path, &home_dir, HOME_SYMBOL);
     }
 
+    // Truncate the dir string to the maximum number of path components
+    let truncated_dir_string = truncate(dir_string, DIR_TRUNCATION_LENGTH);
+
     Segment {
-        value: dir_string,
+        value: truncated_dir_string,
         style: Style::from(COLOR_DIR).bold(),
         ..Default::default()
     }
@@ -65,35 +66,17 @@ fn get_repo_root(repo: Repository) -> PathBuf {
     }
 }
 
-/// Truncate a path to a predefined number of path components
-/// 
-/// Trim the path in the prompt to only have the last few paths, set by `length`.
-/// This function also serves to replace the top-level path of the prompt.
-/// This can be used to replace the path to a git repo with only the repo
-/// directory name.
-fn truncate_path(
-    length: &usize,
-    full_path: &PathBuf,
-    top_level_path: &PathBuf,
-    top_level_replacement: &str,
-) -> String {
+/// Contract the root component of a path
+fn contract_path(full_path: &PathBuf, top_level_path: &PathBuf, top_level_replacement: &str) -> String {
+    if !full_path.starts_with(top_level_path) {
+        return full_path.to_str().unwrap().to_string();
+    }
+
     if full_path == top_level_path {
         return top_level_replacement.to_string();
     }
 
-    let full_path_depth = full_path.components().count();
     let top_level_path_depth = top_level_path.components().count();
-
-    // Don't bother with replacing top level path if length is long enough
-    if full_path_depth - top_level_path_depth >= *length {
-        return full_path
-            .iter()
-            .skip(full_path_depth - length)
-            .collect::<PathBuf>()
-            .to_str()
-            .unwrap()
-            .to_string();
-    }
 
     format!(
         "{replacement}{separator}{path}",
@@ -106,6 +89,21 @@ fn truncate_path(
             .to_str()
             .unwrap()
     )
+}
+
+/// Truncate a path to only have a set number of path components
+fn truncate(dir_string: String, length: usize) -> String {
+    if length == 0 {
+        return dir_string;
+    }
+
+    let components = dir_string.split(std::path::MAIN_SEPARATOR).collect::<Vec<&str>>();
+    if components.len() < length {
+        return dir_string;
+    }
+
+    let truncated_components = &components[..length];
+    truncated_components.join(&std::path::MAIN_SEPARATOR.to_string())
 }
 
 #[cfg(test)]
