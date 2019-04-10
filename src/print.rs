@@ -5,7 +5,7 @@ use crate::modules;
 use crate::modules::Segment;
 
 pub fn prompt(args: ArgMatches) {
-    let default_prompt = vec!["directory", "line_break", "character"];
+    let default_prompt = vec!["directory", "node", "line_break", "character"];
 
     let stdout = io::stdout();
     let mut handle = stdout.lock();

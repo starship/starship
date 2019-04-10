@@ -16,7 +16,7 @@ use git2::Repository;
 /// **Truncation**
 /// Paths will be limited in length to `3` path components by default.
 pub fn segment(_: &ArgMatches) -> Segment {
-    const COLOR_DIR: Color = Color::Cyan;
+    const SECTION_COLOR: Color = Color::Cyan;
     const DIR_TRUNCATION_LENGTH: usize = 3;
     const HOME_SYMBOL: &str = "~";
 
@@ -49,7 +49,7 @@ pub fn segment(_: &ArgMatches) -> Segment {
 
     Segment {
         value: truncated_dir_string,
-        style: Style::from(COLOR_DIR).bold(),
+        style: Style::from(SECTION_COLOR).bold(),
         ..Default::default()
     }
 }
