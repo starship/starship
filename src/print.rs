@@ -1,5 +1,5 @@
-use std::io::{self, Write};
 use clap::ArgMatches;
+use std::io::{self, Write};
 
 use crate::modules;
 use crate::modules::Segment;
@@ -7,12 +7,16 @@ use crate::modules::Segment;
 pub fn prompt(args: ArgMatches) {
     let default_prompt = vec!["directory", "node", "line_break", "character"];
 
+    // TODO:
+    // - List files in directory
+    // - Index binaries in PATH
+
     let stdout = io::stdout();
     let mut handle = stdout.lock();
 
     // Write a new line before the prompt
     write!(handle, "{}", "\n").unwrap();
-    
+
     default_prompt
         .into_iter()
         .map(|module| modules::handle(module, &args))

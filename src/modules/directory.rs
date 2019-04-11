@@ -1,18 +1,18 @@
 use super::Segment;
-use std::env;
-use std::path::PathBuf;
 use ansi_term::{Color, Style};
 use clap::ArgMatches;
 use dirs;
 use git2::Repository;
+use std::env;
+use std::path::PathBuf;
 
 /// Creates a segment with the current directory
-/// 
+///
 /// Will perform path contraction and truncation.
 /// **Contraction**
 ///     - Paths begining with the home directory will be contracted to `~`
 ///     - Paths containing a git repo will contract to begin at the repo root
-/// 
+///
 /// **Truncation**
 /// Paths will be limited in length to `3` path components by default.
 pub fn segment(_: &ArgMatches) -> Segment {
@@ -21,8 +21,7 @@ pub fn segment(_: &ArgMatches) -> Segment {
     const HOME_SYMBOL: &str = "~";
 
     // TODO: Currently gets the physical directory. Get the logical directory.
-    let current_path = env::current_dir()
-        .expect("Unable to identify current directory");
+    let current_path = env::current_dir().expect("Unable to identify current directory");
 
     let dir_string;
     if let Ok(repo) = git2::Repository::discover(&current_path) {
@@ -66,7 +65,11 @@ fn get_repo_root(repo: Repository) -> PathBuf {
 }
 
 /// Contract the root component of a path
-fn contract_path(full_path: &PathBuf, top_level_path: &PathBuf, top_level_replacement: &str) -> String {
+fn contract_path(
+    full_path: &PathBuf,
+    top_level_path: &PathBuf,
+    top_level_replacement: &str,
+) -> String {
     if !full_path.starts_with(top_level_path) {
         return full_path.to_str().unwrap().to_string();
     }
@@ -96,7 +99,9 @@ fn truncate(dir_string: String, length: usize) -> String {
         return dir_string;
     }
 
-    let components = dir_string.split(std::path::MAIN_SEPARATOR).collect::<Vec<&str>>();
+    let components = dir_string
+        .split(std::path::MAIN_SEPARATOR)
+        .collect::<Vec<&str>>();
     if components.len() < length {
         return dir_string;
     }

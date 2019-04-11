@@ -6,6 +6,9 @@ mod nodejs;
 use ansi_term::Style;
 use clap::ArgMatches;
 
+// pub static current_dir: PathBuf = env::current_dir().expect("Unable to identify current directory");
+// TODO: Currently gets the physical directory. Get the logical directory.
+
 pub struct Segment {
     pub style: Style,
     pub value: String,
