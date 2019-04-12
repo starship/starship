@@ -9,7 +9,10 @@ pub struct Segment {
 }
 
 impl Segment {
-    pub fn new<S>(name: S) -> Segment where S: Into<String> {
+    pub fn new<T>(name: T) -> Segment
+    where
+        T: Into<String>,
+    {
         let default_prefix = Some(Box::new(Segment {
             name: Some(format!("{} {}", name.into(), "prefix")),
             style: Style::default(),
@@ -35,8 +38,11 @@ impl Segment {
         }
     }
 
-    pub fn set_style<'a>(&'a mut self, style: Style) -> &'a mut Segment {
-        self.style = style;
+    pub fn set_style<'a, T>(&'a mut self, style: T) -> &'a mut Segment
+    where
+        T: Into<Style>,
+    {
+        self.style = style.into();
         self
     }
 

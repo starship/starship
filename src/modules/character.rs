@@ -17,17 +17,13 @@ pub fn segment(args: &ArgMatches) -> Segment {
 
     let segment = Segment::new("char");
 
-    let color = if args.value_of("status_code").unwrap() == "0" {
+    if args.value_of("status_code").unwrap() == "0" {
         segment.set_style(COLOR_SUCCESS);
     } else {
-        COLOR_FAILURE
+        segment.set_style(COLOR_FAILURE);
     };
 
-    Segment {
-        value: String::from(PROMPT_CHAR),
-        style: Style::from(color),
-        ..Default::default()
-    }
+    segment
 }
 
 #[cfg(test)]
