@@ -4,7 +4,6 @@ extern crate clap;
 extern crate ansi_term;
 extern crate dirs;
 extern crate git2;
-extern crate rayon;
 
 mod modules;
 mod print;
