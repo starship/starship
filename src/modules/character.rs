@@ -15,8 +15,10 @@ pub fn segment(args: &ArgMatches) -> Segment {
     const COLOR_SUCCESS: Color = Color::Green;
     const COLOR_FAILURE: Color = Color::Red;
 
+    let segment = Segment::new("char");
+
     let color = if args.value_of("status_code").unwrap() == "0" {
-        COLOR_SUCCESS
+        segment.set_style(COLOR_SUCCESS);
     } else {
         COLOR_FAILURE
     };

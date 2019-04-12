@@ -6,7 +6,7 @@ use std::fs::{self, DirEntry};
 use std::process::Command;
 
 /// Creates a segment with the current Node.js version
-/// 
+///
 /// Will display the Node.js version if any of the following criteria are met:
 ///     - Current directory contains a `.js` file
 ///     - Current directory contains a `node_modules` directory

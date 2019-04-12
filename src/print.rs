@@ -5,7 +5,7 @@ use crate::modules;
 use crate::modules::Segment;
 
 pub fn prompt(args: ArgMatches) {
-    let default_prompt = vec!["directory", "node", "line_break", "character"];
+    let default_prompt = vec!["directory", "nodejs", "line_break", "character"];
 
     // TODO:
     // - List files in directory
