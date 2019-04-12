@@ -15,7 +15,7 @@ pub fn prompt(args: ArgMatches) {
     let mut handle = stdout.lock();
 
     // Write a new line before the prompt
-    write!(handle, "{}", "\n").unwrap();
+    writeln!(handle).unwrap();
 
     default_prompt
         .into_iter()
