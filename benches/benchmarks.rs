@@ -5,7 +5,7 @@ extern crate test;
 #[cfg(test)]
 mod tests {
     use clap::{App, Arg};
-    use starship::{modules, print};
+    use starship::modules;
     use test::Bencher;
 
     // #[bench]
@@ -27,7 +27,7 @@ mod tests {
                 .get_matches_from(vec!["starship", "0"]);
 
             let segment = modules::handle("char", &args);
-            print::stringify_segment(segment)
+            segment.output()
         });
     }
 
@@ -39,7 +39,7 @@ mod tests {
                 .get_matches_from(vec!["starship", "0"]);
 
             let segment = modules::handle("dir", &args);
-            print::stringify_segment(segment)
+            segment.output()
         });
     }
 
@@ -51,7 +51,7 @@ mod tests {
                 .get_matches_from(vec!["starship", "0"]);
 
             let segment = modules::handle("line_break", &args);
-            print::stringify_segment(segment)
+            segment.output()
         });
     }
 
@@ -63,7 +63,7 @@ mod tests {
                 .get_matches_from(vec!["starship", "0"]);
 
             let segment = modules::handle("nodejs", &args);
-            print::stringify_segment(segment)
+            segment.output()
         });
     }
 }
