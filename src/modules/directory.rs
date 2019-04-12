@@ -49,7 +49,7 @@ pub fn segment(_: &ArgMatches) -> Segment {
 }
 
 /// Get the root directory of a git repo
-fn get_repo_root<'a>(repo: &'a Repository) -> &'a Path {
+fn get_repo_root(repo: &Repository) -> &Path {
     if repo.is_bare() {
         // Bare repos will return the repo root
         repo.path()

@@ -40,7 +40,7 @@ impl Segment {
         }
     }
 
-    pub fn set_style<'a, T>(&'a mut self, style: T) -> &'a mut Segment
+    pub fn set_style<T>(&mut self, style: T) -> &mut Segment
     where
         T: Into<Style>,
     {
@@ -48,7 +48,7 @@ impl Segment {
         self
     }
 
-    pub fn set_value<'a, T>(&'a mut self, value: T) -> &'a mut Segment
+    pub fn set_value<T>(&mut self, value: T) -> &mut Segment
     where
         T: Into<String>,
     {
@@ -56,12 +56,12 @@ impl Segment {
         self
     }
 
-    pub fn set_prefix<'a>(&'a mut self, prefix: Segment) -> &'a mut Segment {
+    pub fn set_prefix(&mut self, prefix: Segment) -> &mut Segment {
         self.prefix = Some(Box::new(prefix));
         self
     }
 
-    pub fn set_suffix<'a>(&'a mut self, suffix: Segment) -> &'a mut Segment {
+    pub fn set_suffix(&mut self, suffix: Segment) -> &mut Segment {
         self.suffix = Some(Box::new(suffix));
         self
     }
