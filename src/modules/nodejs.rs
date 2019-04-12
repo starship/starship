@@ -1,12 +1,13 @@
 use super::Segment;
 use ansi_term::{Color, Style};
 use clap::ArgMatches;
+use rayon::prelude::*;
 use std::env;
 use std::fs::{self, DirEntry};
 use std::process::Command;
 
 /// Creates a segment with the current Node.js version
-/// 
+///
 /// Will display the Node.js version if any of the following criteria are met:
 ///     - Current directory contains a `.js` file
 ///     - Current directory contains a `node_modules` directory
@@ -16,10 +17,13 @@ pub fn segment(_: &ArgMatches) -> Segment {
     const SECTION_COLOR: Color = Color::Green;
 
     let current_path = env::current_dir().expect("Unable to identify current directory");
-    let files = fs::read_dir(&current_path).unwrap();
+    let files = fs::read_dir(&current_path)
+        .unwrap()
+        .filter_map(Result::ok)
+        .collect::<Vec<DirEntry>>();
 
     // Early return if there are no JS project files
-    let is_js_project = files.filter_map(Result::ok).any(has_js_files);
+    let is_js_project = files.par_iter().any(has_js_files);
     if !is_js_project {
         return Segment::default();
     }
@@ -38,7 +42,7 @@ pub fn segment(_: &ArgMatches) -> Segment {
     }
 }
 
-fn has_js_files(dir_entry: DirEntry) -> bool {
+fn has_js_files(dir_entry: &DirEntry) -> bool {
     let is_js_file = |d: &DirEntry| -> bool {
         d.path().is_file() && d.path().extension().unwrap_or_default() == "js"
     };
@@ -49,5 +53,5 @@ fn has_js_files(dir_entry: DirEntry) -> bool {
         d.path().is_file() && d.path().file_name().unwrap_or_default() == "package.json"
     };
 
-    is_js_file(&dir_entry) || is_node_modules(&dir_entry) || is_package_json(&dir_entry)
+    is_js_file(dir_entry) || is_node_modules(dir_entry) || is_package_json(dir_entry)
 }
