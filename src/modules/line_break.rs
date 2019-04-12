@@ -5,9 +5,7 @@ use clap::ArgMatches;
 pub fn segment(_: &ArgMatches) -> Segment {
     const LINE_ENDING: &str = "\n";
 
-    Segment {
-        value: String::from(LINE_ENDING),
-        suffix: None,
-        ..Default::default()
-    }
+    let mut segment = Segment::new("line_break");
+
+    segment.set_value(LINE_ENDING).clone()
 }

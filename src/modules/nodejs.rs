@@ -1,5 +1,5 @@
 use super::Segment;
-use ansi_term::{Color, Style};
+use ansi_term::Color;
 use clap::ArgMatches;
 use std::env;
 use std::fs::{self, DirEntry};
@@ -15,27 +15,27 @@ pub fn segment(_: &ArgMatches) -> Segment {
     const NODE_CHAR: &str = "⬢";
     const SECTION_COLOR: Color = Color::Green;
 
+    let mut segment = Segment::new("node");
     let current_path = env::current_dir().expect("Unable to identify current directory");
     let files = fs::read_dir(&current_path).unwrap();
 
     // Early return if there are no JS project files
     let is_js_project = files.filter_map(Result::ok).any(has_js_files);
     if !is_js_project {
-        return Segment::default();
+        return segment;
     }
 
-    let version = match Command::new("node").arg("--version").output() {
-        Ok(output) => String::from_utf8(output.stdout).unwrap().trim().to_string(),
+    match Command::new("node").arg("--version").output() {
+        Ok(output) => {
+            let version = String::from_utf8(output.stdout).unwrap();
+            segment.set_value(format!("{} {}", NODE_CHAR, version.trim()))
+        }
         Err(_) => {
-            return Segment::default();
+            return segment;
         }
     };
 
-    Segment {
-        value: format!("{} {}", NODE_CHAR, version),
-        style: Style::from(SECTION_COLOR),
-        ..Default::default()
-    }
+    segment.set_style(SECTION_COLOR).clone()
 }
 
 fn has_js_files(dir_entry: DirEntry) -> bool {

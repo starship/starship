@@ -1,5 +1,6 @@
 use ansi_term::Style;
 
+#[derive(Clone)]
 pub struct Segment {
     name: Option<String>,
     style: Style,
@@ -12,6 +13,7 @@ impl Segment {
     pub fn new<T>(name: T) -> Segment
     where
         T: Into<String>,
+        T: Copy,
     {
         let default_prefix = Some(Box::new(Segment {
             name: Some(format!("{} {}", name.into(), "prefix")),
@@ -46,8 +48,11 @@ impl Segment {
         self
     }
 
-    pub fn set_value<'a>(&'a mut self, value: String) -> &'a mut Segment {
-        self.value = value;
+    pub fn set_value<'a, T>(&'a mut self, value: T) -> &'a mut Segment
+    where
+        T: Into<String>,
+    {
+        self.value = value.into();
         self
     }
 
@@ -61,6 +66,10 @@ impl Segment {
         self
     }
 
+    /// Create a string with the formatted contents of a segment
+    ///
+    /// Will recursively also format the prefix and suffix of the segment being
+    /// stringified.
     pub fn output<'a>(&'a self) -> String {
         let Segment {
             name: _name,
