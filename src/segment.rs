@@ -5,11 +5,12 @@ pub struct Segment {
     name: Option<String>,
     style: Style,
     value: String,
-    prefix: OptionalSegment,
-    suffix: OptionalSegment,
+    prefix: BoxedSegment,
+    suffix: BoxedSegment,
 }
 
 impl Segment {
+    /// Creates a new segment with default fields
     pub fn new<T>(name: T) -> Segment
     where
         T: Into<String>,
@@ -40,6 +41,9 @@ impl Segment {
         }
     }
 
+    /// Sets the style of the segment
+    /// 
+    /// Accepts either `Color` or `Style`.
     pub fn set_style<T>(&mut self, style: T) -> &mut Segment
     where
         T: Into<Style>,
@@ -48,6 +52,7 @@ impl Segment {
         self
     }
 
+    /// Sets the value of the segment
     pub fn set_value<T>(&mut self, value: T) -> &mut Segment
     where
         T: Into<String>,
@@ -56,12 +61,14 @@ impl Segment {
         self
     }
 
-    pub fn set_prefix(&mut self, prefix: OptionalSegment) -> &mut Segment {
+    /// Sets the prefix of the segment
+    pub fn set_prefix(&mut self, prefix: BoxedSegment) -> &mut Segment {
         self.prefix = prefix;
         self
     }
 
-    pub fn set_suffix(&mut self, suffix: OptionalSegment) -> &mut Segment {
+    /// Sets the suffix of the segment
+    pub fn set_suffix(&mut self, suffix: BoxedSegment) -> &mut Segment {
         self.suffix = suffix;
         self
     }
@@ -69,7 +76,7 @@ impl Segment {
     /// Create a string with the formatted contents of a segment
     ///
     /// Will recursively also format the prefix and suffix of the segment being
-    /// stringified.
+    /// stringified. Skips the prefix of the first segment.
     pub fn output(&self, index: usize) -> String {
         let Segment {
             name: _name,
@@ -98,4 +105,4 @@ impl Segment {
     }
 }
 
-type OptionalSegment = Option<Box<Segment>>;
+type BoxedSegment = Option<Box<Segment>>;
