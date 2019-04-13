@@ -42,7 +42,7 @@ impl Segment {
     }
 
     /// Sets the style of the segment
-    /// 
+    ///
     /// Accepts either `Color` or `Style`.
     pub fn set_style<T>(&mut self, style: T) -> &mut Segment
     where
