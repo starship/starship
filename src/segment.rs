@@ -56,13 +56,13 @@ impl Segment {
         self
     }
 
-    pub fn set_prefix(&mut self, prefix: Segment) -> &mut Segment {
-        self.prefix = Some(Box::new(prefix));
+    pub fn set_prefix(&mut self, prefix: OptionalSegment) -> &mut Segment {
+        self.prefix = prefix;
         self
     }
 
-    pub fn set_suffix(&mut self, suffix: Segment) -> &mut Segment {
-        self.suffix = Some(Box::new(suffix));
+    pub fn set_suffix(&mut self, suffix: OptionalSegment) -> &mut Segment {
+        self.suffix = suffix;
         self
     }
 
@@ -70,7 +70,7 @@ impl Segment {
     ///
     /// Will recursively also format the prefix and suffix of the segment being
     /// stringified.
-    pub fn output<'a>(&'a self) -> String {
+    pub fn output(&self, index: usize) -> String {
         let Segment {
             name: _name,
             prefix,
@@ -81,14 +81,17 @@ impl Segment {
 
         let mut segment_string = String::new();
 
-        if let Some(prefix) = prefix {
-            segment_string += &prefix.output()
+        // Skip the prefix for the first segment
+        if index != 0 {
+            if let Some(prefix) = prefix {
+                segment_string += &prefix.output(index)
+            }
         }
 
         segment_string += &style.paint(value).to_string();
 
         if let Some(suffix) = suffix {
-            segment_string += &suffix.output();
+            segment_string += &suffix.output(index);
         }
 
         segment_string

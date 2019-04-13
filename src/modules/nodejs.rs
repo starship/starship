@@ -11,7 +11,7 @@ use std::process::Command;
 ///     - Current directory contains a `.js` file
 ///     - Current directory contains a `node_modules` directory
 ///     - Current directory contains a `package.json` file
-pub fn segment(_: &ArgMatches) -> Segment {
+pub fn segment(_: &ArgMatches) -> Option<Segment> {
     const NODE_CHAR: &str = "⬢";
     const SECTION_COLOR: Color = Color::Green;
 
@@ -22,7 +22,7 @@ pub fn segment(_: &ArgMatches) -> Segment {
     // Early return if there are no JS project files
     let is_js_project = files.filter_map(Result::ok).any(has_js_files);
     if !is_js_project {
-        return segment;
+        return None;
     }
 
     match Command::new("node").arg("--version").output() {
@@ -31,11 +31,12 @@ pub fn segment(_: &ArgMatches) -> Segment {
             segment.set_value(format!("{} {}", NODE_CHAR, version.trim()))
         }
         Err(_) => {
-            return segment;
+            return None;
         }
     };
 
-    segment.set_style(SECTION_COLOR).clone()
+    segment.set_style(SECTION_COLOR);
+    Some(segment)
 }
 
 fn has_js_files(dir_entry: DirEntry) -> bool {

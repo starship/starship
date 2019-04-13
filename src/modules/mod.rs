@@ -9,7 +9,7 @@ use clap::ArgMatches;
 // pub static current_dir: PathBuf = env::current_dir().expect("Unable to identify current directory");
 // TODO: Currently gets the physical directory. Get the logical directory.
 
-pub fn handle(module: &str, args: &ArgMatches) -> Segment {
+pub fn handle(module: &str, args: &ArgMatches) -> Option<Segment> {
     match module {
         "dir" | "directory" => directory::segment(&args),
         "char" | "character" => character::segment(&args),

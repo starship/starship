@@ -15,7 +15,7 @@ use std::path::Path;
 ///
 /// **Truncation**
 /// Paths will be limited in length to `3` path components by default.
-pub fn segment(_: &ArgMatches) -> Segment {
+pub fn segment(_: &ArgMatches) -> Option<Segment> {
     const HOME_SYMBOL: &str = "~";
     const DIR_TRUNCATION_LENGTH: usize = 3;
     const SECTION_COLOR: Color = Color::Cyan;
@@ -44,8 +44,9 @@ pub fn segment(_: &ArgMatches) -> Segment {
 
     segment
         .set_value(truncated_dir_string)
-        .set_style(SECTION_COLOR.bold())
-        .clone()
+        .set_style(SECTION_COLOR.bold());
+
+    Some(segment)
 }
 
 /// Get the root directory of a git repo

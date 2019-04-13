@@ -18,7 +18,9 @@ pub fn prompt(args: ArgMatches) {
 
     default_prompt
         .iter()
-        .map(|module| modules::handle(module, &args))
-        .map(|segment| segment.output())
+        .map(|module| modules::handle(module, &args)) // Compute segments
+        .flatten() // Remove segments set to `None`
+        .enumerate() // Turn segment into tuple with index
+        .map(|(index, segment)| segment.output(index)) // Generate string outputs
         .for_each(|segment_string| write!(handle, "{}", segment_string).unwrap());
 }
