@@ -8,7 +8,20 @@
 Starship is a Rust port of the minimalistic, powerful, and extremely customizable prompt [Spaceship ZSH](https://github.com/denysdovhan/spaceship-prompt).
 
 
-## Features
+## Development plans
+
+The project is beginning as a port of Spaceship ZSH, but will be improved in areas where Spaceship ZSH was previously limited:
+- Speed 
+    - Concurrency of segment logic execution
+    - Memoization of expensive operations
+- Safety and error handling
+- Testability of code
+- Configuration
+    - Cross-shell support with JSON or TOML config files
+
+We will _not_ be aiming to achieve full pairity with Spaceship ZSH as a result, so I am very open to discussing and reevaluating new solutions and ideas for the prompt.
+
+I'm very new to Rust, so any help is appreciated when it comes to improving development patterns, writing idiomatic Rust, performance, safety, etc. 😄
 
 ### Prompt segments
 
@@ -20,11 +33,21 @@ Starship is a Rust port of the minimalistic, powerful, and extremely customizabl
 - [ ] Indicator for jobs in the background (`✦`).
 - [ ] Execution time of the last command if it exceeds the set threshold.
 
+### Other features
+- [ ] `.starshiprc` configuration (JSON or TOML)
+- [ ] Custom sections given commands or binaries
+- [ ] Self-updating
+
 ### Shell support
 
 - [x] Fish shell
 - [ ] Z Shell
 - [ ] Bash
+
+### Test strategy
+- [ ] Per-segment benchmarking
+- [ ] Per-segment unit + integration tests
+- [ ] Shell + OS matrix acceptance tests
 
 ## Setup
 
