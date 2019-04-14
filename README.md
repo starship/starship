@@ -19,7 +19,7 @@ The project is beginning as a port of Spaceship ZSH, but will be improved in are
 - Configuration
     - Cross-shell support with JSON or TOML config files
 
-We will _not_ be aiming to achieve full pairity with Spaceship ZSH as a result, so I am very open to discussing and reevaluating new solutions and ideas for the prompt.
+We will _not_ be aiming to achieve full parity with Spaceship ZSH as a result, so I am very open to discussing and reevaluating new solutions and ideas for the prompt.
 
 I'm very new to Rust, so any help is appreciated when it comes to improving development patterns, writing idiomatic Rust, performance, safety, etc. 😄
 
