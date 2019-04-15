@@ -61,7 +61,7 @@ fn get_repo_root(repo: &Repository) -> &Path {
 }
 
 /// Contract the root component of a path
-/// 
+///
 /// Replaces the `top_level_path` in a given `full_path` with the provided
 /// `top_level_replacement`.
 fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement: &str) -> String {
@@ -86,7 +86,7 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
 }
 
 /// Truncate a path to only have a set number of path components
-/// 
+///
 /// Will truncate a path to only show the last `length` components in a path.
 /// If a length of `0` is provided, the path will not be truncated.
 fn truncate(dir_string: String, length: usize) -> String {
