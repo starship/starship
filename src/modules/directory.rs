@@ -3,7 +3,6 @@ use ansi_term::Color;
 use clap::ArgMatches;
 use dirs;
 use git2::Repository;
-use std::env;
 use std::path::Path;
 
 /// Creates a segment with the current directory
@@ -15,28 +14,25 @@ use std::path::Path;
 ///
 /// **Truncation**
 /// Paths will be limited in length to `3` path components by default.
-pub fn segment(_: &ArgMatches) -> Option<Segment> {
+pub fn segment(current_dir: &Path, _args: &ArgMatches) -> Option<Segment> {
     const HOME_SYMBOL: &str = "~";
     const DIR_TRUNCATION_LENGTH: usize = 3;
     const SECTION_COLOR: Color = Color::Cyan;
 
     let mut segment = Segment::new("dir");
 
-    // TODO: Currently gets the physical directory. Get the logical directory.
-    let current_path = env::current_dir().expect("Unable to identify current directory");
-
     let dir_string;
-    if let Ok(repo) = git2::Repository::discover(&current_path) {
+    if let Ok(repo) = git2::Repository::discover(current_dir) {
         // Contract the path to the git repo root
         let repo_root = get_repo_root(&repo);
         let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
 
-        dir_string = contract_path(&current_path, repo_root, repo_folder_name);
+        dir_string = contract_path(current_dir, repo_root, repo_folder_name);
     } else {
         // Contract the path to the home directory
         let home_dir = dirs::home_dir().unwrap();
 
-        dir_string = contract_path(&current_path, &home_dir, HOME_SYMBOL);
+        dir_string = contract_path(current_dir, &home_dir, HOME_SYMBOL);
     }
 
     // Truncate the dir string to the maximum number of path components
@@ -61,7 +57,7 @@ fn get_repo_root(repo: &Repository) -> &Path {
 }
 
 /// Contract the root component of a path
-/// 
+///
 /// Replaces the `top_level_path` in a given `full_path` with the provided
 /// `top_level_replacement`.
 fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement: &str) -> String {
@@ -86,7 +82,7 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
 }
 
 /// Truncate a path to only have a set number of path components
-/// 
+///
 /// Will truncate a path to only show the last `length` components in a path.
 /// If a length of `0` is provided, the path will not be truncated.
 fn truncate(dir_string: String, length: usize) -> String {

@@ -1,10 +1,14 @@
 use clap::ArgMatches;
+use std::env;
 use std::io::{self, Write};
 
 use crate::modules;
 
 pub fn prompt(args: ArgMatches) {
     let default_prompt = vec!["directory", "nodejs", "line_break", "character"];
+
+    // TODO: Currently gets the physical directory. Get the logical directory.
+    let current_path = env::current_dir().expect("Unable to identify current directory.");
 
     // TODO:
     // - List files in directory
@@ -18,7 +22,7 @@ pub fn prompt(args: ArgMatches) {
 
     default_prompt
         .iter()
-        .map(|module| modules::handle(module, &args)) // Compute segments
+        .map(|module| modules::handle(module, &current_path, &args)) // Compute segments
         .flatten() // Remove segments set to `None`
         .enumerate() // Turn segment into tuple with index
         .map(|(index, segment)| segment.output_index(index)) // Generate string outputs

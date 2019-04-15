@@ -1,6 +1,7 @@
 use super::Segment;
 use ansi_term::Color;
 use clap::ArgMatches;
+use std::path::Path;
 
 /// Creates a segment for the prompt character
 ///
@@ -10,7 +11,7 @@ use clap::ArgMatches;
 /// (green by default)
 /// - If the exit-code was anything else, the arrow will be formatted with
 /// `COLOR_FAILURE` (red by default)
-pub fn segment(args: &ArgMatches) -> Option<Segment> {
+pub fn segment(_current_dir: &Path, args: &ArgMatches) -> Option<Segment> {
     const PROMPT_CHAR: &str = "➜";
     const COLOR_SUCCESS: Color = Color::Green;
     const COLOR_FAILURE: Color = Color::Red;
@@ -26,30 +27,4 @@ pub fn segment(args: &ArgMatches) -> Option<Segment> {
     segment.set_value(PROMPT_CHAR).set_prefix(None);
 
     Some(segment)
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use clap::{App, Arg};
-
-    #[test]
-    fn char_section_success_status() {
-        let args = App::new("starship")
-            .arg(Arg::with_name("status_code"))
-            .get_matches_from(vec!["starship", "0"]);
-
-        let segment = segment(&args);
-        // assert_eq!(segment.style, Style::from(Color::Green));
-    }
-
-    #[test]
-    fn char_section_failure_status() {
-        let args = App::new("starship")
-            .arg(Arg::with_name("status_code"))
-            .get_matches_from(vec!["starship", "1"]);
-
-        let segment = segment(&args);
-        // assert_eq!(segment.style, Style::from(Color::Red));
-    }
 }
