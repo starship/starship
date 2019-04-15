@@ -95,21 +95,56 @@ fn truncated_directory_in_root() -> io::Result<()> {
 }
 
 #[test]
-fn directory_in_git_repo() -> io::Result<()> {
+fn git_repo_root() -> io::Result<()> {
     let temp_dir = TempDir::new("starship")?;
     let repo_dir = temp_dir.path().join("rocket-controls");
     fs::create_dir(&repo_dir)?;
-
-    match Repository::init(&repo_dir) {
-        Ok(repo) => repo,
-        Err(e) => panic!("failed to init: {}", e),
-    };
+    
+    Repository::init(&repo_dir).unwrap();
 
     let expected = Segment::new("dir")
-        .set_value("starship")
+        .set_value("rocket-controls")
         .set_style(Color::Cyan.bold())
         .output();
     let actual = common::render_segment("dir", &repo_dir);
+    assert_eq!(expected, actual);
+
+    Ok(())
+}
+
+#[test]
+fn directory_in_git_repo() -> io::Result<()> {
+    let temp_dir = TempDir::new("starship")?;
+    let repo_dir = temp_dir.path().join("rocket-controls");
+    let dir = repo_dir.join("src");
+    fs::create_dir_all(&dir)?;
+    
+    Repository::init(&repo_dir).unwrap();
+
+    let expected = Segment::new("dir")
+        .set_value("rocket-controls/src")
+        .set_style(Color::Cyan.bold())
+        .output();
+    let actual = common::render_segment("dir", &dir);
+    assert_eq!(expected, actual);
+
+    Ok(())
+}
+
+#[test]
+fn truncated_directory_in_git_repo() -> io::Result<()> {
+    let temp_dir = TempDir::new("starship")?;
+    let repo_dir = temp_dir.path().join("rocket-controls");
+    let dir = repo_dir.join("src/meters/fuel-gauge");
+    fs::create_dir_all(&dir)?;
+        
+    Repository::init(&repo_dir).unwrap();
+
+    let expected = Segment::new("dir")
+        .set_value("src/meters/fuel-gauge")
+        .set_style(Color::Cyan.bold())
+        .output();
+    let actual = common::render_segment("dir", &dir);
     assert_eq!(expected, actual);
 
     Ok(())
