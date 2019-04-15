@@ -1,12 +1,12 @@
 extern crate starship;
 
-use ansi_term::{Color};
+use ansi_term::Color;
 use git2::Repository;
 use starship::segment::Segment;
-use tempdir::TempDir;
 use std::fs;
 use std::io;
 use std::path::Path;
+use tempdir::TempDir;
 
 mod common;
 
@@ -99,7 +99,7 @@ fn git_repo_root() -> io::Result<()> {
     let temp_dir = TempDir::new("starship")?;
     let repo_dir = temp_dir.path().join("rocket-controls");
     fs::create_dir(&repo_dir)?;
-    
+
     Repository::init(&repo_dir).unwrap();
 
     let expected = Segment::new("dir")
@@ -118,7 +118,7 @@ fn directory_in_git_repo() -> io::Result<()> {
     let repo_dir = temp_dir.path().join("rocket-controls");
     let dir = repo_dir.join("src");
     fs::create_dir_all(&dir)?;
-    
+
     Repository::init(&repo_dir).unwrap();
 
     let expected = Segment::new("dir")
@@ -137,7 +137,7 @@ fn truncated_directory_in_git_repo() -> io::Result<()> {
     let repo_dir = temp_dir.path().join("rocket-controls");
     let dir = repo_dir.join("src/meters/fuel-gauge");
     fs::create_dir_all(&dir)?;
-        
+
     Repository::init(&repo_dir).unwrap();
 
     let expected = Segment::new("dir")
