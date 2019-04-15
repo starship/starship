@@ -1,6 +1,9 @@
 <h3 align="center">Starship ✨🚀</h3>
 <p align="center">The cross-shell prompt for astronauts.</p>
-
+<p align="center">
+    <a href="https://dev.azure.com/starship-control/starship/_build"><img src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite" alt="Azure Pipelines Build Status"></a>
+    <a href="https://discord.gg/Zpek73"><img src="https://badgen.net/badge/chat/on%20discord/7289da" alt="Chat on Discord"></a>
+</p>
 ---
 
 > ⚠️ This is very much work in progress, so please don't try to use it just yet!
