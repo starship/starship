@@ -103,47 +103,7 @@ fn truncate(dir_string: String, length: usize) -> String {
 
 #[cfg(test)]
 mod tests {
-    // TODO: Look into stubbing `env` so that tests can be run in parallel
     use super::*;
-
-    // #[test]
-    // fn truncate_home_dir() {
-    //     let args = App::new("starship")
-    //         .arg(Arg::with_name("status_code"))
-    //         .get_matches_from(vec!["starship", "0"]);
-
-    //     let home_dir = dirs::home_dir().unwrap();
-    //     env::set_current_dir(&home_dir).unwrap();
-
-    //     let segment = segment(&args).unwrap();
-    //     assert_eq!(segment.output(), "~");
-    // }
-
-    // #[test]
-    // fn dont_truncate_non_home_dir() {
-    //     let args = App::new("starship")
-    //         .arg(Arg::with_name("status_code"))
-    //         .get_matches_from(vec!["starship", "0"]);
-
-    //     let root_dir = Path::new("/");
-    //     env::set_current_dir(&root_dir).unwrap();
-
-    //     let segment = segment(&args).unwrap();
-    //     assert_eq!(segment.output(), "/");
-    // }
-
-    // #[test]
-    // fn do_not_canonicalize_paths() {
-    //     let args = App::new("starship")
-    //         .arg(Arg::with_name("status_code"))
-    //         .get_matches_from(vec!["starship", "0"]);
-
-    //     let root_dir = Path::new("/var");
-    //     env::set_current_dir(&root_dir).unwrap();
-
-    //     let segment = segment(&args).unwrap();
-    //     assert_eq!(segment.output(), "/var");
-    // }
 
     #[test]
     fn contract_home_directory() {
