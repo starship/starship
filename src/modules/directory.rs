@@ -91,11 +91,11 @@ fn truncate(dir_string: String, length: usize) -> String {
     let components = dir_string
         .split(std::path::MAIN_SEPARATOR)
         .collect::<Vec<&str>>();
-    if components.len() < length {
+    if components.len() <= length {
         return dir_string;
     }
 
-    let truncated_components = &components[..length];
+    let truncated_components = &components[components.len() - length..];
     truncated_components.join(&std::path::MAIN_SEPARATOR.to_string())
 }
 
@@ -103,45 +103,71 @@ fn truncate(dir_string: String, length: usize) -> String {
 mod tests {
     // TODO: Look into stubbing `env` so that tests can be run in parallel
     use super::*;
-    use clap::{App, Arg};
-    use std::path::Path;
+
+    // #[test]
+    // fn truncate_home_dir() {
+    //     let args = App::new("starship")
+    //         .arg(Arg::with_name("status_code"))
+    //         .get_matches_from(vec!["starship", "0"]);
+
+    //     let home_dir = dirs::home_dir().unwrap();
+    //     env::set_current_dir(&home_dir).unwrap();
+
+    //     let segment = segment(&args).unwrap();
+    //     assert_eq!(segment.output(), "~");
+    // }
+
+    // #[test]
+    // fn dont_truncate_non_home_dir() {
+    //     let args = App::new("starship")
+    //         .arg(Arg::with_name("status_code"))
+    //         .get_matches_from(vec!["starship", "0"]);
+
+    //     let root_dir = Path::new("/");
+    //     env::set_current_dir(&root_dir).unwrap();
+
+    //     let segment = segment(&args).unwrap();
+    //     assert_eq!(segment.output(), "/");
+    // }
+
+    // #[test]
+    // fn do_not_canonicalize_paths() {
+    //     let args = App::new("starship")
+    //         .arg(Arg::with_name("status_code"))
+    //         .get_matches_from(vec!["starship", "0"]);
+
+    //     let root_dir = Path::new("/var");
+    //     env::set_current_dir(&root_dir).unwrap();
+
+    //     let segment = segment(&args).unwrap();
+    //     assert_eq!(segment.output(), "/var");
+    // }
 
     #[test]
-    fn truncate_home_dir() {
-        let args = App::new("starship")
-            .arg(Arg::with_name("status_code"))
-            .get_matches_from(vec!["starship", "0"]);
-
-        let home_dir = dirs::home_dir().unwrap();
-        env::set_current_dir(&home_dir).unwrap();
-
-        let segment = segment(&args);
-        // assert_eq!(segment.value, "~");
+    fn truncate_smaller_path_than_provided_length() {
+        let path = "~/starship";
+        let output = truncate(path.to_string(), 3);
+        assert_eq!(output, "~/starship")
     }
 
     #[test]
-    fn dont_truncate_non_home_dir() {
-        let args = App::new("starship")
-            .arg(Arg::with_name("status_code"))
-            .get_matches_from(vec!["starship", "0"]);
-
-        let root_dir = Path::new("/");
-        env::set_current_dir(&root_dir).unwrap();
-
-        let segment = segment(&args);
-        // assert_eq!(segment.value, "/");
+    fn truncate_same_path_as_provided_length() {
+        let path = "~/starship/engines";
+        let output = truncate(path.to_string(), 3);
+        assert_eq!(output, "~/starship/engines")
     }
 
     #[test]
-    fn do_not_canonicalize_paths() {
-        let args = App::new("starship")
-            .arg(Arg::with_name("status_code"))
-            .get_matches_from(vec!["starship", "0"]);
+    fn truncate_slightly_larger_path_then_provided_length() {
+        let path = "~/starship/engines/booster";
+        let output = truncate(path.to_string(), 3);
+        assert_eq!(output, "starship/engines/booster")
+    }
 
-        let root_dir = Path::new("/var");
-        env::set_current_dir(&root_dir).unwrap();
-
-        let segment = segment(&args);
-        // assert_eq!(segment.value, "/var");
+    #[test]
+    fn truncate_larger_path_than_provided_length() {
+        let path = "~/starship/engines/booster/rocket";
+        let output = truncate(path.to_string(), 3);
+        assert_eq!(output, "engines/booster/rocket")
     }
 }

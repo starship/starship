@@ -76,8 +76,37 @@ impl Segment {
     /// Create a string with the formatted contents of a segment
     ///
     /// Will recursively also format the prefix and suffix of the segment being
-    /// stringified. Skips the prefix of the first segment.
-    pub fn output(&self, index: usize) -> String {
+    /// stringified.
+    pub fn output(&self) -> String {
+        let Segment {
+            name: _name,
+            prefix,
+            value,
+            style,
+            suffix,
+        } = self;
+
+        let mut segment_string = String::new();
+
+        // Skip the prefix for the first segment
+        if let Some(prefix) = prefix {
+            segment_string += &prefix.output()
+        }
+
+        segment_string += &style.paint(value).to_string();
+
+        if let Some(suffix) = suffix {
+            segment_string += &suffix.output();
+        }
+
+        segment_string
+    }
+
+    /// Create a string with the formatted contents of a segment while skipping the first segment.
+    ///
+    /// Will recursively also format the prefix and suffix of the segment being
+    /// stringified.
+    pub fn output_index(&self, index: usize) -> String {
         let Segment {
             name: _name,
             prefix,
@@ -91,14 +120,14 @@ impl Segment {
         // Skip the prefix for the first segment
         if index != 0 {
             if let Some(prefix) = prefix {
-                segment_string += &prefix.output(index)
+                segment_string += &prefix.output_index(index)
             }
         }
 
         segment_string += &style.paint(value).to_string();
 
         if let Some(suffix) = suffix {
-            segment_string += &suffix.output(index);
+            segment_string += &suffix.output();
         }
 
         segment_string
