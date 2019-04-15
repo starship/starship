@@ -1,5 +1,3 @@
-extern crate starship;
-
 use ansi_term::Color;
 use git2::Repository;
 use starship::segment::Segment;
