@@ -15,8 +15,9 @@ Starship is a Rust port of the minimalistic, powerful, and extremely customizabl
 ## Development plans
 
 The project is beginning as a port of Spaceship ZSH, but will be improved in areas where Spaceship ZSH was previously limited:
-- Speed 
-    - Concurrency of segment logic execution
+
+- Speed
+- Concurrency of segment logic execution
     - Memoization of expensive operations
 - Safety and error handling
 - Testability of code
@@ -38,6 +39,7 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 - [ ] Execution time of the last command if it exceeds the set threshold.
 
 ### Other features
+
 - [ ] `.starshiprc` configuration (JSON or TOML)
 - [ ] Custom sections given commands or binaries
 - [ ] Self-updating
@@ -49,8 +51,9 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 - [ ] Bash
 
 ### Test strategy
-- [ ] Per-segment benchmarking
-- [ ] Per-segment unit + integration tests
+
+- [x] Per-segment benchmarking
+- [x] Per-segment unit + integration tests
 - [ ] Shell + OS matrix acceptance tests
 
 ## Setup
@@ -58,7 +61,6 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 ### Prerequisites
 
 - Rust v1.33 or higher
-- Fisher v3
 
 ### Getting Started
 
@@ -70,11 +72,29 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
     ```
 
 1. Navigate to the adapters directory
+
     ```bash
     cd adapters
     ```
+
+#### Fish
+
 1. Install the fish shell prompt with fisher:
 
     ```bash
     fisher $PWD
+    ```
+
+#### oh-my-zsh
+
+1. Install the zsh theme:
+
+    ```bash
+    cp starship.zsh-theme ~/.oh-my-zsh/themes
+    ```
+
+1. In `~/.zshrc`, find the line with `ZSH_THEME=` and set it to
+
+    ```bash
+    ZSH_THEME="starship"
     ```
