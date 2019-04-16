@@ -4,7 +4,7 @@ use starship::segment::Segment;
 use std::fs;
 use std::io;
 use std::path::Path;
-use tempdir::TempDir;
+use tempfile::TempDir;
 
 mod common;
 
@@ -94,8 +94,8 @@ fn truncated_directory_in_root() -> io::Result<()> {
 
 #[test]
 fn git_repo_root() -> io::Result<()> {
-    let temp_dir = TempDir::new("starship")?;
-    let repo_dir = temp_dir.path().join("rocket-controls");
+    let tmp_dir = TempDir::new()?;
+    let repo_dir = tmp_dir.path().join("rocket-controls");
     fs::create_dir(&repo_dir)?;
 
     Repository::init(&repo_dir).unwrap();
@@ -112,8 +112,8 @@ fn git_repo_root() -> io::Result<()> {
 
 #[test]
 fn directory_in_git_repo() -> io::Result<()> {
-    let temp_dir = TempDir::new("starship")?;
-    let repo_dir = temp_dir.path().join("rocket-controls");
+    let tmp_dir = TempDir::new()?;
+    let repo_dir = tmp_dir.path().join("rocket-controls");
     let dir = repo_dir.join("src");
     fs::create_dir_all(&dir)?;
 
@@ -131,8 +131,8 @@ fn directory_in_git_repo() -> io::Result<()> {
 
 #[test]
 fn truncated_directory_in_git_repo() -> io::Result<()> {
-    let temp_dir = TempDir::new("starship")?;
-    let repo_dir = temp_dir.path().join("rocket-controls");
+    let tmp_dir = TempDir::new()?;
+    let repo_dir = tmp_dir.path().join("rocket-controls");
     let dir = repo_dir.join("src/meters/fuel-gauge");
     fs::create_dir_all(&dir)?;
 

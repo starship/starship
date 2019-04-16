@@ -11,4 +11,4 @@ dirs = "1.0.5"
 git2 = "0.8.0"
 
 [dev-dependencies]
-tempdir = "0.3.7"
+tempfile = "3.0.7"
