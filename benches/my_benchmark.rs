@@ -14,7 +14,9 @@ fn char_segment(c: &mut Criterion) {
 
     let path = Path::new("~");
 
-    c.bench_function("char segment", move |b| b.iter(|| modules::handle("char", &path, &args)));
+    c.bench_function("char segment", move |b| {
+        b.iter(|| modules::handle("char", &path, &args))
+    });
 }
 
 fn dir_segment(c: &mut Criterion) {
@@ -24,7 +26,9 @@ fn dir_segment(c: &mut Criterion) {
 
     let path = Path::new("~");
 
-    c.bench_function("dir segment", move |b| b.iter(|| modules::handle("dir", &path, &args)));
+    c.bench_function("dir segment", move |b| {
+        b.iter(|| modules::handle("dir", &path, &args))
+    });
 }
 
 fn line_break_segment(c: &mut Criterion) {
@@ -34,19 +38,10 @@ fn line_break_segment(c: &mut Criterion) {
 
     let path = Path::new("~");
 
-    c.bench_function("line break segment", move |b| b.iter(|| modules::handle("line_break", &path, &args)));
+    c.bench_function("line break segment", move |b| {
+        b.iter(|| modules::handle("line_break", &path, &args))
+    });
 }
 
-fn nodejs_segment(c: &mut Criterion) {
-    // TODO: Bootstrap Nodejs benchmark folder
-    let args = App::new("starship")
-        .arg(Arg::with_name("status_code"))
-        .get_matches_from(vec!["starship", "0"]);
-
-    let path = Path::new("~");
-
-    c.bench_function("nodejs segment", move |b| b.iter(|| modules::handle("nodejs", &path, &args)));
-}
-
-criterion_group!(benches, dir_segment, char_segment, line_break_segment, nodejs_segment);
+criterion_group!(benches, dir_segment, char_segment, line_break_segment);
 criterion_main!(benches);
