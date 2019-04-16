@@ -12,3 +12,8 @@ git2 = "0.8.0"
 
 [dev-dependencies]
 tempfile = "3.0.7"
+criterion = "0.2.11"
+
+[[bench]]
+name = "my_benchmark"
+harness = false
