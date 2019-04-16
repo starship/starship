@@ -69,6 +69,10 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
     cargo install --path .
     ```
 
+1. Navigate to the adapters directory
+    ```bash
+    cd adapters
+    ```
 1. Install the fish shell prompt with fisher:
 
     ```bash
