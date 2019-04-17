@@ -47,7 +47,7 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 ### Shell support
 
 - [x] Fish shell
-- [ ] Z Shell
+- [x] Z Shell
 - [ ] Bash
 
 ### Test strategy
