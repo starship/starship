@@ -3,16 +3,15 @@ mod directory;
 mod line_break;
 mod nodejs;
 
+use crate::context::Context;
 use crate::segment::Segment;
-use clap::ArgMatches;
-use std::path::Path;
 
-pub fn handle(module: &str, current_dir: &Path, args: &ArgMatches) -> Option<Segment> {
+pub fn handle(module: &str, context: &Context) -> Option<Segment> {
     match module {
-        "dir" | "directory" => directory::segment(current_dir, args),
-        "char" | "character" => character::segment(current_dir, args),
-        "node" | "nodejs" => nodejs::segment(current_dir, args),
-        "line_break" => line_break::segment(current_dir, args),
+        "dir" | "directory" => directory::segment(context),
+        "char" | "character" => character::segment(context),
+        "node" | "nodejs" => nodejs::segment(context),
+        "line_break" => line_break::segment(context),
 
         _ => panic!("Unknown module: {}", module),
     }

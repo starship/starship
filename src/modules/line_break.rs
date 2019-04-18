@@ -1,9 +1,8 @@
 use super::Segment;
-use clap::ArgMatches;
-use std::path::Path;
+use crate::context::Context;
 
 /// Creates a segment for the line break
-pub fn segment(_current_dir: &Path, _args: &ArgMatches) -> Option<Segment> {
+pub fn segment(_context: &Context) -> Option<Segment> {
     const LINE_ENDING: &str = "\n";
 
     let mut segment = Segment::new("line_break");
