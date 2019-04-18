@@ -19,7 +19,6 @@ pub fn segment(context: &Context) -> Option<Segment> {
     let current_dir = &context.current_dir;
     let files = fs::read_dir(current_dir).unwrap();
 
-
     // Early return if there are no JS project files
     let is_js_project = files.filter_map(Result::ok).any(has_js_files);
     if !is_js_project {

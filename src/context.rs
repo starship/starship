@@ -18,7 +18,10 @@ impl<'a> Context<'a> {
         }
     }
 
-    pub fn new_with_dir<T>(arguments: ArgMatches, dir: T) -> Context where T: Into<PathBuf> {
+    pub fn new_with_dir<T>(arguments: ArgMatches, dir: T) -> Context
+    where
+        T: Into<PathBuf>,
+    {
         Context {
             current_dir: dir.into(),
             arguments,
