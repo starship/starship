@@ -1,9 +1,9 @@
-use super::Segment;
 use ansi_term::Color;
-use clap::ArgMatches;
 use std::fs::{self, DirEntry};
-use std::path::Path;
 use std::process::Command;
+
+use super::Segment;
+use crate::context::Context;
 
 /// Creates a segment with the current Node.js version
 ///
@@ -11,11 +11,12 @@ use std::process::Command;
 ///     - Current directory contains a `.js` file
 ///     - Current directory contains a `node_modules` directory
 ///     - Current directory contains a `package.json` file
-pub fn segment(current_dir: &Path, _args: &ArgMatches) -> Option<Segment> {
+pub fn segment(context: &Context) -> Option<Segment> {
     const NODE_CHAR: &str = "⬢";
     const SECTION_COLOR: Color = Color::Green;
 
     let mut segment = Segment::new("node");
+    let current_dir = &context.current_dir;
     let files = fs::read_dir(current_dir).unwrap();
 
     // Early return if there are no JS project files

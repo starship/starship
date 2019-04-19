@@ -1,7 +1,7 @@
-use super::Segment;
 use ansi_term::Color;
-use clap::ArgMatches;
-use std::path::Path;
+
+use super::Segment;
+use crate::context::Context;
 
 /// Creates a segment for the prompt character
 ///
@@ -11,14 +11,15 @@ use std::path::Path;
 /// (green by default)
 /// - If the exit-code was anything else, the arrow will be formatted with
 /// `COLOR_FAILURE` (red by default)
-pub fn segment(_current_dir: &Path, args: &ArgMatches) -> Option<Segment> {
+pub fn segment(context: &Context) -> Option<Segment> {
     const PROMPT_CHAR: &str = "➜";
     const COLOR_SUCCESS: Color = Color::Green;
     const COLOR_FAILURE: Color = Color::Red;
 
     let mut segment = Segment::new("char");
+    let arguments = &context.arguments;
 
-    if args.value_of("status_code").unwrap() == "0" {
+    if arguments.value_of("status_code").unwrap() == "0" {
         segment.set_style(COLOR_SUCCESS);
     } else {
         segment.set_style(COLOR_FAILURE);

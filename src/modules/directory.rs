@@ -1,9 +1,9 @@
-use super::Segment;
 use ansi_term::Color;
-use clap::ArgMatches;
-use dirs;
 use git2::Repository;
 use std::path::Path;
+
+use super::Segment;
+use crate::context::Context;
 
 /// Creates a segment with the current directory
 ///
@@ -14,12 +14,13 @@ use std::path::Path;
 ///
 /// **Truncation**
 /// Paths will be limited in length to `3` path components by default.
-pub fn segment(current_dir: &Path, _args: &ArgMatches) -> Option<Segment> {
+pub fn segment(context: &Context) -> Option<Segment> {
     const HOME_SYMBOL: &str = "~";
     const DIR_TRUNCATION_LENGTH: usize = 3;
     const SECTION_COLOR: Color = Color::Cyan;
 
     let mut segment = Segment::new("dir");
+    let current_dir = &context.current_dir;
 
     let dir_string;
     if let Ok(repo) = git2::Repository::discover(current_dir) {
