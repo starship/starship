@@ -1,5 +1,5 @@
 use ansi_term::Color;
-use std::fs::{self, DirEntry};
+use std::fs::DirEntry;
 use std::process::Command;
 
 use super::Segment;
@@ -16,11 +16,9 @@ pub fn segment(context: &Context) -> Option<Segment> {
     const SECTION_COLOR: Color = Color::Green;
 
     let mut segment = Segment::new("node");
-    let current_dir = &context.current_dir;
-    let files = fs::read_dir(current_dir).unwrap();
 
     // Early return if there are no JS project files
-    let is_js_project = files.filter_map(Result::ok).any(has_js_files);
+    let is_js_project = context.dir_files.filter_map(Result::ok).any(has_js_files);
     if !is_js_project {
         return None;
     }
