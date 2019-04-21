@@ -32,7 +32,8 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 
 - [x] Prompt character turns red if the last command exits with non-zero code.
 - [x] Current Node.js version(`⬢`).
-- [ ] Current Rust version (`𝗥`).
+- [x] Current Rust version (`𝗥`).
+- [ ] Package version of package in current directory (`📦`).
 - [ ] Current battery level and status
 - [ ] Current Git branch and rich repo status.
 - [ ] Indicator for jobs in the background (`✦`).
