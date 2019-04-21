@@ -1,7 +1,7 @@
 use super::Segment;
+use crate::context::Context;
 use ansi_term::Color;
 use std::fs::{self, DirEntry};
-use crate::context::Context;
 use std::process::Command;
 
 /// Creates a segment with the current Rust version
@@ -26,9 +26,9 @@ pub fn segment(context: &Context) -> Option<Segment> {
             let formated_version = format_rustc_version(rust_version);
             segment.set_value(format!("{} {}", RUST_LOGO, formated_version));
 
-            return Some(segment)
-        },
-        None => return None
+            return Some(segment);
+        }
+        None => return None,
     };
 }
 
@@ -46,17 +46,16 @@ fn has_rs_files(dir_entry: DirEntry) -> bool {
 fn get_rust_version() -> Option<String> {
     match Command::new("rustc").arg("-V").output() {
         Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
-        Err(_) => None
+        Err(_) => None,
     }
 }
 
 fn format_rustc_version(mut rustc_stdout: String) -> String {
-   let offset = &rustc_stdout.find('(').unwrap();
-   let formated_version: String = rustc_stdout.drain(..offset).collect();
+    let offset = &rustc_stdout.find('(').unwrap();
+    let formated_version: String = rustc_stdout.drain(..offset).collect();
 
-   format!(" v{}", formated_version.replace("rustc", "").trim())
+    format!(" v{}", formated_version.replace("rustc", "").trim())
 }
-
 
 #[cfg(test)]
 mod tests {
