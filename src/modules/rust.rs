@@ -24,12 +24,12 @@ pub fn segment(context: &Context) -> Option<Segment> {
             segment.set_style(SECTION_COLOR);
 
             let formatted_version = format_rustc_version(rust_version);
-            segment.set_value(format!("{} {}", RUST_LOGO, formated_version));
+            segment.set_value(format!("{} {}", RUST_LOGO, formatted_version));
 
-            return Some(segment);
+            Some(segment)
         }
-        None => return None,
-    };
+        None => None,
+    }
 }
 
 fn has_rs_files(dir_entry: DirEntry) -> bool {
@@ -52,9 +52,9 @@ fn get_rust_version() -> Option<String> {
 
 fn format_rustc_version(mut rustc_stdout: String) -> String {
     let offset = &rustc_stdout.find('(').unwrap();
-    let formated_version: String = rustc_stdout.drain(..offset).collect();
+    let formatted_version: String = rustc_stdout.drain(..offset).collect();
 
-    format!(" v{}", formated_version.replace("rustc", "").trim())
+    format!("v{}", formatted_version.replace("rustc", "").trim())
 }
 
 #[cfg(test)]
@@ -64,12 +64,12 @@ mod tests {
     #[test]
     fn test_format_rustc_version() {
         let nightly_input = String::from("rustc 1.34.0-nightly (b139669f3 2019-04-10)");
-        assert_eq!(format_rustc_version(nightly_input), " v1.34.0-nightly");
+        assert_eq!(format_rustc_version(nightly_input), "v1.34.0-nightly");
 
         let beta_input = String::from("rustc 1.34.0-beta.1 (2bc1d406d 2019-04-10)");
-        assert_eq!(format_rustc_version(beta_input), " v1.34.0-beta.1");
+        assert_eq!(format_rustc_version(beta_input), "v1.34.0-beta.1");
 
         let stable_input = String::from("rustc 1.34.0 (91856ed52 2019-04-10)");
-        assert_eq!(format_rustc_version(stable_input), " v1.34.0");
+        assert_eq!(format_rustc_version(stable_input), "v1.34.0");
     }
 }
