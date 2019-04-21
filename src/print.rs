@@ -5,7 +5,7 @@ use crate::context::Context;
 use crate::modules;
 
 pub fn prompt(args: ArgMatches) {
-    let prompt_order = vec!["directory", "nodejs", "line_break", "character"];
+    let prompt_order = vec!["directory", "nodejs", "rust", "line_break", "character"];
     let context = Context::new(args);
 
     // TODO:
