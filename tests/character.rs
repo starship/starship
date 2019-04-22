@@ -5,7 +5,7 @@ use std::path::Path;
 mod common;
 
 #[test]
-fn char_section_success_status() {
+fn char_segment_success_status() {
     let dir = Path::new("~");
     let expected = Segment::new("char")
         .set_value("➜")
@@ -17,7 +17,7 @@ fn char_section_success_status() {
 }
 
 #[test]
-fn char_section_failure_status() {
+fn char_segment_failure_status() {
     let dir = Path::new("~");
     let expected = Segment::new("char")
         .set_value("➜")

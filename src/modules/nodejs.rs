@@ -20,10 +20,10 @@ pub fn segment(context: &Context) -> Option<Segment> {
     match get_node_version() {
         Some(node_version) => {
             const NODE_CHAR: &str = "⬢";
-            const SECTION_COLOR: Color = Color::Green;
+            const SEGMENT_COLOR: Color = Color::Green;
 
             let mut segment = Segment::new("node");
-            segment.set_style(SECTION_COLOR);
+            segment.set_style(SEGMENT_COLOR);
 
             let formatted_version = node_version.trim();
             segment.set_value(format!("{} {}", NODE_CHAR, formatted_version));
