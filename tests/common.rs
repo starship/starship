@@ -3,6 +3,7 @@ use starship::context::Context;
 use starship::modules;
 use std::path::PathBuf;
 
+#[allow(dead_code)]
 pub fn render_segment<T>(module: &str, path: T) -> String
 where
     T: Into<PathBuf>,
