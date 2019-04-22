@@ -1,30 +1,30 @@
 use super::Segment;
 use crate::context::Context;
 use ansi_term::Color;
-use std::fs::{self, DirEntry};
+use std::path::PathBuf;
 use std::process::Command;
 
 /// Creates a segment with the current Rust version
 ///
 /// Will display the Rust version if any of the following criteria are met:
-///     - Current directory contains a `.rs` or 'Cargo.toml' file
+///     - Current directory contains a `.rs` file
+///     - Current directory contains a `Cargo.toml` file
 pub fn segment(context: &Context) -> Option<Segment> {
-    let files = fs::read_dir(&context.current_dir).unwrap();
-    let is_rs_project = files.filter_map(Result::ok).any(has_rs_files);
+    let is_rs_project = context.dir_files.iter().any(has_rs_files);
     if !is_rs_project {
         return None;
     }
 
     match get_rust_version() {
         Some(rust_version) => {
-            const RUST_LOGO: &str = "🦀";
+            const RUST_CHAR: &str = "🦀";
             const SECTION_COLOR: Color = Color::Red;
 
             let mut segment = Segment::new("rust");
             segment.set_style(SECTION_COLOR);
 
             let formatted_version = format_rustc_version(rust_version);
-            segment.set_value(format!("{} {}", RUST_LOGO, formatted_version));
+            segment.set_value(format!("{} {}", RUST_CHAR, formatted_version));
 
             Some(segment)
         }
@@ -32,13 +32,11 @@ pub fn segment(context: &Context) -> Option<Segment> {
     }
 }
 
-fn has_rs_files(dir_entry: DirEntry) -> bool {
-    let is_rs_file = |d: &DirEntry| -> bool {
-        d.path().is_file() && d.path().extension().unwrap_or_default() == "rs"
-    };
-    let is_cargo_toml = |d: &DirEntry| -> bool {
-        d.path().is_file() && d.path().file_name().unwrap_or_default() == "Cargo.toml"
-    };
+fn has_rs_files(dir_entry: &PathBuf) -> bool {
+    let is_rs_file =
+        |d: &PathBuf| -> bool { d.is_file() && d.extension().unwrap_or_default() == "rs" };
+    let is_cargo_toml =
+        |d: &PathBuf| -> bool { d.is_file() && d.file_name().unwrap_or_default() == "Cargo.toml" };
 
     is_rs_file(&dir_entry) || is_cargo_toml(&dir_entry)
 }
