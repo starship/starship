@@ -17,7 +17,7 @@ use crate::context::Context;
 pub fn segment(context: &Context) -> Option<Segment> {
     const HOME_SYMBOL: &str = "~";
     const DIR_TRUNCATION_LENGTH: usize = 3;
-    const SECTION_COLOR: Color = Color::Cyan;
+    const SEGMENT_COLOR: Color = Color::Cyan;
 
     let mut segment = Segment::new("dir");
     let current_dir = &context.current_dir;
@@ -41,7 +41,7 @@ pub fn segment(context: &Context) -> Option<Segment> {
 
     segment
         .set_value(truncated_dir_string)
-        .set_style(SECTION_COLOR.bold());
+        .set_style(SEGMENT_COLOR.bold());
 
     Some(segment)
 }
