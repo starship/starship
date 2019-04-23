@@ -15,13 +15,14 @@ impl<'a> Context<'a> {
         Context::new_with_dir(arguments, current_dir)
     }
 
+    #[allow(dead_code)]
     pub fn new_with_dir<T>(arguments: ArgMatches, dir: T) -> Context
     where
         T: Into<PathBuf>,
     {
-        let current_dir = dir.into();
-
         // TODO: Currently gets the physical directory. Get the logical directory.
+        let current_dir = Context::expand_tilde(dir.into());
+
         let dir_files = fs::read_dir(&current_dir)
             .unwrap_or_else(|_| {
                 panic!(
@@ -35,8 +36,17 @@ impl<'a> Context<'a> {
 
         Context {
             current_dir,
-            dir_files,
             arguments,
+            dir_files,
         }
+    }
+
+    /// Convert a `~` in a path to the home directory
+    fn expand_tilde(dir: PathBuf) -> PathBuf {
+        if dir.starts_with("~") {
+            let without_home = dir.strip_prefix("~").unwrap();
+            return dirs::home_dir().unwrap().join(without_home);
+        }
+        dir
     }
 }

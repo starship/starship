@@ -67,6 +67,7 @@ fn root_directory() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn directory_in_root() -> io::Result<()> {
     let dir = Path::new("/private");
 
@@ -81,6 +82,7 @@ fn directory_in_root() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn truncated_directory_in_root() -> io::Result<()> {
     let dir = Path::new("/private/var/folders/3s");
 
