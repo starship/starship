@@ -23,6 +23,7 @@ fn home_directory() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn directory_in_home() -> io::Result<()> {
     let dir = Path::new("~/starship/engine");
 
@@ -37,6 +38,7 @@ fn directory_in_home() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn truncated_directory_in_home() -> io::Result<()> {
     let dir = Path::new("~/starship/engine/schematics");
 
