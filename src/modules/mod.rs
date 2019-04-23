@@ -1,5 +1,6 @@
 mod character;
 mod directory;
+mod git_branch;
 mod line_break;
 mod nodejs;
 mod rust;
@@ -14,6 +15,7 @@ pub fn handle(module: &str, context: &Context) -> Option<Segment> {
         "node" | "nodejs" => nodejs::segment(context),
         "rust" | "rustlang" => rust::segment(context),
         "line_break" => line_break::segment(context),
+        "git_branch" => git_branch::segment(context),
 
         _ => panic!("Unknown module: {}", module),
     }

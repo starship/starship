@@ -1,5 +1,4 @@
 use ansi_term::Color;
-use git2::Repository;
 use std::path::Path;
 
 use super::Segment;
@@ -23,17 +22,17 @@ pub fn segment(context: &Context) -> Option<Segment> {
     let current_dir = &context.current_dir;
 
     let dir_string;
-    if let Ok(repo) = git2::Repository::discover(current_dir) {
+    if let Some(repo) = &context.repository {
         // Contract the path to the git repo root
-        let repo_root = get_repo_root(&repo);
+        let repo_root = repo.workdir().unwrap();
         let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
 
-        dir_string = contract_path(current_dir, repo_root, repo_folder_name);
+        dir_string = contract_path(&current_dir, repo_root, repo_folder_name);
     } else {
         // Contract the path to the home directory
         let home_dir = dirs::home_dir().unwrap();
 
-        dir_string = contract_path(current_dir, &home_dir, HOME_SYMBOL);
+        dir_string = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
     }
 
     // Truncate the dir string to the maximum number of path components
@@ -44,17 +43,6 @@ pub fn segment(context: &Context) -> Option<Segment> {
         .set_style(SEGMENT_COLOR.bold());
 
     Some(segment)
-}
-
-/// Get the root directory of a git repo
-fn get_repo_root(repo: &Repository) -> &Path {
-    if repo.is_bare() {
-        // Bare repos will return the repo root
-        repo.path()
-    } else {
-        // Non-bare repos will return the path of `.git`
-        repo.path().parent().unwrap()
-    }
 }
 
 /// Contract the root component of a path
