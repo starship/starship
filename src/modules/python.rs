@@ -8,8 +8,9 @@ use std::process::Command;
 ///
 /// Will display the Python version if any of the following criteria are met:
 ///     - Current directory contains a `.py` file
-///     - Current directory contains a `requirements.txt` file
 ///     - Current directory contains a `.python-version` file
+///     - Current directory contains a `requirements.txt` file
+///     - Current directory contains a `pyproject.toml` file
 pub fn segment(context: &Context) -> Option<Segment> {
     let is_py_project = context.dir_files.iter().any(has_py_files);
     if !is_py_project {
