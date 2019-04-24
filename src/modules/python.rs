@@ -37,14 +37,20 @@ pub fn segment(context: &Context) -> Option<Segment> {
 fn has_py_files(dir_entry: &PathBuf) -> bool {
     let is_py_file =
         |d: &PathBuf| -> bool { d.is_file() && d.extension().unwrap_or_default() == "py" };
-    let is_python_version =
-        |d: &PathBuf| -> bool { d.is_file() && d.file_name().unwrap_or_default() == ".python-version" };
-    let is_requirements_txt =
-        |d: &PathBuf| -> bool { d.is_file() && d.file_name().unwrap_or_default() == "requirements.txt" };
-    let is_py_project =
-        |d: &PathBuf| -> bool { d.is_file() && d.file_name().unwrap_or_default() == "pyproject.toml" };
+    let is_python_version = |d: &PathBuf| -> bool {
+        d.is_file() && d.file_name().unwrap_or_default() == ".python-version"
+    };
+    let is_requirements_txt = |d: &PathBuf| -> bool {
+        d.is_file() && d.file_name().unwrap_or_default() == "requirements.txt"
+    };
+    let is_py_project = |d: &PathBuf| -> bool {
+        d.is_file() && d.file_name().unwrap_or_default() == "pyproject.toml"
+    };
 
-    is_py_file(&dir_entry) || is_python_version(&dir_entry) || is_requirements_txt(&dir_entry) || is_py_project(&dir_entry)
+    is_py_file(&dir_entry)
+        || is_python_version(&dir_entry)
+        || is_requirements_txt(&dir_entry)
+        || is_py_project(&dir_entry)
 }
 
 fn get_python_version() -> Option<String> {

@@ -2,8 +2,8 @@ mod character;
 mod directory;
 mod line_break;
 mod nodejs;
-mod rust;
 mod python;
+mod rust;
 
 use crate::context::Context;
 use crate::segment::Segment;
