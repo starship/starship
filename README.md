@@ -99,3 +99,10 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
     ```bash
     ZSH_THEME="starship"
     ```
+## Contributing
+
+To test locally run the below command:
+
+```bash
+cargo run -- $status
+```
