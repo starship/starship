@@ -1,11 +1,11 @@
 use ansi_term::Color;
+use dirs::home_dir;
 use git2::Repository;
 use starship::segment::Segment;
 use std::fs;
 use std::io;
 use std::path::Path;
 use tempfile::TempDir;
-use dirs::home_dir;
 
 mod common;
 
