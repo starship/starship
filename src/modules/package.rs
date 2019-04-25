@@ -48,10 +48,7 @@ fn get_package_version(context: &Context) -> Option<String> {
     let is_rs_project = context.dir_files.iter().any(has_rs_files);
     if !is_rs_project {
         let is_js_project = context.dir_files.iter().any(has_js_files);
-        if is_js_project {
-            // TODO
-            return None;
-        }
+        // TODO: Implement for nodejs
     } else {
         match Command::new("cargo").arg("pkgid").output() {
             Ok(output) => Some(format_rust_version(
