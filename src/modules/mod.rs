@@ -4,6 +4,7 @@ mod line_break;
 mod nodejs;
 mod python;
 mod rust;
+mod package;
 
 use crate::context::Context;
 use crate::segment::Segment;
@@ -15,6 +16,7 @@ pub fn handle(module: &str, context: &Context) -> Option<Segment> {
         "node" | "nodejs" => nodejs::segment(context),
         "rust" | "rustlang" => rust::segment(context),
         "python" => python::segment(context),
+        "package" => package::segment(context),
         "line_break" => line_break::segment(context),
 
         _ => panic!("Unknown module: {}", module),
