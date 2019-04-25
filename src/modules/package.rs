@@ -1,11 +1,11 @@
 use super::Segment;
 use crate::context::Context;
 use ansi_term::Color;
-use serde_json::Value;
+use serde_json;
 use std::fs::File;
 use std::io::Read;
 use std::path::PathBuf;
-use std::process::Command;
+use toml;
 
 /// Creates a segment with the current package version
 pub fn segment(context: &Context) -> Option<Segment> {
@@ -58,30 +58,23 @@ fn get_package_version(context: &Context) -> Option<String> {
             let mut data = String::new();
             file.read_to_string(&mut data).unwrap();
 
-            let json: Value = serde_json::from_str(&data).unwrap();
-            let version = format_nodejs_version(json["version"].to_string());
+            let json: serde_json::Value = serde_json::from_str(&data).unwrap();
+            let version = format_version(json["version"].to_string());
             return Some(version);
         }
     } else {
-        // TODO: Don't use `cargo pkgid` command
-        match Command::new("cargo").arg("pkgid").output() {
-            Ok(output) => Some(format_rust_version(
-                String::from_utf8(output.stdout).unwrap(),
-            )),
-            Err(_) => None,
-        }
+        let mut file = File::open("Cargo.toml").unwrap();
+        let mut data = String::new();
+        file.read_to_string(&mut data).unwrap();
+
+        let toml = data.parse::<toml::Value>().unwrap();
+        let version = format_version(toml["package"]["version"].to_string());
+        return Some(version);
     }
 }
 
-fn format_rust_version(mut rust_version: String) -> String {
-    let offset = &rust_version.find('#').unwrap();
-    let _text: String = rust_version.drain(..offset).collect();
-
-    format!("v{}", rust_version.replace("#", "").trim())
-}
-
-fn format_nodejs_version(mut nodejs_version: String) -> String {
-    format!("v{}", nodejs_version.replace('"', "").trim())
+fn format_version(version: String) -> String {
+    format!("v{}", version.replace('"', "").trim())
 }
 
 #[cfg(test)]
@@ -89,8 +82,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_format_rust_version() {
-        let input = String::from("file:///Users/john/Desktop/starship#0.1.0");
-        assert_eq!(format_rust_version(input), "v0.1.0");
+    fn test_format_version() {
+        let input = String::from("0.1.0");
+        assert_eq!(format_version(input), "v0.1.0");
     }
 }
