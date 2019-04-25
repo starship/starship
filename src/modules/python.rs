@@ -54,7 +54,7 @@ fn has_py_files(dir_entry: &PathBuf) -> bool {
 }
 
 fn get_python_version() -> Option<String> {
-    match Command::new("python").arg("-V").output() {
+    match Command::new("python").arg("--version").output() {
         Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
         Err(_) => None,
     }
