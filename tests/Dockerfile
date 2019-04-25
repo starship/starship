@@ -1,5 +1,16 @@
 FROM rust:latest
 
+# Install Node.js
+ENV NODE_VERSION 12.0.0
+RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash \
+  && . $HOME/.nvm/nvm.sh \
+  && nvm install $NODE_VERSION \
+  && nvm alias default $NODE_VERSION \
+  && nvm use default
+ENV PATH /root/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
+# Check that Node.js was correctly installed
+RUN node --version 
+
 # Create blank project
 RUN USER=root cargo new --bin starship
 WORKDIR /starship

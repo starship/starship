@@ -6,4 +6,4 @@ if [[ $(docker images -q starship-test) == "" ]]; then
 fi
 
 printf 'Running test suite:\n'
-docker run --rm -v $(pwd):/starship starship-test
+docker run --rm -v $(pwd):/starship starship-test 

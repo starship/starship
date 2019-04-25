@@ -13,10 +13,10 @@ fn folder_with_package_json() -> io::Result<()> {
     File::create(project_dir.path().join("package.json"))?;
 
     let expected = Segment::new("node")
-        .set_value("⬢ v10.2.0")
+        .set_value("⬢ v12.0.0")
         .set_style(Color::Green)
         .output();
-    let actual = common::render_segment("node", &project_dir);
+    let actual = common::render_segment("nodejs", &project_dir.path());
     assert_eq!(expected, actual);
 
     Ok(())
