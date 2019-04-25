@@ -1,6 +1,9 @@
 use super::Segment;
 use crate::context::Context;
 use ansi_term::Color;
+use serde_json::Value;
+use std::fs::File;
+use std::io::Read;
 use std::path::PathBuf;
 use std::process::Command;
 
@@ -47,10 +50,20 @@ fn has_js_files(dir_entry: &PathBuf) -> bool {
 fn get_package_version(context: &Context) -> Option<String> {
     let is_rs_project = context.dir_files.iter().any(has_rs_files);
     if !is_rs_project {
-        // TODO: Implement for nodejs projects
         let is_js_project = context.dir_files.iter().any(has_js_files);
-        return None;
+        if !is_js_project {
+            return None;
+        } else {
+            let mut file = File::open("package.json").unwrap();
+            let mut data = String::new();
+            file.read_to_string(&mut data).unwrap();
+
+            let json: Value = serde_json::from_str(&data).unwrap();
+            let version = format_nodejs_version(json["version"].to_string());
+            return Some(version);
+        }
     } else {
+        // TODO: Don't use `cargo pkgid` command
         match Command::new("cargo").arg("pkgid").output() {
             Ok(output) => Some(format_rust_version(
                 String::from_utf8(output.stdout).unwrap(),
@@ -65,6 +78,10 @@ fn format_rust_version(mut rust_version: String) -> String {
     let _text: String = rust_version.drain(..offset).collect();
 
     format!("v{}", rust_version.replace("#", "").trim())
+}
+
+fn format_nodejs_version(mut nodejs_version: String) -> String {
+    format!("v{}", nodejs_version.replace('"', "").trim())
 }
 
 #[cfg(test)]
