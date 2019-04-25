@@ -14,10 +14,12 @@ RUN touch benches/my_benchmark.rs
 
 # This is a dummy build to get dependencies cached
 RUN cargo build --release
-RUN rm src/*.rs
 
-# Now copy in the rest of the source files
-COPY ./src ./src
-COPY ./tests ./tests
+# Delete the dummy build
+RUN rm -rf /starship
+
+# Create the directory for the real source files
+RUN mkdir starship
+WORKDIR /starship
 
 CMD [ "cargo", "test", "--", "--ignored"]

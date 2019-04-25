@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [[ $(docker images -q starship-test) == "" ]]; then
+  printf 'Building test docker image:\n'
+  docker build -f tests/Dockerfile --tag starship-test .
+fi
+
+printf 'Running test suite:\n'
+docker run --rm -v $(pwd):/starship starship-test
