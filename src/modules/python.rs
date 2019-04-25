@@ -61,7 +61,7 @@ fn get_python_version() -> Option<String> {
 }
 
 fn format_python_version(python_stdout: String) -> String {
-    format!("v{}", python_stdout.replace("Python ", "").trim())
+    format!("v{}", python_stdout.trim_start_matches("Python ").trim())
 }
 
 #[cfg(test)]
