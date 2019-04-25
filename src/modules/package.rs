@@ -50,15 +50,15 @@ fn get_package_version(context: &Context) -> Option<String> {
         let is_js_project = context.dir_files.iter().any(has_js_files);
         if !is_js_project {
             return None;
-        }
-        else {
+        } else {
             // TODO
             return None;
         }
-    }
-    else {
+    } else {
         match Command::new("cargo").arg("pkgid").output() {
-            Ok(output) => Some(format_rust_version(String::from_utf8(output.stdout).unwrap())),
+            Ok(output) => Some(format_rust_version(
+                String::from_utf8(output.stdout).unwrap(),
+            )),
             Err(_) => None,
         }
     }
