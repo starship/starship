@@ -20,15 +20,6 @@ jobs:
       - script: cargo fmt --all -- --check
         displayName: Run Rustfmt
 
-  - job: "Bench"
-    pool:
-      vmImage: "ubuntu-16.04"
-    container: "rust:latest"
-    condition: eq(variables['Build.Reason'], 'PullRequest')
-    steps:
-      - script: cargo bench
-        displayName: Run benchmark
-
   - job: "Test"
     strategy:
       matrix:
