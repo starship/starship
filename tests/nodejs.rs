@@ -44,7 +44,7 @@ fn folder_with_node_modules() -> io::Result<()> {
     let dir = TempDir::new()?;
     let node_modules = dir.path().join("node_modules");
     fs::create_dir_all(&node_modules)?;
-    
+
     let expected = Segment::new("node")
         .set_value("⬢ v12.0.0")
         .set_style(Color::Green)
