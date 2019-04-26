@@ -23,7 +23,7 @@ pub fn segment(context: &Context) -> Option<Segment> {
             const SEGMENT_COLOR: Color = Color::Green;
 
             let mut segment = Segment::new("node");
-            segment.set_style(SEGMENT_COLOR);
+            segment.set_style(SEGMENT_COLOR.bold());
 
             let formatted_version = node_version.trim();
             segment.set_value(format!("{} {}", NODE_CHAR, formatted_version));
