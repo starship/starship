@@ -10,6 +10,7 @@ pub fn prompt(args: ArgMatches) {
         "git_branch",
         "nodejs",
         "rust",
+        "python",
         "line_break",
         "character",
     ];
