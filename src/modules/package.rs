@@ -26,51 +26,59 @@ pub fn segment(context: &Context) -> Option<Segment> {
     }
 }
 
+// TODO: Combine into one function and just call for different file names!
 fn has_rs_files(dir_entry: &PathBuf) -> bool {
-    let is_rs_file =
-        |d: &PathBuf| -> bool { d.is_file() && d.extension().unwrap_or_default() == "rs" };
     let is_cargo_toml =
         |d: &PathBuf| -> bool { d.is_file() && d.file_name().unwrap_or_default() == "Cargo.toml" };
 
-    is_rs_file(&dir_entry) || is_cargo_toml(&dir_entry)
+    is_cargo_toml(&dir_entry)
 }
 
 fn has_js_files(dir_entry: &PathBuf) -> bool {
-    let is_js_file =
-        |d: &PathBuf| -> bool { d.is_file() && d.extension().unwrap_or_default() == "js" };
-    let is_node_modules =
-        |d: &PathBuf| -> bool { d.is_dir() && d.file_name().unwrap_or_default() == "node_modules" };
     let is_package_json = |d: &PathBuf| -> bool {
         d.is_file() && d.file_name().unwrap_or_default() == "package.json"
     };
 
-    is_js_file(&dir_entry) || is_node_modules(&dir_entry) || is_package_json(&dir_entry)
+    is_package_json(&dir_entry)
+}
+
+// TODO: Move to `utils.rs` file and import
+fn read_file(file_name: String) -> String {
+    let mut file = File::open(file_name).unwrap();
+    let mut data = String::new();
+    file.read_to_string(&mut data).unwrap();
+
+    data
+}
+
+fn extract_cargo_version() -> String {
+    let data = read_file("Cargo.toml".to_string());
+
+    let toml = data.parse::<toml::Value>().unwrap();
+    let version = format_version(toml["package"]["version"].to_string());
+    return version;
+}
+
+fn extract_package_version() -> String {
+    let data = read_file("package.json".to_string());
+
+    let json: serde_json::Value = serde_json::from_str(&data).unwrap();
+    let version = format_version(json["version"].to_string());
+    return version;
 }
 
 fn get_package_version(context: &Context) -> Option<String> {
     let is_rs_project = context.dir_files.iter().any(has_rs_files);
-    if !is_rs_project {
-        let is_js_project = context.dir_files.iter().any(has_js_files);
-        if !is_js_project {
-            return None;
-        } else {
-            let mut file = File::open("package.json").unwrap();
-            let mut data = String::new();
-            file.read_to_string(&mut data).unwrap();
-
-            let json: serde_json::Value = serde_json::from_str(&data).unwrap();
-            let version = format_version(json["version"].to_string());
-            return Some(version);
-        }
-    } else {
-        let mut file = File::open("Cargo.toml").unwrap();
-        let mut data = String::new();
-        file.read_to_string(&mut data).unwrap();
-
-        let toml = data.parse::<toml::Value>().unwrap();
-        let version = format_version(toml["package"]["version"].to_string());
-        return Some(version);
+    if is_rs_project {
+        return Some(extract_cargo_version());
     }
+
+    let is_js_project = context.dir_files.iter().any(has_js_files);
+    if is_js_project {
+        return Some(extract_package_version());
+    }
+
+    return None;
 }
 
 fn format_version(version: String) -> String {
