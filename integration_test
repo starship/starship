@@ -1,9 +1,19 @@
 #!/bin/bash
 
-if [[ $(docker images -q starship-test) == "" ]]; then
-  printf 'Building test docker image:\n'
-  docker build -f tests/Dockerfile --tag starship-test .
+if ! (docker --version); then 
+  printf 'Docker is required to run the starship integration tests.\n'
+  printf 'Please download and install Docker in order to run these tests locally.\n'
+  exit 1
 fi
 
+if [[ $(docker images -q starship-test) == "" ]]; then
+  printf 'Building test docker image:\n'
+  docker build -f tests/docker/Dockerfile --tag starship-test .
+else
+  printf 'Reusing the pre-existing spaceship-test docker image.\n'
+fi
+
+printf 'To force it to rebuild, run: "docker rmi starship-test".\n\n'
+
 printf 'Running test suite:\n'
-docker run --rm -v $(pwd):/starship starship-test 
+docker run --rm -t -v $(pwd):/starship starship-test
