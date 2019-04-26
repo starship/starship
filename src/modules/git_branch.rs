@@ -18,6 +18,7 @@ pub fn segment(context: &Context) -> Option<Segment> {
             const GIT_BRANCH_CHAR: &str = "";
             const SEGMENT_COLOR: Color = Color::Purple;
 
+            // TODO: Make the prefix for the module "in "
             let mut segment_prefix = Segment::new("git_branch_prefix");
             segment_prefix
                 .set_value(GIT_BRANCH_CHAR)
