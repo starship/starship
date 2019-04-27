@@ -10,6 +10,7 @@ mod module;
 mod modules;
 mod print;
 mod segment;
+mod find_file;
 
 use clap::{App, Arg};
 
