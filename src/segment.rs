@@ -2,7 +2,6 @@ use ansi_term::Style;
 use std::fmt;
 
 pub struct Segment {
-
     /// The string's name, to be used in configuration and logging.
     name: String,
 
@@ -10,7 +9,7 @@ pub struct Segment {
     style: Style,
 
     /// The string value of the current segment.
-    value: String
+    value: String,
 }
 
 impl Segment {
