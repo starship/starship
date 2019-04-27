@@ -1,42 +1,25 @@
 use ansi_term::Style;
+use std::fmt;
 
 pub struct Segment {
-    name: Option<String>,
+
+    /// The string's name, to be used in configuration and logging.
+    name: String,
+
+    /// The segment's style. If None, will inherit the style of the module containing it.
     style: Style,
-    value: String,
-    prefix: BoxedSegment,
-    suffix: BoxedSegment,
+
+    /// The string value of the current segment.
+    value: String
 }
 
 impl Segment {
     /// Creates a new segment with default fields
-    pub fn new<T>(name: T) -> Segment
-    where
-        T: Into<String>,
-        T: Copy,
-    {
-        let default_prefix = Some(Box::new(Segment {
-            name: Some(format!("{} {}", name.into(), "prefix")),
-            style: Style::default(),
-            value: String::from("via "),
-            prefix: None,
-            suffix: None,
-        }));
-
-        let default_suffix = Some(Box::new(Segment {
-            name: Some(format!("{} {}", name.into(), "suffix")),
-            style: Style::default(),
-            value: String::from(" "),
-            prefix: None,
-            suffix: None,
-        }));
-
+    pub fn new<T>(name: String) -> Segment {
         Segment {
-            name: Some(name.into()),
+            name: name,
             style: Style::default(),
-            value: String::from(""),
-            prefix: default_prefix,
-            suffix: default_suffix,
+            value: "".to_string(),
         }
     }
 
@@ -59,78 +42,10 @@ impl Segment {
         self.value = value.into();
         self
     }
-
-    /// Sets the prefix of the segment
-    pub fn set_prefix(&mut self, prefix: BoxedSegment) -> &mut Segment {
-        self.prefix = prefix;
-        self
-    }
-
-    /// Sets the suffix of the segment
-    pub fn set_suffix(&mut self, suffix: BoxedSegment) -> &mut Segment {
-        self.suffix = suffix;
-        self
-    }
-
-    /// Create a string with the formatted contents of a segment
-    ///
-    /// Will recursively also format the prefix and suffix of the segment being
-    /// stringified.
-    pub fn output(&self) -> String {
-        let Segment {
-            name: _name,
-            prefix,
-            value,
-            style,
-            suffix,
-        } = self;
-
-        let mut segment_string = String::new();
-
-        // Skip the prefix for the first segment
-        if let Some(prefix) = prefix {
-            segment_string += &prefix.output()
-        }
-
-        segment_string += &style.paint(value).to_string();
-
-        if let Some(suffix) = suffix {
-            segment_string += &suffix.output();
-        }
-
-        segment_string
-    }
-
-    /// Create a string with the formatted contents of a segment while skipping the first segment.
-    ///
-    /// Will recursively also format the prefix and suffix of the segment being
-    /// stringified.
-    pub fn output_index(&self, index: usize) -> String {
-        let Segment {
-            name: _name,
-            prefix,
-            value,
-            style,
-            suffix,
-        } = self;
-
-        let mut segment_string = String::new();
-
-        // Skip the prefix for the first segment
-        if index != 0 {
-            if let Some(prefix) = prefix {
-                segment_string += &prefix.output_index(index)
-            }
-        }
-
-        segment_string += &style.paint(value).to_string();
-
-        if let Some(suffix) = suffix {
-            segment_string += &suffix.output();
-        }
-
-        segment_string
-    }
 }
 
-type BoxedSegment = Option<Box<Segment>>;
+impl fmt::Display for Segment {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.style.paint(self.value))
+    }
+}
