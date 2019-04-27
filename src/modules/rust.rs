@@ -21,7 +21,7 @@ pub fn segment(context: &Context) -> Option<Segment> {
             const SEGMENT_COLOR: Color = Color::Red;
 
             let mut segment = Segment::new("rust");
-            segment.set_style(SEGMENT_COLOR);
+            segment.set_style(SEGMENT_COLOR.bold());
 
             let formatted_version = format_rustc_version(rust_version);
             segment.set_value(format!("{} {}", RUST_CHAR, formatted_version));

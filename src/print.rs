@@ -7,6 +7,7 @@ use crate::modules;
 pub fn prompt(args: ArgMatches) {
     let prompt_order = vec![
         "directory",
+        "git_branch",
         "nodejs",
         "rust",
         "python",

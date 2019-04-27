@@ -23,7 +23,7 @@ pub fn segment(context: &Context) -> Option<Segment> {
             const SEGMENT_COLOR: Color = Color::Yellow;
 
             let mut segment = Segment::new("python");
-            segment.set_style(SEGMENT_COLOR);
+            segment.set_style(SEGMENT_COLOR.bold());
 
             let formatted_version = format_python_version(python_version);
             segment.set_value(format!("{} {}", PYTHON_CHAR, formatted_version));
