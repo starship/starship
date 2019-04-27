@@ -1,20 +1,21 @@
+use super::Segment;
+use crate::context::Context;
+use crate::find_file;
 use ansi_term::Color;
 use std::process::Command;
-use crate::find_file;
-
 
 use super::{Context, Module};
 
 /// Creates a segment with the current Rust version
 ///
-/// Will displayw the Rust version if any of the following criteria are met:
+/// Will display the Rust version if any of the following criteria are met:
 ///     - Current directory contains a file with a `.rs` extension
 ///     - Current directory contains a `Cargo.toml` file
 pub fn segment(context: &Context) -> Option<Segment> {
     let rust_criteria = find_file::Criteria {
-        files: vec!["Cargo.tml"],
+        files: vec!["Cargo.toml"],
         extension: "rs".to_string(),
-        folder: "".to_string()
+        folder: "".to_string(),
     };
 
     let is_rs_project = find_file::is_lang_project(&context.dir_files, &rust_criteria);
