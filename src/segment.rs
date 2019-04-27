@@ -1,6 +1,5 @@
 use ansi_term::Style;
 
-#[derive(Clone)]
 pub struct Segment {
     name: Option<String>,
     style: Style,

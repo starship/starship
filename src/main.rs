@@ -8,6 +8,7 @@ extern crate git2;
 mod context;
 mod modules;
 mod print;
+mod module;
 mod segment;
 
 use clap::{App, Arg};
