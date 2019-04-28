@@ -9,17 +9,17 @@ pub struct Module {
     /// The module's name, to be used in configuration and logging.
     name: String,
 
-    /// The string used to separate the current module from the previous one.
-    prefix: Option<String>,
-
-    /// The string used to separate the current module from the next one.
-    suffix: Option<String>,
-
     /// The styling to be inherited by all segments contained within this module.
     style: Style,
 
+    /// The string used to separate the current module from the previous one.
+    prefix: Option<String>,
+
     /// The collection of segments that compose this module.
     segments: Vec<Segment>,
+
+    /// The string used to separate the current module from the next one.
+    suffix: Option<String>,
 }
 
 impl Module {
@@ -27,10 +27,10 @@ impl Module {
     pub fn new(name: String) -> Module {
         Module {
             name,
-            prefix: Some(" via".to_string()),
-            suffix: Some(" ".to_string()),
             style: Style::default(),
+            prefix: Some(" via".to_string()),
             segments: Vec::new(),
+            suffix: Some(" ".to_string()),
         }
     }
 }
@@ -47,6 +47,8 @@ impl fmt::Display for Module {
             .collect::<Vec<String>>()
             .join("");
 
-        write!(f, "{}{}{}", prefix, segments, suffix)
+        let painted_output = self.style.paint("{}{}{}", prefix, segments, suffix);
+
+        write!(f, "{}{}{}", painted_output)
     }
 }
