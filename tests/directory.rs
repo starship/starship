@@ -1,5 +1,4 @@
 use ansi_term::Color;
-use dirs::home_dir;
 use git2::Repository;
 use starship::segment::Segment;
 use std::fs;
@@ -26,8 +25,7 @@ fn home_directory() -> io::Result<()> {
 #[test]
 #[ignore]
 fn directory_in_home() -> io::Result<()> {
-    let dir = home_dir().unwrap().join("starship/engine");
-    fs::create_dir_all(&dir)?;
+    let dir = Path::new("~/starship/engine");
 
     let expected = Segment::new("dir")
         .set_value("~/starship/engine")
@@ -42,8 +40,7 @@ fn directory_in_home() -> io::Result<()> {
 #[test]
 #[ignore]
 fn truncated_directory_in_home() -> io::Result<()> {
-    let dir = home_dir().unwrap().join("starship/engine/schematics");
-    fs::create_dir_all(&dir)?;
+    let dir = Path::new("~/starship/engine/schematics");
 
     let expected = Segment::new("dir")
         .set_value("starship/engine/schematics")
@@ -70,11 +67,12 @@ fn root_directory() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn directory_in_root() -> io::Result<()> {
-    let dir = Path::new("/opt");
+    let dir = Path::new("/private");
 
     let expected = Segment::new("dir")
-        .set_value("/opt")
+        .set_value("/private")
         .set_style(Color::Cyan.bold())
         .output();
     let actual = common::render_segment("dir", &dir);
@@ -86,11 +84,10 @@ fn directory_in_root() -> io::Result<()> {
 #[test]
 #[ignore]
 fn truncated_directory_in_root() -> io::Result<()> {
-    let dir = Path::new("/opt/starship/thrusters/rocket");
-    fs::create_dir_all(&dir)?;
+    let dir = Path::new("/private/var/folders/3s");
 
     let expected = Segment::new("dir")
-        .set_value("starship/thrusters/rocket")
+        .set_value("var/folders/3s")
         .set_style(Color::Cyan.bold())
         .output();
     let actual = common::render_segment("dir", &dir);
@@ -100,7 +97,6 @@ fn truncated_directory_in_root() -> io::Result<()> {
 }
 
 #[test]
-#[ignore]
 fn git_repo_root() -> io::Result<()> {
     let tmp_dir = TempDir::new()?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -119,7 +115,6 @@ fn git_repo_root() -> io::Result<()> {
 }
 
 #[test]
-#[ignore]
 fn directory_in_git_repo() -> io::Result<()> {
     let tmp_dir = TempDir::new()?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -139,7 +134,6 @@ fn directory_in_git_repo() -> io::Result<()> {
 }
 
 #[test]
-#[ignore]
 fn truncated_directory_in_git_repo() -> io::Result<()> {
     let tmp_dir = TempDir::new()?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
