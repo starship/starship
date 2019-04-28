@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if ! (docker --version); then 
+  printf 'Docker is required to run the starship integration tests.\n'
+  printf 'Please download and install Docker in order to run these tests locally.\n'
+  exit 1
+fi
+
+printf 'Building test docker image:\n'
+docker build -f tests/Dockerfile --tag starship-test .
+
+printf 'Running test suite:\n'
+docker run --rm -t -v $(pwd):/starship starship-test
