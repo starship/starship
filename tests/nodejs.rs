@@ -14,7 +14,7 @@ fn folder_with_package_json() -> io::Result<()> {
 
     let expected = Segment::new("node")
         .set_value("⬢ v12.0.0")
-        .set_style(Color::Green)
+        .set_style(Color::Green.bold())
         .output();
     let actual = common::render_segment("nodejs", &dir.path());
     assert_eq!(expected, actual);
@@ -30,7 +30,7 @@ fn folder_with_js_file() -> io::Result<()> {
 
     let expected = Segment::new("node")
         .set_value("⬢ v12.0.0")
-        .set_style(Color::Green)
+        .set_style(Color::Green.bold())
         .output();
     let actual = common::render_segment("nodejs", &dir.path());
     assert_eq!(expected, actual);
@@ -47,7 +47,7 @@ fn folder_with_node_modules() -> io::Result<()> {
 
     let expected = Segment::new("node")
         .set_value("⬢ v12.0.0")
-        .set_style(Color::Green)
+        .set_style(Color::Green.bold())
         .output();
     let actual = common::render_segment("nodejs", &dir.path());
     assert_eq!(expected, actual);
