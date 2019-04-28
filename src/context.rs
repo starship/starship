@@ -1,4 +1,5 @@
 use clap::ArgMatches;
+use git2::Repository;
 use std::env;
 use std::fs;
 use std::path::PathBuf;
@@ -7,6 +8,7 @@ pub struct Context<'a> {
     pub current_dir: PathBuf,
     pub dir_files: Vec<PathBuf>,
     pub arguments: ArgMatches<'a>,
+    pub repository: Option<Repository>,
 }
 
 impl<'a> Context<'a> {
@@ -34,10 +36,13 @@ impl<'a> Context<'a> {
             .map(|entry| entry.path())
             .collect::<Vec<PathBuf>>();
 
+        let repository: Option<Repository> = Repository::discover(&current_dir).ok();
+
         Context {
-            current_dir,
             arguments,
+            current_dir,
             dir_files,
+            repository,
         }
     }
 
