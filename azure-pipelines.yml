@@ -20,6 +20,15 @@ jobs:
       - script: cargo fmt --all -- --check
         displayName: Run Rustfmt
 
+  - job: "Bench"
+    pool:
+      vmImage: "ubuntu-16.04"
+    container: "rust:latest"
+    condition: eq(variables['Build.Reason'], 'PullRequest')
+    steps:
+      - script: cargo bench
+        displayName: Run benchmark
+
   - job: "Test"
     strategy:
       matrix:
@@ -41,9 +50,6 @@ jobs:
     pool:
       vmImage: "ubuntu-16.04"
     steps:
-      - task: NodeTool@0 
-        inputs:
-          versionSpec: '12.0.0'
       - script: |
           curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain $RUSTUP_TOOLCHAIN
           echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
@@ -57,5 +63,6 @@ jobs:
         condition: eq( variables['Agent.OS'], 'Windows_NT' )
       - script: cargo build --all
         displayName: Cargo build
-      - script: cargo test -- --ignored
+        # Until env stubbing is solved, make tests run on a single thread
+      - script: cargo test --all -- --test-threads=1
         displayName: Cargo test
