@@ -31,7 +31,6 @@ pub fn prompt(args: ArgMatches) {
         .iter()
         .map(|module| modules::handle(module, &context)) // Compute segments
         .flatten() // Remove segments set to `None`
-        .enumerate() // Turn segment into tuple with index
-        .map(|(index, segment)| segment.output_index(index)) // Generate string outputs
+        // TODO: Skip first prefix
         .for_each(|segment_string| write!(handle, "{}", segment_string).unwrap());
 }

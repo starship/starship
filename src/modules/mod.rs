@@ -9,9 +9,8 @@ mod rust;
 
 use crate::context::Context;
 use crate::segment::Segment;
-use crate::module::Module;
 
-pub fn handle(module: &str, context: &Context) -> Option<Segment> {
+pub fn handle(module: &str, context: &Context) -> Option<impl std::fmt::Display> {
     match module {
         "dir" | "directory" => directory::segment(context),
         "char" | "character" => character::segment(context),
