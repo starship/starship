@@ -13,7 +13,7 @@ fn folder_with_python_version() -> io::Result<()> {
     File::create(dir.path().join(".python-version"))?;
 
     let expected = Segment::new("python")
-        .set_value("🐍 v3.7.3")
+        .set_value("🐍 v3.7.2")
         .set_style(Color::Yellow.bold())
         .output();
     let actual = common::render_segment("python", &dir.path());
@@ -29,7 +29,7 @@ fn folder_with_requirements_txt() -> io::Result<()> {
     File::create(dir.path().join("requirements.txt"))?;
 
     let expected = Segment::new("python")
-        .set_value("🐍 v3.7.3")
+        .set_value("🐍 v3.7.2")
         .set_style(Color::Yellow.bold())
         .output();
     let actual = common::render_segment("python", &dir.path());
@@ -45,7 +45,7 @@ fn folder_with_pyproject_toml() -> io::Result<()> {
     File::create(dir.path().join("pyproject.toml"))?;
 
     let expected = Segment::new("python")
-        .set_value("🐍 v3.7.3")
+        .set_value("🐍 v3.7.2")
         .set_style(Color::Yellow.bold())
         .output();
     let actual = common::render_segment("python", &dir.path());
@@ -61,7 +61,7 @@ fn folder_with_py_file() -> io::Result<()> {
     File::create(dir.path().join("main.py"))?;
 
     let expected = Segment::new("python")
-        .set_value("🐍 v3.7.3")
+        .set_value("🐍 v3.7.2")
         .set_style(Color::Yellow.bold())
         .output();
     let actual = common::render_segment("python", &dir.path());
