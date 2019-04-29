@@ -9,7 +9,7 @@ use toml;
 
 /// Creates a segment with the current package version
 ///
-/// Will display if a version your Node.js or Rust project (if one exists)
+/// Will display if a version is defined for your Node.js or Rust project (if one exists)
 pub fn segment(context: &Context) -> Option<Segment> {
     match get_package_version(context) {
         Some(package_version) => {
