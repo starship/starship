@@ -25,7 +25,7 @@ pub fn segment(context: &Context) -> Option<Segment> {
         segment.set_style(COLOR_FAILURE);
     };
 
-    segment.set_value(PROMPT_CHAR).set_prefix(None);
+    segment.set_value(PROMPT_CHAR);
 
     Some(segment)
 }

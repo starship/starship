@@ -6,10 +6,10 @@ use std::fmt;
 /// (e.g. The version that software is running).
 pub struct Segment {
     /// The segment's name, to be used in configuration and logging.
-    pub name: String,
+    name: String,
 
     /// The segment's style. If None, will inherit the style of the module containing it.
-    pub style: Option<Style>,
+    style: Option<Style>,
 
     /// The prefix used to preceed the contents of a segment.
     prefix: Option<SegmentAffix>,
@@ -23,9 +23,9 @@ pub struct Segment {
 
 impl Segment {
     /// Creates a new segment with default fields.
-    pub fn new<T>(name: String) -> Segment {
+    pub fn new(name: &str) -> Segment {
         Segment {
-            name: name,
+            name: name.to_string(),
             style: None,
             prefix: None,
             value: "".to_string(),
@@ -65,34 +65,34 @@ impl Segment {
         self.suffix = Some(suffix);
     }
 
-    /// Returns the ANSIString of the segment value, not including its prefix and suffix
-    fn ansi_string(&self) -> ANSIString {
+    // Returns the ANSIString of the segment value, not including its prefix and suffix
+    fn value_ansi_string(&self) -> ANSIString {
         match self.style {
             Some(style) => style.paint(self.value),
             None => ANSIString::from(self.value),
         }
     } 
 
-    /// Returns the colored ANSIStrings the segment, including its prefix and suffix
-    pub fn ansi_strings(&self) -> ansi_term::ANSIStrings {
+    /// Returns a vector of colored ANSIString elements to be later used with
+    /// `ANSIStrings()` to optimize ANSI codes
+    pub fn ansi_strings(&self) -> Vec<ANSIString> {
         let prefix = self.prefix.and_then(|p| Some(p.ansi_string()));
         let suffix = self.suffix.and_then(|s| Some(s.ansi_string()));
-        let value = Some(self.ansi_string());
+        let value = Some(self.value_ansi_string());
 
         // Remove `None` values from the vector
-        let output = vec!(
+        vec!(
             prefix,
             value,
             suffix
-        ).into_iter().filter_map(|e| e).collect::<Vec<ANSIString>>();
-
-        ANSIStrings(&output)
+        ).into_iter().filter_map(|e| e).collect::<Vec<ANSIString>>()
     }
 }
 
 impl fmt::Display for Segment {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.ansi_strings())
+        let ansi_strings = self.ansi_strings();
+        write!(f, "{}", ANSIStrings(&ansi_strings))
     }
 }
 

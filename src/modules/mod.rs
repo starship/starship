@@ -9,6 +9,7 @@ mod rust;
 
 use crate::context::Context;
 use crate::segment::Segment;
+use crate::module::Module;
 
 pub fn handle(module: &str, context: &Context) -> Option<Segment> {
     match module {
