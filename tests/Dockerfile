@@ -29,15 +29,12 @@ RUN goenv global $GO_VERSION
 RUN go version
 # Install Python
 ENV PYTHON_VERSION 3.7.3
-RUN curl https://pyenv.run | bash
-ENV PATH /root/.pyenv/bin:$PATH
-RUN eval "$(pyenv init -)"
-RUN eval "$(pyenv virtualenv-init -)"
-RUN python --version
-RUN pyenv install $PYTHON_VERSION
-RUN pyenv versions
-RUN pyenv global $PYTHON_VERSION
-RUN pyenv versions
+ENV PYENV_ROOT /root/.pyenv
+ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
+RUN curl https://pyenv.run | bash \
+  && pyenv update \
+  && pyenv install $PYTHON_VERSION \
+  && pyenv global $PYTHON_VERSION
 # Check that Python was correctly installed
 RUN python --version
 
