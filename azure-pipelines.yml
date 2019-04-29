@@ -60,13 +60,14 @@ jobs:
       - task: GoTool@0
         inputs:
           versionSpec: "1.10"
-      # Install Rust at a fixed version for integration tests
+      # Install Python
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '3.7.3'
+      # Install Rust
       - template: ".build/install-rust.yml"
-        parameters:
-          versionSpec: "1.34.0"
 
-      # Because integration tests rely on a fixed Rust version, we must use rustup to run with the intended toolkit
-      - script: rustup run $RUSTUP_TOOLCHAIN cargo build --all
+      - script: cargo build
         displayName: Cargo build
-      - script: rustup run $RUSTUP_TOOLCHAIN cargo test -- --ignored
+      - script: cargo test -- --ignored
         displayName: Cargo test
