@@ -25,7 +25,21 @@ ENV PATH $GO_ROOT/bin:$PATH
 RUN goenv install $GO_VERSION
 RUN goenv global $GO_VERSION
 # Check that Go was correctly installed
+
 RUN go version
+# Install Python
+ENV PYTHON_VERSION 3.7.3
+RUN curl https://pyenv.run | bash
+ENV PATH /root/.pyenv/bin:$PATH
+RUN eval "$(pyenv init -)"
+RUN eval "$(pyenv virtualenv-init -)"
+RUN python --version
+RUN pyenv install $PYTHON_VERSION
+RUN pyenv versions
+RUN pyenv global $PYTHON_VERSION
+RUN pyenv versions
+# Check that Python was correctly installed
+RUN python --version
 
 # Create blank project
 RUN USER=root cargo new --bin starship
@@ -50,5 +64,9 @@ RUN rm -rf /starship
 RUN mkdir starship
 WORKDIR /starship
 
+<<<<<<< HEAD
 # Run with rustup to use stable instead of the Rust default
 CMD [ "rustup", "run", "stable", "cargo", "test", "--", "--ignored"]
+=======
+CMD ["cargo", "test", "--", "--ignored"]
+>>>>>>> Add integration tests for Python segment
