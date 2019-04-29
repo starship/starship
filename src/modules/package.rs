@@ -38,7 +38,7 @@ fn is_package_json(dir_entry: &PathBuf) -> bool {
 }
 
 // TODO: Move to `utils.rs` file and import
-fn read_file(file_name: String) -> String {
+fn read_file(file_name: &str) -> String {
     let mut file = File::open(file_name).unwrap();
     let mut data = String::new();
     file.read_to_string(&mut data).unwrap();
@@ -47,7 +47,7 @@ fn read_file(file_name: String) -> String {
 }
 
 fn extract_cargo_version() -> Option<String> {
-    let data = read_file("Cargo.toml".to_string());
+    let data = read_file("Cargo.toml");
 
     let toml = data.parse::<toml::Value>().unwrap();
     match toml["package"]["version"].as_str() {
@@ -60,7 +60,7 @@ fn extract_cargo_version() -> Option<String> {
 }
 
 fn extract_package_version() -> Option<String> {
-    let data = read_file("package.json".to_string());
+    let data = read_file("package.json");
 
     let json: serde_json::Value = serde_json::from_str(&data).unwrap();
     let raw_version = json["version"].to_string();
