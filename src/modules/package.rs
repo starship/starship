@@ -43,7 +43,9 @@ fn read_file(file_name: &str) -> String {
         panic!("There was a problem opening the file: {:?}", error);
     });
     let mut data = String::new();
-    file.read_to_string(&mut data).unwrap();
+    file.read_to_string(&mut data).unwrap_or_else(|error| {
+        panic!("There was a problem reading the file: {:?}", error);
+    });
 
     data
 }
@@ -51,7 +53,9 @@ fn read_file(file_name: &str) -> String {
 fn extract_cargo_version() -> Option<String> {
     let data = read_file("Cargo.toml");
 
-    let toml = data.parse::<toml::Value>().unwrap();
+    let toml = data.parse::<toml::Value>().unwrap_or_else(|error| {
+        panic!("There was a problem parsing the TOML file: {:?}", error);
+    });
     match toml["package"]["version"].as_str() {
         Some(raw_version) => {
             let version = format_version(raw_version.to_string());
@@ -64,7 +68,9 @@ fn extract_cargo_version() -> Option<String> {
 fn extract_package_version() -> Option<String> {
     let data = read_file("package.json");
 
-    let json: serde_json::Value = serde_json::from_str(&data).unwrap();
+    let json: serde_json::Value = serde_json::from_str(&data).unwrap_or_else(|error| {
+        panic!("There was a problem parsing the JSON file: {:?}", error);
+    });
     let raw_version = json["version"].to_string();
     if raw_version == "null" {
         return None;
