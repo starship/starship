@@ -39,7 +39,9 @@ fn is_package_json(dir_entry: &PathBuf) -> bool {
 
 // TODO: Move to `utils.rs` file and import
 fn read_file(file_name: &str) -> String {
-    let mut file = File::open(file_name).unwrap();
+    let mut file = File::open(file_name).unwrap_or_else(|error| {
+        panic!("There was a problem opening the file: {:?}", error);
+    });
     let mut data = String::new();
     file.read_to_string(&mut data).unwrap();
 
