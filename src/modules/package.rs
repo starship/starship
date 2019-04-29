@@ -29,19 +29,12 @@ pub fn segment(context: &Context) -> Option<Segment> {
 }
 
 // TODO: Combine into one function and just call for different file names!
-fn has_rs_files(dir_entry: &PathBuf) -> bool {
-    let is_cargo_toml =
-        |d: &PathBuf| -> bool { d.is_file() && d.file_name().unwrap_or_default() == "Cargo.toml" };
-
-    is_cargo_toml(&dir_entry)
+fn is_cargo_toml(dir_entry: &PathBuf) -> bool {
+    dir_entry.is_file() && dir_entry.file_name().unwrap_or_default() == "Cargo.toml"
 }
 
-fn has_js_files(dir_entry: &PathBuf) -> bool {
-    let is_package_json = |d: &PathBuf| -> bool {
-        d.is_file() && d.file_name().unwrap_or_default() == "package.json"
-    };
-
-    is_package_json(&dir_entry)
+fn is_package_json(dir_entry: &PathBuf) -> bool {
+    dir_entry.is_file() && dir_entry.file_name().unwrap_or_default() == "package.json"
 }
 
 // TODO: Move to `utils.rs` file and import
@@ -79,13 +72,13 @@ fn extract_package_version() -> Option<String> {
 }
 
 fn get_package_version(context: &Context) -> Option<String> {
-    let is_rs_project = context.dir_files.iter().any(has_rs_files);
-    if is_rs_project {
+    let has_cargo_toml = context.dir_files.iter().any(is_cargo_toml);
+    if has_cargo_toml {
         return extract_cargo_version();
     }
 
-    let is_js_project = context.dir_files.iter().any(has_js_files);
-    if is_js_project {
+    let has_package_json = context.dir_files.iter().any(is_package_json);
+    if has_package_json {
         return extract_package_version();
     }
 
