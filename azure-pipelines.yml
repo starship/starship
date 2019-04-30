@@ -47,6 +47,8 @@ jobs:
           versionSpec: "12.0.0"
       # Install Rust
       - template: ".build/install-rust.yml"
+        parameters:
+          versionSpec: "1.34.0"
 
       # Because integration tests rely on a fixed Rust version, we must use rustup to run with the intended toolkit
       - script: rustup run $RUSTUP_TOOLCHAIN cargo build --all
