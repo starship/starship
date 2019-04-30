@@ -54,13 +54,13 @@ impl Segment {
     }
 
     /// Sets the segment prefix to the provided SegmentAffix.
-    pub fn set_prefix(&mut self, prefix: SegmentAffix) {
+    pub fn set_prefix(&mut self, mut prefix: SegmentAffix) {
         prefix.name = format!("{}_prefix", self.name);
         self.prefix = Some(prefix);
     }
 
     /// Sets the segment suffix to the provided SegmentAffix.
-    pub fn set_suffix(&mut self, suffix: SegmentAffix) {
+    pub fn set_suffix(&mut self, mut suffix: SegmentAffix) {
         suffix.name = format!("{}_suffix", self.name);
         self.suffix = Some(suffix);
     }
@@ -68,16 +68,16 @@ impl Segment {
     // Returns the ANSIString of the segment value, not including its prefix and suffix
     fn value_ansi_string(&self) -> ANSIString {
         match self.style {
-            Some(style) => style.paint(self.value),
-            None => ANSIString::from(self.value),
+            Some(style) => style.paint(&self.value),
+            None => ANSIString::from(&self.value),
         }
     } 
 
     /// Returns a vector of colored ANSIString elements to be later used with
     /// `ANSIStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<ANSIString> {
-        let prefix = self.prefix.and_then(|p| Some(p.ansi_string()));
-        let suffix = self.suffix.and_then(|s| Some(s.ansi_string()));
+        let prefix = self.prefix.as_ref().and_then(|p| Some(p.ansi_string()));
+        let suffix = self.suffix.as_ref().and_then(|s| Some(s.ansi_string()));
         let value = Some(self.value_ansi_string());
 
         // Remove `None` values from the vector
@@ -98,7 +98,7 @@ impl fmt::Display for Segment {
 
 /// Segment affixes are to be used for the prefix or suffix of a segment.
 /// By default they will inherit the styling of its segment, unless otherwise specified.
-struct SegmentAffix {
+pub struct SegmentAffix {
     /// The affix's name, to be used in configuration and logging.
     name: String,
 
@@ -111,7 +111,7 @@ struct SegmentAffix {
 
 impl SegmentAffix {
     /// Creates a segment affix with no contents.
-    fn new() -> SegmentAffix {
+    pub fn new() -> SegmentAffix {
         SegmentAffix {
             name: String::new(),
             style: None,
@@ -122,8 +122,8 @@ impl SegmentAffix {
     /// Generates the colored ANSIString output.
     pub fn ansi_string(&self) -> ANSIString {
         match self.style {
-            Some(style) => style.paint(self.value),
-            None => ANSIString::from(self.value),
+            Some(style) => style.paint(&self.value),
+            None => ANSIString::from(&self.value),
         }
     }
 }

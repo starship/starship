@@ -2,7 +2,7 @@ use ansi_term::Color;
 use std::path::PathBuf;
 use std::process::Command;
 
-use super::Segment;
+use super::{Segment, PromptComponent};
 use crate::context::Context;
 
 /// Creates a segment with the current Node.js version
@@ -11,7 +11,7 @@ use crate::context::Context;
 ///     - Current directory contains a `.js` file
 ///     - Current directory contains a `package.json` file
 ///     - Current directory contains a `node_modules` directory
-pub fn segment(context: &Context) -> Option<Segment> {
+pub fn segment(context: &Context) -> PromptComponent {
     let is_js_project = context.dir_files.iter().any(has_js_files);
     if !is_js_project {
         return None;
@@ -28,7 +28,7 @@ pub fn segment(context: &Context) -> Option<Segment> {
             let formatted_version = node_version.trim();
             segment.set_value(format!("{} {}", NODE_CHAR, formatted_version));
 
-            Some(segment)
+            Some(Box::new(segment))
         }
         None => None,
     }

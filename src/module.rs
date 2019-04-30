@@ -25,31 +25,31 @@ pub struct Module {
 
 impl Module {
     /// Creates a module with no segments.
-    pub fn new(name: String) -> Module {
+    pub fn new(name: &String) -> Module {
         Module {
-            name,
+            name: name.to_string(),
             style: Style::default(),
-            prefix: Some(ModuleAffix::default_prefix(name)),
+            prefix: Some(ModuleAffix::default_prefix(name.to_string())),
             segments: Vec::new(),
-            suffix: Some(ModuleAffix::default_suffix(name)),
+            suffix: Some(ModuleAffix::default_suffix(name.to_string())),
         }
     }
 
     /// Returns a vector of colored ANSIString elements to be later used with
     /// `ANSIStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<ANSIString> {
-        let ansi_strings = self.segments
+        let mut ansi_strings = self.segments
             .iter()
             .map(|s| s.ansi_strings())
             .flat_map(|s| s.into_iter())
             .collect::<Vec<ANSIString>>();
 
-        if let Some(prefix) = self.prefix {
-            ansi_strings.insert(0, prefix.ansi_string());
+        if let Some(prefix) = &self.prefix {
+            &ansi_strings.insert(0, prefix.ansi_string());
         }
 
-        if let Some(suffix) = self.suffix {
-            ansi_strings.push(suffix.ansi_string());
+        if let Some(suffix) = &self.suffix {
+            &ansi_strings.push(suffix.ansi_string());
         }
 
         ansi_strings
@@ -103,7 +103,7 @@ impl ModuleAffix {
 
     /// Generates the colored ANSIString output.
     pub fn ansi_string(&self) -> ANSIString {
-        self.style.paint(self.value)
+        self.style.paint(&self.value)
     }
 }
 
