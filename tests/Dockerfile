@@ -1,4 +1,4 @@
-FROM rust:latest
+FROM rust:1.34.0
 
 # Install Node.js
 ENV NODE_VERSION 12.0.0
@@ -24,7 +24,8 @@ RUN mkdir benches
 RUN touch benches/my_benchmark.rs
 
 # This is a dummy build to get dependencies cached
-RUN cargo build --release
+RUN rustup install stable
+RUN rustup run stable cargo build --release
 
 # Delete the dummy build
 RUN rm -rf /starship
@@ -33,4 +34,5 @@ RUN rm -rf /starship
 RUN mkdir starship
 WORKDIR /starship
 
-CMD [ "cargo", "test", "--", "--ignored"]
+# Run with rustup to use stable instead of the Rust default
+CMD [ "rustup", "run", "stable", "cargo", "test", "--", "--ignored"]
