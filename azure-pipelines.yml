@@ -1,4 +1,5 @@
 jobs:
+  # Run the Rust linter
   - job: "Clippy"
     pool:
       vmImage: "ubuntu-16.04"
@@ -9,6 +10,7 @@ jobs:
       - script: cargo clippy --all
         displayName: Run clippy
 
+  # Run the Rust formatter
   - job: "Rustfmt"
     pool:
       vmImage: "ubuntu-16.04"
@@ -20,13 +22,15 @@ jobs:
       - script: cargo fmt --all -- --check
         displayName: Run Rustfmt
 
-  - job: "Dockerized tests"
+  # Run the integration tests in a Docker container
+  - job: "Docker_tests"
     pool:
       vmImage: "ubuntu-16.04"
     steps:
       - script: ./integration_test
         displayName: Dockerized tests
 
+  # Run the integration tests on virtual machines
   - job: "Test"
     strategy:
       matrix:
