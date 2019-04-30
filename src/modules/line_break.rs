@@ -6,13 +6,13 @@ pub fn segment(_context: &Context) -> Option<Module> {
 
     let mut module = Module::new("line_break");
     
-    let mut prefix = module.get_prefix();
+    let prefix = module.get_prefix();
     prefix.set_value("");
 
-    let mut suffix = module.get_suffix();
+    let suffix = module.get_suffix();
     suffix.set_value("");
 
-    let mut symbol = module.new_segment("character");
+    let symbol = module.new_segment("character");
     symbol.set_value(LINE_ENDING);
     
     Some(module)
