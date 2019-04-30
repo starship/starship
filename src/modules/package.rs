@@ -3,6 +3,7 @@ use crate::context::Context;
 use ansi_term::Color;
 use serde_json;
 use std::fs::File;
+use std::io;
 use std::io::Read;
 use std::path::PathBuf;
 use toml;
@@ -38,45 +39,60 @@ fn is_package_json(dir_entry: &PathBuf) -> bool {
 }
 
 // TODO: Move to `utils.rs` file and import
-fn read_file(file_name: &str) -> String {
-    let mut file = File::open(file_name).unwrap_or_else(|error| {
-        panic!("There was a problem opening the file: {:?}", error);
-    });
+fn read_file(file_name: &str) -> Result<String, io::Error> {
+    let mut file = File::open(file_name)?;
     let mut data = String::new();
-    file.read_to_string(&mut data).unwrap_or_else(|error| {
-        panic!("There was a problem reading the file: {:?}", error);
-    });
 
-    data
+    file.read_to_string(&mut data)?;
+
+    Ok(data)
 }
 
 fn extract_cargo_version() -> Option<String> {
-    let data = read_file("Cargo.toml");
+    match read_file("Cargo.toml") {
+        Ok(data) => {
+            let toml = match data.parse::<toml::Value>() {
+                Ok(toml) => Some(toml),
+                Err(_) => None,
+            };
 
-    let toml = data.parse::<toml::Value>().unwrap_or_else(|error| {
-        panic!("There was a problem parsing the TOML file: {:?}", error);
-    });
-    match toml["package"]["version"].as_str() {
-        Some(raw_version) => {
-            let version = format_version(raw_version.to_string());
-            Some(version)
+            match toml {
+                None => None,
+                Some(toml) => match toml["package"]["version"].as_str() {
+                    None => None,
+                    Some(raw_version) => {
+                        let version = format_version(raw_version.to_string());
+                        Some(version)
+                    }
+                },
+            }
         }
-        None => None,
+        Err(_) => None,
     }
 }
 
 fn extract_package_version() -> Option<String> {
-    let data = read_file("package.json");
+    match read_file("package.json") {
+        Ok(data) => {
+            let json: Option<serde_json::Value> = match serde_json::from_str(&data) {
+                Ok(json) => Some(json),
+                Err(_) => None,
+            };
 
-    let json: serde_json::Value = serde_json::from_str(&data).unwrap_or_else(|error| {
-        panic!("There was a problem parsing the JSON file: {:?}", error);
-    });
-    let raw_version = json["version"].to_string();
-    if raw_version == "null" {
-        return None;
+            match json {
+                None => None,
+                Some(json) => {
+                    let raw_version = json["version"].to_string();
+                    if raw_version == "null" {
+                        None
+                    } else {
+                        Some(format_version(raw_version))
+                    }
+                }
+            }
+        }
+        Err(_) => None,
     }
-    let version = format_version(raw_version);
-    return Some(version);
 }
 
 fn get_package_version(context: &Context) -> Option<String> {
