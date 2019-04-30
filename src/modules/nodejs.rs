@@ -14,8 +14,8 @@ use crate::find_file;
 pub fn segment(context: &Context) -> Option<Segment> {
     let js_criteria = find_file::Criteria {
         files: vec!["package.json"],
-        extension: "js".to_string(),
-        folder: "node_modules".to_string(),
+        extension: vec!["js"],
+        folder: vec!["node_modules"],
     };
 
     let is_js_project = find_file::is_lang_project(&context.dir_files, &js_criteria);

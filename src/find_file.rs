@@ -3,46 +3,50 @@ use std::path::PathBuf;
 
 pub struct Criteria<'a> {
     pub files: Vec<&'a str>,
-    pub extension: String,
-    pub folder: String,
+    pub extension: Vec<&'a str>,
+    pub folder: Vec<&'a str>,
+}
+
+impl Criteria {
+    fn new() -> Criteria {
+        Criteria {}
+    }
 }
 
 // based on the directory do any of this criteria match or exist
 pub fn is_lang_project(dir_entry: &Vec<PathBuf>, criteria: &Criteria) -> bool {
     dir_entry.into_iter().any(|path| match path.is_dir() {
-        true => has_folder(&path, &criteria.folder),
-        false => {
-            has_files(&path, &criteria.files)
-                || has_files_with_extension(&path, &criteria.extension)
-        }
+        true => path_has_name(&path, &criteria.folder),
+        false => path_has_name(&path, &criteria.files) || has_extension(&path, &criteria.extension),
     })
 }
 
-pub fn has_files(dir_entry: &PathBuf, files: &Vec<&str>) -> bool {
-    let found_file = files.into_iter().find(|file| {
+pub fn path_has_name(dir_entry: &PathBuf, names: &Vec<&str>) -> bool {
+    let found_file_or_folder_name = names.into_iter().find(|file_or_folder_name| {
         dir_entry
             .file_name()
             .and_then(OsStr::to_str)
             .unwrap_or_default()
-            == **file
+            == **file_or_folder_name
     });
 
-    match found_file {
-        Some(file) => !file.is_empty(),
+    match found_file_or_folder_name {
+        Some(name) => !name.is_empty(),
         None => false,
     }
 }
 
-pub fn has_files_with_extension(dir_entry: &PathBuf, extension: &String) -> bool {
-    match dir_entry.extension().and_then(OsStr::to_str) {
-        Some(ext) => ext == extension,
-        None => false,
-    }
-}
+pub fn has_extension(dir_entry: &PathBuf, extensions: &Vec<&str>) -> bool {
+    let found_ext = extensions.into_iter().find(|ext| {
+        dir_entry
+            .extension()
+            .and_then(OsStr::to_str)
+            .unwrap_or_default()
+            == **ext
+    });
 
-pub fn has_folder(dir_entry: &PathBuf, folder: &String) -> bool {
-    match dir_entry.file_name().and_then(OsStr::to_str) {
-        Some(ext) => ext == folder,
+    match found_ext {
+        Some(extension) => !extension.is_empty(),
         None => false,
     }
 }
@@ -52,43 +56,31 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_has_files() {
+    fn test_path_has_name() {
         let mut buf = PathBuf::from("/");
-        let mut files = vec!["no-package.json"];
+        let mut files = vec!["package.json"];
 
-        assert_eq!(has_files(&buf, &files), false);
+        assert_eq!(path_has_name(&buf, &files), false);
 
         buf.set_file_name("some-file.js");
-        assert_eq!(has_files(&buf, &files), false);
+        assert_eq!(path_has_name(&buf, &files), false);
 
         files.push("package.json");
-        assert_eq!(has_files(&buf, &files), true);
+        assert_eq!(path_has_name(&buf, &files), true);
     }
 
     #[test]
-    fn test_has_files_with_extension() {
+    fn test_has_extension() {
         let mut buf = PathBuf::from("/");
+        let extensions = vec!["js"];
 
-        assert_eq!(has_files_with_extension(&buf, &String::from("js")), false);
+        assert_eq!(has_extension(&buf, &extensions), false);
 
         buf.set_file_name("some-file.rs");
-        assert_eq!(has_files_with_extension(&buf, &String::from("js")), false);
+        assert_eq!(has_extension(&buf, &extensions), false);
 
         buf.set_file_name("some-file.js");
-        assert_eq!(has_files_with_extension(&buf, &String::from("js")), true)
-    }
-
-    #[test]
-    fn test_has_folder() {
-        let mut buf = PathBuf::from("/");
-
-        assert_eq!(has_folder(&buf, &String::from("node_modules")), false);
-
-        buf.set_file_name("some-file.rs");
-        assert_eq!(has_folder(&buf, &String::from("node_modules")), false);
-
-        buf.set_file_name("node_modules");
-        assert_eq!(has_folder(&buf, &String::from("node_modules")), true)
+        assert_eq!(has_extension(&buf, &extensions), true)
     }
 
     #[test]
@@ -97,8 +89,8 @@ mod tests {
 
         let criteria = Criteria {
             files: vec!["package.json"],
-            extension: "js".to_string(),
-            folder: "node_modules".to_string(),
+            extension: vec!["js"],
+            folder: vec!["node_modules"],
         };
 
         assert_eq!(is_lang_project(&buf, &criteria), false);

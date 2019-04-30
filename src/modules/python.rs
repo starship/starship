@@ -16,8 +16,8 @@ use super::{Context, Module};
 pub fn segment(context: &Context) -> Option<Segment> {
     let python_criteria = find_file::Criteria {
         files: vec!["requirements.txt, pyproject.toml", ".pyproject.toml"],
-        extension: "py".to_string(),
-        folder: "".to_string(),
+        extension: vec!["py"],
+        folder: vec![""],
     };
 
     let is_py_project = find_file::is_lang_project(&context.dir_files, &python_criteria);;

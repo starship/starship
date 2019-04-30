@@ -14,8 +14,8 @@ use super::{Context, Module};
 pub fn segment(context: &Context) -> Option<Segment> {
     let rust_criteria = find_file::Criteria {
         files: vec!["Cargo.toml"],
-        extension: "rs".to_string(),
-        folder: "".to_string(),
+        extension: vec!["rs"],
+        folder: vec![""],
     };
 
     let is_rs_project = find_file::is_lang_project(&context.dir_files, &rust_criteria);
