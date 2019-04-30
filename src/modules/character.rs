@@ -1,7 +1,5 @@
 use ansi_term::Color;
-
-use super::{Segment, PromptComponent};
-use crate::context::Context;
+use super::{Context, Module};
 
 /// Creates a segment for the prompt character
 ///
@@ -11,21 +9,26 @@ use crate::context::Context;
 /// (green by default)
 /// - If the exit-code was anything else, the arrow will be formatted with
 /// `COLOR_FAILURE` (red by default)
-pub fn segment(context: &Context) -> PromptComponent {
+pub fn segment(context: &Context) -> Option<Module> {
     const PROMPT_CHAR: &str = "➜";
     const COLOR_SUCCESS: Color = Color::Green;
     const COLOR_FAILURE: Color = Color::Red;
 
-    let mut segment = Segment::new("char");
     let arguments = &context.arguments;
 
+    let mut module = Module::new("char");
+
+    let prefix = module.get_prefix();
+    prefix.set_value("");
+
+    let symbol = module.new_segment("symbol");
+    symbol.set_value(PROMPT_CHAR);
+
     if arguments.value_of("status_code").unwrap() == "0" {
-        segment.set_style(COLOR_SUCCESS);
+        symbol.set_style(COLOR_SUCCESS);
     } else {
-        segment.set_style(COLOR_FAILURE);
+        symbol.set_style(COLOR_FAILURE);
     };
 
-    segment.set_value(PROMPT_CHAR);
-
-    Some(Box::new(segment))
+    Some(module)
 }

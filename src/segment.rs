@@ -1,4 +1,4 @@
-use ansi_term::{Style, ANSIString, ANSIStrings};
+use ansi_term::{ANSIString, ANSIStrings, Style};
 use std::fmt;
 
 /// A segment is a single configurable element in a module. This will usually
@@ -29,7 +29,7 @@ impl Segment {
             style: None,
             prefix: None,
             value: "".to_string(),
-            suffix: None
+            suffix: None,
         }
     }
 
@@ -71,7 +71,7 @@ impl Segment {
             Some(style) => style.paint(&self.value),
             None => ANSIString::from(&self.value),
         }
-    } 
+    }
 
     /// Returns a vector of colored ANSIString elements to be later used with
     /// `ANSIStrings()` to optimize ANSI codes
@@ -81,11 +81,10 @@ impl Segment {
         let value = Some(self.value_ansi_string());
 
         // Remove `None` values from the vector
-        vec!(
-            prefix,
-            value,
-            suffix
-        ).into_iter().filter_map(|e| e).collect::<Vec<ANSIString>>()
+        vec![prefix, value, suffix]
+            .into_iter()
+            .filter_map(|e| e)
+            .collect::<Vec<ANSIString>>()
     }
 }
 
@@ -115,7 +114,7 @@ impl SegmentAffix {
         SegmentAffix {
             name: String::new(),
             style: None,
-            value: String::new()
+            value: String::new(),
         }
     }
 

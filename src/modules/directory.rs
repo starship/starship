@@ -1,8 +1,7 @@
 use ansi_term::Color;
 use std::path::Path;
 
-use super::{Segment, PromptComponent};
-use crate::context::Context;
+use super::{Context, Module};
 
 /// Creates a segment with the current directory
 ///
@@ -13,12 +12,15 @@ use crate::context::Context;
 ///
 /// **Truncation**
 /// Paths will be limited in length to `3` path components by default.
-pub fn segment(context: &Context) -> PromptComponent {
+pub fn segment(context: &Context) -> Option<Module> {
     const HOME_SYMBOL: &str = "~";
     const DIR_TRUNCATION_LENGTH: usize = 3;
-    const SEGMENT_COLOR: Color = Color::Cyan;
+    const MODULE_COLOR: Color = Color::Cyan;
 
-    let mut segment = Segment::new("dir");
+    let mut module = Module::new("directory");
+    module.set_style(MODULE_COLOR.bold());
+    
+    let segment = module.new_segment("path");
     let current_dir = &context.current_dir;
 
     let dir_string;
@@ -38,11 +40,9 @@ pub fn segment(context: &Context) -> PromptComponent {
     // Truncate the dir string to the maximum number of path components
     let truncated_dir_string = truncate(dir_string, DIR_TRUNCATION_LENGTH);
 
-    segment
-        .set_value(truncated_dir_string)
-        .set_style(SEGMENT_COLOR.bold());
+    segment.set_value(truncated_dir_string);
 
-    Some(Box::new(segment))
+    Some(module)
 }
 
 /// Contract the root component of a path

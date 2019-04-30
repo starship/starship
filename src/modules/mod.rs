@@ -8,9 +8,9 @@ mod python;
 mod rust;
 
 use crate::context::Context;
-use crate::segment::Segment;
+use crate::module::Module;
 
-pub fn handle(module: &str, context: &Context) -> PromptComponent {
+pub fn handle(module: &str, context: &Context) -> Option<Module> {
     match module {
         "dir" | "directory" => directory::segment(context),
         "char" | "character" => character::segment(context),
@@ -24,5 +24,3 @@ pub fn handle(module: &str, context: &Context) -> PromptComponent {
         _ => panic!("Unknown module: {}", module),
     }
 }
-
-pub type PromptComponent = Option<Box<dyn std::fmt::Display>>;
