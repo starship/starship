@@ -45,7 +45,7 @@ jobs:
       - task: NodeTool@0
         inputs:
           versionSpec: "12.0.0"
-      # Install Rust
+      # Install Rust at a fixed version for integration tests
       - template: ".build/install-rust.yml"
         parameters:
           versionSpec: "1.34.0"

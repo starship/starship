@@ -2,6 +2,7 @@ parameters:
   versionSpec: ""
 
 steps:
+  # Install Rust at a fixed version for integration tests to pass
  - script: |
      curl -sSf -o rustup-init.exe https://win.rustup.rs
      rustup-init.exe -y --default-toolchain ${{ parameters.versionSpec }}
@@ -13,3 +14,6 @@ steps:
      echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
    displayName: Install rust
    condition: ne( variables['Agent.OS'], 'Windows_NT' )
+
+  # Install the version of Rust used for testing with
+ - script: rustup install $RUSTUP_TOOLCHAIN
