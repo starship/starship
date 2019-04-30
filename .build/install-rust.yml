@@ -7,13 +7,14 @@ steps:
      curl -sSf -o rustup-init.exe https://win.rustup.rs
      rustup-init.exe -y --default-toolchain ${{ parameters.versionSpec }}
      echo "##vso[task.setvariable variable=PATH;]%PATH%;%USERPROFILE%\.cargo\bin"
-   displayName: Windows install rust
+   displayName: Windows install Rust
    condition: eq( variables['Agent.OS'], 'Windows_NT' )
  - script: |
      curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain ${{ parameters.versionSpec }}
      echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
-   displayName: Install rust
+   displayName: Install a fixed version of Rust
    condition: ne( variables['Agent.OS'], 'Windows_NT' )
 
   # Install the version of Rust used for testing with
  - script: rustup install $RUSTUP_TOOLCHAIN
+   displayName: Install Rust used for CI
