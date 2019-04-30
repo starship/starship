@@ -55,3 +55,10 @@ jobs:
         displayName: Cargo build
       - script: rustup run $RUSTUP_TOOLCHAIN cargo test -- --ignored
         displayName: Cargo test
+
+  - job: "Dockerized tests"
+    pool:
+      vmImage: "ubuntu-16.04"
+    steps:
+      - script: ./integration_test
+        displayName: Dockerized tests
