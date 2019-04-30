@@ -2,6 +2,7 @@ use clap::ArgMatches;
 use std::io::{self, Write};
 
 use crate::context::Context;
+use crate::module::Module;
 use crate::modules;
 
 pub fn prompt(args: ArgMatches) {
@@ -27,10 +28,20 @@ pub fn prompt(args: ArgMatches) {
     // Write a new line before the prompt
     writeln!(handle).unwrap();
 
-    prompt_order
+    let modules = prompt_order
         .iter()
-        .map(|module| modules::handle(module, &context)) // Compute segments
-        .flatten() // Remove segments set to `None`
-        // TODO: Skip first prefix
-        .for_each(|segment_string| write!(handle, "{}", segment_string).unwrap());
+        .map(|module| modules::handle(module, &context)) // Compute modules
+        .flatten()
+        .collect::<Vec<Module>>(); // Remove segments set to `None`
+
+    let mut printable = modules.iter();
+
+    // Print the first module without its prefix
+    if let Some(first_module) = printable.next() {
+        let module_without_prefix = first_module.to_string_without_prefix();
+        write!(handle, "{}", module_without_prefix).unwrap()
+    }
+
+    // Print all remaining modules
+    printable.for_each(|segment_string| write!(handle, "{}", segment_string).unwrap());
 }

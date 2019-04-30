@@ -53,18 +53,6 @@ impl Segment {
         self
     }
 
-    /// Sets the segment prefix to the provided SegmentAffix.
-    pub fn set_prefix(&mut self, mut prefix: SegmentAffix) {
-        prefix.name = format!("{}_prefix", self.name);
-        self.prefix = Some(prefix);
-    }
-
-    /// Sets the segment suffix to the provided SegmentAffix.
-    pub fn set_suffix(&mut self, mut suffix: SegmentAffix) {
-        suffix.name = format!("{}_suffix", self.name);
-        self.suffix = Some(suffix);
-    }
-
     // Returns the ANSIString of the segment value, not including its prefix and suffix
     fn value_ansi_string(&self) -> ANSIString {
         match self.style {

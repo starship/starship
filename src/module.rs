@@ -80,6 +80,10 @@ impl Module {
 
         ansi_strings
     }
+
+    pub fn to_string_without_prefix(&self) -> String {
+        ANSIStrings(&self.ansi_strings()[1..]).to_string()
+    }
 }
 
 impl fmt::Display for Module {
@@ -102,15 +106,6 @@ pub struct ModuleAffix {
 }
 
 impl ModuleAffix {
-    /// Creates a module affix with no contents.
-    fn new() -> ModuleAffix {
-        ModuleAffix {
-            name: String::new(),
-            style: Style::default(),
-            value: String::new(),
-        }
-    }
-
     pub fn default_prefix(name: String) -> ModuleAffix {
         ModuleAffix {
             name: format!("{}_prefix", name),
