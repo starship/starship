@@ -19,7 +19,7 @@ pub fn segment(context: &Context) -> Option<Module> {
 
     let mut module = Module::new("directory");
     module.set_style(MODULE_COLOR.bold());
-    
+
     let segment = module.new_segment("path");
     let current_dir = &context.current_dir;
 

@@ -1,5 +1,5 @@
-use ansi_term::Color;
 use super::{Context, Module};
+use ansi_term::Color;
 
 /// Creates a segment for the prompt character
 ///
@@ -25,9 +25,9 @@ pub fn segment(context: &Context) -> Option<Module> {
     symbol.set_value(PROMPT_CHAR);
 
     if arguments.value_of("status_code").unwrap() == "0" {
-        symbol.set_style(COLOR_SUCCESS);
+        symbol.set_style(COLOR_SUCCESS.bold());
     } else {
-        symbol.set_style(COLOR_FAILURE);
+        symbol.set_style(COLOR_FAILURE.bold());
     };
 
     Some(module)

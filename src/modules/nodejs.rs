@@ -27,7 +27,7 @@ pub fn segment(context: &Context) -> Option<Module> {
             let symbol = module.new_segment("symbol");
             symbol.set_value(NODE_CHAR);
 
-            let  version = module.new_segment("version");
+            let version = module.new_segment("version");
             let formatted_version = node_version.trim();
             version.set_value(formatted_version);
 

@@ -5,7 +5,7 @@ pub fn segment(_context: &Context) -> Option<Module> {
     const LINE_ENDING: &str = "\n";
 
     let mut module = Module::new("line_break");
-    
+
     let prefix = module.get_prefix();
     prefix.set_value("");
 
@@ -14,6 +14,6 @@ pub fn segment(_context: &Context) -> Option<Module> {
 
     let symbol = module.new_segment("character");
     symbol.set_value(LINE_ENDING);
-    
+
     Some(module)
 }
