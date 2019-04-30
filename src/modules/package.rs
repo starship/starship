@@ -39,7 +39,7 @@ fn is_package_json(dir_entry: &PathBuf) -> bool {
 }
 
 // TODO: Move to `utils.rs` file and import
-fn read_file(file_name: &str) -> Result<String, io::Error> {
+fn read_file(file_name: &str) -> io::Result<String> {
     let mut file = File::open(file_name)?;
     let mut data = String::new();
 
