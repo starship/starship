@@ -49,49 +49,53 @@ fn read_file(file_name: &str) -> io::Result<String> {
 }
 
 fn extract_cargo_version() -> Option<String> {
-    match read_file("Cargo.toml") {
-        Ok(data) => {
-            let toml = match data.parse::<toml::Value>() {
-                Ok(toml) => Some(toml),
-                Err(_) => None,
-            };
+    let file_contents = read_file("Cargo.toml");
 
-            match toml {
-                None => None,
-                Some(toml) => match toml["package"]["version"].as_str() {
-                    None => None,
-                    Some(raw_version) => {
-                        let version = format_version(raw_version.to_string());
-                        Some(version)
-                    }
-                },
-            }
-        }
+    let data = match file_contents {
+        Ok(file_contents) => file_contents,
+        Err(_) => return None,
+    };
+
+    let toml = match data.parse::<toml::Value>() {
+        Ok(toml) => Some(toml),
         Err(_) => None,
+    };
+
+    match toml {
+        None => None,
+        Some(toml) => match toml["package"]["version"].as_str() {
+            None => None,
+            Some(raw_version) => {
+                let version = format_version(raw_version.to_string());
+                Some(version)
+            }
+        },
     }
 }
 
 fn extract_package_version() -> Option<String> {
-    match read_file("package.json") {
-        Ok(data) => {
-            let json: Option<serde_json::Value> = match serde_json::from_str(&data) {
-                Ok(json) => Some(json),
-                Err(_) => None,
-            };
+    let file_contents = read_file("package.json");
 
-            match json {
-                None => None,
-                Some(json) => {
-                    let raw_version = json["version"].to_string();
-                    if raw_version == "null" {
-                        None
-                    } else {
-                        Some(format_version(raw_version))
-                    }
-                }
+    let data = match file_contents {
+        Ok(file_contents) => file_contents,
+        Err(_) => return None,
+    };
+
+    let json: Option<serde_json::Value> = match serde_json::from_str(&data) {
+        Ok(json) => Some(json),
+        Err(_) => None,
+    };
+
+    match json {
+        None => None,
+        Some(json) => {
+            let raw_version = json["version"].to_string();
+            if raw_version == "null" {
+                None
+            } else {
+                Some(format_version(raw_version))
             }
         }
-        Err(_) => None,
     }
 }
 
