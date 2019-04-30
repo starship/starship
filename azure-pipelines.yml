@@ -44,11 +44,9 @@ jobs:
       # Install Node.js
       - task: NodeTool@0
         inputs:
-          versionSpec: '12.0.0'
+          versionSpec: "12.0.0"
       # Install Rust
-      - template: '.build/install-rust.yml'
-        inputs:
-          versionSpec: '1.34.0'
+      - template: ".build/install-rust.yml"
 
       # Because integration tests rely on a fixed Rust version, we must use rustup to run with the intended toolkit
       - script: rustup run $RUSTUP_TOOLCHAIN cargo build --all

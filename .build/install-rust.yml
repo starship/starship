@@ -1,19 +1,12 @@
-parameters:
-  versionSpec: ''
-
 steps:
- - bash: |
-     TOOLCHAIN="${{parameters['versionSpec']}}"
-     echo "##vso[task.setvariable variable=TOOLCHAIN;]$TOOLCHAIN"
-   displayName: Set rust toolchain
  - script: |
      curl -sSf -o rustup-init.exe https://win.rustup.rs
-     rustup-init.exe -y --default-toolchain %TOOLCHAIN%
+     rustup-init.exe -y --default-toolchain %RUSTUP_TOOLCHAIN%
      echo "##vso[task.setvariable variable=PATH;]%PATH%;%USERPROFILE%\.cargo\bin"
    displayName: Windows install rust
    condition: eq( variables['Agent.OS'], 'Windows_NT' )
  - script: |
-     curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain $TOOLCHAIN
+     curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain $RUSTUP_TOOLCHAIN
      echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
    displayName: Install rust
    condition: ne( variables['Agent.OS'], 'Windows_NT' )
