@@ -18,3 +18,5 @@ steps:
   # Install the version of Rust used for testing with
  - script: rustup install $RUSTUP_TOOLCHAIN
    displayName: Install Rust used for CI
+
+ - script: rustup default ${{ parameters.versionSpec }}
