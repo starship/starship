@@ -48,8 +48,7 @@ fn read_file(file_name: &str) -> io::Result<String> {
     Ok(data)
 }
 
-fn extract_cargo_version() -> Option<String> {
-    let file_contents = read_file("Cargo.toml").ok()?;
+fn extract_cargo_version(file_contents: String) -> Option<String> {
     let cargo_toml = file_contents.parse::<toml::Value>().ok()?;
 
     match cargo_toml["package"]["version"].as_str() {
@@ -61,8 +60,7 @@ fn extract_cargo_version() -> Option<String> {
     }
 }
 
-fn extract_package_version() -> Option<String> {
-    let file_contents = read_file("package.json").ok()?;
+fn extract_package_version(file_contents: String) -> Option<String> {
     let json: Option<serde_json::Value> = serde_json::from_str(&file_contents).ok()?;
 
     match json {
@@ -81,12 +79,14 @@ fn extract_package_version() -> Option<String> {
 fn get_package_version(context: &Context) -> Option<String> {
     let has_cargo_toml = context.dir_files.iter().any(is_cargo_toml);
     if has_cargo_toml {
-        return extract_cargo_version();
+        let file_contents = read_file("Cargo.toml").ok()?;
+        return extract_cargo_version(file_contents);
     }
 
     let has_package_json = context.dir_files.iter().any(is_package_json);
     if has_package_json {
-        return extract_package_version();
+        let file_contents = read_file("package.json").ok()?;
+        return extract_package_version(file_contents);
     }
 
     return None;
