@@ -3,7 +3,7 @@ use std::process::Command;
 
 use super::Segment;
 use crate::context::Context;
-use crate::find_file;
+use crate::utils;
 
 /// Creates a segment with the current Node.js version
 ///
@@ -12,13 +12,12 @@ use crate::find_file;
 ///     - Current directory contains a `package.json` file
 ///     - Current directory contains a `node_modules` directory
 pub fn segment(context: &Context) -> Option<Segment> {
-    let js_criteria = find_file::Criteria {
-        files: vec!["package.json"],
-        extension: vec!["js"],
-        folder: vec!["node_modules"],
-    };
+    let js_criteria = utils::Criteria::new()
+        .set_files(vec!["package.json"])
+        .set_extensions(vec!["js"])
+        .set_folders(vec!["node_modules"]);
 
-    let is_js_project = find_file::is_lang_project(&context.dir_files, &js_criteria);
+    let is_js_project = utils::is_lang_project(&context.dir_files, &js_criteria);
     if !is_js_project {
         return None;
     }

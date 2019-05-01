@@ -1,6 +1,6 @@
 use super::Segment;
 use crate::context::Context;
-use crate::find_file;
+use crate::utils;
 use ansi_term::Color;
 use std::process::Command;
 
@@ -14,13 +14,11 @@ use super::{Context, Module};
 ///     - Current directory contains a `requirements.txt` file
 ///     - Current directory contains a `pyproject.toml` file
 pub fn segment(context: &Context) -> Option<Segment> {
-    let python_criteria = find_file::Criteria {
-        files: vec!["requirements.txt, pyproject.toml", ".pyproject.toml"],
-        extension: vec!["py"],
-        folder: vec![""],
-    };
+    let python_criteria = utils::Criteria::new()
+        .set_files(vec!["requirements.txt, pyproject.toml", ".pyproject.toml"])
+        .set_extensions(vec!["py"]);
 
-    let is_py_project = find_file::is_lang_project(&context.dir_files, &python_criteria);;
+    let is_py_project = utils::is_lang_project(&context.dir_files, &python_criteria);;
     if !is_py_project {
         return None;
     }
