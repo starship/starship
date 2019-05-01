@@ -84,7 +84,10 @@ fn truncated_directory_in_root() -> io::Result<()> {
 
     let expected = format!(
         "via {} ",
-        Color::Cyan.bold().paint("starship/thrusters/rocket").to_string()
+        Color::Cyan
+            .bold()
+            .paint("starship/thrusters/rocket")
+            .to_string()
     );
     let actual = common::render_module("dir", &dir);
     assert_eq!(expected, actual);
