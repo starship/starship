@@ -64,7 +64,6 @@ fn extract_package_version(file_contents: String) -> Option<String> {
     let json: Option<serde_json::Value> = serde_json::from_str(&file_contents).ok()?;
 
     match json {
-        None => None,
         Some(json) => {
             let raw_version = json["version"].to_string();
             if raw_version == "null" {
@@ -73,6 +72,7 @@ fn extract_package_version(file_contents: String) -> Option<String> {
                 Some(format_version(raw_version))
             }
         }
+        None => None,
     }
 }
 
