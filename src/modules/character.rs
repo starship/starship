@@ -11,23 +11,19 @@ use ansi_term::Color;
 /// `COLOR_FAILURE` (red by default)
 pub fn segment(context: &Context) -> Option<Module> {
     const PROMPT_CHAR: &str = "➜";
-    const COLOR_SUCCESS: Color = Color::Green;
-    const COLOR_FAILURE: Color = Color::Red;
-
-    let arguments = &context.arguments;
+    let color_success = Color::Green.bold();
+    let color_failure = Color::Red.bold();
 
     let mut module = Module::new("char");
+    module.get_prefix().set_value("");
 
-    let prefix = module.get_prefix();
-    prefix.set_value("");
+    let symbol = module.new_segment_with_value("symbol", PROMPT_CHAR);
 
-    let symbol = module.new_segment("symbol");
-    symbol.set_value(PROMPT_CHAR);
-
+    let arguments = &context.arguments;
     if arguments.value_of("status_code").unwrap() == "0" {
-        symbol.set_style(COLOR_SUCCESS.bold());
+        symbol.set_style(color_success.bold());
     } else {
-        symbol.set_style(COLOR_FAILURE.bold());
+        symbol.set_style(color_failure.bold());
     };
 
     Some(module)

@@ -20,17 +20,14 @@ pub fn segment(context: &Context) -> Option<Module> {
     match get_python_version() {
         Some(python_version) => {
             const PYTHON_CHAR: &str = "🐍";
-            const MODULE_COLOR: Color = Color::Yellow;
+            let module_color = Color::Yellow.bold();
 
             let mut module = Module::new("python");
-            module.set_style(MODULE_COLOR.bold());
+            module.set_style(module_color);
 
-            let symbol = module.new_segment("symbol");
-            symbol.set_value(PYTHON_CHAR);
-
-            let version = module.new_segment("version");
             let formatted_version = format_python_version(python_version);
-            version.set_value(formatted_version);
+            module.new_segment("symbol", PYTHON_CHAR);
+            module.new_segment("version", formatted_version);
 
             Some(module)
         }

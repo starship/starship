@@ -18,17 +18,14 @@ pub fn segment(context: &Context) -> Option<Module> {
     match get_rust_version() {
         Some(rust_version) => {
             const RUST_CHAR: &str = "🦀";
-            const MODULE_COLOR: Color = Color::Red;
+            let module_color = Color::Red.bold();
 
             let mut module = Module::new("rust");
-            module.set_style(MODULE_COLOR.bold());
+            module.set_style(module_color);
 
-            let symbol = module.new_segment("symbol");
-            symbol.set_value(RUST_CHAR);
-
-            let version = module.new_segment("version");
             let formatted_version = format_rustc_version(rust_version);
-            version.set_value(formatted_version);
+            module.new_segment("symbol", RUST_CHAR);
+            module.new_segment("version", formatted_version);
 
             Some(module)
         }

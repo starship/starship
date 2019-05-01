@@ -15,19 +15,14 @@ pub fn segment(context: &Context) -> Option<Module> {
     match get_current_branch(repository) {
         Ok(branch_name) => {
             const GIT_BRANCH_CHAR: &str = " ";
-            const SEGMENT_COLOR: Color = Color::Purple;
+            let segment_color = Color::Purple.bold();
 
             let mut module = Module::new("git_branch");
-            module.set_style(SEGMENT_COLOR.bold());
+            module.set_style(segment_color);
+            module.get_prefix().set_value("in ");
 
-            let prefix = module.get_prefix();
-            prefix.set_value("in ");
-
-            let branch_char_segment = module.new_segment("branch_char");
-            branch_char_segment.set_value(GIT_BRANCH_CHAR);
-
-            let branch_name_segment = module.new_segment("branch_name");
-            branch_name_segment.set_value(branch_name);
+            module.new_segment("branch_char", GIT_BRANCH_CHAR);
+            module.new_segment("branch_name", branch_name);
 
             Some(module)
         }

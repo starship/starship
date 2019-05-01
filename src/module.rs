@@ -36,9 +36,13 @@ impl Module {
     }
 
     /// Get a reference to a newly created segment in the module
-    pub fn new_segment(&mut self, name: &str) -> &mut Segment {
+    pub fn new_segment<T>(&mut self, name: &str, value: T) -> &mut Segment
+    where
+        T: Into<String>,
+    {
         let mut segment = Segment::new(name);
         segment.set_style(self.style);
+        segment.set_value(value.into());
         self.segments.push(segment);
 
         self.segments.last_mut().unwrap()

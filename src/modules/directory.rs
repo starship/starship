@@ -15,12 +15,11 @@ use super::{Context, Module};
 pub fn segment(context: &Context) -> Option<Module> {
     const HOME_SYMBOL: &str = "~";
     const DIR_TRUNCATION_LENGTH: usize = 3;
-    const MODULE_COLOR: Color = Color::Cyan;
+    let module_color = Color::Cyan.bold();
 
     let mut module = Module::new("directory");
-    module.set_style(MODULE_COLOR.bold());
+    module.set_style(module_color);
 
-    let segment = module.new_segment("path");
     let current_dir = &context.current_dir;
 
     let dir_string;
@@ -39,8 +38,7 @@ pub fn segment(context: &Context) -> Option<Module> {
 
     // Truncate the dir string to the maximum number of path components
     let truncated_dir_string = truncate(dir_string, DIR_TRUNCATION_LENGTH);
-
-    segment.set_value(truncated_dir_string);
+    module.new_segment("path", truncated_dir_string);
 
     Some(module)
 }

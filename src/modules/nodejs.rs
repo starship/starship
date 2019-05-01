@@ -19,17 +19,14 @@ pub fn segment(context: &Context) -> Option<Module> {
     match get_node_version() {
         Some(node_version) => {
             const NODE_CHAR: &str = "⬢";
-            const MODULE_COLOR: Color = Color::Green;
+            let module_color = Color::Green.bold();
 
             let mut module = Module::new("node");
-            module.set_style(MODULE_COLOR.bold());
+            module.set_style(module_color);
 
-            let symbol = module.new_segment("symbol");
-            symbol.set_value(NODE_CHAR);
-
-            let version = module.new_segment("version");
             let formatted_version = node_version.trim();
-            version.set_value(formatted_version);
+            module.new_segment("symbol", NODE_CHAR);
+            module.new_segment("version", formatted_version);
 
             Some(module)
         }
