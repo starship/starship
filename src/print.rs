@@ -43,5 +43,5 @@ pub fn prompt(args: ArgMatches) {
     }
 
     // Print all remaining modules
-    printable.for_each(|segment_string| write!(handle, "{}", segment_string).unwrap());
+    printable.for_each(|module| write!(handle, "{}", module).unwrap());
 }
