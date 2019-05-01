@@ -89,7 +89,7 @@ fn get_package_version(context: &Context) -> Option<String> {
         return extract_package_version(file_contents);
     }
 
-   None
+    None
 }
 
 fn format_version(version: String) -> String {
