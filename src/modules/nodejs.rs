@@ -18,7 +18,7 @@ pub fn segment(context: &Context) -> Option<Module> {
 
     match get_node_version() {
         Some(node_version) => {
-            const NODE_CHAR: &str = "⬢";
+            const NODE_CHAR: &str = "⬢ ";
             let module_color = Color::Green.bold();
 
             let mut module = Module::new("node");

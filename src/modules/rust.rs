@@ -17,7 +17,7 @@ pub fn segment(context: &Context) -> Option<Module> {
 
     match get_rust_version() {
         Some(rust_version) => {
-            const RUST_CHAR: &str = "🦀";
+            const RUST_CHAR: &str = "🦀 ";
             let module_color = Color::Red.bold();
 
             let mut module = Module::new("rust");

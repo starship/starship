@@ -19,7 +19,7 @@ pub fn segment(context: &Context) -> Option<Module> {
 
     match get_python_version() {
         Some(python_version) => {
-            const PYTHON_CHAR: &str = "🐍";
+            const PYTHON_CHAR: &str = "🐍 ";
             let module_color = Color::Yellow.bold();
 
             let mut module = Module::new("python");

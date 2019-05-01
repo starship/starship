@@ -17,7 +17,7 @@ pub fn segment(context: &Context) -> Option<Module> {
     let mut module = Module::new("char");
     module.get_prefix().set_value("");
 
-    let symbol = module.new_segment_with_value("symbol", PROMPT_CHAR);
+    let symbol = module.new_segment("symbol", PROMPT_CHAR);
 
     let arguments = &context.arguments;
     if arguments.value_of("status_code").unwrap() == "0" {
