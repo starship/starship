@@ -6,6 +6,7 @@ extern crate dirs;
 extern crate git2;
 
 mod context;
+mod module;
 mod modules;
 mod print;
 mod segment;

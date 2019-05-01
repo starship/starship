@@ -1,16 +1,15 @@
-use super::Segment;
-use crate::context::Context;
+use super::{Context, Module};
 
 /// Creates a segment for the line break
-pub fn segment(_context: &Context) -> Option<Segment> {
+pub fn segment(_context: &Context) -> Option<Module> {
     const LINE_ENDING: &str = "\n";
 
-    let mut segment = Segment::new("line_break");
+    let mut module = Module::new("line_break");
 
-    segment
-        .set_value(LINE_ENDING)
-        .set_prefix(None)
-        .set_suffix(None);
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
-    Some(segment)
+    module.new_segment("character", LINE_ENDING);
+
+    Some(module)
 }

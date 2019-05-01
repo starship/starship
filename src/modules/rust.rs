@@ -1,15 +1,15 @@
-use super::Segment;
-use crate::context::Context;
 use ansi_term::Color;
 use std::path::PathBuf;
 use std::process::Command;
+
+use super::{Context, Module};
 
 /// Creates a segment with the current Rust version
 ///
 /// Will display the Rust version if any of the following criteria are met:
 ///     - Current directory contains a `.rs` file
 ///     - Current directory contains a `Cargo.toml` file
-pub fn segment(context: &Context) -> Option<Segment> {
+pub fn segment(context: &Context) -> Option<Module> {
     let is_rs_project = context.dir_files.iter().any(has_rs_files);
     if !is_rs_project {
         return None;
@@ -17,16 +17,17 @@ pub fn segment(context: &Context) -> Option<Segment> {
 
     match get_rust_version() {
         Some(rust_version) => {
-            const RUST_CHAR: &str = "🦀";
-            const SEGMENT_COLOR: Color = Color::Red;
+            const RUST_CHAR: &str = "🦀 ";
+            let module_color = Color::Red.bold();
 
-            let mut segment = Segment::new("rust");
-            segment.set_style(SEGMENT_COLOR.bold());
+            let mut module = Module::new("rust");
+            module.set_style(module_color);
 
             let formatted_version = format_rustc_version(rust_version);
-            segment.set_value(format!("{} {}", RUST_CHAR, formatted_version));
+            module.new_segment("symbol", RUST_CHAR);
+            module.new_segment("version", formatted_version);
 
-            Some(segment)
+            Some(module)
         }
         None => None,
     }

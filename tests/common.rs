@@ -4,14 +4,14 @@ use starship::modules;
 use std::path::PathBuf;
 
 #[allow(dead_code)]
-pub fn render_segment<T>(module: &str, path: T) -> String
+pub fn render_module<T>(module: &str, path: T) -> String
 where
     T: Into<PathBuf>,
 {
-    render_segment_with_status(module, path.into(), "0")
+    render_module_with_status(module, path.into(), "0")
 }
 
-pub fn render_segment_with_status<T>(module: &str, path: T, status: &str) -> String
+pub fn render_module_with_status<T>(module: &str, path: T, status: &str) -> String
 where
     T: Into<PathBuf>,
 {
@@ -21,7 +21,7 @@ where
         .get_matches_from(vec!["starship", status]);
     let context = Context::new_with_dir(args, path.into());
 
-    let segment = modules::handle(module, &context);
+    let module = modules::handle(module, &context);
 
-    segment.unwrap().output()
+    module.unwrap().to_string()
 }

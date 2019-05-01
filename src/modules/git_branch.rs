@@ -1,13 +1,12 @@
 use ansi_term::Color;
 use git2::Repository;
 
-use super::Segment;
-use crate::context::Context;
+use super::{Context, Module};
 
 /// Creates a segment with the Git branch in the current directory
 ///
 /// Will display the branch name if the current directory is a git repo
-pub fn segment(context: &Context) -> Option<Segment> {
+pub fn segment(context: &Context) -> Option<Module> {
     if context.repository.is_none() {
         return None;
     }
@@ -15,22 +14,17 @@ pub fn segment(context: &Context) -> Option<Segment> {
     let repository = context.repository.as_ref().unwrap();
     match get_current_branch(repository) {
         Ok(branch_name) => {
-            const GIT_BRANCH_CHAR: &str = "";
-            const SEGMENT_COLOR: Color = Color::Purple;
+            const GIT_BRANCH_CHAR: &str = " ";
+            let segment_color = Color::Purple.bold();
 
-            // TODO: Make the prefix for the module "in "
-            let mut segment_prefix = Segment::new("git_branch_prefix");
-            segment_prefix
-                .set_value(GIT_BRANCH_CHAR)
-                .set_style(SEGMENT_COLOR.bold());
+            let mut module = Module::new("git_branch");
+            module.set_style(segment_color);
+            module.get_prefix().set_value("in ");
 
-            let mut segment = Segment::new("git_branch");
-            segment
-                .set_prefix(Some(Box::new(segment_prefix)))
-                .set_style(SEGMENT_COLOR.bold())
-                .set_value(branch_name);
+            module.new_segment("branch_char", GIT_BRANCH_CHAR);
+            module.new_segment("branch_name", branch_name);
 
-            Some(segment)
+            Some(module)
         }
         Err(_e) => None,
     }

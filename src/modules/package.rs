@@ -1,5 +1,5 @@
-use super::Segment;
-use crate::context::Context;
+use super::{Context, Module};
+
 use ansi_term::Color;
 use serde_json;
 use std::fs::File;
@@ -11,19 +11,20 @@ use toml;
 /// Creates a segment with the current package version
 ///
 /// Will display if a version is defined for your Node.js or Rust project (if one exists)
-pub fn segment(context: &Context) -> Option<Segment> {
+pub fn segment(context: &Context) -> Option<Module> {
     match get_package_version(context) {
         Some(package_version) => {
-            const PACKAGE_CHAR: &str = "📦";
-            const SEGMENT_COLOR: Color = Color::Red;
+            const PACKAGE_CHAR: &str = "📦 ";
+            let module_color = Color::Red.bold();
 
-            // TODO: Make the prefix for the module "is "
-            let mut segment = Segment::new("package");
-            segment.set_style(SEGMENT_COLOR.bold());
+            let mut module = Module::new("package");
+            module.set_style(module_color);
+            module.get_prefix().set_value("is ");
 
-            segment.set_value(format!("{} {}", PACKAGE_CHAR, package_version));
+            module.new_segment("symbol", PACKAGE_CHAR);
+            module.new_segment("version", package_version);
 
-            Some(segment)
+            Some(module)
         }
         None => None,
     }

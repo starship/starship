@@ -1,58 +1,50 @@
-use ansi_term::Style;
+use ansi_term::{ANSIString, ANSIStrings, Style};
+use std::fmt;
 
-#[derive(Clone)]
+/// A segment is a single configurable element in a module. This will usually
+/// contain a data point to provide context for the prompt's user
+/// (e.g. The version that software is running).
 pub struct Segment {
-    name: Option<String>,
-    style: Style,
+    /// The segment's name, to be used in configuration and logging.
+    name: String,
+
+    /// The segment's style. If None, will inherit the style of the module containing it.
+    style: Option<Style>,
+
+    /// The prefix used to preceed the contents of a segment.
+    prefix: Option<SegmentAffix>,
+
+    /// The string value of the current segment.
     value: String,
-    prefix: BoxedSegment,
-    suffix: BoxedSegment,
+
+    /// The suffix used following the contents of a segment.
+    suffix: Option<SegmentAffix>,
 }
 
 impl Segment {
-    /// Creates a new segment with default fields
-    pub fn new<T>(name: T) -> Segment
-    where
-        T: Into<String>,
-        T: Copy,
-    {
-        let default_prefix = Some(Box::new(Segment {
-            name: Some(format!("{} {}", name.into(), "prefix")),
-            style: Style::default(),
-            value: String::from("via "),
-            prefix: None,
-            suffix: None,
-        }));
-
-        let default_suffix = Some(Box::new(Segment {
-            name: Some(format!("{} {}", name.into(), "suffix")),
-            style: Style::default(),
-            value: String::from(" "),
-            prefix: None,
-            suffix: None,
-        }));
-
+    /// Creates a new segment with default fields.
+    pub fn new(name: &str) -> Segment {
         Segment {
-            name: Some(name.into()),
-            style: Style::default(),
-            value: String::from(""),
-            prefix: default_prefix,
-            suffix: default_suffix,
+            name: name.to_string(),
+            style: None,
+            prefix: None,
+            value: "".to_string(),
+            suffix: None,
         }
     }
 
-    /// Sets the style of the segment
+    /// Sets the style of the segment.
     ///
     /// Accepts either `Color` or `Style`.
     pub fn set_style<T>(&mut self, style: T) -> &mut Segment
     where
         T: Into<Style>,
     {
-        self.style = style.into();
+        self.style = Some(style.into());
         self
     }
 
-    /// Sets the value of the segment
+    /// Sets the value of the segment.
     pub fn set_value<T>(&mut self, value: T) -> &mut Segment
     where
         T: Into<String>,
@@ -61,77 +53,70 @@ impl Segment {
         self
     }
 
-    /// Sets the prefix of the segment
-    pub fn set_prefix(&mut self, prefix: BoxedSegment) -> &mut Segment {
-        self.prefix = prefix;
-        self
+    // Returns the ANSIString of the segment value, not including its prefix and suffix
+    fn value_ansi_string(&self) -> ANSIString {
+        match self.style {
+            Some(style) => style.paint(&self.value),
+            None => ANSIString::from(&self.value),
+        }
     }
 
-    /// Sets the suffix of the segment
-    pub fn set_suffix(&mut self, suffix: BoxedSegment) -> &mut Segment {
-        self.suffix = suffix;
-        self
-    }
+    /// Returns a vector of colored ANSIString elements to be later used with
+    /// `ANSIStrings()` to optimize ANSI codes
+    pub fn ansi_strings(&self) -> Vec<ANSIString> {
+        let prefix = self.prefix.as_ref().and_then(|p| Some(p.ansi_string()));
+        let suffix = self.suffix.as_ref().and_then(|s| Some(s.ansi_string()));
+        let value = Some(self.value_ansi_string());
 
-    /// Create a string with the formatted contents of a segment
-    ///
-    /// Will recursively also format the prefix and suffix of the segment being
-    /// stringified.
-    pub fn output(&self) -> String {
-        let Segment {
-            name: _name,
-            prefix,
-            value,
-            style,
-            suffix,
-        } = self;
-
-        let mut segment_string = String::new();
-
-        // Skip the prefix for the first segment
-        if let Some(prefix) = prefix {
-            segment_string += &prefix.output()
-        }
-
-        segment_string += &style.paint(value).to_string();
-
-        if let Some(suffix) = suffix {
-            segment_string += &suffix.output();
-        }
-
-        segment_string
-    }
-
-    /// Create a string with the formatted contents of a segment while skipping the first segment.
-    ///
-    /// Will recursively also format the prefix and suffix of the segment being
-    /// stringified.
-    pub fn output_index(&self, index: usize) -> String {
-        let Segment {
-            name: _name,
-            prefix,
-            value,
-            style,
-            suffix,
-        } = self;
-
-        let mut segment_string = String::new();
-
-        // Skip the prefix for the first segment
-        if index != 0 {
-            if let Some(prefix) = prefix {
-                segment_string += &prefix.output_index(index)
-            }
-        }
-
-        segment_string += &style.paint(value).to_string();
-
-        if let Some(suffix) = suffix {
-            segment_string += &suffix.output();
-        }
-
-        segment_string
+        // Remove `None` values from the vector
+        vec![prefix, value, suffix]
+            .into_iter()
+            .filter_map(|e| e)
+            .collect::<Vec<ANSIString>>()
     }
 }
 
-type BoxedSegment = Option<Box<Segment>>;
+impl fmt::Display for Segment {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let ansi_strings = self.ansi_strings();
+        write!(f, "{}", ANSIStrings(&ansi_strings))
+    }
+}
+
+/// Segment affixes are to be used for the prefix or suffix of a segment.
+/// By default they will inherit the styling of its segment, unless otherwise specified.
+pub struct SegmentAffix {
+    /// The affix's name, to be used in configuration and logging.
+    name: String,
+
+    /// The affix's style. If None, will inherit the style of the segment containing it.
+    style: Option<Style>,
+
+    /// The string value of the affix.
+    value: String,
+}
+
+impl SegmentAffix {
+    /// Creates a segment affix with no contents.
+    pub fn new() -> SegmentAffix {
+        SegmentAffix {
+            name: String::new(),
+            style: None,
+            value: String::new(),
+        }
+    }
+
+    /// Generates the colored ANSIString output.
+    pub fn ansi_string(&self) -> ANSIString {
+        match self.style {
+            Some(style) => style.paint(&self.value),
+            None => ANSIString::from(&self.value),
+        }
+    }
+}
+
+impl fmt::Display for SegmentAffix {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.ansi_string())
+    }
+}
