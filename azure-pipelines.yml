@@ -1,4 +1,5 @@
 jobs:
+  # Run the Rust linter
   - job: "Clippy"
     pool:
       vmImage: "ubuntu-16.04"
@@ -9,6 +10,7 @@ jobs:
       - script: cargo clippy --all
         displayName: Run clippy
 
+  # Run the Rust formatter
   - job: "Rustfmt"
     pool:
       vmImage: "ubuntu-16.04"
@@ -20,6 +22,15 @@ jobs:
       - script: cargo fmt --all -- --check
         displayName: Run Rustfmt
 
+  # Run the integration tests in a Docker container
+  - job: "Docker"
+    pool:
+      vmImage: "ubuntu-16.04"
+    steps:
+      - script: ./integration_test
+        displayName: Dockerized tests
+
+  # Run the integration tests on virtual machines
   - job: "Test"
     strategy:
       matrix:
@@ -41,21 +52,17 @@ jobs:
     pool:
       vmImage: "ubuntu-16.04"
     steps:
-      - task: NodeTool@0 
+      # Install Node.js
+      - task: NodeTool@0
         inputs:
-          versionSpec: '12.0.0'
-      - script: |
-          curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain $RUSTUP_TOOLCHAIN
-          echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
-        displayName: Install rust
-        condition: ne( variables['Agent.OS'], 'Windows_NT' )
-      - script: |
-          curl -sSf -o rustup-init.exe https://win.rustup.rs
-          rustup-init.exe -y --default-toolchain %RUSTUP_TOOLCHAIN%
-          echo "##vso[task.setvariable variable=PATH;]%PATH%;%USERPROFILE%\.cargo\bin"
-        displayName: Windows install rust
-        condition: eq( variables['Agent.OS'], 'Windows_NT' )
-      - script: cargo build --all
+          versionSpec: "12.0.0"
+      # Install Rust at a fixed version for integration tests
+      - template: ".build/install-rust.yml"
+        parameters:
+          versionSpec: "1.34.0"
+
+      # Because integration tests rely on a fixed Rust version, we must use rustup to run with the intended toolkit
+      - script: rustup run $RUSTUP_TOOLCHAIN cargo build --all
         displayName: Cargo build
-      - script: cargo test -- --ignored
+      - script: rustup run $RUSTUP_TOOLCHAIN cargo test -- --ignored
         displayName: Cargo test
