@@ -49,42 +49,21 @@ fn read_file(file_name: &str) -> io::Result<String> {
 }
 
 fn extract_cargo_version() -> Option<String> {
-    let file_contents = read_file("Cargo.toml");
+    let file_contents = read_file("Cargo.toml").ok()?;
+    let cargo_toml = file_contents.parse::<toml::Value>().ok()?;
 
-    let data = match file_contents {
-        Ok(file_contents) => file_contents,
-        Err(_) => return None,
-    };
-
-    let toml = match data.parse::<toml::Value>() {
-        Ok(toml) => Some(toml),
-        Err(_) => None,
-    };
-
-    match toml {
+    match cargo_toml["package"]["version"].as_str() {
+        Some(raw_version) => {
+            let version = format_version(raw_version.to_string());
+            Some(version)
+        }
         None => None,
-        Some(toml) => match toml["package"]["version"].as_str() {
-            None => None,
-            Some(raw_version) => {
-                let version = format_version(raw_version.to_string());
-                Some(version)
-            }
-        },
     }
 }
 
 fn extract_package_version() -> Option<String> {
-    let file_contents = read_file("package.json");
-
-    let data = match file_contents {
-        Ok(file_contents) => file_contents,
-        Err(_) => return None,
-    };
-
-    let json: Option<serde_json::Value> = match serde_json::from_str(&data) {
-        Ok(json) => Some(json),
-        Err(_) => None,
-    };
+    let file_contents = read_file("package.json").ok()?;
+    let json: Option<serde_json::Value> = serde_json::from_str(&file_contents).ok()?;
 
     match json {
         None => None,
