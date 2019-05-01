@@ -12,11 +12,11 @@ fn folder_with_package_json() -> io::Result<()> {
     let dir = TempDir::new()?;
     File::create(dir.path().join("package.json"))?;
 
-    let expected = Segment::new("node")
+    let expected = format!("via {} ", Segment::new("node")
         .set_value("⬢ v12.0.0")
         .set_style(Color::Green.bold())
-        .output();
-    let actual = common::render_segment("nodejs", &dir.path());
+    );
+    let actual = common::render_module("nodejs", &dir.path());
     assert_eq!(expected, actual);
 
     Ok(())
@@ -28,11 +28,11 @@ fn folder_with_js_file() -> io::Result<()> {
     let dir = TempDir::new()?;
     File::create(dir.path().join("index.js"))?;
 
-    let expected = Segment::new("node")
+    let expected = format!("via {} ", Segment::new("node")
         .set_value("⬢ v12.0.0")
         .set_style(Color::Green.bold())
-        .output();
-    let actual = common::render_segment("nodejs", &dir.path());
+    );
+    let actual = common::render_module("nodejs", &dir.path());
     assert_eq!(expected, actual);
 
     Ok(())
@@ -45,11 +45,11 @@ fn folder_with_node_modules() -> io::Result<()> {
     let node_modules = dir.path().join("node_modules");
     fs::create_dir_all(&node_modules)?;
 
-    let expected = Segment::new("node")
+    let expected = format!("via {} ", Segment::new("node")
         .set_value("⬢ v12.0.0")
         .set_style(Color::Green.bold())
-        .output();
-    let actual = common::render_segment("nodejs", &dir.path());
+    );
+    let actual = common::render_module("nodejs", &dir.path());
     assert_eq!(expected, actual);
 
     Ok(())

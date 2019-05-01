@@ -27,10 +27,7 @@ fn directory_in_home() -> io::Result<()> {
 
     let expected = format!(
         "via {} ",
-        format!(
-            "via {} ",
-            Color::Cyan.bold().paint("~/starship/engine").to_string()
-        )
+        Color::Cyan.bold().paint("~/starship/engine").to_string()
     );
     let actual = common::render_module("dir", &dir);
     assert_eq!(expected, actual);
@@ -46,13 +43,10 @@ fn truncated_directory_in_home() -> io::Result<()> {
 
     let expected = format!(
         "via {} ",
-        format!(
-            "via {} ",
-            Color::Cyan
-                .bold()
-                .paint("starship/engine/schematics")
-                .to_string()
-        )
+        Color::Cyan
+            .bold()
+            .paint("starship/engine/schematics")
+            .to_string()
     );
     let actual = common::render_module("dir", &dir);
     assert_eq!(expected, actual);
@@ -75,7 +69,7 @@ fn root_directory() -> io::Result<()> {
 fn directory_in_root() -> io::Result<()> {
     let dir = Path::new("/opt");
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("/private").to_string());
+    let expected = format!("via {} ", Color::Cyan.bold().paint("/opt").to_string());
     let actual = common::render_module("dir", &dir);
     assert_eq!(expected, actual);
 
@@ -90,7 +84,7 @@ fn truncated_directory_in_root() -> io::Result<()> {
 
     let expected = format!(
         "via {} ",
-        Color::Cyan.bold().paint("var/folders/3s").to_string()
+        Color::Cyan.bold().paint("starship/thrusters/rocket").to_string()
     );
     let actual = common::render_module("dir", &dir);
     assert_eq!(expected, actual);
