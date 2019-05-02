@@ -42,6 +42,8 @@ fn has_go_files(dir_entry: &PathBuf) -> bool {
     // TODO: Check to see if the current directory is $GOPATH
     let is_go_mod =
         |d: &PathBuf| -> bool { d.is_file() && d.file_name().unwrap_or_default() == "go.mod" };
+    let is_go_sum =
+        |d: &PathBuf| -> bool { d.is_file() && d.file_name().unwrap_or_default() == "go.sum" };
     let is_godeps =
         |d: &PathBuf| -> bool { d.is_file() && d.file_name().unwrap_or_default() == "Godeps" };
     let is_glide_yaml =
@@ -54,6 +56,7 @@ fn has_go_files(dir_entry: &PathBuf) -> bool {
         |d: &PathBuf| -> bool { d.is_file() && d.file_name().unwrap_or_default() == "Gopkg.lock" };
 
     is_go_mod(&dir_entry)
+        || is_go_sum(&dir_entry)
         || is_godeps(&dir_entry)
         || is_glide_yaml(&dir_entry)
         || is_go_file(&dir_entry)
