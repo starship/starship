@@ -12,11 +12,13 @@ fn folder_with_cargo_toml() -> io::Result<()> {
     let dir = TempDir::new()?;
     File::create(dir.path().join("Cargo.toml"))?;
 
-    let expected = Segment::new("rust")
-        .set_value("🦀 v1.34.1")
-        .set_style(Color::Red.bold())
-        .output();
-    let actual = common::render_segment("rust", &dir.path());
+    let expected = format!(
+        "via {} ",
+        Segment::new("rust")
+            .set_value("🦀 v1.34.1")
+            .set_style(Color::Red.bold())
+    );
+    let actual = common::render_module("rust", &dir.path());
     assert_eq!(expected, actual);
 
     Ok(())
@@ -28,11 +30,13 @@ fn folder_with_rs_file() -> io::Result<()> {
     let dir = TempDir::new()?;
     File::create(dir.path().join("main.rs"))?;
 
-    let expected = Segment::new("rust")
-        .set_value("🦀 v1.34.1")
-        .set_style(Color::Red.bold())
-        .output();
-    let actual = common::render_segment("rust", &dir.path());
+    let expected = format!(
+        "via {} ",
+        Segment::new("rust")
+            .set_value("🦀 v1.34.1")
+            .set_style(Color::Red.bold())
+    );
+    let actual = common::render_module("rust", &dir.path());
     assert_eq!(expected, actual);
 
     Ok(())
