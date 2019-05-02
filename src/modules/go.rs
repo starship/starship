@@ -9,7 +9,8 @@ use super::{Context, Module};
 /// Will display the Python version if any of the following criteria are met:
 ///     - Current directory contains a `.go` file
 ///     - Current directory contains a `go.mod` file
-///     - Current directory contains a `Godeps` file
+///     - Current directory contains a `go.sum` file
+///     - Current directory contains a `Godeps` directory
 ///     - Current directory contains a `glide.yaml` file
 ///     - Current directory contains a `Gopkg.yml` file
 ///     - Current directory contains a `Gopkg.lock` file
