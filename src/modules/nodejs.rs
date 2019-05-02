@@ -1,9 +1,8 @@
+use crate::utils::project_detector;
 use ansi_term::Color;
 use std::process::Command;
 
-use super::Segment;
-use crate::context::Context;
-use crate::utils::project_detector;
+use super::{Context, Module};
 
 /// Creates a segment with the current Node.js version
 ///
@@ -11,7 +10,7 @@ use crate::utils::project_detector;
 ///     - Current directory contains a `.js` file
 ///     - Current directory contains a `package.json` file
 ///     - Current directory contains a `node_modules` directory
-pub fn segment(context: &Context) -> Option<Segment> {
+pub fn segment(context: &Context) -> Option<Module> {
     let js_criteria = project_detector::Criteria::new()
         .set_files(vec!["package.json"])
         .set_extensions(vec!["js"])

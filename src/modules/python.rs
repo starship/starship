@@ -1,5 +1,3 @@
-use super::Segment;
-use crate::context::Context;
 use crate::utils::project_detector;
 use ansi_term::Color;
 use std::process::Command;
@@ -13,7 +11,7 @@ use super::{Context, Module};
 ///     - Current directory contains a `.pyproject.toml` file
 ///     - Current directory contains a `requirements.txt` file
 ///     - Current directory contains a `pyproject.toml` file
-pub fn segment(context: &Context) -> Option<Segment> {
+pub fn segment(context: &Context) -> Option<Module> {
     let python_criteria = project_detector::Criteria::new()
         .set_files(vec!["requirements.txt, pyproject.toml", ".pyproject.toml"])
         .set_extensions(vec!["py"]);

@@ -1,5 +1,3 @@
-use super::Segment;
-use crate::context::Context;
 use crate::utils::project_detector;
 use ansi_term::Color;
 use std::process::Command;
@@ -11,7 +9,7 @@ use super::{Context, Module};
 /// Will display the Rust version if any of the following criteria are met:
 ///     - Current directory contains a file with a `.rs` extension
 ///     - Current directory contains a `Cargo.toml` file
-pub fn segment(context: &Context) -> Option<Segment> {
+pub fn segment(context: &Context) -> Option<Module> {
     let rust_criteria = project_detector::Criteria::new()
         .set_files(vec!["Cargo.toml"])
         .set_extensions(vec!["rs"]);
