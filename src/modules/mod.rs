@@ -18,7 +18,7 @@ pub fn handle(module: &str, context: &Context) -> Option<Module> {
         "node" | "nodejs" => nodejs::segment(context),
         "rust" | "rustlang" => rust::segment(context),
         "python" => python::segment(context),
-        "go" => go::segment(context),
+        "go" | "golang" => go::segment(context),
         "line_break" => line_break::segment(context),
         "package" => package::segment(context),
         "git_branch" => git_branch::segment(context),
