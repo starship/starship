@@ -45,7 +45,7 @@ fn has_go_files(dir_entry: &PathBuf) -> bool {
     let is_go_sum =
         |d: &PathBuf| -> bool { d.is_file() && d.file_name().unwrap_or_default() == "go.sum" };
     let is_godeps =
-        |d: &PathBuf| -> bool { d.is_file() && d.file_name().unwrap_or_default() == "Godeps" };
+        |d: &PathBuf| -> bool { d.is_dir() && d.file_name().unwrap_or_default() == "Godeps" };
     let is_glide_yaml =
         |d: &PathBuf| -> bool { d.is_file() && d.file_name().unwrap_or_default() == "glide.yaml" };
     let is_go_file =
