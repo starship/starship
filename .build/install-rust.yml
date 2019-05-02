@@ -16,7 +16,7 @@ steps:
    condition: ne( variables['Agent.OS'], 'Windows_NT' )
 
   # Install the version of Rust used for testing with
- - script: rustup install $RUSTUP_TOOLCHAIN
+ - script: rustup install $RUST_BUILD
    displayName: Install Rust used for CI
 
  - script: rustup default ${{ parameters.versionSpec }}
