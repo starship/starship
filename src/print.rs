@@ -13,6 +13,7 @@ pub fn prompt(args: ArgMatches) {
         "nodejs",
         "rust",
         "python",
+        "go",
         "line_break",
         "character",
     ];
