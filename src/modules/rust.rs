@@ -10,11 +10,11 @@ use super::{Context, Module};
 ///     - Current directory contains a file with a `.rs` extension
 ///     - Current directory contains a `Cargo.toml` file
 pub fn segment(context: &Context) -> Option<Module> {
-    let rust_criteria = project_detector::Criteria::new()
+    let is_rs_project = project_detector::Criteria::new()
         .set_files(vec!["Cargo.toml"])
-        .set_extensions(vec!["rs"]);
+        .set_extensions(vec!["rs"])
+        .scan(&context.dir_files);
 
-    let is_rs_project = project_detector::is_lang_project(&context.dir_files, &rust_criteria);
     if !is_rs_project {
         return None;
     }

@@ -11,12 +11,12 @@ use super::{Context, Module};
 ///     - Current directory contains a `package.json` file
 ///     - Current directory contains a `node_modules` directory
 pub fn segment(context: &Context) -> Option<Module> {
-    let js_criteria = project_detector::Criteria::new()
+    let is_js_project = project_detector::Criteria::new()
         .set_files(vec!["package.json"])
         .set_extensions(vec!["js"])
-        .set_folders(vec!["node_modules"]);
+        .set_folders(vec!["node_modules"])
+        .scan(&context.dir_files);
 
-    let is_js_project = project_detector::is_lang_project(&context.dir_files, &js_criteria);
     if !is_js_project {
         return None;
     }

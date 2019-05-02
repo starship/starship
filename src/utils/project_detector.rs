@@ -29,16 +29,14 @@ impl<'a> Criteria<'a> {
         self.folders = folders;
         self
     }
-}
 
-// based on the directory do any of this criteria match or exist
-pub fn is_lang_project(dir_entry: &Vec<PathBuf>, criteria: &Criteria) -> bool {
-    dir_entry.into_iter().any(|path| match path.is_dir() {
-        true => path_has_name(&path, &criteria.folders),
-        false => {
-            path_has_name(&path, &criteria.files) || has_extension(&path, &criteria.extensions)
-        }
-    })
+    // based on the directory do any of this criteria match or exist
+    pub fn scan(self, dir_entry: &Vec<PathBuf>) -> bool {
+        dir_entry.into_iter().any(|path| match path.is_dir() {
+            true => path_has_name(&path, &self.folders),
+            false => path_has_name(&path, &self.files) || has_extension(&path, &self.extensions),
+        })
+    }
 }
 
 pub fn path_has_name(dir_entry: &PathBuf, names: &Vec<&str>) -> bool {
@@ -104,7 +102,7 @@ mod tests {
     }
 
     #[test]
-    fn test_is_lang_project() {
+    fn test_criteria_scan() {
         let mut buf = vec![PathBuf::new()];
 
         let criteria = Criteria {
@@ -113,9 +111,15 @@ mod tests {
             folders: vec!["node_modules"],
         };
 
-        assert_eq!(is_lang_project(&buf, &criteria), false);
+        assert_eq!(criteria.scan(&buf), false);
+
+        let criteria = Criteria {
+            files: vec!["package.json"],
+            extensions: vec!["js"],
+            folders: vec!["node_modules"],
+        };
 
         buf[0].set_file_name("package.json");
-        assert_eq!(is_lang_project(&buf, &criteria), true);
+        assert_eq!(criteria.scan(&buf), true);
     }
 }

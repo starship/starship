@@ -1,3 +1,4 @@
+use crate::utils::project_detector;
 use clap::ArgMatches;
 use git2::Repository;
 use std::env;
@@ -9,6 +10,7 @@ pub struct Context<'a> {
     pub dir_files: Vec<PathBuf>,
     pub arguments: ArgMatches<'a>,
     pub repository: Option<Repository>,
+    // pub criteria: project_detector::Criteria<'a>,
 }
 
 impl<'a> Context<'a> {
