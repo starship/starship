@@ -9,7 +9,6 @@ use super::{Context, Module};
 /// Will display the Python version if any of the following criteria are met:
 ///     - Current directory contains a `.py` file
 ///     - Current directory contains a `.python-version` file
-///     - Current directory contains a `.pyproject.toml` file
 ///     - Current directory contains a `requirements.txt` file
 ///     - Current directory contains a `pyproject.toml` file
 pub fn segment(context: &Context) -> Option<Module> {
@@ -18,7 +17,7 @@ pub fn segment(context: &Context) -> Option<Module> {
             "requirements.txt",
             ".python-version",
             "pyproject.toml",
-            ".pyproject.toml",
+            "pyproject.toml",
         ])
         .set_extensions(vec!["py"])
         .scan(&context.dir_files);
