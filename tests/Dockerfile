@@ -9,15 +9,31 @@ RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | ba
   && nvm use default
 ENV PATH /root/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
 # Check that Node.js was correctly installed
-RUN node --version 
+RUN node --version
+
+# Install Go
+ENV GO_VERSION 1.12.4
+ENV GOENV_ROOT /root/.goenv
+ENV GO_ROOT /root/go
+# RUN git clone https://github.com/wfarr/goenv.git $GOENV_ROOT
+RUN git clone https://github.com/syndbg/goenv.git $GOENV_ROOT
+ENV PATH $GOENV_ROOT/bin:$GOENV_ROOT/shims:$PATH
+RUN eval "$(goenv init -)"
+RUN mkdir -p $GO_ROOT
+ENV GOPATH $GO_ROOT
+ENV PATH $GO_ROOT/bin:$PATH
+RUN goenv install $GO_VERSION
+RUN goenv global $GO_VERSION
+# Check that Go was correctly installed
+RUN go version
 
 # Create blank project
 RUN USER=root cargo new --bin starship
 WORKDIR /starship
 
 # We want dependencies cached, so copy those first
-COPY ./Cargo.lock ./Cargo.lock 
-COPY ./Cargo.toml ./Cargo.toml 
+COPY ./Cargo.lock ./Cargo.lock
+COPY ./Cargo.toml ./Cargo.toml
 
 # Cargo.toml will fail to parse without my_benchmark
 RUN mkdir benches
