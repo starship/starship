@@ -1,6 +1,10 @@
 #[macro_use]
 extern crate clap;
 
+#[macro_use]
+extern crate log;
+
+extern crate pretty_env_logger;
 extern crate ansi_term;
 extern crate dirs;
 extern crate git2;
@@ -14,6 +18,8 @@ mod segment;
 use clap::{App, Arg};
 
 fn main() {
+    pretty_env_logger::init();
+    
     let args = App::new("Starship")
         .about("The cross-shell prompt for astronauts. ✨🚀")
         // pull the version number from Cargo.toml

@@ -10,6 +10,7 @@ pub fn prompt(args: ArgMatches) {
     let prompt_order = vec![
         "directory",
         "git_branch",
+        "git_status",
         "package",
         "nodejs",
         "rust",

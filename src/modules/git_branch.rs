@@ -17,7 +17,7 @@ pub fn segment(context: &Context) -> Option<Module> {
 
             let mut module = Module::new("git_branch");
             module.set_style(segment_color);
-            module.get_prefix().set_value("in ");
+            module.get_prefix().set_value("on ");
 
             module.new_segment("branch_char", GIT_BRANCH_CHAR);
             module.new_segment("branch_name", branch_name);
