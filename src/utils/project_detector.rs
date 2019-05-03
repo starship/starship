@@ -1,10 +1,18 @@
 use std::ffi::OsStr;
 use std::path::PathBuf;
 
+/// Criteria is a struct containing a list of file names, extensions or folder names
+/// which will be used to check is if the Module, eg. Golang, Python etc. is valid based
+/// on the current directory.
 #[derive(Default)]
 pub struct Criteria<'a> {
+    /// files is a list of file names eg. 'package.json'
     pub files: Vec<&'a str>,
+
+    /// extensions is a list file extensions without the . eg. 'js'
     pub extensions: Vec<&'a str>,
+
+    /// folders is a list of folder names eg. 'node_modules'
     pub folders: Vec<&'a str>,
 }
 
@@ -30,7 +38,8 @@ impl<'a> Criteria<'a> {
         self
     }
 
-    // based on the directory do any of this criteria match or exist
+    /// based on the current list of paths check to see
+    /// if any of this criteria match or exist and return a boolean
     pub fn scan(self, dir_entry: &Vec<PathBuf>) -> bool {
         dir_entry.into_iter().any(|path| match path.is_dir() {
             true => path_has_name(&path, &self.folders),
@@ -39,6 +48,7 @@ impl<'a> Criteria<'a> {
     }
 }
 
+/// checks to see if the pathbuf matches a file or folder name
 pub fn path_has_name(dir_entry: &PathBuf, names: &Vec<&str>) -> bool {
     let found_file_or_folder_name = names.into_iter().find(|file_or_folder_name| {
         dir_entry
@@ -54,6 +64,7 @@ pub fn path_has_name(dir_entry: &PathBuf, names: &Vec<&str>) -> bool {
     }
 }
 
+/// checks if pathbuf matches the extension provided
 pub fn has_extension(dir_entry: &PathBuf, extensions: &Vec<&str>) -> bool {
     let found_ext = extensions.into_iter().find(|ext| {
         dir_entry
