@@ -12,7 +12,7 @@ ENV PATH /root/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
 RUN node --version
 
 # Install Go
-ENV GO_VERSION 1.10.0
+ENV GO_VERSION 1.10
 ENV GOENV_ROOT /root/.goenv
 ENV GO_ROOT /root/go
 # RUN git clone https://github.com/wfarr/goenv.git $GOENV_ROOT

@@ -59,7 +59,7 @@ jobs:
       # Install Go
       - task: GoTool@0
         inputs:
-          versionSpec: "1.10.0"
+          versionSpec: "1.10"
       # Install Rust at a fixed version for integration tests
       - template: ".build/install-rust.yml"
         parameters:

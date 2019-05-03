@@ -15,7 +15,7 @@ fn folder_with_go_file() -> io::Result<()> {
     let expected = format!(
         "via {} ",
         Segment::new("go")
-            .set_value("🐹 v1.10.0")
+            .set_value("🐹 v1.10")
             .set_style(Color::Cyan.bold())
     );
     let actual = common::render_module("go", &dir.path());
@@ -33,7 +33,7 @@ fn folder_with_go_mod() -> io::Result<()> {
     let expected = format!(
         "via {} ",
         Segment::new("go")
-            .set_value("🐹 v1.10.0")
+            .set_value("🐹 v1.10")
             .set_style(Color::Cyan.bold())
     );
     let actual = common::render_module("go", &dir.path());
@@ -51,7 +51,7 @@ fn folder_with_go_sum() -> io::Result<()> {
     let expected = format!(
         "via {} ",
         Segment::new("go")
-            .set_value("🐹 v1.10.0")
+            .set_value("🐹 v1.10")
             .set_style(Color::Cyan.bold())
     );
     let actual = common::render_module("go", &dir.path());
@@ -70,7 +70,7 @@ fn folder_with_godeps() -> io::Result<()> {
     let expected = format!(
         "via {} ",
         Segment::new("go")
-            .set_value("🐹 v1.10.0")
+            .set_value("🐹 v1.10")
             .set_style(Color::Cyan.bold())
     );
     let actual = common::render_module("go", &dir.path());
@@ -88,7 +88,7 @@ fn folder_with_glide_yaml() -> io::Result<()> {
     let expected = format!(
         "via {} ",
         Segment::new("go")
-            .set_value("🐹 v1.10.0")
+            .set_value("🐹 v1.10")
             .set_style(Color::Cyan.bold())
     );
     let actual = common::render_module("go", &dir.path());
@@ -106,7 +106,7 @@ fn folder_with_gopkg_yml() -> io::Result<()> {
     let expected = format!(
         "via {} ",
         Segment::new("go")
-            .set_value("🐹 v1.10.0")
+            .set_value("🐹 v1.10")
             .set_style(Color::Cyan.bold())
     );
     let actual = common::render_module("go", &dir.path());
@@ -124,7 +124,7 @@ fn folder_with_gopkg_lock() -> io::Result<()> {
     let expected = format!(
         "via {} ",
         Segment::new("go")
-            .set_value("🐹 v1.10.0")
+            .set_value("🐹 v1.10")
             .set_style(Color::Cyan.bold())
     );
     let actual = common::render_module("go", &dir.path());
