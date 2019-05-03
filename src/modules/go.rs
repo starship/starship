@@ -14,7 +14,6 @@ use super::{Context, Module};
 ///     - Current directory contains a `glide.yaml` file
 ///     - Current directory contains a `Gopkg.yml` file
 ///     - Current directory contains a `Gopkg.lock` file
-///     - Current directory is $GOPATH
 pub fn segment(context: &Context) -> Option<Module> {
     let is_go_project = context.dir_files.iter().any(has_go_files);
     if !is_go_project {
@@ -40,7 +39,6 @@ pub fn segment(context: &Context) -> Option<Module> {
 }
 
 fn has_go_files(dir_entry: &PathBuf) -> bool {
-    // TODO: Check to see if the current directory is $GOPATH
     let is_go_mod =
         |d: &PathBuf| -> bool { d.is_file() && d.file_name().unwrap_or_default() == "go.mod" };
     let is_go_sum =
