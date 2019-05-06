@@ -1,5 +1,5 @@
 use ansi_term::Color;
-use git2::{Status};
+use git2::{Repository, Status};
 
 use super::{Context, Module};
 
@@ -7,21 +7,10 @@ use super::{Context, Module};
 ///
 /// Will display the branch name if the current directory is a git repo
 pub fn segment(context: &Context) -> Option<Module> {
-    let repository = context.repository.as_ref()?;
-
-    let mut status_options = git2::StatusOptions::new();
-    status_options.include_untracked(true);
-
-    let repo_file_statuses = repository.statuses(Some(&mut status_options)).ok()?;
-    if repo_file_statuses.is_empty() {
-        return None;
-    }
-
-    // Statuses are stored as bitflags, so use BitOr to join them all into a single value
-    let repo_status = repo_file_statuses.iter().fold(Status::empty(), |acc, x| acc | x.status());
-    info!("repo status: {:?}", repo_status);
-
     let module_style = Color::Red.bold();
+
+    let repository = context.repository.as_ref()?;
+    let repo_status = get_repo_status(repository)?;
 
     let mut module = Module::new("git_status");
     module.get_prefix().set_value("[").set_style(module_style);
@@ -63,4 +52,19 @@ pub fn segment(context: &Context) -> Option<Module> {
     // TODO: Check whether branch is diverged
     
     Some(module)
+}
+
+fn get_repo_status(repository: &Repository) -> Option<Status> {
+    let mut status_options = git2::StatusOptions::new();
+    status_options.include_untracked(true);
+
+    let repo_file_statuses = repository.statuses(Some(&mut status_options)).ok()?;
+
+    // Statuses are stored as bitflags, so use BitOr to join them all into a single value
+    let repo_status = repo_file_statuses.iter().fold(Status::empty(), |acc, x| acc | x.status());
+    if repo_status.is_empty() {
+        return None;
+    }
+
+    Some(repo_status)
 }
