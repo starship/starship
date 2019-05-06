@@ -20,22 +20,19 @@ pub fn segment(context: &Context) -> Option<Module> {
         return None;
     }
 
-    match get_go_version() {
-        Some(go_version) => {
-            const GO_CHAR: &str = "🐹 ";
-            let module_color = Color::Cyan.bold();
+    let go_version = get_go_version()?;
 
-            let mut module = Module::new("go");
-            module.set_style(module_color);
+    const GO_CHAR: &str = "🐹 ";
+    let module_color = Color::Cyan.bold();
 
-            let formatted_version = format_go_version(go_version);
-            module.new_segment("symbol", GO_CHAR);
-            module.new_segment("version", formatted_version);
+    let mut module = Module::new("go");
+    module.set_style(module_color);
 
-            Some(module)
-        }
-        None => None,
-    }
+    let formatted_version = format_go_version(go_version);
+    module.new_segment("symbol", GO_CHAR);
+    module.new_segment("version", formatted_version);
+
+    Some(module)
 }
 
 fn has_go_files(dir_entry: &PathBuf) -> bool {
@@ -64,10 +61,11 @@ fn has_go_files(dir_entry: &PathBuf) -> bool {
 }
 
 fn get_go_version() -> Option<String> {
-    match Command::new("go").arg("version").output() {
-        Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
-        Err(_) => None,
-    }
+    Command::new("go")
+        .arg("version")
+        .output()
+        .ok()
+        .and_then(|output| String::from_utf8(output.stdout).ok())
 }
 
 fn format_go_version(go_stdout: String) -> String {
