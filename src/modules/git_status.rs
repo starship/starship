@@ -9,8 +9,9 @@ use super::{Context, Module};
 pub fn segment(context: &Context) -> Option<Module> {
     let module_style = Color::Red.bold();
 
-    let repository = context.repository.as_ref()?;
-    let repo_status = get_repo_status(repository)?;
+    let repo_root = context.repo_root.as_ref()?;
+    let repository = Repository::open(repo_root).ok()?;
+    let repo_status = get_repo_status(&repository)?;
 
     debug!("Repo status: {:?}", repo_status);
 
