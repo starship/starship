@@ -7,12 +7,10 @@ use super::{Context, Module};
 ///
 /// Will display the branch name if the current directory is a git repo
 pub fn segment(context: &Context) -> Option<Module> {
-    if context.repository.is_none() {
-        return None;
-    }
+    let repo_root = context.repo_root.as_ref()?;
+    let repository = Repository::open(repo_root).ok()?;
 
-    let repository = context.repository.as_ref().unwrap();
-    match get_current_branch(repository) {
+    match get_current_branch(&repository) {
         Ok(branch_name) => {
             const GIT_BRANCH_CHAR: &str = " ";
             let segment_color = Color::Purple.bold();
