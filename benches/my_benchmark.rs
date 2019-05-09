@@ -6,8 +6,8 @@ use criterion::Criterion;
 use clap::{App, Arg};
 use starship::context::Context;
 use starship::modules;
-use tempfile::TempDir;
 use std::fs;
+use tempfile::TempDir;
 
 fn char_segment(c: &mut Criterion) {
     let args = App::new("starship")
@@ -59,5 +59,11 @@ fn git_branch_segment(c: &mut Criterion) {
     });
 }
 
-criterion_group!(benches, char_segment, dir_segment, line_break_segment, git_branch_segment);
+criterion_group!(
+    benches,
+    char_segment,
+    dir_segment,
+    line_break_segment,
+    git_branch_segment
+);
 criterion_main!(benches);
