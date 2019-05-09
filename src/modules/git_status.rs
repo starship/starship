@@ -1,5 +1,6 @@
 use ansi_term::Color;
 use git2::{Repository, Status};
+use std::process;
 
 use super::{Context, Module};
 
@@ -27,10 +28,6 @@ pub fn segment(context: &Context) -> Option<Module> {
     const GIT_STATUS_DELETED: &str = "✘";
     const GIT_STATUS_STASHED: &str = "$";
     const GIT_STATUS_UNMERGED: &str = "=";
-
-    if repository.revparse_single("refs/stash").is_ok() {
-        module.new_segment("stashed", GIT_STATUS_STASHED);
-    }
 
     if repo_status.is_wt_deleted() || repo_status.is_index_deleted() {
         module.new_segment("deleted", GIT_STATUS_DELETED);
