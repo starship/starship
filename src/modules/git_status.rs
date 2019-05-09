@@ -67,7 +67,7 @@ fn get_repo_status(repository: &Repository) -> Option<Status> {
     let repo_file_statuses = repository.statuses(Some(&mut status_options)).ok()?;
 
     // Statuses are stored as bitflags, so use BitOr to join them all into a single value
-    let repo_status = repo_file_statuses.iter().fold(Status::empty(), |acc, x| acc | x.status());
+    let repo_status: Status = repo_file_statuses.iter().map(|e| e.status()).collect();
     if repo_status.is_empty() {
         return None;
     }
