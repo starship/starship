@@ -14,7 +14,7 @@ pub fn segment(context: &Context) -> Option<Module> {
     let repository = Repository::open(repo_root).ok()?;
     let repo_status = get_repo_status(&repository)?;
 
-    debug!("Repo status: {:?}", repo_status);
+    log::debug!("Repo status: {:?}", repo_status);
 
     let mut module = Module::new("git_status");
     module.get_prefix().set_value("[").set_style(module_style);
@@ -28,6 +28,13 @@ pub fn segment(context: &Context) -> Option<Module> {
     const GIT_STATUS_DELETED: &str = "✘";
     const GIT_STATUS_STASHED: &str = "$";
     const GIT_STATUS_UNMERGED: &str = "=";
+
+    let stash_object = repository.revparse_single("refs/stash");
+    log::debug!("Stash object: {:?}", stash_object);
+    
+    if stash_object.is_ok() {
+        module.new_segment("stashed", GIT_STATUS_STASHED);
+    }
 
     if repo_status.is_wt_deleted() || repo_status.is_index_deleted() {
         module.new_segment("deleted", GIT_STATUS_DELETED);
