@@ -1,6 +1,5 @@
 use ansi_term::Color;
 use git2::{Repository, Status};
-use std::process;
 
 use super::{Context, Module};
 
@@ -10,6 +9,7 @@ use super::{Context, Module};
 pub fn segment(context: &Context) -> Option<Module> {
     let module_style = Color::Red.bold();
 
+    let branch_name = context.branch_name.as_ref()?;
     let repo_root = context.repo_root.as_ref()?;
     let repository = Repository::open(repo_root).ok()?;
     let repo_status = get_repo_status(&repository)?;
@@ -20,7 +20,7 @@ pub fn segment(context: &Context) -> Option<Module> {
     module.get_prefix().set_value("[").set_style(module_style);
     module.get_suffix().set_value("] ").set_style(module_style);
     module.set_style(module_style);
-    
+
     const GIT_STATUS_UNTRACKED: &str = "?";
     const GIT_STATUS_MODIFIED: &str = "!";
     const GIT_STATUS_ADDED: &str = "+";
@@ -28,10 +28,34 @@ pub fn segment(context: &Context) -> Option<Module> {
     const GIT_STATUS_DELETED: &str = "✘";
     const GIT_STATUS_STASHED: &str = "$";
     const GIT_STATUS_UNMERGED: &str = "=";
+    const GIT_STATUS_AHEAD: &str = "⇡";
+    const GIT_STATUS_BEHIND: &str = "⇣";
+    const GIT_STATUS_DIVERGED: &str = "⇕";
+
+    // Check ahead/behind
+    let branch_object = repository.revparse_single(&branch_name);
+    let tracking_branch_name = format!("{}@{{upstream}}", branch_name);
+    let tracking_object = repository.revparse_single(&tracking_branch_name);
+
+    if branch_object.is_ok() && tracking_object.is_ok() {
+        let branch_oid = branch_object.unwrap().id();
+        let tracking_oid = tracking_object.unwrap().id();
+
+        let graph_ahead_behind = repository.graph_ahead_behind(branch_oid, tracking_oid);
+        let (ahead, behind) = graph_ahead_behind.unwrap();
+
+        if ahead > 0 && behind > 0 {
+            module.new_segment("diverged", GIT_STATUS_DIVERGED);
+        } else if ahead > 0 {
+            module.new_segment("ahead", GIT_STATUS_AHEAD);
+        } else if behind > 0 {
+            module.new_segment("behind", GIT_STATUS_BEHIND);
+        }
+    }
 
     let stash_object = repository.revparse_single("refs/stash");
     log::debug!("Stash object: {:?}", stash_object);
-    
+
     if stash_object.is_ok() {
         module.new_segment("stashed", GIT_STATUS_STASHED);
     }
@@ -57,10 +81,7 @@ pub fn segment(context: &Context) -> Option<Module> {
     }
 
     // TODO: Check for unmerged changes
-    // TODO: Check whether branch is ahead
-    // TODO: Check whether branch is behind
-    // TODO: Check whether branch is diverged
-    
+
     Some(module)
 }
 

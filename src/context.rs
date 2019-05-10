@@ -9,6 +9,7 @@ pub struct Context<'a> {
     pub dir_files: Vec<PathBuf>,
     pub arguments: ArgMatches<'a>,
     pub repo_root: Option<PathBuf>,
+    pub branch_name: Option<String>
 }
 
 impl<'a> Context<'a> {
@@ -36,15 +37,16 @@ impl<'a> Context<'a> {
             .map(|entry| entry.path())
             .collect::<Vec<PathBuf>>();
 
-        let repo_root: Option<PathBuf> = Repository::discover(&current_dir)
-            .ok()
-            .and_then(|repo| repo.workdir().map(|repo| repo.to_path_buf()));
+        let repository = Repository::discover(&current_dir).ok();
+        let repo_root = repository.as_ref().and_then(|repo| repo.workdir().map(|repo| repo.to_path_buf()));
+        let branch_name = repository.as_ref().and_then(|repo| get_current_branch(&repo));
 
         Context {
             arguments,
             current_dir,
             dir_files,
             repo_root,
+            branch_name
         }
     }
 
@@ -56,4 +58,11 @@ impl<'a> Context<'a> {
         }
         dir
     }
+}
+
+fn get_current_branch(repository: &Repository) -> Option<String> {
+    let head = repository.head().ok()?;
+    let shorthand = head.shorthand();
+    
+    shorthand.map(|branch| branch.to_string())
 }
