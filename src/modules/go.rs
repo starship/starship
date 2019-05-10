@@ -20,15 +20,14 @@ pub fn segment(context: &Context) -> Option<Module> {
         return None;
     }
 
-    let go_version = get_go_version()?;
-
     const GO_CHAR: &str = "🐹 ";
     let module_color = Color::Cyan.bold();
 
     let mut module = Module::new("go");
     module.set_style(module_color);
 
-    let formatted_version = format_go_version(go_version);
+    let go_version = get_go_version()?;
+    let formatted_version = format_go_version(go_version)?;
     module.new_segment("symbol", GO_CHAR);
     module.new_segment("version", formatted_version);
 
@@ -68,15 +67,21 @@ fn get_go_version() -> Option<String> {
         .and_then(|output| String::from_utf8(output.stdout).ok())
 }
 
-fn format_go_version(go_stdout: String) -> String {
-    let mut trimmed_version = go_stdout
-        .trim_start_matches("go version go")
-        .trim()
-        .to_string();
-    let offset = &trimmed_version.find(' ').unwrap();
-    let formatted_version: String = trimmed_version.drain(..offset).collect();
+fn format_go_version(go_stdout: String) -> Option<String> {
+    let mut version = go_stdout
+        // split into ["", "1.12.4 linux/amd64"]
+        .splitn(2, "go version go")
+        // return "1.12.4 linux/amd64"
+        .nth(1)?
+        // split into ["1.12.4", "linux/amd64"]
+        .split_whitespace()
+        // return "1.12.4"
+        .next()?;
 
-    format!("v{}", formatted_version)
+    let mut formatted_version = String::with_capacity(version.len() + 1);
+    formatted_version.push('v');
+    formatted_version.push_str(version);
+    Some(formatted_version)
 }
 
 #[cfg(test)]
