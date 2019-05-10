@@ -82,7 +82,11 @@ pub fn segment(context: &Context) -> Option<Module> {
         }
     }
 
-    Some(module)
+    if module.is_empty() {
+        None
+    } else {
+        Some(module)
+    }
 }
 
 /// Gets the bitflags associated with the repo's git status
