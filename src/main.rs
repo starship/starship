@@ -1,9 +1,6 @@
 #[macro_use]
 extern crate clap;
 
-#[macro_use]
-extern crate log;
-
 extern crate pretty_env_logger;
 extern crate ansi_term;
 extern crate dirs;
