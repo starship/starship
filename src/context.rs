@@ -8,7 +8,7 @@ pub struct Context<'a> {
     pub current_dir: PathBuf,
     pub dir_files: Vec<PathBuf>,
     pub arguments: ArgMatches<'a>,
-    pub repository: Option<Repository>,
+    pub repo_root: Option<PathBuf>,
 }
 
 impl<'a> Context<'a> {
@@ -36,13 +36,15 @@ impl<'a> Context<'a> {
             .map(|entry| entry.path())
             .collect::<Vec<PathBuf>>();
 
-        let repository: Option<Repository> = Repository::discover(&current_dir).ok();
+        let repo_root: Option<PathBuf> = Repository::discover(&current_dir)
+            .ok()
+            .and_then(|repo| repo.workdir().map(|repo| repo.to_path_buf()));
 
         Context {
             arguments,
             current_dir,
             dir_files,
-            repository,
+            repo_root,
         }
     }
 
