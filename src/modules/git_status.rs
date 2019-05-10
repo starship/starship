@@ -7,27 +7,28 @@ use super::{Context, Module};
 ///
 /// Will display the branch name if the current directory is a git repo
 pub fn segment(context: &Context) -> Option<Module> {
-    let module_style = Color::Red.bold();
+    // This is the order that the sections will appear in
+    const GIT_STATUS_CONFLICTED: &str = "=";
+    const GIT_STATUS_AHEAD: &str = "⇡";
+    const GIT_STATUS_BEHIND: &str = "⇣";
+    const GIT_STATUS_DIVERGED: &str = "⇕";
+    const GIT_STATUS_UNTRACKED: &str = "?";
+    const GIT_STATUS_STASHED: &str = "$";
+    const GIT_STATUS_MODIFIED: &str = "!";
+    const GIT_STATUS_ADDED: &str = "+";
+    const GIT_STATUS_RENAMED: &str = "»";
+    const GIT_STATUS_DELETED: &str = "✘";
 
     let branch_name = context.branch_name.as_ref()?;
     let repo_root = context.repo_root.as_ref()?;
     let repository = Repository::open(repo_root).ok()?;
 
+    let module_style = Color::Red.bold();
     let mut module = Module::new("git_status");
     module.get_prefix().set_value("[").set_style(module_style);
     module.get_suffix().set_value("] ").set_style(module_style);
     module.set_style(module_style);
 
-    const GIT_STATUS_UNTRACKED: &str = "?";
-    const GIT_STATUS_MODIFIED: &str = "!";
-    const GIT_STATUS_ADDED: &str = "+";
-    const GIT_STATUS_RENAMED: &str = "»";
-    const GIT_STATUS_DELETED: &str = "✘";
-    const GIT_STATUS_STASHED: &str = "$";
-    const GIT_STATUS_UNMERGED: &str = "=";
-    const GIT_STATUS_AHEAD: &str = "⇡";
-    const GIT_STATUS_BEHIND: &str = "⇣";
-    const GIT_STATUS_DIVERGED: &str = "⇕";
 
     let ahead_behind = get_ahead_behind(&repository, &branch_name);
     log::debug!("Repo ahead/behind: {:?}", ahead_behind);
@@ -42,6 +43,7 @@ pub fn segment(context: &Context) -> Option<Module> {
         }
     }
 
+
     let stash_object = repository.revparse_single("refs/stash");
     log::debug!("Stash object: {:?}", stash_object);
 
@@ -49,10 +51,15 @@ pub fn segment(context: &Context) -> Option<Module> {
         module.new_segment("stashed", GIT_STATUS_STASHED);
     }
 
+
     let repo_status = get_repo_status(&repository);
     log::debug!("Repo status: {:?}", repo_status);
 
     if let Ok(repo_status) = repo_status {
+        if repo_status.is_conflicted() {
+            module.new_segment("conflicted", GIT_STATUS_CONFLICTED);
+        }
+
         if repo_status.is_wt_deleted() || repo_status.is_index_deleted() {
             module.new_segment("deleted", GIT_STATUS_DELETED);
         }
@@ -73,8 +80,6 @@ pub fn segment(context: &Context) -> Option<Module> {
             module.new_segment("untracked", GIT_STATUS_UNTRACKED);
         }
     }
-
-    // TODO: Check for unmerged changes
 
     Some(module)
 }
