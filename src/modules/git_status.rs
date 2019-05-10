@@ -36,13 +36,14 @@ pub fn segment(context: &Context) -> Option<Module> {
     let repo_status = get_repo_status(&repository);
     log::debug!("Repo status: {:?}", repo_status);
 
-    // Show the conflicted module before all other statuses
+    // Add the conflicted segment
     if let Ok(repo_status) = repo_status {
         if repo_status.is_conflicted() {
             module.new_segment("conflicted", GIT_STATUS_CONFLICTED);
         }
     }
 
+    // Add the ahead/behind segment
     if let Ok((ahead, behind)) = ahead_behind {
         if ahead > 0 && behind > 0 {
             module.new_segment("diverged", GIT_STATUS_DIVERGED);
@@ -53,10 +54,12 @@ pub fn segment(context: &Context) -> Option<Module> {
         }
     }
 
+    // Add the stashed segment
     if stash_object.is_ok() {
         module.new_segment("stashed", GIT_STATUS_STASHED);
     }
 
+    // Add all remaining status segments
     if let Ok(repo_status) = repo_status {
         if repo_status.is_wt_deleted() || repo_status.is_index_deleted() {
             module.new_segment("deleted", GIT_STATUS_DELETED);

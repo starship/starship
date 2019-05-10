@@ -34,9 +34,9 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 - [x] Current Node.js version(`⬢`).
 - [x] Current Rust version (`🦀`).
 - [x] Current Python version (`🐍`).
-- [ ] Package version of package in current directory (`📦`).
+- [x] Package version of package in current directory (`📦`).
 - [ ] Current battery level and status
-- [ ] Current Git branch and rich repo status.
+- [x] Current Git branch and rich repo status.
 - [ ] Indicator for jobs in the background (`✦`).
 - [ ] Execution time of the last command if it exceeds the set threshold.
 
@@ -100,6 +100,7 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
     ```bash
     ZSH_THEME="starship"
     ```
+
 ## Contributing
 
 To test locally run the below command:
