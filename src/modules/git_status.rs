@@ -29,9 +29,19 @@ pub fn segment(context: &Context) -> Option<Module> {
     module.get_suffix().set_value("] ").set_style(module_style);
     module.set_style(module_style);
 
-
     let ahead_behind = get_ahead_behind(&repository, &branch_name);
     log::debug!("Repo ahead/behind: {:?}", ahead_behind);
+    let stash_object = repository.revparse_single("refs/stash");
+    log::debug!("Stash object: {:?}", stash_object);
+    let repo_status = get_repo_status(&repository);
+    log::debug!("Repo status: {:?}", repo_status);
+
+    // Show the conflicted module before all other statuses
+    if let Ok(repo_status) = repo_status {
+        if repo_status.is_conflicted() {
+            module.new_segment("conflicted", GIT_STATUS_CONFLICTED);
+        }
+    }
 
     if let Ok((ahead, behind)) = ahead_behind {
         if ahead > 0 && behind > 0 {
@@ -43,23 +53,11 @@ pub fn segment(context: &Context) -> Option<Module> {
         }
     }
 
-
-    let stash_object = repository.revparse_single("refs/stash");
-    log::debug!("Stash object: {:?}", stash_object);
-
     if stash_object.is_ok() {
         module.new_segment("stashed", GIT_STATUS_STASHED);
     }
 
-
-    let repo_status = get_repo_status(&repository);
-    log::debug!("Repo status: {:?}", repo_status);
-
     if let Ok(repo_status) = repo_status {
-        if repo_status.is_conflicted() {
-            module.new_segment("conflicted", GIT_STATUS_CONFLICTED);
-        }
-
         if repo_status.is_wt_deleted() || repo_status.is_index_deleted() {
             module.new_segment("deleted", GIT_STATUS_DELETED);
         }
