@@ -91,6 +91,6 @@ mod tests {
     #[test]
     fn test_format_go_version() {
         let input = String::from("go version go1.12 darwin/amd64");
-        assert_eq!(format_go_version(input), "v1.12");
+        assert_eq!(format_go_version(input), Some("v1.12".to_string()));
     }
 }
