@@ -11,6 +11,7 @@ dirs = "1.0.5"
 git2 = "0.8.0"
 toml = "0.5.0"
 serde_json = "1.0.39"
+rayon = "1.0.3"
 
 [dev-dependencies]
 tempfile = "3.0.7"

@@ -1,4 +1,5 @@
 use clap::ArgMatches;
+use rayon::prelude::*;
 use std::io::{self, Write};
 
 use crate::context::Context;
@@ -13,6 +14,7 @@ pub fn prompt(args: ArgMatches) {
         "nodejs",
         "rust",
         "python",
+        "go",
         "line_break",
         "character",
     ];
@@ -29,7 +31,7 @@ pub fn prompt(args: ArgMatches) {
     writeln!(handle).unwrap();
 
     let modules = prompt_order
-        .iter()
+        .par_iter()
         .map(|module| modules::handle(module, &context)) // Compute modules
         .flatten()
         .collect::<Vec<Module>>(); // Remove segments set to `None`

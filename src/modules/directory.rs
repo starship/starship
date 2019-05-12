@@ -23,9 +23,8 @@ pub fn segment(context: &Context) -> Option<Module> {
     let current_dir = &context.current_dir;
 
     let dir_string;
-    if let Some(repo) = &context.repository {
+    if let Some(repo_root) = &context.repo_root {
         // Contract the path to the git repo root
-        let repo_root = repo.workdir().unwrap();
         let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
 
         dir_string = contract_path(&current_dir, repo_root, repo_folder_name);
