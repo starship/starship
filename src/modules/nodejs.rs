@@ -1,4 +1,3 @@
-use crate::utils::project_detector;
 use ansi_term::Color;
 use std::process::Command;
 
@@ -11,11 +10,12 @@ use super::{Context, Module};
 ///     - Current directory contains a `package.json` file
 ///     - Current directory contains a `node_modules` directory
 pub fn segment(context: &Context) -> Option<Module> {
-    let is_js_project = project_detector::Criteria::new()
-        .set_files(vec!["package.json"])
-        .set_extensions(vec!["js"])
-        .set_folders(vec!["node_modules"])
-        .scan(&context.dir_files);
+    let is_js_project = context
+        .new_scan_dir()
+        .set_files(&["package.json"])
+        .set_extensions(&["js"])
+        .set_folders(&["node_modules"])
+        .scan();
 
     if !is_js_project {
         return None;

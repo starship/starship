@@ -10,7 +10,7 @@ mod module;
 mod modules;
 mod print;
 mod segment;
-mod utils;
+
 
 use clap::{App, Arg};
 

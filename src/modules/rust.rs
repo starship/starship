@@ -1,4 +1,3 @@
-use crate::utils::project_detector;
 use ansi_term::Color;
 use std::process::Command;
 
@@ -10,10 +9,11 @@ use super::{Context, Module};
 ///     - Current directory contains a file with a `.rs` extension
 ///     - Current directory contains a `Cargo.toml` file
 pub fn segment(context: &Context) -> Option<Module> {
-    let is_rs_project = project_detector::Criteria::new()
-        .set_files(vec!["Cargo.toml"])
-        .set_extensions(vec!["rs"])
-        .scan(&context.dir_files);
+    let is_rs_project = context
+        .new_scan_dir()
+        .set_files(&["Cargo.toml"])
+        .set_extensions(&["rs"])
+        .scan();
 
     if !is_rs_project {
         return None;
