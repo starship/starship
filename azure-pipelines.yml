@@ -36,19 +36,19 @@ jobs:
       matrix:
         windows-stable:
           imageName: "vs2017-win2016"
-          RUST_BUILD: stable
+          RUSTUP_TOOLCHAIN: stable
         mac-stable:
           imageName: "macos-10.13"
-          RUST_BUILD: stable
+          RUSTUP_TOOLCHAIN: stable
         linux-stable:
           imageName: "ubuntu-16.04"
-          RUST_BUILD: stable
+          RUSTUP_TOOLCHAIN: stable
         linux-beta:
           imageName: "ubuntu-16.04"
-          RUST_BUILD: beta
+          RUSTUP_TOOLCHAIN: beta
         linux-nightly:
           imageName: "ubuntu-16.04"
-          RUST_BUILD: nightly
+          RUSTUP_TOOLCHAIN: nightly
     pool:
       vmImage: "ubuntu-16.04"
     steps:
@@ -67,7 +67,12 @@ jobs:
       # Install Rust
       - template: ".build/install-rust.yml"
 
+<<<<<<< HEAD
       - script: cargo build
+=======
+      # Because integration tests rely on a fixed Rust version, we must use rustup to run with the intended toolkit
+      - script: cargo build --all
+>>>>>>> Remove rust integration tests for now
         displayName: Cargo build
       - script: cargo test -- --ignored
         displayName: Cargo test
