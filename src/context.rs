@@ -70,7 +70,7 @@ impl<'a> Context<'a> {
     }
 }
 
-// A Scruct of Criteria which will be used to verify current PathBuf is
+// A struct of Criteria which will be used to verify current PathBuf is
 // of X language, criteriass can be set via the builder pattern
 pub struct ScanDir<'a> {
     dir_files: &'a Vec<PathBuf>, // Replace with reference
