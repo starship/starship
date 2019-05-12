@@ -4,9 +4,9 @@ use std::process::Command;
 
 use super::{Context, Module};
 
-/// Creates a segment with the current Python version
+/// Creates a segment with the current Go version
 ///
-/// Will display the Python version if any of the following criteria are met:
+/// Will display the Go version if any of the following criteria are met:
 ///     - Current directory contains a `go.mod` file
 ///     - Current directory contains a `go.sum` file
 ///     - Current directory contains a `glide.yaml` file
