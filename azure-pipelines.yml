@@ -67,12 +67,7 @@ jobs:
       # Install Rust
       - template: ".build/install-rust.yml"
 
-<<<<<<< HEAD
       - script: cargo build
-=======
-      # Because integration tests rely on a fixed Rust version, we must use rustup to run with the intended toolkit
-      - script: cargo build --all
->>>>>>> Remove rust integration tests for now
         displayName: Cargo build
       - script: cargo test -- --ignored
         displayName: Cargo test
