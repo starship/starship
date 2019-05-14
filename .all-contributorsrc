@@ -16,11 +16,12 @@
       "profile": "https://twitter.com/matchai",
       "contributions": [
         "code",
+        "design",
         "ideas",
-        "review",
-        "test",
         "infra",
-        "maintenance"
+        "maintenance",
+        "review",
+        "test"
       ]
     },
     {
@@ -54,7 +55,7 @@
       "contributions": [
         "ideas",
         "maintenance",
-        "doc"
+        "review"
       ]
     },
     {
@@ -63,8 +64,8 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/26250962?v=4",
       "profile": "https://about.snuggi.es",
       "contributions": [
-        "ideas",
         "design",
+        "ideas",
         "maintenance",
         "review"
       ]
