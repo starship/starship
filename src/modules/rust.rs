@@ -1,5 +1,4 @@
 use ansi_term::Color;
-use std::path::PathBuf;
 use std::process::Command;
 
 use super::{Context, Module};
@@ -7,10 +6,15 @@ use super::{Context, Module};
 /// Creates a segment with the current Rust version
 ///
 /// Will display the Rust version if any of the following criteria are met:
-///     - Current directory contains a `.rs` file
+///     - Current directory contains a file with a `.rs` extension
 ///     - Current directory contains a `Cargo.toml` file
 pub fn segment(context: &Context) -> Option<Module> {
-    let is_rs_project = context.dir_files.iter().any(has_rs_files);
+    let is_rs_project = context
+        .new_scan_dir()
+        .set_files(&["Cargo.toml"])
+        .set_extensions(&["rs"])
+        .scan();
+
     if !is_rs_project {
         return None;
     }
@@ -31,15 +35,6 @@ pub fn segment(context: &Context) -> Option<Module> {
         }
         None => None,
     }
-}
-
-fn has_rs_files(dir_entry: &PathBuf) -> bool {
-    let is_rs_file =
-        |d: &PathBuf| -> bool { d.is_file() && d.extension().unwrap_or_default() == "rs" };
-    let is_cargo_toml =
-        |d: &PathBuf| -> bool { d.is_file() && d.file_name().unwrap_or_default() == "Cargo.toml" };
-
-    is_rs_file(&dir_entry) || is_cargo_toml(&dir_entry)
 }
 
 fn get_rust_version() -> Option<String> {
