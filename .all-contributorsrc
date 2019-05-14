@@ -1,0 +1,78 @@
+{
+  "projectName": "starship",
+  "projectOwner": "starship",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "badgeTemplate": "<a href=\"#contributors\"><img src=\"https://badgen.net/badge/all%20contributors/<%= contributors.length %>/orange\" alt=\"All Contributors\"></a>",
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "matchai",
+      "name": "Matan Kushner",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/4658208?v=4",
+      "profile": "https://twitter.com/matchai",
+      "contributions": [
+        "code",
+        "ideas",
+        "review",
+        "test",
+        "infra",
+        "maintenance"
+      ]
+    },
+    {
+      "login": "johnletey",
+      "name": "John Letey",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/30328854?v=4",
+      "profile": "https://github.com/johnletey",
+      "contributions": [
+        "code",
+        "ideas",
+        "test"
+      ]
+    },
+    {
+      "login": "Multimo",
+      "name": "Tim Mulqueen",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6132021?v=4",
+      "profile": "http://timmulqueen.com",
+      "contributions": [
+        "code",
+        "ideas",
+        "review",
+        "test"
+      ]
+    },
+    {
+      "login": "sirMerr",
+      "name": "Tiffany Le-Nguyen",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/11183523?v=4",
+      "profile": "https://github.com/sirMerr",
+      "contributions": [
+        "ideas",
+        "maintenance"
+      ]
+    },
+    {
+      "login": "Snuggle",
+      "name": "​Snuggle",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/26250962?v=4",
+      "profile": "https://about.snuggi.es",
+      "contributions": [
+        "ideas"
+      ]
+    },
+    {
+      "login": "mehcode",
+      "name": "Ryan Leckey",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/753919?v=4",
+      "profile": "https://github.com/mehcode",
+      "contributions": [
+        "review"
+      ]
+    }
+  ]
+}
