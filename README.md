@@ -38,7 +38,7 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 - [x] Package version of package in current directory (`📦`).
 - [ ] Current battery level and status
 - [x] Current Git branch and rich repo status:
-    - `=` — conflicted changes
+    - `=` — conflicting changes
     - `⇡` — ahead of remote branch
     - `⇣` — behind of remote branch
     - `⇕` — diverged changes
