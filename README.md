@@ -38,16 +38,16 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 - [x] Package version of package in current directory (`📦`).
 - [ ] Current battery level and status
 - [x] Current Git branch and rich repo status:
-    - ? — untracked changes
-    - + — uncommitted changes in the index
-    - ! — unstaged changes
-    - » — renamed files
-    - ✘ — deleted files
-    - $ — stashed changes
-    - = — unmerged changes
-    - ⇡ — ahead of remote branch
-    - ⇣ — behind of remote branch
-    - ⇕ — diverged changes
+    - `=` — conflicted changes
+    - `⇡` — ahead of remote branch
+    - `⇣` — behind of remote branch
+    - `⇕` — diverged changes
+    - `?` — untracked changes
+    - `$` — stashed changes
+    - `!` — modified files
+    - `+` — added files
+    - `»` — renamed files
+    - `✘` — deleted files
 - [ ] Indicator for jobs in the background (`✦`).
 - [ ] Execution time of the last command if it exceeds the set threshold.
 
