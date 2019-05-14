@@ -53,7 +53,8 @@
       "profile": "https://github.com/sirMerr",
       "contributions": [
         "ideas",
-        "maintenance"
+        "maintenance",
+        "doc"
       ]
     },
     {
@@ -62,7 +63,10 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/26250962?v=4",
       "profile": "https://about.snuggi.es",
       "contributions": [
-        "ideas"
+        "ideas",
+        "design",
+        "maintenance",
+        "review"
       ]
     },
     {
