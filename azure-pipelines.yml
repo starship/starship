@@ -20,7 +20,7 @@ jobs:
       - script: rustup component add rustfmt
         displayName: Install Rustfmt
       - script: cargo fmt --all -- --check
-        displayName: Run Rustfmt
+        displayName: Run rustfmt
 
   # Run the integration tests in a Docker container
   - job: "Docker"
