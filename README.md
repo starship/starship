@@ -1,4 +1,4 @@
-<h3 align="center">Starship <img src="https://raw.githubusercontent.com/Snuggle/starship/Warp-Speed/svg/comet.svg?sanitize=true"><img src="https://raw.githubusercontent.com/Snuggle/starship/Warp-Speed/svg/galaxy.svg?sanitize=true"></h3>
+<h3 align="center">Starship <img src="svg/comet.svg?sanitize=true"><img src="svg/galaxy.svg?sanitize=true"></h3>
 <p align="center">The cross-shell prompt for astronauts.</p>
 <p align="center">
     <a href="https://dev.azure.com/starship-control/starship/_build"><img src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite" alt="Azure Pipelines Build Status"></a>
