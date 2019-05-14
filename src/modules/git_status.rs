@@ -6,6 +6,17 @@ use super::{Context, Module};
 /// Creates a segment with the Git branch in the current directory
 ///
 /// Will display the branch name if the current directory is a git repo
+/// By default, the following symbols will be used to represent the repo's status:
+///   - `=` – This branch has merge conflicts
+///   - `⇡` – This branch is ahead of the branch being tracked
+///   - `⇡` – This branch is behind of the branch being tracked
+///   - `⇕` – This branch has diverged from the branch being tracked
+///   - `?` — There are untracked files in the working directory
+///   - `$` — A stash exists for the repository
+///   - `!` — There are file modifications in the working directory
+///   - `+` — A new file has been added to the staging area
+///   - `»` — A renamed file has been added to the staging area
+///   - `✘` — A file's deletion has been added to the staging area
 pub fn segment(context: &Context) -> Option<Module> {
     // This is the order that the sections will appear in
     const GIT_STATUS_CONFLICTED: &str = "=";
