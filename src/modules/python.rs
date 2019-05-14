@@ -1,5 +1,4 @@
 use ansi_term::Color;
-use std::path::PathBuf;
 use std::process::Command;
 
 use super::{Context, Module};
@@ -12,7 +11,17 @@ use super::{Context, Module};
 ///     - Current directory contains a `requirements.txt` file
 ///     - Current directory contains a `pyproject.toml` file
 pub fn segment(context: &Context) -> Option<Module> {
-    let is_py_project = context.dir_files.iter().any(has_py_files);
+    let is_py_project = context
+        .new_scan_dir()
+        .set_files(&[
+            "requirements.txt",
+            ".python-version",
+            "pyproject.toml",
+            "pyproject.toml",
+        ])
+        .set_extensions(&["py"])
+        .scan();
+
     if !is_py_project {
         return None;
     }
@@ -33,25 +42,6 @@ pub fn segment(context: &Context) -> Option<Module> {
         }
         None => None,
     }
-}
-
-fn has_py_files(dir_entry: &PathBuf) -> bool {
-    let is_py_file =
-        |d: &PathBuf| -> bool { d.is_file() && d.extension().unwrap_or_default() == "py" };
-    let is_python_version = |d: &PathBuf| -> bool {
-        d.is_file() && d.file_name().unwrap_or_default() == ".python-version"
-    };
-    let is_requirements_txt = |d: &PathBuf| -> bool {
-        d.is_file() && d.file_name().unwrap_or_default() == "requirements.txt"
-    };
-    let is_py_project = |d: &PathBuf| -> bool {
-        d.is_file() && d.file_name().unwrap_or_default() == "pyproject.toml"
-    };
-
-    is_py_file(&dir_entry)
-        || is_python_version(&dir_entry)
-        || is_requirements_txt(&dir_entry)
-        || is_py_project(&dir_entry)
 }
 
 fn get_python_version() -> Option<String> {
