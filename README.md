@@ -37,7 +37,17 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 - [x] Current Go version (`🐹`).
 - [x] Package version of package in current directory (`📦`).
 - [ ] Current battery level and status
-- [ ] Current Git branch and rich repo status.
+- [x] Current Git branch and rich repo status:
+    - `=` — conflicting changes
+    - `⇡` — ahead of remote branch
+    - `⇣` — behind of remote branch
+    - `⇕` — diverged changes
+    - `?` — untracked changes
+    - `$` — stashed changes
+    - `!` — modified files
+    - `+` — added files
+    - `»` — renamed files
+    - `✘` — deleted files
 - [ ] Indicator for jobs in the background (`✦`).
 - [ ] Execution time of the last command if it exceeds the set threshold.
 
@@ -101,6 +111,7 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
     ```bash
     ZSH_THEME="starship"
     ```
+
 ## Contributing
 
 To test locally run the below command:

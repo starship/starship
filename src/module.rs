@@ -48,6 +48,11 @@ impl Module {
         self.segments.last_mut().unwrap()
     }
 
+    /// Whether a module has any segments
+    pub fn is_empty(&self) -> bool {
+        self.segments.is_empty()
+    }
+
     /// Get the module's prefix
     pub fn get_prefix(&mut self) -> &mut ModuleAffix {
         &mut self.prefix

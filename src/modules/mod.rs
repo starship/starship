@@ -1,6 +1,7 @@
 mod character;
 mod directory;
 mod git_branch;
+mod git_status;
 mod go;
 mod line_break;
 mod nodejs;
@@ -22,6 +23,7 @@ pub fn handle(module: &str, context: &Context) -> Option<Module> {
         "line_break" => line_break::segment(context),
         "package" => package::segment(context),
         "git_branch" => git_branch::segment(context),
+        "git_status" => git_status::segment(context),
 
         _ => panic!("Unknown module: {}", module),
     }
