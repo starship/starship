@@ -20,7 +20,7 @@ jobs:
       - script: rustup component add rustfmt
         displayName: Install Rustfmt
       - script: cargo fmt --all -- --check
-        displayName: Run Rustfmt
+        displayName: Run rustfmt
 
   # Run the integration tests in a Docker container
   - job: "Docker"
@@ -36,19 +36,19 @@ jobs:
       matrix:
         windows-stable:
           imageName: "vs2017-win2016"
-          rustup_toolchain: stable
+          RUSTUP_TOOLCHAIN: stable
         mac-stable:
           imageName: "macos-10.13"
-          rustup_toolchain: stable
+          RUSTUP_TOOLCHAIN: stable
         linux-stable:
           imageName: "ubuntu-16.04"
-          rustup_toolchain: stable
+          RUSTUP_TOOLCHAIN: stable
         linux-beta:
           imageName: "ubuntu-16.04"
-          rustup_toolchain: beta
+          RUSTUP_TOOLCHAIN: beta
         linux-nightly:
           imageName: "ubuntu-16.04"
-          rustup_toolchain: nightly
+          RUSTUP_TOOLCHAIN: nightly
     pool:
       vmImage: "ubuntu-16.04"
     steps:
@@ -60,13 +60,14 @@ jobs:
       - task: GoTool@0
         inputs:
           versionSpec: "1.10"
-      # Install Rust at a fixed version for integration tests
+      # Install Python
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: "3.7.2"
+      # Install Rust
       - template: ".build/install-rust.yml"
-        parameters:
-          versionSpec: "1.34.0"
 
-      # Because integration tests rely on a fixed Rust version, we must use rustup to run with the intended toolkit
-      - script: rustup run $RUSTUP_TOOLCHAIN cargo build --all
+      - script: cargo build
         displayName: Cargo build
-      - script: rustup run $RUSTUP_TOOLCHAIN cargo test -- --ignored
+      - script: cargo test -- --ignored
         displayName: Cargo test

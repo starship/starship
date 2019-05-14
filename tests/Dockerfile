@@ -1,4 +1,4 @@
-FROM rust:1.34.0
+FROM rust:latest
 
 # Install Node.js
 ENV NODE_VERSION 12.0.0
@@ -25,7 +25,18 @@ ENV PATH $GO_ROOT/bin:$PATH
 RUN goenv install $GO_VERSION
 RUN goenv global $GO_VERSION
 # Check that Go was correctly installed
+
 RUN go version
+# Install Python
+ENV PYTHON_VERSION 3.7.2
+ENV PYENV_ROOT /root/.pyenv
+ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
+RUN curl https://pyenv.run | bash \
+  && pyenv update \
+  && pyenv install $PYTHON_VERSION \
+  && pyenv global $PYTHON_VERSION
+# Check that Python was correctly installed
+RUN python --version
 
 # Create blank project
 RUN USER=root cargo new --bin starship
@@ -40,8 +51,7 @@ RUN mkdir benches
 RUN touch benches/my_benchmark.rs
 
 # This is a dummy build to get dependencies cached
-RUN rustup install stable
-RUN rustup run stable cargo build --release
+RUN cargo build --release
 
 # Delete the dummy build
 RUN rm -rf /starship
@@ -50,5 +60,4 @@ RUN rm -rf /starship
 RUN mkdir starship
 WORKDIR /starship
 
-# Run with rustup to use stable instead of the Rust default
-CMD [ "rustup", "run", "stable", "cargo", "test", "--", "--ignored"]
+CMD ["cargo", "test", "--", "--ignored"]
