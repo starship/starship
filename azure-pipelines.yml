@@ -63,7 +63,7 @@ jobs:
       # Install Python
       - task: UsePythonVersion@0
         inputs:
-          versionSpec: "3.7.2"
+          versionSpec: "3.7.3"
       # Install Rust
       - template: ".build/install-rust.yml"
 
