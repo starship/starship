@@ -98,7 +98,8 @@ fn truncated_directory_in_root() -> io::Result<()> {
 #[test]
 #[ignore]
 fn git_repo_root() -> io::Result<()> {
-    let repo_dir = home_dir().unwrap().join("rocket-controls");
+    let tmp_dir = TempDir::new_in(home_dir().unwrap())?;
+    let repo_dir = tmp_dir.path().join("rocket-controls");
     fs::create_dir(&repo_dir)?;
 
     Repository::init(&repo_dir).unwrap();
@@ -116,7 +117,8 @@ fn git_repo_root() -> io::Result<()> {
 #[test]
 #[ignore]
 fn directory_in_git_repo() -> io::Result<()> {
-    let repo_dir = home_dir().unwrap().join("rocket-controls");
+    let tmp_dir = TempDir::new_in(home_dir().unwrap())?;
+    let repo_dir = tmp_dir.path().join("rocket-controls");
     let dir = repo_dir.join("src");
     fs::create_dir_all(&dir)?;
 
