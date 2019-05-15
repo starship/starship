@@ -2,7 +2,7 @@ steps:
   # Linux and macOS
   - script: |
       set -e
-      curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain $RUSTUP_TOOLCHAIN
+      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain $RUSTUP_TOOLCHAIN
       echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
     env:
       RUSTUP_TOOLCHAIN: ${{parameters.rust_version}}
