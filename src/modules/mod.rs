@@ -8,6 +8,7 @@ mod nodejs;
 mod package;
 mod python;
 mod rust;
+mod username;
 
 use crate::context::Context;
 use crate::module::Module;
@@ -24,6 +25,7 @@ pub fn handle(module: &str, context: &Context) -> Option<Module> {
         "package" => package::segment(context),
         "git_branch" => git_branch::segment(context),
         "git_status" => git_status::segment(context),
+        "username" => username::segment(context),
 
         _ => panic!("Unknown module: {}", module),
     }

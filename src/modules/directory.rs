@@ -39,6 +39,8 @@ pub fn segment(context: &Context) -> Option<Module> {
     let truncated_dir_string = truncate(dir_string, DIR_TRUNCATION_LENGTH);
     module.new_segment("path", truncated_dir_string);
 
+    module.get_prefix().set_value("");
+
     Some(module)
 }
 
