@@ -1,6 +1,6 @@
 # Test top level crate
 jobs:
-- template: ci/test-stable.yml
+- template: ci/azure-test-stable.yml
   parameters:
     name: test_starship
     displayName: Test starship
