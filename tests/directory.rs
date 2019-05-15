@@ -102,10 +102,11 @@ fn git_repo_root() -> io::Result<()> {
     let repo_dir = tmp_dir.path().join("rocket-controls");
     fs::create_dir(&repo_dir)?;
 
-    Repository::init(&repo_dir).unwrap();
-    let perms = fs::metadata(&repo_dir)?.permissions();
+    let mut perms = fs::metadata(&repo_dir)?.permissions();
     perms.set_readonly(false);
     fs::set_permissions(&repo_dir, perms)?;
+    
+    Repository::init(&repo_dir).unwrap();
 
     let expected = format!(
         "via {} ",
