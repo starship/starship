@@ -7,7 +7,7 @@ jobs:
   steps:
   - template: azure-install-rust.yml
     parameters:
-      rust_version: ${{ parameters.rust }}
+      rust_version: nightly
 
   - script: cargo check --all
     displayName: cargo +nightly check --all
