@@ -67,9 +67,9 @@ fn root_directory() -> io::Result<()> {
 
 #[test]
 fn directory_in_root() -> io::Result<()> {
-    let dir = Path::new("/home");
+    let dir = Path::new("/tmp");
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("/home").to_string());
+    let expected = format!("via {} ", Color::Cyan.bold().paint("/tmp").to_string());
     let actual = common::render_module("dir", &dir);
     assert_eq!(expected, actual);
 
@@ -79,7 +79,7 @@ fn directory_in_root() -> io::Result<()> {
 #[test]
 #[ignore]
 fn truncated_directory_in_root() -> io::Result<()> {
-    let dir = Path::new("/home/starship/thrusters/rocket");
+    let dir = Path::new("/tmp/starship/thrusters/rocket");
     fs::create_dir_all(&dir)?;
 
     let expected = format!(
