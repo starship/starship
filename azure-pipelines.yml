@@ -1,25 +1,35 @@
 jobs:
-  # Check formatting
-  - template: ci/azure-rustfmt.yml
-    parameters:
-      name: rustfmt
+  # # Check formatting
+  # - template: ci/azure-rustfmt.yml
+  #   parameters:
+  #     name: rustfmt
 
-  # Test with Rust stable
-  - template: ci/azure-test-stable.yml
-    parameters:
-      name: test_starship
-      displayName: Test starship
+  # # Test with Rust stable
+  # - template: ci/azure-test-stable.yml
+  #   parameters:
+  #     name: test_starship
+  #     displayName: Test starship
 
-  # Test with Rust nightly
-  - template: ci/azure-test-nightly.yml
-    parameters:
-      name: test_nightly
-      displayName: Check starship with nightly
+  # # Test with Rust nightly
+  # - template: ci/azure-test-nightly.yml
+  #   parameters:
+  #     name: test_nightly
+  #     displayName: Check starship with nightly
 
-  # Run the integration tests in a Docker container
-  - job: test_docker
-    displayName: Test starship Docker
+  # # Run the integration tests in a Docker container
+  # - job: test_docker
+  #   displayName: Test starship Docker
+  #   pool:
+  #     vmImage: ubuntu-16.04
+  #   steps:
+  #     - script: ./integration_test
+
+  - job: test_rust
+    displayName: Install Rust
     pool:
       vmImage: ubuntu-16.04
     steps:
-      - script: ./integration_test
+      - script: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+      - script: |
+            rustc -Vv
+            cargo -V
