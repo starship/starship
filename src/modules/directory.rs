@@ -58,7 +58,7 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
     format!(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
-        separator = std::path::MAIN_SEPARATOR,
+        separator = "/",
         path = full_path
             .strip_prefix(top_level_path)
             .unwrap()
