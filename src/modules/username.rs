@@ -10,10 +10,7 @@ use super::{Context, Module};
 ///     - The current user isn't the same as the one that is logged in ($LOGNAME != $USER)
 ///     - The current user is root (UID = 0)
 ///     - The user is currently connected as an SSH session ($SSH_CONNECTION)
-pub fn segment(context: &Context) -> Option<Module> {
-    // $LOGNAME != $USER
-    // UID = 0
-    // $SSH_CONNECTION
+pub fn segment(_context: &Context) -> Option<Module> {
     let user = env::var("USER").unwrap_or("".to_string());
     let logname = env::var("LOGNAME").unwrap_or("".to_string());
     let ssh_connection = env::var("SSH_CONNECTION").unwrap_or("".to_string());
@@ -24,9 +21,7 @@ pub fn segment(context: &Context) -> Option<Module> {
 
         let mut module = Module::new("username");
         module.set_style(module_color);
-
         module.get_suffix().set_value(" on ");
-
         module.new_segment("username", user);
 
         return Some(module);
