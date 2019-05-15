@@ -51,30 +51,21 @@ fn read_file(file_name: &str) -> io::Result<String> {
 
 fn extract_cargo_version(file_contents: String) -> Option<String> {
     let cargo_toml = file_contents.parse::<toml::Value>().ok()?;
+    let raw_version = cargo_toml.get("package")?.get("version")?.as_str()?;
 
-    match cargo_toml["package"]["version"].as_str() {
-        Some(raw_version) => {
-            let version = format_version(raw_version.to_string());
-            Some(version)
-        }
-        None => None,
-    }
+    let formatted_version = format_version(raw_version);
+    Some(formatted_version)
 }
 
 fn extract_package_version(file_contents: String) -> Option<String> {
-    let json: Option<serde_json::Value> = serde_json::from_str(&file_contents).ok()?;
+    let package_json: serde_json::Value = serde_json::from_str(&file_contents).ok()?;
+    let raw_version = package_json.get("version")?.as_str()?;
+    if raw_version == "null" {
+        return None;
+    };
 
-    match json {
-        Some(json) => {
-            let raw_version = json["version"].to_string();
-            if raw_version == "null" {
-                None
-            } else {
-                Some(format_version(raw_version))
-            }
-        }
-        None => None,
-    }
+    let formatted_version = format_version(raw_version);
+    Some(formatted_version)
 }
 
 fn get_package_version(context: &Context) -> Option<String> {
@@ -93,7 +84,7 @@ fn get_package_version(context: &Context) -> Option<String> {
     None
 }
 
-fn format_version(version: String) -> String {
+fn format_version(version: &str) -> String {
     format!("v{}", version.replace('"', "").trim())
 }
 
@@ -103,7 +94,6 @@ mod tests {
 
     #[test]
     fn test_format_version() {
-        let input = String::from("0.1.0");
-        assert_eq!(format_version(input), "v0.1.0");
+        assert_eq!(format_version("0.1.0"), "v0.1.0");
     }
 }
