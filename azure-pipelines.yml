@@ -29,7 +29,10 @@ jobs:
     pool:
       vmImage: ubuntu-16.04
     steps:
-      - script: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+      - script: |
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+            echo "##vso[task.setvariable variable=PATH;]$PATH:/usr/local/cargo/bin"
+
       - script: |
             rustc -Vv
             cargo -V
