@@ -103,9 +103,9 @@ fn git_repo_root() -> io::Result<()> {
     fs::create_dir(&repo_dir)?;
 
     Repository::init(&repo_dir).unwrap();
-
-    let files = std::fs::read_dir(&repo_dir)?;
-    println!("{:?}", files);
+    let perms = fs::metadata(&repo_dir)?.permissions();
+    perms.set_readonly(false);
+    fs::set_permissions(&repo_dir, perms)?;
 
     let expected = format!(
         "via {} ",
