@@ -104,6 +104,9 @@ fn git_repo_root() -> io::Result<()> {
 
     Repository::init(&repo_dir).unwrap();
 
+    let files = std::fs::read_dir(&repo_dir)?;
+    println!("{:?}", files);
+
     let expected = format!(
         "via {} ",
         Color::Cyan.bold().paint("rocket-controls").to_string()
