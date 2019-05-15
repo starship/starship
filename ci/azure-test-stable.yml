@@ -17,5 +17,7 @@ jobs:
     parameters:
       rust_version: stable
 
-  - script: cargo test
+  - template: azure-setup-test-env.yml
+
+  - script: cargo test -- --ignored
     displayName: cargo test

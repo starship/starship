@@ -4,35 +4,17 @@ jobs:
   parameters:
     name: rustfmt
 
-# Test top level crate
+# Test with Rust stable
 - template: ci/azure-test-stable.yml
   parameters:
     name: test_starship
     displayName: Test starship
 
-# jobs:
-#   # Run the Rust linter
-#   - job: "Clippy"
-#     pool:
-#       vmImage: "ubuntu-16.04"
-#     container: "rust:latest"
-#     steps:
-#       - script: rustup component add clippy
-#         displayName: Install Clippy
-#       - script: cargo clippy --all
-#         displayName: Run clippy
-
-#   # Run the Rust formatter
-#   - job: "Rustfmt"
-#     pool:
-#       vmImage: "ubuntu-16.04"
-#     container: "rust:latest"
-#     condition: eq(variables['Build.Reason'], 'PullRequest')
-#     steps:
-#       - script: rustup component add rustfmt
-#         displayName: Install Rustfmt
-#       - script: cargo fmt --all -- --check
-#         displayName: Run rustfmt
+# Test with Rust nightly
+- template: ci/azure-test-nightly.yml
+  parameters:
+    name: test_nightly
+    displayName: Check starship with nightly
 
 #   # Run the integration tests in a Docker container
 #   - job: "Docker"
@@ -64,18 +46,18 @@ jobs:
 #     pool:
 #       vmImage: "ubuntu-16.04"
 #     steps:
-#       # # Install Node.js
-#       # - task: NodeTool@0
-#       #   inputs:
-#       #     versionSpec: "12.0.0"
-#       # # Install Go
-#       # - task: GoTool@0
-#       #   inputs:
-#       #     versionSpec: "1.10"
-#       # # Install Python
-#       # - task: UsePythonVersion@0
-#       #   inputs:
-#       #     versionSpec: "3.6.8"
+      # # Install Node.js
+      # - task: NodeTool@0
+      #   inputs:
+      #     versionSpec: "12.0.0"
+      # # Install Go
+      # - task: GoTool@0
+      #   inputs:
+      #     versionSpec: "1.10"
+      # # Install Python
+      # - task: UsePythonVersion@0
+      #   inputs:
+      #     versionSpec: "3.6.8"
 #       # # Install Rust
 #       - template: "ci/install-rust.yml"
 #         parameters:

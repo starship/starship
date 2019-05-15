@@ -1,0 +1,13 @@
+jobs:
+- job: ${{ parameters.name }}
+  displayName: ${{ parameters.displayName }}
+  pool:
+    vmImage: ubuntu-16.04
+
+  steps:
+  - template: azure-install-rust.yml
+    parameters:
+      rust_version: ${{ parameters.rust }}
+
+  - script: cargo check --all
+    displayName: cargo +nightly check --all
