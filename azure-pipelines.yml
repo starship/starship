@@ -1,5 +1,10 @@
-# Test top level crate
 jobs:
+# Check formatting
+- template: ci/azure-rustfmt.yml
+  parameters:
+    name: rustfmt
+
+# Test top level crate
 - template: ci/azure-test-stable.yml
   parameters:
     name: test_starship
