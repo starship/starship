@@ -1,74 +1,80 @@
-jobs:
-  # Run the Rust linter
-  - job: "Clippy"
-    pool:
-      vmImage: "ubuntu-16.04"
-    container: "rust:latest"
-    steps:
-      - script: rustup component add clippy
-        displayName: Install Clippy
-      - script: cargo clippy --all
-        displayName: Run clippy
+# Test top level crate
+- template: ci/test-stable.yml
+  parameters:
+    name: test_starship
+    displayName: Test starship
 
-  # Run the Rust formatter
-  - job: "Rustfmt"
-    pool:
-      vmImage: "ubuntu-16.04"
-    container: "rust:latest"
-    condition: eq(variables['Build.Reason'], 'PullRequest')
-    steps:
-      - script: rustup component add rustfmt
-        displayName: Install Rustfmt
-      - script: cargo fmt --all -- --check
-        displayName: Run rustfmt
+# jobs:
+#   # Run the Rust linter
+#   - job: "Clippy"
+#     pool:
+#       vmImage: "ubuntu-16.04"
+#     container: "rust:latest"
+#     steps:
+#       - script: rustup component add clippy
+#         displayName: Install Clippy
+#       - script: cargo clippy --all
+#         displayName: Run clippy
 
-  # Run the integration tests in a Docker container
-  - job: "Docker"
-    pool:
-      vmImage: "ubuntu-16.04"
-    steps:
-      - script: ./integration_test
-        displayName: Dockerized tests
+#   # Run the Rust formatter
+#   - job: "Rustfmt"
+#     pool:
+#       vmImage: "ubuntu-16.04"
+#     container: "rust:latest"
+#     condition: eq(variables['Build.Reason'], 'PullRequest')
+#     steps:
+#       - script: rustup component add rustfmt
+#         displayName: Install Rustfmt
+#       - script: cargo fmt --all -- --check
+#         displayName: Run rustfmt
 
-  # Run the integration tests on virtual machines
-  - job: "Test"
-    # strategy:
-      # matrix:
-      #   windows-stable:
-      #     imageName: "vs2017-win2016"
-      #     RUSTUP_TOOLCHAIN: stable
-      #   mac-stable:
-      #     imageName: "macos-10.13"
-      #     RUSTUP_TOOLCHAIN: stable
-      #   linux-stable:
-      #     imageName: "ubuntu-16.04"
-      #     RUSTUP_TOOLCHAIN: stable
-      #   linux-beta:
-      #     imageName: "ubuntu-16.04"
-      #     RUSTUP_TOOLCHAIN: beta
-      #   linux-nightly:
-      #     imageName: "ubuntu-16.04"
-      #     RUSTUP_TOOLCHAIN: nightly
-    pool:
-      vmImage: "ubuntu-16.04"
-    steps:
-      # # Install Node.js
-      # - task: NodeTool@0
-      #   inputs:
-      #     versionSpec: "12.0.0"
-      # # Install Go
-      # - task: GoTool@0
-      #   inputs:
-      #     versionSpec: "1.10"
-      # # Install Python
-      # - task: UsePythonVersion@0
-      #   inputs:
-      #     versionSpec: "3.6.8"
-      # # Install Rust
-      - template: "ci/install-rust.yml"
-        parameters:
-          rust_version: stable
-      - script: cargo build
-        displayName: Cargo build
-      - script: cargo test -- --ignored
-        displayName: Cargo test
+#   # Run the integration tests in a Docker container
+#   - job: "Docker"
+#     pool:
+#       vmImage: "ubuntu-16.04"
+#     steps:
+#       - script: ./integration_test
+#         displayName: Dockerized tests
+
+#   # Run the integration tests on virtual machines
+#   - job: "Test"
+#     # strategy:
+#       # matrix:
+#       #   windows-stable:
+#       #     imageName: "vs2017-win2016"
+#       #     RUSTUP_TOOLCHAIN: stable
+#       #   mac-stable:
+#       #     imageName: "macos-10.13"
+#       #     RUSTUP_TOOLCHAIN: stable
+#       #   linux-stable:
+#       #     imageName: "ubuntu-16.04"
+#       #     RUSTUP_TOOLCHAIN: stable
+#       #   linux-beta:
+#       #     imageName: "ubuntu-16.04"
+#       #     RUSTUP_TOOLCHAIN: beta
+#       #   linux-nightly:
+#       #     imageName: "ubuntu-16.04"
+#       #     RUSTUP_TOOLCHAIN: nightly
+#     pool:
+#       vmImage: "ubuntu-16.04"
+#     steps:
+#       # # Install Node.js
+#       # - task: NodeTool@0
+#       #   inputs:
+#       #     versionSpec: "12.0.0"
+#       # # Install Go
+#       # - task: GoTool@0
+#       #   inputs:
+#       #     versionSpec: "1.10"
+#       # # Install Python
+#       # - task: UsePythonVersion@0
+#       #   inputs:
+#       #     versionSpec: "3.6.8"
+#       # # Install Rust
+#       - template: "ci/install-rust.yml"
+#         parameters:
+#           rust_version: stable
+#       - script: cargo build
+#         displayName: Cargo build
+#       - script: cargo test -- --ignored
+#         displayName: Cargo test
