@@ -105,7 +105,7 @@ fn git_repo_root() -> io::Result<()> {
     let mut perms = fs::metadata(&repo_dir)?.permissions();
     perms.set_readonly(false);
     fs::set_permissions(&repo_dir, perms)?;
-    
+
     Repository::init(&repo_dir).unwrap();
 
     let expected = format!(
