@@ -66,6 +66,8 @@ jobs:
       #     versionSpec: "3.6.8"
       # # Install Rust
       - template: "ci/install-rust.yml"
+        parameters:
+          rust_version: stable
       - script: cargo build
         displayName: Cargo build
       - script: cargo test -- --ignored
