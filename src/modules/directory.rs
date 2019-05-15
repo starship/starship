@@ -83,7 +83,7 @@ fn truncate(dir_string: String, length: usize) -> String {
     }
 
     let truncated_components = &components[components.len() - length..];
-    truncated_components.join(&std::path::MAIN_SEPARATOR.to_string())
+    truncated_components.join("/")
 }
 
 #[cfg(test)]
