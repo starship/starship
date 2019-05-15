@@ -1,6 +1,6 @@
+use ansi_term::Color;
 use std::env;
 use std::process::Command;
-use ansi_term::Color;
 
 use super::{Context, Module};
 
@@ -17,7 +17,11 @@ pub fn segment(_context: &Context) -> Option<Module> {
     let uid = get_uid().unwrap_or(1000);
 
     if user != logname || uid == 0 || !ssh_connection.is_empty() {
-        let module_color = if uid == 0 { Color::Red.bold() } else { Color::Yellow.bold() };
+        let module_color = if uid == 0 {
+            Color::Red.bold()
+        } else {
+            Color::Yellow.bold()
+        };
 
         let mut module = Module::new("username");
         module.set_style(module_color);
@@ -39,7 +43,7 @@ fn get_uid() -> Option<u32> {
                 .parse::<u32>()
                 .unwrap();
             Some(uid)
-        },
+        }
         Err(_) => None,
     }
 }
