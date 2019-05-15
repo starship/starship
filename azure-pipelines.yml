@@ -18,7 +18,7 @@ jobs:
 
   # Run the integration tests in a Docker container
   - job: test_docker
-    displayName: Run dockerized integration tests
+    displayName: Test starship Docker
     pool:
       vmImage: ubuntu-16.04
     steps:
