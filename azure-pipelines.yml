@@ -32,7 +32,7 @@ jobs:
 
   # Run the integration tests on virtual machines
   - job: "Test"
-    strategy:
+    # strategy:
       # matrix:
       #   windows-stable:
       #     imageName: "vs2017-win2016"
