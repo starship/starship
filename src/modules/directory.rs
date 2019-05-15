@@ -21,6 +21,7 @@ pub fn segment(context: &Context) -> Option<Module> {
     module.set_style(module_color);
 
     let current_dir = &context.current_dir;
+    log::debug!("Current directory: {:?}", current_dir);
 
     let dir_string;
     if let Some(repo_root) = &context.repo_root {
@@ -77,7 +78,7 @@ fn truncate(dir_string: String, length: usize) -> String {
     }
 
     let components = dir_string
-        .split(std::path::MAIN_SEPARATOR)
+        .split("/")
         .collect::<Vec<&str>>();
     if components.len() <= length {
         return dir_string;
