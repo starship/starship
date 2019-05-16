@@ -101,16 +101,19 @@ mod tests {
     fn test_extract_cargo_version() {
         let cargo_with_version = "[package]
             name = \"starship\"
-            version = \"0.1.0\""; 
-            
+            version = \"0.1.0\"";
+
         let expected_version = Some("v0.1.0".to_string());
         assert_eq!(extract_cargo_version(&cargo_with_version), expected_version);
 
         let cargo_without_version = "[package]
-            name = \"starship\""; 
-        
+            name = \"starship\"";
+
         let expected_version = None;
-        assert_eq!(extract_cargo_version(&cargo_without_version), expected_version);
+        assert_eq!(
+            extract_cargo_version(&cargo_without_version),
+            expected_version
+        );
     }
 
     #[test]
@@ -118,16 +121,24 @@ mod tests {
         let package_with_version = serde_json::json!({
             "name": "spacefish",
             "version": "0.1.0"
-        }).to_string();
+        })
+        .to_string();
 
         let expected_version = Some("v0.1.0".to_string());
-        assert_eq!(extract_package_version(&package_with_version), expected_version);
+        assert_eq!(
+            extract_package_version(&package_with_version),
+            expected_version
+        );
 
         let package_without_version = serde_json::json!({
             "name": "spacefish"
-        }).to_string();
-        
+        })
+        .to_string();
+
         let expected_version = None;
-        assert_eq!(extract_package_version(&package_without_version), expected_version);
+        assert_eq!(
+            extract_package_version(&package_without_version),
+            expected_version
+        );
     }
 }
