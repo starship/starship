@@ -28,7 +28,7 @@ RUN goenv global $GO_VERSION
 
 RUN go version
 # Install Python
-ENV PYTHON_VERSION 3.7.2
+ENV PYTHON_VERSION 3.6.8
 ENV PYENV_ROOT /root/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 RUN curl https://pyenv.run | bash \
