@@ -53,7 +53,7 @@ fn get_go_version() -> Option<String> {
 }
 
 fn format_go_version(go_stdout: String) -> Option<String> {
-    let mut version = go_stdout
+    let version = go_stdout
         // split into ["", "1.12.4 linux/amd64"]
         .splitn(2, "go version go")
         // return "1.12.4 linux/amd64"
