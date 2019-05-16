@@ -67,9 +67,9 @@ fn root_directory() -> io::Result<()> {
 
 #[test]
 fn directory_in_root() -> io::Result<()> {
-    let dir = Path::new("/opt");
+    let dir = Path::new("/tmp");
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("/opt").to_string());
+    let expected = format!("via {} ", Color::Cyan.bold().paint("/tmp").to_string());
     let actual = common::render_module("dir", &dir);
     assert_eq!(expected, actual);
 
@@ -79,7 +79,7 @@ fn directory_in_root() -> io::Result<()> {
 #[test]
 #[ignore]
 fn truncated_directory_in_root() -> io::Result<()> {
-    let dir = Path::new("/opt/starship/thrusters/rocket");
+    let dir = Path::new("/tmp/starship/thrusters/rocket");
     fs::create_dir_all(&dir)?;
 
     let expected = format!(
@@ -98,7 +98,7 @@ fn truncated_directory_in_root() -> io::Result<()> {
 #[test]
 #[ignore]
 fn git_repo_root() -> io::Result<()> {
-    let tmp_dir = TempDir::new()?;
+    let tmp_dir = TempDir::new_in(home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
     fs::create_dir(&repo_dir)?;
 
@@ -117,7 +117,7 @@ fn git_repo_root() -> io::Result<()> {
 #[test]
 #[ignore]
 fn directory_in_git_repo() -> io::Result<()> {
-    let tmp_dir = TempDir::new()?;
+    let tmp_dir = TempDir::new_in(home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
     let dir = repo_dir.join("src");
     fs::create_dir_all(&dir)?;
