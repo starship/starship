@@ -11,13 +11,13 @@ use super::{Context, Module};
 ///     - The current user is root (UID = 0)
 ///     - The user is currently connected as an SSH session ($SSH_CONNECTION)
 pub fn segment(_context: &Context) -> Option<Module> {
-    let user = env::var("USER").unwrap_or("".to_string());
-    let logname = env::var("LOGNAME").unwrap_or("".to_string());
-    let ssh_connection = env::var("SSH_CONNECTION").unwrap_or("".to_string());
-    let uid = get_uid().unwrap_or(1000);
+    let user = env::var("USER").ok();
+    let logname = env::var("LOGNAME").ok();
+    let ssh_connection = env::var("SSH_CONNECTION").ok();
+    let uid = get_uid();
 
-    if user != logname || uid == 0 || !ssh_connection.is_empty() {
-        let module_color = if uid == 0 {
+    if user != logname || uid == Some(0) || ssh_connection.is_some() {
+        let module_color = if uid == Some(0) {
             Color::Red.bold()
         } else {
             Color::Yellow.bold()
@@ -25,8 +25,8 @@ pub fn segment(_context: &Context) -> Option<Module> {
 
         let mut module = Module::new("username");
         module.set_style(module_color);
-        module.get_suffix().set_value(" on ");
-        module.new_segment("username", user);
+        module.get_suffix().set_value(" in ");
+        module.new_segment("username", user.unwrap());
 
         return Some(module);
     }
