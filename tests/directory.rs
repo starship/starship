@@ -12,7 +12,7 @@ mod common;
 fn home_directory() -> io::Result<()> {
     let dir = Path::new("~");
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("~").to_string());
+    let expected = format!("in {} ", Color::Cyan.bold().paint("~").to_string());
     let actual = common::render_module("dir", &dir);
     assert_eq!(expected, actual);
 
@@ -26,7 +26,7 @@ fn directory_in_home() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
 
     let expected = format!(
-        "via {} ",
+        "in {} ",
         Color::Cyan.bold().paint("~/starship/engine").to_string()
     );
     let actual = common::render_module("dir", &dir);
@@ -42,7 +42,7 @@ fn truncated_directory_in_home() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
 
     let expected = format!(
-        "via {} ",
+        "in {} ",
         Color::Cyan
             .bold()
             .paint("starship/engine/schematics")
@@ -58,7 +58,7 @@ fn truncated_directory_in_home() -> io::Result<()> {
 fn root_directory() -> io::Result<()> {
     let dir = Path::new("/");
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("/").to_string());
+    let expected = format!("in {} ", Color::Cyan.bold().paint("/").to_string());
     let actual = common::render_module("dir", &dir);
     assert_eq!(expected, actual);
 
@@ -69,7 +69,7 @@ fn root_directory() -> io::Result<()> {
 fn directory_in_root() -> io::Result<()> {
     let dir = Path::new("/tmp");
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("/tmp").to_string());
+    let expected = format!("in {} ", Color::Cyan.bold().paint("/tmp").to_string());
     let actual = common::render_module("dir", &dir);
     assert_eq!(expected, actual);
 
@@ -83,7 +83,7 @@ fn truncated_directory_in_root() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
 
     let expected = format!(
-        "via {} ",
+        "in {} ",
         Color::Cyan
             .bold()
             .paint("starship/thrusters/rocket")
@@ -105,7 +105,7 @@ fn git_repo_root() -> io::Result<()> {
     Repository::init(&repo_dir).unwrap();
 
     let expected = format!(
-        "via {} ",
+        "in {} ",
         Color::Cyan.bold().paint("rocket-controls").to_string()
     );
     let actual = common::render_module("dir", &repo_dir);
@@ -125,7 +125,7 @@ fn directory_in_git_repo() -> io::Result<()> {
     Repository::init(&repo_dir).unwrap();
 
     let expected = format!(
-        "via {} ",
+        "in {} ",
         Color::Cyan.bold().paint("rocket-controls/src").to_string()
     );
     let actual = common::render_module("dir", &dir);
@@ -145,7 +145,7 @@ fn truncated_directory_in_git_repo() -> io::Result<()> {
     Repository::init(&repo_dir).unwrap();
 
     let expected = format!(
-        "via {} ",
+        "in {} ",
         Color::Cyan
             .bold()
             .paint("src/meters/fuel-gauge")
