@@ -15,7 +15,7 @@ fn folder_with_python_version() -> io::Result<()> {
     let expected = format!(
         "via {} ",
         Segment::new("python")
-            .set_value("🐍 v3.7.2")
+            .set_value("🐍 v3.6.8")
             .set_style(Color::Yellow.bold())
     );
     let actual = common::render_module("python", &dir.path());
@@ -33,7 +33,7 @@ fn folder_with_requirements_txt() -> io::Result<()> {
     let expected = format!(
         "via {} ",
         Segment::new("python")
-            .set_value("🐍 v3.7.2")
+            .set_value("🐍 v3.6.8")
             .set_style(Color::Yellow.bold())
     );
     let actual = common::render_module("python", &dir.path());
@@ -51,7 +51,7 @@ fn folder_with_pyproject_toml() -> io::Result<()> {
     let expected = format!(
         "via {} ",
         Segment::new("python")
-            .set_value("🐍 v3.7.2")
+            .set_value("🐍 v3.6.8")
             .set_style(Color::Yellow.bold())
     );
     let actual = common::render_module("python", &dir.path());
@@ -69,7 +69,7 @@ fn folder_with_py_file() -> io::Result<()> {
     let expected = format!(
         "via {} ",
         Segment::new("python")
-            .set_value("🐍 v3.7.2")
+            .set_value("🐍 v3.6.8")
             .set_style(Color::Yellow.bold())
     );
     let actual = common::render_module("python", &dir.path());
