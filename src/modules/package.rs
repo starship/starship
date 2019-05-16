@@ -1,18 +1,17 @@
 use super::{Context, Module};
 
 use ansi_term::Color;
-use serde_json;
+use serde_json as json;
 use std::fs::File;
 use std::io;
 use std::io::Read;
-use std::path::PathBuf;
 use toml;
 
 /// Creates a segment with the current package version
 ///
 /// Will display if a version is defined for your Node.js or Rust project (if one exists)
-pub fn segment(context: &Context) -> Option<Module> {
-    match get_package_version(context) {
+pub fn segment(_context: &Context) -> Option<Module> {
+    match get_package_version() {
         Some(package_version) => {
             const PACKAGE_CHAR: &str = "📦 ";
             let module_color = Color::Red.bold();
@@ -40,7 +39,7 @@ fn read_file(file_name: &str) -> io::Result<String> {
 }
 
 fn extract_cargo_version(file_contents: &str) -> Option<String> {
-    let cargo_toml = file_contents.parse::<toml::Value>().ok()?;
+    let cargo_toml: toml::Value = toml::from_str(&file_contents).ok()?;
     let raw_version = cargo_toml.get("package")?.get("version")?.as_str()?;
 
     let formatted_version = format_version(raw_version);
@@ -48,7 +47,7 @@ fn extract_cargo_version(file_contents: &str) -> Option<String> {
 }
 
 fn extract_package_version(file_contents: &str) -> Option<String> {
-    let package_json: serde_json::Value = serde_json::from_str(&file_contents).ok()?;
+    let package_json: json::Value = json::from_str(&file_contents).ok()?;
     let raw_version = package_json.get("version")?.as_str()?;
     if raw_version == "null" {
         return None;
@@ -58,7 +57,7 @@ fn extract_package_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
-fn get_package_version(context: &Context) -> Option<String> {
+fn get_package_version() -> Option<String> {
     let cargo_toml = read_file("Cargo.toml");
     if let Ok(cargo_toml) = cargo_toml {
         return extract_cargo_version(&cargo_toml);
@@ -111,7 +110,7 @@ mod tests {
 
     #[test]
     fn test_extract_package_version() {
-        let package_with_version = serde_json::json!({
+        let package_with_version = json::json!({
             "name": "spacefish",
             "version": "0.1.0"
         })
@@ -123,7 +122,7 @@ mod tests {
             expected_version
         );
 
-        let package_without_version = serde_json::json!({
+        let package_without_version = json::json!({
             "name": "spacefish"
         })
         .to_string();
