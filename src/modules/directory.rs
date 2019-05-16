@@ -21,6 +21,7 @@ pub fn segment(context: &Context) -> Option<Module> {
     module.set_style(module_color);
 
     let current_dir = &context.current_dir;
+    log::debug!("Current directory: {:?}", current_dir);
 
     let dir_string;
     if let Some(repo_root) = &context.repo_root {
@@ -60,7 +61,7 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
     format!(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
-        separator = std::path::MAIN_SEPARATOR,
+        separator = "/",
         path = full_path
             .strip_prefix(top_level_path)
             .unwrap()
@@ -78,15 +79,13 @@ fn truncate(dir_string: String, length: usize) -> String {
         return dir_string;
     }
 
-    let components = dir_string
-        .split(std::path::MAIN_SEPARATOR)
-        .collect::<Vec<&str>>();
+    let components = dir_string.split("/").collect::<Vec<&str>>();
     if components.len() <= length {
         return dir_string;
     }
 
     let truncated_components = &components[components.len() - length..];
-    truncated_components.join(&std::path::MAIN_SEPARATOR.to_string())
+    truncated_components.join("/")
 }
 
 #[cfg(test)]
