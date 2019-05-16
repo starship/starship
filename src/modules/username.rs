@@ -26,7 +26,7 @@ pub fn segment(_context: &Context) -> Option<Module> {
         let mut module = Module::new("username");
         module.set_style(module_color);
         module.get_suffix().set_value(" in ");
-        module.new_segment("username", user.unwrap());
+        module.new_segment("username", user?);
 
         return Some(module);
     }
@@ -37,13 +37,10 @@ pub fn segment(_context: &Context) -> Option<Module> {
 fn get_uid() -> Option<u32> {
     match Command::new("id").arg("-u").output() {
         Ok(output) => {
-            let uid = String::from_utf8(output.stdout)
-                .unwrap()
-                .trim()
-                .parse::<u32>()
-                .unwrap();
-            Some(uid)
-        }
+            String::from_utf8(output.stdout)
+                .map(|uid| uid.trim().parse::<u32>().ok())
+                .ok()?
+        },
         Err(_) => None,
     }
 }
