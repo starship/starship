@@ -30,22 +30,12 @@ pub fn segment(context: &Context) -> Option<Module> {
     }
 }
 
-// TODO: Combine into one function and just call for different file names!
-fn is_cargo_toml(dir_entry: &PathBuf) -> bool {
-    dir_entry.is_file() && dir_entry.file_name().unwrap_or_default() == "Cargo.toml"
-}
-
-fn is_package_json(dir_entry: &PathBuf) -> bool {
-    dir_entry.is_file() && dir_entry.file_name().unwrap_or_default() == "package.json"
-}
-
 // TODO: Move to `utils.rs` file and import
 fn read_file(file_name: &str) -> io::Result<String> {
     let mut file = File::open(file_name)?;
     let mut data = String::new();
 
     file.read_to_string(&mut data)?;
-
     Ok(data)
 }
 
@@ -69,18 +59,16 @@ fn extract_package_version(file_contents: &str) -> Option<String> {
 }
 
 fn get_package_version(context: &Context) -> Option<String> {
-    let has_cargo_toml = context.dir_files.iter().any(is_cargo_toml);
-    if has_cargo_toml {
-        let file_contents = read_file("Cargo.toml").ok()?;
-        return extract_cargo_version(&file_contents);
+    let cargo_toml = read_file("Cargo.toml");
+    if let Ok(cargo_toml) = cargo_toml {
+        return extract_cargo_version(&cargo_toml);
     }
 
-    let has_package_json = context.dir_files.iter().any(is_package_json);
-    if has_package_json {
-        let file_contents = read_file("package.json").ok()?;
-        return extract_package_version(&file_contents);
+    let package_json = read_file("package.json");
+    if let Ok(package_json) = package_json {
+        return extract_package_version(&package_json);
     }
-
+    
     None
 }
 
