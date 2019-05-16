@@ -1,5 +1,4 @@
 use ansi_term::Color;
-use std::path::PathBuf;
 use std::process::Command;
 
 use super::{Context, Module};
