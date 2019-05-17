@@ -80,8 +80,7 @@ impl Module {
         let mut ansi_strings = self
             .segments
             .iter()
-            .map(|s| s.ansi_strings())
-            .flat_map(|s| s.into_iter())
+            .map(|s| s.ansi_string())
             .collect::<Vec<ANSIString>>();
 
         ansi_strings.insert(0, self.prefix.ansi_string());
