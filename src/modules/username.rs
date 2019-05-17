@@ -1,4 +1,4 @@
-use ansi_term::Color;
+use ansi_term::{Color, Style};
 use std::env;
 use std::process::Command;
 
@@ -14,14 +14,10 @@ pub fn segment(_context: &Context) -> Option<Module> {
     let user = env::var("USER").ok();
     let logname = env::var("LOGNAME").ok();
     let ssh_connection = env::var("SSH_CONNECTION").ok();
-    let uid = get_uid();
 
-    if user != logname || uid == Some(0) || ssh_connection.is_some() {
-        let module_color = if uid == Some(0) {
-            Color::Red.bold()
-        } else {
-            Color::Yellow.bold()
-        };
+    let mut module_color = Color::Yellow.bold();
+
+    if user != logname || ssh_connection.is_some() || is_root(&mut module_color) {
 
         let mut module = Module::new("username");
         module.set_style(module_color);
@@ -39,5 +35,16 @@ fn get_uid() -> Option<u32> {
             .map(|uid| uid.trim().parse::<u32>().ok())
             .ok()?,
         Err(_) => None,
+    }
+}
+
+fn is_root(style: &mut Style) -> bool {
+    match get_uid() {
+        Some(uid) if uid == 0 => {
+            style.clone_from(&Color::Red.bold());
+
+            true
+        },
+        _ => false
     }
 }
