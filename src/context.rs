@@ -1,3 +1,5 @@
+use crate::config::Config;
+
 use clap::ArgMatches;
 use git2::Repository;
 use std::env;
@@ -6,6 +8,7 @@ use std::fs;
 use std::path::PathBuf;
 
 pub struct Context<'a> {
+    pub config: Config,
     pub current_dir: PathBuf,
     pub dir_files: Vec<PathBuf>,
     pub arguments: ArgMatches<'a>,
@@ -24,6 +27,8 @@ impl<'a> Context<'a> {
     where
         T: Into<PathBuf>,
     {
+        let config = Config::initialize();
+
         // TODO: Currently gets the physical directory. Get the logical directory.
         let current_dir = Context::expand_tilde(dir.into());
 

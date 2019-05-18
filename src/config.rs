@@ -1,25 +1,33 @@
 use crate::utils;
 
-// use std::collections::HashMap;
 use dirs::home_dir;
 
-static config: toml::value::Table = toml::value::Table::new();
-// static config: HashMap<String, ModuleConfig> = HashMap::new();
-
-// enum ModuleConfig {
-//     ConfigValue(HashMap<String, String>),
-//     SegmentConfig(HashMap<String, HashMap<String, String>>)
-// }
-
-pub fn initialize() -> Option<()> {
-    let file_path = home_dir()?.join(".config/starship.toml");
-    let toml_content = utils::read_file(&file_path.to_str()?).ok()?;
-
-    config = toml::from_str(&toml_content).ok()?;
-
-    Some(())
+pub struct Config {
+    data: toml::value::Table,
 }
 
-pub fn get_config(config_value: &str, default: &str) -> String {
-    default.to_string()
+impl Config {
+    pub fn initialize() -> Config {
+        if let Some(file_data) = Config::config_from_file() {
+            return Config {
+                data: file_data
+            };
+        }
+
+        Config {
+            data: toml::value::Table::new(),
+        }
+    }
+
+    fn config_from_file() -> Option<toml::value::Table> {
+        let file_path = home_dir()?.join(".config/starship.toml");
+        let toml_content = utils::read_file(&file_path.to_str()?).ok()?;
+
+        let config = toml::from_str(&toml_content).ok()?;
+        Some(config)
+    }
+
+    pub fn get_config(config_value: &str, default: &str) -> String {
+        default.to_string()
+    }
 }
