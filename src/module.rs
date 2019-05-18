@@ -28,6 +28,7 @@ impl Module {
     pub fn new(name: &str) -> Module {
         Module {
             name: name.to_string(),
+            config: config.get_config(name),
             style: Style::default(),
             prefix: ModuleAffix::default_prefix(name.to_string()),
             segments: Vec::new(),

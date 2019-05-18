@@ -1,10 +1,8 @@
 use super::{Context, Module};
+use crate::utils;
 
 use ansi_term::Color;
 use serde_json as json;
-use std::fs::File;
-use std::io;
-use std::io::Read;
 use toml;
 
 /// Creates a segment with the current package version
@@ -29,15 +27,6 @@ pub fn segment(_context: &Context) -> Option<Module> {
     }
 }
 
-// TODO: Move to `utils.rs` file and import
-fn read_file(file_name: &str) -> io::Result<String> {
-    let mut file = File::open(file_name)?;
-    let mut data = String::new();
-
-    file.read_to_string(&mut data)?;
-    Ok(data)
-}
-
 fn extract_cargo_version(file_contents: &str) -> Option<String> {
     let cargo_toml: toml::Value = toml::from_str(&file_contents).ok()?;
     let raw_version = cargo_toml.get("package")?.get("version")?.as_str()?;
@@ -58,12 +47,12 @@ fn extract_package_version(file_contents: &str) -> Option<String> {
 }
 
 fn get_package_version() -> Option<String> {
-    let cargo_toml = read_file("Cargo.toml");
+    let cargo_toml = utils::read_file("Cargo.toml");
     if let Ok(cargo_toml) = cargo_toml {
         return extract_cargo_version(&cargo_toml);
     }
 
-    let package_json = read_file("package.json");
+    let package_json = utils::read_file("package.json");
     if let Ok(package_json) = package_json {
         return extract_package_version(&package_json);
     }
