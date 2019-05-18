@@ -6,7 +6,7 @@ use super::{Context, Module};
 
 /// Creates a segment with the current user's username
 ///
-/// Will display the Node.js version if any of the following criteria are met:
+/// Will display the usename if any of the following criteria are met:
 ///     - The current user isn't the same as the one that is logged in ($LOGNAME != $USER)
 ///     - The current user is root (UID = 0)
 ///     - The user is currently connected as an SSH session ($SSH_CONNECTION)
@@ -18,7 +18,6 @@ pub fn segment(_context: &Context) -> Option<Module> {
     let mut module_color = Color::Yellow.bold();
 
     if user != logname || ssh_connection.is_some() || is_root(&mut module_color) {
-
         let mut module = Module::new("username");
         module.set_style(module_color);
         module.new_segment("username", user?);
@@ -44,7 +43,7 @@ fn is_root(style: &mut Style) -> bool {
             style.clone_from(&Color::Red.bold());
 
             true
-        },
-        _ => false
+        }
+        _ => false,
     }
 }
