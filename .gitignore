@@ -10,3 +10,6 @@ Cargo.lock
 
 # VSCode configuration
 .vscode/
+
+# Intellij IDE configuration
+.idea/

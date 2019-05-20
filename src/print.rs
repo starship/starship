@@ -8,6 +8,7 @@ use crate::modules;
 
 pub fn prompt(args: ArgMatches) {
     let prompt_order = vec![
+        "username",
         "directory",
         "git_branch",
         "git_status",
