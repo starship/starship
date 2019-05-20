@@ -16,7 +16,7 @@ pretty_env_logger = "0.3.0"
 log = "0.4.6"
 
 [dev-dependencies]
-tempfile = "3.0.7"
+tempfile = "3.0.8"
 criterion = "0.2.11"
 
 [[bench]]
