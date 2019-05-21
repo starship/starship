@@ -101,8 +101,11 @@ impl<'a> Module<'a> {
     /// Get a module's config value as a string
     fn config_value(&self, key: &str) -> Option<String> {
         self.config
+            // Find the config value by its key
             .map(|config| config.get(key)).unwrap_or(None)
+            // Get the config value as a `&str`
             .map(toml::Value::as_str).unwrap_or(None)
+            // Convert it to a String
             .map(str::to_string)
     }
 }
