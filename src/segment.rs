@@ -12,7 +12,7 @@ pub struct Segment {
     style: Option<Style>,
 
     /// The string value of the current segment.
-    value: String
+    value: String,
 }
 
 impl Segment {
@@ -21,7 +21,7 @@ impl Segment {
         Segment {
             name: name.to_string(),
             style: None,
-            value: "".to_string()
+            value: "".to_string(),
         }
     }
 

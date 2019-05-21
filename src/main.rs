@@ -6,13 +6,13 @@ extern crate dirs;
 extern crate git2;
 extern crate pretty_env_logger;
 
+mod config;
 mod context;
 mod module;
 mod modules;
 mod print;
 mod segment;
 mod utils;
-mod config;
 
 use clap::{App, Arg};
 

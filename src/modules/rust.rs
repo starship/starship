@@ -24,7 +24,7 @@ pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
             const RUST_CHAR: &str = "🦀 ";
             let module_color = Color::Red.bold();
 
-            let mut module =context.new_module("rust");
+            let mut module = context.new_module("rust");
             module.set_style(module_color);
 
             let formatted_version = format_rustc_version(rust_version);

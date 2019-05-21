@@ -56,7 +56,7 @@ fn get_package_version() -> Option<String> {
     if let Ok(package_json) = package_json {
         return extract_package_version(&package_json);
     }
-    
+
     None
 }
 
@@ -88,7 +88,6 @@ mod tests {
             [package]
             name = "starship"
             "#;
-
 
         let expected_version = None;
         assert_eq!(

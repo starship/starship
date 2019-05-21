@@ -10,9 +10,7 @@ impl Config {
     /// Initialize the Config struct
     pub fn initialize() -> Config {
         if let Some(file_data) = Config::config_from_file() {
-            return Config {
-                data: file_data
-            };
+            return Config { data: file_data };
         }
 
         Config {
@@ -33,7 +31,11 @@ impl Config {
 
     /// Get the subset of the table for a module by its name
     pub fn get_module_config(&self, module_name: &str) -> Option<&toml::value::Table> {
-        let module_config = self.data.get(module_name).map(toml::Value::as_table).unwrap_or(None);
+        let module_config = self
+            .data
+            .get(module_name)
+            .map(toml::Value::as_table)
+            .unwrap_or(None);
         log::debug!("Config found for {}: {:?}", &module_name, &module_config);
         module_config
     }
