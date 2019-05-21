@@ -4,6 +4,7 @@ extern crate clap;
 extern crate ansi_term;
 extern crate dirs;
 extern crate git2;
+extern crate battery;
 extern crate pretty_env_logger;
 
 mod context;
