@@ -47,7 +47,6 @@ impl<'a> Module<'a> {
         let mut segment = Segment::new(name);
         segment.set_style(self.style);
         // Use the provided value unless overwritten by config
-        log::debug!("{} {} {:?}", self.name, name, self.config_value(name));
         segment.set_value(self.config_value(name).unwrap_or_else(|| value.into()));
         self.segments.push(segment);
 
