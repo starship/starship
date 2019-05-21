@@ -8,7 +8,7 @@ use super::{Context, Module};
 /// Will display the Rust version if any of the following criteria are met:
 ///     - Current directory contains a file with a `.rs` extension
 ///     - Current directory contains a `Cargo.toml` file
-pub fn segment(context: &Context) -> Option<Module> {
+pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_rs_project = context
         .new_scan_dir()
         .set_files(&["Cargo.toml"])
@@ -24,7 +24,7 @@ pub fn segment(context: &Context) -> Option<Module> {
             const RUST_CHAR: &str = "🦀 ";
             let module_color = Color::Red.bold();
 
-            let mut module = Module::new("rust");
+            let mut module =context.new_module("rust");
             module.set_style(module_color);
 
             let formatted_version = format_rustc_version(rust_version);

@@ -13,7 +13,7 @@ mod username;
 use crate::context::Context;
 use crate::module::Module;
 
-pub fn handle(module: &str, context: &Context) -> Option<Module> {
+pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     match module {
         "dir" | "directory" => directory::segment(context),
         "char" | "character" => character::segment(context),
