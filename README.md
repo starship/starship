@@ -54,7 +54,7 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 
 ### Other features
 
-- [ ] `.starshiprc` configuration (JSON or TOML)
+- [x] `starship.toml` configuration
 - [ ] Custom sections given commands or binaries
 - [ ] Self-updating
 
@@ -66,9 +66,9 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 
 ### Test strategy
 
-- [x] Per-segment benchmarking
+- [ ] Per-segment benchmarking
 - [x] Per-segment unit + integration tests
-- [ ] Shell + OS matrix acceptance tests
+- [x] Shell + OS matrix acceptance tests
 
 ## Setup
 
