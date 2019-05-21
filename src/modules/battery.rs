@@ -2,7 +2,7 @@ use ansi_term::Color;
 
 use super::{Context, Module};
 
-/// Creates a segment for the line break
+/// Creates a segment for the battery percentage and charging state
 pub fn segment(_context: &Context) -> Option<Module> {
     const BATTERY_FULL: &str = "•";
     const BATTERY_CHARGING: &str = "⇡";
@@ -55,15 +55,15 @@ fn get_battery_status() -> Option<BatteryStatus> {
                 state: battery.state()
             };
 
-            return Some(battery_status);
+            Some(battery_status)
         }
         Some(Err(e)) => {
             log::debug!("Unable to access battery information:\n{}", e);
-            return None;
+            None
         }
         None => {
             log::debug!("No batteries found");
-            return None;
+            None
         }
     }
 }

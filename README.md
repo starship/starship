@@ -37,7 +37,7 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 - [x] Current Python version (`🐍`).
 - [x] Current Go version (`🐹`).
 - [x] Package version of package in current directory (`📦`).
-- [ ] Current battery level and status
+- [x] Current battery level and status
 - [x] Current Git branch and rich repo status:
     - `=` — conflicting changes
     - `⇡` — ahead of remote branch
