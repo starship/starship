@@ -1,3 +1,4 @@
+mod battery;
 mod character;
 mod directory;
 mod git_branch;
@@ -9,7 +10,6 @@ mod package;
 mod python;
 mod rust;
 mod username;
-mod battery;
 
 use crate::context::Context;
 use crate::module::Module;

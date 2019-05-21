@@ -13,15 +13,18 @@ pub fn segment(_context: &Context) -> Option<Module> {
     let BatteryStatus { state, percentage } = battery_status;
 
     if percentage > BATTERY_THRESHOLD {
-        log::debug!("Battery percentage is higher than threshold ({} > {})", percentage, BATTERY_THRESHOLD);
+        log::debug!(
+            "Battery percentage is higher than threshold ({} > {})",
+            percentage,
+            BATTERY_THRESHOLD
+        );
         return None;
     }
-    
+
     // TODO: Set style based on percentage when threshold is modifiable
     let mut module = Module::new("battery");
     module.set_style(Color::Red.bold());
     module.get_prefix().set_value("");
-
 
     match state {
         battery::State::Full => {
@@ -33,7 +36,7 @@ pub fn segment(_context: &Context) -> Option<Module> {
         battery::State::Discharging => {
             module.new_segment("discharging", BATTERY_DISCHARGING);
         }
-        _ => return None
+        _ => return None,
     }
 
     let mut percent_string = Vec::<String>::with_capacity(2);
@@ -52,7 +55,7 @@ fn get_battery_status() -> Option<BatteryStatus> {
             log::debug!("Battery found: {:?}", battery);
             let battery_status = BatteryStatus {
                 percentage: battery.state_of_charge().value * 100.0,
-                state: battery.state()
+                state: battery.state(),
             };
 
             Some(battery_status)
@@ -70,5 +73,5 @@ fn get_battery_status() -> Option<BatteryStatus> {
 
 struct BatteryStatus {
     percentage: f32,
-    state: battery::State
+    state: battery::State,
 }
