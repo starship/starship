@@ -105,9 +105,11 @@ impl<'a> ScanDir<'a> {
     /// if any of this criteria match or exist and returning a boolean
     pub fn scan(&mut self) -> bool {
         self.dir_files.iter().any(|path| {
-            path_has_name(&path, &self.folders)
-                || path_has_name(&path, &self.files)
-                || has_extension(&path, &self.extensions)
+            if path.is_dir() {
+                return path_has_name(&path, &self.folders);
+            } else {
+                return path_has_name(&path, &self.files) || has_extension(&path, &self.extensions);
+            }
         })
     }
 }
@@ -142,6 +144,13 @@ pub fn has_extension<'a>(dir_entry: &PathBuf, extensions: &'a [&'a str]) -> bool
         Some(extension) => !extension.is_empty(),
         None => false,
     }
+}
+
+fn get_current_branch(repository: &Repository) -> Option<String> {
+    let head = repository.head().ok()?;
+    let shorthand = head.shorthand();
+
+    shorthand.map(|branch| branch.to_string())
 }
 
 #[cfg(test)]
@@ -197,11 +206,4 @@ mod tests {
 
         assert_eq!(passing_criteria.scan(), true);
     }
-}
-
-fn get_current_branch(repository: &Repository) -> Option<String> {
-    let head = repository.head().ok()?;
-    let shorthand = head.shorthand();
-
-    shorthand.map(|branch| branch.to_string())
 }
