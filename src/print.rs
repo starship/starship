@@ -8,6 +8,7 @@ use crate::modules;
 
 pub fn prompt(args: ArgMatches) {
     let prompt_order = vec![
+        "battery",
         "username",
         "directory",
         "git_branch",
@@ -21,10 +22,6 @@ pub fn prompt(args: ArgMatches) {
         "character",
     ];
     let context = Context::new(args);
-
-    // TODO:
-    // - List files in directory
-    // - Index binaries in PATH
 
     let stdout = io::stdout();
     let mut handle = stdout.lock();

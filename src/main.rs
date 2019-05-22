@@ -2,6 +2,7 @@
 extern crate clap;
 
 extern crate ansi_term;
+extern crate battery;
 extern crate dirs;
 extern crate git2;
 extern crate pretty_env_logger;
