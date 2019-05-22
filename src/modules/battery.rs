@@ -40,8 +40,8 @@ pub fn segment(_context: &Context) -> Option<Module> {
     }
 
     let mut percent_string = Vec::<String>::with_capacity(2);
-    // Truncate the percentage to a whole number
-    percent_string.push(percentage.trunc().to_string());
+    // Round the percentage to a whole number
+    percent_string.push(percentage.round().to_string());
     percent_string.push("%".to_string());
     module.new_segment("percentage", percent_string.join(""));
 
