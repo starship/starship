@@ -1,4 +1,4 @@
-<h3 align="center">Starship <img src="https://raw.githubusercontent.com/starship/starship/master/svg/comet.svg?sanitize=true"><img src="https://raw.githubusercontent.com/starship/starship/master/svg/comet.svg?sanitize=true"></h3>
+<h3 align="center">Starship <img src="https://raw.githubusercontent.com/starship/starship/master/svg/comet.svg?sanitize=true"><img src="https://raw.githubusercontent.com/starship/starship/master/svg/galaxy.svg?sanitize=true"></h3>
 <p align="center">The cross-shell prompt for astronauts.</p>
 <p align="center">
     <a href="https://crates.io/crates/starship"><img src="https://badgen.net/crates/v/starship" alt="Crates.io version"></a>
