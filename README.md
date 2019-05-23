@@ -3,6 +3,8 @@
 <p align="center">
     <a href="https://crates.io/crates/starship"><img src="https://badgen.net/crates/v/starship" alt="Crates.io version"></a>
     <a href="https://dev.azure.com/starship-control/starship/_build"><img src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite" alt="Azure Pipelines build status"></a>
+    <a href="https://deps.rs/repo/github/starship/starship"><img src="https://deps.rs/repo/github/starship/starship/status.svg" alt="Crates.io version"></a>
+    <br>
     <a href="#contributors"><img src="https://badgen.net/badge/all%20contributors/6/orange" alt="All Contributors"></a>
     <a href="https://discord.gg/8Jzqu3T"><img src="https://badgen.net/badge/chat/on%20discord/7289da" alt="Chat on Discord"></a>
 </p>
