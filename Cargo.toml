@@ -1,8 +1,22 @@
 [package]
 name = "starship"
-version = "0.1.0"
-authors = ["Matan Kushner <hello@matchai.me>"]
+version = "0.1.0-beta.0"
 edition = "2018"
+authors = ["Matan Kushner <hello@matchai.me>"]
+repository = "https://github.com/starship/starship"
+readme = "README.md"
+license = "ISC"
+keywords = ["prompt", "shell", "bash", "fish", "zsh"]
+categories = ["command-line-utilities"]
+description = """
+The cross-shell prompt for astronauts. ☄🌌️
+"""
+
+[badges]
+azure-devops = { project = "starship-control/starship", pipeline = "Starship Test Suite" }
+is-it-maintained-issue-resolution = { repository = "starship/starship" }
+is-it-maintained-open-issues = { repository = "starship/starship" }
+maintenance = { status = "actively-developed" }
 
 [dependencies]
 clap = "2.33.0"
