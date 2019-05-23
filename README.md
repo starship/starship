@@ -1,14 +1,13 @@
-<h3 align="center">Starship <img src="svg/comet.svg?sanitize=true"><img src="svg/galaxy.svg?sanitize=true"></h3>
+<h3 align="center">Starship <img src="https://raw.githubusercontent.com/starship/starship/master/svg/comet.svg?sanitize=true"><img src="https://raw.githubusercontent.com/starship/starship/master/svg/comet.svg?sanitize=true"></h3>
 <p align="center">The cross-shell prompt for astronauts.</p>
 <p align="center">
-    <a href="https://dev.azure.com/starship-control/starship/_build"><img src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite" alt="Azure Pipelines Build Status"></a>
+    <a href="https://crates.io/crates/starship"><img src="https://badgen.net/crates/v/starship" alt="Crates.io version"></a>
+    <a href="https://dev.azure.com/starship-control/starship/_build"><img src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite" alt="Azure Pipelines build status"></a>
     <a href="#contributors"><img src="https://badgen.net/badge/all%20contributors/6/orange" alt="All Contributors"></a>
     <a href="https://discord.gg/8Jzqu3T"><img src="https://badgen.net/badge/chat/on%20discord/7289da" alt="Chat on Discord"></a>
 </p>
 
 ---
-
-> ⚠️ This is very much work in progress, so please don't try to use it just yet!
 
 Starship is a Rust port of the minimalistic, powerful, and extremely customizable prompt [Spaceship ZSH](https://github.com/denysdovhan/spaceship-prompt).
 
