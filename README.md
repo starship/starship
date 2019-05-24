@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="media/logo.svg" width="200">
+    <img src="media/logo.png" width="200">
     <h3 align="center">Starship <img src="media/comet.svg"><img src="media/galaxy.svg"></h3>
     <p align="center">The cross-shell prompt for astronauts.</p>
     <p align="center">
