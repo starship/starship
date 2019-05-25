@@ -1,3 +1,4 @@
+mod battery;
 mod character;
 mod directory;
 mod git_branch;
@@ -26,6 +27,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "git_branch" => git_branch::segment(context),
         "git_status" => git_status::segment(context),
         "username" => username::segment(context),
+        "battery" => battery::segment(context),
 
         _ => panic!("Unknown module: {}", module),
     }

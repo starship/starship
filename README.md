@@ -1,9 +1,12 @@
-<h3 align="center">Starship <img src="svg/comet.svg?sanitize=true"><img src="svg/galaxy.svg?sanitize=true"></h3>
-<p align="center">The cross-shell prompt for astronauts.</p>
 <p align="center">
-    <a href="https://dev.azure.com/starship-control/starship/_build"><img src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite" alt="Azure Pipelines Build Status"></a>
-    <a href="#contributors"><img src="https://badgen.net/badge/all%20contributors/6/orange" alt="All Contributors"></a>
-    <a href="https://discord.gg/8Jzqu3T"><img src="https://badgen.net/badge/chat/on%20discord/7289da" alt="Chat on Discord"></a>
+    <img src="media/logo.png" width="150">
+    <h3 align="center">Starship</h3>
+    <p align="center">The cross-shell prompt for astronauts.</p>
+    <p align="center">
+        <a href="https://dev.azure.com/starship-control/starship/_build"><img src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite" alt="Azure Pipelines Build Status"></a>
+        <a href="#contributors"><img src="https://badgen.net/badge/all%20contributors/6/orange" alt="All Contributors"></a>
+        <a href="https://discord.gg/8Jzqu3T"><img src="https://badgen.net/badge/chat/on%20discord/7289da" alt="Chat on Discord"></a>
+    </p>
 </p>
 
 ---
@@ -37,7 +40,7 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 - [x] Current Python version (`🐍`).
 - [x] Current Go version (`🐹`).
 - [x] Package version of package in current directory (`📦`).
-- [ ] Current battery level and status
+- [x] Current battery level and status
 - [x] Current Git branch and rich repo status:
     - `=` — conflicting changes
     - `⇡` — ahead of remote branch

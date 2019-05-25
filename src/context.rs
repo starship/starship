@@ -116,9 +116,11 @@ impl<'a> ScanDir<'a> {
     /// if any of this criteria match or exist and returning a boolean
     pub fn scan(&mut self) -> bool {
         self.dir_files.iter().any(|path| {
-            path_has_name(&path, &self.folders)
-                || path_has_name(&path, &self.files)
-                || has_extension(&path, &self.extensions)
+            if path.is_dir() {
+                return path_has_name(&path, &self.folders);
+            } else {
+                return path_has_name(&path, &self.files) || has_extension(&path, &self.extensions);
+            }
         })
     }
 }
@@ -155,6 +157,13 @@ pub fn has_extension<'a>(dir_entry: &PathBuf, extensions: &'a [&'a str]) -> bool
     }
 }
 
+fn get_current_branch(repository: &Repository) -> Option<String> {
+    let head = repository.head().ok()?;
+    let shorthand = head.shorthand();
+
+    shorthand.map(|branch| branch.to_string())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -188,7 +197,7 @@ mod tests {
     }
 
     #[test]
-    fn test_criteria_scan() {
+    fn test_criteria_scan_fails() {
         let mut failing_criteria = ScanDir {
             dir_files: &vec![PathBuf::new()],
             files: &["package.json"],
@@ -199,6 +208,19 @@ mod tests {
         // fails if buffer does not match any criteria
         assert_eq!(failing_criteria.scan(), false);
 
+        let mut failing_dir_criteria = ScanDir {
+            dir_files: &vec![PathBuf::from("/package.js/dog.go")],
+            files: &["package.json"],
+            extensions: &["js"],
+            folders: &["node_modules"],
+        };
+
+        // fails when passed a pathbuf dir matches extension path
+        assert_eq!(failing_dir_criteria.scan(), false);
+    }
+
+    #[test]
+    fn test_criteria_scan_passes() {
         let mut passing_criteria = ScanDir {
             dir_files: &vec![PathBuf::from("package.json")],
             files: &["package.json"],
@@ -208,11 +230,4 @@ mod tests {
 
         assert_eq!(passing_criteria.scan(), true);
     }
-}
-
-fn get_current_branch(repository: &Repository) -> Option<String> {
-    let head = repository.head().ok()?;
-    let shorthand = head.shorthand();
-
-    shorthand.map(|branch| branch.to_string())
 }
