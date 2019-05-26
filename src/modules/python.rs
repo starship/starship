@@ -46,7 +46,14 @@ pub fn segment(context: &Context) -> Option<Module> {
 
 fn get_python_version() -> Option<String> {
     match Command::new("python").arg("--version").output() {
-        Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
+        Ok(output) => {
+            let temp_version = String::from_utf8(output.stdout).unwrap();
+            if temp_version == "" {
+                Some(String::from_utf8(output.stderr).unwrap())
+            } else {
+                Some(temp_version)
+            }
+        }
         Err(_) => None,
     }
 }
