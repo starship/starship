@@ -25,3 +25,8 @@ jobs:
 
   - script: cargo test -- --ignored
     displayName: cargo test
+
+  - script: |
+      cargo tarpaulin --out Xml
+      bash <(curl -s https://codecov.io/bash)
+    condition: eq(variables['vmImage'], 'ubuntu-16.04')
