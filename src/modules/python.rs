@@ -47,11 +47,15 @@ pub fn segment(context: &Context) -> Option<Module> {
 fn get_python_version() -> Option<String> {
     match Command::new("python").arg("--version").output() {
         Ok(output) => {
-            let temp_version = String::from_utf8(output.stdout).unwrap();
-            if temp_version == "" {
-                Some(String::from_utf8(output.stderr).unwrap())
+            // We have to check both stdout and stderr since for Python versions
+            // < 3.4, Python reports to stderr and for Python version >= 3.5,
+            // Python reports to stdout
+            if output.stdout.is_empty() {
+                let stderr_string = String::from_utf8(output.stderr).unwrap();
+                Some(stderr_string)
             } else {
-                Some(temp_version)
+                let stdout_string = String::from_utf8(output.stdout).unwrap();
+                Some(stdout_string)
             }
         }
         Err(_) => None,
