@@ -27,5 +27,5 @@ jobs:
         cargo install cargo-tarpaulin -f
         cargo tarpaulin --ignored --out Xml
         bash <(curl -s https://codecov.io/bash)
-    displayName: "cargo test w/ coverage"
+    displayName: "Cargo test w/ coverage"
     condition: eq(variables['vmImage'], 'ubuntu-16.04')
