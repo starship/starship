@@ -19,14 +19,13 @@ jobs:
 
   - template: azure-setup-test-env.yml
 
-  - script: cargo install cargo-tarpaulin -f
-    displayName: "Install tarpaulin"
-    condition: eq(variables['vmImage'], 'ubuntu-16.04')
-
   - script: cargo test -- --ignored
     displayName: cargo test
+    condition: not(eq(variables['vmImage'], 'ubuntu-16.04'))
 
   - script: |
-      cargo tarpaulin --out Xml
-      bash <(curl -s https://codecov.io/bash)
+        cargo install cargo-tarpaulin -f
+        cargo tarpaulin --ignored --out Xml
+        bash <(curl -s https://codecov.io/bash)
+    displayName: "cargo test w/ coverage"
     condition: eq(variables['vmImage'], 'ubuntu-16.04')
