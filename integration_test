@@ -10,7 +10,10 @@ printf 'Pulling latest docker image'
 docker pull starshipcommand/starship-test
 
 printf 'Building test docker image:\n'
-docker build -f tests/Dockerfile --tag starshipcommand/starship-test .
+docker build -f tests/Dockerfile \
+  --tag starshipcommand/starship-test:latest \
+  --cache-from starshipcommand/starship-test \
+  .
 
 printf 'Running test suite:\n'
-docker run --rm -t -v $(pwd):/starship starship-test
+docker run --rm -t -v $(pwd):/starship starshipcommand/starship-test
