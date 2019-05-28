@@ -11,5 +11,6 @@ jobs:
   - script: |
       docker login -u $(dockerUsername) -p $(dockerPassword)
       docker push starshipcommand/starship-test
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: succeeded()
+    # condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: Push image to dockerhub
