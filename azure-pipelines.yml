@@ -23,3 +23,4 @@ jobs:
       vmImage: ubuntu-16.04
     steps:
       - script: ./integration_test
+        displayName: Run integration test within Docker
