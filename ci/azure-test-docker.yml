@@ -1,0 +1,15 @@
+jobs:
+- job: ${{ parameters.name }}
+  displayName: ${{ parameters.displayName }}
+  pool:
+    vmImage: ubuntu-16.04
+
+  steps:
+  - script: ./integration_test
+    displayName: Run integration test within Docker
+  
+  - script: |
+      docker login -u matchai -p $(dockerPassword)
+      docker push starshipcommand/starship-test
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: Push image to dockerhub

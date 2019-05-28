@@ -17,10 +17,7 @@ jobs:
       displayName: Check starship with nightly
 
   # Run the integration tests in a Docker container
-  - job: test_docker
-    displayName: Test starship Docker
-    pool:
-      vmImage: ubuntu-16.04
-    steps:
-      - script: ./integration_test
-        displayName: Run integration test within Docker
+  - template: ci/azure-test-docker.yml
+    parameters: 
+      name: test_docker
+      displayName: Run integration test within Docker
