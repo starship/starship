@@ -9,7 +9,7 @@ jobs:
     displayName: Run integration test within Docker
   
   - script: |
-      docker login -u matchai -p $(dockerPassword)
+      docker login -u $(dockerUsername) -p $(dockerPassword)
       docker push starshipcommand/starship-test
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: Push image to dockerhub
