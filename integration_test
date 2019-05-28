@@ -11,7 +11,7 @@ docker pull starshipcommand/starship-test
 
 printf 'Building test docker image:\n'
 docker build -f tests/Dockerfile \
-  --tag starshipcommand/starship-test:latest \
+  --tag starshipcommand/starship-test \
   --cache-from starshipcommand/starship-test \
   .
 
