@@ -31,16 +31,9 @@ RUN wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[
 	\
 	&& cd /usr/src/python \
 	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
-	&& ./configure \
-		--build="$gnuArch" \
-		--enable-loadable-sqlite-extensions \
-		--enable-shared \
-		--with-system-expat \
-		--with-system-ffi \
-		--without-ensurepip \
-	&& make -j "$(nproc)" \
-	&& make install \
-	&& ldconfig \
+	&& --enable-optimizations \
+	&& make -j8 \
+	&& sudo make altinstall \
 	\
 	&& find /usr/local -depth \
 		\( \
@@ -50,7 +43,7 @@ RUN wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[
 		\) -exec rm -rf '{}' + \
 	&& rm -rf /usr/src/python \
 	\
-	&& ln -s python3 python \
+	&& ln -s /usr/local/bin/python3 /usr/local/bin/python \
 # Check that Python was correctly installed
 	&& python --version
 
