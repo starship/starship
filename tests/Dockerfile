@@ -54,4 +54,5 @@ RUN rm -rf /starship
 RUN mkdir starship
 WORKDIR /starship
 
+# Instrument coverage tooling and run the full test suite
 CMD ["cargo", "tarpaulin", "--ignored", "--out", "Xml"]
