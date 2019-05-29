@@ -28,7 +28,7 @@ ENV PYENV_ROOT /root/.pyenv
 ENV PATH $PYENV_ROOT/bin:$PATH
 RUN curl https://pyenv.run | bash \
   && pyenv install $PYTHON_VERSION \
-  && pyenv global $PYTHON_VERSION \
+  && pyenv global $PYTHON_VERSION
 # Check that Python was correctly installed
 RUN python --version
 
