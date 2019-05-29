@@ -8,6 +8,9 @@ jobs:
   - script: ./integration_test
     displayName: Run integration test within Docker
   
+  - script: bash <(curl -s https://codecov.io/bash) -t $(CODECOV_TOKEN)
+    displayName: Report coverage to Codecov
+
   - script: |
       docker login -u $(dockerUsername) -p $(dockerPassword)
       docker push starshipcommand/starship-test

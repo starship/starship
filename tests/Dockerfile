@@ -1,5 +1,9 @@
 FROM rust:latest
 
+# Install Tarpaulin (code coverage tool)
+# https://github.com/xd009642/tarpaulin
+RUN cargo install cargo-tarpaulin
+
 # Install Node.js
 ENV NODE_VERSION 12.0.0
 RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash \
@@ -60,4 +64,4 @@ RUN rm -rf /starship
 RUN mkdir starship
 WORKDIR /starship
 
-CMD ["cargo", "test", "--", "--ignored"]
+CMD ["cargo", "tarpaulin", "--ignored", "--out Xml"]
