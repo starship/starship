@@ -7,36 +7,49 @@ COPY --from=xd009642/tarpaulin /usr/local/cargo/bin/cargo-tarpaulin /usr/local/c
 # Install Node.js
 ENV NODE_VERSION 12.0.0
 RUN curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
-  && tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
-  && rm "node-v$NODE_VERSION-linux-x64.tar.xz"
+	&& tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
+	&& rm "node-v$NODE_VERSION-linux-x64.tar.xz"
 # Check that Node.js was correctly installed
 RUN node --version
 RUN npm --version
 
 # Install Go
-ENV GO_VERSION 1.10.0
-ENV GOENV_ROOT /root/.goenv
-ENV GO_ROOT /root/go
-# RUN git clone https://github.com/wfarr/goenv.git $GOENV_ROOT
-RUN git clone https://github.com/syndbg/goenv.git $GOENV_ROOT
-ENV PATH $GOENV_ROOT/bin:$GOENV_ROOT/shims:$PATH
-RUN eval "$(goenv init -)"
-RUN mkdir -p $GO_ROOT
-ENV GOPATH $GO_ROOT
-ENV PATH $GO_ROOT/bin:$PATH
-RUN goenv install $GO_VERSION
-RUN goenv global $GO_VERSION
-# Check that Go was correctly installed
-
+ENV GOLANG_VERSION 1.10
+RUN wget -O go.tgz "https://dl.google.com/go/go${GOLANG_VERSION}.linux-amd64.tar.gz" \
+	&& tar -C /usr/local -xzf go.tgz \
+	&& rm go.tgz
+# Check tha Go was correctly installed
 RUN go version
+
 # Install Python
 ENV PYTHON_VERSION 3.6.8
-ENV PYENV_ROOT /root/.pyenv
-ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
-RUN curl https://pyenv.run | bash \
-  && pyenv update \
-  && pyenv install $PYTHON_VERSION \
-  && pyenv global $PYTHON_VERSION
+RUN wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
+	&& mkdir -p /usr/src/python \
+	&& tar -xJC /usr/src/python --strip-components=1 -f python.tar.xz \
+	&& rm python.tar.xz \
+	\
+	&& cd /usr/src/python \
+	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
+	&& ./configure \
+		--build="$gnuArch" \
+		--enable-loadable-sqlite-extensions \
+		--enable-shared \
+		--with-system-expat \
+		--with-system-ffi \
+		--without-ensurepip \
+	&& make -j "$(nproc)" \
+	&& make install \
+	&& ldconfig \
+	\
+	&& find /usr/local -depth \
+		\( \
+			\( -type d -a \( -name test -o -name tests \) \) \
+			-o \
+			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
+		\) -exec rm -rf '{}' + \
+	&& rm -rf /usr/src/python \
+	\
+	&& ln -s python3 python
 # Check that Python was correctly installed
 RUN python --version
 
