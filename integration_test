@@ -16,4 +16,4 @@ docker build -f tests/Dockerfile \
   .
 
 printf 'Running test suite:\n'
-docker run --rm -t -v $(pwd):/starship starshipcommand/starship-test
+docker run --rm --security-opt seccomp=unconfined -v $(pwd):/starship starshipcommand/starship-test
