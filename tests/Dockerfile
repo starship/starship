@@ -34,7 +34,7 @@ RUN wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[
 	\
 	&& cd /usr/src/python \
 	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
-	&& make -j8 build_all \
+	&& ./configure \
 	&& make -j8 altinstall \
 	\
 	&& find /usr/local -depth \
