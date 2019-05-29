@@ -20,4 +20,4 @@ jobs:
   - template: ci/azure-test-docker.yml
     parameters: 
       name: test_docker
-      displayName: Run integration test within Docker
+      displayName: Test starship Docker
