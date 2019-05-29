@@ -8,18 +8,19 @@ COPY --from=xd009642/tarpaulin /usr/local/cargo/bin/cargo-tarpaulin /usr/local/c
 ENV NODE_VERSION 12.0.0
 RUN curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
 	&& tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
-	&& rm "node-v$NODE_VERSION-linux-x64.tar.xz"
+	&& rm "node-v$NODE_VERSION-linux-x64.tar.xz" \
 # Check that Node.js was correctly installed
-RUN node --version
-RUN npm --version
+	&& node --version \
+	&& npm --version
 
 # Install Go
 ENV GOLANG_VERSION 1.10
 RUN wget -O go.tgz "https://dl.google.com/go/go${GOLANG_VERSION}.linux-amd64.tar.gz" \
 	&& tar -C /usr/local -xzf go.tgz \
-	&& rm go.tgz
-# Check tha Go was correctly installed
-RUN go version
+	&& rm go.tgz \
+	&& export PATH="/usr/local/go/bin:$PATH" \
+	# Check that Go was correctly installed
+	&& go version
 
 # Install Python
 ENV PYTHON_VERSION 3.6.8
@@ -49,9 +50,9 @@ RUN wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[
 		\) -exec rm -rf '{}' + \
 	&& rm -rf /usr/src/python \
 	\
-	&& ln -s python3 python
+	&& ln -s python3 python \
 # Check that Python was correctly installed
-RUN python --version
+	&& python --version
 
 # Create blank project
 RUN USER=root cargo new --bin starship
