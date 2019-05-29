@@ -6,8 +6,8 @@ COPY --from=xd009642/tarpaulin /usr/local/cargo/bin/cargo-tarpaulin /usr/local/c
 
 # Install Node.js
 ENV NODE_VERSION 12.0.0
-RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 ENV PATH /root/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
+RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 # Check that Node.js was correctly installed
 RUN node --version
 
@@ -25,10 +25,10 @@ RUN go version
 # Install Python
 ENV PYTHON_VERSION 3.6.8
 ENV PYENV_ROOT /root/.pyenv
+ENV PATH $PYENV_ROOT/bin:$PATH
 RUN curl https://pyenv.run | bash \
   && pyenv install $PYTHON_VERSION \
   && pyenv global $PYTHON_VERSION \
-ENV PATH $PYENV_ROOT/bin:$PATH
 # Check that Python was correctly installed
 RUN python --version
 
