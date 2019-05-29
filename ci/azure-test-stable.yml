@@ -21,11 +21,3 @@ jobs:
 
   - script: cargo test -- --ignored
     displayName: cargo test
-    condition: not(eq(variables['vmImage'], 'ubuntu-16.04'))
-
-  - script: |
-        cargo install cargo-tarpaulin -f
-        cargo tarpaulin --ignored --out Xml
-        bash <(curl -s https://codecov.io/bash) -t $(CODECOV_TOKEN)
-    displayName: "Cargo test w/ coverage"
-    condition: eq(variables['vmImage'], 'ubuntu-16.04')
