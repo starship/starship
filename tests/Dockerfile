@@ -14,7 +14,7 @@ RUN node --version
 # Install Go
 ENV GO_VERSION 1.10.0
 ENV GOENV_ROOT /root/.goenv
-ENV PATH $GOENV_ROOT/bin:$PATH
+ENV PATH $GOENV_ROOT/bin:$GOENV_ROOT/shims:$PATH
 RUN git clone https://github.com/syndbg/goenv.git $GOENV_ROOT \
 	&& eval "$(goenv init -)" \
 	&& goenv install $GO_VERSION \
