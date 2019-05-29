@@ -5,6 +5,7 @@ FROM rust
 COPY --from=xd009642/tarpaulin /usr/local/cargo/bin/cargo-tarpaulin /usr/local/cargo/bin/cargo-tarpaulin
 
 # Install Node.js
+# Copied from https://github.com/nodejs/docker-node/blob/master/12/stretch/Dockerfile
 ENV NODE_VERSION 12.0.0
 RUN curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
 	&& tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
@@ -14,6 +15,7 @@ RUN curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE
 	&& npm --version
 
 # Install Go
+# Copied from https://github.com/docker-library/golang/blob/master/1.12/stretch/Dockerfile
 ENV GOLANG_VERSION 1.10
 RUN wget -O go.tgz "https://dl.google.com/go/go${GOLANG_VERSION}.linux-amd64.tar.gz" \
 	&& tar -C /usr/local -xzf go.tgz \
@@ -23,6 +25,7 @@ RUN wget -O go.tgz "https://dl.google.com/go/go${GOLANG_VERSION}.linux-amd64.tar
 	&& go version
 
 # Install Python
+# Copied from https://github.com/docker-library/python/blob/master/3.7/stretch/Dockerfile
 ENV PYTHON_VERSION 3.6.8
 RUN wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
 	&& mkdir -p /usr/src/python \
@@ -31,7 +34,7 @@ RUN wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[
 	\
 	&& cd /usr/src/python \
 	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
-	&& --enable-optimizations \
+	&& ./configure --enable-optimizations \
 	&& make -j8 \
 	&& sudo make altinstall \
 	\
