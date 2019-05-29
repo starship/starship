@@ -15,5 +15,5 @@ jobs:
       docker login -u $(dockerUsername) -p $(dockerPassword)
       docker push starshipcommand/starship-test
     # Only push new image if on master and build is passing
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    # condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: Push image to dockerhub
