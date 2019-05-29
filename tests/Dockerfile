@@ -6,23 +6,19 @@ COPY --from=xd009642/tarpaulin /usr/local/cargo/bin/cargo-tarpaulin /usr/local/c
 
 # Install Node.js
 ENV NODE_VERSION 12.0.0
-RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash \
-  && . $HOME/.nvm/nvm.sh \
-  && nvm install $NODE_VERSION \
-  && nvm alias default $NODE_VERSION \
-  && nvm use default \
-	&& export PATH="$HOME/.nvm/versions/node/v$NODE_VERSION/bin:$PATH"
+RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+ENV PATH /root/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
 # Check that Node.js was correctly installed
 RUN node --version
 
 # Install Go
 ENV GO_VERSION 1.10.0
 ENV GOENV_ROOT /root/.goenv
+ENV PATH $GOENV_ROOT/bin:$PATH
 RUN git clone https://github.com/syndbg/goenv.git $GOENV_ROOT \
 	&& eval "$(goenv init -)" \
 	&& goenv install $GO_VERSION \
-	&& goenv global $GO_VERSION \
-	&& export PATH="$GOENV_ROOT/bin:$PATH"
+	&& goenv global $GO_VERSION
 # Check that Go was correctly installed
 RUN go version
 
@@ -32,7 +28,7 @@ ENV PYENV_ROOT /root/.pyenv
 RUN curl https://pyenv.run | bash \
   && pyenv install $PYTHON_VERSION \
   && pyenv global $PYTHON_VERSION \
-	&& export PATH="$PYENV_ROOT/bin:$PATH"
+ENV PATH $PYENV_ROOT/bin:$PATH
 # Check that Python was correctly installed
 RUN python --version
 
