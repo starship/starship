@@ -6,14 +6,12 @@ COPY --from=xd009642/tarpaulin /usr/local/cargo/bin/cargo-tarpaulin /usr/local/c
 
 # Install Node.js
 ENV NODE_VERSION 12.0.0
-RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash \
-  && . $HOME/.nvm/nvm.sh \
-  && nvm install $NODE_VERSION \
-  && nvm alias default $NODE_VERSION \
-  && nvm use default
-ENV PATH /root/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
+RUN curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
+  && tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
+  && rm "node-v$NODE_VERSION-linux-x64.tar.xz"
 # Check that Node.js was correctly installed
 RUN node --version
+RUN npm --version
 
 # Install Go
 ENV GO_VERSION 1.10.0
