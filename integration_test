@@ -16,4 +16,6 @@ docker build -f tests/Dockerfile \
   .
 
 printf 'Running test suite:\n'
+# `seccomp=unconfined` is needed to allow tarpaulin to disable ASLR
+# Details found here: https://github.com/xd009642/tarpaulin/issues/146
 docker run --rm --security-opt seccomp=unconfined -v $(pwd):/starship starshipcommand/starship-test
