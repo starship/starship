@@ -4,6 +4,7 @@ use git2::Repository;
 use std::fs;
 use std::io;
 use std::path::Path;
+use tempfile::TempDir;
 
 mod common;
 
@@ -88,7 +89,7 @@ fn truncated_directory_in_root() -> io::Result<()> {
 #[test]
 #[ignore]
 fn git_repo_root() -> io::Result<()> {
-    let tmp_dir = common::new_tempdir()?;
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
     fs::create_dir(&repo_dir)?;
 
@@ -104,7 +105,7 @@ fn git_repo_root() -> io::Result<()> {
 #[test]
 #[ignore]
 fn directory_in_git_repo() -> io::Result<()> {
-    let tmp_dir = common::new_tempdir()?;
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
     let dir = repo_dir.join("src");
     fs::create_dir_all(&dir)?;
@@ -119,8 +120,9 @@ fn directory_in_git_repo() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn truncated_directory_in_git_repo() -> io::Result<()> {
-    let tmp_dir = common::new_tempdir()?;
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
     let dir = repo_dir.join("src/meters/fuel-gauge");
     fs::create_dir_all(&dir)?;
