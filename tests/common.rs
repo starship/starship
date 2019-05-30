@@ -1,6 +1,7 @@
 use clap::{App, Arg};
 use starship::context::Context;
 use starship::modules;
+use std::io;
 use std::path::PathBuf;
 
 #[allow(dead_code)]
@@ -24,4 +25,11 @@ where
     let module = modules::handle(module, &context);
 
     module.unwrap().to_string()
+}
+
+/// Create a temporary directory with full access permissions (rwxrwxrwt).
+pub fn new_tempdir() -> io::Result<tempfile::TempDir> {
+    //  Using `tempfile::TempDir` directly creates files on macOS within
+    // "/var/folders", which provides us with restricted permissions (rwxr-xr-x)
+    tempfile::tempdir_in("/tmp")
 }
