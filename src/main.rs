@@ -30,6 +30,13 @@ fn main() {
                 .help("The status code of the previously run command")
                 .required(true),
         )
+        .arg(
+            Arg::with_name("path")
+                .short("p")
+                .long("path")
+                .help("Sets the path for which the prompt should render")
+                .takes_value(true),
+        )
         .get_matches();
 
     print::prompt(args);
