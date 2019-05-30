@@ -1,38 +1,32 @@
-FROM rust:latest
+FROM rust
+
+# Install Tarpaulin (code coverage tool)
+# https://github.com/xd009642/tarpaulin
+COPY --from=xd009642/tarpaulin /usr/local/cargo/bin/cargo-tarpaulin /usr/local/cargo/bin/cargo-tarpaulin
 
 # Install Node.js
 ENV NODE_VERSION 12.0.0
-RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash \
-  && . $HOME/.nvm/nvm.sh \
-  && nvm install $NODE_VERSION \
-  && nvm alias default $NODE_VERSION \
-  && nvm use default
 ENV PATH /root/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
+RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 # Check that Node.js was correctly installed
 RUN node --version
 
 # Install Go
 ENV GO_VERSION 1.10.0
 ENV GOENV_ROOT /root/.goenv
-ENV GO_ROOT /root/go
-# RUN git clone https://github.com/wfarr/goenv.git $GOENV_ROOT
-RUN git clone https://github.com/syndbg/goenv.git $GOENV_ROOT
 ENV PATH $GOENV_ROOT/bin:$GOENV_ROOT/shims:$PATH
-RUN eval "$(goenv init -)"
-RUN mkdir -p $GO_ROOT
-ENV GOPATH $GO_ROOT
-ENV PATH $GO_ROOT/bin:$PATH
-RUN goenv install $GO_VERSION
-RUN goenv global $GO_VERSION
+RUN git clone https://github.com/syndbg/goenv.git $GOENV_ROOT \
+	&& eval "$(goenv init -)" \
+	&& goenv install $GO_VERSION \
+	&& goenv global $GO_VERSION
 # Check that Go was correctly installed
-
 RUN go version
+
 # Install Python
 ENV PYTHON_VERSION 3.6.8
 ENV PYENV_ROOT /root/.pyenv
-ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
+ENV PATH $PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH
 RUN curl https://pyenv.run | bash \
-  && pyenv update \
   && pyenv install $PYTHON_VERSION \
   && pyenv global $PYTHON_VERSION
 # Check that Python was correctly installed
@@ -60,4 +54,5 @@ RUN rm -rf /starship
 RUN mkdir starship
 WORKDIR /starship
 
-CMD ["cargo", "test", "--", "--ignored"]
+# Instrument coverage tooling and run the full test suite
+CMD ["cargo", "tarpaulin", "--ignored", "--out", "Xml"]

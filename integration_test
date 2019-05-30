@@ -6,8 +6,16 @@ if ! (docker --version); then
   exit 1
 fi
 
+printf 'Pulling latest docker image'
+docker pull starshipcommand/starship-test
+
 printf 'Building test docker image:\n'
-docker build -f tests/Dockerfile --tag starship-test .
+docker build -f tests/Dockerfile \
+  --tag starshipcommand/starship-test \
+  --cache-from starshipcommand/starship-test \
+  .
 
 printf 'Running test suite:\n'
-docker run --rm -t -v $(pwd):/starship starship-test
+# `seccomp=unconfined` is needed to allow tarpaulin to disable ASLR
+# Details found here: https://github.com/xd009642/tarpaulin/issues/146
+docker run --rm --security-opt seccomp=unconfined -v $(pwd):/starship starshipcommand/starship-test
