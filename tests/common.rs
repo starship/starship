@@ -1,8 +1,8 @@
 use clap::{App, Arg};
 use starship::context::Context;
 use starship::modules;
-use std::io;
 use std::path::PathBuf;
+use std::{io, process};
 
 #[allow(dead_code)]
 pub fn render_module<T>(module: &str, path: T) -> String
@@ -25,6 +25,17 @@ where
     let module = modules::handle(module, &context);
 
     module.unwrap().to_string()
+}
+
+pub fn render_prompt<T>(path: T) -> io::Result<process::Output>
+where
+    T: Into<String>,
+{
+    process::Command::new("./target/debug/starship")
+        .arg("0") // status of last command
+        .arg("--path")
+        .arg(path.into())
+        .output()
 }
 
 /// Create a temporary directory with full access permissions (rwxrwxrwt).
