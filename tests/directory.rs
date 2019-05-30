@@ -89,6 +89,9 @@ fn truncated_directory_in_root() -> io::Result<()> {
 #[test]
 #[ignore]
 fn git_repo_root() -> io::Result<()> {
+    // TODO: Investigate why git repo related tests fail when the tempdir is within /tmp/...
+    // Temporarily making the tempdir within $HOME
+    // #[ignore] can be removed after this TODO is addressed
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
     fs::create_dir(&repo_dir)?;
