@@ -24,7 +24,6 @@ impl<'a> Context<'a> {
         Context::new_with_dir(arguments, path)
     }
 
-    #[allow(dead_code)]
     pub fn new_with_dir<T>(arguments: ArgMatches, dir: T) -> Context
     where
         T: Into<PathBuf>,
