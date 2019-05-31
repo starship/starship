@@ -11,9 +11,7 @@ fn no_username_shown() -> io::Result<()> {
     let expected = "";
 
     // No environment variables
-    let output = common::render_module("username")
-        .env_clear()
-        .output()?;
+    let output = common::render_module("username").env_clear().output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
 
@@ -31,7 +29,7 @@ fn no_username_shown() -> io::Result<()> {
         .env_clear()
         .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
         .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();    
+    let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
 
     Ok(())
@@ -45,7 +43,7 @@ fn current_user_not_logname() -> io::Result<()> {
         .env("USER", "cosmonaut")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    
+
     let expected = format!("via {} ", Color::Yellow.bold().paint("cosmonaut"));
     assert_eq!(expected, actual);
     Ok(())
@@ -59,7 +57,7 @@ fn ssh_connection() -> io::Result<()> {
         .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    
+
     let expected = format!("via {} ", Color::Yellow.bold().paint("astronaut"));
     assert_eq!(expected, actual);
     Ok(())
