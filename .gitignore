@@ -13,6 +13,3 @@ Cargo.lock
 
 # Intellij IDE configuration
 .idea/
-
-# Cobertura coverage report
-cobertura.xml

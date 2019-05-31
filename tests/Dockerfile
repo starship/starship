@@ -1,9 +1,5 @@
 FROM rust
 
-# Install Tarpaulin (code coverage tool)
-# https://github.com/xd009642/tarpaulin
-COPY --from=xd009642/tarpaulin /usr/local/cargo/bin/cargo-tarpaulin /usr/local/cargo/bin/cargo-tarpaulin
-
 # Install Node.js
 ENV NODE_VERSION 12.0.0
 ENV PATH /root/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
@@ -54,5 +50,4 @@ RUN rm -rf /starship
 RUN mkdir starship
 WORKDIR /starship
 
-# Instrument coverage tooling and run the full test suite
-CMD ["cargo", "tarpaulin", "--ignored", "--ignore-tests", "--out", "Xml"]
+CMD ["cargo", "test", "--", "--ignored"]

@@ -10,9 +10,6 @@ jobs:
   
   - script: ./integration_test
     displayName: Run integration test suite
-  
-  - script: bash <(curl -s https://codecov.io/bash) -t $(CODECOV_TOKEN)
-    displayName: Report coverage to Codecov
 
   - script: |
       docker login -u $(dockerUsername) -p $(dockerPassword)
