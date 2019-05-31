@@ -1,6 +1,6 @@
 use std::io;
 
-mod common;
+use crate::common;
 
 #[test]
 fn line_break_module() -> io::Result<()> {

@@ -6,7 +6,7 @@ use std::io;
 use std::path::Path;
 use tempfile::TempDir;
 
-mod common;
+use crate::common;
 
 #[test]
 fn home_directory() -> io::Result<()> {

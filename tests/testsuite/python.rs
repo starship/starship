@@ -2,7 +2,7 @@ use ansi_term::Color;
 use std::fs::File;
 use std::io;
 
-mod common;
+use crate::common;
 
 #[test]
 #[ignore]

@@ -1,7 +1,7 @@
 use ansi_term::Color;
 use std::io;
 
-mod common;
+use crate::common;
 
 #[test]
 fn char_module_success_status() -> io::Result<()> {

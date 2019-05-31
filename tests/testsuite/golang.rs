@@ -2,7 +2,7 @@ use ansi_term::Color;
 use std::fs::{self, File};
 use std::io;
 
-mod common;
+use crate::common;
 
 #[test]
 fn folder_without_go_files() -> io::Result<()> {
