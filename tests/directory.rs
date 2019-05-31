@@ -10,7 +10,7 @@ mod common;
 
 #[test]
 fn home_directory() -> io::Result<()> {
-    let output = common::render_module("dir").current_dir("~").output()?;
+    let output = common::render_module("dir").arg("--path=~").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("~"));
@@ -25,7 +25,7 @@ fn directory_in_home() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
 
     let output = common::render_module("dir")
-        .current_dir("~/starship/engine")
+        .arg("--path=~/starship/engine")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -41,7 +41,7 @@ fn truncated_directory_in_home() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
 
     let output = common::render_module("dir")
-        .current_dir("~/starship/engine/schematics")
+        .arg("--path=~/starship/engine/schematics")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -55,7 +55,7 @@ fn truncated_directory_in_home() -> io::Result<()> {
 
 #[test]
 fn root_directory() -> io::Result<()> {
-    let output = common::render_module("dir").current_dir("/").output()?;
+    let output = common::render_module("dir").arg("--path=/").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("/"));
@@ -65,7 +65,7 @@ fn root_directory() -> io::Result<()> {
 
 #[test]
 fn directory_in_root() -> io::Result<()> {
-    let output = common::render_module("dir").current_dir("/tmp").output()?;
+    let output = common::render_module("dir").arg("--path=/tmp").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("/tmp"));
@@ -80,7 +80,7 @@ fn truncated_directory_in_root() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
 
     let output = common::render_module("dir")
-        .current_dir("/tmp/starship/thrusters/rocket")
+        .arg("--path=/tmp/starship/thrusters/rocket")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -122,7 +122,7 @@ fn directory_in_git_repo() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
     Repository::init(&repo_dir).unwrap();
 
-    let output = common::render_module("dir").current_dir(dir).output()?;
+    let output = common::render_module("dir").arg("--path={}").arg(dir).output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("rocket-controls/src"));
@@ -139,7 +139,7 @@ fn truncated_directory_in_git_repo() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
     Repository::init(&repo_dir).unwrap();
 
-    let output = common::render_module("dir").current_dir(dir).output()?;
+    let output = common::render_module("dir").arg("--path={}").arg(dir).output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("src/meters/fuel-gauge"));
