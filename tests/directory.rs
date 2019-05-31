@@ -25,7 +25,8 @@ fn directory_in_home() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
 
     let output = common::render_module("dir")
-        .arg("--path=~/starship/engine")
+        .arg("--path")
+        .arg(dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -41,7 +42,8 @@ fn truncated_directory_in_home() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
 
     let output = common::render_module("dir")
-        .arg("--path=~/starship/engine/schematics")
+        .arg("--path")
+        .arg(dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -80,7 +82,8 @@ fn truncated_directory_in_root() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
 
     let output = common::render_module("dir")
-        .arg("--path=/tmp/starship/thrusters/rocket")
+        .arg("--path")
+        .arg(dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -104,7 +107,8 @@ fn git_repo_root() -> io::Result<()> {
     Repository::init(&repo_dir).unwrap();
 
     let output = common::render_module("dir")
-        .current_dir(repo_dir)
+        .arg("--path")
+        .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -123,7 +127,7 @@ fn directory_in_git_repo() -> io::Result<()> {
     Repository::init(&repo_dir).unwrap();
 
     let output = common::render_module("dir")
-        .arg("--path={}")
+        .arg("--path")
         .arg(dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
@@ -143,7 +147,7 @@ fn truncated_directory_in_git_repo() -> io::Result<()> {
     Repository::init(&repo_dir).unwrap();
 
     let output = common::render_module("dir")
-        .arg("--path={}")
+        .arg("--path")
         .arg(dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
