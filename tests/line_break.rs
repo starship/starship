@@ -1,8 +1,13 @@
+use std::io;
+
 mod common;
 
 #[test]
-fn line_break_module() {
+fn line_break_module() -> io::Result<()> {
+    let output = common::render_module("line_break").output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
     let expected = "\n";
-    let actual = common::render_module_with_status("line_break", "~", "0");
     assert_eq!(expected, actual);
+    Ok(())
 }

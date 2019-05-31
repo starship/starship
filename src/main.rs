@@ -49,7 +49,7 @@ fn main() {
             SubCommand::with_name("module")
                 .about("Prints a specific prompt module")
                 .arg(
-                    Arg::with_name("module_name")
+                    Arg::with_name("name")
                         .help("The name of the module to be printed")
                         .required(true),
                 )
@@ -75,7 +75,7 @@ fn main() {
     match matches.subcommand() {
         ("prompt", Some(sub_m)) => print::prompt(sub_m.clone()),
         ("module", Some(sub_m)) => {
-            let module_name = sub_m.value_of("module_name").unwrap();
+            let module_name = sub_m.value_of("name").expect("Module name missing.");
             print::module(module_name, sub_m.clone());
         }
         _ => {}

@@ -49,6 +49,11 @@ pub fn prompt(args: ArgMatches) {
 
 pub fn module(module_name: &str, args: ArgMatches) {
     let context = Context::new(args);
-    let module = modules::handle(module_name, &context).expect("Invalid module name.");
+
+    // If the module returns `None`, print an empty string
+    let module = modules::handle(module_name, &context)
+        .map(|m| m.to_string())
+        .unwrap_or_default();
+        
     print!("{}", module);
 }

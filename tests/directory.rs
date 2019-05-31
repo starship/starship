@@ -10,12 +10,11 @@ mod common;
 
 #[test]
 fn home_directory() -> io::Result<()> {
-    let dir = Path::new("~");
+    let output = common::render_module("dir").current_dir("~").output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("~"));
-    let actual = common::render_module("dir", &dir);
     assert_eq!(expected, actual);
-
     Ok(())
 }
 
@@ -25,10 +24,13 @@ fn directory_in_home() -> io::Result<()> {
     let dir = home_dir().unwrap().join("starship/engine");
     fs::create_dir_all(&dir)?;
 
-    let expected = format!("in {} ", Color::Cyan.bold().paint("~/starship/engine"));
-    let actual = common::render_module("dir", &dir);
-    assert_eq!(expected, actual);
+    let output = common::render_module("dir")
+        .current_dir("~/starship/engine")
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
 
+    let expected = format!("in {} ", Color::Cyan.bold().paint("~/starship/engine"));
+    assert_eq!(expected, actual);
     Ok(())
 }
 
@@ -38,35 +40,36 @@ fn truncated_directory_in_home() -> io::Result<()> {
     let dir = home_dir().unwrap().join("starship/engine/schematics");
     fs::create_dir_all(&dir)?;
 
+    let output = common::render_module("dir")
+        .current_dir("~/starship/engine/schematics")
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
     let expected = format!(
         "in {} ",
         Color::Cyan.bold().paint("starship/engine/schematics")
     );
-    let actual = common::render_module("dir", &dir);
     assert_eq!(expected, actual);
-
     Ok(())
 }
 
 #[test]
 fn root_directory() -> io::Result<()> {
-    let dir = Path::new("/");
+    let output = common::render_module("dir").current_dir("/").output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("/"));
-    let actual = common::render_module("dir", &dir);
     assert_eq!(expected, actual);
-
     Ok(())
 }
 
 #[test]
 fn directory_in_root() -> io::Result<()> {
-    let dir = Path::new("/tmp");
+    let output = common::render_module("dir").current_dir("/tmp").output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("/tmp"));
-    let actual = common::render_module("dir", &dir);
     assert_eq!(expected, actual);
-
     Ok(())
 }
 
@@ -76,13 +79,16 @@ fn truncated_directory_in_root() -> io::Result<()> {
     let dir = Path::new("/tmp/starship/thrusters/rocket");
     fs::create_dir_all(&dir)?;
 
+    let output = common::render_module("dir")
+        .current_dir("/tmp/starship/thrusters/rocket")
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
     let expected = format!(
         "in {} ",
         Color::Cyan.bold().paint("starship/thrusters/rocket")
     );
-    let actual = common::render_module("dir", &dir);
     assert_eq!(expected, actual);
-
     Ok(())
 }
 
@@ -95,13 +101,15 @@ fn git_repo_root() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
     fs::create_dir(&repo_dir)?;
-
     Repository::init(&repo_dir).unwrap();
 
-    let expected = format!("in {} ", Color::Cyan.bold().paint("rocket-controls"));
-    let actual = common::render_module("dir", &repo_dir);
-    assert_eq!(expected, actual);
+    let output = common::render_module("dir")
+        .current_dir(repo_dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
 
+    let expected = format!("in {} ", Color::Cyan.bold().paint("rocket-controls"));
+    assert_eq!(expected, actual);
     Ok(())
 }
 
@@ -112,13 +120,13 @@ fn directory_in_git_repo() -> io::Result<()> {
     let repo_dir = tmp_dir.path().join("rocket-controls");
     let dir = repo_dir.join("src");
     fs::create_dir_all(&dir)?;
-
     Repository::init(&repo_dir).unwrap();
 
-    let expected = format!("in {} ", Color::Cyan.bold().paint("rocket-controls/src"));
-    let actual = common::render_module("dir", &dir);
-    assert_eq!(expected, actual);
+    let output = common::render_module("dir").current_dir(dir).output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
 
+    let expected = format!("in {} ", Color::Cyan.bold().paint("rocket-controls/src"));
+    assert_eq!(expected, actual);
     Ok(())
 }
 
@@ -129,12 +137,12 @@ fn truncated_directory_in_git_repo() -> io::Result<()> {
     let repo_dir = tmp_dir.path().join("rocket-controls");
     let dir = repo_dir.join("src/meters/fuel-gauge");
     fs::create_dir_all(&dir)?;
-
     Repository::init(&repo_dir).unwrap();
 
-    let expected = format!("in {} ", Color::Cyan.bold().paint("src/meters/fuel-gauge"));
-    let actual = common::render_module("dir", &dir);
-    assert_eq!(expected, actual);
+    let output = common::render_module("dir").current_dir(dir).output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
 
+    let expected = format!("in {} ", Color::Cyan.bold().paint("src/meters/fuel-gauge"));
+    assert_eq!(expected, actual);
     Ok(())
 }
