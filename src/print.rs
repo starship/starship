@@ -54,6 +54,6 @@ pub fn module(module_name: &str, args: ArgMatches) {
     let module = modules::handle(module_name, &context)
         .map(|m| m.to_string())
         .unwrap_or_default();
-        
+
     print!("{}", module);
 }

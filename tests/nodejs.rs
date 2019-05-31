@@ -4,7 +4,6 @@ use std::io;
 
 mod common;
 
-
 #[test]
 fn folder_without_node_files() -> io::Result<()> {
     let dir = common::new_tempdir()?;
