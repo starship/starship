@@ -122,7 +122,10 @@ fn directory_in_git_repo() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
     Repository::init(&repo_dir).unwrap();
 
-    let output = common::render_module("dir").arg("--path={}").arg(dir).output()?;
+    let output = common::render_module("dir")
+        .arg("--path={}")
+        .arg(dir)
+        .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("rocket-controls/src"));
@@ -139,7 +142,10 @@ fn truncated_directory_in_git_repo() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
     Repository::init(&repo_dir).unwrap();
 
-    let output = common::render_module("dir").arg("--path={}").arg(dir).output()?;
+    let output = common::render_module("dir")
+        .arg("--path={}")
+        .arg(dir)
+        .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("src/meters/fuel-gauge"));
