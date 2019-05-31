@@ -6,9 +6,6 @@ if ! (docker --version); then
   exit 1
 fi
 
-printf 'Pulling latest docker image'
-docker pull starshipcommand/starship-test
-
 printf 'Building test docker image:\n'
 docker build -f tests/Dockerfile \
   --tag starshipcommand/starship-test \

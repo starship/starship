@@ -5,8 +5,11 @@ jobs:
     vmImage: ubuntu-16.04
 
   steps:
+  - script: docker pull starshipcommand/starship-test
+    displayName: Pull docker image
+  
   - script: ./integration_test
-    displayName: Run integration test within Docker
+    displayName: Run integration test suite
   
   - script: bash <(curl -s https://codecov.io/bash) -t $(CODECOV_TOKEN)
     displayName: Report coverage to Codecov
