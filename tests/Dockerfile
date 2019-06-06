@@ -51,4 +51,4 @@ RUN mkdir starship
 WORKDIR /starship
 
 # "-Z unstable-options" is required for "--include-ignored"
-CMD ["cargo", "test", "--", "-Z unstable-options", "--include-ignored"]
+CMD ["cargo", "test", "--", "-Z", "unstable-options", "--include-ignored"]
