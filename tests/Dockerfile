@@ -50,4 +50,4 @@ RUN rm -rf /starship
 RUN mkdir starship
 WORKDIR /starship
 
-CMD ["cargo", "test", "--", "--ignored"]
+CMD ["cargo", "test", "--", "--include-ignored"]
