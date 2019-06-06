@@ -1,3 +1,3 @@
 function fish_prompt
-  starship $status
+  starship prompt --status=$status
 end

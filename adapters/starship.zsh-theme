@@ -1,1 +1,1 @@
-PROMPT='$(starship $?)'
+PROMPT='$(starship prompt --status=$?)'
