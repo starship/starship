@@ -15,11 +15,15 @@ pub struct Context<'a> {
 
 impl<'a> Context<'a> {
     pub fn new(arguments: ArgMatches) -> Context {
-        let current_dir = env::current_dir().expect("Unable to identify current directory.");
-        Context::new_with_dir(arguments, current_dir)
+        // Retreive the "path" flag. If unavailable, use the current directory instead.
+        let path = arguments
+            .value_of("path")
+            .map(From::from)
+            .unwrap_or_else(|| env::current_dir().expect("Unable to identify current directory."));
+
+        Context::new_with_dir(arguments, path)
     }
 
-    #[allow(dead_code)]
     pub fn new_with_dir<T>(arguments: ArgMatches, dir: T) -> Context
     where
         T: Into<PathBuf>,

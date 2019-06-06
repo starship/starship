@@ -46,3 +46,14 @@ pub fn prompt(args: ArgMatches) {
     // Print all remaining modules
     printable.for_each(|module| write!(handle, "{}", module).unwrap());
 }
+
+pub fn module(module_name: &str, args: ArgMatches) {
+    let context = Context::new(args);
+
+    // If the module returns `None`, print an empty string
+    let module = modules::handle(module_name, &context)
+        .map(|m| m.to_string())
+        .unwrap_or_default();
+
+    print!("{}", module);
+}

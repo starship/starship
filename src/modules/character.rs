@@ -20,7 +20,7 @@ pub fn segment(context: &Context) -> Option<Module> {
     let symbol = module.new_segment("symbol", PROMPT_CHAR);
 
     let arguments = &context.arguments;
-    if arguments.value_of("status_code").unwrap() == "0" {
+    if arguments.value_of("status_code").unwrap_or("0") == "0" {
         symbol.set_style(color_success.bold());
     } else {
         symbol.set_style(color_failure.bold());
