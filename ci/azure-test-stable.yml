@@ -19,5 +19,6 @@ jobs:
 
   - template: azure-setup-test-env.yml
 
-  - script: cargo test -- --include-ignored
+  # "-Z unstable-options" is required for "--include-ignored"
+  - script: cargo test -- -Z unstable-options --include-ignored
     displayName: cargo test

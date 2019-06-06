@@ -50,4 +50,5 @@ RUN rm -rf /starship
 RUN mkdir starship
 WORKDIR /starship
 
-CMD ["cargo", "test", "--", "--include-ignored"]
+# "-Z unstable-options" is required for "--include-ignored"
+CMD ["cargo", "test", "--", "-Z unstable-options", "--include-ignored"]
