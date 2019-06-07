@@ -7,31 +7,34 @@ use crate::common;
 // Requires mocking
 
 #[test]
-fn no_username_shown() -> io::Result<()> {
-    let expected = "";
-
-    // No environment variables
+fn no_env_variables() -> io::Result<()> {
     let output = common::render_module("username").env_clear().output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    assert_eq!(expected, actual);
+    assert_eq!("", actual);
+    Ok(())
+}
 
-    // LOGNAME == USER
+#[test]
+fn logname_equals_user() -> io::Result<()> {
     let output = common::render_module("username")
         .env_clear()
         .env("LOGNAME", "astronaut")
         .env("USER", "astronaut")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    assert_eq!(expected, actual);
+    assert_eq!("", actual);
+    Ok(())
+}
 
+#[test]
+fn ssh_wo_username() -> io::Result<()> {
     // SSH connection w/o username
     let output = common::render_module("username")
         .env_clear()
         .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    assert_eq!(expected, actual);
-
+    assert_eq!("", actual);
     Ok(())
 }
 
