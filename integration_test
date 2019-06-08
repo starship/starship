@@ -13,4 +13,4 @@ docker build -f tests/Dockerfile \
   .
 
 printf 'Running test suite:\n'
-docker run --rm -v $(pwd):/starship starshipcommand/starship-test
+docker run --rm -v $(pwd):/src/starship starshipcommand/starship-test
