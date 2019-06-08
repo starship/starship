@@ -1,7 +1,7 @@
 FROM rust
 
 # Work in /src
-RUN mkdir /src && chmod a+w /src
+RUN mkdir /src && chmod -R a+w /src
 WORKDIR /src
 
 # Create non-root user
