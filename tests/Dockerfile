@@ -58,4 +58,5 @@ RUN cargo build --release
 RUN rm -rf src target/debug/starship* 
 
 # "-Z unstable-options" is required for "--include-ignored"
+RUN chmod -R a+w /src/starship
 CMD ["cargo", "test", "--", "-Z", "unstable-options", "--include-ignored"]
