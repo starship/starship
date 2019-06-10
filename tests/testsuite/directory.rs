@@ -67,10 +67,10 @@ fn root_directory() -> io::Result<()> {
 
 #[test]
 fn directory_in_root() -> io::Result<()> {
-    let output = common::render_module("dir").arg("--path=/tmp").output()?;
+    let output = common::render_module("dir").arg("--path=/usr").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("in {} ", Color::Cyan.bold().paint("/tmp"));
+    let expected = format!("in {} ", Color::Cyan.bold().paint("/usr"));
     assert_eq!(expected, actual);
     Ok(())
 }

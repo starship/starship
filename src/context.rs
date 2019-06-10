@@ -1,3 +1,6 @@
+use crate::config::Config;
+use crate::module::Module;
+
 use clap::ArgMatches;
 use git2::Repository;
 use std::env;
@@ -6,6 +9,7 @@ use std::fs;
 use std::path::PathBuf;
 
 pub struct Context<'a> {
+    pub config: Config,
     pub current_dir: PathBuf,
     pub dir_files: Vec<PathBuf>,
     pub arguments: ArgMatches<'a>,
@@ -28,6 +32,8 @@ impl<'a> Context<'a> {
     where
         T: Into<PathBuf>,
     {
+        let config = Config::initialize();
+
         // TODO: Currently gets the physical directory. Get the logical directory.
         let current_dir = Context::expand_tilde(dir.into());
 
@@ -51,6 +57,7 @@ impl<'a> Context<'a> {
             .and_then(|repo| get_current_branch(&repo));
 
         Context {
+            config,
             arguments,
             current_dir,
             dir_files,
@@ -66,6 +73,10 @@ impl<'a> Context<'a> {
             return dirs::home_dir().unwrap().join(without_home);
         }
         dir
+    }
+
+    pub fn new_module(&self, name: &str) -> Module {
+        Module::new(name, self.config.get_module_config(name))
     }
 
     // returns a new ScanDir struct with reference to current dir_files of context

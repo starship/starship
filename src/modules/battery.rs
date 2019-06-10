@@ -3,7 +3,7 @@ use ansi_term::Color;
 use super::{Context, Module};
 
 /// Creates a segment for the battery percentage and charging state
-pub fn segment(_context: &Context) -> Option<Module> {
+pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
     const BATTERY_FULL: &str = "•";
     const BATTERY_CHARGING: &str = "⇡";
     const BATTERY_DISCHARGING: &str = "⇣";
@@ -22,7 +22,7 @@ pub fn segment(_context: &Context) -> Option<Module> {
     }
 
     // TODO: Set style based on percentage when threshold is modifiable
-    let mut module = Module::new("battery");
+    let mut module = context.new_module("battery");
     module.set_style(Color::Red.bold());
     module.get_prefix().set_value("");
 
