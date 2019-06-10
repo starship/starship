@@ -9,7 +9,9 @@ jobs:
     displayName: Pull docker image
   
   - script: |
-      chmod a+w .
+      # In order to run tests as a non-root user in docker,
+      # the files need to be accessible to non-root users
+      chmod -R a+w .
       ./integration_test
     displayName: Run integration test suite
 
