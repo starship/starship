@@ -1,8 +1,7 @@
 FROM rust
 
-# Work in /src
+# Create /src as root
 RUN mkdir /src && chmod -R a+w /src
-WORKDIR /src
 
 # Create non-root user
 RUN useradd -ms /bin/bash nonroot
@@ -40,7 +39,7 @@ RUN curl https://pyenv.run | bash \
 RUN python --version
 
 # Create blank project
-RUN USER=nonroot cargo new --bin starship
+RUN USER=nonroot cargo new --bin /src/starship
 WORKDIR /src/starship
 
 # We want dependencies cached, so copy those first
