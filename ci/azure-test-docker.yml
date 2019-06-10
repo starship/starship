@@ -8,7 +8,9 @@ jobs:
   - script: docker pull starshipcommand/starship-test
     displayName: Pull docker image
   
-  - script: ./integration_test
+  - script: |
+      chmod a+w .
+      ./integration_test
     displayName: Run integration test suite
 
   - script: |
