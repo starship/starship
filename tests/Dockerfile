@@ -1,11 +1,8 @@
 FROM rust
 
-# Work in /src
-RUN mkdir /src && chmod -R a+w /src
-WORKDIR /src
-
 # Create non-root user
 RUN useradd -ms /bin/bash nonroot
+RUN chown -R nonroot /src
 USER nonroot
 
 # Install Node.js
@@ -40,6 +37,7 @@ RUN curl https://pyenv.run | bash \
 RUN python --version
 
 # Create blank project
+WORKDIR /src
 RUN USER=nonroot cargo new --bin starship
 WORKDIR /src/starship
 
@@ -56,7 +54,6 @@ RUN cargo build --release
 
 # Delete the dummy build
 RUN rm -rf src target/debug/starship*
-RUN sudo chown -R nonroot /src/starship
 
 # "-Z unstable-options" is required for "--include-ignored"
 CMD ["cargo", "test", "--", "-Z", "unstable-options", "--include-ignored"]
