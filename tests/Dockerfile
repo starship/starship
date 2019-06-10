@@ -1,7 +1,7 @@
 FROM rust
 
 # Work in /src
-RUN mkdir /src
+RUN mkdir /src && chmod -R a+w /src
 WORKDIR /src
 
 # Create non-root user
@@ -40,8 +40,7 @@ RUN curl https://pyenv.run | bash \
 RUN python --version
 
 # Create blank project
-USER root
-RUN USER=root cargo new --bin starship
+RUN USER=nonroot cargo new --bin starship
 WORKDIR /src/starship
 
 # We want dependencies cached, so copy those first
@@ -56,10 +55,7 @@ RUN touch benches/my_benchmark.rs
 RUN cargo build --release
 
 # Delete the dummy build
-RUN rm -rf src target/debug/starship*
-
-RUN chmod -R a+w /src/starship
-USER nonroot
+RUN rm -rf src target/debug/starship* /src/starship/target/debug/.cargo-lock
 
 # "-Z unstable-options" is required for "--include-ignored"
 CMD ["cargo", "test", "--", "-Z", "unstable-options", "--include-ignored"]
