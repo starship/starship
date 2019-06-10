@@ -51,10 +51,8 @@ RUN mkdir benches
 RUN touch benches/my_benchmark.rs
 
 # This is a dummy build to get dependencies cached
-RUN cargo build --release
-
-# Delete the dummy build
-RUN rm -rf src target/debug/starship*
+RUN cargo build --release \
+  && rm -rf src target/debug/starship*
 
 # "-Z unstable-options" is required for "--include-ignored"
 CMD ["cargo", "test", "--", "-Z", "unstable-options", "--include-ignored"]
