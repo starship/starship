@@ -56,7 +56,7 @@ RUN cargo build --release
 
 # Delete the dummy build
 RUN rm -rf src target/debug/starship*
-RUN chown -R nonroot /src/starship
+RUN sudo chown -R nonroot /src/starship
 
 # "-Z unstable-options" is required for "--include-ignored"
 CMD ["cargo", "test", "--", "-Z", "unstable-options", "--include-ignored"]
