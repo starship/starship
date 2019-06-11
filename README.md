@@ -7,7 +7,6 @@
         <a href="https://discord.gg/8Jzqu3T"><img src="https://badgen.net/badge/chat/on%20discord/7289da" alt="Chat on Discord"></a>
     </p>
 	<br>
-	<br>
 </h1>
 
 > ⚠️ This is very much work in progress, so please don't try to use it just yet!
