@@ -1,7 +1,5 @@
 <p align="center">
-    <img src="media/logo.png" width="150">
-    <h3 align="center">Starship</h3>
-    <p align="center">The cross-shell prompt for astronauts.</p>
+    <img src="media/logo.png" width="80%">
     <p align="center">
         <a href="https://dev.azure.com/starship-control/starship/_build"><img src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite" alt="Azure Pipelines Build Status"></a>
         <a href="#contributors"><img src="https://badgen.net/badge/all%20contributors/7/orange" alt="All Contributors"></a>
