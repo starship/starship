@@ -43,7 +43,7 @@ RUST_LOG=starship=trace cargo run
 Testing is critical to making sure starship works as intended on systems big and small. Starship interfaces with many applications and system APIs when generating the prompt, so there's a lot of room for bugs to slip in.
 
 Unit tests and a subset of acceptance tests can be run with `cargo test`.
-The full acceptance test suite can be run in a Docker container with the included `./integration_test` script.
+The full acceptance test suite can be run in a Docker container with the included [`./integration_test`](integration_test) script.
 
 ### Unit Testing
 
@@ -57,7 +57,7 @@ Acceptance tests are located in the `tests/` directory and are also written usin
 
 Acceptance tests should test full modules or the entire prompt. All integration tests expecting the testing environment to have preexisting state or making permanent changes to the filesystem should have the `#[ignore]` attribute. These tests will be run in a Docker container, by running the included `./integration_test` script. All tests that don't depend on any preexisting state will be run alongside the unit tests with `cargo test`.
 
-For tests that depend on having preexisting state, whatever needed state will have to be added to the project's Dockerfile (`tests/Dockerfile`) as well as the project's Azure Pipelines configuration (`azure-pipelines.yml`).
+For tests that depend on having preexisting state, whatever needed state will have to be added to the project's Dockerfile ([`tests/Dockerfile`](tests/Dockerfile)) as well as the project's Azure Pipelines configuration ([`azure-pipelines.yml`](azure-pipelines.yml)).
 
 The reason for having _both_ the Dockerfile as well as the Azure Pipelines configuration is in order to allow acceptance tests to be run on your local development environment via Docker, while also running our test suite on all supported OSes (Windows, Mac, Linux) on Azure Pipelines.
 
