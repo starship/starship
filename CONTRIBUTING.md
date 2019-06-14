@@ -38,8 +38,6 @@ RUST_LOG=starship=trace starship
 RUST_LOG=starship=trace cargo run
 ```
 
-## Linting and Formatting
-
 ## Linting
 
 Starship source files are linted with [clippy](https://crates.io/crates/clippy). Clippy will be ran as part of CI. Linting errors will fail a build, so it is suggested that you run Clippy locally:
