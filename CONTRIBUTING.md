@@ -64,5 +64,5 @@ The reason for having _both_ the Dockerfile as well as the Azure Pipelines confi
 ### Benchmarking
 
 Benchmarks are located in the `benches/` directory and are written using the [Criterion](https://crates.io/crates/criterion) library.
-m
+
 For the time being, benchmarks aren't actively used, but we plan to integrate benchmark comparison reporting into our CI pipeline in the near future. For the time being, they can be manually run with `cargo bench`.
