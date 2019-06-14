@@ -20,7 +20,7 @@ If you spot anywhere that we could trim some time or reduce the prompt's workloa
 
 ## Architecture
 
-The project begins in `main.rs`, where the appropriate `print::` method is called based on which arguments are given to [clap](https://crates.io/crates/clap). When printing the full prompt, we use [rayon](https://crates.io/crates/rayon) to parallelize the computation of modules.
+The project begins in [`main.rs`](src/main.rs), where the appropriate `print::` method is called based on which arguments are given to [clap](https://crates.io/crates/clap). When printing the full prompt, we use [rayon](https://crates.io/crates/rayon) to parallelize the computation of modules.
 
 Any styling that is applied to a module is inherited by its segments. Module prefixes and suffixes by default don't have any styling applied to them.
 
@@ -53,9 +53,9 @@ Unit tests should be fully isolated, only testing a given function's expected ou
 
 ### Acceptance Testing
 
-Acceptance tests are located in the `tests/` directory and are also written using the built-in Rust testing library.
+Acceptance tests are located in the [`tests/`](tests) directory and are also written using the built-in Rust testing library.
 
-Acceptance tests should test full modules or the entire prompt. All integration tests expecting the testing environment to have preexisting state or making permanent changes to the filesystem should have the `#[ignore]` attribute. These tests will be run in a Docker container, by running the included `./integration_test` script. All tests that don't depend on any preexisting state will be run alongside the unit tests with `cargo test`.
+Acceptance tests should test full modules or the entire prompt. All integration tests expecting the testing environment to have preexisting state or making permanent changes to the filesystem should have the `#[ignore]` attribute. These tests will be run in a Docker container, by running the included [`./integration_test`](integration_test) script. All tests that don't depend on any preexisting state will be run alongside the unit tests with `cargo test`.
 
 For tests that depend on having preexisting state, whatever needed state will have to be added to the project's Dockerfile ([`tests/Dockerfile`](tests/Dockerfile)) as well as the project's Azure Pipelines configuration ([`azure-pipelines.yml`](azure-pipelines.yml)).
 
@@ -63,6 +63,6 @@ The reason for having _both_ the Dockerfile as well as the Azure Pipelines confi
 
 ### Benchmarking
 
-Benchmarks are located in the `benches/` directory and are written using the [Criterion](https://crates.io/crates/criterion) library.
+Benchmarks are located in the [`benches/`](benches) directory and are written using the [Criterion](https://crates.io/crates/criterion) library.
 
 For the time being, benchmarks aren't actively used, but we plan to integrate benchmark comparison reporting into our CI pipeline in the near future. For the time being, they can be manually run with `cargo bench`.
