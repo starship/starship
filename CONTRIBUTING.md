@@ -38,6 +38,27 @@ RUST_LOG=starship=trace starship
 RUST_LOG=starship=trace cargo run
 ```
 
+## Linting and Formatting
+
+## Linting
+
+Starship source files are linted with [clippy](https://crates.io/crates/clippy). Clippy will be ran as part of CI. Linting errors will fail a build, so it is suggested that you run Clippy locally:
+
+```sh
+rustup component add clippy
+cargo clippy
+```
+
+## Formatting
+
+Starship source files are formatted with [rustfmt](https://crates.io/crates/rustfmt-nightly). Rustfmt will be ran as part of CI. Unformatted code will fail a build, so it is suggested that you run rustfmt locally:
+
+```sh
+rustup component add rustfmt
+cargo fmt
+```
+
+
 ## Testing
 
 Testing is critical to making sure starship works as intended on systems big and small. Starship interfaces with many applications and system APIs when generating the prompt, so there's a lot of room for bugs to slip in.
