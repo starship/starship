@@ -22,7 +22,6 @@ const PROMPT_ORDER: &[&str] = &[
 ];
 
 pub fn prompt(args: ArgMatches) {
-
     let context = Context::new(args);
 
     let stdout = io::stdout();

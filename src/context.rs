@@ -77,7 +77,7 @@ impl<'a> Context<'a> {
 
     pub fn new_module(&self, name: &str) -> Option<Module> {
         let config = self.config.get_module_config(name);
-        
+
         config
             // Find the config value by its key
             .map(|config| config.get("disabled"))
