@@ -17,7 +17,7 @@ pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
     const DIR_TRUNCATION_LENGTH: usize = 3;
     let module_color = Color::Cyan.bold();
 
-    let mut module = context.new_module("directory");
+    let mut module = context.new_module("directory")?;
     module.set_style(module_color);
 
     let current_dir = &context.current_dir;

@@ -14,7 +14,7 @@ pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
     let color_success = Color::Green.bold();
     let color_failure = Color::Red.bold();
 
-    let mut module = context.new_module("char");
+    let mut module = context.new_module("char")?;
     module.get_prefix().set_value("");
 
     let symbol = module.new_segment("symbol", PROMPT_CHAR);

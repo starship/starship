@@ -26,7 +26,7 @@ pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
             const PYTHON_CHAR: &str = "🐍 ";
             let module_color = Color::Yellow.bold();
 
-            let mut module = context.new_module("python");
+            let mut module = context.new_module("python")?;
             module.set_style(module_color);
 
             let formatted_version = format_python_version(python_version);

@@ -35,7 +35,7 @@ pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repository = Repository::open(repo_root).ok()?;
 
     let module_style = Color::Red.bold();
-    let mut module = context.new_module("git_status");
+    let mut module = context.new_module("git_status")?;
     module.get_prefix().set_value("[").set_style(module_style);
     module.get_suffix().set_value("] ").set_style(module_style);
     module.set_style(module_style);

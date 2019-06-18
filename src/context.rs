@@ -75,8 +75,18 @@ impl<'a> Context<'a> {
         dir
     }
 
-    pub fn new_module(&self, name: &str) -> Module {
-        Module::new(name, self.config.get_module_config(name))
+    pub fn new_module(&self, name: &str) -> Option<Module> {
+        let config = self.config.get_module_config(name);
+        
+        config
+            // Find the config value by its key
+            .map(|config| config.get("disabled"))
+            .unwrap_or(None)
+            // Get the config value as a `&str`
+            .map(toml::Value::as_bool)
+            .unwrap_or(None)?;
+
+        Some(Module::new(name, self.config.get_module_config(name)))
     }
 
     // returns a new ScanDir struct with reference to current dir_files of context

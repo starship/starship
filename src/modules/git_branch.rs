@@ -11,7 +11,7 @@ pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
     const GIT_BRANCH_CHAR: &str = " ";
     let segment_color = Color::Purple.bold();
 
-    let mut module = context.new_module("git_branch");
+    let mut module = context.new_module("git_branch")?;
     module.set_style(segment_color);
     module.get_prefix().set_value("on ");
 

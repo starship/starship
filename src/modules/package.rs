@@ -14,7 +14,7 @@ pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
             const PACKAGE_CHAR: &str = "📦 ";
             let module_color = Color::Red.bold();
 
-            let mut module = context.new_module("package");
+            let mut module = context.new_module("package")?;
             module.set_style(module_color);
             module.get_prefix().set_value("is ");
 
