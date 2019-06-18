@@ -97,7 +97,7 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 1. Install the fish shell prompt with fisher:
 
     ```bash
-    fisher $PWD
+    fisher add $PWD
     ```
 
 #### oh-my-zsh
