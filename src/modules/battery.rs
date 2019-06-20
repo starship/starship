@@ -3,7 +3,7 @@ use ansi_term::Color;
 use super::{Context, Module};
 
 /// Creates a segment for the battery percentage and charging state
-pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const BATTERY_FULL: &str = "•";
     const BATTERY_CHARGING: &str = "⇡";
     const BATTERY_DISCHARGING: &str = "⇣";

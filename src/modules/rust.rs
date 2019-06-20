@@ -8,7 +8,7 @@ use super::{Context, Module};
 /// Will display the Rust version if any of the following criteria are met:
 ///     - Current directory contains a file with a `.rs` extension
 ///     - Current directory contains a `Cargo.toml` file
-pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_rs_project = context
         .new_scan_dir()
         .set_files(&["Cargo.toml"])

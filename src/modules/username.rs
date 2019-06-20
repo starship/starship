@@ -10,7 +10,7 @@ use super::{Context, Module};
 ///     - The current user isn't the same as the one that is logged in ($LOGNAME != $USER)
 ///     - The current user is root (UID = 0)
 ///     - The user is currently connected as an SSH session ($SSH_CONNECTION)
-pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let user = env::var("USER").ok();
     let logname = env::var("LOGNAME").ok();
     let ssh_connection = env::var("SSH_CONNECTION").ok();

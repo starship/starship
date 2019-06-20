@@ -1,7 +1,7 @@
 use super::{Context, Module};
 
 /// Creates a segment for the line break
-pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const LINE_ENDING: &str = "\n";
 
     let mut module = context.new_module("line_break")?;

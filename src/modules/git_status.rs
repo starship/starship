@@ -17,7 +17,7 @@ use super::{Context, Module};
 ///   - `+` — A new file has been added to the staging area
 ///   - `»` — A renamed file has been added to the staging area
 ///   - `✘` — A file's deletion has been added to the staging area
-pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // This is the order that the sections will appear in
     const GIT_STATUS_CONFLICTED: &str = "=";
     const GIT_STATUS_AHEAD: &str = "⇡";

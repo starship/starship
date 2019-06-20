@@ -9,7 +9,7 @@ use ansi_term::Color;
 /// (green by default)
 /// - If the exit-code was anything else, the arrow will be formatted with
 /// `COLOR_FAILURE` (red by default)
-pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const PROMPT_CHAR: &str = "➜";
     let color_success = Color::Green.bold();
     let color_failure = Color::Red.bold();

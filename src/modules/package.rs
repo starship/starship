@@ -8,7 +8,7 @@ use toml;
 /// Creates a segment with the current package version
 ///
 /// Will display if a version is defined for your Node.js or Rust project (if one exists)
-pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     match get_package_version() {
         Some(package_version) => {
             const PACKAGE_CHAR: &str = "📦 ";
