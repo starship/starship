@@ -40,3 +40,32 @@ impl Config {
         module_config
     }
 }
+
+/// Extends `toml::value::Table` with useful methods
+pub trait TableExt {
+    fn get_as_bool(&self, value: &str) -> Option<bool>;
+}
+
+impl TableExt for toml::value::Table {
+    /// Get a key from a module's configuration as a boolean
+    fn get_as_bool(&self, key: &str) -> Option<bool> {
+        self.get(key).map(toml::Value::as_bool).unwrap_or(None)
+    }
+}
+
+mod tests {
+    use super::*;
+
+    #[test]
+    fn table_get_as_bool() {
+        let mut table = toml::value::Table::new();
+
+        // Use with boolean value
+        table.insert("boolean".to_string(), toml::value::Value::Boolean(true));
+        assert_eq!(table.get_as_bool("boolean"), Some(true));
+
+        // Use with string value
+        table.insert("string".to_string(), toml::value::Value::String("true".to_string()));
+        assert_eq!(table.get_as_bool("string"), None);
+    }
+}

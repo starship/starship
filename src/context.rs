@@ -1,4 +1,4 @@
-use crate::config::Config;
+use crate::config::{Config, TableExt};
 use crate::module::Module;
 
 use clap::ArgMatches;
@@ -75,15 +75,16 @@ impl<'a> Context<'a> {
         dir
     }
 
+    /// Create a new module
+    ///
+    /// Will return `None` if the module is disabled by configuration, by setting
+    /// the `disabled` key to `true` in the configuration for that module.
     pub fn new_module(&self, name: &str) -> Option<Module> {
         let config = self.config.get_module_config(name);
 
+        // If the segment has "disabled" set to "true", don't show it
         let disabled = config
-            // Find the config value by its key
-            .map(|config| config.get("disabled"))
-            .unwrap_or(None)
-            // Get value as boolean
-            .map(toml::Value::as_bool)
+            .map(|table| table.get_as_bool("disabled"))
             .unwrap_or(None);
 
         if disabled == Some(true) {
