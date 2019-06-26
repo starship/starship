@@ -18,6 +18,7 @@ pub fn prompt(args: ArgMatches) {
         "rust",
         "python",
         "go",
+        "jobs",
         "line_break",
         "character",
     ];
