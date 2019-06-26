@@ -21,14 +21,17 @@ impl Config {
 
     /// Create a config from a starship configuration file
     fn config_from_file() -> Option<toml::value::Table> {
-        let file_path = env::var("STARSHIP_CONFIG").unwrap_or_else(|_| {
-            home_dir()
-                .unwrap()
-                .join(".config/starship.toml")
-                .to_str()
-                .unwrap()
-                .to_owned()
-        });
+        let file_path = match env::var("STARSHIP_CONFIG") {
+            Ok(path) => {
+                log::debug!("STARSHIP_CONFIG is set: {}", &path);
+                path
+            }
+            Err(_) => {
+                log::debug!("STARSHIP_CONFIG is not set");
+                let config_path = home_dir()?.join(".config/starship.toml");
+                config_path.to_str()?.to_owned()
+            }
+        };
 
         let toml_content = utils::read_file(&file_path).ok()?;
         log::trace!("Config file content: \n{}", &toml_content);
