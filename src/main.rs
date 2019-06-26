@@ -14,6 +14,20 @@ use clap::{App, Arg, SubCommand};
 fn main() {
     pretty_env_logger::init();
 
+    let status_code_arg = Arg::with_name("status_code")
+        .short("s")
+        .long("status")
+        .value_name("STATUS_CODE")
+        .help("The status code of the previously run command")
+        .takes_value(true);
+
+    let path_arg = Arg::with_name("path")
+        .short("p")
+        .long("path")
+        .value_name("PATH")
+        .help("The path that the prompt should render for")
+        .takes_value(true);
+
     let matches = App::new("Starship")
         .about("The cross-shell prompt for astronauts. ✨🚀")
         // pull the version number from Cargo.toml
@@ -24,22 +38,8 @@ fn main() {
         .subcommand(
             SubCommand::with_name("prompt")
                 .about("Prints the full starship prompt")
-                .arg(
-                    Arg::with_name("status_code")
-                        .short("s")
-                        .long("status")
-                        .value_name("STATUS_CODE")
-                        .help("The status code of the previously run command")
-                        .takes_value(true),
-                )
-                .arg(
-                    Arg::with_name("path")
-                        .short("p")
-                        .long("path")
-                        .value_name("PATH")
-                        .help("The path that the prompt should render for ($PWD by default)")
-                        .takes_value(true),
-                ),
+                .arg(&status_code_arg)
+                .arg(&path_arg),
         )
         .subcommand(
             SubCommand::with_name("module")
@@ -49,22 +49,8 @@ fn main() {
                         .help("The name of the module to be printed")
                         .required(true),
                 )
-                .arg(
-                    Arg::with_name("status_code")
-                        .short("s")
-                        .long("status")
-                        .value_name("STATUS_CODE")
-                        .help("The status code of the previously run command")
-                        .takes_value(true),
-                )
-                .arg(
-                    Arg::with_name("path")
-                        .short("p")
-                        .long("path")
-                        .value_name("PATH")
-                        .help("The path the prompt should render for ($PWD by default)")
-                        .takes_value(true),
-                ),
+                .arg(&status_code_arg)
+                .arg(&path_arg),
         )
         .get_matches();
 

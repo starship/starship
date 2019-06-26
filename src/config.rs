@@ -1,4 +1,5 @@
 use crate::utils;
+use std::env;
 
 use dirs::home_dir;
 
@@ -20,8 +21,16 @@ impl Config {
 
     /// Create a config from a starship configuration file
     fn config_from_file() -> Option<toml::value::Table> {
-        let file_path = home_dir()?.join(".config/starship.toml");
-        let toml_content = utils::read_file(&file_path.to_str()?).ok()?;
+        let file_path = env::var("STARSHIP_CONFIG").unwrap_or_else(|_| {
+            home_dir()
+                .unwrap()
+                .join(".config/starship.toml")
+                .to_str()
+                .unwrap()
+                .to_owned()
+        });
+
+        let toml_content = utils::read_file(&file_path).ok()?;
         log::trace!("Config file content: \n{}", &toml_content);
 
         let config = toml::from_str(&toml_content).ok()?;
@@ -65,7 +74,10 @@ mod tests {
         assert_eq!(table.get_as_bool("boolean"), Some(true));
 
         // Use with string value
-        table.insert("string".to_string(), toml::value::Value::String("true".to_string()));
+        table.insert(
+            "string".to_string(),
+            toml::value::Value::String("true".to_string()),
+        );
         assert_eq!(table.get_as_bool("string"), None);
     }
 }
