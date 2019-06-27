@@ -9,11 +9,14 @@ lazy_static! {
     static ref EMPTY_CONFIG: PathBuf = MANIFEST_DIR.join("empty_config.toml");
 }
 
-pub fn render_prompt() -> process::Command {
+/// Run an instance of starship
+fn run_starship() -> process::Command {
     let mut command = process::Command::new("./target/debug/starship");
+    
     command
         .arg("prompt")
         .env_clear()
+        .env("PATH", env!("PATH")) // Provide the $PATH variable so that external programs are runnable
         .env("STARSHIP_CONFIG", EMPTY_CONFIG.as_os_str());
 
     command
@@ -21,10 +24,12 @@ pub fn render_prompt() -> process::Command {
 
 pub fn render_module(module_name: &str) -> process::Command {
     let mut command = process::Command::new("./target/debug/starship");
+
     command
         .arg("module")
         .arg(module_name)
         .env_clear()
+        .env("PATH", env!("PATH")) // Provide the $PATH variable so that external programs are runnable
         .env("STARSHIP_CONFIG", EMPTY_CONFIG.as_os_str());
 
     command
