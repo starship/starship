@@ -6,3 +6,4 @@ mod line_break;
 mod nodejs;
 mod python;
 mod username;
+mod configuration;
