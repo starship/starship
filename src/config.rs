@@ -23,10 +23,12 @@ impl Config {
     fn config_from_file() -> Option<toml::value::Table> {
         let file_path = match env::var("STARSHIP_CONFIG") {
             Ok(path) => {
+                // Use $STARSHIP_CONFIG as the config path if available
                 log::debug!("STARSHIP_CONFIG is set: {}", &path);
                 path
             }
             Err(_) => {
+                // Default to using ~/.config/starhip.toml
                 log::debug!("STARSHIP_CONFIG is not set");
                 let config_path = home_dir()?.join(".config/starship.toml");
                 let config_path_str = config_path.to_str()?.to_owned();
