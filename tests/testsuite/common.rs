@@ -12,7 +12,7 @@ lazy_static! {
 /// Run an instance of starship
 fn run_starship() -> process::Command {
     let mut command = process::Command::new("./target/debug/starship");
-    
+
     command
         .arg("prompt")
         .env_clear()
