@@ -29,12 +29,23 @@ impl Config {
             Err(_) => {
                 log::debug!("STARSHIP_CONFIG is not set");
                 let config_path = home_dir()?.join(".config/starship.toml");
-                config_path.to_str()?.to_owned()
+                let config_path_str = config_path.to_str()?.to_owned();
+                
+                log::debug!("Using default config path: {}", config_path_str);
+                config_path_str
             }
         };
 
-        let toml_content = utils::read_file(&file_path).ok()?;
-        log::trace!("Config file content: \n{}", &toml_content);
+        let toml_content = match utils::read_file(&file_path) {
+            Ok(content) => {
+                log::trace!("Config file content: \n{}", &content);
+                Some(content)
+            }
+            Err(e) => {
+                log::debug!("Unable to read config file content: \n{}", &e);
+                None
+            }
+        }?;
 
         let config = toml::from_str(&toml_content).ok()?;
         log::debug!("Config found: \n{:?}", &config);

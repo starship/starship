@@ -61,7 +61,7 @@ fn get_battery_status() -> Option<BatteryStatus> {
             Some(battery_status)
         }
         Some(Err(e)) => {
-            log::debug!("Unable to access battery information:\n{}", e);
+            log::debug!("Unable to access battery information:\n{}", &e);
             None
         }
         None => {
