@@ -30,7 +30,7 @@ impl Config {
                 log::debug!("STARSHIP_CONFIG is not set");
                 let config_path = home_dir()?.join(".config/starship.toml");
                 let config_path_str = config_path.to_str()?.to_owned();
-                
+
                 log::debug!("Using default config path: {}", config_path_str);
                 config_path_str
             }
@@ -66,7 +66,7 @@ impl Config {
 
 /// Extends `toml::value::Table` with useful methods
 pub trait TableExt {
-    fn get_as_bool(&self, value: &str) -> Option<bool>;
+    fn get_as_bool(&self, key: &str) -> Option<bool>;
 }
 
 impl TableExt for toml::value::Table {

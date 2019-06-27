@@ -75,19 +75,21 @@ mod tests {
 
     #[test]
     fn test_extract_cargo_version() {
-        let cargo_with_version = r#"
+        let cargo_with_version = toml::toml! {
             [package]
             name = "starship"
             version = "0.1.0"
-            "#;
+        }
+        .to_string();
 
         let expected_version = Some("v0.1.0".to_string());
         assert_eq!(extract_cargo_version(&cargo_with_version), expected_version);
 
-        let cargo_without_version = r#"
+        let cargo_without_version = toml::toml! {
             [package]
             name = "starship"
-            "#;
+        }
+        .to_string();
 
         let expected_version = None;
         assert_eq!(

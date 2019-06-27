@@ -1,4 +1,5 @@
 use lazy_static::lazy_static;
+use std::io::prelude::*;
 use std::path::{Path, PathBuf};
 use std::{io, process};
 
@@ -34,4 +35,22 @@ pub fn new_tempdir() -> io::Result<tempfile::TempDir> {
     //  Using `tempfile::TempDir` directly creates files on macOS within
     // "/var/folders", which provides us with restricted permissions (rwxr-xr-x)
     tempfile::tempdir_in("/tmp")
+}
+
+/// Extends `std::process::Command` with methods for testing
+pub trait TestCommand {
+    fn use_config(&mut self, toml: toml::value::Value) -> &mut process::Command;
+}
+
+impl TestCommand for process::Command {
+    /// Create a configuration file with the provided TOML and use it
+    fn use_config(&mut self, toml: toml::value::Value) -> &mut process::Command {
+        // Create a persistent config file in a tempdir
+        let (mut config_file, config_path) =
+            tempfile::NamedTempFile::new().unwrap().keep().unwrap();
+        write!(config_file, "{}", toml.to_string()).unwrap();
+
+        // Set that newly-created file as the config for the prompt instance
+        self.env("STARSHIP_CONFIG", config_path)
+    }
 }
