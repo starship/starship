@@ -1,9 +1,9 @@
 mod character;
 mod common;
+mod configuration;
 mod directory;
 mod golang;
 mod line_break;
 mod nodejs;
 mod python;
 mod username;
-mod configuration;
