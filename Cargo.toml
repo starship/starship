@@ -17,7 +17,7 @@ log = "0.4.6"
 battery = "0.7.4"
 
 [dev-dependencies]
-tempfile = "3.0.8"
+tempfile = "3.0.9"
 criterion = "0.2.11"
 
 [[bench]]
