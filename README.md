@@ -63,7 +63,7 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 
 - [x] Fish shell
 - [x] Z Shell
-- [ ] Bash
+- [x] Bash
 
 ### Test strategy
 
@@ -79,6 +79,8 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 
 ### Getting Started
 
+### Getting Started
+
 1. `cd` to the root of the **starship** repo
 1. Install the **starship** binary:
 
@@ -86,32 +88,26 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
     cargo install --path .
     ```
 
-1. Navigate to the adapters directory
+1. Add the init script to your shell's config file:
+
+    #### Bash / Zsh
+
+    Add the following to the end of `~/.bashrc` or `~/.zshrc`:
 
     ```bash
-    cd adapters
+    # ~/.bashrc or ~/.zshrc
+    
+    eval "$(starship init $0)"
     ```
 
-#### Fish
+    #### Fish
 
-1. Install the fish shell prompt with fisher:
+    Add the following to the end of `~/.config/fish/config.fish`:
 
-    ```bash
-    fisher add $PWD
-    ```
+    ```fish
+    # ~/.config/config.fish
 
-#### oh-my-zsh
-
-1. Install the zsh theme:
-
-    ```bash
-    cp starship.zsh-theme ~/.oh-my-zsh/themes
-    ```
-
-1. In `~/.zshrc`, find the line with `ZSH_THEME=` and set it to
-
-    ```bash
-    ZSH_THEME="starship"
+    eval (starship init fish)
     ```
 
 ## Contributors
