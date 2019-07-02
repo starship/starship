@@ -1,5 +1,6 @@
 mod character;
 mod common;
+mod configuration;
 mod directory;
 mod golang;
 mod line_break;

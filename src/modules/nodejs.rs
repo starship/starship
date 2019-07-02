@@ -9,7 +9,7 @@ use super::{Context, Module};
 ///     - Current directory contains a `.js` file
 ///     - Current directory contains a `package.json` file
 ///     - Current directory contains a `node_modules` directory
-pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_js_project = context
         .new_scan_dir()
         .set_files(&["package.json"])
@@ -26,7 +26,7 @@ pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
             const NODE_CHAR: &str = "⬢ ";
             let module_color = Color::Green.bold();
 
-            let mut module = context.new_module("node");
+            let mut module = context.new_module("node")?;
             module.set_style(module_color);
 
             let formatted_version = node_version.trim();

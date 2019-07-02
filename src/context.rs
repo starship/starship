@@ -1,4 +1,4 @@
-use crate::config::Config;
+use crate::config::{Config, TableExt};
 use crate::module::Module;
 
 use clap::ArgMatches;
@@ -75,8 +75,23 @@ impl<'a> Context<'a> {
         dir
     }
 
-    pub fn new_module(&self, name: &str) -> Module {
-        Module::new(name, self.config.get_module_config(name))
+    /// Create a new module
+    ///
+    /// Will return `None` if the module is disabled by configuration, by setting
+    /// the `disabled` key to `true` in the configuration for that module.
+    pub fn new_module(&self, name: &str) -> Option<Module> {
+        let config = self.config.get_module_config(name);
+
+        // If the segment has "disabled" set to "true", don't show it
+        let disabled = config
+            .map(|table| table.get_as_bool("disabled"))
+            .unwrap_or(None);
+
+        if disabled == Some(true) {
+            return None;
+        }
+
+        Some(Module::new(name, config))
     }
 
     // returns a new ScanDir struct with reference to current dir_files of context

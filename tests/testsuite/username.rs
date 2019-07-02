@@ -8,7 +8,7 @@ use crate::common;
 
 #[test]
 fn no_env_variables() -> io::Result<()> {
-    let output = common::render_module("username").env_clear().output()?;
+    let output = common::render_module("username").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!("", actual);
     Ok(())
@@ -17,7 +17,6 @@ fn no_env_variables() -> io::Result<()> {
 #[test]
 fn logname_equals_user() -> io::Result<()> {
     let output = common::render_module("username")
-        .env_clear()
         .env("LOGNAME", "astronaut")
         .env("USER", "astronaut")
         .output()?;
@@ -30,7 +29,6 @@ fn logname_equals_user() -> io::Result<()> {
 fn ssh_wo_username() -> io::Result<()> {
     // SSH connection w/o username
     let output = common::render_module("username")
-        .env_clear()
         .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
@@ -41,7 +39,6 @@ fn ssh_wo_username() -> io::Result<()> {
 #[test]
 fn current_user_not_logname() -> io::Result<()> {
     let output = common::render_module("username")
-        .env_clear()
         .env("LOGNAME", "astronaut")
         .env("USER", "cosmonaut")
         .output()?;
@@ -55,7 +52,6 @@ fn current_user_not_logname() -> io::Result<()> {
 #[test]
 fn ssh_connection() -> io::Result<()> {
     let output = common::render_module("username")
-        .env_clear()
         .env("USER", "astronaut")
         .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
         .output()?;

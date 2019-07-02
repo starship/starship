@@ -10,7 +10,7 @@ use super::{Context, Module};
 ///     - Current directory contains a `.python-version` file
 ///     - Current directory contains a `requirements.txt` file
 ///     - Current directory contains a `pyproject.toml` file
-pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_py_project = context
         .new_scan_dir()
         .set_files(&["requirements.txt", ".python-version", "pyproject.toml"])
@@ -26,7 +26,7 @@ pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
             const PYTHON_CHAR: &str = "🐍 ";
             let module_color = Color::Yellow.bold();
 
-            let mut module = context.new_module("python");
+            let mut module = context.new_module("python")?;
             module.set_style(module_color);
 
             let formatted_version = format_python_version(python_version);
