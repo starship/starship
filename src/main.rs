@@ -1,9 +1,9 @@
 #[macro_use]
 extern crate clap;
 
-mod init;
 mod config;
 mod context;
+mod init;
 mod module;
 mod modules;
 mod print;
@@ -31,7 +31,9 @@ fn main() {
 
     let shell_arg = Arg::with_name("shell")
         .value_name("SHELL")
-        .help("The name of the currently running shell\nCurrently supported options: bash, zsh, fish")
+        .help(
+            "The name of the currently running shell\nCurrently supported options: bash, zsh, fish",
+        )
         .required(true);
 
     let matches = App::new("starship")
@@ -70,7 +72,7 @@ fn main() {
         ("init", Some(sub_m)) => {
             let shell_name = sub_m.value_of("shell").expect("Shell name missing.");
             init::init(shell_name)
-        },
+        }
         ("prompt", Some(sub_m)) => print::prompt(sub_m.clone()),
         ("module", Some(sub_m)) => {
             let module_name = sub_m.value_of("name").expect("Module name missing.");
