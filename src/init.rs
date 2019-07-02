@@ -18,7 +18,7 @@ pub fn init(shell_name: &str) {
                 "printf \"\\n{0} is not yet supported by starship.\\n\
                  For the time being, we support bash, zsh, and fish.\\n\
                  Please open an issue in the starship repo if you would like to \
-                 see support for {0}:\\nhttps://github.com/starship/starship/issues/new\"",
+                 see support for {0}:\\nhttps://github.com/starship/starship/issues/new\"\\n\\n",
                 shell_name
             );
             None
