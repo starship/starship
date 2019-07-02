@@ -79,8 +79,6 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 
 ### Getting Started
 
-### Getting Started
-
 1. `cd` to the root of the **starship** repo
 1. Install the **starship** binary:
 
