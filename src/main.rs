@@ -42,7 +42,7 @@ fn main() {
         .version(crate_version!())
         // pull the authors from Cargo.toml
         .author(crate_authors!())
-        .after_help("https://github.com/matchai/starship")
+        .after_help("https://github.com/starship/starship")
         .setting(AppSettings::SubcommandRequiredElseHelp)
         .subcommand(
             SubCommand::with_name("init")
