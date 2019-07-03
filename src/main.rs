@@ -37,7 +37,7 @@ fn main() {
         .required(true);
 
     let matches = App::new("starship")
-        .about("The cross-shell prompt for astronauts. ✨🚀")
+        .about("☄🌌️ The cross-shell prompt for astronauts.")
         // pull the version number from Cargo.toml
         .version(crate_version!())
         // pull the authors from Cargo.toml
