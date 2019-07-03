@@ -3,13 +3,14 @@ extern crate clap;
 
 mod config;
 mod context;
+mod init;
 mod module;
 mod modules;
 mod print;
 mod segment;
 mod utils;
 
-use clap::{App, Arg, SubCommand};
+use clap::{App, AppSettings, Arg, SubCommand};
 
 fn main() {
     pretty_env_logger::init();
@@ -28,13 +29,26 @@ fn main() {
         .help("The path that the prompt should render for")
         .takes_value(true);
 
-    let matches = App::new("Starship")
-        .about("The cross-shell prompt for astronauts. ✨🚀")
+    let shell_arg = Arg::with_name("shell")
+        .value_name("SHELL")
+        .help(
+            "The name of the currently running shell\nCurrently supported options: bash, zsh, fish",
+        )
+        .required(true);
+
+    let matches = App::new("starship")
+        .about("The cross-shell prompt for astronauts. ☄🌌️")
         // pull the version number from Cargo.toml
         .version(crate_version!())
         // pull the authors from Cargo.toml
         .author(crate_authors!())
-        .after_help("https://github.com/matchai/starship")
+        .after_help("https://github.com/starship/starship")
+        .setting(AppSettings::SubcommandRequiredElseHelp)
+        .subcommand(
+            SubCommand::with_name("init")
+                .about("Prints the shell function used to execute starship")
+                .arg(&shell_arg),
+        )
         .subcommand(
             SubCommand::with_name("prompt")
                 .about("Prints the full starship prompt")
@@ -55,6 +69,10 @@ fn main() {
         .get_matches();
 
     match matches.subcommand() {
+        ("init", Some(sub_m)) => {
+            let shell_name = sub_m.value_of("shell").expect("Shell name missing.");
+            init::init(shell_name)
+        }
         ("prompt", Some(sub_m)) => print::prompt(sub_m.clone()),
         ("module", Some(sub_m)) => {
             let module_name = sub_m.value_of("name").expect("Module name missing.");
