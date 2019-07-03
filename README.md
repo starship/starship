@@ -76,10 +76,12 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 ### Prerequisites
 
 - Rust v1.33 or higher
+- A Powerline font (like [Fira Code](https://github.com/tonsky/FiraCode)) installed and enabled in your terminal emulator
 
 ### Getting Started
 
 1. `cd` to the root of the **starship** repo
+
 1. Install the **starship** binary:
 
     ```bash
