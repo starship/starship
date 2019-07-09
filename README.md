@@ -81,12 +81,10 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 
 ### Getting Started
 
-1. `cd` to the root of the **starship** repo
-
 1. Install the **starship** binary:
 
     ```bash
-    cargo install --path .
+    cargo install starship
     ```
 
 1. Add the init script to your shell's config file:
