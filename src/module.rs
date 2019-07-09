@@ -6,7 +6,10 @@ use std::string::ToString;
 
 /// A module is a collection of segments showing data for a single integration
 /// (e.g. The git module shows the current git branch and status)
-pub struct Module {
+pub struct Module<'a> {
+    /// The module's configuration map if available
+    config: Option<&'a toml::value::Table>,
+
     /// The module's name, to be used in configuration and logging.
     name: String,
 
@@ -23,10 +26,11 @@ pub struct Module {
     suffix: ModuleAffix,
 }
 
-impl Module {
+impl<'a> Module<'a> {
     /// Creates a module with no segments.
-    pub fn new(name: &str) -> Module {
+    pub fn new(name: &str, config: Option<&'a toml::value::Table>) -> Module<'a> {
         Module {
+            config,
             name: name.to_string(),
             style: Style::default(),
             prefix: ModuleAffix::default_prefix(name.to_string()),
@@ -42,7 +46,8 @@ impl Module {
     {
         let mut segment = Segment::new(name);
         segment.set_style(self.style);
-        segment.set_value(value.into());
+        // Use the provided value unless overwritten by config
+        segment.set_value(self.config_value(name).unwrap_or_else(|| value.into()));
         self.segments.push(segment);
 
         self.segments.last_mut().unwrap()
@@ -66,7 +71,7 @@ impl Module {
     /// Sets the style of the segment.
     ///
     /// Accepts either `Color` or `Style`.
-    pub fn set_style<T>(&mut self, style: T) -> &mut Module
+    pub fn set_style<T>(&mut self, style: T) -> &mut Module<'a>
     where
         T: Into<Style>,
     {
@@ -80,8 +85,7 @@ impl Module {
         let mut ansi_strings = self
             .segments
             .iter()
-            .map(|s| s.ansi_strings())
-            .flat_map(|s| s.into_iter())
+            .map(|s| s.ansi_string())
             .collect::<Vec<ANSIString>>();
 
         ansi_strings.insert(0, self.prefix.ansi_string());
@@ -93,9 +97,22 @@ impl Module {
     pub fn to_string_without_prefix(&self) -> String {
         ANSIStrings(&self.ansi_strings()[1..]).to_string()
     }
+
+    /// Get a module's config value as a string
+    fn config_value(&self, key: &str) -> Option<String> {
+        self.config
+            // Find the config value by its key
+            .map(|config| config.get(key))
+            .unwrap_or(None)
+            // Get the config value as a `&str`
+            .map(toml::Value::as_str)
+            .unwrap_or(None)
+            // Convert it to a String
+            .map(str::to_string)
+    }
 }
 
-impl fmt::Display for Module {
+impl<'a> fmt::Display for Module<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let ansi_strings = self.ansi_strings();
         write!(f, "{}", ANSIStrings(&ansi_strings))

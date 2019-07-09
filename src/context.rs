@@ -1,3 +1,6 @@
+use crate::config::{Config, TableExt};
+use crate::module::Module;
+
 use clap::ArgMatches;
 use git2::Repository;
 use std::env;
@@ -6,6 +9,7 @@ use std::fs;
 use std::path::PathBuf;
 
 pub struct Context<'a> {
+    pub config: Config,
     pub current_dir: PathBuf,
     pub dir_files: Vec<PathBuf>,
     pub arguments: ArgMatches<'a>,
@@ -15,15 +19,21 @@ pub struct Context<'a> {
 
 impl<'a> Context<'a> {
     pub fn new(arguments: ArgMatches) -> Context {
-        let current_dir = env::current_dir().expect("Unable to identify current directory.");
-        Context::new_with_dir(arguments, current_dir)
+        // Retreive the "path" flag. If unavailable, use the current directory instead.
+        let path = arguments
+            .value_of("path")
+            .map(From::from)
+            .unwrap_or_else(|| env::current_dir().expect("Unable to identify current directory."));
+
+        Context::new_with_dir(arguments, path)
     }
 
-    #[allow(dead_code)]
     pub fn new_with_dir<T>(arguments: ArgMatches, dir: T) -> Context
     where
         T: Into<PathBuf>,
     {
+        let config = Config::initialize();
+
         // TODO: Currently gets the physical directory. Get the logical directory.
         let current_dir = Context::expand_tilde(dir.into());
 
@@ -47,6 +57,7 @@ impl<'a> Context<'a> {
             .and_then(|repo| get_current_branch(&repo));
 
         Context {
+            config,
             arguments,
             current_dir,
             dir_files,
@@ -62,6 +73,25 @@ impl<'a> Context<'a> {
             return dirs::home_dir().unwrap().join(without_home);
         }
         dir
+    }
+
+    /// Create a new module
+    ///
+    /// Will return `None` if the module is disabled by configuration, by setting
+    /// the `disabled` key to `true` in the configuration for that module.
+    pub fn new_module(&self, name: &str) -> Option<Module> {
+        let config = self.config.get_module_config(name);
+
+        // If the segment has "disabled" set to "true", don't show it
+        let disabled = config
+            .map(|table| table.get_as_bool("disabled"))
+            .unwrap_or(None);
+
+        if disabled == Some(true) {
+            return None;
+        }
+
+        Some(Module::new(name, config))
     }
 
     // returns a new ScanDir struct with reference to current dir_files of context

@@ -10,15 +10,10 @@ use super::{Context, Module};
 ///     - Current directory contains a `.python-version` file
 ///     - Current directory contains a `requirements.txt` file
 ///     - Current directory contains a `pyproject.toml` file
-pub fn segment(context: &Context) -> Option<Module> {
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_py_project = context
         .new_scan_dir()
-        .set_files(&[
-            "requirements.txt",
-            ".python-version",
-            "pyproject.toml",
-            "pyproject.toml",
-        ])
+        .set_files(&["requirements.txt", ".python-version", "pyproject.toml"])
         .set_extensions(&["py"])
         .scan();
 
@@ -31,7 +26,7 @@ pub fn segment(context: &Context) -> Option<Module> {
             const PYTHON_CHAR: &str = "🐍 ";
             let module_color = Color::Yellow.bold();
 
-            let mut module = Module::new("python");
+            let mut module = context.new_module("python")?;
             module.set_style(module_color);
 
             let formatted_version = format_python_version(python_version);
@@ -46,7 +41,18 @@ pub fn segment(context: &Context) -> Option<Module> {
 
 fn get_python_version() -> Option<String> {
     match Command::new("python").arg("--version").output() {
-        Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
+        Ok(output) => {
+            // We have to check both stdout and stderr since for Python versions
+            // < 3.4, Python reports to stderr and for Python version >= 3.5,
+            // Python reports to stdout
+            if output.stdout.is_empty() {
+                let stderr_string = String::from_utf8(output.stderr).unwrap();
+                Some(stderr_string)
+            } else {
+                let stdout_string = String::from_utf8(output.stdout).unwrap();
+                Some(stdout_string)
+            }
+        }
         Err(_) => None,
     }
 }

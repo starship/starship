@@ -12,12 +12,12 @@ use super::{Context, Module};
 ///
 /// **Truncation**
 /// Paths will be limited in length to `3` path components by default.
-pub fn segment(context: &Context) -> Option<Module> {
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const HOME_SYMBOL: &str = "~";
     const DIR_TRUNCATION_LENGTH: usize = 3;
     let module_color = Color::Cyan.bold();
 
-    let mut module = Module::new("directory");
+    let mut module = context.new_module("directory")?;
     module.set_style(module_color);
 
     let current_dir = &context.current_dir;

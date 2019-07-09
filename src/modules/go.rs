@@ -13,7 +13,7 @@ use super::{Context, Module};
 ///     - Current directory contains a `Gopkg.lock` file
 ///     - Current directory contains a `.go` file
 ///     - Current directory contains a `Godeps` directory
-pub fn segment(context: &Context) -> Option<Module> {
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_go_project = context
         .new_scan_dir()
         .set_files(&["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock"])
@@ -30,7 +30,7 @@ pub fn segment(context: &Context) -> Option<Module> {
             const GO_CHAR: &str = "🐹 ";
             let module_color = Color::Cyan.bold();
 
-            let mut module = Module::new("go");
+            let mut module = context.new_module("go")?;
             module.set_style(module_color);
 
             let formatted_version = format_go_version(go_version)?;

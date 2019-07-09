@@ -1,15 +1,14 @@
-<h3 align="center">Starship <img src="https://raw.githubusercontent.com/starship/starship/master/svg/comet.svg?sanitize=true"><img src="https://raw.githubusercontent.com/starship/starship/master/svg/galaxy.svg?sanitize=true"></h3>
-<p align="center">The cross-shell prompt for astronauts.</p>
-<p align="center">
-    <a href="https://crates.io/crates/starship"><img src="https://badgen.net/crates/v/starship" alt="Crates.io version"></a>
-    <a href="https://dev.azure.com/starship-control/starship/_build"><img src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite" alt="Azure Pipelines build status"></a>
-    <a href="https://deps.rs/repo/github/starship/starship"><img src="https://deps.rs/repo/github/starship/starship/status.svg" alt="Crates.io version"></a>
-    <br>
-    <a href="#contributors"><img src="https://badgen.net/badge/all%20contributors/6/orange" alt="All Contributors"></a>
-    <a href="https://discord.gg/8Jzqu3T"><img src="https://badgen.net/badge/chat/on%20discord/7289da" alt="Chat on Discord"></a>
-</p>
-
----
+<h1 align="center">
+	<br>
+	<img width="400" src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png" alt="Starship – Cross-shell prompt">
+    <p align="center">
+        <a href="https://crates.io/crates/starship"><img src="https://badgen.net/crates/v/starship" alt="Crates.io version"></a>
+        <a href="https://dev.azure.com/starship-control/starship/_build"><img src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite" alt="Azure Pipelines Build Status"></a>
+        <a href="#contributors"><img src="https://badgen.net/badge/all%20contributors/7/orange" alt="All Contributors"></a>
+        <a href="https://discord.gg/8Jzqu3T"><img src="https://badgen.net/badge/chat/on%20discord/7289da" alt="Chat on Discord"></a>
+    </p>
+	<br>
+</h1>
 
 Starship is a Rust port of the minimalistic, powerful, and extremely customizable prompt [Spaceship ZSH](https://github.com/denysdovhan/spaceship-prompt).
 
@@ -55,7 +54,7 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 
 ### Other features
 
-- [ ] `.starshiprc` configuration (JSON or TOML)
+- [x] `starship.toml` configuration
 - [ ] Custom sections given commands or binaries
 - [ ] Self-updating
 
@@ -63,64 +62,52 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 
 - [x] Fish shell
 - [x] Z Shell
-- [ ] Bash
+- [x] Bash
 
 ### Test strategy
 
-- [x] Per-segment benchmarking
+- [ ] Per-segment benchmarking
 - [x] Per-segment unit + integration tests
-- [ ] Shell + OS matrix acceptance tests
+- [x] Shell + OS matrix acceptance tests
 
 ## Setup
 
 ### Prerequisites
 
 - Rust v1.33 or higher
+- A Powerline font (like [Fira Code](https://github.com/tonsky/FiraCode)) installed and enabled in your terminal emulator
 
 ### Getting Started
 
 1. `cd` to the root of the **starship** repo
+
 1. Install the **starship** binary:
 
     ```bash
     cargo install --path .
     ```
 
-1. Navigate to the adapters directory
+1. Add the init script to your shell's config file:
+
+    #### Bash / Zsh
+
+    Add the following to the end of `~/.bashrc` or `~/.zshrc`:
 
     ```bash
-    cd adapters
+    # ~/.bashrc or ~/.zshrc
+    
+    eval "$(starship init $0)"
     ```
 
-#### Fish
+    #### Fish
 
-1. Install the fish shell prompt with fisher:
+    Add the following to the end of `~/.config/fish/config.fish`:
 
-    ```bash
-    fisher $PWD
+    ```fish
+    # ~/.config/config.fish
+
+    eval (starship init fish)
     ```
-
-#### oh-my-zsh
-
-1. Install the zsh theme:
-
-    ```bash
-    cp starship.zsh-theme ~/.oh-my-zsh/themes
-    ```
-
-1. In `~/.zshrc`, find the line with `ZSH_THEME=` and set it to
-
-    ```bash
-    ZSH_THEME="starship"
-    ```
-
-## Contributing
-
-To test locally run the below command:
-
-```bash
-cargo run -- $status
-```
 
 ## Contributors
 

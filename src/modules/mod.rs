@@ -14,20 +14,20 @@ mod username;
 use crate::context::Context;
 use crate::module::Module;
 
-pub fn handle(module: &str, context: &Context) -> Option<Module> {
+pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     match module {
-        "dir" | "directory" => directory::segment(context),
-        "char" | "character" => character::segment(context),
-        "node" | "nodejs" => nodejs::segment(context),
-        "rust" | "rustlang" => rust::segment(context),
-        "python" => python::segment(context),
-        "go" | "golang" => go::segment(context),
-        "line_break" => line_break::segment(context),
-        "package" => package::segment(context),
-        "git_branch" => git_branch::segment(context),
-        "git_status" => git_status::segment(context),
-        "username" => username::segment(context),
-        "battery" => battery::segment(context),
+        "dir" | "directory" => directory::module(context),
+        "char" | "character" => character::module(context),
+        "node" | "nodejs" => nodejs::module(context),
+        "rust" | "rustlang" => rust::module(context),
+        "python" => python::module(context),
+        "go" | "golang" => go::module(context),
+        "line_break" => line_break::module(context),
+        "package" => package::module(context),
+        "git_branch" => git_branch::module(context),
+        "git_status" => git_status::module(context),
+        "username" => username::module(context),
+        "battery" => battery::module(context),
 
         _ => panic!("Unknown module: {}", module),
     }
