@@ -10,7 +10,7 @@
 	<br>
 </h1>
 
-> ⚠️ Starship is still a work in progress, but is now far enough along to be used as a prompt (I use it as my daily driver)
+> ⚠️ Starship is still a work in progress but is now far enough along to be used as a prompt (I personally use it as my daily driver)
 
 Starship is a Rust port of the minimalistic, powerful, and extremely customizable prompt [Spaceship ZSH](https://github.com/denysdovhan/spaceship-prompt).
 
