@@ -1,7 +1,8 @@
 <h1 align="center">
 	<br>
-	<img width="400" src="media/logo.png" alt="Starship – Cross-shell prompt">
+	<img width="400" src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png" alt="Starship – Cross-shell prompt">
     <p align="center">
+        <a href="https://crates.io/crates/starship"><img src="https://badgen.net/crates/v/starship" alt="Crates.io version"></a>
         <a href="https://dev.azure.com/starship-control/starship/_build"><img src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite" alt="Azure Pipelines Build Status"></a>
         <a href="#contributors"><img src="https://badgen.net/badge/all%20contributors/7/orange" alt="All Contributors"></a>
         <a href="https://discord.gg/8Jzqu3T"><img src="https://badgen.net/badge/chat/on%20discord/7289da" alt="Chat on Discord"></a>
@@ -9,7 +10,7 @@
 	<br>
 </h1>
 
-> ⚠️ This is very much work in progress, so please don't try to use it just yet!
+> ⚠️ Starship is still a work in progress but is now far enough along to be used as a prompt (I personally use it as my daily driver)
 
 Starship is a Rust port of the minimalistic, powerful, and extremely customizable prompt [Spaceship ZSH](https://github.com/denysdovhan/spaceship-prompt).
 
@@ -80,12 +81,10 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 
 ### Getting Started
 
-1. `cd` to the root of the **starship** repo
-
 1. Install the **starship** binary:
 
     ```bash
-    cargo install --path .
+    cargo install starship
     ```
 
 1. Add the init script to your shell's config file:
@@ -109,6 +108,10 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 
     eval (starship init fish)
     ```
+
+## Configuration
+
+> 🚧 Configuration features and documentation are in the process of being developed 
 
 ## Contributors
 
