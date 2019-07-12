@@ -16,7 +16,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.get_prefix().set_value("on ");
 
     module.new_segment("branch_char", GIT_BRANCH_CHAR);
-    module.new_segment("branch_name", branch_name.to_string());
+    module.new_segment("branch_name", branch_name);
 
     Some(module)
 }

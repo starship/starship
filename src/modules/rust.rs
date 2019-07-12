@@ -29,7 +29,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
             let formatted_version = format_rustc_version(rust_version);
             module.new_segment("symbol", RUST_CHAR);
-            module.new_segment("version", formatted_version);
+            module.new_segment("version", &formatted_version);
 
             Some(module)
         }

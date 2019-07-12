@@ -1,8 +1,8 @@
+use crate::config::TableExt;
 use crate::segment::Segment;
 use ansi_term::Style;
 use ansi_term::{ANSIString, ANSIStrings};
 use std::fmt;
-use std::string::ToString;
 
 /// A module is a collection of segments showing data for a single integration
 /// (e.g. The git module shows the current git branch and status)
@@ -40,14 +40,11 @@ impl<'a> Module<'a> {
     }
 
     /// Get a reference to a newly created segment in the module
-    pub fn new_segment<T>(&mut self, name: &str, value: T) -> &mut Segment
-    where
-        T: Into<String>,
-    {
+    pub fn new_segment(&mut self, name: &str, value: &str) -> &mut Segment {
         let mut segment = Segment::new(name);
         segment.set_style(self.style);
         // Use the provided value unless overwritten by config
-        segment.set_value(self.config_value(name).unwrap_or_else(|| value.into()));
+        segment.set_value(self.config_value(name).unwrap_or(value));
         self.segments.push(segment);
 
         self.segments.last_mut().unwrap()
@@ -99,16 +96,8 @@ impl<'a> Module<'a> {
     }
 
     /// Get a module's config value as a string
-    fn config_value(&self, key: &str) -> Option<String> {
-        self.config
-            // Find the config value by its key
-            .map(|config| config.get(key))
-            .unwrap_or(None)
-            // Get the config value as a `&str`
-            .map(toml::Value::as_str)
-            .unwrap_or(None)
-            // Convert it to a String
-            .map(str::to_string)
+    fn config_value(&self, key: &str) -> Option<&str> {
+        self.config.and_then(|config| config.get_as_str(key))
     }
 }
 

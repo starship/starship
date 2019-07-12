@@ -19,7 +19,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             module.get_prefix().set_value("is ");
 
             module.new_segment("symbol", PACKAGE_CHAR);
-            module.new_segment("version", package_version);
+            module.new_segment("version", &package_version);
 
             Some(module)
         }
