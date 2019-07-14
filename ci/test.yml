@@ -24,4 +24,4 @@ jobs:
           cargo test
         env:
           CI: "true"
-        displayName: cargo test
+        displayName: cargo test --include-ignored
