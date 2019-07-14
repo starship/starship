@@ -45,7 +45,7 @@ fn get_rust_version() -> Option<String> {
 }
 
 fn format_rustc_version(mut rustc_stdout: String) -> String {
-    let offset = &rustc_stdout.find('(').unwrap_or(rustc_stdout.len());
+    let offset = &rustc_stdout.find('(').unwrap_or_else(|| rustc_stdout.len());
     let formatted_version: String = rustc_stdout.drain(..offset).collect();
 
     format!("v{}", formatted_version.replace("rustc", "").trim())

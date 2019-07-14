@@ -1,3 +1,7 @@
+# defaults for any parameters that aren't specified
+parameters:
+  rust_version: stable
+
 steps:
   # Linux and macOS
   - script: |
@@ -18,8 +22,26 @@ steps:
       RUSTUP_TOOLCHAIN: ${{parameters.rust_version}}
     displayName: "Install rust (windows)"
     condition: eq(variables['Agent.OS'], 'Windows_NT')
-  # All platforms.
+  # Install additional components:
+  - ${{ each component in parameters.components }}:
+      - script: rustup component add ${{ component }}
+
+  # TEMPORATY FIX UNTIL https://github.com/rust-embedded/cross/pull/169 is merged.
   - script: |
-        rustc -Vv
-        cargo -V
+      git config --global user.email "not_necessery@dont.need"
+      git config --global user.name "I merge the things"
+      git clone https://github.com/rust-embedded/cross
+      cd cross
+      git remote add pitkley https://github.com/pitkley/cross
+      git fetch pitkley
+      git checkout 718a19c
+      git merge -m "No pseudo tty" pitkley/docker-no-pseudo-tty
+      cargo install --force --path .
+    displayName: Instaling cross supprot
+  # All platforms
+  - script: |
+      rustup -V
+      rustup component list --installed
+      rustc -Vv
+      cargo -V
     displayName: Query rust and cargo versions

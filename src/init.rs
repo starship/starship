@@ -30,11 +30,3 @@ pub fn init(shell_name: &str) {
         print!("{}", script);
     }
 }
-
-#[derive(Debug)]
-enum Shell {
-    Bash,
-    Fish,
-    Zsh,
-    Unsupported(String),
-}

@@ -1,23 +1,77 @@
 jobs:
   # Check formatting
-  - template: ci/azure-rustfmt.yml
+  - template: ci/rustfmt.yml
     parameters:
       name: rustfmt
+      displayName: Check formatting
 
-  # Test with Rust stable
-  - template: ci/azure-test-stable.yml
+  # Run linter
+  - template: ci/cargo-clippy.yml
     parameters:
-      name: test_starship
-      displayName: Test starship
+      name: cargo_clippy
+      displayName: Run linter
 
-  # Test with Rust nightly
-  - template: ci/azure-test-nightly.yml
+  # Cargo check
+  - template: ci/cargo-check.yml
     parameters:
-      name: test_nightly
-      displayName: Check starship with nightly
+      name: cargo_check
+      displayName: Cargo check
 
-  # Run the integration tests in a Docker container
-  - template: ci/azure-test-docker.yml
-    parameters: 
+  ##############
+  # Test stage #
+  ##############
+
+  # Test stable
+  - template: ci/test.yml
+    parameters:
+      dependsOn:
+        - cargo_check
+      name: cargo_test_stable
+      displayName: Cargo test
+      cross: true # Test on Windows and macOS
+
+  # Test nightly
+  - template: ci/test.yml
+    parameters:
+      name: cargo_test_nightly
+      displayName: Cargo test
+      rust_version: nightly
+
+  # Test docker
+  # Runs integration tests as a starship developer would run them locally
+  - template: ci/test-docker.yml
+    parameters:
       name: test_docker
-      displayName: Test starship Docker
+      displayName: Docker test
+
+  ################
+  # Release stage #
+  ################
+
+  # Release binary
+  - template: ci/github-release.yml
+    parameters:
+      name: github_release
+      dependsOn:
+        - rustfmt
+        - cargo_check
+        - cargo_clippy
+        - cargo_test_stable
+        - test_docker
+      rust_version: stable
+      condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
+      contents: |
+        *
+        !*.rlib
+        !*.d
+        !.*
+      targets:
+        - x86_64-unknown-linux-gnu
+        # Windows support temporarily disabled
+        # - x86_64-pc-windows-gnu
+        # - x86_64-pc-windows-msvc
+        - x86_64-apple-darwin
+      github:
+        gitHubConnection: StarshipRelease
+        repositoryName: starship/starship
+        isPreRelease: true
