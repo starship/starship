@@ -1,3 +1,7 @@
+# defaults for any parameters that aren't specified
+parameters:
+  rust_version: stable
+
 steps:
   # Linux and macOS
   - script: |
@@ -18,8 +22,14 @@ steps:
       RUSTUP_TOOLCHAIN: ${{parameters.rust_version}}
     displayName: "Install rust (windows)"
     condition: eq(variables['Agent.OS'], 'Windows_NT')
-  # All platforms.
+  # Install additional components:
+  - ${{ each component in parameters.components }}:
+      - script: rustup component add ${{ component }}
+
+  # All platforms
   - script: |
-        rustc -Vv
-        cargo -V
+      rustup -V
+      rustup component list --installed
+      rustc -Vv
+      cargo -V
     displayName: Query rust and cargo versions
