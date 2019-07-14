@@ -31,7 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
             let formatted_version = format_python_version(python_version);
             module.new_segment("symbol", PYTHON_CHAR);
-            module.new_segment("version", formatted_version);
+            module.new_segment("version", &formatted_version);
 
             Some(module)
         }

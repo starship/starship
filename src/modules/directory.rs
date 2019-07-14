@@ -38,7 +38,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Truncate the dir string to the maximum number of path components
     let truncated_dir_string = truncate(dir_string, DIR_TRUNCATION_LENGTH);
-    module.new_segment("path", truncated_dir_string);
+    module.new_segment("path", &truncated_dir_string);
 
     module.get_prefix().set_value("in ");
 

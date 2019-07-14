@@ -69,12 +69,18 @@ impl Config {
 /// Extends `toml::value::Table` with useful methods
 pub trait TableExt {
     fn get_as_bool(&self, key: &str) -> Option<bool>;
+    fn get_as_str(&self, key: &str) -> Option<&str>;
 }
 
 impl TableExt for toml::value::Table {
     /// Get a key from a module's configuration as a boolean
     fn get_as_bool(&self, key: &str) -> Option<bool> {
         self.get(key).map(toml::Value::as_bool).unwrap_or(None)
+    }
+
+    /// Get a key from a module's configuration as a string
+    fn get_as_str(&self, key: &str) -> Option<&str> {
+        self.get(key).map(toml::Value::as_str).unwrap_or(None)
     }
 }
 
@@ -86,14 +92,30 @@ mod tests {
         let mut table = toml::value::Table::new();
 
         // Use with boolean value
-        table.insert("boolean".to_string(), toml::value::Value::Boolean(true));
+        table.insert(String::from("boolean"), toml::value::Value::Boolean(true));
         assert_eq!(table.get_as_bool("boolean"), Some(true));
 
         // Use with string value
         table.insert(
-            "string".to_string(),
-            toml::value::Value::String("true".to_string()),
+            String::from("string"),
+            toml::value::Value::String(String::from("true")),
         );
         assert_eq!(table.get_as_bool("string"), None);
+    }
+
+    #[test]
+    fn table_get_as_str() {
+        let mut table = toml::value::Table::new();
+
+        // Use with string value
+        table.insert(
+            String::from("string"),
+            toml::value::Value::String(String::from("hello")),
+        );
+        assert_eq!(table.get_as_str("string"), Some("hello"));
+
+        // Use with boolean value
+        table.insert(String::from("boolean"), toml::value::Value::Boolean(true));
+        assert_eq!(table.get_as_str("boolean"), None);
     }
 }
