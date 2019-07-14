@@ -17,18 +17,6 @@ jobs:
       name: cargo_check
       displayName: Cargo check
 
-  # Test with Rust stable
-  - template: ci/azure-test-stable.yml
-    parameters:
-      name: test_starship
-      displayName: Test starship
-
-  # Test with Rust nightly
-  - template: ci/azure-test-nightly.yml
-    parameters:
-      name: test_nightly
-      displayName: Check starship with nightly
-
   ##############
   # Test stage #
   ##############
