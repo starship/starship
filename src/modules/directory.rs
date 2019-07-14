@@ -79,7 +79,7 @@ fn truncate(dir_string: String, length: usize) -> String {
         return dir_string;
     }
 
-    let components = dir_string.split("/").collect::<Vec<&str>>();
+    let components = dir_string.split('/').collect::<Vec<&str>>();
     if components.len() <= length {
         return dir_string;
     }
