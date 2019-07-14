@@ -20,5 +20,5 @@ jobs:
 
     # Testing targets
     - ${{ each test_target in parameters.test_targets }}:
-       - script: cross test --target  ${{ test_target }} --include-ignored
+       - script: cross test -- --include-ignored --target ${{ test_target }}
        - script: cargo clean

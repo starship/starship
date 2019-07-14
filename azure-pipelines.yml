@@ -44,7 +44,6 @@ jobs:
       name: cargo_cross
       displayName: Cross check and test
       test_targets:
-        - mips-unknown-linux-gnu
         - armv7-unknown-linux-musleabihf
         - x86_64-unknown-linux-gnu
 
