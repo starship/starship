@@ -22,7 +22,7 @@ jobs:
       - template: install-rust.yml
       - template: setup-test-env.yml
       - script: |
-          cargo test
+          cargo test  -- -Z unstable-options --include-ignored 
         env:
           CI: "true"
-        displayName: cargo test --include-ignored
+        displayName: cargo test
