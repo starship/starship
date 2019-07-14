@@ -60,29 +60,29 @@ jobs:
   ################
     
   # Release binary
-  - template: ci/github-release.yml@templates
+  - template: ci/github-release.yml
     parameters:
-    name: github_release
-    dependsOn:
-        - rustfmt
-        - cargo_check
-        - cargo_clippy
-        - cargo_test_stable
-        - cargo_cross
-        - test_docker
-    rust_version: stable
-    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
-    contents: |
-      *
-      !*.rlib
-      !*.d
-      !.*
-    targets:
-      - x86_64-unknown-linux-gnu
-      - x86_64-pc-windows-gnu
-      - x86_64-pc-windows-msvc
-      - x86_64-apple-darwin
-    github:
-      gitHubConnection: StarshipRelease
-      repositoryName: starship/starship
-      isPreRelease: true
+      name: github_release
+      dependsOn:
+          - rustfmt
+          - cargo_check
+          - cargo_clippy
+          - cargo_test_stable
+          - cargo_cross
+          - test_docker
+      rust_version: stable
+      condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
+      contents: |
+        *
+        !*.rlib
+        !*.d
+        !.*
+      targets:
+        - x86_64-unknown-linux-gnu
+        - x86_64-pc-windows-gnu
+        - x86_64-pc-windows-msvc
+        - x86_64-apple-darwin
+      github:
+        gitHubConnection: StarshipRelease
+        repositoryName: starship/starship
+        isPreRelease: true
