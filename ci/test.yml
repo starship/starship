@@ -12,8 +12,9 @@ jobs:
         ${{ if parameters.cross }}:
           MacOS:
             vmImage: macOS-10.13
-          Windows:
-            vmImage: vs2017-win2016
+          # Temporarily disable Windows support
+          # Windows:
+          #   vmImage: vs2017-win2016
     pool:
       vmImage: $(vmImage)
 
