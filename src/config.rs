@@ -24,7 +24,7 @@ impl Config {
         let file_path = match env::var("STARSHIP_CONFIG") {
             Ok(path) => {
                 // Use $STARSHIP_CONFIG as the config path if available
-                log::debug!("STARSHIP_CONFIG is set: {}", &path);
+                log::debug!("STARSHIP_CONFIG is set: \n{}", &path);
                 path
             }
             Err(_) => {
@@ -50,7 +50,7 @@ impl Config {
         }?;
 
         let config = toml::from_str(&toml_content).ok()?;
-        log::debug!("Config found: \n{:?}", &config);
+        log::debug!("Config parsed: \n{:?}", &config);
         Some(config)
     }
 
@@ -61,26 +61,75 @@ impl Config {
             .get(module_name)
             .map(toml::Value::as_table)
             .unwrap_or(None);
-        log::debug!("Config found for {}: {:?}", &module_name, &module_config);
+
+        if module_config.is_some() {
+            log::debug!(
+                "Config found for \"{}\": \n{:?}",
+                &module_name,
+                &module_config
+            );
+        } else {
+            log::trace!("No config found for \"{}\"", &module_name);
+        }
+
         module_config
     }
 }
 
 /// Extends `toml::value::Table` with useful methods
 pub trait TableExt {
+    fn get_config(&self, key: &str) -> Option<&toml::value::Value>;
     fn get_as_bool(&self, key: &str) -> Option<bool>;
     fn get_as_str(&self, key: &str) -> Option<&str>;
 }
 
 impl TableExt for toml::value::Table {
+    /// Get the config value for a given key
+    fn get_config(&self, key: &str) -> Option<&toml::value::Value> {
+        log::trace!("Looking for config key \"{}\"", key);
+        let config_value = self.get(key);
+
+        if config_value.is_some() {
+            log::trace!("Config found for \"{}\": {:?}", key, &config_value);
+        } else {
+            log::trace!("No value found for \"{}\"", key);
+        }
+
+        config_value
+    }
+
     /// Get a key from a module's configuration as a boolean
     fn get_as_bool(&self, key: &str) -> Option<bool> {
-        self.get(key).map(toml::Value::as_bool).unwrap_or(None)
+        let value = self.get_config(key)?;
+        let bool_value = value.as_bool();
+
+        if bool_value.is_none() {
+            log::debug!(
+                "Expected \"{}\" to be a boolean. Instead received {} of type {}.",
+                key,
+                value,
+                value.type_str()
+            );
+        }
+
+        bool_value
     }
 
     /// Get a key from a module's configuration as a string
     fn get_as_str(&self, key: &str) -> Option<&str> {
-        self.get(key).map(toml::Value::as_str).unwrap_or(None)
+        let value = self.get_config(key)?;
+        let str_value = value.as_str();
+
+        if str_value.is_none() {
+            log::debug!(
+                "Expected \"{}\" to be a string. Instead received {} of type {}.",
+                key,
+                value,
+                value.type_str()
+            );
+        }
+
+        str_value
     }
 }
 
