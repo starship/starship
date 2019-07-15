@@ -1,3 +1,9 @@
+trigger:
+  branches:
+    include: ["*"]
+  tags:
+    include: ["*"]
+
 jobs:
   # Check formatting
   - template: ci/rustfmt.yml
