@@ -107,7 +107,7 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
     Add the following to the end of `~/.config/fish/config.fish`:
 
     ```fish
-    # ~/.config/config.fish
+    # ~/.config/fish/config.fish
 
     eval (starship init fish)
     ```
