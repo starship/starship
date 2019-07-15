@@ -4,7 +4,7 @@ parameters:
     isPreRelease: false
     repositoryName: "$(Build.Repository.Name)"
   dependsOn: []
-  displayName: "Release to github"
+  displayName: "Release to GitHub"
   tarCompression: "none"
   archiveType: "zip"
   archiveName: "$(Build.Repository.Name)"

@@ -80,4 +80,4 @@ jobs:
       github:
         gitHubConnection: StarshipRelease
         repositoryName: starship/starship
-        isPreRelease: true
+        isPreRelease: false
