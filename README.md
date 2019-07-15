@@ -14,6 +14,9 @@
 
 Starship is a Rust port of the minimalistic, powerful, and extremely customizable prompt [Spaceship ZSH](https://github.com/denysdovhan/spaceship-prompt).
 
+<p align="center">
+  <img alt="Starship with Hyper and One Dark" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif">
+</p>
 
 ## Development plans
 
