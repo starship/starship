@@ -5,8 +5,6 @@ parameters:
     repositoryName: "$(Build.Repository.Name)"
   dependsOn: []
   displayName: "Release to GitHub"
-  tarCompression: "none"
-  archiveType: "zip"
   archiveName: "$(Build.Repository.Name)"
 
 jobs:
@@ -45,9 +43,9 @@ jobs:
                 displayName: Gather assets
                 inputs:
                   rootFolderOrFile: "$(Build.BinariesDirectory)/${{ build_target }}"
-                  archiveType: ${{ parameters.archiveType }}
-                  tarCompression: ${{ parameters.tarCompression }}
-                  archiveFile: "$(Build.ArtifactStagingDirectory)/${{ parameters.archiveName }}-$(build.my_tag)-${{ build_target }}.zip"
+                  archiveType: "tar"
+                  tarCompression: "gz"
+                  archiveFile: "$(Build.ArtifactStagingDirectory)/${{ parameters.archiveName }}-$(build.my_tag)-${{ build_target }}.tar.gz"
 
       - task: GitHubRelease@0
         displayName: Create release
@@ -97,9 +95,9 @@ jobs:
                 displayName: Gather assets
                 inputs:
                   rootFolderOrFile: "$(Build.BinariesDirectory)/${{ build_target }}"
-                  archiveType: ${{ parameters.archiveType }}
-                  tarCompression: ${{ parameters.tarCompression }}
-                  archiveFile: "$(Build.ArtifactStagingDirectory)/${{ parameters.archiveName }}-$(build.my_tag)-${{ build_target }}.zip"
+                  archiveType: "tar"
+                  tarCompression: "gz"
+                  archiveFile: "$(Build.ArtifactStagingDirectory)/${{ parameters.archiveName }}-$(build.my_tag)-${{ build_target }}.tar.gz"
 
               - task: GitHubRelease@0
                 displayName: Create release
@@ -148,8 +146,8 @@ jobs:
                 displayName: Gather assets
                 inputs:
                   rootFolderOrFile: "$(Build.BinariesDirectory)/${{ build_target }}"
-                  archiveType: ${{ parameters.archiveType }}
-                  tarCompression: ${{ parameters.tarCompression }}
+                  archiveType: "zip"
+                  tarCompression: "None"
                   archiveFile: "$(Build.ArtifactStagingDirectory)/${{ parameters.archiveName }}-$(build.my_tag)-${{ build_target }}.zip"
 
               - task: GitHubRelease@0
