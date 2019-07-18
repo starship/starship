@@ -1,0 +1,23 @@
+jobs:
+- job: ${{ parameters.name }}
+  displayName: ${{ parameters.displayName }}
+  pool:
+    vmImage: ubuntu-16.04
+
+  steps:
+  - script: docker pull starshipcommand/starship-test
+    displayName: Pull docker image
+  
+  - script: |
+      # In order to run tests as a non-root user in docker,
+      # the files need to be accessible to non-root users
+      chmod -R a+w .
+      ./integration_test
+    displayName: Run integration test suite
+
+  - script: |
+      docker login -u $(dockerUsername) -p $(dockerPassword)
+      docker push starshipcommand/starship-test
+    # Only push new image if on master and build is passing
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: Push image to dockerhub

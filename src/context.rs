@@ -146,7 +146,7 @@ impl<'a> ScanDir<'a> {
 
 /// checks to see if the pathbuf matches a file or folder name
 pub fn path_has_name<'a>(dir_entry: &PathBuf, names: &'a [&'a str]) -> bool {
-    let found_file_or_folder_name = names.into_iter().find(|file_or_folder_name| {
+    let found_file_or_folder_name = names.iter().find(|file_or_folder_name| {
         dir_entry
             .file_name()
             .and_then(OsStr::to_str)
@@ -162,7 +162,7 @@ pub fn path_has_name<'a>(dir_entry: &PathBuf, names: &'a [&'a str]) -> bool {
 
 /// checks if pathbuf matches the extension provided
 pub fn has_extension<'a>(dir_entry: &PathBuf, extensions: &'a [&'a str]) -> bool {
-    let found_ext = extensions.into_iter().find(|ext| {
+    let found_ext = extensions.iter().find(|ext| {
         dir_entry
             .extension()
             .and_then(OsStr::to_str)

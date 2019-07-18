@@ -14,6 +14,9 @@
 
 Starship is a Rust port of the minimalistic, powerful, and extremely customizable prompt [Spaceship ZSH](https://github.com/denysdovhan/spaceship-prompt).
 
+<p align="center">
+  <img alt="Starship with Hyper and One Dark" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif">
+</p>
 
 ## Development plans
 
@@ -104,7 +107,7 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
     Add the following to the end of `~/.config/fish/config.fish`:
 
     ```fish
-    # ~/.config/config.fish
+    # ~/.config/fish/config.fish
 
     eval (starship init fish)
     ```
