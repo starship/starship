@@ -12,5 +12,5 @@ steps:
   # Install Python
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: "3.6.8"
+      versionSpec: "3.4.8"
     displayName: "Install a fixed version of Python"
