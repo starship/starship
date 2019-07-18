@@ -1,0 +1,5 @@
+[book]
+authors = ["Tiffany"]
+multilingual = false
+src = "src"
+title = "starship: cross-shell prompt"
