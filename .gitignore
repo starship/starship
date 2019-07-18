@@ -13,3 +13,5 @@ Cargo.lock
 
 # Intellij IDE configuration
 .idea/
+
+docs/book
