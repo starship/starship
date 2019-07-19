@@ -10,7 +10,12 @@ steps:
       versionSpec: "1.10"
     displayName: "Install a fixed version of Go"
   # Install Python
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: "3.4.8"
+  - job: Install Python
+    steps:
+      - script: |
+          echo '##vso[task.setvariable variable=PYTHON_VERSION]3.4.8'
+      - script: |
+          curl https://pyenv.run | bash
     displayName: "Install a fixed version of Python"
+    # inputs:
+    #   versionSpec: "3.4.8"
