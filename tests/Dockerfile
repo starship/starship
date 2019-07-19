@@ -28,7 +28,7 @@ RUN git clone https://github.com/syndbg/goenv.git $GOENV_ROOT \
 RUN go version
 
 # Install Python
-ENV PYTHON_VERSION 3.6.8
+ENV PYTHON_VERSION 3.6.9
 ENV PYENV_ROOT /home/nonroot/.pyenv
 ENV PATH $PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH
 RUN curl https://pyenv.run | bash \
