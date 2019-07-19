@@ -20,7 +20,7 @@ maintenance = { status = "actively-developed" }
 
 [dependencies]
 clap = "2.33.0"
-ansi_term = "0.11.0"
+ansi_term = "0.12.0"
 dirs = "2.0.1"
 git2 = "0.9.1"
 toml = "0.5.1"
