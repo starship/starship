@@ -2,7 +2,7 @@ use ansi_term::Color;
 
 use super::{Context, Module};
 
-/// Creates a segment for the battery percentage and charging state
+/// Creates a module for the battery percentage and charging state
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const BATTERY_FULL: &str = "•";
     const BATTERY_CHARGING: &str = "⇡";
@@ -28,13 +28,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     match state {
         battery::State::Full => {
-            module.new_segment("full", BATTERY_FULL);
+            module.new_segment("full_symbol", BATTERY_FULL);
         }
         battery::State::Charging => {
-            module.new_segment("charging", BATTERY_CHARGING);
+            module.new_segment("charging_symbol", BATTERY_CHARGING);
         }
         battery::State::Discharging => {
-            module.new_segment("discharging", BATTERY_DISCHARGING);
+            module.new_segment("discharging_symbol", BATTERY_DISCHARGING);
         }
         _ => return None,
     }

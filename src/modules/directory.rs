@@ -3,7 +3,7 @@ use std::path::Path;
 
 use super::{Context, Module};
 
-/// Creates a segment with the current directory
+/// Creates a module with the current directory
 ///
 /// Will perform path contraction and truncation.
 /// **Contraction**

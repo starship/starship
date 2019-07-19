@@ -3,13 +3,13 @@ use std::process::Command;
 
 use super::{Context, Module};
 
-/// Creates a segment with the current Python version
+/// Creates a module with the current Python version
 ///
 /// Will display the Python version if any of the following criteria are met:
-///     - Current directory contains a `.py` file
 ///     - Current directory contains a `.python-version` file
 ///     - Current directory contains a `requirements.txt` file
 ///     - Current directory contains a `pyproject.toml` file
+///     - Current directory contains a file with the `.py` extension
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_py_project = context
         .new_scan_dir()
