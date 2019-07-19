@@ -4,5 +4,5 @@
 
 - [Usage](./usage.md)
 - [Configuration](./configuration.md)
-- [API](./api/README.md)
+- [API](./api/index.md)
   - [context](./api/context.md)

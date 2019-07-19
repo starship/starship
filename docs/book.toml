@@ -1,5 +1,4 @@
 [book]
-authors = ["starship"]
-multilingual = false
 src = "src"
 title = "starship: cross-shell prompt"
+language = "en"

@@ -1,57 +1,67 @@
 # Configuration
 
-In order to change the default configuration of starship, start by creating a `starship.toml` file in your home config folder:
+To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
 ```shell
 touch ~/.config/starship.toml
 ```
 
-Any overrides will go in there.
-
-## Format
+All configuration for starship is done in a [TOML](https://github.com/toml-lang/toml) file.
+Here we will demonstrate a couple simple configuration examples.
 
 ```toml
-[module]
-key = "value"
+# Replace the "➜" symbol in the prompt with "❯"
+[char]           # The name of the module we are confguring is "char"
+symbol = "❯"     # The "symbol" segment is being set to "❯"
 
-# Example which changes the prompt to use > instead of ➜ segment
-[char]
-symbol = ">"
-# false by default. If true, the module would not show in the prompt
-disabled = "false"
+# Disable the package module, hiding it from the prompt completely
+[package]
+disabled = true
 ```
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the nodejs module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
+## Terminology
 
-**Segment**: Smaller sub-components that compose a module. For example, the symbol segment in the nodejs module contains the character that is shown before the version number (⬢ by default).
+**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
-Here is the representation of the node module. You can override any of these in your config file **other than the prefix and suffix** as well as disable the module entirely:
+**Segment**: Smaller sub-components that compose a module. For example, the "symbol" segment in the "nodejs" module contains the character that is shown before the version number (⬢ by default).
+
+Here is the representation of the node module. In the following example, "symbol" and "version"
+are segments within it. Every module also has a prefix and suffix that are the default terminal color.
 
 ```
 [prefix]      [symbol]     [version]    [suffix]
  "via "         "⬢"        "v10.4.1"       ""
 ```
 
-### Configuration keys
+## Planned Configuration
 
-We have two types of configuration keys right now.
+- [x] Overriding segments within a module
+- [x] Disabling a module entirely
+- [ ] Overriding the prefix and suffix of a module
+- [ ] Prompt order
+- [ ] Module and segment colors and text styling
 
-- `disabled`, a boolean, which will work on any moudle and accepts a boolean value. If it's set to `true`, the section will not appear in the prompt.
-- Segments names, which you can use to override their default values. NOTE: we are currently working on documentation to expose each modules' segments' name 🙏.
+## Modules
 
-## Example
+### Battery
 
-Ally uses Node and wants to change the hexagon (⬢) symbol into a snake with a party hat (🐦) emoji.
+The battery module shows how charged the device's battery is and its current charging status.
+The module is only visible when the device's battery is below 10%.
 
-<div style="display: flex;justify-content:center;">
-	<img src="assets/example-module.png" height=60/>
-</div>
+| Variable             | Default | Description                                       |
+| -------------------- | ------- | ------------------------------------------------- |
+| `full_symbol`        | `"•"`   | The symbol shown when the battery is full.        |
+| `charging_symbol`    | `"⇡"`   | The symbol shown when the battery is charging.    |
+| `discharging_symbol` | `"⇣"`   | The symbol shown when the battery is discharging. |
+| `disabled`           | `false` | Disables the `battery` module.                    |
 
-1. She finds in the [node module file](https://github.com/starship/starship/blob/master/src/modules/nodejs.rs#L33) that the segment name she's looking for is `symbol`.
-2. She then updates her `starship.toml`, overriding `symbol` with her own.
-   ```toml
-   # ~/.config/starship.toml
-   [node]
-   symbol = "🐦"
-   ```
-3. Finally, she saves it and exits. Her prompt has now changed to use `🐦` as Node symbol.
+#### Example
+
+```toml
+# ~/.config/starship.toml
+
+[battery]
+full_symbol = "🔋"
+charging_symbol = "⚡️"
+discharging_symbol = "💀"
+```
