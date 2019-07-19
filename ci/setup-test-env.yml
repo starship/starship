@@ -11,9 +11,12 @@ steps:
     displayName: "Install a fixed version of Go"
   # Install Python
   - script: |
-      echo '##vso[task.setvariable variable=PYTHON_VERSION]3.4.8'
+      echo "##vso[task.setvariable variable=PYTHON_VERSION]3.4.8"
+      echo "##vso[task.setvariable variable=PYENV_ROOT]~/.pyenv"
+      echo "##vso[task.setvariable variable=PATH]$PATH:$PYENV_ROOT/bin:$PYENV_ROOT/shims"
   - script: |
       curl https://pyenv.run | bash
-      pyenv install $PYTHON_VERSION
-      pyenv global $PYTHON_VERSION
+      && pyenv install $PYTHON_VERSION
+      && pyenv global $PYTHON_VERSION
+      && chmod -R a+x $PYENV_ROOT
     displayName: "Install a fixed version of Python"
