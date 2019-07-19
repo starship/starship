@@ -7,9 +7,9 @@ use crate::common::{self, TestCommand};
 fn char_symbol_configuration() -> io::Result<()> {
     let expected = format!("{} ", Color::Green.bold().paint("❯"));
 
-    let output = common::render_module("char")
+    let output = common::render_module("character")
         .use_config(toml::toml! {
-            [char]
+            [character]
             symbol = "❯"
         })
         .output()?;

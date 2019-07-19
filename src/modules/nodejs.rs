@@ -3,7 +3,7 @@ use std::process::Command;
 
 use super::{Context, Module};
 
-/// Creates a segment with the current Node.js version
+/// Creates a module with the current Node.js version
 ///
 /// Will display the Node.js version if any of the following criteria are met:
 ///     - Current directory contains a `.js` file

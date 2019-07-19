@@ -1,6 +1,6 @@
 use super::{Context, Module};
 
-/// Creates a segment for the line break
+/// Creates a module for the line break
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const LINE_ENDING: &str = "\n";
 

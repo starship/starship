@@ -3,7 +3,7 @@ use std::process::Command;
 
 use super::{Context, Module};
 
-/// Creates a segment with the current Go version
+/// Creates a module with the current Go version
 ///
 /// Will display the Go version if any of the following criteria are met:
 ///     - Current directory contains a `go.mod` file
@@ -11,8 +11,8 @@ use super::{Context, Module};
 ///     - Current directory contains a `glide.yaml` file
 ///     - Current directory contains a `Gopkg.yml` file
 ///     - Current directory contains a `Gopkg.lock` file
-///     - Current directory contains a `.go` file
 ///     - Current directory contains a `Godeps` directory
+///     - Current directory contains a file with the `.go` extension
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_go_project = context
         .new_scan_dir()

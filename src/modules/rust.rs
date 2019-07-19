@@ -3,7 +3,7 @@ use std::process::Command;
 
 use super::{Context, Module};
 
-/// Creates a segment with the current Rust version
+/// Creates a module with the current Rust version
 ///
 /// Will display the Rust version if any of the following criteria are met:
 ///     - Current directory contains a file with a `.rs` extension

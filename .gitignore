@@ -13,3 +13,7 @@ Cargo.lock
 
 # Intellij IDE configuration
 .idea/
+
+# Compiled files for documentation
+docs/node_modules
+docs/.vuepress/dist/
