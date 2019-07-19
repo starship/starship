@@ -14,4 +14,5 @@ Cargo.lock
 # Intellij IDE configuration
 .idea/
 
-docs/book
+# Compiled files for documentation
+docs/node_modules

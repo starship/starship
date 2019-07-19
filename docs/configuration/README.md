@@ -1,13 +1,21 @@
+---
+sidebar: auto
+---
+
 # Configuration
+
+::: tip
+🔥 Configuration is currently being worked on.
+Many new configuration options will be available in coming releases.
+:::
 
 To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
 ```shell
-touch ~/.config/starship.toml
+$ touch ~/.config/starship.toml
 ```
 
-All configuration for starship is done in a [TOML](https://github.com/toml-lang/toml) file.
-Here we will demonstrate a couple simple configuration examples.
+All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 
 ```toml
 # Replace the "➜" symbol in the prompt with "❯"
@@ -32,14 +40,6 @@ are segments within it. Every module also has a prefix and suffix that are the d
 [prefix]      [symbol]     [version]    [suffix]
  "via "         "⬢"        "v10.4.1"       ""
 ```
-
-## Planned Configuration
-
-- [x] Overriding segments within a module
-- [x] Disabling a module entirely
-- [ ] Overriding the prefix and suffix of a module
-- [ ] Prompt order
-- [ ] Module and segment colors and text styling
 
 ## Modules
 
