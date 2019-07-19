@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: /logo.png
+heroImage: /logo.svg
 actionText: Get Started →
 actionLink: /guide/
 footer: ISC Licensed | Copyright © 2019-present Matan Kushner
