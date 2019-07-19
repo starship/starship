@@ -61,7 +61,6 @@ I'm very new to Rust, so any help is appreciated when it comes to improving deve
 
 - [x] `starship.toml` configuration
 - [ ] Custom sections given commands or binaries
-- [ ] Self-updating
 
 ### Shell support
 
