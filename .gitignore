@@ -16,3 +16,4 @@ Cargo.lock
 
 # Compiled files for documentation
 docs/node_modules
+docs/.vuepress/dist/
