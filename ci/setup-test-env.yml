@@ -9,20 +9,28 @@ steps:
     inputs:
       versionSpec: "1.10"
     displayName: "Install a fixed version of Go"
+
+  # Because the Pipelines agent updates are out of sync, we can't install 3.6.9
+  # with PythonTool on macOS
+
   # Install Python
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: "3.6.9"
+    displayName: "Install a fixed version of Python"
+    condition: not(eq(variables['Agent.OS'], 'Darwin'))
+  # Install Python (macOS)
   - script: |
-      sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
-      libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
-      xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
-    condition: eq(variables['Agent.OS'], 'Linux')
-  - script: |
-      echo "##vso[task.setvariable variable=PYTHON_VERSION;]3.4.8"
+      echo "##vso[task.setvariable variable=PYTHON_VERSION;]3.6.9"
       echo "##vso[task.setvariable variable=PYENV_ROOT;]$HOME/.pyenv"
+    condition: eq(variables['Agent.OS'], 'Darwin')
   - script: |
       curl https://pyenv.run | bash
       echo "##vso[task.setvariable variable=PATH;]$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
+    condition: eq(variables['Agent.OS'], 'Darwin')
   - script: |
       eval "$(pyenv init -)"
       pyenv install $PYTHON_VERSION
       pyenv global $PYTHON_VERSION
+    condition: eq(variables['Agent.OS'], 'Darwin')
     displayName: "Install a fixed version of Python"
