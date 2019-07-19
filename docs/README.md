@@ -45,7 +45,7 @@ footer: ISC Licensed | Copyright © 2019-present Matan Kushner
 
     Add the following to the end of `~/.config/fish/config.fish`:
 
-    ```fish
+    ```sh
     # ~/.config/fish/config.fish
 
     eval (starship init fish)
