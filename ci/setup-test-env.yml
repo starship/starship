@@ -12,10 +12,11 @@ steps:
   # Install Python
   - script: |
       echo "##vso[task.setvariable variable=PYTHON_VERSION;]3.4.8"
-      echo "##vso[task.setvariable variable=PYENV_ROOT;]~/.pyenv"
-      echo "##vso[task.setvariable variable=PATH;]$PATH:~/.pyenv/bin"
+      echo "##vso[task.setvariable variable=PYENV_ROOT;]$HOME/.pyenv"
   - script: |
       curl https://pyenv.run | bash
+      echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin:/usr/local/cargo/bin"
+  - script: |
       pyenv install $PYTHON_VERSION
       pyenv global $PYTHON_VERSION
     displayName: "Install a fixed version of Python"
