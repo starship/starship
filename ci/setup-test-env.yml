@@ -14,6 +14,7 @@ steps:
       sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
       libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
       xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+    condition: not(eq(variables['Agent.OS'], 'Linux'))
   - script: |
       echo "##vso[task.setvariable variable=PYTHON_VERSION;]3.4.8"
       echo "##vso[task.setvariable variable=PYENV_ROOT;]$HOME/.pyenv"
