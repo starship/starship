@@ -3,7 +3,7 @@ mod character;
 mod directory;
 mod git_branch;
 mod git_status;
-mod go;
+mod golang;
 mod line_break;
 mod nodejs;
 mod package;
@@ -21,7 +21,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "node" | "nodejs" => nodejs::module(context),
         "rust" | "rustlang" => rust::module(context),
         "python" => python::module(context),
-        "go" | "golang" => go::module(context),
+        "go" | "golang" => golang::module(context),
         "line_break" => line_break::module(context),
         "package" => package::module(context),
         "git_branch" => git_branch::module(context),

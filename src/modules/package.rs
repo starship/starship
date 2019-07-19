@@ -5,7 +5,7 @@ use ansi_term::Color;
 use serde_json as json;
 use toml;
 
-/// Creates a segment with the current package version
+/// Creates a module with the current package version
 ///
 /// Will display if a version is defined for your Node.js or Rust project (if one exists)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {

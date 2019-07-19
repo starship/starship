@@ -4,7 +4,7 @@ use std::process::Command;
 
 use super::{Context, Module};
 
-/// Creates a segment with the current user's username
+/// Creates a module with the current user's username
 ///
 /// Will display the usename if any of the following criteria are met:
 ///     - The current user isn't the same as the one that is logged in ($LOGNAME != $USER)
