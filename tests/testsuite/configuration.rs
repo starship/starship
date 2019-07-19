@@ -9,7 +9,7 @@ fn char_symbol_configuration() -> io::Result<()> {
 
     let output = common::render_module("character")
         .use_config(toml::toml! {
-            [char]
+            [character]
             symbol = "❯"
         })
         .output()?;
