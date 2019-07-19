@@ -11,6 +11,10 @@ steps:
     displayName: "Install a fixed version of Go"
   # Install Python
   - script: |
+      sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+      libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+      xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+  - script: |
       echo "##vso[task.setvariable variable=PYTHON_VERSION;]3.4.8"
       echo "##vso[task.setvariable variable=PYENV_ROOT;]$HOME/.pyenv"
   - script: |
