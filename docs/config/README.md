@@ -1,7 +1,3 @@
----
-sidebarDepth: 2
----
-
 # Configuration
 
 ::: tip
@@ -27,7 +23,7 @@ symbol = "❯"     # The "symbol" segment is being set to "❯"
 disabled = true
 ```
 
-## Terminology
+### Terminology
 
 **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
@@ -41,14 +37,12 @@ are segments within it. Every module also has a prefix and suffix that are the d
  "via "         "⬢"        "v10.4.1"       ""
 ```
 
-## Modules
-
-### Battery
+## Battery
 
 The `battery` module shows how charged the device's battery is and its current charging status.
 The module is only visible when the device's battery is below 10%.
 
-#### Options
+### Options
 
 | Variable             | Default | Description                                       |
 | -------------------- | ------- | ------------------------------------------------- |
@@ -57,7 +51,7 @@ The module is only visible when the device's battery is below 10%.
 | `discharging_symbol` | `"⇣"`   | The symbol shown when the battery is discharging. |
 | `disabled`           | `false` | Disables the `battery` module.                    |
 
-#### Example
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -68,7 +62,7 @@ charging_symbol = "⚡️"
 discharging_symbol = "💀"
 ```
 
-### Character
+## Character
 
 The `character` module shows a character (usually an arrow) beside where the text
 is entered in your terminal.
@@ -77,14 +71,14 @@ The character will be green if the status of your
 last command had a successful status code (zero), and will be red if the last
 command had an unsuccessful status code (non-zero).
 
-#### Options
+### Options
 
 | Variable   | Default | Description                                          |
 | ---------- | ------- | ---------------------------------------------------- |
 | `symbol`   | `"➜"`   | The symbol used before the text input in the prompt. |
 | `disabled` | `false` | Disables the `character` module.                     |
 
-#### Example
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -93,30 +87,30 @@ command had an unsuccessful status code (non-zero).
 symbol = "❯"
 ```
 
-### Directory
+## Directory
 
 The `directory` module shows the path to your current directory, truncated to
 three parent folders. Your directory will also be truncated to the root of the
 git repo that you're currently in.
 
-#### Options
+### Options
 
 | Variable   | Default | Description                      |
 | ---------- | ------- | -------------------------------- |
 | `disabled` | `false` | Disables the `directory` module. |
 
-### Git Branch
+## Git Branch
 
 The `git_branch` module shows the active branch of the repo in your current directory.
 
-#### Options
+### Options
 
 | Variable   | Default | Description                                                                   |
 | ---------- | ------- | ----------------------------------------------------------------------------- |
 | `symbol`   | `" "`  | The symbol used before the branch name of the repo in your current directory. |
 | `disabled` | `false` | Disables the `git_branch` module.                                             |
 
-#### Example
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -125,12 +119,12 @@ The `git_branch` module shows the active branch of the repo in your current dire
 symbol = "🌱 "
 ```
 
-### Git Status
+## Git Status
 
 The `git_status` module shows symbols representing the state of the repo in your
 current directory.
 
-#### Options
+### Options
 
 | Variable     | Default | Description                                             |
 | ------------ | ------- | ------------------------------------------------------- |
@@ -146,7 +140,7 @@ current directory.
 | `deleted`    | `"✘"`   | A file's deletion has been added to the staging area.   |
 | `disabled`   | `false` | Disables the `git_status` module.                       |
 
-#### Example
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -164,7 +158,7 @@ renamed = "👅"
 deleted = "🗑"
 ```
 
-### Golang
+## Golang
 
 The `golang` module shows the currently installed version of Golang.
 The module will be shown if any of the following conditions are met:
@@ -177,14 +171,14 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `Godeps` directory
 - The current directory contains a file with the `.go` extension
 
-#### Options
+### Options
 
 | Variable   | Default | Description                                              |
 | ---------- | ------- | -------------------------------------------------------- |
 | `symbol`   | `"🐹 "` | The symbol used before displaying the version of Golang. |
 | `disabled` | `false` | Disables the `golang` module.                            |
 
-#### Example
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -193,17 +187,17 @@ The module will be shown if any of the following conditions are met:
 symbol = "🏎💨 "
 ```
 
-### Line Break
+## Line Break
 
 The `line_break` module separates the prompt into two lines.
 
-#### Options
+### Options
 
 | Variable   | Default | Description                                                        |
 | ---------- | ------- | ------------------------------------------------------------------ |
 | `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
-#### Example
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -212,7 +206,7 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
-### NodeJS
+## NodeJS
 
 The `nodejs` module shows the currently installed version of NodeJS.
 The module will be shown if any of the following conditions are met:
@@ -221,14 +215,14 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js` extension
 
-#### Options
+### Options
 
 | Variable   | Default | Description                                              |
 | ---------- | ------- | -------------------------------------------------------- |
 | `symbol`   | `"⬢ "`  | The symbol used before displaying the version of NodeJS. |
 | `disabled` | `false` | Disables the `nodejs` module.                            |
 
-#### Example
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -237,7 +231,7 @@ The module will be shown if any of the following conditions are met:
 symbol = "🤖 "
 ```
 
-### Package Version
+## Package Version
 
 The `package` module is shown when the current directory is the repository for a
 package, and shows its current version. The module currently supports `npm` and
@@ -251,14 +245,14 @@ package, and shows its current version. The module currently supports `npm` and
 > ⚠️ The version being shown is that of the package whose source code is in your
 > current directory, not your package manager.
 
-#### Options
+### Options
 
 | Variable   | Default | Description                                                |
 | ---------- | ------- | ---------------------------------------------------------- |
 | `symbol`   | `"📦 "` | The symbol used before displaying the version the package. |
 | `disabled` | `false` | Disables the `package` module.                             |
 
-#### Example
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -267,7 +261,7 @@ package, and shows its current version. The module currently supports `npm` and
 symbol = "🎁 "
 ```
 
-### Python
+## Python
 
 The `python` module shows the currently installed version of Python.
 The module will be shown if any of the following conditions are met:
@@ -277,14 +271,14 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `pyproject.toml` file
 - The current directory contains a file with the `.py` extension
 
-#### Options
+### Options
 
 | Variable   | Default | Description                                              |
 | ---------- | ------- | -------------------------------------------------------- |
 | `symbol`   | `"🐍 "` | The symbol used before displaying the version of Python. |
 | `disabled` | `false` | Disables the `python` module.                            |
 
-#### Example
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -293,7 +287,7 @@ The module will be shown if any of the following conditions are met:
 symbol = "👾 "
 ```
 
-### Rust
+## Rust
 
 The `rust` module shows the currently installed version of Rust.
 The module will be shown if any of the following conditions are met:
@@ -301,14 +295,14 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
 
-#### Options
+### Options
 
 | Variable   | Default | Description                                              |
 | ---------- | ------- | -------------------------------------------------------- |
 | `symbol`   | `"🦀 "` | The symbol used before displaying the version of Python. |
 | `disabled` | `false` | Disables the `rust` module.                              |
 
-#### Example
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -317,7 +311,7 @@ The module will be shown if any of the following conditions are met:
 symbol = "⚙️ "
 ```
 
-### Username
+## Username
 
 The `username` module shows active user's username.
 The module will be shown if any of the following conditions are met:
@@ -326,13 +320,13 @@ The module will be shown if any of the following conditions are met:
 - The current user isn't the same as the one that is logged in
 - The user is currently connected as an SSH session
 
-#### Options
+### Options
 
 | Variable   | Default | Description                     |
 | ---------- | ------- | ------------------------------- |
 | `disabled` | `false` | Disables the `username` module. |
 
-#### Example
+### Example
 
 ```toml
 # ~/.config/starship.toml
