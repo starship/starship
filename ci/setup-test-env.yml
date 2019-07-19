@@ -15,7 +15,7 @@ steps:
       echo "##vso[task.setvariable variable=PYENV_ROOT;]$HOME/.pyenv"
   - script: |
       curl https://pyenv.run | bash
-      echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin:/usr/local/cargo/bin"
+      echo "##vso[task.setvariable variable=PATH;]$PATH:$PYENV_ROOT/bin:$PYENV_ROOT/shims"
   - script: |
       pyenv install $PYTHON_VERSION
       pyenv global $PYTHON_VERSION
