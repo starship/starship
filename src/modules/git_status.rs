@@ -41,9 +41,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_style(module_style);
 
     let ahead_behind = get_ahead_behind(&repository, &branch_name);
-    log::debug!("Repo ahead/behind: {:?}", ahead_behind);
+    if ahead_behind != Ok((0, 0)) {
+        log::debug!("Repo ahead/behind: {:?}", ahead_behind);
+    } else {
+        log::trace!("No ahead/behind found");
+    }
+
     let stash_object = repository.revparse_single("refs/stash");
-    log::debug!("Stash object: {:?}", stash_object);
+    if stash_object.is_ok() {
+        log::debug!("Stash object: {:?}", stash_object);
+    } else {
+        log::trace!("No stash object found");
+    }
+
     let repo_status = get_repo_status(&repository);
     log::debug!("Repo status: {:?}", repo_status);
 

@@ -8,16 +8,34 @@ use std::ffi::OsStr;
 use std::fs;
 use std::path::PathBuf;
 
+/// Context contains data or common methods that may be used by multiple modules.
+/// The data contained within Context will be relevant to this particular rendering
+/// of the prompt.
 pub struct Context<'a> {
+    /// The deserialized configuration map from the user's `starship.toml` file.
     pub config: Config,
+
+    /// The current working directory that starship is being called in.
     pub current_dir: PathBuf,
+
+    /// A vector containing the full paths of all the files in `current_dir`.
     pub dir_files: Vec<PathBuf>,
+
+    /// The map of arguments that were passed when starship was called.
     pub arguments: ArgMatches<'a>,
+
+    /// If `current_dir` is a git repository or is contained within one,
+    /// this is the path to the root of that repo.
     pub repo_root: Option<PathBuf>,
+
+    /// If `current_dir` is a git repository or is contained within one,
+    /// this is the current branch name of that repo.
     pub branch_name: Option<String>,
 }
 
 impl<'a> Context<'a> {
+    /// Identify the current working directory and create an instance of Context
+    /// for it.
     pub fn new(arguments: ArgMatches) -> Context {
         // Retreive the "path" flag. If unavailable, use the current directory instead.
         let path = arguments
@@ -28,6 +46,7 @@ impl<'a> Context<'a> {
         Context::new_with_dir(arguments, path)
     }
 
+    /// Create a new instance of Context for the provided directory
     pub fn new_with_dir<T>(arguments: ArgMatches, dir: T) -> Context
     where
         T: Into<PathBuf>,
