@@ -89,6 +89,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "chipbuster",
+      "name": "Kevin Song",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/4605384?v=4",
+      "profile": "https://github.com/chipbuster",
+      "contributions": [
+        "bug",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
