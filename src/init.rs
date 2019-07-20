@@ -4,9 +4,7 @@ use std::path::Path;
 pub fn init(shell_name: &str) {
     log::debug!("Shell name: {}", shell_name);
 
-    let shell_basename = Path::new(shell_name)
-        .file_stem()
-        .and_then(OsStr::to_str);
+    let shell_basename = Path::new(shell_name).file_stem().and_then(OsStr::to_str);
 
     let setup_script = match shell_basename {
         Some("bash") => {
@@ -22,10 +20,11 @@ pub fn init(shell_name: &str) {
             Some(script)
         }
         None => {
-            println!("Invalid shell name provided: {}\\n\
-                    If this issue persists, please open an \
-                    issue in the starship repo: \\n\
-                    https://github.com/starship/starship/issues/new\\n\"",
+            println!(
+                "Invalid shell name provided: {}\\n\
+                 If this issue persists, please open an \
+                 issue in the starship repo: \\n\
+                 https://github.com/starship/starship/issues/new\\n\"",
                 shell_name
             );
             None
