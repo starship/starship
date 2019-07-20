@@ -4,6 +4,7 @@ version = "0.3.0"
 edition = "2018"
 authors = ["Matan Kushner <hello@matchai.me>"]
 repository = "https://github.com/starship/starship"
+documentation = "https://starship.rs/guide/"
 readme = "README.md"
 license = "ISC"
 keywords = ["prompt", "shell", "bash", "fish", "zsh"]
@@ -11,6 +12,7 @@ categories = ["command-line-utilities"]
 description = """
 The cross-shell prompt for astronauts. ☄🌌️
 """
+exclude = ["docs/**/*"]
 
 [badges]
 azure-devops = { project = "starship-control/starship", pipeline = "Starship Test Suite" }
