@@ -10,112 +10,88 @@
 	<br>
 </h1>
 
-> ⚠️ Starship is still a work in progress but is now far enough along to be used as a prompt (I personally use it as my daily driver)
+<h4 align="center"></h4>
+<h4 align="center">
+    <a href="https://starship.rs">Website</a> · 
+    <a href="#installation">Installation</a> · 
+    <a href="https://starship.rs/config/">Configuration</a>
+</h4>
 
-Starship is a Rust port of the minimalistic, powerful, and extremely customizable prompt [Spaceship ZSH](https://github.com/denysdovhan/spaceship-prompt).
+Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!
+The prompt shows information need while you're working, while staying sleek and out of the way.
 
 <p align="center">
   <img alt="Starship with Hyper and One Dark" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif">
 </p>
 
-## Development plans
+## Features
 
-The project is beginning as a port of Spaceship ZSH, but will be improved in areas where Spaceship ZSH was previously limited:
+- Prompt character turns red if the last command exits with non-zero code.
+- Current username if not the same as the logged-in user.
+- Current Node.js version(`⬢`).
+- Current Rust version (`🦀`).
+- Current Python version (`🐍`).
+- Current Go version (`🐹`).
+- Package version of package in current directory (`📦`).
+- Current battery level and status
+- Current Git branch and rich repo status:
+  - `=` — conflicting changes
+  - `⇡` — ahead of remote branch
+  - `⇣` — behind of remote branch
+  - `⇕` — diverged changes
+  - `?` — untracked changes
+  - `$` — stashed changes
+  - `!` — modified files
+  - `+` — added files
+  - `»` — renamed files
+  - `✘` — deleted files
+- [PLANNED #80](https://github.com/starship/starship/issues/80) – Indicator for jobs in the background (`✦`).
+- [PLANNED #104](https://github.com/starship/starship/issues/104) – Execution time of the last command if it exceeds the set threshold.
 
-- Speed
-- Concurrency of segment logic execution
-    - Memoization of expensive operations
-- Safety and error handling
-- Testability of code
-- Configuration
-    - Cross-shell support with JSON or TOML config files
-
-We will _not_ be aiming to achieve full parity with Spaceship ZSH as a result, so I am very open to discussing and reevaluating new solutions and ideas for the prompt.
-
-I'm very new to Rust, so any help is appreciated when it comes to improving development patterns, writing idiomatic Rust, performance, safety, etc. 😄
-
-### Prompt segments
-
-- [x] Prompt character turns red if the last command exits with non-zero code.
-- [x] Current Node.js version(`⬢`).
-- [x] Current Rust version (`🦀`).
-- [x] Current Python version (`🐍`).
-- [x] Current Go version (`🐹`).
-- [x] Package version of package in current directory (`📦`).
-- [x] Current battery level and status
-- [x] Current Git branch and rich repo status:
-    - `=` — conflicting changes
-    - `⇡` — ahead of remote branch
-    - `⇣` — behind of remote branch
-    - `⇕` — diverged changes
-    - `?` — untracked changes
-    - `$` — stashed changes
-    - `!` — modified files
-    - `+` — added files
-    - `»` — renamed files
-    - `✘` — deleted files
-- [ ] Indicator for jobs in the background (`✦`).
-- [ ] Execution time of the last command if it exceeds the set threshold.
-
-### Other features
-
-- [x] `starship.toml` configuration
-- [ ] Custom sections given commands or binaries
-
-### Shell support
-
-- [x] Fish shell
-- [x] Z Shell
-- [x] Bash
-
-### Test strategy
-
-- [ ] Per-segment benchmarking
-- [x] Per-segment unit + integration tests
-- [x] Shell + OS matrix acceptance tests
-
-## Setup
+## Installation
 
 ### Prerequisites
 
-- Rust v1.33 or higher
-- A Powerline font (like [Fira Code](https://github.com/tonsky/FiraCode)) installed and enabled in your terminal emulator
+- [Rust](https://rustup.rs/) v1.33 or higher
+- A [Powerline font](https://github.com/powerline/fonts)  installed and enabled in your terminal (for example, try [Fira Code](https://github.com/tonsky/FiraCode)).
 
 ### Getting Started
 
 1. Install the **starship** binary:
 
-    ```bash
-    cargo install starship
-    ```
+   ```sh
+   cargo install starship
+   ```
 
 1. Add the init script to your shell's config file:
 
-    #### Bash / Zsh
+   #### Bash / Zsh
 
-    Add the following to the end of `~/.bashrc` or `~/.zshrc`:
+   Add the following to the end of `~/.bashrc` or `~/.zshrc`:
 
-    ```bash
-    # ~/.bashrc or ~/.zshrc
-    
-    eval "$(starship init $0)"
-    ```
+   ```sh
+   # ~/.bashrc or ~/.zshrc
 
-    #### Fish
+   eval "$(starship init $0)"
+   ```
 
-    Add the following to the end of `~/.config/fish/config.fish`:
+   #### Fish
 
-    ```fish
-    # ~/.config/fish/config.fish
+   Add the following to the end of `~/.config/fish/config.fish`:
 
-    eval (starship init fish)
-    ```
+   ```sh
+   # ~/.config/fish/config.fish
+
+   eval (starship init fish)
+   ```
 
 ## Configuration
 
-> 🚧 Configuration features and documentation are in the process of being developed 
+For details on how to configure Starship, check out our [documentation](https://starship.rs/config/).
 
-## Contributors
+## Contribution
+
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](./CONTRIBUTING.md).
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
@@ -136,3 +112,14 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+<p align="center">
+    <br>
+    <img width="100" src="media/icon.png" alt="Starship rocket icon">
+</p>
+
+## License
+
+[ISC Licensed](./LICENSE)
+
+Copyright © 2019-present, Matan Kushner
