@@ -8,11 +8,11 @@ pub fn init(shell_name: &str) {
 
     let setup_script = match shell_basename {
         Some("bash") => {
-            let script = "PS1=\"$(starship prompt --status=$?)\"";
+            let script = "PS1=\'$(starship prompt --status=$?)\'";
             Some(script)
         }
         Some("zsh") => {
-            let script = "PROMPT=\"$(starship prompt --status=$?)\"";
+            let script = "PROMPT=\'$(starship prompt --status=$?)\'";
             Some(script)
         }
         Some("fish") => {
