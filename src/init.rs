@@ -7,12 +7,23 @@ pub fn init(shell_name: &str) {
     let shell_basename = Path::new(shell_name).file_stem().and_then(OsStr::to_str);
 
     let setup_script = match shell_basename {
+        // The contents of `PROMPT_COMMAND` are executed as a regular Bash command
+        // just before Bash displays a prompt.
         Some("bash") => {
-            let script = "PS1=\"$(starship prompt --status=$?)\"";
+            let script = "
+            PROMPT_COMMAND=starship_prompt
+            
+            starship_prompt() {
+                PS1=\"$(starship prompt --status=$?)\"
+            }";
             Some(script)
         }
+        // `precmd` executes a command before the zsh prompt is displayed.
         Some("zsh") => {
-            let script = "PROMPT=\"$(starship prompt --status=$?)\"";
+            let script = "
+            precmd() {
+                PROMPT=\"$(starship prompt --status=$?)\"
+            }";
             Some(script)
         }
         Some("fish") => {
