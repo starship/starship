@@ -94,7 +94,7 @@ For details on how to configure Starship, check out our [documentation](https://
 
 We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/good%20first%20issue).
 
-### Highest Priority Needs
+### High Priority Needs
 
 - 👩‍💼 **Product Manager**
   - We have a GitHub Project and many unorganized/unprioritized features, as well as ideas that haven't yet been made into issues. Starship needs someone to own the product direction!
@@ -103,7 +103,7 @@ We are always looking for contributors of **all skill levels**! If you're lookin
 - 👩‍💻 **Rust Developer**
   - There is _a lot_ of low-hanging fruit when it comes to   writing idiomatic Rust, designing effective Rust architecture, performance optimizations, cross-platform build optimizations, and more! I ([@matchai](https://github.com/matchai)) am a beginner to Rust. Come point us in the right direction!
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](./CONTRIBUTING.md).
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](./CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ### Contributors
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
