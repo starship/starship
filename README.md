@@ -18,19 +18,14 @@
 
 <h1></h1>
 
-
 Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br>
 The prompt shows information need while you're working, while staying sleek and out of the way.
-
-## ✨ Demo
-
-Starship will dynamically produce a new prompt based on the files in your current directory and environment variables.
 
 <p align="center">
   <img alt="Starship with Hyper and One Dark" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif">
 </p>
 
-## 💪 Features
+## 🍬 Features
 
 - Prompt character turns red if the last command exits with non-zero code.
 - Current username if not the same as the logged-in user.
