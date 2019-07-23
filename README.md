@@ -1,6 +1,5 @@
 <p align="center">
 	<br>
-	<br>
 	<img width="400" src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png" alt="Starship – Cross-shell prompt">
     <p align="center">
         <a href="https://crates.io/crates/starship"><img src="https://badgen.net/crates/v/starship" alt="Crates.io version"></a>
