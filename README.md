@@ -110,6 +110,7 @@ We are always looking for contributors of **all skill levels**! If you're lookin
 
 If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](./CONTRIBUTING.md).
 
+### Contributors
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
