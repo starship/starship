@@ -1,4 +1,4 @@
-<h1 align="center">
+<p align="center">
 	<br>
 	<img width="400" src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png" alt="Starship – Cross-shell prompt">
     <p align="center">
@@ -7,24 +7,24 @@
         <a href="#contributors"><img src="https://badgen.net/badge/all%20contributors/7/orange" alt="All Contributors"></a>
         <a href="https://discord.gg/8Jzqu3T"><img src="https://badgen.net/badge/chat/on%20discord/7289da" alt="Chat on Discord"></a>
     </p>
-	<br>
-</h1>
-
-<h4 align="center"></h4>
+</p>
 <h4 align="center">
+<br>
     <a href="https://starship.rs">Website</a> · 
-    <a href="#installation">Installation</a> · 
+    <a href="#-installation">Installation</a> · 
     <a href="https://starship.rs/config/">Configuration</a>
 </h4>
 
-Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!
+<h1></h1>
+
+Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br>
 The prompt shows information need while you're working, while staying sleek and out of the way.
 
 <p align="center">
   <img alt="Starship with Hyper and One Dark" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif">
 </p>
 
-## Features
+## 🍬 Features
 
 - Prompt character turns red if the last command exits with non-zero code.
 - Current username if not the same as the logged-in user.
@@ -48,7 +48,7 @@ The prompt shows information need while you're working, while staying sleek and 
 - [PLANNED #80](https://github.com/starship/starship/issues/80) – Indicator for jobs in the background (`✦`).
 - [PLANNED #104](https://github.com/starship/starship/issues/104) – Execution time of the last command if it exceeds the set threshold.
 
-## Installation
+## 🚀 Installation
 
 ### Prerequisites
 
@@ -85,14 +85,26 @@ The prompt shows information need while you're working, while staying sleek and 
    eval (starship init fish)
    ```
 
-## Configuration
+## 🔧 Configuration
 
 For details on how to configure Starship, check out our [documentation](https://starship.rs/config/).
 
-## Contribution
+## 🤝 Contributing
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](./CONTRIBUTING.md).
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/good%20first%20issue).
 
+### High Priority Needs
+
+- 👩‍💼 **Product Manager**
+  - We have a GitHub Project and many unorganized/unprioritized features, as well as ideas that haven't yet been made into issues. Starship needs someone to own the product direction!
+- 👩‍🎨 **Designer**
+  - Like making eye-catching websites? Excellent! We are looking to create a beautiful landing page showing off Starship in all its glory. Helping design for Starship's brand is a great opportunity to try out new ideas!
+- 👩‍💻 **Rust Developer**
+  - There is _a lot_ of low-hanging fruit when it comes to   writing idiomatic Rust, designing effective Rust architecture, performance optimizations, cross-platform build optimizations, and more! I ([@matchai](https://github.com/matchai)) am a beginner to Rust. Come point us in the right direction!
+
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](./CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+
+### Contributors
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -121,8 +133,7 @@ This project follows the [all-contributors](https://github.com/all-contributors/
     <img width="100" src="media/icon.png" alt="Starship rocket icon">
 </p>
 
-## License
+## 📝 License
 
-[ISC Licensed](./LICENSE)
-
-Copyright © 2019-present, Matan Kushner
+Copyright © 2019-present, [Matan Kushner](https://github.com/matchai).<br>
+This project is [ISC](./LICENSE) licensed.
