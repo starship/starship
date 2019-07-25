@@ -2,10 +2,10 @@ use clap::ArgMatches;
 use rayon::prelude::*;
 use std::io::{self, Write};
 
+use crate::config::Config;
 use crate::context::Context;
 use crate::module::Module;
 use crate::modules;
-use crate::config::Config;
 
 const PROMPT_ORDER: &[&str] = &[
     "battery",
