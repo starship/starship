@@ -135,5 +135,5 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 ## 📝 License
 
-Copyright © 2019-present, [Matan Kushner](https://github.com/matchai).<br>
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br>
 This project is [ISC](./LICENSE) licensed.

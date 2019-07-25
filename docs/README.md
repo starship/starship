@@ -3,7 +3,7 @@ home: true
 heroImage: /logo.svg
 actionText: Get Started →
 actionLink: /guide/
-footer: ISC Licensed | Copyright © 2019-present Matan Kushner
+footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 ---
 
 <div class="features">
