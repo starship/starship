@@ -36,6 +36,13 @@ fn main() {
         )
         .required(true);
 
+    let timer_arg = Arg::with_name("elapsed_time")
+        .short("t")
+        .long("elapsed")
+        .value_name("ELAPSED")
+        .help("The amount of time elapsed since the start of the last command (s)")
+        .takes_value(true);
+
     let matches = App::new("starship")
         .about("The cross-shell prompt for astronauts. ☄🌌️")
         // pull the version number from Cargo.toml
@@ -53,7 +60,8 @@ fn main() {
             SubCommand::with_name("prompt")
                 .about("Prints the full starship prompt")
                 .arg(&status_code_arg)
-                .arg(&path_arg),
+                .arg(&path_arg)
+                .arg(&timer_arg),
         )
         .subcommand(
             SubCommand::with_name("module")
