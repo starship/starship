@@ -14,23 +14,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .parse::<u64>()
         .ok()?;
 
-    // These breakpoints can be adjusted in config later
-    let module_color = Color::Yellow.bold();
-    
-    /*
-    match elapsed {
-        0...2 => return None, // We're not printing anything for now
-        2...10 => Color::Green.bold(),
-        11...60 => Color::Yellow.bold(),
-        _ => Color::Red.bold(),
-    };*/
+    let module_color = match elapsed {
+        0...2 => return None, // Too short! Don't display anything.
+        _ => Color::Yellow.bold(),
+    };
 
     let mut module = context.new_module("timer")?;
     module.set_style(module_color);
-    module.new_segment(
-        "timer",
-        &format!("took {}", render_time(&elapsed)),
-    );
+    module.new_segment("timer", &format!("took {}", render_time(&elapsed)));
     module.get_prefix().set_value("");
 
     Some(module)
@@ -56,9 +47,8 @@ fn render_time(raw_seconds: &u64) -> String {
 
 /// Render a single component of the time string, giving an empty string if component is zero
 fn render_time_component((component, suffix): (&u64, &&str)) -> String {
-    let time = match component {
+    match component {
         0 => String::new(),
         n => format!("{}{}", n, suffix),
-    };
-    time
+    }
 }

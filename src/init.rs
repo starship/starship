@@ -10,24 +10,48 @@ pub fn init(shell_name: &str) {
         // The contents of `PROMPT_COMMAND` are executed as a regular Bash command
         // just before Bash displays a prompt.
         Some("bash") => {
-            let script = "
-            PROMPT_COMMAND=starship_prompt
-            
+            let script = r##"
+            starship_preexec() {
+                if [ "$PREEXEC_READY" = "true" ]; then
+                    PREEXEC_READY=false;
+                    STARSHIP_START_TIME=$(date +%s);
+                fi
+            };
+
             starship_prompt() {
-                PS1=\"$(starship prompt --status=$?)\"
-            }";
+                PREEXEC_READY=true;
+                STARSHIP_END_TIME=$(date +%s);
+                ELAPSED=$((STARSHIP_END_TIME - STARSHIP_START_TIME));
+                PS1="$(starship prompt --status=$? --elapsed=$ELAPSED)";
+            };
+ 
+            trap starship_preexec DEBUG;
+            PROMPT_COMMAND=starship_prompt;
+            "##;
             Some(script)
         }
-        // `precmd` executes a command before the zsh prompt is displayed.
+        /* `precmd` executes a command before the zsh prompt is displayed.
+        We need to set STARSHIP_START_TIME as part of the init commmand or
+        else the first prompt will display a very large time */
         Some("zsh") => {
-            let script = "
+            let script = r##"
             precmd() {
-                PROMPT=\"$(starship prompt --status=$?)\"
-            }";
+                STARSHIP_END_TIME="$(date +%s)"
+                ELAPSED=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
+                PROMPT="$(starship prompt --status=$? --elapsed=$ELAPSED)"
+            };
+            preexec(){
+                STARSHIP_START_TIME="$(date +%s)"
+            };
+            STARSHIP_START_TIME="$(date +%s)"
+            "##;
             Some(script)
         }
         Some("fish") => {
-            let script = "function fish_prompt; starship prompt --status=$status; end";
+            let script = r##"function fish_prompt;
+            set -l elapsed (math --scale=0 "$CMD_DURATION / 1000");
+            starship prompt --status=$status --elapsed=$elapsed;
+            end;"##;
             Some(script)
         }
         None => {
