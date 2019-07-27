@@ -4,6 +4,7 @@ mod directory;
 mod git_branch;
 mod git_status;
 mod golang;
+mod jobs;
 mod line_break;
 mod nodejs;
 mod package;
@@ -28,6 +29,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "git_status" => git_status::module(context),
         "username" => username::module(context),
         "battery" => battery::module(context),
+        "job" | "jobs" => jobs::module(context),
 
         _ => panic!("Unknown module: {}", module),
     }
