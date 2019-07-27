@@ -1,4 +1,4 @@
-use crate::config::Config;
+use crate::config::{Config, TableExt};
 use crate::module::Module;
 
 use clap::ArgMatches;
@@ -8,16 +8,34 @@ use std::ffi::OsStr;
 use std::fs;
 use std::path::PathBuf;
 
+/// Context contains data or common methods that may be used by multiple modules.
+/// The data contained within Context will be relevant to this particular rendering
+/// of the prompt.
 pub struct Context<'a> {
+    /// The deserialized configuration map from the user's `starship.toml` file.
     pub config: Config,
+
+    /// The current working directory that starship is being called in.
     pub current_dir: PathBuf,
+
+    /// A vector containing the full paths of all the files in `current_dir`.
     pub dir_files: Vec<PathBuf>,
+
+    /// The map of arguments that were passed when starship was called.
     pub arguments: ArgMatches<'a>,
+
+    /// If `current_dir` is a git repository or is contained within one,
+    /// this is the path to the root of that repo.
     pub repo_root: Option<PathBuf>,
+
+    /// If `current_dir` is a git repository or is contained within one,
+    /// this is the current branch name of that repo.
     pub branch_name: Option<String>,
 }
 
 impl<'a> Context<'a> {
+    /// Identify the current working directory and create an instance of Context
+    /// for it.
     pub fn new(arguments: ArgMatches) -> Context {
         // Retreive the "path" flag. If unavailable, use the current directory instead.
         let path = arguments
@@ -28,6 +46,7 @@ impl<'a> Context<'a> {
         Context::new_with_dir(arguments, path)
     }
 
+    /// Create a new instance of Context for the provided directory
     pub fn new_with_dir<T>(arguments: ArgMatches, dir: T) -> Context
     where
         T: Into<PathBuf>,
@@ -75,8 +94,23 @@ impl<'a> Context<'a> {
         dir
     }
 
-    pub fn new_module(&self, name: &str) -> Module {
-        Module::new(name, self.config.get_module_config(name))
+    /// Create a new module
+    ///
+    /// Will return `None` if the module is disabled by configuration, by setting
+    /// the `disabled` key to `true` in the configuration for that module.
+    pub fn new_module(&self, name: &str) -> Option<Module> {
+        let config = self.config.get_module_config(name);
+
+        // If the segment has "disabled" set to "true", don't show it
+        let disabled = config
+            .map(|table| table.get_as_bool("disabled"))
+            .unwrap_or(None);
+
+        if disabled == Some(true) {
+            return None;
+        }
+
+        Some(Module::new(name, config))
     }
 
     // returns a new ScanDir struct with reference to current dir_files of context
@@ -131,7 +165,7 @@ impl<'a> ScanDir<'a> {
 
 /// checks to see if the pathbuf matches a file or folder name
 pub fn path_has_name<'a>(dir_entry: &PathBuf, names: &'a [&'a str]) -> bool {
-    let found_file_or_folder_name = names.into_iter().find(|file_or_folder_name| {
+    let found_file_or_folder_name = names.iter().find(|file_or_folder_name| {
         dir_entry
             .file_name()
             .and_then(OsStr::to_str)
@@ -147,7 +181,7 @@ pub fn path_has_name<'a>(dir_entry: &PathBuf, names: &'a [&'a str]) -> bool {
 
 /// checks if pathbuf matches the extension provided
 pub fn has_extension<'a>(dir_entry: &PathBuf, extensions: &'a [&'a str]) -> bool {
-    let found_ext = extensions.into_iter().find(|ext| {
+    let found_ext = extensions.iter().find(|ext| {
         dir_entry
             .extension()
             .and_then(OsStr::to_str)

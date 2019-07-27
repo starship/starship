@@ -5,21 +5,21 @@ use ansi_term::Color;
 use serde_json as json;
 use toml;
 
-/// Creates a segment with the current package version
+/// Creates a module with the current package version
 ///
 /// Will display if a version is defined for your Node.js or Rust project (if one exists)
-pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     match get_package_version() {
         Some(package_version) => {
             const PACKAGE_CHAR: &str = "📦 ";
             let module_color = Color::Red.bold();
 
-            let mut module = context.new_module("package");
+            let mut module = context.new_module("package")?;
             module.set_style(module_color);
             module.get_prefix().set_value("is ");
 
             module.new_segment("symbol", PACKAGE_CHAR);
-            module.new_segment("version", package_version);
+            module.new_segment("version", &package_version);
 
             Some(module)
         }
@@ -75,19 +75,21 @@ mod tests {
 
     #[test]
     fn test_extract_cargo_version() {
-        let cargo_with_version = r#"
+        let cargo_with_version = toml::toml! {
             [package]
             name = "starship"
             version = "0.1.0"
-            "#;
+        }
+        .to_string();
 
         let expected_version = Some("v0.1.0".to_string());
         assert_eq!(extract_cargo_version(&cargo_with_version), expected_version);
 
-        let cargo_without_version = r#"
+        let cargo_without_version = toml::toml! {
             [package]
             name = "starship"
-            "#;
+        }
+        .to_string();
 
         let expected_version = None;
         assert_eq!(

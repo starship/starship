@@ -3,7 +3,7 @@ use std::path::Path;
 
 use super::{Context, Module};
 
-/// Creates a segment with the current directory
+/// Creates a module with the current directory
 ///
 /// Will perform path contraction and truncation.
 /// **Contraction**
@@ -12,12 +12,12 @@ use super::{Context, Module};
 ///
 /// **Truncation**
 /// Paths will be limited in length to `3` path components by default.
-pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const HOME_SYMBOL: &str = "~";
     const DIR_TRUNCATION_LENGTH: usize = 3;
     let module_color = Color::Cyan.bold();
 
-    let mut module = context.new_module("directory");
+    let mut module = context.new_module("directory")?;
     module.set_style(module_color);
 
     let current_dir = &context.current_dir;
@@ -38,7 +38,7 @@ pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Truncate the dir string to the maximum number of path components
     let truncated_dir_string = truncate(dir_string, DIR_TRUNCATION_LENGTH);
-    module.new_segment("path", truncated_dir_string);
+    module.new_segment("path", &truncated_dir_string);
 
     module.get_prefix().set_value("in ");
 
@@ -79,7 +79,7 @@ fn truncate(dir_string: String, length: usize) -> String {
         return dir_string;
     }
 
-    let components = dir_string.split("/").collect::<Vec<&str>>();
+    let components = dir_string.split('/').collect::<Vec<&str>>();
     if components.len() <= length {
         return dir_string;
     }

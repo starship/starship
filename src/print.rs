@@ -6,21 +6,22 @@ use crate::context::Context;
 use crate::module::Module;
 use crate::modules;
 
+const PROMPT_ORDER: &[&str] = &[
+    "battery",
+    "username",
+    "directory",
+    "git_branch",
+    "git_status",
+    "package",
+    "nodejs",
+    "rust",
+    "python",
+    "go",
+    "line_break",
+    "character",
+];
+
 pub fn prompt(args: ArgMatches) {
-    let prompt_order = vec![
-        "battery",
-        "username",
-        "directory",
-        "git_branch",
-        "git_status",
-        "package",
-        "nodejs",
-        "rust",
-        "python",
-        "go",
-        "line_break",
-        "character",
-    ];
     let context = Context::new(args);
 
     let stdout = io::stdout();
@@ -29,7 +30,7 @@ pub fn prompt(args: ArgMatches) {
     // Write a new line before the prompt
     writeln!(handle).unwrap();
 
-    let modules = prompt_order
+    let modules = PROMPT_ORDER
         .par_iter()
         .map(|module| modules::handle(module, &context)) // Compute modules
         .flatten()

@@ -3,21 +3,21 @@ use git2::{Repository, Status};
 
 use super::{Context, Module};
 
-/// Creates a segment with the Git branch in the current directory
+/// Creates a module with the Git branch in the current directory
 ///
 /// Will display the branch name if the current directory is a git repo
 /// By default, the following symbols will be used to represent the repo's status:
 ///   - `=` – This branch has merge conflicts
 ///   - `⇡` – This branch is ahead of the branch being tracked
-///   - `⇡` – This branch is behind of the branch being tracked
+///   - `⇣` – This branch is behind of the branch being tracked
 ///   - `⇕` – This branch has diverged from the branch being tracked
 ///   - `?` — There are untracked files in the working directory
-///   - `$` — A stash exists for the repository
+///   - `$` — A stash exists for the local repository
 ///   - `!` — There are file modifications in the working directory
 ///   - `+` — A new file has been added to the staging area
 ///   - `»` — A renamed file has been added to the staging area
 ///   - `✘` — A file's deletion has been added to the staging area
-pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // This is the order that the sections will appear in
     const GIT_STATUS_CONFLICTED: &str = "=";
     const GIT_STATUS_AHEAD: &str = "⇡";
@@ -35,15 +35,25 @@ pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repository = Repository::open(repo_root).ok()?;
 
     let module_style = Color::Red.bold();
-    let mut module = context.new_module("git_status");
+    let mut module = context.new_module("git_status")?;
     module.get_prefix().set_value("[").set_style(module_style);
     module.get_suffix().set_value("] ").set_style(module_style);
     module.set_style(module_style);
 
     let ahead_behind = get_ahead_behind(&repository, &branch_name);
-    log::debug!("Repo ahead/behind: {:?}", ahead_behind);
+    if ahead_behind != Ok((0, 0)) {
+        log::debug!("Repo ahead/behind: {:?}", ahead_behind);
+    } else {
+        log::trace!("No ahead/behind found");
+    }
+
     let stash_object = repository.revparse_single("refs/stash");
-    log::debug!("Stash object: {:?}", stash_object);
+    if stash_object.is_ok() {
+        log::debug!("Stash object: {:?}", stash_object);
+    } else {
+        log::trace!("No stash object found");
+    }
+
     let repo_status = get_repo_status(&repository);
     log::debug!("Repo status: {:?}", repo_status);
 

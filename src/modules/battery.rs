@@ -2,8 +2,8 @@ use ansi_term::Color;
 
 use super::{Context, Module};
 
-/// Creates a segment for the battery percentage and charging state
-pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
+/// Creates a module for the battery percentage and charging state
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const BATTERY_FULL: &str = "•";
     const BATTERY_CHARGING: &str = "⇡";
     const BATTERY_DISCHARGING: &str = "⇣";
@@ -22,19 +22,19 @@ pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // TODO: Set style based on percentage when threshold is modifiable
-    let mut module = context.new_module("battery");
+    let mut module = context.new_module("battery")?;
     module.set_style(Color::Red.bold());
     module.get_prefix().set_value("");
 
     match state {
         battery::State::Full => {
-            module.new_segment("full", BATTERY_FULL);
+            module.new_segment("full_symbol", BATTERY_FULL);
         }
         battery::State::Charging => {
-            module.new_segment("charging", BATTERY_CHARGING);
+            module.new_segment("charging_symbol", BATTERY_CHARGING);
         }
         battery::State::Discharging => {
-            module.new_segment("discharging", BATTERY_DISCHARGING);
+            module.new_segment("discharging_symbol", BATTERY_DISCHARGING);
         }
         _ => return None,
     }
@@ -43,7 +43,7 @@ pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Round the percentage to a whole number
     percent_string.push(percentage.round().to_string());
     percent_string.push("%".to_string());
-    module.new_segment("percentage", percent_string.join(""));
+    module.new_segment("percentage", percent_string.join("").as_ref());
 
     Some(module)
 }
@@ -61,7 +61,7 @@ fn get_battery_status() -> Option<BatteryStatus> {
             Some(battery_status)
         }
         Some(Err(e)) => {
-            log::debug!("Unable to access battery information:\n{}", e);
+            log::debug!("Unable to access battery information:\n{}", &e);
             None
         }
         None => {
