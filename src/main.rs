@@ -27,7 +27,7 @@ fn main() {
         .long("jobs")
         .value_name("JOB")
         .help("The number of currently running jobs")
-        .takes_value(0);
+        .takes_value(false);
 
     let path_arg = Arg::with_name("path")
         .short("p")
