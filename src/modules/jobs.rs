@@ -16,7 +16,9 @@ pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     } else {
         module.new_segment("symbol", PROMPT_CHAR);
-        module.new_segment("number", num_of_jobs);
+        if num_of_jobs != "1" {
+            module.new_segment("number", num_of_jobs);
+        }
     };
 
     Some(module)
