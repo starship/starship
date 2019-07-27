@@ -66,6 +66,10 @@ pub fn init(shell_name: &str) {
    we only start the timer if no timer has been started since the last prompt draw,
    tracked by the variable PREEXEC_READY. Similarly, only draw timing info if
    STARSHIP_START_TIME is defined, in case preexec was interrupted.
+
+   Finally, note that `eval` will evaluate this thing as a single line, so things
+   like comments (#) should be avoided and semicolons should be used on most 
+   statements.
 */
 
 const BASH_INIT: &str = r##"
@@ -83,17 +87,15 @@ starship_precmd() {
         unset STARSHIP_START_TIME;
     else
         PS1="$(starship prompt --status=$?)";
-    fi
+    fi;
     PREEXEC_READY=true;
 };
-# Check for preexec/precmd frameworks
 if [[ $preexec_functions ]]; then
     preexec_functions+=(starship_preexec);
     precmd_functions+=(starship_precmd);
     STARSHIP_START_TIME=$(date +%s);
-fi
-# Check if it is safe to trap DEBUG: get name of function trapping DEBUG, if any
-dbg_trap="$(trap -p DEBUG | cut -d' ' -f3 | tr -d \')"  
+fi;
+dbg_trap="$(trap -p DEBUG | cut -d' ' -f3 | tr -d \')";
 if [[ -z $dbg_trap || "$dbg_trap" = "starship_preexec" ]]; then
     trap starship_preexec DEBUG;
     PROMPT_COMMAND=starship_precmd;
