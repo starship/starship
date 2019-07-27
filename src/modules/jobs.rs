@@ -11,10 +11,12 @@ pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_style(module_color);
 
     let arguments = &context.arguments;
-    if arguments.value_of("jobs").unwrap_or("0") == "0" {
-        module.new_segment("symbol", "");
+    let num_of_jobs = arguments.value_of("jobs").unwrap_or("0");
+    if num_of_jobs == "0" {
+        return None;
     } else {
         module.new_segment("symbol", PROMPT_CHAR);
+        module.new_segment("number", num_of_jobs);
     };
 
     Some(module)
