@@ -22,9 +22,9 @@ fn main() {
         .help("The status code of the previously run command")
         .takes_value(true);
 
-    let job_arg = Arg::with_name("job")
+    let jobs_arg = Arg::with_name("jobs")
         .short("j")
-        .long("job")
+        .long("jobs")
         .value_name("JOB")
         .help("The number of currently running jobs")
         .takes_value(0);
@@ -60,7 +60,7 @@ fn main() {
             SubCommand::with_name("prompt")
                 .about("Prints the full starship prompt")
                 .arg(&status_code_arg)
-                .arg(&job_arg)
+                .arg(&jobs_arg)
                 .arg(&path_arg),
         )
         .subcommand(
