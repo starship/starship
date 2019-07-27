@@ -68,8 +68,8 @@ pub fn init(shell_name: &str) {
    STARSHIP_START_TIME is defined, in case preexec was interrupted.
 
    Finally, note that `eval` will evaluate this thing as a single line, so things
-   like comments (#) should be avoided and semicolons should be used on most 
-   statements.
+   like comments (#) should be avoided and semicolons should be used on most
+   statements (but not after then/else).
 */
 
 const BASH_INIT: &str = r##"

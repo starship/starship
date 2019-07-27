@@ -1,3 +1,4 @@
+use crate::config::TableExt;
 use ansi_term::Color;
 
 use super::{Context, Module};
@@ -14,8 +15,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .parse::<u64>()
         .ok()?;
 
+    // Question: Is this a good series of calls to use? Is there a cleaner way to set types?
+    // Question: If the input config is negative, should I warn the user?
+    let config_min = context
+        .config
+        .get_module_config("timer")
+        .and_then(|table| table.get_config("min_time"))
+        .and_then(|value| value.as_integer())
+        .unwrap_or(2) as u64;
+
     let module_color = match elapsed {
-        0...2 => return None, // Too short! Don't display anything.
+        time if time < config_min => return None,
         _ => Color::Yellow.bold(),
     };
 
@@ -66,4 +76,8 @@ mod tests {
     fn test_10110s() {
         assert_eq!(render_time(10110 as u64), "1h48m30s")
     }
+    fn test_1d() {
+        assert_eq!(render_time(86400 as u64), "1d")
+    }
+
 }
