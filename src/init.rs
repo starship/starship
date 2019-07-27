@@ -14,7 +14,7 @@ pub fn init(shell_name: &str) {
             PROMPT_COMMAND=starship_prompt
             
             starship_prompt() {
-                PS1=\"$(starship prompt --status=$?)\"
+                PS1=\"$(starship prompt --status=$? --job=$(jobs -p | wc -l))\"
             }";
             Some(script)
         }
@@ -22,12 +22,12 @@ pub fn init(shell_name: &str) {
         Some("zsh") => {
             let script = "
             precmd() {
-                PROMPT=\"$(starship prompt --status=$?)\"
+                PROMPT=\"$(starship prompt --status=$? --job=$(jobs | wc -l))\"
             }";
             Some(script)
         }
         Some("fish") => {
-            let script = "function fish_prompt; starship prompt --status=$status; end";
+            let script = "function fish_prompt; starship prompt --status=$status --job=$(count (jobs -p)); end";
             Some(script)
         }
         None => {
