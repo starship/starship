@@ -1,5 +1,4 @@
 use super::{Context, Module};
-use crate::config::{Config, TableExt};
 use ansi_term::Color;
 
 /// Creates a module for the prompt character

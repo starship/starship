@@ -80,13 +80,14 @@ starship_preexec() {
     fi
 };
 starship_precmd() {
+    STATUS=$?;
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(date +%s);
         STARSHIP_ELAPSED=$((STARSHIP_END_TIME - STARSHIP_START_TIME));
-        PS1="$(starship prompt --status=$? --elapsed=$STARSHIP_ELAPSED)";
+        PS1="$(starship prompt --status=$STATUS --elapsed=$STARSHIP_ELAPSED)";
         unset STARSHIP_START_TIME;
     else
-        PS1="$(starship prompt --status=$?)";
+        PS1="$(starship prompt --status=$STATUS)";
     fi;
     PREEXEC_READY=true;
 };
@@ -102,9 +103,11 @@ if [[ -z $dbg_trap || "$dbg_trap" = "starship_preexec" ]]; then
     STARSHIP_START_TIME=$(date +%s);
 else
     PROMPT_COMMAND=starship_precmd;
+    unset STARSHIP_START_TIME;
 fi
 "##;
-//TODO: How to warn the user?
+/* TODO: Once warning/error system is implemented in starship, print a warning
+   if starship will not be printing timing due to DEBUG clobber error */
 
 /* For zsh: preexec_functions and precmd_functions provide preexec/precmd in a
    way that lets us avoid clobbering them.
@@ -137,9 +140,11 @@ preexec_functions+=(starship_preexec);
 STARSHIP_START_TIME="$(date +%s)";
 "##;
 
-/* Fish setup is simple because they give us CMD_DURATION. Hooray! */
+/* Fish setup is simple because they give us CMD_DURATION. Just account for name
+changes between 2.7/3.0 and do some math to convert ms->s and we can use it */
 const FISH_INIT: &str = r##"
 function fish_prompt;
+    let -l CMD_DURATION "$CMD_DURATION$cmd_duration"
     set -l elapsed (math --scale=0 "$CMD_DURATION / 1000");
     starship prompt --status=$status --elapsed=$elapsed;
 end;

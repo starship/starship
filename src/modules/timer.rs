@@ -1,11 +1,15 @@
-use crate::config::TableExt;
+//TODO: rename module to cmd_duration/command_duration/cmd_timer
+
+
+use crate::config::TableExt; // TODO: Pull #116 and unify
 use ansi_term::Color;
 
 use super::{Context, Module};
 
 /// Outputs the time it took the last command to execute
 ///
-/// Will only print if last command took more than two seconds to execute.
+/// Will only print if last command took more than a certain amount of time to
+/// execute. Default is two seconds, but can be set by config option `min_time`.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("timer")?;
     let arguments = &context.arguments;
@@ -15,13 +19,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .parse::<u64>()
         .ok()?;
 
-    // Question: Is this a good series of calls to use? Is there a cleaner way to set types?
     // Question: If the input config is negative, should I warn the user?
-    let config_min = context
-        .config
-        .get_module_config("timer")
+    let config_min = module.config
         .and_then(|table| table.get_config("min_time"))
-        .and_then(|value| value.as_integer())
+        .and_then(|value| value.as_integer()) // TODO: implement Table::get_as_int() once 
+                                            // #116 is merged
         .unwrap_or(2) as u64;
 
     let module_color = match elapsed {
@@ -36,7 +38,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-/// Render the time into a nice human-readable string
+// TODO: Potentially convert time using UOM instead of handrolled functions
+
+// Render the time into a nice human-readable string
 fn render_time(raw_seconds: u64) -> String {
     // Calculate a simple breakdown into days/hours/minutes/seconds
     let (seconds, raw_minutes) = (raw_seconds % 60, raw_seconds / 60);
