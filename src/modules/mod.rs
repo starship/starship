@@ -1,5 +1,6 @@
 mod battery;
 mod character;
+mod cmd_duration;
 mod directory;
 mod git_branch;
 mod git_status;
@@ -9,7 +10,6 @@ mod nodejs;
 mod package;
 mod python;
 mod rust;
-mod timer;
 mod username;
 
 use crate::context::Context;
@@ -29,7 +29,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "git_status" => git_status::module(context),
         "username" => username::module(context),
         "battery" => battery::module(context),
-        "timer" => timer::module(context),
+        "cmd_duration" => cmd_duration::module(context),
 
         _ => panic!("Unknown module: {}", module),
     }

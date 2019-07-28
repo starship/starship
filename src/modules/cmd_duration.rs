@@ -1,7 +1,4 @@
-//TODO: rename module to cmd_duration/command_duration/cmd_timer
-
-
-use crate::config::TableExt; // TODO: Pull #116 and unify
+use crate::config::Config;
 use ansi_term::Color;
 
 use super::{Context, Module};
@@ -11,20 +8,31 @@ use super::{Context, Module};
 /// Will only print if last command took more than a certain amount of time to
 /// execute. Default is two seconds, but can be set by config option `min_time`.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module("timer")?;
+    let mut module = context.new_module("cmd_duration")?;
     let arguments = &context.arguments;
     let elapsed = arguments
-        .value_of("elapsed_time")
-        .unwrap_or("x") // not a time
+        .value_of("cmd_duration")
+        .unwrap_or("invalid_time")
         .parse::<u64>()
         .ok()?;
 
-    // Question: If the input config is negative, should I warn the user?
-    let config_min = module.config
-        .and_then(|table| table.get_config("min_time"))
-        .and_then(|value| value.as_integer()) // TODO: implement Table::get_as_int() once 
-                                            // #116 is merged
-        .unwrap_or(2) as u64;
+    let signed_config_min = context
+        .config
+        .get_module_config("cmd_duration")
+        .and_then(|cfg| cfg.get_as_i64("min_time"))
+        .unwrap_or(2);
+
+    /* TODO: Once error handling is implemented, warn the user if their config
+    min time is nonsensical */
+    if signed_config_min < 0 {
+        log::debug!(
+            "[WARN]: min_time in [cmd_duration] ({}) was less than zero",
+            signed_config_min
+        );
+        return None;
+    }
+
+    let config_min = signed_config_min as u64;
 
     let module_color = match elapsed {
         time if time < config_min => return None,
@@ -32,13 +40,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     module.set_style(module_color);
-    module.new_segment("timer", &format!("took {}", render_time(elapsed)));
+    module.new_segment("cmd_duration", &format!("took {}", render_time(elapsed)));
     module.get_prefix().set_value("");
 
     Some(module)
 }
-
-// TODO: Potentially convert time using UOM instead of handrolled functions
 
 // Render the time into a nice human-readable string
 fn render_time(raw_seconds: u64) -> String {

@@ -18,7 +18,7 @@ const PROMPT_ORDER: &[&str] = &[
     "rust",
     "python",
     "go",
-    "timer",
+    "cmd_duration",
     "line_break",
     "character",
 ];

@@ -36,11 +36,11 @@ fn main() {
         )
         .required(true);
 
-    let timer_arg = Arg::with_name("elapsed_time")
-        .short("t")
-        .long("elapsed")
-        .value_name("ELAPSED")
-        .help("The amount of time elapsed since the start of the last command (s)")
+    let cmd_duration_arg = Arg::with_name("cmd_duration")
+        .short("d")
+        .long("duration")
+        .value_name("DURATION")
+        .help("The amount of time since the start of the last command (s)")
         .takes_value(true);
 
     let matches = App::new("starship")
@@ -61,7 +61,7 @@ fn main() {
                 .about("Prints the full starship prompt")
                 .arg(&status_code_arg)
                 .arg(&path_arg)
-                .arg(&timer_arg),
+                .arg(&cmd_duration_arg),
         )
         .subcommand(
             SubCommand::with_name("module")
