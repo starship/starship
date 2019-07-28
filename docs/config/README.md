@@ -116,9 +116,10 @@ git repo that you're currently in.
 
 ### Options
 
-| Variable   | Default | Description                      |
-| ---------- | ------- | -------------------------------- |
-| `disabled` | `false` | Disables the `directory` module. |
+| Variable            | Default | Description                            |
+| ------------------- | ------- | -------------------------------------- |
+| `disabled`          | `false` | Disables the `directory` module.       |
+| `truncation_length` | `3`     | Truncates to this many parent folders. |
 
 ## Git Branch
 

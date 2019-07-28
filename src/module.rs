@@ -96,8 +96,18 @@ impl<'a> Module<'a> {
     }
 
     /// Get a module's config value as a string
-    fn config_value(&self, key: &str) -> Option<&str> {
+    pub fn config_value(&self, key: &str) -> Option<&str> {
         self.config.and_then(|config| config.get_as_str(key))
+    }
+
+    /// Get a module's config value as an int
+    pub fn config_value_i64(&self, key: &str) -> Option<i64> {
+        self.config.and_then(|config| config.get_as_i64(key))
+    }
+
+    /// Get a module's config value as a bool
+    pub fn config_value_bool(&self, key: &str) -> Option<bool> {
+        self.config.and_then(|config| config.get_as_bool(key))
     }
 }
 

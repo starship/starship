@@ -12,6 +12,7 @@ pub trait Config {
     // Config accessor methods
     fn get_as_bool(&self, key: &str) -> Option<bool>;
     fn get_as_str(&self, key: &str) -> Option<&str>;
+    fn get_as_i64(&self, key: &str) -> Option<i64>;
 
     // Internal implementation for accessors
     fn get_config(&self, key: &str) -> Option<&toml::value::Value>;
@@ -129,6 +130,23 @@ impl Config for Table {
 
         str_value
     }
+
+    /// Get a key from a module's configuration as a string
+    fn get_as_i64(&self, key: &str) -> Option<i64> {
+        let value = self.get_config(key)?;
+        let i64_value = value.as_integer();
+
+        if i64_value.is_none() {
+            log::debug!(
+                "Expected \"{}\" to be an integer. Instead received {} of type {}.",
+                key,
+                value,
+                value.type_str()
+            );
+        }
+
+        i64_value
+    }
 }
 
 mod tests {
@@ -164,5 +182,21 @@ mod tests {
         // Use with boolean value
         table.insert(String::from("boolean"), toml::value::Value::Boolean(true));
         assert_eq!(table.get_as_str("boolean"), None);
+    }
+
+    #[test]
+    fn table_get_as_i64() {
+        let mut table = toml::value::Table::new();
+
+        // Use with integer value
+        table.insert(String::from("integer"), toml::value::Value::Integer(82));
+        assert_eq!(table.get_as_i64("integer"), Some(82));
+
+        // Use with string value
+        table.insert(
+            String::from("string"),
+            toml::value::Value::String(String::from("82")),
+        );
+        assert_eq!(table.get_as_bool("string"), None);
     }
 }
