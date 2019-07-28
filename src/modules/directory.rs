@@ -78,7 +78,7 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
 /// On non-Windows OS, does nothing
 #[cfg(target_os = "windows")]
 fn replace_c_dir(path: String) -> String {
-    return path.replace("C://", "/c/");
+    return path.replace("C:/", "/c");
 }
 
 /// Replaces "C://" with "/c/" within a Windows path
@@ -157,6 +157,16 @@ mod tests {
 
         let output = contract_path(full_path, top_level_path, "~");
         assert_eq!(output, "/c/Some/Other/Path");
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
+    fn contract_windows_style_root_directory() {
+        let full_path = Path::new("C:\\");
+        let top_level_path = Path::new("C:\\Users\\astronaut");
+
+        let output = contract_path(full_path, top_level_path, "~");
+        assert_eq!(output, "/c");
     }
 
     #[test]
