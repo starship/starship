@@ -1,4 +1,4 @@
-use crate::config::{Config, TableExt};
+use crate::config::Config;
 use crate::module::Module;
 
 use clap::ArgMatches;
@@ -13,7 +13,7 @@ use std::path::PathBuf;
 /// of the prompt.
 pub struct Context<'a> {
     /// The deserialized configuration map from the user's `starship.toml` file.
-    pub config: Config,
+    pub config: toml::value::Table,
 
     /// The current working directory that starship is being called in.
     pub current_dir: PathBuf,
@@ -51,7 +51,7 @@ impl<'a> Context<'a> {
     where
         T: Into<PathBuf>,
     {
-        let config = Config::initialize();
+        let config = toml::value::Table::initialize();
 
         // TODO: Currently gets the physical directory. Get the logical directory.
         let current_dir = Context::expand_tilde(dir.into());

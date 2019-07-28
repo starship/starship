@@ -1,4 +1,4 @@
-use crate::config::TableExt;
+use crate::config::Config;
 use crate::segment::Segment;
 use ansi_term::Style;
 use ansi_term::{ANSIString, ANSIStrings};

@@ -14,6 +14,9 @@ $ touch ~/.config/starship.toml
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 
 ```toml
+# Don't print a new line at the start of the prompt
+add_newline = false
+
 # Replace the "➜" symbol in the prompt with "❯"
 [character]      # The name of the module we are confguring is "character"
 symbol = "❯"     # The "symbol" segment is being set to "❯"
@@ -35,6 +38,24 @@ are segments within it. Every module also has a prefix and suffix that are the d
 ```
 [prefix]      [symbol]     [version]    [suffix]
  "via "         "⬢"        "v10.4.1"       ""
+```
+
+## Prompt
+
+This is the list of prompt-wide configuration options.
+
+### Options
+
+| Variable | Default | Description|
+| `add_newline` | `true` | Add a new line before the start of the prompt |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+# Disable the newline at the start of the prompt
+add_newline = false
 ```
 
 ## Battery
