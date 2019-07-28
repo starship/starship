@@ -1,4 +1,5 @@
 use ansi_term::Color;
+use path_slash::PathExt;
 use std::path::Path;
 
 use super::{Context, Module};
@@ -65,7 +66,7 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
         path = full_path
             .strip_prefix(top_level_path)
             .unwrap()
-            .to_str()
+            .to_slash()
             .unwrap()
     )
 }
