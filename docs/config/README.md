@@ -121,6 +121,15 @@ git repo that you're currently in.
 | `disabled`          | `false` | Disables the `directory` module.       |
 | `truncation_length` | `3`     | Truncates to this many parent folders. |
 
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[directory]
+truncation_length = 8
+```
+
 ## Git Branch
 
 The `git_branch` module shows the active branch of the repo in your current directory.
