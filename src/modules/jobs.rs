@@ -14,12 +14,11 @@ pub fn segment<'a>(context: &'a Context) -> Option<Module<'a>> {
     let num_of_jobs = arguments.value_of("jobs").unwrap_or("0");
     if num_of_jobs == "0" {
         return None;
-    } else {
-        module.new_segment("symbol", PROMPT_CHAR);
-        if num_of_jobs != "1" {
-            module.new_segment("number", num_of_jobs);
-        }
-    };
+    }
+    module.new_segment("symbol", PROMPT_CHAR);
+    if num_of_jobs != "1" {
+        module.new_segment("number", num_of_jobs);
+    }
 
     Some(module)
 }
