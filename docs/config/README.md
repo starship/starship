@@ -118,8 +118,8 @@ git repo that you're currently in.
 
 | Variable            | Default | Description                            |
 | ------------------- | ------- | -------------------------------------- |
-| `disabled`          | `false` | Disables the `directory` module.       |
 | `truncation_length` | `3`     | Truncates to this many parent folders. |
+| `disabled`          | `false` | Disables the `directory` module.       |
 
 ### Example
 

@@ -131,7 +131,7 @@ impl Config for Table {
         str_value
     }
 
-    /// Get a key from a module's configuration as a string
+    /// Get a key from a module's configuration as an integer
     fn get_as_i64(&self, key: &str) -> Option<i64> {
         let value = self.get_config(key)?;
         let i64_value = value.as_integer();
