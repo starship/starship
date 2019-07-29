@@ -135,10 +135,7 @@ fn truncated_directory_config_small() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!(
-        "in {} ",
-        Color::Cyan.bold().paint("thrusters/rocket")
-    );
+    let expected = format!("in {} ", Color::Cyan.bold().paint("thrusters/rocket"));
     assert_eq!(expected, actual);
     Ok(())
 }
