@@ -46,8 +46,9 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Variable | Default | Description|
-| `add_newline` | `true` | Add a new line before the start of the prompt |
+| Variable      | Default | Description                                   |
+| ------------- | ------- | --------------------------------------------- |
+| `add_newline` | `true`  | Add a new line before the start of the prompt |
 
 ### Example
 
