@@ -99,6 +99,16 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "andrewda",
+      "name": "Andrew Dassonville",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/10191084?v=4",
+      "profile": "https://andrewda.me",
+      "contributions": [
+        "bug",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
