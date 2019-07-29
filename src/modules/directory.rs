@@ -15,11 +15,15 @@ use super::{Context, Module};
 /// Paths will be limited in length to `3` path components by default.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const HOME_SYMBOL: &str = "~";
-    const DIR_TRUNCATION_LENGTH: usize = 3;
+    const DIR_TRUNCATION_LENGTH: i64 = 3;
     let module_color = Color::Cyan.bold();
 
     let mut module = context.new_module("directory")?;
     module.set_style(module_color);
+
+    let truncation_length = module
+        .config_value_i64("truncation_length")
+        .unwrap_or(DIR_TRUNCATION_LENGTH);
 
     let current_dir = &context.current_dir;
     log::debug!("Current directory: {:?}", current_dir);
@@ -38,7 +42,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // Truncate the dir string to the maximum number of path components
-    let truncated_dir_string = truncate(dir_string, DIR_TRUNCATION_LENGTH);
+    let truncated_dir_string = truncate(dir_string, truncation_length as usize);
     module.new_segment("path", &truncated_dir_string);
 
     module.get_prefix().set_value("in ");

@@ -116,9 +116,19 @@ git repo that you're currently in.
 
 ### Options
 
-| Variable   | Default | Description                      |
-| ---------- | ------- | -------------------------------- |
-| `disabled` | `false` | Disables the `directory` module. |
+| Variable            | Default | Description                            |
+| ------------------- | ------- | -------------------------------------- |
+| `truncation_length` | `3`     | Truncates to this many parent folders. |
+| `disabled`          | `false` | Disables the `directory` module.       |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[directory]
+truncation_length = 8
+```
 
 ## Git Branch
 
