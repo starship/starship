@@ -16,11 +16,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .parse::<u64>()
         .ok()?;
 
-    let signed_config_min = context
-        .config
-        .get_module_config("cmd_duration")
-        .and_then(|cfg| cfg.get_as_i64("min_time"))
-        .unwrap_or(2);
+    let signed_config_min = module.config_value_i64("min time").unwrap_or(2);
 
     /* TODO: Once error handling is implemented, warn the user if their config
     min time is nonsensical */

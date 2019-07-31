@@ -83,7 +83,7 @@ starship_precmd() {
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME="$(date +%s)";
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME));
-        PROMPT="$(starship prompt --status=$STATUS --duration=$STARSHIP_DURATION)";
+        PROMPT="$(starship prompt --status=$STATUS --cmd-duration=$STARSHIP_DURATION)";
         unset STARSHIP_START_TIME;
     else
         PROMPT="$(starship prompt --status=$STATUS)";
@@ -107,6 +107,6 @@ const FISH_INIT: &str = r##"
 function fish_prompt;
     set -l CMD_DURATION "$CMD_DURATION$cmd_duration";
     set -l starship_duration (math --scale=0 "$CMD_DURATION / 1000");
-    starship prompt --status=$status --duration=$starship_duration;
+    starship prompt --status=$status --cmd-duration=$starship_duration;
 end;
 "##;

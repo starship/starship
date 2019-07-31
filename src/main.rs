@@ -38,9 +38,9 @@ fn main() {
 
     let cmd_duration_arg = Arg::with_name("cmd_duration")
         .short("d")
-        .long("duration")
-        .value_name("DURATION")
-        .help("The amount of time since the start of the last command (s)")
+        .long("cmd-duration")
+        .value_name("CMD_DURATION")
+        .help("The execution duration of the last command, in seconds")
         .takes_value(true);
 
     let matches = App::new("starship")
