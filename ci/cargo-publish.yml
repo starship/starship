@@ -9,5 +9,7 @@ jobs:
     steps:
       - template: install-rust.yml
 
-      - script: cargo clippy -- -D warnings -D clippy::all -D clippy::nursery -D clippy::pedantic
-        displayName: Run clippy
+      - script: |
+          cargo login $(CARGO_TOKEN)
+          cargo publish
+        displayName: Publish package to Crates.io

@@ -149,6 +149,7 @@ impl Config for Table {
     }
 }
 
+
 mod tests {
     use super::*;
 
