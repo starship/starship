@@ -17,13 +17,13 @@ pub struct Module<'a> {
     style: Style,
 
     /// The prefix used to separate the current module from the previous one.
-    prefix: ModuleAffix,
+    prefix: Affix,
 
     /// The collection of segments that compose this module.
     segments: Vec<Segment>,
 
     /// The suffix used to separate the current module from the next one.
-    suffix: ModuleAffix,
+    suffix: Affix,
 }
 
 impl<'a> Module<'a> {
@@ -33,9 +33,9 @@ impl<'a> Module<'a> {
             config,
             name: name.to_string(),
             style: Style::default(),
-            prefix: ModuleAffix::default_prefix(name.to_string()),
+            prefix: Affix::default_prefix(name),
             segments: Vec::new(),
-            suffix: ModuleAffix::default_suffix(name.to_string()),
+            suffix: Affix::default_suffix(name),
         }
     }
 
@@ -56,12 +56,12 @@ impl<'a> Module<'a> {
     }
 
     /// Get the module's prefix
-    pub fn get_prefix(&mut self) -> &mut ModuleAffix {
+    pub fn get_prefix(&mut self) -> &mut Affix {
         &mut self.prefix
     }
 
     /// Get the module's suffix
-    pub fn get_suffix(&mut self) -> &mut ModuleAffix {
+    pub fn get_suffix(&mut self) -> &mut Affix {
         &mut self.suffix
     }
 
@@ -82,7 +82,7 @@ impl<'a> Module<'a> {
         let mut ansi_strings = self
             .segments
             .iter()
-            .map(|s| s.ansi_string())
+            .map(Segment::ansi_string)
             .collect::<Vec<ANSIString>>();
 
         ansi_strings.insert(0, self.prefix.ansi_string());
@@ -119,7 +119,7 @@ impl<'a> fmt::Display for Module<'a> {
 }
 
 /// Module affixes are to be used for the prefix or suffix of a module.
-pub struct ModuleAffix {
+pub struct Affix {
     /// The affix's name, to be used in configuration and logging.
     name: String,
 
@@ -130,17 +130,17 @@ pub struct ModuleAffix {
     value: String,
 }
 
-impl ModuleAffix {
-    pub fn default_prefix(name: String) -> ModuleAffix {
-        ModuleAffix {
+impl Affix {
+    pub fn default_prefix(name: &str) -> Self {
+        Self {
             name: format!("{}_prefix", name),
             style: Style::default(),
             value: "via ".to_string(),
         }
     }
 
-    pub fn default_suffix(name: String) -> ModuleAffix {
-        ModuleAffix {
+    pub fn default_suffix(name: &str) -> Self {
+        Self {
             name: format!("{}_suffix", name),
             style: Style::default(),
             value: " ".to_string(),
@@ -150,7 +150,7 @@ impl ModuleAffix {
     /// Sets the style of the module.
     ///
     /// Accepts either `Color` or `Style`.
-    pub fn set_style<T>(&mut self, style: T) -> &mut ModuleAffix
+    pub fn set_style<T>(&mut self, style: T) -> &mut Self
     where
         T: Into<Style>,
     {
@@ -159,7 +159,7 @@ impl ModuleAffix {
     }
 
     /// Sets the value of the module.
-    pub fn set_value<T>(&mut self, value: T) -> &mut ModuleAffix
+    pub fn set_value<T>(&mut self, value: T) -> &mut Self
     where
         T: Into<String>,
     {
@@ -173,7 +173,7 @@ impl ModuleAffix {
     }
 }
 
-impl fmt::Display for ModuleAffix {
+impl fmt::Display for Affix {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.ansi_string())
     }

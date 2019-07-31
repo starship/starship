@@ -9,5 +9,5 @@ jobs:
     steps:
       - template: install-rust.yml
 
-      - script: cargo clippy -- -D warnings -D clippy::all -D clippy::nursery -D clippy::pedantic
+      - script: cargo clippy -- -D clippy::all
         displayName: Run clippy

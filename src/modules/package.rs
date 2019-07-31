@@ -28,7 +28,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn extract_cargo_version(file_contents: &str) -> Option<String> {
-    let cargo_toml: toml::Value = toml::from_str(&file_contents).ok()?;
+    let cargo_toml: toml::Value = toml::from_str(file_contents).ok()?;
     let raw_version = cargo_toml.get("package")?.get("version")?.as_str()?;
 
     let formatted_version = format_version(raw_version);
@@ -36,7 +36,7 @@ fn extract_cargo_version(file_contents: &str) -> Option<String> {
 }
 
 fn extract_package_version(file_contents: &str) -> Option<String> {
-    let package_json: json::Value = json::from_str(&file_contents).ok()?;
+    let package_json: json::Value = json::from_str(file_contents).ok()?;
     let raw_version = package_json.get("version")?.as_str()?;
     if raw_version == "null" {
         return None;

@@ -33,12 +33,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         // Contract the path to the git repo root
         let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
 
-        dir_string = contract_path(&current_dir, repo_root, repo_folder_name);
+        dir_string = contract_path(current_dir, repo_root, repo_folder_name);
     } else {
         // Contract the path to the home directory
         let home_dir = dirs::home_dir().unwrap();
 
-        dir_string = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
+        dir_string = contract_path(current_dir, &home_dir, HOME_SYMBOL);
     }
 
     // Truncate the dir string to the maximum number of path components
@@ -89,8 +89,8 @@ fn replace_c_dir(path: String) -> String {
 ///
 /// On non-Windows OS, does nothing
 #[cfg(not(target_os = "windows"))]
-fn replace_c_dir(path: String) -> String {
-    return path;
+const fn replace_c_dir(path: String) -> String {
+    path
 }
 
 /// Truncate a path to only have a set number of path components
