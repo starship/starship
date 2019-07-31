@@ -58,9 +58,9 @@ https://github.com/starship/starship/issues/124
 
 const BASH_INIT: &str = r##"
 starship_precmd() {
-        PS1="$(starship prompt --status=$?";
-        PROMPT_COMMAND=starship_precmd;
-}
+        PS1="$(starship prompt --status=$?)";
+};
+PROMPT_COMMAND=starship_precmd;
 "##;
 /* TODO: Once warning/error system is implemented in starship, print a warning
 if starship will not be printing timing due to DEBUG clobber error */
