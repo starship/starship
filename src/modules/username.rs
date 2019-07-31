@@ -7,9 +7,9 @@ use super::{Context, Module};
 /// Creates a module with the current user's username
 ///
 /// Will display the usename if any of the following criteria are met:
-///     - The current user isn't the same as the one that is logged in ($LOGNAME != $USER)
+///     - The current user isn't the same as the one that is logged in (`$LOGNAME` != `$USER`)
 ///     - The current user is root (UID = 0)
-///     - The user is currently connected as an SSH session ($SSH_CONNECTION)
+///     - The user is currently connected as an SSH session (`$SSH_CONNECTION`)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let user = env::var("USER").ok();
     let logname = env::var("LOGNAME").ok();

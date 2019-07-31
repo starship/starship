@@ -17,8 +17,8 @@ pub struct Segment {
 
 impl Segment {
     /// Creates a new segment with default fields.
-    pub fn new(name: &str) -> Segment {
-        Segment {
+    pub fn new(name: &str) -> Self {
+        Self {
             name: name.to_string(),
             style: None,
             value: "".to_string(),
@@ -28,7 +28,7 @@ impl Segment {
     /// Sets the style of the segment.
     ///
     /// Accepts either `Color` or `Style`.
-    pub fn set_style<T>(&mut self, style: T) -> &mut Segment
+    pub fn set_style<T>(&mut self, style: T) -> &mut Self
     where
         T: Into<Style>,
     {
@@ -37,7 +37,7 @@ impl Segment {
     }
 
     /// Sets the value of the segment.
-    pub fn set_value<T>(&mut self, value: T) -> &mut Segment
+    pub fn set_value<T>(&mut self, value: T) -> &mut Self
     where
         T: Into<String>,
     {
