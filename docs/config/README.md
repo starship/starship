@@ -46,8 +46,9 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Variable | Default | Description|
-| `add_newline` | `true` | Add a new line before the start of the prompt |
+| Variable      | Default | Description                                    |
+| ------------- | ------- | ---------------------------------------------- |
+| `add_newline` | `true`  | Add a new line before the start of the prompt. |
 
 ### Example
 
@@ -116,9 +117,19 @@ git repo that you're currently in.
 
 ### Options
 
-| Variable   | Default | Description                      |
-| ---------- | ------- | -------------------------------- |
-| `disabled` | `false` | Disables the `directory` module. |
+| Variable            | Default | Description                                                                     |
+| ------------------- | ------- | ------------------------------------------------------------------------------- |
+| `truncation_length` | `3`     | The number of parent folders that the current directory should be truncated to. |
+| `disabled`          | `false` | Disables the `directory` module.                                                |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[directory]
+truncation_length = 8
+```
 
 ## Git Branch
 
