@@ -6,7 +6,7 @@ use std::io;
 use std::path::Path;
 use tempfile::TempDir;
 
-use crate::common;
+use crate::common::{self, TestCommand};
 
 #[test]
 fn home_directory() -> io::Result<()> {
@@ -91,6 +91,51 @@ fn truncated_directory_in_root() -> io::Result<()> {
         "in {} ",
         Color::Cyan.bold().paint("starship/thrusters/rocket")
     );
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[ignore]
+fn truncated_directory_config_large() -> io::Result<()> {
+    let dir = Path::new("/tmp/starship/thrusters/rocket");
+    fs::create_dir_all(&dir)?;
+
+    let output = common::render_module("dir")
+        .use_config(toml::toml! {
+            [directory]
+            truncation_length = 100
+        })
+        .arg("--path")
+        .arg(dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!(
+        "in {} ",
+        Color::Cyan.bold().paint("/tmp/starship/thrusters/rocket")
+    );
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[ignore]
+fn truncated_directory_config_small() -> io::Result<()> {
+    let dir = Path::new("/tmp/starship/thrusters/rocket");
+    fs::create_dir_all(&dir)?;
+
+    let output = common::render_module("dir")
+        .use_config(toml::toml! {
+            [directory]
+            truncation_length = 2
+        })
+        .arg("--path")
+        .arg(dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("in {} ", Color::Cyan.bold().paint("thrusters/rocket"));
     assert_eq!(expected, actual);
     Ok(())
 }

@@ -2,6 +2,7 @@ use clap::ArgMatches;
 use rayon::prelude::*;
 use std::io::{self, Write};
 
+use crate::config::Config;
 use crate::context::Context;
 use crate::module::Module;
 use crate::modules;
@@ -24,12 +25,15 @@ const PROMPT_ORDER: &[&str] = &[
 
 pub fn prompt(args: ArgMatches) {
     let context = Context::new(args);
+    let config = &context.config;
 
     let stdout = io::stdout();
     let mut handle = stdout.lock();
 
     // Write a new line before the prompt
-    writeln!(handle).unwrap();
+    if config.get_as_bool("add_newline") != Some(false) {
+        writeln!(handle).unwrap();
+    }
 
     let modules = PROMPT_ORDER
         .par_iter()

@@ -2,25 +2,34 @@ use crate::utils;
 use std::env;
 
 use dirs::home_dir;
+use toml::value::Table;
 
-pub struct Config {
-    data: toml::value::Table,
+pub trait Config {
+    fn initialize() -> Table;
+    fn config_from_file() -> Option<Table>;
+    fn get_module_config(&self, module_name: &str) -> Option<&Table>;
+
+    // Config accessor methods
+    fn get_as_bool(&self, key: &str) -> Option<bool>;
+    fn get_as_str(&self, key: &str) -> Option<&str>;
+    fn get_as_i64(&self, key: &str) -> Option<i64>;
+
+    // Internal implementation for accessors
+    fn get_config(&self, key: &str) -> Option<&toml::value::Value>;
 }
 
-impl Config {
+impl Config for Table {
     /// Initialize the Config struct
-    pub fn initialize() -> Config {
-        if let Some(file_data) = Config::config_from_file() {
-            return Config { data: file_data };
+    fn initialize() -> Table {
+        if let Some(file_data) = Table::config_from_file() {
+            return file_data;
         }
 
-        Config {
-            data: toml::value::Table::new(),
-        }
+        Table::new()
     }
 
     /// Create a config from a starship configuration file
-    fn config_from_file() -> Option<toml::value::Table> {
+    fn config_from_file() -> Option<Table> {
         let file_path = match env::var("STARSHIP_CONFIG") {
             Ok(path) => {
                 // Use $STARSHIP_CONFIG as the config path if available
@@ -55,9 +64,8 @@ impl Config {
     }
 
     /// Get the subset of the table for a module by its name
-    pub fn get_module_config(&self, module_name: &str) -> Option<&toml::value::Table> {
+    fn get_module_config(&self, module_name: &str) -> Option<&toml::value::Table> {
         let module_config = self
-            .data
             .get(module_name)
             .map(toml::Value::as_table)
             .unwrap_or(None);
@@ -74,16 +82,7 @@ impl Config {
 
         module_config
     }
-}
 
-/// Extends `toml::value::Table` with useful methods
-pub trait TableExt {
-    fn get_config(&self, key: &str) -> Option<&toml::value::Value>;
-    fn get_as_bool(&self, key: &str) -> Option<bool>;
-    fn get_as_str(&self, key: &str) -> Option<&str>;
-}
-
-impl TableExt for toml::value::Table {
     /// Get the config value for a given key
     fn get_config(&self, key: &str) -> Option<&toml::value::Value> {
         log::trace!("Looking for config key \"{}\"", key);
@@ -131,6 +130,23 @@ impl TableExt for toml::value::Table {
 
         str_value
     }
+
+    /// Get a key from a module's configuration as an integer
+    fn get_as_i64(&self, key: &str) -> Option<i64> {
+        let value = self.get_config(key)?;
+        let i64_value = value.as_integer();
+
+        if i64_value.is_none() {
+            log::debug!(
+                "Expected \"{}\" to be an integer. Instead received {} of type {}.",
+                key,
+                value,
+                value.type_str()
+            );
+        }
+
+        i64_value
+    }
 }
 
 mod tests {
@@ -166,5 +182,21 @@ mod tests {
         // Use with boolean value
         table.insert(String::from("boolean"), toml::value::Value::Boolean(true));
         assert_eq!(table.get_as_str("boolean"), None);
+    }
+
+    #[test]
+    fn table_get_as_i64() {
+        let mut table = toml::value::Table::new();
+
+        // Use with integer value
+        table.insert(String::from("integer"), toml::value::Value::Integer(82));
+        assert_eq!(table.get_as_i64("integer"), Some(82));
+
+        // Use with string value
+        table.insert(
+            String::from("string"),
+            toml::value::Value::String(String::from("82")),
+        );
+        assert_eq!(table.get_as_bool("string"), None);
     }
 }

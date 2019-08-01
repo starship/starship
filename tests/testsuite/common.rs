@@ -9,8 +9,8 @@ lazy_static! {
     static ref EMPTY_CONFIG: PathBuf = MANIFEST_DIR.join("empty_config.toml");
 }
 
-/// Run an instance of starship
-fn run_starship() -> process::Command {
+/// Render the full starship prompt
+pub fn render_prompt() -> process::Command {
     let mut command = process::Command::new("./target/debug/starship");
 
     command
@@ -22,6 +22,7 @@ fn run_starship() -> process::Command {
     command
 }
 
+/// Render a specific starship module by name
 pub fn render_module(module_name: &str) -> process::Command {
     let mut command = process::Command::new("./target/debug/starship");
 

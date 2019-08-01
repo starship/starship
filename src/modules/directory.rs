@@ -1,4 +1,5 @@
 use ansi_term::Color;
+use path_slash::PathExt;
 use std::path::Path;
 
 use super::{Context, Module};
@@ -14,11 +15,15 @@ use super::{Context, Module};
 /// Paths will be limited in length to `3` path components by default.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const HOME_SYMBOL: &str = "~";
-    const DIR_TRUNCATION_LENGTH: usize = 3;
+    const DIR_TRUNCATION_LENGTH: i64 = 3;
     let module_color = Color::Cyan.bold();
 
     let mut module = context.new_module("directory")?;
     module.set_style(module_color);
+
+    let truncation_length = module
+        .config_value_i64("truncation_length")
+        .unwrap_or(DIR_TRUNCATION_LENGTH);
 
     let current_dir = &context.current_dir;
     log::debug!("Current directory: {:?}", current_dir);
@@ -37,7 +42,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // Truncate the dir string to the maximum number of path components
-    let truncated_dir_string = truncate(dir_string, DIR_TRUNCATION_LENGTH);
+    let truncated_dir_string = truncate(dir_string, truncation_length as usize);
     module.new_segment("path", &truncated_dir_string);
 
     module.get_prefix().set_value("in ");
@@ -51,23 +56,41 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 /// `top_level_replacement`.
 fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement: &str) -> String {
     if !full_path.starts_with(top_level_path) {
-        return full_path.to_str().unwrap().to_string();
+        return replace_c_dir(full_path.to_slash().unwrap());
     }
 
     if full_path == top_level_path {
-        return top_level_replacement.to_string();
+        return replace_c_dir(top_level_replacement.to_string());
     }
 
     format!(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
         separator = "/",
-        path = full_path
-            .strip_prefix(top_level_path)
-            .unwrap()
-            .to_str()
-            .unwrap()
+        path = replace_c_dir(
+            full_path
+                .strip_prefix(top_level_path)
+                .unwrap()
+                .to_slash()
+                .unwrap()
+        )
     )
+}
+
+/// Replaces "C://" with "/c/" within a Windows path
+///
+/// On non-Windows OS, does nothing
+#[cfg(target_os = "windows")]
+fn replace_c_dir(path: String) -> String {
+    return path.replace("C:/", "/c");
+}
+
+/// Replaces "C://" with "/c/" within a Windows path
+///
+/// On non-Windows OS, does nothing
+#[cfg(not(target_os = "windows"))]
+fn replace_c_dir(path: String) -> String {
+    return path;
 }
 
 /// Truncate a path to only have a set number of path components
@@ -108,6 +131,46 @@ mod tests {
 
         let output = contract_path(full_path, repo_root, "rocket-controls");
         assert_eq!(output, "rocket-controls/src");
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
+    fn contract_windows_style_home_directory() {
+        let full_path = Path::new("C:\\Users\\astronaut\\schematics\\rocket");
+        let home = Path::new("C:\\Users\\astronaut");
+
+        let output = contract_path(full_path, home, "~");
+        assert_eq!(output, "~/schematics/rocket");
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
+    fn contract_windows_style_repo_directory() {
+        let full_path = Path::new("C:\\Users\\astronaut\\dev\\rocket-controls\\src");
+        let repo_root = Path::new("C:\\Users\\astronaut\\dev\\rocket-controls");
+
+        let output = contract_path(full_path, repo_root, "rocket-controls");
+        assert_eq!(output, "rocket-controls/src");
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
+    fn contract_windows_style_no_top_level_directory() {
+        let full_path = Path::new("C:\\Some\\Other\\Path");
+        let top_level_path = Path::new("C:\\Users\\astronaut");
+
+        let output = contract_path(full_path, top_level_path, "~");
+        assert_eq!(output, "/c/Some/Other/Path");
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
+    fn contract_windows_style_root_directory() {
+        let full_path = Path::new("C:\\");
+        let top_level_path = Path::new("C:\\Users\\astronaut");
+
+        let output = contract_path(full_path, top_level_path, "~");
+        assert_eq!(output, "/c");
     }
 
     #[test]
