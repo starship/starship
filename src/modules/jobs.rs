@@ -7,7 +7,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const JOB_CHAR: &str = "✦ ";
     let module_color = Color::Blue.bold();
 
-    let mut module = context.new_module("jobs");
+    let mut module = context.new_module("jobs")?;
     module.set_style(module_color);
 
     let arguments = &context.arguments;
@@ -15,7 +15,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if num_of_jobs == "0" {
         return None;
     }
-    module.new_segment("symbol", PROMPT_CHAR);
+    module.new_segment("symbol", JOB_CHAR);
     if num_of_jobs != "1" {
         module.new_segment("number", num_of_jobs);
     }
