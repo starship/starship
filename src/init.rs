@@ -54,8 +54,7 @@ pub fn init(shell_name: &str) {
         }
     };
 
-    if setup_script.is_some() {
-        let script = setup_script.unwrap();
+    if let Some(script) = setup_script {
         print!("{}", script);
     }
 }

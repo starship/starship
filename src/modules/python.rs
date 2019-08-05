@@ -29,7 +29,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let mut module = context.new_module("python")?;
             module.set_style(module_color);
 
-            let formatted_version = format_python_version(python_version);
+            let formatted_version = format_python_version(&python_version);
             module.new_segment("symbol", PYTHON_CHAR);
             module.new_segment("version", &formatted_version);
 
@@ -57,7 +57,7 @@ fn get_python_version() -> Option<String> {
     }
 }
 
-fn format_python_version(python_stdout: String) -> String {
+fn format_python_version(python_stdout: &str) -> String {
     format!("v{}", python_stdout.trim_start_matches("Python ").trim())
 }
 
@@ -67,7 +67,7 @@ mod tests {
 
     #[test]
     fn test_format_python_version() {
-        let input = String::from("Python 3.7.2");
+        let input = "Python 3.7.2";
         assert_eq!(format_python_version(input), "v3.7.2");
     }
 }
