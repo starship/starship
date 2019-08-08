@@ -31,7 +31,6 @@ fn config_blank_duration_5s() -> io::Result<()> {
 }
 
 #[test]
-#[ignore]
 fn config_5s_duration_3s() -> io::Result<()> {
     let output = common::render_module("cmd_duration")
         .use_config(toml::toml! {
@@ -48,7 +47,6 @@ fn config_5s_duration_3s() -> io::Result<()> {
 }
 
 #[test]
-#[ignore]
 fn config_5s_duration_10s() -> io::Result<()> {
     let output = common::render_module("cmd_duration")
         .use_config(toml::toml! {
@@ -65,7 +63,6 @@ fn config_5s_duration_10s() -> io::Result<()> {
 }
 
 #[test]
-#[ignore]
 fn config_disabled() -> io::Result<()> {
     let output = common::render_module("cmd_duration")
         .use_config(toml::toml! {

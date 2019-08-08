@@ -9,9 +9,6 @@ use super::{Context, Module};
 /// execute. Default is two seconds, but can be set by config option `min_time`.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("cmd_duration")?;
-    if module.config_value_bool("disabled").unwrap_or(false) {
-        return None;
-    }
 
     let arguments = &context.arguments;
     let elapsed = arguments
