@@ -45,8 +45,8 @@ The prompt shows information need while you're working, while staying sleek and 
   - `+` — added files
   - `»` — renamed files
   - `✘` — deleted files
+- Execution time of the last command if it exceeds the set threshold.
 - [PLANNED #80](https://github.com/starship/starship/issues/80) – Indicator for jobs in the background (`✦`).
-- [PLANNED #104](https://github.com/starship/starship/issues/104) – Execution time of the last command if it exceeds the set threshold.
 
 ## 🚀 Installation
 
