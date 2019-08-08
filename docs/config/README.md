@@ -373,7 +373,7 @@ The `cmd_duration` module shows how long the last command took to execute.
 The module will be shown only if the command took longer than two seconds, or
 the `min_time` config value, if it exists.
 
-::: warning
+::: warning NOTE
 Command duration is currently not supported in `bash`. See
 [this issue](https://github.com/starship/starship/issues/124) for more details.
 :::
