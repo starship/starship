@@ -33,7 +33,7 @@ The prompt shows information need while you're working, while staying sleek and 
 - Current Python version (`🐍`).
 - Current Go version (`🐹`).
 - Package version of package in current directory (`📦`).
-- Current battery level and status
+- Current battery level and status.
 - Current Git branch and rich repo status:
   - `=` — conflicting changes
   - `⇡` — ahead of remote branch
