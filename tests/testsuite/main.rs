@@ -1,4 +1,5 @@
 mod character;
+mod cmd_duration;
 mod common;
 mod configuration;
 mod directory;

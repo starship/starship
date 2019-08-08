@@ -72,7 +72,8 @@ fn main() {
                         .required(true),
                 )
                 .arg(&status_code_arg)
-                .arg(&path_arg),
+                .arg(&path_arg)
+                .arg(&cmd_duration_arg),
         )
         .get_matches();
 

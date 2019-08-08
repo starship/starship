@@ -366,3 +366,28 @@ The module will be shown if any of the following conditions are met:
 [username]
 disabled = true
 ```
+
+## Command Duration
+
+The `cmd_duration` module shows how long the last command took to execute.
+The module will be shown only if the command took longer than two seconds, or
+the `min_time` config value, if it exists.
+
+NOTE: Command duration is currently **not supported in `bash`**. See
+[this issue](https://github.com/starship/starship/issues/124) for more details.
+
+### Options
+
+| Variable   | Default | Description                         |
+| ---------- | ------- | ----------------------------------- |
+| `disabled` | `false` | Disables the `cmd_duration` module. |
+| `min_time` | `2`     | Shortest duration to show time for. |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[username]
+min_time = 4
+```
