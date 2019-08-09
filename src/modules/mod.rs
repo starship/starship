@@ -9,6 +9,7 @@ mod line_break;
 mod nodejs;
 mod package;
 mod python;
+mod ruby;
 mod rust;
 mod username;
 
@@ -23,6 +24,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "rust" | "rustlang" => rust::module(context),
         "python" => python::module(context),
         "go" | "golang" => golang::module(context),
+        "ruby" => ruby::module(context),
         "line_break" => line_break::module(context),
         "package" => package::module(context),
         "git_branch" => git_branch::module(context),
