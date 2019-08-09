@@ -97,7 +97,9 @@
       "profile": "https://github.com/chipbuster",
       "contributions": [
         "bug",
-        "code"
+        "code",
+        "doc",
+        "test"
       ]
     },
     {

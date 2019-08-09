@@ -1,5 +1,6 @@
 mod battery;
 mod character;
+mod cmd_duration;
 mod directory;
 mod git_branch;
 mod git_status;
@@ -29,6 +30,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "git_status" => git_status::module(context),
         "username" => username::module(context),
         "battery" => battery::module(context),
+        "cmd_duration" => cmd_duration::module(context),
         "job" | "jobs" => jobs::module(context),
 
         _ => panic!("Unknown module: {}", module),

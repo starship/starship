@@ -33,7 +33,7 @@ The prompt shows information need while you're working, while staying sleek and 
 - Current Python version (`🐍`).
 - Current Go version (`🐹`).
 - Package version of package in current directory (`📦`).
-- Current battery level and status
+- Current battery level and status.
 - Current Git branch and rich repo status:
   - `=` — conflicting changes
   - `⇡` — ahead of remote branch
@@ -45,8 +45,8 @@ The prompt shows information need while you're working, while staying sleek and 
   - `+` — added files
   - `»` — renamed files
   - `✘` — deleted files
+- Execution time of the last command if it exceeds the set threshold.
 - Indicator for jobs in the background (`✦`).
-- [PLANNED #104](https://github.com/starship/starship/issues/104) – Execution time of the last command if it exceeds the set threshold.
 
 ## 🚀 Installation
 
@@ -120,7 +120,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/youssefhabri"><img src="https://avatars3.githubusercontent.com/u/1578005?v=4" width="100px;" alt="Youssef Habri"/><br /><sub><b>Youssef Habri</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=youssefhabri" title="Code">💻</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/chipbuster"><img src="https://avatars2.githubusercontent.com/u/4605384?v=4" width="100px;" alt="Kevin Song"/><br /><sub><b>Kevin Song</b></sub></a><br /><a href="https://github.com/starship/starship/issues?q=author%3Achipbuster" title="Bug reports">🐛</a> <a href="https://github.com/starship/starship/commits?author=chipbuster" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/chipbuster"><img src="https://avatars2.githubusercontent.com/u/4605384?v=4" width="100px;" alt="Kevin Song"/><br /><sub><b>Kevin Song</b></sub></a><br /><a href="https://github.com/starship/starship/issues?q=author%3Achipbuster" title="Bug reports">🐛</a> <a href="https://github.com/starship/starship/commits?author=chipbuster" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=chipbuster" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=chipbuster" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://andrewda.me"><img src="https://avatars1.githubusercontent.com/u/10191084?v=4" width="100px;" alt="Andrew Dassonville"/><br /><sub><b>Andrew Dassonville</b></sub></a><br /><a href="https://github.com/starship/starship/issues?q=author%3Aandrewda" title="Bug reports">🐛</a> <a href="https://github.com/starship/starship/commits?author=andrewda" title="Code">💻</a></td>
   </tr>
 </table>
