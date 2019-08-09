@@ -28,9 +28,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let mut module = context.new_module("ruby")?;
             module.set_style(module_color);
 
-            let formatted_version = ruby_version.trim();
+            let formatted_version = format_ruby_version(&ruby_version)?;
             module.new_segment("symbol", RUBY_CHAR);
-            module.new_segment("version", formatted_version);
+            module.new_segment("version", &formatted_version);
 
             Some(module)
         }
