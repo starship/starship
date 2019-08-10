@@ -9,12 +9,12 @@ use ansi_term::Color;
 /// (green by default)
 /// - If the exit-code was anything else, the arrow will be formatted with
 /// `COLOR_FAILURE` (red by default)
-#[allow(clippy::collapsible_if)]
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const SUCCESS_CHAR: &str = "➜";
     const FAILURE_CHAR: &str = "✖";
     let color_success = Color::Green.bold();
     let color_failure = Color::Red.bold();
+
 
     let mut module = context.new_module("character")?;
     module.get_prefix().set_value("");
@@ -23,9 +23,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let use_symbol = module
         .config_value_bool("use_symbol_for_status")
         .unwrap_or(false);
-    let use_color = module
-        .config_value_bool("use_color_for_status")
-        .unwrap_or(true);
     let exit_success = arguments.value_of("status_code").unwrap_or("0") == "0";
 
     /* If an error symbol is set in the config, use symbols to indicate
@@ -36,12 +33,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         module.new_segment("symbol", SUCCESS_CHAR)
     };
 
-    if use_color {
-        if exit_success {
-            symbol.set_style(color_success.bold());
-        } else {
-            symbol.set_style(color_failure.bold());
-        };
+    if exit_success {
+        symbol.set_style(color_success.bold());
+    } else {
+       symbol.set_style(color_failure.bold());
     };
+
     Some(module)
 }

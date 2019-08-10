@@ -39,44 +39,7 @@ fn char_module_failure_status() -> io::Result<()> {
 }
 
 #[test]
-fn char_module_symbolyes_colorno_status() -> io::Result<()> {
-    let expected_fail = "✖ ";
-    let expected_success = "➜ ";
-
-    let exit_values = ["1", "54321", "-5000"];
-
-    // Test failure values
-    for status in exit_values.iter() {
-        let arg = format!("--status={}", status);
-        let output = common::render_module("character")
-            .use_config(toml::toml! {
-                [character]
-                use_color_for_status = false
-                use_symbol_for_status = true
-            })
-            .arg(arg)
-            .output()?;
-        let actual = String::from_utf8(output.stdout).unwrap();
-        assert_eq!(expected_fail, actual);
-    }
-
-    // Test success
-    let output = common::render_module("character")
-        .use_config(toml::toml! {
-            [character]
-            use_color_for_status = false
-            use_symbol_for_status = true
-        })
-        .arg("--status=0")
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-    assert_eq!(expected_success, actual);
-
-    Ok(())
-}
-
-#[test]
-fn char_module_symbolyes_coloryes_status() -> io::Result<()> {
+fn char_module_symbolyes_status() -> io::Result<()> {
     let expected_fail = format!("{} ", Color::Red.bold().paint("✖"));
     let expected_success = format!("{} ", Color::Green.bold().paint("➜"));
 
@@ -88,7 +51,6 @@ fn char_module_symbolyes_coloryes_status() -> io::Result<()> {
         let output = common::render_module("character")
             .use_config(toml::toml! {
                 [character]
-                use_color_for_status = true
                 use_symbol_for_status = true
             })
             .arg(arg)
@@ -101,45 +63,7 @@ fn char_module_symbolyes_coloryes_status() -> io::Result<()> {
     let output = common::render_module("character")
         .use_config(toml::toml! {
             [character]
-            use_color_for_status = true
             use_symbol_for_status = true
-        })
-        .arg("--status=0")
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-    assert_eq!(expected_success, actual);
-
-    Ok(())
-}
-
-#[test]
-fn char_module_symbolno_colorno_status() -> io::Result<()> {
-    let expected_fail = "➜ ";
-    let expected_success = "➜ ";
-
-    let exit_values = ["1", "54321", "-5000"];
-
-    // Test failure values
-    for status in exit_values.iter() {
-        let arg = format!("--status={}", status);
-        let output = common::render_module("character")
-            .use_config(toml::toml! {
-                [character]
-                use_color_for_status = false
-                use_symbol_for_status = false
-            })
-            .arg(arg)
-            .output()?;
-        let actual = String::from_utf8(output.stdout).unwrap();
-        assert_eq!(expected_fail, actual);
-    }
-
-    // Test success
-    let output = common::render_module("character")
-        .use_config(toml::toml! {
-            [character]
-            use_color_for_status = false
-            use_symbol_for_status = false
         })
         .arg("--status=0")
         .output()?;

@@ -89,11 +89,9 @@ discharging_symbol = "💀"
 The `character` module shows a character (usually an arrow) beside where the text
 is entered in your terminal.
 
-The character will, by default, try to tell you whether the last command was
-successful or not. It can do this in two ways: by changing color (red/green)
-or by changing its shape (➜/✖). Which it tries will be determined by the values
-`use_symbol_for_status` and `use_color_for_status`. These two options are
-independent of each other: you can use one, both, or neither.
+The character will tell you whether the last command was successful or not. It 
+can do this in two ways: by changing color (red/green) or by changing its shape 
+(➜/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
 
 ### Options
 
@@ -102,7 +100,6 @@ independent of each other: you can use one, both, or neither.
 | `symbol`                | `"➜"`   | The symbol used before the text input in the prompt. |
 | `error_symbol`          | `"✖"`   | The symbol used before text input if the previous command failed. |
 | `use_symbol_for_status` | `false` | Indicate error status by changing the symbol.         |
-| `use_color_for_status`  | `false` | Indicate error status by changing the color.          |
 | `disabled`              | `false` | Disables the `character` module.                      |
 
 ### Example
@@ -114,7 +111,6 @@ independent of each other: you can use one, both, or neither.
 symbol = "❯"
 error_symbol = "✗"
 use_symbol_for_status = true
-use_color_for_status = true
 ```
 
 ## Command Duration
