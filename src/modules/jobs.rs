@@ -4,10 +4,16 @@ use super::{Context, Module};
 
 /// Creates a segment to show if there are any active jobs running
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    const THRESHOLD_DEFAULT: i64 = 1;
+    let mut module = context.new_module("jobs")?;
+
+    let threshold = module
+        .config_value_i64("truncation_length")
+        .unwrap_or(THRESHOLD_DEFAULT);
+
     const JOB_CHAR: &str = "✦ ";
     let module_color = Color::Blue.bold();
 
-    let mut module = context.new_module("jobs")?;
     module.set_style(module_color);
 
     let arguments = &context.arguments;
@@ -16,7 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
     module.new_segment("symbol", JOB_CHAR);
-    if num_of_jobs != "1" {
+    if num_of_jobs > threshold {
         module.new_segment("number", num_of_jobs);
     }
 
