@@ -42,7 +42,7 @@ fn main() {
         .value_name("CMD_DURATION")
         .help("The execution duration of the last command, in seconds")
         .takes_value(true);
-    
+
     let jobs_arg = Arg::with_name("jobs")
         .short("j")
         .long("jobs")
