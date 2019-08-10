@@ -22,13 +22,6 @@ fn main() {
         .help("The status code of the previously run command")
         .takes_value(true);
 
-    let jobs_arg = Arg::with_name("jobs")
-        .short("j")
-        .long("jobs")
-        .value_name("JOB")
-        .help("The number of currently running jobs")
-        .takes_value(false);
-
     let path_arg = Arg::with_name("path")
         .short("p")
         .long("path")
@@ -49,6 +42,13 @@ fn main() {
         .value_name("CMD_DURATION")
         .help("The execution duration of the last command, in seconds")
         .takes_value(true);
+    
+    let jobs_arg = Arg::with_name("jobs")
+        .short("j")
+        .long("jobs")
+        .value_name("JOB")
+        .help("The number of currently running jobs")
+        .takes_value(false);
 
     let matches = App::new("starship")
         .about("The cross-shell prompt for astronauts. ☄🌌️")
@@ -81,7 +81,8 @@ fn main() {
                 )
                 .arg(&status_code_arg)
                 .arg(&path_arg)
-                .arg(&cmd_duration_arg),
+                .arg(&cmd_duration_arg)
+                .arg(&jobs_arg),
         )
         .get_matches();
 
