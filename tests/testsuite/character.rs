@@ -30,9 +30,7 @@ fn char_module_failure_status() -> io::Result<()> {
 
     for status in exit_values.iter() {
         let arg = format!("--status={}", status);
-        let output = common::render_module("character")
-            .arg(arg)
-            .output()?;
+        let output = common::render_module("character").arg(arg).output()?;
         let actual = String::from_utf8(output.stdout).unwrap();
         assert_eq!(expected, actual);
     }

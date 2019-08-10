@@ -19,20 +19,24 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("character")?;
     module.get_prefix().set_value("");
 
-   let arguments = &context.arguments;
-    let use_symbol = module.config_value_bool("use_symbol_for_status").unwrap_or(false);
-    let use_color = module.config_value_bool("use_color_for_status").unwrap_or(true);
+    let arguments = &context.arguments;
+    let use_symbol = module
+        .config_value_bool("use_symbol_for_status")
+        .unwrap_or(false);
+    let use_color = module
+        .config_value_bool("use_color_for_status")
+        .unwrap_or(true);
     let exit_success = arguments.value_of("status_code").unwrap_or("0") == "0";
 
     /* If an error symbol is set in the config, use symbols to indicate
     success/failure, in addition to color */
     let symbol = if use_symbol && !exit_success {
         module.new_segment("error_symbol", FAILURE_CHAR)
-    }else{
+    } else {
         module.new_segment("symbol", SUCCESS_CHAR)
     };
 
-    if use_color{
+    if use_color {
         if exit_success {
             symbol.set_style(color_success.bold());
         } else {
