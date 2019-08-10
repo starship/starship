@@ -50,7 +50,8 @@ fn format_ruby_version(ruby_version: &str) -> Option<String> {
         // split into ["ruby", "2.6.0p0", "linux/amd64"]
         .split_whitespace()
         // return "2.6.0p0"
-        .nth(1)?;
+        .nth(1)?
+        .get(0..5)?;
 
     let mut formatted_version = String::with_capacity(version.len() + 1);
     formatted_version.push('v');
