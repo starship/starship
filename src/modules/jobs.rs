@@ -8,7 +8,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("jobs")?;
 
     let threshold = module
-        .config_value_i64("truncation_length")
+        .config_value_i64("threshold")
         .unwrap_or(THRESHOLD_DEFAULT);
 
     const JOB_CHAR: &str = "✦ ";
@@ -22,7 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
     module.new_segment("symbol", JOB_CHAR);
-    if num_of_jobs > threshold as usize {
+    if num_of_jobs > &(threshold as usize) {
         module.new_segment("number", num_of_jobs);
     }
 
