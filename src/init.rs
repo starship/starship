@@ -62,13 +62,47 @@ trimming within the jobs module.
 */
 
 const BASH_INIT: &str = r##"
-starship_precmd() {
-        PS1="$(starship prompt --status=$? --jobs="$(jobs -p | wc -l)")";
+starship_preexec() {
+    if [ "$PREEXEC_READY" = "true" ]; then
+        PREEXEC_READY=false;
+        STARSHIP_START_TIME=$(date +%s);
+    fi
 };
+starship_precmd() {
+    STATUS=$?;
+    if [[ $STARSHIP_START_TIME ]]; then
+        STARSHIP_END_TIME=$(date +%s);
+        STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME));
+        PS1="$(starship prompt --status=$STATUS --jobs="$(jobs -p | wc -l)" --cmd-duration=$STARSHIP_DURATION)";
+        unset STARSHIP_START_TIME;
+    else
+        PS1="$(starship prompt --status=$STATUS --jobs="$(jobs -p | wc -l)")";
+    fi;
+    PREEXEC_READY=true;
+};
+if [[ $preexec_functions ]]; then
+    preexec_functions+=(starship_preexec);
+    precmd_functions+=(starship_precmd);
+    STARSHIP_START_TIME=$(date +%s);
+fi;
+dbg_trap="$(trap -p DEBUG | cut -d' ' -f3 | tr -d \')";
+if [[ -z "$dbg_trap" ]]; then
+    trap starship_preexec DEBUG;
+elif [[ "a" ]]; then
+    function starship_preexec_all(){
+        $dbg_trap && starship_preexec;
+    };
+    trap starship_preexec_all DEBUG;
+fi;
 PROMPT_COMMAND=starship_precmd;
+STARSHIP_START_TIME=$(date +%s);
 "##;
+
 /* TODO: Once warning/error system is implemented in starship, print a warning
-if starship will not be printing timing due to DEBUG clobber error */
+if starship will not be printing timing due to DEBUG clobber error
+"$dbg_trap" != "starship_preexec" && "$dbg_trap" != "starship_preexec_all"
+
+*/
 
 /* For zsh: preexec_functions and precmd_functions provide preexec/precmd in a
    way that lets us avoid clobbering them.
