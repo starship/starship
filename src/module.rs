@@ -96,7 +96,7 @@ impl<'a> Module<'a> {
     }
 
     /// Get a module's config value as a string
-    fn config_value(&self, key: &str) -> Option<&str> {
+    pub fn config_value(&self, key: &str) -> Option<&str> {
         self.config.and_then(|config| config.get_as_str(key))
     }
 
