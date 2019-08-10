@@ -18,7 +18,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let arguments = &context.arguments;
     let num_of_jobs = arguments.value_of("jobs").unwrap_or("0");
-    if num_of_jobs == "0" {
+    let num_of_jobs: i64 = num_of_jobs.parse().unwrap();
+    if num_of_jobs == 0 {
         return None;
     }
     module.new_segment("symbol", JOB_CHAR);
