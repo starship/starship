@@ -88,7 +88,7 @@ fi;
 dbg_trap="$(trap -p DEBUG | cut -d' ' -f3 | tr -d \')";
 if [[ -z "$dbg_trap" ]]; then
     trap starship_preexec DEBUG;
-elif [[ "a" ]]; then
+elif [[ "$dbg_trap" != "starship_preexec" && "$dbg_trap" != "starship_preexec_all" ]]; then
     function starship_preexec_all(){
         $dbg_trap && starship_preexec;
     };
@@ -100,7 +100,6 @@ STARSHIP_START_TIME=$(date +%s);
 
 /* TODO: Once warning/error system is implemented in starship, print a warning
 if starship will not be printing timing due to DEBUG clobber error
-"$dbg_trap" != "starship_preexec" && "$dbg_trap" != "starship_preexec_all"
 
 */
 
