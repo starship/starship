@@ -22,7 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
     module.new_segment("symbol", JOB_CHAR);
-    if num_of_jobs > threshold {
+    if num_of_jobs > &threshold {
         module.new_segment("number", num_of_jobs);
     }
 

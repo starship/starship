@@ -1,4 +1,3 @@
-use crate::config::Config;
 use ansi_term::Color;
 
 use super::{Context, Module};
