@@ -67,8 +67,6 @@ The prompt shows information need while you're working, while staying sleek and 
    ```
 
    #### Rust (v1.33 or higher)
-
-   - [Rust](https://rustup.rs/) v1.33 or higher
 	
    ```sh
    $ cargo install starship
