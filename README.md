@@ -52,16 +52,25 @@ The prompt shows information need while you're working, while staying sleek and 
 
 ### Prerequisites
 
-- [Rust](https://rustup.rs/) v1.33 or higher
-- A [Powerline font](https://github.com/powerline/fonts)  installed and enabled in your terminal (for example, try [Fira Code](https://github.com/tonsky/FiraCode)).
+- A [Powerline font](https://github.com/powerline/fonts) installed and enabled in your terminal (for example, try [Fira Code](https://github.com/tonsky/FiraCode)).
 
 ### Getting Started
 
 1. Install the **starship** binary:
 
-   ```sh
-   cargo install starship
-   ```
+    **[Download archives of precompiled binaries](https://github.com/starship/starship/releases)** if you don't use the platforms below.
+
+    #### Homebrew
+
+    ```sh
+    $ brew install starship
+    ```
+
+    #### Rust
+
+    ```sh
+    $ cargo install starship
+    ```
 
 1. Add the init script to your shell's config file:
 
