@@ -1,5 +1,8 @@
-use ansi_term::Color;
+use std::env;
+use std::path::Path;
 use std::process::Command;
+
+use ansi_term::Color;
 
 use super::{Context, Module};
 
@@ -32,6 +35,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let formatted_version = format_python_version(&python_version);
             module.new_segment("symbol", PYTHON_CHAR);
             module.new_segment("version", &formatted_version);
+            get_python_virtual_env()
+                .map(|virtual_env| module.new_segment("virtualenv", &format!("({})", virtual_env)));
 
             Some(module)
         }
@@ -61,6 +66,14 @@ fn format_python_version(python_stdout: &str) -> String {
     format!("v{}", python_stdout.trim_start_matches("Python ").trim())
 }
 
+fn get_python_virtual_env() -> Option<String> {
+    env::var("VIRTUAL_ENV").ok().and_then(|venv| {
+        Path::new(&venv)
+            .file_name()
+            .map(|filaname| String::from(filaname.to_str().unwrap_or("")))
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -69,5 +82,17 @@ mod tests {
     fn test_format_python_version() {
         let input = "Python 3.7.2";
         assert_eq!(format_python_version(input), "v3.7.2");
+    }
+
+    #[test]
+    fn test_no_virtual_env() {
+        env::set_var("VIRTUAL_ENV", "");
+        assert_eq!(get_python_virtual_env(), None)
+    }
+
+    #[test]
+    fn test_virtual_env() {
+        env::set_var("VIRTUAL_ENV", "/foo/bar/my_venv");
+        assert_eq!(get_python_virtual_env().unwrap(), "my_venv")
     }
 }
