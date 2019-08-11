@@ -70,7 +70,7 @@ fn get_python_virtual_env() -> Option<String> {
     env::var("VIRTUAL_ENV").ok().and_then(|venv| {
         Path::new(&venv)
             .file_name()
-            .map(|filaname| String::from(filaname.to_str().unwrap_or("")))
+            .map(|filename| String::from(filename.to_str().unwrap_or("")))
     })
 }
 
