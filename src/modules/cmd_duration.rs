@@ -88,5 +88,4 @@ mod tests {
     fn test_1d() {
         assert_eq!(render_time(86400 as u64), "1d")
     }
-
 }
