@@ -30,6 +30,7 @@ const DEFAULT_PROMPT_ORDER: &[&str] = &[
     "jobs",
     #[cfg(feature = "battery")]
     "battery",
+    "time",
     "character",
 ];
 
