@@ -52,15 +52,24 @@ The prompt shows information you need while you're working, while staying sleek 
 
 ### Prerequisites
 
-- [Rust](https://rustup.rs/) v1.33 or higher
-- A [Powerline font](https://github.com/powerline/fonts)  installed and enabled in your terminal (for example, try [Fira Code](https://github.com/tonsky/FiraCode)).
+- A [Powerline font](https://github.com/powerline/fonts) installed and enabled in your terminal (for example, try [Fira Code](https://github.com/tonsky/FiraCode)).
 
 ### Getting Started
 
 1. Install the **starship** binary:
 
+   **[Download archives of precompiled binaries](https://github.com/starship/starship/releases)** if you don't use the platforms below.
+
+   #### Homebrew
+
    ```sh
-   cargo install starship
+   $ brew install starship
+   ```
+
+   #### Rust (v1.33 or higher)
+	
+   ```sh
+   $ cargo install starship
    ```
 
 1. Add the init script to your shell's config file:
@@ -100,11 +109,12 @@ We are always looking for contributors of **all skill levels**! If you're lookin
 - 👩‍🎨 **Designer**
   - Like making eye-catching websites? Excellent! We are looking to create a beautiful landing page showing off Starship in all its glory. Helping design for Starship's brand is a great opportunity to try out new ideas!
 - 👩‍💻 **Rust Developer**
-  - There is _a lot_ of low-hanging fruit when it comes to   writing idiomatic Rust, designing effective Rust architecture, performance optimizations, cross-platform build optimizations, and more! I ([@matchai](https://github.com/matchai)) am a beginner to Rust. Come point us in the right direction!
+  - There is _a lot_ of low-hanging fruit when it comes to writing idiomatic Rust, designing effective Rust architecture, performance optimizations, cross-platform build optimizations, and more! I ([@matchai](https://github.com/matchai)) am a beginner to Rust. Come point us in the right direction!
 
 If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](./CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ### Contributors
+
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
