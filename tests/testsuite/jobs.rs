@@ -21,7 +21,7 @@ fn config_blank_job_1() -> io::Result<()> {
     let output = common::render_module("jobs").arg("--jobs=1").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("{} ", Color::Blue.bold().paint("✦"));
+    let expected = format!("{}", Color::Blue.bold().paint("✦ "));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -47,7 +47,7 @@ fn config_2_job_2() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("{} ", Color::Blue.bold().paint("✦"));
+    let expected = format!("{}", Color::Blue.bold().paint("✦ "));
     assert_eq!(expected, actual);
     Ok(())
 }
