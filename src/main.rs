@@ -48,7 +48,7 @@ fn main() {
         .long("jobs")
         .value_name("JOB")
         .help("The number of currently running jobs")
-        .takes_value(false);
+        .takes_value(true);
 
     let matches = App::new("starship")
         .about("The cross-shell prompt for astronauts. ☄🌌️")
