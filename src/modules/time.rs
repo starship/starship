@@ -13,7 +13,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .to_owned();
 
     let is_12hr = module.config_value_bool("12hr").unwrap_or(false);
-    if is_12hr == true {
+    if is_12hr {
         time_format = module
             .config_value_str("format")
             .unwrap_or("%I:%M %p")
