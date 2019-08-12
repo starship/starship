@@ -26,28 +26,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let pyenv_version_name = context
-        .config
-        .get_module_config("python")
-        .and_then(|table| table.get_as_bool("pyenv_version_name"))
+    let mut module = context.new_module("python")?;
+    let pyenv_version_name = module
+        .config_value_bool("pyenv_version_name")
         .unwrap_or(false);
 
-    select_python_version(pyenv_version_name)
-        .and_then(|python_version| python_module(context, pyenv_version_name, python_version))
-}
-
-fn python_module<'a>(
-    context: &'a Context,
-    pyenv_version_name: bool,
-    python_version: String,
-) -> Option<Module<'a>> {
     const PYTHON_CHAR: &str = "🐍 ";
-    const PYENV_PREFIX: &str = "pyenv ";
     let module_color = Color::Yellow.bold();
-
-    let mut module = context.new_module("python")?;
     module.set_style(module_color);
     module.new_segment("symbol", PYTHON_CHAR);
+
+    select_python_version(pyenv_version_name)
+        .map(|python_version| python_module(module, pyenv_version_name, python_version))
+}
+
+fn python_module(mut module: Module, pyenv_version_name: bool, python_version: String) -> Module {
+    const PYENV_PREFIX: &str = "pyenv ";
 
     if pyenv_version_name {
         module.new_segment("pyenv_prefix", PYENV_PREFIX);
@@ -59,7 +53,7 @@ fn python_module<'a>(
             .map(|virtual_env| module.new_segment("virtualenv", &format!("({})", virtual_env)));
     };
 
-    Some(module)
+    module
 }
 
 fn select_python_version(pyenv_version_name: bool) -> Option<String> {
