@@ -603,6 +603,27 @@ The module will be shown if any of the following conditions are met:
 symbol = "⚙️ "
 ```
 
+## Time
+
+The `time` module shows the current **local** time.
+
+### Options
+
+| Variable   | Default | Description                                  |
+| ---------- | ------- | -------------------------------------------- |
+| `12hr`     | `false` | Enables 12 hour formatting                   |
+| `format`   | `''`    | Enables the user to set a custom time format |
+| `disabled` | `false` | Disables the `username` module.              |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[time]
+disabled = true
+```
+
 ## Username
 
 The `username` module shows active user's username.
