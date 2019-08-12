@@ -328,7 +328,7 @@ symbol = "🎁 "
 
 The `python` module shows the currently installed version of Python.
 
-If `use_pyenv` is set to `true`, it will display the pyenv version name.
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
 
 Otherwise, it will display the version number from `python --version`
 and show the current Python virtual environment if one is
@@ -347,7 +347,7 @@ The module will be shown if any of the following conditions are met:
 | ---------- | ------- | -------------------------------------------------------- |
 | `symbol`   | `"🐍 "` | The symbol used before displaying the version of Python. |
 | `disabled` | `false` | Disables the `python` module.                            |
-| `use_pyenv` | `false` | Use pyenv to get Python version                            |
+| `pyenv_version_name` | `false` | Use pyenv to get Python version                            |
 | `pyenv_prefix` | `"pyenv "` | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
 
 
@@ -358,7 +358,7 @@ The module will be shown if any of the following conditions are met:
 
 [python]
 symbol = "👾 "
-use_pyenv = true
+pyenv_version_name = true
 pyenv_prefix = "foo "
 ```
 

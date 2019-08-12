@@ -102,7 +102,7 @@ fn with_pyenv() -> io::Result<()> {
     let output = common::render_module("python")
         .use_config(toml::toml! {
             [python]
-            use_pyenv = true
+            pyenv_version_name = true
         })
         .env("VIRTUAL_ENV", "/foo/bar/my_venv")
         .arg("--path")
@@ -122,7 +122,7 @@ fn with_pyenv_no_output() -> io::Result<()> {
     let output = common::render_module("python")
         .use_config(toml::toml! {
             [python]
-            use_pyenv = true
+            pyenv_version_name = true
         })
         .env("PATH", "")
         .arg("--path")

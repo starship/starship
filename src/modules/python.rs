@@ -26,19 +26,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let use_pyenv = context
+    let pyenv_version_name = context
         .config
         .get_module_config("python")
-        .and_then(|table| table.get_as_bool("use_pyenv"))
+        .and_then(|table| table.get_as_bool("pyenv_version_name"))
         .unwrap_or(false);
 
-    select_python_version(use_pyenv)
-        .and_then(|python_version| python_module(context, use_pyenv, python_version))
+    select_python_version(pyenv_version_name)
+        .and_then(|python_version| python_module(context, pyenv_version_name, python_version))
 }
 
 fn python_module<'a>(
     context: &'a Context,
-    use_pyenv: bool,
+    pyenv_version_name: bool,
     python_version: String,
 ) -> Option<Module<'a>> {
     const PYTHON_CHAR: &str = "🐍 ";
@@ -49,7 +49,7 @@ fn python_module<'a>(
     module.set_style(module_color);
     module.new_segment("symbol", PYTHON_CHAR);
 
-    if use_pyenv {
+    if pyenv_version_name {
         module.new_segment("pyenv_prefix", PYENV_PREFIX);
         module.new_segment("version", &python_version.trim());
     } else {
@@ -62,8 +62,8 @@ fn python_module<'a>(
     Some(module)
 }
 
-fn select_python_version(use_pyenv: bool) -> Option<String> {
-    if use_pyenv {
+fn select_python_version(pyenv_version_name: bool) -> Option<String> {
+    if pyenv_version_name {
         get_pyenv_version()
     } else {
         get_python_version()
