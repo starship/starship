@@ -31,7 +31,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "username" => username::module(context),
         "battery" => battery::module(context),
         "cmd_duration" => cmd_duration::module(context),
-        "job" | "jobs" => jobs::module(context),
+        "jobs" => jobs::module(context),
 
         _ => panic!("Unknown module: {}", module),
     }
