@@ -1,0 +1,10 @@
+jobs:
+  - job: ${{ parameters.name }}
+    displayName: ${{ parameters.displayName }}
+    pool:
+      vmImage: macOS-10.13
+    steps:
+      - script: |
+          MY_TAG="$(Build.SourceBranch)"
+          brew bump-formula-pr starship --url=https://github.com/starship/starship/archive/${MY_TAG}.tar.gz
+        displayName: Bump the Homebrew formula
