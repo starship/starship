@@ -4,6 +4,8 @@ use std::process::Command;
 
 use ansi_term::Color;
 
+use crate::config::Config;
+
 use super::{Context, Module};
 
 /// Creates a module with the current Python version
@@ -24,24 +26,56 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    match get_python_version() {
-        Some(python_version) => {
-            const PYTHON_CHAR: &str = "🐍 ";
-            let module_color = Color::Yellow.bold();
+    let use_pyenv = context
+        .config
+        .get_module_config("python")
+        .and_then(|table| table.get_as_bool("use_pyenv"))
+        .unwrap_or(false);
 
-            let mut module = context.new_module("python")?;
-            module.set_style(module_color);
+    select_python_version(use_pyenv)
+        .and_then(|python_version| python_module(context, use_pyenv, python_version))
+}
 
-            let formatted_version = format_python_version(&python_version);
-            module.new_segment("symbol", PYTHON_CHAR);
-            module.new_segment("version", &formatted_version);
-            get_python_virtual_env()
-                .map(|virtual_env| module.new_segment("virtualenv", &format!("({})", virtual_env)));
+fn python_module<'a>(
+    context: &'a Context,
+    use_pyenv: bool,
+    python_version: String,
+) -> Option<Module<'a>> {
+    const PYTHON_CHAR: &str = "🐍 ";
+    const PYENV_PREFIX: &str = "pyenv ";
+    let module_color = Color::Yellow.bold();
 
-            Some(module)
-        }
-        None => None,
+    let mut module = context.new_module("python")?;
+    module.set_style(module_color);
+    module.new_segment("symbol", PYTHON_CHAR);
+
+    if use_pyenv {
+        module.new_segment("pyenv_prefix", PYENV_PREFIX);
+        module.new_segment("version", &python_version.trim());
+    } else {
+        let formatted_version = format_python_version(&python_version);
+        module.new_segment("version", &formatted_version);
+        get_python_virtual_env()
+            .map(|virtual_env| module.new_segment("virtualenv", &format!("({})", virtual_env)));
+    };
+
+    Some(module)
+}
+
+fn select_python_version(use_pyenv: bool) -> Option<String> {
+    if use_pyenv {
+        get_pyenv_version()
+    } else {
+        get_python_version()
     }
+}
+
+fn get_pyenv_version() -> Option<String> {
+    Command::new("pyenv")
+        .arg("version-name")
+        .output()
+        .ok()
+        .and_then(|output| String::from_utf8(output.stdout).ok())
 }
 
 fn get_python_version() -> Option<String> {
@@ -95,4 +129,5 @@ mod tests {
         env::set_var("VIRTUAL_ENV", "/foo/bar/my_venv");
         assert_eq!(get_python_virtual_env().unwrap(), "my_venv")
     }
+
 }
