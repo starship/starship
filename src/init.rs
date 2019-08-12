@@ -52,15 +52,37 @@ pub fn init(shell_name: &str) {
     }
 }
 
-/* Bash does not currently support command durations (see issue #124) for details
-https://github.com/starship/starship/issues/124
+/*
+ For bash: we need to manually hook functions ourself: PROMPT_COMMAND will exec
+   right before the prompt is drawn, and any function trapped by DEBUG will exec
+   before a command is run.
 
-We need to quote the output of `$(jobs -p | wc -l)` since MacOS `wc` leaves
-giant spaces in front of the number (e.g. "    3"), which messes up the
-word-splitting. Instead, quote the whole thing, then let Rust do the whitespace
-trimming within the jobs module.
+   There is a preexec/precmd framework for bash out there: if we find the
+   appropriate variables set, assume we are using that framework:
+   https://github.com/rcaloras/bash-preexec
+
+   Bash quirk: DEBUG is triggered whenever a command is executed, even if that
+   command is part of a pipeline. To avoid only timing the last part of a pipeline,
+   we only start the timer if no timer has been started since the last prompt draw,
+   tracked by the variable PREEXEC_READY. Similarly, only draw timing info if
+   STARSHIP_START_TIME is defined, in case preexec was interrupted.
+
+   Finally, to work around existing DEBUG traps in the absence of a preexec-like,
+   we parse out the name of the old DEBUG hook, then make a new function which
+   calls both that function and our starship hooks. We don't do this for
+   PROMPT_COMMAND because that would probably result in two prompts.
+
+   We need to quote the output of `$(jobs -p | wc -l)` since MacOS `wc` leaves
+   giant spaces in front of the number (e.g. "    3"), which messes up the
+   word-splitting. Instead, quote the whole thing, then let Rust do the whitespace
+   trimming within the jobs module
 */
 
+/*
+Note to programmers: this and the zsh init will be evaluated on a single line.
+Use semicolons, avoid comments, and generally think like all newlines will be
+deleted.
+*/
 const BASH_INIT: &str = r##"
 starship_preexec() {
     if [ "$PREEXEC_READY" = "true" ]; then
@@ -84,24 +106,20 @@ if [[ $preexec_functions ]]; then
     preexec_functions+=(starship_preexec);
     precmd_functions+=(starship_precmd);
     STARSHIP_START_TIME=$(date +%s);
+else
+    dbg_trap="$(trap -p DEBUG | cut -d' ' -f3 | tr -d \')";
+    if [[ -z "$dbg_trap" ]]; then
+        trap starship_preexec DEBUG;
+    elif [[ "$dbg_trap" != "starship_preexec" && "$dbg_trap" != "starship_preexec_all" ]]; then
+        function starship_preexec_all(){
+            $dbg_trap; starship_preexec;
+        };
+        trap starship_preexec_all DEBUG;
+    fi;
+    PROMPT_COMMAND=starship_precmd;
+    STARSHIP_START_TIME=$(date +%s);
 fi;
-dbg_trap="$(trap -p DEBUG | cut -d' ' -f3 | tr -d \')";
-if [[ -z "$dbg_trap" ]]; then
-    trap starship_preexec DEBUG;
-elif [[ "$dbg_trap" != "starship_preexec" && "$dbg_trap" != "starship_preexec_all" ]]; then
-    function starship_preexec_all(){
-        $dbg_trap && starship_preexec;
-    };
-    trap starship_preexec_all DEBUG;
-fi;
-PROMPT_COMMAND=starship_precmd;
-STARSHIP_START_TIME=$(date +%s);
 "##;
-
-/* TODO: Once warning/error system is implemented in starship, print a warning
-if starship will not be printing timing due to DEBUG clobber error
-
-*/
 
 /* For zsh: preexec_functions and precmd_functions provide preexec/precmd in a
    way that lets us avoid clobbering them.
@@ -113,6 +131,9 @@ if starship will not be printing timing due to DEBUG clobber error
 
    To fix this, only pass the time if STARSHIP_START_TIME is defined, and unset
    it after passing the time, so that we only measure actual commands.
+
+   We need to quote the output of the jobs command for the same reason as
+   bash.
 */
 
 const ZSH_INIT: &str = r##"
