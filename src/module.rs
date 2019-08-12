@@ -44,7 +44,7 @@ impl<'a> Module<'a> {
         let mut segment = Segment::new(name);
         segment.set_style(self.style);
         // Use the provided value unless overwritten by config
-        segment.set_value(self.config_value(name).unwrap_or(value));
+        segment.set_value(self.config_value_str(name).unwrap_or(value));
         self.segments.push(segment);
 
         self.segments.last_mut().unwrap()
@@ -96,7 +96,7 @@ impl<'a> Module<'a> {
     }
 
     /// Get a module's config value as a string
-    fn config_value(&self, key: &str) -> Option<&str> {
+    pub fn config_value_str(&self, key: &str) -> Option<&str> {
         self.config.and_then(|config| config.get_as_str(key))
     }
 

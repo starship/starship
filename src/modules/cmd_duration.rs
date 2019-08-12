@@ -1,4 +1,3 @@
-use crate::config::Config;
 use ansi_term::Color;
 
 use super::{Context, Module};
@@ -77,14 +76,16 @@ mod tests {
     fn test_10s() {
         assert_eq!(render_time(10 as u64), "10s")
     }
+    #[test]
     fn test_90s() {
         assert_eq!(render_time(90 as u64), "1m30s")
     }
+    #[test]
     fn test_10110s() {
-        assert_eq!(render_time(10110 as u64), "1h48m30s")
+        assert_eq!(render_time(10110 as u64), "2h48m30s")
     }
+    #[test]
     fn test_1d() {
         assert_eq!(render_time(86400 as u64), "1d")
     }
-
 }
