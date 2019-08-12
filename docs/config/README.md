@@ -350,6 +350,8 @@ symbol = "🎁 "
 ## Python
 
 The `python` module shows the currently installed version of Python.
+It will also show the current Python virtual environment if one is
+activated.
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.python-version` file
