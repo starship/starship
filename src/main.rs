@@ -46,7 +46,7 @@ fn main() {
     let jobs_arg = Arg::with_name("jobs")
         .short("j")
         .long("jobs")
-        .value_name("JOB")
+        .value_name("JOBS")
         .help("The number of currently running jobs")
         .takes_value(true);
 
