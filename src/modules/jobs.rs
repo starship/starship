@@ -8,7 +8,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let threshold = module.config_value_i64("threshold").unwrap_or(1);
 
-    const JOB_CHAR: &str = "✦ ";
+    const JOB_CHAR: &str = "✦";
     let module_color = Color::Blue.bold();
 
     module.set_style(module_color);
