@@ -10,6 +10,12 @@ steps:
       versionSpec: "1.10"
     displayName: "Install a fixed version of Go"
 
+  # Install Ruby
+  - task: UseRubyVersion@0
+    inputs:
+      versionSpec: "2.5.5"
+    displayName: "Install a fixed version of Ruby"
+
   # Because the Pipelines agent updates are out of sync, we can't install 3.6.9
   # with PythonTool on macOS
 
