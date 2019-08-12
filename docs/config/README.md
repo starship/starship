@@ -607,6 +607,10 @@ symbol = "⚙️ "
 
 The `time` module shows the current **local** time.
 
+::: tip
+For the `format` configuration value, take a look [here](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what you can pass in.
+:::
+
 ### Options
 
 | Variable   | Default | Description                                  |
