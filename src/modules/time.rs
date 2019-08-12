@@ -7,11 +7,17 @@ use super::{Context, Module};
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("time")?;
 
-    let mut time_format = module.config_value_str("format").unwrap_or("%H:%M").to_owned();
+    let mut time_format = module
+        .config_value_str("format")
+        .unwrap_or("%H:%M")
+        .to_owned();
 
     let is_12hr = module.config_value_bool("12hr").unwrap_or(false);
     if is_12hr == true {
-        time_format = module.config_value_str("format").unwrap_or("%I:%M %p").to_owned();
+        time_format = module
+            .config_value_str("format")
+            .unwrap_or("%I:%M %p")
+            .to_owned();
     }
 
     let local: DateTime<Local> = Local::now();
