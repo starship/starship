@@ -18,7 +18,7 @@
 <h1></h1>
 
 Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br>
-The prompt shows information need while you're working, while staying sleek and out of the way.
+The prompt shows information you need while you're working, while staying sleek and out of the way.
 
 <p align="center">
   <img alt="Starship with Hyper and One Dark" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif">
@@ -46,7 +46,7 @@ The prompt shows information need while you're working, while staying sleek and 
   - `»` — renamed files
   - `✘` — deleted files
 - Execution time of the last command if it exceeds the set threshold.
-- [PLANNED #80](https://github.com/starship/starship/issues/80) – Indicator for jobs in the background (`✦`).
+- Indicator for jobs in the background (`✦`).
 
 ## 🚀 Installation
 

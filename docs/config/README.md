@@ -250,6 +250,29 @@ The module will be shown if any of the following conditions are met:
 symbol = "🏎💨 "
 ```
 
+## Jobs
+
+The `jobs` module shows the current number of jobs running.
+The module will be shown only if there are background jobs running.
+The module will show the number of jobs running if there is more than 1 job, or
+more than the `threshold` config value, if it exists.
+
+### Options
+
+| Variable    | Default | Description                      |
+| ----------- | ------- | -------------------------------- |
+| `threshold` | `1`     | Show number of jobs if execeded. |
+| `disabled`  | `false` | Disables the `jobs` module.      |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[jobs]
+threshold = 4
+```
+
 ## Line Break
 
 The `line_break` module separates the prompt into two lines.
