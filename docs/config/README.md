@@ -617,7 +617,7 @@ For the `format` configuration value, take a look [here](https://docs.rs/chrono/
 | ---------- | ------- | -------------------------------------------- |
 | `12hr`     | `false` | Enables 12 hour formatting                   |
 | `format`   | `''`    | Enables the user to set a custom time format |
-| `disabled` | `false` | Disables the `time` module.              |
+| `disabled` | `false` | Disables the `time` module.                  |
 
 ### Example
 
