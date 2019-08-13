@@ -5,6 +5,10 @@ jobs:
       vmImage: macOS-10.13
     steps:
       - script: |
-          MY_TAG="$(Build.SourceBranch)"
-          brew bump-formula-pr starship --url=https://github.com/starship/starship/archive/${MY_TAG}.tar.gz
+          GIT_TAG="$(Build.SourceBranch)"
+          git config --global user.name "matchai"
+          git config --global user.email "hello@matchai.me"
+          git config --global config.helper store
+          echo "https://matchai:${HOMEBREW_GITHUB_API_TOKEN}@github.com" >> ~/.git-credentials
+          brew bump-formula-pr starship --url=https://github.com/starship/starship/archive/${GIT_TAG}.tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship
         displayName: Bump the Homebrew formula
