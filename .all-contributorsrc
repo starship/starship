@@ -111,6 +111,17 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "MaT1g3R",
+      "name": "MaT1g3R",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/15258494?v=4",
+      "profile": "https://github.com/MaT1g3R",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7

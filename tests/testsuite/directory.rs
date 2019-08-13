@@ -10,7 +10,9 @@ use crate::common::{self, TestCommand};
 
 #[test]
 fn home_directory() -> io::Result<()> {
-    let output = common::render_module("dir").arg("--path=~").output()?;
+    let output = common::render_module("directory")
+        .arg("--path=~")
+        .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("~"));
@@ -24,7 +26,7 @@ fn directory_in_home() -> io::Result<()> {
     let dir = home_dir().unwrap().join("starship/engine");
     fs::create_dir_all(&dir)?;
 
-    let output = common::render_module("dir")
+    let output = common::render_module("directory")
         .arg("--path")
         .arg(dir)
         .output()?;
@@ -41,7 +43,7 @@ fn truncated_directory_in_home() -> io::Result<()> {
     let dir = home_dir().unwrap().join("starship/engine/schematics");
     fs::create_dir_all(&dir)?;
 
-    let output = common::render_module("dir")
+    let output = common::render_module("directory")
         .arg("--path")
         .arg(dir)
         .output()?;
@@ -57,7 +59,9 @@ fn truncated_directory_in_home() -> io::Result<()> {
 
 #[test]
 fn root_directory() -> io::Result<()> {
-    let output = common::render_module("dir").arg("--path=/").output()?;
+    let output = common::render_module("directory")
+        .arg("--path=/")
+        .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("/"));
@@ -67,7 +71,9 @@ fn root_directory() -> io::Result<()> {
 
 #[test]
 fn directory_in_root() -> io::Result<()> {
-    let output = common::render_module("dir").arg("--path=/usr").output()?;
+    let output = common::render_module("directory")
+        .arg("--path=/usr")
+        .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("/usr"));
@@ -81,7 +87,7 @@ fn truncated_directory_in_root() -> io::Result<()> {
     let dir = Path::new("/tmp/starship/thrusters/rocket");
     fs::create_dir_all(&dir)?;
 
-    let output = common::render_module("dir")
+    let output = common::render_module("directory")
         .arg("--path")
         .arg(dir)
         .output()?;
@@ -101,7 +107,7 @@ fn truncated_directory_config_large() -> io::Result<()> {
     let dir = Path::new("/tmp/starship/thrusters/rocket");
     fs::create_dir_all(&dir)?;
 
-    let output = common::render_module("dir")
+    let output = common::render_module("directory")
         .use_config(toml::toml! {
             [directory]
             truncation_length = 100
@@ -125,7 +131,7 @@ fn truncated_directory_config_small() -> io::Result<()> {
     let dir = Path::new("/tmp/starship/thrusters/rocket");
     fs::create_dir_all(&dir)?;
 
-    let output = common::render_module("dir")
+    let output = common::render_module("directory")
         .use_config(toml::toml! {
             [directory]
             truncation_length = 2
@@ -151,7 +157,7 @@ fn git_repo_root() -> io::Result<()> {
     fs::create_dir(&repo_dir)?;
     Repository::init(&repo_dir).unwrap();
 
-    let output = common::render_module("dir")
+    let output = common::render_module("directory")
         .arg("--path")
         .arg(repo_dir)
         .output()?;
@@ -171,7 +177,7 @@ fn directory_in_git_repo() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
     Repository::init(&repo_dir).unwrap();
 
-    let output = common::render_module("dir")
+    let output = common::render_module("directory")
         .arg("--path")
         .arg(dir)
         .output()?;
@@ -191,7 +197,7 @@ fn truncated_directory_in_git_repo() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
     Repository::init(&repo_dir).unwrap();
 
-    let output = common::render_module("dir")
+    let output = common::render_module("directory")
         .arg("--path")
         .arg(dir)
         .output()?;

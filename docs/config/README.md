@@ -250,6 +250,29 @@ The module will be shown if any of the following conditions are met:
 symbol = "🏎💨 "
 ```
 
+## Jobs
+
+The `jobs` module shows the current number of jobs running.
+The module will be shown only if there are background jobs running.
+The module will show the number of jobs running if there is more than 1 job, or
+more than the `threshold` config value, if it exists.
+
+### Options
+
+| Variable    | Default | Description                      |
+| ----------- | ------- | -------------------------------- |
+| `threshold` | `1`     | Show number of jobs if execeded. |
+| `disabled`  | `false` | Disables the `jobs` module.      |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[jobs]
+threshold = 4
+```
+
 ## Line Break
 
 The `line_break` module separates the prompt into two lines.
@@ -350,8 +373,13 @@ symbol = "🎁 "
 ## Python
 
 The `python` module shows the currently installed version of Python.
-It will also show the current Python virtual environment if one is
+
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
+
+Otherwise, it will display the version number from `python --version`
+and show the current Python virtual environment if one is
 activated.
+
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.python-version` file
@@ -365,6 +393,9 @@ The module will be shown if any of the following conditions are met:
 | ---------- | ------- | -------------------------------------------------------- |
 | `symbol`   | `"🐍 "` | The symbol used before displaying the version of Python. |
 | `disabled` | `false` | Disables the `python` module.                            |
+| `pyenv_version_name` | `false` | Use pyenv to get Python version                            |
+| `pyenv_prefix` | `"pyenv "` | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
+
 
 ### Example
 
@@ -373,6 +404,8 @@ The module will be shown if any of the following conditions are met:
 
 [python]
 symbol = "👾 "
+pyenv_version_name = true
+pyenv_prefix = "foo "
 ```
 
 ## Rust
