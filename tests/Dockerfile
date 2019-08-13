@@ -27,6 +27,16 @@ RUN git clone https://github.com/syndbg/goenv.git $GOENV_ROOT \
 # Check that Go was correctly installed
 RUN go version
 
+# Install Ruby
+ENV RUBY_VERSION 2.5.5
+ENV RBENV_ROOT /home/nonroot/.rbenv
+ENV PATH $RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH
+RUN curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer | bash \
+  && rbenv install $RUBY_VERSION \
+  && rbenv global $RUBY_VERSION
+# Check that Ruby was correctly installed
+RUN ruby --version
+
 # Install Python
 ENV PYTHON_VERSION 3.6.9
 ENV PYENV_ROOT /home/nonroot/.pyenv

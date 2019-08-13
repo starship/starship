@@ -292,6 +292,29 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
+## Ruby
+
+The `ruby` module shows the currently installed version of NodeJS.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `Gemfile` file
+- The current directory contains a `.rb` file
+
+### Options
+
+| Variable   | Default | Description                                              |
+| ---------- | ------- | -------------------------------------------------------- |
+| `disabled` | `false` | Disables the `ruby` module.                              |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[ruby]
+disabled = false
+```
+
 ## NodeJS
 
 The `nodejs` module shows the currently installed version of NodeJS.
