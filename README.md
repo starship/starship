@@ -98,25 +98,35 @@ The prompt shows information you need while you're working, while staying sleek 
 
 1. Add the init script to your shell's config file:
 
-   #### Bash / Zsh
+    #### Bash
 
-   Add the following to the end of `~/.bashrc` or `~/.zshrc`:
+    Add the following to the end of `~/.bashrc`:
 
-   ```sh
-   # ~/.bashrc or ~/.zshrc
+    ```sh
+    # ~/.bashrc
 
-   eval "$(starship init $0)"
-   ```
+    eval "$(starship init bash)"
+    ```
 
-   #### Fish
+    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+    Add the following to the end of `~/.config/fish/config.fish`:
 
-   ```sh
-   # ~/.config/fish/config.fish
+    ```sh
+    # ~/.config/fish/config.fish
 
-   eval (starship init fish)
-   ```
+    eval (starship init fish)
+    ```
+
+    #### Zsh
+
+    Add the following to the end of `~/.zshrc`:
+
+    ```sh
+    # ~/.zshrc
+
+    eval "$(starship init zsh)"
+    ```
 
 ## 🔧 Configuration
 
