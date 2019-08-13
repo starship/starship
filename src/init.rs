@@ -54,11 +54,16 @@ pub fn init(shell_name: &str) {
 
 /* Bash does not currently support command durations (see issue #124) for details
 https://github.com/starship/starship/issues/124
+
+We need to quote the output of `$(jobs -p | wc -l)` since MacOS `wc` leaves
+giant spaces in front of the number (e.g. "    3"), which messes up the
+word-splitting. Instead, quote the whole thing, then let Rust do the whitespace
+trimming within the jobs module.
 */
 
 const BASH_INIT: &str = r##"
 starship_precmd() {
-        PS1="$(starship prompt --status=$? --jobs=$(jobs -p | wc -l))";
+        PS1="$(starship prompt --status=$? --jobs="$(jobs -p | wc -l)")";
 };
 PROMPT_COMMAND=starship_precmd;
 "##;
@@ -83,10 +88,10 @@ starship_precmd() {
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME="$(date +%s)";
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME));
-        PROMPT="$(starship prompt --status=$STATUS --cmd-duration=$STARSHIP_DURATION --jobs=$(jobs | wc -l))";
+        PROMPT="$(starship prompt --status=$STATUS --cmd-duration=$STARSHIP_DURATION --jobs="$(jobs | wc -l)")";
         unset STARSHIP_START_TIME;
     else
-        PROMPT="$(starship prompt --status=$STATUS --jobs=$(jobs | wc -l))";
+        PROMPT="$(starship prompt --status=$STATUS --jobs="$(jobs | wc -l)")";
     fi
 };
 starship_preexec(){
