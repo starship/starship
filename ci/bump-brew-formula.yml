@@ -9,6 +9,7 @@ jobs:
           git config --global user.name "matchai"
           git config --global user.email "hello@matchai.me"
           git config --global credential.helper store
+          export HOMEBREW_GITHUB_API_TOKEN=$HOMEBREW_GITHUB_API_TOKEN
           echo "https://matchai:$HOMEBREW_GITHUB_API_TOKEN@github.com" >> ~/.git-credentials
           brew update
           brew bump-formula-pr --url=https://github.com/starship/starship/archive/$GIT_TAG.tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship
