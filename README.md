@@ -4,7 +4,7 @@
     <p align="center">
         <a href="https://crates.io/crates/starship"><img src="https://badgen.net/crates/v/starship" alt="Crates.io version"></a>
         <a href="https://dev.azure.com/starship-control/starship/_build"><img src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite" alt="Azure Pipelines Build Status"></a>
-        <a href="#contributors"><img src="https://badgen.net/badge/all%20contributors/9/orange" alt="All Contributors"></a>
+        <a href="#contributors"><img src="https://badgen.net/badge/all%20contributors/10/orange" alt="All Contributors"></a>
         <a href="https://discord.gg/8Jzqu3T"><img src="https://badgen.net/badge/chat/on%20discord/7289da" alt="Chat on Discord"></a>
     </p>
 </p>
@@ -18,7 +18,7 @@
 <h1></h1>
 
 Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br>
-The prompt shows information need while you're working, while staying sleek and out of the way.
+The prompt shows information you need while you're working, while staying sleek and out of the way.
 
 <p align="center">
   <img alt="Starship with Hyper and One Dark" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif">
@@ -46,7 +46,7 @@ The prompt shows information need while you're working, while staying sleek and 
   - `»` — renamed files
   - `✘` — deleted files
 - Execution time of the last command if it exceeds the set threshold.
-- [PLANNED #80](https://github.com/starship/starship/issues/80) – Indicator for jobs in the background (`✦`).
+- Indicator for jobs in the background (`✦`).
 
 ## 🚀 Installation
 
@@ -132,6 +132,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/chipbuster"><img src="https://avatars2.githubusercontent.com/u/4605384?v=4" width="100px;" alt="Kevin Song"/><br /><sub><b>Kevin Song</b></sub></a><br /><a href="https://github.com/starship/starship/issues?q=author%3Achipbuster" title="Bug reports">🐛</a> <a href="https://github.com/starship/starship/commits?author=chipbuster" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=chipbuster" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=chipbuster" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://andrewda.me"><img src="https://avatars1.githubusercontent.com/u/10191084?v=4" width="100px;" alt="Andrew Dassonville"/><br /><sub><b>Andrew Dassonville</b></sub></a><br /><a href="https://github.com/starship/starship/issues?q=author%3Aandrewda" title="Bug reports">🐛</a> <a href="https://github.com/starship/starship/commits?author=andrewda" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/MaT1g3R"><img src="https://avatars1.githubusercontent.com/u/15258494?v=4" width="100px;" alt="MaT1g3R"/><br /><sub><b>MaT1g3R</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=MaT1g3R" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=MaT1g3R" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=MaT1g3R" title="Tests">⚠️</a></td>
   </tr>
 </table>
 

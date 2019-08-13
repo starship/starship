@@ -43,6 +43,13 @@ fn main() {
         .help("The execution duration of the last command, in seconds")
         .takes_value(true);
 
+    let jobs_arg = Arg::with_name("jobs")
+        .short("j")
+        .long("jobs")
+        .value_name("JOBS")
+        .help("The number of currently running jobs")
+        .takes_value(true);
+
     let matches = App::new("starship")
         .about("The cross-shell prompt for astronauts. ☄🌌️")
         // pull the version number from Cargo.toml
@@ -61,7 +68,8 @@ fn main() {
                 .about("Prints the full starship prompt")
                 .arg(&status_code_arg)
                 .arg(&path_arg)
-                .arg(&cmd_duration_arg),
+                .arg(&cmd_duration_arg)
+                .arg(&jobs_arg),
         )
         .subcommand(
             SubCommand::with_name("module")
@@ -73,7 +81,8 @@ fn main() {
                 )
                 .arg(&status_code_arg)
                 .arg(&path_arg)
-                .arg(&cmd_duration_arg),
+                .arg(&cmd_duration_arg)
+                .arg(&jobs_arg),
         )
         .get_matches();
 

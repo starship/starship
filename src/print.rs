@@ -8,7 +8,6 @@ use crate::module::Module;
 use crate::modules;
 
 const PROMPT_ORDER: &[&str] = &[
-    "battery",
     "username",
     "directory",
     "git_branch",
@@ -20,6 +19,8 @@ const PROMPT_ORDER: &[&str] = &[
     "go",
     "cmd_duration",
     "line_break",
+    "jobs",
+    "battery",
     "character",
 ];
 

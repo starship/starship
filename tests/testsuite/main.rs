@@ -4,6 +4,7 @@ mod common;
 mod configuration;
 mod directory;
 mod golang;
+mod jobs;
 mod line_break;
 mod nodejs;
 mod python;
