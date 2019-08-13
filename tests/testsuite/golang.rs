@@ -2,7 +2,7 @@ use ansi_term::Color;
 use std::fs::{self, File};
 use std::io;
 
-use crate::common;
+use crate::common::{self, TestCommand};
 
 #[test]
 fn folder_without_go_files() -> io::Result<()> {
@@ -135,6 +135,27 @@ fn folder_with_gopkg_lock() -> io::Result<()> {
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.10"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[ignore]
+fn config_disabled() -> io::Result<()> {
+    let dir = common::new_tempdir()?;
+    File::create(dir.path().join("main.go"))?;
+
+    let output = common::render_module("golang")
+        .use_config(toml::toml! {
+            [golang]
+            disabled = true
+        })
+        .arg("--path")
+        .arg(dir.path())
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = "";
     assert_eq!(expected, actual);
     Ok(())
 }
