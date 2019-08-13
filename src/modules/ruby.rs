@@ -8,11 +8,10 @@ use super::{Context, Module};
 /// Will display the Ruby version if any of the following criteria are met:
 ///     - Current directory contains a `.rb` file
 ///     - Current directory contains a `Gemfile` file
-///     - Current directory contains a `.ruby-version` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_rb_project = context
         .new_scan_dir()
-        .set_files(&["Gemfile", ".ruby-version"])
+        .set_files(&["Gemfile"])
         .set_extensions(&["rb"])
         .scan();
 
