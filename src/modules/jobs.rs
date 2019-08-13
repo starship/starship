@@ -17,6 +17,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let num_of_jobs = arguments
         .value_of("jobs")
         .unwrap_or("0")
+        .trim()
         .parse::<i64>()
         .ok()?;
     if num_of_jobs == 0 {
