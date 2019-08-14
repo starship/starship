@@ -1,21 +1,45 @@
 <p align="center">
-	<br>
-	<img width="400" src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png" alt="Starship – Cross-shell prompt">
-    <p align="center">
-        <a href="https://crates.io/crates/starship"><img src="https://badgen.net/crates/v/starship" alt="Crates.io version"></a>
-        <a href="https://dev.azure.com/starship-control/starship/_build"><img src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite" alt="Azure Pipelines Build Status"></a>
-        <a href="#contributors"><img src="https://badgen.net/badge/all%20contributors/10/orange" alt="All Contributors"></a>
-        <a href="https://discord.gg/8Jzqu3T"><img src="https://badgen.net/badge/chat/on%20discord/7289da" alt="Chat on Discord"></a>
-    </p>
+  <br />
+  <img
+    width="400"
+    src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
+    alt="Starship – Cross-shell prompt"
+  />
+</p>
+<p align="center">
+  <a href="https://crates.io/crates/starship">
+    <img src="https://badgen.net/crates/v/starship" alt="Crates.io version" />
+  </a>
+  <a href="https://dev.azure.com/starship-control/starship/_build">
+    <img
+      src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite"
+      alt="Azure Pipelines Build Status"
+    />
+  </a>
+  <a href="#contributors">
+    <img
+      src="https://badgen.net/badge/all%20contributors/10/orange"
+      alt="All Contributors"
+    />
+  </a>
+  <a href="https://discord.gg/8Jzqu3T">
+    <img
+      src="https://badgen.net/badge/chat/on%20discord/7289da"
+      alt="Chat on Discord"
+    />
+  </a>
 </p>
 <h4 align="center">
-<br>
-    <a href="https://starship.rs">Website</a> · 
-    <a href="#-installation">Installation</a> · 
-    <a href="https://starship.rs/config/">Configuration</a>
+  <br />
+  <a href="https://starship.rs">Website</a>
+  ·
+  <a href="#-installation">Installation</a>
+  ·
+  <a href="https://starship.rs/config/">Configuration</a>
 </h4>
 
 <h1></h1>
+
 
 Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br>
 The prompt shows information you need while you're working, while staying sleek and out of the way.
@@ -26,15 +50,15 @@ The prompt shows information you need while you're working, while staying sleek 
 
 ## 🍬 Features
 
-- Prompt character turns red if the last command exits with non-zero code.
-- Current username if not the same as the logged-in user.
-- Current Node.js version(`⬢`).
-- Current Rust version (`🦀`).
+- Prompt character turns red if the last command exits with non-zero code
+- Current username if not the same as the logged-in user
+- Current Node.js version(`⬢`)
+- Current Rust version (`🦀`)
 - Current Ruby version (`💎`).
-- Current Python version (`🐍`).
-- Current Go version (`🐹`).
-- Package version of package in current directory (`📦`).
-- Current battery level and status.
+- Current Python version (`🐍`)
+- Current Go version (`🐹`)
+- Package version of package in current directory (`📦`)
+- Current battery level and status
 - Current Git branch and rich repo status:
   - `=` — conflicting changes
   - `⇡` — ahead of remote branch
@@ -46,8 +70,8 @@ The prompt shows information you need while you're working, while staying sleek 
   - `+` — added files
   - `»` — renamed files
   - `✘` — deleted files
-- Execution time of the last command if it exceeds the set threshold.
-- Indicator for jobs in the background (`✦`).
+- Execution time of the last command if it exceeds the set threshold
+- Indicator for jobs in the background (`✦`)
 
 ## 🚀 Installation
 
@@ -68,32 +92,42 @@ The prompt shows information you need while you're working, while staying sleek 
    ```
 
    #### Rust (v1.33 or higher)
-	
+
    ```sh
    $ cargo install starship
    ```
 
 1. Add the init script to your shell's config file:
 
-   #### Bash / Zsh
+    #### Bash
 
-   Add the following to the end of `~/.bashrc` or `~/.zshrc`:
+    Add the following to the end of `~/.bashrc`:
 
-   ```sh
-   # ~/.bashrc or ~/.zshrc
+    ```sh
+    # ~/.bashrc
 
-   eval "$(starship init $0)"
-   ```
+    eval "$(starship init bash)"
+    ```
 
-   #### Fish
+    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+    Add the following to the end of `~/.config/fish/config.fish`:
 
-   ```sh
-   # ~/.config/fish/config.fish
+    ```sh
+    # ~/.config/fish/config.fish
 
-   eval (starship init fish)
-   ```
+    eval (starship init fish)
+    ```
+
+    #### Zsh
+
+    Add the following to the end of `~/.zshrc`:
+
+    ```sh
+    # ~/.zshrc
+
+    eval "$(starship init zsh)"
+    ```
 
 ## 🔧 Configuration
 
