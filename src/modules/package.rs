@@ -55,22 +55,15 @@ fn extract_poetry_version(file_contents: &str) -> Option<String> {
 }
 
 fn get_package_version() -> Option<String> {
-    let cargo_toml = utils::read_file("Cargo.toml");
-    if let Ok(cargo_toml) = cargo_toml {
+    if let Ok(cargo_toml) = utils::read_file("Cargo.toml") {
         return extract_cargo_version(&cargo_toml);
-    }
-
-    let package_json = utils::read_file("package.json");
-    if let Ok(package_json) = package_json {
+    } else if let Ok(package_json) = utils::read_file("package.json") {
         return extract_package_version(&package_json);
-    }
-
-    let poetry_toml = utils::read_file("pyproject.toml");
-    if let Ok(poetry_toml) = poetry_toml {
+    } else if let Ok(poetry_toml) = utils::read_file("pyproject.toml") {
         return extract_poetry_version(&poetry_toml);
+    } else {
+        None
     }
-
-    None
 }
 
 fn format_version(version: &str) -> String {
