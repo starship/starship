@@ -7,6 +7,11 @@ use super::{Context, Module};
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("time")?;
 
+    // Remove when logic for disabled by default exists
+    if module.config_value_bool("disabled").unwrap_or(true) {
+        return None;
+    }
+
     let is_12hr = module.config_value_bool("12hr").unwrap_or(false);
     let default_format = if is_12hr { "%I:%M%p" } else { "%H:%M" };
     let time_format = module
