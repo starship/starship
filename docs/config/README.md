@@ -299,7 +299,7 @@ disabled = true
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of NodeJS.
+The `ruby` module shows the currently installed version of Ruby.
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Gemfile` file
