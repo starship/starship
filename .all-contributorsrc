@@ -122,6 +122,17 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "AZanellato",
+      "name": "André Zanellato",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/30451287?v=4",
+      "profile": "https://github.com/AZanellato",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
