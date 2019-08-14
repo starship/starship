@@ -162,11 +162,10 @@ STARSHIP_START_TIME="$(date +%s)";
 
 /* Fish setup is simple because they give us CMD_DURATION. Just account for name
 changes between 2.7/3.0 and do some math to convert ms->s and we can use it */
-const FISH_INIT: &str = r##"
-function fish_prompt;
-    set -l exit_code $status;
-    set -l CMD_DURATION "$CMD_DURATION$cmd_duration";
-    set -l starship_duration (math --scale=0 "$CMD_DURATION / 1000");
-    starship prompt --status=$exit_code --cmd-duration=$starship_duration --jobs=(count (jobs -p));
-end;
+const FISH_INIT: &str = r##"function fish_prompt
+    set -l exit_code $status
+    set -l CMD_DURATION "$CMD_DURATION$cmd_duration"
+    set -l starship_duration (math --scale=0 "$CMD_DURATION / 1000")
+    starship prompt --status=$exit_code --cmd-duration=$starship_duration --jobs=(count (jobs -p))
+end
 "##;
