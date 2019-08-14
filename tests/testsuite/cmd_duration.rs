@@ -1,8 +1,5 @@
 use ansi_term::Color;
-use std::fs;
 use std::io;
-use std::path::Path;
-use tempfile::TempDir;
 
 use crate::common::{self, TestCommand};
 
