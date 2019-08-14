@@ -81,9 +81,3 @@ stages:
       parameters:
         name: cargo_publish
         displayName: Publish to Crates.io
-
-    # Open a PR on Homebrew/homebrew-core with an update to the starship formula
-    - template: ci/bump-brew-formula.yml
-      parameters:
-        name: bump_brew_formula
-        displayName: Bump the Homebrew formula

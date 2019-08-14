@@ -54,6 +54,7 @@ The prompt shows information you need while you're working, while staying sleek 
 - Current username if not the same as the logged-in user
 - Current Node.js version(`⬢`)
 - Current Rust version (`🦀`)
+- Current Ruby version (`💎`).
 - Current Python version (`🐍`)
 - Current Go version (`🐹`)
 - Package version of package in current directory (`📦`)
