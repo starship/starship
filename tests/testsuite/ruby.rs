@@ -5,6 +5,7 @@ use std::io;
 use crate::common;
 
 #[test]
+#[ignore]
 fn folder_without_ruby_files() -> io::Result<()> {
     let dir = common::new_tempdir()?;
 
@@ -20,6 +21,7 @@ fn folder_without_ruby_files() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn folder_with_gemfile() -> io::Result<()> {
     let dir = common::new_tempdir()?;
     File::create(dir.path().join("Gemfile"))?;
