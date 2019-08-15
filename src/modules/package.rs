@@ -133,4 +133,32 @@ mod tests {
             expected_version
         );
     }
+
+    #[test]
+    fn test_extract_poetry_version() {
+        let poetry_with_version = toml::toml! {
+            [tool.poetry]
+            name = "starship"
+            version = "0.1.0"
+        }
+        .to_string();
+
+        let expected_version = Some("v0.1.0".to_string());
+        assert_eq!(
+            extract_poetry_version(&poetry_with_version),
+            expected_version
+        );
+
+        let poetry_without_version = toml::toml! {
+            [tool.poetry]
+            name = "starship"
+        }
+        .to_string();
+
+        let expected_version = None;
+        assert_eq!(
+            extract_poetry_version(&poetry_without_version),
+            expected_version
+        );
+    }
 }
