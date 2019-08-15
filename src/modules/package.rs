@@ -48,7 +48,11 @@ fn extract_package_version(file_contents: &str) -> Option<String> {
 
 fn extract_poetry_version(file_contents: &str) -> Option<String> {
     let poetry_toml: toml::Value = toml::from_str(file_contents).ok()?;
-    let raw_version = poetry_toml.get("tool")?.get("poetry")?.get("version")?.as_str()?;
+    let raw_version = poetry_toml
+        .get("tool")?
+        .get("poetry")?
+        .get("version")?
+        .as_str()?;
 
     let formatted_version = format_version(raw_version);
     Some(formatted_version)
