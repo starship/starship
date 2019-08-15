@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate clap;
 
+mod bug_report;
 mod config;
 mod context;
 mod init;
@@ -50,41 +51,45 @@ fn main() {
         .help("The number of currently running jobs")
         .takes_value(true);
 
-    let matches = App::new("starship")
-        .about("The cross-shell prompt for astronauts. ☄🌌️")
-        // pull the version number from Cargo.toml
-        .version(crate_version!())
-        // pull the authors from Cargo.toml
-        .author(crate_authors!())
-        .after_help("https://github.com/starship/starship")
-        .setting(AppSettings::SubcommandRequiredElseHelp)
-        .subcommand(
-            SubCommand::with_name("init")
-                .about("Prints the shell function used to execute starship")
-                .arg(&shell_arg),
-        )
-        .subcommand(
-            SubCommand::with_name("prompt")
-                .about("Prints the full starship prompt")
-                .arg(&status_code_arg)
-                .arg(&path_arg)
-                .arg(&cmd_duration_arg)
-                .arg(&jobs_arg),
-        )
-        .subcommand(
-            SubCommand::with_name("module")
-                .about("Prints a specific prompt module")
-                .arg(
-                    Arg::with_name("name")
-                        .help("The name of the module to be printed")
-                        .required(true),
-                )
-                .arg(&status_code_arg)
-                .arg(&path_arg)
-                .arg(&cmd_duration_arg)
-                .arg(&jobs_arg),
-        )
-        .get_matches();
+    let matches =
+        App::new("starship")
+            .about("The cross-shell prompt for astronauts. ☄🌌️")
+            // pull the version number from Cargo.toml
+            .version(crate_version!())
+            // pull the authors from Cargo.toml
+            .author(crate_authors!())
+            .after_help("https://github.com/starship/starship")
+            .setting(AppSettings::SubcommandRequiredElseHelp)
+            .subcommand(
+                SubCommand::with_name("init")
+                    .about("Prints the shell function used to execute starship")
+                    .arg(&shell_arg),
+            )
+            .subcommand(
+                SubCommand::with_name("prompt")
+                    .about("Prints the full starship prompt")
+                    .arg(&status_code_arg)
+                    .arg(&path_arg)
+                    .arg(&cmd_duration_arg)
+                    .arg(&jobs_arg),
+            )
+            .subcommand(
+                SubCommand::with_name("module")
+                    .about("Prints a specific prompt module")
+                    .arg(
+                        Arg::with_name("name")
+                            .help("The name of the module to be printed")
+                            .required(true),
+                    )
+                    .arg(&status_code_arg)
+                    .arg(&path_arg)
+                    .arg(&cmd_duration_arg)
+                    .arg(&jobs_arg),
+            )
+            .subcommand(SubCommand::with_name("bug-report").about(
+                "Create a pre-populated GitHub issue with information about your configuration",
+            ))
+            .get_matches();
 
     match matches.subcommand() {
         ("init", Some(sub_m)) => {
@@ -95,6 +100,9 @@ fn main() {
         ("module", Some(sub_m)) => {
             let module_name = sub_m.value_of("name").expect("Module name missing.");
             print::module(module_name, sub_m.clone());
+        }
+        ("bug-report", Some(_)) => {
+            bug_report::bug_report();
         }
         _ => {}
     }
