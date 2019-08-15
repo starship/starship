@@ -348,12 +348,14 @@ symbol = "🤖 "
 ## Package Version
 
 The `package` module is shown when the current directory is the repository for a
-package, and shows its current version. The module currently supports `npm` and
-`cargo` packages.
+package, and shows its current version. The module currently supports `npm`, `cargo`,
+and `poetry` packages.
 
 - **npm** – The `npm` package version is extracted from the `package.json` present
   in the current directory
 - **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present
+  in the current directory
+- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present
   in the current directory
 
 > ⚠️ The version being shown is that of the package whose source code is in your
