@@ -38,6 +38,7 @@ fn folder_with_gemfile() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn folder_with_rb_file() -> io::Result<()> {
     let dir = common::new_tempdir()?;
     File::create(dir.path().join("any.rb"))?;
