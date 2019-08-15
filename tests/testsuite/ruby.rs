@@ -20,6 +20,7 @@ fn folder_without_ruby_files() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn folder_with_gemfile() -> io::Result<()> {
     let dir = common::new_tempdir()?;
     File::create(dir.path().join("Gemfile"))?;
@@ -36,6 +37,7 @@ fn folder_with_gemfile() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn folder_with_rb_file() -> io::Result<()> {
     let dir = common::new_tempdir()?;
     File::create(dir.path().join("any.rb"))?;
