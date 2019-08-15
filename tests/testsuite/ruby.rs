@@ -5,7 +5,6 @@ use std::io;
 use crate::common;
 
 #[test]
-#[ignore]
 fn folder_without_ruby_files() -> io::Result<()> {
     let dir = common::new_tempdir()?;
 
