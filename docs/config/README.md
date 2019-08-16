@@ -148,15 +148,15 @@ min_time = 4
 ## Directory
 
 The `directory` module shows the path to your current directory, truncated to
-three parent folders. Your directory will also be truncated to the root of the
-git repo that you're currently in.
+three parent folders.
 
 ### Options
 
-| Variable            | Default | Description                                                                     |
-| ------------------- | ------- | ------------------------------------------------------------------------------- |
-| `truncation_length` | `3`     | The number of parent folders that the current directory should be truncated to. |
-| `disabled`          | `false` | Disables the `directory` module.                                                |
+| Variable            | Default | Description                                                                      |
+| ------------------- | ------- | -------------------------------------------------------------------------------- |
+| `truncation_length` | `3`     | The number of parent folders that the current directory should be truncated to.  |
+| `truncate_to_repo`  | `true`  | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `disabled`          | `false` | Disables the `directory` module.                                                 |
 
 ### Example
 
