@@ -16,7 +16,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let is_12hr = module.config_value_bool("12hr").unwrap_or(false);
-    let default_format = if is_12hr { "%I:%M%p" } else { "%H:%M" };
+    let default_format = if is_12hr { "%r" } else { "%T" };
     let time_format = module
         .config_value_str("format")
         .unwrap_or(default_format)
@@ -29,7 +29,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         "time",
         &format!("{}{}{}", prefix, local.format(&time_format), suffix),
     );
-    module.get_prefix().set_value("");
+    module.get_prefix().set_value("at ");
 
     Some(module)
 }
