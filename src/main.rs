@@ -1,6 +1,9 @@
 #[macro_use]
 extern crate clap;
 
+#[macro_use]
+mod mocks;
+
 mod config;
 mod context;
 mod init;

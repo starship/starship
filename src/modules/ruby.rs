@@ -1,5 +1,5 @@
 use ansi_term::Color;
-use std::process::Command;
+use_command!();
 
 use super::{Context, Module};
 
