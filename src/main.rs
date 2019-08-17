@@ -91,6 +91,7 @@ fn main() {
                 .arg(&status_code_arg)
                 .arg(&path_arg)
                 .arg(&cmd_duration_arg)
+                .arg(&keymap_arg)
                 .arg(&jobs_arg),
         )
         .get_matches();
