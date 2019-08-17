@@ -1,6 +1,7 @@
 mod battery;
 mod character;
 mod cmd_duration;
+mod crystal;
 mod directory;
 mod git_branch;
 mod git_status;
@@ -26,6 +27,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "python" => python::module(context),
         "ruby" => ruby::module(context),
         "golang" => golang::module(context),
+        "crystal" => crystal::module(context),
         "line_break" => line_break::module(context),
         "package" => package::module(context),
         "git_branch" => git_branch::module(context),
