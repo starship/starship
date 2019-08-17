@@ -40,7 +40,6 @@
 
 <h1></h1>
 
-
 Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br>
 The prompt shows information you need while you're working, while staying sleek and out of the way.
 
@@ -57,7 +56,10 @@ The prompt shows information you need while you're working, while staying sleek 
 - Current Ruby version (`💎`).
 - Current Python version (`🐍`)
 - Current Go version (`🐹`)
-- Package version of package in current directory (`📦`)
+- Current version of package in current directory (`📦`)
+  - npm (Node.js)
+  - cargo (Rust)
+  - poetry (Python)
 - Current battery level and status
 - Current Git branch and rich repo status:
   - `=` — conflicting changes
@@ -99,35 +101,35 @@ The prompt shows information you need while you're working, while staying sleek 
 
 1. Add the init script to your shell's config file:
 
-    #### Bash
+   #### Bash
 
-    Add the following to the end of `~/.bashrc`:
+   Add the following to the end of `~/.bashrc`:
 
-    ```sh
-    # ~/.bashrc
+   ```sh
+   # ~/.bashrc
 
-    eval "$(starship init bash)"
-    ```
+   eval "$(starship init bash)"
+   ```
 
-    #### Fish
+   #### Fish
 
-    Add the following to the end of `~/.config/fish/config.fish`:
+   Add the following to the end of `~/.config/fish/config.fish`:
 
-    ```sh
-    # ~/.config/fish/config.fish
+   ```sh
+   # ~/.config/fish/config.fish
 
-    eval (starship init fish)
-    ```
+   eval (starship init fish)
+   ```
 
-    #### Zsh
+   #### Zsh
 
-    Add the following to the end of `~/.zshrc`:
+   Add the following to the end of `~/.zshrc`:
 
-    ```sh
-    # ~/.zshrc
+   ```sh
+   # ~/.zshrc
 
-    eval "$(starship init zsh)"
-    ```
+   eval "$(starship init zsh)"
+   ```
 
 ## 🔧 Configuration
 
