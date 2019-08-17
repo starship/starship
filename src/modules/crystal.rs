@@ -21,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     match get_crystal_version() {
         Some(crystal_version) => {
-            const CRYSTAL_CHAR: &str = "💎 ";
+            const CRYSTAL_CHAR: &str = "🔮 ";
             let module_color = Color::Red.bold();
 
             let mut module = context.new_module("crystal")?;
