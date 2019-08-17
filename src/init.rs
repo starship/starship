@@ -83,11 +83,11 @@ pub fn init_main(shell_name: &str) {
 /* GENERAL INIT SCRIPT NOTES
 
 Each init script will be passed as-is. Global notes for init scripts are in this
-comment, with additional per-script comments in the strings themselves.AsMut
+comment, with additional per-script comments in the strings themselves.
 
 JOBS: The argument to `--jobs` is quoted because MacOS's `wc` leaves whitespace
 in the output. We pass it to starship and do the whitespace removal in Rust,
-to avoid the cost of an additional shell fork every shell draw.AsMut
+to avoid the cost of an additional shell fork every shell draw.
 
 */
 
