@@ -251,7 +251,7 @@ fn directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
     let output = common::render_module("directory")
         .use_config(toml::toml! {
             [directory]
-            // `truncate_tro_repo` should ensure that the longer path should not be displayed.
+            // `truncate_to_repo = true` should display the truncated path
             truncation_length = 5
             truncate_to_repo = true
         })
