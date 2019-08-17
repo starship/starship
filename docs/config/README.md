@@ -89,19 +89,19 @@ discharging_symbol = "💀"
 The `character` module shows a character (usually an arrow) beside where the text
 is entered in your terminal.
 
-The character will tell you whether the last command was successful or not. It 
-can do this in two ways: by changing color (red/green) or by changing its shape 
+The character will tell you whether the last command was successful or not. It
+can do this in two ways: by changing color (red/green) or by changing its shape
 (➜/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
 
 ### Options
 
-| Variable   | Default | Description                                          |
-| ---------- | ------- | ---------------------------------------------------- |
-| `symbol`                | `"➜"`   | The symbol used before the text input in the prompt. |
-| `error_symbol`          | `"✖"`   | The symbol used before text input if the previous command failed. |
-| `use_symbol_for_status` | `false` | Indicate error status by changing the symbol.         |
+| Variable                | Default | Description                                                                       |
+| ----------------------- | ------- | --------------------------------------------------------------------------------- |
+| `symbol`                | `"➜"`   | The symbol used before the text input in the prompt.                              |
+| `error_symbol`          | `"✖"`   | The symbol used before text input if the previous command failed.                 |
+| `use_symbol_for_status` | `false` | Indicate error status by changing the symbol.                                     |
 | `vicmd_symbol`          | `"❮"`   | The symbol used before the text input in the prompt if zsh is in vim normal mode. |
-| `disabled`              | `false` | Disables the `character` module.                      |
+| `disabled`              | `false` | Disables the `character` module.                                                  |
 
 ### Example
 
@@ -120,14 +120,14 @@ The `cmd_duration` module shows how long the last command took to execute.
 The module will be shown only if the command took longer than two seconds, or
 the `min_time` config value, if it exists.
 
-::: warning Do Not Hook the DEBUG trap in Bash
+::: warning Do not hook the DEBUG trap in Bash
 If you are running Starship in `bash`, do not hook the `DEBUG` trap after running
 `eval $(starship init $0)`, or this module **will** break.
 :::
 
 Bash users who need preexec-like functionality can use
 [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec).
-Simply define the arrays `preexec_functions` and `precmd_functions` before 
+Simply define the arrays `preexec_functions` and `precmd_functions` before
 running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
@@ -309,9 +309,9 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default | Description                                              |
-| ---------- | ------- | -------------------------------------------------------- |
-| `disabled` | `false` | Disables the `ruby` module.                              |
+| Variable   | Default | Description                 |
+| ---------- | ------- | --------------------------- |
+| `disabled` | `false` | Disables the `ruby` module. |
 
 ### Example
 
@@ -398,13 +398,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default | Description                                              |
-| ---------- | ------- | -------------------------------------------------------- |
-| `symbol`   | `"🐍 "` | The symbol used before displaying the version of Python. |
-| `disabled` | `false` | Disables the `python` module.                            |
-| `pyenv_version_name` | `false` | Use pyenv to get Python version                            |
-| `pyenv_prefix` | `"pyenv "` | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
-
+| Variable             | Default    | Description                                                                 |
+| -------------------- | ---------- | --------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`    | The symbol used before displaying the version of Python.                    |
+| `disabled`           | `false`    | Disables the `python` module.                                               |
+| `pyenv_version_name` | `false`    | Use pyenv to get Python version                                             |
+| `pyenv_prefix`       | `"pyenv "` | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
 
 ### Example
 
@@ -464,4 +463,3 @@ The module will be shown if any of the following conditions are met:
 [username]
 disabled = true
 ```
-
