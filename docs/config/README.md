@@ -100,7 +100,7 @@ can do this in two ways: by changing color (red/green) or by changing its shape
 | `symbol`                | `"➜"`   | The symbol used before the text input in the prompt. |
 | `error_symbol`          | `"✖"`   | The symbol used before text input if the previous command failed. |
 | `use_symbol_for_status` | `false` | Indicate error status by changing the symbol.         |
-| `vicmd_symbol`          | `"❮"`   | The symbol used before the text input in the prompt if Zsh Line Editor keymap is `vicmd`. |
+| `vicmd_symbol`          | `"❮"`   | The symbol used before the text input in the prompt if zsh is in vim normal mode. |
 | `disabled`              | `false` | Disables the `character` module.                      |
 
 ### Example
