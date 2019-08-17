@@ -58,6 +58,11 @@ fn main() {
         .help("The number of currently running jobs")
         .takes_value(true);
 
+    let init_scripts_arg = Arg::with_name("print_full_init")
+        .short("i")
+        .long("print-full-init")
+        .help("The number of currently running jobs");
+
     let matches = App::new("starship")
         .about("The cross-shell prompt for astronauts. ☄🌌️")
         // pull the version number from Cargo.toml
@@ -69,7 +74,8 @@ fn main() {
         .subcommand(
             SubCommand::with_name("init")
                 .about("Prints the shell function used to execute starship")
-                .arg(&shell_arg),
+                .arg(&shell_arg)
+                .arg(&init_scripts_arg),
         )
         .subcommand(
             SubCommand::with_name("prompt")
@@ -99,7 +105,11 @@ fn main() {
     match matches.subcommand() {
         ("init", Some(sub_m)) => {
             let shell_name = sub_m.value_of("shell").expect("Shell name missing.");
-            init::init(shell_name)
+            if sub_m.is_present("print_full_init") {
+                init::init_main(shell_name);
+            } else {
+                init::init_stub(shell_name);
+            }
         }
         ("prompt", Some(sub_m)) => print::prompt(sub_m.clone()),
         ("module", Some(sub_m)) => {

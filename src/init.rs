@@ -1,26 +1,36 @@
 use std::ffi::OsStr;
 use std::path::Path;
 
-/* We need to send execution time to the prompt for the cmd_duration module. For fish,
-this is fairly straightforward. For bash and zsh, we'll need to use several
-shell utilities to get the time, as well as render the prompt */
+/*
+We use a two-phase init here: the first phase gives a simple command to the
+shell, which prints and evaluates a much more complicated init script. We do this
+because directly using `eval` on a shell script causes it to be evaluated in
+a single line. This is problematic because you have to put semicolons in *just*
+the right places, and you can't use comments within the script.
+*/
 
-pub fn init(shell_name: &str) {
+/* This prints the setup stub, the short piece of code which sets up the main
+init code. This stub allows us to use `source` instead of `eval` to run the
+setup code, which makes programming the init scripts MUCH easier */
+pub fn init_stub(shell_name: &str) {
     log::debug!("Shell name: {}", shell_name);
 
     let shell_basename = Path::new(shell_name).file_stem().and_then(OsStr::to_str);
 
-    let setup_script = match shell_basename {
+    let setup_stub = match shell_basename {
         Some("bash") => {
-            let script = BASH_INIT;
+            /* this really should look like the zsh function, but bash 3.2 (MacOS default shell)
+            does not support using source with process substitution, so we use this
+            workaround from https://stackoverflow.com/a/32596626 */
+            let script = "source /dev/stdin <<<\"$(starship init bash --print-full-init)\"";
             Some(script)
         }
         Some("zsh") => {
-            let script = ZSH_INIT;
+            let script = "source <(starship init zsh --print-full-init)";
             Some(script)
         }
         Some("fish") => {
-            let script = FISH_INIT;
+            let script = "source (starship init fish --print-full-init | psub)";
             Some(script)
         }
         None => {
@@ -46,109 +56,138 @@ pub fn init(shell_name: &str) {
             None
         }
     };
-
-    if let Some(script) = setup_script {
+    if let Some(script) = setup_stub {
         print!("{}", script);
-    }
+    };
 }
 
-/*
- For bash: we need to manually hook functions ourself: PROMPT_COMMAND will exec
-   right before the prompt is drawn, and any function trapped by DEBUG will exec
-   before a command is run.
+pub fn init_main(shell_name: &str) {
+    let setup_script = match shell_name {
+        "bash" => Some(BASH_INIT),
+        "zsh" => Some(ZSH_INIT),
+        "fish" => Some(FISH_INIT),
+        _ => {
+            println!(
+                "printf \"Shell name detection failed on phase two init.\\n\
+                 This probably indicates a bug within starship: please open\\n\
+                 an issue at https://github.com/starship/starship/issues/new\\n\"\\n"
+            );
+            None
+        }
+    };
+    if let Some(script) = setup_script {
+        print!("{}", script);
+    };
+}
 
-   There is a preexec/precmd framework for bash out there: if we find the
-   appropriate variables set, assume we are using that framework:
-   https://github.com/rcaloras/bash-preexec
+/* GENERAL INIT SCRIPT NOTES
 
-   Bash quirk: DEBUG is triggered whenever a command is executed, even if that
-   command is part of a pipeline. To avoid only timing the last part of a pipeline,
-   we only start the timer if no timer has been started since the last prompt draw,
-   tracked by the variable PREEXEC_READY. Similarly, only draw timing info if
-   STARSHIP_START_TIME is defined, in case preexec was interrupted.
+Each init script will be passed as-is. Global notes for init scripts are in this
+comment, with additional per-script comments in the strings themselves.AsMut
 
-   Finally, to work around existing DEBUG traps in the absence of a preexec-like,
-   we parse out the name of the old DEBUG hook, then make a new function which
-   calls both that function and our starship hooks. We don't do this for
-   PROMPT_COMMAND because that would probably result in two prompts.
+JOBS: The argument to `--jobs` is quoted because MacOS's `wc` leaves whitespace
+in the output. We pass it to starship and do the whitespace removal in Rust,
+to avoid the cost of an additional shell fork every shell draw.AsMut
 
-   We need to quote the output of `$(jobs -p | wc -l)` since MacOS `wc` leaves
-   giant spaces in front of the number (e.g. "    3"), which messes up the
-   word-splitting. Instead, quote the whole thing, then let Rust do the whitespace
-   trimming within the jobs module
 */
 
-/*
-Note to programmers: this and the zsh init will be evaluated on a single line.
-Use semicolons, avoid comments, and generally think like all newlines will be
-deleted.
+/* BASH INIT SCRIPT
+
+We use PROMPT_COMMAND and the DEBUG trap to generate timing information. We try
+to avoid clobbering what we can, and try to give the user ways around our
+clobbers, if it's unavoidable.
+
+A bash quirk is that the DEBUG trap is fired every time a command runs, even
+if it's later on in the pipeline. If uncorrected, this could cause bad timing
+data for commands like `slow | slow | fast`, since the timer starts at the start
+of the "fast" command.
+
+To solve this, we set a flag `PREEXEC_READY` when the prompt is drawn, and only
+start the timer if this flag is present. That way, timing is for the entire command,
+and not just a portion of it
 */
+
 const BASH_INIT: &str = r##"
+# Will be run before *every* command (even ones in pipes!)
 starship_preexec() {
+    # Avoid restarting the timer for commands in the same pipeline
     if [ "$PREEXEC_READY" = "true" ]; then
         PREEXEC_READY=false;
         STARSHIP_START_TIME=$(date +%s);
     fi
 };
+# Will be run before the prompt is drawn
 starship_precmd() {
-    STATUS=$?;
-    export STARSHIP_SHELL="bash";
+    # Save the status, because commands in this pipeline will change $?
+    STATUS=$?
+    export STARSHIP_SHELL="bash"
+
+    # Run the bash precmd function, if relevant
     "${starship_precmd_user_func-:}";
     if [[ $STARSHIP_START_TIME ]]; then
-        STARSHIP_END_TIME=$(date +%s);
-        STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME));
-        PS1="$(starship prompt --status=$STATUS --jobs="$(jobs -p | wc -l)" --cmd-duration=$STARSHIP_DURATION)";
-        unset STARSHIP_START_TIME;
+        STARSHIP_END_TIME=$(date +%s)
+        STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
+        PS1="$(starship prompt --status=$STATUS --jobs="$(jobs -p | wc -l)" --cmd-duration=$STARSHIP_DURATION)"
+        unset STARSHIP_START_TIME
     else
-        PS1="$(starship prompt --status=$STATUS --jobs="$(jobs -p | wc -l)")";
-    fi;
-    PREEXEC_READY=true;
+        PS1="$(starship prompt --status=$STATUS --jobs="$(jobs -p | wc -l)")"
+    fi
+    PREEXEC_READY=true;  # Signal that we can safely restart the timer
 };
+
+# If the user appears to be using https://github.com/rcaloras/bash-preexec,
+# then hook our functions into their framework.
 if [[ $preexec_functions ]]; then
-    preexec_functions+=(starship_preexec);
-    precmd_functions+=(starship_precmd);
-    STARSHIP_START_TIME=$(date +%s);
+    preexec_functions+=(starship_preexec)
+    precmd_functions+=(starship_precmd)
+    STARSHIP_START_TIME=$(date +%s)
 else
-    dbg_trap="$(trap -p DEBUG | cut -d' ' -f3 | tr -d \')";
+# We want to avoid destroying an existing DEBUG hook. If we detect one, create 
+# a new function that runs both the existing function AND our function, then 
+# re-trap DEBUG to use this new function. This prevents a trap clobber.
+    dbg_trap="$(trap -p DEBUG | cut -d' ' -f3 | tr -d \')"
     if [[ -z "$dbg_trap" ]]; then
-        trap starship_preexec DEBUG;
+        trap starship_preexec DEBUG
     elif [[ "$dbg_trap" != "starship_preexec" && "$dbg_trap" != "starship_preexec_all" ]]; then
         function starship_preexec_all(){
-            $dbg_trap; starship_preexec;
+            $dbg_trap; starship_preexec
         };
-        trap starship_preexec_all DEBUG;
+        trap starship_preexec_all DEBUG
     fi;
-    PROMPT_COMMAND=starship_precmd;
-    STARSHIP_START_TIME=$(date +%s);
+
+    # Finally, prepare the precmd function and set up the start time.
+    PROMPT_COMMAND=starship_precmd
+    STARSHIP_START_TIME=$(date +%s)
 fi;
 "##;
 
-/* For zsh: preexec_functions and precmd_functions provide preexec/precmd in a
-   way that lets us avoid clobbering them.
+/* ZSH INIT SCRIPT
 
-   Zsh quirk: preexec() is only fired if a command is actually run (unlike in
-   bash, where spamming empty commands still triggers DEBUG). This means a user
-   spamming ENTER at an empty command line will see increasing runtime (since
-   preexec never actually fires to reset the start time).
+ZSH has a quirk where `preexec` is only run if a command is actually run (i.e
+pressing ENTER at an empty command line will not cause preexec to fire). This
+can cause timing issues, as a user who presses "ENTER" without running a command
+will see the time to the start of the last command, which may be very large.env!
 
-   To fix this, only pass the time if STARSHIP_START_TIME is defined, and unset
-   it after passing the time, so that we only measure actual commands.
-
-   We need to quote the output of the jobs command for the same reason as
-   bash.
+To fix this, we create STARSHIP_START_TIME upon preexec() firing, and destroy it
+after drawing the prompt. This ensures that the timing for one command is only
+ever drawn once (for the prompt immediately after it is run).
 */
 
 const ZSH_INIT: &str = r##"
+# Will be run before every prompt draw
 starship_precmd() {
-    STATUS=$?;
-    export STARSHIP_SHELL="zsh";
+    # Save the status, because commands in this pipeline will change $?
+    STATUS=$?
+    export STARSHIP_SHELL="zsh"
+
+    # Compute cmd_duration, if needed
     if [[ $STARSHIP_START_TIME ]]; then
-        STARSHIP_END_TIME="$(date +%s)";
-        STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME));
-        PROMPT="$(starship prompt --status=$STATUS --cmd-duration=$STARSHIP_DURATION --jobs="$(jobs | wc -l)")";
-        unset STARSHIP_START_TIME;
+        STARSHIP_END_TIME="$(date +%s)"
+        STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
+        PROMPT="$(starship prompt --status=$STATUS --cmd-duration=$STARSHIP_DURATION --jobs="$(jobs | wc -l)")"
+        unset STARSHIP_START_TIME
     else
-        PROMPT="$(starship prompt --status=$STATUS --jobs="$(jobs | wc -l)")";
+        PROMPT="$(starship prompt --status=$STATUS --jobs="$(jobs | wc -l)")"
     fi
 };
 starship_preexec(){
@@ -175,13 +214,12 @@ function zle-keymap-select
 zle -N zle-keymap-select;
 "##;
 
-/* Fish setup is simple because they give us CMD_DURATION. Just account for name
-changes between 2.7/3.0 and do some math to convert ms->s and we can use it */
 const FISH_INIT: &str = r##"
-function fish_prompt;
-    set -l exit_code $status;
-    set -l CMD_DURATION "$CMD_DURATION$cmd_duration";
+function fish_prompt
+    set -l exit_code $status
+    # Account for changes in variable name between v2.7 and v3.0
+    set -l CMD_DURATION "$CMD_DURATION$cmd_duration"
     set -l starship_duration (math --scale=0 "$CMD_DURATION / 1000");
-    starship prompt --status=$exit_code --cmd-duration=$starship_duration --jobs=(count (jobs -p));
-end;
+    starship prompt --status=$exit_code --cmd-duration=$starship_duration --jobs=(count (jobs -p))
+end
 "##;
