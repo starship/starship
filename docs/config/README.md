@@ -148,7 +148,8 @@ min_time = 4
 ## Directory
 
 The `directory` module shows the path to your current directory, truncated to
-three parent folders.
+three parent folders. Your directory will also be truncated to the root of the
+git repo that you're currently in.
 
 ### Options
 
