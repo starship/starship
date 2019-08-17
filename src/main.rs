@@ -59,9 +59,8 @@ fn main() {
         .takes_value(true);
 
     let init_scripts_arg = Arg::with_name("print_full_init")
-        .short("i")
         .long("print-full-init")
-        .help("The number of currently running jobs");
+        .help("Print the main initialization script (as opposed to the init stub)");
 
     let matches = App::new("starship")
         .about("The cross-shell prompt for astronauts. ☄🌌️")
