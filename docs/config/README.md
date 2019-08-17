@@ -46,9 +46,11 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Variable      | Default | Description                                    |
-| ------------- | ------- | ---------------------------------------------- |
-| `add_newline` | `true`  | Add a new line before the start of the prompt. |
+| Variable                | Default | Description                                                          |
+| ----------------------- | ------- | -------------------------------------------------------------------- |
+| `add_newline`           | `true`  | Add a new line before the start of the prompt.                       |
+| `prompt_order`          | `[]`    | Configure out custom prompt order modifying default order            |
+| `disable_default_order` | `false` | Disable default config order and only enable out custom prompt order |
 
 ### Example
 
@@ -57,6 +59,8 @@ This is the list of prompt-wide configuration options.
 
 # Disable the newline at the start of the prompt
 add_newline = false
+prompt_order=["rust","line_break","package","line_break","character"] 
+disable_default_order=true
 ```
 
 ## Battery
