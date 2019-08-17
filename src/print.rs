@@ -7,7 +7,8 @@ use crate::context::Context;
 use crate::module::Module;
 use crate::modules;
 
-const PROMPT_ORDER: &[&str] = &[
+//List of all prompt order
+const ALL_PROMPT_LIST: &[&str] = &[
     "username",
     "directory",
     "git_branch",
@@ -36,7 +37,59 @@ pub fn prompt(args: ArgMatches) {
         writeln!(handle).unwrap();
     }
 
-    let modules = PROMPT_ORDER
+    let mut prompt_order: Vec<&str> = Vec::new();
+    //List of default prompt order
+    let default_prompt_order: &[&str] = &[
+        "username",
+        "directory",
+        "git_branch",
+        "git_status",
+        "package",
+        "nodejs",
+        "rust",
+        "python",
+        "golang",
+        "cmd_duration",
+        "line_break",
+        "jobs",
+        "battery",
+        "character",
+    ];
+
+    // Write out a custom prompt order
+    if let Some(values) = config.get_as_array("prompt_order") {
+        for value in values {
+            let str_value = value.as_str();
+
+            if let Some(value) = str_value {
+                if ALL_PROMPT_LIST.contains(&value) {
+                    prompt_order.push(value);
+                } else {
+                    log::debug!(
+                        "Expected prompt_order to contain value from {:?}. Instead received {}",
+                        ALL_PROMPT_LIST,
+                        value,
+                    );
+                }
+            } else {
+                log::debug!(
+                    "Expected prompt_order to be a array of string. Instead received {} of type {}",
+                    value,
+                    value.type_str()
+                );
+            }
+        }
+    }
+
+    if config.get_as_bool("disable_default_order") != Some(true) {
+        for prompts in default_prompt_order {
+            if !prompt_order.contains(prompts) {
+                prompt_order.push(prompts);
+            }
+        }
+    }
+
+    let modules = &prompt_order
         .par_iter()
         .map(|module| modules::handle(module, &context)) // Compute modules
         .flatten()
