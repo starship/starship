@@ -12,6 +12,8 @@ use ansi_term::Color;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const SUCCESS_CHAR: &str = "➜";
     const FAILURE_CHAR: &str = "✖";
+    const VICMD_CHAR: &str = "❮";
+
     let color_success = Color::Green.bold();
     let color_failure = Color::Red.bold();
 
@@ -23,11 +25,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .config_value_bool("use_symbol_for_status")
         .unwrap_or(false);
     let exit_success = arguments.value_of("status_code").unwrap_or("0") == "0";
+    let keymap = arguments.value_of("keymap").unwrap_or("viins");
 
     /* If an error symbol is set in the config, use symbols to indicate
     success/failure, in addition to color */
     let symbol = if use_symbol && !exit_success {
         module.new_segment("error_symbol", FAILURE_CHAR)
+    } else if keymap == "vicmd" {
+        module.new_segment("vicmd_symbol", VICMD_CHAR)
     } else {
         module.new_segment("symbol", SUCCESS_CHAR)
     };

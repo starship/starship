@@ -72,3 +72,37 @@ fn char_module_symbolyes_status() -> io::Result<()> {
 
     Ok(())
 }
+
+#[test]
+fn char_module_vicmd_keymap() -> io::Result<()> {
+    let expected_vicmd = format!("{} ", Color::Green.bold().paint("❮"));
+    let expected_specified = format!("{} ", Color::Green.bold().paint("N"));
+    let expected_other = format!("{} ", Color::Green.bold().paint("➜"));
+
+    // zle keymap is vicmd
+    let output = common::render_module("character")
+        .arg("--keymap=vicmd")
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected_vicmd, actual);
+
+    // specified vicmd character
+    let output = common::render_module("character")
+        .use_config(toml::toml! {
+            [character]
+            vicmd_symbol = "N"
+        })
+        .arg("--keymap=vicmd")
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected_specified, actual);
+
+    // zle keymap is other
+    let output = common::render_module("character")
+        .arg("--keymap=visual")
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected_other, actual);
+
+    Ok(())
+}

@@ -40,7 +40,6 @@
 
 <h1></h1>
 
-
 Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br>
 The prompt shows information you need while you're working, while staying sleek and out of the way.
 
@@ -57,7 +56,10 @@ The prompt shows information you need while you're working, while staying sleek 
 - Current Ruby version (`💎`).
 - Current Python version (`🐍`)
 - Current Go version (`🐹`)
-- Package version of package in current directory (`📦`)
+- Current version of package in current directory (`📦`)
+  - npm (Node.js)
+  - cargo (Rust)
+  - poetry (Python)
 - Current battery level and status
 - Current Git branch and rich repo status:
   - `=` — conflicting changes
@@ -99,35 +101,35 @@ The prompt shows information you need while you're working, while staying sleek 
 
 1. Add the init script to your shell's config file:
 
-    #### Bash
+   #### Bash
 
-    Add the following to the end of `~/.bashrc`:
+   Add the following to the end of `~/.bashrc`:
 
-    ```sh
-    # ~/.bashrc
+   ```sh
+   # ~/.bashrc
 
-    eval "$(starship init bash)"
-    ```
+   eval "$(starship init bash)"
+   ```
 
-    #### Fish
+   #### Fish
 
-    Add the following to the end of `~/.config/fish/config.fish`:
+   Add the following to the end of `~/.config/fish/config.fish`:
 
-    ```sh
-    # ~/.config/fish/config.fish
+   ```sh
+   # ~/.config/fish/config.fish
 
-    eval (starship init fish)
-    ```
+   eval (starship init fish)
+   ```
 
-    #### Zsh
+   #### Zsh
 
-    Add the following to the end of `~/.zshrc`:
+   Add the following to the end of `~/.zshrc`:
 
-    ```sh
-    # ~/.zshrc
+   ```sh
+   # ~/.zshrc
 
-    eval "$(starship init zsh)"
-    ```
+   eval "$(starship init zsh)"
+   ```
 
 ## 🔧 Configuration
 
@@ -170,6 +172,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/MaT1g3R"><img src="https://avatars1.githubusercontent.com/u/15258494?v=4" width="100px;" alt="MaT1g3R"/><br /><sub><b>MaT1g3R</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=MaT1g3R" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=MaT1g3R" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=MaT1g3R" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://github.com/AZanellato"><img src="https://avatars3.githubusercontent.com/u/30451287?v=4" width="100px;" alt="André Zanellato"/><br /><sub><b>André Zanellato</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=AZanellato" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=AZanellato" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=AZanellato" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://saghm.com"><img src="https://avatars2.githubusercontent.com/u/5875560?v=4" width="100px;" alt="Saghm Rossi"/><br /><sub><b>Saghm Rossi</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=saghm" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=saghm" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=saghm" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://medium.com/@cappyzawa"><img src="https://avatars3.githubusercontent.com/u/12455284?v=4" width="100px;" alt="Shu Kutsuzawa"/><br /><sub><b>Shu Kutsuzawa</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=cappyzawa" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=cappyzawa" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=cappyzawa" title="Tests">⚠️</a></td>
   </tr>
 </table>
 

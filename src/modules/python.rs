@@ -111,17 +111,4 @@ mod tests {
         let input = "Python 3.7.2";
         assert_eq!(format_python_version(input), "v3.7.2");
     }
-
-    #[test]
-    fn test_no_virtual_env() {
-        env::set_var("VIRTUAL_ENV", "");
-        assert_eq!(get_python_virtual_env(), None)
-    }
-
-    #[test]
-    fn test_virtual_env() {
-        env::set_var("VIRTUAL_ENV", "/foo/bar/my_venv");
-        assert_eq!(get_python_virtual_env().unwrap(), "my_venv")
-    }
-
 }
