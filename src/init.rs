@@ -158,6 +158,12 @@ if [[ ${preexec_functions[(ie)starship_preexec]} -gt ${#preexec_functions} ]]; t
     preexec_functions+=(starship_preexec);
 fi;
 STARSHIP_START_TIME="$(date +%s)";
+function zle-keymap-select
+{
+    PROMPT=$(starship prompt --keymap=$KEYMAP)
+    zle reset-prompt
+}
+zle -N zle-keymap-select
 "##;
 
 /* Fish setup is simple because they give us CMD_DURATION. Just account for name
