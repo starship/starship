@@ -144,6 +144,17 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "cappyzawa",
+      "name": "Shu Kutsuzawa",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/12455284?v=4",
+      "profile": "https://medium.com/@cappyzawa",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
