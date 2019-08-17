@@ -92,6 +92,7 @@ starship_preexec() {
 };
 starship_precmd() {
     STATUS=$?;
+    "${starship_precmd_user_func-:}";
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(date +%s);
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME));
