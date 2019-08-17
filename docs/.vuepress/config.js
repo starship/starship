@@ -9,7 +9,8 @@ module.exports = {
     sidebar: [
       '/',
       ['/guide/', 'Guide'],
-      ['/config/', 'Configuration']
+      ['/config/', 'Configuration'],
+      ['/advanced-config/', 'Advanced Configuration']
     ],
     nav: [
       { text: 'Configuration', link: '/config/' },
