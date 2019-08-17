@@ -17,7 +17,7 @@ into the prompt-rendering procedure:
 
 - To run a custom function right before the prompt is drawn, define a new
   function and then assign its name to `starship_precmd_user_func`. For example,
-  to draw a rocket face before the prompt, you would do
+  to draw a rocket before the prompt, you would do
 
 ```bash
 function blastoff(){
@@ -36,15 +36,16 @@ starship_precmd_user_func="blastoff"
 function blastoff(){
     echo "🚀"
 }
-trap blastoff DEBUG     # Trap DEBUG *before* starship
+trap blastoff DEBUG     # Trap DEBUG *before* running starship
 eval $(starship init bash)
 ```
 
 ## Change Window Title
 
 Some shell prompts will automatically change the window title for you (e.g. to 
-reflect your working directory). Starship does not do this, but it's fairly
-straightforward to add a config for it yourself.
+reflect your working directory). Fish even does it by default.
+Starship does not do this, but it's fairly straightforward to add this
+functionality to `bash` or `zsh`.
 
 First, define a window title change function (identical in bash and zsh):
 
@@ -53,6 +54,9 @@ function set_win_title(){
     echo -ne "\033]0; YOUR_WINDOW_TITLE_HERE \007"
 }
 ```
+
+You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD`
+are popular choices).
 
 In `bash`, set this function to be the precmd starship function:
 
@@ -66,5 +70,5 @@ In `zsh`, add this to the `precmd_functions` array:
 precmd_functions+=(set_win_title)
 ```
 
-Add these lines to your shell configuration file (`~/.bashrc` or `~/.zsrhc`) to
-make it permanent.
+If you like the result, add these lines to your shell configuration file 
+(`~/.bashrc` or `~/.zsrhc`) to make it permanent.
