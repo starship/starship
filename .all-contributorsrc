@@ -133,6 +133,17 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "saghm",
+      "name": "Saghm Rossi",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5875560?v=4",
+      "profile": "https://saghm.com",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
