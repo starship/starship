@@ -30,3 +30,12 @@ steps:
       pyenv install $PYTHON_VERSION
       pyenv global $PYTHON_VERSION
     displayName: "Install a fixed version of Python"
+
+  # use choosenim to install Nim for integration tests
+  # Install Nim
+  - script: |
+      echo "##vso[task.setvariable variable=CHOOSENIM_CHOOSE_VERSION;]0.20.0"
+  - script: |
+      curl https://nim-lang.org/choosenim/init.sh -sSf | sh
+      echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.nimble/bin"
+    displayName: "Install a fixed version of Nim"
