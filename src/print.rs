@@ -7,8 +7,27 @@ use crate::context::Context;
 use crate::module::Module;
 use crate::modules;
 
-//List of all prompt order
-const ALL_PROMPT_LIST: &[&str] = &[
+//List of all modules
+const ALL_MODULES: &[&str] = &[
+    "battery",
+    "character",
+    "cmd_duration",
+    "directory",
+    "git_branch",
+    "git_status",
+    "golang",
+    "jobs",
+    "line_break",
+    "nodejs",
+    "package",
+    "python",
+    "ruby",
+    "rust",
+    "username",
+];
+
+//List of default prompt order
+const DEFAULT_PROMPT_ORDER: &[&str] = &[
     "username",
     "directory",
     "git_branch",
@@ -38,55 +57,37 @@ pub fn prompt(args: ArgMatches) {
     }
 
     let mut prompt_order: Vec<&str> = Vec::new();
-    //List of default prompt order
-    let default_prompt_order: &[&str] = &[
-        "username",
-        "directory",
-        "git_branch",
-        "git_status",
-        "package",
-        "nodejs",
-        "rust",
-        "python",
-        "golang",
-        "cmd_duration",
-        "line_break",
-        "jobs",
-        "battery",
-        "character",
-    ];
 
     // Write out a custom prompt order
-    if let Some(values) = config.get_as_array("prompt_order") {
-        for value in values {
-            let str_value = value.as_str();
+    if let Some(modules) = config.get_as_array("prompt_order") {
+        // if prompt_order = [] use default_prompt_order
+        if !modules.is_empty() {
+            for module in modules {
+                let str_value = module.as_str();
 
-            if let Some(value) = str_value {
-                if ALL_PROMPT_LIST.contains(&value) {
-                    prompt_order.push(value);
+                if let Some(value) = str_value {
+                    if ALL_MODULES.contains(&value) {
+                        prompt_order.push(value);
+                    } else {
+                        log::debug!(
+                            "Expected prompt_order to contain value from {:?}. Instead received {}",
+                            ALL_MODULES,
+                            value,
+                        );
+                    }
                 } else {
                     log::debug!(
-                        "Expected prompt_order to contain value from {:?}. Instead received {}",
-                        ALL_PROMPT_LIST,
-                        value,
-                    );
-                }
-            } else {
-                log::debug!(
-                    "Expected prompt_order to be a array of string. Instead received {} of type {}",
-                    value,
-                    value.type_str()
+                    "Expected prompt_order to be an array of strings. Instead received {} of type {}",
+                    module,
+                    module.type_str()
                 );
+                }
             }
+        } else {
+            prompt_order = DEFAULT_PROMPT_ORDER.to_vec();
         }
-    }
-
-    if config.get_as_bool("disable_default_order") != Some(true) {
-        for prompts in default_prompt_order {
-            if !prompt_order.contains(prompts) {
-                prompt_order.push(prompts);
-            }
-        }
+    } else {
+        prompt_order = DEFAULT_PROMPT_ORDER.to_vec();
     }
 
     let modules = &prompt_order
