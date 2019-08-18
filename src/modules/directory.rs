@@ -8,7 +8,7 @@ use super::{Context, Module};
 ///
 /// Will perform path contraction and truncation.
 /// **Contraction**
-///     - Paths begining with the home directory will be contracted to `~`
+///     - Paths beginning with the home directory will be contracted to `~`
 ///     - Paths containing a git repo will contract to begin at the repo root
 ///
 /// **Truncation**
