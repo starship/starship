@@ -79,10 +79,42 @@ impl<'a> Module<'a> {
     /// Returns a vector of colored ANSIString elements to be later used with
     /// `ANSIStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<ANSIString> {
+        let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
         let mut ansi_strings = self
             .segments
             .iter()
             .map(Segment::ansi_string)
+            .map(|ansi| {
+                let mut replaced_initial = false;
+                let final_string: String = ansi
+                    .to_string()
+                    .chars()
+                    .map(|x| match x {
+                        '\u{1b}' => {
+                            replaced_initial = true;
+                            match shell.as_str() {
+                                "bash" => String::from("\u{5c}\u{5b}\u{1b}"), // => \[ESC
+                                "zsh" => String::from("\u{25}\u{7b}\u{1b}"),  // => %{ESC
+                                _ => x.to_string(),
+                            }
+                        }
+                        'm' => {
+                            if replaced_initial {
+                                replaced_initial = false;
+                                match shell.as_str() {
+                                    "bash" => String::from("m\u{5c}\u{5d}"), // => m\]
+                                    "zsh" => String::from("m\u{25}\u{7d}"),  // => m%}
+                                    _ => x.to_string(),
+                                }
+                            } else {
+                                x.to_string()
+                            }
+                        }
+                        _ => x.to_string(),
+                    })
+                    .collect();
+                ANSIString::from(final_string)
+            })
             .collect::<Vec<ANSIString>>();
 
         ansi_strings.insert(0, self.prefix.ansi_string());
