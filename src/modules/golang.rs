@@ -30,10 +30,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             const GO_CHAR: &str = "🐹 ";
             let module_color = Color::Cyan.bold();
 
-            let mut module = context.new_module("go")?;
+            let mut module = context.new_module("golang")?;
             module.set_style(module_color);
 
-            let formatted_version = format_go_version(go_version)?;
+            let formatted_version = format_go_version(&go_version)?;
             module.new_segment("symbol", GO_CHAR);
             module.new_segment("version", &formatted_version);
 
@@ -51,7 +51,7 @@ fn get_go_version() -> Option<String> {
         .and_then(|output| String::from_utf8(output.stdout).ok())
 }
 
-fn format_go_version(go_stdout: String) -> Option<String> {
+fn format_go_version(go_stdout: &str) -> Option<String> {
     let version = go_stdout
         // split into ["", "1.12.4 linux/amd64"]
         .splitn(2, "go version go")
@@ -74,7 +74,7 @@ mod tests {
 
     #[test]
     fn test_format_go_version() {
-        let input = String::from("go version go1.12 darwin/amd64");
+        let input = "go version go1.12 darwin/amd64";
         assert_eq!(format_go_version(input), Some("v1.12".to_string()));
     }
 }

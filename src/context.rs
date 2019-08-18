@@ -37,7 +37,7 @@ impl<'a> Context<'a> {
     /// Identify the current working directory and create an instance of Context
     /// for it.
     pub fn new(arguments: ArgMatches) -> Context {
-        // Retreive the "path" flag. If unavailable, use the current directory instead.
+        // Retrieve the "path" flag. If unavailable, use the current directory instead.
         let path = arguments
             .value_of("path")
             .map(From::from)
@@ -70,10 +70,10 @@ impl<'a> Context<'a> {
         let repository = Repository::discover(&current_dir).ok();
         let repo_root = repository
             .as_ref()
-            .and_then(|repo| repo.workdir().map(|repo| repo.to_path_buf()));
+            .and_then(|repo| repo.workdir().map(std::path::Path::to_path_buf));
         let branch_name = repository
             .as_ref()
-            .and_then(|repo| get_current_branch(&repo));
+            .and_then(|repo| get_current_branch(repo));
 
         Context {
             config,
@@ -102,9 +102,7 @@ impl<'a> Context<'a> {
         let config = self.config.get_module_config(name);
 
         // If the segment has "disabled" set to "true", don't show it
-        let disabled = config
-            .map(|table| table.get_as_bool("disabled"))
-            .unwrap_or(None);
+        let disabled = config.and_then(|table| table.get_as_bool("disabled"));
 
         if disabled == Some(true) {
             return None;
@@ -135,17 +133,17 @@ pub struct ScanDir<'a> {
 }
 
 impl<'a> ScanDir<'a> {
-    pub fn set_files(mut self, files: &'a [&'a str]) -> Self {
+    pub const fn set_files(mut self, files: &'a [&'a str]) -> Self {
         self.files = files;
         self
     }
 
-    pub fn set_extensions(mut self, extensions: &'a [&'a str]) -> Self {
+    pub const fn set_extensions(mut self, extensions: &'a [&'a str]) -> Self {
         self.extensions = extensions;
         self
     }
 
-    pub fn set_folders(mut self, folders: &'a [&'a str]) -> Self {
+    pub const fn set_folders(mut self, folders: &'a [&'a str]) -> Self {
         self.folders = folders;
         self
     }
@@ -155,9 +153,9 @@ impl<'a> ScanDir<'a> {
     pub fn scan(&mut self) -> bool {
         self.dir_files.iter().any(|path| {
             if path.is_dir() {
-                return path_has_name(&path, &self.folders);
+                path_has_name(path, self.folders)
             } else {
-                return path_has_name(&path, &self.files) || has_extension(&path, &self.extensions);
+                path_has_name(path, self.files) || has_extension(path, self.extensions)
             }
         })
     }
@@ -199,7 +197,7 @@ fn get_current_branch(repository: &Repository) -> Option<String> {
     let head = repository.head().ok()?;
     let shorthand = head.shorthand();
 
-    shorthand.map(|branch| branch.to_string())
+    shorthand.map(std::string::ToString::to_string)
 }
 
 #[cfg(test)]

@@ -21,30 +21,27 @@ pub trait Config {
 impl Config for Table {
     /// Initialize the Config struct
     fn initialize() -> Table {
-        if let Some(file_data) = Table::config_from_file() {
+        if let Some(file_data) = Self::config_from_file() {
             return file_data;
         }
 
-        Table::new()
+        Self::new()
     }
 
     /// Create a config from a starship configuration file
     fn config_from_file() -> Option<Table> {
-        let file_path = match env::var("STARSHIP_CONFIG") {
-            Ok(path) => {
-                // Use $STARSHIP_CONFIG as the config path if available
-                log::debug!("STARSHIP_CONFIG is set: \n{}", &path);
-                path
-            }
-            Err(_) => {
-                // Default to using ~/.config/starhip.toml
-                log::debug!("STARSHIP_CONFIG is not set");
-                let config_path = home_dir()?.join(".config/starship.toml");
-                let config_path_str = config_path.to_str()?.to_owned();
+        let file_path = if let Ok(path) = env::var("STARSHIP_CONFIG") {
+            // Use $STARSHIP_CONFIG as the config path if available
+            log::debug!("STARSHIP_CONFIG is set: \n{}", &path);
+            path
+        } else {
+            // Default to using ~/.config/starhip.toml
+            log::debug!("STARSHIP_CONFIG is not set");
+            let config_path = home_dir()?.join(".config/starship.toml");
+            let config_path_str = config_path.to_str()?.to_owned();
 
-                log::debug!("Using default config path: {}", config_path_str);
-                config_path_str
-            }
+            log::debug!("Using default config path: {}", config_path_str);
+            config_path_str
         };
 
         let toml_content = match utils::read_file(&file_path) {
@@ -65,10 +62,7 @@ impl Config for Table {
 
     /// Get the subset of the table for a module by its name
     fn get_module_config(&self, module_name: &str) -> Option<&toml::value::Table> {
-        let module_config = self
-            .get(module_name)
-            .map(toml::Value::as_table)
-            .unwrap_or(None);
+        let module_config = self.get(module_name).and_then(toml::Value::as_table);
 
         if module_config.is_some() {
             log::debug!(
@@ -149,6 +143,7 @@ impl Config for Table {
     }
 }
 
+#[cfg(test)]
 mod tests {
     use super::*;
 

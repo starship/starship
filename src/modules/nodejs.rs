@@ -26,7 +26,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             const NODE_CHAR: &str = "⬢ ";
             let module_color = Color::Green.bold();
 
-            let mut module = context.new_module("node")?;
+            let mut module = context.new_module("nodejs")?;
             module.set_style(module_color);
 
             let formatted_version = node_version.trim();

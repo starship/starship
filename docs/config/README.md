@@ -89,16 +89,19 @@ discharging_symbol = "💀"
 The `character` module shows a character (usually an arrow) beside where the text
 is entered in your terminal.
 
-The character will be green if the status of your
-last command had a successful status code (zero), and will be red if the last
-command had an unsuccessful status code (non-zero).
+The character will tell you whether the last command was successful or not. It
+can do this in two ways: by changing color (red/green) or by changing its shape
+(➜/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
 
 ### Options
 
-| Variable   | Default | Description                                          |
-| ---------- | ------- | ---------------------------------------------------- |
-| `symbol`   | `"➜"`   | The symbol used before the text input in the prompt. |
-| `disabled` | `false` | Disables the `character` module.                     |
+| Variable                | Default | Description                                                                       |
+| ----------------------- | ------- | --------------------------------------------------------------------------------- |
+| `symbol`                | `"➜"`   | The symbol used before the text input in the prompt.                              |
+| `error_symbol`          | `"✖"`   | The symbol used before text input if the previous command failed.                 |
+| `use_symbol_for_status` | `false` | Indicate error status by changing the symbol.                                     |
+| `vicmd_symbol`          | `"❮"`   | The symbol used before the text input in the prompt if zsh is in vim normal mode. |
+| `disabled`              | `false` | Disables the `character` module.                                                  |
 
 ### Example
 
@@ -107,6 +110,40 @@ command had an unsuccessful status code (non-zero).
 
 [character]
 symbol = "❯"
+error_symbol = "✗"
+use_symbol_for_status = true
+```
+
+## Command Duration
+
+The `cmd_duration` module shows how long the last command took to execute.
+The module will be shown only if the command took longer than two seconds, or
+the `min_time` config value, if it exists.
+
+::: warning Do not hook the DEBUG trap in Bash
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running
+`eval $(starship init $0)`, or this module **will** break.
+:::
+
+Bash users who need preexec-like functionality can use
+[rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec).
+Simply define the arrays `preexec_functions` and `precmd_functions` before
+running `eval $(starship init $0)`, and then proceed as normal.
+
+### Options
+
+| Variable   | Default | Description                         |
+| ---------- | ------- | ----------------------------------- |
+| `min_time` | `2`     | Shortest duration to show time for. |
+| `disabled` | `false` | Disables the `cmd_duration` module. |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[cmd_duration]
+min_time = 4
 ```
 
 ## Directory
@@ -117,10 +154,11 @@ git repo that you're currently in.
 
 ### Options
 
-| Variable            | Default | Description                                                                     |
-| ------------------- | ------- | ------------------------------------------------------------------------------- |
-| `truncation_length` | `3`     | The number of parent folders that the current directory should be truncated to. |
-| `disabled`          | `false` | Disables the `directory` module.                                                |
+| Variable            | Default | Description                                                                      |
+| ------------------- | ------- | -------------------------------------------------------------------------------- |
+| `truncation_length` | `3`     | The number of parent folders that the current directory should be truncated to.  |
+| `truncate_to_repo`  | `true`  | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `disabled`          | `false` | Disables the `directory` module.                                                 |
 
 ### Example
 
@@ -219,6 +257,29 @@ The module will be shown if any of the following conditions are met:
 symbol = "🏎💨 "
 ```
 
+## Jobs
+
+The `jobs` module shows the current number of jobs running.
+The module will be shown only if there are background jobs running.
+The module will show the number of jobs running if there is more than 1 job, or
+more than the `threshold` config value, if it exists.
+
+### Options
+
+| Variable    | Default | Description                      |
+| ----------- | ------- | -------------------------------- |
+| `threshold` | `1`     | Show number of jobs if exceeded. |
+| `disabled`  | `false` | Disables the `jobs` module.      |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[jobs]
+threshold = 4
+```
+
 ## Line Break
 
 The `line_break` module separates the prompt into two lines.
@@ -236,6 +297,29 @@ The `line_break` module separates the prompt into two lines.
 
 [line_break]
 disabled = true
+```
+
+## Ruby
+
+The `ruby` module shows the currently installed version of Ruby.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `Gemfile` file
+- The current directory contains a `.rb` file
+
+### Options
+
+| Variable   | Default | Description                 |
+| ---------- | ------- | --------------------------- |
+| `disabled` | `false` | Disables the `ruby` module. |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[ruby]
+disabled = false
 ```
 
 ## NodeJS
@@ -266,12 +350,14 @@ symbol = "🤖 "
 ## Package Version
 
 The `package` module is shown when the current directory is the repository for a
-package, and shows its current version. The module currently supports `npm` and
-`cargo` packages.
+package, and shows its current version. The module currently supports `npm`, `cargo`,
+and `poetry` packages.
 
 - **npm** – The `npm` package version is extracted from the `package.json` present
   in the current directory
 - **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present
+  in the current directory
+- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present
   in the current directory
 
 > ⚠️ The version being shown is that of the package whose source code is in your
@@ -296,6 +382,13 @@ symbol = "🎁 "
 ## Python
 
 The `python` module shows the currently installed version of Python.
+
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
+
+Otherwise, it will display the version number from `python --version`
+and show the current Python virtual environment if one is
+activated.
+
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.python-version` file
@@ -305,10 +398,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default | Description                                              |
-| ---------- | ------- | -------------------------------------------------------- |
-| `symbol`   | `"🐍 "` | The symbol used before displaying the version of Python. |
-| `disabled` | `false` | Disables the `python` module.                            |
+| Variable             | Default    | Description                                                                 |
+| -------------------- | ---------- | --------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`    | The symbol used before displaying the version of Python.                    |
+| `disabled`           | `false`    | Disables the `python` module.                                               |
+| `pyenv_version_name` | `false`    | Use pyenv to get Python version                                             |
+| `pyenv_prefix`       | `"pyenv "` | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
 
 ### Example
 
@@ -317,6 +412,8 @@ The module will be shown if any of the following conditions are met:
 
 [python]
 symbol = "👾 "
+pyenv_version_name = true
+pyenv_prefix = "foo "
 ```
 
 ## Rust
