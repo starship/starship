@@ -31,6 +31,7 @@ pub fn render_module(module_name: &str) -> process::Command {
         .arg(module_name)
         .env_clear()
         .env("PATH", env!("PATH")) // Provide the $PATH variable so that external programs are runnable
+        .env("HOME", env!("HOME")) // Provide the $HOME variable so that programs that rely on configiuration in HOME are runnable
         .env("STARSHIP_CONFIG", EMPTY_CONFIG.as_os_str());
 
     command
