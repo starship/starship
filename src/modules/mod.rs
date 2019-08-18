@@ -7,12 +7,12 @@ mod git_status;
 mod golang;
 mod jobs;
 mod line_break;
+mod nim;
 mod nodejs;
 mod package;
 mod python;
 mod ruby;
 mod rust;
-mod nim;
 mod username;
 
 use crate::context::Context;

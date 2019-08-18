@@ -86,10 +86,7 @@ fn with_virtual_env() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!(
-        "via {} ",
-        Color::Yellow.bold().paint("🐍 v3.6.9(my_venv)")
-    );
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.6.9(my_venv)"));
     assert_eq!(expected, actual);
     Ok(())
 }
