@@ -89,8 +89,8 @@ discharging_symbol = "💀"
 The `character` module shows a character (usually an arrow) beside where the text
 is entered in your terminal.
 
-The character will tell you whether the last command was successful or not. It 
-can do this in two ways: by changing color (red/green) or by changing its shape 
+The character will tell you whether the last command was successful or not. It
+can do this in two ways: by changing color (red/green) or by changing its shape
 (❯/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
 
 ### Options
