@@ -5,7 +5,7 @@ use crate::common::{self, TestCommand};
 
 #[test]
 fn char_module_success_status() -> io::Result<()> {
-    let expected = format!("{} ", Color::Green.bold().paint("➜"));
+    let expected = format!("{} ", Color::Green.bold().paint("❯"));
 
     // Status code 0
     let output = common::render_module("character")
@@ -24,7 +24,7 @@ fn char_module_success_status() -> io::Result<()> {
 
 #[test]
 fn char_module_failure_status() -> io::Result<()> {
-    let expected = format!("{} ", Color::Red.bold().paint("➜"));
+    let expected = format!("{} ", Color::Red.bold().paint("❯"));
 
     let exit_values = ["1", "54321", "-5000"];
 
@@ -41,7 +41,7 @@ fn char_module_failure_status() -> io::Result<()> {
 #[test]
 fn char_module_symbolyes_status() -> io::Result<()> {
     let expected_fail = format!("{} ", Color::Red.bold().paint("✖"));
-    let expected_success = format!("{} ", Color::Green.bold().paint("➜"));
+    let expected_success = format!("{} ", Color::Green.bold().paint("❯"));
 
     let exit_values = ["1", "54321", "-5000"];
 
@@ -77,7 +77,7 @@ fn char_module_symbolyes_status() -> io::Result<()> {
 fn char_module_vicmd_keymap() -> io::Result<()> {
     let expected_vicmd = format!("{} ", Color::Green.bold().paint("❮"));
     let expected_specified = format!("{} ", Color::Green.bold().paint("N"));
-    let expected_other = format!("{} ", Color::Green.bold().paint("➜"));
+    let expected_other = format!("{} ", Color::Green.bold().paint("❯"));
 
     // zle keymap is vicmd
     let output = common::render_module("character")
