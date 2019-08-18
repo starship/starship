@@ -7,7 +7,7 @@ use crate::context::Context;
 use crate::module::Module;
 use crate::modules;
 
-//List of all modules
+// List of all modules
 const ALL_MODULES: &[&str] = &[
     "battery",
     "character",
@@ -26,7 +26,7 @@ const ALL_MODULES: &[&str] = &[
     "username",
 ];
 
-//List of default prompt order
+// List of default prompt order
 const DEFAULT_PROMPT_ORDER: &[&str] = &[
     "username",
     "directory",
@@ -77,10 +77,10 @@ pub fn prompt(args: ArgMatches) {
                     }
                 } else {
                     log::debug!(
-                    "Expected prompt_order to be an array of strings. Instead received {} of type {}",
-                    module,
-                    module.type_str()
-                );
+                        "Expected prompt_order to be an array of strings. Instead received {} of type {}",
+                        module,
+                        module.type_str()
+                    );
                 }
             }
         } else {
