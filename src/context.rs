@@ -37,7 +37,7 @@ impl<'a> Context<'a> {
     /// Identify the current working directory and create an instance of Context
     /// for it.
     pub fn new(arguments: ArgMatches) -> Context {
-        // Retreive the "path" flag. If unavailable, use the current directory instead.
+        // Retrieve the "path" flag. If unavailable, use the current directory instead.
         let path = arguments
             .value_of("path")
             .map(From::from)

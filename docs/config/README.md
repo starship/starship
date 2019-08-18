@@ -268,7 +268,7 @@ more than the `threshold` config value, if it exists.
 
 | Variable    | Default | Description                      |
 | ----------- | ------- | -------------------------------- |
-| `threshold` | `1`     | Show number of jobs if execeded. |
+| `threshold` | `1`     | Show number of jobs if exceeded. |
 | `disabled`  | `false` | Disables the `jobs` module.      |
 
 ### Example
