@@ -25,8 +25,18 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
 1. Install the **starship** binary:
 
-   ```bash
-   cargo install starship
+   **[Download archives of precompiled binaries](https://github.com/starship/starship/releases)** if you don't use the platforms below.
+
+   #### Homebrew
+
+   ```sh
+   $ brew install starship
+   ```
+
+   #### Rust (v1.33 or higher)
+
+   ```sh
+   $ cargo install starship
    ```
 
 1. Add the init script to your shell's config file:
