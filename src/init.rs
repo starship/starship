@@ -152,6 +152,12 @@ starship_precmd() {
 starship_preexec(){
     STARSHIP_START_TIME="$(date +%s)"
 };
+if [[ -z "${precmd_functions+1}" ]]; then
+    precmd_functions=()
+fi;
+if [[ -z "${preexec_functions+1}" ]]; then
+    preexec_functions=()
+fi;
 if [[ ${precmd_functions[(ie)starship_precmd]} -gt ${#precmd_functions} ]]; then
     precmd_functions+=(starship_precmd);
 fi;
