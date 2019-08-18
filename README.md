@@ -56,6 +56,7 @@ The prompt shows information you need while you're working, while staying sleek 
 - Current Ruby version (`💎`).
 - Current Python version (`🐍`)
 - Current Go version (`🐹`)
+- Current Nim version (`👑`)
 - Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)

@@ -9,4 +9,5 @@ mod line_break;
 mod nodejs;
 mod python;
 mod ruby;
+mod nim;
 mod username;

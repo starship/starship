@@ -12,6 +12,7 @@ mod package;
 mod python;
 mod ruby;
 mod rust;
+mod nim;
 mod username;
 
 use crate::context::Context;
@@ -26,6 +27,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "python" => python::module(context),
         "ruby" => ruby::module(context),
         "golang" => golang::module(context),
+        "nim" => nim::module(context),
         "line_break" => line_break::module(context),
         "package" => package::module(context),
         "git_branch" => git_branch::module(context),
