@@ -25,28 +25,38 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
 1. Install the **starship** binary:
 
-    ```bash
-    cargo install starship
-    ```
+   ```bash
+   cargo install starship
+   ```
 
 1. Add the init script to your shell's config file:
 
-    #### Bash / Zsh
+   #### Bash
 
-    Add the following to the end of `~/.bashrc` or `~/.zshrc`:
+   Add the following to the end of `~/.bashrc`:
 
-    ```bash
-    # ~/.bashrc or ~/.zshrc
-    
-    eval "$(starship init $0)"
-    ```
+   ```sh
+   # ~/.bashrc
 
-    #### Fish
+   eval "$(starship init bash)"
+   ```
 
-    Add the following to the end of `~/.config/fish/config.fish`:
+   #### Fish
 
-    ```sh
-    # ~/.config/fish/config.fish
+   Add the following to the end of `~/.config/fish/config.fish`:
 
-    eval (starship init fish)
-    ```
+   ```sh
+   # ~/.config/fish/config.fish
+
+   eval (starship init fish)
+   ```
+
+   #### Zsh
+
+   Add the following to the end of `~/.zshrc`:
+
+   ```sh
+   # ~/.zshrc
+
+   eval "$(starship init zsh)"
+   ```
