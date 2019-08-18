@@ -10,7 +10,7 @@ use ansi_term::Color;
 /// - If the exit-code was anything else, the arrow will be formatted with
 /// `COLOR_FAILURE` (red by default)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    const SUCCESS_CHAR: &str = "➜";
+    const SUCCESS_CHAR: &str = "❯";
     const FAILURE_CHAR: &str = "✖";
     const VICMD_CHAR: &str = "❮";
 
