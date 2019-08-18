@@ -321,6 +321,31 @@ The module will be shown if any of the following conditions are met:
 disabled = false
 ```
 
+## Crystal
+
+The `crystal` module shows the currently installed version of Crystal.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `shard.yml` file
+- The current directory contains a `.cr` file
+
+### Options
+
+| Variable   | Default | Description                                              |
+| ---------- | ------- | -------------------------------------------------------- |
+| `symbol`   | `"🔮 "`   | The symbol used before displaying the version of crystal.|
+| `disabled` | `false` | Disables the `crystal` module.                           |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[crystal]
+symbol = "☕ "
+disabled = false
+```
+
 ## NodeJS
 
 The `nodejs` module shows the currently installed version of NodeJS.

@@ -55,6 +55,7 @@ The prompt shows information you need while you're working, while staying sleek 
 - Current Node.js version(`⬢`)
 - Current Rust version (`🦀`)
 - Current Ruby version (`💎`).
+- Current Crystal version (`🔮 `).
 - Current Python version (`🐍`)
 - Current Go version (`🐹`)
 - Package version of package in current directory (`📦`)
