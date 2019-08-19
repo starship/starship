@@ -24,6 +24,7 @@ const ALL_MODULES: &[&str] = &[
     "ruby",
     "rust",
     "username",
+    "crystal",
 ];
 
 // List of default prompt order
