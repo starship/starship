@@ -18,7 +18,7 @@
   </a>
   <a href="#contributors">
     <img
-      src="https://badgen.net/badge/all%20contributors/12/orange"
+      src="https://badgen.net/badge/all%20contributors/14/orange"
       alt="All Contributors"
     />
   </a>
