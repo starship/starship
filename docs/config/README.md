@@ -49,7 +49,7 @@ This is the list of prompt-wide configuration options.
 | Variable       | Default | Description                                                        |
 | -------------- | ------- | ------------------------------------------------------------------ |
 | `add_newline`  | `true`  | Add a new line before the start of the prompt.                     |
-| `prompt_order` | `[]`    | Configure out custom prompt order overriding default prompt order. |
+| `prompt_order` | `[]`    | Configure out custom prompt order overriding [default prompt order](#default-prompt-order). |
 
 ### Example
 
@@ -58,8 +58,31 @@ This is the list of prompt-wide configuration options.
 
 # Disable the newline at the start of the prompt
 add_newline = false
+# Overwrite a default_prompt_order and  use custom prompt_order
 prompt_order=["rust","line_break","package","line_break","character"]
 ```
+
+### Default prompt order
+```default_prompt_order``` is used as ```prompt_order``` when config have no options named as ```prompt_order``` or when you have set ```prompt_order = []```
+```toml
+default_prompt_order = [
+    "username",
+    "directory",
+    "git_branch",
+    "git_status",
+    "package",
+    "nodejs",
+    "rust",
+    "python",
+    "golang",
+    "cmd_duration",
+    "line_break",
+    "jobs",
+    "battery",
+    "character",
+]
+```
+
 
 ## Battery
 
