@@ -92,6 +92,7 @@ starship_preexec() {
 };
 starship_precmd() {
     STATUS=$?;
+    export STARSHIP_SHELL="bash";
     "${starship_precmd_user_func-:}";
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(date +%s);
@@ -140,6 +141,7 @@ fi;
 const ZSH_INIT: &str = r##"
 starship_precmd() {
     STATUS=$?;
+    export STARSHIP_SHELL="zsh";
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME="$(date +%s)";
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME));
@@ -152,6 +154,12 @@ starship_precmd() {
 starship_preexec(){
     STARSHIP_START_TIME="$(date +%s)"
 };
+if [[ -z "${precmd_functions+1}" ]]; then
+    precmd_functions=()
+fi;
+if [[ -z "${preexec_functions+1}" ]]; then
+    preexec_functions=()
+fi;
 if [[ ${precmd_functions[(ie)starship_precmd]} -gt ${#precmd_functions} ]]; then
     precmd_functions+=(starship_precmd);
 fi;

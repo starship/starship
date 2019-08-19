@@ -79,11 +79,18 @@ impl<'a> Module<'a> {
     /// Returns a vector of colored ANSIString elements to be later used with
     /// `ANSIStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<ANSIString> {
-        let mut ansi_strings = self
+        let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
+        let ansi_strings = self
             .segments
             .iter()
             .map(Segment::ansi_string)
             .collect::<Vec<ANSIString>>();
+
+        let mut ansi_strings = match shell.as_str() {
+            "bash" => ansi_strings_modified(ansi_strings, shell),
+            "zsh" => ansi_strings_modified(ansi_strings, shell),
+            _ => ansi_strings,
+        };
 
         ansi_strings.insert(0, self.prefix.ansi_string());
         ansi_strings.push(self.suffix.ansi_string());
@@ -116,6 +123,48 @@ impl<'a> fmt::Display for Module<'a> {
         let ansi_strings = self.ansi_strings();
         write!(f, "{}", ANSIStrings(&ansi_strings))
     }
+}
+
+/// Many shells cannot deal with raw unprintable characters (like ANSI escape sequences) and
+/// miscompute the cursor position as a result, leading to strange visual bugs. Here, we wrap these
+/// characters in shell-specific escape codes to indicate to the shell that they are zero-length.
+fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: String) -> Vec<ANSIString> {
+    const ESCAPE_BEGIN: char = '\u{1b}';
+    const MAYBE_ESCAPE_END: char = 'm';
+    ansi_strings
+        .iter()
+        .map(|ansi| {
+            let mut escaped = false;
+            let final_string: String = ansi
+                .to_string()
+                .chars()
+                .map(|x| match x {
+                    ESCAPE_BEGIN => {
+                        escaped = true;
+                        match shell.as_str() {
+                            "bash" => String::from("\u{5c}\u{5b}\u{1b}"), // => \[ESC
+                            "zsh" => String::from("\u{25}\u{7b}\u{1b}"),  // => %{ESC
+                            _ => x.to_string(),
+                        }
+                    }
+                    MAYBE_ESCAPE_END => {
+                        if escaped {
+                            escaped = false;
+                            match shell.as_str() {
+                                "bash" => String::from("m\u{5c}\u{5d}"), // => m\]
+                                "zsh" => String::from("m\u{25}\u{7d}"),  // => m%}
+                                _ => x.to_string(),
+                            }
+                        } else {
+                            x.to_string()
+                        }
+                    }
+                    _ => x.to_string(),
+                })
+                .collect();
+            ANSIString::from(final_string)
+        })
+        .collect::<Vec<ANSIString>>()
 }
 
 /// Module affixes are to be used for the prefix or suffix of a module.
