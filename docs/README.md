@@ -43,7 +43,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    Starship is available on the AUR under the name `starship`. Install it with `yay` or your favorite AUR helper.
 
-   ```
+   ```sh
    $ yay -S starship
    ```
 
