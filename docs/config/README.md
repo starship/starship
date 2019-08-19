@@ -46,9 +46,10 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Variable      | Default | Description                                    |
-| ------------- | ------- | ---------------------------------------------- |
-| `add_newline` | `true`  | Add a new line before the start of the prompt. |
+| Variable       | Default | Description                                                        |
+| -------------- | ------- | ------------------------------------------------------------------ |
+| `add_newline`  | `true`  | Add a new line before the start of the prompt.                     |
+| `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
 
 ### Example
 
@@ -57,7 +58,31 @@ This is the list of prompt-wide configuration options.
 
 # Disable the newline at the start of the prompt
 add_newline = false
+# Overwrite a default_prompt_order and  use custom prompt_order
+prompt_order=["rust","line_break","package","line_break","character"]
 ```
+
+### Default prompt order
+The ```default_prompt_order``` configuration option is used to define the order in which modules are shown in the prompt, if empty or no ```prompt_order``` is provided. The default is as shown:
+```
+default_prompt_order = [
+    "username",
+    "directory",
+    "git_branch",
+    "git_status",
+    "package",
+    "nodejs",
+    "rust",
+    "python",
+    "golang",
+    "cmd_duration",
+    "line_break",
+    "jobs",
+    "battery",
+    "character",
+]
+```
+
 
 ## Battery
 
