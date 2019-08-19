@@ -124,9 +124,8 @@ starship_preexec() {
 starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
     STATUS=$?
-    export STARSHIP_SHELL="bash"
 
-    # Run the bash precmd function, if relevant
+    # Run the bash precmd function, if it's set. If not set, evaluates to no-op
     "${starship_precmd_user_func-:}"
 
     # Prepare the timer data, if needed.
@@ -146,7 +145,6 @@ starship_precmd() {
 if [[ $preexec_functions ]]; then
     preexec_functions+=(starship_preexec)
     precmd_functions+=(starship_precmd)
-    STARSHIP_START_TIME=$(date +%s)
 else
 # We want to avoid destroying an existing DEBUG hook. If we detect one, create 
 # a new function that runs both the existing function AND our function, then 
@@ -163,8 +161,11 @@ else
 
     # Finally, prepare the precmd function and set up the start time.
     PROMPT_COMMAND=starship_precmd
-    STARSHIP_START_TIME=$(date +%s)
 fi
+
+# Set up the start time and STARSHIP_SHELL, which controls shell-specific sequences
+STARSHIP_START_TIME=$(date +%s)
+export STARSHIP_SHELL="bash"
 "##;
 
 /* ZSH INIT SCRIPT
@@ -172,7 +173,7 @@ fi
 ZSH has a quirk where `preexec` is only run if a command is actually run (i.e
 pressing ENTER at an empty command line will not cause preexec to fire). This
 can cause timing issues, as a user who presses "ENTER" without running a command
-will see the time to the start of the last command, which may be very large.env!
+will see the time to the start of the last command, which may be very large.
 
 To fix this, we create STARSHIP_START_TIME upon preexec() firing, and destroy it
 after drawing the prompt. This ensures that the timing for one command is only
@@ -184,9 +185,8 @@ const ZSH_INIT: &str = r##"
 starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
     STATUS=$?
-    export STARSHIP_SHELL="zsh"
 
-    # Compute cmd_duration, if needed
+    # Compute cmd_duration, if we have a time to consume
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME="$(date +%s)"
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
@@ -206,20 +206,24 @@ starship_preexec(){
 [[ -z "${precmd_functions+1}" ]] && precmd_functions=()
 [[ -z "${preexec_functions+1}" ]] && preexec_functions=()
 
-# If starship precmd/preexec functions are already hooked, don't double-hook
+# If starship precmd/preexec functions are already hooked, don't double-hook them
+# to avoid unnecessary performance degradation in nested shells
 if [[ ${precmd_functions[(ie)starship_precmd]} -gt ${#precmd_functions} ]]; then
     precmd_functions+=(starship_precmd)
 fi
 if [[ ${preexec_functions[(ie)starship_preexec]} -gt ${#preexec_functions} ]]; then
     preexec_functions+=(starship_preexec)
 fi
-STARSHIP_START_TIME="$(date +%s)"
+# Set up a function to redraw the prompt if the user switches vi modes
 function zle-keymap-select
 {
     PROMPT=$(starship prompt --keymap=$KEYMAP --jobs="$(jobs | wc -l)")
     zle reset-prompt
 }
+
+STARSHIP_START_TIME="$(date +%s)"
 zle -N zle-keymap-select
+export STARSHIP_SHELL="zsh"
 "##;
 
 const FISH_INIT: &str = r##"
