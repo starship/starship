@@ -1,17 +1,19 @@
 use std::ffi::OsStr;
 use std::path::Path;
 
-/*
-We use a two-phase init here: the first phase gives a simple command to the
-shell, which prints and evaluates a much more complicated init script. We do this
-because directly using `eval` on a shell script causes it to be evaluated in
-a single line. This is problematic because you have to put semicolons in *just*
-the right places, and you can't use comments within the script.
-*/
+/* We use a two-phase init here: the first phase gives a simple command to the
+shell. This command evaluates a more complicated script using `source` and
+process substitution.
+
+Directly using `eval` on a shell script causes it to be evaluated in
+a single line, which sucks because things like comments will comment out the
+rest of the script, and you have to spam semicolons everywhere. By using
+source and process substitutions, we make it possible to comment and debug
+the init scripts. */
 
 /* This prints the setup stub, the short piece of code which sets up the main
-init code. This stub allows us to use `source` instead of `eval` to run the
-setup code, which makes programming the init scripts MUCH easier */
+init code. The stub produces the main init script, then evaluates it with
+`source` and process substitution */
 pub fn init_stub(shell_name: &str) {
     log::debug!("Shell name: {}", shell_name);
 
@@ -19,7 +21,7 @@ pub fn init_stub(shell_name: &str) {
 
     let setup_stub = match shell_basename {
         Some("bash") => {
-            /* this really should look like the zsh function, but bash 3.2 (MacOS default shell)
+            /* This *should* look like the zsh function, but bash 3.2 (MacOS default shell)
             does not support using source with process substitution, so we use this
             workaround from https://stackoverflow.com/a/32596626 */
             let script = "source /dev/stdin <<<\"$(starship init bash --print-full-init)\"";
@@ -30,6 +32,7 @@ pub fn init_stub(shell_name: &str) {
             Some(script)
         }
         Some("fish") => {
+            // Fish does process substitution with pipes and psub instead of bash syntax
             let script = "source (starship init fish --print-full-init | psub)";
             Some(script)
         }
@@ -61,6 +64,8 @@ pub fn init_stub(shell_name: &str) {
     };
 }
 
+/* This function (called when `--print-full-init` is passed to `starship init`)
+prints out the main initialization script */
 pub fn init_main(shell_name: &str) {
     let setup_script = match shell_name {
         "bash" => Some(BASH_INIT),
@@ -70,7 +75,7 @@ pub fn init_main(shell_name: &str) {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
                  This probably indicates a bug within starship: please open\\n\
-                 an issue at https://github.com/starship/starship/issues/new\\n\"\\n"
+                 an issue at https://github.com/starship/starship/issues/new\\n\""
             );
             None
         }
@@ -88,7 +93,6 @@ comment, with additional per-script comments in the strings themselves.
 JOBS: The argument to `--jobs` is quoted because MacOS's `wc` leaves whitespace
 in the output. We pass it to starship and do the whitespace removal in Rust,
 to avoid the cost of an additional shell fork every shell draw.
-
 */
 
 /* BASH INIT SCRIPT
