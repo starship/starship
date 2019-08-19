@@ -6,7 +6,7 @@ use super::{Context, Module};
 
 /// Creates a module with the current user's username
 ///
-/// Will display the usename if any of the following criteria are met:
+/// Will display the username if any of the following criteria are met:
 ///     - The current user isn't the same as the one that is logged in (`$LOGNAME` != `$USER`)
 ///     - The current user is root (UID = 0)
 ///     - The user is currently connected as an SSH session (`$SSH_CONNECTION`)

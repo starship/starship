@@ -17,9 +17,9 @@ All configuration for starship is done in this [TOML](https://github.com/toml-la
 # Don't print a new line at the start of the prompt
 add_newline = false
 
-# Replace the "➜" symbol in the prompt with "❯"
+# Replace the "❯" symbol in the prompt with "➜"
 [character]      # The name of the module we are confguring is "character"
-symbol = "❯"     # The "symbol" segment is being set to "❯"
+symbol = "➜"     # The "symbol" segment is being set to "➜"
 
 # Disable the package module, hiding it from the prompt completely
 [package]
@@ -46,9 +46,10 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Variable      | Default | Description                                    |
-| ------------- | ------- | ---------------------------------------------- |
-| `add_newline` | `true`  | Add a new line before the start of the prompt. |
+| Variable       | Default | Description                                                        |
+| -------------- | ------- | ------------------------------------------------------------------ |
+| `add_newline`  | `true`  | Add a new line before the start of the prompt.                     |
+| `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
 
 ### Example
 
@@ -57,7 +58,31 @@ This is the list of prompt-wide configuration options.
 
 # Disable the newline at the start of the prompt
 add_newline = false
+# Overwrite a default_prompt_order and  use custom prompt_order
+prompt_order=["rust","line_break","package","line_break","character"]
 ```
+
+### Default prompt order
+The ```default_prompt_order``` configuration option is used to define the order in which modules are shown in the prompt, if empty or no ```prompt_order``` is provided. The default is as shown:
+```
+default_prompt_order = [
+    "username",
+    "directory",
+    "git_branch",
+    "git_status",
+    "package",
+    "nodejs",
+    "rust",
+    "python",
+    "golang",
+    "cmd_duration",
+    "line_break",
+    "jobs",
+    "battery",
+    "character",
+]
+```
+
 
 ## Battery
 
@@ -89,18 +114,19 @@ discharging_symbol = "💀"
 The `character` module shows a character (usually an arrow) beside where the text
 is entered in your terminal.
 
-The character will tell you whether the last command was successful or not. It 
-can do this in two ways: by changing color (red/green) or by changing its shape 
-(➜/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
+The character will tell you whether the last command was successful or not. It
+can do this in two ways: by changing color (red/green) or by changing its shape
+(❯/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
 
 ### Options
 
-| Variable   | Default | Description                                          |
-| ---------- | ------- | ---------------------------------------------------- |
-| `symbol`                | `"➜"`   | The symbol used before the text input in the prompt. |
-| `error_symbol`          | `"✖"`   | The symbol used before text input if the previous command failed. |
-| `use_symbol_for_status` | `false` | Indicate error status by changing the symbol.         |
-| `disabled`              | `false` | Disables the `character` module.                      |
+| Variable                | Default | Description                                                                       |
+| ----------------------- | ------- | --------------------------------------------------------------------------------- |
+| `symbol`                | `"❯"`   | The symbol used before the text input in the prompt.                              |
+| `error_symbol`          | `"✖"`   | The symbol used before text input if the previous command failed.                 |
+| `use_symbol_for_status` | `false` | Indicate error status by changing the symbol.                                     |
+| `vicmd_symbol`          | `"❮"`   | The symbol used before the text input in the prompt if zsh is in vim normal mode. |
+| `disabled`              | `false` | Disables the `character` module.                                                  |
 
 ### Example
 
@@ -108,7 +134,7 @@ can do this in two ways: by changing color (red/green) or by changing its shape
 # ~/.config/starship.toml
 
 [character]
-symbol = "❯"
+symbol = "➜"
 error_symbol = "✗"
 use_symbol_for_status = true
 ```
@@ -119,14 +145,14 @@ The `cmd_duration` module shows how long the last command took to execute.
 The module will be shown only if the command took longer than two seconds, or
 the `min_time` config value, if it exists.
 
-::: warning Do Not Hook the DEBUG trap in Bash
+::: warning Do not hook the DEBUG trap in Bash
 If you are running Starship in `bash`, do not hook the `DEBUG` trap after running
 `eval $(starship init $0)`, or this module **will** break.
 :::
 
 Bash users who need preexec-like functionality can use
 [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec).
-Simply define the arrays `preexec_functions` and `precmd_functions` before 
+Simply define the arrays `preexec_functions` and `precmd_functions` before
 running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
@@ -267,7 +293,7 @@ more than the `threshold` config value, if it exists.
 
 | Variable    | Default | Description                      |
 | ----------- | ------- | -------------------------------- |
-| `threshold` | `1`     | Show number of jobs if execeded. |
+| `threshold` | `1`     | Show number of jobs if exceeded. |
 | `disabled`  | `false` | Disables the `jobs` module.      |
 
 ### Example
@@ -308,9 +334,9 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default | Description                                              |
-| ---------- | ------- | -------------------------------------------------------- |
-| `disabled` | `false` | Disables the `ruby` module.                              |
+| Variable   | Default | Description                 |
+| ---------- | ------- | --------------------------- |
+| `disabled` | `false` | Disables the `ruby` module. |
 
 ### Example
 
@@ -422,13 +448,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default | Description                                              |
-| ---------- | ------- | -------------------------------------------------------- |
-| `symbol`   | `"🐍 "` | The symbol used before displaying the version of Python. |
-| `disabled` | `false` | Disables the `python` module.                            |
-| `pyenv_version_name` | `false` | Use pyenv to get Python version                            |
-| `pyenv_prefix` | `"pyenv "` | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
-
+| Variable             | Default    | Description                                                                 |
+| -------------------- | ---------- | --------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`    | The symbol used before displaying the version of Python.                    |
+| `disabled`           | `false`    | Disables the `python` module.                                               |
+| `pyenv_version_name` | `false`    | Use pyenv to get Python version                                             |
+| `pyenv_prefix`       | `"pyenv "` | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
 
 ### Example
 
@@ -488,4 +513,3 @@ The module will be shown if any of the following conditions are met:
 [username]
 disabled = true
 ```
-

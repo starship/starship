@@ -92,6 +92,8 @@ starship_preexec() {
 };
 starship_precmd() {
     STATUS=$?;
+    export STARSHIP_SHELL="bash";
+    "${starship_precmd_user_func-:}";
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(date +%s);
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME));
@@ -139,6 +141,7 @@ fi;
 const ZSH_INIT: &str = r##"
 starship_precmd() {
     STATUS=$?;
+    export STARSHIP_SHELL="zsh";
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME="$(date +%s)";
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME));
@@ -151,6 +154,12 @@ starship_precmd() {
 starship_preexec(){
     STARSHIP_START_TIME="$(date +%s)"
 };
+if [[ -z "${precmd_functions+1}" ]]; then
+    precmd_functions=()
+fi;
+if [[ -z "${preexec_functions+1}" ]]; then
+    preexec_functions=()
+fi;
 if [[ ${precmd_functions[(ie)starship_precmd]} -gt ${#precmd_functions} ]]; then
     precmd_functions+=(starship_precmd);
 fi;
@@ -158,6 +167,12 @@ if [[ ${preexec_functions[(ie)starship_preexec]} -gt ${#preexec_functions} ]]; t
     preexec_functions+=(starship_preexec);
 fi;
 STARSHIP_START_TIME="$(date +%s)";
+function zle-keymap-select
+{
+    PROMPT=$(starship prompt --keymap=$KEYMAP --jobs="$(jobs | wc -l)");
+    zle reset-prompt;
+};
+zle -N zle-keymap-select;
 "##;
 
 /* Fish setup is simple because they give us CMD_DURATION. Just account for name

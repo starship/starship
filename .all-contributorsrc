@@ -144,6 +144,27 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "cappyzawa",
+      "name": "Shu Kutsuzawa",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/12455284?v=4",
+      "profile": "https://medium.com/@cappyzawa",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "iamsauravsharma",
+      "name": "Saurav Sharma",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/38726015?v=4",
+      "profile": "https://github.com/iamsauravsharma",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7

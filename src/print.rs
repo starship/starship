@@ -7,7 +7,29 @@ use crate::context::Context;
 use crate::module::Module;
 use crate::modules;
 
-const PROMPT_ORDER: &[&str] = &[
+// List of all modules
+const ALL_MODULES: &[&str] = &[
+    "battery",
+    "character",
+    "cmd_duration",
+    "directory",
+    "git_branch",
+    "git_status",
+    "golang",
+    "jobs",
+    "line_break",
+    "nodejs",
+    "package",
+    "python",
+    "ruby",
+    "rust",
+    "username",
+];
+
+// List of default prompt order
+// NOTE: If this const value is changed then Default prompt order subheading inside
+// prompt heading of config docs needs to be updated according to changes made here.
+const DEFAULT_PROMPT_ORDER: &[&str] = &[
     "username",
     "directory",
     "git_branch",
@@ -37,7 +59,41 @@ pub fn prompt(args: ArgMatches) {
         writeln!(handle).unwrap();
     }
 
-    let modules = PROMPT_ORDER
+    let mut prompt_order: Vec<&str> = Vec::new();
+
+    // Write out a custom prompt order
+    if let Some(modules) = config.get_as_array("prompt_order") {
+        // if prompt_order = [] use default_prompt_order
+        if !modules.is_empty() {
+            for module in modules {
+                let str_value = module.as_str();
+
+                if let Some(value) = str_value {
+                    if ALL_MODULES.contains(&value) {
+                        prompt_order.push(value);
+                    } else {
+                        log::debug!(
+                            "Expected prompt_order to contain value from {:?}. Instead received {}",
+                            ALL_MODULES,
+                            value,
+                        );
+                    }
+                } else {
+                    log::debug!(
+                        "Expected prompt_order to be an array of strings. Instead received {} of type {}",
+                        module,
+                        module.type_str()
+                    );
+                }
+            }
+        } else {
+            prompt_order = DEFAULT_PROMPT_ORDER.to_vec();
+        }
+    } else {
+        prompt_order = DEFAULT_PROMPT_ORDER.to_vec();
+    }
+
+    let modules = &prompt_order
         .par_iter()
         .map(|module| modules::handle(module, &context)) // Compute modules
         .flatten()

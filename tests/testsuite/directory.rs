@@ -70,6 +70,7 @@ fn root_directory() -> io::Result<()> {
 }
 
 #[test]
+#[cfg(not(target_os = "windows"))]
 fn directory_in_root() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path=/etc")
@@ -77,6 +78,17 @@ fn directory_in_root() -> io::Result<()> {
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("/etc"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[cfg(target_os = "windows")]
+fn directory_in_root() -> io::Result<()> {
+    let output = common::render_module("dir").arg("--path=C:\\").output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("in {} ", Color::Cyan.bold().paint("/c"));
     assert_eq!(expected, actual);
     Ok(())
 }
