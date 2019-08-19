@@ -4,6 +4,25 @@ use ansi_term::Style;
 use ansi_term::{ANSIString, ANSIStrings};
 use std::fmt;
 
+// List of all modules
+pub const ALL_MODULES: &[&str] = &[
+    "battery",
+    "character",
+    "cmd_duration",
+    "directory",
+    "git_branch",
+    "git_status",
+    "golang",
+    "jobs",
+    "line_break",
+    "nodejs",
+    "package",
+    "python",
+    "ruby",
+    "rust",
+    "username",
+];
+
 /// A module is a collection of segments showing data for a single integration
 /// (e.g. The git module shows the current git branch and status)
 pub struct Module<'a> {
