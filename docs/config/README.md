@@ -75,6 +75,7 @@ default_prompt_order = [
     "rust",
     "python",
     "golang",
+    "crystal",
     "cmd_duration",
     "line_break",
     "jobs",
