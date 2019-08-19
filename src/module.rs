@@ -125,7 +125,12 @@ impl<'a> fmt::Display for Module<'a> {
     }
 }
 
+/// Many shells cannot deal with raw unprintable characters (like ANSI escape sequences) and
+/// miscompute the cursor position as a result, leading to strange visual bugs. Here, we wrap these
+/// characters in shell-specific escape codes to indicate to the shell that they are zero-length.
 fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: String) -> Vec<ANSIString> {
+    const ESCAPE_BEGIN: char = '\u{1b}';
+    const MAYBE_ESCAPE_END: char = 'm';
     ansi_strings
         .iter()
         .map(|ansi| {
@@ -134,7 +139,7 @@ fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: String) -> Vec<AN
                 .to_string()
                 .chars()
                 .map(|x| match x {
-                    '\u{1b}' => {
+                    ESCAPE_BEGIN => {
                         escaped = true;
                         match shell.as_str() {
                             "bash" => String::from("\u{5c}\u{5b}\u{1b}"), // => \[ESC
@@ -142,7 +147,7 @@ fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: String) -> Vec<AN
                             _ => x.to_string(),
                         }
                     }
-                    'm' => {
+                    MAYBE_ESCAPE_END => {
                         if escaped {
                             escaped = false;
                             match shell.as_str() {

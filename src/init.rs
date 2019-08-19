@@ -92,14 +92,15 @@ starship_preexec() {
 };
 starship_precmd() {
     STATUS=$?;
+    export STARSHIP_SHELL="bash";
     "${starship_precmd_user_func-:}";
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(date +%s);
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME));
-        PS1="$(STARSHIP_SHELL="bash" starship prompt --status=$STATUS --jobs="$(jobs -p | wc -l)" --cmd-duration=$STARSHIP_DURATION)";
+        PS1="$(starship prompt --status=$STATUS --jobs="$(jobs -p | wc -l)" --cmd-duration=$STARSHIP_DURATION)";
         unset STARSHIP_START_TIME;
     else
-        PS1="$(STARSHIP_SHELL="bash" starship prompt --status=$STATUS --jobs="$(jobs -p | wc -l)")";
+        PS1="$(starship prompt --status=$STATUS --jobs="$(jobs -p | wc -l)")";
     fi;
     PREEXEC_READY=true;
 };
@@ -140,13 +141,14 @@ fi;
 const ZSH_INIT: &str = r##"
 starship_precmd() {
     STATUS=$?;
+    export STARSHIP_SHELL="zsh";
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME="$(date +%s)";
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME));
-        PROMPT="$(STARSHIP_SHELL="zsh" starship prompt --status=$STATUS --cmd-duration=$STARSHIP_DURATION --jobs="$(jobs | wc -l)")";
+        PROMPT="$(starship prompt --status=$STATUS --cmd-duration=$STARSHIP_DURATION --jobs="$(jobs | wc -l)")";
         unset STARSHIP_START_TIME;
     else
-        PROMPT="$(STARSHIP_SHELL="zsh" starship prompt --status=$STATUS --jobs="$(jobs | wc -l)")";
+        PROMPT="$(starship prompt --status=$STATUS --jobs="$(jobs | wc -l)")";
     fi
 };
 starship_preexec(){
