@@ -112,10 +112,10 @@ const BASH_INIT: &str = r##"
 starship_preexec() {
     # Avoid restarting the timer for commands in the same pipeline
     if [ "$PREEXEC_READY" = "true" ]; then
-        PREEXEC_READY=false;
-        STARSHIP_START_TIME=$(date +%s);
+        PREEXEC_READY=false
+        STARSHIP_START_TIME=$(date +%s)
     fi
-};
+}
 # Will be run before the prompt is drawn
 starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
@@ -123,7 +123,9 @@ starship_precmd() {
     export STARSHIP_SHELL="bash"
 
     # Run the bash precmd function, if relevant
-    "${starship_precmd_user_func-:}";
+    "${starship_precmd_user_func-:}"
+
+    # Prepare the timer data, if needed.
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(date +%s)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
@@ -133,7 +135,7 @@ starship_precmd() {
         PS1="$(starship prompt --status=$STATUS --jobs="$(jobs -p | wc -l)")"
     fi
     PREEXEC_READY=true;  # Signal that we can safely restart the timer
-};
+}
 
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
 # then hook our functions into their framework.
@@ -151,14 +153,14 @@ else
     elif [[ "$dbg_trap" != "starship_preexec" && "$dbg_trap" != "starship_preexec_all" ]]; then
         function starship_preexec_all(){
             $dbg_trap; starship_preexec
-        };
+        }
         trap starship_preexec_all DEBUG
-    fi;
+    fi
 
     # Finally, prepare the precmd function and set up the start time.
     PROMPT_COMMAND=starship_precmd
     STARSHIP_START_TIME=$(date +%s)
-fi;
+fi
 "##;
 
 /* ZSH INIT SCRIPT
@@ -189,29 +191,31 @@ starship_precmd() {
     else
         PROMPT="$(starship prompt --status=$STATUS --jobs="$(jobs | wc -l)")"
     fi
-};
+}
 starship_preexec(){
     STARSHIP_START_TIME="$(date +%s)"
-};
-if [[ -z "${precmd_functions+1}" ]]; then
-    precmd_functions=()
-fi;
-if [[ -z "${preexec_functions+1}" ]]; then
-    preexec_functions=()
-fi;
+}
+
+# If precmd/preexec arrays are not already set, set them. If we don't do this,
+# the code to detect whether starship_precmd is already in precmd_functions will
+# fail because the array doesn't exist (and same for starship_preexec)
+[[ -z "${precmd_functions+1}" ]] && precmd_functions=()
+[[ -z "${preexec_functions+1}" ]] && preexec_functions=()
+
+# If starship precmd/preexec functions are already hooked, don't double-hook
 if [[ ${precmd_functions[(ie)starship_precmd]} -gt ${#precmd_functions} ]]; then
-    precmd_functions+=(starship_precmd);
-fi;
+    precmd_functions+=(starship_precmd)
+fi
 if [[ ${preexec_functions[(ie)starship_preexec]} -gt ${#preexec_functions} ]]; then
-    preexec_functions+=(starship_preexec);
-fi;
-STARSHIP_START_TIME="$(date +%s)";
+    preexec_functions+=(starship_preexec)
+fi
+STARSHIP_START_TIME="$(date +%s)"
 function zle-keymap-select
 {
-    PROMPT=$(starship prompt --keymap=$KEYMAP --jobs="$(jobs | wc -l)");
-    zle reset-prompt;
-};
-zle -N zle-keymap-select;
+    PROMPT=$(starship prompt --keymap=$KEYMAP --jobs="$(jobs | wc -l)")
+    zle reset-prompt
+}
+zle -N zle-keymap-select
 "##;
 
 const FISH_INIT: &str = r##"
@@ -219,7 +223,7 @@ function fish_prompt
     set -l exit_code $status
     # Account for changes in variable name between v2.7 and v3.0
     set -l CMD_DURATION "$CMD_DURATION$cmd_duration"
-    set -l starship_duration (math --scale=0 "$CMD_DURATION / 1000");
+    set -l starship_duration (math --scale=0 "$CMD_DURATION / 1000")
     starship prompt --status=$exit_code --cmd-duration=$starship_duration --jobs=(count (jobs -p))
 end
 "##;
