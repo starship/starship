@@ -17,9 +17,9 @@ All configuration for starship is done in this [TOML](https://github.com/toml-la
 # Don't print a new line at the start of the prompt
 add_newline = false
 
-# Replace the "➜" symbol in the prompt with "❯"
+# Replace the "❯" symbol in the prompt with "➜"
 [character]      # The name of the module we are confguring is "character"
-symbol = "❯"     # The "symbol" segment is being set to "❯"
+symbol = "➜"     # The "symbol" segment is being set to "➜"
 
 # Disable the package module, hiding it from the prompt completely
 [package]
@@ -91,13 +91,13 @@ is entered in your terminal.
 
 The character will tell you whether the last command was successful or not. It
 can do this in two ways: by changing color (red/green) or by changing its shape
-(➜/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
+(❯/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
 
 ### Options
 
 | Variable                | Default | Description                                                                       |
 | ----------------------- | ------- | --------------------------------------------------------------------------------- |
-| `symbol`                | `"➜"`   | The symbol used before the text input in the prompt.                              |
+| `symbol`                | `"❯"`   | The symbol used before the text input in the prompt.                              |
 | `error_symbol`          | `"✖"`   | The symbol used before text input if the previous command failed.                 |
 | `use_symbol_for_status` | `false` | Indicate error status by changing the symbol.                                     |
 | `vicmd_symbol`          | `"❮"`   | The symbol used before the text input in the prompt if zsh is in vim normal mode. |
@@ -109,7 +109,7 @@ can do this in two ways: by changing color (red/green) or by changing its shape
 # ~/.config/starship.toml
 
 [character]
-symbol = "❯"
+symbol = "➜"
 error_symbol = "✗"
 use_symbol_for_status = true
 ```
