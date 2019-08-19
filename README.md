@@ -101,13 +101,11 @@ The prompt shows information you need while you're working, while staying sleek 
 
    #### Arch Linux (AUR)
 
-   Starship is available on the AUR under the package name `starship`. Install it with `yay` or your favorite helper.
+   Starship is available on the AUR under the package name `starship`. Install it with `yay` or your favorite AUR helper.
 
    ```
-   # yay -S starship
+   $ sudo yay -S starship
    ```
-
-   or your favorite AUR helper.
 
 1. Add the init script to your shell's config file:
 
