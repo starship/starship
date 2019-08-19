@@ -99,6 +99,14 @@ The prompt shows information you need while you're working, while staying sleek 
    $ cargo install starship
    ```
 
+   #### Arch Linux (AUR)
+
+   Starship is available on the AUR under the name `starship`. Install it with `yay` or your favorite AUR helper.
+
+   ```
+   $ yay -S starship
+   ```
+
 1. Add the init script to your shell's config file:
 
    #### Bash
