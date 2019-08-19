@@ -49,7 +49,7 @@ This is the list of prompt-wide configuration options.
 | Variable       | Default | Description                                                        |
 | -------------- | ------- | ------------------------------------------------------------------ |
 | `add_newline`  | `true`  | Add a new line before the start of the prompt.                     |
-| `prompt_order` | `[]`    | Configure out custom prompt order overriding [default prompt order](#default-prompt-order). |
+| `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
 
 ### Example
 
@@ -63,8 +63,8 @@ prompt_order=["rust","line_break","package","line_break","character"]
 ```
 
 ### Default prompt order
-```default_prompt_order``` is used as ```prompt_order``` when config have no options named as ```prompt_order``` or when you have set ```prompt_order = []```
-```toml
+The ```default_prompt_order``` configuration option is used to define the order in which modules are shown in the prompt, if empty or no ```prompt_order``` is provided. The default is as shown:
+```
 default_prompt_order = [
     "username",
     "directory",
