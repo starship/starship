@@ -101,7 +101,7 @@ The prompt shows information you need while you're working, while staying sleek 
 
    #### Arch Linux (AUR)
 
-   Starship is available on the AUR under the package name `starship`. Install it with
+   Starship is available on the AUR under the package name `starship`. Install it with `yay` or your favorite helper.
 
    ```
    # yay -S starship
