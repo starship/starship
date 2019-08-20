@@ -15,7 +15,7 @@ fn ex(cmd: &str, args: &[&str]) -> Result<String, String> {
 /// Creates a module with the current k8s context/namespace
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let maybe_ctx: Option<String> = ex("kubectl", &["config", "current-context"])
-        .map(|s| Some(s))
+        .map(Some)
         .or::<String>(Ok(None))
         .unwrap();
     let maybe_namespace: Option<String> = ex(
@@ -28,7 +28,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "jsonpath={..namespace}",
         ],
     )
-    .map(|s| Some(s))
+    .map(Some)
     .or::<String>(Ok(None))
     .unwrap();
 
