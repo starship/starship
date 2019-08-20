@@ -39,6 +39,14 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    $ cargo install starship
    ```
 
+   #### Arch Linux (AUR)
+
+   Starship is available on the AUR under the name `starship`. Install it with `yay` or your favorite AUR helper.
+
+   ```sh
+   $ yay -S starship
+   ```
+
 1. Add the init script to your shell's config file:
 
    #### Bash
