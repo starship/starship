@@ -25,5 +25,13 @@ module.exports = {
     editLinks: true,
     // custom text for edit link. Defaults to "Edit this page"
     editLinkText: 'Edit this page on GitHub'
-  }
+  },
+  plugins: [
+    [
+      '@vuepress/google-analytics',
+      {
+        'ga': 'UA-71160903-4'
+      }
+    ]
+  ]
 }
