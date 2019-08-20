@@ -37,6 +37,7 @@ fn folder_with_nimble_file() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn folder_with_nim_file() -> io::Result<()> {
     let dir = common::new_tempdir()?;
     File::create(dir.path().join("any.nim"))?;
