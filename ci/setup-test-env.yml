@@ -4,7 +4,14 @@ steps:
     inputs:
       versionSpec: "12.0.0"
     displayName: "Install a fixed version of Node"
-    
+
+  # Install TypeScript
+  - task: Npm@1
+    inputs:
+      command: custom
+      customCommand: "install --global typescript@3.5.3"
+    displayName: "Install a fixed version of TypeScript"
+
   # Install Go
   - task: GoTool@0
     inputs:
@@ -16,7 +23,7 @@ steps:
     inputs:
       versionSpec: "2.5.5"
     displayName: "Install a fixed version of Ruby"
-    
+
   # We are using pyenv to install Python for integration tests
   # Install Python
   - script: |

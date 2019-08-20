@@ -16,7 +16,7 @@ RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | ba
 RUN node --version
 
 # Install Typescript
-RUN npm install --global typescript
+RUN npm install --global typescript@3.5.3
 # Check that typescript was correctly installed
 RUN tsc --version
 
