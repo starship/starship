@@ -163,7 +163,7 @@ pub fn get_shells_infos() -> Vec<ShellInfo> {
 
 		fs::read_to_string(&bash_config_path).and_then(|content| {
 			shell_types.push(ShellInfo {
-				shell_type: ShellType::Fish, 
+				shell_type: ShellType::Bash, 
 				shell_config: content,
 				shell_version,
 			});
@@ -186,7 +186,7 @@ pub fn get_shells_infos() -> Vec<ShellInfo> {
 
 		fs::read_to_string(&zsh_config_path).and_then(|content| {
 			shell_types.push(ShellInfo {
-				shell_type: ShellType::Fish, 
+				shell_type: ShellType::Zsh, 
 				shell_config: content,
 				shell_version,
 			});
