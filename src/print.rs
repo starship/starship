@@ -5,26 +5,8 @@ use std::io::{self, Write};
 use crate::config::Config;
 use crate::context::Context;
 use crate::module::Module;
+use crate::module::ALL_MODULES;
 use crate::modules;
-
-// List of all modules
-const ALL_MODULES: &[&str] = &[
-    "battery",
-    "character",
-    "cmd_duration",
-    "directory",
-    "git_branch",
-    "git_status",
-    "golang",
-    "jobs",
-    "line_break",
-    "nodejs",
-    "package",
-    "python",
-    "ruby",
-    "rust",
-    "username",
-];
 
 // List of default prompt order
 // NOTE: If this const value is changed then Default prompt order subheading inside

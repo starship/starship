@@ -6,6 +6,7 @@ mod directory;
 mod golang;
 mod jobs;
 mod line_break;
+mod modules;
 mod nodejs;
 mod python;
 mod ruby;

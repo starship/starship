@@ -10,6 +10,7 @@ mod print;
 mod segment;
 mod utils;
 
+use crate::module::ALL_MODULES;
 use clap::{App, AppSettings, Arg, SubCommand};
 
 fn main() {
@@ -91,7 +92,14 @@ fn main() {
                 .arg(
                     Arg::with_name("name")
                         .help("The name of the module to be printed")
-                        .required(true),
+                        .required(true)
+                        .required_unless("list"),
+                )
+                .arg(
+                    Arg::with_name("list")
+                        .short("l")
+                        .long("list")
+                        .help("List out all supported modules"),
                 )
                 .arg(&status_code_arg)
                 .arg(&path_arg)
@@ -112,8 +120,16 @@ fn main() {
         }
         ("prompt", Some(sub_m)) => print::prompt(sub_m.clone()),
         ("module", Some(sub_m)) => {
-            let module_name = sub_m.value_of("name").expect("Module name missing.");
-            print::module(module_name, sub_m.clone());
+            if sub_m.is_present("list") {
+                println!("Supported modules list");
+                println!("----------------------");
+                for modules in ALL_MODULES {
+                    println!("{}", modules);
+                }
+            }
+            if let Some(module_name) = sub_m.value_of("name") {
+                print::module(module_name, sub_m.clone());
+            }
         }
         _ => {}
     }
