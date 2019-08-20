@@ -53,7 +53,7 @@ The prompt shows information you need while you're working, while staying sleek 
 - Current username if not the same as the logged-in user
 - Current Node.js version(`⬢`)
 - Current Rust version (`🦀`)
-- Current Ruby version (`💎`).
+- Current Ruby version (`💎`)
 - Current Python version (`🐍`)
 - Current Go version (`🐹`)
 - Current version of package in current directory (`📦`)
@@ -97,6 +97,14 @@ The prompt shows information you need while you're working, while staying sleek 
 
    ```sh
    $ cargo install starship
+   ```
+
+   #### Arch Linux (AUR)
+
+   Starship is available on the AUR under the name `starship`. Install it with `yay` or your favorite AUR helper.
+
+   ```sh
+   $ yay -S starship
    ```
 
 1. Add the init script to your shell's config file:
