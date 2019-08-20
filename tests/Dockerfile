@@ -48,6 +48,14 @@ RUN curl https://pyenv.run | bash \
 # Check that Python was correctly installed
 RUN python --version
 
+# Install Nim
+ENV CHOOSENIM_CHOOSE_VERSION 0.20.0
+ENV PATH $HOME/.nimble/bin:$PATH
+RUN curl https://nim-lang.org/choosenim/init.sh -sSf > choosenim_init.sh \
+      && sh choosenim_init.sh -y
+# Check that Nim was correctly installed
+RUN nim --version
+
 # Create blank project
 RUN USER=nonroot cargo new --bin /src/starship
 WORKDIR /src/starship

@@ -37,12 +37,12 @@ fn folder_with_nimble_file() -> io::Result<()> {
 }
 
 #[test]
-#[ignore]
 fn folder_with_nim_file() -> io::Result<()> {
     let dir = common::new_tempdir()?;
     File::create(dir.path().join("any.nim"))?;
 
     let output = common::render_module("nim")
+        .env("HOME", env!("HOME")) // choosenim install binary relative to HOME
         .arg("--path")
         .arg(dir.path())
         .output()?;
