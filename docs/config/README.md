@@ -372,6 +372,29 @@ The module will be shown if any of the following conditions are met:
 symbol = "🤖 "
 ```
 
+## Typescript
+
+The `typescript` module shows the currently installed version of Typescript.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `tsconfig.json` file
+- The current directory contains a `.ts` file
+
+### Options
+
+| Variable   | Default | Description                 |
+| ---------- | ------- | --------------------------- |
+| `disabled` | `false` | Disables the `typescript` module. |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[typescript]
+disabled = false
+```
+
 ## Package Version
 
 The `package` module is shown when the current directory is the repository for a
