@@ -107,6 +107,12 @@ The prompt shows information you need while you're working, while staying sleek 
    $ yay -S starship
    ```
 
+   #### Nix (unstable)
+
+   ```sh
+   $ nix-env --install starship
+   ```
+
 1. Add the init script to your shell's config file:
 
    #### Bash
