@@ -21,6 +21,7 @@ const DEFAULT_PROMPT_ORDER: &[&str] = &[
     "rust",
     "python",
     "golang",
+    "typescript",
     "cmd_duration",
     "line_break",
     "jobs",

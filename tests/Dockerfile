@@ -15,6 +15,11 @@ RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | ba
 # Check that Node.js was correctly installed
 RUN node --version
 
+# Install Typescript
+RUN npm install --global typescript
+# Check that typescript was correctly installed
+RUN tsc --version
+
 # Install Go
 ENV GO_VERSION 1.10.0
 ENV GOENV_ROOT /home/nonroot/.goenv

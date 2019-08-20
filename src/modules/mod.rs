@@ -13,6 +13,7 @@ mod package;
 mod python;
 mod ruby;
 mod rust;
+mod typescript;
 mod username;
 
 use crate::context::Context;
@@ -35,6 +36,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "battery" => battery::module(context),
         "cmd_duration" => cmd_duration::module(context),
         "jobs" => jobs::module(context),
+        "typescript" => typescript::module(context),
 
         _ => {
             eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
