@@ -45,7 +45,10 @@ fn get_typescript_version() -> Option<String> {
 }
 
 fn format_typescript_version(typescript_version: &str) -> String {
-    format!("v{}", typescript_version.trim_start_matches("Version ").trim())
+    format!(
+        "v{}",
+        typescript_version.trim_start_matches("Version ").trim()
+    )
 }
 
 #[cfg(test)]
