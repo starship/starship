@@ -165,6 +165,16 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "andytom",
+      "name": "Thomas O'Donnell",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/108836?v=4",
+      "profile": "https://github.com/andytom",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
