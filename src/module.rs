@@ -105,9 +105,15 @@ impl<'a> Module<'a> {
             .map(Segment::ansi_string)
             .collect::<Vec<ANSIString>>();
 
+        /* Only print escaped sequences if we are printing in a prompt (or
+        somewhere the user wants the shell-specific escapes), but not if e.g.
+        someone has called `starship prompt` from the command line */
+        let use_shell_escapes =
+            std::env::var("STARSHIP_PRINT_SHELL_ESCAPES").unwrap_or("false".to_string());
+        let use_shell_escapes = use_shell_escapes == "true" || use_shell_escapes == "yes";
         let mut ansi_strings = match shell.as_str() {
-            "bash" => ansi_strings_modified(ansi_strings, shell),
-            "zsh" => ansi_strings_modified(ansi_strings, shell),
+            "bash" if use_shell_escapes => ansi_strings_modified(ansi_strings, shell),
+            "zsh" if use_shell_escapes => ansi_strings_modified(ansi_strings, shell),
             _ => ansi_strings,
         };
 
