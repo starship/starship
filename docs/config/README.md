@@ -454,7 +454,7 @@ The module will be shown if any of the following conditions are met:
 
 | Variable   | Default | Description                                              |
 | ---------- | ------- | -------------------------------------------------------- |
-| `symbol`   | `"🦀 "` | The symbol used before displaying the version of Python. |
+| `symbol`   | `"🦀 "` | The symbol used before displaying the version of Rust. |
 | `disabled` | `false` | Disables the `rust` module.                              |
 
 ### Example
