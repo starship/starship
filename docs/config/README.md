@@ -46,9 +46,9 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Variable       | Default | Description                                                        |
-| -------------- | ------- | ------------------------------------------------------------------ |
-| `add_newline`  | `true`  | Add a new line before the start of the prompt.                     |
+| Variable       | Default                       | Description                                            |
+| -------------- | ----------------------------- | ------------------------------------------------------ |
+| `add_newline`  | `true`                        | Add a new line before the start of the prompt.         |
 | `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
 
 ### Example
@@ -72,6 +72,7 @@ default_prompt_order = [
     "git_status",
     "package",
     "nodejs",
+    "ruby",
     "rust",
     "python",
     "golang",

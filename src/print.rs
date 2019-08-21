@@ -18,6 +18,7 @@ const DEFAULT_PROMPT_ORDER: &[&str] = &[
     "git_status",
     "package",
     "nodejs",
+    "ruby",
     "rust",
     "python",
     "golang",
