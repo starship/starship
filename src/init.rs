@@ -187,7 +187,7 @@ starship_precmd() {
     STATUS=$?
 
     # Compute cmd_duration, if we have a time to consume
-    if [[ $STARSHIP_START_TIME ]]; then
+    if [[ ! -z "${STARSHIP_START_TIME+1}" ]]; then
         STARSHIP_END_TIME="$(date +%s)"
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
         PROMPT="$(starship prompt --status=$STATUS --cmd-duration=$STARSHIP_DURATION --jobs="$(jobs | wc -l)")"
