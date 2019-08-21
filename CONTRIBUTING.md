@@ -70,6 +70,8 @@ Unit tests are written using the built-in Rust testing library in the same file 
 
 Unit tests should be fully isolated, only testing a given function's expected output given a specific input, and should be reproducible on any machine. Unit tests should not expect the computer running them to be in any particular state. This includes having any applications pre-installed, having any environment variables set, etc.
 
+The previous point should be emphasized: even seemingly innocuous ideas like "if we can see the directory, we can read it" or "nobody will have their home directory be a git repo" have bitten us in the past. Having even a single test fail can completely break installation on some platforms, so be careful with tests!
+
 ### Acceptance Testing
 
 Acceptance tests are located in the [`tests/`](tests) directory and are also written using the built-in Rust testing library.

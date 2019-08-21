@@ -12,7 +12,7 @@ use crate::common::{self, TestCommand};
 fn home_directory() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path=~")
-        .use_config(toml::toml! {
+        .use_config(toml::toml! { // Necessary if homedir is a git repo
             [directory]
             truncate_to_repo = false
         })
