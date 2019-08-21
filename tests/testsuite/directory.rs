@@ -12,6 +12,10 @@ use crate::common::{self, TestCommand};
 fn home_directory() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path=~")
+        .use_config(toml::toml! {
+            [directory]
+            truncate_to_repo = false
+        })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
