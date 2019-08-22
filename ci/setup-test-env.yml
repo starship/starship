@@ -38,5 +38,5 @@ steps:
   - script: |
       curl https://nim-lang.org/choosenim/init.sh -sSf > choosenim_init.sh
       sh choosenim_init.sh -y
-      echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.nimble/bin"
+      echo "##vso[task.setvariable variable=PATH;]$HOME/.nimble/bin:$PATH"
     displayName: "Install a fixed version of Nim"

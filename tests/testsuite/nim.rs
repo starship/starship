@@ -41,6 +41,7 @@ fn folder_with_nimble_file() -> io::Result<()> {
 fn folder_with_nim_file() -> io::Result<()> {
     let dir = common::new_tempdir()?;
     File::create(dir.path().join("any.nim"))?;
+    println!("{}", env!("HOME"));
 
     let output = common::render_module("nim")
         .env("HOME", env!("HOME")) // choosenim install binary relative to HOME
