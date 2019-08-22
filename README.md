@@ -44,7 +44,10 @@ Starship is the minimal, blazing fast, and extremely customizable prompt for any
 The prompt shows information you need while you're working, while staying sleek and out of the way.
 
 <p align="center">
-  <img alt="Starship with Hyper and One Dark" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif">
+  <br>
+  <img alt="Starship with Hyper and One Dark" src="./media/demo.gif" width="80%">
+  <br>
+  <br>
 </p>
 
 ## 🍬 Features
