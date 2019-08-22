@@ -42,7 +42,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut percent_string = Vec::<String>::with_capacity(2);
     // Round the percentage to a whole number
     percent_string.push(percentage.round().to_string());
-    percent_string.push("%".to_string());
+    percent_string.push("%%".to_string());
     module.new_segment("percentage", percent_string.join("").as_ref());
 
     Some(module)
