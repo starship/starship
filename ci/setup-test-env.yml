@@ -34,8 +34,10 @@ steps:
   # use choosenim to install Nim for integration tests
   # Install Nim
   - script: |
+      echo "##vso[task.setvariable variable=PATH;]$HOME/.nimble/bin:$PATH"
+  - script: |
       curl https://nim-lang.org/choosenim/init.sh -sSf > choosenim_init.sh
       sh choosenim_init.sh -y
-      echo "##vso[task.setvariable variable=PATH;]$HOME/.nimble/bin:$PATH"
+  - script: |
       choosenim 0.20.0
     displayName: "Install a fixed version of Nim"
