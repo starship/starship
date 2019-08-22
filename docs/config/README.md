@@ -46,9 +46,10 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Variable      | Default | Description                                    |
-| ------------- | ------- | ---------------------------------------------- |
-| `add_newline` | `true`  | Add a new line before the start of the prompt. |
+| Variable       | Default                       | Description                                            |
+| -------------- | ----------------------------- | ------------------------------------------------------ |
+| `add_newline`  | `true`                        | Add a new line before the start of the prompt.         |
+| `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
 
 ### Example
 
@@ -57,7 +58,32 @@ This is the list of prompt-wide configuration options.
 
 # Disable the newline at the start of the prompt
 add_newline = false
+# Overwrite a default_prompt_order and  use custom prompt_order
+prompt_order=["rust","line_break","package","line_break","character"]
 ```
+
+### Default prompt order
+The ```default_prompt_order``` configuration option is used to define the order in which modules are shown in the prompt, if empty or no ```prompt_order``` is provided. The default is as shown:
+```
+default_prompt_order = [
+    "username",
+    "directory",
+    "git_branch",
+    "git_status",
+    "package",
+    "nodejs",
+    "ruby",
+    "rust",
+    "python",
+    "golang",
+    "cmd_duration",
+    "line_break",
+    "jobs",
+    "battery",
+    "character",
+]
+```
+
 
 ## Battery
 
@@ -395,6 +421,7 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `requirements.txt` file
 - The current directory contains a `pyproject.toml` file
 - The current directory contains a file with the `.py` extension
+- The current directory contains a `Pipfile` file
 
 ### Options
 
@@ -428,7 +455,7 @@ The module will be shown if any of the following conditions are met:
 
 | Variable   | Default | Description                                              |
 | ---------- | ------- | -------------------------------------------------------- |
-| `symbol`   | `"🦀 "` | The symbol used before displaying the version of Python. |
+| `symbol`   | `"🦀 "` | The symbol used before displaying the version of Rust. |
 | `disabled` | `false` | Disables the `rust` module.                              |
 
 ### Example

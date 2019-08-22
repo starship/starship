@@ -1,3 +1,4 @@
+// While adding out new module add out module to src/module.rs ALL_MODULES const array also.
 mod battery;
 mod character;
 mod cmd_duration;
@@ -37,6 +38,9 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "cmd_duration" => cmd_duration::module(context),
         "jobs" => jobs::module(context),
 
-        _ => panic!("Unknown module: {}", module),
+        _ => {
+            eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
+            None
+        }
     }
 }

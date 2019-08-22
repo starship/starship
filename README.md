@@ -18,7 +18,7 @@
   </a>
   <a href="#contributors">
     <img
-      src="https://badgen.net/badge/all%20contributors/12/orange"
+      src="https://badgen.net/badge/all%20contributors/14/orange"
       alt="All Contributors"
     />
   </a>
@@ -53,7 +53,7 @@ The prompt shows information you need while you're working, while staying sleek 
 - Current username if not the same as the logged-in user
 - Current Node.js version(`⬢`)
 - Current Rust version (`🦀`)
-- Current Ruby version (`💎`).
+- Current Ruby version (`💎`)
 - Current Python version (`🐍`)
 - Current Go version (`🐹`)
 - Current Nim version (`👑`)
@@ -100,6 +100,20 @@ The prompt shows information you need while you're working, while staying sleek 
    $ cargo install starship
    ```
 
+   #### Arch Linux (AUR)
+
+   Starship is available on the AUR under the name `starship`. Install it with `yay` or your favorite AUR helper.
+
+   ```sh
+   $ yay -S starship
+   ```
+
+   #### Nix (unstable)
+
+   ```sh
+   $ nix-env --install starship
+   ```
+
 1. Add the init script to your shell's config file:
 
    #### Bash
@@ -138,7 +152,7 @@ For details on how to configure Starship, check out our [documentation](https://
 
 ## 🤝 Contributing
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/good%20first%20issue).
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
 ### High Priority Needs
 
@@ -174,6 +188,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/AZanellato"><img src="https://avatars3.githubusercontent.com/u/30451287?v=4" width="100px;" alt="André Zanellato"/><br /><sub><b>André Zanellato</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=AZanellato" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=AZanellato" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=AZanellato" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://saghm.com"><img src="https://avatars2.githubusercontent.com/u/5875560?v=4" width="100px;" alt="Saghm Rossi"/><br /><sub><b>Saghm Rossi</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=saghm" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=saghm" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=saghm" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://medium.com/@cappyzawa"><img src="https://avatars3.githubusercontent.com/u/12455284?v=4" width="100px;" alt="Shu Kutsuzawa"/><br /><sub><b>Shu Kutsuzawa</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=cappyzawa" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=cappyzawa" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=cappyzawa" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/iamsauravsharma"><img src="https://avatars0.githubusercontent.com/u/38726015?v=4" width="100px;" alt="Saurav Sharma"/><br /><sub><b>Saurav Sharma</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=iamsauravsharma" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=iamsauravsharma" title="Documentation">📖</a></td>
   </tr>
 </table>
 

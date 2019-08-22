@@ -59,6 +59,23 @@ fn folder_with_pyproject_toml() -> io::Result<()> {
 
 #[test]
 #[ignore]
+fn folder_with_pipfile() -> io::Result<()> {
+    let dir = common::new_tempdir()?;
+    File::create(dir.path().join("Pipfile"))?;
+
+    let output = common::render_module("python")
+        .arg("--path")
+        .arg(dir.path())
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.6.9"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[ignore]
 fn folder_with_py_file() -> io::Result<()> {
     let dir = common::new_tempdir()?;
     File::create(dir.path().join("main.py"))?;

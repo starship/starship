@@ -10,6 +10,7 @@ mod print;
 mod segment;
 mod utils;
 
+use crate::module::ALL_MODULES;
 use clap::{App, AppSettings, Arg, SubCommand};
 
 fn main() {
@@ -58,6 +59,10 @@ fn main() {
         .help("The number of currently running jobs")
         .takes_value(true);
 
+    let init_scripts_arg = Arg::with_name("print_full_init")
+        .long("print-full-init")
+        .help("Print the main initialization script (as opposed to the init stub)");
+
     let matches = App::new("starship")
         .about("The cross-shell prompt for astronauts. ☄🌌️")
         // pull the version number from Cargo.toml
@@ -69,7 +74,8 @@ fn main() {
         .subcommand(
             SubCommand::with_name("init")
                 .about("Prints the shell function used to execute starship")
-                .arg(&shell_arg),
+                .arg(&shell_arg)
+                .arg(&init_scripts_arg),
         )
         .subcommand(
             SubCommand::with_name("prompt")
@@ -86,7 +92,14 @@ fn main() {
                 .arg(
                     Arg::with_name("name")
                         .help("The name of the module to be printed")
-                        .required(true),
+                        .required(true)
+                        .required_unless("list"),
+                )
+                .arg(
+                    Arg::with_name("list")
+                        .short("l")
+                        .long("list")
+                        .help("List out all supported modules"),
                 )
                 .arg(&status_code_arg)
                 .arg(&path_arg)
@@ -99,12 +112,24 @@ fn main() {
     match matches.subcommand() {
         ("init", Some(sub_m)) => {
             let shell_name = sub_m.value_of("shell").expect("Shell name missing.");
-            init::init(shell_name)
+            if sub_m.is_present("print_full_init") {
+                init::init_main(shell_name);
+            } else {
+                init::init_stub(shell_name);
+            }
         }
         ("prompt", Some(sub_m)) => print::prompt(sub_m.clone()),
         ("module", Some(sub_m)) => {
-            let module_name = sub_m.value_of("name").expect("Module name missing.");
-            print::module(module_name, sub_m.clone());
+            if sub_m.is_present("list") {
+                println!("Supported modules list");
+                println!("----------------------");
+                for modules in ALL_MODULES {
+                    println!("{}", modules);
+                }
+            }
+            if let Some(module_name) = sub_m.value_of("name") {
+                print::module(module_name, sub_m.clone());
+            }
         }
         _ => {}
     }
