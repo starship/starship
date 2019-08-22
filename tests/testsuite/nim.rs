@@ -9,6 +9,7 @@ fn folder_without_nim_files() -> io::Result<()> {
     let dir = common::new_tempdir()?;
 
     let output = common::render_module("nim")
+        .env("HOME", env!("HOME")) // choosenim installs binary relative to HOME
         .arg("--path")
         .arg(dir.path())
         .output()?;
@@ -26,6 +27,7 @@ fn folder_with_nimble_file() -> io::Result<()> {
     File::create(dir.path().join("any.nimble"))?;
 
     let output = common::render_module("nim")
+        .env("HOME", env!("HOME")) // choosenim installs binary relative to HOME
         .arg("--path")
         .arg(dir.path())
         .output()?;
@@ -43,7 +45,7 @@ fn folder_with_nim_file() -> io::Result<()> {
     File::create(dir.path().join("any.nim"))?;
 
     let output = common::render_module("nim")
-        .env("HOME", env!("HOME")) // choosenim install binary relative to HOME
+        .env("HOME", env!("HOME")) // choosenim installs binary relative to HOME
         .arg("--path")
         .arg(dir.path())
         .output()?;

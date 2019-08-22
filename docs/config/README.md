@@ -76,6 +76,7 @@ default_prompt_order = [
     "rust",
     "python",
     "golang",
+    "nim",
     "cmd_duration",
     "line_break",
     "jobs",
@@ -348,6 +349,30 @@ The module will be shown if any of the following conditions are met:
 disabled = false
 ```
 
+## Nim
+
+The `nim` module shows the currently installed version of Nim.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.nim` extension
+- The current directory contains a file with the `.nimble` extension
+
+### Options
+
+| Variable   | Default | Description                                              |
+| ---------- | ------- | -------------------------------------------------------- |
+| `symbol`   | `"👑 "` | The symbol used before displaying the version of Nim.    |
+| `disabled` | `false` | Disables the `nim` module.                               |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[nim]
+symbol = "👑 "
+```
+
 ## NodeJS
 
 The `nodejs` module shows the currently installed version of NodeJS.
@@ -465,30 +490,6 @@ The module will be shown if any of the following conditions are met:
 
 [rust]
 symbol = "⚙️ "
-```
-
-## Nim
-
-The `nim` module shows the currently installed version of Nim.
-The module will be shown if any of the following conditions are met:
-
-- The current directory contains a file with the `.nim` extension
-- The current directory contains a file with the `.nimble` extension
-
-### Options
-
-| Variable   | Default | Description                                              |
-| ---------- | ------- | -------------------------------------------------------- |
-| `symbol`   | `"👑 "` | The symbol used before displaying the version of Nim.    |
-| `disabled` | `false` | Disables the `nim` module.                               |
-
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[nim]
-symbol = "👑 "
 ```
 
 ## Username

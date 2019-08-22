@@ -15,6 +15,7 @@ pub const ALL_MODULES: &[&str] = &[
     "golang",
     "jobs",
     "line_break",
+    "nim",
     "nodejs",
     "package",
     "python",
