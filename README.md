@@ -40,8 +40,10 @@
 
 <h1></h1>
 
+<p align="center">
 Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br>
 The prompt shows information you need while you're working, while staying sleek and out of the way.
+<p>
 
 <p align="center">
   <br>
