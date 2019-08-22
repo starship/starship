@@ -49,10 +49,10 @@ RUN curl https://pyenv.run | bash \
 RUN python --version
 
 # Install Nim
-ENV CHOOSENIM_CHOOSE_VERSION 0.20.0
 ENV PATH /home/nonroot/.nimble/bin:$PATH
 RUN curl https://nim-lang.org/choosenim/init.sh -sSf > /home/nonroot/choosenim_init.sh \
       && sh /home/nonroot/choosenim_init.sh -y
+RUN choosenim 0.20.0
 # Check that Nim was correctly installed
 RUN nim --version
 
