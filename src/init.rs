@@ -1,5 +1,6 @@
 use std::ffi::OsStr;
 use std::path::Path;
+use std::{env, io};
 
 /* We use a two-phase init here: the first phase gives a simple command to the
 shell. This command evaluates a more complicated script using `source` and
@@ -11,29 +12,45 @@ rest of the script, and you have to spam semicolons everywhere. By using
 source and process substitutions, we make it possible to comment and debug
 the init scripts. */
 
+fn path_to_starship() -> io::Result<String> {
+    let current_exe = env::current_exe()?
+        .to_str()
+        .ok_or_else(|| io::Error::new(io::ErrorKind::Other, "can't convert to str"))?
+        .to_string();
+    Ok(current_exe)
+}
+
 /* This prints the setup stub, the short piece of code which sets up the main
 init code. The stub produces the main init script, then evaluates it with
 `source` and process substitution */
-pub fn init_stub(shell_name: &str) {
+pub fn init_stub(shell_name: &str) -> io::Result<()> {
     log::debug!("Shell name: {}", shell_name);
 
     let shell_basename = Path::new(shell_name).file_stem().and_then(OsStr::to_str);
+
+    let starship = path_to_starship()?.replace("\"", "\"'\"'\"");
 
     let setup_stub = match shell_basename {
         Some("bash") => {
             /* This *should* look like the zsh function, but bash 3.2 (MacOS default shell)
             does not support using source with process substitution, so we use this
             workaround from https://stackoverflow.com/a/32596626 */
-            let script = "source /dev/stdin <<<\"$(starship init bash --print-full-init)\"";
+            let script = format!(
+                "source /dev/stdin <<<\"$(\"{}\" init bash --print-full-init)\"",
+                starship
+            );
             Some(script)
         }
         Some("zsh") => {
-            let script = "source <(starship init zsh --print-full-init)";
+            let script = format!("source <(\"{}\" init zsh --print-full-init)", starship);
             Some(script)
         }
         Some("fish") => {
             // Fish does process substitution with pipes and psub instead of bash syntax
-            let script = "source (starship init fish --print-full-init | psub)";
+            let script = format!(
+                "source (\"{}\" init fish --print-full-init | psub)",
+                starship
+            );
             Some(script)
         }
         None => {
@@ -62,15 +79,18 @@ pub fn init_stub(shell_name: &str) {
     if let Some(script) = setup_stub {
         print!("{}", script);
     };
+    Ok(())
 }
 
 /* This function (called when `--print-full-init` is passed to `starship init`)
 prints out the main initialization script */
-pub fn init_main(shell_name: &str) {
+pub fn init_main(shell_name: &str) -> io::Result<()> {
+    let starship_path = path_to_starship()?.replace("\"", "\"'\"'\"");
+
     let setup_script = match shell_name {
-        "bash" => Some(BASH_INIT),
-        "zsh" => Some(ZSH_INIT),
-        "fish" => Some(FISH_INIT),
+        "bash" => Some(BASH_INIT.replace("## STARSHIP ##", &format!("\"{}\"", starship_path))),
+        "zsh" => Some(ZSH_INIT.replace("## STARSHIP ##", &format!("\"{}\"", starship_path))),
+        "fish" => Some(FISH_INIT.replace("## STARSHIP ##", &format!("\"{}\"", starship_path))),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
@@ -83,6 +103,7 @@ pub fn init_main(shell_name: &str) {
     if let Some(script) = setup_script {
         print!("{}", script);
     };
+    Ok(())
 }
 
 /* GENERAL INIT SCRIPT NOTES
@@ -132,10 +153,10 @@ starship_precmd() {
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(date +%s)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        PS1="$(starship prompt --status=$STATUS --jobs="$(jobs -p | wc -l)" --cmd-duration=$STARSHIP_DURATION)"
+        PS1="$(## STARSHIP ## prompt --status=$STATUS --jobs="$(jobs -p | wc -l)" --cmd-duration=$STARSHIP_DURATION)"
         unset STARSHIP_START_TIME
     else
-        PS1="$(starship prompt --status=$STATUS --jobs="$(jobs -p | wc -l)")"
+        PS1="$(## STARSHIP ## prompt --status=$STATUS --jobs="$(jobs -p | wc -l)")"
     fi
     PREEXEC_READY=true;  # Signal that we can safely restart the timer
 }
@@ -190,10 +211,10 @@ starship_precmd() {
     if [[ ! -z "${STARSHIP_START_TIME+1}" ]]; then
         STARSHIP_END_TIME="$(date +%s)"
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        PROMPT="$(starship prompt --status=$STATUS --cmd-duration=$STARSHIP_DURATION --jobs="$(jobs | wc -l)")"
+        PROMPT="$(## STARSHIP ## prompt --status=$STATUS --cmd-duration=$STARSHIP_DURATION --jobs="$(jobs | wc -l)")"
         unset STARSHIP_START_TIME
     else
-        PROMPT="$(starship prompt --status=$STATUS --jobs="$(jobs | wc -l)")"
+        PROMPT="$(## STARSHIP ## prompt --status=$STATUS --jobs="$(jobs | wc -l)")"
     fi
 }
 starship_preexec(){
@@ -217,7 +238,7 @@ fi
 # Set up a function to redraw the prompt if the user switches vi modes
 function zle-keymap-select
 {
-    PROMPT=$(starship prompt --keymap=$KEYMAP --jobs="$(jobs | wc -l)")
+    PROMPT=$(## STARSHIP ## prompt --keymap=$KEYMAP --jobs="$(jobs | wc -l)")
     zle reset-prompt
 }
 
@@ -232,6 +253,6 @@ function fish_prompt
     # Account for changes in variable name between v2.7 and v3.0
     set -l CMD_DURATION "$CMD_DURATION$cmd_duration"
     set -l starship_duration (math --scale=0 "$CMD_DURATION / 1000")
-    starship prompt --status=$exit_code --cmd-duration=$starship_duration --jobs=(count (jobs -p))
+    ## STARSHIP ## prompt --status=$exit_code --cmd-duration=$starship_duration --jobs=(count (jobs -p))
 end
 "##;
