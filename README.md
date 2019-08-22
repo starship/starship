@@ -162,7 +162,7 @@ We are always looking for contributors of **all skill levels**! If you're lookin
 - 👩‍💻 **Rust Developer**
   - There is _a lot_ of low-hanging fruit when it comes to writing idiomatic Rust, designing effective Rust architecture, performance optimizations, cross-platform build optimizations, and more! I ([@matchai](https://github.com/matchai)) am a beginner to Rust. Come point us in the right direction!
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](./CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ### Contributors
 
@@ -203,4 +203,4 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 ## 📝 License
 
 Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br>
-This project is [ISC](./LICENSE) licensed.
+This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
