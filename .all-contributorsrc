@@ -175,6 +175,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "bbigras",
+      "name": "Bruno Bigras",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/24027?v=4",
+      "profile": "https://github.com/bbigras",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
