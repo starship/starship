@@ -45,7 +45,7 @@ jobs:
       
       - uses: actions/setup-go@master
         with:
-          go-version: '1.10'
+          go-version: '1.10.0'
 
       - uses: actions/setup-ruby@master
         with:
