@@ -1,7 +1,7 @@
 name: Continuous Integration
 on: push
 jobs:
-  
+
   rustfmt:
     runs-on: ubuntu-latest
     steps:
@@ -54,7 +54,7 @@ jobs:
         if: matrix.os != 'windows-latest'
 
       - run: choco install ruby --version 2.5.5 -y
-        if: matrix.os != 'windows-latest'
+        if: matrix.os == 'windows-latest'
 
       - uses: actions/setup-python@master
         with:
