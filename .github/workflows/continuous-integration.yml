@@ -1,7 +1,6 @@
 name: Continuous Integration
 on: push
 jobs:
-
   rustfmt:
     runs-on: ubuntu-latest
     steps:
@@ -42,19 +41,27 @@ jobs:
 
       - uses: actions/setup-node@master
         with:
-          node-version: '12.0.0'
-      
+          node-version: "12.0.0"
+
       - uses: actions/setup-go@master
         with:
-          go-version: '1.12.1'
+          go-version: "1.12.1"
 
       - uses: actions/setup-ruby@master
         with:
-          ruby-version: '2.6.3'
+          ruby-version: "2.6.3"
 
       - uses: actions/setup-python@master
         with:
-          python-version: '3.6.9'
+          python-version: "3.6.9"
 
       - uses: actions/checkout@master
       - run: cargo test  -- -Z unstable-options --include-ignored
+
+  docker_test:
+    needs: [rustfmt, clippy, cargo_check]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - run: docker pull starshipcommand/starship-test
+      - run: ./integration_test
