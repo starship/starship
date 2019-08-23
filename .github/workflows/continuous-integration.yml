@@ -4,7 +4,7 @@ jobs:
   rustfmt:
     runs-on: ubuntu-latest
     steps:
-      - uses: docker://rust:latest
+      - uses: hecrj/setup-rust-action@master
       - uses: actions/checkout@master
       - run: rustup component add rustfmt
       - run: cargo fmt --all -- --check
@@ -12,7 +12,7 @@ jobs:
   clippy:
     runs-on: ubuntu-latest
     steps:
-      - uses: docker://rust:latest
+      - uses: hecrj/setup-rust-action@master
       - uses: actions/checkout@master
       - run: rustup component add clippy
       - run: cargo clippy --all-targets --all-features -- -D clippy::all
@@ -20,7 +20,7 @@ jobs:
   cargo_check:
     runs-on: ubuntu-latest
     steps:
-      - uses: docker://rust:latest
+      - uses: hecrj/setup-rust-action@master
       - uses: actions/checkout@master
       - run: cargo check --all
 
