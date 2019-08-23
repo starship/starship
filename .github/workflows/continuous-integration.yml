@@ -50,10 +50,12 @@ jobs:
 
       - uses: actions/setup-ruby@master
         with:
-          ruby-version: '2.5.5'
+          ruby-version: '2.6.3'
         if: matrix.os != 'windows-latest'
 
-      - run: choco install ruby --version 2.5.5 -y
+      # Required until the Actions tool cache is updated
+      # https://github.com/actions/setup-ruby/issues/8
+      - run: choco install ruby --version 2.6.3.1
         if: matrix.os == 'windows-latest'
 
       - uses: actions/setup-python@master
