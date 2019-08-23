@@ -17,17 +17,9 @@ jobs:
       - run: rustup component add clippy
       - run: cargo clippy --all-targets --all-features -- -D clippy::all
 
-  check:
-    name: cargo check
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
-        rust: [stable, nightly]
+  cargo_check:
+    runs-on: ubuntu-latest
     steps:
-      - uses: hecrj/setup-rust-action@master
-        with:
-          rust-version: ${{ matrix.rust }}
+      - uses: docker://rust:latest
       - uses: actions/checkout@master
-      - name: Run tests
-        run: cargo check --all
+      - run: cargo check --all
