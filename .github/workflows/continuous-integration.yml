@@ -1,0 +1,10 @@
+name: Continuous Integration
+on: push
+jobs:
+  rustfmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: docker://rust:latest
+      - uses: actions/checkout@master
+      - run: rustup component add rustfmt
+      - run: cargo fmt --all -- --check
