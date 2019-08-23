@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@master
       - run: cargo check --all
 
-  # Run tests on Linux, Windows, and macOS
+  # Run tests on Linux, and macOS
   # On both Rust stable and Rust nightly
   test:
     needs: [rustfmt, clippy, cargo_check]
