@@ -1,6 +1,15 @@
 name: Continuous Integration
 on: push
 jobs:
+  check_ruby:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    steps:
+      - run: ls $RUNNER_TOOL_CACHE/Ruby
+
   rustfmt:
     runs-on: ubuntu-latest
     steps:
