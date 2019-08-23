@@ -33,7 +33,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest, macOS-latest]
         rust: [stable, nightly]
     steps:
       - uses: hecrj/setup-rust-action@master
@@ -51,12 +51,6 @@ jobs:
       - uses: actions/setup-ruby@master
         with:
           ruby-version: '2.6.3'
-        if: matrix.os != 'windows-latest'
-
-      # Required until the Actions tool cache is updated
-      # https://github.com/actions/setup-ruby/issues/8
-      - run: choco install ruby --version 2.6.3.1 && ruby --version
-        if: matrix.os == 'windows-latest'
 
       - uses: actions/setup-python@master
         with:
