@@ -30,6 +30,7 @@ jobs:
     needs: [rustfmt, clippy, cargo_check]
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
         rust: [stable, nightly]
