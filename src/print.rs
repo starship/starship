@@ -26,6 +26,7 @@ const DEFAULT_PROMPT_ORDER: &[&str] = &[
     "cmd_duration",
     "line_break",
     "jobs",
+    #[cfg(feature = "battery")]
     "battery",
     "character",
 ];
