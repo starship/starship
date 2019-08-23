@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "0.12.1"
+version = "0.12.2"
 edition = "2018"
 authors = ["Matan Kushner <hello@matchai.me>"]
 repository = "https://github.com/starship/starship"
