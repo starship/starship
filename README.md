@@ -47,7 +47,7 @@ The prompt shows information you need while you're working, while staying sleek 
 
 <p align="center">
   <br>
-  <img alt="Starship with Hyper and One Dark" src="./media/demo.gif" width="80%">
+  <img alt="Starship with iTerm2 and the Snazzy theme" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" width="80%">
   <br>
   <br>
 </p>
