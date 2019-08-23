@@ -8,3 +8,11 @@ jobs:
       - uses: actions/checkout@master
       - run: rustup component add rustfmt
       - run: cargo fmt --all -- --check
+
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: docker://rust:latest
+      - uses: actions/checkout@master
+      - run: rustup component add clippy
+      - run: cargo clippy --all-targets --all-features -- -D clippy::all
