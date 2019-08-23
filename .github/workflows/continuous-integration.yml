@@ -49,7 +49,7 @@ jobs:
 
       - uses: actions/setup-ruby@master
         with:
-          ruby-version: '2.5.5'
+          ruby-version: '2.3.3'
 
       - uses: actions/setup-python@master
         with:
