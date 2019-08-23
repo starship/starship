@@ -81,8 +81,11 @@ jobs:
 
       - uses: actions/setup-ruby@master
         with:
-          ruby-version: '2.6.2'
-        if: 
+          ruby-version: '2.5.5'
+        if: matrix.os != 'windows-latest'
+
+      - run: choco install ruby --version 2.5.5 -y
+        if: matrix.os != 'windows-latest'
 
       - uses: actions/setup-python@master
         with:
