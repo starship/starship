@@ -109,7 +109,7 @@ impl<'a> Module<'a> {
         somewhere the user wants the shell-specific escapes), but not if e.g.
         someone has called `starship prompt` from the command line */
         let use_shell_escapes =
-            std::env::var("STARSHIP_PRINT_SHELL_ESCAPES").unwrap_or("false".to_string());
+            std::env::var("STARSHIP_PRINT_SHELL_ESCAPES").unwrap_or_else(|_| "false".to_string());
         let use_shell_escapes = use_shell_escapes == "true" || use_shell_escapes == "yes";
         let mut ansi_strings = match shell.as_str() {
             "bash" if use_shell_escapes => ansi_strings_modified(ansi_strings, shell),
