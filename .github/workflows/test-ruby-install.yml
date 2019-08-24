@@ -2,7 +2,7 @@ name: Test Ruby Install
 on: push
 jobs:
   test:
-    needs: [rustfmt, clippy, cargo_check]
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
