@@ -1,11 +1,14 @@
 name: Release
+
+# Builds on push events to master branch
+# or to tags with a version number
 on:
   push:
     branches:
-    - master
+      - master
     tags:
-    - 'v*'
-      
+      - "v*"
+
 jobs:
   rustfmt:
     runs-on: ubuntu-latest
