@@ -6,69 +6,11 @@ on:
     tags:
     - 'v*'
       
-# jobs:
-#   rustfmt:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: hecrj/setup-rust-action@master
-#       - uses: actions/checkout@master
-#       - run: rustup component add rustfmt
-#       - run: cargo fmt --all -- --check
-
-#   clippy:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: hecrj/setup-rust-action@master
-#       - uses: actions/checkout@master
-#       - run: rustup component add clippy
-#       - run: cargo clippy --all-targets --all-features -- -D clippy::all
-
-#   cargo_check:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: hecrj/setup-rust-action@master
-#       - uses: actions/checkout@master
-#       - run: cargo check --all
-
-#   # Run tests on Linux, and macOS
-#   # On both Rust stable and Rust nightly
-#   test:
-#     needs: [rustfmt, clippy, cargo_check]
-#     runs-on: ${{ matrix.os }}
-#     strategy:
-#       fail-fast: false
-#       matrix:
-#         os: [ubuntu-latest, macOS-latest]
-#         rust: [stable, nightly]
-#     steps:
-#       - uses: hecrj/setup-rust-action@master
-#         with:
-#           rust-version: ${{ matrix.rust }}
-
-#       - uses: actions/setup-node@master
-#         with:
-#           node-version: "12.0.0"
-
-#       - uses: actions/setup-go@master
-#         with:
-#           go-version: "1.12.1"
-
-#       - uses: actions/setup-ruby@master
-#         with:
-#           ruby-version: "2.6.3"
-
-#       - uses: actions/setup-python@master
-#         with:
-#           python-version: "3.6.9"
-
-#       - uses: actions/checkout@master
-#       - run: cargo test  -- -Z unstable-options --include-ignored
-
-#   docker_test:
-#     needs: [rustfmt, clippy, cargo_check]
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@master
-#       - run: docker pull starshipcommand/starship-test
-#       - run: chmod -R a+w .
-#       - run: ./integration_test
+jobs:
+  rustfmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hecrj/setup-rust-action@master
+      - uses: actions/checkout@master
+      - run: rustup component add rustfmt
+      - run: cargo fmt --all -- --check
