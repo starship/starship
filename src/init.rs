@@ -30,6 +30,10 @@ pub fn init(shell_name: &str) {
             let script = "function fish_prompt; starship prompt --status=$status; end";
             Some(script)
         }
+        Some("powershell") => {
+            let script = "function Prompt { starship prompt --status=$LastExitCode }";
+            Some(script)
+        }
         None => {
             println!(
                 "Invalid shell name provided: {}\\n\

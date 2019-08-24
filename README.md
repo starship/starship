@@ -85,6 +85,17 @@ The prompt shows information need while you're working, while staying sleek and 
    eval (starship init fish)
    ```
 
+#### PowerShell
+
+Add the following to the end of your PowerShell `$Profile` e.g. on Windows:
+
+`~\WindowsPowerShell\Microsoft.PowerShell_profile.ps1`
+
+```powershell
+# ~/WindowsPowerShell/Microsoft.PowerShell_profile.ps
+Invoke-Expression (starship init powershell)
+```
+
 ## 🔧 Configuration
 
 For details on how to configure Starship, check out our [documentation](https://starship.rs/config/).
