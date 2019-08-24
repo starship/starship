@@ -1,6 +1,8 @@
 name: Continuous Integration
 on: push
 jobs:
+
+  # Run the `rustfmt` code formatter
   rustfmt:
     runs-on: ubuntu-latest
     steps:
@@ -9,6 +11,7 @@ jobs:
       - run: rustup component add rustfmt
       - run: cargo fmt --all -- --check
 
+  # Run the `clippy` linting tool
   clippy:
     runs-on: ubuntu-latest
     steps:
@@ -17,6 +20,7 @@ jobs:
       - run: rustup component add clippy
       - run: cargo clippy --all-targets --all-features -- -D clippy::all
 
+  # Ensure that the project could be successfully compiled
   cargo_check:
     runs-on: ubuntu-latest
     steps:
@@ -35,29 +39,36 @@ jobs:
         os: [ubuntu-latest, macOS-latest, windows-latest]
         rust: [stable, nightly]
     steps:
+      # Install all the required dependencies for testing
       - uses: hecrj/setup-rust-action@master
         with:
           rust-version: ${{ matrix.rust }}
 
+      # Install Node.js at a fixed version
       - uses: actions/setup-node@master
         with:
           node-version: "12.0.0"
 
+      # Install Golang at a fixed version
       - uses: actions/setup-go@master
         with:
           go-version: "1.12.1"
 
+      # Install Ruby at a fixed version
       - uses: actions/setup-ruby@master
         with:
           ruby-version: "2.6.3"
 
+      # Install Python at a fixed version
       - uses: actions/setup-python@master
         with:
           python-version: "3.6.9"
 
+      # Run the ignored tests that expect the above setup
       - uses: actions/checkout@master
       - run: cargo test  -- -Z unstable-options --include-ignored
 
+  # Run the tests in the Docker image
   docker_test:
     needs: [rustfmt, clippy, cargo_check]
     runs-on: ubuntu-latest
