@@ -61,6 +61,7 @@ The prompt shows information you need while you're working, while staying sleek 
 - Current Ruby version (`💎`)
 - Current Python version (`🐍`)
 - Current Go version (`🐹`)
+- Nix-shell environment detection
 - Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
