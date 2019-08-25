@@ -8,7 +8,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const BATTERY_CHARGING: &str = "⇡";
     const BATTERY_DISCHARGING: &str = "⇣";
     const BATTERY_THRESHOLD: f32 = 10.0;
-
+// TODO: Update when v1.0 printing refactor is implemented to only
+// print escapes in a prompt context.
     let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
     let percentage_char = match shell.as_str() {
         "zsh" => "%%",   // % is an escape in zsh, see PROMPT in `man zshmisc`
