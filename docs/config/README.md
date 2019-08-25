@@ -211,10 +211,12 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Options
 
-| Variable   | Default | Description                                                                   |
-| ---------- | ------- | ----------------------------------------------------------------------------- |
-| `symbol`   | `" "`  | The symbol used before the branch name of the repo in your current directory. |
-| `disabled` | `false` | Disables the `git_branch` module.                                             |
+| Variable            | Default    | Description                                                                           |
+| ------------------- | ---------- | ------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`     | The symbol used before the branch name of the repo in your current directory.         |
+| `disabled`          | `false`    | Disables the `git_branch` module.                                                     |
+| `truncation_length` | `2^63 - 1` | Truncates a git branch to X graphemes                                                 |
+| `truncation_symbol` | `"…"`      | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
 
 ### Example
 
@@ -223,6 +225,8 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 [git_branch]
 symbol = "🌱 "
+truncation_length = "4"
+truncation_symbol = ""
 ```
 
 ## Git Status
