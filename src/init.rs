@@ -63,15 +63,13 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             );
             None
         }
-        _ => {
-            /* Calling unwrap() here is fine because the None case will have
-            already matched on the previous arm */
+        Some(shell_basename) => {
             println!(
                 "printf \"\\n{0} is not yet supported by starship.\\n\
                  For the time being, we support bash, zsh, and fish.\\n\
                  Please open an issue in the starship repo if you would like to \
                  see support for {0}:\\nhttps://github.com/starship/starship/issues/new\"\\n\\n",
-                shell_basename.unwrap()
+                shell_basename
             );
             None
         }
