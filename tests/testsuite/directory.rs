@@ -78,10 +78,7 @@ fn fish_directory_in_home() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!(
-        "in {} ",
-        Color::Cyan.bold().paint("~/st/en/schematics")
-    );
+    let expected = format!("in {} ", Color::Cyan.bold().paint("~/st/en/schematics"));
     assert_eq!(expected, actual);
     Ok(())
 }
