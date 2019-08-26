@@ -490,3 +490,29 @@ The module will be shown if any of the following conditions are met:
 [username]
 disabled = true
 ```
+
+## Nix-shell
+
+The `nix_shell` module shows the nix-shell environment.
+The module will be shown when inside a nix-shell environment.
+
+### Options
+
+| Variable     | Default  | Description                        |
+| ------------ | -------- | ---------------------------------- |
+| `disabled`   | `false`  | Disables the `username` module.    |
+| `use_name`   | `false`  | Display the name of the nix-shell. |
+| `impure_msg` | `impure` | Customize the "impure" msg.        |
+| `pure_msg`   | `pure`   | Customize the "pure" msg.          |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[nix_shell]
+disabled = true
+use_name = true
+impure_msg = "impure shell"
+pure_msg = "pure shell"
+```

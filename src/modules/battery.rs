@@ -8,6 +8,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const BATTERY_CHARGING: &str = "⇡";
     const BATTERY_DISCHARGING: &str = "⇣";
     const BATTERY_THRESHOLD: f32 = 10.0;
+    // TODO: Update when v1.0 printing refactor is implemented to only
+    // print escapes in a prompt context.
+    let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
+    let percentage_char = match shell.as_str() {
+        "zsh" => "%%", // % is an escape in zsh, see PROMPT in `man zshmisc`
+        _ => "%",
+    };
 
     let battery_status = get_battery_status()?;
     let BatteryStatus { state, percentage } = battery_status;
@@ -42,7 +49,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut percent_string = Vec::<String>::with_capacity(2);
     // Round the percentage to a whole number
     percent_string.push(percentage.round().to_string());
-    percent_string.push("%".to_string());
+    percent_string.push(percentage_char.to_string());
     module.new_segment("percentage", percent_string.join("").as_ref());
 
     Some(module)
