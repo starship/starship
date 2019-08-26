@@ -69,9 +69,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         if ahead > 0 && behind > 0 {
             module.new_segment("diverged", GIT_STATUS_DIVERGED);
         } else if ahead > 0 {
-            module.new_segment("ahead", GIT_STATUS_AHEAD);
+            module.new_segment("ahead", format!("{}{}", GIT_STATUS_AHEAD, ahead).as_str());
         } else if behind > 0 {
-            module.new_segment("behind", GIT_STATUS_BEHIND);
+            module.new_segment("behind", format!("{}{}", GIT_STATUS_BEHIND, behind).as_str());
         }
     }
 
@@ -113,7 +113,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 /// Gets the bitflags associated with the repo's git status
 fn get_repo_status(repository: &Repository) -> Result<Status, git2::Error> {
     let mut status_options = git2::StatusOptions::new();
+
     status_options.include_untracked(true);
+    status_options.renames_from_rewrites(true);
+    status_options.renames_head_to_index(true);
+    status_options.renames_index_to_workdir(true);
 
     let repo_file_statuses = repository.statuses(Some(&mut status_options))?;
 
