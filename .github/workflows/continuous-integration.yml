@@ -36,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-latest, macOS-latest]
         rust: [stable, nightly]
     steps:
       # Install all the required dependencies for testing
@@ -77,3 +77,11 @@ jobs:
       - run: docker pull starshipcommand/starship-test
       - run: chmod -R a+w .
       - run: ./integration_test
+
+  github_release:
+    needs: [test, docker_test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hecrj/setup-rust-action@master
+      - uses: actions/checkout@master
+      - 
