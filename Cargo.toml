@@ -31,7 +31,7 @@ rayon = "1.1.0"
 pretty_env_logger = "0.3.1"
 log = "0.4.8"
 battery = "0.7.4"
-lazy_static = "1.3.0"
+lazy_static = "1.4.0"
 path-slash = "0.1.1"
 
 [dev-dependencies]
