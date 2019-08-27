@@ -71,7 +71,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         } else if ahead > 0 {
             module.new_segment("ahead", format!("{}{}", GIT_STATUS_AHEAD, ahead).as_str());
         } else if behind > 0 {
-            module.new_segment("behind", format!("{}{}", GIT_STATUS_BEHIND, behind).as_str());
+            module.new_segment(
+                "behind",
+                format!("{}{}", GIT_STATUS_BEHIND, behind).as_str(),
+            );
         }
     }
 
