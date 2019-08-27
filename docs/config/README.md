@@ -178,6 +178,14 @@ The `directory` module shows the path to your current directory, truncated to
 three parent folders. Your directory will also be truncated to the root of the
 git repo that you're currently in.
 
+When using the fish style pwd option, instead of hiding the path that is
+truncated, you will see a shortened name of each directory based on the number
+you enable for the option.
+
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root,
+and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before
+it would have been `nixpkgs/pkgs`.
+
 ### Options
 
 | Variable            | Default | Description                                                                      |
