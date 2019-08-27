@@ -29,7 +29,10 @@ fn shows_behind_count() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = Color::Red.bold().paint(format!("[{}] ", "⇣1")).to_string();
+    let expected = Color::Red
+        .bold()
+        .paint(format!("[{}] ", "⇣1"))
+        .to_string();
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -57,7 +60,10 @@ fn shows_ahead_count() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = Color::Red.bold().paint(format!("[{}] ", "⇡1")).to_string();
+    let expected = Color::Red
+        .bold()
+        .paint(format!("[{}] ", "⇡1"))
+        .to_string();
     assert_eq!(expected, actual);
     Ok(())
 }
