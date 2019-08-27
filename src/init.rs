@@ -35,10 +35,18 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             /* This *should* look like the zsh function, but bash 3.2 (MacOS default shell)
             does not support using source with process substitution, so we use this
             workaround from https://stackoverflow.com/a/32596626 */
-            let script = format!(
-                "source /dev/stdin <<<\"$(\"{}\" init bash --print-full-init)\"",
-                starship
-            );
+            let script = {
+                format!(
+                    r#"if [ "${{BASH_VERSINFO[0]}}" -gt 4 ]
+then
+source <("{}" init bash --print-full-init)
+else
+source /dev/stdin <<<"$("{}" init bash --print-full-init)"
+fi"#,
+                    starship, starship
+                )
+            };
+
             Some(script)
         }
         Some("zsh") => {
