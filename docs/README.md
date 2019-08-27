@@ -60,6 +60,12 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    $ nix-env --install starship
    ```
 
+   #### Termux
+
+   ```sh
+   $ pkg install starship
+   ```
+
 1. Add the init script to your shell's config file:
 
    #### Bash
