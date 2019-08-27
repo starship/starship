@@ -184,6 +184,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "wyze",
+      "name": "Neil Kistner",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/186971?v=4",
+      "profile": "https://neilkistner.com/",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
