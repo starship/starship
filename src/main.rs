@@ -32,7 +32,7 @@ fn main() {
     let shell_arg = Arg::with_name("shell")
         .value_name("SHELL")
         .help(
-            "The name of the currently running shell\nCurrently supported options: bash, zsh, fish",
+            "The name of the currently running shell\nCurrently supported options: bash, zsh, fish, powershell",
         )
         .required(true);
 
