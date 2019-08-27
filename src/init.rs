@@ -37,7 +37,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             workaround from https://stackoverflow.com/a/32596626 */
             let script = {
                 format!(
-                    r#"if [ "${{BASH_VERSINFO[0]}}" -gt 4 ] || ([ "${{BASH_VERSINFO[0]}}" -eq 4 ] && [ "${{BASH_VERSINFO[1]}}" -ge 1 ])
+                    r#"if [ "${{BASH_VERSINFO[0]}}" -gt 4 ]
 then
 source <("{}" init bash --print-full-init)
 else
