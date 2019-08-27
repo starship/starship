@@ -37,7 +37,7 @@ steps:
       git checkout 718a19c
       git merge -m "No pseudo tty" pitkley/docker-no-pseudo-tty
       cargo install --force --path .
-    displayName: Instaling cross supprot
+    displayName: Install cross
   # All platforms
   - script: |
       rustup -V

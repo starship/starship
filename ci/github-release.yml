@@ -3,15 +3,12 @@ parameters:
   github:
     isPreRelease: false
     repositoryName: "$(Build.Repository.Name)"
-  dependsOn: []
   displayName: "Release to GitHub"
   archiveName: "$(Build.Repository.Name)"
 
 jobs:
   - job: ${{ parameters.name }}
-    condition: ${{ parameters.condition }}
     displayName: ${{ parameters.displayName }}
-    dependsOn: ${{ parameters.dependsOn }}
     pool:
       vmImage: ubuntu-16.04
     steps:
@@ -63,9 +60,7 @@ jobs:
   - ${{ each build_target in parameters.targets }}:
       - ${{ if eq(build_target, 'x86_64-apple-darwin') }}:
           - job: ${{ parameters.name }}_macOS
-            condition: ${{ parameters.condition }}
             displayName: ${{ parameters.displayName }} (macOS)
-            dependsOn: ${{ parameters.dependsOn }}
             pool:
               vmImage: macOS-10.13
             steps:
@@ -114,9 +109,7 @@ jobs:
 
       - ${{ if eq(build_target, 'x86_64-pc-windows-msvc') }}:
           - job: ${{ parameters.name }}_msvc
-            condition: ${{ parameters.condition }}
             displayName: ${{ parameters.displayName }} (Windows)
-            dependsOn: ${{ parameters.dependsOn }}
             pool:
               vmImage: vs2017-win2016
             steps:

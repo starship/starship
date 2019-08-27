@@ -40,11 +40,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.get_suffix().set_value("] ").set_style(module_style);
     module.set_style(module_style);
 
-    let ahead_behind = get_ahead_behind(&repository, &branch_name);
-    if ahead_behind != Ok((0, 0)) {
-        log::debug!("Repo ahead/behind: {:?}", ahead_behind);
-    } else {
+    let ahead_behind = get_ahead_behind(&repository, branch_name);
+    if ahead_behind == Ok((0, 0)) {
         log::trace!("No ahead/behind found");
+    } else {
+        log::debug!("Repo ahead/behind: {:?}", ahead_behind);
     }
 
     let stash_object = repository.revparse_single("refs/stash");

@@ -24,22 +24,26 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let truncation_length = module
         .config_value_i64("truncation_length")
         .unwrap_or(DIR_TRUNCATION_LENGTH);
+    let truncate_to_repo = module.config_value_bool("truncate_to_repo").unwrap_or(true);
 
     let current_dir = &context.current_dir;
     log::debug!("Current directory: {:?}", current_dir);
 
     let dir_string;
-    if let Some(repo_root) = &context.repo_root {
-        // Contract the path to the git repo root
-        let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
+    match &context.repo_root {
+        Some(repo_root) if truncate_to_repo => {
+            // Contract the path to the git repo root
+            let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
 
-        dir_string = contract_path(&current_dir, repo_root, repo_folder_name);
-    } else {
-        // Contract the path to the home directory
-        let home_dir = dirs::home_dir().unwrap();
+            dir_string = contract_path(current_dir, repo_root, repo_folder_name);
+        }
+        _ => {
+            // Contract the path to the home directory
+            let home_dir = dirs::home_dir().unwrap();
 
-        dir_string = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
-    }
+            dir_string = contract_path(current_dir, &home_dir, HOME_SYMBOL);
+        }
+    };
 
     // Truncate the dir string to the maximum number of path components
     let truncated_dir_string = truncate(dir_string, truncation_length as usize);
@@ -89,8 +93,8 @@ fn replace_c_dir(path: String) -> String {
 ///
 /// On non-Windows OS, does nothing
 #[cfg(not(target_os = "windows"))]
-fn replace_c_dir(path: String) -> String {
-    return path;
+const fn replace_c_dir(path: String) -> String {
+    path
 }
 
 /// Truncate a path to only have a set number of path components

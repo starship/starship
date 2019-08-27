@@ -97,7 +97,9 @@
       "profile": "https://github.com/chipbuster",
       "contributions": [
         "bug",
-        "code"
+        "code",
+        "doc",
+        "test"
       ]
     },
     {
@@ -108,6 +110,50 @@
       "contributions": [
         "bug",
         "code"
+      ]
+    },
+    {
+      "login": "MaT1g3R",
+      "name": "MaT1g3R",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/15258494?v=4",
+      "profile": "https://github.com/MaT1g3R",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "AZanellato",
+      "name": "André Zanellato",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/30451287?v=4",
+      "profile": "https://github.com/AZanellato",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "saghm",
+      "name": "Saghm Rossi",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5875560?v=4",
+      "profile": "https://saghm.com",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "cappyzawa",
+      "name": "Shu Kutsuzawa",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/12455284?v=4",
+      "profile": "https://medium.com/@cappyzawa",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
       ]
     }
   ],
