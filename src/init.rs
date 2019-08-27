@@ -63,15 +63,13 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             );
             None
         }
-        _ => {
-            /* Calling unwrap() here is fine because the None case will have
-            already matched on the previous arm */
+        Some(shell_basename) => {
             println!(
                 "printf \"\\n{0} is not yet supported by starship.\\n\
                  For the time being, we support bash, zsh, and fish.\\n\
                  Please open an issue in the starship repo if you would like to \
                  see support for {0}:\\nhttps://github.com/starship/starship/issues/new\"\\n\\n",
-                shell_basename.unwrap()
+                shell_basename
             );
             None
         }
@@ -167,8 +165,8 @@ if [[ $preexec_functions ]]; then
     preexec_functions+=(starship_preexec)
     precmd_functions+=(starship_precmd)
 else
-# We want to avoid destroying an existing DEBUG hook. If we detect one, create 
-# a new function that runs both the existing function AND our function, then 
+# We want to avoid destroying an existing DEBUG hook. If we detect one, create
+# a new function that runs both the existing function AND our function, then
 # re-trap DEBUG to use this new function. This prevents a trap clobber.
     dbg_trap="$(trap -p DEBUG | cut -d' ' -f3 | tr -d \')"
     if [[ -z "$dbg_trap" ]]; then
@@ -255,4 +253,5 @@ function fish_prompt
     set -l starship_duration (math --scale=0 "$CMD_DURATION / 1000")
     ## STARSHIP ## prompt --status=$exit_code --cmd-duration=$starship_duration --jobs=(count (jobs -p))
 end
+export STARSHIP_SHELL="fish"
 "##;

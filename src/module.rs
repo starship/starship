@@ -6,6 +6,7 @@ use std::fmt;
 
 // List of all modules
 pub const ALL_MODULES: &[&str] = &[
+    #[cfg(feature = "battery")]
     "battery",
     "character",
     "cmd_duration",
