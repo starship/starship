@@ -12,6 +12,14 @@ fn create_fixture_repo() -> io::Result<std::path::PathBuf> {
     let fixture = env::current_dir()?.join("tests/fixtures/rocket.bundle");
 
     Command::new("git")
+        .args(&["config", "--global", "user.email", "starship@example.com"])
+        .output()?;
+
+    Command::new("git")
+        .args(&["config", "--global", "user.name", "starship"])
+        .output()?;
+
+    Command::new("git")
         .args(&[
             "clone",
             "-b",
@@ -63,7 +71,7 @@ fn shows_ahead_count() -> io::Result<()> {
     File::create(repo_dir.join("readme.md"))?;
 
     Command::new("git")
-        .args(&["commit", "-am", "'Update readme'"])
+        .args(&["commit", "-am", "Update readme"])
         .current_dir(&repo_dir)
         .output()?;
 
@@ -98,7 +106,7 @@ fn shows_diverged() -> io::Result<()> {
     fs::write(repo_dir.join("Cargo.toml"), " ")?;
 
     Command::new("git")
-        .args(&["commit", "-am", "'Update readme'"])
+        .args(&["commit", "-am", "Update readme"])
         .current_dir(repo_dir.as_path())
         .output()?;
 
@@ -138,7 +146,7 @@ fn shows_conflicted() -> io::Result<()> {
         .output()?;
 
     Command::new("git")
-        .args(&["commit", "-m", "'Change readme'"])
+        .args(&["commit", "-m", "Change readme"])
         .current_dir(repo_dir.as_path())
         .output()?;
 
@@ -192,7 +200,7 @@ fn shows_stashed() -> io::Result<()> {
     File::create(repo_dir.join("readme.md"))?;
 
     Command::new("git")
-        .args(&["stash", "--all"])
+        .arg("stash")
         .current_dir(repo_dir.as_path())
         .output()?;
 
