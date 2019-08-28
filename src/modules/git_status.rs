@@ -66,15 +66,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Add the ahead/behind segment
     if let Ok((ahead, behind)) = ahead_behind {
+        let ahead_segment = format!("{}{}", GIT_STATUS_AHEAD, ahead);
+        let behind_segment = format!("{}{}", GIT_STATUS_BEHIND, behind);
+
         if ahead > 0 && behind > 0 {
             module.new_segment("diverged", GIT_STATUS_DIVERGED);
+            module.new_segment("ahead", ahead_segment.as_str());
+            module.new_segment("behind", behind_segment.as_str());
         } else if ahead > 0 {
-            module.new_segment("ahead", format!("{}{}", GIT_STATUS_AHEAD, ahead).as_str());
+            module.new_segment("ahead", ahead_segment.as_str());
         } else if behind > 0 {
-            module.new_segment(
-                "behind",
-                format!("{}{}", GIT_STATUS_BEHIND, behind).as_str(),
-            );
+            module.new_segment("behind", behind_segment.as_str());
         }
     }
 

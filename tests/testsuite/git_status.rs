@@ -101,7 +101,7 @@ fn shows_diverged() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "⇕")).to_string();
+    let expected = Color::Red.bold().paint(format!("[{}] ", "⇕⇡1⇣1")).to_string();
 
     assert_eq!(expected, actual);
 
