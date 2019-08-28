@@ -75,34 +75,38 @@ fn char_module_symbolyes_status() -> io::Result<()> {
 
 #[test]
 fn char_module_vicmd_keymap() -> io::Result<()> {
-    let expected_vicmd = format!("{} ", Color::Green.bold().paint("❮"));
-    let expected_specified = format!("{} ", Color::Green.bold().paint("N"));
-    let expected_other = format!("{} ", Color::Green.bold().paint("❯"));
+    let expected_vicmd = "❮";
+    // TODO make this less... well, stupid when ANSI escapes can be mocked out
+    let expected_specified = "I HIGHLY DOUBT THIS WILL SHOW UP IN OTHER OUTPUT";
+    let expected_other = "❯";
 
     // zle keymap is vicmd
     let output = common::render_module("character")
+        .env("STARSHIP_SHELL", "zsh")
         .arg("--keymap=vicmd")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    assert_eq!(expected_vicmd, actual);
+    assert!(actual.contains(&expected_vicmd));
 
     // specified vicmd character
     let output = common::render_module("character")
         .use_config(toml::toml! {
             [character]
-            vicmd_symbol = "N"
+            vicmd_symbol = "I HIGHLY DOUBT THIS WILL SHOW UP IN OTHER OUTPUT"
         })
+        .env("STARSHIP_SHELL", "zsh")
         .arg("--keymap=vicmd")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    assert_eq!(expected_specified, actual);
+    assert!(actual.contains(&expected_specified));
 
     // zle keymap is other
     let output = common::render_module("character")
+        .env("STARSHIP_SHELL", "zsh")
         .arg("--keymap=visual")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    assert_eq!(expected_other, actual);
+    assert!(actual.contains(&expected_other));
 
     Ok(())
 }
