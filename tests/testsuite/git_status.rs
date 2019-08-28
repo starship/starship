@@ -63,7 +63,7 @@ fn shows_ahead_count() -> io::Result<()> {
     File::create(repo_dir.join("readme.md"))?;
 
     Command::new("git")
-        .args(&["commit", "-am", "Update readme"])
+        .args(&["commit", "-am", "'Update readme'"])
         .current_dir(&repo_dir)
         .output()?;
 
@@ -98,7 +98,7 @@ fn shows_diverged() -> io::Result<()> {
     fs::write(repo_dir.join("Cargo.toml"), " ")?;
 
     Command::new("git")
-        .args(&["commit", "-am", "Update readme"])
+        .args(&["commit", "-am", "'Update readme'"])
         .current_dir(repo_dir.as_path())
         .output()?;
 
@@ -138,7 +138,7 @@ fn shows_conflicted() -> io::Result<()> {
         .output()?;
 
     Command::new("git")
-        .args(&["commit", "-m", "Change readme"])
+        .args(&["commit", "-m", "'Change readme'"])
         .current_dir(repo_dir.as_path())
         .output()?;
 
@@ -192,7 +192,7 @@ fn shows_stashed() -> io::Result<()> {
     File::create(repo_dir.join("readme.md"))?;
 
     Command::new("git")
-        .arg("stash")
+        .args(&["stash", "--all"])
         .current_dir(repo_dir.as_path())
         .output()?;
 
