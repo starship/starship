@@ -25,6 +25,7 @@ fn create_fixture_repo() -> io::Result<std::path::PathBuf> {
 }
 
 #[test]
+#[ignore]
 fn shows_behind_count() -> io::Result<()> {
     let fixture_repo_dir = create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
@@ -49,6 +50,7 @@ fn shows_behind_count() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_ahead_count() -> io::Result<()> {
     let fixture_repo_dir = create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
@@ -75,6 +77,7 @@ fn shows_ahead_count() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_diverged() -> io::Result<()> {
     let fixture_repo_dir = create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
@@ -106,6 +109,7 @@ fn shows_diverged() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_conflicted() -> io::Result<()> {
     let fixture_repo_dir = create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
@@ -147,6 +151,7 @@ fn shows_conflicted() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_untracked_file() -> io::Result<()> {
     let fixture_repo_dir = create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
@@ -168,6 +173,7 @@ fn shows_untracked_file() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_stashed() -> io::Result<()> {
     let fixture_repo_dir = create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
@@ -194,6 +200,7 @@ fn shows_stashed() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_modified() -> io::Result<()> {
     let fixture_repo_dir = create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
@@ -215,6 +222,7 @@ fn shows_modified() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_added_file() -> io::Result<()> {
     let fixture_repo_dir = create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
@@ -241,6 +249,7 @@ fn shows_added_file() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_renamed_file() -> io::Result<()> {
     let fixture_repo_dir = create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
@@ -270,6 +279,7 @@ fn shows_renamed_file() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_deleted_file() -> io::Result<()> {
     let fixture_repo_dir = create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
