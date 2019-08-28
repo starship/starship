@@ -74,7 +74,7 @@ fn char_module_symbolyes_status() -> io::Result<()> {
 }
 
 #[test]
-fn char_module_vicmd_keymap() -> io::Result<()> {
+fn char_module_zsh_keymap() -> io::Result<()> {
     let expected_vicmd = "❮";
     // TODO make this less... well, stupid when ANSI escapes can be mocked out
     let expected_specified = "I HIGHLY DOUBT THIS WILL SHOW UP IN OTHER OUTPUT";
@@ -103,6 +103,44 @@ fn char_module_vicmd_keymap() -> io::Result<()> {
     // zle keymap is other
     let output = common::render_module("character")
         .env("STARSHIP_SHELL", "zsh")
+        .arg("--keymap=visual")
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert!(actual.contains(&expected_other));
+
+    Ok(())
+}
+
+#[test]
+fn char_module_fish_keymap() -> io::Result<()> {
+    let expected_vicmd = "❮";
+    // TODO make this less... well, stupid when ANSI escapes can be mocked out
+    let expected_specified = "I HIGHLY DOUBT THIS WILL SHOW UP IN OTHER OUTPUT";
+    let expected_other = "❯";
+
+    // fish keymap is default
+    let output = common::render_module("character")
+        .env("STARSHIP_SHELL", "fish")
+        .arg("--keymap=default")
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert!(actual.contains(&expected_vicmd));
+
+    // specified vicmd character
+    let output = common::render_module("character")
+        .use_config(toml::toml! {
+            [character]
+            vicmd_symbol = "I HIGHLY DOUBT THIS WILL SHOW UP IN OTHER OUTPUT"
+        })
+        .env("STARSHIP_SHELL", "fish")
+        .arg("--keymap=default")
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert!(actual.contains(&expected_specified));
+
+    // fish keymap is other
+    let output = common::render_module("character")
+        .env("STARSHIP_SHELL", "fish")
         .arg("--keymap=visual")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
