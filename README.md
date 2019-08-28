@@ -7,6 +7,9 @@
   />
 </p>
 <p align="center">
+  <a href="https://repology.org/project/starship/versions">
+    <img src="https://repology.org/badge/tiny-repos/starship.svg" alt="Packaging status">
+  </a>
   <a href="https://crates.io/crates/starship">
     <img src="https://badgen.net/crates/v/starship" alt="Crates.io version" />
   </a>
