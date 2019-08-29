@@ -36,7 +36,7 @@ impl Config for Table {
             log::debug!("STARSHIP_CONFIG is set: \n{}", &path);
             path
         } else {
-            // Default to using ~/.config/starhip.toml
+            // Default to using ~/.config/starship.toml
             log::debug!("STARSHIP_CONFIG is not set");
             let config_path = home_dir()?.join(".config/starship.toml");
             let config_path_str = config_path.to_str()?.to_owned();
