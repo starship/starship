@@ -509,7 +509,7 @@ The module will be shown when inside a nix-shell environment.
 
 | Variable     | Default  | Description                        |
 | ------------ | -------- | ---------------------------------- |
-| `disabled`   | `false`  | Disables the `username` module.    |
+| `disabled`   | `false`  | Disables the `nix_shell` module.    |
 | `use_name`   | `false`  | Display the name of the nix-shell. |
 | `impure_msg` | `impure` | Customize the "impure" msg.        |
 | `pure_msg`   | `pure`   | Customize the "pure" msg.          |
