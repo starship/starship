@@ -21,6 +21,13 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
   </div>
 </div>
 
+<div class="center">
+  <video class="demo-video" autoplay muted loop>
+    <source src="/demo.webm" type="video/webm">
+    <source src="/demo.mp4" type="video/mp4">
+  </video>
+</div>
+
 ### Quick Install
 
 1. Install the **starship** binary:
@@ -51,6 +58,12 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    ```sh
    $ nix-env --install starship
+   ```
+
+   #### Termux
+
+   ```sh
+   $ pkg install starship
    ```
 
 1. Add the init script to your shell's config file:

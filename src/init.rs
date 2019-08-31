@@ -35,10 +35,18 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             /* This *should* look like the zsh function, but bash 3.2 (MacOS default shell)
             does not support using source with process substitution, so we use this
             workaround from https://stackoverflow.com/a/32596626 */
-            let script = format!(
-                "source /dev/stdin <<<\"$(\"{}\" init bash --print-full-init)\"",
-                starship
-            );
+            let script = {
+                format!(
+                    r#"if [ "${{BASH_VERSINFO[0]}}" -gt 4 ]
+then
+source <("{}" init bash --print-full-init)
+else
+source /dev/stdin <<<"$("{}" init bash --print-full-init)"
+fi"#,
+                    starship, starship
+                )
+            };
+
             Some(script)
         }
         Some("zsh") => {
@@ -63,15 +71,13 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             );
             None
         }
-        _ => {
-            /* Calling unwrap() here is fine because the None case will have
-            already matched on the previous arm */
+        Some(shell_basename) => {
             println!(
                 "printf \"\\n{0} is not yet supported by starship.\\n\
                  For the time being, we support bash, zsh, and fish.\\n\
                  Please open an issue in the starship repo if you would like to \
                  see support for {0}:\\nhttps://github.com/starship/starship/issues/new\"\\n\\n",
-                shell_basename.unwrap()
+                shell_basename
             );
             None
         }
@@ -167,8 +173,8 @@ if [[ $preexec_functions ]]; then
     preexec_functions+=(starship_preexec)
     precmd_functions+=(starship_precmd)
 else
-# We want to avoid destroying an existing DEBUG hook. If we detect one, create 
-# a new function that runs both the existing function AND our function, then 
+# We want to avoid destroying an existing DEBUG hook. If we detect one, create
+# a new function that runs both the existing function AND our function, then
 # re-trap DEBUG to use this new function. This prevents a trap clobber.
     dbg_trap="$(trap -p DEBUG | cut -d' ' -f3 | tr -d \')"
     if [[ -z "$dbg_trap" ]]; then
@@ -249,10 +255,18 @@ export STARSHIP_SHELL="zsh"
 
 const FISH_INIT: &str = r##"
 function fish_prompt
+    switch "$fish_key_bindings"
+        case fish_hybrid_key_bindings fish_vi_key_bindings
+            set keymap "$fish_bind_mode"
+        case '*'
+            set keymap insert
+    end
     set -l exit_code $status
     # Account for changes in variable name between v2.7 and v3.0
     set -l CMD_DURATION "$CMD_DURATION$cmd_duration"
     set -l starship_duration (math --scale=0 "$CMD_DURATION / 1000")
-    ## STARSHIP ## prompt --status=$exit_code --cmd-duration=$starship_duration --jobs=(count (jobs -p))
+    ## STARSHIP ## prompt --status=$exit_code --keymap=$keymap --cmd-duration=$starship_duration --jobs=(count (jobs -p))
 end
+function fish_mode_prompt; end
+export STARSHIP_SHELL="fish"
 "##;

@@ -48,8 +48,8 @@ fn main() {
         .short("k")
         .long("keymap")
         .value_name("KEYMAP")
-        // zsh only
-        .help("The keymap of zsh")
+        // fish/zsh only
+        .help("The keymap of fish/zsh")
         .takes_value(true);
 
     let jobs_arg = Arg::with_name("jobs")
