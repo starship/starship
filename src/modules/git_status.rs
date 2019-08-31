@@ -119,7 +119,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn get_repo_status(repository: &Repository) -> Result<Status, git2::Error> {
     let mut status_options = git2::StatusOptions::new();
 
-    status_options.include_untracked(true);
+    match repository.config()?.get_entry("status.showUntrackedFiles") {
+        Ok(entry) => status_options.include_untracked(entry.value() != Some("no")),
+        _ => status_options.include_untracked(true),
+    };
     status_options.renames_from_rewrites(true);
     status_options.renames_head_to_index(true);
     status_options.renames_index_to_workdir(true);
