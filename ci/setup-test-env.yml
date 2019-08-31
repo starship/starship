@@ -35,9 +35,7 @@ steps:
   # Install Nim
   - script: |
       echo "##vso[task.setvariable variable=PATH;]$HOME/.nimble/bin:$PATH"
+      echo "##vso[task.setvariable variable=CHOOSENIM_CHOOSE_VERSION;]0.20.0"
   - script: |
       curl https://nim-lang.org/choosenim/init.sh -sSf > choosenim_init.sh
       sh choosenim_init.sh -y
-  - script: |
-      choosenim 0.20.0
-    displayName: "Install a fixed version of Nim"
