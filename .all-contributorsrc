@@ -194,6 +194,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "qstrahl",
+      "name": "Quinn Strahl",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2235277?v=4",
+      "profile": "http://ca.linkedin.com/in/qstrahl",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
