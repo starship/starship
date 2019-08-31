@@ -13,6 +13,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const SUCCESS_CHAR: &str = "❯";
     const FAILURE_CHAR: &str = "✖";
     const VICMD_CHAR: &str = "❮";
+    enum ShellEditMode {
+        Normal,
+        Insert,
+    };
+    const ASSUMED_MODE: ShellEditMode = ShellEditMode::Insert;
+    // TODO: extend config to more modes
 
     let color_success = Color::Green.bold();
     let color_failure = Color::Red.bold();
@@ -25,16 +31,28 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .config_value_bool("use_symbol_for_status")
         .unwrap_or(false);
     let exit_success = arguments.value_of("status_code").unwrap_or("0") == "0";
+    let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
     let keymap = arguments.value_of("keymap").unwrap_or("viins");
+
+    // Match shell "keymap" names to normalized vi modes
+    // NOTE: in vi mode, fish reports normal mode as "default".
+    // Unfortunately, this is also the name of the non-vi default mode.
+    // We do some environment detection in src/init.rs to translate.
+    // The result: in non-vi fish, keymap is always reported as "insert"
+    let mode = match (shell.as_str(), keymap) {
+        ("fish", "default") | ("zsh", "vicmd") => ShellEditMode::Normal,
+        _ => ASSUMED_MODE,
+    };
 
     /* If an error symbol is set in the config, use symbols to indicate
     success/failure, in addition to color */
     let symbol = if use_symbol && !exit_success {
         module.new_segment("error_symbol", FAILURE_CHAR)
-    } else if keymap == "vicmd" {
-        module.new_segment("vicmd_symbol", VICMD_CHAR)
     } else {
-        module.new_segment("symbol", SUCCESS_CHAR)
+        match mode {
+            ShellEditMode::Normal => module.new_segment("vicmd_symbol", VICMD_CHAR),
+            ShellEditMode::Insert => module.new_segment("symbol", SUCCESS_CHAR),
+        }
     };
 
     if exit_success {

@@ -7,6 +7,9 @@
   />
 </p>
 <p align="center">
+  <a href="https://repology.org/project/starship/versions">
+    <img src="https://repology.org/badge/tiny-repos/starship.svg" alt="Packaging status">
+  </a>
   <a href="https://crates.io/crates/starship">
     <img src="https://badgen.net/crates/v/starship" alt="Crates.io version" />
   </a>
@@ -40,11 +43,16 @@
 
 <h1></h1>
 
+<p align="center">
 Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br>
 The prompt shows information you need while you're working, while staying sleek and out of the way.
+<p>
 
 <p align="center">
-  <img alt="Starship with Hyper and One Dark" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif">
+  <br>
+  <img alt="Starship with iTerm2 and the Snazzy theme" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" width="80%">
+  <br>
+  <br>
 </p>
 
 ## 🍬 Features
@@ -57,6 +65,7 @@ The prompt shows information you need while you're working, while staying sleek 
 - Current Python version (`🐍`)
 - Current Go version (`🐹`)
 - Current Nim version (`👑`)
+- Nix-shell environment detection
 - Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
@@ -112,6 +121,12 @@ The prompt shows information you need while you're working, while staying sleek 
 
    ```sh
    $ nix-env --install starship
+   ```
+
+   #### Termux
+
+   ```sh
+   $ pkg install starship
    ```
 
 1. Add the init script to your shell's config file:
@@ -192,6 +207,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/andytom"><img src="https://avatars1.githubusercontent.com/u/108836?v=4" width="100px;" alt="Thomas O'Donnell"/><br /><sub><b>Thomas O'Donnell</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=andytom" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=andytom" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/bbigras"><img src="https://avatars1.githubusercontent.com/u/24027?v=4" width="100px;" alt="Bruno Bigras"/><br /><sub><b>Bruno Bigras</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=bbigras" title="Code">💻</a></td>
+    <td align="center"><a href="https://neilkistner.com/"><img src="https://avatars1.githubusercontent.com/u/186971?v=4" width="100px;" alt="Neil Kistner"/><br /><sub><b>Neil Kistner</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=wyze" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=wyze" title="Tests">⚠️</a></td>
   </tr>
 </table>
 

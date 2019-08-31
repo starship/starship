@@ -60,11 +60,11 @@ fn extract_poetry_version(file_contents: &str) -> Option<String> {
 
 fn get_package_version() -> Option<String> {
     if let Ok(cargo_toml) = utils::read_file("Cargo.toml") {
-        return extract_cargo_version(&cargo_toml);
+        extract_cargo_version(&cargo_toml)
     } else if let Ok(package_json) = utils::read_file("package.json") {
-        return extract_package_version(&package_json);
+        extract_package_version(&package_json)
     } else if let Ok(poetry_toml) = utils::read_file("pyproject.toml") {
-        return extract_poetry_version(&poetry_toml);
+        extract_poetry_version(&poetry_toml)
     } else {
         None
     }

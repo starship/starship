@@ -23,9 +23,11 @@ const DEFAULT_PROMPT_ORDER: &[&str] = &[
     "python",
     "golang",
     "nim",
+    "nix_shell",
     "cmd_duration",
     "line_break",
     "jobs",
+    #[cfg(feature = "battery")]
     "battery",
     "character",
 ];
