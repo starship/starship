@@ -1,3 +1,4 @@
+use crate::opt::SubCommand;
 use ansi_term::Color;
 
 use super::{Context, Module};
@@ -13,13 +14,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     module.set_style(module_color);
 
-    let arguments = &context.arguments;
-    let num_of_jobs = arguments
-        .value_of("jobs")
-        .unwrap_or("0")
-        .trim()
-        .parse::<i64>()
-        .ok()?;
+    let num_of_jobs = match &context.arguments.sub_command {
+        SubCommand::Init {
+            print_full_init: _,
+            shell: _,
+        } => unreachable!(),
+        SubCommand::Prompt { common_opts } => common_opts.jobs,
+        SubCommand::Module {
+            common_opts,
+            list: _,
+            shell: _,
+        } => common_opts.jobs,
+    };
+
     if num_of_jobs == 0 {
         return None;
     }

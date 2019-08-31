@@ -3,6 +3,7 @@ mod config;
 pub mod context;
 pub mod module;
 pub mod modules;
+mod opt;
 pub mod print;
 pub mod segment;
 mod utils;

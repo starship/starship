@@ -1,3 +1,4 @@
+use crate::opt::SubCommand;
 use ansi_term::Color;
 
 use super::{Context, Module};
@@ -9,12 +10,18 @@ use super::{Context, Module};
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("cmd_duration")?;
 
-    let arguments = &context.arguments;
-    let elapsed = arguments
-        .value_of("cmd_duration")
-        .unwrap_or("invalid_time")
-        .parse::<u64>()
-        .ok()?;
+    let elapsed = match &context.arguments.sub_command {
+        SubCommand::Init {
+            print_full_init: _,
+            shell: _,
+        } => unreachable!(),
+        SubCommand::Prompt { common_opts } => common_opts.cmd_duration?,
+        SubCommand::Module {
+            common_opts,
+            list: _,
+            shell: _,
+        } => common_opts.cmd_duration?,
+    };
 
     let signed_config_min = module.config_value_i64("min_time").unwrap_or(2);
 

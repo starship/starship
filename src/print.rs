@@ -1,4 +1,4 @@
-use clap::ArgMatches;
+use crate::opt::Opt;
 use rayon::prelude::*;
 use std::io::{self, Write};
 
@@ -31,7 +31,7 @@ const DEFAULT_PROMPT_ORDER: &[&str] = &[
     "character",
 ];
 
-pub fn prompt(args: ArgMatches) {
+pub fn prompt(args: Opt) {
     let context = Context::new(args);
     let config = &context.config;
 
@@ -95,7 +95,7 @@ pub fn prompt(args: ArgMatches) {
     printable.for_each(|module| write!(handle, "{}", module).unwrap());
 }
 
-pub fn module(module_name: &str, args: ArgMatches) {
+pub fn module(module_name: &str, args: Opt) {
     let context = Context::new(args);
 
     // If the module returns `None`, print an empty string

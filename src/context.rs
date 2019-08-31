@@ -1,7 +1,7 @@
 use crate::config::Config;
 use crate::module::Module;
+use crate::opt::{Opt, SubCommand};
 
-use clap::ArgMatches;
 use git2::Repository;
 use std::env;
 use std::ffi::OsStr;
@@ -11,7 +11,7 @@ use std::path::PathBuf;
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering
 /// of the prompt.
-pub struct Context<'a> {
+pub struct Context {
     /// The deserialized configuration map from the user's `starship.toml` file.
     pub config: toml::value::Table,
 
@@ -22,7 +22,7 @@ pub struct Context<'a> {
     pub dir_files: Vec<PathBuf>,
 
     /// The map of arguments that were passed when starship was called.
-    pub arguments: ArgMatches<'a>,
+    pub arguments: Opt,
 
     /// If `current_dir` is a git repository or is contained within one,
     /// this is the path to the root of that repo.
@@ -33,21 +33,34 @@ pub struct Context<'a> {
     pub branch_name: Option<String>,
 }
 
-impl<'a> Context<'a> {
+impl Context {
     /// Identify the current working directory and create an instance of Context
     /// for it.
-    pub fn new(arguments: ArgMatches) -> Context {
+    pub fn new(arguments: Opt) -> Context {
         // Retrieve the "path" flag. If unavailable, use the current directory instead.
-        let path = arguments
-            .value_of("path")
-            .map(From::from)
-            .unwrap_or_else(|| env::current_dir().expect("Unable to identify current directory."));
+
+        let path = match &arguments.sub_command {
+            SubCommand::Init {
+                print_full_init: _,
+                shell: _,
+            } => env::current_dir().expect("Unable to identify current directory."),
+            SubCommand::Prompt { common_opts } => common_opts.path.clone().unwrap_or_else(|| {
+                env::current_dir().expect("Unable to identify current directory.")
+            }),
+            SubCommand::Module {
+                common_opts,
+                list: _,
+                shell: _,
+            } => common_opts.path.clone().unwrap_or_else(|| {
+                env::current_dir().expect("Unable to identify current directory.")
+            }),
+        };
 
         Context::new_with_dir(arguments, path)
     }
 
     /// Create a new instance of Context for the provided directory
-    pub fn new_with_dir<T>(arguments: ArgMatches, dir: T) -> Context
+    pub fn new_with_dir<T>(arguments: Opt, dir: T) -> Context
     where
         T: Into<PathBuf>,
     {
@@ -113,7 +126,7 @@ impl<'a> Context<'a> {
 
     // returns a new ScanDir struct with reference to current dir_files of context
     // see ScanDir for methods
-    pub fn new_scan_dir(&'a self) -> ScanDir<'a> {
+    pub fn new_scan_dir(&self) -> ScanDir {
         ScanDir {
             dir_files: self.dir_files.as_ref(),
             files: &[],

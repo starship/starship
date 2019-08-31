@@ -1,4 +1,5 @@
 use super::{Context, Module};
+use crate::opt::SubCommand;
 use ansi_term::Color;
 
 /// Creates a module for the prompt character
@@ -30,16 +31,35 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let use_symbol = module
         .config_value_bool("use_symbol_for_status")
         .unwrap_or(false);
-    let exit_success = arguments.value_of("status_code").unwrap_or("0") == "0";
+
     let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
-    let keymap = arguments.value_of("keymap").unwrap_or("viins");
+    let exit_success;
+    let keymap;
+    match &arguments.sub_command {
+        SubCommand::Init {
+            print_full_init: _,
+            shell: _,
+        } => unreachable!(),
+        SubCommand::Prompt { common_opts } => {
+            exit_success = common_opts.status == "0";
+            keymap = &common_opts.keymap;
+        }
+        SubCommand::Module {
+            common_opts,
+            list: _,
+            shell: _,
+        } => {
+            exit_success = common_opts.status == "0";
+            keymap = &common_opts.keymap;
+        }
+    };
 
     // Match shell "keymap" names to normalized vi modes
     // NOTE: in vi mode, fish reports normal mode as "default".
     // Unfortunately, this is also the name of the non-vi default mode.
     // We do some environment detection in src/init.rs to translate.
     // The result: in non-vi fish, keymap is always reported as "insert"
-    let mode = match (shell.as_str(), keymap) {
+    let mode = match (shell.as_str(), keymap.as_str()) {
         ("fish", "default") | ("zsh", "vicmd") => ShellEditMode::Normal,
         _ => ASSUMED_MODE,
     };
