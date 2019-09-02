@@ -3,6 +3,7 @@ mod cmd_duration;
 mod common;
 mod configuration;
 mod directory;
+mod git_branch;
 mod git_status;
 mod golang;
 mod jobs;
