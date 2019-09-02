@@ -122,13 +122,13 @@ can do this in two ways: by changing color (red/green) or by changing its shape
 
 ### Options
 
-| Variable                | Default | Description                                                                       |
-| ----------------------- | ------- | --------------------------------------------------------------------------------- |
-| `symbol`                | `"❯"`   | The symbol used before the text input in the prompt.                              |
-| `error_symbol`          | `"✖"`   | The symbol used before text input if the previous command failed.                 |
-| `use_symbol_for_status` | `false` | Indicate error status by changing the symbol.                                     |
-| `vicmd_symbol`          | `"❮"`   | The symbol used before the text input in the prompt if zsh is in vim normal mode. |
-| `disabled`              | `false` | Disables the `character` module.                                                  |
+| Variable                | Default | Description                                                                         |
+| ----------------------- | ------- | ----------------------------------------------------------------------------------- |
+| `symbol`                | `"❯"`   | The symbol used before the text input in the prompt.                                |
+| `error_symbol`          | `"✖"`   | The symbol used before text input if the previous command failed.                   |
+| `use_symbol_for_status` | `false` | Indicate error status by changing the symbol.                                       |
+| `vicmd_symbol`          | `"❮"`   | The symbol used before the text input in the prompt if shell is in vim normal mode. |
+| `disabled`              | `false` | Disables the `character` module.                                                    |
 
 ### Example
 
@@ -211,10 +211,12 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Options
 
-| Variable   | Default | Description                                                                   |
-| ---------- | ------- | ----------------------------------------------------------------------------- |
-| `symbol`   | `" "`  | The symbol used before the branch name of the repo in your current directory. |
-| `disabled` | `false` | Disables the `git_branch` module.                                             |
+| Variable            | Default    | Description                                                                           |
+| ------------------- | ---------- | ------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`     | The symbol used before the branch name of the repo in your current directory.         |
+| `disabled`          | `false`    | Disables the `git_branch` module.                                                     |
+| `truncation_length` | `2^63 - 1` | Truncates a git branch to X graphemes                                                 |
+| `truncation_symbol` | `"…"`      | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
 
 ### Example
 
@@ -223,6 +225,8 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 [git_branch]
 symbol = "🌱 "
+truncation_length = "4"
+truncation_symbol = ""
 ```
 
 ## Git Status
@@ -241,7 +245,7 @@ current directory.
 | `untracked`  | `"?"`   | There are untracked files in the working directory.     |
 | `stashed`    | `"$"`   | A stash exists for the local repository.                |
 | `modified`   | `"!"`   | There are file modifications in the working directory.  |
-| `added`      | `"+"`   | A new file has been added to the staging area.          |
+| `staged`     | `"+"`   | A new file has been added to the staging area.          |
 | `renamed`    | `"»"`   | A renamed file has been added to the staging area.      |
 | `deleted`    | `"✘"`   | A file's deletion has been added to the staging area.   |
 | `disabled`   | `false` | Disables the `git_status` module.                       |
@@ -259,7 +263,7 @@ diverged = "😵"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"
-added = "➕"
+staged = "➕"
 renamed = "👅"
 deleted = "🗑"
 ```
