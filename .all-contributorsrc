@@ -182,7 +182,8 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/24027?v=4",
       "profile": "https://github.com/bbigras",
       "contributions": [
-        "code"
+        "code",
+        "review"
       ]
     },
     {
@@ -190,6 +191,16 @@
       "name": "Neil Kistner",
       "avatar_url": "https://avatars1.githubusercontent.com/u/186971?v=4",
       "profile": "https://neilkistner.com/",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "qstrahl",
+      "name": "Quinn Strahl",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2235277?v=4",
+      "profile": "http://ca.linkedin.com/in/qstrahl",
       "contributions": [
         "code",
         "test"

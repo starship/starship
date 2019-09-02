@@ -245,7 +245,7 @@ current directory.
 | `untracked`  | `"?"`   | There are untracked files in the working directory.     |
 | `stashed`    | `"$"`   | A stash exists for the local repository.                |
 | `modified`   | `"!"`   | There are file modifications in the working directory.  |
-| `added`      | `"+"`   | A new file has been added to the staging area.          |
+| `staged`     | `"+"`   | A new file has been added to the staging area.          |
 | `renamed`    | `"»"`   | A renamed file has been added to the staging area.      |
 | `deleted`    | `"✘"`   | A file's deletion has been added to the staging area.   |
 | `disabled`   | `false` | Disables the `git_status` module.                       |
@@ -263,7 +263,7 @@ diverged = "😵"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"
-added = "➕"
+staged = "➕"
 renamed = "👅"
 deleted = "🗑"
 ```
