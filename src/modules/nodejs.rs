@@ -15,6 +15,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .set_files(&["package.json"])
         .set_extensions(&["js"])
         .set_folders(&["node_modules"])
+        .set_ignores(&["~/.mongorc.js", "~/.hyper.js"])
         .scan();
 
     if !is_js_project {

@@ -116,9 +116,10 @@ impl<'a> Context<'a> {
     pub fn new_scan_dir(&'a self) -> ScanDir<'a> {
         ScanDir {
             dir_files: self.dir_files.as_ref(),
+            extensions: &[],
             files: &[],
             folders: &[],
-            extensions: &[],
+            ignores: &[],
         }
     }
 }
@@ -127,9 +128,10 @@ impl<'a> Context<'a> {
 // of X language, criteria can be set via the builder pattern
 pub struct ScanDir<'a> {
     dir_files: &'a Vec<PathBuf>, // Replace with reference
+    extensions: &'a [&'a str],
     files: &'a [&'a str],
     folders: &'a [&'a str],
-    extensions: &'a [&'a str],
+    ignores: &'a [&'a str],
 }
 
 impl<'a> ScanDir<'a> {
@@ -148,16 +150,30 @@ impl<'a> ScanDir<'a> {
         self
     }
 
+    pub const fn set_ignores(mut self, ignores: &'a [&'a str]) -> Self {
+        self.ignores = ignores;
+        self
+    }
+
     /// based on the current Pathbuf check to see
     /// if any of this criteria match or exist and returning a boolean
     pub fn scan(&mut self) -> bool {
-        self.dir_files.iter().any(|path| {
-            if path.is_dir() {
-                path_has_name(path, self.folders)
-            } else {
-                path_has_name(path, self.files) || has_extension(path, self.extensions)
-            }
-        })
+        let ignores: Vec<_> = self
+            .ignores
+            .iter()
+            .map(|path| Context::expand_tilde(PathBuf::from(path)))
+            .collect();
+
+        self.dir_files
+            .iter()
+            .filter(|path| !ignores.contains(path))
+            .any(|path| {
+                if path.is_dir() {
+                    path_has_name(path, self.folders)
+                } else {
+                    path_has_name(path, self.files) || has_extension(path, self.extensions)
+                }
+            })
     }
 }
 
@@ -236,9 +252,10 @@ mod tests {
     fn test_criteria_scan_fails() {
         let mut failing_criteria = ScanDir {
             dir_files: &vec![PathBuf::new()],
-            files: &["package.json"],
             extensions: &["js"],
+            files: &["package.json"],
             folders: &["node_modules"],
+            ignores: &[],
         };
 
         // fails if buffer does not match any criteria
@@ -246,9 +263,10 @@ mod tests {
 
         let mut failing_dir_criteria = ScanDir {
             dir_files: &vec![PathBuf::from("/package.js/dog.go")],
-            files: &["package.json"],
             extensions: &["js"],
+            files: &["package.json"],
             folders: &["node_modules"],
+            ignores: &[],
         };
 
         // fails when passed a pathbuf dir matches extension path
@@ -259,9 +277,10 @@ mod tests {
     fn test_criteria_scan_passes() {
         let mut passing_criteria = ScanDir {
             dir_files: &vec![PathBuf::from("package.json")],
-            files: &["package.json"],
             extensions: &["js"],
+            files: &["package.json"],
             folders: &["node_modules"],
+            ignores: &[],
         };
 
         assert_eq!(passing_criteria.scan(), true);
