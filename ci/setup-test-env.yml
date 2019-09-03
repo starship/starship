@@ -16,6 +16,16 @@ steps:
     inputs:
       versionSpec: "2.5.5"
     displayName: "Install a fixed version of Ruby"
+
+  # use choosenim to install Nim for integration tests
+  # Install Nim
+  - script: |
+      echo "##vso[task.setvariable variable=PATH;]$HOME/.nimble/bin:$PATH"
+      echo "##vso[task.setvariable variable=CHOOSENIM_CHOOSE_VERSION;]0.20.0"
+      echo "##vso[task.setvariable variable=CHOOSENIM_NO_ANALYTICS;]1"
+  - script: |
+      curl https://nim-lang.org/choosenim/init.sh -sSf > choosenim_init.sh
+      sh choosenim_init.sh -y
     
   # We are using pyenv to install Python for integration tests
   # Install Python
@@ -31,12 +41,3 @@ steps:
       pyenv global $PYTHON_VERSION
     displayName: "Install a fixed version of Python"
 
-  # use choosenim to install Nim for integration tests
-  # Install Nim
-  - script: |
-      echo "##vso[task.setvariable variable=PATH;]$HOME/.nimble/bin:$PATH"
-      echo "##vso[task.setvariable variable=CHOOSENIM_CHOOSE_VERSION;]0.20.0"
-      echo "##vso[task.setvariable variable=CHOOSENIM_NO_ANALYTICS;]1"
-  - script: |
-      curl https://nim-lang.org/choosenim/init.sh -sSf > choosenim_init.sh
-      sh choosenim_init.sh -y
