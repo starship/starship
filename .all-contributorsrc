@@ -205,6 +205,25 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "tivervac",
+      "name": "Titouan Vervack",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/3389524?v=4",
+      "profile": "https://github.com/tivervac",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "oblitum",
+      "name": "Francisco Lopes",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1269815?v=4",
+      "profile": "http://nosubstance.me",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
