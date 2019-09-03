@@ -191,6 +191,33 @@ fn shows_untracked_file() -> io::Result<()> {
 
 #[test]
 #[ignore]
+fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
+    let fixture_repo_dir = create_fixture_repo()?;
+    let repo_dir = common::new_tempdir()?.path().join("rocket");
+
+    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+
+    File::create(repo_dir.join("license"))?;
+
+    Command::new("git")
+        .args(&["config", "status.showUntrackedFiles", "no"])
+        .current_dir(repo_dir.as_path())
+        .output()?;
+
+    let output = common::render_module("git_status")
+        .arg("--path")
+        .arg(repo_dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    let expected = "";
+
+    assert_eq!(expected, actual);
+
+    Ok(())
+}
+
+#[test]
+#[ignore]
 fn shows_stashed() -> io::Result<()> {
     let fixture_repo_dir = create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
@@ -240,7 +267,7 @@ fn shows_modified() -> io::Result<()> {
 
 #[test]
 #[ignore]
-fn shows_added_file() -> io::Result<()> {
+fn shows_staged_file() -> io::Result<()> {
     let fixture_repo_dir = create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
 
