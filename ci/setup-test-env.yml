@@ -23,9 +23,11 @@ steps:
       echo "##vso[task.setvariable variable=PATH;]$HOME/.nimble/bin:$PATH"
       echo "##vso[task.setvariable variable=CHOOSENIM_CHOOSE_VERSION;]0.20.0"
       echo "##vso[task.setvariable variable=CHOOSENIM_NO_ANALYTICS;]1"
+    displayName: "Setup env for Nim installation"
   - script: |
       curl https://nim-lang.org/choosenim/init.sh -sSf > choosenim_init.sh
-      sh choosenim_init.sh -y
+      sh choosenim_init.sh -y 2>/dev/null
+    displayName: "Install a fixed version of Nim"
     
   # We are using pyenv to install Python for integration tests
   # Install Python
