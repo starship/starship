@@ -215,6 +215,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "oblitum",
+      "name": "Francisco Lopes",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1269815?v=4",
+      "profile": "http://nosubstance.me",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
