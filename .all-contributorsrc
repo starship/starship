@@ -205,6 +205,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "tivervac",
+      "name": "Titouan Vervack",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/3389524?v=4",
+      "profile": "https://github.com/tivervac",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
