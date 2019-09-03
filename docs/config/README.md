@@ -236,19 +236,20 @@ current directory.
 
 ### Options
 
-| Variable     | Default | Description                                             |
-| ------------ | ------- | ------------------------------------------------------- |
-| `conflicted` | `"="`   | This branch has merge conflicts.                        |
-| `ahead`      | `"⇡"`   | This branch is ahead of the branch being tracked.       |
-| `behind`     | `"⇣"`   | This branch is behind of the branch being tracked.      |
-| `diverged`   | `"⇕"`   | This branch has diverged from the branch being tracked. |
-| `untracked`  | `"?"`   | There are untracked files in the working directory.     |
-| `stashed`    | `"$"`   | A stash exists for the local repository.                |
-| `modified`   | `"!"`   | There are file modifications in the working directory.  |
-| `staged`     | `"+"`   | A new file has been added to the staging area.          |
-| `renamed`    | `"»"`   | A renamed file has been added to the staging area.      |
-| `deleted`    | `"✘"`   | A file's deletion has been added to the staging area.   |
-| `disabled`   | `false` | Disables the `git_status` module.                       |
+| Variable              | Default | Description                                             |
+| --------------------- | ------- | ------------------------------------------------------- |
+| `conflicted`          | `"="`   | This branch has merge conflicts.                        |
+| `ahead`               | `"⇡"`   | This branch is ahead of the branch being tracked.       |
+| `behind`              | `"⇣"`   | This branch is behind of the branch being tracked.      |
+| `diverged`            | `"⇕"`   | This branch has diverged from the branch being tracked. |
+| `untracked`           | `"?"`   | There are untracked files in the working directory.     |
+| `stashed`             | `"$"`   | A stash exists for the local repository.                |
+| `modified`            | `"!"`   | There are file modifications in the working directory.  |
+| `staged`              | `"+"`   | A new file has been added to the staging area.          |
+| `renamed`             | `"»"`   | A renamed file has been added to the staging area.      |
+| `deleted`             | `"✘"`   | A file's deletion has been added to the staging area.   |
+| `show_diverged_count` | `false` | Show ahead/behind count when branch is diverged.        |
+| `disabled`            | `false` | Disables the `git_status` module.                       |
 
 ### Example
 

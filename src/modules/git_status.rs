@@ -36,6 +36,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let module_style = Color::Red.bold();
     let mut module = context.new_module("git_status")?;
+
+    let show_diverged_count = module
+        .config_value_bool("show_diverged_count")
+        .unwrap_or(false);
+
     module.get_prefix().set_value("[").set_style(module_style);
     module.get_suffix().set_value("] ").set_style(module_style);
     module.set_style(module_style);
@@ -71,8 +76,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
         if ahead > 0 && behind > 0 {
             module.new_segment("diverged", GIT_STATUS_DIVERGED);
-            module.new_segment("ahead", ahead_segment.as_str());
-            module.new_segment("behind", behind_segment.as_str());
+
+            if show_diverged_count {
+                module.new_segment("ahead", ahead_segment.as_str());
+                module.new_segment("behind", behind_segment.as_str());
+            }
         } else if ahead > 0 {
             module.new_segment("ahead", ahead_segment.as_str());
         } else if behind > 0 {

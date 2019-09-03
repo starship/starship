@@ -5,7 +5,7 @@ use std::fs::{self, File};
 use std::io;
 use std::process::Command;
 
-use crate::common;
+use crate::common::{self, TestCommand};
 
 fn create_fixture_repo() -> io::Result<std::path::PathBuf> {
     let fixture_repo_dir = common::new_tempdir()?.path().join("fixture");
@@ -92,6 +92,45 @@ fn shows_ahead_count() -> io::Result<()> {
 
 #[test]
 #[ignore]
+fn shows_diverged_with_count() -> io::Result<()> {
+    let fixture_repo_dir = create_fixture_repo()?;
+    let repo_dir = common::new_tempdir()?.path().join("rocket");
+
+    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+
+    Command::new("git")
+        .args(&["reset", "--hard", "HEAD^"])
+        .current_dir(repo_dir.as_path())
+        .output()?;
+
+    fs::write(repo_dir.join("Cargo.toml"), " ")?;
+
+    Command::new("git")
+        .args(&["commit", "-am", "Update readme"])
+        .current_dir(repo_dir.as_path())
+        .output()?;
+
+    let output = common::render_module("git_status")
+        .use_config(toml::toml! {
+            [git_status]
+            show_diverged_count = true
+        })
+        .arg("--path")
+        .arg(repo_dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    let expected = Color::Red
+        .bold()
+        .paint(format!("[{}] ", "⇕⇡1⇣1"))
+        .to_string();
+
+    assert_eq!(expected, actual);
+
+    Ok(())
+}
+
+#[test]
+#[ignore]
 fn shows_diverged() -> io::Result<()> {
     let fixture_repo_dir = create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
@@ -115,10 +154,7 @@ fn shows_diverged() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red
-        .bold()
-        .paint(format!("[{}] ", "⇕⇡1⇣1"))
-        .to_string();
+    let expected = Color::Red.bold().paint(format!("[{}] ", "⇕")).to_string();
 
     assert_eq!(expected, actual);
 
