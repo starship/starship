@@ -44,34 +44,18 @@ pub fn new_tempdir() -> io::Result<tempfile::TempDir> {
     tempfile::tempdir_in("/tmp")
 }
 
-/// Helper function to run a `git config` command
-fn run_git_config_command(args: Vec<&str>) -> io::Result<process::Output> {
-    Ok(Command::new("git")
-        .arg("config")
-        .args(args.as_slice())
-        .output()?)
-}
-
-/// Helper function to see if a `git config <value>` command is set
-fn git_config_exists(key: &str) -> io::Result<bool> {
-    let output = run_git_config_command(vec![key])?;
-    let result = String::from_utf8(output.stdout).unwrap();
-
-    Ok(!result.is_empty())
-}
-
 /// Create a repo from the fixture to be used in git module tests
 pub fn create_fixture_repo() -> io::Result<std::path::PathBuf> {
     let fixture_repo_dir = new_tempdir()?.path().join("fixture");
     let fixture = env::current_dir()?.join("tests/fixtures/rocket.bundle");
 
-    if !git_config_exists("user.email")? {
-        run_git_config_command(vec!["--global", "user.email", "starship@example.com"])?;
-    }
+    Command::new("git")
+        .args(&["config", "--global", "user.email", "starship@example.com"])
+        .output()?;
 
-    if !git_config_exists("user.name")? {
-        run_git_config_command(vec!["--global", "user.name", "starship"])?;
-    }
+    Command::new("git")
+        .args(&["config", "--global", "user.name", "starship"])
+        .output()?;
 
     Command::new("git")
         .args(&[
