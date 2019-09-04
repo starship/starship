@@ -1,4 +1,6 @@
 <!--- Provide a general summary of your changes in the Title above -->
+<!--- To help with semantic versioning the PR title should start with one of the conventional commit types. -->
+<!--- The conventional commit types for Semantic PR are: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert -->
 
 #### Description
 <!--- Describe your changes in detail -->
