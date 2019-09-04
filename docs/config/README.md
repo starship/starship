@@ -277,7 +277,7 @@ The `hostname` module shows the system hostname.
 
 | Variable     | Default | Description                                             |
 | ------------ | ------- | ------------------------------------------------------- |
-| `ssh_only`   | `true`  | Only show hostname when connected to a ssh session.     |
+| `ssh_only`   | `true`  | Only show hostname when connected to an SSH session.     |
 | `prefix`     | `""`    | Prefix to display immediately before the hostname.      |
 | `suffix`     | `""`    | Suffix to display immediately after the hostname.       |
 | `disabled`   | `false` | Disables the `hostname` module.                         |
