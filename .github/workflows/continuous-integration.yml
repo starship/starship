@@ -7,8 +7,10 @@ jobs:
     steps:
       - uses: hecrj/setup-rust-action@master
       - uses: actions/checkout@master
-      - run: rustup component add rustfmt
-      - run: cargo fmt --all -- --check
+      - name: Install rustfmt
+        run: rustup component add rustfmt
+      - name: Run rustfmt
+        run: cargo fmt --all -- --check
 
   # Run the `clippy` linting tool
   clippy:
@@ -16,8 +18,10 @@ jobs:
     steps:
       - uses: hecrj/setup-rust-action@master
       - uses: actions/checkout@master
-      - run: rustup component add clippy
-      - run: cargo clippy --all-targets --all-features -- -D clippy::all
+      - name: Install clippy
+        run: rustup component add clippy
+      - name: Run clippy
+        run: cargo clippy --all-targets --all-features -- -D clippy::all
 
   # Ensure that the project could be successfully compiled
   cargo_check:
@@ -65,7 +69,8 @@ jobs:
 
       # Run the ignored tests that expect the above setup
       - uses: actions/checkout@master
-      - run: cargo test  -- -Z unstable-options --include-ignored
+      - name: Run all tests
+        run: cargo test  -- -Z unstable-options --include-ignored
 
   # Run the tests in the Docker image
   docker_test:
@@ -73,6 +78,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - run: docker pull starshipcommand/starship-test
-      - run: chmod -R a+w .
-      - run: ./integration_test
+      - name: Run all tests in Docker
+        run: |
+          docker pull starshipcommand/starship-test
+          chmod -R a+w .
+          ./integration_test

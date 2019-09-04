@@ -4,10 +4,7 @@ trigger:
 
 stages:
   - stage: Release
-    dependsOn:
-    - Checks
-    - Test
-    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
+    condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
     jobs:
     # Release binary on GitHub
     - template: ci/github-release.yml
