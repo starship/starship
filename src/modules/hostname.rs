@@ -13,10 +13,6 @@ use std::ffi::OsString;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("hostname")?;
 
-    if module.config_value_bool("disabled").unwrap_or(false) {
-        return None;
-    }
-
     let ssh_connection = env::var("SSH_CONNECTION").ok();
     if module.config_value_bool("ssh_only").unwrap_or(true) && ssh_connection.is_none() {
         return None;
@@ -24,15 +20,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let os_hostname: OsString = gethostname::gethostname();
 
-    let (host, style) = match os_hostname.into_string() {
-        Ok(host) => (host, Color::Green.bold().dimmed()),
-        Err(_) => (String::from("<invalid UTF>"), Color::Red.bold()),
+    let host = match os_hostname.into_string() {
+        Ok(host) => host,
+        Err(bad) => {
+            log::debug!("hostname is not valid UTF!\n{:?}", bad);
+            return None;
+        }
     };
 
     let prefix = module.config_value_str("prefix").unwrap_or("").to_owned();
     let suffix = module.config_value_str("suffix").unwrap_or("").to_owned();
 
-    module.set_style(style);
+    module.set_style(Color::Green.bold().dimmed());
     module.new_segment("hostname", &format!("{}{}{}", prefix, host, suffix));
     module.get_prefix().set_value("on ");
 
