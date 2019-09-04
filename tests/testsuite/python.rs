@@ -4,7 +4,6 @@ use std::io;
 use ansi_term::Color;
 
 use crate::common;
-use crate::common::TestCommand;
 
 #[test]
 #[ignore]

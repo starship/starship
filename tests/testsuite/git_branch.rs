@@ -90,13 +90,13 @@ fn test_truncate_length(
     expected_name: &str,
     truncation_symbol: &str,
 ) -> io::Result<()> {
-    return test_truncate_length_with_config(
+    test_truncate_length_with_config(
         branch_name,
         truncate_length,
         expected_name,
         truncation_symbol,
         "",
-    );
+    )
 }
 
 fn test_truncate_length_with_config(
