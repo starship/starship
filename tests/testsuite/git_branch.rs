@@ -106,7 +106,7 @@ fn test_truncate_length_with_config(
     truncation_symbol: &str,
     config_options: &str,
 ) -> io::Result<()> {
-    let fixture_repo_dir = create_fixture_repo()?;
+    let fixture_repo_dir = common::create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
 
     Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
@@ -140,29 +140,4 @@ fn test_truncate_length_with_config(
     );
     assert_eq!(expected, actual);
     Ok(())
-}
-
-fn create_fixture_repo() -> io::Result<std::path::PathBuf> {
-    let fixture_repo_dir = common::new_tempdir()?.path().join("fixture");
-    let fixture = env::current_dir()?.join("tests/fixtures/rocket.bundle");
-
-    Command::new("git")
-        .args(&["config", "--global", "user.email", "starship@example.com"])
-        .output()?;
-
-    Command::new("git")
-        .args(&["config", "--global", "user.name", "starship"])
-        .output()?;
-
-    Command::new("git")
-        .args(&[
-            "clone",
-            "-b",
-            "master",
-            &fixture.to_str().unwrap(),
-            fixture_repo_dir.to_str().unwrap(),
-        ])
-        .output()?;
-
-    Ok(fixture_repo_dir)
 }
