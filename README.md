@@ -7,9 +7,6 @@
   />
 </p>
 <p align="center">
-  <a href="https://repology.org/project/starship/versions">
-    <img src="https://repology.org/badge/tiny-repos/starship.svg" alt="Packaging status">
-  </a>
   <a href="https://crates.io/crates/starship">
     <img src="https://badgen.net/crates/v/starship" alt="Crates.io version" />
   </a>
@@ -19,9 +16,12 @@
       alt="Azure Pipelines Build Status"
     />
   </a>
+    <a href="https://repology.org/project/starship/versions">
+    <img src="https://repology.org/badge/tiny-repos/starship.svg" alt="Packaging status">
+  </a><br>
   <a href="#contributors">
     <img
-      src="https://badgen.net/badge/all%20contributors/14/orange"
+      src="https://badgen.net/badge/all%20contributors/20/orange"
       alt="All Contributors"
     />
   </a>
@@ -222,6 +222,16 @@ This project follows the [all-contributors](https://github.com/all-contributors/
     <br>
     <img width="100" src="media/icon.png" alt="Starship rocket icon">
 </p>
+
+## 💭 Inspired By
+
+Please check out these previous works that helped inspire the creation of starship. 🙏
+
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
+
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme written in JavaScript.
+
+- **[reujab/silver](https://github.com/reujab/silver)** - A cross-shell customizable powerline-like prompt with icons.
 
 ## 📝 License
 
