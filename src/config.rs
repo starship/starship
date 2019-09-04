@@ -4,7 +4,7 @@ use std::env;
 use dirs::home_dir;
 use toml::value::Table;
 
-use ansi_term;
+use ansi_term::{Style,Color};
 
 pub trait Config {
     fn initialize() -> Table;
@@ -162,18 +162,32 @@ impl Config for Table {
     }
 
     /// Get a text key and attempt to interpret it into an ANSI style.
-    fn get_as_colorstyle(&self ,key: &str) -> Option<ansi_term::Style> {
+    fn get_as_colorstyle(&self, key: &str) -> Option<ansi_term::Style> {
         let styletoks = self.get_as_str(key)?.split_whitespace();
         let mut style = ansi_term::Style::new();
+
         for tok in styletoks {
-            match tok.to_lowercase() {
-                // TODO: Match tokens per-color and set up a special hex parser
-                
+            style = match tok.to_lowercase().as_str() {
+                "bold" => style.bold(),
+                "underline" => style.underline(),
+                "black" => style.fg(Color::Black),
+                "red" => style.fg(Color::Red),
+                "green" => style.fg(Color::Green),
+                "yellow" => style.fg(Color::Yellow),
+                "blue" => style.fg(Color::Blue),
+                "purple" => style.fg(Color::Purple),
+                "cyan" => style.fg(Color::Cyan),
+                "white" => style.fg(Color::White),
+                other => parse_hex_or_bg(&mut style, other),
             }
         }
 
 
-        style
+        Some(style)
+    }
+
+    fn parse_hex_or_bg(style: &mut Style, token: &str) -> Style {
+        //TODO: Implement fully
     }
 }
 
