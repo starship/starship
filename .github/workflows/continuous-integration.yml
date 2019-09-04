@@ -3,7 +3,7 @@ on: push
 jobs:
   # Run the `rustfmt` code formatter
   rustfmt:
-    name: Rustfmt (Formatter)
+    name: Rustfmt [Formatter]
     runs-on: ubuntu-latest
     steps:
       - uses: hecrj/setup-rust-action@master
@@ -15,7 +15,7 @@ jobs:
 
   # Run the `clippy` linting tool
   clippy:
-    name: Clippy (Linter)
+    name: Clippy [Linter]
     runs-on: ubuntu-latest
     steps:
       - uses: hecrj/setup-rust-action@master
@@ -37,7 +37,7 @@ jobs:
   # Run tests on Linux, and macOS
   # On both Rust stable and Rust nightly
   test:
-    name: Test
+    name: Test Suite
     needs: [rustfmt, clippy, cargo_check]
     runs-on: ${{ matrix.os }}
     strategy:
