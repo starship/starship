@@ -69,6 +69,7 @@ The `default_prompt_order` configuration option is used to define the order in w
 ```
 default_prompt_order = [
     "username",
+    "hostname",
     "directory",
     "git_branch",
     "git_status",
@@ -266,6 +267,31 @@ modified = "📝"
 staged = "➕"
 renamed = "👅"
 deleted = "🗑"
+```
+
+## Hostname
+
+The `hostname` module shows the system hostname.
+
+### Options
+
+| Variable     | Default | Description                                             |
+| ------------ | ------- | ------------------------------------------------------- |
+| `ssh_only`   | `true`  | Only show hostname when connected to an SSH session.    |
+| `prefix`     | `""`    | Prefix to display immediately before the hostname.      |
+| `suffix`     | `""`    | Suffix to display immediately after the hostname.       |
+| `disabled`   | `false` | Disables the `hostname` module.                         |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+prefix = "⟪"
+suffix = "⟫"
+disabled = false
 ```
 
 ## Golang
