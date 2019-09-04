@@ -6,7 +6,7 @@ mod directory;
 mod git_branch;
 mod git_status;
 mod golang;
-mod hostname;
+mod host;
 mod jobs;
 mod line_break;
 mod modules;

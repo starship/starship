@@ -8,10 +8,10 @@ use crate::common::TestCommand;
 
 #[test]
 fn ssh_only_false() -> io::Result<()> {
-    let output = common::render_module("hostname")
+    let output = common::render_module("host")
         .env_clear()
         .use_config(toml::toml! {
-            [hostname]
+            [host]
             ssh_only = false
         })
         .output()?;
@@ -23,10 +23,10 @@ fn ssh_only_false() -> io::Result<()> {
 
 #[test]
 fn no_ssh() -> io::Result<()> {
-    let output = common::render_module("hostname")
+    let output = common::render_module("host")
         .env_clear()
         .use_config(toml::toml! {
-            [hostname]
+            [host]
             ssh_only = true
         })
         .output()?;
@@ -37,10 +37,10 @@ fn no_ssh() -> io::Result<()> {
 
 #[test]
 fn ssh() -> io::Result<()> {
-    let output = common::render_module("hostname")
+    let output = common::render_module("host")
         .env_clear()
         .use_config(toml::toml! {
-            [hostname]
+            [host]
             ssh_only = true
         })
         .env("SSH_CONNECTION", "something")
@@ -53,10 +53,10 @@ fn ssh() -> io::Result<()> {
 
 #[test]
 fn disabled() -> io::Result<()> {
-    let output = common::render_module("hostname")
+    let output = common::render_module("host")
         .env_clear()
         .use_config(toml::toml! {
-            [hostname]
+            [host]
             disabled = true
         })
         .env("SSH_CONNECTION", "something")
@@ -68,10 +68,10 @@ fn disabled() -> io::Result<()> {
 
 #[test]
 fn prefix() -> io::Result<()> {
-    let output = common::render_module("hostname")
+    let output = common::render_module("host")
         .env_clear()
         .use_config(toml::toml! {
-            [hostname]
+            [host]
             ssh_only = false
             prefix = "<"
         })
@@ -84,10 +84,10 @@ fn prefix() -> io::Result<()> {
 
 #[test]
 fn suffix() -> io::Result<()> {
-    let output = common::render_module("hostname")
+    let output = common::render_module("host")
         .env_clear()
         .use_config(toml::toml! {
-            [hostname]
+            [host]
             ssh_only = false
             suffix = ">"
         })
