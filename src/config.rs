@@ -4,6 +4,8 @@ use std::env;
 use dirs::home_dir;
 use toml::value::Table;
 
+use ansi_term;
+
 pub trait Config {
     fn initialize() -> Table;
     fn config_from_file() -> Option<Table>;
@@ -14,6 +16,7 @@ pub trait Config {
     fn get_as_str(&self, key: &str) -> Option<&str>;
     fn get_as_i64(&self, key: &str) -> Option<i64>;
     fn get_as_array(&self, key: &str) -> Option<&Vec<toml::value::Value>>;
+    fn get_as_colorstyle(&self, key: &str) -> Option<ansi_term::Style>; // Should this be reference-to-style?
 
     // Internal implementation for accessors
     fn get_config(&self, key: &str) -> Option<&toml::value::Value>;
@@ -156,6 +159,21 @@ impl Config for Table {
             );
         }
         array_value
+    }
+
+    /// Get a text key and attempt to interpret it into an ANSI style.
+    fn get_as_colorstyle(&self ,key: &str) -> Option<ansi_term::Style> {
+        let styletoks = self.get_as_str(key)?.split_whitespace();
+        let mut style = ansi_term::Style::new();
+        for tok in styletoks {
+            match tok.to_lowercase() {
+                // TODO: Match tokens per-color and set up a special hex parser
+                
+            }
+        }
+
+
+        style
     }
 }
 
