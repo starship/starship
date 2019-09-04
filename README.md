@@ -219,11 +219,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
-<p align="center">
-    <br>
-    <img width="100" src="media/icon.png" alt="Starship rocket icon">
-</p>
-
 ## 💭 Inspired By
 
 Please check out these previous works that helped inspire the creation of starship. 🙏
@@ -233,6 +228,11 @@ Please check out these previous works that helped inspire the creation of starsh
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme written in JavaScript.
 
 - **[reujab/silver](https://github.com/reujab/silver)** - A cross-shell customizable powerline-like prompt with icons.
+
+<p align="center">
+    <br>
+    <img width="100" src="media/icon.png" alt="Starship rocket icon">
+</p>
 
 ## 📝 License
 
