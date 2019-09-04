@@ -3,6 +3,7 @@ on: push
 jobs:
   # Run the `rustfmt` code formatter
   rustfmt:
+    name: Rustfmt (Formatter)
     runs-on: ubuntu-latest
     steps:
       - uses: hecrj/setup-rust-action@master
@@ -14,6 +15,7 @@ jobs:
 
   # Run the `clippy` linting tool
   clippy:
+    name: Clippy (Linter)
     runs-on: ubuntu-latest
     steps:
       - uses: hecrj/setup-rust-action@master
@@ -25,6 +27,7 @@ jobs:
 
   # Ensure that the project could be successfully compiled
   cargo_check:
+    name: Compile
     runs-on: ubuntu-latest
     steps:
       - uses: hecrj/setup-rust-action@master
@@ -34,6 +37,7 @@ jobs:
   # Run tests on Linux, and macOS
   # On both Rust stable and Rust nightly
   test:
+    name: Test
     needs: [rustfmt, clippy, cargo_check]
     runs-on: ${{ matrix.os }}
     strategy:
@@ -74,6 +78,7 @@ jobs:
 
   # Run the tests in the Docker image
   docker_test:
+    name: Test in Docker
     needs: [rustfmt, clippy, cargo_check]
     runs-on: ubuntu-latest
     steps:
