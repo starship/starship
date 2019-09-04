@@ -13,7 +13,7 @@ use crate::modules;
 // prompt heading of config docs needs to be updated according to changes made here.
 const DEFAULT_PROMPT_ORDER: &[&str] = &[
     "username",
-    "host",
+    "hostname",
     "directory",
     "git_branch",
     "git_status",

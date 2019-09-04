@@ -69,7 +69,7 @@ The `default_prompt_order` configuration option is used to define the order in w
 ```
 default_prompt_order = [
     "username",
-    "host",
+    "hostname",
     "directory",
     "git_branch",
     "git_status",
@@ -269,9 +269,9 @@ renamed = "👅"
 deleted = "🗑"
 ```
 
-## Host
+## Hostname
 
-The `host` module shows the system hostname.
+The `hostname` module shows the system hostname.
 
 ### Options
 
@@ -280,14 +280,14 @@ The `host` module shows the system hostname.
 | `ssh_only`   | `true`  | Only show hostname when connected to a ssh session.     |
 | `prefix`     | `""`    | Prefix to display immediately before the hostname.      |
 | `suffix`     | `""`    | Suffix to display immediately after the hostname.       |
-| `disabled`   | `false` | Disables the `host` module.                             |
+| `disabled`   | `false` | Disables the `hostname` module.                         |
 
 ### Example
 
 ```toml
 # ~/.config/starship.toml
 
-[host]
+[hostname]
 ssh_only = false
 prefix = "⟪"
 suffix = "⟫"

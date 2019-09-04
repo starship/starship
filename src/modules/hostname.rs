@@ -8,10 +8,10 @@ use std::ffi::OsString;
 /// Creates a module with the system hostname
 ///
 /// Will display the hostname if all of the following criteria are met:
-///     - host.disabled is absent or false
-///     - host.ssh_only is false OR the user is currently connected as an SSH session (`$SSH_CONNECTION`)
+///     - hostname.disabled is absent or false
+///     - hostname.ssh_only is false OR the user is currently connected as an SSH session (`$SSH_CONNECTION`)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module("host")?;
+    let mut module = context.new_module("hostname")?;
 
     if module.config_value_bool("disabled").unwrap_or(false) {
         return None;
@@ -33,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let suffix = module.config_value_str("suffix").unwrap_or("").to_owned();
 
     module.set_style(style);
-    module.new_segment("host", &format!("{}{}{}", prefix, host, suffix));
+    module.new_segment("hostname", &format!("{}{}{}", prefix, host, suffix));
     module.get_prefix().set_value("on ");
 
     Some(module)
