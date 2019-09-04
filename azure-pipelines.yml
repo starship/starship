@@ -1,54 +1,8 @@
 trigger:
-  branches:
-    include: ["*"]
   tags:
     include: ["*"]
 
 stages:
-  - stage: Checks
-    jobs:
-      # Check formatting
-      - template: ci/rustfmt.yml
-        parameters:
-          name: rustfmt
-          displayName: Check formatting
-
-      # Run linter
-      - template: ci/cargo-clippy.yml
-        parameters:
-          name: cargo_clippy
-          displayName: Run linter
-
-      # Cargo check
-      - template: ci/cargo-check.yml
-        parameters:
-          name: cargo_check
-          displayName: Cargo check
-          
-  - stage: Test
-    dependsOn: Checks
-    jobs:
-    # Test stable
-    - template: ci/test.yml
-      parameters:
-        name: cargo_test_stable
-        displayName: Cargo test
-        cross: true # Test on Windows and macOS
-
-    # Test nightly
-    - template: ci/test.yml
-      parameters:
-        name: cargo_test_nightly
-        displayName: Cargo test
-        rust_version: nightly
-
-    # Test docker
-    # Runs integration tests as a starship developer would run them locally
-    - template: ci/test-docker.yml
-      parameters:
-        name: test_docker
-        displayName: Docker test
-
   - stage: Release
     dependsOn:
     - Checks
