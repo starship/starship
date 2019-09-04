@@ -7,35 +7,10 @@ use std::process::Command;
 
 use crate::common;
 
-fn create_fixture_repo() -> io::Result<std::path::PathBuf> {
-    let fixture_repo_dir = common::new_tempdir()?.path().join("fixture");
-    let fixture = env::current_dir()?.join("tests/fixtures/rocket.bundle");
-
-    Command::new("git")
-        .args(&["config", "--global", "user.email", "starship@example.com"])
-        .output()?;
-
-    Command::new("git")
-        .args(&["config", "--global", "user.name", "starship"])
-        .output()?;
-
-    Command::new("git")
-        .args(&[
-            "clone",
-            "-b",
-            "master",
-            &fixture.to_str().unwrap(),
-            fixture_repo_dir.to_str().unwrap(),
-        ])
-        .output()?;
-
-    Ok(fixture_repo_dir)
-}
-
 #[test]
 #[ignore]
 fn shows_behind_count() -> io::Result<()> {
-    let fixture_repo_dir = create_fixture_repo()?;
+    let fixture_repo_dir = common::create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
 
     Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
@@ -63,7 +38,7 @@ fn shows_behind_count() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_ahead_count() -> io::Result<()> {
-    let fixture_repo_dir = create_fixture_repo()?;
+    let fixture_repo_dir = common::create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
 
     Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
@@ -93,7 +68,7 @@ fn shows_ahead_count() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_diverged() -> io::Result<()> {
-    let fixture_repo_dir = create_fixture_repo()?;
+    let fixture_repo_dir = common::create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
 
     Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
@@ -128,7 +103,7 @@ fn shows_diverged() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_conflicted() -> io::Result<()> {
-    let fixture_repo_dir = create_fixture_repo()?;
+    let fixture_repo_dir = common::create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
 
     Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
@@ -170,7 +145,7 @@ fn shows_conflicted() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_untracked_file() -> io::Result<()> {
-    let fixture_repo_dir = create_fixture_repo()?;
+    let fixture_repo_dir = common::create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
 
     Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
@@ -192,7 +167,7 @@ fn shows_untracked_file() -> io::Result<()> {
 #[test]
 #[ignore]
 fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
-    let fixture_repo_dir = create_fixture_repo()?;
+    let fixture_repo_dir = common::create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
 
     Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
@@ -219,7 +194,7 @@ fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_stashed() -> io::Result<()> {
-    let fixture_repo_dir = create_fixture_repo()?;
+    let fixture_repo_dir = common::create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
 
     Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
@@ -246,7 +221,7 @@ fn shows_stashed() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_modified() -> io::Result<()> {
-    let fixture_repo_dir = create_fixture_repo()?;
+    let fixture_repo_dir = common::create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
 
     Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
@@ -268,7 +243,7 @@ fn shows_modified() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_staged_file() -> io::Result<()> {
-    let fixture_repo_dir = create_fixture_repo()?;
+    let fixture_repo_dir = common::create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
 
     Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
@@ -295,7 +270,7 @@ fn shows_staged_file() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_renamed_file() -> io::Result<()> {
-    let fixture_repo_dir = create_fixture_repo()?;
+    let fixture_repo_dir = common::create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
 
     Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
@@ -325,7 +300,7 @@ fn shows_renamed_file() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_deleted_file() -> io::Result<()> {
-    let fixture_repo_dir = create_fixture_repo()?;
+    let fixture_repo_dir = common::create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
 
     Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
