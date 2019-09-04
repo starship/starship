@@ -78,8 +78,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: Run all tests in Docker
-        run: |
-          docker pull starshipcommand/starship-test
-          chmod -R a+w .
-          ./integration_test
+      - name: Pull the pre-built Docker image
+        run: docker pull starshipcommand/starship-test
+      - name: Fix file permissions
+        run: chmod -R a+w .
+      - name: Build the Docker image
+        run: docker build -f tests/Dockerfile --tag starshipcommand/starship-test --cache-from starshipcommand/starship-test .
+      - name: Run tests in Docker
+        run: docker run --rm -v $(pwd):/src/starship starshipcommand/starship-test
