@@ -4,8 +4,6 @@ use std::process::Command;
 
 use ansi_term::Color;
 
-use crate::config::Config;
-
 use super::{Context, Module};
 
 /// Creates a module with the current Python version

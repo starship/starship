@@ -224,6 +224,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "ahouts",
+      "name": "Andrew Houts",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/16907671?v=4",
+      "profile": "https://github.com/ahouts",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
