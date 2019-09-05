@@ -235,6 +235,17 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "nickwb",
+      "name": "Nick Young",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/594211?v=4",
+      "profile": "https://github.com/nickwb",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
