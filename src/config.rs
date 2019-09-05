@@ -4,7 +4,7 @@ use std::env;
 use dirs::home_dir;
 use toml::value::Table;
 
-use ansi_term::{Style,Color};
+use ansi_term::{Color, Style};
 
 pub trait Config {
     fn initialize() -> Table;
@@ -20,6 +20,56 @@ pub trait Config {
 
     // Internal implementation for accessors
     fn get_config(&self, key: &str) -> Option<&toml::value::Value>;
+}
+
+fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
+    Some(Style::new())
+}
+
+/// Parse a string that represents a color setting, returning None if this fails
+/// There are three valid color formats:
+///  - #RRGGBB      (a hash followed by an RGB hex)
+///  - u8           (a number from 0-255, representing an ANSI color)
+///  - colstring    (one of the 8 predefined color strings)
+fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
+    // Parse RGB hex values
+    if color_string.starts_with('#') {
+        log::trace!(
+            "Attempting to read hexadecimal color string: {}",
+            color_string
+        );
+        let r: u8 = u8::from_str_radix(&color_string[1..3], 16).ok()?;
+        let g: u8 = u8::from_str_radix(&color_string[3..5], 16).ok()?;
+        let b: u8 = u8::from_str_radix(&color_string[5..7], 16).ok()?;
+        log::trace!("Read RGB color string: {},{},{}", r, g, b);
+        return Some(Color::RGB(r, g, b));
+    }
+
+    // Parse a u8 (ansi color)
+    if let Result::Ok(ansi_color_num) = color_string.parse::<u8>() {
+        log::trace!("Read ANSI color string: {}", ansi_color_num);
+        return Some(Color::Fixed(ansi_color_num));
+    }
+
+    let predefined_color = match color_string.to_lowercase().as_str() {
+        "black" => Some(Color::Black),
+        "red" => Some(Color::Red),
+        "green" => Some(Color::Green),
+        "yellow" => Some(Color::Yellow),
+        "blue" => Some(Color::Blue),
+        "purple" => Some(Color::Purple),
+        "cyan" => Some(Color::Cyan),
+        "white" => Some(Color::White),
+        _ => None,
+    };
+
+    if predefined_color.is_some() {
+        log::trace!("Read predefined color: {}", color_string);
+        return predefined_color;
+    }
+
+    // All attempts to parse have failed
+    None
 }
 
 impl Config for Table {
@@ -166,28 +216,7 @@ impl Config for Table {
         let styletoks = self.get_as_str(key)?.split_whitespace();
         let mut style = ansi_term::Style::new();
 
-        for tok in styletoks {
-            style = match tok.to_lowercase().as_str() {
-                "bold" => style.bold(),
-                "underline" => style.underline(),
-                "black" => style.fg(Color::Black),
-                "red" => style.fg(Color::Red),
-                "green" => style.fg(Color::Green),
-                "yellow" => style.fg(Color::Yellow),
-                "blue" => style.fg(Color::Blue),
-                "purple" => style.fg(Color::Purple),
-                "cyan" => style.fg(Color::Cyan),
-                "white" => style.fg(Color::White),
-                other => parse_hex_or_bg(&mut style, other),
-            }
-        }
-
-
         Some(style)
-    }
-
-    fn parse_hex_or_bg(style: &mut Style, token: &str) -> Style {
-        //TODO: Implement fully
     }
 }
 
