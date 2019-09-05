@@ -31,7 +31,7 @@ fn folder_with_go_file() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.10"));
+    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -48,7 +48,7 @@ fn folder_with_go_mod() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.10"));
+    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -65,7 +65,7 @@ fn folder_with_go_sum() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.10"));
+    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -83,7 +83,7 @@ fn folder_with_godeps() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.10"));
+    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -100,7 +100,7 @@ fn folder_with_glide_yaml() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.10"));
+    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -117,7 +117,7 @@ fn folder_with_gopkg_yml() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.10"));
+    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -134,7 +134,7 @@ fn folder_with_gopkg_lock() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.10"));
+    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1"));
     assert_eq!(expected, actual);
     Ok(())
 }

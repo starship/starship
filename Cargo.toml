@@ -26,7 +26,7 @@ default = ["battery"]
 
 [dependencies]
 clap = "2.33.0"
-ansi_term = "0.12.0"
+ansi_term = "0.12.1"
 dirs = "2.0.2"
 git2 = "0.10.0"
 toml = "0.5.3"
@@ -40,6 +40,7 @@ battery = { version = "0.7.4", optional = true }
 lazy_static = "1.4.0"
 path-slash = "0.1.1"
 unicode-segmentation = "1.3.0"
+gethostname = "0.2.0"
 
 [dev-dependencies]
 tempfile = "3.1.0"

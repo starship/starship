@@ -32,12 +32,40 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
 
     let setup_stub = match shell_basename {
         Some("bash") => {
-            /* This *should* look like the zsh function, but bash 3.2 (MacOS default shell)
-            does not support using source with process substitution, so we use this
-            workaround from https://stackoverflow.com/a/32596626 */
+            /*
+             * The standard bash bootstrap is:
+             *      `source <(starship init bash --print-full-init)`
+             *
+             * Unfortunately there is an issue with bash 3.2 (the MacOS
+             * default) which prevents this from working. It does not support
+             * `source` with process substitution.
+             *
+             * There are more details here: https://stackoverflow.com/a/32596626
+             *
+             * The workaround for MacOS is to use the `/dev/stdin` trick you
+             * see below. However, there are some systems with emulated POSIX
+             * environments which do not support `/dev/stdin`. For example,
+             * `Git Bash` within `Git for Windows and `Termux` on Android.
+             *
+             * Fortunately, these apps ship with recent-ish versions of bash.
+             * Git Bash is currently shipping bash 4.4 and Termux is shipping
+             * bash 5.0.
+             *
+             * Some testing has suggested that bash 4.0 is also incompatible
+             * with the standard bootstrap, whereas bash 4.1 appears to be
+             * consistently compatible.
+             *
+             * The upshot of all of this, is that we will use the standard
+             * bootstrap whenever the bash version is 4.1 or higher. Otherwise,
+             * we fall back to the `/dev/stdin` solution.
+             *
+             * More background can be found in these pull requests:
+             * https://github.com/starship/starship/pull/241
+             * https://github.com/starship/starship/pull/278
+             */
             let script = {
                 format!(
-                    r#"if [ "${{BASH_VERSINFO[0]}}" -gt 4 ]
+                    r#"if [ "${{BASH_VERSINFO[0]}}" -gt 4 ] || ([ "${{BASH_VERSINFO[0]}}" -eq 4 ] && [ "${{BASH_VERSINFO[1]}}" -ge 1 ])
 then
 source <("{}" init bash --print-full-init)
 else
@@ -208,19 +236,24 @@ ever drawn once (for the prompt immediately after it is run).
 */
 
 const ZSH_INIT: &str = r##"
+zmodload zsh/parameter  # Needed to access jobstates variable for NUM_JOBS
+
 # Will be run before every prompt draw
 starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
     STATUS=$?
 
+    # Use length of jobstates array as number of jobs. Expansion fails inside
+    # quotes so we set it here and then use the value later on.
+    NUM_JOBS=$#jobstates  
     # Compute cmd_duration, if we have a time to consume
     if [[ ! -z "${STARSHIP_START_TIME+1}" ]]; then
         STARSHIP_END_TIME="$(date +%s)"
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        PROMPT="$(## STARSHIP ## prompt --status=$STATUS --cmd-duration=$STARSHIP_DURATION --jobs="$(jobs | wc -l)")"
+        PROMPT="$(## STARSHIP ## prompt --status=$STATUS --cmd-duration=$STARSHIP_DURATION --jobs="$NUM_JOBS")"
         unset STARSHIP_START_TIME
     else
-        PROMPT="$(## STARSHIP ## prompt --status=$STATUS --jobs="$(jobs | wc -l)")"
+        PROMPT="$(## STARSHIP ## prompt --status=$STATUS --jobs="$NUM_JOBS")"
     fi
 }
 starship_preexec(){

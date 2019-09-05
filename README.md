@@ -7,9 +7,6 @@
   />
 </p>
 <p align="center">
-  <a href="https://repology.org/project/starship/versions">
-    <img src="https://repology.org/badge/tiny-repos/starship.svg" alt="Packaging status">
-  </a>
   <a href="https://crates.io/crates/starship">
     <img src="https://badgen.net/crates/v/starship" alt="Crates.io version" />
   </a>
@@ -19,9 +16,12 @@
       alt="Azure Pipelines Build Status"
     />
   </a>
+    <a href="https://repology.org/project/starship/versions">
+    <img src="https://repology.org/badge/tiny-repos/starship.svg" alt="Packaging status">
+  </a><br>
   <a href="#contributors">
     <img
-      src="https://badgen.net/badge/all%20contributors/14/orange"
+      src="https://badgen.net/badge/all%20contributors/20/orange"
       alt="All Contributors"
     />
   </a>
@@ -211,12 +211,23 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://ca.linkedin.com/in/qstrahl"><img src="https://avatars3.githubusercontent.com/u/2235277?v=4" width="100px;" alt="Quinn Strahl"/><br /><sub><b>Quinn Strahl</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=qstrahl" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=qstrahl" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://github.com/tivervac"><img src="https://avatars2.githubusercontent.com/u/3389524?v=4" width="100px;" alt="Titouan Vervack"/><br /><sub><b>Titouan Vervack</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=tivervac" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=tivervac" title="Tests">⚠️</a></td>
     <td align="center"><a href="http://nosubstance.me"><img src="https://avatars1.githubusercontent.com/u/1269815?v=4" width="100px;" alt="Francisco Lopes"/><br /><sub><b>Francisco Lopes</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=oblitum" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/ahouts"><img src="https://avatars1.githubusercontent.com/u/16907671?v=4" width="100px;" alt="Andrew Houts"/><br /><sub><b>Andrew Houts</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=ahouts" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=ahouts" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=ahouts" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+## 💭 Inspired By
+
+Please check out these previous works that helped inspire the creation of starship. 🙏
+
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
+
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme written in JavaScript.
+
+- **[reujab/silver](https://github.com/reujab/silver)** - A cross-shell customizable powerline-like prompt with icons.
 
 <p align="center">
     <br>
