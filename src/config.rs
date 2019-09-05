@@ -22,15 +22,53 @@ pub trait Config {
     fn get_config(&self, key: &str) -> Option<&toml::value::Value>;
 }
 
+/** Parse a style string which represents an ansi style. Valid tokens in the style
+ string include the following:
+ - 'fg'    (specifies that the next color read should be a foreground color)
+ - 'bg'    (specifies that the next color read should be a background color)
+ - 'underline'
+ - 'bold'
+ - a color string  (see the parse_color_string doc for valid color strings)
+*/
 fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
-    Some(Style::new())
+    let tokens = style_string.split_whitespace();
+    let mut style = ansi_term::Style::new();
+
+    // Should we color the foreground? If not, assume we color the background.
+    let mut col_fg = true;
+
+    for token in tokens {
+        match token.to_lowercase().as_str() {
+            "underline" => style = style.underline(),
+            "bold" => style = style.bold(),
+            "fg" => col_fg = true,
+            "bg" => col_fg = false,
+
+            // Try to see if this token parses as a valid color string
+            color_string => {
+                // Match found: set either fg or bg color
+                if let Some(ansi_color) = parse_color_string(color_string){
+                    if col_fg { style = style.fg(ansi_color); }
+                    else { style = style.on(ansi_color);}
+                } else {
+                    // Match failed: skip this token and log it
+                    log::debug!("Could not parse token in color string: {}", token)
+                }
+            }
+        }
+    }
+
+    // Currently, this function always returns Some(x), but I'd like to reserve
+    // the ability to return None in the event that parsing becomes more complex
+    Some(style)
 }
 
-/// Parse a string that represents a color setting, returning None if this fails
-/// There are three valid color formats:
-///  - #RRGGBB      (a hash followed by an RGB hex)
-///  - u8           (a number from 0-255, representing an ANSI color)
-///  - colstring    (one of the 8 predefined color strings)
+/** Parse a string that represents a color setting, returning None if this fails
+ There are three valid color formats:
+  - #RRGGBB      (a hash followed by an RGB hex)
+  - u8           (a number from 0-255, representing an ANSI color)
+  - colstring    (one of the 8 predefined color strings)
+*/
 fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
     // Parse RGB hex values
     if color_string.starts_with('#') {
