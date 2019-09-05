@@ -72,6 +72,7 @@ default_prompt_order = [
     "hostname",
     "directory",
     "git_branch",
+    "git_state",
     "git_status",
     "package",
     "nodejs",
@@ -79,6 +80,7 @@ default_prompt_order = [
     "rust",
     "python",
     "golang",
+    "nix_shell",
     "cmd_duration",
     "line_break",
     "jobs",
@@ -230,6 +232,37 @@ truncation_length = "4"
 truncation_symbol = ""
 ```
 
+## Git State
+
+The `git_state` module will show in directories which are part of a git
+repository, and where there is an operation in progress, such as: _REBASING_,
+_BISECTING_, etc. If there is progress information (e.g., REBASING 3/10),
+that information will be shown too.
+
+### Options
+
+| Variable           | Default            | Description                                                                                                      |
+| ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
+| `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
+| `revert`           | `"REVERTING"`      | The text displayed when a `revert` is in progress.                                                               |
+| `cherry_pick`      | `"CHERRY-PICKING"` | The text displayed when a `cherry-pick` is in progress.                                                          |
+| `bisect`           | `"BISECTING"`      | The text displayed when a `bisect` is in progress.                                                               |
+| `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
+| `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
+| `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
+| `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[git_state]
+progress_divider = " of "
+cherry_pick = "🍒 PICKING"
+```
+
 ## Git Status
 
 The `git_status` module shows symbols representing the state of the repo in your
@@ -276,12 +309,12 @@ The `hostname` module shows the system hostname.
 
 ### Options
 
-| Variable     | Default | Description                                             |
-| ------------ | ------- | ------------------------------------------------------- |
-| `ssh_only`   | `true`  | Only show hostname when connected to an SSH session.    |
-| `prefix`     | `""`    | Prefix to display immediately before the hostname.      |
-| `suffix`     | `""`    | Suffix to display immediately after the hostname.       |
-| `disabled`   | `false` | Disables the `hostname` module.                         |
+| Variable   | Default | Description                                          |
+| ---------- | ------- | ---------------------------------------------------- |
+| `ssh_only` | `true`  | Only show hostname when connected to an SSH session. |
+| `prefix`   | `""`    | Prefix to display immediately before the hostname.   |
+| `suffix`   | `""`    | Suffix to display immediately after the hostname.    |
+| `disabled` | `false` | Disables the `hostname` module.                      |
 
 ### Example
 
@@ -378,10 +411,10 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default | Description                 |
-| ---------- | ------- | --------------------------- |
-| `symbol`    | `"💎 "`  | The symbol used before displaying the version of Ruby. |
-| `disabled` | `false` | Disables the `ruby` module. |
+| Variable   | Default | Description                                            |
+| ---------- | ------- | ------------------------------------------------------ |
+| `symbol`   | `"💎 "` | The symbol used before displaying the version of Ruby. |
+| `disabled` | `false` | Disables the `ruby` module.                            |
 
 ### Example
 

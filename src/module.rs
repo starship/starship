@@ -12,6 +12,7 @@ pub const ALL_MODULES: &[&str] = &[
     "cmd_duration",
     "directory",
     "git_branch",
+    "git_state",
     "git_status",
     "golang",
     "hostname",

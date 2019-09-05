@@ -3,6 +3,7 @@ mod character;
 mod cmd_duration;
 mod directory;
 mod git_branch;
+mod git_state;
 mod git_status;
 mod golang;
 mod hostname;
@@ -34,6 +35,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "line_break" => line_break::module(context),
         "package" => package::module(context),
         "git_branch" => git_branch::module(context),
+        "git_state" => git_state::module(context),
         "git_status" => git_status::module(context),
         "username" => username::module(context),
         #[cfg(feature = "battery")]

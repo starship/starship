@@ -2,7 +2,7 @@ use lazy_static::lazy_static;
 use std::io::prelude::*;
 use std::path::{Path, PathBuf};
 use std::process::Command;
-use std::{env, io, process};
+use std::{env, fs, io, process};
 
 lazy_static! {
     static ref MANIFEST_DIR: &'static Path = Path::new(env!("CARGO_MANIFEST_DIR"));
@@ -25,7 +25,8 @@ pub fn render_prompt() -> process::Command {
 
 /// Render a specific starship module by name
 pub fn render_module(module_name: &str) -> process::Command {
-    let mut command = process::Command::new("./target/debug/starship");
+    let binary = fs::canonicalize("./target/debug/starship").unwrap();
+    let mut command = process::Command::new(binary);
 
     command
         .arg("module")
