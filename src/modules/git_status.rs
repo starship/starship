@@ -36,6 +36,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let module_style = Color::Red.bold();
     let mut module = context.new_module("git_status")?;
+
+    let show_sync_count = module.config_value_bool("show_sync_count").unwrap_or(false);
+
     module.get_prefix().set_value("[").set_style(module_style);
     module.get_suffix().set_value("] ").set_style(module_style);
     module.set_style(module_style);
@@ -66,17 +69,37 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Add the ahead/behind segment
     if let Ok((ahead, behind)) = ahead_behind {
-        let ahead_segment = format!("{}{}", GIT_STATUS_AHEAD, ahead);
-        let behind_segment = format!("{}{}", GIT_STATUS_BEHIND, behind);
+        let add_ahead = |m: &mut Module<'a>| {
+            m.new_segment("ahead", GIT_STATUS_AHEAD);
+
+            if show_sync_count {
+                m.new_segment("ahead_count", &ahead.to_string());
+            }
+        };
+
+        let add_behind = |m: &mut Module<'a>| {
+            m.new_segment("behind", GIT_STATUS_BEHIND);
+
+            if show_sync_count {
+                m.new_segment("behind_count", &behind.to_string());
+            }
+        };
 
         if ahead > 0 && behind > 0 {
             module.new_segment("diverged", GIT_STATUS_DIVERGED);
-            module.new_segment("ahead", ahead_segment.as_str());
-            module.new_segment("behind", behind_segment.as_str());
-        } else if ahead > 0 {
-            module.new_segment("ahead", ahead_segment.as_str());
-        } else if behind > 0 {
-            module.new_segment("behind", behind_segment.as_str());
+
+            if show_sync_count {
+                add_ahead(&mut module);
+                add_behind(&mut module);
+            }
+        }
+
+        if ahead > 0 && behind == 0 {
+            add_ahead(&mut module);
+        }
+
+        if behind > 0 && ahead == 0 {
+            add_behind(&mut module);
         }
     }
 
