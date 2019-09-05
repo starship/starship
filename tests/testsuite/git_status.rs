@@ -9,7 +9,7 @@ use crate::common::{self, TestCommand};
 
 #[test]
 #[ignore]
-fn shows_behind_count() -> io::Result<()> {
+fn shows_behind() -> io::Result<()> {
     let fixture_repo_dir = common::create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
 
@@ -21,6 +21,35 @@ fn shows_behind_count() -> io::Result<()> {
         .output()?;
 
     let output = common::render_module("git_status")
+        .arg("--path")
+        .arg(repo_dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    let expected = Color::Red.bold().paint(format!("[{}] ", "⇣")).to_string();
+
+    assert_eq!(expected, actual);
+
+    Ok(())
+}
+
+#[test]
+#[ignore]
+fn shows_behind_with_count() -> io::Result<()> {
+    let fixture_repo_dir = common::create_fixture_repo()?;
+    let repo_dir = common::new_tempdir()?.path().join("rocket");
+
+    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+
+    Command::new("git")
+        .args(&["reset", "--hard", "HEAD^"])
+        .current_dir(repo_dir.as_path())
+        .output()?;
+
+    let output = common::render_module("git_status")
+        .use_config(toml::toml! {
+            [git_status]
+            show_sync_count = true
+        })
         .arg("--path")
         .arg(repo_dir)
         .output()?;
@@ -37,7 +66,7 @@ fn shows_behind_count() -> io::Result<()> {
 
 #[test]
 #[ignore]
-fn shows_ahead_count() -> io::Result<()> {
+fn shows_ahead() -> io::Result<()> {
     let fixture_repo_dir = common::create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
 
@@ -55,10 +84,7 @@ fn shows_ahead_count() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red
-        .bold()
-        .paint(format!("[{}] ", "⇡1"))
-        .to_string();
+    let expected = Color::Red.bold().paint(format!("[{}] ", "⇡")).to_string();
 
     assert_eq!(expected, actual);
 
@@ -67,28 +93,23 @@ fn shows_ahead_count() -> io::Result<()> {
 
 #[test]
 #[ignore]
-fn shows_diverged_with_count() -> io::Result<()> {
+fn shows_ahead_with_count() -> io::Result<()> {
     let fixture_repo_dir = common::create_fixture_repo()?;
     let repo_dir = common::new_tempdir()?.path().join("rocket");
 
     Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
 
-    Command::new("git")
-        .args(&["reset", "--hard", "HEAD^"])
-        .current_dir(repo_dir.as_path())
-        .output()?;
-
-    fs::write(repo_dir.join("Cargo.toml"), " ")?;
+    File::create(repo_dir.join("readme.md"))?;
 
     Command::new("git")
         .args(&["commit", "-am", "Update readme"])
-        .current_dir(repo_dir.as_path())
+        .current_dir(&repo_dir)
         .output()?;
 
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            show_diverged_count = true
+            show_sync_count = true
         })
         .arg("--path")
         .arg(repo_dir)
@@ -96,7 +117,7 @@ fn shows_diverged_with_count() -> io::Result<()> {
     let actual = String::from_utf8(output.stdout).unwrap();
     let expected = Color::Red
         .bold()
-        .paint(format!("[{}] ", "⇕⇡1⇣1"))
+        .paint(format!("[{}] ", "⇡1"))
         .to_string();
 
     assert_eq!(expected, actual);
@@ -130,6 +151,45 @@ fn shows_diverged() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     let expected = Color::Red.bold().paint(format!("[{}] ", "⇕")).to_string();
+
+    assert_eq!(expected, actual);
+
+    Ok(())
+}
+
+#[test]
+#[ignore]
+fn shows_diverged_with_count() -> io::Result<()> {
+    let fixture_repo_dir = common::create_fixture_repo()?;
+    let repo_dir = common::new_tempdir()?.path().join("rocket");
+
+    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+
+    Command::new("git")
+        .args(&["reset", "--hard", "HEAD^"])
+        .current_dir(repo_dir.as_path())
+        .output()?;
+
+    fs::write(repo_dir.join("Cargo.toml"), " ")?;
+
+    Command::new("git")
+        .args(&["commit", "-am", "Update readme"])
+        .current_dir(repo_dir.as_path())
+        .output()?;
+
+    let output = common::render_module("git_status")
+        .use_config(toml::toml! {
+            [git_status]
+            show_sync_count = true
+        })
+        .arg("--path")
+        .arg(repo_dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    let expected = Color::Red
+        .bold()
+        .paint(format!("[{}] ", "⇕⇡1⇣1"))
+        .to_string();
 
     assert_eq!(expected, actual);
 
