@@ -251,6 +251,7 @@ that information will be shown too.
 | `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
 | `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
 | `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
+| `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
 ### Example
 
@@ -308,12 +309,12 @@ The `hostname` module shows the system hostname.
 
 ### Options
 
-| Variable     | Default | Description                                             |
-| ------------ | ------- | ------------------------------------------------------- |
-| `ssh_only`   | `true`  | Only show hostname when connected to an SSH session.    |
-| `prefix`     | `""`    | Prefix to display immediately before the hostname.      |
-| `suffix`     | `""`    | Suffix to display immediately after the hostname.       |
-| `disabled`   | `false` | Disables the `hostname` module.                         |
+| Variable   | Default | Description                                          |
+| ---------- | ------- | ---------------------------------------------------- |
+| `ssh_only` | `true`  | Only show hostname when connected to an SSH session. |
+| `prefix`   | `""`    | Prefix to display immediately before the hostname.   |
+| `suffix`   | `""`    | Suffix to display immediately after the hostname.    |
+| `disabled` | `false` | Disables the `hostname` module.                      |
 
 ### Example
 

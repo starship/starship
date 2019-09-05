@@ -9,6 +9,8 @@ use super::{Context, Module};
 /// During a git operation it will show: REBASING, BISECTING, MERGING, etc.
 /// If the progress information is available (e.g. rebasing 3/10), it will show that too.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("git_state")?;
+
     let repo_root = context.repo_root.as_ref()?;
     let mut repository = Repository::open(repo_root).ok()?;
     let state_description = get_state_description(&mut repository);
@@ -17,7 +19,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let mut module = context.new_module("git_state")?;
     module.get_prefix().set_value("(");
     module.get_suffix().set_value(") ");
     module.set_style(Color::Yellow.bold());
