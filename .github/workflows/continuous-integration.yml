@@ -1,5 +1,5 @@
 name: Continuous Integration
-on: push
+on: [push, pull_request]
 jobs:
   # Run the `rustfmt` code formatter
   rustfmt:
