@@ -16,7 +16,7 @@ pub trait Config {
     fn get_as_str(&self, key: &str) -> Option<&str>;
     fn get_as_i64(&self, key: &str) -> Option<i64>;
     fn get_as_array(&self, key: &str) -> Option<&Vec<toml::value::Value>>;
-    fn get_as_colorstyle(&self, key: &str) -> Option<ansi_term::Style>; // Should this be reference-to-style?
+    fn get_as_ansi_style(&self, key: &str) -> Option<ansi_term::Style>; // Should this be reference-to-style?
 
     // Internal implementation for accessors
     fn get_config(&self, key: &str) -> Option<&toml::value::Value>;
@@ -47,9 +47,12 @@ fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
             // Try to see if this token parses as a valid color string
             color_string => {
                 // Match found: set either fg or bg color
-                if let Some(ansi_color) = parse_color_string(color_string){
-                    if col_fg { style = style.fg(ansi_color); }
-                    else { style = style.on(ansi_color);}
+                if let Some(ansi_color) = parse_color_string(color_string) {
+                    if col_fg {
+                        style = style.fg(ansi_color);
+                    } else {
+                        style = style.on(ansi_color);
+                    }
                 } else {
                     // Match failed: skip this token and log it
                     log::debug!("Could not parse token in color string: {}", token)
@@ -250,11 +253,9 @@ impl Config for Table {
     }
 
     /// Get a text key and attempt to interpret it into an ANSI style.
-    fn get_as_colorstyle(&self, key: &str) -> Option<ansi_term::Style> {
-        let styletoks = self.get_as_str(key)?.split_whitespace();
-        let mut style = ansi_term::Style::new();
-
-        Some(style)
+    fn get_as_ansi_style(&self, key: &str) -> Option<ansi_term::Style> {
+        let style_string = self.get_as_str(key)?;
+        parse_style_string(style_string)
     }
 }
 
@@ -308,5 +309,62 @@ mod tests {
             toml::value::Value::String(String::from("82")),
         );
         assert_eq!(table.get_as_bool("string"), None);
+    }
+
+    #[test]
+    fn table_get_styles_simple() {
+        let mut table = toml::value::Table::new();
+
+        // Test for a bold underline green module (with SiLlY cApS)
+        table.insert(
+            String::from("mystyle"),
+            toml::value::Value::String(String::from("bOlD uNdErLiNe GrEeN")),
+        );
+        assert!(table.get_as_ansi_style("mystyle").unwrap().is_bold);
+        assert!(table.get_as_ansi_style("mystyle").unwrap().is_underline);
+        assert_eq!(
+            table.get_as_ansi_style("mystyle").unwrap(),
+            ansi_term::Style::new().bold().underline().fg(Color::Green)
+        );
+
+        // Test a "plain" style with no formatting
+        table.insert(
+            String::from("plainstyle"),
+            toml::value::Value::String(String::from("")),
+        );
+        assert_eq!(
+            table.get_as_ansi_style("plainstyle").unwrap(),
+            ansi_term::Style::new()
+        );
+    }
+
+    #[test]
+    fn table_get_styles_ordered(){
+        let mut table = toml::value::Table::new();
+
+        // Test a background style with inverted order (also test hex + ANSI)
+        table.insert(
+            String::from("flipstyle"),
+            toml::value::Value::String(String::from("bg underline #050505 fg 120")),
+        );
+        assert_eq!(
+            table.get_as_ansi_style("flipstyle").unwrap(),
+            Style::new()
+                .underline()
+                .fg(Color::Fixed(120))
+                .on(Color::RGB(5, 5, 5))
+        );
+
+        // Test that the last color style is always the one used
+        table.insert(
+            String::from("multistyle"),
+            toml::value::Value::String(String::from("bg 120 125 127 fg 127 122 125")),
+        );
+        assert_eq!(
+            table.get_as_ansi_style("multistyle").unwrap(),
+            Style::new()
+                .fg(Color::Fixed(125))
+                .on(Color::Fixed(127))
+        );
     }
 }
