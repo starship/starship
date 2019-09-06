@@ -1,4 +1,5 @@
 pub mod battery;
+pub mod dotnet;
 pub mod rust;
 
 use crate::config::{ModuleConfig, RootModuleConfig};
@@ -32,6 +33,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "python",
                 "golang",
                 "java",
+                "dotnet",
                 "nix_shell",
                 "memory_usage",
                 "aws",
