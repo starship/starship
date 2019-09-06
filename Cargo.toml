@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "0.14.1"
+version = "0.15.0"
 edition = "2018"
 authors = ["Matan Kushner <hello@matchai.me>"]
 homepage = "https://starship.rs"
