@@ -22,97 +22,6 @@ pub trait Config {
     fn get_config(&self, key: &str) -> Option<&toml::value::Value>;
 }
 
-/** Parse a style string which represents an ansi style. Valid tokens in the style
- string include the following:
- - 'fg'    (specifies that the next color read should be a foreground color)
- - 'bg'    (specifies that the next color read should be a background color)
- - 'underline'
- - 'bold'
- - a color string  (see the parse_color_string doc for valid color strings)
-*/
-fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
-    let tokens = style_string.split_whitespace();
-    let mut style = ansi_term::Style::new();
-
-    // Should we color the foreground? If not, assume we color the background.
-    let mut col_fg = true;
-
-    for token in tokens {
-        match token.to_lowercase().as_str() {
-            "underline" => style = style.underline(),
-            "bold" => style = style.bold(),
-            "fg" => col_fg = true,
-            "bg" => col_fg = false,
-
-            // Try to see if this token parses as a valid color string
-            color_string => {
-                // Match found: set either fg or bg color
-                if let Some(ansi_color) = parse_color_string(color_string) {
-                    if col_fg {
-                        style = style.fg(ansi_color);
-                    } else {
-                        style = style.on(ansi_color);
-                    }
-                } else {
-                    // Match failed: skip this token and log it
-                    log::debug!("Could not parse token in color string: {}", token)
-                }
-            }
-        }
-    }
-
-    // Currently, this function always returns Some(x), but I'd like to reserve
-    // the ability to return None in the event that parsing becomes more complex
-    Some(style)
-}
-
-/** Parse a string that represents a color setting, returning None if this fails
- There are three valid color formats:
-  - #RRGGBB      (a hash followed by an RGB hex)
-  - u8           (a number from 0-255, representing an ANSI color)
-  - colstring    (one of the 8 predefined color strings)
-*/
-fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
-    // Parse RGB hex values
-    if color_string.starts_with('#') {
-        log::trace!(
-            "Attempting to read hexadecimal color string: {}",
-            color_string
-        );
-        let r: u8 = u8::from_str_radix(&color_string[1..3], 16).ok()?;
-        let g: u8 = u8::from_str_radix(&color_string[3..5], 16).ok()?;
-        let b: u8 = u8::from_str_radix(&color_string[5..7], 16).ok()?;
-        log::trace!("Read RGB color string: {},{},{}", r, g, b);
-        return Some(Color::RGB(r, g, b));
-    }
-
-    // Parse a u8 (ansi color)
-    if let Result::Ok(ansi_color_num) = color_string.parse::<u8>() {
-        log::trace!("Read ANSI color string: {}", ansi_color_num);
-        return Some(Color::Fixed(ansi_color_num));
-    }
-
-    let predefined_color = match color_string.to_lowercase().as_str() {
-        "black" => Some(Color::Black),
-        "red" => Some(Color::Red),
-        "green" => Some(Color::Green),
-        "yellow" => Some(Color::Yellow),
-        "blue" => Some(Color::Blue),
-        "purple" => Some(Color::Purple),
-        "cyan" => Some(Color::Cyan),
-        "white" => Some(Color::White),
-        _ => None,
-    };
-
-    if predefined_color.is_some() {
-        log::trace!("Read predefined color: {}", color_string);
-        return predefined_color;
-    }
-
-    // All attempts to parse have failed
-    None
-}
-
 impl Config for Table {
     /// Initialize the Config struct
     fn initialize() -> Table {
@@ -257,6 +166,98 @@ impl Config for Table {
         let style_string = self.get_as_str(key)?;
         parse_style_string(style_string)
     }
+}
+
+/** Parse a style string which represents an ansi style. Valid tokens in the style
+ string include the following:
+ - 'fg'    (specifies that the next color read should be a foreground color)
+ - 'bg'    (specifies that the next color read should be a background color)
+ - 'underline'
+ - 'bold'
+ - a color string  (see the parse_color_string doc for valid color strings)
+*/
+fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
+    let tokens = style_string.split_whitespace();
+    let mut style = ansi_term::Style::new();
+
+    // Should we color the foreground? If not, assume we color the background.
+    let mut col_fg = true;
+
+    for token in tokens {
+        match token.to_lowercase().as_str() {
+            "underline" => style = style.underline(),
+            "bold" => style = style.bold(),
+            "fg" => col_fg = true,
+            "bg" => col_fg = false,
+
+            // Try to see if this token parses as a valid color string
+            color_string => {
+                // Match found: set either fg or bg color
+                if let Some(ansi_color) = parse_color_string(color_string) {
+                    if col_fg {
+                        style = style.fg(ansi_color);
+                    } else {
+                        style = style.on(ansi_color);
+                    }
+                } else {
+                    // Match failed: skip this token and log it
+                    log::debug!("Could not parse token in color string: {}", token)
+                }
+            }
+        }
+    }
+
+    // Currently, this function always returns Some(x), but I'd like to reserve
+    // the ability to return None in the event that parsing becomes more complex
+    Some(style)
+}
+
+/** Parse a string that represents a color setting, returning None if this fails
+ There are three valid color formats:
+  - #RRGGBB      (a hash followed by an RGB hex)
+  - u8           (a number from 0-255, representing an ANSI color)
+  - colstring    (one of the 8 predefined color strings)
+*/
+fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
+    // Parse RGB hex values
+    log::trace!("Parsing color_string: {}",color_string);
+    if color_string.starts_with('#') {
+        log::trace!(
+            "Attempting to read hexadecimal color string: {}",
+            color_string
+        );
+        let r: u8 = u8::from_str_radix(&color_string[1..3], 16).ok()?;
+        let g: u8 = u8::from_str_radix(&color_string[3..5], 16).ok()?;
+        let b: u8 = u8::from_str_radix(&color_string[5..7], 16).ok()?;
+        log::trace!("Read RGB color string: {},{},{}", r, g, b);
+        return Some(Color::RGB(r, g, b));
+    }
+
+    // Parse a u8 (ansi color)
+    if let Result::Ok(ansi_color_num) = color_string.parse::<u8>() {
+        log::trace!("Read ANSI color string: {}", ansi_color_num);
+        return Some(Color::Fixed(ansi_color_num));
+    }
+
+    let predefined_color = match color_string.to_lowercase().as_str() {
+        "black" => Some(Color::Black),
+        "red" => Some(Color::Red),
+        "green" => Some(Color::Green),
+        "yellow" => Some(Color::Yellow),
+        "blue" => Some(Color::Blue),
+        "purple" => Some(Color::Purple),
+        "cyan" => Some(Color::Cyan),
+        "white" => Some(Color::White),
+        _ => None,
+    };
+
+    if predefined_color.is_some() {
+        log::trace!("Read predefined color: {}", color_string);
+        return predefined_color;
+    }
+
+    // All attempts to parse have failed
+    None
 }
 
 #[cfg(test)]

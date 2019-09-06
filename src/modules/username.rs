@@ -19,7 +19,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     if user != logname || ssh_connection.is_some() || is_root(&mut module_color) {
         let mut module = context.new_module("username")?;
-        module.set_style(module_color);
+        let modstyle = module.config_value_style("style").unwrap_or(module_color);
+        module.set_style(modstyle);
         module.new_segment("username", &user?);
 
         return Some(module);
