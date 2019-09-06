@@ -99,7 +99,7 @@ The prompt shows information you need while you're working, while staying sleek 
    #### Homebrew
 
    ```sh
-   $ brew install starship
+   $ brew update && brew install starship
    ```
 
    #### Rust (v1.33 or higher)
