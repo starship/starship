@@ -252,17 +252,18 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
         return Some(Color::Fixed(ansi_color_num));
     }
 
+    // Check for any predefined color strings
+    // There are no predefined enums for bright colors, so we use Color::Fixed
     let predefined_color = match color_string.to_lowercase().as_str() {
-        "black" => Some(Color::Black),
-        "red" => Some(Color::Red),
-        "green" => Some(Color::Green),
-        "yellow" => Some(Color::Yellow),
-        "blue" => Some(Color::Blue),
-        "purple" => Some(Color::Purple),
-        "cyan" => Some(Color::Cyan),
-        "white" => Some(Color::White),
-        // There are no predefined enums for bright colors, so we use Color::Fixed
-        "bright-black" => Some(Color::Fixed(8)),   // Protip: "Bright black" is dark grey
+        "black" => Some(Color::Fixed(0)),
+        "red" => Some(Color::Fixed(1)),
+        "green" => Some(Color::Fixed(2)),
+        "yellow" => Some(Color::Fixed(3)),
+        "blue" => Some(Color::Fixed(4)),
+        "purple" => Some(Color::Fixed(5)),
+        "cyan" => Some(Color::Fixed(6)),
+        "white" => Some(Color::Fixed(7)),
+        "bright-black" => Some(Color::Fixed(8)), // "bright-black" is dark grey
         "bright-red" => Some(Color::Fixed(9)),
         "bright-green" => Some(Color::Fixed(10)),
         "bright-yellow" => Some(Color::Fixed(11)),
