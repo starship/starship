@@ -48,15 +48,8 @@ pub fn new_tempdir() -> io::Result<tempfile::TempDir> {
 /// Create a repo from the fixture to be used in git module tests
 pub fn create_fixture_repo() -> io::Result<std::path::PathBuf> {
     let fixture_repo_dir = new_tempdir()?.path().join("fixture");
+    let repo_dir = new_tempdir()?.path().join("rocket");
     let fixture = env::current_dir()?.join("tests/fixtures/rocket.bundle");
-
-    Command::new("git")
-        .args(&["config", "--global", "user.email", "starship@example.com"])
-        .output()?;
-
-    Command::new("git")
-        .args(&["config", "--global", "user.name", "starship"])
-        .output()?;
 
     Command::new("git")
         .args(&[
@@ -68,7 +61,19 @@ pub fn create_fixture_repo() -> io::Result<std::path::PathBuf> {
         ])
         .output()?;
 
-    Ok(fixture_repo_dir)
+    git2::Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+
+    Command::new("git")
+        .args(&["config", "--local", "user.email", "starship@example.com"])
+        .current_dir(repo_dir.as_path())
+        .output()?;
+
+    Command::new("git")
+        .args(&["config", "--local", "user.name", "starship"])
+        .current_dir(repo_dir.as_path())
+        .output()?;
+
+    Ok(repo_dir)
 }
 
 /// Extends `std::process::Command` with methods for testing

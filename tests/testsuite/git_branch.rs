@@ -106,10 +106,8 @@ fn test_truncate_length_with_config(
     truncation_symbol: &str,
     config_options: &str,
 ) -> io::Result<()> {
-    let fixture_repo_dir = common::create_fixture_repo()?;
-    let repo_dir = common::new_tempdir()?.path().join("rocket");
+    let repo_dir = common::create_fixture_repo()?;
 
-    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
     Command::new("git")
         .args(&["checkout", "-b", branch_name])
         .current_dir(repo_dir.as_path())
