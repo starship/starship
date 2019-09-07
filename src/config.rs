@@ -170,11 +170,11 @@ impl Config for Table {
 
 /** Parse a style string which represents an ansi style. Valid tokens in the style
  string include the following:
- - 'fg'    (specifies that the next color read should be a foreground color)
- - 'bg'    (specifies that the next color read should be a background color)
+ - 'fg:<color>'    (specifies that the color read should be a foreground color)
+ - 'bg:<color>'    (specifies that the color read should be a background color)
  - 'underline'
  - 'bold'
- - a color string  (see the parse_color_string doc for valid color strings)
+ - '<color>'        (see the parse_color_string doc for valid color strings)
 */
 fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
     let tokens = style_string.split_whitespace();
