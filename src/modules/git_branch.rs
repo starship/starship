@@ -9,9 +9,11 @@ use super::{Context, Module};
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const GIT_BRANCH_CHAR: &str = " ";
 
-    let segment_color = Color::Purple.bold();
-
     let mut module = context.new_module("git_branch")?;
+
+    let segment_color = module
+        .config_value_style("style")
+        .unwrap_or_else(|| Color::Purple.bold());
     module.set_style(segment_color);
     module.get_prefix().set_value("on ");
 

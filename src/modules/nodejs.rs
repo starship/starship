@@ -24,10 +24,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     match get_node_version() {
         Some(node_version) => {
             const NODE_CHAR: &str = "⬢ ";
-            let module_color = Color::Green.bold();
 
             let mut module = context.new_module("nodejs")?;
-            module.set_style(module_color);
+            let module_style = module
+                .config_value_style("style")
+                .unwrap_or_else(|| Color::Green.bold());
+            module.set_style(module_style);
 
             let formatted_version = node_version.trim();
             module.new_segment("symbol", NODE_CHAR);
