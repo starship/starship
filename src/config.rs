@@ -4,7 +4,7 @@ use std::env;
 use dirs::home_dir;
 use toml::value::Table;
 
-use ansi_term::{Color, Style};
+use ansi_term::Color;
 
 pub trait Config {
     fn initialize() -> Table;
@@ -181,7 +181,7 @@ fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
     let mut style = ansi_term::Style::new();
 
     // Should we color the foreground? If not, assume we color the background.
-    let mut col_fg = true;
+    let mut col_fg: bool;
 
     for token in tokens {
         let token = token.to_lowercase();
@@ -286,6 +286,7 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use ansi_term::Style;
 
     #[test]
     fn table_get_as_bool() {

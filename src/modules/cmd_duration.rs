@@ -32,7 +32,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let module_color = match elapsed {
         time if time < config_min => return None,
-        _ => Color::Yellow.bold(),
+        _ => module
+            .config_value_style("style")
+            .unwrap_or_else(|| Color::Yellow.bold()),
     };
 
     module.set_style(module_color);

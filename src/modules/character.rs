@@ -5,10 +5,10 @@ use ansi_term::Color;
 ///
 /// The character segment prints an arrow character in a color dependant on the exit-
 /// code of the last executed command:
-/// - If the exit-code was "0", the arrow will be formatted with `COLOR_SUCCESS`
+/// - If the exit-code was "0", the arrow will be formatted with `style_success`
 /// (green by default)
 /// - If the exit-code was anything else, the arrow will be formatted with
-/// `COLOR_FAILURE` (red by default)
+/// `style_failure` (red by default)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const SUCCESS_CHAR: &str = "❯";
     const FAILURE_CHAR: &str = "✖";
@@ -20,11 +20,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const ASSUMED_MODE: ShellEditMode = ShellEditMode::Insert;
     // TODO: extend config to more modes
 
-    let color_success = Color::Green.bold();
-    let color_failure = Color::Red.bold();
-
     let mut module = context.new_module("character")?;
     module.get_prefix().set_value("");
+
+    let style_success = module
+        .config_value_style("style_success")
+        .unwrap_or_else(|| Color::Green.bold());
+    let style_failure = module
+        .config_value_style("style_failure")
+        .unwrap_or_else(|| Color::Red.bold());
 
     let arguments = &context.arguments;
     let use_symbol = module
@@ -56,9 +60,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     if exit_success {
-        symbol.set_style(color_success.bold());
+        symbol.set_style(style_success);
     } else {
-        symbol.set_style(color_failure.bold());
+        symbol.set_style(style_failure);
     };
 
     Some(module)

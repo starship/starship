@@ -1,6 +1,5 @@
-use ansi_term::{Color, Style};
+use ansi_term::Color;
 use std::env;
-use std::process::Command;
 
 use super::{Context, Module};
 use std::ffi::OsString;
