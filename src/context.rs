@@ -196,20 +196,20 @@ pub fn path_has_name<'a>(dir_entry: &PathBuf, names: &'a [&'a str]) -> bool {
     }
 }
 
-/// checks if pathbuf matches the extension provided
+/// checks if pathbuf doesn't start with a dot and matches any provided extension
 pub fn has_extension<'a>(dir_entry: &PathBuf, extensions: &'a [&'a str]) -> bool {
-    let found_ext = extensions.iter().find(|ext| {
-        dir_entry
-            .extension()
-            .and_then(OsStr::to_str)
-            .unwrap_or_default()
-            == **ext
-    });
-
-    match found_ext {
-        Some(extension) => !extension.is_empty(),
-        None => false,
+    if let Some(file_name) = dir_entry.file_name() {
+        if file_name.to_string_lossy().starts_with('.') {
+            return false;
+        }
+        return extensions.iter().any(|ext| {
+            dir_entry
+                .extension()
+                .and_then(OsStr::to_str)
+                .map_or(false, |e| e == *ext)
+        });
     }
+    false
 }
 
 fn get_current_branch(repository: &Repository) -> Option<String> {
@@ -245,6 +245,9 @@ mod tests {
         assert_eq!(has_extension(&buf, &extensions), false);
 
         buf.set_file_name("some-file.rs");
+        assert_eq!(has_extension(&buf, &extensions), false);
+
+        buf.set_file_name(".some-file.js");
         assert_eq!(has_extension(&buf, &extensions), false);
 
         buf.set_file_name("some-file.js");

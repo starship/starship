@@ -9,10 +9,7 @@ use crate::common::{self, TestCommand};
 #[test]
 #[ignore]
 fn shows_behind() -> io::Result<()> {
-    let fixture_repo_dir = common::create_fixture_repo()?;
-    let repo_dir = common::new_tempdir()?.path().join("rocket");
-
-    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+    let repo_dir = common::create_fixture_repo()?;
 
     Command::new("git")
         .args(&["reset", "--hard", "HEAD^"])
@@ -34,10 +31,7 @@ fn shows_behind() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_behind_with_count() -> io::Result<()> {
-    let fixture_repo_dir = common::create_fixture_repo()?;
-    let repo_dir = common::new_tempdir()?.path().join("rocket");
-
-    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+    let repo_dir = common::create_fixture_repo()?;
 
     Command::new("git")
         .args(&["reset", "--hard", "HEAD^"])
@@ -66,10 +60,7 @@ fn shows_behind_with_count() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_ahead() -> io::Result<()> {
-    let fixture_repo_dir = common::create_fixture_repo()?;
-    let repo_dir = common::new_tempdir()?.path().join("rocket");
-
-    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+    let repo_dir = common::create_fixture_repo()?;
 
     File::create(repo_dir.join("readme.md"))?;
 
@@ -93,10 +84,7 @@ fn shows_ahead() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_ahead_with_count() -> io::Result<()> {
-    let fixture_repo_dir = common::create_fixture_repo()?;
-    let repo_dir = common::new_tempdir()?.path().join("rocket");
-
-    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+    let repo_dir = common::create_fixture_repo()?;
 
     File::create(repo_dir.join("readme.md"))?;
 
@@ -127,10 +115,7 @@ fn shows_ahead_with_count() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_diverged() -> io::Result<()> {
-    let fixture_repo_dir = common::create_fixture_repo()?;
-    let repo_dir = common::new_tempdir()?.path().join("rocket");
-
-    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+    let repo_dir = common::create_fixture_repo()?;
 
     Command::new("git")
         .args(&["reset", "--hard", "HEAD^"])
@@ -159,10 +144,7 @@ fn shows_diverged() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_diverged_with_count() -> io::Result<()> {
-    let fixture_repo_dir = common::create_fixture_repo()?;
-    let repo_dir = common::new_tempdir()?.path().join("rocket");
-
-    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+    let repo_dir = common::create_fixture_repo()?;
 
     Command::new("git")
         .args(&["reset", "--hard", "HEAD^"])
@@ -198,10 +180,7 @@ fn shows_diverged_with_count() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_conflicted() -> io::Result<()> {
-    let fixture_repo_dir = common::create_fixture_repo()?;
-    let repo_dir = common::new_tempdir()?.path().join("rocket");
-
-    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+    let repo_dir = common::create_fixture_repo()?;
 
     Command::new("git")
         .args(&["reset", "--hard", "HEAD^"])
@@ -240,10 +219,7 @@ fn shows_conflicted() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_untracked_file() -> io::Result<()> {
-    let fixture_repo_dir = common::create_fixture_repo()?;
-    let repo_dir = common::new_tempdir()?.path().join("rocket");
-
-    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+    let repo_dir = common::create_fixture_repo()?;
 
     File::create(repo_dir.join("license"))?;
 
@@ -262,10 +238,7 @@ fn shows_untracked_file() -> io::Result<()> {
 #[test]
 #[ignore]
 fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
-    let fixture_repo_dir = common::create_fixture_repo()?;
-    let repo_dir = common::new_tempdir()?.path().join("rocket");
-
-    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+    let repo_dir = common::create_fixture_repo()?;
 
     File::create(repo_dir.join("license"))?;
 
@@ -289,10 +262,7 @@ fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_stashed() -> io::Result<()> {
-    let fixture_repo_dir = common::create_fixture_repo()?;
-    let repo_dir = common::new_tempdir()?.path().join("rocket");
-
-    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+    let repo_dir = common::create_fixture_repo()?;
 
     File::create(repo_dir.join("readme.md"))?;
 
@@ -316,10 +286,7 @@ fn shows_stashed() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_modified() -> io::Result<()> {
-    let fixture_repo_dir = common::create_fixture_repo()?;
-    let repo_dir = common::new_tempdir()?.path().join("rocket");
-
-    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+    let repo_dir = common::create_fixture_repo()?;
 
     File::create(repo_dir.join("readme.md"))?;
 
@@ -338,10 +305,7 @@ fn shows_modified() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_staged_file() -> io::Result<()> {
-    let fixture_repo_dir = common::create_fixture_repo()?;
-    let repo_dir = common::new_tempdir()?.path().join("rocket");
-
-    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+    let repo_dir = common::create_fixture_repo()?;
 
     File::create(repo_dir.join("license"))?;
 
@@ -365,10 +329,7 @@ fn shows_staged_file() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_renamed_file() -> io::Result<()> {
-    let fixture_repo_dir = common::create_fixture_repo()?;
-    let repo_dir = common::new_tempdir()?.path().join("rocket");
-
-    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+    let repo_dir = common::create_fixture_repo()?;
 
     Command::new("git")
         .args(&["mv", "readme.md", "readme.md.bak"])
@@ -395,10 +356,7 @@ fn shows_renamed_file() -> io::Result<()> {
 #[test]
 #[ignore]
 fn shows_deleted_file() -> io::Result<()> {
-    let fixture_repo_dir = common::create_fixture_repo()?;
-    let repo_dir = common::new_tempdir()?.path().join("rocket");
-
-    Repository::clone(fixture_repo_dir.to_str().unwrap(), &repo_dir.as_path()).unwrap();
+    let repo_dir = common::create_fixture_repo()?;
 
     fs::remove_file(repo_dir.join("readme.md"))?;
 
