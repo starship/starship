@@ -3,10 +3,11 @@ use crate::module::Module;
 
 use clap::ArgMatches;
 use git2::Repository;
+use once_cell::sync::OnceCell;
 use std::env;
 use std::ffi::OsStr;
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering
@@ -24,13 +25,8 @@ pub struct Context<'a> {
     /// The map of arguments that were passed when starship was called.
     pub arguments: ArgMatches<'a>,
 
-    /// If `current_dir` is a git repository or is contained within one,
-    /// this is the path to the root of that repo.
-    pub repo_root: Option<PathBuf>,
-
-    /// If `current_dir` is a git repository or is contained within one,
-    /// this is the current branch name of that repo.
-    pub branch_name: Option<String>,
+    /// Private field to store Git information for modules who need it
+    repo: OnceCell<Repo>,
 }
 
 impl<'a> Context<'a> {
@@ -67,21 +63,12 @@ impl<'a> Context<'a> {
             .map(|entry| entry.path())
             .collect::<Vec<PathBuf>>();
 
-        let repository = Repository::discover(&current_dir).ok();
-        let repo_root = repository
-            .as_ref()
-            .and_then(|repo| repo.workdir().map(std::path::Path::to_path_buf));
-        let branch_name = repository
-            .as_ref()
-            .and_then(|repo| get_current_branch(repo));
-
         Context {
             config,
             arguments,
             current_dir,
             dir_files,
-            repo_root,
-            branch_name,
+            repo: OnceCell::new(),
         }
     }
 
@@ -96,19 +83,22 @@ impl<'a> Context<'a> {
 
     /// Create a new module
     ///
-    /// Will return `None` if the module is disabled by configuration, by setting
-    /// the `disabled` key to `true` in the configuration for that module.
+    /// Can always return a new module as if a module was disabled it won't get
+    /// to this point.
     pub fn new_module(&self, name: &str) -> Option<Module> {
+        let config = self.config.get_module_config(name);
+
+        Some(Module::new(name, config))
+    }
+
+    /// Check the `disabled` configuration of the module
+    pub fn is_module_enabled(&self, name: &str) -> bool {
         let config = self.config.get_module_config(name);
 
         // If the segment has "disabled" set to "true", don't show it
         let disabled = config.and_then(|table| table.get_as_bool("disabled"));
 
-        if disabled == Some(true) {
-            return None;
-        }
-
-        Some(Module::new(name, config))
+        disabled != Some(true)
     }
 
     // returns a new ScanDir struct with reference to current dir_files of context
@@ -121,6 +111,35 @@ impl<'a> Context<'a> {
             extensions: &[],
         }
     }
+
+    /// Will lazily get repo root and branch when a module requests it.
+    pub fn get_repo(&self) -> Result<&Repo, std::io::Error> {
+        let repo = self
+            .repo
+            .get_or_try_init(|| -> Result<Repo, std::io::Error> {
+                let repository = Repository::discover(&self.current_dir).ok();
+                let branch = repository
+                    .as_ref()
+                    .and_then(|repo| get_current_branch(repo));
+                let root = repository
+                    .as_ref()
+                    .and_then(|repo| repo.workdir().map(Path::to_path_buf));
+
+                Ok(Repo { branch, root })
+            })?;
+
+        Ok(repo)
+    }
+}
+
+pub struct Repo {
+    /// If `current_dir` is a git repository or is contained within one,
+    /// this is the current branch name of that repo.
+    pub branch: Option<String>,
+
+    /// If `current_dir` is a git repository or is contained within one,
+    /// this is the path to the root of that repo.
+    pub root: Option<PathBuf>,
 }
 
 // A struct of Criteria which will be used to verify current PathBuf is

@@ -30,8 +30,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const GIT_STATUS_RENAMED: &str = "»";
     const GIT_STATUS_DELETED: &str = "✘";
 
-    let branch_name = context.branch_name.as_ref()?;
-    let repo_root = context.repo_root.as_ref()?;
+    let repo = context.get_repo().ok()?;
+    let branch_name = repo.branch.as_ref()?;
+    let repo_root = repo.root.as_ref()?;
     let repository = Repository::open(repo_root).ok()?;
 
     let module_style = Color::Red.bold();
@@ -132,10 +133,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     if module.is_empty() {
-        None
-    } else {
-        Some(module)
+        return None;
     }
+
+    Some(module)
 }
 
 /// Gets the bitflags associated with the repo's git status

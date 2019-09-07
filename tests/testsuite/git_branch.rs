@@ -1,6 +1,5 @@
 use ansi_term::Color;
 use git2::Repository;
-use std::env;
 use std::io;
 use std::process::Command;
 

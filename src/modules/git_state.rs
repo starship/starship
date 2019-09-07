@@ -11,7 +11,8 @@ use super::{Context, Module};
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_state")?;
 
-    let repo_root = context.repo_root.as_ref()?;
+    let repo = context.get_repo().ok()?;
+    let repo_root = repo.root.as_ref()?;
     let mut repository = Repository::open(repo_root).ok()?;
     let state_description = get_state_description(&mut repository);
 
