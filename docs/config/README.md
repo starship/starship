@@ -42,7 +42,7 @@ are segments within it. Every module also has a prefix and suffix that are the d
 
 ### Style Strings
 
-Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`, but some modules have different names) which is a string. Here are some examples of style strings along with what they do. For details on the full syntax, consult the advanced config guide.
+Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`, but some modules have different names) which is a string. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
 - `fg:green bg:blue` sets green text on a blue background
 - `bg:blue fg:bright-green` sets bright green text on a blue background

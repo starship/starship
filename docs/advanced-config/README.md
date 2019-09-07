@@ -75,7 +75,7 @@ If you like the result, add these lines to your shell configuration file
 
 ## Style Strings
 
-Style strings are a list of words, separated by whitespace. Each word can be one of the following:
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
   - `bold`
   - `underline`
@@ -83,7 +83,7 @@ Style strings are a list of words, separated by whitespace. Each word can be one
   - `fg:<color>`
   - `<color>`
 
-where `<color>` is a color specifier (discussed below). The last two are currently considered equivalent, though this may change in the future. The order of words in the string does not matter.
+where `<color>` is a color specifier (discussed below). The last two are currently considered equivalent, though this may change in the future. The order of words in the string does not matter. 
 
 A color specifier can be one of the following:
 
