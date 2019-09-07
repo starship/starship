@@ -72,3 +72,26 @@ precmd_functions+=(set_win_title)
 
 If you like the result, add these lines to your shell configuration file 
 (`~/.bashrc` or `~/.zsrhc`) to make it permanent.
+
+## Style Strings
+
+Style strings are a list of words, separated by whitespace. Each word can be one of the following:
+
+  - `bold`
+  - `underline`
+  - `bg:<color>`
+  - `fg:<color>`
+  - `<color>`
+
+where `<color>` is a color specifier (discussed below). The last two are currently considered equivalent, though this may change in the future. The order of words in the string does not matter.
+
+A color specifier can be one of the following:
+
+ - One of the standard terminal colors: `black`, `red`, `green`, `blue`,
+    `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these
+    with `bright-` to get the bright version (e.g. `bright-white`).
+ - A `#` followed by a six-digit hexadecimal number. This specifies an
+   [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+ - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+
+If multiple colors are specified for foreground/background, the last one in the string will take priority.
