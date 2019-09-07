@@ -2,7 +2,7 @@ use crate::config::Config;
 use crate::module::Module;
 
 use clap::ArgMatches;
-use git2::Repository;
+use git2::{Repository, RepositoryState};
 use once_cell::sync::OnceCell;
 use std::env;
 use std::ffi::OsStr;
@@ -124,8 +124,13 @@ impl<'a> Context<'a> {
                 let root = repository
                     .as_ref()
                     .and_then(|repo| repo.workdir().map(Path::to_path_buf));
+                let state = repository.as_ref().map(|repo| repo.state());
 
-                Ok(Repo { branch, root })
+                Ok(Repo {
+                    branch,
+                    root,
+                    state,
+                })
             })?;
 
         Ok(repo)
@@ -140,6 +145,9 @@ pub struct Repo {
     /// If `current_dir` is a git repository or is contained within one,
     /// this is the path to the root of that repo.
     pub root: Option<PathBuf>,
+
+    /// State
+    pub state: Option<RepositoryState>,
 }
 
 // A struct of Criteria which will be used to verify current PathBuf is

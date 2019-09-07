@@ -1,6 +1,6 @@
 use ansi_term::Color;
-use git2::{Repository, RepositoryState};
-use std::path::Path;
+use git2::RepositoryState;
+use std::path::{Path, PathBuf};
 
 use super::{Context, Module};
 
@@ -13,8 +13,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let repo = context.get_repo().ok()?;
     let repo_root = repo.root.as_ref()?;
-    let mut repository = Repository::open(repo_root).ok()?;
-    let state_description = get_state_description(&mut repository);
+    let repo_state = repo.state?;
+    let state_description = get_state_description(repo_state, repo_root);
 
     if let StateDescription::Clean = state_description {
         return None;
@@ -77,8 +77,8 @@ static AM_OR_REBASE_LABEL: StateLabel = StateLabel {
     message_default: "AM/REBASE",
 };
 
-fn get_state_description(repository: &mut Repository) -> StateDescription {
-    match repository.state() {
+fn get_state_description(state: RepositoryState, root: &PathBuf) -> StateDescription {
+    match state {
         RepositoryState::Clean => StateDescription::Clean,
         RepositoryState::Merge => StateDescription::Label(&MERGE_LABEL),
         RepositoryState::Revert => StateDescription::Label(&REVERT_LABEL),
@@ -88,13 +88,13 @@ fn get_state_description(repository: &mut Repository) -> StateDescription {
         RepositoryState::Bisect => StateDescription::Label(&BISECT_LABEL),
         RepositoryState::ApplyMailbox => StateDescription::Label(&AM_LABEL),
         RepositoryState::ApplyMailboxOrRebase => StateDescription::Label(&AM_OR_REBASE_LABEL),
-        RepositoryState::Rebase => describe_rebase(repository),
-        RepositoryState::RebaseInteractive => describe_rebase(repository),
-        RepositoryState::RebaseMerge => describe_rebase(repository),
+        RepositoryState::Rebase => describe_rebase(root),
+        RepositoryState::RebaseInteractive => describe_rebase(root),
+        RepositoryState::RebaseMerge => describe_rebase(root),
     }
 }
 
-fn describe_rebase(repository: &mut Repository) -> StateDescription {
+fn describe_rebase(root: &PathBuf) -> StateDescription {
     /*
      *  Sadly, libgit2 seems to have some issues with reading the state of
      *  interactive rebases. So, instead, we'll poke a few of the .git files
@@ -105,18 +105,7 @@ fn describe_rebase(repository: &mut Repository) -> StateDescription {
 
     let just_label = StateDescription::Label(&REBASE_LABEL);
 
-    let dot_git = repository
-        .workdir()
-        .and_then(|d| Some(d.join(Path::new(".git"))));
-
-    let dot_git = match dot_git {
-        None => {
-            // We didn't find the .git directory.
-            // Something very odd is going on. We'll just back away slowly.
-            return just_label;
-        }
-        Some(path) => path,
-    };
+    let dot_git = root.join(".git");
 
     let has_path = |relative_path: &str| {
         let path = dot_git.join(Path::new(relative_path));
