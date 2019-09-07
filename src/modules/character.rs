@@ -23,7 +23,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let color_success = Color::Green.bold();
     let color_failure = Color::Red.bold();
 
-    let mut module = context.new_module("character")?;
+    let mut module = context.new_module("character");
     module.get_prefix().set_value("");
 
     let arguments = &context.arguments;

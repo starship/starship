@@ -85,10 +85,10 @@ impl<'a> Context<'a> {
     ///
     /// Can always return a new module as if a module was disabled it won't get
     /// to this point.
-    pub fn new_module(&self, name: &str) -> Option<Module> {
+    pub fn new_module(&self, name: &str) -> Module {
         let config = self.config.get_module_config(name);
 
-        Some(Module::new(name, config))
+        Module::new(name, config)
     }
 
     /// Check the `disabled` configuration of the module

@@ -11,7 +11,7 @@ use std::ffi::OsString;
 ///     - hostname.disabled is absent or false
 ///     - hostname.ssh_only is false OR the user is currently connected as an SSH session (`$SSH_CONNECTION`)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module("hostname")?;
+    let mut module = context.new_module("hostname");
 
     let ssh_connection = env::var("SSH_CONNECTION").ok();
     if module.config_value_bool("ssh_only").unwrap_or(true) && ssh_connection.is_none() {

@@ -18,7 +18,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module_color = Color::Yellow.bold();
 
     if user != logname || ssh_connection.is_some() || is_root(&mut module_color) {
-        let mut module = context.new_module("username")?;
+        let mut module = context.new_module("username");
         module.set_style(module_color);
         module.new_segment("username", &user?);
 

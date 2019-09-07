@@ -36,7 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repository = Repository::open(repo_root).ok()?;
 
     let module_style = Color::Red.bold();
-    let mut module = context.new_module("git_status")?;
+    let mut module = context.new_module("git_status");
 
     let show_sync_count = module.config_value_bool("show_sync_count").unwrap_or(false);
 

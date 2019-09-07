@@ -30,7 +30,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let mut module = context.new_module("python")?;
+    let mut module = context.new_module("python");
     let pyenv_version_name = module
         .config_value_bool("pyenv_version_name")
         .unwrap_or(false);

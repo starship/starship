@@ -29,7 +29,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // TODO: Set style based on percentage when threshold is modifiable
-    let mut module = context.new_module("battery")?;
+    let mut module = context.new_module("battery");
     module.set_style(Color::Red.bold());
     module.get_prefix().set_value("");
 

@@ -24,7 +24,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             const RUBY_CHAR: &str = "💎 ";
             let module_color = Color::Red.bold();
 
-            let mut module = context.new_module("ruby")?;
+            let mut module = context.new_module("ruby");
             module.set_style(module_color);
 
             let formatted_version = format_ruby_version(&ruby_version)?;

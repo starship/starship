@@ -7,7 +7,7 @@ use super::{Context, Module};
 /// Will only print if last command took more than a certain amount of time to
 /// execute. Default is two seconds, but can be set by config option `min_time`.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module("cmd_duration")?;
+    let mut module = context.new_module("cmd_duration");
 
     let arguments = &context.arguments;
     let elapsed = arguments

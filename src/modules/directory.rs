@@ -19,7 +19,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const FISH_STYLE_PWD_DIR_LENGTH: i64 = 0;
     let module_color = Color::Cyan.bold();
 
-    let mut module = context.new_module("directory")?;
+    let mut module = context.new_module("directory");
     module.set_style(module_color);
 
     let truncation_length = module
