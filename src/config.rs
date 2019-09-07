@@ -16,7 +16,7 @@ pub trait Config {
     fn get_as_str(&self, key: &str) -> Option<&str>;
     fn get_as_i64(&self, key: &str) -> Option<i64>;
     fn get_as_array(&self, key: &str) -> Option<&Vec<toml::value::Value>>;
-    fn get_as_ansi_style(&self, key: &str) -> Option<ansi_term::Style>; // Should this be reference-to-style?
+    fn get_as_ansi_style(&self, key: &str) -> Option<ansi_term::Style>;
 
     // Internal implementation for accessors
     fn get_config(&self, key: &str) -> Option<&toml::value::Value>;
@@ -255,14 +255,14 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
     // Check for any predefined color strings
     // There are no predefined enums for bright colors, so we use Color::Fixed
     let predefined_color = match color_string.to_lowercase().as_str() {
-        "black" => Some(Color::Fixed(0)),
-        "red" => Some(Color::Fixed(1)),
-        "green" => Some(Color::Fixed(2)),
-        "yellow" => Some(Color::Fixed(3)),
-        "blue" => Some(Color::Fixed(4)),
-        "purple" => Some(Color::Fixed(5)),
-        "cyan" => Some(Color::Fixed(6)),
-        "white" => Some(Color::Fixed(7)),
+        "black" => Some(Color::Black),
+        "red" => Some(Color::Red),
+        "green" => Some(Color::Green),
+        "yellow" => Some(Color::Yellow),
+        "blue" => Some(Color::Blue),
+        "purple" => Some(Color::Purple),
+        "cyan" => Some(Color::Cyan),
+        "white" => Some(Color::White),
         "bright-black" => Some(Color::Fixed(8)), // "bright-black" is dark grey
         "bright-red" => Some(Color::Fixed(9)),
         "bright-green" => Some(Color::Fixed(10)),
@@ -369,7 +369,7 @@ mod tests {
         // Test a background style with inverted order (also test hex + ANSI)
         table.insert(
             String::from("flipstyle"),
-            toml::value::Value::String(String::from("bg underline #050505 fg 120")),
+            toml::value::Value::String(String::from("bg:#050505 underline fg:120")),
         );
         assert_eq!(
             table.get_as_ansi_style("flipstyle").unwrap(),
@@ -382,7 +382,7 @@ mod tests {
         // Test that the last color style is always the one used
         table.insert(
             String::from("multistyle"),
-            toml::value::Value::String(String::from("bg 120 125 127 fg 127 122 125")),
+            toml::value::Value::String(String::from("bg:120 bg:125 bg:127 fg:127 122 125")),
         );
         assert_eq!(
             table.get_as_ansi_style("multistyle").unwrap(),
