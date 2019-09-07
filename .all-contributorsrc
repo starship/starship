@@ -247,6 +247,15 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "g2p",
+      "name": "Gabriel de Perthuis",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/61678?v=4",
+      "profile": "https://github.com/g2p",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
