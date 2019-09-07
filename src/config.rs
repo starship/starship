@@ -188,7 +188,6 @@ fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
 
         // Check for FG/BG identifiers and strip them off if appropriate
         let token = if token.as_str().starts_with("fg:") {
-            log::trace!("FG TRACE");
             col_fg = true;
             token.trim_start_matches("fg:").to_owned()
         } else if token.as_str().starts_with("bg:") {
@@ -220,8 +219,6 @@ fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
         }
     }
 
-    // Currently, this function always returns Some(x), but I'd like to reserve
-    // the ability to return None in the event that parsing becomes more complex
     Some(style)
 }
 
@@ -359,6 +356,16 @@ mod tests {
         );
         assert_eq!(
             table.get_as_ansi_style("plainstyle").unwrap(),
+            ansi_term::Style::new()
+        );
+
+        // Test a string that's clearly broken
+        table.insert(
+            String::from("broken"),
+            toml::value::Value::String(String::from("djklgfhjkldhlhk;j")),
+        );
+        assert_eq!(
+            table.get_as_ansi_style("broken").unwrap(),
             ansi_term::Style::new()
         );
     }

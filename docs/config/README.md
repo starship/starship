@@ -44,10 +44,11 @@ are segments within it. Every module also has a prefix and suffix that are the d
 
 Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`, but some modules have different names) which is a string. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
-- `fg:green bg:blue` sets green text on a blue background
-- `bg:blue fg:bright-green` sets bright green text on a blue background
-- `bold fg:27` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
-- `underline bg:#bf5700` sets underlined text on a burnt orange background
+- `"fg:green bg:blue"` sets green text on a blue background
+- `"bg:blue fg:bright-green"` sets bright green text on a blue background
+- `"bold fg:27"` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
+- `"underline bg:#bf5700"` sets underlined text on a burnt orange background
+- `""` explicitly disables all styling on the module
 
 ## Prompt
 
