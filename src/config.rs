@@ -180,7 +180,7 @@ fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
     let tokens = style_string.split_whitespace();
     let mut style = ansi_term::Style::new();
 
-    // Should we color the foreground? If not, assume we color the background.
+    // If col_fg is true, color the foreground. If it's false, color the background.
     let mut col_fg: bool;
 
     for token in tokens {
