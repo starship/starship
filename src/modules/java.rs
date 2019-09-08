@@ -41,6 +41,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_java_version() -> Option<String> {
+    // `javac -version` usually outputs to `stderr`,
+    // but it's best check both outputs.
     match Command::new("javac").arg("-version").output() {
         Ok(output) => {
             if output.stdout.is_empty() {

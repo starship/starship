@@ -506,7 +506,7 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default        | Description                                              |
 | ---------- | -------------- | -------------------------------------------------------- |
 | `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java.  |
-| `style`    | `"bold RGB(166, 42, 42)"` | The style for the module.                     |
+| `style`    | `"bold #a62a2a"`| The style for the module.                               |
 | `disabled` | `false`        | Disables the `java` module.                              |
 
 ### Example
