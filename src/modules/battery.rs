@@ -8,6 +8,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const BATTERY_CHARGING: &str = "⇡";
     const BATTERY_DISCHARGING: &str = "⇣";
     const BATTERY_THRESHOLD: f32 = 10.0;
+    const BATTERY_UNKNOWN: &str = "↕";
     // TODO: Update when v1.0 printing refactor is implemented to only
     // print escapes in a prompt context.
     let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
@@ -46,7 +47,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         battery::State::Discharging => {
             module.new_segment("discharging_symbol", BATTERY_DISCHARGING);
         }
-        _ => return None,
+        battery::State::Unknown => {
+            module.new_segment("unknown_symbol", BATTERY_UNKNOWN);
+        }
+        _ => {
+            log::debug!("Unhandled battery state `{}`", state);
+            return None;
+        }
     }
 
     let mut percent_string = Vec::<String>::with_capacity(2);
