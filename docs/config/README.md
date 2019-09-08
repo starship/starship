@@ -427,15 +427,6 @@ disabled = true
 ```
 
 
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[ruby]
-symbol = "🔺 "
-```
-
 ## Nix-shell
 
 The `nix_shell` module shows the nix-shell environment.
@@ -577,6 +568,15 @@ The module will be shown if any of the following conditions are met:
 | `symbol`   | `"💎 "`      | The symbol used before displaying the version of Ruby. |
 | `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `ruby` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[ruby]
+symbol = "🔺 "
+```
 
 ## Rust
 
