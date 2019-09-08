@@ -7,7 +7,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const BATTERY_FULL: &str = "•";
     const BATTERY_CHARGING: &str = "⇡";
     const BATTERY_DISCHARGING: &str = "⇣";
-    const BATTERY_THRESHOLD: f32 = 10.0;
+    const BATTERY_THRESHOLD: i64 = 10;
     // TODO: Update when v1.0 printing refactor is implemented to only
     // print escapes in a prompt context.
     let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
@@ -19,17 +19,32 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let battery_status = get_battery_status()?;
     let BatteryStatus { state, percentage } = battery_status;
 
-    if percentage > BATTERY_THRESHOLD {
+    let mut module = context.new_module("battery")?;
+    let battery_threshold = match module.config_value_i64("display_threshold") {
+        Some(threshold) => {
+            if 0 <= threshold && threshold < 100 {
+                threshold
+            } else {
+                log::debug!(
+                    "Expect battery.battery_threshold in [0, 100), found `{}`",
+                    threshold
+                );
+                BATTERY_THRESHOLD
+            }
+        }
+        None => BATTERY_THRESHOLD,
+    };
+
+    if percentage > battery_threshold as f32 {
         log::debug!(
             "Battery percentage is higher than threshold ({} > {})",
             percentage,
-            BATTERY_THRESHOLD
+            battery_threshold
         );
         return None;
     }
 
     // TODO: Set style based on percentage when threshold is modifiable
-    let mut module = context.new_module("battery")?;
     let module_style = module
         .config_value_style("style")
         .unwrap_or_else(|| Color::Red.bold());
