@@ -24,18 +24,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Parse config under `display`
     let display_styles = get_display_styles(&module);
     let display_style = display_styles.iter().find(|display_style| {
-        let BatteryDisplayStyle {
-            threshold,
-            style: _,
-        } = display_style;
+        let BatteryDisplayStyle { threshold, .. } = display_style;
         percentage <= *threshold as f32
     });
 
     if let Some(display_style) = display_style {
-        let BatteryDisplayStyle {
-            threshold: _,
-            style,
-        } = display_style;
+        let BatteryDisplayStyle { style, .. } = display_style;
 
         // Set style based on percentage
         module.set_style(*style);
@@ -86,13 +80,10 @@ fn get_display_styles(module: &Module) -> Vec<BatteryDisplayStyle> {
     if let Some(display_configs) = module.config_value_array("display") {
         let mut display_styles: Vec<BatteryDisplayStyle> = vec![];
         for display_config in display_configs.iter() {
-            match display_config {
-                toml::Value::Table(config) => {
-                    if let Some(display_style) = BatteryDisplayStyle::from_config(config) {
-                        display_styles.push(display_style);
-                    }
+            if let toml::Value::Table(config) = display_config {
+                if let Some(display_style) = BatteryDisplayStyle::from_config(config) {
+                    display_styles.push(display_style);
                 }
-                _ => {}
             }
         }
 
