@@ -201,6 +201,8 @@ fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
         match token.as_str() {
             "underline" => style = style.underline(),
             "bold" => style = style.bold(),
+            "dimmed" => style = style.dimmed(),
+            "none" => return Some(ansi_term::Style::new()), // Overrides other toks
 
             // Try to see if this token parses as a valid color string
             color_string => {
@@ -366,6 +368,16 @@ mod tests {
         );
         assert_eq!(
             table.get_as_ansi_style("broken").unwrap(),
+            ansi_term::Style::new()
+        );
+
+        // Test a string that's nullified by `none`
+        table.insert(
+            String::from("nullified"),
+            toml::value::Value::String(String::from("fg:red bg:green bold none")),
+        );
+        assert_eq!(
+            table.get_as_ansi_style("nullified").unwrap(),
             ansi_term::Style::new()
         );
     }

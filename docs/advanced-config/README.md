@@ -79,11 +79,15 @@ Style strings are a list of words, separated by whitespace. The words are not ca
 
   - `bold`
   - `underline`
+  - `dimmed`
   - `bg:<color>`
   - `fg:<color>`
   - `<color>`
+  - `none`
 
-where `<color>` is a color specifier (discussed below). The last two are currently considered equivalent, though this may change in the future. The order of words in the string does not matter. 
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing , though this may change in the future. The order of words in the string does not matter.
+
+The `none` token overrides all other tokens in a string, so that e.g. `fg:red none fg:blue` will still create a string with no styling. It may become an error to use `none` in conjunction with other tokens in the future.
 
 A color specifier can be one of the following:
 

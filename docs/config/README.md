@@ -360,13 +360,13 @@ The `hostname` module shows the system hostname.
 
 ### Options
 
-| Variable   | Default        | Description                                          |
-| ---------- | -------------- | ---------------------------------------------------- |
-| `ssh_only` | `true`         | Only show hostname when connected to an SSH session. |
-| `prefix`   | `""`           | Prefix to display immediately before the hostname.   |
-| `suffix`   | `""`           | Suffix to display immediately after the hostname.    |
-| `style`    | `"bold green"` | The style for the module.                            |
-| `disabled` | `false`        | Disables the `hostname` module.                      |
+| Variable   | Default               | Description                                          |
+| ---------- | --------------------- | ---------------------------------------------------- |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session. |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.    |
+| `style`    | `"bold dimmed green"` | The style for the module.                            |
+| `disabled` | `false`               | Disables the `hostname` module.                      |
 
 ### Example
 
