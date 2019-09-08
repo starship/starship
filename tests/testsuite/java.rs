@@ -16,7 +16,10 @@ fn folder_with_pom() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::RGB(166, 42, 42).bold().paint("☕ v12.0.2"));
+    let expected = format!(
+        "via {} ",
+        Color::RGB(166, 42, 42).bold().paint("☕ v12.0.2")
+    );
     assert_eq!(expected, actual);
     Ok(())
 }
