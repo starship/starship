@@ -36,7 +36,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .unwrap_or(false);
 
     const PYTHON_CHAR: &str = "🐍 ";
-    let module_color = Color::Yellow.bold();
+    let module_color = module
+        .config_value_style("style")
+        .unwrap_or_else(|| Color::Yellow.bold());
     module.set_style(module_color);
     module.new_segment("symbol", PYTHON_CHAR);
 

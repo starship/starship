@@ -139,6 +139,11 @@ impl<'a> Module<'a> {
     pub fn config_value_bool(&self, key: &str) -> Option<bool> {
         self.config.and_then(|config| config.get_as_bool(key))
     }
+
+    /// Get a module's config value as a style
+    pub fn config_value_style(&self, key: &str) -> Option<Style> {
+        self.config.and_then(|config| config.get_as_ansi_style(key))
+    }
 }
 
 impl<'a> fmt::Display for Module<'a> {
