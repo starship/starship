@@ -6,6 +6,7 @@ use ansi_term::Color;
 use crate::common;
 
 #[test]
+#[ignore]
 fn folder_with_pom() -> io::Result<()> {
     let dir = common::new_tempdir()?;
     File::create(dir.path().join("pom.xml"))?;

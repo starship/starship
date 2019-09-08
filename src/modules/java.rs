@@ -23,10 +23,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     match get_java_version() {
         Some(java_version) => {
             const JAVA_CHAR: &str = "☕ ";
-            let module_color = Color::RGB(166, 42, 42).bold();
 
             let mut module = context.new_module("java")?;
-            module.set_style(module_color);
+            let module_style = module
+                .config_value_style("style")
+                .unwrap_or_else(|| Color::RGB(166, 42, 42).bold());
+            module.set_style(module_style);
 
             let formatted_version = format_java_version(java_version);
             module.new_segment("symbol", JAVA_CHAR);
