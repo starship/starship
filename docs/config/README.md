@@ -108,13 +108,13 @@ The module is only visible when the device's battery is below 10%.
 
 ### Options
 
-| Variable             | Default      | Description                                       |
-| -------------------- | ------------ | ------------------------------------------------- |
-| `full_symbol`        | `"•"`        | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`        | The symbol shown when the battery is charging.    |
-| `discharging_symbol` | `"⇣"`        | The symbol shown when the battery is discharging. |
-| `style`              | `"bold red"` | The style for the module.                         |
-| `disabled`           | `false`      | Disables the `battery` module.                    |
+| Variable             | Default                                  | Description                                       |
+| -------------------- | ---------------------------------------- | ------------------------------------------------- |
+| `full_symbol`        | `"•"`                                    | The symbol shown when the battery is full.        |
+| `charging_symbol`    | `"⇡"`                                    | The symbol shown when the battery is charging.    |
+| `discharging_symbol` | `"⇣"`                                    | The symbol shown when the battery is discharging. |
+| `display`            | `{"threshold": 10, "style": "bold red"}` | Display threshold and style for the module.       |
+| `disabled`           | `false`                                  | Disables the `battery` module.                    |
 
 ### Example
 
@@ -125,6 +125,14 @@ The module is only visible when the device's battery is below 10%.
 full_symbol = "🔋"
 charging_symbol = "⚡️"
 discharging_symbol = "💀"
+
+  [[battery.display]]
+  threshold = 10
+  style = "bold red"
+
+  [[battery.display]]
+  threshold = 30
+  style = "bold yellow"
 ```
 
 ## Character
