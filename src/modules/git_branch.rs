@@ -9,7 +9,7 @@ use super::{Context, Module};
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const GIT_BRANCH_CHAR: &str = " ";
 
-    let mut module = context.new_module("git_branch")?;
+    let mut module = context.new_module("git_branch");
 
     let segment_color = module
         .config_value_style("style")
@@ -38,7 +38,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else {
         unsafe_truncation_length as usize
     };
-    let branch_name = context.branch_name.as_ref()?;
+    let repo = context.get_repo().ok()?;
+    let branch_name = repo.branch.as_ref()?;
     let truncated_graphemes = get_graphemes(&branch_name, len);
     // The truncation symbol should only be added if we truncated
     let truncated_and_symbol = if len < graphemes_len(&branch_name) {

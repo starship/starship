@@ -58,20 +58,3 @@ fn config_5s_duration_10s() -> io::Result<()> {
     assert_eq!(expected, actual);
     Ok(())
 }
-
-#[test]
-fn config_disabled() -> io::Result<()> {
-    let output = common::render_module("cmd_duration")
-        .use_config(toml::toml! {
-            [cmd_duration]
-            disabled = true
-            min_time = 5
-        })
-        .arg("--cmd-duration=10")
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-
-    let expected = "";
-    assert_eq!(expected, actual);
-    Ok(())
-}
