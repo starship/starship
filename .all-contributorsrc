@@ -245,7 +245,8 @@
       "contributions": [
         "code",
         "doc",
-        "test"
+        "test",
+        "review"
       ]
     },
     {
@@ -255,6 +256,15 @@
       "profile": "https://github.com/g2p",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "Hofer-Julian",
+      "name": "Hofer-Julian",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/30049909?v=4",
+      "profile": "https://github.com/Hofer-Julian",
+      "contributions": [
+        "doc"
       ]
     }
   ],

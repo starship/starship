@@ -22,10 +22,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     match get_rust_version() {
         Some(rust_version) => {
             const RUST_CHAR: &str = "🦀 ";
-            let module_color = Color::Red.bold();
 
             let mut module = context.new_module("rust");
-            module.set_style(module_color);
+            let module_style = module
+                .config_value_style("style")
+                .unwrap_or_else(|| Color::Red.bold());
+            module.set_style(module_style);
 
             let formatted_version = format_rustc_version(rust_version);
             module.new_segment("symbol", RUST_CHAR);

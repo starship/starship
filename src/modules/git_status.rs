@@ -35,10 +35,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo_root = repo.root.as_ref()?;
     let repository = Repository::open(repo_root).ok()?;
 
-    let module_style = Color::Red.bold();
     let mut module = context.new_module("git_status");
-
     let show_sync_count = module.config_value_bool("show_sync_count").unwrap_or(false);
+    let module_style = module
+        .config_value_style("style")
+        .unwrap_or_else(|| Color::Red.bold());
 
     module.get_prefix().set_value("[").set_style(module_style);
     module.get_suffix().set_value("] ").set_style(module_style);

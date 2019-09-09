@@ -20,9 +20,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let module_style = module
+        .config_value_style("style")
+        .unwrap_or_else(|| Color::Yellow.bold());
+    module.set_style(module_style);
     module.get_prefix().set_value("(");
     module.get_suffix().set_value(") ");
-    module.set_style(Color::Yellow.bold());
 
     let label = match state_description {
         StateDescription::Label(label) => label,

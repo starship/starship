@@ -12,10 +12,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     match get_package_version() {
         Some(package_version) => {
             const PACKAGE_CHAR: &str = "📦 ";
-            let module_color = Color::Red.bold();
 
             let mut module = context.new_module("package");
-            module.set_style(module_color);
+            let module_style = module
+                .config_value_style("style")
+                .unwrap_or_else(|| Color::Red.bold());
+            module.set_style(module_style);
             module.get_prefix().set_value("is ");
 
             module.new_segment("symbol", PACKAGE_CHAR);

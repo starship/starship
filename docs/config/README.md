@@ -40,6 +40,18 @@ are segments within it. Every module also has a prefix and suffix that are the d
  "via "         "⬢"        "v10.4.1"       ""
 ```
 
+### Style Strings
+
+Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+
+- `"fg:green bg:blue"` sets green text on a blue background
+- `"bg:blue fg:bright-green"` sets bright green text on a blue background
+- `"bold fg:27"` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
+- `"underline bg:#bf5700"` sets underlined text on a burnt orange background
+- `""` explicitly disables all styling
+
+Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors.
+
 ## Prompt
 
 This is the list of prompt-wide configuration options.
@@ -96,12 +108,13 @@ The module is only visible when the device's battery is below 10%.
 
 ### Options
 
-| Variable             | Default | Description                                       |
-| -------------------- | ------- | ------------------------------------------------- |
-| `full_symbol`        | `"•"`   | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`   | The symbol shown when the battery is charging.    |
-| `discharging_symbol` | `"⇣"`   | The symbol shown when the battery is discharging. |
-| `disabled`           | `false` | Disables the `battery` module.                    |
+| Variable             | Default      | Description                                       |
+| -------------------- | ------------ | ------------------------------------------------- |
+| `full_symbol`        | `"•"`        | The symbol shown when the battery is full.        |
+| `charging_symbol`    | `"⇡"`        | The symbol shown when the battery is charging.    |
+| `discharging_symbol` | `"⇣"`        | The symbol shown when the battery is discharging. |
+| `style`              | `"bold red"` | The style for the module.                         |
+| `disabled`           | `false`      | Disables the `battery` module.                    |
 
 ### Example
 
@@ -125,13 +138,15 @@ can do this in two ways: by changing color (red/green) or by changing its shape
 
 ### Options
 
-| Variable                | Default | Description                                                                         |
-| ----------------------- | ------- | ----------------------------------------------------------------------------------- |
-| `symbol`                | `"❯"`   | The symbol used before the text input in the prompt.                                |
-| `error_symbol`          | `"✖"`   | The symbol used before text input if the previous command failed.                   |
-| `use_symbol_for_status` | `false` | Indicate error status by changing the symbol.                                       |
-| `vicmd_symbol`          | `"❮"`   | The symbol used before the text input in the prompt if shell is in vim normal mode. |
-| `disabled`              | `false` | Disables the `character` module.                                                    |
+| Variable                | Default        | Description                                                                         |
+| ----------------------- | -------------- | ----------------------------------------------------------------------------------- |
+| `symbol`                | `"❯"`          | The symbol used before the text input in the prompt.                                |
+| `error_symbol`          | `"✖"`          | The symbol used before text input if the previous command failed.                   |
+| `use_symbol_for_status` | `false`        | Indicate error status by changing the symbol.                                       |
+| `vicmd_symbol`          | `"❮"`          | The symbol used before the text input in the prompt if shell is in vim normal mode. |
+| `style_success`         | `"bold green"` | The style used if the last command was successful.                                  |
+| `style_failure`         | `"bold red"`   | The style used if the last command failed.                                          |
+| `disabled`              | `false`        | Disables the `character` module.                                                    |
 
 ### Example
 
@@ -162,10 +177,11 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Variable   | Default | Description                         |
-| ---------- | ------- | ----------------------------------- |
-| `min_time` | `2`     | Shortest duration to show time for. |
-| `disabled` | `false` | Disables the `cmd_duration` module. |
+| Variable   | Default         | Description                         |
+| ---------- | --------------- | ----------------------------------- |
+| `min_time` | `2`             | Shortest duration to show time for. |
+| `style`    | `"bold yellow"` | The style for the module.           |
+| `disabled` | `false`         | Disables the `cmd_duration` module. |
 
 ### Example
 
@@ -192,12 +208,13 @@ it would have been `nixpkgs/pkgs`.
 
 ### Options
 
-| Variable                    | Default | Description                                                                      |
-| --------------------------- | ------- | -------------------------------------------------------------------------------- |
-| `truncation_length`         | `3`     | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`          | `true`  | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `disabled`                  | `false` | Disables the `directory` module.                                                 |
-| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.         |
+| Variable                    | Default       | Description                                                                      |
+| --------------------------- | ------------- | -------------------------------------------------------------------------------- |
+| `truncation_length`         | `3`           | The number of parent folders that the current directory should be truncated to.  |
+| `truncate_to_repo`          | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `fish_style_pwd_dir_length` | `0`           | The number of characters to use when applying fish shell pwd path logic.         |
+| `style`                     | `"bold cyan"` | The style for the module.                                                        |
+| `disabled`                  | `false`       | Disables the `directory` module.                                                 |
 
 ### Example
 
@@ -214,12 +231,13 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Options
 
-| Variable            | Default    | Description                                                                           |
-| ------------------- | ---------- | ------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`     | The symbol used before the branch name of the repo in your current directory.         |
-| `disabled`          | `false`    | Disables the `git_branch` module.                                                     |
-| `truncation_length` | `2^63 - 1` | Truncates a git branch to X graphemes                                                 |
-| `truncation_symbol` | `"…"`      | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
+| Variable            | Default         | Description                                                                           |
+| ------------------- | --------------- | ------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
+| `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
+| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
+| `style`             | `"bold purple"` | The style for the module.                                                             |
+| `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
 
 ### Example
 
@@ -251,6 +269,7 @@ that information will be shown too.
 | `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
 | `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
 | `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
+| `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
 | `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
 ### Example
@@ -270,20 +289,21 @@ current directory.
 
 ### Options
 
-| Variable          | Default | Description                                             |
-| ----------------- | ------- | ------------------------------------------------------- |
-| `conflicted`      | `"="`   | This branch has merge conflicts.                        |
-| `ahead`           | `"⇡"`   | This branch is ahead of the branch being tracked.       |
-| `behind`          | `"⇣"`   | This branch is behind of the branch being tracked.      |
-| `diverged`        | `"⇕"`   | This branch has diverged from the branch being tracked. |
-| `untracked`       | `"?"`   | There are untracked files in the working directory.     |
-| `stashed`         | `"$"`   | A stash exists for the local repository.                |
-| `modified`        | `"!"`   | There are file modifications in the working directory.  |
-| `staged`          | `"+"`   | A new file has been added to the staging area.          |
-| `renamed`         | `"»"`   | A renamed file has been added to the staging area.      |
-| `deleted`         | `"✘"`   | A file's deletion has been added to the staging area.   |
-| `show_sync_count` | `false` | Show ahead/behind count of the branch being tracked.    |
-| `disabled`        | `false` | Disables the `git_status` module.                       |
+| Variable          | Default      | Description                                             |
+| ----------------- | ------------ | ------------------------------------------------------- |
+| `conflicted`      | `"="`        | This branch has merge conflicts.                        |
+| `ahead`           | `"⇡"`        | This branch is ahead of the branch being tracked.       |
+| `behind`          | `"⇣"`        | This branch is behind of the branch being tracked.      |
+| `diverged`        | `"⇕"`        | This branch has diverged from the branch being tracked. |
+| `untracked`       | `"?"`        | There are untracked files in the working directory.     |
+| `stashed`         | `"$"`        | A stash exists for the local repository.                |
+| `modified`        | `"!"`        | There are file modifications in the working directory.  |
+| `staged`          | `"+"`        | A new file has been added to the staging area.          |
+| `renamed`         | `"»"`        | A renamed file has been added to the staging area.      |
+| `deleted`         | `"✘"`        | A file's deletion has been added to the staging area.   |
+| `show_sync_count` | `false`      | Show ahead/behind count of the branch being tracked.    |
+| `style`           | `"bold red"` | The style for the module.                               |
+| `disabled`        | `false`      | Disables the `git_status` module.                       |
 
 ### Example
 
@@ -303,31 +323,6 @@ renamed = "👅"
 deleted = "🗑"
 ```
 
-## Hostname
-
-The `hostname` module shows the system hostname.
-
-### Options
-
-| Variable   | Default | Description                                          |
-| ---------- | ------- | ---------------------------------------------------- |
-| `ssh_only` | `true`  | Only show hostname when connected to an SSH session. |
-| `prefix`   | `""`    | Prefix to display immediately before the hostname.   |
-| `suffix`   | `""`    | Suffix to display immediately after the hostname.    |
-| `disabled` | `false` | Disables the `hostname` module.                      |
-
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[hostname]
-ssh_only = false
-prefix = "⟪"
-suffix = "⟫"
-disabled = false
-```
-
 ## Golang
 
 The `golang` module shows the currently installed version of Golang.
@@ -343,10 +338,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default | Description                                              |
-| ---------- | ------- | -------------------------------------------------------- |
-| `symbol`   | `"🐹 "` | The symbol used before displaying the version of Golang. |
-| `disabled` | `false` | Disables the `golang` module.                            |
+| Variable   | Default       | Description                                              |
+| ---------- | ------------- | -------------------------------------------------------- |
+| `symbol`   | `"🐹 "`       | The symbol used before displaying the version of Golang. |
+| `style`    | `"bold cyan"` | The style for the module.                                |
+| `disabled` | `false`       | Disables the `golang` module.                            |
 
 ### Example
 
@@ -357,6 +353,34 @@ The module will be shown if any of the following conditions are met:
 symbol = "🏎💨 "
 ```
 
+
+## Hostname
+
+The `hostname` module shows the system hostname.
+
+### Options
+
+| Variable   | Default               | Description                                          |
+| ---------- | --------------------- | ---------------------------------------------------- |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session. |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.    |
+| `style`    | `"bold dimmed green"` | The style for the module.                            |
+| `disabled` | `false`               | Disables the `hostname` module.                      |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+prefix = "⟪"
+suffix = "⟫"
+disabled = false
+```
+
+
 ## Jobs
 
 The `jobs` module shows the current number of jobs running.
@@ -366,11 +390,12 @@ more than the `threshold` config value, if it exists.
 
 ### Options
 
-| Variable    | Default | Description                                           |
-| ----------- | ------- | ----------------------------------------------------- |
-| `symbol`    | `"✦ "`  | The symbol used before displaying the number of jobs. |
-| `threshold` | `1`     | Show number of jobs if exceeded.                      |
-| `disabled`  | `false` | Disables the `jobs` module.                           |
+| Variable    | Default       | Description                                           |
+| ----------- | ------------- | ----------------------------------------------------- |
+| `symbol`    | `"✦ "`        | The symbol used before displaying the number of jobs. |
+| `threshold` | `1`           | Show number of jobs if exceeded.                      |
+| `style`     | `"bold blue"` | The style for the module.                             |
+| `disabled`  | `false`       | Disables the `jobs` module.                           |
 
 ### Example
 
@@ -401,29 +426,34 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
-## Ruby
 
-The `ruby` module shows the currently installed version of Ruby.
-The module will be shown if any of the following conditions are met:
+## Nix-shell
 
-- The current directory contains a `Gemfile` file
-- The current directory contains a `.rb` file
+The `nix_shell` module shows the nix-shell environment.
+The module will be shown when inside a nix-shell environment.
 
 ### Options
 
-| Variable   | Default | Description                                            |
-| ---------- | ------- | ------------------------------------------------------ |
-| `symbol`   | `"💎 "` | The symbol used before displaying the version of Ruby. |
-| `disabled` | `false` | Disables the `ruby` module.                            |
+| Variable     | Default      | Description                        |
+| ------------ | ------------ | ---------------------------------- |
+| `use_name`   | `false`      | Display the name of the nix-shell. |
+| `impure_msg` | `impure`     | Customize the "impure" msg.        |
+| `pure_msg`   | `pure`       | Customize the "pure" msg.          |
+| `style`      | `"bold red"` | The style for the module.          |
+| `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
 ### Example
 
 ```toml
 # ~/.config/starship.toml
 
-[ruby]
-symbol = "🔺 "
+[nix_shell]
+disabled = true
+use_name = true
+impure_msg = "impure shell"
+pure_msg = "pure shell"
 ```
+
 
 ## NodeJS
 
@@ -436,10 +466,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default | Description                                              |
-| ---------- | ------- | -------------------------------------------------------- |
-| `symbol`   | `"⬢ "`  | The symbol used before displaying the version of NodeJS. |
-| `disabled` | `false` | Disables the `nodejs` module.                            |
+| Variable   | Default        | Description                                              |
+| ---------- | -------------- | -------------------------------------------------------- |
+| `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
+| `style`    | `"bold green"` | The style for the module.                                |
+| `disabled` | `false`        | Disables the `nodejs` module.                            |
 
 ### Example
 
@@ -468,10 +499,11 @@ and `poetry` packages.
 
 ### Options
 
-| Variable   | Default | Description                                                |
-| ---------- | ------- | ---------------------------------------------------------- |
-| `symbol`   | `"📦 "` | The symbol used before displaying the version the package. |
-| `disabled` | `false` | Disables the `package` module.                             |
+| Variable   | Default      | Description                                                |
+| ---------- | ------------ | ---------------------------------------------------------- |
+| `symbol`   | `"📦 "`      | The symbol used before displaying the version the package. |
+| `style`    | `"bold red"` | The style for the module.                                  |
+| `disabled` | `false`      | Disables the `package` module.                             |
 
 ### Example
 
@@ -502,12 +534,13 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable             | Default    | Description                                                                 |
-| -------------------- | ---------- | --------------------------------------------------------------------------- |
-| `symbol`             | `"🐍 "`    | The symbol used before displaying the version of Python.                    |
-| `disabled`           | `false`    | Disables the `python` module.                                               |
-| `pyenv_version_name` | `false`    | Use pyenv to get Python version                                             |
-| `pyenv_prefix`       | `"pyenv "` | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
+| Variable             | Default         | Description                                                                 |
+| -------------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`         | The symbol used before displaying the version of Python.                    |
+| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
+| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
+| `style`              | `"bold yellow"` | The style for the module.                                                   |
+| `disabled`           | `false`         | Disables the `python` module.                                               |
 
 ### Example
 
@@ -520,6 +553,31 @@ pyenv_version_name = true
 pyenv_prefix = "foo "
 ```
 
+## Ruby
+
+The `ruby` module shows the currently installed version of Ruby.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `Gemfile` file
+- The current directory contains a `.rb` file
+
+### Options
+
+| Variable   | Default      | Description                                            |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `symbol`   | `"💎 "`      | The symbol used before displaying the version of Ruby. |
+| `style`    | `"bold red"` | The style for the module.                              |
+| `disabled` | `false`      | Disables the `ruby` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[ruby]
+symbol = "🔺 "
+```
+
 ## Rust
 
 The `rust` module shows the currently installed version of Rust.
@@ -530,10 +588,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default | Description                                            |
-| ---------- | ------- | ------------------------------------------------------ |
-| `symbol`   | `"🦀 "` | The symbol used before displaying the version of Rust. |
-| `disabled` | `false` | Disables the `rust` module.                            |
+| Variable   | Default      | Description                                            |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `symbol`   | `"🦀 "`      | The symbol used before displaying the version of Rust. |
+| `style`    | `"bold red"` | The style for the module.                              |
+| `disabled` | `false`      | Disables the `rust` module.                            |
 
 ### Example
 
@@ -555,9 +614,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default | Description                     |
-| ---------- | ------- | ------------------------------- |
-| `disabled` | `false` | Disables the `username` module. |
+| Variable     | Default         | Description                           |
+| ------------ | --------------- | ------------------------------------- |
+| `style_root` | `"bold red"`    | The style used when the user is root. |
+| `style_user` | `"bold yellow"` | The style used for non-root users.    |
+| `disabled`   | `false`         | Disables the `username` module.       |
 
 ### Example
 
@@ -566,30 +627,4 @@ The module will be shown if any of the following conditions are met:
 
 [username]
 disabled = true
-```
-
-## Nix-shell
-
-The `nix_shell` module shows the nix-shell environment.
-The module will be shown when inside a nix-shell environment.
-
-### Options
-
-| Variable     | Default  | Description                        |
-| ------------ | -------- | ---------------------------------- |
-| `disabled`   | `false`  | Disables the `nix_shell` module.   |
-| `use_name`   | `false`  | Display the name of the nix-shell. |
-| `impure_msg` | `impure` | Customize the "impure" msg.        |
-| `pure_msg`   | `pure`   | Customize the "pure" msg.          |
-
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[nix_shell]
-disabled = true
-use_name = true
-impure_msg = "impure shell"
-pure_msg = "pure shell"
 ```

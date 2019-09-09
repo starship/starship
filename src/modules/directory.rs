@@ -17,9 +17,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const HOME_SYMBOL: &str = "~";
     const DIR_TRUNCATION_LENGTH: i64 = 3;
     const FISH_STYLE_PWD_DIR_LENGTH: i64 = 0;
-    let module_color = Color::Cyan.bold();
 
     let mut module = context.new_module("directory");
+    let module_color = module
+        .config_value_style("style")
+        .unwrap_or_else(|| Color::Cyan.bold());
     module.set_style(module_color);
 
     let truncation_length = module

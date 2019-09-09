@@ -22,10 +22,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     match get_ruby_version() {
         Some(ruby_version) => {
             const RUBY_CHAR: &str = "💎 ";
-            let module_color = Color::Red.bold();
 
             let mut module = context.new_module("ruby");
-            module.set_style(module_color);
+            let module_style = module
+                .config_value_style("style")
+                .unwrap_or_else(|| Color::Red.bold());
+            module.set_style(module_style);
 
             let formatted_version = format_ruby_version(&ruby_version)?;
             module.new_segment("symbol", RUBY_CHAR);

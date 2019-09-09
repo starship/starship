@@ -15,11 +15,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let logname = env::var("LOGNAME").ok();
     let ssh_connection = env::var("SSH_CONNECTION").ok();
 
-    let mut module_color = Color::Yellow.bold();
-
-    if user != logname || ssh_connection.is_some() || is_root(&mut module_color) {
+    const ROOT_UID: Option<u32> = Some(0);
+    let user_uid = get_uid();
+    if user != logname || ssh_connection.is_some() || user_uid == ROOT_UID {
         let mut module = context.new_module("username");
-        module.set_style(module_color);
+        let module_style = get_mod_style(user_uid, &module);
+        module.set_style(module_style);
         module.new_segment("username", &user?);
 
         return Some(module);
@@ -37,13 +38,13 @@ fn get_uid() -> Option<u32> {
     }
 }
 
-fn is_root(style: &mut Style) -> bool {
-    match get_uid() {
-        Some(uid) if uid == 0 => {
-            style.clone_from(&Color::Red.bold());
-
-            true
-        }
-        _ => false,
+fn get_mod_style(user_uid: Option<u32>, module: &Module) -> Style {
+    match user_uid {
+        Some(0) => module
+            .config_value_style("style_root")
+            .unwrap_or_else(|| Color::Red.bold()),
+        _ => module
+            .config_value_style("style_user")
+            .unwrap_or_else(|| Color::Yellow.bold()),
     }
 }

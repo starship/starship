@@ -46,8 +46,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             }
         })
         .map(|segment| {
-            let module_color = Color::Red.bold();
-            module.set_style(module_color);
+            let module_style = module
+                .config_value_style("style")
+                .unwrap_or_else(|| Color::Red.bold());
+            module.set_style(module_style);
             module.new_segment("nix_shell", &segment);
             module
         })
