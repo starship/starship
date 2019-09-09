@@ -82,9 +82,6 @@ impl<'a> Context<'a> {
     }
 
     /// Create a new module
-    ///
-    /// Can always return a new module as if a module was disabled it won't get
-    /// to this point.
     pub fn new_module(&self, name: &str) -> Module {
         let config = self.config.get_module_config(name);
 

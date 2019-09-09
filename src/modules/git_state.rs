@@ -80,6 +80,9 @@ static AM_OR_REBASE_LABEL: StateLabel = StateLabel {
     message_default: "AM/REBASE",
 };
 
+/// Returns the state of the current repository
+///
+/// During a git operation it will show: REBASING, BISECTING, MERGING, etc.
 fn get_state_description(state: RepositoryState, root: &PathBuf) -> StateDescription {
     match state {
         RepositoryState::Clean => StateDescription::Clean,
