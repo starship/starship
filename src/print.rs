@@ -29,7 +29,7 @@ const DEFAULT_PROMPT_ORDER: &[&str] = &[
     "line_break",
     "jobs",
     #[cfg(feature = "battery")]
-    "battery",
+    "time",
     "character",
 ];
 

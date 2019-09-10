@@ -15,6 +15,7 @@ mod package;
 mod python;
 mod ruby;
 mod rust;
+mod time;
 mod username;
 
 #[cfg(feature = "battery")]
@@ -44,6 +45,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "jobs" => jobs::module(context),
         "nix_shell" => nix_shell::module(context),
         "hostname" => hostname::module(context),
+        "time" => time::module(context),
 
         _ => {
             eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
