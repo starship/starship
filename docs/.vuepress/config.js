@@ -53,7 +53,7 @@ module.exports = {
         sidebar: [
           "/",
           ["/guide/", "ガイド"],
-          ["/config/", "Configuration"],
+          ["/config/", "設定"],
           ["/advanced-config/", "Advanced Configuration"]
         ],
       },
