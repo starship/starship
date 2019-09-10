@@ -61,7 +61,7 @@ else
     fi
 
     # Finally, prepare the precmd function and set up the start time.
-    PROMPT_COMMAND=starship_precmd
+    PROMPT_COMMAND="starship_precmd;$PROMPT_COMMAND"
 fi
 
 # Set up the start time and STARSHIP_SHELL, which controls shell-specific sequences
