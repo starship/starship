@@ -5,7 +5,7 @@ use super::{Context, Module};
 
 /// Outputs the current time
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module("time")?;
+    let mut module = context.new_module("time");
 
     // Remove when logic for disabled by default exists
     if module.config_value_bool("disabled").unwrap_or(true) {
@@ -27,8 +27,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .to_owned();
 
     log::trace!(
-        "Timer module is enabled with format string: {}",
-        time_format
+        "Timer module is enabled with format string: {}", time_format
     );
 
     let local: DateTime<Local> = Local::now();
