@@ -54,7 +54,7 @@ module.exports = {
           "/",
           ["/guide/", "ガイド"],
           ["/config/", "設定"],
-          ["/advanced-config/", "Advanced Configuration"]
+          ["/advanced-config/", "高度な設定"]
         ],
       },
     }
