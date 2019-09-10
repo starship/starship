@@ -42,7 +42,7 @@ module.exports = {
       },
       "/ja/": {
         // text for the language dropdown
-        selectText: "Languages",
+        selectText: "言語",
         // label for this locale in the language dropdown
         label: "日本語",
         // Custom text for edit link. Defaults to "Edit this page"
