@@ -6,7 +6,16 @@ use tempfile::TempDir;
 
 use crate::common::{self, TestCommand};
 
+/* Note: tests in this crate cannot rely on the actual time displayed by
+the module, since that is dependent on the time inside the test environment,
+which we cannot control.
+
+However, we *can* test certain things here, such as the fact that the module
+should not display when disabled, should display *something* when enabled,
+and should have the correct prefixes and suffixes in a given config */
+
 #[test]
+#[ignore]
 fn config_enabled() -> io::Result<()> {
     let output = common::render_module("time")
         .use_config(toml::toml! {
@@ -22,6 +31,7 @@ fn config_enabled() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn config_blank() -> io::Result<()> {
     let output = common::render_module("time").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
@@ -32,6 +42,7 @@ fn config_blank() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn config_check_prefix_and_suffix() -> io::Result<()> {
     let output = common::render_module("time")
         .use_config(toml::toml! {

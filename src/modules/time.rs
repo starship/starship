@@ -18,10 +18,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .unwrap_or_else(|| Color::Yellow.bold());
     module.set_style(module_style);
 
-    // Get module settings set up
+    // Load module settings
     let prefix = module.config_value_str("prefix").unwrap_or("").to_owned();
     let suffix = module.config_value_str("suffix").unwrap_or("").to_owned();
     let is_12hr = module.config_value_bool("12hr").unwrap_or(false);
+
     let default_format = if is_12hr { "%r" } else { "%T" };
     let time_format = module
         .config_value_str("format")
@@ -42,10 +43,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 /// Format a given time into the given string. This function should be referentially
 /// transparent, which makes it easy to test (unlike anything involving the actual time)
 fn format_time(time_format: &str, localtime: DateTime<Local>) -> String {
-    // Get module settings
     localtime.format(time_format).to_string()
 }
 
+/* Because we cannot do integration tests on the time module, these unit
+tests become extra important */
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -94,5 +96,4 @@ mod tests {
         let formatted = format_time(FMT_24, time);
         assert_eq!(formatted, "15:36:47");
     }
-
 }
