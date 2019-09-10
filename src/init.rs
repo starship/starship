@@ -135,6 +135,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         }
     };
     if let Some(script) = setup_script {
+        // Set up quoting for starship path in case it has spaces.
         let starship_path_string = format!("\"{}\"", starship_path);
         let script = script.replace("::STARSHIP::", &starship_path_string);
         print!("{}", script);
