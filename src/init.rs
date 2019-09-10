@@ -122,9 +122,9 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
     let starship_path = path_to_starship()?.replace("\"", "\"'\"'\"");
 
     let setup_script = match shell_name {
-        "bash" => Some(BASH_INIT.replace("## STARSHIP ##", &format!("\"{}\"", starship_path))),
-        "zsh" => Some(ZSH_INIT.replace("## STARSHIP ##", &format!("\"{}\"", starship_path))),
-        "fish" => Some(FISH_INIT.replace("## STARSHIP ##", &format!("\"{}\"", starship_path))),
+        "bash" => Some(BASH_INIT),
+        "zsh" => Some(ZSH_INIT),
+        "fish" => Some(FISH_INIT),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
@@ -135,6 +135,8 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         }
     };
     if let Some(script) = setup_script {
+        let starship_path_string = format!("\"{}\"", starship_path);
+        let script = script.replace("::STARSHIP::", &starship_path_string);
         print!("{}", script);
     };
     Ok(())
