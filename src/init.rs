@@ -159,7 +159,7 @@ to avoid the cost of an additional shell fork every shell draw.
 
 Note that the init scripts are not in their final form--they are processed by
 `starship init` prior to emitting the final form. In this processing, some tokens
-are replaced, e.g. `## STARSHIP ##` is replaced by the full path to the
+are replaced, e.g. `::STARSHIP::` is replaced by the full path to the
 starship binary.
 */
 
