@@ -16,8 +16,8 @@ fn config_enabled() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = "";
-    assert_eq!(expected, actual);
+    // We can't test what it actually is...but we can assert it's not blank
+    assert!(actual.len() > 0);
     Ok(())
 }
 
@@ -28,5 +28,28 @@ fn config_blank() -> io::Result<()> {
 
     let expected = "";
     assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+fn config_check_prefix_and_suffix() -> io::Result<()> {
+    let output = common::render_module("time")
+        .use_config(toml::toml! {
+            [time]
+            disabled = false
+            prefix = "["
+            suffix = "]"
+        })
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    // This is the prefix with "at ", the color code, then the prefix char [
+    let col_prefix = format!("at {}{}[", '\u{1b}', "[1;33m");
+
+    // This is the suffix with suffix char ']', then color codes, then a space
+    let col_suffix = format!("]{}{} ", '\u{1b}', "[0m");
+
+    assert!(actual.starts_with(&col_prefix));
+    assert!(actual.ends_with(&col_suffix));
     Ok(())
 }
