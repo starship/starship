@@ -46,7 +46,7 @@ module.exports = {
         // label for this locale in the language dropdown
         label: "日本語",
         // Custom text for edit link. Defaults to "Edit this page"
-        editLinkText: "Edit this page on GitHub",
+        editLinkText: "GitHub で編集する",
         // Custom navbar values
         nav: [{ text: "Configuration", link: "/config/" }],
         // Custom sidebar values
