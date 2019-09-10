@@ -10,7 +10,12 @@ Directly using `eval` on a shell script causes it to be evaluated in
 a single line, which sucks because things like comments will comment out the
 rest of the script, and you have to spam semicolons everywhere. By using
 source and process substitutions, we make it possible to comment and debug
-the init scripts. */
+the init scripts.
+
+In the future, this may be changed to just directly evaluating the initscript
+using whatever mechanism is available in the host shell--this two-phase solution
+has been developed as a compatibility measure with `eval $(starship init X)`
+*/
 
 fn path_to_starship() -> io::Result<String> {
     let current_exe = env::current_exe()?
