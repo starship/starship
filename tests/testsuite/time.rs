@@ -26,7 +26,7 @@ fn config_enabled() -> io::Result<()> {
     let actual = String::from_utf8(output.stdout).unwrap();
 
     // We can't test what it actually is...but we can assert it's not blank
-    assert!(actual.len() > 0);
+    assert!(!actual.is_empty());
     Ok(())
 }
 
