@@ -27,7 +27,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .to_owned();
 
     log::trace!(
-        "Timer module is enabled with format string: {}", time_format
+        "Timer module is enabled with format string: {}",
+        time_format
     );
 
     let local: DateTime<Local> = Local::now();
