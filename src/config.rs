@@ -66,6 +66,7 @@ impl Config for Table {
 
     /// Get the subset of the table for a module by its name
     fn get_module_config(&self, module_name: &str) -> Option<&toml::value::Table> {
+        log::trace!("{}",module_name);
         let module_config = self.get(module_name).and_then(toml::Value::as_table);
 
         if module_config.is_some() {

@@ -1,5 +1,4 @@
 use ansi_term::Color;
-use chrono::offset::TimeZone;
 use chrono::{DateTime, Local};
 
 use super::{Context, Module};
@@ -19,8 +18,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_style(module_style);
 
     // Load module settings
-    let prefix = module.config_value_str("prefix").unwrap_or("").to_owned();
-    let suffix = module.config_value_str("suffix").unwrap_or("").to_owned();
     let is_12hr = module.config_value_bool("12hr").unwrap_or(false);
 
     let default_format = if is_12hr { "%r" } else { "%T" };
@@ -29,12 +26,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .unwrap_or(default_format)
         .to_owned();
 
+    log::trace!(
+        "Timer module is enabled with format string: {}",
+        time_format
+    );
+
     let local: DateTime<Local> = Local::now();
     let formatted_time_string = format_time(&time_format, local);
-    module.new_segment(
-        "time",
-        &format!("{}{}{}", prefix, formatted_time_string, suffix),
-    );
+    module.new_segment("time", &formatted_time_string);
     module.get_prefix().set_value("at ");
 
     Some(module)
@@ -95,5 +94,11 @@ mod tests {
         let time = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let formatted = format_time(FMT_24, time);
         assert_eq!(formatted, "15:36:47");
+    }
+
+    fn test_format_with_paren() {
+        let time = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let formatted = format_time("[%T]", time);
+        assert_eq!(formatted, "[15:36:47]");
     }
 }
