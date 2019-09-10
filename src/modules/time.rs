@@ -1,4 +1,5 @@
 use ansi_term::Color;
+use chrono::offset::TimeZone;
 use chrono::{DateTime, Local};
 
 use super::{Context, Module};
