@@ -19,7 +19,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let battery_status = get_battery_status()?;
     let BatteryStatus { state, percentage } = battery_status;
 
-    let mut module = context.new_module("battery")?;
+    let mut module = context.new_module("battery");
 
     // Parse config under `display`
     let display_styles = get_display_styles(&module);
