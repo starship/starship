@@ -13,7 +13,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Some(package_version) => {
             const PACKAGE_CHAR: &str = "📦 ";
 
-            let mut module = context.new_module("package")?;
+            let mut module = context.new_module("package");
             let module_style = module
                 .config_value_style("style")
                 .unwrap_or_else(|| Color::Red.bold());

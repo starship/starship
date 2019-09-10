@@ -29,7 +29,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Some(go_version) => {
             const GO_CHAR: &str = "🐹 ";
 
-            let mut module = context.new_module("golang")?;
+            let mut module = context.new_module("golang");
             let module_style = module
                 .config_value_style("style")
                 .unwrap_or_else(|| Color::Cyan.bold());
