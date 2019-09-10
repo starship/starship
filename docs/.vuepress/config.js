@@ -52,7 +52,7 @@ module.exports = {
         // Custom sidebar values
         sidebar: [
           "/",
-          ["/guide/", "Guide"],
+          ["/guide/", "ガイド"],
           ["/config/", "Configuration"],
           ["/advanced-config/", "Advanced Configuration"]
         ],
