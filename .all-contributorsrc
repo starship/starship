@@ -266,6 +266,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "heyrict",
+      "name": "谢祯晖",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/25698503?v=4",
+      "profile": "https://github.com/heyrict",
+      "contributions": [
+        "translation"
+      ]
     }
   ],
   "contributorsPerLine": 7
