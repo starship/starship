@@ -119,17 +119,8 @@ struct BatteryDisplayStyle {
 impl BatteryDisplayStyle {
     /// construct battery display style from toml table
     pub fn from_config(config: &toml::value::Table) -> Option<BatteryDisplayStyle> {
-        let threshold = if let Some(threshold) = config.get_as_i64("threshold") {
-            threshold
-        } else {
-            return None;
-        };
-
-        let style = if let Some(style) = config.get_as_ansi_style("style") {
-            style
-        } else {
-            return None;
-        };
+        let threshold = config.get_as_i64("threshold")?;
+        let style = config.get_as_ansi_style("style")?;
 
         Some(BatteryDisplayStyle { threshold, style })
     }
