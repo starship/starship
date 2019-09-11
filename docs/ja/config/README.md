@@ -24,7 +24,7 @@ symbol = "➜"     # The "symbol" segment is being set to "➜"
 disabled = true
 ```
 
-### Terminology
+### 用語
 
 **モジュール**: OSのコンテキスト情報に基づいて情報を提供するプロンプト内のコンポーネントです。たとえば、現在のディレクトリがNodeJSプロジェクトである場合、「nodejs」モジュールは、現在コンピューターにインストールされているNodeJSのバージョンを表示します。
 
@@ -41,23 +41,23 @@ disabled = true
 
 starshipのほとんどのモジュールでは、表示スタイルを設定できます。これは、設定を指定する文字列であるエントリ（`style`）で行われます。スタイル文字列の例とその機能を次に示します。完全な構文の詳細については、詳細は [高度な設定](/advanced-config/)を参照してください 。
 
-- `"fg:green bg:blue"` sets green text on a blue background
-- `"bg:blue fg:bright-green"` sets bright green text on a blue background
-- `"bold fg:27"` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
-- `"underline bg:#bf5700"` sets underlined text on a burnt orange background
-- `""` explicitly disables all styling
+- `"fg:green bg:blue"`は、青色の背景に緑色のテキストを設定します
+- `"bg:blue fg:bright-green"`は、青色の背景に明るい緑色のテキストを設定します
+- `"bold fg:27"`は、 [ANSIカラー](https://i.stack.imgur.com/KTSQa.png) 27の太字テキストを設定します
+- `"underline bg:#bf5700"`は、焦げたオレンジ色の背景に下線付きのテキストを設定します
+- `""`はすべてのスタイルを明示的に無効にします
 
 スタイリングがどのように見えるかは、端末エミュレータによって制御されることに注意してください。たとえば、一部の端末エミュレータはテキストを太字にする代わりに色を明るくします。また、一部のカラーテーマは通常の色と明るい色と同じ値を使用します。
 
-## Prompt
+## プロンプト
 
 これは、プロンプト全体のオプションのリストです。
 
-### Options
+### オプション
 
 変数 | デフォルト | 説明
 --- | --- | ---
-`add_newline` | `true` | Add a new line before the start of the prompt.
+`add_newline` | `true` | プロンプトの開始前に新しい行を追加します。
 `prompt_order` | [link](#%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%81%AE%E3%83%97%E3%83%AD%E3%83%B3%E3%83%97%E3%83%88%E9%A0%86) | プロンプトモジュールを出力する順序を設定します。
 
 ### 設定例
@@ -101,18 +101,17 @@ default_prompt_order = [
 
 ## バッテリー
 
-The `battery` module shows how charged the device's battery is and its current charging status.
-The module is only visible when the device's battery is below 10%.
+`battery`モジュールは、デバイスのバッテリーの充電状態と現在の充電状態を示します。モジュールは、デバイスのバッテリーが10％未満の場合にのみ表示されます。
 
 ### オプション
 
-Variable | デフォルト | 説明
+変数 | デフォルト | 説明
 --- | --- | ---
 `full_symbol` | `"•"` | バッテリーが満タンのときに表示される記号です。
 `charging_symbol` | `"⇡"` | バッテリーの充電中に表示される記号です。
 `discharging_symbol` | `"⇣"` | バッテリーが放電しているときに表示される記号です。
 `style` | `"bold red"` | モジュールのスタイルです。
-`disabled` | `false` | Disables the `battery` module.
+`disabled` | `false` | `battery`モジュールを無効にします。
 
 ### 設定例
 
@@ -127,22 +126,21 @@ discharging_symbol = "💀"
 
 ## 文字
 
-The `character` module shows a character (usually an arrow) beside where the text
-is entered in your terminal.
+`character`モジュールは、端末でテキストが入力される場所の横に文字（通常は矢印）を表示します。
 
 文字は、最後のコマンドが成功したかどうかを示します。これは、色の変更（赤/緑）またはその形状の変更(❯/✖)の2つの方法で行うことができます。後者は`use_symbol_for_status`に`true`設定されている場合にのみ行われます。
 
 ### オプション
 
-Variable | Default | 説明
+変数 | デフォルト | 説明
 --- | --- | ---
 `symbol` | `"❯"` | プロンプトでテキストを入力する前に使用される記号です。
 `error_symbol` | `"✖"` | 前のコマンドが失敗した場合にテキスト入力の前に使用される記号です。
-`use_symbol_for_status` | `false` | Indicate error status by changing the symbol.
+`use_symbol_for_status` | `false` | シンボルを変更してエラーステータスを示します。
 `vicmd_symbol` | `"❮"` | シェルがvimの通常モードである場合、プロンプトのテキスト入力の前に使用される記号です。
 `style_success` | `"bold green"` | 最後のコマンドが成功した場合に使用されるスタイルです。
 `style_failure` | `"bold red"` | 最後のコマンドが失敗した場合に使用されるスタイルです。
-`disabled` | `false` | Disables the `character` module.
+`disabled` | `false` | `character`モジュールを無効にします。
 
 ### 設定例
 
@@ -157,22 +155,20 @@ use_symbol_for_status = true
 
 ## コマンド実行時間
 
-The `cmd_duration` module shows how long the last command took to execute.
-The module will be shown only if the command took longer than two seconds, or
-the `min_time` config value, if it exists.
+`cmd_duration`モジュールは、最後のコマンドの実行にかかった時間を示します。モジュールが表示されるのは、コマンドが2秒以上かかった場合、または`min_time`値が存在する場合のみです。
 
 ::: warning BashでDEBUGトラップをhookしない
 `bash`でStarshipを実行している場合、 `eval $(starship init $0)`実行した後に`DEBUG`トラップをフックしないでください。そうしないと、このモジュールが**おそらくですが**壊れます。 :::
 
 preexecのような機能を必要とするBashユーザーは、 [rcalorasのbash_preexecフレームワーク](https://github.com/rcaloras/bash-preexec)を使用できます。 `eval $(starship init $0)` を実行する前に、`preexec_functions` 、および`precmd_functions`定義するだけで、通常どおり続行します。
 
-### Options
+### オプション
 
-Variable | Default | Description
+変数 | デフォルト | 説明
 --- | --- | ---
 `min_time` | `2` | 時間を表示する最短期間です。
 `style` | `"bold yellow"` | モジュールのスタイルです。
-`disabled` | `false` | Disables the `cmd_duration` module.
+`disabled` | `false` | `cmd_duration`モジュールを無効にします。
 
 ### 設定例
 
@@ -187,21 +183,19 @@ min_time = 4
 
 `directory`モジュールには、現在のディレクトリへのパスが表示され、3つの親フォルダは切り捨てられます。ディレクトリは、現在のgitリポジトリであるとルートとなります。
 
-When using the fish style pwd option, instead of hiding the path that is
-truncated, you will see a shortened name of each directory based on the number
-you enable for the option.
+fishスタイルのpwdオプションを使用すると、切り捨てられたパスを非表示にする代わりに、オプションで有効にした番号に基づいて各ディレクトリの短縮名が表示されます。
 
 たとえば、`~/Dev/Nix/nixpkgs/pkgs`で、`nixpkgs`がリポジトリルートであり、オプションが`1`に設定されている場合、`~/D/N/nixpkgs/pkgsが表示されますが、以前はnixpkgs/pkgs`でした。
 
-### Options
+### オプション
 
-Variable | Default | 説明
+変数 | デフォルト | 説明
 --- | --- | ---
 `truncation_length` | `3` | 現在のディレクトリを切り捨てる親フォルダーの数です。
 `truncate_to_repo` | `true` | 現在いるgitリポジトリのルートに切り捨てるかどうかです。
 `fish_style_pwd_dir_length` | `0` | fish shellのpwdパスロジックを適用するときに使用する文字数です。
 `style` | `"bold cyan"` | モジュールのスタイルです。
-`disabled` | `false` | Disables the `directory` module.
+`disabled` | `false` | `directory`モジュールを無効にします。
 
 ### 設定例
 
@@ -218,13 +212,13 @@ truncation_length = 8
 
 ### オプション
 
-変数 | デフォルト | Description
+変数 | デフォルト | 説明
 --- | --- | ---
 `symbol` | `" "` | 現在のディレクトリのリポジトリのブランチ名の前に使用されるシンボルです。
-`truncation_length` | `2^63 - 1` | Truncates a git branch to X graphemes
+`truncation_length` | `2^63 - 1` | gitブランチをX書記素に切り捨てます
 `truncation_symbol` | `"…"` | ブランチ名切り捨てられていることを示すための記号です。記号なしに「」も使用できます。
 `style` | `"bold purple"` | モジュールのスタイルです。
-`disabled` | `false` | Disables the `git_branch` module.
+`disabled` | `false` | `git_branch`モジュールを無効にします。
 
 ### 設定例
 
@@ -244,9 +238,9 @@ truncation_symbol = ""
 
 進捗情報がある場合(例: REBASING 3/10)はその情報も表示されます。
 
-### Options
+### オプション
 
-Variable | Default | Description
+変数 | デフォルト | 説明
 --- | --- | ---
 `rebase` | `"REBASING"` | `rebase`進行中に表示されるテキストです。
 `merge` | `"MERGING"` | `merge`進行中に表示されるテキストです。
@@ -257,7 +251,7 @@ Variable | Default | Description
 `am_or_rebase` | `"AM/REBASE"` | あいまいな`apply-mailbox`または`rebase`が進行中のときに表示されるテキストです。
 `progress_divider` | `"/"` | 現在の進行量と合計進行量を分ける記号またはテキスト(例えば、 `" of "` 、 `"3 of 10"` )です。
 `style` | `"bold yellow"` | モジュールのスタイルです。
-`disabled` | `false` | Disables the `git_state` module.
+`disabled` | `false` | `git_state`モジュールを無効にします。
 
 ### 設定例
 
@@ -271,26 +265,25 @@ cherry_pick = "🍒 PICKING"
 
 ## Gitの状態
 
-The `git_status` module shows symbols representing the state of the repo in your
-current directory.
+`git_status`モジュールは、現在のディレクトリのリポジトリの状態を表すシンボルを表示します。
 
-### Options
+### オプション
 
-Variable | Default | 説明
+変数 | デフォルト | 説明
 --- | --- | ---
-`conflicted` | `"="` | This branch has merge conflicts.
-`ahead` | `"⇡"` | This branch is ahead of the branch being tracked.
-`behind` | `"⇣"` | This branch is behind of the branch being tracked.
-`diverged` | `"⇕"` | This branch has diverged from the branch being tracked.
-`untracked` | `"?"` | There are untracked files in the working directory.
-`stashed` | `"$"` | A stash exists for the local repository.
-`modified` | `"!"` | There are file modifications in the working directory.
-`staged` | `"+"` | A new file has been added to the staging area.
-`renamed` | `"»"` | A renamed file has been added to the staging area.
-`deleted` | `"✘"` | A file's deletion has been added to the staging area.
-`show_sync_count` | `false` | Show ahead/behind count of the branch being tracked.
+`conflicted` | `"="` | このブランチにはマージの競合があります。
+`ahead` | `"⇡"` | このブランチは、追跡されるブランチよりも先にあります。
+`behind` | `"⇣"` | このブランチは、追跡されているブランチの背後にあります。
+`diverged` | `"⇕"` | このブランチは、追跡されているブランチから分岐しています。
+`untracked` | `"?"` | 作業ディレクトリに追跡されていないファイルがあります。
+`stashed` | `"$"` | ローカルリポジトリ用のスタッシュが存在します。
+`modified` | `"!"` | 作業ディレクトリにファイルの変更があります。
+`staged` | `"+"` | 新しいファイルがステージング領域に追加されました。
+`renamed` | `"»"` | 名前が変更されたファイルがステージング領域に追加されました。
+`deleted` | `"✘"` | ファイルの削除がステージング領域に追加されました。
+`show_sync_count` | `false` | 追跡されているブランチの先行/後方カウントを表示します。
 `style` | `"bold red"` | モジュールのスタイルです。
-`disabled` | `false` | Disables the `git_status` module.
+`disabled` | `false` | `git_status`モジュールを無効にします。
 
 ### 設定例
 
@@ -312,8 +305,7 @@ deleted = "🗑"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang.
-The module will be shown if any of the following conditions are met:
+`golang`モジュールは、現在インストールされているGolangのバージョンを示します。次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`go.mod`ファイルが含まれている
 - カレントディレクトリに`go.sum`ファイルが含まれている
@@ -323,13 +315,13 @@ The module will be shown if any of the following conditions are met:
 - カレントディレクトリに`Godeps`ファイルが含まれている
 - カレントディレクトリに`.go`の拡張子のファイルが含まれている
 
-### Options
+### オプション
 
-Variable | Default | Description
+変数 | デフォルト | 説明
 --- | --- | ---
 `symbol` | `"🐹 "` | Golangのバージョンを表示する前に使用される記号です。
 `style` | `"bold cyan"` | モジュールのスタイルです。
-`disabled` | `false` | Disables the `golang` module.
+`disabled` | `false` | `golang`モジュールを無効にします。
 
 ### 設定例
 
@@ -342,17 +334,17 @@ symbol = "🏎💨 "
 
 ## ホスト名
 
-The `hostname` module shows the system hostname.
+`hostname`モジュールには、システムのホスト名が表示されます。
 
 ### オプション
 
-Variable | Default | Description
+変数 | デフォルト | 説明
 --- | --- | ---
-`ssh_only` | `true` | Only show hostname when connected to an SSH session.
+`ssh_only` | `true` | SSHセッションに接続されている場合にのみホスト名を表示します。
 `prefix` | `""` | ホスト名の直前に表示するprefixです。
 `suffix` | `""` | ホスト名の直後に表示するsuffixです。
 `style` | `"bold dimmed green"` | モジュールのスタイルです。
-`disabled` | `false` | Disables the `hostname` module.
+`disabled` | `false` | `hostname`モジュールを無効にします。
 
 ### 設定例
 
@@ -372,10 +364,10 @@ disabled = false
 
 ### オプション
 
-Variable | Default | Description
+変数 | デフォルト | 説明
 --- | --- | ---
 `symbol` | `"✦ "` | ジョブの数を表示する前に使用される記号です。
-`threshold` | `1` | Show number of jobs if exceeded.
+`threshold` | `1` | 超過した場合、ジョブの数を表示します。
 `style` | `"bold blue"` | モジュールのスタイルです。
 `disabled` | `false` | `jobs`モジュールを無効にします。
 
@@ -391,13 +383,13 @@ threshold = 4
 
 ## 改行
 
-The `line_break` module separates the prompt into two lines.
+`line_break`モジュールは、プロンプトを2行に分割します。
 
-### Options
+### オプション
 
-Variable | Default | Description
+変数 | デフォルト | 説明
 --- | --- | ---
-`disabled` | `false` | Disables the `line_break` module, making the prompt a single line.
+`disabled` | `false` | `line_break`モジュールを無効にして、プロンプトを1行にします。
 
 ### 設定例
 
@@ -412,15 +404,15 @@ disabled = true
 
 `nix_shell`モジュールは、nix-shell環境を示しています。このモジュールは、nixシェル環境内にあるときに表示されます。
 
-### Options
+### オプション
 
-Variable | Default | Description
+変数 | デフォルト | 説明
 --- | --- | ---
-`use_name` | `false` | Display the name of the nix-shell.
+`use_name` | `false` | nix-shellの名前を表示します。
 `impure_msg` | `impure` | impureメッセージをカスタマイズします。
 `pure_msg` | `pure` | pureメッセージをカスタマイズします。
 `style` | `"bold red"` | モジュールのスタイルです。
-`disabled` | `false` | Disables the `nix_shell` module.
+`disabled` | `false` | `nix_shell`モジュールを無効にします。
 
 ### 設定例
 
@@ -436,20 +428,19 @@ pure_msg = "pure shell"
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS.
-The module will be shown if any of the following conditions are met:
+`nodejs`モジュールは、現在インストールされているNodeJSのバージョンを示します。次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`package.json`ファイルが含まれている
 - カレントディレクトリに`node_modules`ディレクトリが含まれている
 - カレントディレクトリに`.js`の拡張子のファイルが含まれている
 
-### Options
+### オプション
 
-Variable | デフォルト | 説明
+変数 | デフォルト | 説明
 --- | --- | ---
 `symbol` | `"⬢ "` | NodeJSのバージョンを表示する前に使用される記号です。
 `style` | `"bold green"` | モジュールのスタイルです。
-`disabled` | `false` | Disables the `nodejs` module.
+`disabled` | `false` | `nodejs`モジュールを無効にします。
 
 ### 設定例
 
@@ -462,23 +453,21 @@ symbol = "🤖 "
 
 ## パッケージのバージョン
 
-The `package` module is shown when the current directory is the repository for a
-package, and shows its current version. The module currently supports `npm`, `cargo`,
-and `poetry` packages.
+`package`モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。このモジュールは現在、 `npm` 、 `cargo` 、および`poetry`パッケージをサポートしています。
 
-- **npm** – The `npm` package version is extracted from the `package.json` presentin the current directory
+- **npm** – `npm`パッケージバージョンは、現在のディレクトリにある`package.json`から抽出されます
 - **cargo** – `cargo`パッケージバージョンは、現在のディレクトリにある`Cargo.toml`から抽出されます。
-- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` presentin the current directory
+- **poetry** – `poetry`パッケージバージョンは、現在のディレクトリにある`pyproject.toml`から抽出されます
 
 > ⚠️ 表示されるバージョンは、パッケージマネージャーではなく、ソースコードが現在のディレクトリにあるパッケージのバージョンです。
 
-### Options
+### オプション
 
-Variable | Default | Description
+変数 | デフォルト | 説明
 --- | --- | ---
 `symbol` | `"📦 "` | パッケージのバージョンを表示する前に使用される記号です。
 `style` | `"bold red"` | モジュールのスタイルです。
-`disabled` | `false` | Disables the `package` module.
+`disabled` | `false` | `package`モジュールを無効にします。
 
 ### 設定例
 
@@ -491,15 +480,13 @@ symbol = "🎁 "
 
 ## Python
 
-The `python` module shows the currently installed version of Python.
+`python`モジュールは、現在インストールされているPythonのバージョンを示します。
 
 `pyenv_version_name`が`true`に設定されている場合 、pyenvでのバージョン名が表示されます 。
 
-Otherwise, it will display the version number from `python --version`
-and show the current Python virtual environment if one is
-activated.
+それ以外の場合は、 `python --version`バージョン番号が表示され、アクティブになっている場合は現在のPython仮想環境が表示されます。
 
-The module will be shown if any of the following conditions are met:
+次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`.python-version`ファイルが含まれている
 - カレントディレクトリに`requirements.txt`ファイルが含まれている
@@ -507,15 +494,15 @@ The module will be shown if any of the following conditions are met:
 - カレントディレクトリに`.py`の拡張子のファイルが含まれている
 - カレントディレクトリに`Pipfile`ファイルが含まれている
 
-### Options
+### オプション
 
-変数 | Default | 説明
+変数 | デフォルト | 説明
 --- | --- | ---
 `symbol` | `"🐍 "` | Pythonのバージョンを表示する前に使用される記号です。
 `pyenv_version_name` | `false` | pyenvを使用してPythonバージョンを取得します
 `pyenv_prefix` | `"pyenv "` | pyenvバージョン表示の前のprefix（デフォルトの表示は`pyenv MY_VERSION` ）です
 `style` | `"bold yellow"` | モジュールのスタイルです。
-`disabled` | `false` | Disables the `python` module.
+`disabled` | `false` | `python`モジュールを無効にします。
 
 ### 設定例
 
@@ -530,19 +517,18 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby.
-The module will be shown if any of the following conditions are met:
+`ruby`モジュールは、現在インストールされているRubyのバージョンを示します。次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Gemfile`ファイルが含まれている
 - カレントディレクトリに`.rb`の拡張子のファイルが含まれている
 
-### Options
+### オプション
 
-Variable | デフォルト | 説明
+変数 | デフォルト | 説明
 --- | --- | ---
 `symbol` | `"💎 "` | Rubyのバージョンを表示する前に使用される記号です。
 `style` | `"bold red"` | モジュールのスタイルです。
-`disabled` | `false` | Disables the `ruby` module.
+`disabled` | `false` | `ruby`モジュールを無効にします。
 
 ### 設定例
 
@@ -555,19 +541,18 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust.
-The module will be shown if any of the following conditions are met:
+`rust`モジュールには、現在インストールされているRustのバージョンが表示されます。次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Cargo.toml`ファイルが含まれている
 - カレントディレクトリに`.rs`の拡張子のファイルが含まれている
 
-### Options
+### オプション
 
-Variable | Default | Description
+変数 | デフォルト | 説明
 --- | --- | ---
 `symbol` | `"🦀 "` | Rustのバージョンを表示する前に使用される記号です。
 `style` | `"bold red"` | モジュールのスタイルです。
-`disabled` | `false` | Disables the `rust` module.
+`disabled` | `false` | `rust`モジュールを無効にします。
 
 ### 設定例
 
@@ -585,14 +570,14 @@ symbol = "⚙️ "
 ::: tip
 このモジュールはデフォルトで無効になっています。有効にするには、設定ファイルで`disabled`を`false`に設定します。 :::
 
-### Options
+### オプション
 
-Variable | Default | Description
+変数 | デフォルト | 説明
 --- | --- | ---
 `12hr` | `false` | 12時間のフォーマットを有効にします。
 `format` | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。
 `style` | `bold yellow` | モジュールのスタイルです。
-`disabled` | `true` | Disables the `time` module.
+`disabled` | `true` | `time`モジュールを無効にします。
 
 `12hr`が`true` 、 `format`デフォルトで`"%r"`です。それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、 `12hr`の設定が上書きされます。
 
@@ -608,8 +593,7 @@ format = "🕙[ %T ]"
 
 ## ユーザ名
 
-The `username` module shows active user's username.
-The module will be shown if any of the following conditions are met:
+`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントユーザーがroot
 - カレントユーザーが、ログインしているユーザーとは異なる
@@ -617,11 +601,11 @@ The module will be shown if any of the following conditions are met:
 
 ### オプション
 
-Variable | Default | Description
+変数 | デフォルト | 説明
 --- | --- | ---
 `style_root` | `"bold red"` | ユーザーがrootのときに使用されるスタイルです。
 `style_user` | `"bold yellow"` | 非rootユーザーに使用されるスタイルです。
-`disabled` | `false` | Disables the `username` module.
+`disabled` | `false` | `username`モジュールを無効にします。
 
 ### 設定例
 
