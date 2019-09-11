@@ -7,8 +7,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const BATTERY_FULL: &str = "•";
     const BATTERY_CHARGING: &str = "⇡";
     const BATTERY_DISCHARGING: &str = "⇣";
-    const BATTERY_THRESHOLD: f32 = 10.0;
-    const BATTERY_UNKNOWN: &str = "↕";
+    // TODO: Set this to 10.0 instead of debugging with 100.0
+    const BATTERY_THRESHOLD: f32 = 100.0;
     // TODO: Update when v1.0 printing refactor is implemented to only
     // print escapes in a prompt context.
     let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
@@ -48,7 +48,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             module.new_segment("discharging_symbol", BATTERY_DISCHARGING);
         }
         battery::State::Unknown => {
-            module.new_segment("unknown_symbol", BATTERY_UNKNOWN);
+            log::debug!("Unknown detected");
+            if let None = module.new_segment_required("unknown_symbol") {
+                log::debug!("Unknown detected, display none");
+                return None;
+            }
+        }
+        battery::State::Empty => {
+            if let None = module.new_segment_required("empty_symbol") {
+                return None;
+            }
         }
         _ => {
             log::debug!("Unhandled battery state `{}`", state);

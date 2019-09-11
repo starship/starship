@@ -74,6 +74,20 @@ impl<'a> Module<'a> {
         self.segments.last_mut().unwrap()
     }
 
+    /// Should config exists, get a reference to a newly created segment in the module
+    pub fn new_segment_required(&mut self, name: &str) -> Option<&mut Segment> {
+        // Use the provided value unless overwritten by config
+        if let Some(value) = self.config_value_str(name) {
+            let mut segment = Segment::new(name);
+            segment.set_style(self.style);
+            segment.set_value(value);
+            self.segments.push(segment);
+            Some(self.segments.last_mut().unwrap())
+        } else {
+            None
+        }
+    }
+
     /// Whether a module has any segments
     pub fn is_empty(&self) -> bool {
         self.segments.is_empty()
