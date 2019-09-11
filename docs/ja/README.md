@@ -8,7 +8,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
 <div class="features">
   <div class="feature">
-    <h2>互換性第一</h2>
+    <h2>互換性優先</h2>
     <p>一般的なほとんどのOSの一般的なほとんどのシェル上で動作します。あらゆるところで使用してください！</p>
   </div>
   <div class="feature">
