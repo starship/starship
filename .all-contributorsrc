@@ -153,7 +153,8 @@
       "contributions": [
         "code",
         "doc",
-        "test"
+        "test",
+        "translation"
       ]
     },
     {
@@ -265,6 +266,16 @@
       "profile": "https://github.com/Hofer-Julian",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "unhappychoice",
+      "name": "Yuji Ueki",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5608948?v=4",
+      "profile": "http://blog.unhappychoice.com",
+      "contributions": [
+        "content",
+        "translation"
       ]
     },
     {
