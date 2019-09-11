@@ -96,6 +96,7 @@ default_prompt_order = [
     "cmd_duration",
     "line_break",
     "jobs",
+    "time",
     "battery",
     "character",
 ]
@@ -601,6 +602,38 @@ The module will be shown if any of the following conditions are met:
 
 [rust]
 symbol = "⚙️ "
+```
+
+## Time
+
+The `time` module shows the current **local** time.
+The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+
+::: tip
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+:::
+
+### Options
+
+| Variable   | Default       | Description                                                                                                         |
+| ---------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `12hr`     | `false`       | Enables 12 hour formatting                                                                                          |
+| `format`   | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`    | `bold yellow` | The style for the module time                                                                                       |
+| `disabled` | `true`        | Disables the `time` module.                                                                                         |
+
+If `12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
+Manually setting `format` will override the `12hr` setting.
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[time]
+disabled = false
+format = "🕙[ %T ]"
 ```
 
 ## Username
