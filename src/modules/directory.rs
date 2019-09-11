@@ -18,7 +18,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const DIR_TRUNCATION_LENGTH: i64 = 3;
     const FISH_STYLE_PWD_DIR_LENGTH: i64 = 0;
 
-    let mut module = context.new_module("directory")?;
+    let mut module = context.new_module("directory");
     let module_color = module
         .config_value_style("style")
         .unwrap_or_else(|| Color::Cyan.bold());
@@ -36,7 +36,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let current_dir = &context.current_dir;
     log::debug!("Current directory: {:?}", current_dir);
 
-    let dir_string = match &context.repo_root {
+    let repo = &context.get_repo().ok()?;
+
+    let dir_string = match &repo.root {
         Some(repo_root) if truncate_to_repo => {
             let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
 

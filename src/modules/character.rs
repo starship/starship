@@ -20,7 +20,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const ASSUMED_MODE: ShellEditMode = ShellEditMode::Insert;
     // TODO: extend config to more modes
 
-    let mut module = context.new_module("character")?;
+    let mut module = context.new_module("character");
     module.get_prefix().set_value("");
 
     let style_success = module

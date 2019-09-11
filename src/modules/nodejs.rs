@@ -25,7 +25,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Some(node_version) => {
             const NODE_CHAR: &str = "⬢ ";
 
-            let mut module = context.new_module("nodejs")?;
+            let mut module = context.new_module("nodejs");
             let module_style = module
                 .config_value_style("style")
                 .unwrap_or_else(|| Color::Green.bold());

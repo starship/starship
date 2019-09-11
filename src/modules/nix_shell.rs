@@ -22,7 +22,7 @@ use super::{Context, Module};
 ///     - pure           // use_name == false in a pure nix-shell
 ///     - impure         // use_name == false in an impure nix-shell
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module("nix_shell")?;
+    let mut module = context.new_module("nix_shell");
 
     env::var("IN_NIX_SHELL")
         .ok()

@@ -10,7 +10,7 @@ use std::ffi::OsString;
 ///     - hostname.disabled is absent or false
 ///     - hostname.ssh_only is false OR the user is currently connected as an SSH session (`$SSH_CONNECTION`)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module("hostname")?;
+    let mut module = context.new_module("hostname");
     let module_style = module
         .config_value_style("style")
         .unwrap_or_else(|| Color::Green.bold().dimmed());

@@ -23,7 +23,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Some(rust_version) => {
             const RUST_CHAR: &str = "🦀 ";
 
-            let mut module = context.new_module("rust")?;
+            let mut module = context.new_module("rust");
             let module_style = module
                 .config_value_style("style")
                 .unwrap_or_else(|| Color::Red.bold());

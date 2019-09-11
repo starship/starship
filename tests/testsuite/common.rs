@@ -1,15 +1,12 @@
-use lazy_static::lazy_static;
+use once_cell::sync::Lazy;
 use std::io::prelude::*;
 use std::io::{Error, ErrorKind};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::{env, fs, io, process};
 
-lazy_static! {
-    static ref MANIFEST_DIR: &'static Path = Path::new(env!("CARGO_MANIFEST_DIR"));
-    pub static ref FIXTURES_DIR: PathBuf = MANIFEST_DIR.join("tests/fixtures");
-    static ref EMPTY_CONFIG: PathBuf = MANIFEST_DIR.join("empty_config.toml");
-}
+static MANIFEST_DIR: Lazy<&'static Path> = Lazy::new(|| Path::new(env!("CARGO_MANIFEST_DIR")));
+static EMPTY_CONFIG: Lazy<PathBuf> = Lazy::new(|| MANIFEST_DIR.join("empty_config.toml"));
 
 /// Render the full starship prompt
 pub fn render_prompt() -> process::Command {
