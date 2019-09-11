@@ -163,8 +163,8 @@ are replaced, e.g. `::STARSHIP::` is replaced by the full path to the
 starship binary.
 */
 
-const BASH_INIT: &str = include_str!("shellinit/starship.bash");
+const BASH_INIT: &str = include_str!("starship.bash");
 
-const ZSH_INIT: &str = include_str!("shellinit/starship.zsh");
+const ZSH_INIT: &str = include_str!("starship.zsh");
 
-const FISH_INIT: &str = include_str!("shellinit/starship.fish");
+const FISH_INIT: &str = include_str!("starship.fish");
