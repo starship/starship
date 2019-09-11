@@ -1,5 +1,4 @@
 use ansi_term::Color;
-use chrono::offset::TimeZone;
 use chrono::{DateTime, Local};
 
 use super::{Context, Module};
@@ -51,6 +50,7 @@ tests become extra important */
 #[cfg(test)]
 mod tests {
     use super::*;
+    use chrono::offset::TimeZone;
 
     const FMT_12: &str = "%r";
     const FMT_24: &str = "%T";
@@ -97,6 +97,7 @@ mod tests {
         assert_eq!(formatted, "15:36:47");
     }
 
+    #[test]
     fn test_format_with_paren() {
         let time = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let formatted = format_time("[%T]", time);
