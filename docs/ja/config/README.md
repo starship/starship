@@ -64,9 +64,9 @@ starshipのほとんどのモジュールでは、表示スタイルを設定で
 ```toml
 # ~/.config/starship.toml
 
-# Disable the newline at the start of the prompt
+# プロンプト表示の改行を無効にする
 add_newline = false
-# Overwrite a default_prompt_order and  use custom prompt_order
+# デフォルトのプロンプト表示順を書き換える
 prompt_order=["rust","line_break","package","line_break","character"]
 ```
 
