@@ -61,22 +61,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_display_styles(module: &Module) -> Vec<BatteryDisplayStyle> {
-    const DISPLAY_STYLES: &[BatteryDisplayStyle] = &[BatteryDisplayStyle {
-        threshold: 10,
-        style: Style {
-            background: None,
-            foreground: Some(Color::Red),
-            is_bold: true,
-            is_dimmed: false,
-            is_italic: false,
-            is_underline: false,
-            is_blink: false,
-            is_reverse: false,
-            is_hidden: false,
-            is_strikethrough: false,
-        },
-    }];
-
     if let Some(display_configs) = module.config_value_array("display") {
         let mut display_styles: Vec<BatteryDisplayStyle> = vec![];
         for display_config in display_configs.iter() {
@@ -90,7 +74,11 @@ fn get_display_styles(module: &Module) -> Vec<BatteryDisplayStyle> {
         // Return display styles as long as display array exists, even if it is empty.
         display_styles
     } else {
-        Vec::from(DISPLAY_STYLES)
+        // Default display styles: [{ threshold = 10, style = "red bold" }]
+        vec![BatteryDisplayStyle {
+            threshold: 10,
+            style: Color::Red.bold(),
+        }]
     }
 }
 
