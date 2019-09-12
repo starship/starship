@@ -110,13 +110,13 @@ The module is only visible when the device's battery is below 10%.
 
 ### Options
 
-| Variable             | Default      | Description                                       |
-| -------------------- | ------------ | ------------------------------------------------- |
-| `full_symbol`        | `"•"`        | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`        | The symbol shown when the battery is charging.    |
-| `discharging_symbol` | `"⇣"`        | The symbol shown when the battery is discharging. |
-| `style`              | `"bold red"` | The style for the module.                         |
-| `disabled`           | `false`      | Disables the `battery` module.                    |
+| Variable             | Default                  | Description                                       |
+| -------------------- | ------------------------ | ------------------------------------------------- |
+| `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
+| `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
+| `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
+| `display`            | [link](#battery-display) | Display threshold and style for the module.       |
+| `disabled`           | `false`                  | Disables the `battery` module.                    |
 
 ### Example
 
@@ -127,6 +127,41 @@ The module is only visible when the device's battery is below 10%.
 full_symbol = "🔋"
 charging_symbol = "⚡️"
 discharging_symbol = "💀"
+```
+
+### Battery Display
+
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style).
+If no `display` is provided. The default is as shown:
+
+```toml
+[[battery.display]]
+threshold = 10
+style = "bold red"
+```
+
+#### Options
+
+The `display` option is an array of the following table.
+
+| Variable    | Description                                     |
+|-------------|-------------------------------------------------|
+| `threshold` | The upper bound for the display option.         |
+| `style`     | The style used if the display option is in use. |
+
+#### Example
+
+```toml
+[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
+threshold = 10
+style = "bold red"
+
+[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
+threshold = 30
+style = "bold yellow"
+
+# when capacity is over 30%, the battery indicator will not be displayed
+
 ```
 
 ## Character
