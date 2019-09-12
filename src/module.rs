@@ -145,6 +145,11 @@ impl<'a> Module<'a> {
     pub fn config_value_style(&self, key: &str) -> Option<Style> {
         self.config.and_then(|config| config.get_as_ansi_style(key))
     }
+
+    /// Get a module's config value as an array
+    pub fn config_value_array(&self, key: &str) -> Option<&Vec<toml::Value>> {
+        self.config.and_then(|config| config.get_as_array(key))
+    }
 }
 
 impl<'a> fmt::Display for Module<'a> {
