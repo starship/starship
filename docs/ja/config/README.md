@@ -1,6 +1,8 @@
 # 設定
 
-::: tip 🔥Starshipの開発は現在も進んでいます。多くの新しいオプションが今後のリリースで利用可能になります。 :::
+::: tip
+🔥Starshipの開発は現在も進んでいます。多くの新しいオプションが今後のリリースで利用可能になります。
+:::
 
 starshipの設定を開始するには、`~/.config/starship.toml` ファイルを作成します。
 
@@ -157,7 +159,8 @@ use_symbol_for_status = true
 `cmd_duration`モジュールは、最後のコマンドの実行にかかった時間を示します。モジュールが表示されるのは、コマンドが2秒以上かかった場合、または`min_time`値が存在する場合のみです。
 
 ::: warning BashでDEBUGトラップをhookしない
-`bash`でStarshipを実行している場合、 `eval $(starship init $0)`実行した後に`DEBUG`トラップをフックしないでください。そうしないと、このモジュールが**おそらくですが**壊れます。 :::
+`bash`でStarshipを実行している場合、 `eval $(starship init $0)`実行した後に`DEBUG`トラップをフックしないでください。そうしないと、このモジュールが**おそらくですが**壊れます。
+:::
 
 preexecのような機能を必要とするBashユーザーは、 [rcalorasのbash_preexecフレームワーク](https://github.com/rcaloras/bash-preexec)を使用できます。 `eval $(starship init $0)` を実行する前に、`preexec_functions` 、および`precmd_functions`定義するだけで、通常どおり続行します。
 
@@ -566,7 +569,9 @@ symbol = "⚙️ "
 
 `time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
 
-::: tip このモジュールはデフォルトで無効になっています。有効にするには、設定ファイルで`disabled`を`false`に設定します。 :::
+::: tip 
+このモジュールはデフォルトで無効になっています。有効にするには、設定ファイルで`disabled`を`false`に設定します。
+:::
 
 ### オプション
 
