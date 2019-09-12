@@ -39,8 +39,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let current_dir = if use_logical_path {
         match std::env::var("PWD") {
             Ok(path) => From::from(path),
-            Err(_) => {
-                log::error!("Attempted to use logical paths, but PWD was not a valid path.");
+            Err(e) => {
+                log::error!("Attempted to use logical paths, but PWD was not valid.");
+                log::error!("Reading PWD failed because of {}", e);
                 context.current_dir.clone()
             }
         }

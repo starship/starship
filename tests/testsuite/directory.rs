@@ -418,3 +418,26 @@ fn directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
     assert_eq!(expected, actual);
     Ok(())
 }
+
+#[test]
+#[ignore]
+fn use_logical_and_physical_paths() -> io::Result<()> {
+    /* This test is a bit of a smoke + mirrors trick because all it shows is that
+    the application is reading the PWD envar correctly (if the shell doesn't
+    correctly set PWD, we're still in trouble). */
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
+    let dir = tmp_dir.path().join("directory");
+    let sym = tmp_dir.path().join("symlink_to_directory");
+    fs::create_dir_all(&dir)?;
+    std::os::unix::fs::symlink(&dir,&sym);
+
+    let output = common::render_module("directory")
+        .arg("--path")
+        .arg(dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("in {} ", Color::Cyan.bold().paint("src/meters/fuel-gauge"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
