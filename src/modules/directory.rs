@@ -32,8 +32,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .config_value_i64("fish_style_pwd_dir_length")
         .unwrap_or(FISH_STYLE_PWD_DIR_LENGTH);
 
+    // If use_logical_path is set, read from the envar PWD. This is done by many
+    // logical path tools, including coreutils pwd when run as `pwd -L`. If this
+    // fails, log an error and fall back to the path from context.
+    let use_logical_path = module.config_value_bool("use_logical_path").unwrap_or(true);
+    let current_dir = if use_logical_path {
+        match std::env::var("PWD") {
+            Ok(path) => From::from(path),
+            Err(_) => {
+                log::error!("Attempted to use logical paths, but PWD was not a valid path.");
+                context.current_dir.clone()
+            }
+        }
+    } else {
+        context.current_dir.clone()
+    };
+
     let home_dir = dirs::home_dir().unwrap();
-    let current_dir = &context.current_dir;
     log::debug!("Current directory: {:?}", current_dir);
 
     let repo = &context.get_repo().ok()?;
@@ -43,10 +58,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
 
             // Contract the path to the git repo root
-            contract_path(current_dir, repo_root, repo_folder_name)
+            contract_path(&current_dir, repo_root, repo_folder_name)
         }
         // Contract the path to the home directory
-        _ => contract_path(current_dir, &home_dir, HOME_SYMBOL),
+        _ => contract_path(&current_dir, &home_dir, HOME_SYMBOL),
     };
 
     // Truncate the dir string to the maximum number of path components
@@ -54,7 +69,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     if fish_style_pwd_dir_length > 0 {
         // If user is using fish style path, we need to add the segment first
-        let contracted_home_dir = contract_path(current_dir, &home_dir, HOME_SYMBOL);
+        let contracted_home_dir = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
         let fish_style_dir = to_fish_style(
             fish_style_pwd_dir_length as usize,
             contracted_home_dir,
