@@ -48,9 +48,10 @@ Most modules in starship allow you to configure their display styles. This is do
 - `"bg:blue fg:bright-green"` sets bright green text on a blue background
 - `"bold fg:27"` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
 - `"underline bg:#bf5700"` sets underlined text on a burnt orange background
+- `"bold italic fg:purple"` sets bold italic purple text
 - `""` explicitly disables all styling
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors.
+Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
 ## Prompt
 
