@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if ! (docker --version); then
-  printf 'Docker is required to run the starship integration tests.\n'
+  printf 'Docker is required to run the starship acceptance tests.\n'
   printf 'Please download and install Docker in order to run these tests locally.\n'
   exit 1
 fi

@@ -45,7 +45,7 @@ fn format_time(time_format: &str, localtime: DateTime<Local>) -> String {
     localtime.format(time_format).to_string()
 }
 
-/* Because we cannot do integration tests on the time module, these unit
+/* Because we cannot make acceptance tests for the time module, these unit
 tests become extra important */
 #[cfg(test)]
 mod tests {
