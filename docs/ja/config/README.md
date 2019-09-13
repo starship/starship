@@ -60,7 +60,7 @@ starshipのほとんどのモジュールでは、表示スタイルを設定で
 変数 | デフォルト | 説明
 --- | --- | ---
 `add_newline` | `true` | プロンプトの開始前に新しい行を追加します。
-`prompt_order` | [link](#%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%81%AE%E3%83%97%E3%83%AD%E3%83%B3%E3%83%97%E3%83%88%E9%A0%86) | プロンプトモジュールを出力する順序を設定します。
+`prompt_order` | [link](#default-prompt-order) | プロンプトモジュールを出力する順序を設定します。
 
 ### 設定例
 
@@ -103,7 +103,8 @@ default_prompt_order = [
 
 ## バッテリー
 
-`battery`モジュールは、デバイスのバッテリー残量と現在の充電状態を示します。モジュールは、デバイスのバッテリー残量が10％未満の場合にのみ表示されます。
+The `battery` module shows how charged the device's battery is and its current charging status.
+The module is only visible when the device's battery is below 10%.
 
 ### オプション
 
@@ -137,14 +138,16 @@ threshold = 10
 style = "bold red"
 ```
 
-#### オプション 
+#### オプション
 
-| 変数        | 説明                                            |
-|-------------|-------------------------------------------------|
-| `threshold` | バッテリーが表示される上限です。        |
-| `style`     | displayオプションが使用されている場合のスタイルです。|
+`display`オプションは、次の表の通りです。
 
-#### 設定例 
+変数 | 説明
+--- | ---
+`threshold` | バッテリーが表示される上限です。
+`style` | displayオプションが使用されている場合のスタイルです。
+
+#### 設定例
 
 ```toml
 [[battery.display]]  # バッテリー残量が0％〜10％の間は「太字の赤色」スタイルを利用する
@@ -299,7 +302,7 @@ progress_divider = " of "
 cherry_pick = "🍒 PICKING"
 ```
 
-## Gitの状態
+## Git の状態
 
 `git_status`モジュールは、現在のディレクトリのリポジトリの状態を表すシンボルを表示します。
 
@@ -603,7 +606,7 @@ symbol = "⚙️ "
 
 `time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
 
-::: tip 
+::: tip
 このモジュールはデフォルトで無効になっています。有効にするには、設定ファイルで`disabled`を`false`に設定します。
 :::
 
