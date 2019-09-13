@@ -112,7 +112,7 @@ default_prompt_order = [
 `full_symbol` | `"•"` | バッテリーが満タンのときに表示される記号です。
 `charging_symbol` | `"⇡"` | バッテリーの充電中に表示される記号です。
 `discharging_symbol` | `"⇣"` | バッテリーが放電しているときに表示される記号です。
-`style` | `"bold red"` | モジュールのスタイルです。
+`display` | [link](#battery-display) | モジュールの閾値とスタイルを表示します。
 `disabled` | `false` | `battery`モジュールを無効にします。
 
 ### 設定例
@@ -124,6 +124,39 @@ default_prompt_order = [
 full_symbol = "🔋"
 charging_symbol = "⚡️"
 discharging_symbol = "💀"
+```
+
+### バッテリーの表示
+
+`display` 設定オプションは、バッテリーインジケーターを表示するタイミング（threshold）と見た目（style）を定義するために使用されます。
+`display` が設定されていない場合のデフォルトは次のとおりです:
+
+```toml
+[[battery.display]]
+threshold = 10
+style = "bold red"
+```
+
+#### オプション 
+
+| 変数        | 説明                                            |
+|-------------|-------------------------------------------------|
+| `threshold` | バッテリーが表示される上限です。        |
+| `style`     | displayオプションが使用されている場合のスタイルです。|
+
+#### 設定例 
+
+```toml
+[[battery.display]]  # バッテリー残量が0％〜10％の間は「太字の赤色」スタイルを利用する
+threshold = 10
+style = "bold red"
+
+[[battery.display]]  # バッテリー残量が10％〜30％の間は「太字の黄色」スタイルを利用する
+threshold = 30
+style = "bold yellow"
+
+# 容量が30％を超えると、バッテリーインジケーターは表示されません
+
 ```
 
 ## 文字
