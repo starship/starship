@@ -62,7 +62,7 @@ cargo fmt
 Testing is critical to making sure starship works as intended on systems big and small. Starship interfaces with many applications and system APIs when generating the prompt, so there's a lot of room for bugs to slip in.
 
 Unit tests and a subset of acceptance tests can be run with `cargo test`.
-The full acceptance test suite can be run in a Docker container with the included [`./integration_test`](integration_test) script.
+The full acceptance test suite can be run in a Docker container with the included [`./acceptance_test`](acceptance_test) script.
 
 ### Unit Testing
 
@@ -76,9 +76,9 @@ The previous point should be emphasized: even seemingly innocuous ideas like "if
 
 Acceptance tests are located in the [`tests/`](tests) directory and are also written using the built-in Rust testing library.
 
-Acceptance tests should test full modules or the entire prompt. All integration tests expecting the testing environment to have preexisting state or making permanent changes to the filesystem should have the `#[ignore]` attribute. All tests that don't depend on any preexisting state will be run alongside the unit tests with `cargo test`.
+Acceptance tests should test full modules or the entire prompt. All acceptance tests expecting the testing environment to have preexisting state or making permanent changes to the filesystem should have the `#[ignore]` attribute. All tests that don't depend on any preexisting state will be run alongside the unit tests with `cargo test`.
 
-Acceptance tests require Docker to be installed, as they are run inside a Docker container. This can be done as described in the official [documentation](https://docs.docker.com/install/). The acceptance tests can then be executed by running the included [`./integration_test`](integration_test) script. It might be necessary to run [`./integration_test`](integration_test) with `sudo` if your user is not part of the `docker` group.
+Acceptance tests require Docker to be installed, as they are run inside a Docker container. This can be done as described in the official [documentation](https://docs.docker.com/install/). The acceptance tests can then be executed by running the included [`./acceptance_test`](acceptance_test) script. It might be necessary to run [`./acceptance_test`](acceptance_test) with `sudo` if your user is not part of the `docker` group.
 
 
 For tests that depend on having preexisting state, whatever needed state will have to be added to the project's Dockerfile ([`tests/Dockerfile`](tests/Dockerfile)) as well as the project's Azure Pipelines configuration ([`azure-pipelines.yml`](azure-pipelines.yml)).
