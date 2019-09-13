@@ -103,8 +103,7 @@ default_prompt_order = [
 
 ## バッテリー
 
-The `battery` module shows how charged the device's battery is and its current charging status.
-The module is only visible when the device's battery is below 10%.
+`battery`モジュールは、デバイスのバッテリーの充電状態と現在の充電状態を示します。モジュールは、デバイスのバッテリーが10％未満の場合にのみ表示されます。
 
 ### オプション
 
