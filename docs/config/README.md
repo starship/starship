@@ -75,12 +75,12 @@ add_newline = false
 prompt_order=["rust","line_break","package","line_break","character"]
 ```
 
-### Default prompt order
+### Default Prompt Order
 
-The `default_prompt_order` configuration option is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. The default is as shown:
+The default `prompt_order` is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. The default is as shown:
 
-```
-default_prompt_order = [
+```toml
+prompt_order = [
     "username",
     "hostname",
     "directory",
