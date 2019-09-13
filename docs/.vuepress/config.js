@@ -51,9 +51,9 @@ module.exports = {
         nav: [{ text: "設定", link: "/config/" }],
         // Custom sidebar values
         sidebar: [
-          "/",
+          "/ja/",
           ["/guide/", "ガイド"],
-          ["/config/", "設定"],
+          ["/ja/config/", "設定"],
           ["/advanced-config/", "高度な設定"]
         ],
       },
