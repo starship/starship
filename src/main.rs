@@ -23,6 +23,12 @@ fn main() {
         .help("The status code of the previously run command")
         .takes_value(true);
 
+    let pipestatus_arg = Arg::with_name("pipestatus")
+        .long("pipestatus")
+        .value_name("PIPESTATUS")
+        .help("Status codes from the previous pipeline")
+        .takes_value(true);
+
     let path_arg = Arg::with_name("path")
         .short("p")
         .long("path")
@@ -84,7 +90,8 @@ fn main() {
                 .arg(&path_arg)
                 .arg(&cmd_duration_arg)
                 .arg(&keymap_arg)
-                .arg(&jobs_arg),
+                .arg(&jobs_arg)
+                .arg(&pipestatus_arg),
         )
         .subcommand(
             SubCommand::with_name("module")
@@ -105,7 +112,8 @@ fn main() {
                 .arg(&path_arg)
                 .arg(&cmd_duration_arg)
                 .arg(&keymap_arg)
-                .arg(&jobs_arg),
+                .arg(&jobs_arg)
+                .arg(&pipestatus_arg),
         )
         .get_matches();
 

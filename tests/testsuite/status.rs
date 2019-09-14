@@ -7,7 +7,9 @@ use crate::common::{self, TestCommand};
 fn success_exit() -> io::Result<()> {
     let expected = "";
 
-    let output = common::render_module("status").arg("--status=0").output()?;
+    let output = common::render_module("status")
+        .args(&["--status=0", "--pipestatus=0"])
+        .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
 
@@ -22,7 +24,9 @@ fn success_exit() -> io::Result<()> {
 fn error_exit() -> io::Result<()> {
     let expected = format!("{} ", Color::Red.paint("1"));
 
-    let output = common::render_module("status").arg("--status=1").output()?;
+    let output = common::render_module("status")
+        .args(&["--status=1", "--pipestatus=1"])
+        .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
 
@@ -34,7 +38,7 @@ fn success_pipeline() -> io::Result<()> {
     let expected = format!("{} ", Color::White.dimmed().paint("(1 0)"));
 
     let output = common::render_module("status")
-        .arg("--status=1 0")
+        .args(&["--status=0", "--pipestatus=1 0"])
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
@@ -47,7 +51,7 @@ fn error_pipeline() -> io::Result<()> {
     let expected = format!("{} ", Color::Red.paint("(0 1)"));
 
     let output = common::render_module("status")
-        .arg("--status=0 1")
+        .args(&["--status=1", "--pipestatus=0 1"])
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
@@ -66,7 +70,7 @@ fn no_pipeline() -> io::Result<()> {
 
     let output = common::render_module("status")
         .use_config(config.clone())
-        .arg("--status=1 0")
+        .args(&["--status=0", "--pipestatus=1 0"])
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
@@ -75,7 +79,7 @@ fn no_pipeline() -> io::Result<()> {
 
     let output = common::render_module("status")
         .use_config(config)
-        .arg("--status=0 1")
+        .args(&["--status=1", "--pipestatus=0 1"])
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
@@ -92,7 +96,7 @@ fn show_success() -> io::Result<()> {
             [status]
             show_success = true
         })
-        .arg("--status=0")
+        .args(&["--status=0", "--pipestatus=0"])
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
@@ -110,7 +114,7 @@ fn show_pipeline_always() -> io::Result<()> {
 
     let output = common::render_module("status")
         .use_config(config.clone())
-        .arg("--status=1 0")
+        .args(&["--status=0", "--pipestatus=1 0"])
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
@@ -119,7 +123,7 @@ fn show_pipeline_always() -> io::Result<()> {
 
     let output = common::render_module("status")
         .use_config(config)
-        .arg("--status=0 1")
+        .args(&["--status=1", "--pipestatus=0 1"])
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
@@ -138,7 +142,7 @@ fn use_symbols() -> io::Result<()> {
 
     let output = common::render_module("status")
         .use_config(config.clone())
-        .arg("--status=1 0")
+        .args(&["--status=0", "--pipestatus=1 0"])
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
@@ -147,7 +151,7 @@ fn use_symbols() -> io::Result<()> {
 
     let output = common::render_module("status")
         .use_config(config)
-        .arg("--status=0 1")
+        .args(&["--status=1", "--pipestatus=0 1"])
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);

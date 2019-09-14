@@ -6,13 +6,12 @@ use super::{Context, Module};
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("status");
     module.get_prefix().set_value("");
-    let mut pipestatus: Vec<&str> = context
-        .arguments
-        .value_of("status_code")?
+    let arguments = &context.arguments;
+    let mut pipestatus: Vec<&str> = arguments
+        .value_of("pipestatus")?
         .split_ascii_whitespace()
         .collect();
-
-    let exit_code = *pipestatus.last()?;
+    let exit_code = arguments.value_of("status_code")?;
 
     let show_success = module.config_value_bool("show_success").unwrap_or(false);
     let show_pipeline_always = module
@@ -36,6 +35,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         "0" => module.set_style(success_style),
         _ => module.set_style(error_style),
     };
+
+    if exit_code != *pipestatus.last()? {
+        module.get_prefix().set_value("!");
+        module.get_prefix().set_style(if exit_code == "0" {
+            success_style
+        } else {
+            error_style
+        });
+    }
 
     let symbols = module.config_value_bool("use_symbols").unwrap_or(false);
     if symbols {
