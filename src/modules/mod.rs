@@ -15,6 +15,7 @@ mod package;
 mod python;
 mod ruby;
 mod rust;
+mod status;
 mod time;
 mod username;
 
@@ -46,6 +47,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "nix_shell" => nix_shell::module(context),
         "hostname" => hostname::module(context),
         "time" => time::module(context),
+        "status" => status::module(context),
 
         _ => {
             eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);

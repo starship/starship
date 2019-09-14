@@ -34,7 +34,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let use_symbol = module
         .config_value_bool("use_symbol_for_status")
         .unwrap_or(false);
-    let exit_success = arguments.value_of("status_code").unwrap_or("0") == "0";
+    let exit_code = match arguments.value_of("status_code") {
+        Some(status) => status.split_ascii_whitespace().last().unwrap(),
+        None => "0",
+    };
+    let exit_success = exit_code == "0";
     let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
     let keymap = arguments.value_of("keymap").unwrap_or("viins");
 

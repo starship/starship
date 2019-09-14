@@ -12,7 +12,7 @@ zmodload zsh/parameter  # Needed to access jobstates variable for NUM_JOBS
 # Will be run before every prompt draw
 starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
-    STATUS=$?
+    STATUS=$pipestatus;
 
     # Use length of jobstates array as number of jobs. Expansion fails inside
     # quotes so we set it here and then use the value later on.
