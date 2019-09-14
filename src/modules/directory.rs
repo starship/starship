@@ -60,10 +60,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
 
             // Contract the path to the git repo root
-            contract_path(&current_dir, repo_root, repo_folder_name)
+            contract_path(current_dir, repo_root, repo_folder_name)
         }
         // Contract the path to the home directory
-        _ => contract_path(&current_dir, &home_dir, HOME_SYMBOL),
+        _ => contract_path(current_dir, &home_dir, HOME_SYMBOL),
     };
 
     // Truncate the dir string to the maximum number of path components
