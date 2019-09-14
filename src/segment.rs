@@ -6,7 +6,7 @@ use std::fmt;
 /// (e.g. The version that software is running).
 pub struct Segment {
     /// The segment's name, to be used in configuration and logging.
-    name: String,
+    _name: String,
 
     /// The segment's style. If None, will inherit the style of the module containing it.
     style: Option<Style>,
@@ -19,7 +19,7 @@ impl Segment {
     /// Creates a new segment with default fields.
     pub fn new(name: &str) -> Self {
         Self {
-            name: name.to_string(),
+            _name: name.to_string(),
             style: None,
             value: "".to_string(),
         }
