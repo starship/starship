@@ -32,22 +32,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .config_value_i64("fish_style_pwd_dir_length")
         .unwrap_or(FISH_STYLE_PWD_DIR_LENGTH);
 
-    // If use_logical_path is set, read from the envar PWD. This is done by many
-    // logical path tools, including coreutils pwd when run as `pwd -L`. If this
-    // fails, log an error and fall back to the path from context.
+    // Using environment PWD is the standard approach for determining logical path
     let use_logical_path = module.config_value_bool("use_logical_path").unwrap_or(true);
-    let current_dir = if use_logical_path {
+    let logical_current_dir = if use_logical_path {
         match std::env::var("PWD") {
-            Ok(path) => From::from(path),
-            Err(e) => {
-                log::error!("Attempted to use logical paths, but PWD was not valid.");
-                log::error!("Reading PWD failed because of {}", e);
-                context.current_dir.clone()
+            Ok(x) => Some(x),
+            Err(_) => {
+                log::debug!("Asked for logical path, but PWD was invalid.");
+                None
             }
         }
     } else {
-        context.current_dir.clone()
+        None
     };
+    let current_dir = logical_current_dir
+        .as_ref()
+        .map(|d| Path::new(d))
+        .unwrap_or_else(|| context.current_dir.as_ref());
 
     let home_dir = dirs::home_dir().unwrap();
     log::debug!("Current directory: {:?}", current_dir);
