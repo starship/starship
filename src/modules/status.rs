@@ -28,10 +28,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let success_style = module
         .config_value_style("success")
-        .unwrap_or(Color::White.dimmed());
+        .unwrap_or_else(|| Color::White.dimmed());
     let error_style = module
         .config_value_style("error")
-        .unwrap_or(Color::Red.into());
+        .unwrap_or_else(|| Color::Red.into());
     match exit_code {
         "0" => module.set_style(success_style),
         _ => module.set_style(error_style),
