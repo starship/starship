@@ -2,7 +2,7 @@ use ansi_term::Color;
 
 use super::{Context, Module};
 
-/// Creates a module for the line break
+/// Creates a module for exit codes from the previous pipeline
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("status");
     module.get_prefix().set_value("");
@@ -37,17 +37,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         _ => module.set_style(error_style),
     };
 
-    let icons = module.config_value_bool("icons").unwrap_or(false);
-    if icons {
-        let success_icon = module.config_value_str("success_symbol").unwrap_or("✔");
-        let error_icon = module.config_value_str("error_symbol").unwrap_or("✘");
+    let symbols = module.config_value_bool("use_symbols").unwrap_or(false);
+    if symbols {
+        let success_symbol = module.config_value_str("success_symbol").unwrap_or("✔");
+        let error_symbol = module.config_value_str("error_symbol").unwrap_or("✖");
         pipestatus = pipestatus
             .into_iter()
             .map(|code| {
                 if code == "0" {
-                    success_icon
+                    success_symbol
                 } else {
-                    error_icon
+                    error_symbol
                 }
             })
             .collect();
