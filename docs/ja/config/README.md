@@ -77,7 +77,7 @@ prompt_order=["rust","line_break","package","line_break","character"]
 
 `default_prompt_order`オプションは、空または`prompt_order`が指定されていない場合に、プロンプトにモジュールが表示される順序を定義するために使用されます。デフォルトは次のとおりです。
 
-```
+```toml
 default_prompt_order = [
     "username",
     "hostname",
@@ -531,6 +531,7 @@ symbol = "🎁 "
 - カレントディレクトリに`pyproject.toml`ファイルが含まれている
 - カレントディレクトリに`.py`の拡張子のファイルが含まれている
 - カレントディレクトリに`Pipfile`ファイルが含まれている
+- カレントディレクトリに`tox.ini`ファイルが含まれている
 
 ### オプション
 

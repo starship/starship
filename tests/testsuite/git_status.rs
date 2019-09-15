@@ -1,5 +1,4 @@
 use ansi_term::Color;
-use git2::Repository;
 use std::fs::{self, File};
 use std::io;
 use std::process::Command;

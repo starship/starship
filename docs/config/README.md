@@ -568,6 +568,7 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `pyproject.toml` file
 - The current directory contains a file with the `.py` extension
 - The current directory contains a `Pipfile` file
+- The current directory contains a `tox.ini` file
 
 ### Options
 

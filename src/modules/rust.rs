@@ -10,10 +10,10 @@ use super::{Context, Module};
 ///     - Current directory contains a `Cargo.toml` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_rs_project = context
-        .new_scan_dir()
+        .try_begin_scan()?
         .set_files(&["Cargo.toml"])
         .set_extensions(&["rs"])
-        .scan();
+        .is_match();
 
     if !is_rs_project {
         return None;
