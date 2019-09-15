@@ -383,11 +383,12 @@ fn prefix() -> io::Result<()> {
         .use_config(toml::toml! {
             [git_status]
             prefix = "("
+            style = ""
         })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("{}?] ", "(")).to_string();
-    assert_eq!(actual, expected);
+    let expected = "(";
+    assert!(actual.starts_with(&expected));
     Ok(())
 }
 
@@ -403,10 +404,11 @@ fn suffix() -> io::Result<()> {
         .use_config(toml::toml! {
             [git_status]
             suffix = ")"
+            style = ""
         })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[?{}", ")")).to_string();
-    assert_eq!(actual, expected);
+    let expected = ")";
+    assert!(actual.ends_with(&expected));
     Ok(())
 }
