@@ -8,7 +8,7 @@ advanced configuration techniques used in starship.
 The configurations in this section are subject to change in future releases of Starship.
 :::
 
-## Custom pre-prompt and pre-execution Commands in Bash
+## Bashのカスタムの事前プロンプトおよび事前実行コマンド
 
 Bash does not have a formal preexec/precmd framework like most other shells.
 Because of this, it is difficult to provide fully customizable hooks in `bash`.
