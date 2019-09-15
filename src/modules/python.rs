@@ -14,6 +14,7 @@ use super::{Context, Module};
 ///     - Current directory contains a `pyproject.toml` file
 ///     - Current directory contains a file with the `.py` extension
 ///     - Current directory contains a `Pipfile` file
+///     - Current directory contains a `tox.ini` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_py_project = context
         .try_begin_scan()?
@@ -22,6 +23,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             ".python-version",
             "pyproject.toml",
             "Pipfile",
+            "tox.ini",
         ])
         .set_extensions(&["py"])
         .is_match();
