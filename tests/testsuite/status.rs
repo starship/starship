@@ -63,7 +63,7 @@ fn error_pipeline() -> io::Result<()> {
 fn no_pipeline() -> io::Result<()> {
     let config = toml::toml! {
         [status]
-        no_pipeline = true
+        display_mode = "last on error"
     };
 
     let expected = "";
@@ -94,7 +94,7 @@ fn show_success() -> io::Result<()> {
     let output = common::render_module("status")
         .use_config(toml::toml! {
             [status]
-            show_success = true
+            display_mode = "always"
         })
         .args(&["--status=0", "--pipestatus=0"])
         .output()?;
@@ -105,28 +105,31 @@ fn show_success() -> io::Result<()> {
 }
 
 #[test]
-fn show_pipeline_always() -> io::Result<()> {
+fn only_error() -> io::Result<()> {
     let config = toml::toml! {
         [status]
-        show_pipeline_always = false
+        display_mode = "error"
     };
-    let expected = "";
 
-    let output = common::render_module("status")
-        .use_config(config.clone())
-        .args(&["--status=0", "--pipestatus=1 0"])
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-    assert_eq!(expected, actual);
+    let tests = [
+        ("".to_string(), ["0", "0"]),
+        ("".to_string(), ["0", "1 0"]),
+        (format!("{} ", Color::Red.paint("1")), ["1", "1"]),
+        (format!("{} ", Color::Red.paint("(0 1)")), ["1", "0 1"]),
+    ];
 
-    let expected = format!("{} ", Color::Red.paint("(0 1)"));
-
-    let output = common::render_module("status")
-        .use_config(config)
-        .args(&["--status=1", "--pipestatus=0 1"])
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-    assert_eq!(expected, actual);
+    for (expected, args) in tests.iter() {
+        let args = [
+            format!("--status={}", args[0]),
+            format!("--pipestatus={}", args[1]),
+        ];
+        let output = common::render_module("status")
+            .use_config(config.clone())
+            .args(&args)
+            .output()?;
+        let actual = String::from_utf8(output.stdout).unwrap();
+        assert_eq!(*expected, actual);
+    }
 
     Ok(())
 }
@@ -152,6 +155,27 @@ fn use_symbols() -> io::Result<()> {
     let output = common::render_module("status")
         .use_config(config)
         .args(&["--status=1", "--pipestatus=0 1"])
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected, actual);
+
+    Ok(())
+}
+
+#[test]
+fn negation() -> io::Result<()> {
+    let expected = "";
+
+    let output = common::render_module("status")
+        .args(&["--status=0", "--pipestatus=1"])
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected, actual);
+
+    let expected = format!("{} ", Color::Red.paint("!0"));
+
+    let output = common::render_module("status")
+        .args(&["--status=1", "--pipestatus=0"])
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);

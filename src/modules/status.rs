@@ -2,25 +2,34 @@ use ansi_term::Color;
 
 use super::{Context, Module};
 
+#[derive(PartialEq)]
+enum DisplayMode {
+    Always,          // Always shows all exit codes
+    OnError,         // Show all exit codes only on error
+    PipelineOrError, // Always shows if there's more than one exit code, otherwise only on error
+    Last,            // Always shows the last exit code
+    LastOnError,     // Only shows the last exit code and only on error
+}
+
 /// Creates a module for exit codes from the previous pipeline
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("status");
     module.get_prefix().set_value("");
     let arguments = &context.arguments;
-    let mut pipestatus: Vec<&str> = arguments
-        .value_of("pipestatus")?
-        .split_ascii_whitespace()
-        .collect();
     let exit_code = arguments.value_of("status_code")?;
+    let mut pipestatus: Vec<&str> = match arguments.value_of("pipestatus") {
+        Some(val) => val.split_ascii_whitespace().collect(),
+        //fallback if --pipestatus is not provided
+        None => vec![exit_code],
+    };
 
-    let show_success = module.config_value_bool("show_success").unwrap_or(false);
-    let show_pipeline_always = module
-        .config_value_bool("show_pipeline_always")
-        .unwrap_or(true);
-    let no_pipeline = module.config_value_bool("no_pipeline").unwrap_or(false);
-    let not_show = (!show_success && exit_code == "0")
-        && (no_pipeline || !show_pipeline_always || pipestatus.len() == 1);
-    if not_show {
+    let display_mode = get_display_mode(&module);
+    let show = match display_mode {
+        DisplayMode::Always | DisplayMode::Last => true,
+        DisplayMode::PipelineOrError => exit_code != "0" || pipestatus.len() > 1,
+        DisplayMode::OnError | DisplayMode::LastOnError => exit_code != "0",
+    };
+    if !show {
         module.get_suffix().set_value("");
         return Some(module);
     }
@@ -37,7 +46,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     if exit_code != *pipestatus.last()? {
-        module.get_prefix().set_value("!");
+        let symbol = module
+            .config_value_str("negation_symbol")
+            .unwrap_or("!")
+            .to_string();
+        module.get_prefix().set_value(symbol);
         module.get_prefix().set_style(if exit_code == "0" {
             success_style
         } else {
@@ -61,16 +74,37 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .collect();
     }
 
-    let output = if !no_pipeline {
-        match pipestatus.len() {
-            1 => pipestatus[0].to_string(),
-            _ => format!("({})", pipestatus.join(" ")),
-        }
+    let no_pipeline = pipestatus.len() == 1
+        || display_mode == DisplayMode::Last
+        || display_mode == DisplayMode::LastOnError;
+    let output = if no_pipeline {
+        pipestatus.last()?.to_string()
     } else {
-        exit_code.to_string()
+        let delimiter_start = module
+            .config_value_str("delimiter_start_symbol")
+            .unwrap_or("(");
+        let delimiter_end = module
+            .config_value_str("delimiter_end_symbol")
+            .unwrap_or(")");
+        format!(
+            "{}{}{}",
+            delimiter_start,
+            pipestatus.join(" "),
+            delimiter_end
+        )
     };
 
     module.new_segment("status", &output);
 
     Some(module)
+}
+
+fn get_display_mode(module: &Module) -> DisplayMode {
+    match module.config_value_str("display_mode") {
+        Some("always") => DisplayMode::Always,
+        Some("error") => DisplayMode::OnError,
+        Some("last") => DisplayMode::Last,
+        Some("last on error") => DisplayMode::LastOnError,
+        /*Some("pipeline or error") |*/ _ => DisplayMode::PipelineOrError,
+    }
 }
