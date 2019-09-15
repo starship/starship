@@ -13,6 +13,7 @@ mod print;
 mod segment;
 mod utils;
 
+use crate::module::ALL_MODULES;
 use clap::{App, AppSettings, Arg, SubCommand};
 
 fn main() {
@@ -46,12 +47,24 @@ fn main() {
         .help("The execution duration of the last command, in seconds")
         .takes_value(true);
 
+    let keymap_arg = Arg::with_name("keymap")
+        .short("k")
+        .long("keymap")
+        .value_name("KEYMAP")
+        // fish/zsh only
+        .help("The keymap of fish/zsh")
+        .takes_value(true);
+
     let jobs_arg = Arg::with_name("jobs")
         .short("j")
         .long("jobs")
         .value_name("JOBS")
         .help("The number of currently running jobs")
         .takes_value(true);
+
+    let init_scripts_arg = Arg::with_name("print_full_init")
+        .long("print-full-init")
+        .help("Print the main initialization script (as opposed to the init stub)");
 
     let matches = App::new("starship")
         .about("The cross-shell prompt for astronauts. ☄🌌️")
@@ -64,7 +77,8 @@ fn main() {
         .subcommand(
             SubCommand::with_name("init")
                 .about("Prints the shell function used to execute starship")
-                .arg(&shell_arg),
+                .arg(&shell_arg)
+                .arg(&init_scripts_arg),
         )
         .subcommand(
             SubCommand::with_name("prompt")
@@ -72,6 +86,7 @@ fn main() {
                 .arg(&status_code_arg)
                 .arg(&path_arg)
                 .arg(&cmd_duration_arg)
+                .arg(&keymap_arg)
                 .arg(&jobs_arg),
         )
         .subcommand(
@@ -80,11 +95,19 @@ fn main() {
                 .arg(
                     Arg::with_name("name")
                         .help("The name of the module to be printed")
-                        .required(true),
+                        .required(true)
+                        .required_unless("list"),
+                )
+                .arg(
+                    Arg::with_name("list")
+                        .short("l")
+                        .long("list")
+                        .help("List out all supported modules"),
                 )
                 .arg(&status_code_arg)
                 .arg(&path_arg)
                 .arg(&cmd_duration_arg)
+                .arg(&keymap_arg)
                 .arg(&jobs_arg),
         )
         .get_matches();
@@ -92,12 +115,24 @@ fn main() {
     match matches.subcommand() {
         ("init", Some(sub_m)) => {
             let shell_name = sub_m.value_of("shell").expect("Shell name missing.");
-            init::init(shell_name)
+            if sub_m.is_present("print_full_init") {
+                init::init_main(shell_name).expect("can't init_main");
+            } else {
+                init::init_stub(shell_name).expect("can't init_stub");
+            }
         }
         ("prompt", Some(sub_m)) => print::prompt(sub_m.clone()),
         ("module", Some(sub_m)) => {
-            let module_name = sub_m.value_of("name").expect("Module name missing.");
-            print::module(module_name, sub_m.clone());
+            if sub_m.is_present("list") {
+                println!("Supported modules list");
+                println!("----------------------");
+                for modules in ALL_MODULES {
+                    println!("{}", modules);
+                }
+            }
+            if let Some(module_name) = sub_m.value_of("name") {
+                print::module(module_name, sub_m.clone());
+            }
         }
         _ => {}
     }

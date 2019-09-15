@@ -4,6 +4,30 @@ use ansi_term::Style;
 use ansi_term::{ANSIString, ANSIStrings};
 use std::fmt;
 
+// List of all modules
+pub const ALL_MODULES: &[&str] = &[
+    #[cfg(feature = "battery")]
+    "battery",
+    "character",
+    "cmd_duration",
+    "directory",
+    "git_branch",
+    "git_state",
+    "git_status",
+    "golang",
+    "hostname",
+    "jobs",
+    "line_break",
+    "nix_shell",
+    "nodejs",
+    "package",
+    "python",
+    "ruby",
+    "rust",
+    "time",
+    "username",
+];
+
 /// A module is a collection of segments showing data for a single integration
 /// (e.g. The git module shows the current git branch and status)
 pub struct Module<'a> {
@@ -11,7 +35,7 @@ pub struct Module<'a> {
     config: Option<&'a toml::value::Table>,
 
     /// The module's name, to be used in configuration and logging.
-    name: String,
+    _name: String,
 
     /// The styling to be inherited by all segments contained within this module.
     style: Style,
@@ -31,7 +55,7 @@ impl<'a> Module<'a> {
     pub fn new(name: &str, config: Option<&'a toml::value::Table>) -> Module<'a> {
         Module {
             config,
-            name: name.to_string(),
+            _name: name.to_string(),
             style: Style::default(),
             prefix: Affix::default_prefix(name),
             segments: Vec::new(),
@@ -79,11 +103,18 @@ impl<'a> Module<'a> {
     /// Returns a vector of colored ANSIString elements to be later used with
     /// `ANSIStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<ANSIString> {
-        let mut ansi_strings = self
+        let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
+        let ansi_strings = self
             .segments
             .iter()
             .map(Segment::ansi_string)
             .collect::<Vec<ANSIString>>();
+
+        let mut ansi_strings = match shell.as_str() {
+            "bash" => ansi_strings_modified(ansi_strings, shell),
+            "zsh" => ansi_strings_modified(ansi_strings, shell),
+            _ => ansi_strings,
+        };
 
         ansi_strings.insert(0, self.prefix.ansi_string());
         ansi_strings.push(self.suffix.ansi_string());
@@ -109,6 +140,16 @@ impl<'a> Module<'a> {
     pub fn config_value_bool(&self, key: &str) -> Option<bool> {
         self.config.and_then(|config| config.get_as_bool(key))
     }
+
+    /// Get a module's config value as a style
+    pub fn config_value_style(&self, key: &str) -> Option<Style> {
+        self.config.and_then(|config| config.get_as_ansi_style(key))
+    }
+
+    /// Get a module's config value as an array
+    pub fn config_value_array(&self, key: &str) -> Option<&Vec<toml::Value>> {
+        self.config.and_then(|config| config.get_as_array(key))
+    }
 }
 
 impl<'a> fmt::Display for Module<'a> {
@@ -118,10 +159,52 @@ impl<'a> fmt::Display for Module<'a> {
     }
 }
 
+/// Many shells cannot deal with raw unprintable characters (like ANSI escape sequences) and
+/// miscompute the cursor position as a result, leading to strange visual bugs. Here, we wrap these
+/// characters in shell-specific escape codes to indicate to the shell that they are zero-length.
+fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: String) -> Vec<ANSIString> {
+    const ESCAPE_BEGIN: char = '\u{1b}';
+    const MAYBE_ESCAPE_END: char = 'm';
+    ansi_strings
+        .iter()
+        .map(|ansi| {
+            let mut escaped = false;
+            let final_string: String = ansi
+                .to_string()
+                .chars()
+                .map(|x| match x {
+                    ESCAPE_BEGIN => {
+                        escaped = true;
+                        match shell.as_str() {
+                            "bash" => String::from("\u{5c}\u{5b}\u{1b}"), // => \[ESC
+                            "zsh" => String::from("\u{25}\u{7b}\u{1b}"),  // => %{ESC
+                            _ => x.to_string(),
+                        }
+                    }
+                    MAYBE_ESCAPE_END => {
+                        if escaped {
+                            escaped = false;
+                            match shell.as_str() {
+                                "bash" => String::from("m\u{5c}\u{5d}"), // => m\]
+                                "zsh" => String::from("m\u{25}\u{7d}"),  // => m%}
+                                _ => x.to_string(),
+                            }
+                        } else {
+                            x.to_string()
+                        }
+                    }
+                    _ => x.to_string(),
+                })
+                .collect();
+            ANSIString::from(final_string)
+        })
+        .collect::<Vec<ANSIString>>()
+}
+
 /// Module affixes are to be used for the prefix or suffix of a module.
 pub struct Affix {
     /// The affix's name, to be used in configuration and logging.
-    name: String,
+    _name: String,
 
     /// The affix's style.
     style: Style,
@@ -133,7 +216,7 @@ pub struct Affix {
 impl Affix {
     pub fn default_prefix(name: &str) -> Self {
         Self {
-            name: format!("{}_prefix", name),
+            _name: format!("{}_prefix", name),
             style: Style::default(),
             value: "via ".to_string(),
         }
@@ -141,7 +224,7 @@ impl Affix {
 
     pub fn default_suffix(name: &str) -> Self {
         Self {
-            name: format!("{}_suffix", name),
+            _name: format!("{}_suffix", name),
             style: Style::default(),
             value: " ".to_string(),
         }

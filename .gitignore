@@ -13,6 +13,7 @@ Cargo.lock
 
 # Intellij IDE configuration
 .idea/
+/*.iml
 
 # Compiled files for documentation
 docs/node_modules

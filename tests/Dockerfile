@@ -16,7 +16,7 @@ RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | ba
 RUN node --version
 
 # Install Go
-ENV GO_VERSION 1.10.0
+ENV GO_VERSION 1.12.1
 ENV GOENV_ROOT /home/nonroot/.goenv
 ENV PATH $GOENV_ROOT/bin:$GOENV_ROOT/shims:$PATH
 RUN git clone https://github.com/syndbg/goenv.git $GOENV_ROOT \
@@ -28,7 +28,7 @@ RUN git clone https://github.com/syndbg/goenv.git $GOENV_ROOT \
 RUN go version
 
 # Install Ruby
-ENV RUBY_VERSION 2.5.5
+ENV RUBY_VERSION 2.6.3
 ENV RBENV_ROOT /home/nonroot/.rbenv
 ENV PATH $RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH
 RUN curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer | bash \

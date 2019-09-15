@@ -4,8 +4,6 @@ use std::process::Command;
 
 use ansi_term::Color;
 
-use crate::config::Config;
-
 use super::{Context, Module};
 
 /// Creates a module with the current Python version
@@ -15,24 +13,32 @@ use super::{Context, Module};
 ///     - Current directory contains a `requirements.txt` file
 ///     - Current directory contains a `pyproject.toml` file
 ///     - Current directory contains a file with the `.py` extension
+///     - Current directory contains a `Pipfile` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_py_project = context
-        .new_scan_dir()
-        .set_files(&["requirements.txt", ".python-version", "pyproject.toml"])
+        .try_begin_scan()?
+        .set_files(&[
+            "requirements.txt",
+            ".python-version",
+            "pyproject.toml",
+            "Pipfile",
+        ])
         .set_extensions(&["py"])
-        .scan();
+        .is_match();
 
     if !is_py_project {
         return None;
     }
 
-    let mut module = context.new_module("python")?;
+    let mut module = context.new_module("python");
     let pyenv_version_name = module
         .config_value_bool("pyenv_version_name")
         .unwrap_or(false);
 
     const PYTHON_CHAR: &str = "🐍 ";
-    let module_color = Color::Yellow.bold();
+    let module_color = module
+        .config_value_style("style")
+        .unwrap_or_else(|| Color::Yellow.bold());
     module.set_style(module_color);
     module.new_segment("symbol", PYTHON_CHAR);
 
@@ -111,17 +117,4 @@ mod tests {
         let input = "Python 3.7.2";
         assert_eq!(format_python_version(input), "v3.7.2");
     }
-
-    #[test]
-    fn test_no_virtual_env() {
-        env::set_var("VIRTUAL_ENV", "");
-        assert_eq!(get_python_virtual_env(), None)
-    }
-
-    #[test]
-    fn test_virtual_env() {
-        env::set_var("VIRTUAL_ENV", "/foo/bar/my_venv");
-        assert_eq!(get_python_virtual_env().unwrap(), "my_venv")
-    }
-
 }

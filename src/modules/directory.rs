@@ -8,7 +8,7 @@ use super::{Context, Module};
 ///
 /// Will perform path contraction and truncation.
 /// **Contraction**
-///     - Paths begining with the home directory will be contracted to `~`
+///     - Paths beginning with the home directory will be contracted to `~`
 ///     - Paths containing a git repo will contract to begin at the repo root
 ///
 /// **Truncation**
@@ -16,33 +16,54 @@ use super::{Context, Module};
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const HOME_SYMBOL: &str = "~";
     const DIR_TRUNCATION_LENGTH: i64 = 3;
-    let module_color = Color::Cyan.bold();
+    const FISH_STYLE_PWD_DIR_LENGTH: i64 = 0;
 
-    let mut module = context.new_module("directory")?;
+    let mut module = context.new_module("directory");
+    let module_color = module
+        .config_value_style("style")
+        .unwrap_or_else(|| Color::Cyan.bold());
     module.set_style(module_color);
 
     let truncation_length = module
         .config_value_i64("truncation_length")
         .unwrap_or(DIR_TRUNCATION_LENGTH);
+    let truncate_to_repo = module.config_value_bool("truncate_to_repo").unwrap_or(true);
+    let fish_style_pwd_dir_length = module
+        .config_value_i64("fish_style_pwd_dir_length")
+        .unwrap_or(FISH_STYLE_PWD_DIR_LENGTH);
 
+    let home_dir = dirs::home_dir().unwrap();
     let current_dir = &context.current_dir;
     log::debug!("Current directory: {:?}", current_dir);
 
-    let dir_string;
-    if let Some(repo_root) = &context.repo_root {
-        // Contract the path to the git repo root
-        let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
+    let repo = &context.get_repo().ok()?;
 
-        dir_string = contract_path(current_dir, repo_root, repo_folder_name);
-    } else {
+    let dir_string = match &repo.root {
+        Some(repo_root) if truncate_to_repo => {
+            let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
+
+            // Contract the path to the git repo root
+            contract_path(current_dir, repo_root, repo_folder_name)
+        }
         // Contract the path to the home directory
-        let home_dir = dirs::home_dir().unwrap();
-
-        dir_string = contract_path(current_dir, &home_dir, HOME_SYMBOL);
-    }
+        _ => contract_path(current_dir, &home_dir, HOME_SYMBOL),
+    };
 
     // Truncate the dir string to the maximum number of path components
     let truncated_dir_string = truncate(dir_string, truncation_length as usize);
+
+    if fish_style_pwd_dir_length > 0 {
+        // If user is using fish style path, we need to add the segment first
+        let contracted_home_dir = contract_path(current_dir, &home_dir, HOME_SYMBOL);
+        let fish_style_dir = to_fish_style(
+            fish_style_pwd_dir_length as usize,
+            contracted_home_dir,
+            &truncated_dir_string,
+        );
+
+        module.new_segment("path", &fish_style_dir);
+    }
+
     module.new_segment("path", &truncated_dir_string);
 
     module.get_prefix().set_value("in ");
@@ -109,6 +130,38 @@ fn truncate(dir_string: String, length: usize) -> String {
 
     let truncated_components = &components[components.len() - length..];
     truncated_components.join("/")
+}
+
+/// Takes part before contracted path and replaces it with fish style path
+///
+/// Will take the first letter of each directory before the contracted path and
+/// use that in the path instead. See the following example.
+///
+/// Absolute Path: `/Users/Bob/Projects/work/a_repo`
+/// Contracted Path: `a_repo`
+/// With Fish Style: `~/P/w/a_repo`
+///
+/// Absolute Path: `/some/Path/not/in_a/repo/but_nested`
+/// Contracted Path: `in_a/repo/but_nested`
+/// With Fish Style: `/s/P/n/in_a/repo/but_nested`
+fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string: &str) -> String {
+    let replaced_dir_string = dir_string.replace(truncated_dir_string, "");
+    let components = replaced_dir_string.split('/').collect::<Vec<&str>>();
+
+    if components.is_empty() {
+        return replaced_dir_string;
+    }
+
+    components
+        .into_iter()
+        .map(|word| match word {
+            "" => "",
+            _ if word.len() <= pwd_dir_length => word,
+            _ if word.starts_with('.') => &word[..=pwd_dir_length],
+            _ => &word[..pwd_dir_length],
+        })
+        .collect::<Vec<_>>()
+        .join("/")
 }
 
 #[cfg(test)]
@@ -199,5 +252,35 @@ mod tests {
         let path = "~/starship/engines/booster/rocket";
         let output = truncate(path.to_string(), 3);
         assert_eq!(output, "engines/booster/rocket")
+    }
+
+    #[test]
+    fn fish_style_with_user_home_contracted_path() {
+        let path = "~/starship/engines/booster/rocket";
+        let output = to_fish_style(1, path.to_string(), "engines/booster/rocket");
+        assert_eq!(output, "~/s/");
+    }
+
+    #[test]
+    fn fish_style_with_user_home_contracted_path_and_dot_dir() {
+        let path = "~/.starship/engines/booster/rocket";
+        let output = to_fish_style(1, path.to_string(), "engines/booster/rocket");
+        assert_eq!(output, "~/.s/");
+    }
+
+    #[test]
+    fn fish_style_with_no_contracted_path() {
+        // `truncatation_length = 2`
+        let path = "/absolute/Path/not/in_a/repo/but_nested";
+        let output = to_fish_style(1, path.to_string(), "repo/but_nested");
+        assert_eq!(output, "/a/P/n/i/");
+    }
+
+    #[test]
+    fn fish_style_with_pwd_dir_len_no_contracted_path() {
+        // `truncatation_length = 2`
+        let path = "/absolute/Path/not/in_a/repo/but_nested";
+        let output = to_fish_style(2, path.to_string(), "repo/but_nested");
+        assert_eq!(output, "/ab/Pa/no/in/");
     }
 }

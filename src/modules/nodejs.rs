@@ -11,11 +11,11 @@ use super::{Context, Module};
 ///     - Current directory contains a `node_modules` directory
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_js_project = context
-        .new_scan_dir()
+        .try_begin_scan()?
         .set_files(&["package.json"])
         .set_extensions(&["js"])
         .set_folders(&["node_modules"])
-        .scan();
+        .is_match();
 
     if !is_js_project {
         return None;
@@ -24,10 +24,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     match get_node_version() {
         Some(node_version) => {
             const NODE_CHAR: &str = "⬢ ";
-            let module_color = Color::Green.bold();
 
-            let mut module = context.new_module("nodejs")?;
-            module.set_style(module_color);
+            let mut module = context.new_module("nodejs");
+            let module_style = module
+                .config_value_style("style")
+                .unwrap_or_else(|| Color::Green.bold());
+            module.set_style(module_style);
 
             let formatted_version = node_version.trim();
             module.new_segment("symbol", NODE_CHAR);

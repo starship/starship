@@ -133,6 +133,170 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "saghm",
+      "name": "Saghm Rossi",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5875560?v=4",
+      "profile": "https://saghm.com",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "cappyzawa",
+      "name": "Shu Kutsuzawa",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/12455284?v=4",
+      "profile": "https://medium.com/@cappyzawa",
+      "contributions": [
+        "code",
+        "doc",
+        "test",
+        "translation"
+      ]
+    },
+    {
+      "login": "iamsauravsharma",
+      "name": "Saurav Sharma",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/38726015?v=4",
+      "profile": "https://github.com/iamsauravsharma",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "andytom",
+      "name": "Thomas O'Donnell",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/108836?v=4",
+      "profile": "https://github.com/andytom",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "bbigras",
+      "name": "Bruno Bigras",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/24027?v=4",
+      "profile": "https://github.com/bbigras",
+      "contributions": [
+        "code",
+        "review"
+      ]
+    },
+    {
+      "login": "wyze",
+      "name": "Neil Kistner",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/186971?v=4",
+      "profile": "https://neilkistner.com/",
+      "contributions": [
+        "code",
+        "test",
+        "review"
+      ]
+    },
+    {
+      "login": "qstrahl",
+      "name": "Quinn Strahl",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2235277?v=4",
+      "profile": "http://ca.linkedin.com/in/qstrahl",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "tivervac",
+      "name": "Titouan Vervack",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/3389524?v=4",
+      "profile": "https://github.com/tivervac",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "oblitum",
+      "name": "Francisco Lopes",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1269815?v=4",
+      "profile": "http://nosubstance.me",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ahouts",
+      "name": "Andrew Houts",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/16907671?v=4",
+      "profile": "https://github.com/ahouts",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "nickwb",
+      "name": "Nick Young",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/594211?v=4",
+      "profile": "https://github.com/nickwb",
+      "contributions": [
+        "code",
+        "doc",
+        "test",
+        "review"
+      ]
+    },
+    {
+      "login": "g2p",
+      "name": "Gabriel de Perthuis",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/61678?v=4",
+      "profile": "https://github.com/g2p",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Hofer-Julian",
+      "name": "Hofer-Julian",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/30049909?v=4",
+      "profile": "https://github.com/Hofer-Julian",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "unhappychoice",
+      "name": "Yuji Ueki",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5608948?v=4",
+      "profile": "http://blog.unhappychoice.com",
+      "contributions": [
+        "content",
+        "translation"
+      ]
+    },
+    {
+      "login": "heyrict",
+      "name": "谢祯晖",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/25698503?v=4",
+      "profile": "https://github.com/heyrict",
+      "contributions": [
+        "code",
+        "doc",
+        "translation"
+      ]
+    },
+    {
+      "login": "bookun",
+      "name": "Kutsuzawa Ryo",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/10346162?v=4",
+      "profile": "https://twitter.com/bookun2851",
+      "contributions": [
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7
