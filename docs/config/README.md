@@ -339,9 +339,9 @@ current directory.
 | `renamed`                | `"»"`        | A renamed file has been added to the staging area.      |
 | `deleted`                | `"✘"`        | A file's deletion has been added to the staging area.   |
 | `show_sync_count`        | `false`      | Show ahead/behind count of the branch being tracked.    |
-| `style`                  | `"bold red"` | The style for the module.                               |
 | `prefix`                 | `[`          | Prefix to display immediately before git status.        |
 | `suffix`                 | `]`          | Suffix to display immediately after git status.         |
+| `style`                  | `"bold red"` | The style for the module.                               |
 | `disabled`               | `false`      | Disables the `git_status` module.                       |
 
 ### Example
