@@ -370,3 +370,43 @@ fn shows_deleted_file() -> io::Result<()> {
 
     Ok(())
 }
+
+#[test]
+#[ignore]
+fn prefix() -> io::Result<()> {
+    let repo_dir = common::create_fixture_repo()?;
+    File::create(repo_dir.join("prefix"))?;
+    let output = common::render_module("git_status")
+        .arg("--path")
+        .arg(repo_dir)
+        .env_clear()
+        .use_config(toml::toml! {
+            [git_status]
+            prefix = "("
+        })
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    let expected = Color::Red.bold().paint(format!("{}?] ", "(")).to_string();
+    assert_eq!(actual, expected);
+    Ok(())
+}
+
+#[test]
+#[ignore]
+fn suffix() -> io::Result<()> {
+    let repo_dir = common::create_fixture_repo()?;
+    File::create(repo_dir.join("suffix"))?;
+    let output = common::render_module("git_status")
+        .arg("--path")
+        .arg(repo_dir)
+        .env_clear()
+        .use_config(toml::toml! {
+            [git_status]
+            suffix = ")"
+        })
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    let expected = Color::Red.bold().paint(format!("[?{}", ")")).to_string();
+    assert_eq!(actual, expected);
+    Ok(())
+}
