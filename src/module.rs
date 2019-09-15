@@ -36,7 +36,7 @@ pub struct Module<'a> {
     config: Option<&'a toml::value::Table>,
 
     /// The module's name, to be used in configuration and logging.
-    name: String,
+    _name: String,
 
     /// The styling to be inherited by all segments contained within this module.
     style: Style,
@@ -56,7 +56,7 @@ impl<'a> Module<'a> {
     pub fn new(name: &str, config: Option<&'a toml::value::Table>) -> Module<'a> {
         Module {
             config,
-            name: name.to_string(),
+            _name: name.to_string(),
             style: Style::default(),
             prefix: Affix::default_prefix(name),
             segments: Vec::new(),
@@ -205,7 +205,7 @@ fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: String) -> Vec<AN
 /// Module affixes are to be used for the prefix or suffix of a module.
 pub struct Affix {
     /// The affix's name, to be used in configuration and logging.
-    name: String,
+    _name: String,
 
     /// The affix's style.
     style: Style,
@@ -217,7 +217,7 @@ pub struct Affix {
 impl Affix {
     pub fn default_prefix(name: &str) -> Self {
         Self {
-            name: format!("{}_prefix", name),
+            _name: format!("{}_prefix", name),
             style: Style::default(),
             value: "via ".to_string(),
         }
@@ -225,7 +225,7 @@ impl Affix {
 
     pub fn default_suffix(name: &str) -> Self {
         Self {
-            name: format!("{}_suffix", name),
+            _name: format!("{}_suffix", name),
             style: Style::default(),
             value: " ".to_string(),
         }

@@ -16,7 +16,7 @@ use super::{Context, Module};
 ///     - Current directory contains a `Pipfile` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_py_project = context
-        .new_scan_dir()
+        .try_begin_scan()?
         .set_files(&[
             "requirements.txt",
             ".python-version",
@@ -24,7 +24,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "Pipfile",
         ])
         .set_extensions(&["py"])
-        .scan();
+        .is_match();
 
     if !is_py_project {
         return None;
