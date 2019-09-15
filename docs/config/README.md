@@ -48,9 +48,10 @@ Most modules in starship allow you to configure their display styles. This is do
 - `"bg:blue fg:bright-green"` sets bright green text on a blue background
 - `"bold fg:27"` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
 - `"underline bg:#bf5700"` sets underlined text on a burnt orange background
+- `"bold italic fg:purple"` sets bold italic purple text
 - `""` explicitly disables all styling
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors.
+Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
 ## Prompt
 
@@ -74,12 +75,12 @@ add_newline = false
 prompt_order=["rust","line_break","package","line_break","character"]
 ```
 
-### Default prompt order
+### Default Prompt Order
 
-The `default_prompt_order` configuration option is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. The default is as shown:
+The default `prompt_order` is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. The default is as shown:
 
-```
-default_prompt_order = [
+```toml
+prompt_order = [
     "username",
     "hostname",
     "directory",
@@ -109,13 +110,13 @@ The module is only visible when the device's battery is below 10%.
 
 ### Options
 
-| Variable             | Default      | Description                                       |
-| -------------------- | ------------ | ------------------------------------------------- |
-| `full_symbol`        | `"•"`        | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`        | The symbol shown when the battery is charging.    |
-| `discharging_symbol` | `"⇣"`        | The symbol shown when the battery is discharging. |
-| `style`              | `"bold red"` | The style for the module.                         |
-| `disabled`           | `false`      | Disables the `battery` module.                    |
+| Variable             | Default                  | Description                                       |
+| -------------------- | ------------------------ | ------------------------------------------------- |
+| `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
+| `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
+| `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
+| `display`            | [link](#battery-display) | Display threshold and style for the module.       |
+| `disabled`           | `false`                  | Disables the `battery` module.                    |
 
 ### Example
 
@@ -126,6 +127,41 @@ The module is only visible when the device's battery is below 10%.
 full_symbol = "🔋"
 charging_symbol = "⚡️"
 discharging_symbol = "💀"
+```
+
+### Battery Display
+
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style).
+If no `display` is provided. The default is as shown:
+
+```toml
+[[battery.display]]
+threshold = 10
+style = "bold red"
+```
+
+#### Options
+
+The `display` option is an array of the following table.
+
+| Variable    | Description                                     |
+|-------------|-------------------------------------------------|
+| `threshold` | The upper bound for the display option.         |
+| `style`     | The style used if the display option is in use. |
+
+#### Example
+
+```toml
+[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
+threshold = 10
+style = "bold red"
+
+[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
+threshold = 30
+style = "bold yellow"
+
+# when capacity is over 30%, the battery indicator will not be displayed
+
 ```
 
 ## Character

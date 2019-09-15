@@ -10,10 +10,10 @@ use super::{Context, Module};
 ///     - Current directory contains a `Gemfile` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_rb_project = context
-        .new_scan_dir()
+        .try_begin_scan()?
         .set_files(&["Gemfile"])
         .set_extensions(&["rb"])
-        .scan();
+        .is_match();
 
     if !is_rb_project {
         return None;

@@ -11,11 +11,11 @@ use super::{Context, Module};
 ///     - Current directory contains a `node_modules` directory
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_js_project = context
-        .new_scan_dir()
+        .try_begin_scan()?
         .set_files(&["package.json"])
         .set_extensions(&["js"])
         .set_folders(&["node_modules"])
-        .scan();
+        .is_match();
 
     if !is_js_project {
         return None;

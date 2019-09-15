@@ -41,11 +41,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 /// Format a given time into the given string. This function should be referentially
 /// transparent, which makes it easy to test (unlike anything involving the actual time)
-fn format_time(time_format: &str, localtime: DateTime<Local>) -> String {
-    localtime.format(time_format).to_string()
+fn format_time(time_format: &str, local_time: DateTime<Local>) -> String {
+    local_time.format(time_format).to_string()
 }
 
-/* Because we cannot do integration tests on the time module, these unit
+/* Because we cannot make acceptance tests for the time module, these unit
 tests become extra important */
 #[cfg(test)]
 mod tests {

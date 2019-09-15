@@ -174,6 +174,7 @@ impl Config for Table {
  - 'bg:<color>'    (specifies that the color read should be a background color)
  - 'underline'
  - 'bold'
+ - 'italic'
  - '<color>'        (see the parse_color_string doc for valid color strings)
 */
 fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
@@ -201,6 +202,7 @@ fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
         match token.as_str() {
             "underline" => style = style.underline(),
             "bold" => style = style.bold(),
+            "italic" => style = style.italic(),
             "dimmed" => style = style.dimmed(),
             "none" => return Some(ansi_term::Style::new()), // Overrides other toks
 
@@ -339,16 +341,21 @@ mod tests {
     fn table_get_styles_simple() {
         let mut table = toml::value::Table::new();
 
-        // Test for a bold underline green module (with SiLlY cApS)
+        // Test for a bold italic underline green module (with SiLlY cApS)
         table.insert(
             String::from("mystyle"),
-            toml::value::Value::String(String::from("bOlD uNdErLiNe GrEeN")),
+            toml::value::Value::String(String::from("bOlD ItAlIc uNdErLiNe GrEeN")),
         );
         assert!(table.get_as_ansi_style("mystyle").unwrap().is_bold);
+        assert!(table.get_as_ansi_style("mystyle").unwrap().is_italic);
         assert!(table.get_as_ansi_style("mystyle").unwrap().is_underline);
         assert_eq!(
             table.get_as_ansi_style("mystyle").unwrap(),
-            ansi_term::Style::new().bold().underline().fg(Color::Green)
+            ansi_term::Style::new()
+                .bold()
+                .italic()
+                .underline()
+                .fg(Color::Green)
         );
 
         // Test a "plain" style with no formatting

@@ -284,7 +284,18 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/25698503?v=4",
       "profile": "https://github.com/heyrict",
       "contributions": [
+        "code",
+        "doc",
         "translation"
+      ]
+    },
+    {
+      "login": "bookun",
+      "name": "Kutsuzawa Ryo",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/10346162?v=4",
+      "profile": "https://twitter.com/bookun2851",
+      "contributions": [
+        "review"
       ]
     }
   ],

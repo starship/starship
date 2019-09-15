@@ -20,7 +20,7 @@ pub struct Context<'a> {
     pub current_dir: PathBuf,
 
     /// A vector containing the full paths of all the files in `current_dir`.
-    pub dir_files: Vec<PathBuf>,
+    dir_files: OnceCell<Vec<PathBuf>>,
 
     /// The map of arguments that were passed when starship was called.
     pub arguments: ArgMatches<'a>,
@@ -52,22 +52,11 @@ impl<'a> Context<'a> {
         // TODO: Currently gets the physical directory. Get the logical directory.
         let current_dir = Context::expand_tilde(dir.into());
 
-        let dir_files = fs::read_dir(&current_dir)
-            .unwrap_or_else(|_| {
-                panic!(
-                    "Unable to read current directory: {}",
-                    current_dir.to_string_lossy()
-                )
-            })
-            .filter_map(Result::ok)
-            .map(|entry| entry.path())
-            .collect::<Vec<PathBuf>>();
-
         Context {
             config,
             arguments,
             current_dir,
-            dir_files,
+            dir_files: OnceCell::new(),
             repo: OnceCell::new(),
         }
     }
@@ -100,19 +89,18 @@ impl<'a> Context<'a> {
 
     // returns a new ScanDir struct with reference to current dir_files of context
     // see ScanDir for methods
-    pub fn new_scan_dir(&'a self) -> ScanDir<'a> {
-        ScanDir {
-            dir_files: self.dir_files.as_ref(),
+    pub fn try_begin_scan(&'a self) -> Option<ScanDir<'a>> {
+        Some(ScanDir {
+            dir_files: self.get_dir_files().ok()?,
             files: &[],
             folders: &[],
             extensions: &[],
-        }
+        })
     }
 
     /// Will lazily get repo root and branch when a module requests it.
     pub fn get_repo(&self) -> Result<&Repo, std::io::Error> {
-        let repo = self
-            .repo
+        self.repo
             .get_or_try_init(|| -> Result<Repo, std::io::Error> {
                 let repository = Repository::discover(&self.current_dir).ok();
                 let branch = repository
@@ -128,9 +116,19 @@ impl<'a> Context<'a> {
                     root,
                     state,
                 })
-            })?;
+            })
+    }
 
-        Ok(repo)
+    pub fn get_dir_files(&self) -> Result<&Vec<PathBuf>, std::io::Error> {
+        self.dir_files
+            .get_or_try_init(|| -> Result<Vec<PathBuf>, std::io::Error> {
+                let dir_files = fs::read_dir(&self.current_dir)?
+                    .filter_map(Result::ok)
+                    .map(|entry| entry.path())
+                    .collect::<Vec<PathBuf>>();
+
+                Ok(dir_files)
+            })
     }
 }
 
@@ -150,7 +148,7 @@ pub struct Repo {
 // A struct of Criteria which will be used to verify current PathBuf is
 // of X language, criteria can be set via the builder pattern
 pub struct ScanDir<'a> {
-    dir_files: &'a Vec<PathBuf>, // Replace with reference
+    dir_files: &'a Vec<PathBuf>,
     files: &'a [&'a str],
     folders: &'a [&'a str],
     extensions: &'a [&'a str],
@@ -174,7 +172,7 @@ impl<'a> ScanDir<'a> {
 
     /// based on the current Pathbuf check to see
     /// if any of this criteria match or exist and returning a boolean
-    pub fn scan(&mut self) -> bool {
+    pub fn is_match(&self) -> bool {
         self.dir_files.iter().any(|path| {
             if path.is_dir() {
                 path_has_name(path, self.folders)
@@ -261,7 +259,7 @@ mod tests {
 
     #[test]
     fn test_criteria_scan_fails() {
-        let mut failing_criteria = ScanDir {
+        let failing_criteria = ScanDir {
             dir_files: &vec![PathBuf::new()],
             files: &["package.json"],
             extensions: &["js"],
@@ -269,9 +267,9 @@ mod tests {
         };
 
         // fails if buffer does not match any criteria
-        assert_eq!(failing_criteria.scan(), false);
+        assert_eq!(failing_criteria.is_match(), false);
 
-        let mut failing_dir_criteria = ScanDir {
+        let failing_dir_criteria = ScanDir {
             dir_files: &vec![PathBuf::from("/package.js/dog.go")],
             files: &["package.json"],
             extensions: &["js"],
@@ -279,18 +277,18 @@ mod tests {
         };
 
         // fails when passed a pathbuf dir matches extension path
-        assert_eq!(failing_dir_criteria.scan(), false);
+        assert_eq!(failing_dir_criteria.is_match(), false);
     }
 
     #[test]
     fn test_criteria_scan_passes() {
-        let mut passing_criteria = ScanDir {
+        let passing_criteria = ScanDir {
             dir_files: &vec![PathBuf::from("package.json")],
             files: &["package.json"],
             extensions: &["js"],
             folders: &["node_modules"],
         };
 
-        assert_eq!(passing_criteria.scan(), true);
+        assert_eq!(passing_criteria.is_match(), true);
     }
 }
