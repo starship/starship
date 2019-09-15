@@ -97,8 +97,8 @@ prompt_order = [
     "cmd_duration",
     "line_break",
     "jobs",
-    "time",
     "battery",
+    "time",
     "character",
 ]
 ```
