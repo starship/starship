@@ -16,21 +16,26 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("status");
     module.get_prefix().set_value("");
     let arguments = &context.arguments;
-    let mut exit_code = arguments.value_of("status_code")?;
+    let exit_code = arguments.value_of("status_code")?;
     let mut pipestatus: Vec<&str> = match arguments.value_of("pipestatus") {
         Some(val) => val.split_ascii_whitespace().collect(),
-        //fallback if --pipestatus is not provided
+        // fallback if --pipestatus is not provided
         None => vec![exit_code],
     };
 
+    // kind of a hack to not show `!<previous status code>` when a user sends ^C to clear the line
     if exit_code == "130" && *pipestatus.last()? != "130" {
-        exit_code = *pipestatus.last()?;
+        module.get_suffix().set_value("");
+        return Some(module);
     }
+
+    let errored = exit_code != "0";
+
     let display_mode = get_display_mode(&module);
     let show = match display_mode {
         DisplayMode::Always | DisplayMode::Last => true,
-        DisplayMode::PipelineOrError => exit_code != "0" || pipestatus.len() > 1,
-        DisplayMode::OnError | DisplayMode::LastOnError => exit_code != "0",
+        DisplayMode::PipelineOrError => errored || pipestatus.len() > 1,
+        DisplayMode::OnError | DisplayMode::LastOnError => errored,
     };
     if !show {
         module.get_suffix().set_value("");
@@ -49,12 +54,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     if exit_code != *pipestatus.last()? {
-        let symbol = module
-            .config_value_str("negation_symbol")
-            .unwrap_or("!")
-            .to_string();
-        module.get_prefix().set_value(symbol);
-        module.get_prefix().set_style(if exit_code == "0" {
+        module.new_segment("negation", "!").set_style(if !errored {
             success_style
         } else {
             error_style
@@ -83,18 +83,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let output = if no_pipeline {
         pipestatus.last()?.to_string()
     } else {
-        let delimiter_start = module
-            .config_value_str("delimiter_start_symbol")
-            .unwrap_or("(");
-        let delimiter_end = module
-            .config_value_str("delimiter_end_symbol")
-            .unwrap_or(")");
-        format!(
-            "{}{}{}",
-            delimiter_start,
-            pipestatus.join(" "),
-            delimiter_end
-        )
+        let prefix = module.config_value_str("prefix").unwrap_or("(");
+        let suffix = module.config_value_str("suffix").unwrap_or(")");
+        format!("{}{}{}", prefix, pipestatus.join(" "), suffix)
     };
 
     module.new_segment("status", &output);
