@@ -16,13 +16,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("status");
     module.get_prefix().set_value("");
     let arguments = &context.arguments;
-    let exit_code = arguments.value_of("status_code")?;
+    let mut exit_code = arguments.value_of("status_code")?;
     let mut pipestatus: Vec<&str> = match arguments.value_of("pipestatus") {
         Some(val) => val.split_ascii_whitespace().collect(),
         //fallback if --pipestatus is not provided
         None => vec![exit_code],
     };
 
+    if exit_code == "130" && *pipestatus.last()? != "130" {
+        exit_code = *pipestatus.last()?;
+    }
     let display_mode = get_display_mode(&module);
     let show = match display_mode {
         DisplayMode::Always | DisplayMode::Last => true,
