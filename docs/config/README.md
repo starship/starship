@@ -340,8 +340,8 @@ current directory.
 | `deleted`                | `"✘"`        | A file's deletion has been added to the staging area.   |
 | `show_sync_count`        | `false`      | Show ahead/behind count of the branch being tracked.    |
 | `style`                  | `"bold red"` | The style for the module.                               |
-| `delimiter_start_symbol` | `[`          | A symbol for start delimiter of `git_status` module     |
-| `delimiter_end_symbol`   | `]`          | A symbol for end delimiter of `git_status` module       |
+| `prefix`                 | `[`          | Prefix to display immediately before git status.        |
+| `suffix`                 | `]`          | Suffix to display immediately after git status.         |
 | `disabled`               | `false`      | Disables the `git_status` module.                       |
 
 ### Example

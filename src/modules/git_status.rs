@@ -29,8 +29,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const GIT_STATUS_ADDED: &str = "+";
     const GIT_STATUS_RENAMED: &str = "»";
     const GIT_STATUS_DELETED: &str = "✘";
-    const DELIMITER_START_SYMBOL: &str = "[";
-    const DELIMITER_END_SYMBOL: &str = "] ";
+    const PREFIX: &str = "[";
+    const SUFFIX: &str = "] ";
 
     let repo = context.get_repo().ok()?;
     let branch_name = repo.branch.as_ref()?;
@@ -43,12 +43,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .config_value_style("style")
         .unwrap_or_else(|| Color::Red.bold());
     let start_symbol = module
-        .config_value_str("delimiter_start_symbol")
-        .unwrap_or(DELIMITER_START_SYMBOL)
+        .config_value_str("prefix")
+        .unwrap_or(PREFIX)
         .to_owned();
     let end_symbol = module
-        .config_value_str("delimiter_end_symbol")
-        .unwrap_or(DELIMITER_END_SYMBOL)
+        .config_value_str("suffix")
+        .unwrap_or(SUFFIX)
         .to_owned();
 
     module
