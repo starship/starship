@@ -48,17 +48,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let error_style = module
         .config_value_style("error")
         .unwrap_or_else(|| Color::Red.into());
-    match exit_code {
-        "0" => module.set_style(success_style),
-        _ => module.set_style(error_style),
-    };
+    module.set_style(if errored { error_style } else { success_style });
 
     if exit_code != *pipestatus.last()? {
-        module.new_segment("negation", "!").set_style(if !errored {
-            success_style
-        } else {
-            error_style
-        });
+        module.new_segment("negation", "!");
     }
 
     let symbols = module.config_value_bool("use_symbols").unwrap_or(false);
