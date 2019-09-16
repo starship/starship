@@ -438,7 +438,7 @@ fn use_logical_and_physical_paths() -> io::Result<()> {
             use_logical_path = false
         })
         .arg("--path")
-        .arg(&sym)
+        .arg(&dir)
         .env(
             "PWD",
             "/tmp/starship/porthole/viewport/symlink_to_directory",
