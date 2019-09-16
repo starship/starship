@@ -298,7 +298,8 @@
       "contributions": [
         "review",
         "code",
-        "test"
+        "test",
+        "translation"
       ]
     }
   ],
