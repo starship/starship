@@ -75,7 +75,7 @@ prompt_order=["rust","line_break","package","line_break","character"]
 
 ### デフォルトのプロンプト表示順
 
-`default_prompt_order`オプションは、空または`prompt_order`が指定されていない場合に、プロンプトにモジュールが表示される順序を定義するために使用されます。デフォルトは次のとおりです。
+デフォルトの`prompt_order`は、空の場合、または`prompt_order`が指定されていない場合に、プロンプトにモジュールが表示される順序を定義するために使用されます。デフォルトは次のとおりです。
 
 ```toml
 prompt_order = [
