@@ -52,6 +52,11 @@ impl Segment {
             None => ANSIString::from(&self.value),
         }
     }
+
+    /// Determines if the segment contains a value.
+    pub fn is_empty(&self) -> bool {
+        self.value.trim().is_empty()
+    }
 }
 
 impl fmt::Display for Segment {
