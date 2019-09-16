@@ -271,7 +271,7 @@ mod tests {
         let name = "unit_test";
         let module = Module {
             config: None,
-            name: name.to_string(),
+            _name: name.to_string(),
             style: Style::default(),
             prefix: Affix::default_prefix(name),
             segments: Vec::new(),
@@ -286,7 +286,7 @@ mod tests {
         let name = "unit_test";
         let module = Module {
             config: None,
-            name: name.to_string(),
+            _name: name.to_string(),
             style: Style::default(),
             prefix: Affix::default_prefix(name),
             segments: vec![Segment::new("test_segment")],
