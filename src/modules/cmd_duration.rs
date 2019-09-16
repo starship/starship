@@ -16,7 +16,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .parse::<u64>()
         .ok()?;
 
-    let signed_config_min = module.config_value_i64("min_time").unwrap_or(2000) * 1000000;
+    let signed_config_min = module.config_value_i64("min_time").unwrap_or(2000) * 1_000_000;
 
     /* TODO: Once error handling is implemented, warn the user if their config
     min time is nonsensical */
@@ -47,7 +47,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 // Render the time into a nice human-readable string
 fn render_time(raw_nanoseconds: u64) -> String {
     // Calculate a simple breakdown into days/hours/minutes/seconds
-    let raw_milliseconds = raw_nanoseconds / 1000000;
+    let raw_milliseconds = raw_nanoseconds / 1_000_000;
     let (milliseconds, raw_seconds) = (raw_milliseconds % 1000, raw_milliseconds / 1000);
     let (seconds, raw_minutes) = (raw_seconds % 60, raw_seconds / 60);
     let (minutes, raw_hours) = (raw_minutes % 60, raw_minutes / 60);
@@ -78,22 +78,22 @@ mod tests {
 
     #[test]
     fn test_100ms() {
-        assert_eq!(render_time(100 * 1000000 as u64), "100ms")
+        assert_eq!(render_time(100 * 1_000_000 as u64), "100ms")
     }
     #[test]
     fn test_10s() {
-        assert_eq!(render_time(10 * 1000000000 as u64), "10s")
+        assert_eq!(render_time(10 * 1_000_000_000 as u64), "10s")
     }
     #[test]
     fn test_90s() {
-        assert_eq!(render_time(90 * 1000000000 as u64), "1m30s")
+        assert_eq!(render_time(90 * 1_000_000_000 as u64), "1m30s")
     }
     #[test]
     fn test_10110s() {
-        assert_eq!(render_time(10110 * 1000000000 as u64), "2h48m30s")
+        assert_eq!(render_time(10110 * 1_000_000_000 as u64), "2h48m30s")
     }
     #[test]
     fn test_1d() {
-        assert_eq!(render_time(86400 * 1000000000 as u64), "1d")
+        assert_eq!(render_time(86400 * 1_000_000_000 as u64), "1d")
     }
 }
