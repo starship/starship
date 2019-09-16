@@ -40,6 +40,28 @@ are segments within it. Every module also has a prefix and suffix that are the d
  "via "         "⬢"        "v10.4.1"       ""
 ```
 
+### Styling
+There are generally two kinds of options for styling.
+
+One is module-wide styling. Options described with `*style*` in the root will be applied to the whole module. In the following config, starship will print all the contents red in `git_status` module, unless specified.
+
+```toml
+[git_status]
+style = "red"
+```
+
+Another is segment-wide styling. Segments in the configuration can be a string, or a table with optional `style` and `value` key. In the following config, starship will print `ahead` segment green, `diverged` segment yellow, and other segments red. **Note: Segment-wide stylings will always overwrite module-wide stylings, no matter if the module use conditional stylings such as [character](#character) and [username](#username) module.**
+
+All variables described under `Segments` can be configured with a table.
+
+```toml
+[git_status]
+conflicted = "-"  # This is equivalent to `conflicted.value = "-"`
+ahead.style = "green"
+diverged = { value = "±", style = "yellow" }
+style = "red"
+```
+
 ### Style Strings
 
 Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
@@ -110,13 +132,18 @@ The module is only visible when the device's battery is below 10%.
 
 ### Options
 
-| Variable             | Default                  | Description                                       |
-| -------------------- | ------------------------ | ------------------------------------------------- |
-| `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
-| `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
-| `display`            | [link](#battery-display) | Display threshold and style for the module.       |
-| `disabled`           | `false`                  | Disables the `battery` module.                    |
+| Variable   | Default                  | Description                                 |
+|------------|--------------------------|---------------------------------------------|
+| `display`  | [link](#battery-display) | Display threshold and style for the module. |
+| `disabled` | `false`                  | Disables the `battery` module.              |
+
+### Segments
+
+| Segment              | Default | Description                                       |
+|----------------------|---------|---------------------------------------------------|
+| `full_symbol`        | `"•"`   | The symbol shown when the battery is full.        |
+| `charging_symbol`    | `"⇡"`   | The symbol shown when the battery is charging.    |
+| `discharging_symbol` | `"⇣"`   | The symbol shown when the battery is discharging. |
 
 ### Example
 
@@ -175,15 +202,20 @@ can do this in two ways: by changing color (red/green) or by changing its shape
 
 ### Options
 
-| Variable                | Default        | Description                                                                         |
-| ----------------------- | -------------- | ----------------------------------------------------------------------------------- |
-| `symbol`                | `"❯"`          | The symbol used before the text input in the prompt.                                |
-| `error_symbol`          | `"✖"`          | The symbol used before text input if the previous command failed.                   |
-| `use_symbol_for_status` | `false`        | Indicate error status by changing the symbol.                                       |
-| `vicmd_symbol`          | `"❮"`          | The symbol used before the text input in the prompt if shell is in vim normal mode. |
-| `style_success`         | `"bold green"` | The style used if the last command was successful.                                  |
-| `style_failure`         | `"bold red"`   | The style used if the last command failed.                                          |
-| `disabled`              | `false`        | Disables the `character` module.                                                    |
+| Variable        | Default        | Description                                        |
+|-----------------|----------------|----------------------------------------------------|
+| `style_success` | `"bold green"` | The style used if the last command was successful. |
+| `style_failure` | `"bold red"`   | The style used if the last command failed.         |
+| `disabled`      | `false`        | Disables the `character` module.                   |
+
+### Segments
+
+| Segment                 | Default | Description                                                                         |
+|-------------------------|---------|-------------------------------------------------------------------------------------|
+| `symbol`                | `"❯"`   | The symbol used before the text input in the prompt.                                |
+| `error_symbol`          | `"✖"`   | The symbol used before text input if the previous command failed.                   |
+| `use_symbol_for_status` | `false` | Indicate error status by changing the symbol.                                       |
+| `vicmd_symbol`          | `"❮"`   | The symbol used before the text input in the prompt if shell is in vim normal mode. |
 
 ### Example
 
@@ -270,11 +302,16 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 | Variable            | Default         | Description                                                                           |
 | ------------------- | --------------- | ------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
 | `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
 | `style`             | `"bold purple"` | The style for the module.                                                             |
 | `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
+
+### Segments
+
+| Segment  | Default | Description                                                                   |
+|----------|---------|-------------------------------------------------------------------------------|
+| `symbol` | `" "`  | The symbol used before the branch name of the repo in your current directory. |
 
 ### Example
 
@@ -296,8 +333,15 @@ that information will be shown too.
 
 ### Options
 
-| Variable           | Default            | Description                                                                                                      |
-| ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| Variable   | Default         | Description                      |
+|------------|-----------------|----------------------------------|
+| `style`    | `"bold yellow"` | The style for the module.        |
+| `disabled` | `false`         | Disables the `git_state` module. |
+
+### Segments
+
+| Segments           | Default            | Description                                                                                                      |
+|--------------------|--------------------|------------------------------------------------------------------------------------------------------------------|
 | `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
 | `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
 | `revert`           | `"REVERTING"`      | The text displayed when a `revert` is in progress.                                                               |
@@ -306,8 +350,6 @@ that information will be shown too.
 | `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
 | `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
 | `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
-| `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
-| `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
 ### Example
 
@@ -326,23 +368,28 @@ current directory.
 
 ### Options
 
-| Variable                 | Default      | Description                                             |
-| ------------------------ | ------------ | ------------------------------------------------------- |
-| `conflicted`             | `"="`        | This branch has merge conflicts.                        |
-| `ahead`                  | `"⇡"`        | This branch is ahead of the branch being tracked.       |
-| `behind`                 | `"⇣"`        | This branch is behind of the branch being tracked.      |
-| `diverged`               | `"⇕"`        | This branch has diverged from the branch being tracked. |
-| `untracked`              | `"?"`        | There are untracked files in the working directory.     |
-| `stashed`                | `"$"`        | A stash exists for the local repository.                |
-| `modified`               | `"!"`        | There are file modifications in the working directory.  |
-| `staged`                 | `"+"`        | A new file has been added to the staging area.          |
-| `renamed`                | `"»"`        | A renamed file has been added to the staging area.      |
-| `deleted`                | `"✘"`        | A file's deletion has been added to the staging area.   |
-| `show_sync_count`        | `false`      | Show ahead/behind count of the branch being tracked.    |
-| `prefix`                 | `[`          | Prefix to display immediately before git status.        |
-| `suffix`                 | `]`          | Suffix to display immediately after git status.         |
-| `style`                  | `"bold red"` | The style for the module.                               |
-| `disabled`               | `false`      | Disables the `git_status` module.                       |
+| Variable          | Default      | Description                                          |
+|-------------------|--------------|------------------------------------------------------|
+| `show_sync_count` | `false`      | Show ahead/behind count of the branch being tracked. |
+| `prefix`          | `[`          | Prefix to display immediately before git status.     |
+| `suffix`          | `]`          | Suffix to display immediately after git status.      |
+| `style`           | `"bold red"` | The style for the module.                            |
+| `disabled`        | `false`      | Disables the `git_status` module.                    |
+
+### Segments
+
+| Segment      | Default | Description                                             |
+|--------------|---------|---------------------------------------------------------|
+| `conflicted` | `"="`   | This branch has merge conflicts.                        |
+| `ahead`      | `"⇡"`   | This branch is ahead of the branch being tracked.       |
+| `behind`     | `"⇣"`   | This branch is behind of the branch being tracked.      |
+| `diverged`   | `"⇕"`   | This branch has diverged from the branch being tracked. |
+| `untracked`  | `"?"`   | There are untracked files in the working directory.     |
+| `stashed`    | `"$"`   | A stash exists for the local repository.                |
+| `modified`   | `"!"`   | There are file modifications in the working directory.  |
+| `staged`     | `"+"`   | A new file has been added to the staging area.          |
+| `renamed`    | `"»"`   | A renamed file has been added to the staging area.      |
+| `deleted`    | `"✘"`   | A file's deletion has been added to the staging area.   |
 
 ### Example
 
@@ -429,12 +476,17 @@ more than the `threshold` config value, if it exists.
 
 ### Options
 
-| Variable    | Default       | Description                                           |
-| ----------- | ------------- | ----------------------------------------------------- |
-| `symbol`    | `"✦ "`        | The symbol used before displaying the number of jobs. |
-| `threshold` | `1`           | Show number of jobs if exceeded.                      |
-| `style`     | `"bold blue"` | The style for the module.                             |
-| `disabled`  | `false`       | Disables the `jobs` module.                           |
+| Variable    | Default       | Description                      |
+|-------------|---------------|----------------------------------|
+| `threshold` | `1`           | Show number of jobs if exceeded. |
+| `style`     | `"bold blue"` | The style for the module.        |
+| `disabled`  | `false`       | Disables the `jobs` module.      |
+
+### Segments
+
+| Segment  | Default | Description                                           |
+|----------|---------|-------------------------------------------------------|
+| `symbol` | `"✦ "`  | The symbol used before displaying the number of jobs. |
 
 ### Example
 
@@ -505,11 +557,16 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default        | Description                                              |
-| ---------- | -------------- | -------------------------------------------------------- |
-| `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | The style for the module.                                |
-| `disabled` | `false`        | Disables the `nodejs` module.                            |
+| Variable   | Default        | Description                   |
+|------------|----------------|-------------------------------|
+| `style`    | `"bold green"` | The style for the module.     |
+| `disabled` | `false`        | Disables the `nodejs` module. |
+
+### Segments
+
+| Segment  | Default | Description                                              |
+|----------|---------|----------------------------------------------------------|
+| `symbol` | `"⬢ "`  | The symbol used before displaying the version of NodeJS. |
 
 ### Example
 
@@ -538,11 +595,16 @@ and `poetry` packages.
 
 ### Options
 
-| Variable   | Default      | Description                                                |
-| ---------- | ------------ | ---------------------------------------------------------- |
-| `symbol`   | `"📦 "`      | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | The style for the module.                                  |
-| `disabled` | `false`      | Disables the `package` module.                             |
+| Variable   | Default      | Description                    |
+|------------|--------------|--------------------------------|
+| `style`    | `"bold red"` | The style for the module.      |
+| `disabled` | `false`      | Disables the `package` module. |
+
+### Segments
+
+| Segment  | Default | Description                                                |
+|----------|---------|------------------------------------------------------------|
+| `symbol` | `"📦 "` | The symbol used before displaying the version the package. |
 
 ### Example
 
@@ -574,13 +636,18 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable             | Default         | Description                                                                 |
-| -------------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`             | `"🐍 "`         | The symbol used before displaying the version of Python.                    |
-| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
-| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
-| `style`              | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`           | `false`         | Disables the `python` module.                                               |
+| Variable             | Default         | Description                     |
+|----------------------|-----------------|---------------------------------|
+| `pyenv_version_name` | `false`         | Use pyenv to get Python version |
+| `style`              | `"bold yellow"` | The style for the module.       |
+| `disabled`           | `false`         | Disables the `python` module.   |
+
+### Segments
+
+| Segment        | Default    | Description                                                                 |
+|----------------|------------|-----------------------------------------------------------------------------|
+| `symbol`       | `"🐍 "`    | The symbol used before displaying the version of Python.                    |
+| `pyenv_prefix` | `"pyenv "` | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
 
 ### Example
 
@@ -603,11 +670,16 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default      | Description                                            |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"💎 "`      | The symbol used before displaying the version of Ruby. |
-| `style`    | `"bold red"` | The style for the module.                              |
-| `disabled` | `false`      | Disables the `ruby` module.                            |
+| Variable   | Default      | Description                 |
+|------------|--------------|-----------------------------|
+| `style`    | `"bold red"` | The style for the module.   |
+| `disabled` | `false`      | Disables the `ruby` module. |
+
+### Segments
+
+| Segment  | Default | Description                                            |
+|----------|---------|--------------------------------------------------------|
+| `symbol` | `"💎 "` | The symbol used before displaying the version of Ruby. |
 
 ### Example
 
@@ -628,11 +700,16 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default      | Description                                            |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"🦀 "`      | The symbol used before displaying the version of Rust. |
-| `style`    | `"bold red"` | The style for the module.                              |
-| `disabled` | `false`      | Disables the `rust` module.                            |
+| Variable   | Default      | Description                 |
+|------------|--------------|-----------------------------|
+| `style`    | `"bold red"` | The style for the module.   |
+| `disabled` | `false`      | Disables the `rust` module. |
+
+### Segments
+
+| Segment  | Default | Description                                            |
+|----------|---------|--------------------------------------------------------|
+| `symbol` | `"🦀 "` | The symbol used before displaying the version of Rust. |
 
 ### Example
 
