@@ -246,14 +246,14 @@ it would have been `nixpkgs/pkgs`.
 
 ### Options
 
-| Variable                    | Default       | Description                                                                      |
-| --------------------------- | ------------- | -------------------------------------------------------------------------------- |
-| `truncation_length`         | `3`           | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`          | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `fish_style_pwd_dir_length` | `0`           | The number of characters to use when applying fish shell pwd path logic.         |
-| `use_logical_path`          | `true`        | Controls using the shell's logical path instead of the on-disk physical path.    |
-| `style`                     | `"bold cyan"` | The style for the module.                                                        |
-| `disabled`                  | `false`       | Disables the `directory` module.                                                 |
+| Variable                    | Default       | Description                                                                              |
+| --------------------------- | ------------- | ---------------------------------------------------------------------------------------- |
+| `truncation_length`         | `3`           | The number of parent folders that the current directory should be truncated to.          |
+| `truncate_to_repo`          | `true`        | Whether or not to truncate to the root of the git repo that you're currently in.         |
+| `fish_style_pwd_dir_length` | `0`           | The number of characters to use when applying fish shell pwd path logic.                 |
+| `use_logical_path`          | `true`        | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+| `style`                     | `"bold cyan"` | The style for the module.                                                                |
+| `disabled`                  | `false`       | Disables the `directory` module.                                                         |
 
 ### Example
 
