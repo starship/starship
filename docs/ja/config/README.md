@@ -75,10 +75,10 @@ prompt_order=["rust","line_break","package","line_break","character"]
 
 ### デフォルトのプロンプト表示順
 
-`default_prompt_order`オプションは、空または`prompt_order`が指定されていない場合に、プロンプトにモジュールが表示される順序を定義するために使用されます。デフォルトは次のとおりです。
+デフォルトの`prompt_order`は、空の場合、または`prompt_order`が指定されていない場合に、プロンプトにモジュールが表示される順序を定義するために使用されます。デフォルトは次のとおりです。
 
 ```toml
-default_prompt_order = [
+prompt_order = [
     "username",
     "hostname",
     "directory",
@@ -320,6 +320,8 @@ cherry_pick = "🍒 PICKING"
 `renamed` | `"»"` | 名前が変更されたファイルがステージング領域に追加されました。
 `deleted` | `"✘"` | ファイルの削除がステージング領域に追加されました。
 `show_sync_count` | `false` | 追跡されているブランチの先行/後方カウントを表示します。
+`prefix` | `[` | このモジュールの先頭に表示される文字列です。
+`suffix` | `]` | このモジュールの末尾に表示される文字列です。
 `style` | `"bold red"` | モジュールのスタイルです。
 `disabled` | `false` | `git_status`モジュールを無効にします。
 
