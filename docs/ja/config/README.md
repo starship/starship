@@ -60,7 +60,7 @@ starshipのほとんどのモジュールでは、表示スタイルを設定で
 変数 | デフォルト | 説明
 --- | --- | ---
 `add_newline` | `true` | プロンプトの開始前に新しい行を追加します。
-`prompt_order` | [link](#デフォルトのプロンプト表示順) | プロンプトモジュールを出力する順序を設定します。
+`prompt_order` | [link](#default-prompt-order) | プロンプトモジュールを出力する順序を設定します。
 
 ### 設定例
 
@@ -78,7 +78,7 @@ prompt_order=["rust","line_break","package","line_break","character"]
 `default_prompt_order`オプションは、空または`prompt_order`が指定されていない場合に、プロンプトにモジュールが表示される順序を定義するために使用されます。デフォルトは次のとおりです。
 
 ```toml
-default_prompt_order = [
+prompt_order = [
     "username",
     "hostname",
     "directory",
@@ -112,7 +112,7 @@ default_prompt_order = [
 `full_symbol` | `"•"` | バッテリーが満タンのときに表示される記号です。
 `charging_symbol` | `"⇡"` | バッテリーの充電中に表示される記号です。
 `discharging_symbol` | `"⇣"` | バッテリーが放電しているときに表示される記号です。
-`display` | [link](#バッテリーの表示) | モジュールの閾値とスタイルを表示します。
+`display` | [link](#battery-display) | モジュールの閾値とスタイルを表示します。
 `disabled` | `false` | `battery`モジュールを無効にします。
 
 ### 設定例
@@ -320,6 +320,8 @@ cherry_pick = "🍒 PICKING"
 `renamed` | `"»"` | 名前が変更されたファイルがステージング領域に追加されました。
 `deleted` | `"✘"` | ファイルの削除がステージング領域に追加されました。
 `show_sync_count` | `false` | 追跡されているブランチの先行/後方カウントを表示します。
+`prefix` | `[` | Prefix to display immediately before git status.
+`suffix` | `]` | Suffix to display immediately after git status.
 `style` | `"bold red"` | モジュールのスタイルです。
 `disabled` | `false` | `git_status`モジュールを無効にします。
 
