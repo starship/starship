@@ -77,19 +77,23 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_100ms() {
+        assert_eq!(render_time(100 * 1000000 as u64), "100ms")
+    }
+    #[test]
     fn test_10s() {
-        assert_eq!(render_time(10 as u64), "10s")
+        assert_eq!(render_time(10 * 1000000000 as u64), "10s")
     }
     #[test]
     fn test_90s() {
-        assert_eq!(render_time(90 as u64), "1m30s")
+        assert_eq!(render_time(90 * 1000000000 as u64), "1m30s")
     }
     #[test]
     fn test_10110s() {
-        assert_eq!(render_time(10110 as u64), "2h48m30s")
+        assert_eq!(render_time(10110 * 1000000000 as u64), "2h48m30s")
     }
     #[test]
     fn test_1d() {
-        assert_eq!(render_time(86400 as u64), "1d")
+        assert_eq!(render_time(86400 * 1000000000 as u64), "1d")
     }
 }
