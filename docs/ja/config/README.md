@@ -320,8 +320,8 @@ cherry_pick = "🍒 PICKING"
 `renamed` | `"»"` | 名前が変更されたファイルがステージング領域に追加されました。
 `deleted` | `"✘"` | ファイルの削除がステージング領域に追加されました。
 `show_sync_count` | `false` | 追跡されているブランチの先行/後方カウントを表示します。
-`prefix` | `[` | Prefix to display immediately before git status.
-`suffix` | `]` | Suffix to display immediately after git status.
+`prefix` | `[` | このモジュールの先頭に表示される文字列です。
+`suffix` | `]` | このモジュールの末尾に表示される文字列です。
 `style` | `"bold red"` | モジュールのスタイルです。
 `disabled` | `false` | `git_status`モジュールを無効にします。
 
