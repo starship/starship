@@ -49,6 +49,19 @@ impl<'a> ModuleConfig<'a> for f64 {
     }
 }
 
+impl<'a, T> ModuleConfig<'a> for Vec<T>
+where
+    T: ModuleConfig<'a>,
+{
+    fn from_config(config: &'a toml::Value) -> Option<Self> {
+        config
+            .as_array()?
+            .iter()
+            .map(|value| T::from_config(value))
+            .collect()
+    }
+}
+
 fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
     let tokens = style_string.split_whitespace();
     let mut style = ansi_term::Style::new();
@@ -164,29 +177,93 @@ mod tests {
 
     #[test]
     fn test_load_config() {
-        #[derive(Clone, ModuleConfig, Debug)]
+        #[derive(Clone, ModuleConfig)]
         struct TestConfig<'a> {
             pub symbol: &'a str,
             pub disabled: bool,
+            pub some_array: Vec<&'a str>,
         }
 
         let config = toml::toml! {
             symbol = "T "
             disabled = true
+            some_array = ["A"]
         };
         let default_config = TestConfig {
             symbol: "S ",
             disabled: false,
+            some_array: vec!["A", "B", "C"],
         };
         let rust_config = default_config.load_config(&config);
 
         assert_eq!(rust_config.symbol, "T ");
         assert_eq!(rust_config.disabled, true);
+        assert_eq!(rust_config.some_array, vec!["A"]);
+    }
+
+    #[test]
+    fn test_load_nested_config() {
+        #[derive(Clone, ModuleConfig)]
+        struct TestConfig<'a> {
+            pub untracked: SegmentDisplayConfig<'a>,
+            pub modified: SegmentDisplayConfig<'a>,
+        }
+
+        #[derive(PartialEq, Debug, Clone, ModuleConfig)]
+        struct SegmentDisplayConfig<'a> {
+            pub value: &'a str,
+            pub style: Style,
+        }
+
+        let config = toml::toml! {
+            untracked.value = "x"
+            modified = { value = "•", style = "red" }
+        };
+
+        let default_config = TestConfig {
+            untracked: SegmentDisplayConfig {
+                value: "?",
+                style: Color::Red.bold(),
+            },
+            modified: SegmentDisplayConfig {
+                value: "!",
+                style: Color::Red.bold(),
+            },
+        };
+        let git_status_config = default_config.load_config(&config);
+
+        assert_eq!(
+            git_status_config.untracked,
+            SegmentDisplayConfig {
+                value: "x",
+                style: Color::Red.bold(),
+            }
+        );
+        assert_eq!(
+            git_status_config.modified,
+            SegmentDisplayConfig {
+                value: "•",
+                style: Color::Red.normal(),
+            }
+        );
     }
 
     #[test]
     fn test_from_string() {
         let config = toml::Value::String(String::from("S"));
         assert_eq!(<&str>::from_config(&config).unwrap(), "S")
+    }
+
+    #[test]
+    fn test_from_bool() {
+        let config = toml::Value::Boolean(true);
+        assert_eq!(<bool>::from_config(&config).unwrap(), true)
+    }
+
+    #[test]
+    fn test_from_vec() {
+        let config: toml::Value = toml::Value::Array(vec![toml::Value::from("S")]);
+        let default_config: Vec<&str> = vec!["S"];
+        assert_eq!(<Vec<&str>>::from_config(&config).unwrap(), default_config)
     }
 }
