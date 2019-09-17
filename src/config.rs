@@ -28,7 +28,6 @@ impl Config for Table {
         if let Some(file_data) = Self::config_from_file() {
             return file_data;
         }
-
         Self::new()
     }
 
@@ -43,7 +42,6 @@ impl Config for Table {
             log::debug!("STARSHIP_CONFIG is not set");
             let config_path = home_dir()?.join(".config/starship.toml");
             let config_path_str = config_path.to_str()?.to_owned();
-
             log::debug!("Using default config path: {}", config_path_str);
             config_path_str
         };
@@ -65,7 +63,7 @@ impl Config for Table {
     }
 
     /// Get the subset of the table for a module by its name
-    fn get_module_config(&self, module_name: &str) -> Option<&toml::value::Table> {
+    fn get_module_config(&self, module_name: &str) -> Option<&Table> {
         let module_config = self.get(module_name).and_then(toml::Value::as_table);
 
         if module_config.is_some() {
@@ -163,8 +161,7 @@ impl Config for Table {
 
     /// Get a text key and attempt to interpret it into an ANSI style.
     fn get_as_ansi_style(&self, key: &str) -> Option<ansi_term::Style> {
-        let style_string = self.get_as_str(key)?;
-        parse_style_string(style_string)
+        self.get_as_str(key).map(parse_style_string)
     }
 }
 
@@ -177,53 +174,42 @@ impl Config for Table {
  - 'italic'
  - '<color>'        (see the parse_color_string doc for valid color strings)
 */
-fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
-    let tokens = style_string.split_whitespace();
-    let mut style = ansi_term::Style::new();
+fn parse_style_string(style_string: &str) -> ansi_term::Style {
+    style_string
+        .split_whitespace()
+        .fold(ansi_term::Style::new(), |style, token| {
+            let token = token.to_lowercase();
 
-    // If col_fg is true, color the foreground. If it's false, color the background.
-    let mut col_fg: bool;
+            // Check for FG/BG identifiers and strip them off if appropriate
+            // If col_fg is true, color the foreground. If it's false, color the background.
+            let (token, col_fg) = if token.as_str().starts_with("fg:") {
+                (token.trim_start_matches("fg:").to_owned(), true)
+            } else if token.as_str().starts_with("bg:") {
+                (token.trim_start_matches("bg:").to_owned(), false)
+            } else {
+                (token, true) // Bare colors are assumed to color the foreground
+            };
 
-    for token in tokens {
-        let token = token.to_lowercase();
+            match token.as_str() {
+                "underline" => style.underline(),
+                "bold" => style.bold(),
+                "italic" => style.italic(),
+                "dimmed" => style.dimmed(),
+                "none" => ansi_term::Style::new(),
 
-        // Check for FG/BG identifiers and strip them off if appropriate
-        let token = if token.as_str().starts_with("fg:") {
-            col_fg = true;
-            token.trim_start_matches("fg:").to_owned()
-        } else if token.as_str().starts_with("bg:") {
-            col_fg = false;
-            token.trim_start_matches("bg:").to_owned()
-        } else {
-            col_fg = true; // Bare colors are assumed to color the foreground
-            token
-        };
-
-        match token.as_str() {
-            "underline" => style = style.underline(),
-            "bold" => style = style.bold(),
-            "italic" => style = style.italic(),
-            "dimmed" => style = style.dimmed(),
-            "none" => return Some(ansi_term::Style::new()), // Overrides other toks
-
-            // Try to see if this token parses as a valid color string
-            color_string => {
-                // Match found: set either fg or bg color
-                if let Some(ansi_color) = parse_color_string(color_string) {
-                    if col_fg {
-                        style = style.fg(ansi_color);
-                    } else {
-                        style = style.on(ansi_color);
-                    }
-                } else {
-                    // Match failed: skip this token and log it
-                    log::debug!("Could not parse token in color string: {}", token)
-                }
+                // Try to see if this token parses as a valid color string
+                color_string => parse_color_string(color_string).map_or_else(
+                    || style,
+                    |ansi_color| {
+                        if col_fg {
+                            style.fg(ansi_color)
+                        } else {
+                            style.on(ansi_color)
+                        }
+                    },
+                ),
             }
-        }
-    }
-
-    Some(style)
+        })
 }
 
 /** Parse a string that represents a color setting, returning None if this fails
@@ -277,11 +263,10 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
 
     if predefined_color.is_some() {
         log::trace!("Read predefined color: {}", color_string);
-        return predefined_color;
+    } else {
+        log::debug!("Could not parse color in string: {}", color_string);
     }
-
-    // All attempts to parse have failed
-    None
+    predefined_color
 }
 
 #[cfg(test)]
