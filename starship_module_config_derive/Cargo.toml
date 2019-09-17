@@ -20,5 +20,9 @@ name = "starship_module_config_derive"
 proc-macro = true
 
 [dependencies]
+proc-macro2 = "~1"
 quote = "~1"
 syn = "~1"
+
+[dev-dependencies]
+starship = { version = "0.17", path = "../starship" }
