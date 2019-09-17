@@ -14,7 +14,7 @@ where
 
     /// Merge `self` with config from a toml table.
     fn load_config(&self, config: &'a toml::Value) -> Self {
-        Self::from_config(config).unwrap_or(self.clone())
+        Self::from_config(config).unwrap_or_else(|| self.clone())
     }
 }
 
