@@ -128,12 +128,13 @@ discharging_symbol = "💀"
 ### バッテリーの表示
 
 `display</ 0> オプションを使用して、バッテリーインジケーターを表示するタイミング（閾値）と外観（スタイル）を定義します。
-<code>display</ 0> が提供されない場合、 デフォルトは次のとおりです。</p>
+<code>display` が提供されない場合、 デフォルトは次のとおりです。
 
-<pre><code class="toml">[[battery.display]]
+```toml
+[[battery.display]]
 threshold = 10
 style = "bold red"
-`</pre> 
+```
 
 #### オプション
 
@@ -157,7 +158,6 @@ threshold = 30
 style = "bold yellow"
 
 # 容量が30％を超えると、バッテリーインジケーターは表示されません
-
 
 ```
 
