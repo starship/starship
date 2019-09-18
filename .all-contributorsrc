@@ -286,7 +286,8 @@
       "contributions": [
         "code",
         "doc",
-        "translation"
+        "translation",
+        "review"
       ]
     },
     {
@@ -295,7 +296,10 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/10346162?v=4",
       "profile": "https://twitter.com/bookun2851",
       "contributions": [
-        "review"
+        "review",
+        "code",
+        "test",
+        "translation"
       ]
     }
   ],
