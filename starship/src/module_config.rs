@@ -62,6 +62,15 @@ where
     }
 }
 
+impl<'a, T> ModuleConfig<'a> for Option<T>
+where
+    T: ModuleConfig<'a> + Sized,
+{
+    fn from_config(config: &'a toml::Value) -> Option<Self> {
+        Some(T::from_config(config))
+    }
+}
+
 fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
     let tokens = style_string.split_whitespace();
     let mut style = ansi_term::Style::new();
@@ -249,21 +258,59 @@ mod tests {
     }
 
     #[test]
+    fn test_load_optional_config() {
+        #[derive(Clone, ModuleConfig)]
+        struct TestConfig<'a> {
+            pub optional: Option<&'a str>,
+            pub hidden: Option<&'a str>,
+        }
+
+        let config = toml::toml! {
+            optional = "test"
+        };
+        let default_config = TestConfig {
+            optional: None,
+            hidden: None,
+        };
+        let rust_config = default_config.load_config(&config);
+
+        assert_eq!(rust_config.optional, Some("test"));
+        assert_eq!(rust_config.hidden, None);
+    }
+
+    #[test]
     fn test_from_string() {
         let config = toml::Value::String(String::from("S"));
-        assert_eq!(<&str>::from_config(&config).unwrap(), "S")
+        assert_eq!(<&str>::from_config(&config).unwrap(), "S");
     }
 
     #[test]
     fn test_from_bool() {
         let config = toml::Value::Boolean(true);
-        assert_eq!(<bool>::from_config(&config).unwrap(), true)
+        assert_eq!(<bool>::from_config(&config).unwrap(), true);
+    }
+
+    #[test]
+    fn test_from_i64() {
+        let config = toml::Value::Integer(42);
+        assert_eq!(<i64>::from_config(&config).unwrap(), 42);
+    }
+
+    #[test]
+    fn test_from_style() {
+        let config = toml::Value::from("red bold");
+        assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.bold());
     }
 
     #[test]
     fn test_from_vec() {
         let config: toml::Value = toml::Value::Array(vec![toml::Value::from("S")]);
-        let default_config: Vec<&str> = vec!["S"];
-        assert_eq!(<Vec<&str>>::from_config(&config).unwrap(), default_config)
+        assert_eq!(<Vec<&str>>::from_config(&config).unwrap(), vec!["S"]);
+    }
+
+    #[test]
+    fn test_from_option() {
+        let config: toml::Value = toml::Value::String(String::from("S"));
+        assert_eq!(<Option<&str>>::from_config(&config).unwrap(), Some("S"));
     }
 }
