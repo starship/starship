@@ -1,15 +1,15 @@
 ---
-home: 'true'
-heroImage: "/logo.svg"
+home: true
+heroImage: /logo.svg
 actionText: Get Started →
-actionLink: "/guide/"
+actionLink: /ja/guide/
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 ---
 
 <div class="features">
   <div class="feature">
-    <h2>互換性優先</h2>
-    <p>一般的なほとんどのOSの一般的なほとんどのシェル上で動作します。あらゆるところで使用してください！</p>
+    <h2>互換性第一</h2>
+    <p>一般的なほとんどのOSの一般的なほとんどのシェル上で動作します。 あらゆるところで使用してください！</p>
   </div>
   <div class="feature">
     <h2>Rust 製</h2>
@@ -25,75 +25,75 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
   <video class="demo-video" autoplay muted loop>
     <source src="/demo.webm" type="video/webm">
     <source src="/demo.mp4" type="video/mp4">
-  </source></source></video>
+  </video>
 </div>
 
 ### クイックインストール
 
 1. **Starship** のバイナリをインストール
-
+    
     もし以下のプラットフォームを使用していない場合は **[コンパイル済みのバイナリファイルをダウンロード](https://github.com/starship/starship/releases)** してください。
-
+    
     #### Homebrew
 
-    ```sh
-    $ brew install starship
-    ```
+   ```sh
+   $ brew install starship
+   ```
 
-    #### Rust (v1.33 もしくはそれ以上)
+#### Rust (v1.33 もしくはそれ以上)
 
-    ```sh
-    $ cargo install starship
-    ```
+   ```sh
+   $ cargo install starship
+   ```
 
-    #### Arch Linux (AUR)
+#### Arch Linux (AUR)
 
-    Starship は AUR 上の `starship` というパッケージ名で利用可能です。`yay` またはお好きな AUR ヘルパーでインストールしてください。
+Starship は AUR 上の `starship` というパッケージ名で利用可能です。 `yay` またはお好きな AUR ヘルパーでインストールしてください。
 
-    ```sh
-    $ yay -S starship
-    ```
+   ```sh
+   $ yay -S starship
+   ```
 
-    #### Nix (unstable)
+#### Nix (unstable)
 
-    ```sh
-    $ nix-env --install starship
-    ```
+   ```sh
+   $ nix-env --install starship
+   ```
 
-    #### Termux
+#### Termux
 
-    ```sh
-    $ pkg install starship
-    ```
+   ```sh
+   $ pkg install starship
+   ```
 
-2. 初期化のためのスクリプトをシェルの設定ファイルに追加
-
+1. 初期化のためのスクリプトをシェルの設定ファイルに追加
+    
     #### Bash
-
+    
     `~/.bashrc` の最後に以下を追記してください
 
-    ```sh
-    # ~/.bashrc
+   ```sh
+   # ~/.bashrc
 
-    eval "$(starship init bash)"
-    ```
+   eval "$(starship init bash)"
+   ```
 
-    #### Fish
+#### Fish
 
-    `~/.config/fish/config.fish` の最後に以下を追記してください
+`~/.config/fish/config.fish` の最後に以下を追記してください
 
-    ```sh
-    # ~/.config/fish/config.fish
+   ```sh
+   # ~/.config/fish/config.fish
 
-    eval (starship init fish)
-    ```
+   eval (starship init fish)
+   ```
 
-    #### Zsh
+#### Zsh
 
-    `~/.zshrc` の最後に以下を追記してください
+`~/.zshrc` の最後に以下を追記してください
 
-    ```sh
-    # ~/.zshrc
+   ```sh
+   # ~/.zshrc
 
-    eval "$(starship init zsh)"
-    ```
+   eval "$(starship init zsh)"
+   ```
