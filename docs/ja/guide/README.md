@@ -1,1 +1,1 @@
-../../README.ja.md
+../../../README.ja.md
