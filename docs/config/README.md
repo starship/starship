@@ -255,10 +255,12 @@ it would have been `nixpkgs/pkgs`.
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+
 | Variable                    | Default | Description                                                                              |
 | --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
 | `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
 | `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+
 </details>
 
 
@@ -335,23 +337,23 @@ current directory.
 
 ### Options
 
-| Variable                 | Default      | Description                                             |
-| ------------------------ | ------------ | ------------------------------------------------------- |
-| `conflicted`             | `"="`        | This branch has merge conflicts.                        |
-| `ahead`                  | `"⇡"`        | This branch is ahead of the branch being tracked.       |
-| `behind`                 | `"⇣"`        | This branch is behind of the branch being tracked.      |
-| `diverged`               | `"⇕"`        | This branch has diverged from the branch being tracked. |
-| `untracked`              | `"?"`        | There are untracked files in the working directory.     |
-| `stashed`                | `"$"`        | A stash exists for the local repository.                |
-| `modified`               | `"!"`        | There are file modifications in the working directory.  |
-| `staged`                 | `"+"`        | A new file has been added to the staging area.          |
-| `renamed`                | `"»"`        | A renamed file has been added to the staging area.      |
-| `deleted`                | `"✘"`        | A file's deletion has been added to the staging area.   |
-| `show_sync_count`        | `false`      | Show ahead/behind count of the branch being tracked.    |
-| `prefix`                 | `[`          | Prefix to display immediately before git status.        |
-| `suffix`                 | `]`          | Suffix to display immediately after git status.         |
-| `style`                  | `"bold red"` | The style for the module.                               |
-| `disabled`               | `false`      | Disables the `git_status` module.                       |
+| Variable          | Default      | Description                                             |
+| ----------------- | ------------ | ------------------------------------------------------- |
+| `conflicted`      | `"="`        | This branch has merge conflicts.                        |
+| `ahead`           | `"⇡"`        | This branch is ahead of the branch being tracked.       |
+| `behind`          | `"⇣"`        | This branch is behind of the branch being tracked.      |
+| `diverged`        | `"⇕"`        | This branch has diverged from the branch being tracked. |
+| `untracked`       | `"?"`        | There are untracked files in the working directory.     |
+| `stashed`         | `"$"`        | A stash exists for the local repository.                |
+| `modified`        | `"!"`        | There are file modifications in the working directory.  |
+| `staged`          | `"+"`        | A new file has been added to the staging area.          |
+| `renamed`         | `"»"`        | A renamed file has been added to the staging area.      |
+| `deleted`         | `"✘"`        | A file's deletion has been added to the staging area.   |
+| `show_sync_count` | `false`      | Show ahead/behind count of the branch being tracked.    |
+| `prefix`          | `[`          | Prefix to display immediately before git status.        |
+| `suffix`          | `]`          | Suffix to display immediately after git status.         |
+| `style`           | `"bold red"` | The style for the module.                               |
+| `disabled`        | `false`      | Disables the `git_status` module.                       |
 
 ### Example
 
