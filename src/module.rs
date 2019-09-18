@@ -75,7 +75,7 @@ impl<'a> Module<'a> {
     }
 
     /// Should config exists, get a reference to a newly created segment in the module
-    pub fn new_segment_required(&mut self, name: &str) -> Option<&mut Segment> {
+    pub fn new_segment_if_config_exists(&mut self, name: &str) -> Option<&mut Segment> {
         // Use the provided value unless overwritten by config
         if let Some(value) = self.config_value_str(name) {
             let mut segment = Segment::new(name);

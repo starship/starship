@@ -47,10 +47,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             }
             battery::State::Unknown => {
                 log::debug!("Unknown detected");
-                module.new_segment_required("unknown_symbol")?;
+                module.new_segment_if_config_exists("unknown_symbol")?;
             }
             battery::State::Empty => {
-                module.new_segment_required("empty_symbol")?;
+                module.new_segment_if_config_exists("empty_symbol")?;
             }
             _ => {
                 log::debug!("Unhandled battery state `{}`", state);
