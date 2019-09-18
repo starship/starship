@@ -34,6 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Using environment PWD is the standard approach for determining logical path
     let use_logical_path = module.config_value_bool("use_logical_path").unwrap_or(true);
+    // If this is None for any reason, we fall back to reading the os-provided path
     let logical_current_dir = if use_logical_path {
         match std::env::var("PWD") {
             Ok(x) => Some(x),

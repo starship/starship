@@ -429,7 +429,11 @@ fn use_logical_and_physical_paths() -> io::Result<()> {
     let dir = tmp_dir.join("directory");
     let sym = tmp_dir.join("symlink_to_directory");
     fs::create_dir_all(&dir)?;
+    // Create a symlink on the appropriate system
+    #[cfg(target_family = "unix")]
     std::os::unix::fs::symlink(&dir, &sym).unwrap();
+    #[cfg(target_family = "windows")]
+    std::os::windows::fs::symlink_file(&dir, &sym).unwrap();
 
     // Test when using physical paths
     let output = common::render_module("directory")
