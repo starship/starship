@@ -21,3 +21,20 @@ fn folder_with_pom() -> io::Result<()> {
     assert_eq!(expected, actual);
     Ok(())
 }
+
+
+#[test]
+fn check_java_version1() -> io::Result<()> {
+    let out = std::process::Command::new("java").arg("-Xinternalversion").output().unwrap().stdout;
+    let ver = String::from_utf8(out).unwrap();
+    assert_eq!(ver, "nope");
+    Ok(())
+}
+
+#[test]
+fn check_java_version2() -> io::Result<()> {
+    let out = std::process::Command::new("/opt/hostedtoolcache/Java/12.0.2/x64/bin/java").arg("-Xinternalversion").output().unwrap().stdout;
+    let ver = String::from_utf8(out).unwrap();
+    assert_eq!(ver, "nope");
+    Ok(())
+}
