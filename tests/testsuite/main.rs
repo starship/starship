@@ -8,6 +8,7 @@ mod git_state;
 mod git_status;
 mod golang;
 mod hostname;
+mod java;
 mod jobs;
 mod line_break;
 mod modules;

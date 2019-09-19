@@ -59,6 +59,7 @@ The prompt shows information you need while you're working, while staying sleek 
 
 - Prompt character turns red if the last command exits with non-zero code
 - Current username if not the same as the logged-in user
+- Current Java version(`☕`)
 - Current Node.js version(`⬢`)
 - Current Rust version (`🦀`)
 - Current Ruby version (`💎`)
