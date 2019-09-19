@@ -41,8 +41,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_java_version() -> Option<String> {
-    match Command::new("java").arg("-Xinternalversion").output() {
-        Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
+    let java_command = match std::env::var("JAVA_HOME") {
+        Ok(java_home) => format!("{}/bin/java", java_home),
+        Err(_) => String::from("java"),
+    };
+
+    // Temporary -> For CI
+    eprintln!("java_command={}", java_command);
+
+    match Command::new(java_command).arg("-Xinternalversion").output() {
+        Ok(output) => {
+            // Temporary -> For CI
+            let res = String::from_utf8(output.stdout).unwrap();
+            eprintln!("res={}", res);
+            Some(res)
+        }
         Err(_) => None,
     }
 }
