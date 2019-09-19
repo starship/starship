@@ -10,25 +10,19 @@ pub struct RustConfig<'a> {
     pub disabled: bool,
 }
 
-/* This works
+/* This is what the macro adds.
 impl<'a> ModuleConfig<'a> for RustConfig<'a> {
     fn load_config(&self, config: &'a toml::Value) -> Self {
         let mut new_module_config = self.clone();
         if let toml::Value::Table(config) = config {
             if let Some(config_str) = config.get("symbol") {
-                if let Some(symbol) = <&str>::from_config(config_str) {
-                    new_module_config.symbol = symbol;
-                }
+                new_module_config.symbol = new_module_config.symbol.load_config(config_str);
             }
             if let Some(config_str) = config.get("disabled") {
-                if let Some(disabled) = <bool>::from_config(config_str) {
-                    new_module_config.symbol = disabled;
-                }
+                new_module_config.disabled = new_module_config.disabled.load_config(config_str);
             }
             if let Some(config_str) = config.get("style") {
-                if let Some(style) = <Style>::from_config(config_str) {
-                    new_module_config.symbol = style;
-                }
+                new_module_config.style = new_module_config.style.load_config(config_str);
             }
         }
         new_module_config
@@ -36,38 +30,33 @@ impl<'a> ModuleConfig<'a> for RustConfig<'a> {
 }
 */
 
-pub const DEFAULT_RUST_CONFIG: RustConfig = RustConfig {
-    symbol: "🦀 ",
-    style: Style {
-        foreground: Some(Color::Red),
-        background: None,
-        is_bold: true,
-        is_dimmed: false,
-        is_italic: false,
-        is_underline: false,
-        is_blink: false,
-        is_reverse: false,
-        is_hidden: false,
-        is_strikethrough: false,
-    },
-    disabled: false,
-};
+pub fn get_rust_config(config: &Option<toml::Value>) -> RustConfig {
+    let default_config = RustConfig {
+        symbol: "🦀 ",
+        style: Color::Red.bold(),
+        disabled: false,
+    };
+    if let Some(config) = config {
+        default_config.load_config(config)
+    } else {
+        default_config
+    }
+}
 
 // TODO Move this test to ./module_config.rs
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::module_config::ModuleConfig;
     use toml;
 
     #[test]
     fn test_load_config() {
-        let config = toml::toml! {
+        let config = Some(toml::toml! {
             disabled = false
             symbol = "R "
             style = "red italic"
-        };
-        let rust_config = DEFAULT_RUST_CONFIG.load_config(&config);
+        });
+        let rust_config = get_rust_config(&config);
         assert_eq!(rust_config.symbol, "R ");
     }
 }
