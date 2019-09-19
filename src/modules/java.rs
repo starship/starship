@@ -7,8 +7,8 @@ use super::{Context, Module};
 /// Creates a module with the current Java version
 ///
 /// Will display the Java version if any of the following criteria are met:
-///     - Current directory contains a file with a `.java` extension
-///     - Current directory contains a `pom.xml` file
+///     - Current directory contains a file with a `.java`, `.class` or `.jar` extension
+///     - Current directory contains a `pom.xml` or `build.gradle` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_java_project = context
         .try_begin_scan()?
