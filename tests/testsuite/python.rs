@@ -17,7 +17,7 @@ fn folder_with_python_version() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.6.9"));
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.4"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -34,7 +34,7 @@ fn folder_with_requirements_txt() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.6.9"));
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.4"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -51,7 +51,7 @@ fn folder_with_pyproject_toml() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.6.9"));
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.4"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -68,7 +68,7 @@ fn folder_with_pipfile() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.6.9"));
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.4"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -85,7 +85,7 @@ fn folder_with_tox() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.6.9"));
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.4"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -102,7 +102,7 @@ fn folder_with_py_file() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.6.9"));
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.4"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -119,7 +119,10 @@ fn with_virtual_env() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.6.9(my_venv)"));
+    let expected = format!(
+        "via {} ",
+        Color::Yellow.bold().paint("🐍 v3.7.4(my_venv)")
+    );
     assert_eq!(expected, actual);
     Ok(())
 }

@@ -69,7 +69,7 @@ jobs:
       # Install Python at a fixed version
       - uses: actions/setup-python@master
         with:
-          python-version: "3.6.9"
+          python-version: "3.7.4"
 
       # Install dotnet at a fixed version
       - uses: actions/setup-dotnet@master
