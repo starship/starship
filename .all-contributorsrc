@@ -301,6 +301,15 @@
         "test",
         "translation"
       ]
+    },
+    {
+      "login": "hdevalke",
+      "name": "hdevalke",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/2261239?v=4",
+      "profile": "https://github.com/hdevalke",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7
