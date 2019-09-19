@@ -46,20 +46,15 @@ fn get_java_version() -> Option<String> {
         Err(_) => String::from("java"),
     };
 
-    // Temporary -> For CI
-    eprintln!("java_command={}", java_command);
-
     match Command::new(java_command).arg("-Xinternalversion").output() {
-        Ok(output) => {
-            // Temporary -> For CI
-            let res = String::from_utf8(output.stdout).unwrap();
-            eprintln!("res={}", res);
-            Some(res)
-        }
+        Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
         Err(_) => None,
     }
 }
 
+/// Extract the java version from `java_stdout`.
+/// The expected format is similar to: "JRE (1.8.0_222-b10)".
+/// Some Java vendors don't follow this format: "JRE (Zulu 8.40.0.25-CA-linux64)").
 fn format_java_version(java_stdout: String) -> Option<String> {
     let start = java_stdout.find("JRE (")? + "JRE (".len();
     let end = start
@@ -67,7 +62,12 @@ fn format_java_version(java_stdout: String) -> Option<String> {
             '0'..='9' | '.' => false,
             _ => true,
         })?);
-    Some(format!("v{}", &java_stdout[start..end]))
+
+    if start == end {
+        None
+    } else {
+        Some(format!("v{}", &java_stdout[start..end]))
+    }
 }
 
 #[cfg(test)]
@@ -86,5 +86,20 @@ mod tests {
     fn test_format_java_version_oracle() {
         let java_8 = String::from("Java HotSpot(TM) Client VM (25.65-b01) for linux-arm-vfp-hflt JRE (1.8.0_65-b17), built on Oct  6 2015 16:19:04 by \"java_re\" with gcc 4.7.2 20120910 (prerelease)");
         assert_eq!(format_java_version(java_8), Some(String::from("v1.8.0")));
+    }
+
+    #[test]
+    fn test_format_java_version_redhat() {
+        let java_8 = String::from("OpenJDK 64-Bit Server VM (25.222-b10) for linux-amd64 JRE (1.8.0_222-b10), built on Jul 11 2019 20:48:53 by \"root\" with gcc 7.3.1 20180303 (Red Hat 7.3.1-5)");
+        let java_12 = String::from("OpenJDK 64-Bit Server VM (12.0.2+10) for linux-amd64 JRE (12.0.2+10), built on Jul 18 2019 14:41:47 by \"jenkins\" with gcc 7.3.1 20180303 (Red Hat 7.3.1-5)");
+        assert_eq!(format_java_version(java_8), Some(String::from("v1.8.0")));
+        assert_eq!(format_java_version(java_12), Some(String::from("v12.0.2")));
+    }
+
+    #[test]
+    fn test_format_java_version_zulu() {
+        // Not currently supported
+        let java_8 = String::from("OpenJDK 64-Bit Server VM (25.222-b10) for linux-amd64 JRE (Zulu 8.40.0.25-CA-linux64) (1.8.0_222-b10), built on Jul 11 2019 11:36:39 by \"zulu_re\" with gcc 4.4.7 20120313 (Red Hat 4.4.7-3)");
+        assert_eq!(format_java_version(java_8), None);
     }
 }
