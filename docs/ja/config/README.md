@@ -115,6 +115,19 @@ prompt_order = [
 | `disabled`           | `false`                  | `battery`モジュールを無効にします。    |
 
 
+<details>
+<summary>There are also options for some uncommon battery states.</summary>
+
+| 変数               | 説明                                                  |
+| ---------------- | --------------------------------------------------- |
+| `unknown_symbol` | The symbol shown when the battery state is unknown. |
+| `empty_symbol`   | The symbol shown when the battery state is empty.   |
+
+
+Note: Battery indicator will be hidden if the status is `unknown` or `empty` unless you specify the option in the config.
+
+</details>
+
 ### 設定例
 
 ```toml
@@ -128,8 +141,7 @@ discharging_symbol = "💀"
 
 ### バッテリーの表示
 
-`display</ 0> オプションを使用して、バッテリーインジケーターを表示するタイミング（閾値）と外観（スタイル）を定義します。
-<code>display` が提供されない場合、 デフォルトは次のとおりです。
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
 
 ```toml
 [[battery.display]]
@@ -139,12 +151,12 @@ style = "bold red"
 
 #### オプション
 
-`display`オプションは、次の表の通りです。
+The `display` option is an array of the following table.
 
-| 変数          | 説明                             |
-| ----------- | ------------------------------ |
-| `threshold` | バッテリーが表示される上限です。               |
-| `style`     | displayオプションが使用されている場合のスタイルです。 |
+| 変数          | Description                                     |
+| ----------- | ----------------------------------------------- |
+| `threshold` | The upper bound for the display option.         |
+| `style`     | The style used if the display option is in use. |
 
 
 #### 設定例
@@ -164,21 +176,21 @@ style = "bold yellow"
 
 ## 文字
 
-`character`モジュールは、端末でテキストが入力される場所の横に文字（通常は矢印）を表示します。
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-文字は、最後のコマンドが成功したかどうかを示します。 これは、色の変更（赤/緑）またはその形状の変更(❯/✖) の2つの方法で行うことができます。 後者は`use_symbol_for_status`に`true`設定されている場合にのみ行われます。
+The character will tell you whether the last command was successful or not. It can do this in two ways: by changing color (red/green) or by changing its shape (❯/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
 
 ### オプション
 
-| 変数                      | デフォルト          | 説明                                           |
-| ----------------------- | -------------- | -------------------------------------------- |
-| `symbol`                | `"❯"`          | プロンプトでテキストを入力する前に使用される記号です。                  |
-| `error_symbol`          | `"✖"`          | 前のコマンドが失敗した場合にテキスト入力の前に使用される記号です。            |
-| `use_symbol_for_status` | `false`        | シンボルを変更してエラーステータスを示します。                      |
-| `vicmd_symbol`          | `"❮"`          | シェルがvimの通常モードである場合、プロンプトのテキスト入力の前に使用される記号です。 |
-| `style_success`         | `"bold green"` | 最後のコマンドが成功した場合に使用されるスタイルです。                  |
-| `style_failure`         | `"bold red"`   | 最後のコマンドが失敗した場合に使用されるスタイルです。                  |
-| `disabled`              | `false`        | `character`モジュールを無効にします。                     |
+| 変数                      | デフォルト          | 説明                                                                                  |
+| ----------------------- | -------------- | ----------------------------------------------------------------------------------- |
+| `symbol`                | `"❯"`          | The symbol used before the text input in the prompt.                                |
+| `error_symbol`          | `"✖"`          | The symbol used before text input if the previous command failed.                   |
+| `use_symbol_for_status` | `false`        | Indicate error status by changing the symbol.                                       |
+| `vicmd_symbol`          | `"❮"`          | The symbol used before the text input in the prompt if shell is in vim normal mode. |
+| `style_success`         | `"bold green"` | The style used if the last command was successful.                                  |
+| `style_failure`         | `"bold red"`   | The style used if the last command failed.                                          |
+| `disabled`              | `false`        | Disables the `character` module.                                                    |
 
 
 ### 設定例
@@ -194,19 +206,19 @@ use_symbol_for_status = true
 
 ## コマンド実行時間
 
-`cmd_duration`モジュールは、最後のコマンドの実行にかかった時間を示します。 モジュールが表示されるのは、コマンドが2秒以上かかった場合、または`min_time`値が存在する場合のみです。
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning BashでDEBUGトラップをhookしない `bash`でStarshipを実行している場合、 `eval $(starship init $0)`実行した後に`DEBUG`トラップをフックしないでください。そうしないと、このモジュールが**おそらくですが**壊れます。 :::
+::: warning Do not hook the DEBUG trap in Bash If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break. :::
 
-preexecのような機能を必要とするBashユーザーは、 [rcalorasのbash_preexecフレームワーク](https://github.com/rcaloras/bash-preexec)を使用できます。 `eval $(starship init $0)` を実行する前に、`preexec_functions`、および`precmd_functions`定義するだけで、通常どおり続行します。
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### オプション
 
-| 変数         | デフォルト           | 説明                          |
-| ---------- | --------------- | --------------------------- |
-| `min_time` | `2`             | 時間を表示する最短期間です。              |
-| `style`    | `"bold yellow"` | モジュールのスタイルです。               |
-| `disabled` | `false`         | `cmd_duration`モジュールを無効にします。 |
+| 変数         | デフォルト           | 説明                                  |
+| ---------- | --------------- | ----------------------------------- |
+| `min_time` | `2`             | Shortest duration to show time for. |
+| `style`    | `"bold yellow"` | The style for the module.           |
+| `disabled` | `false`         | Disables the `cmd_duration` module. |
 
 
 ### 設定例
@@ -220,20 +232,20 @@ min_time = 4
 
 ## ディレクトリ
 
-`directory`モジュールには、現在のディレクトリへのパスが表示され、3つの親フォルダは切り捨てられます。 ディレクトリは、現在のgitリポジトリであるとルートとなります。
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
-fishスタイルのpwdオプションを使用すると、切り捨てられたパスを非表示にする代わりに、オプションで有効にした番号に基づいて各ディレクトリの短縮名が表示されます。
+When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-例として、`~/Dev/Nix/nixpkgs/pkgs`で、`nixpkgs`がリポジトリルートであり、オプションが`1`に設定されている場合を挙げます。 以前は`nixpkgs/pkgs`でしたが、`~/D/N/nixpkgs/pkgs`が表示されます。
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
 ### オプション
 
-| 変数                  | デフォルト         | 説明                               |
-| ------------------- | ------------- | -------------------------------- |
-| `truncation_length` | `3`           | 現在のディレクトリを切り捨てる親フォルダーの数です。       |
-| `truncate_to_repo`  | `true`        | 現在いるgitリポジトリのルートに切り捨てるかどうかです。    |
-| `style`             | `"bold cyan"` | The style for the module.        |
-| `disabled`          | `false`       | Disables the `directory` module. |
+| 変数                  | デフォルト         | 説明                                                                               |
+| ------------------- | ------------- | -------------------------------------------------------------------------------- |
+| `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
+| `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `style`             | `"bold cyan"` | The style for the module.                                                        |
+| `disabled`          | `false`       | Disables the `directory` module.                                                 |
 
 
 <details>
@@ -521,7 +533,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 | 変数         | デフォルト          | 説明                                                       |
 | ---------- | -------------- | -------------------------------------------------------- |
 | `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | モジュールのスタイルです。                                            |
+| `style`    | `"bold green"` | The style for the module.                                |
 | `disabled` | `false`        | Disables the `nodejs` module.                            |
 
 
@@ -613,7 +625,7 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 | 変数         | デフォルト        | 説明                                                     |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
-| `style`    | `"bold red"` | モジュールのスタイルです。                                          |
+| `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `ruby` module.                            |
 
 
@@ -659,7 +671,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ### オプション
 
-| 変数         | デフォルト         | 説明                                                                                                                  |
+| Variable   | Default       | Description                                                                                                         |
 | ---------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `12hr`     | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`   | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
