@@ -18,7 +18,7 @@ All configuration for starship is done in this [TOML](https://github.com/toml-la
 add_newline = false
 
 # Replace the "❯" symbol in the prompt with "➜"
-[character]      # The name of the module we are confguring is "character"
+[character]      # The name of the module we are configuring is "character"
 symbol = "➜"     # The "symbol" segment is being set to "➜"
 
 # Disable the package module, hiding it from the prompt completely
@@ -93,6 +93,7 @@ prompt_order = [
     "rust",
     "python",
     "golang",
+    "java",
     "nix_shell",
     "cmd_duration",
     "line_break",
@@ -491,6 +492,31 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
+```
+
+## Java
+
+The `java` module shows the currently installed version of Java.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `pom.xml` or `build.gradle` file
+- The current directory contains a file with the `.java`, `.class` or `.jar` extension
+
+### Options
+
+| Variable   | Default        | Description                                              |
+| ---------- | -------------- | -------------------------------------------------------- |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java.  |
+| `style`    | `"dimmed red"` | The style for the module.                               |
+| `disabled` | `false`        | Disables the `java` module.                              |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[java]
+symbol = "🌟 "
 ```
 
 
