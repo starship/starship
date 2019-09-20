@@ -475,7 +475,7 @@ pure_msg = "pure shell"
 
 ## Java
 
-`Java`モジュールは、現在インストールされているJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+`java`モジュールは、現在インストールされているJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`pom.xml`, もしくは`build.gradle`ファイルが含まれている
 - カレントディレクトリに拡張子が`.java`, `.class`, もしくは`.jar`のファイルが含まれている
@@ -500,19 +500,19 @@ symbol = "🌟 "
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
+`nodejs`モジュールは、現在インストールされているNodeJSのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `package.json` file
-- The current directory contains a `node_modules` directory
-- The current directory contains a file with the `.js` extension
+- カレントディレクトリに`package.json`ファイルが含まれている
+- カレントディレクトリに`node_modules`ディレクトリが含まれている
+- カレントディレクトリに`.js`の拡張子のファイルが含まれている
 
 ### オプション
 
-| 変数         | デフォルト          | 説明                                                       |
-| ---------- | -------------- | -------------------------------------------------------- |
-| `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | モジュールのスタイルです。                                            |
-| `disabled` | `false`        | Disables the `nodejs` module.                            |
+| 変数         | デフォルト          | 説明                            |
+| ---------- | -------------- | ----------------------------- |
+| `symbol`   | `"⬢ "`         | NodeJSのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold green"` | モジュールのスタイルです。                 |
+| `disabled` | `false`        | `nodejs`モジュールを無効にします。         |
 
 
 ### 設定例
@@ -524,23 +524,23 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 symbol = "🤖 "
 ```
 
-## Package Version
+## パッケージのバージョン
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
+`package`モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。 このモジュールは現在、 `npm` 、 `cargo` 、および`poetry`パッケージをサポートしています。
 
-- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
-- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
-- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- **npm** – `npm`パッケージバージョンは、現在のディレクトリにある`package.json`から抽出されます
+- **cargo** – `cargo`パッケージバージョンは、現在のディレクトリにある`Cargo.toml`から抽出されます。
+- **poetry** – `poetry`パッケージバージョンは、現在のディレクトリにある`pyproject.toml`から抽出されます
 
 > ⚠️ 表示されるバージョンは、パッケージマネージャーではなく、ソースコードが現在のディレクトリにあるパッケージのバージョンです。
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                                                         |
-| ---------- | ------------ | ---------------------------------------------------------- |
-| `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | The style for the module.                                  |
-| `disabled` | `false`      | Disables the `package` module.                             |
+| 変数         | デフォルト        | 説明                           |
+| ---------- | ------------ | ---------------------------- |
+| `symbol`   | `"📦 "`       | パッケージのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold red"` | モジュールのスタイルです。                |
+| `disabled` | `false`      | `package`モジュールを無効にします。       |
 
 
 ### 設定例
