@@ -32,8 +32,26 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .config_value_i64("fish_style_pwd_dir_length")
         .unwrap_or(FISH_STYLE_PWD_DIR_LENGTH);
 
+    // Using environment PWD is the standard approach for determining logical path
+    let use_logical_path = module.config_value_bool("use_logical_path").unwrap_or(true);
+    // If this is None for any reason, we fall back to reading the os-provided path
+    let logical_current_dir = if use_logical_path {
+        match std::env::var("PWD") {
+            Ok(x) => Some(x),
+            Err(_) => {
+                log::debug!("Asked for logical path, but PWD was invalid.");
+                None
+            }
+        }
+    } else {
+        None
+    };
+    let current_dir = logical_current_dir
+        .as_ref()
+        .map(|d| Path::new(d))
+        .unwrap_or_else(|| context.current_dir.as_ref());
+
     let home_dir = dirs::home_dir().unwrap();
-    let current_dir = &context.current_dir;
     log::debug!("Current directory: {:?}", current_dir);
 
     let repo = &context.get_repo().ok()?;
@@ -54,7 +72,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     if fish_style_pwd_dir_length > 0 {
         // If user is using fish style path, we need to add the segment first
-        let contracted_home_dir = contract_path(current_dir, &home_dir, HOME_SYMBOL);
+        let contracted_home_dir = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
         let fish_style_dir = to_fish_style(
             fish_style_pwd_dir_length as usize,
             contracted_home_dir,
