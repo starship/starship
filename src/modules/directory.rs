@@ -163,7 +163,7 @@ fn truncate(dir_string: String, length: usize) -> String {
 /// Contracted Path: `in_a/repo/but_nested`
 /// With Fish Style: `/s/P/n/in_a/repo/but_nested`
 fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string: &str) -> String {
-    let replaced_dir_string = dir_string.replace(truncated_dir_string, "");
+    let replaced_dir_string = dir_string.trim_end_matches(truncated_dir_string).to_owned();
     let components = replaced_dir_string.split('/').collect::<Vec<&str>>();
 
     if components.is_empty() {
@@ -300,5 +300,12 @@ mod tests {
         let path = "/absolute/Path/not/in_a/repo/but_nested";
         let output = to_fish_style(2, path.to_string(), "repo/but_nested");
         assert_eq!(output, "/ab/Pa/no/in/");
+    }
+
+    #[test]
+    fn fish_style_with_duplicate_directories() {
+        let path = "~/starship/tmp/C++/C++/C++";
+        let output = to_fish_style(1, path.to_string(), "C++");
+        assert_eq!(output, "~/s/t/C/C/");
     }
 }
