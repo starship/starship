@@ -7,6 +7,7 @@ mod git_state;
 mod git_status;
 mod golang;
 mod hostname;
+mod java;
 mod jobs;
 mod line_break;
 mod nix_shell;
@@ -42,6 +43,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         #[cfg(feature = "battery")]
         "battery" => battery::module(context),
         "cmd_duration" => cmd_duration::module(context),
+        "java" => java::module(context),
         "jobs" => jobs::module(context),
         "nix_shell" => nix_shell::module(context),
         "hostname" => hostname::module(context),
