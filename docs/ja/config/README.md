@@ -554,30 +554,30 @@ symbol = "🎁 "
 
 ## Python
 
-The `python` module shows the currently installed version of Python.
+`python`モジュールは、現在インストールされているPythonのバージョンを示します。
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
+`pyenvversionname`が`true`に設定されている場合 、pyenvでのバージョン名が表示されます 。
 
-Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
+それ以外の場合は、 `python --version`バージョン番号が表示され、アクティブになっている場合は現在のPython仮想環境が表示されます。
 
-The module will be shown if any of the following conditions are met:
+次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a file with the `.py` extension
-- The current directory contains a `Pipfile` file
-- The current directory contains a `tox.ini` file
+- カレントディレクトリに`.python-version`ファイルが含まれている
+- カレントディレクトリに`requirements.txt`ファイルが含まれている
+- カレントディレクトリに`pyproject.toml`ファイルが含まれている
+- カレントディレクトリに`.py`の拡張子のファイルが含まれている
+- カレントディレクトリに`Pipfile`ファイルが含まれている
+- カレントディレクトリに`tox.ini`ファイルが含まれている
 
 ### オプション
 
-| 変数                   | デフォルト           | 説明                                                                          |
-| -------------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
-| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
-| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
-| `style`              | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`           | `false`         | Disables the `python` module.                                               |
+| 変数                   | デフォルト           | 説明                                                   |
+| -------------------- | --------------- | ---------------------------------------------------- |
+| `symbol`             | `"🐍 "`          | Pythonのバージョンを表示する前に使用される記号です。                        |
+| `pyenv_version_name` | `false`         | pyenvを使用してPythonバージョンを取得します                          |
+| `pyenv_prefix`       | `"pyenv "`      | pyenvバージョン表示の前のprefix（デフォルトの表示は`pyenv MY_VERSION`）です |
+| `style`              | `"bold yellow"` | モジュールのスタイルです。                                        |
+| `disabled`           | `false`         | `python`モジュールを無効にします。                                |
 
 
 ### 設定例
@@ -593,18 +593,18 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`ruby`モジュールは、現在インストールされているRubyのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `Gemfile` file
-- The current directory contains a `.rb` file
+- カレントディレクトリに`Gemfile`ファイルが含まれている
+- カレントディレクトリに`.rb`の拡張子のファイルが含まれている
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                                                     |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
-| `style`    | `"bold red"` | モジュールのスタイルです。                                          |
-| `disabled` | `false`      | Disables the `ruby` module.                            |
+| 変数         | デフォルト        | 説明                          |
+| ---------- | ------------ | --------------------------- |
+| `symbol`   | `"💎 "`       | Rubyのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold red"` | モジュールのスタイルです。               |
+| `disabled` | `false`      | `ruby`モジュールを無効にします。         |
 
 
 ### 設定例
@@ -618,18 +618,18 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
+`rust`モジュールには、現在インストールされているRustのバージョンが表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- カレントディレクトリに`Cargo.toml`ファイルが含まれている
+- カレントディレクトリに`.rs`の拡張子のファイルが含まれている
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                                                     |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
-| `style`    | `"bold red"` | The style for the module.                              |
-| `disabled` | `false`      | Disables the `rust` module.                            |
+| 変数         | デフォルト        | 説明                          |
+| ---------- | ------------ | --------------------------- |
+| `symbol`   | `"🦀 "`       | Rustのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold red"` | モジュールのスタイルです。               |
+| `disabled` | `false`      | `rust`モジュールを無効にします。         |
 
 
 ### 設定例
@@ -641,23 +641,23 @@ The `rust` module shows the currently installed version of Rust. The module will
 symbol = "⚙️ "
 ```
 
-## Time
+## 時刻
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
 
-::: tip This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. :::
+::: tip このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。 :::
 
 ### オプション
 
-| 変数         | デフォルト         | 説明                                                                                                                  |
-| ---------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `12hr`     | `false`       | Enables 12 hour formatting                                                                                          |
-| `format`   | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`    | `bold yellow` | The style for the module time                                                                                       |
-| `disabled` | `true`        | Disables the `time` module.                                                                                         |
+| 変数         | デフォルト          | 説明                                                                                                |
+| ---------- | -------------- | ------------------------------------------------------------------------------------------------- |
+| `12hr`     | `false`        | 12時間のフォーマットを有効にします。                                                                               |
+| `format`   | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。 |
+| `style`    | `bold yellow`  | モジュールのスタイルです。                                                                                     |
+| `disabled` | `true`         | `time`モジュールを無効にします。                                                                               |
 
 
-If `12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `12hr` setting.
+`12hr`が`true`、`format`デフォルトで`"%r"`です。 それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、 `12hr`の設定が上書きされます。
 
 ### 設定例
 
@@ -669,24 +669,24 @@ disabled = false
 format = "🕙[ %T ]"
 ```
 
-## Username
+## ユーザー名
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current user is root
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
+- カレントユーザーがroot
+- カレントユーザーが、ログインしているユーザーとは異なる
+- ユーザーがSSHセッションとして接続されている
 
-### Options
+### オプション
 
-| Variable     | Default         | Description                           |
-| ------------ | --------------- | ------------------------------------- |
-| `style_root` | `"bold red"`    | The style used when the user is root. |
-| `style_user` | `"bold yellow"` | The style used for non-root users.    |
-| `disabled`   | `false`         | Disables the `username` module.       |
+| 変数           | デフォルト           | 説明                        |
+| ------------ | --------------- | ------------------------- |
+| `style_root` | `"bold red"`    | ユーザーがrootのときに使用されるスタイルです。 |
+| `style_user` | `"bold yellow"` | 非rootユーザーに使用されるスタイルです。    |
+| `disabled`   | `false`         | `username`モジュールを無効にします。   |
 
 
-### Example
+### 設定例
 
 ```toml
 # ~/.config/starship.toml
