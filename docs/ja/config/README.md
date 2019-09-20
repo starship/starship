@@ -475,7 +475,7 @@ pure_msg = "pure shell"
 
 ## Java
 
-The `java` module shows the currently installed version of Java. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`Java`モジュールは、現在インストールされていっるJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - The current directory contains a `pom.xml` or `build.gradle` file
 - The current directory contains a file with the `.java`, `.class` or `.jar` extension
