@@ -475,18 +475,18 @@ pure_msg = "pure shell"
 
 ## Java
 
-`Java`モジュールは、現在インストールされていっるJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+`Java`モジュールは、現在インストールされているJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `pom.xml` or `build.gradle` file
-- The current directory contains a file with the `.java`, `.class` or `.jar` extension
+- カレントディレクトリに`pom.xml`, もしくは`build.gradle`ファイルが含まれている
+- カレントディレクトリに拡張子が`.java`, `.class`, もしくは`.jar`のファイルが含まれている
 
 ### オプション
 
-| 変数         | デフォルト          | 説明                                                     |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | モジュールのスタイルです。                                          |
-| `disabled` | `false`        | Disables the `java` module.                            |
+| 変数         | デフォルト          | 説明                          |
+| ---------- | -------------- | --------------------------- |
+| `symbol`   | `"☕ "`         | Javaのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"dimmed red"` | モジュールのスタイルです。               |
+| `disabled` | `false`        | `Java`モジュールを無効にします。         |
 
 
 ### 設定例
