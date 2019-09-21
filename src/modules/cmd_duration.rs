@@ -84,22 +84,22 @@ mod tests {
 
     #[test]
     fn test_100ms() {
-        assert_eq!(render_time(100 * 1_000_000 as u64), "100ms")
+        assert_eq!(render_time(100 as u64), "100ms")
     }
     #[test]
     fn test_10s() {
-        assert_eq!(render_time(10 * 1_000_000_000 as u64), "10s")
+        assert_eq!(render_time(10 * 1000 as u64), "10s")
     }
     #[test]
     fn test_90s() {
-        assert_eq!(render_time(90 * 1_000_000_000 as u64), "1m30s")
+        assert_eq!(render_time(90 * 1_000 as u64), "1m30s")
     }
     #[test]
     fn test_10110s() {
-        assert_eq!(render_time(10110 * 1_000_000_000 as u64), "2h48m30s")
+        assert_eq!(render_time(10110 * 1_000 as u64), "2h48m30s")
     }
     #[test]
     fn test_1d() {
-        assert_eq!(render_time(86400 * 1_000_000_000 as u64), "1d")
+        assert_eq!(render_time(86400 * 1_000 as u64), "1d")
     }
 }
