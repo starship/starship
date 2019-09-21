@@ -41,21 +41,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     module.set_style(module_color);
-    module.new_segment("cmd_duration", &format!("took {}", render_time(elapsed)));
+    module.new_segment(
+        "cmd_duration",
+        &format!("took {}", render_time(elapsed, config_min)),
+    );
     module.get_prefix().set_value("");
 
     Some(module)
 }
 
 // Render the time into a nice human-readable string
-fn render_time(raw_milliseconds: u64) -> String {
+fn render_time(raw_milliseconds: u64, config_min: u64) -> String {
     // Calculate a simple breakdown into days/hours/minutes/seconds
     let (mut milliseconds, raw_seconds) = (raw_milliseconds % 1000, raw_milliseconds / 1000);
     let (seconds, raw_minutes) = (raw_seconds % 60, raw_seconds / 60);
     let (minutes, raw_hours) = (raw_minutes % 60, raw_minutes / 60);
     let (hours, days) = (raw_hours % 24, raw_hours / 24);
 
-    if raw_seconds != 0 {
+    // Do not display milliseconds if command duration is less than config_min
+    if raw_milliseconds > config_min {
         milliseconds = 0;
     }
 
