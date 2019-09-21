@@ -10,7 +10,7 @@ fn config_blank_duration_1s() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("{} ", Color::RGB(80,80,80).bold().paint("took 1s"));
+    let expected = format!("{} ", Color::RGB(80, 80, 80).bold().paint("took 1s"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -38,7 +38,7 @@ fn config_5s_duration_3s() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("{} ", Color::RGB(80,80,80).bold().paint("took 3s"));
+    let expected = format!("{} ", Color::RGB(80, 80, 80).bold().paint("took 3s"));
     assert_eq!(expected, actual);
     Ok(())
 }
