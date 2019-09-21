@@ -18,7 +18,7 @@ All configuration for starship is done in this [TOML](https://github.com/toml-la
 add_newline = false
 
 # Replace the "❯" symbol in the prompt with "➜"
-[character]      # The name of the module we are confguring is "character"
+[character]      # The name of the module we are configuring is "character"
 symbol = "➜"     # The "symbol" segment is being set to "➜"
 
 # Disable the package module, hiding it from the prompt completely
@@ -93,6 +93,7 @@ prompt_order = [
     "rust",
     "python",
     "golang",
+    "java",
     "nix_shell",
     "cmd_duration",
     "line_break",
@@ -117,6 +118,18 @@ The module is only visible when the device's battery is below 10%.
 | `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
 | `display`            | [link](#battery-display) | Display threshold and style for the module.       |
 | `disabled`           | `false`                  | Disables the `battery` module.                    |
+
+<details>
+<summary>There are also options for some uncommon battery states.</summary>
+
+| Variable         | Description                                         |
+|------------------|-----------------------------------------------------|
+| `unknown_symbol` | The symbol shown when the battery state is unknown. |
+| `empty_symbol`   | The symbol shown when the battery state is empty.   |
+
+Note: Battery indicator will be hidden if the status is `unknown` or `empty` unless you specify the option in the config.
+
+</details>
 
 ### Example
 
@@ -145,7 +158,7 @@ style = "bold red"
 The `display` option is an array of the following table.
 
 | Variable    | Description                                     |
-|-------------|-------------------------------------------------|
+| ----------- | ----------------------------------------------- |
 | `threshold` | The upper bound for the display option.         |
 | `style`     | The style used if the display option is in use. |
 
@@ -245,13 +258,23 @@ it would have been `nixpkgs/pkgs`.
 
 ### Options
 
-| Variable                    | Default       | Description                                                                      |
-| --------------------------- | ------------- | -------------------------------------------------------------------------------- |
-| `truncation_length`         | `3`           | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`          | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `fish_style_pwd_dir_length` | `0`           | The number of characters to use when applying fish shell pwd path logic.         |
-| `style`                     | `"bold cyan"` | The style for the module.                                                        |
-| `disabled`                  | `false`       | Disables the `directory` module.                                                 |
+| Variable            | Default       | Description                                                                      |
+| ------------------- | ------------- | -------------------------------------------------------------------------------- |
+| `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
+| `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `style`             | `"bold cyan"` | The style for the module.                                                        |
+| `disabled`          | `false`       | Disables the `directory` module.                                                 |
+
+<details>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+
+| Variable                    | Default | Description                                                                              |
+| --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
+| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
+| `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+
+</details>
+
 
 ### Example
 
@@ -326,23 +349,23 @@ current directory.
 
 ### Options
 
-| Variable                 | Default      | Description                                             |
-| ------------------------ | ------------ | ------------------------------------------------------- |
-| `conflicted`             | `"="`        | This branch has merge conflicts.                        |
-| `ahead`                  | `"⇡"`        | This branch is ahead of the branch being tracked.       |
-| `behind`                 | `"⇣"`        | This branch is behind of the branch being tracked.      |
-| `diverged`               | `"⇕"`        | This branch has diverged from the branch being tracked. |
-| `untracked`              | `"?"`        | There are untracked files in the working directory.     |
-| `stashed`                | `"$"`        | A stash exists for the local repository.                |
-| `modified`               | `"!"`        | There are file modifications in the working directory.  |
-| `staged`                 | `"+"`        | A new file has been added to the staging area.          |
-| `renamed`                | `"»"`        | A renamed file has been added to the staging area.      |
-| `deleted`                | `"✘"`        | A file's deletion has been added to the staging area.   |
-| `show_sync_count`        | `false`      | Show ahead/behind count of the branch being tracked.    |
-| `prefix`                 | `[`          | Prefix to display immediately before git status.        |
-| `suffix`                 | `]`          | Suffix to display immediately after git status.         |
-| `style`                  | `"bold red"` | The style for the module.                               |
-| `disabled`               | `false`      | Disables the `git_status` module.                       |
+| Variable          | Default      | Description                                             |
+| ----------------- | ------------ | ------------------------------------------------------- |
+| `conflicted`      | `"="`        | This branch has merge conflicts.                        |
+| `ahead`           | `"⇡"`        | This branch is ahead of the branch being tracked.       |
+| `behind`          | `"⇣"`        | This branch is behind of the branch being tracked.      |
+| `diverged`        | `"⇕"`        | This branch has diverged from the branch being tracked. |
+| `untracked`       | `"?"`        | There are untracked files in the working directory.     |
+| `stashed`         | `"$"`        | A stash exists for the local repository.                |
+| `modified`        | `"!"`        | There are file modifications in the working directory.  |
+| `staged`          | `"+"`        | A new file has been added to the staging area.          |
+| `renamed`         | `"»"`        | A renamed file has been added to the staging area.      |
+| `deleted`         | `"✘"`        | A file's deletion has been added to the staging area.   |
+| `show_sync_count` | `false`      | Show ahead/behind count of the branch being tracked.    |
+| `prefix`          | `[`          | Prefix to display immediately before git status.        |
+| `suffix`          | `]`          | Suffix to display immediately after git status.         |
+| `style`           | `"bold red"` | The style for the module.                               |
+| `disabled`        | `false`      | Disables the `git_status` module.                       |
 
 ### Example
 
@@ -491,6 +514,31 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
+```
+
+## Java
+
+The `java` module shows the currently installed version of Java.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `pom.xml` or `build.gradle` file
+- The current directory contains a file with the `.java`, `.class` or `.jar` extension
+
+### Options
+
+| Variable   | Default        | Description                                              |
+| ---------- | -------------- | -------------------------------------------------------- |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java.  |
+| `style`    | `"dimmed red"` | The style for the module.                               |
+| `disabled` | `false`        | Disables the `java` module.                              |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[java]
+symbol = "🌟 "
 ```
 
 
