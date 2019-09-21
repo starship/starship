@@ -15,6 +15,7 @@ const DEFAULT_PROMPT_ORDER: &[&str] = &[
     "username",
     "hostname",
     "directory",
+    "env_var",
     "git_branch",
     "git_state",
     "git_status",

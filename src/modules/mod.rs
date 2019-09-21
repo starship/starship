@@ -2,6 +2,7 @@
 mod character;
 mod cmd_duration;
 mod directory;
+mod env_var;
 mod git_branch;
 mod git_state;
 mod git_status;
@@ -28,6 +29,7 @@ use crate::module::Module;
 pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     match module {
         "directory" => directory::module(context),
+        "env_var" => env_var::module(context),
         "character" => character::module(context),
         "nodejs" => nodejs::module(context),
         "rust" => rust::module(context),

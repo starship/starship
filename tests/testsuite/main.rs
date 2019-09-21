@@ -3,6 +3,7 @@ mod cmd_duration;
 mod common;
 mod configuration;
 mod directory;
+mod env_var;
 mod git_branch;
 mod git_state;
 mod git_status;
