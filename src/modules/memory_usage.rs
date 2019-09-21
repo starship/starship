@@ -31,7 +31,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         )
     } else {
         fn format_kib(n_kib: u64) -> String {
-            let byte = Byte::from_unit(n_kib as f64, ByteUnit::KiB).unwrap_or(Byte::from_bytes(0));
+            let byte =
+                Byte::from_unit(n_kib as f64, ByteUnit::KiB).unwrap_or_else(|| Byte::from_bytes(0));
             byte.get_appropriate_unit(true).format(0).replace(" ", "")
         }
         (
