@@ -14,9 +14,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .value_of("cmd_duration")
         .unwrap_or("invalid_time")
         .parse::<u64>()
-        .ok()?;
+        .ok()?
+        / 1_000_000;
 
-    let signed_config_min = module.config_value_i64("min_time").unwrap_or(2000) * 1_000_000;
+    let signed_config_min = module.config_value_i64("min_time").unwrap_or(2000);
 
     /* TODO: Once error handling is implemented, warn the user if their config
     min time is nonsensical */
@@ -31,7 +32,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config_min = signed_config_min as u64;
 
     let module_color = match elapsed {
-        time if time < config_min => return None,
+        time if time < config_min => module
+            .config_value_style("style")
+            .unwrap_or_else(|| Color::RGB(80, 80, 80).bold()),
         _ => module
             .config_value_style("style")
             .unwrap_or_else(|| Color::Yellow.bold()),
@@ -45,13 +48,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 // Render the time into a nice human-readable string
-fn render_time(raw_nanoseconds: u64) -> String {
+fn render_time(raw_milliseconds: u64) -> String {
     // Calculate a simple breakdown into days/hours/minutes/seconds
-    let raw_milliseconds = raw_nanoseconds / 1_000_000;
-    let (milliseconds, raw_seconds) = (raw_milliseconds % 1000, raw_milliseconds / 1000);
+    let (mut milliseconds, raw_seconds) = (raw_milliseconds % 1000, raw_milliseconds / 1000);
     let (seconds, raw_minutes) = (raw_seconds % 60, raw_seconds / 60);
     let (minutes, raw_hours) = (raw_minutes % 60, raw_minutes / 60);
     let (hours, days) = (raw_hours % 24, raw_hours / 24);
+
+    if raw_seconds != 0 {
+        milliseconds = 0;
+    }
 
     let components = [days, hours, minutes, seconds, milliseconds];
     let suffixes = ["d", "h", "m", "s", "ms"];
