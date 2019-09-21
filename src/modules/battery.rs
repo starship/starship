@@ -56,7 +56,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 log::debug!("Unhandled battery state `{}`", state);
                 return None;
             }
-            _ => return None,
         }
 
         let mut percent_string = Vec::<String>::with_capacity(2);
