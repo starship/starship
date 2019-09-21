@@ -10,6 +10,7 @@ mod hostname;
 mod java;
 mod jobs;
 mod line_break;
+mod memory_usage;
 mod nix_shell;
 mod nodejs;
 mod package;
@@ -48,6 +49,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "nix_shell" => nix_shell::module(context),
         "hostname" => hostname::module(context),
         "time" => time::module(context),
+        "memory_usage" => memory_usage::module(context),
 
         _ => {
             eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
