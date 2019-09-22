@@ -321,6 +321,16 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "gimbar",
+      "name": "Gimbar",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/862483?v=4",
+      "profile": "http://breax.org",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
