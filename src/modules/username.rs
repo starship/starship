@@ -17,8 +17,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     const ROOT_UID: Option<u32> = Some(0);
     let user_uid = get_uid();
-    if user != logname || ssh_connection.is_some() || user_uid == ROOT_UID {
-        let mut module = context.new_module("username");
+
+    let mut module = context.new_module("username");
+    let show_always = module.config_value_bool("show_always").unwrap_or(false);
+
+    if user != logname || ssh_connection.is_some() || user_uid == ROOT_UID || show_always {
         let module_style = get_mod_style(user_uid, &module);
         module.set_style(module_style);
         module.new_segment("username", &user?);
