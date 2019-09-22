@@ -693,7 +693,7 @@ format = "🕙[ %T ]"
 
 ## ユーザー名
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントユーザーがroot
 - カレントユーザーが、ログインしているユーザーとは異なる
@@ -701,11 +701,11 @@ The `username` module shows active user's username. The module will be shown if 
 
 ### オプション
 
-| Variable     | Default         | Description                           |
-| ------------ | --------------- | ------------------------------------- |
-| `style_root` | `"bold red"`    | The style used when the user is root. |
-| `style_user` | `"bold yellow"` | The style used for non-root users.    |
-| `disabled`   | `false`         | Disables the `username` module.       |
+| 変数           | デフォルト           | 説明                        |
+| ------------ | --------------- | ------------------------- |
+| `style_root` | `"bold red"`    | ユーザーがrootのときに使用されるスタイルです。 |
+| `style_user` | `"bold yellow"` | 非rootユーザーに使用されるスタイルです。    |
+| `disabled`   | `false`         | `username`モジュールを無効にします。   |
 
 
 ### 設定例
