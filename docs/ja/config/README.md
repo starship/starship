@@ -300,18 +300,18 @@ The `git_state` module will show in directories which are part of a git reposito
 
 ### オプション
 
-| 変数                 | デフォルト              | 説明                                                                                                               |
-| ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
-| `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
-| `revert`           | `"REVERTING"`      | The text displayed when a `revert` is in progress.                                                               |
-| `cherry_pick`      | `"CHERRY-PICKING"` | The text displayed when a `cherry-pick` is in progress.                                                          |
-| `bisect`           | `"BISECTING"`      | The text displayed when a `bisect` is in progress.                                                               |
-| `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
-| `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
-| `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
-| `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
-| `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
+| 変数                 | デフォルト              | 説明                                                        |
+| ------------------ | ------------------ | --------------------------------------------------------- |
+| `rebase`           | `"REBASING"`       | `rebase`進行中に表示されるテキストです。                                  |
+| `merge`            | `"MERGING"`        | `merge`進行中に表示されるテキストです。                                   |
+| `revert`           | `"REVERTING"`      | `revert`進行中に表示されるテキストです。                                  |
+| `cherry_pick`      | `"CHERRY-PICKING"` | `cherry-pick`進行中に表示されるテキストです。                             |
+| `bisect`           | `"BISECTING"`      | `disect`進行中に表示されるテキストです。                                  |
+| `am`               | `"AM"`             | `apply-mailbox` (`git am`)の進行中に表示されるテキストです。               |
+| `am_or_rebase`     | `"AM/REBASE"`      | あいまいな`apply-mailbox`または`rebase`が進行中のときに表示されるテキストです。       |
+| `progress_divider` | `"/"`              | 現在の進行量と合計進行量を分ける記号またはテキストです。 (例: `" of "` 、 `"3 of 10"` ) |
+| `style`            | `"bold yellow"`    | モジュールのスタイルです。                                             |
+| `disabled`         | `false`            | `git_state`モジュールを無効にします。                                  |
 
 
 ### 設定例
@@ -326,7 +326,7 @@ cherry_pick = "🍒 PICKING"
 
 ## Git の状態
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+`git_status`モジュールは、現在のディレクトリのリポジトリの状態を表すシンボルを表示します。
 
 ### オプション
 
