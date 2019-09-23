@@ -698,16 +698,16 @@ format = "🕙[ %T ]"
 - カレントユーザーがroot
 - カレントユーザーが、ログインしているユーザーとは異なる
 - ユーザーがSSHセッションとして接続されている
-- The variable `show_always` is set to true
+- `show_always`変数がtrueに設定されている
 
 ### オプション
 
-| 変数            | デフォルト           | 説明                                  |
-| ------------- | --------------- | ----------------------------------- |
-| `style_root`  | `"bold red"`    | ユーザーがrootのときに使用されるスタイルです。           |
-| `style_user`  | `"bold yellow"` | 非rootユーザーに使用されるスタイルです。              |
-| `show_always` | `false`         | Always shows the `username` module. |
-| `disabled`    | `false`         | Disables the `username` module.     |
+| 変数            | デフォルト           | 説明                        |
+| ------------- | --------------- | ------------------------- |
+| `style_root`  | `"bold red"`    | ユーザーがrootのときに使用されるスタイルです。 |
+| `style_user`  | `"bold yellow"` | 非rootユーザーに使用されるスタイルです。    |
+| `show_always` | `false`         | `username`モジュールを常に表示します。  |
+| `disabled`    | `false`         | `username`モジュールを無効にします。   |
 
 
 ### 設定例
