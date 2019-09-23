@@ -15,17 +15,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .config_value_style("style")
         .unwrap_or_else(|| Color::Black.bold().dimmed());
 
-    let env_name = module.config_value_str("variable");
-
-    // name is required
-    env_name?;
+    let env_name = module.config_value_str("variable")?;
 
     let default_value = module.config_value_str("default");
 
-    let env_value = match get_env_value(env_name.unwrap(), default_value) {
-        Some(value) => value,
-        None => return None,
-    };
+    let env_value = get_env_value(env_name, default_value)?;
 
     let prefix = module.config_value_str("prefix").unwrap_or("").to_owned();
     let suffix = module.config_value_str("suffix").unwrap_or("").to_owned();
