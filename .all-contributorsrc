@@ -329,7 +329,8 @@
       "profile": "http://breax.org",
       "contributions": [
         "code",
-        "test"
+        "test",
+        "doc"
       ]
     }
   ],
