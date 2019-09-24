@@ -1,7 +1,9 @@
-use ansi_term::Color;
 use std::process::Command;
 
 use super::{Context, Module};
+
+use crate::configs::rust::RustConfig;
+use crate::module_config::RootModuleConfig;
 
 /// Creates a module with the current Rust version
 ///
@@ -18,19 +20,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if !is_rs_project {
         return None;
     }
+    let config = RustConfig::try_load(context.config.config.as_ref());
 
     match get_rust_version() {
         Some(rust_version) => {
-            const RUST_CHAR: &str = "🦀 ";
-
             let mut module = context.new_module("rust");
-            let module_style = module
-                .config_value_style("style")
-                .unwrap_or_else(|| Color::Red.bold());
-            module.set_style(module_style);
+            module.set_style(config.style);
 
             let formatted_version = format_rustc_version(rust_version);
-            module.new_segment("symbol", RUST_CHAR);
+            module.new_segment("symbol", config.symbol);
             module.new_segment("version", &formatted_version);
 
             Some(module)
