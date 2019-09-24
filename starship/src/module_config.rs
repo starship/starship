@@ -1,4 +1,5 @@
 #![allow(dead_code)]
+use crate::configs::StarshipRootConfig;
 use crate::utils;
 use ansi_term::{Color, Style};
 
@@ -152,6 +153,14 @@ impl StarshipConfig {
             log::trace!("No config found for \"{}\"", &module_name);
         }
         module_config
+    }
+
+    pub fn get_root_config(&self) -> StarshipRootConfig {
+        if let Some(root_config) = &self.config {
+            StarshipRootConfig::load(root_config)
+        } else {
+            StarshipRootConfig::new()
+        }
     }
 }
 

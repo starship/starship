@@ -2,21 +2,14 @@ use clap::ArgMatches;
 use rayon::prelude::*;
 use std::io::{self, Write};
 
-use crate::configs::StarshipRootConfig;
 use crate::context::Context;
 use crate::module::Module;
 use crate::module::ALL_MODULES;
-use crate::module_config::{RootModuleConfig, StarshipConfig};
 use crate::modules;
 
 pub fn prompt(args: ArgMatches) {
     let context = Context::new(args);
-    let StarshipConfig { config } = &context.config;
-    let config = if let Some(root_config) = &config {
-        StarshipRootConfig::load(root_config)
-    } else {
-        StarshipRootConfig::new()
-    };
+    let config = context.config.get_root_config();
 
     let stdout = io::stdout();
     let mut handle = stdout.lock();
