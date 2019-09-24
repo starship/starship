@@ -142,22 +142,37 @@ impl<'a> Module<'a> {
     }
 
     /// Get a module's config value as a string
-    //#[deprecated(since="0.18.0", note="please use {} instead")]
+    #[deprecated(
+        since = "0.18.0",
+        note = "please use <RootModuleConfig>::try_load(module.config) instead"
+    )]
     pub fn config_value_str(&self, key: &str) -> Option<&str> {
         <&str>::from_config(self.config?.as_table()?.get(key)?)
     }
 
     /// Get a module's config value as an int
+    #[deprecated(
+        since = "0.18.0",
+        note = "please use <RootModuleConfig>::try_load(module.config) instead"
+    )]
     pub fn config_value_i64(&self, key: &str) -> Option<i64> {
         <i64>::from_config(self.config?.as_table()?.get(key)?)
     }
 
     /// Get a module's config value as a bool
+    #[deprecated(
+        since = "0.18.0",
+        note = "please use <RootModuleConfig>::try_load(module.config) instead"
+    )]
     pub fn config_value_bool(&self, key: &str) -> Option<bool> {
         <bool>::from_config(self.config?.as_table()?.get(key)?)
     }
 
     /// Get a module's config value as a style
+    #[deprecated(
+        since = "0.18.0",
+        note = "please use <RootModuleConfig>::try_load(module.config) instead"
+    )]
     pub fn config_value_style(&self, key: &str) -> Option<Style> {
         <Style>::from_config(self.config?.as_table()?.get(key)?)
     }
