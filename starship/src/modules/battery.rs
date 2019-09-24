@@ -1,5 +1,5 @@
 use super::{Context, Module};
-use crate::configs::battery::{BatteryConfig, BatteryDisplayConfig};
+use crate::configs::battery::BatteryConfig;
 use crate::module_config::RootModuleConfig;
 
 /// Creates a module for the battery percentage and charging state
@@ -23,16 +23,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Parse config under `display`
     let display_styles = &battery_config.display;
-    let display_style = display_styles.iter().find(|display_style| {
-        let BatteryDisplayConfig { threshold, .. } = display_style;
-        percentage <= *threshold as f32
-    });
+    let display_style = display_styles
+        .iter()
+        .find(|display_style| percentage <= display_style.threshold as f32);
 
     if let Some(display_style) = display_style {
-        let BatteryDisplayConfig { style, .. } = display_style;
-
         // Set style based on percentage
-        module.set_style(*style);
+        module.set_style(display_style.style);
         module.get_prefix().set_value("");
 
         match state {
@@ -47,10 +44,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             }
             battery::State::Unknown => {
                 log::debug!("Unknown detected");
-                module.new_segment_if_config_exists("unknown_symbol")?;
+                if let Some(unknown_symbol) = battery_config.unknown_symbol {
+                    module.new_segment("unknown_symbol", unknown_symbol);
+                }
             }
             battery::State::Empty => {
-                module.new_segment_if_config_exists("empty_symbol")?;
+                if let Some(empty_symbol) = battery_config.empty_symbol {
+                    module.new_segment("empty_symbol", empty_symbol);
+                }
             }
             _ => {
                 log::debug!("Unhandled battery state `{}`", state);
