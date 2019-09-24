@@ -116,12 +116,12 @@ prompt_order = [
 
 
 <details>
-<summary>There are also options for some uncommon battery states.</summary>
+<summary>いくつかのまれなバッテリー状態のオプションもあります。</summary>
 
-| 変数               | 説明                                                  |
-| ---------------- | --------------------------------------------------- |
-| `unknown_symbol` | The symbol shown when the battery state is unknown. |
-| `empty_symbol`   | The symbol shown when the battery state is empty.   |
+| 変数               | 説明                       |
+| ---------------- | ------------------------ |
+| `unknown_symbol` | バッテリー状態が不明なときに表示される記号です。 |
+| `empty_symbol`   | バッテリーが空のときに表示される記号です。    |
 
 
 Note: Battery indicator will be hidden if the status is `unknown` or `empty` unless you specify the option in the config.
