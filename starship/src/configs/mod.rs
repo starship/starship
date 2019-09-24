@@ -1,3 +1,4 @@
+pub mod battery;
 pub mod rust;
 
 use crate::module_config::{ModuleConfig, RootModuleConfig};

@@ -1,7 +1,6 @@
-use ansi_term::{Color, Style};
-
 use super::{Context, Module};
-use crate::config::Config;
+use crate::configs::battery::{BatteryConfig, BatteryDisplayConfig};
+use crate::module_config::RootModuleConfig;
 
 /// Creates a module for the battery percentage and charging state
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -20,16 +19,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let BatteryStatus { state, percentage } = battery_status;
 
     let mut module = context.new_module("battery");
+    let battery_config = if let Some(module_config) = module.config {
+        BatteryConfig::load(module_config)
+    } else {
+        BatteryConfig::new()
+    };
 
     // Parse config under `display`
-    let display_styles = get_display_styles(&module);
+    let display_styles = &battery_config.display;
     let display_style = display_styles.iter().find(|display_style| {
-        let BatteryDisplayStyle { threshold, .. } = display_style;
+        let BatteryDisplayConfig { threshold, .. } = display_style;
         percentage <= *threshold as f32
     });
 
     if let Some(display_style) = display_style {
-        let BatteryDisplayStyle { style, .. } = display_style;
+        let BatteryDisplayConfig { style, .. } = display_style;
 
         // Set style based on percentage
         module.set_style(*style);
@@ -70,28 +74,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 }
 
-fn get_display_styles(module: &Module) -> Vec<BatteryDisplayStyle> {
-    if let Some(display_configs) = module.config_value_array("display") {
-        let mut display_styles: Vec<BatteryDisplayStyle> = vec![];
-        for display_config in display_configs.iter() {
-            if let toml::Value::Table(config) = display_config {
-                if let Some(display_style) = BatteryDisplayStyle::from_config(config) {
-                    display_styles.push(display_style);
-                }
-            }
-        }
-
-        // Return display styles as long as display array exists, even if it is empty.
-        display_styles
-    } else {
-        // Default display styles: [{ threshold = 10, style = "red bold" }]
-        vec![BatteryDisplayStyle {
-            threshold: 10,
-            style: Color::Red.bold(),
-        }]
-    }
-}
-
 fn get_battery_status() -> Option<BatteryStatus> {
     let battery_manager = battery::Manager::new().ok()?;
     match battery_manager.batteries().ok()?.next() {
@@ -118,20 +100,4 @@ fn get_battery_status() -> Option<BatteryStatus> {
 struct BatteryStatus {
     percentage: f32,
     state: battery::State,
-}
-
-#[derive(Clone, Debug)]
-struct BatteryDisplayStyle {
-    threshold: i64,
-    style: Style,
-}
-
-impl BatteryDisplayStyle {
-    /// construct battery display style from toml table
-    pub fn from_config(config: &toml::value::Table) -> Option<BatteryDisplayStyle> {
-        let threshold = config.get_as_i64("threshold")?;
-        let style = config.get_as_ansi_style("style")?;
-
-        Some(BatteryDisplayStyle { threshold, style })
-    }
 }

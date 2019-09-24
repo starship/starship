@@ -27,6 +27,14 @@ impl<'a> ModuleConfig<'a> for RustConfig<'a> {
         }
         new_module_config
     }
+    fn from_config(config: &'a toml::Value) -> Option<Self> {
+        let config = config.as_table()?;
+        Some(RustConfig {
+            symbol: <&'a str>::from_config(config.get("symbol")?)?,
+            style: <Style>::from_config(config.get("style")?)?,
+            disabled: <bool>::from_config(config.get("disabled")?)?,
+        })
+    }
 }
 */
 
