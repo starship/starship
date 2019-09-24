@@ -1,4 +1,4 @@
-use crate::config::Config;
+use crate::module_config::ModuleConfig;
 use crate::segment::Segment;
 use ansi_term::Style;
 use ansi_term::{ANSIString, ANSIStrings};
@@ -33,7 +33,7 @@ pub const ALL_MODULES: &[&str] = &[
 /// (e.g. The git module shows the current git branch and status)
 pub struct Module<'a> {
     /// The module's configuration map if available
-    config: Option<&'a toml::value::Table>,
+    pub config: Option<&'a toml::Value>,
 
     /// The module's name, to be used in configuration and logging.
     _name: String,
@@ -53,7 +53,7 @@ pub struct Module<'a> {
 
 impl<'a> Module<'a> {
     /// Creates a module with no segments.
-    pub fn new(name: &str, config: Option<&'a toml::value::Table>) -> Module<'a> {
+    pub fn new(name: &str, config: Option<&'a toml::Value>) -> Module<'a> {
         Module {
             config,
             _name: name.to_string(),
@@ -142,28 +142,24 @@ impl<'a> Module<'a> {
     }
 
     /// Get a module's config value as a string
+    //#[deprecated(since="0.18.0", note="please use {} instead")]
     pub fn config_value_str(&self, key: &str) -> Option<&str> {
-        self.config.and_then(|config| config.get_as_str(key))
+        <&str>::from_config(self.config?.as_table()?.get(key)?)
     }
 
     /// Get a module's config value as an int
     pub fn config_value_i64(&self, key: &str) -> Option<i64> {
-        self.config.and_then(|config| config.get_as_i64(key))
+        <i64>::from_config(self.config?.as_table()?.get(key)?)
     }
 
     /// Get a module's config value as a bool
     pub fn config_value_bool(&self, key: &str) -> Option<bool> {
-        self.config.and_then(|config| config.get_as_bool(key))
+        <bool>::from_config(self.config?.as_table()?.get(key)?)
     }
 
     /// Get a module's config value as a style
     pub fn config_value_style(&self, key: &str) -> Option<Style> {
-        self.config.and_then(|config| config.get_as_ansi_style(key))
-    }
-
-    /// Get a module's config value as an array
-    pub fn config_value_array(&self, key: &str) -> Option<&Vec<toml::Value>> {
-        self.config.and_then(|config| config.get_as_array(key))
+        <Style>::from_config(self.config?.as_table()?.get(key)?)
     }
 }
 

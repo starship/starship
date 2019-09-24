@@ -90,12 +90,12 @@ where
 
 /// Root config of starship.
 pub struct StarshipConfig {
-    config: Option<toml::Value>,
+    pub config: Option<toml::Value>,
 }
 
 impl StarshipConfig {
     /// Initialize the Config struct
-    fn initialize() -> Self {
+    pub fn initialize() -> Self {
         if let Some(file_data) = Self::config_from_file() {
             StarshipConfig {
                 config: Some(file_data),
@@ -140,7 +140,7 @@ impl StarshipConfig {
     }
 
     /// Get the subset of the table for a module by its name
-    fn get_module_config(&self, module_name: &str) -> Option<&toml::Value> {
+    pub fn get_module_config(&self, module_name: &str) -> Option<&toml::Value> {
         let module_config = self.config.as_ref()?.as_table()?.get(module_name);
         if module_config.is_some() {
             log::debug!(

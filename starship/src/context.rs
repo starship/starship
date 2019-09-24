@@ -1,5 +1,5 @@
-use crate::config::Config;
 use crate::module::Module;
+use crate::module_config::StarshipConfig;
 
 use clap::ArgMatches;
 use git2::{Repository, RepositoryState};
@@ -14,7 +14,7 @@ use std::path::{Path, PathBuf};
 /// of the prompt.
 pub struct Context<'a> {
     /// The deserialized configuration map from the user's `starship.toml` file.
-    pub config: toml::value::Table,
+    pub config: StarshipConfig,
 
     /// The current working directory that starship is being called in.
     pub current_dir: PathBuf,
@@ -47,7 +47,7 @@ impl<'a> Context<'a> {
     where
         T: Into<PathBuf>,
     {
-        let config = toml::value::Table::initialize();
+        let config = StarshipConfig::initialize();
 
         // TODO: Currently gets the physical directory. Get the logical directory.
         let current_dir = Context::expand_tilde(dir.into());
@@ -82,7 +82,7 @@ impl<'a> Context<'a> {
         let config = self.config.get_module_config(name);
 
         // If the segment has "disabled" set to "true", don't show it
-        let disabled = config.and_then(|table| table.get_as_bool("disabled"));
+        let disabled = config.and_then(|table| table.as_table()?.get("disabled")?.as_bool());
 
         disabled != Some(true)
     }
