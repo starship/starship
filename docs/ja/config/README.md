@@ -124,7 +124,7 @@ prompt_order = [
 | `empty_symbol`   | バッテリーが空のときに表示される記号です。    |
 
 
-Note: Battery indicator will be hidden if the status is `unknown` or `empty` unless you specify the option in the config.
+オプションを指定しない限り、バッテリーの状態が`unknown`もしくは`empty`になった場合にインジケーターは非表示になります。
 
 </details>
 
@@ -249,12 +249,12 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
 
-| 変数                          | デフォルト  | 説明                                                                                       |
-| --------------------------- | ------ | ---------------------------------------------------------------------------------------- |
-| `fish_style_pwd_dir_length` | `0`    | fish shellのpwdパスロジックを適用するときに使用する文字数です。                                                   |
-| `use_logical_path`          | `true` | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+| 変数                          | デフォルト  | 説明                                           |
+| --------------------------- | ------ | -------------------------------------------- |
+| `fish_style_pwd_dir_length` | `0`    | fish shellのpwdパスロジックを適用するときに使用する文字数です。       |
+| `use_logical_path`          | `true` | OSからのパスの代わりに、シェル(`PWD`) によって提供される論理パスを表示します。 |
 
 
 </details>
