@@ -84,6 +84,7 @@ prompt_order = [
     "username",
     "hostname",
     "directory",
+    "aws",
     "git_branch",
     "git_state",
     "git_status",
@@ -102,6 +103,29 @@ prompt_order = [
     "time",
     "character",
 ]
+```
+
+## AWS
+
+The `aws` module shows the current AWS profile. This is based on the
+`AWS_PROFILE` env var.
+
+### Options
+
+| Variable   | Default         | Description                                          |
+| ---------- | --------------- | ---------------------------------------------------- |
+| `disabled` | `false`         | Disables the `AWS` module                            |
+| `style`    | `"bold yellow"` | The style used for the module                        |
+| `symbol`   | `"☁️ "`         | The symbol before displaying the current AWS profile |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[aws]
+style = "bold blue"
+symbol = " "
 ```
 
 ## Battery
