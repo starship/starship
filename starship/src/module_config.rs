@@ -279,6 +279,47 @@ mod tests {
     }
 
     #[test]
+    fn test_load_enum_config() {
+        #[derive(Clone, ModuleConfig)]
+        struct TestConfig {
+            pub switch_a: Switch,
+            pub switch_b: Switch,
+            pub switch_c: Switch,
+        }
+
+        #[derive(Debug, PartialEq, Clone)]
+        enum Switch {
+            ON,
+            OFF,
+        }
+
+        impl<'a> ModuleConfig<'a> for Switch {
+            fn from_config(config: &'a toml::Value) -> Option<Self> {
+                match config.as_str()? {
+                    "on" => Some(Self::ON),
+                    "off" => Some(Self::OFF),
+                    _ => None,
+                }
+            }
+        }
+
+        let config = toml::toml! {
+            switch_a = "on"
+            switch_b = "any"
+        };
+        let default_config = TestConfig {
+            switch_a: Switch::OFF,
+            switch_b: Switch::OFF,
+            switch_c: Switch::OFF,
+        };
+        let rust_config = default_config.load_config(&config);
+
+        assert_eq!(rust_config.switch_a, Switch::ON);
+        assert_eq!(rust_config.switch_b, Switch::OFF);
+        assert_eq!(rust_config.switch_c, Switch::OFF);
+    }
+
+    #[test]
     fn test_from_string() {
         let config = toml::Value::String(String::from("S"));
         assert_eq!(<&str>::from_config(&config).unwrap(), "S");
