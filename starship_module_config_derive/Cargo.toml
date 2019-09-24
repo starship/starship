@@ -1,6 +1,6 @@
 [package]
 name = "starship_module_config_derive"
-version = "0.17.0"
+version = "0.18.0"
 edition = "2018"
 authors = ["Matan Kushner <hello@matchai.me>"]
 homepage = "https://starship.rs"
@@ -25,4 +25,4 @@ quote = "~1"
 syn = "~1"
 
 [dev-dependencies]
-starship = { version = "0.17", path = "../starship" }
+starship = { version = "0.18", path = "../starship" }
