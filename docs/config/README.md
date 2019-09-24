@@ -731,6 +731,7 @@ The module will be shown if any of the following conditions are met:
 - The current user is root
 - The current user isn't the same as the one that is logged in
 - The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ### Options
 
@@ -738,6 +739,7 @@ The module will be shown if any of the following conditions are met:
 | ------------ | --------------- | ------------------------------------- |
 | `style_root` | `"bold red"`    | The style used when the user is root. |
 | `style_user` | `"bold yellow"` | The style used for non-root users.    |
+| `show_always`| `false`         | Always shows the `username` module.   |
 | `disabled`   | `false`         | Disables the `username` module.       |
 
 ### Example
