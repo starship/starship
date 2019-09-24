@@ -1,8 +1,14 @@
+#![allow(dead_code)]
+use crate::utils;
 use ansi_term::{Color, Style};
 
 use std::clone::Clone;
 use std::marker::Sized;
 
+use dirs::home_dir;
+use std::env;
+
+/// Root config of a module.
 pub trait RootModuleConfig<'a>
 where
     Self: ModuleConfig<'a>,
@@ -13,6 +19,7 @@ where
     }
 }
 
+/// Parsable config.
 pub trait ModuleConfig<'a>
 where
     Self: Sized + Clone,
@@ -81,6 +88,82 @@ where
     }
 }
 
+/// Root config of starship.
+pub struct StarshipConfig {
+    config: Option<toml::Value>,
+}
+
+impl StarshipConfig {
+    /// Initialize the Config struct
+    fn initialize() -> Self {
+        if let Some(file_data) = Self::config_from_file() {
+            StarshipConfig {
+                config: Some(file_data),
+            }
+        } else {
+            StarshipConfig {
+                config: Some(toml::Value::Table(toml::value::Table::new())),
+            }
+        }
+    }
+
+    /// Create a config from a starship configuration file
+    fn config_from_file() -> Option<toml::Value> {
+        let file_path = if let Ok(path) = env::var("STARSHIP_CONFIG") {
+            // Use $STARSHIP_CONFIG as the config path if available
+            log::debug!("STARSHIP_CONFIG is set: \n{}", &path);
+            path
+        } else {
+            // Default to using ~/.config/starship.toml
+            log::debug!("STARSHIP_CONFIG is not set");
+            let config_path = home_dir()?.join(".config/starship.toml");
+            let config_path_str = config_path.to_str()?.to_owned();
+
+            log::debug!("Using default config path: {}", config_path_str);
+            config_path_str
+        };
+
+        let toml_content: String = match utils::read_file(&file_path) {
+            Ok(content) => {
+                log::trace!("Config file content: \n{}", &content);
+                Some(content)
+            }
+            Err(e) => {
+                log::debug!("Unable to read config file content: \n{}", &e);
+                None
+            }
+        }?;
+
+        let config = toml::from_str(&toml_content).ok()?;
+        log::debug!("Config parsed: \n{:?}", &config);
+        Some(config)
+    }
+
+    /// Get the subset of the table for a module by its name
+    fn get_module_config(&self, module_name: &str) -> Option<&toml::Value> {
+        let module_config = self.config.as_ref()?.as_table()?.get(module_name);
+        if module_config.is_some() {
+            log::debug!(
+                "Config found for \"{}\": \n{:?}",
+                &module_name,
+                &module_config
+            );
+        } else {
+            log::trace!("No config found for \"{}\"", &module_name);
+        }
+        module_config
+    }
+}
+
+/** Parse a style string which represents an ansi style. Valid tokens in the style
+ string include the following:
+ - 'fg:<color>'    (specifies that the color read should be a foreground color)
+ - 'bg:<color>'    (specifies that the color read should be a background color)
+ - 'underline'
+ - 'bold'
+ - 'italic'
+ - '<color>'        (see the parse_color_string doc for valid color strings)
+*/
 fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
     let tokens = style_string.split_whitespace();
     let mut style = ansi_term::Style::new();
@@ -363,5 +446,61 @@ mod tests {
     fn test_from_option() {
         let config: toml::Value = toml::Value::String(String::from("S"));
         assert_eq!(<Option<&str>>::from_config(&config).unwrap(), Some("S"));
+    }
+
+    #[test]
+    fn table_get_styles_simple() {
+        // Test for a bold italic underline green module (with SiLlY cApS)
+        let config = toml::Value::from("bOlD ItAlIc uNdErLiNe GrEeN");
+        let mystyle = <Style>::from_config(&config).unwrap();
+
+        assert!(mystyle.is_bold);
+        assert!(mystyle.is_italic);
+        assert!(mystyle.is_underline);
+        assert_eq!(
+            mystyle,
+            ansi_term::Style::new()
+                .bold()
+                .italic()
+                .underline()
+                .fg(Color::Green)
+        );
+
+        // Test a "plain" style with no formatting
+        let config = toml::Value::from("");
+        let plain_style = <Style>::from_config(&config).unwrap();
+        assert_eq!(plain_style, ansi_term::Style::new());
+
+        // Test a string that's clearly broken
+        let config = toml::Value::from("djklgfhjkldhlhk;j");
+        let broken_style = <Style>::from_config(&config).unwrap();
+        assert_eq!(broken_style, ansi_term::Style::new());
+
+        // Test a string that's nullified by `none`
+        let config = toml::Value::from("fg:red bg:green bold none");
+        let nullified_style = <Style>::from_config(&config).unwrap();
+        assert_eq!(nullified_style, ansi_term::Style::new());
+    }
+
+    #[test]
+    fn table_get_styles_ordered() {
+        // Test a background style with inverted order (also test hex + ANSI)
+        let config = toml::Value::from("bg:#050505 underline fg:120");
+        let flipped_style = <Style>::from_config(&config).unwrap();
+        assert_eq!(
+            flipped_style,
+            Style::new()
+                .underline()
+                .fg(Color::Fixed(120))
+                .on(Color::RGB(5, 5, 5))
+        );
+
+        // Test that the last color style is always the one used
+        let config = toml::Value::from("bg:120 bg:125 bg:127 fg:127 122 125");
+        let multi_style = <Style>::from_config(&config).unwrap();
+        assert_eq!(
+            multi_style,
+            Style::new().fg(Color::Fixed(125)).on(Color::Fixed(127))
+        );
     }
 }
