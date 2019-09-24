@@ -66,11 +66,11 @@ fn config_1s_duration_prefix_underwent() -> io::Result<()> {
             [cmd_duration]
             prefix = "underwent "
         })
-        .arg("--cmd-duration=1")
+        .arg("--cmd-duration=1000000000")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = "";
+    let expected = format!("{} ", Color::RGB(80, 80, 80).bold().paint("underwent 1s"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -82,7 +82,7 @@ fn config_5s_duration_prefix_underwent() -> io::Result<()> {
             [cmd_duration]
             prefix = "underwent "
         })
-        .arg("--cmd-duration=5")
+        .arg("--cmd-duration=5000000000")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
