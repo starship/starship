@@ -206,7 +206,7 @@ use_symbol_for_status = true
 
 ## コマンド実行時間
 
-`cmd_duration`モジュールは、最後のコマンドの実行にかかった時間を示します。 モジュールが表示されるのは、コマンドが2秒以上かかった場合、または`min_time`値が存在する場合のみです。
+`cmd_duration`モジュールは、最後のコマンドの実行にかかった時間を示します。 The module will be shown only if the command took longer than 2000 milliseconds (2 seconds), or the `min_time` config value, if it exists.
 
 ::: warning BashでDEBUGトラップをhookしない `bash`でStarshipを実行している場合、 `eval $(starship init $0)`実行した後に`DEBUG`トラップをフックしないでください。そうしないと、このモジュールが**おそらくですが**壊れます。 :::
 
@@ -214,11 +214,11 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 
 ### オプション
 
-| 変数         | デフォルト           | 説明                          |
-| ---------- | --------------- | --------------------------- |
-| `min_time` | `2`             | 時間を表示する最短期間です。              |
-| `style`    | `"bold yellow"` | モジュールのスタイルです。               |
-| `disabled` | `false`         | `cmd_duration`モジュールを無効にします。 |
+| 変数         | デフォルト           | 説明                                                    |
+| ---------- | --------------- | ----------------------------------------------------- |
+| `min_time` | `2000`          | Shortest duration to show time for (in milliseconds). |
+| `style`    | `"bold yellow"` | モジュールのスタイルです。                                         |
+| `disabled` | `false`         | `cmd_duration`モジュールを無効にします。                           |
 
 
 ### 設定例
@@ -227,7 +227,7 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 # ~/.config/starship.toml
 
 [cmd_duration]
-min_time = 4
+min_time = 4000
 ```
 
 ## ディレクトリ
