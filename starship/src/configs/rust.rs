@@ -47,21 +47,3 @@ impl<'a> RootModuleConfig<'a> for RustConfig<'a> {
         }
     }
 }
-
-// TODO Move this test to ./module_config.rs
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use toml;
-
-    #[test]
-    fn test_load_config() {
-        let config = toml::toml! {
-            disabled = false
-            symbol = "R "
-            style = "red italic"
-        };
-        let rust_config = RustConfig::load(&config);
-        assert_eq!(rust_config.symbol, "R ");
-    }
-}

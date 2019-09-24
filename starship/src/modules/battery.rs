@@ -4,9 +4,6 @@ use crate::module_config::RootModuleConfig;
 
 /// Creates a module for the battery percentage and charging state
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    const BATTERY_FULL: &str = "•";
-    const BATTERY_CHARGING: &str = "⇡";
-    const BATTERY_DISCHARGING: &str = "⇣";
     // TODO: Update when v1.0 printing refactor is implemented to only
     // print escapes in a prompt context.
     let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
@@ -34,13 +31,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
         match state {
             battery::State::Full => {
-                module.new_segment("full_symbol", BATTERY_FULL);
+                module.new_segment("full_symbol", battery_config.full_symbol);
             }
             battery::State::Charging => {
-                module.new_segment("charging_symbol", BATTERY_CHARGING);
+                module.new_segment("charging_symbol", battery_config.charging_symbol);
             }
             battery::State::Discharging => {
-                module.new_segment("discharging_symbol", BATTERY_DISCHARGING);
+                module.new_segment("discharging_symbol", battery_config.discharging_symbol);
             }
             battery::State::Unknown => {
                 log::debug!("Unknown detected");
