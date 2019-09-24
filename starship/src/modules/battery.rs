@@ -19,11 +19,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let BatteryStatus { state, percentage } = battery_status;
 
     let mut module = context.new_module("battery");
-    let battery_config = if let Some(module_config) = module.config {
-        BatteryConfig::load(module_config)
-    } else {
-        BatteryConfig::new()
-    };
+    let battery_config = BatteryConfig::try_load(module.config);
 
     // Parse config under `display`
     let display_styles = &battery_config.display;

@@ -18,6 +18,13 @@ where
     fn load(config: &'a toml::Value) -> Self {
         Self::new().load_config(config)
     }
+    fn try_load(config: Option<&'a toml::Value>) -> Self {
+        if let Some(config) = config {
+            Self::load(config)
+        } else {
+            Self::new()
+        }
+    }
 }
 
 /// Parsable config.
