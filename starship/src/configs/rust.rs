@@ -1,4 +1,4 @@
-use crate::module_config::ModuleConfig;
+use crate::module_config::{ModuleConfig, RootModuleConfig};
 
 use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
@@ -30,16 +30,13 @@ impl<'a> ModuleConfig<'a> for RustConfig<'a> {
 }
 */
 
-pub fn get_rust_config(config: &Option<toml::Value>) -> RustConfig {
-    let default_config = RustConfig {
-        symbol: "🦀 ",
-        style: Color::Red.bold(),
-        disabled: false,
-    };
-    if let Some(config) = config {
-        default_config.load_config(config)
-    } else {
-        default_config
+impl<'a> RootModuleConfig<'a> for RustConfig<'a> {
+    fn new() -> Self {
+        RustConfig {
+            symbol: "🦀 ",
+            style: Color::Red.bold(),
+            disabled: false,
+        }
     }
 }
 
@@ -51,12 +48,12 @@ mod tests {
 
     #[test]
     fn test_load_config() {
-        let config = Some(toml::toml! {
+        let config = toml::toml! {
             disabled = false
             symbol = "R "
             style = "red italic"
-        });
-        let rust_config = get_rust_config(&config);
+        };
+        let rust_config = RustConfig::load(&config);
         assert_eq!(rust_config.symbol, "R ");
     }
 }

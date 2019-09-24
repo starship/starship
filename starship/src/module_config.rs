@@ -3,6 +3,16 @@ use ansi_term::{Color, Style};
 use std::clone::Clone;
 use std::marker::Sized;
 
+pub trait RootModuleConfig<'a>
+where
+    Self: ModuleConfig<'a>,
+{
+    fn new() -> Self;
+    fn load(config: &'a toml::Value) -> Self {
+        Self::new().load_config(config)
+    }
+}
+
 pub trait ModuleConfig<'a>
 where
     Self: Sized + Clone,
