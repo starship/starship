@@ -213,7 +213,7 @@ use_symbol_for_status = true
 ## Command Duration
 
 The `cmd_duration` module shows how long the last command took to execute.
-The module will be shown only if the command took longer than two seconds, or
+The module will be shown only if the command took longer than 2000 milliseconds (2 seconds), or
 the `min_time` config value, if it exists.
 
 ::: warning Do not hook the DEBUG trap in Bash
@@ -228,11 +228,11 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Variable   | Default         | Description                         |
-| ---------- | --------------- | ----------------------------------- |
-| `min_time` | `2`             | Shortest duration to show time for. |
-| `style`    | `"bold yellow"` | The style for the module.           |
-| `disabled` | `false`         | Disables the `cmd_duration` module. |
+| Variable   | Default         | Description                                           |
+| ---------- | --------------- | ----------------------------------------------------- |
+| `min_time` | `2000`          | Shortest duration to show time for (in milliseconds). |
+| `style`    | `"bold yellow"` | The style for the module.                             |
+| `disabled` | `false`         | Disables the `cmd_duration` module.                   |
 
 ### Example
 
@@ -240,7 +240,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 # ~/.config/starship.toml
 
 [cmd_duration]
-min_time = 4
+min_time = 4000
 ```
 
 ## Directory
@@ -761,6 +761,7 @@ The module will be shown if any of the following conditions are met:
 - The current user is root
 - The current user isn't the same as the one that is logged in
 - The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ### Options
 
@@ -768,6 +769,7 @@ The module will be shown if any of the following conditions are met:
 | ------------ | --------------- | ------------------------------------- |
 | `style_root` | `"bold red"`    | The style used when the user is root. |
 | `style_user` | `"bold yellow"` | The style used for non-root users.    |
+| `show_always`| `false`         | Always shows the `username` module.   |
 | `disabled`   | `false`         | Disables the `username` module.       |
 
 ### Example
