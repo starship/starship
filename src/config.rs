@@ -281,6 +281,13 @@ mod tests {
     }
 
     #[test]
+    fn table_get_config() {
+        let mut table = toml::value::Table::new();
+        table.insert(String::from("config"), Value::Boolean(true));
+        assert_eq!(table.get_config("config"), Some(&Value::Boolean(true)));
+    }
+
+    #[test]
     fn table_get_as_bool() {
         let mut table = toml::value::Table::new();
 
@@ -325,22 +332,24 @@ mod tests {
     }
 
     #[test]
-    fn table_get_styles_bold_italic_underline_green_silly_caps() {
+    fn table_get_styles_bold_italic_underline_green_dimmy_silly_caps() {
         let mut table = toml::value::Table::new();
 
         table.insert(
             String::from("mystyle"),
-            Value::String(String::from("bOlD ItAlIc uNdErLiNe GrEeN")),
+            Value::String(String::from("bOlD ItAlIc uNdErLiNe GrEeN dimmed")),
         );
         assert!(table.get_as_ansi_style("mystyle").unwrap().is_bold);
         assert!(table.get_as_ansi_style("mystyle").unwrap().is_italic);
         assert!(table.get_as_ansi_style("mystyle").unwrap().is_underline);
+        assert!(table.get_as_ansi_style("mystyle").unwrap().is_dimmed);
         assert_eq!(
             table.get_as_ansi_style("mystyle").unwrap(),
             ansi_term::Style::new()
                 .bold()
                 .italic()
                 .underline()
+                .dimmed()
                 .fg(Color::Green)
         );
     }
