@@ -17,7 +17,7 @@ starship_preexec() {
     # Avoid restarting the timer for commands in the same pipeline
     if [ "$PREEXEC_READY" = "true" ]; then
         PREEXEC_READY=false
-        STARSHIP_START_TIME=$(date +%s)
+        STARSHIP_START_TIME=$(date +%s%0N)
     fi
 }
 
@@ -31,7 +31,7 @@ starship_precmd() {
 
     # Prepare the timer data, if needed.
     if [[ $STARSHIP_START_TIME ]]; then
-        STARSHIP_END_TIME=$(date +%s)
+        STARSHIP_END_TIME=$(date +%s%0N)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
         PS1="$(::STARSHIP:: prompt --status=$STATUS --jobs="$(jobs -p | wc -l)" --cmd-duration=$STARSHIP_DURATION)"
         unset STARSHIP_START_TIME
@@ -65,5 +65,5 @@ else
 fi
 
 # Set up the start time and STARSHIP_SHELL, which controls shell-specific sequences
-STARSHIP_START_TIME=$(date +%s)
+STARSHIP_START_TIME=$(date +%s%0N)
 export STARSHIP_SHELL="bash"
