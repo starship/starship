@@ -276,11 +276,9 @@ mod tests {
     fn table_get_as_bool() {
         let mut table = toml::value::Table::new();
 
-        // Use with boolean value
         table.insert(String::from("boolean"), Value::Boolean(true));
         assert_eq!(table.get_as_bool("boolean"), Some(true));
 
-        // Use with string value
         table.insert(String::from("string"), Value::String(String::from("true")));
         assert_eq!(table.get_as_bool("string"), None);
     }
@@ -289,11 +287,9 @@ mod tests {
     fn table_get_as_str() {
         let mut table = toml::value::Table::new();
 
-        // Use with string value
         table.insert(String::from("string"), Value::String(String::from("hello")));
         assert_eq!(table.get_as_str("string"), Some("hello"));
 
-        // Use with boolean value
         table.insert(String::from("boolean"), Value::Boolean(true));
         assert_eq!(table.get_as_str("boolean"), None);
     }
@@ -302,20 +298,28 @@ mod tests {
     fn table_get_as_i64() {
         let mut table = toml::value::Table::new();
 
-        // Use with integer value
         table.insert(String::from("integer"), Value::Integer(82));
         assert_eq!(table.get_as_i64("integer"), Some(82));
 
-        // Use with string value
         table.insert(String::from("string"), Value::String(String::from("82")));
         assert_eq!(table.get_as_bool("string"), None);
     }
 
     #[test]
-    fn table_get_styles_simple() {
+    fn table_get_as_array() {
         let mut table = toml::value::Table::new();
 
-        // Test for a bold italic underline green module (with SiLlY cApS)
+        table.insert(String::from("array"), Value::Array(vec![Value::Integer(1), Value::Integer(2)]));
+        assert_eq!(table.get_as_array("array"), Some(&vec![Value::Integer(1), Value::Integer(2)]));
+
+        table.insert(String::from("string"), Value::String(String::from("82")));
+        assert_eq!(table.get_as_array("string"), None);
+    }
+
+    #[test]
+    fn table_get_styles_bold_italic_underline_green_silly_caps() {
+        let mut table = toml::value::Table::new();
+
         table.insert(
             String::from("mystyle"),
             Value::String(String::from("bOlD ItAlIc uNdErLiNe GrEeN")),
@@ -331,7 +335,11 @@ mod tests {
                 .underline()
                 .fg(Color::Green)
         );
+    }
 
+    #[test]
+    fn table_get_styles_plain_and_broken_styles() {
+        let mut table = toml::value::Table::new();
         // Test a "plain" style with no formatting
         table.insert(String::from("plainstyle"), Value::String(String::from("")));
         assert_eq!(
@@ -356,6 +364,16 @@ mod tests {
         );
         assert_eq!(
             table.get_as_ansi_style("nullified").unwrap(),
+            ansi_term::Style::new()
+        );
+
+        // Test a string that's nullified by `none` at the start
+        table.insert(
+            String::from("nullified-start"),
+            Value::String(String::from("none fg:red bg:green bold")),
+        );
+        assert_eq!(
+            table.get_as_ansi_style("nullified-start").unwrap(),
             ansi_term::Style::new()
         );
     }
