@@ -133,7 +133,8 @@ impl Config for Table {
 
     /// Get a text key and attempt to interpret it into an ANSI style.
     fn get_as_ansi_style(&self, key: &str) -> Option<ansi_term::Style> {
-        self.get_as_str(key).map(parse_style_string)
+        // TODO: This should probably not unwrap to an empty new Style but inform the user about the problem
+        self.get_as_str(key).map(|x| parse_style_string(x).unwrap_or(ansi_term::Style::new()))
     }
 }
 
@@ -172,41 +173,42 @@ fn log_if_type_correct<T: std::fmt::Debug>(key: &str, something: &Value, casted_
  - 'italic'
  - '<color>'        (see the parse_color_string doc for valid color strings)
 */
-fn parse_style_string(style_string: &str) -> ansi_term::Style {
+fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
     style_string
         .split_whitespace()
-        .fold(ansi_term::Style::new(), |style, token| {
-            let token = token.to_lowercase();
+        .fold(Some(ansi_term::Style::new()), |maybe_style, token| {
+            maybe_style.and_then(|style| {
+                let token = token.to_lowercase();
 
-            // Check for FG/BG identifiers and strip them off if appropriate
-            // If col_fg is true, color the foreground. If it's false, color the background.
-            let (token, col_fg) = if token.as_str().starts_with("fg:") {
-                (token.trim_start_matches("fg:").to_owned(), true)
-            } else if token.as_str().starts_with("bg:") {
-                (token.trim_start_matches("bg:").to_owned(), false)
-            } else {
-                (token, true) // Bare colors are assumed to color the foreground
-            };
+                // Check for FG/BG identifiers and strip them off if appropriate
+                // If col_fg is true, color the foreground. If it's false, color the background.
+                let (token, col_fg) = if token.as_str().starts_with("fg:") {
+                    (token.trim_start_matches("fg:").to_owned(), true)
+                } else if token.as_str().starts_with("bg:") {
+                    (token.trim_start_matches("bg:").to_owned(), false)
+                } else {
+                    (token, true) // Bare colors are assumed to color the foreground
+                };
 
-            match token.as_str() {
-                "underline" => style.underline(),
-                "bold" => style.bold(),
-                "italic" => style.italic(),
-                "dimmed" => style.dimmed(),
-                "none" => ansi_term::Style::new(),
+                match token.as_str() {
+                    "underline" => Some(style.underline()),
+                    "bold" => Some(style.bold()),
+                    "italic" => Some(style.italic()),
+                    "dimmed" => Some(style.dimmed()),
+                    "none" => None,
 
-                // Try to see if this token parses as a valid color string
-                color_string => parse_color_string(color_string).map_or_else(
-                    || style,
-                    |ansi_color| {
-                        if col_fg {
-                            style.fg(ansi_color)
-                        } else {
-                            style.on(ansi_color)
-                        }
-                    },
-                ),
-            }
+                    // Try to see if this token parses as a valid color string
+                    color_string => parse_color_string(color_string).map(
+                        |ansi_color| {
+                            if col_fg {
+                                style.fg(ansi_color)
+                            } else {
+                                style.on(ansi_color)
+                            }
+                        },
+                    ),
+                }
+            })
         })
 }
 
@@ -271,6 +273,12 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
 mod tests {
     use super::*;
     use ansi_term::Style;
+
+    #[test]
+    fn table_get_nonexisting() {
+        let table = toml::value::Table::new();
+        assert_eq!(table.get_as_bool("boolean"), None);
+    }
 
     #[test]
     fn table_get_as_bool() {
