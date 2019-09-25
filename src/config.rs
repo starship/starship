@@ -134,7 +134,8 @@ impl Config for Table {
     /// Get a text key and attempt to interpret it into an ANSI style.
     fn get_as_ansi_style(&self, key: &str) -> Option<ansi_term::Style> {
         // TODO: This should probably not unwrap to an empty new Style but inform the user about the problem
-        self.get_as_str(key).map(|x| parse_style_string(x).unwrap_or(ansi_term::Style::new()))
+        self.get_as_str(key)
+            .map(|x| parse_style_string(x).unwrap_or_default())
     }
 }
 
@@ -146,7 +147,11 @@ fn log_if_key_found(key: &str, something: Option<&Value>) {
     }
 }
 
-fn log_if_type_correct<T: std::fmt::Debug>(key: &str, something: &Value, casted_something: Option<T>) {
+fn log_if_type_correct<T: std::fmt::Debug>(
+    key: &str,
+    something: &Value,
+    casted_something: Option<T>,
+) {
     if let Some(casted) = casted_something {
         log::trace!(
             "Value under key \"{}\" has the expected type. Proceeding with {:?} which was build from {:?}.",
@@ -198,15 +203,13 @@ fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
                     "none" => None,
 
                     // Try to see if this token parses as a valid color string
-                    color_string => parse_color_string(color_string).map(
-                        |ansi_color| {
-                            if col_fg {
-                                style.fg(ansi_color)
-                            } else {
-                                style.on(ansi_color)
-                            }
-                        },
-                    ),
+                    color_string => parse_color_string(color_string).map(|ansi_color| {
+                        if col_fg {
+                            style.fg(ansi_color)
+                        } else {
+                            style.on(ansi_color)
+                        }
+                    }),
                 }
             })
         })
@@ -324,8 +327,14 @@ mod tests {
     fn table_get_as_array() {
         let mut table = toml::value::Table::new();
 
-        table.insert(String::from("array"), Value::Array(vec![Value::Integer(1), Value::Integer(2)]));
-        assert_eq!(table.get_as_array("array"), Some(&vec![Value::Integer(1), Value::Integer(2)]));
+        table.insert(
+            String::from("array"),
+            Value::Array(vec![Value::Integer(1), Value::Integer(2)]),
+        );
+        assert_eq!(
+            table.get_as_array("array"),
+            Some(&vec![Value::Integer(1), Value::Integer(2)])
+        );
 
         table.insert(String::from("string"), Value::String(String::from("82")));
         assert_eq!(table.get_as_array("string"), None);
