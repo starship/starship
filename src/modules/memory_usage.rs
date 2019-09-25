@@ -81,5 +81,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         module.new_segment("memory_usage", &display_mem);
     }
 
+    module.get_prefix().set_value("");
+
     Some(module)
 }
