@@ -14,10 +14,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .value_of("cmd_duration")
         .unwrap_or("invalid_time")
         .parse::<u64>()
-        .ok()?
-        / 1_000_000;
+        .ok()?;
 
-    let signed_config_min = module.config_value_i64("min_time").unwrap_or(2000);
+    let signed_config_min = module.config_value_i64("min_time").unwrap_or(2);
 
     /* TODO: Once error handling is implemented, warn the user if their config
     min time is nonsensical */
@@ -32,39 +31,28 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config_min = signed_config_min as u64;
 
     let module_color = match elapsed {
-        time if time < config_min => module
-            .config_value_style("style")
-            .unwrap_or_else(|| Color::RGB(80, 80, 80).bold()),
+        time if time < config_min => return None,
         _ => module
             .config_value_style("style")
             .unwrap_or_else(|| Color::Yellow.bold()),
     };
 
     module.set_style(module_color);
-    module.new_segment(
-        "cmd_duration",
-        &format!("took {}", render_time(elapsed, config_min)),
-    );
+    module.new_segment("cmd_duration", &format!("took {}", render_time(elapsed)));
     module.get_prefix().set_value("");
 
     Some(module)
 }
 
 // Render the time into a nice human-readable string
-fn render_time(raw_milliseconds: u64, config_min: u64) -> String {
+fn render_time(raw_seconds: u64) -> String {
     // Calculate a simple breakdown into days/hours/minutes/seconds
-    let (mut milliseconds, raw_seconds) = (raw_milliseconds % 1000, raw_milliseconds / 1000);
     let (seconds, raw_minutes) = (raw_seconds % 60, raw_seconds / 60);
     let (minutes, raw_hours) = (raw_minutes % 60, raw_minutes / 60);
     let (hours, days) = (raw_hours % 24, raw_hours / 24);
 
-    // Do not display milliseconds if command duration is less than config_min
-    if raw_milliseconds > config_min {
-        milliseconds = 0;
-    }
-
-    let components = [days, hours, minutes, seconds, milliseconds];
-    let suffixes = ["d", "h", "m", "s", "ms"];
+    let components = [days, hours, minutes, seconds];
+    let suffixes = ["d", "h", "m", "s"];
 
     let rendered_components: Vec<String> = components
         .iter()
@@ -87,23 +75,19 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_100ms() {
-        assert_eq!(render_time(100 as u64, 2000), "100ms")
-    }
-    #[test]
     fn test_10s() {
-        assert_eq!(render_time(10 * 1000 as u64, 2000), "10s")
+        assert_eq!(render_time(10 as u64), "10s")
     }
     #[test]
     fn test_90s() {
-        assert_eq!(render_time(90 * 1_000 as u64, 2000), "1m30s")
+        assert_eq!(render_time(90 as u64), "1m30s")
     }
     #[test]
     fn test_10110s() {
-        assert_eq!(render_time(10110 * 1_000 as u64, 2000), "2h48m30s")
+        assert_eq!(render_time(10110 as u64), "2h48m30s")
     }
     #[test]
     fn test_1d() {
-        assert_eq!(render_time(86400 * 1_000 as u64, 2000), "1d")
+        assert_eq!(render_time(86400 as u64), "1d")
     }
 }
