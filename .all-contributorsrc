@@ -332,6 +332,16 @@
         "test",
         "doc"
       ]
+    },
+    {
+      "login": "TomHotston",
+      "name": "Tom Hotston",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/22729355?v=4",
+      "profile": "http://tomhotston.net",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7
