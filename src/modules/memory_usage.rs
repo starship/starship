@@ -6,9 +6,9 @@ use sysinfo::SystemExt;
 
 /// Creates a module with system memory usage information
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    const DEFAULT_THRESHOLD: i64 = -1;
+    const DEFAULT_THRESHOLD: i64 = 75;
     const DEFAULT_SHOW_PERCENTAGE: bool = false;
-    const DEFAULT_SYMBOL: &str = "🐏 ";
+    const RAM_CHAR: &str = "🐏 ";
 
     let mut module = context.new_module("memory_usage");
 
@@ -47,7 +47,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         fn format_kib(n_kib: u64) -> String {
             let byte = Byte::from_unit(n_kib as f64, ByteUnit::KiB)
                 .unwrap_or_else(|_| Byte::from_bytes(0));
-            byte.get_appropriate_unit(true).format(0).replace(" ", "")
+            let mut display_bytes = byte.get_appropriate_unit(true).format(0);
+            display_bytes.retain(|c| c != ' ');
+            display_bytes
         }
         (
             format!(
@@ -67,6 +69,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .config_value_bool("show_swap")
         .unwrap_or(total_swap_kib != 0);
 
+    module.new_segment("symbol", RAM_CHAR);
+
     module.set_style(module_style);
     if show_swap {
         module.new_segment(
@@ -76,13 +80,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else {
         module.new_segment("memory_usage", &display_mem);
     }
-
-    let icon = module
-        .config_value_str("symbol")
-        .unwrap_or(DEFAULT_SYMBOL)
-        .to_string();
-
-    module.get_prefix().set_value(icon);
 
     Some(module)
 }

@@ -497,14 +497,14 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ### Options
 
-| Variable          | Default               | Description                                                   |
-| ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | variable              | Display swap usage.                                           |
-| `threshold`       | `-1`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`               | The symbol used before displaying the memory usage.           |
-| `style`           | `"bold dimmed white"` | The style for the module.                                     |
-| `disabled`        | `false`               | Disables the `memory_usage` module.                           |
+| Variable          | Default                  | Description                                                   |
+| ----------------- | ------------------------ | ------------------------------------------------------------- |
+| `show_percentage` | `false`                  | Display memory usage as a percentage of the available memory. |
+| `show_swap`       | when total swap non-zero | Display swap usage.                                           |
+| `threshold`       | `75`                     | Hide the memory usage unless it exceeds this percentage.      |
+| `symbol`          | `"🐏 "`                  | The symbol used before displaying the memory usage.           |
+| `style`           | `"bold dimmed white"`    | The style for the module.                                     |
+| `disabled`        | `false`                  | Disables the `memory_usage` module.                           |
 
 ### Example
 
@@ -514,7 +514,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 [memory_usage]
 show_percentage = true
 show_swap = true
-threshold = 75
+threshold = -1
 icon = " "
 style = "bold dimmed green"
 ```
