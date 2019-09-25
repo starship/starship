@@ -46,3 +46,7 @@ starship_module_config_derive = { version = "0.18", path = "../starship_module_c
 
 [dev-dependencies]
 tempfile = "3.1.0"
+
+[[bin]]
+name = "starship"
+path = "src/main.rs"
