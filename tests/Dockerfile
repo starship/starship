@@ -67,10 +67,13 @@ RUN java -version && javac -version
 # Create blank project
 RUN USER=nonroot cargo new --bin /src/starship
 WORKDIR /src/starship
+RUN mkdir starship starship_module_config_derive
 
 # We want dependencies cached, so copy those first
 COPY ./Cargo.lock ./Cargo.lock
 COPY ./Cargo.toml ./Cargo.toml
+COPY ./starship/Cargo.toml ./starship/Cargo.toml
+COPY ./starship_module_config_derive/Cargo.toml ./starship_module_config_derive/Cargo.toml
 
 # Cargo.toml will fail to parse without my_benchmark
 RUN mkdir benches
