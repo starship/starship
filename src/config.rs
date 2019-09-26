@@ -138,6 +138,39 @@ impl Config for Table {
         self.get_as_str(key)
             .map(|x| parse_style_string(x).unwrap_or_default())
     }
+
+    /// Get a key from a module's configuration as a segment config.
+    ///
+    /// The config can be
+    ///
+    /// - a string, will be interpreted as value.
+    /// - a table with optional { value, style } keys.
+    ///   If omitted, default value will be used.
+    ///
+    /// Returns `Some(SegmentConfig)` if key exists in the configuration, else `None`.
+    fn get_as_segment_config(&self, key: &str) -> Option<SegmentConfig> {
+        self.get_config(key).and_then(|segment_config: &Value| {
+            match segment_config {
+                toml::Value::String(value) => Some(SegmentConfig {
+                    value: Some(value.as_str()),
+                    style: None,
+                }),
+                toml::Value::Table(config_table) => Some(SegmentConfig {
+                    value: config_table.get_as_str("value"),
+                    style: config_table.get_as_ansi_style("style"),
+                }),
+                _ => {
+                    log::debug!(
+                        "Expected \"{}\" to be a string or config table. Instead received {} of type {}.",
+                        key,
+                        segment_config,
+                        segment_config.type_str()
+                        );
+                    None
+                }
+            }
+        })
+    }
 }
 
 fn log_if_key_found(key: &str, something: Option<&Value>) {
@@ -167,38 +200,6 @@ fn log_if_type_correct<T: std::fmt::Debug>(
             something,
             something.type_str()
             );
-    }
-
-    /// Get a key from a module's configuration as a segment config.
-    ///
-    /// The config can be
-    ///
-    /// - a string, will be interpreted as value.
-    /// - a table with optional { value, style } keys.
-    ///   If omitted, default value will be used.
-    ///
-    /// Returns `Some(SegmentConfig)` if key exists in the configuration, else `None`.
-    fn get_as_segment_config(&self, key: &str) -> Option<SegmentConfig> {
-        let segment_config = self.get_config(key)?;
-        match segment_config {
-            toml::Value::String(value) => Some(SegmentConfig {
-                value: Some(value.as_str()),
-                style: None,
-            }),
-            toml::Value::Table(config_table) => Some(SegmentConfig {
-                value: config_table.get_as_str("value"),
-                style: config_table.get_as_ansi_style("style"),
-            }),
-            _ => {
-                log::debug!(
-                    "Expected \"{}\" to be a string or config table. Instead received {} of type {}.",
-                    key,
-                    segment_config,
-                    segment_config.type_str()
-                );
-                None
-            }
-        }
     }
 }
 
