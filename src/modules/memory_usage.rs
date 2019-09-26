@@ -2,7 +2,7 @@ use ansi_term::Color;
 
 use super::{Context, Module};
 use byte_unit::{Byte, ByteUnit};
-use sysinfo::SystemExt;
+use sysinfo::{RefreshKind, SystemExt};
 
 /// Creates a module with system memory usage information
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -16,7 +16,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .config_value_style("style")
         .unwrap_or_else(|| Color::White.bold().dimmed());
 
-    let system = sysinfo::System::new();
+    let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_system());
 
     let used_memory_kib = system.get_used_memory();
     let total_memory_kib = system.get_total_memory();
