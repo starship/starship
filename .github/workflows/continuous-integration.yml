@@ -51,6 +51,14 @@ jobs:
         with:
           rust-version: ${{ matrix.rust }}
 
+      # Install Elixir at a fixed version
+      - uses: actions/setup-elixir@v1.0.0
+          with:
+            otp-version: "21.x"
+            elixir-version: "1.9.1"
+      - run: mix deps.get
+      - run: mix test
+
       # Install Node.js at a fixed version
       - uses: actions/setup-node@master
         with:
@@ -70,11 +78,11 @@ jobs:
       - uses: actions/setup-python@master
         with:
           python-version: "3.6.9"
-      
+
       # Install Java at a fixed version
       - uses: actions/setup-java@master
         with:
-          java-version: '12.0.2'
+          java-version: "12.0.2"
 
       # Run the ignored tests that expect the above setup
       - uses: actions/checkout@master

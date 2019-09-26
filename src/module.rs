@@ -6,11 +6,14 @@ use std::fmt;
 
 // List of all modules
 pub const ALL_MODULES: &[&str] = &[
+    "aws",
     #[cfg(feature = "battery")]
     "battery",
     "character",
     "cmd_duration",
     "directory",
+    "elixir",
+    "env_var",
     "git_branch",
     "git_state",
     "git_status",

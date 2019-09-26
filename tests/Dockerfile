@@ -27,6 +27,24 @@ RUN git clone https://github.com/syndbg/goenv.git $GOENV_ROOT \
 # Check that Go was correctly installed
 RUN go version
 
+# Install Erlang
+ENV ERLANG_VERSION 21.3
+RUN wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
+RUN sudo dpkg -i erlang-solutions_1.0_all.deb
+RUN sudo apt-get update
+RUN sudo apt-get install esl-erlang=21.3
+
+# Install Elixir
+ENV ELIXIR_VERSION 1.9.1
+RUN wget https://github.com/elixir-lang/elixir/releases/download/v1.9.1/Precompiled.zip
+RUN mkdir -p /usr/local/elixir
+RUN cd /usr/local/elixir && unzip /Precompiled.zip
+
+# Install hex & rebar
+RUN mix local.hex <<< 'Y'
+RUN mix local.rebar <<< 'Y'
+RUN elixir --version
+
 # Install Ruby
 ENV RUBY_VERSION 2.6.3
 ENV RBENV_ROOT /home/nonroot/.rbenv

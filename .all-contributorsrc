@@ -342,6 +342,27 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "bijancn",
+      "name": "Bijan Chokoufe Nejad",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2117164?v=4",
+      "profile": "https://github.com/bijancn",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "yuri1969",
+      "name": "yuri",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/13468636?v=4",
+      "profile": "https://github.com/yuri1969",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7

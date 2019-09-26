@@ -1,7 +1,10 @@
 // While adding out new module add out module to src/module.rs ALL_MODULES const array also.
+mod aws;
 mod character;
 mod cmd_duration;
 mod directory;
+mod elixir;
+mod env_var;
 mod git_branch;
 mod git_state;
 mod git_status;
@@ -27,8 +30,11 @@ use crate::module::Module;
 
 pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     match module {
+        "aws" => aws::module(context),
         "directory" => directory::module(context),
+        "env_var" => env_var::module(context),
         "character" => character::module(context),
+        "elixir" => elixir::module(context),
         "nodejs" => nodejs::module(context),
         "rust" => rust::module(context),
         "python" => python::module(context),
