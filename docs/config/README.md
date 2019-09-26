@@ -313,6 +313,7 @@ The module will be shown only if any of the following conditions are met:
 
 [env_var]
 variable = "SHELL"
+default = "unknown shell"
 ```
 
 ## Git Branch
