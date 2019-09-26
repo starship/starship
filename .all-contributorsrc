@@ -342,6 +342,16 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "bijancn",
+      "name": "Bijan Chokoufe Nejad",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2117164?v=4",
+      "profile": "https://github.com/bijancn",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
