@@ -8,6 +8,7 @@ use std::marker::Sized;
 
 use dirs::home_dir;
 use std::env;
+use toml::Value;
 
 /// Root config of a module.
 pub trait RootModuleConfig<'a>
@@ -17,15 +18,15 @@ where
     /// Create a new root module config with default values.
     fn new() -> Self;
 
-    /// Load root module config from given toml::Value and fill unset variables with default
+    /// Load root module config from given Value and fill unset variables with default
     /// values.
-    fn load(config: &'a toml::Value) -> Self {
+    fn load(config: &'a Value) -> Self {
         Self::new().load_config(config)
     }
 
     /// Helper function that will call RootModuleConfig::load(config) if config is Some,
     /// or RootModuleConfig::new() if config is None.
-    fn try_load(config: Option<&'a toml::Value>) -> Self {
+    fn try_load(config: Option<&'a Value>) -> Self {
         if let Some(config) = config {
             Self::load(config)
         } else {
@@ -40,43 +41,43 @@ where
     Self: Sized + Clone,
 {
     /// Construct a `ModuleConfig` from a toml value.
-    fn from_config(_config: &'a toml::Value) -> Option<Self> {
+    fn from_config(_config: &'a Value) -> Option<Self> {
         None
     }
 
     /// Merge `self` with config from a toml table.
-    fn load_config(&self, config: &'a toml::Value) -> Self {
+    fn load_config(&self, config: &'a Value) -> Self {
         Self::from_config(config).unwrap_or_else(|| self.clone())
     }
 }
 
 // TODO: Add logging to default implementations
 impl<'a> ModuleConfig<'a> for &'a str {
-    fn from_config(config: &'a toml::Value) -> Option<Self> {
+    fn from_config(config: &'a Value) -> Option<Self> {
         config.as_str()
     }
 }
 
 impl<'a> ModuleConfig<'a> for Style {
-    fn from_config(config: &toml::Value) -> Option<Self> {
+    fn from_config(config: &Value) -> Option<Self> {
         parse_style_string(config.as_str()?)
     }
 }
 
 impl<'a> ModuleConfig<'a> for bool {
-    fn from_config(config: &toml::Value) -> Option<Self> {
+    fn from_config(config: &Value) -> Option<Self> {
         config.as_bool()
     }
 }
 
 impl<'a> ModuleConfig<'a> for i64 {
-    fn from_config(config: &toml::Value) -> Option<Self> {
+    fn from_config(config: &Value) -> Option<Self> {
         config.as_integer()
     }
 }
 
 impl<'a> ModuleConfig<'a> for f64 {
-    fn from_config(config: &toml::Value) -> Option<Self> {
+    fn from_config(config: &Value) -> Option<Self> {
         config.as_float()
     }
 }
@@ -85,7 +86,7 @@ impl<'a, T> ModuleConfig<'a> for Vec<T>
 where
     T: ModuleConfig<'a>,
 {
-    fn from_config(config: &'a toml::Value) -> Option<Self> {
+    fn from_config(config: &'a Value) -> Option<Self> {
         config
             .as_array()?
             .iter()
@@ -98,14 +99,14 @@ impl<'a, T> ModuleConfig<'a> for Option<T>
 where
     T: ModuleConfig<'a> + Sized,
 {
-    fn from_config(config: &'a toml::Value) -> Option<Self> {
+    fn from_config(config: &'a Value) -> Option<Self> {
         Some(T::from_config(config))
     }
 }
 
 /// Root config of starship.
 pub struct StarshipConfig {
-    pub config: Option<toml::Value>,
+    pub config: Option<Value>,
 }
 
 impl StarshipConfig {
@@ -117,13 +118,13 @@ impl StarshipConfig {
             }
         } else {
             StarshipConfig {
-                config: Some(toml::Value::Table(toml::value::Table::new())),
+                config: Some(Value::Table(toml::value::Table::new())),
             }
         }
     }
 
     /// Create a config from a starship configuration file
-    fn config_from_file() -> Option<toml::Value> {
+    fn config_from_file() -> Option<Value> {
         let file_path = if let Ok(path) = env::var("STARSHIP_CONFIG") {
             // Use $STARSHIP_CONFIG as the config path if available
             log::debug!("STARSHIP_CONFIG is set: \n{}", &path);
@@ -133,12 +134,11 @@ impl StarshipConfig {
             log::debug!("STARSHIP_CONFIG is not set");
             let config_path = home_dir()?.join(".config/starship.toml");
             let config_path_str = config_path.to_str()?.to_owned();
-
             log::debug!("Using default config path: {}", config_path_str);
             config_path_str
         };
 
-        let toml_content: String = match utils::read_file(&file_path) {
+        let toml_content = match utils::read_file(&file_path) {
             Ok(content) => {
                 log::trace!("Config file content: \n{}", &content);
                 Some(content)
@@ -155,7 +155,7 @@ impl StarshipConfig {
     }
 
     /// Get the subset of the table for a module by its name
-    pub fn get_module_config(&self, module_name: &str) -> Option<&toml::Value> {
+    pub fn get_module_config(&self, module_name: &str) -> Option<&Value> {
         let module_config = self.config.as_ref()?.as_table()?.get(module_name);
         if module_config.is_some() {
             log::debug!(
@@ -188,52 +188,40 @@ impl StarshipConfig {
  - '<color>'        (see the parse_color_string doc for valid color strings)
 */
 fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
-    let tokens = style_string.split_whitespace();
-    let mut style = ansi_term::Style::new();
+    style_string
+        .split_whitespace()
+        .fold(Some(ansi_term::Style::new()), |maybe_style, token| {
+            maybe_style.and_then(|style| {
+                let token = token.to_lowercase();
 
-    // If col_fg is true, color the foreground. If it's false, color the background.
-    let mut col_fg: bool;
-
-    for token in tokens {
-        let token = token.to_lowercase();
-
-        // Check for FG/BG identifiers and strip them off if appropriate
-        let token = if token.as_str().starts_with("fg:") {
-            col_fg = true;
-            token.trim_start_matches("fg:").to_owned()
-        } else if token.as_str().starts_with("bg:") {
-            col_fg = false;
-            token.trim_start_matches("bg:").to_owned()
-        } else {
-            col_fg = true; // Bare colors are assumed to color the foreground
-            token
-        };
-
-        match token.as_str() {
-            "underline" => style = style.underline(),
-            "bold" => style = style.bold(),
-            "italic" => style = style.italic(),
-            "dimmed" => style = style.dimmed(),
-            "none" => return Some(ansi_term::Style::new()), // Overrides other toks
-
-            // Try to see if this token parses as a valid color string
-            color_string => {
-                // Match found: set either fg or bg color
-                if let Some(ansi_color) = parse_color_string(color_string) {
-                    if col_fg {
-                        style = style.fg(ansi_color);
-                    } else {
-                        style = style.on(ansi_color);
-                    }
+                // Check for FG/BG identifiers and strip them off if appropriate
+                // If col_fg is true, color the foreground. If it's false, color the background.
+                let (token, col_fg) = if token.as_str().starts_with("fg:") {
+                    (token.trim_start_matches("fg:").to_owned(), true)
+                } else if token.as_str().starts_with("bg:") {
+                    (token.trim_start_matches("bg:").to_owned(), false)
                 } else {
-                    // Match failed: skip this token and log it
-                    log::debug!("Could not parse token in color string: {}", token)
-                }
-            }
-        }
-    }
+                    (token, true) // Bare colors are assumed to color the foreground
+                };
 
-    Some(style)
+                match token.as_str() {
+                    "underline" => Some(style.underline()),
+                    "bold" => Some(style.bold()),
+                    "italic" => Some(style.italic()),
+                    "dimmed" => Some(style.dimmed()),
+                    "none" => None,
+
+                    // Try to see if this token parses as a valid color string
+                    color_string => parse_color_string(color_string).map(|ansi_color| {
+                        if col_fg {
+                            style.fg(ansi_color)
+                        } else {
+                            style.on(ansi_color)
+                        }
+                    }),
+                }
+            })
+        })
 }
 
 /** Parse a string that represents a color setting, returning None if this fails
@@ -287,11 +275,10 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
 
     if predefined_color.is_some() {
         log::trace!("Read predefined color: {}", color_string);
-        return predefined_color;
+    } else {
+        log::debug!("Could not parse color in string: {}", color_string);
     }
-
-    // All attempts to parse have failed
-    None
+    predefined_color
 }
 
 #[cfg(test)]
@@ -410,7 +397,7 @@ mod tests {
         }
 
         impl<'a> ModuleConfig<'a> for Switch {
-            fn from_config(config: &'a toml::Value) -> Option<Self> {
+            fn from_config(config: &'a Value) -> Option<Self> {
                 match config.as_str()? {
                     "on" => Some(Self::ON),
                     "off" => Some(Self::OFF),
@@ -437,78 +424,85 @@ mod tests {
 
     #[test]
     fn test_from_string() {
-        let config = toml::Value::String(String::from("S"));
+        let config = Value::String(String::from("S"));
         assert_eq!(<&str>::from_config(&config).unwrap(), "S");
     }
 
     #[test]
     fn test_from_bool() {
-        let config = toml::Value::Boolean(true);
+        let config = Value::Boolean(true);
         assert_eq!(<bool>::from_config(&config).unwrap(), true);
     }
 
     #[test]
     fn test_from_i64() {
-        let config = toml::Value::Integer(42);
+        let config = Value::Integer(42);
         assert_eq!(<i64>::from_config(&config).unwrap(), 42);
     }
 
     #[test]
     fn test_from_style() {
-        let config = toml::Value::from("red bold");
+        let config = Value::from("red bold");
         assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.bold());
     }
 
     #[test]
     fn test_from_vec() {
-        let config: toml::Value = toml::Value::Array(vec![toml::Value::from("S")]);
+        let config: Value = Value::Array(vec![Value::from("S")]);
         assert_eq!(<Vec<&str>>::from_config(&config).unwrap(), vec!["S"]);
     }
 
     #[test]
     fn test_from_option() {
-        let config: toml::Value = toml::Value::String(String::from("S"));
+        let config: Value = Value::String(String::from("S"));
         assert_eq!(<Option<&str>>::from_config(&config).unwrap(), Some("S"));
     }
 
     #[test]
-    fn table_get_styles_simple() {
-        // Test for a bold italic underline green module (with SiLlY cApS)
-        let config = toml::Value::from("bOlD ItAlIc uNdErLiNe GrEeN");
+    fn table_get_styles_bold_italic_underline_green_dimmy_silly_caps() {
+        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN");
         let mystyle = <Style>::from_config(&config).unwrap();
-
         assert!(mystyle.is_bold);
         assert!(mystyle.is_italic);
         assert!(mystyle.is_underline);
+        assert!(mystyle.is_dimmed);
         assert_eq!(
             mystyle,
             ansi_term::Style::new()
                 .bold()
                 .italic()
                 .underline()
+                .dimmed()
                 .fg(Color::Green)
         );
+    }
 
+    #[test]
+    fn table_get_styles_plain_and_broken_styles() {
         // Test a "plain" style with no formatting
-        let config = toml::Value::from("");
+        let config = Value::from("");
         let plain_style = <Style>::from_config(&config).unwrap();
         assert_eq!(plain_style, ansi_term::Style::new());
 
         // Test a string that's clearly broken
-        let config = toml::Value::from("djklgfhjkldhlhk;j");
+        let config = Value::from("djklgfhjkldhlhk;j");
         let broken_style = <Style>::from_config(&config).unwrap();
         assert_eq!(broken_style, ansi_term::Style::new());
 
         // Test a string that's nullified by `none`
-        let config = toml::Value::from("fg:red bg:green bold none");
+        let config = Value::from("fg:red bg:green bold none");
         let nullified_style = <Style>::from_config(&config).unwrap();
         assert_eq!(nullified_style, ansi_term::Style::new());
+
+        let config = Value::from("fg:red bg:green bold none");
+        let nullified_start_style = <Style>::from_config(&config).unwrap();
+        assert_eq!(nullified_start_style, ansi_term::Style::new());
     }
 
     #[test]
     fn table_get_styles_ordered() {
         // Test a background style with inverted order (also test hex + ANSI)
-        let config = toml::Value::from("bg:#050505 underline fg:120");
+        let config = Value::from("bg:#050505 underline fg:120");
         let flipped_style = <Style>::from_config(&config).unwrap();
         assert_eq!(
             flipped_style,
@@ -519,7 +513,7 @@ mod tests {
         );
 
         // Test that the last color style is always the one used
-        let config = toml::Value::from("bg:120 bg:125 bg:127 fg:127 122 125");
+        let config = Value::from("bg:120 bg:125 bg:127 fg:127 122 125");
         let multi_style = <Style>::from_config(&config).unwrap();
         assert_eq!(
             multi_style,
