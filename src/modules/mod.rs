@@ -1,4 +1,5 @@
 // While adding out new module add out module to src/module.rs ALL_MODULES const array also.
+mod aws;
 mod character;
 mod cmd_duration;
 mod directory;
@@ -28,6 +29,7 @@ use crate::module::Module;
 
 pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     match module {
+        "aws" => aws::module(context),
         "directory" => directory::module(context),
         "env_var" => env_var::module(context),
         "character" => character::module(context),

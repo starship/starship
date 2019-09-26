@@ -84,7 +84,6 @@ prompt_order = [
     "username",
     "hostname",
     "directory",
-    "env_var",
     "git_branch",
     "git_state",
     "git_status",
@@ -96,6 +95,8 @@ prompt_order = [
     "golang",
     "java",
     "nix_shell",
+    "aws",
+    "env_var",
     "cmd_duration",
     "line_break",
     "jobs",
@@ -103,6 +104,29 @@ prompt_order = [
     "time",
     "character",
 ]
+```
+
+## AWS
+
+The `aws` module shows the current AWS profile. This is based on the
+`AWS_PROFILE` env var.
+
+### Options
+
+| Variable   | Default         | Description                                          |
+| ---------- | --------------- | ---------------------------------------------------- |
+| `disabled` | `false`         | Disables the `AWS` module                            |
+| `style`    | `"bold yellow"` | The style used for the module                        |
+| `symbol`   | `"☁️ "`          | The symbol before displaying the current AWS profile |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[aws]
+style = "bold blue"
+symbol = "🅰 "
 ```
 
 ## Battery
@@ -762,6 +786,7 @@ The module will be shown if any of the following conditions are met:
 - The current user is root
 - The current user isn't the same as the one that is logged in
 - The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ### Options
 
@@ -769,6 +794,7 @@ The module will be shown if any of the following conditions are met:
 | ------------ | --------------- | ------------------------------------- |
 | `style_root` | `"bold red"`    | The style used when the user is root. |
 | `style_user` | `"bold yellow"` | The style used for non-root users.    |
+| `show_always`| `false`         | Always shows the `username` module.   |
 | `disabled`   | `false`         | Disables the `username` module.       |
 
 ### Example
