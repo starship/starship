@@ -84,7 +84,6 @@ prompt_order = [
     "username",
     "hostname",
     "directory",
-    "aws",
     "git_branch",
     "git_state",
     "git_status",
@@ -96,6 +95,8 @@ prompt_order = [
     "golang",
     "java",
     "nix_shell",
+    "aws",
+    "env_var",
     "cmd_duration",
     "line_break",
     "jobs",
@@ -307,6 +308,36 @@ it would have been `nixpkgs/pkgs`.
 
 [directory]
 truncation_length = 8
+```
+
+## Environment Variable
+
+The `env_var` module displays the current value of a selected environment variable.
+The module will be shown only if any of the following conditions are met:
+
+- The `variable` configuration option matches an existing environment variable
+- The `variable` configuration option is not defined, but the `default` configuration option is
+
+### Options
+
+| Variable   | Default          | Description                                                                  |
+| ---------- | ---------------- | ---------------------------------------------------------------------------- |
+| `symbol`   |                  | The symbol used before displaying the variable value.                        |
+| `variable` |                  | The environment variable to be displayed.                                    |
+| `default`  |                  | The default value to be displayed when the selected variable is not defined. |
+| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
+| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
+| `style`    | `"dimmed black"` | The style for the module.                                                    |
+| `disabled` | `false`          | Disables the `env_var` module.                                               |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[env_var]
+variable = "SHELL"
+default = "unknown shell"
 ```
 
 ## Git Branch
