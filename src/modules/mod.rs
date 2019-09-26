@@ -1,12 +1,15 @@
 // While adding out new module add out module to src/module.rs ALL_MODULES const array also.
+mod aws;
 mod character;
 mod cmd_duration;
 mod directory;
+mod env_var;
 mod git_branch;
 mod git_state;
 mod git_status;
 mod golang;
 mod hostname;
+mod java;
 mod jobs;
 mod line_break;
 mod nix_shell;
@@ -26,7 +29,9 @@ use crate::module::Module;
 
 pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     match module {
+        "aws" => aws::module(context),
         "directory" => directory::module(context),
+        "env_var" => env_var::module(context),
         "character" => character::module(context),
         "nodejs" => nodejs::module(context),
         "rust" => rust::module(context),
@@ -42,6 +47,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         #[cfg(feature = "battery")]
         "battery" => battery::module(context),
         "cmd_duration" => cmd_duration::module(context),
+        "java" => java::module(context),
         "jobs" => jobs::module(context),
         "nix_shell" => nix_shell::module(context),
         "hostname" => hostname::module(context),

@@ -3,6 +3,7 @@ use std::env;
 
 use dirs::home_dir;
 use toml::value::Table;
+use toml::value::Value;
 
 use ansi_term::Color;
 
@@ -15,12 +16,12 @@ pub trait Config {
     fn get_as_bool(&self, key: &str) -> Option<bool>;
     fn get_as_str(&self, key: &str) -> Option<&str>;
     fn get_as_i64(&self, key: &str) -> Option<i64>;
-    fn get_as_array(&self, key: &str) -> Option<&Vec<toml::value::Value>>;
+    fn get_as_array(&self, key: &str) -> Option<&Vec<Value>>;
     fn get_as_ansi_style(&self, key: &str) -> Option<ansi_term::Style>;
     fn get_as_segment_config(&self, key: &str) -> Option<SegmentConfig>;
 
     // Internal implementation for accessors
-    fn get_config(&self, key: &str) -> Option<&toml::value::Value>;
+    fn get_config(&self, key: &str) -> Option<&Value>;
 }
 
 impl Config for Table {
@@ -29,7 +30,6 @@ impl Config for Table {
         if let Some(file_data) = Self::config_from_file() {
             return file_data;
         }
-
         Self::new()
     }
 
@@ -44,7 +44,6 @@ impl Config for Table {
             log::debug!("STARSHIP_CONFIG is not set");
             let config_path = home_dir()?.join(".config/starship.toml");
             let config_path_str = config_path.to_str()?.to_owned();
-
             log::debug!("Using default config path: {}", config_path_str);
             config_path_str
         };
@@ -65,107 +64,109 @@ impl Config for Table {
         Some(config)
     }
 
-    /// Get the subset of the table for a module by its name
-    fn get_module_config(&self, module_name: &str) -> Option<&toml::value::Table> {
-        let module_config = self.get(module_name).and_then(toml::Value::as_table);
-
-        if module_config.is_some() {
-            log::debug!(
-                "Config found for \"{}\": \n{:?}",
-                &module_name,
-                &module_config
-            );
-        } else {
-            log::trace!("No config found for \"{}\"", &module_name);
-        }
-
-        module_config
+    /// Get the config value for a given key
+    fn get_config(&self, key: &str) -> Option<&Value> {
+        log::trace!("Looking for config key \"{}\"", key);
+        let value = self.get(key);
+        log_if_key_found(key, value);
+        value
     }
 
-    /// Get the config value for a given key
-    fn get_config(&self, key: &str) -> Option<&toml::value::Value> {
-        log::trace!("Looking for config key \"{}\"", key);
-        let config_value = self.get(key);
-
-        if config_value.is_some() {
-            log::trace!("Config found for \"{}\": {:?}", key, &config_value);
-        } else {
-            log::trace!("No value found for \"{}\"", key);
-        }
-
-        config_value
+    /// Get the subset of the table for a module by its name
+    fn get_module_config(&self, key: &str) -> Option<&Table> {
+        log::trace!("Looking for module key \"{}\"", key);
+        let value = self.get(key);
+        log_if_key_found(key, value);
+        value.and_then(|value| {
+            let casted = Value::as_table(value);
+            log_if_type_correct(key, value, casted);
+            casted
+        })
     }
 
     /// Get a key from a module's configuration as a boolean
     fn get_as_bool(&self, key: &str) -> Option<bool> {
-        let value = self.get_config(key)?;
-        let bool_value = value.as_bool();
-
-        if bool_value.is_none() {
-            log::debug!(
-                "Expected \"{}\" to be a boolean. Instead received {} of type {}.",
-                key,
-                value,
-                value.type_str()
-            );
-        }
-
-        bool_value
+        log::trace!("Looking for boolean key \"{}\"", key);
+        let value = self.get(key);
+        log_if_key_found(key, value);
+        value.and_then(|value| {
+            let casted = Value::as_bool(value);
+            log_if_type_correct(key, value, casted);
+            casted
+        })
     }
 
     /// Get a key from a module's configuration as a string
     fn get_as_str(&self, key: &str) -> Option<&str> {
-        let value = self.get_config(key)?;
-        let str_value = value.as_str();
-
-        if str_value.is_none() {
-            log::debug!(
-                "Expected \"{}\" to be a string. Instead received {} of type {}.",
-                key,
-                value,
-                value.type_str()
-            );
-        }
-
-        str_value
+        log::trace!("Looking for string key \"{}\"", key);
+        let value = self.get(key);
+        log_if_key_found(key, value);
+        value.and_then(|value| {
+            let casted = Value::as_str(value);
+            log_if_type_correct(key, value, casted);
+            casted
+        })
     }
 
     /// Get a key from a module's configuration as an integer
     fn get_as_i64(&self, key: &str) -> Option<i64> {
-        let value = self.get_config(key)?;
-        let i64_value = value.as_integer();
-
-        if i64_value.is_none() {
-            log::debug!(
-                "Expected \"{}\" to be an integer. Instead received {} of type {}.",
-                key,
-                value,
-                value.type_str()
-            );
-        }
-
-        i64_value
+        log::trace!("Looking for integer key \"{}\"", key);
+        let value = self.get(key);
+        log_if_key_found(key, value);
+        value.and_then(|value| {
+            let casted = Value::as_integer(value);
+            log_if_type_correct(key, value, casted);
+            casted
+        })
     }
 
     /// Get a key from a module's configuration as a vector
-    fn get_as_array(&self, key: &str) -> Option<&Vec<toml::value::Value>> {
-        let value = self.get_config(key)?;
-        let array_value = value.as_array();
-        if array_value.is_none() {
-            log::debug!(
-                "Expected \"{}\" to be a array. Instead received {} of type {}.",
-                key,
-                value,
-                value.type_str()
-            );
-        }
-        array_value
+    fn get_as_array(&self, key: &str) -> Option<&Vec<Value>> {
+        log::trace!("Looking for array key \"{}\"", key);
+        let value = self.get(key);
+        log_if_key_found(key, value);
+        value.and_then(|value| {
+            let casted = Value::as_array(value);
+            log_if_type_correct(key, value, casted);
+            casted
+        })
     }
 
     /// Get a text key and attempt to interpret it into an ANSI style.
     fn get_as_ansi_style(&self, key: &str) -> Option<ansi_term::Style> {
-        let style_string = self.get_as_str(key)?;
-        parse_style_string(style_string)
+        // TODO: This should probably not unwrap to an empty new Style but inform the user about the problem
+        self.get_as_str(key)
+            .map(|x| parse_style_string(x).unwrap_or_default())
+    }
+}
+
+fn log_if_key_found(key: &str, something: Option<&Value>) {
+    if something.is_some() {
+        log::trace!("Value found for \"{}\": {:?}", key, &something);
+    } else {
+        log::trace!("No value found for \"{}\"", key);
+    }
+}
+
+fn log_if_type_correct<T: std::fmt::Debug>(
+    key: &str,
+    something: &Value,
+    casted_something: Option<T>,
+) {
+    if let Some(casted) = casted_something {
+        log::trace!(
+            "Value under key \"{}\" has the expected type. Proceeding with {:?} which was build from {:?}.",
+            key,
+            casted,
+            something
+            );
+    } else {
+        log::debug!(
+            "Value under key \"{}\" did not have the expected type. Instead received {} of type {}.",
+            key,
+            something,
+            something.type_str()
+            );
     }
 
     /// Get a key from a module's configuration as a segment config.
@@ -211,52 +212,40 @@ impl Config for Table {
  - '<color>'        (see the parse_color_string doc for valid color strings)
 */
 fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
-    let tokens = style_string.split_whitespace();
-    let mut style = ansi_term::Style::new();
+    style_string
+        .split_whitespace()
+        .fold(Some(ansi_term::Style::new()), |maybe_style, token| {
+            maybe_style.and_then(|style| {
+                let token = token.to_lowercase();
 
-    // If col_fg is true, color the foreground. If it's false, color the background.
-    let mut col_fg: bool;
-
-    for token in tokens {
-        let token = token.to_lowercase();
-
-        // Check for FG/BG identifiers and strip them off if appropriate
-        let token = if token.as_str().starts_with("fg:") {
-            col_fg = true;
-            token.trim_start_matches("fg:").to_owned()
-        } else if token.as_str().starts_with("bg:") {
-            col_fg = false;
-            token.trim_start_matches("bg:").to_owned()
-        } else {
-            col_fg = true; // Bare colors are assumed to color the foreground
-            token
-        };
-
-        match token.as_str() {
-            "underline" => style = style.underline(),
-            "bold" => style = style.bold(),
-            "italic" => style = style.italic(),
-            "dimmed" => style = style.dimmed(),
-            "none" => return Some(ansi_term::Style::new()), // Overrides other toks
-
-            // Try to see if this token parses as a valid color string
-            color_string => {
-                // Match found: set either fg or bg color
-                if let Some(ansi_color) = parse_color_string(color_string) {
-                    if col_fg {
-                        style = style.fg(ansi_color);
-                    } else {
-                        style = style.on(ansi_color);
-                    }
+                // Check for FG/BG identifiers and strip them off if appropriate
+                // If col_fg is true, color the foreground. If it's false, color the background.
+                let (token, col_fg) = if token.as_str().starts_with("fg:") {
+                    (token.trim_start_matches("fg:").to_owned(), true)
+                } else if token.as_str().starts_with("bg:") {
+                    (token.trim_start_matches("bg:").to_owned(), false)
                 } else {
-                    // Match failed: skip this token and log it
-                    log::debug!("Could not parse token in color string: {}", token)
-                }
-            }
-        }
-    }
+                    (token, true) // Bare colors are assumed to color the foreground
+                };
 
-    Some(style)
+                match token.as_str() {
+                    "underline" => Some(style.underline()),
+                    "bold" => Some(style.bold()),
+                    "italic" => Some(style.italic()),
+                    "dimmed" => Some(style.dimmed()),
+                    "none" => None,
+
+                    // Try to see if this token parses as a valid color string
+                    color_string => parse_color_string(color_string).map(|ansi_color| {
+                        if col_fg {
+                            style.fg(ansi_color)
+                        } else {
+                            style.on(ansi_color)
+                        }
+                    }),
+                }
+            })
+        })
 }
 
 /** Parse a string that represents a color setting, returning None if this fails
@@ -310,11 +299,10 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
 
     if predefined_color.is_some() {
         log::trace!("Read predefined color: {}", color_string);
-        return predefined_color;
+    } else {
+        log::debug!("Could not parse color in string: {}", color_string);
     }
-
-    // All attempts to parse have failed
-    None
+    predefined_color
 }
 
 pub struct SegmentConfig<'a> {
@@ -328,18 +316,26 @@ mod tests {
     use ansi_term::Style;
 
     #[test]
+    fn table_get_nonexisting() {
+        let table = toml::value::Table::new();
+        assert_eq!(table.get_as_bool("boolean"), None);
+    }
+
+    #[test]
+    fn table_get_config() {
+        let mut table = toml::value::Table::new();
+        table.insert(String::from("config"), Value::Boolean(true));
+        assert_eq!(table.get_config("config"), Some(&Value::Boolean(true)));
+    }
+
+    #[test]
     fn table_get_as_bool() {
         let mut table = toml::value::Table::new();
 
-        // Use with boolean value
-        table.insert(String::from("boolean"), toml::value::Value::Boolean(true));
+        table.insert(String::from("boolean"), Value::Boolean(true));
         assert_eq!(table.get_as_bool("boolean"), Some(true));
 
-        // Use with string value
-        table.insert(
-            String::from("string"),
-            toml::value::Value::String(String::from("true")),
-        );
+        table.insert(String::from("string"), Value::String(String::from("true")));
         assert_eq!(table.get_as_bool("string"), None);
     }
 
@@ -347,15 +343,10 @@ mod tests {
     fn table_get_as_str() {
         let mut table = toml::value::Table::new();
 
-        // Use with string value
-        table.insert(
-            String::from("string"),
-            toml::value::Value::String(String::from("hello")),
-        );
+        table.insert(String::from("string"), Value::String(String::from("hello")));
         assert_eq!(table.get_as_str("string"), Some("hello"));
 
-        // Use with boolean value
-        table.insert(String::from("boolean"), toml::value::Value::Boolean(true));
+        table.insert(String::from("boolean"), Value::Boolean(true));
         assert_eq!(table.get_as_str("boolean"), None);
     }
 
@@ -363,44 +354,58 @@ mod tests {
     fn table_get_as_i64() {
         let mut table = toml::value::Table::new();
 
-        // Use with integer value
-        table.insert(String::from("integer"), toml::value::Value::Integer(82));
+        table.insert(String::from("integer"), Value::Integer(82));
         assert_eq!(table.get_as_i64("integer"), Some(82));
 
-        // Use with string value
-        table.insert(
-            String::from("string"),
-            toml::value::Value::String(String::from("82")),
-        );
+        table.insert(String::from("string"), Value::String(String::from("82")));
         assert_eq!(table.get_as_bool("string"), None);
     }
 
     #[test]
-    fn table_get_styles_simple() {
+    fn table_get_as_array() {
         let mut table = toml::value::Table::new();
 
-        // Test for a bold italic underline green module (with SiLlY cApS)
+        table.insert(
+            String::from("array"),
+            Value::Array(vec![Value::Integer(1), Value::Integer(2)]),
+        );
+        assert_eq!(
+            table.get_as_array("array"),
+            Some(&vec![Value::Integer(1), Value::Integer(2)])
+        );
+
+        table.insert(String::from("string"), Value::String(String::from("82")));
+        assert_eq!(table.get_as_array("string"), None);
+    }
+
+    #[test]
+    fn table_get_styles_bold_italic_underline_green_dimmy_silly_caps() {
+        let mut table = toml::value::Table::new();
+
         table.insert(
             String::from("mystyle"),
-            toml::value::Value::String(String::from("bOlD ItAlIc uNdErLiNe GrEeN")),
+            Value::String(String::from("bOlD ItAlIc uNdErLiNe GrEeN dimmed")),
         );
         assert!(table.get_as_ansi_style("mystyle").unwrap().is_bold);
         assert!(table.get_as_ansi_style("mystyle").unwrap().is_italic);
         assert!(table.get_as_ansi_style("mystyle").unwrap().is_underline);
+        assert!(table.get_as_ansi_style("mystyle").unwrap().is_dimmed);
         assert_eq!(
             table.get_as_ansi_style("mystyle").unwrap(),
             ansi_term::Style::new()
                 .bold()
                 .italic()
                 .underline()
+                .dimmed()
                 .fg(Color::Green)
         );
+    }
 
+    #[test]
+    fn table_get_styles_plain_and_broken_styles() {
+        let mut table = toml::value::Table::new();
         // Test a "plain" style with no formatting
-        table.insert(
-            String::from("plainstyle"),
-            toml::value::Value::String(String::from("")),
-        );
+        table.insert(String::from("plainstyle"), Value::String(String::from("")));
         assert_eq!(
             table.get_as_ansi_style("plainstyle").unwrap(),
             ansi_term::Style::new()
@@ -409,7 +414,7 @@ mod tests {
         // Test a string that's clearly broken
         table.insert(
             String::from("broken"),
-            toml::value::Value::String(String::from("djklgfhjkldhlhk;j")),
+            Value::String(String::from("djklgfhjkldhlhk;j")),
         );
         assert_eq!(
             table.get_as_ansi_style("broken").unwrap(),
@@ -419,10 +424,20 @@ mod tests {
         // Test a string that's nullified by `none`
         table.insert(
             String::from("nullified"),
-            toml::value::Value::String(String::from("fg:red bg:green bold none")),
+            Value::String(String::from("fg:red bg:green bold none")),
         );
         assert_eq!(
             table.get_as_ansi_style("nullified").unwrap(),
+            ansi_term::Style::new()
+        );
+
+        // Test a string that's nullified by `none` at the start
+        table.insert(
+            String::from("nullified-start"),
+            Value::String(String::from("none fg:red bg:green bold")),
+        );
+        assert_eq!(
+            table.get_as_ansi_style("nullified-start").unwrap(),
             ansi_term::Style::new()
         );
     }
@@ -434,7 +449,7 @@ mod tests {
         // Test a background style with inverted order (also test hex + ANSI)
         table.insert(
             String::from("flipstyle"),
-            toml::value::Value::String(String::from("bg:#050505 underline fg:120")),
+            Value::String(String::from("bg:#050505 underline fg:120")),
         );
         assert_eq!(
             table.get_as_ansi_style("flipstyle").unwrap(),
@@ -447,7 +462,7 @@ mod tests {
         // Test that the last color style is always the one used
         table.insert(
             String::from("multistyle"),
-            toml::value::Value::String(String::from("bg:120 bg:125 bg:127 fg:127 122 125")),
+            Value::String(String::from("bg:120 bg:125 bg:127 fg:127 122 125")),
         );
         assert_eq!(
             table.get_as_ansi_style("multistyle").unwrap(),

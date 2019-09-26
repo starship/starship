@@ -7,16 +7,19 @@ use std::fmt;
 
 // List of all modules
 pub const ALL_MODULES: &[&str] = &[
+    "aws",
     #[cfg(feature = "battery")]
     "battery",
     "character",
     "cmd_duration",
     "directory",
+    "env_var",
     "git_branch",
     "git_state",
     "git_status",
     "golang",
     "hostname",
+    "java",
     "jobs",
     "line_break",
     "nix_shell",
@@ -80,9 +83,23 @@ impl<'a> Module<'a> {
         self.segments.last_mut().unwrap()
     }
 
-    /// Whether a module has any segments
+    /// Should config exists, get a reference to a newly created segment in the module
+    pub fn new_segment_if_config_exists(&mut self, name: &str) -> Option<&mut Segment> {
+        // Use the provided value unless overwritten by config
+        if let Some(value) = self.config_value_str(name) {
+            let mut segment = Segment::new(name);
+            segment.set_style(self.style);
+            segment.set_value(value);
+            self.segments.push(segment);
+            Some(self.segments.last_mut().unwrap())
+        } else {
+            None
+        }
+    }
+
+    /// Whether a module has non-empty segments
     pub fn is_empty(&self) -> bool {
-        self.segments.is_empty()
+        self.segments.iter().all(|segment| segment.is_empty())
     }
 
     /// Get the module's prefix
@@ -271,5 +288,40 @@ impl Affix {
 impl fmt::Display for Affix {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.ansi_string())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_module_is_empty_with_no_segments() {
+        let name = "unit_test";
+        let module = Module {
+            config: None,
+            _name: name.to_string(),
+            style: Style::default(),
+            prefix: Affix::default_prefix(name),
+            segments: Vec::new(),
+            suffix: Affix::default_suffix(name),
+        };
+
+        assert!(module.is_empty());
+    }
+
+    #[test]
+    fn test_module_is_empty_with_all_empty_segments() {
+        let name = "unit_test";
+        let module = Module {
+            config: None,
+            _name: name.to_string(),
+            style: Style::default(),
+            prefix: Affix::default_prefix(name),
+            segments: vec![Segment::new("test_segment")],
+            suffix: Affix::default_suffix(name),
+        };
+
+        assert!(module.is_empty());
     }
 }
