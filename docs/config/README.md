@@ -236,7 +236,7 @@ use_symbol_for_status = true
 ## Command Duration
 
 The `cmd_duration` module shows how long the last command took to execute.
-The module will be shown only if the command took longer than 2000 milliseconds (2 seconds), or
+The module will be shown only if the command took longer than two seconds, or
 the `min_time` config value, if it exists.
 
 ::: warning Do not hook the DEBUG trap in Bash
@@ -251,11 +251,11 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Variable   | Default         | Description                                           |
-| ---------- | --------------- | ----------------------------------------------------- |
-| `min_time` | `2000`          | Shortest duration to show time for (in milliseconds). |
-| `style`    | `"bold yellow"` | The style for the module.                             |
-| `disabled` | `false`         | Disables the `cmd_duration` module.                   |
+| Variable   | Default         | Description                         |
+| ---------- | --------------- | ----------------------------------- |
+| `min_time` | `2`             | Shortest duration to show time for. |
+| `style`    | `"bold yellow"` | The style for the module.           |
+| `disabled` | `false`         | Disables the `cmd_duration` module. |
 
 ### Example
 
@@ -263,7 +263,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 # ~/.config/starship.toml
 
 [cmd_duration]
-min_time = 4000
+min_time = 4
 ```
 
 ## Directory
