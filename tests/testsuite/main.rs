@@ -1,3 +1,4 @@
+mod aws;
 mod character;
 mod cmd_duration;
 mod common;
