@@ -20,11 +20,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if !is_rs_project {
         return None;
     }
-    let config = RustConfig::try_load(context.config.config.as_ref());
 
     match get_rust_version() {
         Some(rust_version) => {
             let mut module = context.new_module("rust");
+            let config = RustConfig::try_load(module.config);
             module.set_style(config.style);
 
             let formatted_version = format_rustc_version(rust_version);
