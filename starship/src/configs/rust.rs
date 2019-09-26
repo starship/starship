@@ -1,4 +1,4 @@
-use crate::module_config::{ModuleConfig, RootModuleConfig};
+use crate::config::{ModuleConfig, RootModuleConfig};
 
 use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;

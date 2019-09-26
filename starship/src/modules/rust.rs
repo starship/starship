@@ -2,8 +2,8 @@ use std::process::Command;
 
 use super::{Context, Module};
 
+use crate::config::RootModuleConfig;
 use crate::configs::rust::RustConfig;
-use crate::module_config::RootModuleConfig;
 
 /// Creates a module with the current Rust version
 ///

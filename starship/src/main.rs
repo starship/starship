@@ -6,7 +6,6 @@ mod configs;
 mod context;
 mod init;
 mod module;
-mod module_config;
 mod modules;
 mod print;
 mod segment;

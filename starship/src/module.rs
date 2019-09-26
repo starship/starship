@@ -1,4 +1,4 @@
-use crate::module_config::ModuleConfig;
+use crate::config::ModuleConfig;
 use crate::segment::Segment;
 use ansi_term::Style;
 use ansi_term::{ANSIString, ANSIStrings};

@@ -1,7 +1,7 @@
 pub mod battery;
 pub mod rust;
 
-use crate::module_config::{ModuleConfig, RootModuleConfig};
+use crate::config::{ModuleConfig, RootModuleConfig};
 
 use starship_module_config_derive::ModuleConfig;
 

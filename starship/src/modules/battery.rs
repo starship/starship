@@ -1,6 +1,6 @@
 use super::{Context, Module};
+use crate::config::RootModuleConfig;
 use crate::configs::battery::BatteryConfig;
-use crate::module_config::RootModuleConfig;
 
 /// Creates a module for the battery percentage and charging state
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {

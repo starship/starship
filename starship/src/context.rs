@@ -1,5 +1,5 @@
+use crate::config::StarshipConfig;
 use crate::module::Module;
-use crate::module_config::StarshipConfig;
 
 use clap::ArgMatches;
 use git2::{Repository, RepositoryState};
