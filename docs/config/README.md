@@ -116,7 +116,7 @@ The `aws` module shows the current AWS profile. This is based on the
 | ---------- | --------------- | ---------------------------------------------------- |
 | `disabled` | `false`         | Disables the `AWS` module                            |
 | `style`    | `"bold yellow"` | The style used for the module                        |
-| `symbol`   | `"☁️ "`         | The symbol before displaying the current AWS profile |
+| `symbol`   | `"☁️ "`          | The symbol before displaying the current AWS profile |
 
 ### Example
 
@@ -125,7 +125,7 @@ The `aws` module shows the current AWS profile. This is based on the
 
 [aws]
 style = "bold blue"
-symbol = " "
+symbol = "🅰 "
 ```
 
 ## Battery
