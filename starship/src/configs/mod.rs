@@ -22,6 +22,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "username",
                 "hostname",
                 "directory",
+                "aws",
                 "git_branch",
                 "git_state",
                 "git_status",
