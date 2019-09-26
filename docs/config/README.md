@@ -291,7 +291,7 @@ truncation_length = 8
 The `env_var` module displays the current value of a selected environment variable.
 The module will be shown only if any of the following conditions are met:
 
-- The environment variable named `variable` is defined
+- The `variable` configuration option matches an existing environment variable
 - The environment variable named `variable` is not defined and `default` config value exists
 
 ### Options
