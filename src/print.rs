@@ -24,6 +24,7 @@ const DEFAULT_PROMPT_ORDER: &[&str] = &[
     "rust",
     "python",
     "golang",
+    "java",
     "nix_shell",
     "cmd_duration",
     "line_break",

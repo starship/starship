@@ -1,7 +1,7 @@
 use ansi_term::Color;
 use std::io;
 
-use crate::common;
+use crate::common::{self, TestCommand};
 
 // TODO: Add tests for if root user (UID == 0)
 // Requires mocking
@@ -58,6 +58,22 @@ fn ssh_connection() -> io::Result<()> {
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("via {} ", Color::Yellow.bold().paint("astronaut"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+fn show_always() -> io::Result<()> {
+    let output = common::render_module("username")
+        .env("USER", "astronaut")
+        .use_config(toml::toml! {
+        [username]
+        show_always = true})
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("via {} ", Color::Yellow.bold().paint("astronaut"));
+
     assert_eq!(expected, actual);
     Ok(())
 }
