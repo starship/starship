@@ -80,7 +80,6 @@ prompt_order = [
     "username",
     "hostname",
     "directory",
-    "aws",
     "git_branch",
     "git_state",
     "git_status",
@@ -92,6 +91,8 @@ prompt_order = [
     "golang",
     "java",
     "nix_shell",
+    "aws",
+    "env_var",
     "cmd_duration",
     "line_break",
     "jobs",
@@ -292,6 +293,36 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 truncation_length = 8
 ```
 
+## Environment Variable
+
+The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+
+- The `variable` configuration option matches an existing environment variable
+- The `variable` configuration option is not defined, but the `default` configuration option is
+
+### オプション
+
+| 変数         | デフォルト            | 説明                                                                           |
+| ---------- | ---------------- | ---------------------------------------------------------------------------- |
+| `symbol`   |                  | The symbol used before displaying the variable value.                        |
+| `variable` |                  | The environment variable to be displayed.                                    |
+| `default`  |                  | The default value to be displayed when the selected variable is not defined. |
+| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
+| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
+| `style`    | `"dimmed black"` | The style for the module.                                                    |
+| `disabled` | `false`          | Disables the `env_var` module.                                               |
+
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[env_var]
+variable = "SHELL"
+default = "unknown shell"
+```
+
 ## Git Branch
 
 The `git_branch` module shows the active branch of the repo in your current directory.
@@ -395,13 +426,13 @@ deleted = "🗑"
 
 The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
 
-- カレントディレクトリに`go.mod`ファイルが含まれている
-- カレントディレクトリに`go.sum`ファイルが含まれている
-- カレントディレクトリに`glide.yaml`ファイルが含まれている
-- カレントディレクトリに`Gopkg.yml`ファイルが含まれている
-- カレントディレクトリに`Gopkg.lock`ファイルが含まれている
-- カレントディレクトリに`Godeps`ファイルが含まれている
-- カレントディレクトリに`.go`の拡張子のファイルが含まれている
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
 ### オプション
 
@@ -521,10 +552,10 @@ pure_msg = "pure shell"
 
 ## Java
 
-The `java` module shows the currently installed version of Java. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
 
-- カレントディレクトリに`pom.xml`, もしくは`build.gradle`ファイルが含まれている
-- カレントディレクトリに拡張子が`.java`, `.class`, もしくは`.jar`のファイルが含まれている
+- The current directory contains a `pom.xml` or `build.gradle` file
+- The current directory contains a file with the `.java`, `.class` or `.jar` extension
 
 ### オプション
 
@@ -548,16 +579,16 @@ symbol = "🌟 "
 
 The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
 
-- カレントディレクトリに`package.json`ファイルが含まれている
-- カレントディレクトリに`node_modules`ディレクトリが含まれている
-- カレントディレクトリに`.js`の拡張子のファイルが含まれている
+- The current directory contains a `package.json` file
+- The current directory contains a `node_modules` directory
+- The current directory contains a file with the `.js` extension
 
 ### オプション
 
 | 変数         | デフォルト          | 説明                                                       |
 | ---------- | -------------- | -------------------------------------------------------- |
 | `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | モジュールのスタイルです。                                            |
+| `style`    | `"bold green"` | The style for the module.                                |
 | `disabled` | `false`        | Disables the `nodejs` module.                            |
 
 
@@ -574,9 +605,9 @@ symbol = "🤖 "
 
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
 
-- **npm** – `npm`パッケージバージョンは、現在のディレクトリにある`package.json`から抽出されます
-- **cargo** – `cargo`パッケージバージョンは、現在のディレクトリにある`Cargo.toml`から抽出されます。
-- **poetry** – `poetry`パッケージバージョンは、現在のディレクトリにある`pyproject.toml`から抽出されます
+- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
+- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
 
 > ⚠️ 表示されるバージョンは、パッケージマネージャーではなく、ソースコードが現在のディレクトリにあるパッケージのバージョンです。
 
@@ -608,12 +639,12 @@ Otherwise, it will display the version number from `python --version` and show t
 
 The module will be shown if any of the following conditions are met:
 
-- カレントディレクトリに`.python-version`ファイルが含まれている
-- カレントディレクトリに`requirements.txt`ファイルが含まれている
-- カレントディレクトリに`pyproject.toml`ファイルが含まれている
-- カレントディレクトリに`.py`の拡張子のファイルが含まれている
-- カレントディレクトリに`Pipfile`ファイルが含まれている
-- カレントディレクトリに`tox.ini`ファイルが含まれている
+- The current directory contains a `.python-version` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a file with the `.py` extension
+- The current directory contains a `Pipfile` file
+- The current directory contains a `tox.ini` file
 
 ### オプション
 
@@ -639,17 +670,17 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
 
-- カレントディレクトリに`Gemfile`ファイルが含まれている
-- カレントディレクトリに`.rb`の拡張子のファイルが含まれている
+- The current directory contains a `Gemfile` file
+- The current directory contains a `.rb` file
 
 ### オプション
 
 | 変数         | デフォルト        | 説明                                                     |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
-| `style`    | `"bold red"` | モジュールのスタイルです。                                          |
+| `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `ruby` module.                            |
 
 
@@ -666,8 +697,8 @@ symbol = "🔺 "
 
 The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
 
-- カレントディレクトリに`Cargo.toml`ファイルが含まれている
-- カレントディレクトリに`.rs`の拡張子のファイルが含まれている
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### オプション
 
@@ -693,9 +724,9 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. :::
 
-### オプション
+### Options
 
-| 変数         | デフォルト         | 説明                                                                                                                  |
+| Variable   | Default       | Description                                                                                                         |
 | ---------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `12hr`     | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`   | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
@@ -705,7 +736,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 If `12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `12hr` setting.
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -719,10 +750,10 @@ format = "🕙[ %T ]"
 
 The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
-- カレントユーザーがroot
-- カレントユーザーが、ログインしているユーザーとは異なる
-- ユーザーがSSHセッションとして接続されている
-- `show_always`変数がtrueに設定されている
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ### Options
 
