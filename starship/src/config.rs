@@ -460,7 +460,7 @@ mod tests {
 
     #[test]
     fn table_get_styles_bold_italic_underline_green_dimmy_silly_caps() {
-        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN");
+        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD");
         let mystyle = <Style>::from_config(&config).unwrap();
         assert!(mystyle.is_bold);
         assert!(mystyle.is_italic);
@@ -486,17 +486,15 @@ mod tests {
 
         // Test a string that's clearly broken
         let config = Value::from("djklgfhjkldhlhk;j");
-        let broken_style = <Style>::from_config(&config).unwrap();
-        assert_eq!(broken_style, ansi_term::Style::new());
+        assert!(<Style>::from_config(&config).is_none());
 
         // Test a string that's nullified by `none`
         let config = Value::from("fg:red bg:green bold none");
-        let nullified_style = <Style>::from_config(&config).unwrap();
-        assert_eq!(nullified_style, ansi_term::Style::new());
+        assert!(<Style>::from_config(&config).is_none());
 
-        let config = Value::from("fg:red bg:green bold none");
-        let nullified_start_style = <Style>::from_config(&config).unwrap();
-        assert_eq!(nullified_start_style, ansi_term::Style::new());
+        // Test a string that's nullified by `none` at the start
+        let config = Value::from("none fg:red bg:green bold");
+        assert!(<Style>::from_config(&config).is_none());
     }
 
     #[test]
