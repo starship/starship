@@ -52,14 +52,14 @@
 
 - 最後のコマンドがゼロ以外のコードで終了すると、プロンプト文字が赤に変わります
 - ログインユーザーと異なる場合にユーザー名を表示する
-- Current Java version(`☕`)
+- 現在の Java のバージョン (`☕`)
 - 現在の Node.js のバージョン (`⬢`)
 - 現在の Rust のバージョン (`🦀`)
 - 現在の Ruby のバージョン (`💎`)
 - 現在の Python のバージョン (`🐍`)
 - 現在の Go バージョン (`🐹`)
 - Nix-shell の環境検出
-- Print an environment variable
+- 指定した1つの環境変数の表示
 - カレントディレクトリにある現在のパッケージバージョン(`📦`)
   - npm (Node.js)
   - cargo (Rust)
@@ -250,7 +250,7 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
 
 <p align="center">
     <br>
-    <img width="100" src="media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
 ## 📝 ライセンス
