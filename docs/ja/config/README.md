@@ -25,15 +25,16 @@ disabled = true
 
 ### 用語
 
-**モジュール**: OSのコンテキスト情報に基づいて情報を提供するプロンプト内のコンポーネントです。 たとえば、現在のディレクトリがNodeJSプロジェクトである場合、「nodejs」モジュールは、現在コンピューターにインストールされているNodeJSのバージョンを表示します。
+**Module**: A component in the prompt giving information based on contextual information from your OS. たとえば、現在のディレクトリがNodeJSプロジェクトである場合、「nodejs」モジュールは、現在コンピューターにインストールされているNodeJSのバージョンを表示します。
 
-**セグメント**: モジュールを構成する小さなサブコンポーネントです。 たとえば、「nodejs」モジュールの「symbol」セグメントには、バージョン番号の前に表示される文字が含まれています（デフォルト: ⬢）。
+**Segment**: Smaller sub-components that compose a module. たとえば、「nodejs」モジュールの「symbol」セグメントには、バージョン番号の前に表示される文字が含まれています（デフォルト: ⬢）。
 
 以下はNode モジュールの表現です。 次の例では、「シンボル」と「バージョン」はその中のセグメントです。 すべてのモジュールには、デフォルトの端末色であるprefixとsuffixもあります。
 
-    [prefix]      [symbol]     [version]    [suffix]
-     "via "         "⬢"        "v10.4.1"       ""
-    
+```
+[prefix]      [symbol]     [version]    [suffix]
+ "via "         "⬢"        "v10.4.1"       ""
+```
 
 ### スタイルの設定
 
@@ -58,7 +59,6 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 | -------------- | ----------------------- | ------------------------ |
 | `add_newline`  | `true`                  | プロンプトの開始前に新しい行を追加します。    |
 | `prompt_order` | [link](#デフォルトのプロンプト表示順) | プロンプトモジュールを出力する順序を設定します。 |
-
 
 ### 設定例
 
@@ -114,7 +114,6 @@ The `aws` module shows the current AWS profile. This is based on the `AWS_PROFIL
 | `style`    | `"bold yellow"` | The style used for the module                        |
 | `symbol`   | `"☁️ "`         | The symbol before displaying the current AWS profile |
 
-
 ### 設定例
 
 ```toml
@@ -139,7 +138,6 @@ symbol = "🅰 "
 | `display`            | [link](#battery-display) | モジュールの閾値とスタイルを表示します。      |
 | `disabled`           | `false`                  | `battery`モジュールを無効にします。    |
 
-
 <details>
 <summary>いくつかのまれなバッテリー状態のオプションもあります。</summary>
 
@@ -147,7 +145,6 @@ symbol = "🅰 "
 | ---------------- | ------------------------ |
 | `unknown_symbol` | バッテリー状態が不明なときに表示される記号です。 |
 | `empty_symbol`   | バッテリーが空のときに表示される記号です。    |
-
 
 オプションを指定しない限り、バッテリーの状態が`unknown`もしくは`empty`になった場合にインジケーターは非表示になります。
 
@@ -184,7 +181,6 @@ style = "bold red"
 | `threshold` | バッテリーが表示される上限です。               |
 | `style`     | displayオプションが使用されている場合のスタイルです。 |
 
-
 #### 設定例
 
 ```toml
@@ -218,7 +214,6 @@ style = "bold yellow"
 | `style_failure`         | `"bold red"`   | 最後のコマンドが失敗した場合に使用されるスタイルです。                  |
 | `disabled`              | `false`        | `character`モジュールを無効にします。                     |
 
-
 ### 設定例
 
 ```toml
@@ -234,7 +229,7 @@ use_symbol_for_status = true
 
 `cmd_duration`モジュールは、最後のコマンドの実行にかかった時間を示します。 モジュールが表示されるのは、コマンドが2秒以上かかった場合、または`min_time`値が存在する場合のみです。
 
-::: warning BashでDEBUGトラップをhookしない `bash`でStarshipを実行している場合、 `eval $(starship init $0)`実行した後に`DEBUG`トラップをフックしないでください。そうしないと、このモジュールが**おそらくですが**壊れます。 :::
+::: warning Do not hook the DEBUG trap in Bash If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break. :::
 
 preexecのような機能を必要とするBashユーザーは、 [rcalorasのbash_preexecフレームワーク](https://github.com/rcaloras/bash-preexec)を使用できます。 `eval $(starship init $0)` を実行する前に、`preexec_functions`、および`precmd_functions`定義するだけで、通常どおり続行します。
 
@@ -245,7 +240,6 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 | `min_time` | `2`             | 時間を表示する最短期間です。              |
 | `style`    | `"bold yellow"` | モジュールのスタイルです。               |
 | `disabled` | `false`         | `cmd_duration`モジュールを無効にします。 |
-
 
 ### 設定例
 
@@ -273,7 +267,6 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 | `style`             | `"bold cyan"` | モジュールのスタイルです。                 |
 | `disabled`          | `false`       | `directory`モジュールを無効にします。      |
 
-
 <details>
 <summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
 
@@ -282,8 +275,8 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 | `fish_style_pwd_dir_length` | `0`    | fish shellのpwdパスロジックを適用するときに使用する文字数です。       |
 | `use_logical_path`          | `true` | OSからのパスの代わりに、シェル(`PWD`) によって提供される論理パスを表示します。 |
 
-
 </details>
+
 
 ### 設定例
 
@@ -313,7 +306,6 @@ The `env_var` module displays the current value of a selected environment variab
 | `style`    | `"dimmed black"` | モジュールのスタイルです。                                                                |
 | `disabled` | `false`          | Disables the `env_var` module.                                               |
 
-
 ### 設定例
 
 ```toml
@@ -338,7 +330,6 @@ default = "unknown shell"
 | `style`             | `"bold purple"` | モジュールのスタイルです。                               |
 | `disabled`          | `false`         | `git_branch`モジュールを無効にします。                   |
 
-
 ### 設定例
 
 ```toml
@@ -352,7 +343,7 @@ truncation_symbol = ""
 
 ## Git の進行状態
 
-`git_state`モジュールはgitディレクトリの進行状態を表します。 (例: *REBASING*, *BISECTING*, その他) 進捗情報がある場合(例: REBASING 3/10)はその情報も表示されます。
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. 進捗情報がある場合(例: REBASING 3/10)はその情報も表示されます。
 
 ### オプション
 
@@ -368,7 +359,6 @@ truncation_symbol = ""
 | `progress_divider` | `"/"`              | 現在の進行量と合計進行量を分ける記号またはテキストです。 (例: `" of "` 、 `"3 of 10"` ) |
 | `style`            | `"bold yellow"`    | モジュールのスタイルです。                                             |
 | `disabled`         | `false`            | `git_state`モジュールを無効にします。                                  |
-
 
 ### 設定例
 
@@ -403,7 +393,6 @@ cherry_pick = "🍒 PICKING"
 | `suffix`          | `]`          | このモジュールの末尾に表示される文字列です。         |
 | `style`           | `"bold red"` | モジュールのスタイルです。                  |
 | `disabled`        | `false`      | `git_status`モジュールを無効にします。      |
-
 
 ### 設定例
 
@@ -443,7 +432,6 @@ deleted = "🗑"
 | `style`    | `"bold cyan"` | モジュールのスタイルです。                 |
 | `disabled` | `false`       | `golang`モジュールを無効にします。         |
 
-
 ### 設定例
 
 ```toml
@@ -452,6 +440,7 @@ deleted = "🗑"
 [golang]
 symbol = "🏎💨 "
 ```
+
 
 ## ホスト名
 
@@ -467,7 +456,6 @@ symbol = "🏎💨 "
 | `style`    | `"bold dimmed green"` | モジュールのスタイルです。                    |
 | `disabled` | `false`               | `hostname`モジュールを無効にします。          |
 
-
 ### 設定例
 
 ```toml
@@ -479,6 +467,7 @@ prefix = "⟪"
 suffix = "⟫"
 disabled = false
 ```
+
 
 ## ジョブ
 
@@ -492,7 +481,6 @@ disabled = false
 | `threshold` | `1`           | 超過した場合、ジョブの数を表示します。    |
 | `style`     | `"bold blue"` | モジュールのスタイルです。          |
 | `disabled`  | `false`       | `jobs`モジュールを無効にします。    |
-
 
 ### 設定例
 
@@ -514,7 +502,6 @@ threshold = 4
 | ---------- | ------- | ------------------------------------- |
 | `disabled` | `false` | `line_break`モジュールを無効にして、プロンプトを1行にします。 |
 
-
 ### 設定例
 
 ```toml
@@ -523,6 +510,7 @@ threshold = 4
 [line_break]
 disabled = true
 ```
+
 
 ## Nix-shell
 
@@ -537,7 +525,6 @@ disabled = true
 | `pure_msg`   | `pure`       | pureメッセージをカスタマイズします。     |
 | `style`      | `"bold red"` | モジュールのスタイルです。            |
 | `disabled`   | `false`      | `nix_shell`モジュールを無効にします。 |
-
 
 ### 設定例
 
@@ -566,7 +553,6 @@ pure_msg = "pure shell"
 | `style`    | `"dimmed red"` | モジュールのスタイルです。               |
 | `disabled` | `false`        | `Java`モジュールを無効にします。         |
 
-
 ### 設定例
 
 ```toml
@@ -575,6 +561,7 @@ pure_msg = "pure shell"
 [java]
 symbol = "🌟 "
 ```
+
 
 ## NodeJS
 
@@ -592,7 +579,6 @@ symbol = "🌟 "
 | `style`    | `"bold green"` | モジュールのスタイルです。                 |
 | `disabled` | `false`        | `nodejs`モジュールを無効にします。         |
 
-
 ### 設定例
 
 ```toml
@@ -606,9 +592,9 @@ symbol = "🤖 "
 
 `package`モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。 このモジュールは現在、 `npm` 、 `cargo` 、および`poetry`パッケージをサポートしています。
 
-- **npm** – `npm`パッケージバージョンは、現在のディレクトリにある`package.json`から抽出されます
-- **cargo** – `cargo`パッケージバージョンは、現在のディレクトリにある`Cargo.toml`から抽出されます。
-- **poetry** – `poetry`パッケージバージョンは、現在のディレクトリにある`pyproject.toml`から抽出されます
+- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
+- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
 
 > ⚠️ 表示されるバージョンは、パッケージマネージャーではなく、ソースコードが現在のディレクトリにあるパッケージのバージョンです。
 
@@ -619,7 +605,6 @@ symbol = "🤖 "
 | `symbol`   | `"📦 "`       | パッケージのバージョンを表示する前に使用される記号です。 |
 | `style`    | `"bold red"` | モジュールのスタイルです。                |
 | `disabled` | `false`      | `package`モジュールを無効にします。       |
-
 
 ### 設定例
 
@@ -657,7 +642,6 @@ symbol = "🎁 "
 | `style`              | `"bold yellow"` | モジュールのスタイルです。                                        |
 | `disabled`           | `false`         | `python`モジュールを無効にします。                                |
 
-
 ### 設定例
 
 ```toml
@@ -684,7 +668,6 @@ pyenv_prefix = "foo "
 | `style`    | `"bold red"` | モジュールのスタイルです。               |
 | `disabled` | `false`      | `ruby`モジュールを無効にします。         |
 
-
 ### 設定例
 
 ```toml
@@ -709,7 +692,6 @@ symbol = "🔺 "
 | `style`    | `"bold red"` | モジュールのスタイルです。               |
 | `disabled` | `false`      | `rust`モジュールを無効にします。         |
 
-
 ### 設定例
 
 ```toml
@@ -721,7 +703,7 @@ symbol = "⚙️ "
 
 ## 時刻
 
-`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
+The `time` module shows the current **local** time. `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
 
 ::: tip このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。 :::
 
@@ -733,7 +715,6 @@ symbol = "⚙️ "
 | `format`   | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。 |
 | `style`    | `bold yellow`  | モジュールのスタイルです。                                                                                     |
 | `disabled` | `true`         | `time`モジュールを無効にします。                                                                               |
-
 
 `12hr`が`true` 、 `format`デフォルトで`"%r"`です。 それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、 `12hr`の設定が上書きされます。
 
@@ -764,7 +745,6 @@ format = "🕙[ %T ]"
 | `style_user`  | `"bold yellow"` | 非rootユーザーに使用されるスタイルです。    |
 | `show_always` | `false`         | `username`モジュールを常に表示します。  |
 | `disabled`    | `false`         | `username`モジュールを無効にします。   |
-
 
 ### 設定例
 
