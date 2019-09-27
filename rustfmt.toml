@@ -1,0 +1,16 @@
+condense_wildcard_suffixes = true
+edition = "2018"
+format_strings = true
+format_macro_matchers = true
+imports_layout = "HorizontalVertical"
+merge_imports = true
+max_width = 120
+normalize_comments = true
+reorder_impl_items = true
+use_field_init_shorthand = true
+use_try_shorthand = true
+format_code_in_doc_comments = true
+wrap_comments = true
+unstable_features = true
+version = "Two"
+normalize_doc_attributes = true
