@@ -2,22 +2,22 @@
 home: true
 heroImage: /logo.svg
 actionText: Get Started →
-actionLink: /guide/
+actionLink: /ja/guide/
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 ---
 
 <div class="features">
   <div class="feature">
-    <h2>Compatibility First</h2>
-    <p>Works on the most common shells on the most common operating systems. Use it everywhere!</p>
+    <h2>互換性優先</h2>
+    <p>一般的なほとんどのOSの一般的なほとんどのシェル上で動作します。 あらゆるところで使用してください！</p>
   </div>
   <div class="feature">
-    <h2>Rust-Powered</h2>
-    <p>Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.</p>
+    <h2>Rust 製</h2>
+    <p>Rust の最高レベルの速度と安全性を用いることで、可能な限り高速かつ信頼性を高くしています。</p>
   </div>
   <div class="feature">
-    <h2>Customizable</h2>
-    <p>Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.</p>
+    <h2>カスタマイズ可能</h2>
+    <p>それぞれの細かい点は好みにカスタマイズが出来るため、ミニマルにも多機能にも好きなようにプロンプトを設定することができます。</p>
   </div>
 </div>
 
@@ -28,11 +28,11 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
   </video>
 </div>
 
-### Quick Install
+### クイックインストール
 
-1. Install the **starship** binary:
+1. **Starship** のバイナリをインストール
 
-   **[Download archives of precompiled binaries](https://github.com/starship/starship/releases)** if you don't use the platforms below.
+   もし以下のプラットフォームを使用していない場合は **[コンパイル済みのバイナリファイルをダウンロード](https://github.com/starship/starship/releases)** してください。
 
 
    #### Homebrew
@@ -42,7 +42,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    ```
 
 
-   #### Rust (v1.33 or higher)
+   #### Rust (v1.33 もしくはそれ以上)
 
    ```sh
    $ cargo install starship
@@ -51,7 +51,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Arch Linux (AUR)
 
-   Starship is available on the AUR under the name `starship`. Install it with `yay` or your favorite AUR helper.
+   Starship は AUR 上の `starship` というパッケージ名で利用可能です。 `yay` またはお好きな AUR ヘルパーでインストールしてください。
 
    ```sh
    $ yay -S starship
@@ -71,12 +71,12 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    $ pkg install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. 初期化のためのスクリプトをシェルの設定ファイルに追加
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   `~/.bashrc` の最後に以下を追記してください
 
    ```sh
    # ~/.bashrc
@@ -87,7 +87,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   `~/.config/fish/config.fish` の最後に以下を追記してください
 
    ```sh
    # ~/.config/fish/config.fish
@@ -98,7 +98,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   `~/.zshrc` の最後に以下を追記してください
 
    ```sh
    # ~/.zshrc
