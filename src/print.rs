@@ -27,6 +27,8 @@ const DEFAULT_PROMPT_ORDER: &[&str] = &[
     "java",
     "nix_shell",
     "memory_usage",
+    "aws",
+    "env_var",
     "cmd_duration",
     "line_break",
     "jobs",
