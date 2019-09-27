@@ -108,11 +108,11 @@ The `aws` module shows the current AWS profile. This is based on the `AWS_PROFIL
 
 ### オプション
 
-| 変数         | デフォルト           | 説明                                                   |
-| ---------- | --------------- | ---------------------------------------------------- |
-| `disabled` | `false`         | Disables the `AWS` module                            |
-| `style`    | `"bold yellow"` | モジュールのスタイルです。                                        |
-| `symbol`   | `"☁️ "`         | The symbol before displaying the current AWS profile |
+| 変数         | デフォルト           | 説明                                                         |
+| ---------- | --------------- | ---------------------------------------------------------- |
+| `symbol`   | `"☁️ "`         | The symbol used before displaying the current AWS profile. |
+| `style`    | `"bold yellow"` | The style for the module.                                  |
+| `disabled` | `false`         | Disables the `AWS` module.                                 |
 
 ### 設定例
 
@@ -277,7 +277,6 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 
 </details>
 
-
 ### 設定例
 
 ```toml
@@ -441,7 +440,6 @@ deleted = "🗑"
 symbol = "🏎💨 "
 ```
 
-
 ## ホスト名
 
 `hostname`モジュールには、システムのホスト名が表示されます。
@@ -467,7 +465,6 @@ prefix = "⟪"
 suffix = "⟫"
 disabled = false
 ```
-
 
 ## ジョブ
 
@@ -510,7 +507,6 @@ threshold = 4
 [line_break]
 disabled = true
 ```
-
 
 ## Nix-shell
 
@@ -561,7 +557,6 @@ pure_msg = "pure shell"
 [java]
 symbol = "🌟 "
 ```
-
 
 ## NodeJS
 
