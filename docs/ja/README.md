@@ -2,22 +2,22 @@
 home: true
 heroImage: /logo.svg
 actionText: Get Started →
-actionLink: /ja/guide/
+actionLink: /guide/
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 ---
 
 <div class="features">
   <div class="feature">
-    <h2>互換性優先</h2>
-    <p>一般的なほとんどのOSの一般的なほとんどのシェル上で動作します。 あらゆるところで使用してください！</p>
+    <h2>Compatibility First</h2>
+    <p>Works on the most common shells on the most common operating systems. Use it everywhere!</p>
   </div>
   <div class="feature">
-    <h2>Rust 製</h2>
-    <p>Rust の最高レベルの速度と安全性を用いることで、可能な限り高速かつ信頼性を高くしています。</p>
+    <h2>Rust-Powered</h2>
+    <p>Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.</p>
   </div>
   <div class="feature">
-    <h2>カスタマイズ可能</h2>
-    <p>それぞれの細かい点は好みにカスタマイズが出来るため、ミニマルにも多機能にも好きなようにプロンプトを設定することができます。</p>
+    <h2>Customizable</h2>
+    <p>Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.</p>
   </div>
 </div>
 
@@ -28,49 +28,55 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
   </video>
 </div>
 
-### クイックインストール
+### Quick Install
 
-1. **Starship** のバイナリをインストール
-    
-    もし以下のプラットフォームを使用していない場合は **[コンパイル済みのバイナリファイルをダウンロード](https://github.com/starship/starship/releases)** してください。
-    
-    #### Homebrew
+1. Install the **starship** binary:
+
+   **[Download archives of precompiled binaries](https://github.com/starship/starship/releases)** if you don't use the platforms below.
+
+
+   #### Homebrew
 
    ```sh
    $ brew install starship
    ```
 
-#### Rust (v1.33 もしくはそれ以上)
+
+   #### Rust (v1.33 or higher)
 
    ```sh
    $ cargo install starship
    ```
 
-#### Arch Linux (AUR)
 
-Starship は AUR 上の `starship` というパッケージ名で利用可能です。 `yay` またはお好きな AUR ヘルパーでインストールしてください。
+   #### Arch Linux (AUR)
+
+   Starship is available on the AUR under the name `starship`. Install it with `yay` or your favorite AUR helper.
 
    ```sh
    $ yay -S starship
    ```
 
-#### Nix (unstable)
+
+   #### Nix (unstable)
 
    ```sh
    $ nix-env --install starship
    ```
 
-#### Termux
+
+   #### Termux
 
    ```sh
    $ pkg install starship
    ```
 
-1. 初期化のためのスクリプトをシェルの設定ファイルに追加
-    
-    #### Bash
-    
-    `~/.bashrc` の最後に以下を追記してください
+1. Add the init script to your shell's config file:
+
+
+   #### Bash
+
+   Add the following to the end of `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -78,9 +84,10 @@ Starship は AUR 上の `starship` というパッケージ名で利用可能で
    eval "$(starship init bash)"
    ```
 
-#### Fish
 
-`~/.config/fish/config.fish` の最後に以下を追記してください
+   #### Fish
+
+   Add the following to the end of `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -88,9 +95,10 @@ Starship は AUR 上の `starship` というパッケージ名で利用可能で
    eval (starship init fish)
    ```
 
-#### Zsh
 
-`~/.zshrc` の最後に以下を追記してください
+   #### Zsh
+
+   Add the following to the end of `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
