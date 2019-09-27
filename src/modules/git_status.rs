@@ -1,5 +1,5 @@
 use ansi_term::Color;
-use git2::{Repository, Status};
+use git2::{Repository, StatusEntry};
 
 use super::{Context, Module};
 
@@ -39,6 +39,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("git_status");
     let show_sync_count = module.config_value_bool("show_sync_count").unwrap_or(false);
+    let show_status_count = module
+        .config_value_bool("show_status_count")
+        .unwrap_or(false);
     let module_style = module
         .config_value_style("style")
         .unwrap_or_else(|| Color::Red.bold());
@@ -80,27 +83,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Add the conflicted segment
     if let Ok(repo_status) = repo_status {
-        if repo_status.is_conflicted() {
-            module.new_segment("conflicted", GIT_STATUS_CONFLICTED);
-        }
+        new_segment_with_count(
+            &mut module,
+            "conflicted",
+            repo_status.conflicted,
+            GIT_STATUS_CONFLICTED,
+            show_status_count,
+        );
     }
 
     // Add the ahead/behind segment
     if let Ok((ahead, behind)) = ahead_behind {
         let add_ahead = |m: &mut Module<'a>| {
-            m.new_segment("ahead", GIT_STATUS_AHEAD);
-
-            if show_sync_count {
-                m.new_segment("ahead_count", &ahead.to_string());
-            }
+            new_segment_with_count(m, "ahead", ahead, GIT_STATUS_AHEAD, show_sync_count);
         };
 
         let add_behind = |m: &mut Module<'a>| {
-            m.new_segment("behind", GIT_STATUS_BEHIND);
-
-            if show_sync_count {
-                m.new_segment("behind_count", &behind.to_string());
-            }
+            new_segment_with_count(m, "behind", behind, GIT_STATUS_BEHIND, show_sync_count);
         };
 
         if ahead > 0 && behind > 0 {
@@ -128,25 +127,45 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Add all remaining status segments
     if let Ok(repo_status) = repo_status {
-        if repo_status.is_wt_deleted() || repo_status.is_index_deleted() {
-            module.new_segment("deleted", GIT_STATUS_DELETED);
-        }
+        new_segment_with_count(
+            &mut module,
+            "deleted",
+            repo_status.deleted,
+            GIT_STATUS_DELETED,
+            show_status_count,
+        );
 
-        if repo_status.is_wt_renamed() || repo_status.is_index_renamed() {
-            module.new_segment("renamed", GIT_STATUS_RENAMED);
-        }
+        new_segment_with_count(
+            &mut module,
+            "renamed",
+            repo_status.renamed,
+            GIT_STATUS_RENAMED,
+            show_status_count,
+        );
 
-        if repo_status.is_wt_modified() {
-            module.new_segment("modified", GIT_STATUS_MODIFIED);
-        }
+        new_segment_with_count(
+            &mut module,
+            "modified",
+            repo_status.modified,
+            GIT_STATUS_MODIFIED,
+            show_status_count,
+        );
 
-        if repo_status.is_index_modified() || repo_status.is_index_new() {
-            module.new_segment("staged", GIT_STATUS_ADDED);
-        }
+        new_segment_with_count(
+            &mut module,
+            "staged",
+            repo_status.staged,
+            GIT_STATUS_ADDED,
+            show_status_count,
+        );
 
-        if repo_status.is_wt_new() {
-            module.new_segment("untracked", GIT_STATUS_UNTRACKED);
-        }
+        new_segment_with_count(
+            &mut module,
+            "untracked",
+            repo_status.untracked,
+            GIT_STATUS_UNTRACKED,
+            show_status_count,
+        );
     }
 
     if module.is_empty() {
@@ -156,8 +175,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-/// Gets the bitflags associated with the repo's git status
-fn get_repo_status(repository: &Repository) -> Result<Status, git2::Error> {
+/// Adds a segment with an optional count segment (e.g. "+2")
+fn new_segment_with_count<'a>(
+    module: &mut Module<'a>,
+    name: &str,
+    count: usize,
+    symbol: &str,
+    show_count: bool,
+) {
+    if count > 0 {
+        module.new_segment(name, symbol);
+
+        if show_count {
+            module.new_segment(&format!("{}_count", name), &count.to_string());
+        }
+    }
+}
+
+/// Gets the number of files in various git states (staged, modified, deleted, etc...)
+fn get_repo_status(repository: &Repository) -> Result<RepoStatus, git2::Error> {
     let mut status_options = git2::StatusOptions::new();
 
     match repository.config()?.get_entry("status.showUntrackedFiles") {
@@ -170,13 +206,44 @@ fn get_repo_status(repository: &Repository) -> Result<Status, git2::Error> {
 
     let repo_file_statuses = repository.statuses(Some(&mut status_options))?;
 
-    // Statuses are stored as bitflags, so use BitOr to join them all into a single value
-    let repo_status: Status = repo_file_statuses.iter().map(|e| e.status()).collect();
-    if repo_status.is_empty() {
+    if repo_file_statuses.is_empty() {
         return Err(git2::Error::from_str("Repo has no status"));
     }
 
+    let repo_status: RepoStatus = repo_file_statuses.iter().fold(RepoStatus::default(), count);
+
     Ok(repo_status)
+}
+
+/// Increment RepoStatus counts for a given file status
+fn count(mut repo_status: RepoStatus, status_entry: StatusEntry) -> RepoStatus {
+    let status = status_entry.status();
+
+    if status.is_conflicted() {
+        repo_status.conflicted += 1;
+    }
+
+    if status.is_wt_deleted() || status.is_index_deleted() {
+        repo_status.deleted += 1;
+    }
+
+    if status.is_wt_renamed() || status.is_index_renamed() {
+        repo_status.renamed += 1;
+    }
+
+    if status.is_wt_modified() {
+        repo_status.modified += 1;
+    }
+
+    if status.is_index_modified() || status.is_index_new() {
+        repo_status.staged += 1;
+    }
+
+    if status.is_wt_new() {
+        repo_status.untracked += 1;
+    }
+
+    repo_status
 }
 
 /// Compares the current branch with the branch it is tracking to determine how
@@ -193,4 +260,14 @@ fn get_ahead_behind(
     let tracking_oid = tracking_object.id();
 
     repository.graph_ahead_behind(branch_oid, tracking_oid)
+}
+
+#[derive(Default, Debug, Copy, Clone)]
+struct RepoStatus {
+    conflicted: usize,
+    deleted: usize,
+    renamed: usize,
+    modified: usize,
+    staged: usize,
+    untracked: usize,
 }
