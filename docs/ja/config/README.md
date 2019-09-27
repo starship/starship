@@ -111,8 +111,8 @@ The `aws` module shows the current AWS profile. This is based on the `AWS_PROFIL
 | 変数         | デフォルト           | 説明                                                         |
 | ---------- | --------------- | ---------------------------------------------------------- |
 | `symbol`   | `"☁️ "`         | The symbol used before displaying the current AWS profile. |
-| `style`    | `"bold yellow"` | The style for the module.                                  |
-| `disabled` | `false`         | Disables the `AWS` module.                                 |
+| `style`    | `"bold yellow"` | モジュールのスタイルです。                                              |
+| `disabled` | `false`         | `AWS`モジュールを無効にします。                                         |
 
 ### 設定例
 
@@ -163,8 +163,7 @@ discharging_symbol = "💀"
 
 ### バッテリーの表示
 
-`display</ 0> オプションを使用して、バッテリーインジケーターを表示するタイミング（閾値）と外観（スタイル）を定義します。
-<code>display` が提供されない場合、 デフォルトは次のとおりです。
+`display` オプションを使用して、バッテリーインジケーターを表示するタイミング（閾値）と外観（スタイル）を定義します。 `display` が提供されない場合、 デフォルトは次のとおりです。
 
 ```toml
 [[battery.display]]
@@ -346,18 +345,18 @@ The `git_state` module will show in directories which are part of a git reposito
 
 ### オプション
 
-| 変数                 | デフォルト              | 説明                                                        |
-| ------------------ | ------------------ | --------------------------------------------------------- |
-| `rebase`           | `"REBASING"`       | `rebase`進行中に表示されるテキストです。                                  |
-| `merge`            | `"MERGING"`        | `merge`進行中に表示されるテキストです。                                   |
-| `revert`           | `"REVERTING"`      | `revert`進行中に表示されるテキストです。                                  |
-| `cherry_pick`      | `"CHERRY-PICKING"` | `cherry-pick`進行中に表示されるテキストです。                             |
-| `bisect`           | `"BISECTING"`      | `disect`進行中に表示されるテキストです。                                  |
-| `am`               | `"AM"`             | `apply-mailbox` (`git am`)の進行中に表示されるテキストです。               |
-| `am_or_rebase`     | `"AM/REBASE"`      | あいまいな`apply-mailbox`または`rebase`が進行中のときに表示されるテキストです。       |
-| `progress_divider` | `"/"`              | 現在の進行量と合計進行量を分ける記号またはテキストです。 (例: `" of "` 、 `"3 of 10"` ) |
-| `style`            | `"bold yellow"`    | モジュールのスタイルです。                                             |
-| `disabled`         | `false`            | `git_state`モジュールを無効にします。                                  |
+| 変数                 | デフォルト              | 説明                                                       |
+| ------------------ | ------------------ | -------------------------------------------------------- |
+| `rebase`           | `"REBASING"`       | `rebase`進行中に表示されるテキストです。                                 |
+| `merge`            | `"MERGING"`        | `merge`進行中に表示されるテキストです。                                  |
+| `revert`           | `"REVERTING"`      | `revert`進行中に表示されるテキストです。                                 |
+| `cherry_pick`      | `"CHERRY-PICKING"` | `cherry-pick`進行中に表示されるテキストです。                            |
+| `bisect`           | `"BISECTING"`      | `disect`進行中に表示されるテキストです。                                 |
+| `am`               | `"AM"`             | `apply-mailbox` (`git am`) の進行中に表示されるテキストです。             |
+| `am_or_rebase`     | `"AM/REBASE"`      | あいまいな`apply-mailbox`または`rebase`が進行中のときに表示されるテキストです。      |
+| `progress_divider` | `"/"`              | 現在の進行量と合計進行量を分ける記号またはテキストです。 (例: `" of "` 、 `"3 of 10"`) |
+| `style`            | `"bold yellow"`    | モジュールのスタイルです。                                            |
+| `disabled`         | `false`            | `git_state`モジュールを無効にします。                                 |
 
 ### 設定例
 
