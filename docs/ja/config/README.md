@@ -348,7 +348,7 @@ truncation_symbol = ""
 
 ## Git の進行状態
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. 進捗情報がある場合(例: REBASING 3/10)はその情報も表示されます。
+`git_state`モジュールはgitディレクトリの進行状態を表します。 (例: _REBASING_, _BISECTING_, その他) 進捗情報がある場合(例: REBASING 3/10)はその情報も表示されます。
 
 ### オプション
 
