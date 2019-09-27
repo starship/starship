@@ -104,15 +104,15 @@ prompt_order = [
 
 ## AWS
 
-The `aws` module shows the current AWS profile. This is based on the `AWS_PROFILE` env var.
+`aws` モジュールは現在のAWSプロファイルが表示されます。 これは`AWS_PROFILE`環境変数に基づいています。
 
 ### オプション
 
-| 変数         | デフォルト           | 説明                                                         |
-| ---------- | --------------- | ---------------------------------------------------------- |
-| `symbol`   | `"☁️ "`         | The symbol used before displaying the current AWS profile. |
-| `style`    | `"bold yellow"` | モジュールのスタイルです。                                              |
-| `disabled` | `false`         | `AWS`モジュールを無効にします。                                         |
+| 変数         | デフォルト           | 説明                            |
+| ---------- | --------------- | ----------------------------- |
+| `symbol`   | `"☁️ "`         | 現在のAWSプロファイルを表示する前に表示される記号です。 |
+| `style`    | `"bold yellow"` | モジュールのスタイルです。                 |
+| `disabled` | `false`         | `aws`モジュールを無効にします。            |
 
 ### 設定例
 
@@ -285,24 +285,31 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 truncation_length = 8
 ```
 
-## Environment Variable
+## 環境変数
 
-The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+`env_var</ 0>モジュールは、選択された環境変数の現在の値を表示します。
+次の条件のいずれかが満たされると、モジュールが表示されます。</p>
 
-- The `variable` configuration option matches an existing environment variable
-- The `variable` configuration option is not defined, but the `default` configuration option is
+<ul>
+<li><code>variable`オプションが、既存の環境変数と一致する</li>
+- `variable</ 0>オプションが定義されておらず、<code>default</ 0>オプションが定義されている</li>
+</ul>
 
-### オプション
+<h3 spaces-before="0">オプション</h3>
 
-| 変数         | デフォルト            | 説明                                                                           |
-| ---------- | ---------------- | ---------------------------------------------------------------------------- |
-| `symbol`   |                  | The symbol used before displaying the variable value.                        |
-| `変数`       |                  | The environment variable to be displayed.                                    |
-| `デフォルト`    |                  | The default value to be displayed when the selected variable is not defined. |
-| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
-| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed black"` | モジュールのスタイルです。                                                                |
-| `disabled` | `false`          | Disables the `env_var` module.                                               |
+<table spaces-before="0" line-breaks-before="2">
+<thead>
+<tr>
+  <th>変数</th>
+  <th>デフォルト</th>
+  <th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>symbol`</td> 
+  </tr> 
+  </tbody> </table>
 
 ### 設定例
 
