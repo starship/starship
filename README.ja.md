@@ -66,31 +66,31 @@ p>
 - 最後のコマンドがゼロ以外のコードで終了すると、プロンプト文字が赤に変わります
 - ログインユーザーと異なる場合にユーザー名を表示する
 - Current Java version(`☕`)
-- Current Node.js version(`⬢`)
-- Current Rust version (`🦀`)
-- Current Ruby version (`💎`)
-- Current Python version (`🐍`)
-- Current Go version (`🐹`)
-- Nix-shell environment detection
+- 現在の Node.js のバージョン (`⬢`)
+- 現在の Rust のバージョン (`🦀`)
+- 現在の Ruby のバージョン (`💎`)
+- 現在の Python のバージョン (`🐍`)
+- 現在の Go バージョン (`🐹`)
+- Nix-shell の環境検出
 - Print an environment variable
-- Current version of package in current directory (`📦`) 
+- カレントディレクトリにある現在のパッケージバージョン(`📦`) 
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-- Current battery level and status
-- Current Git branch and rich repo status: 
-  - `=` — conflicting changes
-  - `⇡` — ahead of remote branch
-  - `⇣` — behind of remote branch
-  - `⇕` — diverged changes
-  - `?` — untracked changes
-  - `$` — stashed changes
-  - `!` — modified files
-  - `+` — added files
-  - `»` — renamed files
-  - `✘` — deleted files
-- Execution time of the last command if it exceeds the set threshold
-- Indicator for jobs in the background (`✦`)
+- 現在のバッテリー残量と状態
+- 現在の Git ブランチとリッチなリポジトリの状態 
+  - `=` — 競合している変更
+  - `⇡` — リモートブランチより進んでいる変更
+  - `⇣` —リモートブランチに追いついていない変更
+  - `⇕` — 分岐した変更
+  - `?` — 追跡されていない変更
+  - `$` — stashされた変更
+  - `!` — 変更されたファイル
+  - `+` — 追加されたファイル
+  - `»` — 名前が変更されたファイル
+  - `✘` — 削除されたファイル
+- 閾値を超えた際の、コマンドの実行時間
+- バックグラウンドジョブのインジケーター (`✦`)
 
 ## 🚀 インストール
 
