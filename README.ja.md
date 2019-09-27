@@ -30,16 +30,16 @@
 </p>
 <h4 align="center">
   <br />
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs">ウェブサイト</a>
   ·
-  <a href="#-installation">Installation</a>
+  <a href="#-installation">インストール</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs/config/">設定</a>
 </h4>
 
 <h1></h1>
 
-<p align="center"> Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br /> The prompt shows information you need while you're working, while staying sleek and out of the way. <p>
+<p align="center"> Starship は小さく、とても高速に動作し、非常にカスタマイズ可能なすべてのシェルに対応したプロンプトです！<br /> プロンプトには、作業中に必要な情報が表示されます。 <p>
 
 <p align="center">
   <br>
@@ -87,9 +87,9 @@
 
 ### 入門
 
-1. Install the **starship** binary:
+1. **Starship** のバイナリをインストール
 
-   **[Download archives of precompiled binaries](https://github.com/starship/starship/releases)** if you don't use the platforms below.
+   もし以下のプラットフォームを使用していない場合は **[コンパイル済みのバイナリファイルをダウンロード](https://github.com/starship/starship/releases)** してください。
 
 
    #### Homebrew
@@ -99,7 +99,7 @@
    ```
 
 
-   #### Rust (v1.33 or higher)
+   #### Rust (v1.33 もしくはそれ以上)
 
    ```sh
    $ cargo install starship
@@ -169,16 +169,16 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
 
 ## 🤝 貢献
 
-We are always looking for contributors of **all skill levels**! もし簡単にプロジェクトへ参加する方法をお探しなら、 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) に取り組んでみてください。
+私たちは常に**すべてのスキルレベル**の貢献者を探しています！ もし簡単にプロジェクトへ参加する方法をお探しなら、 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) に取り組んでみてください。
 
 ### 特に必要としています
 
-- 👩‍💼 **Product Manager**
+- 👩‍💼 **プロダクトマネージャー**
   - GitHub のプロジェクトには、整理/優先度付けがされていない機能や、Issue になっていないアイデアが多くあります。 プロダクトの方針を持っていただける方が Starship には必要です！
-- 👩‍🎨 **Designer**
+- 👩‍🎨 **デザイナー**
   - 目を引く Web サイトを作りたいですか？ 素晴らしい！ 我々は Starship の栄光を際立てる美しい Web サイトを作成したいと考えています。 Starship ブランドのデザインを手助けすることは、新しいアイデアを試す絶好の機会です！
-- 👩‍💻 **Rust Developer**
-  - There is _a lot_ of low-hanging fruit when it comes to writing idiomatic Rust, designing effective Rust architecture, performance optimizations, cross-platform build optimizations, and more! 私（[@matchai](https://github.com/matchai)）は Rust の初心者です。 私たちを正しい方向に向けてください！
+- 👩‍💻 **Rust デベロッパー**
+  - 慣用的な Rust の作成、効果的な Rust アーキテクチャの設計、パフォーマンスの最適化、クロスプラットフォームビルドの最適化などに関しては、_多く_の簡単な成果があります。 私（[@matchai](https://github.com/matchai)）は Rust の初心者です。 私たちを正しい方向に向けてください！
 
 もしあなたが Starship への貢献に興味がある場合は、我々の[貢献ガイド](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)をご覧ください。 また、気軽に我々の[Discord サーバー](https://discord.gg/8Jzqu3T)へ顔を出してください。 👋
 
@@ -242,11 +242,11 @@ We are always looking for contributors of **all skill levels**! もし簡単に�
 
 よければStarship の作成に影響を与えた、これまでのプロジェクトをチェックしてください 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - 宇宙飛行士のための ZSH プロンプト。
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - 多くの shell に対応した JavaScript で書かれた robbyrussell テーマ。
 
-- **[reujab/silver](https://github.com/reujab/silver)** - A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** - 多くの shell に対応しているカスタマイズ可能でアイコンを表示できる powerline のようなプロンプト。
 
 <p align="center">
     <br>
@@ -255,4 +255,4 @@ We are always looking for contributors of **all skill levels**! もし簡単に�
 
 ## 📝 ライセンス
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> このプロジェクトは [ISC](https://github.com/starship/starship/blob/master/LICENSE) でライセンスされています。
