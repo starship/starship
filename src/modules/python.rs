@@ -1,6 +1,4 @@
-use std::env;
-use std::path::Path;
-use std::process::Command;
+use std::{env, path::Path, process::Command};
 
 use ansi_term::Color;
 
@@ -33,9 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let mut module = context.new_module("python");
-    let pyenv_version_name = module
-        .config_value_bool("pyenv_version_name")
-        .unwrap_or(false);
+    let pyenv_version_name = module.config_value_bool("pyenv_version_name").unwrap_or(false);
 
     const PYTHON_CHAR: &str = "🐍 ";
     let module_color = module
@@ -57,8 +53,7 @@ fn python_module(mut module: Module, pyenv_version_name: bool, python_version: S
     } else {
         let formatted_version = format_python_version(&python_version);
         module.new_segment("version", &formatted_version);
-        get_python_virtual_env()
-            .map(|virtual_env| module.new_segment("virtualenv", &format!("({})", virtual_env)));
+        get_python_virtual_env().map(|virtual_env| module.new_segment("virtualenv", &format!("({})", virtual_env)));
     };
 
     module

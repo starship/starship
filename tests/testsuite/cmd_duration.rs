@@ -5,9 +5,7 @@ use crate::common::{self, TestCommand};
 
 #[test]
 fn config_blank_duration_1s() -> io::Result<()> {
-    let output = common::render_module("cmd_duration")
-        .arg("--cmd-duration=1")
-        .output()?;
+    let output = common::render_module("cmd_duration").arg("--cmd-duration=1").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = "";
@@ -17,9 +15,7 @@ fn config_blank_duration_1s() -> io::Result<()> {
 
 #[test]
 fn config_blank_duration_5s() -> io::Result<()> {
-    let output = common::render_module("cmd_duration")
-        .arg("--cmd-duration=5")
-        .output()?;
+    let output = common::render_module("cmd_duration").arg("--cmd-duration=5").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("{} ", Color::Yellow.bold().paint("took 5s"));

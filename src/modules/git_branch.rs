@@ -17,13 +17,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_style(segment_color);
     module.get_prefix().set_value("on ");
 
-    let unsafe_truncation_length = module
-        .config_value_i64("truncation_length")
-        .unwrap_or(std::i64::MAX);
-    let truncation_symbol = get_graphemes(
-        module.config_value_str("truncation_symbol").unwrap_or("…"),
-        1,
-    );
+    let unsafe_truncation_length = module.config_value_i64("truncation_length").unwrap_or(std::i64::MAX);
+    let truncation_symbol = get_graphemes(module.config_value_str("truncation_symbol").unwrap_or("…"), 1);
 
     module.new_segment("symbol", GIT_BRANCH_CHAR);
 

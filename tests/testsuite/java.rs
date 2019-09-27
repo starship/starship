@@ -1,16 +1,16 @@
-use std::fs::File;
-use std::io;
+use std::{fs::File, io};
 
 use ansi_term::Color;
 
 use crate::common;
 
 // When these tests run in the CI, they use Azul's Zulu Java distribution.
-// The version format returned by this java package is irregular and not supported (yet).
+// The version format returned by this java package is irregular and not
+// supported (yet).
 
 //#[test]
 //#[ignore]
-//fn folder_with_pom() -> io::Result<()> {
+// fn folder_with_pom() -> io::Result<()> {
 //    let dir = common::new_tempdir()?;
 //    File::create(dir.path().join("pom.xml"))?;
 //

@@ -2,8 +2,7 @@ use crate::utils;
 use std::env;
 
 use dirs::home_dir;
-use toml::value::Table;
-use toml::value::Value;
+use toml::value::{Table, Value};
 
 use ansi_term::Color;
 
@@ -133,9 +132,9 @@ impl Config for Table {
 
     /// Get a text key and attempt to interpret it into an ANSI style.
     fn get_as_ansi_style(&self, key: &str) -> Option<ansi_term::Style> {
-        // TODO: This should probably not unwrap to an empty new Style but inform the user about the problem
-        self.get_as_str(key)
-            .map(|x| parse_style_string(x).unwrap_or_default())
+        // TODO: This should probably not unwrap to an empty new Style but inform the
+        // user about the problem
+        self.get_as_str(key).map(|x| parse_style_string(x).unwrap_or_default())
     }
 }
 
@@ -147,37 +146,34 @@ fn log_if_key_found(key: &str, something: Option<&Value>) {
     }
 }
 
-fn log_if_type_correct<T: std::fmt::Debug>(
-    key: &str,
-    something: &Value,
-    casted_something: Option<T>,
-) {
+fn log_if_type_correct<T: std::fmt::Debug>(key: &str, something: &Value, casted_something: Option<T>) {
     if let Some(casted) = casted_something {
         log::trace!(
             "Value under key \"{}\" has the expected type. Proceeding with {:?} which was build from {:?}.",
             key,
             casted,
             something
-            );
+        );
     } else {
         log::debug!(
             "Value under key \"{}\" did not have the expected type. Instead received {} of type {}.",
             key,
             something,
             something.type_str()
-            );
+        );
     }
 }
 
-/** Parse a style string which represents an ansi style. Valid tokens in the style
- string include the following:
- - 'fg:<color>'    (specifies that the color read should be a foreground color)
- - 'bg:<color>'    (specifies that the color read should be a background color)
- - 'underline'
- - 'bold'
- - 'italic'
- - '<color>'        (see the parse_color_string doc for valid color strings)
-*/
+/// Parse a style string which represents an ansi style. Valid tokens in the
+/// style string include the following:
+/// - 'fg:<color>'    (specifies that the color read should be a foreground
+///   color)
+/// - 'bg:<color>'    (specifies that the color read should be a background
+///   color)
+/// - 'underline'
+/// - 'bold'
+/// - 'italic'
+/// - '<color>'        (see the parse_color_string doc for valid color strings)
 fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
     style_string
         .split_whitespace()
@@ -192,7 +188,8 @@ fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
                 } else if token.as_str().starts_with("bg:") {
                     (token.trim_start_matches("bg:").to_owned(), false)
                 } else {
-                    (token, true) // Bare colors are assumed to color the foreground
+                    (token, true) // Bare colors are assumed to color the
+                                  // foreground
                 };
 
                 match token.as_str() {
@@ -215,20 +212,16 @@ fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
         })
 }
 
-/** Parse a string that represents a color setting, returning None if this fails
- There are three valid color formats:
-  - #RRGGBB      (a hash followed by an RGB hex)
-  - u8           (a number from 0-255, representing an ANSI color)
-  - colstring    (one of the 16 predefined color strings)
-*/
+/// Parse a string that represents a color setting, returning None if this fails
+/// There are three valid color formats:
+/// - #RRGGBB      (a hash followed by an RGB hex)
+/// - u8           (a number from 0-255, representing an ANSI color)
+/// - colstring    (one of the 16 predefined color strings)
 fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
     // Parse RGB hex values
     log::trace!("Parsing color_string: {}", color_string);
     if color_string.starts_with('#') {
-        log::trace!(
-            "Attempting to read hexadecimal color string: {}",
-            color_string
-        );
+        log::trace!("Attempting to read hexadecimal color string: {}", color_string);
         let r: u8 = u8::from_str_radix(&color_string[1..3], 16).ok()?;
         let g: u8 = u8::from_str_radix(&color_string[3..5], 16).ok()?;
         let b: u8 = u8::from_str_radix(&color_string[5..7], 16).ok()?;
@@ -368,30 +361,18 @@ mod tests {
         let mut table = toml::value::Table::new();
         // Test a "plain" style with no formatting
         table.insert(String::from("plainstyle"), Value::String(String::from("")));
-        assert_eq!(
-            table.get_as_ansi_style("plainstyle").unwrap(),
-            ansi_term::Style::new()
-        );
+        assert_eq!(table.get_as_ansi_style("plainstyle").unwrap(), ansi_term::Style::new());
 
         // Test a string that's clearly broken
-        table.insert(
-            String::from("broken"),
-            Value::String(String::from("djklgfhjkldhlhk;j")),
-        );
-        assert_eq!(
-            table.get_as_ansi_style("broken").unwrap(),
-            ansi_term::Style::new()
-        );
+        table.insert(String::from("broken"), Value::String(String::from("djklgfhjkldhlhk;j")));
+        assert_eq!(table.get_as_ansi_style("broken").unwrap(), ansi_term::Style::new());
 
         // Test a string that's nullified by `none`
         table.insert(
             String::from("nullified"),
             Value::String(String::from("fg:red bg:green bold none")),
         );
-        assert_eq!(
-            table.get_as_ansi_style("nullified").unwrap(),
-            ansi_term::Style::new()
-        );
+        assert_eq!(table.get_as_ansi_style("nullified").unwrap(), ansi_term::Style::new());
 
         // Test a string that's nullified by `none` at the start
         table.insert(
@@ -415,10 +396,7 @@ mod tests {
         );
         assert_eq!(
             table.get_as_ansi_style("flipstyle").unwrap(),
-            Style::new()
-                .underline()
-                .fg(Color::Fixed(120))
-                .on(Color::RGB(5, 5, 5))
+            Style::new().underline().fg(Color::Fixed(120)).on(Color::RGB(5, 5, 5))
         );
 
         // Test that the last color style is always the one used

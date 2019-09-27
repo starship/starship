@@ -1,9 +1,7 @@
 use ansi_term::Color;
 use dirs::home_dir;
 use git2::Repository;
-use std::fs;
-use std::io;
-use std::path::Path;
+use std::{fs, io, path::Path};
 use tempfile::TempDir;
 
 use crate::common::{self, TestCommand};
@@ -30,10 +28,7 @@ fn directory_in_home() -> io::Result<()> {
     let dir = home_dir().unwrap().join("starship/engine");
     fs::create_dir_all(&dir)?;
 
-    let output = common::render_module("directory")
-        .arg("--path")
-        .arg(dir)
-        .output()?;
+    let output = common::render_module("directory").arg("--path").arg(dir).output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("~/starship/engine"));
@@ -47,16 +42,10 @@ fn truncated_directory_in_home() -> io::Result<()> {
     let dir = home_dir().unwrap().join("starship/engine/schematics");
     fs::create_dir_all(&dir)?;
 
-    let output = common::render_module("directory")
-        .arg("--path")
-        .arg(dir)
-        .output()?;
+    let output = common::render_module("directory").arg("--path").arg(dir).output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!(
-        "in {} ",
-        Color::Cyan.bold().paint("starship/engine/schematics")
-    );
+    let expected = format!("in {} ", Color::Cyan.bold().paint("starship/engine/schematics"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -85,9 +74,7 @@ fn fish_directory_in_home() -> io::Result<()> {
 
 #[test]
 fn root_directory() -> io::Result<()> {
-    let output = common::render_module("directory")
-        .arg("--path=/")
-        .output()?;
+    let output = common::render_module("directory").arg("--path=/").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("/"));
@@ -98,9 +85,7 @@ fn root_directory() -> io::Result<()> {
 #[test]
 #[cfg(not(target_os = "windows"))]
 fn directory_in_root() -> io::Result<()> {
-    let output = common::render_module("directory")
-        .arg("--path=/etc")
-        .output()?;
+    let output = common::render_module("directory").arg("--path=/etc").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("/etc"));
@@ -125,16 +110,10 @@ fn truncated_directory_in_root() -> io::Result<()> {
     let dir = Path::new("/tmp/starship/thrusters/rocket");
     fs::create_dir_all(&dir)?;
 
-    let output = common::render_module("directory")
-        .arg("--path")
-        .arg(dir)
-        .output()?;
+    let output = common::render_module("directory").arg("--path").arg(dir).output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!(
-        "in {} ",
-        Color::Cyan.bold().paint("starship/thrusters/rocket")
-    );
+    let expected = format!("in {} ", Color::Cyan.bold().paint("starship/thrusters/rocket"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -155,10 +134,7 @@ fn truncated_directory_config_large() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!(
-        "in {} ",
-        Color::Cyan.bold().paint("/tmp/starship/thrusters/rocket")
-    );
+    let expected = format!("in {} ", Color::Cyan.bold().paint("/tmp/starship/thrusters/rocket"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -180,10 +156,7 @@ fn fish_style_directory_config_large() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!(
-        "in {} ",
-        Color::Cyan.bold().paint("/tmp/starship/thrusters/rocket")
-    );
+    let expected = format!("in {} ", Color::Cyan.bold().paint("/tmp/starship/thrusters/rocket"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -234,8 +207,8 @@ fn fish_directory_config_small() -> io::Result<()> {
 #[test]
 #[ignore]
 fn git_repo_root() -> io::Result<()> {
-    // TODO: Investigate why git repo related tests fail when the tempdir is within /tmp/...
-    // Temporarily making the tempdir within $HOME
+    // TODO: Investigate why git repo related tests fail when the tempdir is within
+    // /tmp/... Temporarily making the tempdir within $HOME
     // #[ignore] can be removed after this TODO is addressed
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -262,10 +235,7 @@ fn directory_in_git_repo() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
     Repository::init(&repo_dir).unwrap();
 
-    let output = common::render_module("directory")
-        .arg("--path")
-        .arg(dir)
-        .output()?;
+    let output = common::render_module("directory").arg("--path").arg(dir).output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("rocket-controls/src"));
@@ -282,10 +252,7 @@ fn truncated_directory_in_git_repo() -> io::Result<()> {
     fs::create_dir_all(&dir)?;
     Repository::init(&repo_dir).unwrap();
 
-    let output = common::render_module("directory")
-        .arg("--path")
-        .arg(dir)
-        .output()?;
+    let output = common::render_module("directory").arg("--path").arg(dir).output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("src/meters/fuel-gauge"));
@@ -380,9 +347,7 @@ fn fish_path_directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
 
     let expected = format!(
         "in {} ",
-        Color::Cyan
-            .bold()
-            .paint("~/.t/a/rocket-controls/src/meters/fuel-gauge")
+        Color::Cyan.bold().paint("~/.t/a/rocket-controls/src/meters/fuel-gauge")
     );
     assert_eq!(expected, actual);
     Ok(())
@@ -411,9 +376,7 @@ fn directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
 
     let expected = format!(
         "in {} ",
-        Color::Cyan
-            .bold()
-            .paint("rocket-controls/src/meters/fuel-gauge")
+        Color::Cyan.bold().paint("rocket-controls/src/meters/fuel-gauge")
     );
     assert_eq!(expected, actual);
     Ok(())
@@ -422,9 +385,9 @@ fn directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
 #[test]
 #[ignore]
 fn use_logical_and_physical_paths() -> io::Result<()> {
-    /* This test is a bit of a smoke + mirrors trick because all it shows is that
-    the application is reading the PWD envar correctly (if the shell doesn't
-    correctly set PWD, we're still in trouble). */
+    // This test is a bit of a smoke + mirrors trick because all it shows is that
+    // the application is reading the PWD envar correctly (if the shell doesn't
+    // correctly set PWD, we're still in trouble).
     let tmp_dir = Path::new("/tmp/starship/porthole/viewport");
     let dir = tmp_dir.join("directory");
     let sym = tmp_dir.join("symlink_to_directory");
@@ -443,17 +406,11 @@ fn use_logical_and_physical_paths() -> io::Result<()> {
         })
         .arg("--path")
         .arg(&dir)
-        .env(
-            "PWD",
-            "/tmp/starship/porthole/viewport/symlink_to_directory",
-        )
+        .env("PWD", "/tmp/starship/porthole/viewport/symlink_to_directory")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!(
-        "in {} ",
-        Color::Cyan.bold().paint("porthole/viewport/directory")
-    );
+    let expected = format!("in {} ", Color::Cyan.bold().paint("porthole/viewport/directory"));
     assert_eq!(expected, actual);
 
     // Test when using logical paths
@@ -464,18 +421,13 @@ fn use_logical_and_physical_paths() -> io::Result<()> {
         })
         .arg("--path")
         .arg(&sym)
-        .env(
-            "PWD",
-            "/tmp/starship/porthole/viewport/symlink_to_directory",
-        )
+        .env("PWD", "/tmp/starship/porthole/viewport/symlink_to_directory")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!(
         "in {} ",
-        Color::Cyan
-            .bold()
-            .paint("porthole/viewport/symlink_to_directory")
+        Color::Cyan.bold().paint("porthole/viewport/symlink_to_directory")
     );
     assert_eq!(expected, actual);
 

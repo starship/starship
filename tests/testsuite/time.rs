@@ -2,13 +2,13 @@ use std::io;
 
 use crate::common::{self, TestCommand};
 
-/* Note: tests in this crate cannot rely on the actual time displayed by
-the module, since that is dependent on the time inside the test environment,
-which we cannot control.
-
-However, we *can* test certain things here, such as the fact that the module
-should not display when disabled, should display *something* when enabled,
-and should have the correct prefixes and suffixes in a given config */
+// Note: tests in this crate cannot rely on the actual time displayed by
+// the module, since that is dependent on the time inside the test environment,
+// which we cannot control.
+//
+// However, we *can* test certain things here, such as the fact that the module
+// should not display when disabled, should display *something* when enabled,
+// and should have the correct prefixes and suffixes in a given config
 
 #[test]
 fn config_enabled() -> io::Result<()> {

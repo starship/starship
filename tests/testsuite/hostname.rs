@@ -1,8 +1,7 @@
 use ansi_term::{Color, Style};
 use std::io;
 
-use crate::common;
-use crate::common::TestCommand;
+use crate::{common, common::TestCommand};
 
 #[test]
 fn ssh_only_false() -> io::Result<()> {
@@ -110,8 +109,8 @@ fn style() -> Style {
 
 fn hostname_not_tested() -> io::Result<()> {
     println!(
-        "hostname was not tested because gethostname failed! \
-         This could be caused by your hostname containing invalid UTF."
+        "hostname was not tested because gethostname failed! This could be caused by your hostname containing invalid \
+         UTF."
     );
     Ok(())
 }

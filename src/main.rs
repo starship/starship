@@ -32,9 +32,7 @@ fn main() {
 
     let shell_arg = Arg::with_name("shell")
         .value_name("SHELL")
-        .help(
-            "The name of the currently running shell\nCurrently supported options: bash, zsh, fish",
-        )
+        .help("The name of the currently running shell\nCurrently supported options: bash, zsh, fish")
         .required(true);
 
     let cmd_duration_arg = Arg::with_name("cmd_duration")

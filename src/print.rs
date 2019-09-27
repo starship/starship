@@ -2,15 +2,17 @@ use clap::ArgMatches;
 use rayon::prelude::*;
 use std::io::{self, Write};
 
-use crate::config::Config;
-use crate::context::Context;
-use crate::module::Module;
-use crate::module::ALL_MODULES;
-use crate::modules;
+use crate::{
+    config::Config,
+    context::Context,
+    module::{Module, ALL_MODULES},
+    modules,
+};
 
 // List of default prompt order
-// NOTE: If this const value is changed then Default prompt order subheading inside
-// prompt heading of config docs needs to be updated according to changes made here.
+// NOTE: If this const value is changed then Default prompt order subheading
+// inside prompt heading of config docs needs to be updated according to changes
+// made here.
 const DEFAULT_PROMPT_ORDER: &[&str] = &[
     "username",
     "hostname",

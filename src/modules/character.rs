@@ -3,8 +3,8 @@ use ansi_term::Color;
 
 /// Creates a module for the prompt character
 ///
-/// The character segment prints an arrow character in a color dependant on the exit-
-/// code of the last executed command:
+/// The character segment prints an arrow character in a color dependant on the
+/// exit- code of the last executed command:
 /// - If the exit-code was "0", the arrow will be formatted with `style_success`
 /// (green by default)
 /// - If the exit-code was anything else, the arrow will be formatted with
@@ -31,9 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .unwrap_or_else(|| Color::Red.bold());
 
     let arguments = &context.arguments;
-    let use_symbol = module
-        .config_value_bool("use_symbol_for_status")
-        .unwrap_or(false);
+    let use_symbol = module.config_value_bool("use_symbol_for_status").unwrap_or(false);
     let exit_success = arguments.value_of("status_code").unwrap_or("0") == "0";
     let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
     let keymap = arguments.value_of("keymap").unwrap_or("viins");
@@ -48,8 +46,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         _ => ASSUMED_MODE,
     };
 
-    /* If an error symbol is set in the config, use symbols to indicate
-    success/failure, in addition to color */
+    // If an error symbol is set in the config, use symbols to indicate
+    // success/failure, in addition to color
     let symbol = if use_symbol && !exit_success {
         module.new_segment("error_symbol", FAILURE_CHAR)
     } else {

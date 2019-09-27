@@ -47,9 +47,7 @@ fn impure_shell() -> io::Result<()> {
 
 #[test]
 fn lorri_shell() -> io::Result<()> {
-    let output = common::render_module("nix_shell")
-        .env("IN_NIX_SHELL", "1")
-        .output()?;
+    let output = common::render_module("nix_shell").env("IN_NIX_SHELL", "1").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("via {} ", Color::Red.bold().paint("impure"));

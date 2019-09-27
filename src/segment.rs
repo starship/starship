@@ -8,7 +8,8 @@ pub struct Segment {
     /// The segment's name, to be used in configuration and logging.
     _name: String,
 
-    /// The segment's style. If None, will inherit the style of the module containing it.
+    /// The segment's style. If None, will inherit the style of the module
+    /// containing it.
     style: Option<Style>,
 
     /// The string value of the current segment.
@@ -45,7 +46,8 @@ impl Segment {
         self
     }
 
-    // Returns the ANSIString of the segment value, not including its prefix and suffix
+    // Returns the ANSIString of the segment value, not including its prefix and
+    // suffix
     pub fn ansi_string(&self) -> ANSIString {
         match self.style {
             Some(style) => style.paint(&self.value),

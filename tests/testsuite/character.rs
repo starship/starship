@@ -8,9 +8,7 @@ fn char_module_success_status() -> io::Result<()> {
     let expected = format!("{} ", Color::Green.bold().paint("❯"));
 
     // Status code 0
-    let output = common::render_module("character")
-        .arg("--status=0")
-        .output()?;
+    let output = common::render_module("character").arg("--status=0").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
 

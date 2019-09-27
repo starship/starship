@@ -4,10 +4,12 @@ use std::path::{Path, PathBuf};
 
 use super::{Context, Module};
 
-/// Creates a module with the state of the git repository at the current directory
+/// Creates a module with the state of the git repository at the current
+/// directory
 ///
 /// During a git operation it will show: REBASING, BISECTING, MERGING, etc.
-/// If the progress information is available (e.g. rebasing 3/10), it will show that too.
+/// If the progress information is available (e.g. rebasing 3/10), it will show
+/// that too.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_state");
 
@@ -101,13 +103,11 @@ fn get_state_description(state: RepositoryState, root: &PathBuf) -> StateDescrip
 }
 
 fn describe_rebase(root: &PathBuf) -> StateDescription {
-    /*
-     *  Sadly, libgit2 seems to have some issues with reading the state of
-     *  interactive rebases. So, instead, we'll poke a few of the .git files
-     *  ourselves. This might be worth re-visiting this in the future...
-     *
-     *  The following is based heavily on: https://github.com/magicmonty/bash-git-prompt
-     */
+    //  Sadly, libgit2 seems to have some issues with reading the state of
+    //  interactive rebases. So, instead, we'll poke a few of the .git files
+    //  ourselves. This might be worth re-visiting this in the future...
+    //
+    //  The following is based heavily on: https://github.com/magicmonty/bash-git-prompt
 
     let just_label = StateDescription::Label(&REBASE_LABEL);
 

@@ -21,15 +21,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_12hr = module.config_value_bool("12hr").unwrap_or(false);
 
     let default_format = if is_12hr { "%r" } else { "%T" };
-    let time_format = module
-        .config_value_str("format")
-        .unwrap_or(default_format)
-        .to_owned();
+    let time_format = module.config_value_str("format").unwrap_or(default_format).to_owned();
 
-    log::trace!(
-        "Timer module is enabled with format string: {}",
-        time_format
-    );
+    log::trace!("Timer module is enabled with format string: {}", time_format);
 
     let local: DateTime<Local> = Local::now();
     let formatted_time_string = format_time(&time_format, local);
@@ -39,14 +33,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-/// Format a given time into the given string. This function should be referentially
-/// transparent, which makes it easy to test (unlike anything involving the actual time)
+/// Format a given time into the given string. This function should be
+/// referentially transparent, which makes it easy to test (unlike anything
+/// involving the actual time)
 fn format_time(time_format: &str, local_time: DateTime<Local>) -> String {
     local_time.format(time_format).to_string()
 }
 
-/* Because we cannot make acceptance tests for the time module, these unit
-tests become extra important */
+// Because we cannot make acceptance tests for the time module, these unit
+// tests become extra important
 #[cfg(test)]
 mod tests {
     use super::*;

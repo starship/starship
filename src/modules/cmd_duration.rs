@@ -18,8 +18,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let signed_config_min = module.config_value_i64("min_time").unwrap_or(2);
 
-    /* TODO: Once error handling is implemented, warn the user if their config
-    min time is nonsensical */
+    // TODO: Once error handling is implemented, warn the user if their config
+    // min time is nonsensical
     if signed_config_min < 0 {
         log::debug!(
             "[WARN]: min_time in [cmd_duration] ({}) was less than zero",
@@ -54,15 +54,12 @@ fn render_time(raw_seconds: u64) -> String {
     let components = [days, hours, minutes, seconds];
     let suffixes = ["d", "h", "m", "s"];
 
-    let rendered_components: Vec<String> = components
-        .iter()
-        .zip(&suffixes)
-        .map(render_time_component)
-        .collect();
+    let rendered_components: Vec<String> = components.iter().zip(&suffixes).map(render_time_component).collect();
     rendered_components.join("")
 }
 
-/// Render a single component of the time string, giving an empty string if component is zero
+/// Render a single component of the time string, giving an empty string if
+/// component is zero
 fn render_time_component((component, suffix): (&u64, &&str)) -> String {
     match component {
         0 => String::new(),

@@ -9,18 +9,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let threshold = module.config_value_i64("threshold").unwrap_or(1);
 
     const JOB_CHAR: &str = "✦";
-    let module_style = module
-        .config_value_style("style")
-        .unwrap_or_else(|| Color::Blue.bold());
+    let module_style = module.config_value_style("style").unwrap_or_else(|| Color::Blue.bold());
     module.set_style(module_style);
 
     let arguments = &context.arguments;
-    let num_of_jobs = arguments
-        .value_of("jobs")
-        .unwrap_or("0")
-        .trim()
-        .parse::<i64>()
-        .ok()?;
+    let num_of_jobs = arguments.value_of("jobs").unwrap_or("0").trim().parse::<i64>().ok()?;
     if num_of_jobs == 0 {
         return None;
     }

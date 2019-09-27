@@ -8,7 +8,8 @@ use std::ffi::OsString;
 ///
 /// Will display the hostname if all of the following criteria are met:
 ///     - hostname.disabled is absent or false
-///     - hostname.ssh_only is false OR the user is currently connected as an SSH session (`$SSH_CONNECTION`)
+///     - hostname.ssh_only is false OR the user is currently connected as an
+///       SSH session (`$SSH_CONNECTION`)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("hostname");
     let module_style = module

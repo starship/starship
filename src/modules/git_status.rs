@@ -6,7 +6,8 @@ use super::{Context, Module};
 /// Creates a module with the Git branch in the current directory
 ///
 /// Will display the branch name if the current directory is a git repo
-/// By default, the following symbols will be used to represent the repo's status:
+/// By default, the following symbols will be used to represent the repo's
+/// status:
 ///   - `=` – This branch has merge conflicts
 ///   - `⇡` – This branch is ahead of the branch being tracked
 ///   - `⇣` – This branch is behind of the branch being tracked
@@ -39,26 +40,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("git_status");
     let show_sync_count = module.config_value_bool("show_sync_count").unwrap_or(false);
-    let module_style = module
-        .config_value_style("style")
-        .unwrap_or_else(|| Color::Red.bold());
-    let start_symbol = module
-        .config_value_str("prefix")
-        .unwrap_or(PREFIX)
-        .to_owned();
-    let end_symbol = module
-        .config_value_str("suffix")
-        .unwrap_or(SUFFIX)
-        .to_owned();
+    let module_style = module.config_value_style("style").unwrap_or_else(|| Color::Red.bold());
+    let start_symbol = module.config_value_str("prefix").unwrap_or(PREFIX).to_owned();
+    let end_symbol = module.config_value_str("suffix").unwrap_or(SUFFIX).to_owned();
 
-    module
-        .get_prefix()
-        .set_value(start_symbol)
-        .set_style(module_style);
-    module
-        .get_suffix()
-        .set_value(end_symbol)
-        .set_style(module_style);
+    module.get_prefix().set_value(start_symbol).set_style(module_style);
+    module.get_suffix().set_value(end_symbol).set_style(module_style);
     module.set_style(module_style);
 
     let ahead_behind = get_ahead_behind(&repository, branch_name);
@@ -170,7 +157,8 @@ fn get_repo_status(repository: &Repository) -> Result<Status, git2::Error> {
 
     let repo_file_statuses = repository.statuses(Some(&mut status_options))?;
 
-    // Statuses are stored as bitflags, so use BitOr to join them all into a single value
+    // Statuses are stored as bitflags, so use BitOr to join them all into a single
+    // value
     let repo_status: Status = repo_file_statuses.iter().map(|e| e.status()).collect();
     if repo_status.is_empty() {
         return Err(git2::Error::from_str("Repo has no status"));
@@ -181,10 +169,7 @@ fn get_repo_status(repository: &Repository) -> Result<Status, git2::Error> {
 
 /// Compares the current branch with the branch it is tracking to determine how
 /// far ahead or behind it is in relation
-fn get_ahead_behind(
-    repository: &Repository,
-    branch_name: &str,
-) -> Result<(usize, usize), git2::Error> {
+fn get_ahead_behind(repository: &Repository, branch_name: &str) -> Result<(usize, usize), git2::Error> {
     let branch_object = repository.revparse_single(branch_name)?;
     let tracking_branch_name = format!("{}@{{upstream}}", branch_name);
     let tracking_object = repository.revparse_single(&tracking_branch_name)?;

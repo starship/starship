@@ -1,7 +1,9 @@
 use ansi_term::Color;
-use std::fs::{self, File};
-use std::io;
-use std::process::Command;
+use std::{
+    fs::{self, File},
+    io,
+    process::Command,
+};
 
 use crate::common::{self, TestCommand};
 
@@ -160,10 +162,7 @@ fn shows_diverged_with_count() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red
-        .bold()
-        .paint(format!("[{}] ", "⇕⇡1⇣1"))
-        .to_string();
+    let expected = Color::Red.bold().paint(format!("[{}] ", "⇕⇡1⇣1")).to_string();
 
     assert_eq!(expected, actual);
 

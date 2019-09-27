@@ -1,17 +1,18 @@
-use crate::config::Config;
-use crate::module::Module;
+use crate::{config::Config, module::Module};
 
 use clap::ArgMatches;
 use git2::{Repository, RepositoryState};
 use once_cell::sync::OnceCell;
-use std::env;
-use std::ffi::OsStr;
-use std::fs;
-use std::path::{Path, PathBuf};
+use std::{
+    env,
+    ffi::OsStr,
+    fs,
+    path::{Path, PathBuf},
+};
 
-/// Context contains data or common methods that may be used by multiple modules.
-/// The data contained within Context will be relevant to this particular rendering
-/// of the prompt.
+/// Context contains data or common methods that may be used by multiple
+/// modules. The data contained within Context will be relevant to this
+/// particular rendering of the prompt.
 pub struct Context<'a> {
     /// The deserialized configuration map from the user's `starship.toml` file.
     pub config: toml::value::Table,
@@ -100,23 +101,16 @@ impl<'a> Context<'a> {
 
     /// Will lazily get repo root and branch when a module requests it.
     pub fn get_repo(&self) -> Result<&Repo, std::io::Error> {
-        self.repo
-            .get_or_try_init(|| -> Result<Repo, std::io::Error> {
-                let repository = Repository::discover(&self.current_dir).ok();
-                let branch = repository
-                    .as_ref()
-                    .and_then(|repo| get_current_branch(repo));
-                let root = repository
-                    .as_ref()
-                    .and_then(|repo| repo.workdir().map(Path::to_path_buf));
-                let state = repository.as_ref().map(|repo| repo.state());
+        self.repo.get_or_try_init(|| -> Result<Repo, std::io::Error> {
+            let repository = Repository::discover(&self.current_dir).ok();
+            let branch = repository.as_ref().and_then(|repo| get_current_branch(repo));
+            let root = repository
+                .as_ref()
+                .and_then(|repo| repo.workdir().map(Path::to_path_buf));
+            let state = repository.as_ref().map(|repo| repo.state());
 
-                Ok(Repo {
-                    branch,
-                    root,
-                    state,
-                })
-            })
+            Ok(Repo { branch, root, state })
+        })
     }
 
     pub fn get_dir_files(&self) -> Result<&Vec<PathBuf>, std::io::Error> {
@@ -186,11 +180,7 @@ impl<'a> ScanDir<'a> {
 /// checks to see if the pathbuf matches a file or folder name
 pub fn path_has_name<'a>(dir_entry: &PathBuf, names: &'a [&'a str]) -> bool {
     let found_file_or_folder_name = names.iter().find(|file_or_folder_name| {
-        dir_entry
-            .file_name()
-            .and_then(OsStr::to_str)
-            .unwrap_or_default()
-            == **file_or_folder_name
+        dir_entry.file_name().and_then(OsStr::to_str).unwrap_or_default() == **file_or_folder_name
     });
 
     match found_file_or_folder_name {
@@ -199,7 +189,8 @@ pub fn path_has_name<'a>(dir_entry: &PathBuf, names: &'a [&'a str]) -> bool {
     }
 }
 
-/// checks if pathbuf doesn't start with a dot and matches any provided extension
+/// checks if pathbuf doesn't start with a dot and matches any provided
+/// extension
 pub fn has_extension<'a>(dir_entry: &PathBuf, extensions: &'a [&'a str]) -> bool {
     if let Some(file_name) = dir_entry.file_name() {
         if file_name.to_string_lossy().starts_with('.') {

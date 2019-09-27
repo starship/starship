@@ -1,9 +1,13 @@
 use once_cell::sync::Lazy;
-use std::io::prelude::*;
-use std::io::{Error, ErrorKind};
-use std::path::{Path, PathBuf};
-use std::process::Command;
-use std::{env, fs, io, process};
+use std::{
+    env,
+    fs,
+    io,
+    io::{prelude::*, Error, ErrorKind},
+    path::{Path, PathBuf},
+    process,
+    process::Command,
+};
 
 static MANIFEST_DIR: Lazy<&'static Path> = Lazy::new(|| Path::new(env!("CARGO_MANIFEST_DIR")));
 static EMPTY_CONFIG: Lazy<PathBuf> = Lazy::new(|| MANIFEST_DIR.join("empty_config.toml"));
@@ -73,9 +77,7 @@ pub fn create_fixture_repo() -> io::Result<PathBuf> {
 }
 
 fn path_str(repo_dir: &PathBuf) -> io::Result<&str> {
-    repo_dir
-        .to_str()
-        .ok_or_else(|| Error::from(ErrorKind::Other))
+    repo_dir.to_str().ok_or_else(|| Error::from(ErrorKind::Other))
 }
 
 /// Extends `std::process::Command` with methods for testing
@@ -87,8 +89,7 @@ impl TestCommand for process::Command {
     /// Create a configuration file with the provided TOML and use it
     fn use_config(&mut self, toml: toml::value::Value) -> &mut process::Command {
         // Create a persistent config file in a tempdir
-        let (mut config_file, config_path) =
-            tempfile::NamedTempFile::new().unwrap().keep().unwrap();
+        let (mut config_file, config_path) = tempfile::NamedTempFile::new().unwrap().keep().unwrap();
         write!(config_file, "{}", toml.to_string()).unwrap();
 
         // Set that newly-created file as the config for the prompt instance

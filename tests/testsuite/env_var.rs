@@ -1,8 +1,7 @@
 use ansi_term::{Color, Style};
 use std::io;
 
-use crate::common;
-use crate::common::TestCommand;
+use crate::{common, common::TestCommand};
 
 const TEST_VAR_VALUE: &str = "astronauts";
 

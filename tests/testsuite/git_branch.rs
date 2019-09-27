@@ -1,6 +1,5 @@
 use ansi_term::Color;
-use std::io;
-use std::process::Command;
+use std::{io, process::Command};
 
 use crate::common::{self, TestCommand};
 
@@ -88,13 +87,7 @@ fn test_truncate_length(
     expected_name: &str,
     truncation_symbol: &str,
 ) -> io::Result<()> {
-    test_truncate_length_with_config(
-        branch_name,
-        truncate_length,
-        expected_name,
-        truncation_symbol,
-        "",
-    )
+    test_truncate_length_with_config(branch_name, truncate_length, expected_name, truncation_symbol, "")
 }
 
 fn test_truncate_length_with_config(

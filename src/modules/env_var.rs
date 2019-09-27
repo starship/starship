@@ -5,7 +5,8 @@ use super::{Context, Module};
 
 /// Creates a module with the value of the chosen environment variable
 ///
-/// Will display the environment variable's value if all of the following criteria are met:
+/// Will display the environment variable's value if all of the following
+/// criteria are met:
 ///     - env_var.disabled is absent or false
 ///     - env_var.variable is defined
 ///     - a variable named as the value of env_var.variable is defined

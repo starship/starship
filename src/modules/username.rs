@@ -1,13 +1,13 @@
 use ansi_term::{Color, Style};
-use std::env;
-use std::process::Command;
+use std::{env, process::Command};
 
 use super::{Context, Module};
 
 /// Creates a module with the current user's username
 ///
 /// Will display the username if any of the following criteria are met:
-///     - The current user isn't the same as the one that is logged in (`$LOGNAME` != `$USER`)
+///     - The current user isn't the same as the one that is logged in
+///       (`$LOGNAME` != `$USER`)
 ///     - The current user is root (UID = 0)
 ///     - The user is currently connected as an SSH session (`$SSH_CONNECTION`)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {

@@ -7,16 +7,15 @@ use toml;
 
 /// Creates a module with the current package version
 ///
-/// Will display if a version is defined for your Node.js or Rust project (if one exists)
+/// Will display if a version is defined for your Node.js or Rust project (if
+/// one exists)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     match get_package_version() {
         Some(package_version) => {
             const PACKAGE_CHAR: &str = "📦 ";
 
             let mut module = context.new_module("package");
-            let module_style = module
-                .config_value_style("style")
-                .unwrap_or_else(|| Color::Red.bold());
+            let module_style = module.config_value_style("style").unwrap_or_else(|| Color::Red.bold());
             module.set_style(module_style);
             module.get_prefix().set_value("is ");
 
@@ -50,11 +49,7 @@ fn extract_package_version(file_contents: &str) -> Option<String> {
 
 fn extract_poetry_version(file_contents: &str) -> Option<String> {
     let poetry_toml: toml::Value = toml::from_str(file_contents).ok()?;
-    let raw_version = poetry_toml
-        .get("tool")?
-        .get("poetry")?
-        .get("version")?
-        .as_str()?;
+    let raw_version = poetry_toml.get("tool")?.get("poetry")?.get("version")?.as_str()?;
 
     let formatted_version = format_version(raw_version);
     Some(formatted_version)
@@ -104,10 +99,7 @@ mod tests {
         .to_string();
 
         let expected_version = None;
-        assert_eq!(
-            extract_cargo_version(&cargo_without_version),
-            expected_version
-        );
+        assert_eq!(extract_cargo_version(&cargo_without_version), expected_version);
     }
 
     #[test]
@@ -119,10 +111,7 @@ mod tests {
         .to_string();
 
         let expected_version = Some("v0.1.0".to_string());
-        assert_eq!(
-            extract_package_version(&package_with_version),
-            expected_version
-        );
+        assert_eq!(extract_package_version(&package_with_version), expected_version);
 
         let package_without_version = json::json!({
             "name": "spacefish"
@@ -130,10 +119,7 @@ mod tests {
         .to_string();
 
         let expected_version = None;
-        assert_eq!(
-            extract_package_version(&package_without_version),
-            expected_version
-        );
+        assert_eq!(extract_package_version(&package_without_version), expected_version);
     }
 
     #[test]
@@ -146,10 +132,7 @@ mod tests {
         .to_string();
 
         let expected_version = Some("v0.1.0".to_string());
-        assert_eq!(
-            extract_poetry_version(&poetry_with_version),
-            expected_version
-        );
+        assert_eq!(extract_poetry_version(&poetry_with_version), expected_version);
 
         let poetry_without_version = toml::toml! {
             [tool.poetry]
@@ -158,9 +141,6 @@ mod tests {
         .to_string();
 
         let expected_version = None;
-        assert_eq!(
-            extract_poetry_version(&poetry_without_version),
-            expected_version
-        );
+        assert_eq!(extract_poetry_version(&poetry_without_version), expected_version);
     }
 }

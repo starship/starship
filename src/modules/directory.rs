@@ -19,9 +19,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const FISH_STYLE_PWD_DIR_LENGTH: i64 = 0;
 
     let mut module = context.new_module("directory");
-    let module_color = module
-        .config_value_style("style")
-        .unwrap_or_else(|| Color::Cyan.bold());
+    let module_color = module.config_value_style("style").unwrap_or_else(|| Color::Cyan.bold());
     module.set_style(module_color);
 
     let truncation_length = module
@@ -106,13 +104,7 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
         separator = "/",
-        path = replace_c_dir(
-            full_path
-                .strip_prefix(top_level_path)
-                .unwrap()
-                .to_slash()
-                .unwrap()
-        )
+        path = replace_c_dir(full_path.strip_prefix(top_level_path).unwrap().to_slash().unwrap())
     )
 }
 
