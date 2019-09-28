@@ -114,11 +114,11 @@ The `aws` module shows the current AWS profile. This is based on the
 
 ### Options
 
-| Variable   | Default         | Description                                          |
-| ---------- | --------------- | ---------------------------------------------------- |
-| `disabled` | `false`         | Disables the `AWS` module                            |
-| `style`    | `"bold yellow"` | The style used for the module                        |
-| `symbol`   | `"☁️ "`          | The symbol before displaying the current AWS profile |
+| Variable   | Default         | Description                                                |
+| ---------- | --------------- | ---------------------------------------------------------- |
+| `symbol`   | `"☁️ "`         | The symbol used before displaying the current AWS profile. |
+| `style`    | `"bold yellow"` | The style for the module.                                  |
+| `disabled` | `false`         | Disables the `AWS` module.                                 |
 
 ### Example
 
@@ -149,7 +149,7 @@ The module is only visible when the device's battery is below 10%.
 <summary>There are also options for some uncommon battery states.</summary>
 
 | Variable         | Description                                         |
-|------------------|-----------------------------------------------------|
+| ---------------- | --------------------------------------------------- |
 | `unknown_symbol` | The symbol shown when the battery state is unknown. |
 | `empty_symbol`   | The symbol shown when the battery state is empty.   |
 
@@ -300,7 +300,6 @@ it would have been `nixpkgs/pkgs`.
 | `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
 
 </details>
-
 
 ### Example
 
@@ -471,7 +470,6 @@ The module will be shown if any of the following conditions are met:
 symbol = "🏎💨 "
 ```
 
-
 ## Hostname
 
 The `hostname` module shows the system hostname.
@@ -497,7 +495,6 @@ prefix = "⟪"
 suffix = "⟫"
 disabled = false
 ```
-
 
 ## Jobs
 
@@ -544,6 +541,33 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
+## Nix-shell
+
+The `nix_shell` module shows the nix-shell environment.
+The module will be shown when inside a nix-shell environment.
+
+### Options
+
+| Variable     | Default      | Description                        |
+| ------------ | ------------ | ---------------------------------- |
+| `use_name`   | `false`      | Display the name of the nix-shell. |
+| `impure_msg` | `impure`     | Customize the "impure" msg.        |
+| `pure_msg`   | `pure`       | Customize the "pure" msg.          |
+| `style`      | `"bold red"` | The style for the module.          |
+| `disabled`   | `false`      | Disables the `nix_shell` module.   |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[nix_shell]
+disabled = true
+use_name = true
+impure_msg = "impure shell"
+pure_msg = "pure shell"
+```
+
 ## Memory Usage
 
 The `memory_usage` module shows current system memory and swap usage.
@@ -574,33 +598,6 @@ icon = " "
 style = "bold dimmed green"
 ```
 
-## Nix-shell
-
-The `nix_shell` module shows the nix-shell environment.
-The module will be shown when inside a nix-shell environment.
-
-### Options
-
-| Variable     | Default      | Description                        |
-| ------------ | ------------ | ---------------------------------- |
-| `use_name`   | `false`      | Display the name of the nix-shell. |
-| `impure_msg` | `impure`     | Customize the "impure" msg.        |
-| `pure_msg`   | `pure`       | Customize the "pure" msg.          |
-| `style`      | `"bold red"` | The style for the module.          |
-| `disabled`   | `false`      | Disables the `nix_shell` module.   |
-
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[nix_shell]
-disabled = true
-use_name = true
-impure_msg = "impure shell"
-pure_msg = "pure shell"
-```
-
 ## Java
 
 The `java` module shows the currently installed version of Java.
@@ -611,11 +608,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default        | Description                                              |
-| ---------- | -------------- | -------------------------------------------------------- |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java.  |
-| `style`    | `"dimmed red"` | The style for the module.                               |
-| `disabled` | `false`        | Disables the `java` module.                              |
+| Variable   | Default        | Description                                            |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`        | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | The style for the module.                              |
+| `disabled` | `false`        | Disables the `java` module.                            |
 
 ### Example
 
@@ -625,7 +622,6 @@ The module will be shown if any of the following conditions are met:
 [java]
 symbol = "🌟 "
 ```
-
 
 ## NodeJS
 
@@ -820,12 +816,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable     | Default         | Description                           |
-| ------------ | --------------- | ------------------------------------- |
-| `style_root` | `"bold red"`    | The style used when the user is root. |
-| `style_user` | `"bold yellow"` | The style used for non-root users.    |
-| `show_always`| `false`         | Always shows the `username` module.   |
-| `disabled`   | `false`         | Disables the `username` module.       |
+| Variable      | Default         | Description                           |
+| ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`    | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `show_always` | `false`         | Always shows the `username` module.   |
+| `disabled`    | `false`         | Disables the `username` module.       |
 
 ### Example
 
