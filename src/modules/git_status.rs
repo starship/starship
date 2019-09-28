@@ -210,13 +210,19 @@ fn get_repo_status(repository: &Repository) -> Result<RepoStatus, git2::Error> {
         return Err(git2::Error::from_str("Repo has no status"));
     }
 
-    let repo_status: RepoStatus = repo_file_statuses.iter().fold(RepoStatus::default(), count);
+    let repo_status: RepoStatus =
+        repo_file_statuses
+            .iter()
+            .fold(RepoStatus::default(), |mut repo_status, entry| {
+                count(&mut repo_status, entry);
+                repo_status
+            });
 
     Ok(repo_status)
 }
 
 /// Increment RepoStatus counts for a given file status
-fn count(mut repo_status: RepoStatus, status_entry: StatusEntry) -> RepoStatus {
+fn count(repo_status: &mut RepoStatus, status_entry: StatusEntry) {
     let status = status_entry.status();
 
     if status.is_conflicted() {
@@ -242,8 +248,6 @@ fn count(mut repo_status: RepoStatus, status_entry: StatusEntry) -> RepoStatus {
     if status.is_wt_new() {
         repo_status.untracked += 1;
     }
-
-    repo_status
 }
 
 /// Compares the current branch with the branch it is tracking to determine how
