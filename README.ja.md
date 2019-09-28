@@ -238,7 +238,7 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
 
 このプロジェクトは [all-contributors](https://github.com/all-contributors/all-contributors) の仕様に従っています。 どんな種類の貢献でもお待ちしています！
 
-## 影響を受けたプロダクト
+## 💭影響を受けたプロダクト
 
 よければStarship の作成に影響を与えた、これまでのプロジェクトをチェックしてください 🙏
 
