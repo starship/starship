@@ -45,7 +45,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             battery::State::Discharging => {
                 module.new_segment("discharging_symbol", BATTERY_DISCHARGING);
             }
-            _ => return None,
+            battery::State::Unknown => {
+                log::debug!("Unknown detected");
+                module.new_segment_if_config_exists("unknown_symbol")?;
+            }
+            battery::State::Empty => {
+                module.new_segment_if_config_exists("empty_symbol")?;
+            }
+            _ => {
+                log::debug!("Unhandled battery state `{}`", state);
+                return None;
+            }
         }
 
         let mut percent_string = Vec::<String>::with_capacity(2);

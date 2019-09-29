@@ -29,6 +29,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const GIT_STATUS_ADDED: &str = "+";
     const GIT_STATUS_RENAMED: &str = "»";
     const GIT_STATUS_DELETED: &str = "✘";
+    const PREFIX: &str = "[";
+    const SUFFIX: &str = "] ";
 
     let repo = context.get_repo().ok()?;
     let branch_name = repo.branch.as_ref()?;
@@ -40,9 +42,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let module_style = module
         .config_value_style("style")
         .unwrap_or_else(|| Color::Red.bold());
+    let start_symbol = module
+        .config_value_str("prefix")
+        .unwrap_or(PREFIX)
+        .to_owned();
+    let end_symbol = module
+        .config_value_str("suffix")
+        .unwrap_or(SUFFIX)
+        .to_owned();
 
-    module.get_prefix().set_value("[").set_style(module_style);
-    module.get_suffix().set_value("] ").set_style(module_style);
+    module
+        .get_prefix()
+        .set_value(start_symbol)
+        .set_style(module_style);
+    module
+        .get_suffix()
+        .set_value(end_symbol)
+        .set_style(module_style);
     module.set_style(module_style);
 
     let ahead_behind = get_ahead_behind(&repository, branch_name);

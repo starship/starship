@@ -174,7 +174,8 @@
       "profile": "https://github.com/andytom",
       "contributions": [
         "code",
-        "test"
+        "test",
+        "doc"
       ]
     },
     {
@@ -286,7 +287,8 @@
       "contributions": [
         "code",
         "doc",
-        "translation"
+        "translation",
+        "review"
       ]
     },
     {
@@ -295,7 +297,81 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/10346162?v=4",
       "profile": "https://twitter.com/bookun2851",
       "contributions": [
-        "review"
+        "review",
+        "code",
+        "test",
+        "translation"
+      ]
+    },
+    {
+      "login": "hdevalke",
+      "name": "hdevalke",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/2261239?v=4",
+      "profile": "https://github.com/hdevalke",
+      "contributions": [
+        "ideas"
+      ]
+    },
+    {
+      "login": "jakubclark",
+      "name": "Kuba Clark",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/19486495?v=4",
+      "profile": "https://github.com/jakubclark",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "gimbar",
+      "name": "Gimbar",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/862483?v=4",
+      "profile": "http://breax.org",
+      "contributions": [
+        "code",
+        "test",
+        "doc"
+      ]
+    },
+    {
+      "login": "TomHotston",
+      "name": "Tom Hotston",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/22729355?v=4",
+      "profile": "http://tomhotston.net",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "bijancn",
+      "name": "Bijan Chokoufe Nejad",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2117164?v=4",
+      "profile": "https://github.com/bijancn",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "yuri1969",
+      "name": "yuri",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/13468636?v=4",
+      "profile": "https://github.com/yuri1969",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "TsubasaKawajiri",
+      "name": "TsubasaKawajiri",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/39114857?v=4",
+      "profile": "https://github.com/TsubasaKawajiri",
+      "contributions": [
+        "translation"
       ]
     }
   ],
