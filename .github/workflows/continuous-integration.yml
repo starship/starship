@@ -71,11 +71,6 @@ jobs:
         with:
           python-version: "3.6.9"
       
-      # Install Java at a fixed version
-      - uses: actions/setup-java@master
-        with:
-          java-version: '12.0.2'
-
       # Run the ignored tests that expect the above setup
       - uses: actions/checkout@master
       - name: Run all tests
