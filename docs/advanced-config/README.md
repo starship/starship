@@ -104,16 +104,18 @@ If multiple colors are specified for foreground/background, the last one in the 
 
 There are generally two kinds of options for styling.
 
-One is module-wide styling. Options described with `*style*` in the root will be applied to the whole module. In the following config, starship will print all the contents red in `git_status` module, unless specified.
+One is module-wide styling. Options described with `module_name.style*` will be applied to the whole module. In the following config, starship will print all the contents red in `git_status` module, unless specified.
 
 ```toml
 [git_status]
 style = "red"
 ```
 
-Another is segment-wide styling. Segments in the configuration can be a string, or a table with optional `style` and `value` key. In the following config, starship will print `ahead` segment green, `diverged` segment yellow, and other segments red. **Note: Segment-wide stylings will always overwrite module-wide stylings, no matter if the module use conditional stylings such as the [character](#character) and [username](#username) module.**
+The other option for styling is *segment-wide* styling. Segments in the configuration can be a string, or a table with optional `style` and `value` keys. In the following config, starship will print the `ahead` segment green, `diverged` segment yellow, and other segments red.
 
-All variables described under `Segments` can be configured with a table.
+::: tip
+Segment-wide stylings will always overwrite module-wide stylings, no matter if the module use conditional stylings such as the [character](#character) and [username](#username) module.
+:::
 
 ```toml
 [git_status]

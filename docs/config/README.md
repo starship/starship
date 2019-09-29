@@ -53,30 +53,6 @@ Most modules in starship allow you to configure their display styles. This is do
 
 Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
-### Styling
-There are generally two kinds of options for styling.
-
-One is module-wide styling. Options described with `*style*` in the root will be applied to the whole module. In the following config, starship will print all the contents red in `git_status` module, unless specified.
-
-```toml
-[git_status]
-style = "red"
-```
-
-The other option for styling is *segment-wide* styling. Segments in the configuration can be a string, or a table with optional `style` and `value` keys. In the following config, starship will print the `ahead` segment green, `diverged` segment yellow, and other segments red.
-::: tip
-Segment-wide stylings will always overwrite module-wide stylings, even if the module uses conditional styling (e.g. in the [character](#character) and [username](#username) modules).
-:::
-All variables described under `Segments` can be configured with a table.
-
-```toml
-[git_status]
-conflicted = "-"  # This is equivalent to `conflicted.value = "-"`
-ahead.style = "green"
-diverged = { value = "±", style = "yellow" }
-style = "red"
-```
-
 ## Prompt
 
 This is the list of prompt-wide configuration options.
