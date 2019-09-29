@@ -1,8 +1,10 @@
 # Configuration
 
 ::: tip
+
 🔥 Configuration is currently being worked on.
 Many new configuration options will be available in coming releases.
+
 :::
 
 To get started configuring starship, create the following file: `~/.config/starship.toml`.
@@ -84,7 +86,6 @@ prompt_order = [
     "username",
     "hostname",
     "directory",
-    "aws",
     "git_branch",
     "git_state",
     "git_status",
@@ -96,6 +97,9 @@ prompt_order = [
     "golang",
     "java",
     "nix_shell",
+    "memory_usage",
+    "aws",
+    "env_var",
     "cmd_duration",
     "line_break",
     "jobs",
@@ -112,11 +116,11 @@ The `aws` module shows the current AWS profile. This is based on the
 
 ### Options
 
-| Variable   | Default         | Description                                          |
-| ---------- | --------------- | ---------------------------------------------------- |
-| `disabled` | `false`         | Disables the `AWS` module                            |
-| `style`    | `"bold yellow"` | The style used for the module                        |
-| `symbol`   | `"☁️ "`          | The symbol before displaying the current AWS profile |
+| Variable   | Default         | Description                                                |
+| ---------- | --------------- | ---------------------------------------------------------- |
+| `symbol`   | `"☁️ "`         | The symbol used before displaying the current AWS profile. |
+| `style`    | `"bold yellow"` | The style for the module.                                  |
+| `disabled` | `false`         | Disables the `AWS` module.                                 |
 
 ### Example
 
@@ -147,7 +151,7 @@ The module is only visible when the device's battery is below 10%.
 <summary>There are also options for some uncommon battery states.</summary>
 
 | Variable         | Description                                         |
-|------------------|-----------------------------------------------------|
+| ---------------- | --------------------------------------------------- |
 | `unknown_symbol` | The symbol shown when the battery state is unknown. |
 | `empty_symbol`   | The symbol shown when the battery state is empty.   |
 
@@ -240,8 +244,10 @@ The module will be shown only if the command took longer than two seconds, or
 the `min_time` config value, if it exists.
 
 ::: warning Do not hook the DEBUG trap in Bash
+
 If you are running Starship in `bash`, do not hook the `DEBUG` trap after running
 `eval $(starship init $0)`, or this module **will** break.
+
 :::
 
 Bash users who need preexec-like functionality can use
@@ -299,7 +305,6 @@ it would have been `nixpkgs/pkgs`.
 
 </details>
 
-
 ### Example
 
 ```toml
@@ -307,6 +312,36 @@ it would have been `nixpkgs/pkgs`.
 
 [directory]
 truncation_length = 8
+```
+
+## Environment Variable
+
+The `env_var` module displays the current value of a selected environment variable.
+The module will be shown only if any of the following conditions are met:
+
+- The `variable` configuration option matches an existing environment variable
+- The `variable` configuration option is not defined, but the `default` configuration option is
+
+### Options
+
+| Variable   | Default          | Description                                                                  |
+| ---------- | ---------------- | ---------------------------------------------------------------------------- |
+| `symbol`   |                  | The symbol used before displaying the variable value.                        |
+| `variable` |                  | The environment variable to be displayed.                                    |
+| `default`  |                  | The default value to be displayed when the selected variable is not defined. |
+| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
+| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
+| `style`    | `"dimmed black"` | The style for the module.                                                    |
+| `disabled` | `false`          | Disables the `env_var` module.                                               |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[env_var]
+variable = "SHELL"
+default = "unknown shell"
 ```
 
 ## Git Branch
@@ -440,7 +475,6 @@ The module will be shown if any of the following conditions are met:
 symbol = "🏎💨 "
 ```
 
-
 ## Hostname
 
 The `hostname` module shows the system hostname.
@@ -466,7 +500,6 @@ prefix = "⟪"
 suffix = "⟫"
 disabled = false
 ```
-
 
 ## Jobs
 
@@ -513,7 +546,6 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
-
 ## Nix-shell
 
 The `nix_shell` module shows the nix-shell environment.
@@ -541,6 +573,36 @@ impure_msg = "impure shell"
 pure_msg = "pure shell"
 ```
 
+## Memory Usage
+
+The `memory_usage` module shows current system memory and swap usage.
+
+By default the swap usage is displayed if the total system swap is non-zero.
+
+### Options
+
+| Variable          | Default                  | Description                                                   |
+| ----------------- | ------------------------ | ------------------------------------------------------------- |
+| `show_percentage` | `false`                  | Display memory usage as a percentage of the available memory. |
+| `show_swap`       | when total swap non-zero | Display swap usage.                                           |
+| `threshold`       | `75`                     | Hide the memory usage unless it exceeds this percentage.      |
+| `symbol`          | `"🐏 "`                  | The symbol used before displaying the memory usage.           |
+| `style`           | `"bold dimmed white"`    | The style for the module.                                     |
+| `disabled`        | `false`                  | Disables the `memory_usage` module.                           |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[memory_usage]
+show_percentage = true
+show_swap = true
+threshold = -1
+icon = " "
+style = "bold dimmed green"
+```
+
 ## Java
 
 The `java` module shows the currently installed version of Java.
@@ -551,11 +613,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default        | Description                                              |
-| ---------- | -------------- | -------------------------------------------------------- |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java.  |
-| `style`    | `"dimmed red"` | The style for the module.                               |
-| `disabled` | `false`        | Disables the `java` module.                              |
+| Variable   | Default        | Description                                            |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`        | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | The style for the module.                              |
+| `disabled` | `false`        | Disables the `java` module.                            |
 
 ### Example
 
@@ -565,7 +627,6 @@ The module will be shown if any of the following conditions are met:
 [java]
 symbol = "🌟 "
 ```
-
 
 ## NodeJS
 
@@ -722,8 +783,10 @@ The `time` module shows the current **local** time.
 The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
+
 This module is disabled by default.
 To enable it, set `disabled` to `false` in your configuration file.
+
 :::
 
 ### Options
@@ -760,12 +823,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable     | Default         | Description                           |
-| ------------ | --------------- | ------------------------------------- |
-| `style_root` | `"bold red"`    | The style used when the user is root. |
-| `style_user` | `"bold yellow"` | The style used for non-root users.    |
-| `show_always`| `false`         | Always shows the `username` module.   |
-| `disabled`   | `false`         | Disables the `username` module.       |
+| Variable      | Default         | Description                           |
+| ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`    | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `show_always` | `false`         | Always shows the `username` module.   |
+| `disabled`    | `false`         | Disables the `username` module.       |
 
 ### Example
 

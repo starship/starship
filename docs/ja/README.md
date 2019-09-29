@@ -1,15 +1,15 @@
 ---
-home: 'true'
-heroImage: "/logo.svg"
+home: true
+heroImage: /logo.svg
 actionText: Get Started →
-actionLink: "/guide/"
+actionLink: /ja/guide/
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 ---
 
 <div class="features">
   <div class="feature">
     <h2>互換性優先</h2>
-    <p>一般的なほとんどのOSの一般的なほとんどのシェル上で動作します。あらゆるところで使用してください！</p>
+    <p>一般的なほとんどのOSの一般的なほとんどのシェル上で動作します。 あらゆるところで使用してください！</p>
   </div>
   <div class="feature">
     <h2>Rust 製</h2>
@@ -25,75 +25,83 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
   <video class="demo-video" autoplay muted loop>
     <source src="/demo.webm" type="video/webm">
     <source src="/demo.mp4" type="video/mp4">
-  </source></source></video>
+  </video>
 </div>
 
 ### クイックインストール
 
 1. **Starship** のバイナリをインストール
 
-    もし以下のプラットフォームを使用していない場合は **[コンパイル済みのバイナリファイルをダウンロード](https://github.com/starship/starship/releases)** してください。
+   もし以下のプラットフォームを使用していない場合は **[コンパイル済みのバイナリファイルをダウンロード](https://github.com/starship/starship/releases)** してください。
 
-    #### Homebrew
 
-    ```sh
-    $ brew install starship
-    ```
+   #### Homebrew
 
-    #### Rust (v1.33 もしくはそれ以上)
+   ```sh
+   $ brew install starship
+   ```
 
-    ```sh
-    $ cargo install starship
-    ```
 
-    #### Arch Linux (AUR)
+   #### Rust (v1.33 もしくはそれ以上)
 
-    Starship は AUR 上の `starship` というパッケージ名で利用可能です。`yay` またはお好きな AUR ヘルパーでインストールしてください。
+   ```sh
+   $ cargo install starship
+   ```
 
-    ```sh
-    $ yay -S starship
-    ```
 
-    #### Nix (unstable)
+   #### Arch Linux (AUR)
 
-    ```sh
-    $ nix-env --install starship
-    ```
+   Starship は AUR 上の `starship` というパッケージ名で利用可能です。 `yay` またはお好きな AUR ヘルパーでインストールしてください。
 
-    #### Termux
+   ```sh
+   $ yay -S starship
+   ```
 
-    ```sh
-    $ pkg install starship
-    ```
 
-2. 初期化のためのスクリプトをシェルの設定ファイルに追加
+   #### Nix (unstable)
 
-    #### Bash
+   ```sh
+   $ nix-env --install starship
+   ```
 
-    `~/.bashrc` の最後に以下を追記してください
 
-    ```sh
-    # ~/.bashrc
+   #### Termux
 
-    eval "$(starship init bash)"
-    ```
+   ```sh
+   $ pkg install starship
+   ```
 
-    #### Fish
+1. 初期化のためのスクリプトをシェルの設定ファイルに追加
 
-    `~/.config/fish/config.fish` の最後に以下を追記してください
 
-    ```sh
-    # ~/.config/fish/config.fish
+   #### Bash
 
-    eval (starship init fish)
-    ```
+   `~/.bashrc` の最後に以下を追記してください
 
-    #### Zsh
+   ```sh
+   # ~/.bashrc
 
-    `~/.zshrc` の最後に以下を追記してください
+   eval "$(starship init bash)"
+   ```
 
-    ```sh
-    # ~/.zshrc
 
-    eval "$(starship init zsh)"
-    ```
+   #### Fish
+
+   `~/.config/fish/config.fish` の最後に以下を追記してください
+
+   ```sh
+   # ~/.config/fish/config.fish
+
+   eval (starship init fish)
+   ```
+
+
+   #### Zsh
+
+   `~/.zshrc` の最後に以下を追記してください
+
+   ```sh
+   # ~/.zshrc
+
+   eval "$(starship init zsh)"
+   ```

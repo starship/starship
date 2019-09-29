@@ -174,7 +174,8 @@
       "profile": "https://github.com/andytom",
       "contributions": [
         "code",
-        "test"
+        "test",
+        "doc"
       ]
     },
     {
@@ -351,6 +352,26 @@
       "contributions": [
         "code",
         "test"
+      ]
+    },
+    {
+      "login": "yuri1969",
+      "name": "yuri",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/13468636?v=4",
+      "profile": "https://github.com/yuri1969",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "TsubasaKawajiri",
+      "name": "TsubasaKawajiri",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/39114857?v=4",
+      "profile": "https://github.com/TsubasaKawajiri",
+      "contributions": [
+        "translation"
       ]
     }
   ],
