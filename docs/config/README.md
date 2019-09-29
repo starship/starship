@@ -97,6 +97,7 @@ prompt_order = [
     "golang",
     "java",
     "nix_shell",
+    "memory_usage",
     "aws",
     "env_var",
     "cmd_duration",
@@ -569,6 +570,36 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
+```
+
+## Memory Usage
+
+The `memory_usage` module shows current system memory and swap usage.
+
+By default the swap usage is displayed if the total system swap is non-zero.
+
+### Options
+
+| Variable          | Default                  | Description                                                   |
+| ----------------- | ------------------------ | ------------------------------------------------------------- |
+| `show_percentage` | `false`                  | Display memory usage as a percentage of the available memory. |
+| `show_swap`       | when total swap non-zero | Display swap usage.                                           |
+| `threshold`       | `75`                     | Hide the memory usage unless it exceeds this percentage.      |
+| `symbol`          | `"🐏 "`                  | The symbol used before displaying the memory usage.           |
+| `style`           | `"bold dimmed white"`    | The style for the module.                                     |
+| `disabled`        | `false`                  | Disables the `memory_usage` module.                           |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[memory_usage]
+show_percentage = true
+show_swap = true
+threshold = -1
+icon = " "
+style = "bold dimmed green"
 ```
 
 ## Java

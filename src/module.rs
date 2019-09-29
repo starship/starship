@@ -21,6 +21,7 @@ pub const ALL_MODULES: &[&str] = &[
     "java",
     "jobs",
     "line_break",
+    "memory_usage",
     "nix_shell",
     "nodejs",
     "package",
