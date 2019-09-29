@@ -60,22 +60,23 @@ fn error_pipeline() -> io::Result<()> {
 }
 
 #[test]
-fn no_pipeline() -> io::Result<()> {
+fn full_pipeline() -> io::Result<()> {
     let config = toml::toml! {
         [status]
-        display_mode = "last on error"
+        display_mode = "always"
+        simple_pipeline = false
     };
 
-    let expected = "";
+    let expected = format!("{} ", Color::White.dimmed().paint("(0 0 0)"));
 
     let output = common::render_module("status")
         .use_config(config.clone())
-        .args(&["--status=0", "--pipestatus=1 0"])
+        .args(&["--status=0", "--pipestatus=0 0 0"])
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
 
-    let expected = format!("{} ", Color::Red.paint("1"));
+    let expected = format!("{} ", Color::Red.paint("(0 1)"));
 
     let output = common::render_module("status")
         .use_config(config)
@@ -88,15 +89,26 @@ fn no_pipeline() -> io::Result<()> {
 }
 
 #[test]
-fn show_success() -> io::Result<()> {
+fn show_always() -> io::Result<()> {
+    let config = toml::toml! {
+        [status]
+        display_mode = "always"
+    };
+
     let expected = format!("{} ", Color::White.dimmed().paint("0"));
 
     let output = common::render_module("status")
-        .use_config(toml::toml! {
-            [status]
-            display_mode = "always"
-        })
+        .use_config(config.clone())
         .args(&["--status=0", "--pipestatus=0"])
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected, actual);
+
+    let expected = format!("{} ", Color::White.dimmed().paint("0"));
+
+    let output = common::render_module("status")
+        .use_config(config)
+        .args(&["--status=0", "--pipestatus=0 0 0"])
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
@@ -135,6 +147,19 @@ fn only_error() -> io::Result<()> {
 }
 
 #[test]
+fn any_error() -> io::Result<()> {
+    let expected = format!("{} ", Color::White.dimmed().paint("(1 0)"));
+
+    let output = common::render_module("status")
+        .args(&["--status=0", "--pipestatus=1 0"])
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected, actual);
+
+    Ok(())
+}
+
+#[test]
 fn use_symbols() -> io::Result<()> {
     let config = toml::toml! {
         [status]
@@ -163,8 +188,8 @@ fn use_symbols() -> io::Result<()> {
 }
 
 #[test]
-fn negation() -> io::Result<()> {
-    let expected = "";
+fn mismatch() -> io::Result<()> {
+    let expected = format!("{} ", Color::White.dimmed().paint("1 [0]"));
 
     let output = common::render_module("status")
         .args(&["--status=0", "--pipestatus=1"])
@@ -172,7 +197,7 @@ fn negation() -> io::Result<()> {
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
 
-    let expected = format!("{} ", Color::Red.paint("!0"));
+    let expected = format!("{} ", Color::Red.paint("0 [1]"));
 
     let output = common::render_module("status")
         .args(&["--status=1", "--pipestatus=0"])

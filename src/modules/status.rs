@@ -4,11 +4,11 @@ use super::{Context, Module};
 
 #[derive(PartialEq)]
 enum DisplayMode {
-    Always,            // Always shows all exit codes
-    OnExitError,       // Show all exit codes if there's any error in the pipeline
-    OnError,           // Show all exit codes only on error
+    Always,      // Always shows all exit codes
+    OnExitError, // Show all exit codes if there's any error in the pipeline
+    OnError,     // Show all exit codes only on error
     OnErrorOrMismatch, // Show exit codes when pipeline and exit code don't match
-                       //     or there's an error in the pipeline
+                 //     or there's an error in the pipeline
 }
 
 /// Creates a module for exit codes from the previous pipeline
