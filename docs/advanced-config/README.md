@@ -26,7 +26,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- To run a custom function right before a command runs, you can use the 
+- To run a custom function right before a command runs, you can use the
   [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/).
   However, you **must** trap the DEBUG signal *before* initializing Starship!
   Starship can preserve the value of the DEBUG trap, but if the trap is overwritten
@@ -42,7 +42,7 @@ eval $(starship init bash)
 
 ## Change Window Title
 
-Some shell prompts will automatically change the window title for you (e.g. to 
+Some shell prompts will automatically change the window title for you (e.g. to
 reflect your working directory). Fish even does it by default.
 Starship does not do this, but it's fairly straightforward to add this
 functionality to `bash` or `zsh`.
@@ -70,7 +70,7 @@ In `zsh`, add this to the `precmd_functions` array:
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file 
+If you like the result, add these lines to your shell configuration file
 (`~/.bashrc` or `~/.zsrhc`) to make it permanent.
 
 ## Style Strings
@@ -99,3 +99,26 @@ A color specifier can be one of the following:
  - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
 
 If multiple colors are specified for foreground/background, the last one in the string will take priority.
+
+### Styling
+
+There are generally two kinds of options for styling.
+
+One is module-wide styling. Options described with `*style*` in the root will be applied to the whole module. In the following config, starship will print all the contents red in `git_status` module, unless specified.
+
+```toml
+[git_status]
+style = "red"
+```
+
+Another is segment-wide styling. Segments in the configuration can be a string, or a table with optional `style` and `value` key. In the following config, starship will print `ahead` segment green, `diverged` segment yellow, and other segments red. **Note: Segment-wide stylings will always overwrite module-wide stylings, no matter if the module use conditional stylings such as the [character](#character) and [username](#username) module.**
+
+All variables described under `Segments` can be configured with a table.
+
+```toml
+[git_status]
+conflicted = "-"  # This is equivalent to `conflicted.value = "-"`
+ahead.style = "green"
+diverged = { value = "±", style = "yellow" }
+style = "red"
+```
