@@ -63,8 +63,10 @@ One is module-wide styling. Options described with `*style*` in the root will be
 style = "red"
 ```
 
-Another is segment-wide styling. Segments in the configuration can be a string, or a table with optional `style` and `value` key. In the following config, starship will print `ahead` segment green, `diverged` segment yellow, and other segments red. **Note: Segment-wide stylings will always overwrite module-wide stylings, no matter if the module use conditional stylings such as the [character](#character) and [username](#username) module.**
-
+The other option for styling is *segment-wide* styling. Segments in the configuration can be a string, or a table with optional `style` and `value` keys. In the following config, starship will print the `ahead` segment green, `diverged` segment yellow, and other segments red.
+::: tip
+Segment-wide stylings will always overwrite module-wide stylings, even if the module uses conditional styling (e.g. in the [character](#character) and [username](#username) modules).
+:::
 All variables described under `Segments` can be configured with a table.
 
 ```toml
