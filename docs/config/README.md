@@ -1,8 +1,10 @@
 # Configuration
 
 ::: tip
+
 🔥 Configuration is currently being worked on.
 Many new configuration options will be available in coming releases.
+
 :::
 
 To get started configuring starship, create the following file: `~/.config/starship.toml`.
@@ -242,8 +244,10 @@ The module will be shown only if the command took longer than two seconds, or
 the `min_time` config value, if it exists.
 
 ::: warning Do not hook the DEBUG trap in Bash
+
 If you are running Starship in `bash`, do not hook the `DEBUG` trap after running
 `eval $(starship init $0)`, or this module **will** break.
+
 :::
 
 Bash users who need preexec-like functionality can use
@@ -778,8 +782,10 @@ The `time` module shows the current **local** time.
 The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
+
 This module is disabled by default.
 To enable it, set `disabled` to `false` in your configuration file.
+
 :::
 
 ### Options

@@ -8,7 +8,8 @@ use super::{Context, Module};
 ///
 /// Will perform path contraction and truncation.
 /// **Contraction**
-///     - Paths beginning with the home directory will be contracted to `~`
+///     - Paths beginning with the home directory or with a git repo right
+/// inside the home directory will be contracted to `~`
 ///     - Paths containing a git repo will contract to begin at the repo root
 ///
 /// **Truncation**
@@ -57,7 +58,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = &context.get_repo().ok()?;
 
     let dir_string = match &repo.root {
-        Some(repo_root) if truncate_to_repo => {
+        Some(repo_root) if truncate_to_repo && (repo_root != &home_dir) => {
             let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
 
             // Contract the path to the git repo root
