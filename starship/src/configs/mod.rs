@@ -33,6 +33,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "golang",
                 "java",
                 "nix_shell",
+                "memory_usage",
                 "aws",
                 "env_var",
                 "cmd_duration",
