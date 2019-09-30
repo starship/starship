@@ -1,4 +1,3 @@
-use ansi_term::Color;
 use std::ffi::OsStr;
 use std::path::Path;
 use std::process::{Command, Output};
@@ -6,14 +5,15 @@ use std::{env, fs};
 
 use super::{Context, Module};
 
+use crate::config::RootModuleConfig;
+use crate::configs::rust::RustConfig;
+
 /// Creates a module with the current Rust version
 ///
 /// Will display the Rust version if any of the following criteria are met:
 ///     - Current directory contains a file with a `.rs` extension
 ///     - Current directory contains a `Cargo.toml` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    const RUST_CHAR: &str = "🦀 ";
-
     let is_rs_project = context
         .try_begin_scan()?
         .set_files(&["Cargo.toml"])
@@ -59,13 +59,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let mut module = context.new_module("rust");
+    let config = RustConfig::try_load(module.config);
+    module.set_style(config.style);
 
-    let module_style = module
-        .config_value_style("style")
-        .unwrap_or_else(|| Color::Red.bold());
-    module.set_style(module_style);
-    module.new_segment("symbol", RUST_CHAR);
-    module.new_segment("version", &module_version);
+    module.create_segment("symbol", &config.symbol);
+    module.create_segment("version", &config.version.with_value(&module_version));
 
     Some(module)
 }

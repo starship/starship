@@ -1,0 +1,28 @@
+[package]
+name = "starship_module_config_derive"
+version = "0.20.0"
+edition = "2018"
+authors = ["Matan Kushner <hello@matchai.me>"]
+homepage = "https://starship.rs"
+documentation = "https://starship.rs/guide/"
+repository = "https://github.com/starship/starship"
+readme = "README.md"
+license = "ISC"
+keywords = ["prompt", "shell", "bash", "fish", "zsh"]
+categories = ["command-line-utilities"]
+description = """
+The cross-shell prompt for astronauts. ☄🌌️
+"""
+exclude = ["docs/**/*"]
+
+[lib]
+name = "starship_module_config_derive"
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "~1"
+quote = "~1"
+syn = "~1"
+
+[dev-dependencies]
+starship = { version = "0.20.0", path = "../starship" }
