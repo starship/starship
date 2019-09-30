@@ -551,6 +551,12 @@ The `memory_usage` module shows current system memory and swap usage.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
+::: tip
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
 ### オプション
 
 | 変数                | デフォルト                    | 説明                                                            |
@@ -560,7 +566,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 | `threshold`       | `75`                     | Hide the memory usage unless it exceeds this percentage.      |
 | `symbol`          | `"🐏 "`                   | The symbol used before displaying the memory usage.           |
 | `style`           | `"bold dimmed white"`    | モジュールのスタイルです。                                                 |
-| `disabled`        | `false`                  | Disables the `memory_usage` module.                           |
+| `disabled`        | `true`                   | Disables the `memory_usage` module.                           |
 
 ### 設定例
 
@@ -577,7 +583,7 @@ style = "bold dimmed green"
 
 ## Java
 
-`java`モジュールは、現在インストールされているJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`pom.xml`, もしくは`build.gradle`ファイルが含まれている
 - カレントディレクトリに拡張子が`.java`, `.class`, もしくは`.jar`のファイルが含まれている
@@ -601,7 +607,7 @@ symbol = "🌟 "
 
 ## NodeJS
 
-`nodejs`モジュールは、現在インストールされているNodeJSのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`package.json`ファイルが含まれている
 - カレントディレクトリに`node_modules`ディレクトリが含まれている
@@ -626,7 +632,7 @@ symbol = "🤖 "
 
 ## パッケージのバージョン
 
-`package`モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。 このモジュールは現在、 `npm` 、 `cargo` 、および`poetry`パッケージをサポートしています。
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
 
 - **npm** – `npm`パッケージバージョンは、現在のディレクトリにある`package.json`から抽出されます
 - **cargo** – `cargo`パッケージバージョンは、現在のディレクトリにある`Cargo.toml`から抽出されます。
@@ -653,13 +659,13 @@ symbol = "🎁 "
 
 ## Python
 
-`python`モジュールは、現在インストールされているPythonのバージョンを示します。
+The `python` module shows the currently installed version of Python.
 
-`pyenvversionname`が`true`に設定されている場合 、pyenvでのバージョン名が表示されます 。
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
 
-それ以外の場合は、 `python --version`バージョン番号が表示され、アクティブになっている場合は現在のPython仮想環境が表示されます。
+Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
 
-次の条件のいずれかが満たされると、モジュールが表示されます。
+The module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`.python-version`ファイルが含まれている
 - カレントディレクトリに`requirements.txt`ファイルが含まれている
@@ -691,7 +697,7 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-`ruby`モジュールは、現在インストールされているRubyのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`Gemfile`ファイルが含まれている
 - カレントディレクトリに`.rb`の拡張子のファイルが含まれている
@@ -715,7 +721,7 @@ symbol = "🔺 "
 
 ## Rust
 
-`rust`モジュールには、現在インストールされているRustのバージョンが表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`Cargo.toml`ファイルが含まれている
 - カレントディレクトリに`.rs`の拡張子のファイルが含まれている
@@ -739,11 +745,11 @@ symbol = "⚙️ "
 
 ## 時刻
 
-`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -756,7 +762,7 @@ symbol = "⚙️ "
 | `style`    | `bold yellow`  | モジュールのスタイルです。                                                                                     |
 | `disabled` | `true`         | `time`モジュールを無効にします。                                                                               |
 
-`12hr`が`true` 、 `format`デフォルトで`"%r"`です。 それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、 `12hr`の設定が上書きされます。
+If `12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `12hr` setting.
 
 ### 設定例
 
@@ -770,7 +776,7 @@ format = "🕙[ %T ]"
 
 ## ユーザー名
 
-`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
 - カレントユーザーがroot
 - カレントユーザーが、ログインしているユーザーとは異なる
