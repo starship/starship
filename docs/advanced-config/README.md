@@ -5,7 +5,9 @@ While Starship is a versatile shell, sometimes you need to do more than edit
 advanced configuration techniques used in starship.
 
 ::: warning
+
 The configurations in this section are subject to change in future releases of Starship.
+
 :::
 
 ## Custom pre-prompt and pre-execution Commands in Bash
