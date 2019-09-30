@@ -91,12 +91,13 @@ prompt_order = [
     "git_state",
     "git_status",
     "package",
-    "nodejs",
-    "ruby",
-    "rust",
-    "python",
+    "dotnet",
     "golang",
     "java",
+    "nodejs",
+    "python",
+    "ruby",
+    "rust",
     "nix_shell",
     "memory_usage",
     "aws",
@@ -315,6 +316,41 @@ it would have been `nixpkgs/pkgs`.
 
 [directory]
 truncation_length = 8
+```
+
+## Dotnet
+
+The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If
+the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module
+shows the latest installed version of the SDK.
+
+This module will only be shown in your prompt when one of the following files are present in the
+current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll
+also need the .NET Core command-line tools installed in order to use it correctly.
+
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast
+as running `dotnet --version`, but it may show an incorrect version if your .NET project has an
+unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by
+setting `heuristic = false` in the module options.
+
+### Options
+
+| Variable    | Default       | Description                                              |
+| ----------- | ------------- | -------------------------------------------------------- |
+| `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
+| `style`     | `"bold blue"` | The style for the module.                                |
+| `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
+| `disabled`  | `false`       | Disables the `dotnet` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[dotnet]
+symbol = "🥅 "
+style = "green"
+heuristic = false
 ```
 
 ## Environment Variable
