@@ -23,6 +23,3 @@ proc-macro = true
 proc-macro2 = "~1"
 quote = "~1"
 syn = "~1"
-
-[dev-dependencies]
-starship = { version = "0.20.0", path = "../starship" }
