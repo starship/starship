@@ -257,12 +257,12 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Variable   | Default         | Description                                 |
-| ---------- | --------------- | ------------------------------------------- |
-| `min_time` | `2`             | Shortest duration to show time for.         |
-| `prefix`   | `took `         | Prefix to display immediately cmd_duration. |
-| `style`    | `"bold yellow"` | The style for the module.                   |
-| `disabled` | `false`         | Disables the `cmd_duration` module.         |
+| Variable   | Default         | Description                                                |
+| ---------- | --------------- | ---------------------------------------------------------- |
+| `min_time` | `2`             | Shortest duration to show time for.                        |
+| `prefix`   | `took`          | Prefix to display immediately before the command duration. |
+| `style`    | `"bold yellow"` | The style for the module.                                  |
+| `disabled` | `false`         | Disables the `cmd_duration` module.                        |
 
 ### Example
 
