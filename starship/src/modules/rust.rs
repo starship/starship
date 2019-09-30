@@ -1,4 +1,3 @@
-use ansi_term::Color;
 use std::ffi::OsStr;
 use std::path::Path;
 use std::process::{Command, Output};
@@ -15,8 +14,6 @@ use crate::configs::rust::RustConfig;
 ///     - Current directory contains a file with a `.rs` extension
 ///     - Current directory contains a `Cargo.toml` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    const RUST_CHAR: &str = "🦀 ";
-
     let is_rs_project = context
         .try_begin_scan()?
         .set_files(&["Cargo.toml"])
@@ -65,8 +62,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config = RustConfig::try_load(module.config);
     module.set_style(config.style);
 
-    module.new_segment("symbol", config.symbol);
-    module.new_segment("version", &module_version);
+    module.create_segment("symbol", &config.symbol);
+    module.create_segment("version", &config.version.with_value(&module_version));
 
     Some(module)
 }

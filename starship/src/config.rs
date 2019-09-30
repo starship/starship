@@ -221,12 +221,29 @@ impl<'a> ModuleConfig<'a> for SegmentConfig<'a> {
 
 impl<'a> SegmentConfig<'a> {
     /// Mutably set value
-    fn set_value(&mut self, value: &'a str) {
+    pub fn set_value(&mut self, value: &'a str) {
         self.value = value;
     }
 
-    fn set_style(&mut self, style: Style) {
+    /// Mutably set style
+    pub fn set_style(&mut self, style: Style) {
         self.style = Some(style);
+    }
+
+    /// Immutably set value
+    pub fn with_value(&self, value: &'a str) -> Self {
+        Self {
+            value,
+            style: self.style,
+        }
+    }
+
+    /// Immutably set style
+    pub fn with_style(&self, style: Style) -> Self {
+        Self {
+            value: self.value,
+            style: Some(style),
+        }
     }
 }
 
