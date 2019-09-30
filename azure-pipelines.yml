@@ -27,9 +27,3 @@ stages:
           gitHubConnection: StarshipRelease
           repositoryName: starship/starship
           isPreRelease: false
-
-    # Publish package to Crates.io
-    - template: ci/cargo-publish.yml
-      parameters:
-        name: cargo_publish
-        displayName: Publish to Crates.io
