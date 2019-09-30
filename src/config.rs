@@ -18,6 +18,7 @@ pub trait Config {
     fn get_as_i64(&self, key: &str) -> Option<i64>;
     fn get_as_array(&self, key: &str) -> Option<&Vec<Value>>;
     fn get_as_ansi_style(&self, key: &str) -> Option<ansi_term::Style>;
+    fn get_as_segment_config(&self, key: &str) -> Option<SegmentConfig>;
 
     // Internal implementation for accessors
     fn get_config(&self, key: &str) -> Option<&Value>;
@@ -136,6 +137,39 @@ impl Config for Table {
         // TODO: This should probably not unwrap to an empty new Style but inform the user about the problem
         self.get_as_str(key)
             .map(|x| parse_style_string(x).unwrap_or_default())
+    }
+
+    /// Get a key from a module's configuration as a segment config.
+    ///
+    /// The config can be
+    ///
+    /// - a string, will be interpreted as value.
+    /// - a table with optional { value, style } keys.
+    ///   If omitted, default value will be used.
+    ///
+    /// Returns `Some(SegmentConfig)` if key exists in the configuration, else `None`.
+    fn get_as_segment_config(&self, key: &str) -> Option<SegmentConfig> {
+        self.get_config(key).and_then(|segment_config: &Value| {
+            match segment_config {
+                toml::Value::String(value) => Some(SegmentConfig {
+                    value: Some(value.as_str()),
+                    style: None,
+                }),
+                toml::Value::Table(config_table) => Some(SegmentConfig {
+                    value: config_table.get_as_str("value"),
+                    style: config_table.get_as_ansi_style("style"),
+                }),
+                _ => {
+                    log::debug!(
+                        "Expected \"{}\" to be a string or config table. Instead received {} of type {}.",
+                        key,
+                        segment_config,
+                        segment_config.type_str()
+                        );
+                    None
+                }
+            }
+        })
     }
 }
 
@@ -270,6 +304,11 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
         log::debug!("Could not parse color in string: {}", color_string);
     }
     predefined_color
+}
+
+pub struct SegmentConfig<'a> {
+    pub value: Option<&'a str>,
+    pub style: Option<ansi_term::Style>,
 }
 
 #[cfg(test)]

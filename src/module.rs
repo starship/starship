@@ -1,4 +1,5 @@
 use crate::config::Config;
+use crate::config::SegmentConfig;
 use crate::segment::Segment;
 use ansi_term::Style;
 use ansi_term::{ANSIString, ANSIStrings};
@@ -70,9 +71,14 @@ impl<'a> Module<'a> {
     /// Get a reference to a newly created segment in the module
     pub fn new_segment(&mut self, name: &str, value: &str) -> &mut Segment {
         let mut segment = Segment::new(name);
-        segment.set_style(self.style);
-        // Use the provided value unless overwritten by config
-        segment.set_value(self.config_value_str(name).unwrap_or(value));
+        if let Some(segment_config) = self.config_value_segment_config(name) {
+            segment.set_style(segment_config.style.unwrap_or(self.style));
+            segment.set_value(segment_config.value.unwrap_or(value));
+        } else {
+            segment.set_style(self.style);
+            // Use the provided value unless overwritten by config
+            segment.set_value(self.config_value_str(name).unwrap_or(value));
+        }
         self.segments.push(segment);
 
         self.segments.last_mut().unwrap()
@@ -167,6 +173,12 @@ impl<'a> Module<'a> {
     /// Get a module's config value as an array
     pub fn config_value_array(&self, key: &str) -> Option<&Vec<toml::Value>> {
         self.config.and_then(|config| config.get_as_array(key))
+    }
+
+    /// Get a module's config value as a table of segment config
+    pub fn config_value_segment_config(&self, key: &str) -> Option<SegmentConfig> {
+        self.config
+            .and_then(|config| config.get_as_segment_config(key))
     }
 }
 
