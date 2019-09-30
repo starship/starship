@@ -16,6 +16,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .parse::<u64>()
         .ok()?;
 
+    let prefix = module
+        .config_value_str("prefix")
+        .unwrap_or("took ")
+        .to_owned();
+
     let signed_config_min = module.config_value_i64("min_time").unwrap_or(2);
 
     /* TODO: Once error handling is implemented, warn the user if their config
@@ -38,7 +43,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     module.set_style(module_color);
-    module.new_segment("cmd_duration", &format!("took {}", render_time(elapsed)));
+    module.new_segment(
+        "cmd_duration",
+        &format!("{}{}", prefix, render_time(elapsed)),
+    );
     module.get_prefix().set_value("");
 
     Some(module)

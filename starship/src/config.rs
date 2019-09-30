@@ -178,6 +178,58 @@ impl StarshipConfig {
     }
 }
 
+#[derive(Clone)]
+pub struct SegmentConfig<'a> {
+    pub value: &'a str,
+    pub style: Option<Style>,
+}
+
+impl<'a> ModuleConfig<'a> for SegmentConfig<'a> {
+    fn from_config(config: &'a Value) -> Option<Self> {
+        match config {
+            Value::String(ref config_str) => Some(Self {
+                value: config_str,
+                style: None,
+            }),
+            Value::Table(ref config_table) => Some(Self {
+                value: config_table.get("value")?.as_str()?,
+                style: config_table.get("style").and_then(<Style>::from_config),
+            }),
+            _ => None,
+        }
+    }
+
+    fn load_config(&self, config: &'a Value) -> Self {
+        let mut new_config = self.clone();
+        match config {
+            Value::String(ref config_str) => {
+                new_config.value = config_str;
+            }
+            Value::Table(ref config_table) => {
+                if let Some(Value::String(value)) = config_table.get("value") {
+                    new_config.value = value;
+                };
+                if let Some(style) = config_table.get("style") {
+                    new_config.style = <Style>::from_config(style);
+                };
+            }
+            _ => {}
+        };
+        new_config
+    }
+}
+
+impl<'a> SegmentConfig<'a> {
+    /// Mutably set value
+    fn set_value(&mut self, value: &'a str) {
+        self.value = value;
+    }
+
+    fn set_style(&mut self, style: Style) {
+        self.style = Some(style);
+    }
+}
+
 /** Parse a style string which represents an ansi style. Valid tokens in the style
  string include the following:
  - 'fg:<color>'    (specifies that the color read should be a foreground color)
