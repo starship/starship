@@ -204,15 +204,6 @@ impl<'a> Module<'a> {
     pub fn config_value_style(&self, key: &str) -> Option<Style> {
         <Style>::from_config(self.config?.as_table()?.get(key)?)
     }
-
-    /// Get a module's config value as a table of segment config
-    #[deprecated(
-        since = "0.20.0",
-        note = "please use <RootModuleConfig>::try_load(module.config) instead"
-    )]
-    pub fn config_value_segment_config(&self, key: &str) -> Option<SegmentConfig> {
-        <SegmentConfig>::from_config(self.config?.as_table()?.get(key)?)
-    }
 }
 
 impl<'a> fmt::Display for Module<'a> {
