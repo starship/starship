@@ -244,11 +244,12 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 
 ### オプション
 
-| 変数         | デフォルト           | 説明                          |
-| ---------- | --------------- | --------------------------- |
-| `min_time` | `2`             | 時間を表示する最短期間です。              |
-| `style`    | `"bold yellow"` | モジュールのスタイルです。               |
-| `disabled` | `false`         | `cmd_duration`モジュールを無効にします。 |
+| 変数         | デフォルト           | 説明                                          |
+| ---------- | --------------- | ------------------------------------------- |
+| `min_time` | `2`             | 時間を表示する最短期間です。                              |
+| `prefix`   | `took`          | Prefix to display immediately cmd_duration. |
+| `style`    | `"bold yellow"` | The style for the module.                   |
+| `disabled` | `false`         | Disables the `cmd_duration` module.         |
 
 ### 設定例
 
@@ -257,6 +258,7 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 
 [cmd_duration]
 min_time = 4
+prefix = "underwent "
 ```
 
 ## ディレクトリ
