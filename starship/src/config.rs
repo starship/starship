@@ -1,4 +1,3 @@
-#![allow(dead_code)]
 use crate::configs::StarshipRootConfig;
 use crate::utils;
 use ansi_term::{Color, Style};

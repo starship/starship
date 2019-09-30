@@ -780,7 +780,6 @@ version = "0.20.0"
 dependencies = [
  "proc-macro2 1.0.4 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 1.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "starship 0.20.0",
  "syn 1.0.5 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 

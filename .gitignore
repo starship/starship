@@ -17,3 +17,7 @@ Cargo.lock
 
 # Vim swap files
 *.swp
+
+# Compiled files for documentation
+docs/node_modules
+docs/.vuepress/dist/
