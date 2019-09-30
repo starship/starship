@@ -244,12 +244,12 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 
 ### オプション
 
-| 変数         | デフォルト           | 説明                                          |
-| ---------- | --------------- | ------------------------------------------- |
-| `min_time` | `2`             | 時間を表示する最短期間です。                              |
-| `prefix`   | `took`          | Prefix to display immediately cmd_duration. |
-| `style`    | `"bold yellow"` | The style for the module.                   |
-| `disabled` | `false`         | Disables the `cmd_duration` module.         |
+| 変数         | デフォルト           | 説明                                                         |
+| ---------- | --------------- | ---------------------------------------------------------- |
+| `min_time` | `2`             | 時間を表示する最短期間です。                                             |
+| `prefix`   | `took`          | Prefix to display immediately before the command duration. |
+| `style`    | `"bold yellow"` | The style for the module.                                  |
+| `disabled` | `false`         | Disables the `cmd_duration` module.                        |
 
 ### 設定例
 
