@@ -373,6 +373,15 @@
       "contributions": [
         "translation"
       ]
+    },
+    {
+      "login": "qryxip",
+      "name": "Ryo Yamashita",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/14125495?v=4",
+      "profile": "https://github.com/qryxip",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
