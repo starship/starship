@@ -26,6 +26,7 @@ const DEFAULT_PROMPT_ORDER: &[&str] = &[
     "golang",
     "java",
     "nix_shell",
+    "memory_usage",
     "aws",
     "env_var",
     "cmd_duration",

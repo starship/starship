@@ -48,22 +48,6 @@ RUN curl https://pyenv.run | bash \
 # Check that Python was correctly installed
 RUN python --version
 
-# Install Java.
-ENV JAVA_HOME /home/nonroot/java
-ENV PATH $JAVA_HOME/bin:$PATH
-ENV JAVA_URL https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz
-
-RUN mkdir -p "$JAVA_HOME"
-RUN set -eux; \
-    curl -fL -o $JAVA_HOME/openjdk.tgz "$JAVA_URL"; \
-    tar --extract \
-        --file $JAVA_HOME/openjdk.tgz \
-        --directory "$JAVA_HOME" \
-        --strip-components 1 \
-        --no-same-owner
-
-RUN java -version && javac -version
-
 # Create blank project
 RUN USER=nonroot cargo new --bin /src/starship
 WORKDIR /src/starship
