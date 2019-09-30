@@ -1,7 +1,7 @@
 use std::ffi::OsStr;
 use std::iter::Iterator;
 use std::ops::Deref;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::str;
 
@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let repo_root = context
             .get_repo()
             .ok()
-            .and_then(|r| r.root.as_ref().map(|buf| buf.as_path()));
+            .and_then(|r| r.root.as_ref().map(PathBuf::as_path));
         estimate_dotnet_version(&dotnet_files, &context.current_dir, repo_root)?
     } else {
         get_version_from_cli()?
@@ -55,7 +55,8 @@ fn estimate_dotnet_version<'a>(
 ) -> Option<Version> {
     let get_file_of_type = |t: FileType| files.iter().find(|f| f.file_type == t);
 
-    // Check for a global.json or a solution file first, but otherwise take the first file
+    // It's important to check for a global.json or a solution file first,
+    // but otherwise we can take any relevant file. We'll take whichever is first.
     let relevant_file = get_file_of_type(FileType::GlobalJson)
         .or_else(|| get_file_of_type(FileType::SolutionFile))
         .or_else(|| files.iter().next())?;
@@ -78,6 +79,14 @@ fn estimate_dotnet_version<'a>(
     }
 }
 
+/// Looks for a `global.json` which may exist in one of the parent directories of the current path.
+/// If there is one present, and it contains valid version pinning information, then return that version.
+///
+/// The following places are scanned:
+///     - The parent of the current directory
+///       (Unless there is a git repository, and the parent is above the root of that repository)
+///     - The root of the git repository
+///       (If there is one)
 fn try_find_nearby_global_json(current_dir: &Path, repo_root: Option<&Path>) -> Option<Version> {
     let current_dir_is_repo_root = repo_root.map(|r| r == current_dir).unwrap_or(false);
     let parent_dir = if current_dir_is_repo_root {
@@ -239,7 +248,7 @@ fn get_latest_sdk_from_cli() -> Option<Version> {
             .filter(|l| !l.is_empty())
             .last()
             .or_else(parse_failed)?;
-        let take_until = latest_sdk.find('[')? - 1;
+        let take_until = latest_sdk.find('[').or_else(parse_failed)? - 1;
         if take_until > 1 {
             let version = &latest_sdk[..take_until];
             let mut buffer = String::with_capacity(version.len() + 1);
