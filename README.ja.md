@@ -30,11 +30,11 @@
 </p>
 <h4 align="center">
   <br />
-  <a href="https://starship.rs">ウェブサイト</a>
+  <a href="https://starship.rs/ja/">ウェブサイト</a>
   ·
   <a href="#-installation">インストール</a>
   ·
-  <a href="https://starship.rs/config/">設定</a>
+  <a href="https://starship.rs/ja/config/">設定</a>
 </h4>
 
 <h1></h1>
@@ -184,7 +184,7 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
 
 ### 貢献者
 
-これらの素晴らしい方々に感謝します ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+これらの素晴らしい方々に感謝します ([emoji key](https://allcontributors.org/docs/ja/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
@@ -238,7 +238,7 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-このプロジェクトは [all-contributors](https://github.com/all-contributors/all-contributors) の仕様に従っています。 どんな種類の貢献でもお待ちしています！
+このプロジェクトは [all-contributors](https://allcontributors.org/docs/ja/overview) の仕様に従っています。 どんな種類の貢献でもお待ちしています！
 
 ## 💭影響を受けたプロダクト
 
