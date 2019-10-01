@@ -44,9 +44,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let utc_time = DateTime::<Utc>::from_utc(local_time.naive_utc(), Utc);
         log::trace!("UTC time now is {}", utc_time);
 
-        let utc_time_offset_in_hours = utc_time_offset_str.parse::<i32>().unwrap_or(0);
-        if utc_time_offset_in_hours < 24 && utc_time_offset_in_hours > -24 {
-            let timezone_offset = FixedOffset::east(utc_time_offset_in_hours * 3600);
+        // Using floats to allow 30/45 minute offsets: https://www.timeanddate.com/time/time-zones-interesting.html
+        let utc_time_offset_in_hours = utc_time_offset_str.parse::<f32>().unwrap_or(0_f32);
+        if utc_time_offset_in_hours < 24_f32 && utc_time_offset_in_hours > -24_f32 {
+            let utc_offset_in_seconds: i32 = (utc_time_offset_in_hours * 3600_f32) as i32;
+            let timezone_offset = FixedOffset::east(utc_offset_in_seconds);
             log::trace!("Target timezone offset is {}", timezone_offset);
 
             let target_time = utc_time.with_timezone(&timezone_offset);
