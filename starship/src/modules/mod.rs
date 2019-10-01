@@ -11,6 +11,7 @@ mod golang;
 mod hostname;
 mod java;
 mod jobs;
+mod kubernetes;
 mod line_break;
 mod memory_usage;
 mod nix_shell;
@@ -44,6 +45,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "git_branch" => git_branch::module(context),
         "git_state" => git_state::module(context),
         "git_status" => git_status::module(context),
+        "kubernetes" => kubernetes::module(context),
         "username" => username::module(context),
         #[cfg(feature = "battery")]
         "battery" => battery::module(context),

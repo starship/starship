@@ -20,6 +20,7 @@ pub const ALL_MODULES: &[&str] = &[
     "hostname",
     "java",
     "jobs",
+    "kubernetes",
     "line_break",
     "memory_usage",
     "nix_shell",
