@@ -83,6 +83,7 @@ prompt_order=["rust","line_break","package","line_break","character"]
 prompt_order = [
     "username",
     "hostname",
+    "kubernetes",
     "directory",
     "git_branch",
     "git_state",
@@ -500,15 +501,41 @@ symbol = "+ "
 threshold = 4
 ```
 
-## 改行
 
-`line_break`モジュールは、プロンプトを2行に分割します。
+## Kubernetes
+
+Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace
+astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ### オプション
 
-| 変数         | デフォルト   | 説明                                    |
-| ---------- | ------- | ------------------------------------- |
-| `disabled` | `false` | `line_break`モジュールを無効にして、プロンプトを1行にします。 |
+| 変数         | デフォルト         | 説明                                                  |
+| ---------- | ------------- | --------------------------------------------------- |
+| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
+| `style`    | `"bold blue"` | The style for the module.                           |
+| `disabled` | `false`       | Disables the `kubernetes` module                    |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[kubernetes]
+symbol = "⛵ "
+style = "dim green"
+disabled = true
+```
+
+
+## Line Break
+
+The `line_break` module separates the prompt into two lines.
+
+### オプション
+
+| 変数         | デフォルト   | 説明                                                                 |
+| ---------- | ------- | ------------------------------------------------------------------ |
+| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
 ### 設定例
 
@@ -521,17 +548,17 @@ disabled = true
 
 ## Nix-shell
 
-`nix_shell`モジュールは、nix-shell環境を示しています。 このモジュールは、nixシェル環境内にあるときに表示されます。
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### オプション
 
-| 変数           | デフォルト        | 説明                       |
-| ------------ | ------------ | ------------------------ |
-| `use_name`   | `false`      | nix-shellの名前を表示します。      |
-| `impure_msg` | `impure`     | impureメッセージをカスタマイズします。   |
-| `pure_msg`   | `pure`       | pureメッセージをカスタマイズします。     |
-| `style`      | `"bold red"` | モジュールのスタイルです。            |
-| `disabled`   | `false`      | `nix_shell`モジュールを無効にします。 |
+| 変数           | デフォルト        | 説明                                 |
+| ------------ | ------------ | ---------------------------------- |
+| `use_name`   | `false`      | Display the name of the nix-shell. |
+| `impure_msg` | `impure`     | Customize the "impure" msg.        |
+| `pure_msg`   | `pure`       | Customize the "pure" msg.          |
+| `style`      | `"bold red"` | The style for the module.          |
+| `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
 ### 設定例
 
@@ -565,7 +592,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `show_swap`       | when total swap non-zero | Display swap usage.                                           |
 | `threshold`       | `75`                     | Hide the memory usage unless it exceeds this percentage.      |
 | `symbol`          | `"🐏 "`                   | The symbol used before displaying the memory usage.           |
-| `style`           | `"bold dimmed white"`    | モジュールのスタイルです。                                                 |
+| `style`           | `"bold dimmed white"`    | The style for the module.                                     |
 | `disabled`        | `true`                   | Disables the `memory_usage` module.                           |
 
 ### 設定例
@@ -590,11 +617,11 @@ The `java` module shows the currently installed version of Java. The module will
 
 ### オプション
 
-| 変数         | デフォルト          | 説明                          |
-| ---------- | -------------- | --------------------------- |
-| `symbol`   | `"☕ "`         | Javaのバージョンを表示する前に使用される記号です。 |
-| `style`    | `"dimmed red"` | モジュールのスタイルです。               |
-| `disabled` | `false`        | `Java`モジュールを無効にします。         |
+| 変数         | デフォルト          | 説明                                                     |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | モジュールのスタイルです。                                          |
+| `disabled` | `false`        | Disables the `java` module.                            |
 
 ### 設定例
 
@@ -615,11 +642,11 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 
 ### オプション
 
-| 変数         | デフォルト          | 説明                            |
-| ---------- | -------------- | ----------------------------- |
-| `symbol`   | `"⬢ "`         | NodeJSのバージョンを表示する前に使用される記号です。 |
-| `style`    | `"bold green"` | モジュールのスタイルです。                 |
-| `disabled` | `false`        | `nodejs`モジュールを無効にします。         |
+| 変数         | デフォルト          | 説明                                                       |
+| ---------- | -------------- | -------------------------------------------------------- |
+| `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
+| `style`    | `"bold green"` | モジュールのスタイルです。                                            |
+| `disabled` | `false`        | Disables the `nodejs` module.                            |
 
 ### 設定例
 
@@ -630,7 +657,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 symbol = "🤖 "
 ```
 
-## パッケージのバージョン
+## Package Version
 
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
 
@@ -642,11 +669,11 @@ The `package` module is shown when the current directory is the repository for a
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                           |
-| ---------- | ------------ | ---------------------------- |
-| `symbol`   | `"📦 "`       | パッケージのバージョンを表示する前に使用される記号です。 |
-| `style`    | `"bold red"` | モジュールのスタイルです。                |
-| `disabled` | `false`      | `package`モジュールを無効にします。       |
+| 変数         | デフォルト        | 説明                                                         |
+| ---------- | ------------ | ---------------------------------------------------------- |
+| `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
+| `style`    | `"bold red"` | The style for the module.                                  |
+| `disabled` | `false`      | Disables the `package` module.                             |
 
 ### 設定例
 
@@ -676,13 +703,13 @@ The module will be shown if any of the following conditions are met:
 
 ### オプション
 
-| 変数                   | デフォルト           | 説明                                                   |
-| -------------------- | --------------- | ---------------------------------------------------- |
-| `symbol`             | `"🐍 "`          | Pythonのバージョンを表示する前に使用される記号です。                        |
-| `pyenv_version_name` | `false`         | pyenvを使用してPythonバージョンを取得します                          |
-| `pyenv_prefix`       | `"pyenv "`      | pyenvバージョン表示の前のprefix（デフォルトの表示は`pyenv MY_VERSION`）です |
-| `style`              | `"bold yellow"` | モジュールのスタイルです。                                        |
-| `disabled`           | `false`         | `python`モジュールを無効にします。                                |
+| 変数                   | デフォルト           | 説明                                                                          |
+| -------------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
+| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
+| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
+| `style`              | `"bold yellow"` | The style for the module.                                                   |
+| `disabled`           | `false`         | Disables the `python` module.                                               |
 
 ### 設定例
 
@@ -704,11 +731,11 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                          |
-| ---------- | ------------ | --------------------------- |
-| `symbol`   | `"💎 "`       | Rubyのバージョンを表示する前に使用される記号です。 |
-| `style`    | `"bold red"` | モジュールのスタイルです。               |
-| `disabled` | `false`      | `ruby`モジュールを無効にします。         |
+| 変数         | デフォルト        | 説明                                                     |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
+| `style`    | `"bold red"` | モジュールのスタイルです。                                          |
+| `disabled` | `false`      | Disables the `ruby` module.                            |
 
 ### 設定例
 
@@ -728,11 +755,11 @@ The `rust` module shows the currently installed version of Rust. The module will
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                          |
-| ---------- | ------------ | --------------------------- |
-| `symbol`   | `"🦀 "`       | Rustのバージョンを表示する前に使用される記号です。 |
-| `style`    | `"bold red"` | モジュールのスタイルです。               |
-| `disabled` | `false`      | `rust`モジュールを無効にします。         |
+| 変数         | デフォルト        | 説明                                                     |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
+| `style`    | `"bold red"` | The style for the module.                              |
+| `disabled` | `false`      | Disables the `rust` module.                            |
 
 ### 設定例
 
@@ -743,7 +770,7 @@ The `rust` module shows the currently installed version of Rust. The module will
 symbol = "⚙️ "
 ```
 
-## 時刻
+## Time
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
@@ -755,12 +782,12 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### オプション
 
-| 変数         | デフォルト          | 説明                                                                                                |
-| ---------- | -------------- | ------------------------------------------------------------------------------------------------- |
-| `12hr`     | `false`        | 12時間のフォーマットを有効にします。                                                                               |
-| `format`   | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。 |
-| `style`    | `bold yellow`  | モジュールのスタイルです。                                                                                     |
-| `disabled` | `true`         | `time`モジュールを無効にします。                                                                               |
+| 変数         | デフォルト         | 説明                                                                                                                  |
+| ---------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `12hr`     | `false`       | Enables 12 hour formatting                                                                                          |
+| `format`   | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`    | `bold yellow` | The style for the module time                                                                                       |
+| `disabled` | `true`        | Disables the `time` module.                                                                                         |
 
 If `12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `12hr` setting.
 
@@ -774,7 +801,7 @@ disabled = false
 format = "🕙[ %T ]"
 ```
 
-## ユーザー名
+## Username
 
 The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
@@ -783,16 +810,16 @@ The `username` module shows active user's username. The module will be shown if 
 - ユーザーがSSHセッションとして接続されている
 - `show_always`変数がtrueに設定されている
 
-### オプション
+### Options
 
-| 変数            | デフォルト           | 説明                        |
-| ------------- | --------------- | ------------------------- |
-| `style_root`  | `"bold red"`    | ユーザーがrootのときに使用されるスタイルです。 |
-| `style_user`  | `"bold yellow"` | 非rootユーザーに使用されるスタイルです。    |
-| `show_always` | `false`         | `username`モジュールを常に表示します。  |
-| `disabled`    | `false`         | `username`モジュールを無効にします。   |
+| Variable      | Default         | Description                           |
+| ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`    | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `show_always` | `false`         | Always shows the `username` module.   |
+| `disabled`    | `false`         | Disables the `username` module.       |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
