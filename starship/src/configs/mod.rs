@@ -1,3 +1,4 @@
+pub mod aws;
 pub mod battery;
 pub mod rust;
 
