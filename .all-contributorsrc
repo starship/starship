@@ -383,6 +383,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "keawade",
+      "name": "Keith Wade",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/7308850",
+      "profile": "https://github.com/keawade",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
