@@ -38,15 +38,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let local_time: DateTime<Local> = Local::now();
     log::trace!("Local time now is {}", local_time);
 
-    let formatted_time_string: String;
-    if utc_time_offset_str == "local" {
-        formatted_time_string = format_time(&time_format, local_time);
+    let formatted_time_string: String = if utc_time_offset_str == "local" {
+        format_time(&time_format, local_time)
     } else {
         let utc_time = DateTime::<Utc>::from_utc(local_time.naive_utc(), Utc);
         log::trace!("UTC time now is {}", utc_time);
 
         // Using floats to allow 30/45 minute offsets: https://www.timeanddate.com/time/time-zones-interesting.html
-        let utc_time_offset_in_hours = utc_time_offset_str.parse::<f32>().unwrap_or(0_f32);
+        let utc_time_offset_in_hours = match utc_time_offset_str.parse::<f32>() {
+            Ok(parsed_value) => parsed_value,
+            Err(_) => {
+                log::error!(
+                    "Invalid utc_time_offset configuration provided! Falling back to \"local\"."
+                );
+                0_f32
+            }
+        };
         if utc_time_offset_in_hours < 24_f32 && utc_time_offset_in_hours > -24_f32 {
             let utc_offset_in_seconds: i32 = (utc_time_offset_in_hours * 3600_f32) as i32;
             let timezone_offset = FixedOffset::east(utc_offset_in_seconds);
@@ -55,12 +62,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let target_time = utc_time.with_timezone(&timezone_offset);
             log::trace!("Time in target timezone now is {}", target_time);
 
-            formatted_time_string = format_time_fixed_offset(&time_format, target_time);
+            format_time_fixed_offset(&time_format, target_time)
         } else {
-            // Fall back to local time if an invalid offset is provided.
-            formatted_time_string = format_time(&time_format, local_time);
+            log::error!(
+                "Invalid utc_time_offset configuration provided! Falling back to \"local\"."
+            );
+            format_time(&time_format, local_time)
         }
-    }
+    };
 
     module.new_segment("time", &formatted_time_string);
     module.get_prefix().set_value("at ");
