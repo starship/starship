@@ -7,7 +7,6 @@ use super::{Context, Module};
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("time");
 
-    // Remove when logic for disabled by default exists
     if module.config_value_bool("disabled").unwrap_or(true) {
         return None;
     }

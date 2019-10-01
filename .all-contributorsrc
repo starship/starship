@@ -174,7 +174,8 @@
       "profile": "https://github.com/andytom",
       "contributions": [
         "code",
-        "test"
+        "test",
+        "doc"
       ]
     },
     {
@@ -320,6 +321,67 @@
         "code",
         "doc",
         "test"
+      ]
+    },
+    {
+      "login": "gimbar",
+      "name": "Gimbar",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/862483?v=4",
+      "profile": "http://breax.org",
+      "contributions": [
+        "code",
+        "test",
+        "doc"
+      ]
+    },
+    {
+      "login": "TomHotston",
+      "name": "Tom Hotston",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/22729355?v=4",
+      "profile": "http://tomhotston.net",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "bijancn",
+      "name": "Bijan Chokoufe Nejad",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2117164?v=4",
+      "profile": "https://github.com/bijancn",
+      "contributions": [
+        "code",
+        "test",
+        "review"
+      ]
+    },
+    {
+      "login": "yuri1969",
+      "name": "yuri",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/13468636?v=4",
+      "profile": "https://github.com/yuri1969",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "TsubasaKawajiri",
+      "name": "TsubasaKawajiri",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/39114857?v=4",
+      "profile": "https://github.com/TsubasaKawajiri",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "qryxip",
+      "name": "Ryo Yamashita",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/14125495?v=4",
+      "profile": "https://github.com/qryxip",
+      "contributions": [
+        "code"
       ]
     }
   ],

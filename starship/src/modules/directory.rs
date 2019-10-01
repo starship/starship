@@ -8,7 +8,8 @@ use super::{Context, Module};
 ///
 /// Will perform path contraction and truncation.
 /// **Contraction**
-///     - Paths beginning with the home directory will be contracted to `~`
+///     - Paths beginning with the home directory or with a git repo right
+/// inside the home directory will be contracted to `~`
 ///     - Paths containing a git repo will contract to begin at the repo root
 ///
 /// **Truncation**
@@ -32,14 +33,32 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .config_value_i64("fish_style_pwd_dir_length")
         .unwrap_or(FISH_STYLE_PWD_DIR_LENGTH);
 
+    // Using environment PWD is the standard approach for determining logical path
+    let use_logical_path = module.config_value_bool("use_logical_path").unwrap_or(true);
+    // If this is None for any reason, we fall back to reading the os-provided path
+    let logical_current_dir = if use_logical_path {
+        match std::env::var("PWD") {
+            Ok(x) => Some(x),
+            Err(_) => {
+                log::debug!("Asked for logical path, but PWD was invalid.");
+                None
+            }
+        }
+    } else {
+        None
+    };
+    let current_dir = logical_current_dir
+        .as_ref()
+        .map(|d| Path::new(d))
+        .unwrap_or_else(|| context.current_dir.as_ref());
+
     let home_dir = dirs::home_dir().unwrap();
-    let current_dir = &context.current_dir;
     log::debug!("Current directory: {:?}", current_dir);
 
     let repo = &context.get_repo().ok()?;
 
     let dir_string = match &repo.root {
-        Some(repo_root) if truncate_to_repo => {
+        Some(repo_root) if truncate_to_repo && (repo_root != &home_dir) => {
             let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
 
             // Contract the path to the git repo root
@@ -54,7 +73,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     if fish_style_pwd_dir_length > 0 {
         // If user is using fish style path, we need to add the segment first
-        let contracted_home_dir = contract_path(current_dir, &home_dir, HOME_SYMBOL);
+        let contracted_home_dir = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
         let fish_style_dir = to_fish_style(
             fish_style_pwd_dir_length as usize,
             contracted_home_dir,
@@ -145,7 +164,7 @@ fn truncate(dir_string: String, length: usize) -> String {
 /// Contracted Path: `in_a/repo/but_nested`
 /// With Fish Style: `/s/P/n/in_a/repo/but_nested`
 fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string: &str) -> String {
-    let replaced_dir_string = dir_string.replace(truncated_dir_string, "");
+    let replaced_dir_string = dir_string.trim_end_matches(truncated_dir_string).to_owned();
     let components = replaced_dir_string.split('/').collect::<Vec<&str>>();
 
     if components.is_empty() {
@@ -282,5 +301,12 @@ mod tests {
         let path = "/absolute/Path/not/in_a/repo/but_nested";
         let output = to_fish_style(2, path.to_string(), "repo/but_nested");
         assert_eq!(output, "/ab/Pa/no/in/");
+    }
+
+    #[test]
+    fn fish_style_with_duplicate_directories() {
+        let path = "~/starship/tmp/C++/C++/C++";
+        let output = to_fish_style(1, path.to_string(), "C++");
+        assert_eq!(output, "~/s/t/C/C/");
     }
 }

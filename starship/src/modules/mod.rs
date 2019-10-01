@@ -1,7 +1,9 @@
 // While adding out new module add out module to src/module.rs ALL_MODULES const array also.
+mod aws;
 mod character;
 mod cmd_duration;
 mod directory;
+mod env_var;
 mod git_branch;
 mod git_state;
 mod git_status;
@@ -10,6 +12,7 @@ mod hostname;
 mod java;
 mod jobs;
 mod line_break;
+mod memory_usage;
 mod nix_shell;
 mod nodejs;
 mod package;
@@ -27,7 +30,9 @@ use crate::module::Module;
 
 pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     match module {
+        "aws" => aws::module(context),
         "directory" => directory::module(context),
+        "env_var" => env_var::module(context),
         "character" => character::module(context),
         "nodejs" => nodejs::module(context),
         "rust" => rust::module(context),
@@ -48,6 +53,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "nix_shell" => nix_shell::module(context),
         "hostname" => hostname::module(context),
         "time" => time::module(context),
+        "memory_usage" => memory_usage::module(context),
 
         _ => {
             eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
