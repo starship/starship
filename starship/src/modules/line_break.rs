@@ -1,4 +1,5 @@
 use super::{Context, Module};
+use crate::config::SegmentConfig;
 
 /// Creates a module for the line break
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -9,7 +10,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.get_prefix().set_value("");
     module.get_suffix().set_value("");
 
-    module.new_segment("character", LINE_ENDING);
+    module.create_segment(
+        "character",
+        &SegmentConfig {
+            value: LINE_ENDING,
+            style: None,
+        },
+    );
 
     Some(module)
 }

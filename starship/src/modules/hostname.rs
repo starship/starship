@@ -31,7 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     module.set_style(config.style);
-    // TODO: Rewrite hostname segment with segmento config
+    // TODO: Rewrite hostname segment with segment config
     module.new_segment(
         "hostname",
         &format!("{}{}{}", config.prefix, host, config.suffix),
