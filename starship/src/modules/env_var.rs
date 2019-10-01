@@ -25,7 +25,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // TODO: Use native prefix and suffix instead of stacking custom ones together with env_value.
-    module.new_segment("env_var", &format!("{}{}{}", config.prefix, env_value, config.suffix));
+    module.new_segment(
+        "env_var",
+        &format!("{}{}{}", config.prefix, env_value, config.suffix),
+    );
 
     Some(module)
 }

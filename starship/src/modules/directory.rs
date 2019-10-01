@@ -3,8 +3,8 @@ use std::path::Path;
 
 use super::{Context, Module};
 
-use crate::configs::directory::DirectoryConfig;
 use crate::config::RootModuleConfig;
+use crate::configs::directory::DirectoryConfig;
 
 /// Creates a module with the current directory
 ///
