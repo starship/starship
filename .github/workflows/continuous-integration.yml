@@ -28,7 +28,7 @@ jobs:
           toolchain: stable
           override: true
       - run: rustup component add clippy
-      - uses: actions-rs/clippy-check@v1
+      - uses: actions-rs/clippy-check@bucket-size
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --all-targets --all-features -- -D clippy::all
