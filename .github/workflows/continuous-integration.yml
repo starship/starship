@@ -137,11 +137,11 @@ jobs:
 
   # Publish all packages to Crates.io
   cargo_publish:
+    # Only run if tag starts with "v*" (e.g. v1.0.0)
+    if: startsWith(github.ref, 'refs/tags/v')
     name: Publish Cargo Packages
     needs: [test, docker_test]
     runs-on: ubuntu-latest
-    # Only run if tag starts with "v*" (e.g. v1.0.0)
-    if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
