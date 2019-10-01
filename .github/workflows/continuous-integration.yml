@@ -68,7 +68,7 @@ jobs:
   # On both Rust stable and Rust nightly
   test:
     name: Test Suite
-    needs: [rustfmt, clippy, cargo_check, cargo_audit]
+    needs: [cargo_check]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -120,7 +120,7 @@ jobs:
   # Run the tests in the Docker image
   docker_test:
     name: Test in Docker
-    needs: [rustfmt, clippy, cargo_check, cargo_audit]
+    needs: [cargo_check]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
