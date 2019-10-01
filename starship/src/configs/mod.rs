@@ -1,7 +1,7 @@
 pub mod battery;
 pub mod cmd_duration;
 pub mod directory;
-//pub mod env
+pub mod env_var;
 pub mod rust;
 
 use crate::config::{ModuleConfig, RootModuleConfig};
