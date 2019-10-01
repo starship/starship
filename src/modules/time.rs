@@ -36,6 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let local_time: DateTime<Local> = Local::now();
     log::trace!("Local time now is {}", local_time);
+
     let formatted_time_string: String;
     if utc_time_offset_str == "local" {
         formatted_time_string = format_time_local(&time_format, local_time);
@@ -43,15 +44,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let utc_time = DateTime::<Utc>::from_utc(local_time.naive_utc(), Utc);
         log::trace!("UTC time now is {}", utc_time);
 
-        // TODO: Add check for out of range offsets
         let utc_time_offset_in_hours = utc_time_offset_str.parse::<i32>().unwrap_or(0);
-        let timezone_offset = FixedOffset::east(utc_time_offset_in_hours * 3600);
-        log::trace!("Target timezone offset is {}", timezone_offset);
+        if utc_time_offset_in_hours < 24 && utc_time_offset_in_hours > -24 {
+            let timezone_offset = FixedOffset::east(utc_time_offset_in_hours * 3600);
+            log::trace!("Target timezone offset is {}", timezone_offset);
 
-        let target_time = utc_time.with_timezone(&timezone_offset);
-        log::trace!("Time in target timezone now is {}", target_time);
+            let target_time = utc_time.with_timezone(&timezone_offset);
+            log::trace!("Time in target timezone now is {}", target_time);
 
-        formatted_time_string = format_time_fo(&time_format, target_time);
+            formatted_time_string = format_time_fo(&time_format, target_time);
+        } else {
+            // Fall back to local time if an invalid offset is provided.
+            formatted_time_string = format_time_local(&time_format, local_time);
+        }
     }
 
     module.new_segment("time", &formatted_time_string);
