@@ -1,4 +1,6 @@
 pub mod battery;
+pub mod hostname;
+pub mod jobs;
 pub mod rust;
 
 use crate::config::{ModuleConfig, RootModuleConfig};
