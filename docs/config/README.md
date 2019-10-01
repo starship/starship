@@ -85,6 +85,7 @@ The default `prompt_order` is used to define the order in which modules are show
 prompt_order = [
     "username",
     "hostname",
+    "kubernetes",
     "directory",
     "git_branch",
     "git_state",
@@ -527,6 +528,35 @@ more than the `threshold` config value, if it exists.
 symbol = "+ "
 threshold = 4
 ```
+
+
+## Kubernetes
+
+Displays the current Kubernetes context name and, if set, the namespace from
+the kubeconfig file. The namespace needs to be set in the kubeconfig file, this
+can be done via `kubectl config set-context starship-cluster --namespace
+astronaut`. If the `$KUBECONFIG` env var is set the module will use that if
+not it will use the `~/.kube/config`.
+
+### Options
+
+| Variable   | Default       | Description                                         |
+| ---------- | ------------- | --------------------------------------------------- |
+| `symbol`   | `"☸ "`       | The symbol used before displaying the Cluster info. |
+| `style`    | `"bold blue"` | The style for the module.                           |
+| `disabled` | `false`       | Disables the `kubernetes` module                    |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[kubernetes]
+symbol = "⛵ "
+style = "dim green"
+disabled = true
+```
+
 
 ## Line Break
 
