@@ -16,7 +16,7 @@
       alt="Azure Pipelines Build Status"
     />
   </a>
-    <a href="https://repology.org/project/starship/versions">
+  <a href="https://repology.org/project/starship/versions">
     <img src="https://repology.org/badge/tiny-repos/starship.svg" alt="Packaging status">
   </a><br>
   <a href="#contributors">
@@ -40,7 +40,15 @@
   ·
   <a href="https://starship.rs/config/">Configuration</a>
 </h4>
-
+<p align="center">
+  <a href="./translations/README.ja.md">
+    <img height="15" src="./media/flag-jp.png" alt="日本語" />
+  </a>
+  &#0020;
+  <a href="./README.md">
+    <img height="15" src="./media/flag-us.png" alt="English" />
+  </a>
+</p>
 <h1></h1>
 
 <p align="center">
