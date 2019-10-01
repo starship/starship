@@ -136,4 +136,60 @@ mod tests {
         let formatted = format_time("[%T]", time);
         assert_eq!(formatted, "[15:36:47]");
     }
+
+    #[test]
+    fn test_midnight_12hr_fixed_offset() {
+        let timezone_offset = FixedOffset::east(0);
+        let time = Utc.ymd(2014, 7, 8).and_hms(0, 0, 0).with_timezone(&timezone_offset);
+        let formatted = format_time_fixed_offset(FMT_12, time);
+        assert_eq!(formatted, "12:00:00 AM");
+    }
+
+    #[test]
+    fn test_midnight_24hr_fixed_offset() {
+        let timezone_offset = FixedOffset::east(0);
+        let time = Utc.ymd(2014, 7, 8).and_hms(0, 0, 0).with_timezone(&timezone_offset);
+        let formatted = format_time_fixed_offset(FMT_24, time);
+        assert_eq!(formatted, "00:00:00");
+    }
+
+    #[test]
+    fn test_noon_12hr_fixed_offset() {
+        let timezone_offset = FixedOffset::east(0);
+        let time = Utc.ymd(2014, 7, 8).and_hms(12, 0, 0).with_timezone(&timezone_offset);
+        let formatted = format_time_fixed_offset(FMT_12, time);
+        assert_eq!(formatted, "12:00:00 PM");
+    }
+
+    #[test]
+    fn test_noon_24hr_fixed_offset() {
+        let timezone_offset = FixedOffset::east(0);
+        let time = Utc.ymd(2014, 7, 8).and_hms(12, 0, 0).with_timezone(&timezone_offset);
+        let formatted = format_time_fixed_offset(FMT_24, time);
+        assert_eq!(formatted, "12:00:00");
+    }
+
+    #[test]
+    fn test_arbtime_12hr_fixed_offset() {
+        let timezone_offset = FixedOffset::east(0);
+        let time = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47).with_timezone(&timezone_offset);
+        let formatted = format_time_fixed_offset(FMT_12, time);
+        assert_eq!(formatted, "03:36:47 PM");
+    }
+
+    #[test]
+    fn test_arbtime_24hr_fixed_offset() {
+        let timezone_offset = FixedOffset::east(0);
+        let time = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47).with_timezone(&timezone_offset);
+        let formatted = format_time_fixed_offset(FMT_24, time);
+        assert_eq!(formatted, "15:36:47");
+    }
+
+    #[test]
+    fn test_format_with_paren_fixed_offset() {
+        let timezone_offset = FixedOffset::east(0);
+        let time = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47).with_timezone(&timezone_offset);
+        let formatted = format_time_fixed_offset("[%T]", time);
+        assert_eq!(formatted, "[15:36:47]");
+    }
 }
