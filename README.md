@@ -1,37 +1,35 @@
 <p align="center">
-  <br />
-  <img
+  <br /><img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
     alt="Starship – Cross-shell prompt"
   />
 </p>
 <p align="center">
-  <a href="https://crates.io/crates/starship">
-    <img src="https://badgen.net/crates/v/starship" alt="Crates.io version" />
-  </a>
-  <a href="https://dev.azure.com/starship-control/starship/_build">
-    <img
+  <a href="https://crates.io/crates/starship"
+    ><img src="https://badgen.net/crates/v/starship" alt="Crates.io version"
+  /></a>
+  <a href="https://dev.azure.com/starship-control/starship/_build"
+    ><img
       src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite"
       alt="Azure Pipelines Build Status"
-    />
-  </a>
-  <a href="https://repology.org/project/starship/versions">
-    <img src="https://repology.org/badge/tiny-repos/starship.svg" alt="Packaging status">
-  </a><br>
-  <a href="#contributors">
-    <img
-      src="https://badgen.net/badge/all%20contributors/20/orange"
+  /></a>
+  <a href="https://repology.org/project/starship/versions"
+    ><img
+      src="https://repology.org/badge/tiny-repos/starship.svg"
+      alt="Packaging status"/></a
+  ><br /><a href="#contributors"
+    ><img
+      src="https://badgen.net/badge/all%20contributors/35/orange"
       alt="All Contributors"
-    />
-  </a>
-  <a href="https://discord.gg/8Jzqu3T">
-    <img
+  /></a>
+  <a href="https://discord.gg/8Jzqu3T"
+    ><img
       src="https://badgen.net/badge/chat/on%20discord/7289da"
       alt="Chat on Discord"
-    />
-  </a>
+  /></a>
 </p>
+
 <h4 align="center">
   <br />
   <a href="https://starship.rs">Website</a>
@@ -41,14 +39,15 @@
   <a href="https://starship.rs/config/">Configuration</a>
 </h4>
 <p align="center">
-  <a href="./translations/README.ja.md">
-    <img height="15" src="./media/flag-jp.png" alt="日本語" />
-  </a>
+  <a href="./README.md"
+    ><img height="15" src="./media/flag-us.png" alt="English"
+  /></a>
   &#0020;
-  <a href="./README.md">
-    <img height="15" src="./media/flag-us.png" alt="English" />
-  </a>
+  <a href="./translations/README.ja.md"
+    ><img height="15" src="./media/flag-jp.png" alt="日本語"
+  /></a>
 </p>
+
 <h1></h1>
 
 <p align="center">
