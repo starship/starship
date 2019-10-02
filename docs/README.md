@@ -97,3 +97,12 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    eval "$(starship init zsh)"
    ```
+
+   #### Powershell
+
+   Add the following to the end of `~\Documents\PowerShell\Profile.ps1` (or `~/.config/powershell/profile.ps1` on -Nix):
+
+   ```sh
+   # ~\Documents\PowerShell\Profile.ps1
+   Invoke-Expression (&starship init powershell)
+   ```
