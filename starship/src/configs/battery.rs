@@ -1,25 +1,35 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
 
 use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct BatteryConfig<'a> {
-    pub full_symbol: &'a str,
-    pub charging_symbol: &'a str,
-    pub discharging_symbol: &'a str,
-    pub unknown_symbol: Option<&'a str>,
-    pub empty_symbol: Option<&'a str>,
+    pub full_symbol: SegmentConfig<'a>,
+    pub charging_symbol: SegmentConfig<'a>,
+    pub discharging_symbol: SegmentConfig<'a>,
+    pub unknown_symbol: Option<SegmentConfig<'a>>,
+    pub empty_symbol: Option<SegmentConfig<'a>>,
     pub display: Vec<BatteryDisplayConfig>,
     pub disabled: bool,
+    pub percentage: SegmentConfig<'a>,
 }
 
 impl<'a> RootModuleConfig<'a> for BatteryConfig<'a> {
     fn new() -> Self {
         BatteryConfig {
-            full_symbol: "•",
-            charging_symbol: "↑",
-            discharging_symbol: "↓",
+            full_symbol: SegmentConfig {
+                value: "•",
+                style: None,
+            },
+            charging_symbol: SegmentConfig {
+                value: "↑",
+                style: None,
+            },
+            discharging_symbol: SegmentConfig {
+                value: "↓",
+                style: None,
+            },
             unknown_symbol: None,
             empty_symbol: None,
             display: vec![BatteryDisplayConfig {
@@ -27,6 +37,10 @@ impl<'a> RootModuleConfig<'a> for BatteryConfig<'a> {
                 style: Color::Red.bold(),
             }],
             disabled: false,
+            percentage: SegmentConfig {
+                value: "",
+                style: None,
+            },
         }
     }
 }
