@@ -48,7 +48,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let utc_time_offset_in_hours = match utc_time_offset_str.parse::<f32>() {
             Ok(parsed_value) => parsed_value,
             Err(_) => {
-                log::error!(
+                log::debug!(
                     "Invalid utc_time_offset configuration provided! Falling back to \"local\"."
                 );
                 0_f32
@@ -64,7 +64,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
             format_time_fixed_offset(&time_format, target_time)
         } else {
-            log::error!(
+            log::debug!(
                 "Invalid utc_time_offset configuration provided! Falling back to \"local\"."
             );
             format_time(&time_format, local_time)
