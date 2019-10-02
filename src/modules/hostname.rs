@@ -30,6 +30,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     };
 
+    let host = host.trim_end_matches(module.config_value_str("trim_end").unwrap_or(""));
+
     let prefix = module.config_value_str("prefix").unwrap_or("").to_owned();
     let suffix = module.config_value_str("suffix").unwrap_or("").to_owned();
 
