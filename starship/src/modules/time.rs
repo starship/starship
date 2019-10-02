@@ -35,10 +35,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         time_format
     );
 
+    module.new_segment("time", &create_formatted_time_string(&utc_time_offset_str, &time_format));
+    module.get_prefix().set_value("at ");
+
+    Some(module)
+}
+
+fn create_formatted_time_string(utc_time_offset_str: &str, time_format: &str) -> String {
     let local_time: DateTime<Local> = Local::now();
     log::trace!("Local time now is {}", local_time);
 
-    let formatted_time_string: String = if utc_time_offset_str == "local" {
+    if utc_time_offset_str == "local" {
         format_time(&time_format, local_time)
     } else {
         let utc_time = DateTime::<Utc>::from_utc(local_time.naive_utc(), Utc);
@@ -48,7 +55,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let utc_time_offset_in_hours = match utc_time_offset_str.parse::<f32>() {
             Ok(parsed_value) => parsed_value,
             Err(_) => {
-                log::debug!(
+                log::warn!(
                     "Invalid utc_time_offset configuration provided! Falling back to \"local\"."
                 );
                 0_f32
@@ -64,17 +71,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
             format_time_fixed_offset(&time_format, target_time)
         } else {
-            log::debug!(
+            log::warn!(
                 "Invalid utc_time_offset configuration provided! Falling back to \"local\"."
             );
             format_time(&time_format, local_time)
         }
-    };
-
-    module.new_segment("time", &formatted_time_string);
-    module.get_prefix().set_value("at ");
-
-    Some(module)
+    }
 }
 
 /// Format a given time into the given string. This function should be referentially
