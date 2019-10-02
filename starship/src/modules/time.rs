@@ -62,7 +62,7 @@ fn create_formatted_time_string(
         let utc_time_offset_in_hours = match utc_time_offset_str.parse::<f32>() {
             Ok(parsed_value) => parsed_value,
             // Passing out of range value to force falling back to "local"
-            Err(_) => 25_f32
+            Err(_) => 25_f32,
         };
         if utc_time_offset_in_hours < 24_f32 && utc_time_offset_in_hours > -24_f32 {
             let utc_offset_in_seconds: i32 = (utc_time_offset_in_hours * 3600_f32) as i32;
