@@ -89,12 +89,13 @@ prompt_order = [
     "git_state",
     "git_status",
     "package",
-    "nodejs",
-    "ruby",
-    "rust",
-    "python",
+    "dotnet",
     "golang",
     "java",
+    "nodejs",
+    "python",
+    "ruby",
+    "rust",
     "nix_shell",
     "memory_usage",
     "aws",
@@ -298,24 +299,52 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 truncation_length = 8
 ```
 
-## 環境変数
+## Dotnet
 
-`env_var`モジュールは、選択された環境変数の現在の値を表示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+
+This module will only be shown in your prompt when one of the following files are present in the current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll also need the .NET Core command-line tools installed in order to use it correctly.
+
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+
+### オプション
+
+| 変数          | デフォルト         | 説明                                                       |
+| ----------- | ------------- | -------------------------------------------------------- |
+| `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
+| `style`     | `"bold blue"` | The style for the module.                                |
+| `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
+| `disabled`  | `false`       | Disables the `dotnet` module.                            |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[dotnet]
+symbol = "🥅 "
+style = "green"
+heuristic = false
+```
+
+## Environment Variable
+
+The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
 - `variable`オプションが、既存の環境変数と一致する
 - `variable`オプションが定義されておらず、`default`オプションが定義されている
 
 ### オプション
 
-| 変数         | デフォルト            | 説明                                    |
-| ---------- | ---------------- | ------------------------------------- |
-| `symbol`   |                  | 環境変数を表示する前に使用される記号です。                 |
-| `variable` |                  | 表示される環境変数です。                          |
-| `default`  |                  | 上のvariableが定義されていない場合に表示されるデフォルトの値です。 |
-| `prefix`   | `""`             | 変数の直前に表示するprefixです。                   |
-| `suffix`   | `""`             | 変数の直後に表示するsuffixです。                   |
-| `style`    | `"dimmed black"` | モジュールのスタイルです。                         |
-| `disabled` | `false`          | `env_var`モジュールを無効にします。                |
+| 変数         | デフォルト            | 説明                                                                           |
+| ---------- | ---------------- | ---------------------------------------------------------------------------- |
+| `symbol`   |                  | The symbol used before displaying the variable value.                        |
+| `variable` |                  | The environment variable to be displayed.                                    |
+| `default`  |                  | The default value to be displayed when the selected variable is not defined. |
+| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
+| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
+| `style`    | `"dimmed black"` | The style for the module.                                                    |
+| `disabled` | `false`          | Disables the `env_var` module.                                               |
 
 ### 設定例
 
@@ -327,19 +356,19 @@ variable = "SHELL"
 default = "unknown shell"
 ```
 
-## Git ブランチ
+## Git Branch
 
-`git_branch`モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを表示します。
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### オプション
 
-| 変数                  | デフォルト           | 説明                                          |
-| ------------------- | --------------- | ------------------------------------------- |
-| `symbol`            | `" "`          | 現在のディレクトリのリポジトリのブランチ名の前に使用されるシンボルです。        |
-| `truncation_length` | `2^63 - 1`      | gitブランチをX書記素に切り捨てます。                        |
-| `truncation_symbol` | `"…"`           | ブランチ名切り捨てられていることを示すための記号です。 記号なしに「」も使用できます。 |
-| `style`             | `"bold purple"` | モジュールのスタイルです。                               |
-| `disabled`          | `false`         | `git_branch`モジュールを無効にします。                   |
+| 変数                  | デフォルト           | 説明                                                                                    |
+| ------------------- | --------------- | ------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
+| `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
+| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
+| `style`             | `"bold purple"` | The style for the module.                                                             |
+| `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
 
 ### 設定例
 
@@ -352,24 +381,24 @@ truncation_length = "4"
 truncation_symbol = ""
 ```
 
-## Git の進行状態
+## Git State
 
-`git_state`モジュールはgitディレクトリの進行状態を表します。 (例: _REBASING_, _BISECTING_, その他) 進捗情報がある場合(例: REBASING 3/10)はその情報も表示されます。
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
 ### オプション
 
-| 変数                 | デフォルト              | 説明                                                       |
-| ------------------ | ------------------ | -------------------------------------------------------- |
-| `rebase`           | `"REBASING"`       | `rebase`進行中に表示されるテキストです。                                 |
-| `merge`            | `"MERGING"`        | `merge`進行中に表示されるテキストです。                                  |
-| `revert`           | `"REVERTING"`      | `revert`進行中に表示されるテキストです。                                 |
-| `cherry_pick`      | `"CHERRY-PICKING"` | `cherry-pick`進行中に表示されるテキストです。                            |
-| `bisect`           | `"BISECTING"`      | `disect`進行中に表示されるテキストです。                                 |
-| `am`               | `"AM"`             | `apply-mailbox` (`git am`) の進行中に表示されるテキストです。             |
-| `am_or_rebase`     | `"AM/REBASE"`      | あいまいな`apply-mailbox`または`rebase`が進行中のときに表示されるテキストです。      |
-| `progress_divider` | `"/"`              | 現在の進行量と合計進行量を分ける記号またはテキストです。 (例: `" of "` 、 `"3 of 10"`) |
-| `style`            | `"bold yellow"`    | モジュールのスタイルです。                                            |
-| `disabled`         | `false`            | `git_state`モジュールを無効にします。                                 |
+| 変数                 | デフォルト              | 説明                                                                                                               |
+| ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
+| `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
+| `revert`           | `"REVERTING"`      | The text displayed when a `revert` is in progress.                                                               |
+| `cherry_pick`      | `"CHERRY-PICKING"` | The text displayed when a `cherry-pick` is in progress.                                                          |
+| `bisect`           | `"BISECTING"`      | The text displayed when a `bisect` is in progress.                                                               |
+| `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
+| `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
+| `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
+| `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
+| `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
 ### 設定例
 
@@ -381,29 +410,29 @@ progress_divider = " of "
 cherry_pick = "🍒 PICKING"
 ```
 
-## Git の状態
+## Git Status
 
-`git_status`モジュールは、現在のディレクトリのリポジトリの状態を表すシンボルを表示します。
+The `git_status` module shows symbols representing the state of the repo in your current directory.
 
 ### オプション
 
-| 変数                | デフォルト        | 説明                             |
-| ----------------- | ------------ | ------------------------------ |
-| `conflicted`      | `"="`        | このブランチにはマージの競合があります。           |
-| `ahead`           | `"⇡"`        | このブランチは、追跡されるブランチよりも先にあります。    |
-| `behind`          | `"⇣"`        | このブランチは、追跡されているブランチの背後にあります。   |
-| `diverged`        | `"⇕"`        | このブランチは、追跡されているブランチから分岐しています。  |
-| `untracked`       | `"?"`        | 作業ディレクトリに追跡されていないファイルがあります。    |
-| `stashed`         | `"$"`        | ローカルリポジトリ用のスタッシュが存在します。        |
-| `modified`        | `"!"`        | 作業ディレクトリにファイルの変更があります。         |
-| `staged`          | `"+"`        | 新しいファイルがステージング領域に追加されました。      |
-| `renamed`         | `"»"`        | 名前が変更されたファイルがステージング領域に追加されました。 |
-| `deleted`         | `"✘"`        | ファイルの削除がステージング領域に追加されました。      |
-| `show_sync_count` | `false`      | 追跡されているブランチの先行/後方カウントを表示します。   |
-| `prefix`          | `[`          | このモジュールの先頭に表示される文字列です。         |
-| `suffix`          | `]`          | このモジュールの末尾に表示される文字列です。         |
-| `style`           | `"bold red"` | モジュールのスタイルです。                  |
-| `disabled`        | `false`      | `git_status`モジュールを無効にします。      |
+| 変数                | デフォルト        | 説明                                                      |
+| ----------------- | ------------ | ------------------------------------------------------- |
+| `conflicted`      | `"="`        | This branch has merge conflicts.                        |
+| `ahead`           | `"⇡"`        | This branch is ahead of the branch being tracked.       |
+| `behind`          | `"⇣"`        | This branch is behind of the branch being tracked.      |
+| `diverged`        | `"⇕"`        | This branch has diverged from the branch being tracked. |
+| `untracked`       | `"?"`        | There are untracked files in the working directory.     |
+| `stashed`         | `"$"`        | A stash exists for the local repository.                |
+| `modified`        | `"!"`        | There are file modifications in the working directory.  |
+| `staged`          | `"+"`        | A new file has been added to the staging area.          |
+| `renamed`         | `"»"`        | A renamed file has been added to the staging area.      |
+| `deleted`         | `"✘"`        | A file's deletion has been added to the staging area.   |
+| `show_sync_count` | `false`      | Show ahead/behind count of the branch being tracked.    |
+| `prefix`          | `[`          | Prefix to display immediately before git status.        |
+| `suffix`          | `]`          | Suffix to display immediately after git status.         |
+| `style`           | `"bold red"` | The style for the module.                               |
+| `disabled`        | `false`      | Disables the `git_status` module.                       |
 
 ### 設定例
 
@@ -425,7 +454,7 @@ deleted = "🗑"
 
 ## Golang
 
-`golang`モジュールは、現在インストールされているGolangのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`go.mod`ファイルが含まれている
 - カレントディレクトリに`go.sum`ファイルが含まれている
@@ -437,11 +466,11 @@ deleted = "🗑"
 
 ### オプション
 
-| 変数         | デフォルト         | 説明                            |
-| ---------- | ------------- | ----------------------------- |
-| `symbol`   | `"🐹 "`        | Golangのバージョンを表示する前に使用される記号です。 |
-| `style`    | `"bold cyan"` | モジュールのスタイルです。                 |
-| `disabled` | `false`       | `golang`モジュールを無効にします。         |
+| 変数         | デフォルト         | 説明                                                       |
+| ---------- | ------------- | -------------------------------------------------------- |
+| `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
+| `style`    | `"bold cyan"` | The style for the module.                                |
+| `disabled` | `false`       | Disables the `golang` module.                            |
 
 ### 設定例
 
@@ -452,19 +481,19 @@ deleted = "🗑"
 symbol = "🏎💨 "
 ```
 
-## ホスト名
+## Hostname
 
-`hostname`モジュールには、システムのホスト名が表示されます。
+The `hostname` module shows the system hostname.
 
 ### オプション
 
-| 変数         | デフォルト                 | 説明                               |
-| ---------- | --------------------- | -------------------------------- |
-| `ssh_only` | `true`                | SSHセッションに接続されている場合にのみホスト名を表示します。 |
-| `prefix`   | `""`                  | ホスト名の直前に表示するprefixです。            |
-| `suffix`   | `""`                  | ホスト名の直後に表示するsuffixです。            |
-| `style`    | `"bold dimmed green"` | モジュールのスタイルです。                    |
-| `disabled` | `false`               | `hostname`モジュールを無効にします。          |
+| 変数         | デフォルト                 | 説明                                                   |
+| ---------- | --------------------- | ---------------------------------------------------- |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session. |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.    |
+| `style`    | `"bold dimmed green"` | The style for the module.                            |
+| `disabled` | `false`               | Disables the `hostname` module.                      |
 
 ### 設定例
 
@@ -478,18 +507,18 @@ suffix = "⟫"
 disabled = false
 ```
 
-## ジョブ
+## Jobs
 
-`jobs`モジュールには、実行中のジョブの現在の数が表示されます。 このモジュールは、実行中のバックグラウンドジョブがある場合にのみ表示されます。 1つ以上のジョブがある、または`threshold`に指定した値以上にジョブがある場合は実行中のジョブの数を表示します。
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
 ### オプション
 
-| 変数          | デフォルト         | 説明                     |
-| ----------- | ------------- | ---------------------- |
-| `symbol`    | `"✦ "`        | ジョブの数を表示する前に使用される記号です。 |
-| `threshold` | `1`           | 超過した場合、ジョブの数を表示します。    |
-| `style`     | `"bold blue"` | モジュールのスタイルです。          |
-| `disabled`  | `false`       | `jobs`モジュールを無効にします。    |
+| 変数          | デフォルト         | 説明                                                    |
+| ----------- | ------------- | ----------------------------------------------------- |
+| `symbol`    | `"✦ "`        | The symbol used before displaying the number of jobs. |
+| `threshold` | `1`           | Show number of jobs if exceeded.                      |
+| `style`     | `"bold blue"` | The style for the module.                             |
+| `disabled`  | `false`       | Disables the `jobs` module.                           |
 
 ### 設定例
 
@@ -645,7 +674,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 | 変数         | デフォルト          | 説明                                                       |
 | ---------- | -------------- | -------------------------------------------------------- |
 | `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | モジュールのスタイルです。                                            |
+| `style`    | `"bold green"` | The style for the module.                                |
 | `disabled` | `false`        | Disables the `nodejs` module.                            |
 
 ### 設定例
@@ -734,7 +763,7 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 | 変数         | デフォルト        | 説明                                                     |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
-| `style`    | `"bold red"` | モジュールのスタイルです。                                          |
+| `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `ruby` module.                            |
 
 ### 設定例
@@ -780,9 +809,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### オプション
+### Options
 
-| 変数         | デフォルト         | 説明                                                                                                                  |
+| Variable   | Default       | Description                                                                                                         |
 | ---------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `12hr`     | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`   | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
@@ -791,7 +820,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 If `12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `12hr` setting.
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
