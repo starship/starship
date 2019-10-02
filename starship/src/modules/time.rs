@@ -35,16 +35,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         time_format
     );
 
-    module.new_segment("time", &create_formatted_time_string(&utc_time_offset_str, &time_format));
+    let local_time: DateTime<Local> = Local::now();
+    log::trace!("Local time now is {}", local_time);
+
+    module.new_segment(
+        "time",
+        &create_formatted_time_string(local_time, &utc_time_offset_str, &time_format),
+    );
     module.get_prefix().set_value("at ");
 
     Some(module)
 }
 
-fn create_formatted_time_string(utc_time_offset_str: &str, time_format: &str) -> String {
-    let local_time: DateTime<Local> = Local::now();
-    log::trace!("Local time now is {}", local_time);
-
+fn create_formatted_time_string(
+    local_time: DateTime<Local>,
+    utc_time_offset_str: &str,
+    time_format: &str,
+) -> String {
     if utc_time_offset_str == "local" {
         format_time(&time_format, local_time)
     } else {
@@ -54,12 +61,8 @@ fn create_formatted_time_string(utc_time_offset_str: &str, time_format: &str) ->
         // Using floats to allow 30/45 minute offsets: https://www.timeanddate.com/time/time-zones-interesting.html
         let utc_time_offset_in_hours = match utc_time_offset_str.parse::<f32>() {
             Ok(parsed_value) => parsed_value,
-            Err(_) => {
-                log::warn!(
-                    "Invalid utc_time_offset configuration provided! Falling back to \"local\"."
-                );
-                0_f32
-            }
+            // Passing out of range value to force falling back to "local"
+            Err(_) => 25_f32
         };
         if utc_time_offset_in_hours < 24_f32 && utc_time_offset_in_hours > -24_f32 {
             let utc_offset_in_seconds: i32 = (utc_time_offset_in_hours * 3600_f32) as i32;
@@ -223,5 +226,95 @@ mod tests {
             .with_timezone(&timezone_offset);
         let formatted = format_time_fixed_offset("[%T]", time);
         assert_eq!(formatted, "[15:36:47]");
+    }
+
+    #[test]
+    fn test_create_formatted_time_string_with_local() {
+        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time_offset_str = "local";
+
+        let actual = create_formatted_time_string(local_time, &utc_time_offset_str, FMT_12);
+        assert_eq!(actual, "03:36:47 PM");
+    }
+
+    #[test]
+    fn test_create_formatted_time_string_with_minus_3() {
+        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time_offset_str = "-3";
+
+        let actual = create_formatted_time_string(local_time, &utc_time_offset_str, FMT_12);
+        assert_eq!(actual, "05:36:47 PM");
+    }
+
+    #[test]
+    fn test_create_formatted_time_string_with_plus_5() {
+        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time_offset_str = "+5";
+
+        let actual = create_formatted_time_string(local_time, &utc_time_offset_str, FMT_12);
+        assert_eq!(actual, "01:36:47 AM");
+    }
+
+    #[test]
+    fn test_create_formatted_time_string_with_plus_9_30() {
+        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time_offset_str = "+9.5";
+
+        let actual = create_formatted_time_string(local_time, &utc_time_offset_str, FMT_12);
+        assert_eq!(actual, "06:06:47 AM");
+    }
+
+    #[test]
+    fn test_create_formatted_time_string_with_plus_5_45() {
+        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time_offset_str = "+5.75";
+
+        let actual = create_formatted_time_string(local_time, &utc_time_offset_str, FMT_12);
+        assert_eq!(actual, "02:21:47 AM");
+    }
+
+    #[test]
+    fn test_create_formatted_time_string_with_plus_24() {
+        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time_offset_str = "+24";
+
+        let actual = create_formatted_time_string(local_time, &utc_time_offset_str, FMT_12);
+        assert_eq!(actual, "03:36:47 PM");
+    }
+
+    #[test]
+    fn test_create_formatted_time_string_with_minus_24() {
+        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time_offset_str = "-24";
+
+        let actual = create_formatted_time_string(local_time, &utc_time_offset_str, FMT_12);
+        assert_eq!(actual, "03:36:47 PM");
+    }
+
+    #[test]
+    fn test_create_formatted_time_string_with_plus_9001() {
+        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time_offset_str = "+9001";
+
+        let actual = create_formatted_time_string(local_time, &utc_time_offset_str, FMT_12);
+        assert_eq!(actual, "03:36:47 PM");
+    }
+
+    #[test]
+    fn test_create_formatted_time_string_with_minus_4242() {
+        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time_offset_str = "-4242";
+
+        let actual = create_formatted_time_string(local_time, &utc_time_offset_str, FMT_12);
+        assert_eq!(actual, "03:36:47 PM");
+    }
+
+    #[test]
+    fn test_create_formatted_time_string_with_invalid_string() {
+        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time_offset_str = "completely wrong config";
+
+        let actual = create_formatted_time_string(local_time, &utc_time_offset_str, FMT_12);
+        assert_eq!(actual, "03:36:47 PM");
     }
 }
