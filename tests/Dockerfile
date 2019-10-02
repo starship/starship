@@ -48,6 +48,19 @@ RUN curl https://pyenv.run | bash \
 # Check that Python was correctly installed
 RUN python --version
 
+# Install Dotnet
+ENV DOTNET_HOME /home/nonroot/dotnet
+ENV DOTNET_SDK_VERSION 2.2.402
+
+RUN mkdir -p "$DOTNET_HOME" \
+    && dotnet_download="$DOTNET_HOME/../dotnet.tar.gz" \
+    && curl -SL --output "$dotnet_download" https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-x64.tar.gz \
+    && tar -zxf "$dotnet_download" -C "$DOTNET_HOME" \
+    && rm "$dotnet_download"
+
+ENV PATH $DOTNET_HOME:$PATH
+RUN dotnet help
+
 # Create blank project
 RUN USER=nonroot cargo new --bin /src/starship
 WORKDIR /src/starship
