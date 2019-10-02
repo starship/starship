@@ -2,6 +2,7 @@
 mod aws;
 mod character;
 mod cmd_duration;
+mod conda;
 mod directory;
 mod dotnet;
 mod env_var;
@@ -40,8 +41,16 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "directory" => directory::module(context),
         "character" => character::module(context),
         "cmd_duration" => cmd_duration::module(context),
+        "conda" => conda::module(context),
         "dotnet" => dotnet::module(context),
         "env_var" => env_var::module(context),
+        "nodejs" => nodejs::module(context),
+        "rust" => rust::module(context),
+        "python" => python::module(context),
+        "ruby" => ruby::module(context),
+        "golang" => golang::module(context),
+        "line_break" => line_break::module(context),
+        "package" => package::module(context),
         "git_branch" => git_branch::module(context),
         "git_state" => git_state::module(context),
         "git_status" => git_status::module(context),
