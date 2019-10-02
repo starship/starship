@@ -1,5 +1,5 @@
 use ansi_term::Color;
-use chrono::{DateTime, FixedOffset, Local, Utc};
+use chrono::{DateTime, FixedOffset, Local, TimeZone, Utc};
 
 use super::{Context, Module};
 
@@ -239,7 +239,11 @@ mod tests {
 
     #[test]
     fn test_create_formatted_time_string_with_minus_3() {
-        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let timezone = TimeZone::from_offset(&FixedOffset::east(0));
+        let local_time: DateTime<Local> = Local
+            .ymd(2014, 7, 8)
+            .and_hms(15, 36, 47)
+            .with_timezone(&timezone);
         let utc_time_offset_str = "-3";
 
         let actual = create_formatted_time_string(local_time, &utc_time_offset_str, FMT_12);
@@ -248,7 +252,11 @@ mod tests {
 
     #[test]
     fn test_create_formatted_time_string_with_plus_5() {
-        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let timezone = TimeZone::from_offset(&FixedOffset::east(0));
+        let local_time: DateTime<Local> = Local
+            .ymd(2014, 7, 8)
+            .and_hms(15, 36, 47)
+            .with_timezone(&timezone);
         let utc_time_offset_str = "+5";
 
         let actual = create_formatted_time_string(local_time, &utc_time_offset_str, FMT_12);
@@ -257,7 +265,11 @@ mod tests {
 
     #[test]
     fn test_create_formatted_time_string_with_plus_9_30() {
-        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let timezone = TimeZone::from_offset(&FixedOffset::east(0));
+        let local_time: DateTime<Local> = Local
+            .ymd(2014, 7, 8)
+            .and_hms(15, 36, 47)
+            .with_timezone(&timezone);
         let utc_time_offset_str = "+9.5";
 
         let actual = create_formatted_time_string(local_time, &utc_time_offset_str, FMT_12);
@@ -266,7 +278,11 @@ mod tests {
 
     #[test]
     fn test_create_formatted_time_string_with_plus_5_45() {
-        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let timezone = TimeZone::from_offset(&FixedOffset::east(0));
+        let local_time: DateTime<Local> = Local
+            .ymd(2014, 7, 8)
+            .and_hms(15, 36, 47)
+            .with_timezone(&timezone);
         let utc_time_offset_str = "+5.75";
 
         let actual = create_formatted_time_string(local_time, &utc_time_offset_str, FMT_12);
