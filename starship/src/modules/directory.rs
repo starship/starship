@@ -122,7 +122,7 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
 /// On non-Windows OS, does nothing
 #[cfg(target_os = "windows")]
 fn replace_c_dir(path: String) -> String {
-    return path.replace("C:/", "/c");
+    path.replace("C:/", "/c")
 }
 
 /// Replaces "C://" with "/c/" within a Windows path
