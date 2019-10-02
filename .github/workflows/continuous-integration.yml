@@ -28,7 +28,7 @@ jobs:
           toolchain: stable
           override: true
       - run: rustup component add clippy
-      - uses: actions-rs/clippy-check@bucket-size
+      - uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --all-targets --all-features -- -D clippy::all
@@ -137,7 +137,6 @@ jobs:
 
   # Publish all packages to Crates.io
   cargo_publish:
-    # Only run if tag starts with "v*" (e.g. v1.0.0)
     if: startsWith(github.ref, 'refs/tags/v')
     name: Publish Cargo Packages
     needs: [test, docker_test]
@@ -150,3 +149,67 @@ jobs:
           override: true
       - run: cargo install --force cargo-publish-all
       - run: cargo-publish-all --token $CRATES_IO_TOKEN --yes
+
+  github_release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    name: Create GitHub release
+    needs: [test, docker_test]
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            bin: starship
+            name: starship-x86_64-unknown-linux-gnu.tar.gz
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            bin: starship
+            name: starship-x86_64-unknown-linux-musl.tar.gz
+          - os: macOS-latest
+            target: x86_64-apple-darwin
+            bin: starship
+            name: starship-x86_64-apple-darwin.tar.gz
+          # - os: windows-latest
+          #   target: x86_64-pc-windows-msvc
+          #   bin: starship.exe
+          #   name: starship-Windows-x86_64.zip
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          target: ${{ matrix.target }}
+      - name: Install musl tools
+        if: matrix.target == 'x86_64-unknown-linux-musl'
+        run: sudo apt-get install -y musl-tools
+      - name: Build target
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --target ${{ matrix.target }}
+        run: |
+          strip target/${{ matrix.target }}/release/${{ matrix.bin }}
+          cd target/${{ matrix.target }}/release
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]
+          then
+            7z a ../../../${{ matrix.name }} ${{ matrix.bin }}
+          else
+            tar czvf ../../../${{ matrix.name }} ${{ matrix.bin }}
+          fi
+          cd -
+      - name: Generate release notes
+        run: git-chglog -c .github/chglog/release.yml $(git describe --tags $(git rev-list --tags --max-count=1)) > ${{ github.workflow }}-RELEASE.txt
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          files: |
+            'starship*.tar.gz'
+            'starship*.zip'
+          body_path: ${{ github.workflow }}-RELEASE.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
