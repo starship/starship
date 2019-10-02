@@ -191,6 +191,7 @@ jobs:
         with:
           command: build
           args: --release --target ${{ matrix.target }}
+      - name: Prepare build artifacts
         run: |
           strip target/${{ matrix.target }}/release/${{ matrix.bin }}
           cd target/${{ matrix.target }}/release
