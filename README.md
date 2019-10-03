@@ -132,10 +132,10 @@ The prompt shows information you need while you're working, while staying sleek 
 
    #### As alternative if you don't use the platforms above 
    * [Download archives of precompiled binaries](https://github.com/starship/starship/releases).
-   * Extract the .tar.gz file via
+   * Extract the .tar.gz file 
 
    ```sh
-   xvf starship-*.tar.gz
+   tar xvf starship-*.tar.gz
    ```
    * Change inside the new directory and move or copy the file to the right location:
 
