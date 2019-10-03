@@ -3,7 +3,7 @@ use std::path::Path;
 
 use super::{Context, Module};
 
-use crate::config::RootModuleConfig;
+use crate::config::{RootModuleConfig, SegmentConfig};
 use crate::configs::directory::DirectoryConfig;
 
 /// Creates a module with the current directory
@@ -70,10 +70,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             &truncated_dir_string,
         );
 
-        module.create_segment("path", &config.path.with_value(&fish_style_dir));
+        module.create_segment(
+            "path",
+            &SegmentConfig {
+                value: &fish_style_dir,
+                style: None,
+            },
+        );
     }
 
-    module.create_segment("path", &config.path.with_value(&truncated_dir_string));
+    module.create_segment(
+        "path",
+        &SegmentConfig {
+            value: &truncated_dir_string,
+            style: None,
+        },
+    );
 
     module.get_prefix().set_value("in ");
 
