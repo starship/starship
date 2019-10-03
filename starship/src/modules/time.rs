@@ -262,55 +262,50 @@ mod tests {
 
     #[test]
     fn test_create_formatted_time_string_with_plus_24() {
-        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time_offset_str = "+24";
 
-        let actual = create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12)
+        create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12)
             .err()
             .expect("Invalid timezone offset.");
     }
 
     #[test]
     fn test_create_formatted_time_string_with_minus_24() {
-        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time_offset_str = "-24";
 
-        let actual = create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12)
+        create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12)
             .err()
             .expect("Invalid timezone offset.");
     }
 
     #[test]
     fn test_create_formatted_time_string_with_plus_9001() {
-        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time_offset_str = "+9001";
 
-        let actual = create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12)
+        create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12)
             .err()
             .expect("Invalid timezone offset.");
     }
 
     #[test]
     fn test_create_formatted_time_string_with_minus_4242() {
-        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time_offset_str = "-4242";
 
-        let actual = create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12)
+        create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12)
             .err()
             .expect("Invalid timezone offset.");
     }
 
     #[test]
     fn test_create_formatted_time_string_with_invalid_string() {
-        let local_time: DateTime<Local> = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time_offset_str = "completely wrong config";
 
-        let actual = create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12)
+        create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12)
             .err()
             .expect("Invalid timezone offset.");
     }
