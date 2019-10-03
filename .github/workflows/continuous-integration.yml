@@ -70,7 +70,12 @@ jobs:
       - uses: actions/setup-python@master
         with:
           python-version: "3.6.9"
-      
+
+      # Install dotnet at a fixed version
+      - uses: actions/setup-dotnet@master
+        with:
+          dotnet-version: "2.2.402"
+
       # Run the ignored tests that expect the above setup
       - uses: actions/checkout@master
       - name: Run all tests
@@ -88,6 +93,8 @@ jobs:
       - name: Fix file permissions
         run: chmod -R a+w .
       - name: Build the Docker image
-        run: docker build -f tests/Dockerfile --tag starshipcommand/starship-test --cache-from starshipcommand/starship-test .
+        run:
+          docker build -f tests/Dockerfile --tag starshipcommand/starship-test --cache-from
+          starshipcommand/starship-test .
       - name: Run tests in Docker
         run: docker run --rm -v $(pwd):/src/starship starshipcommand/starship-test
