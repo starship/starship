@@ -5,4 +5,4 @@ files:
       - /docs/guide
     translation: /docs/%two_letters_code%/**/%original_file_name%
   - source: /README.md
-    translation: /%file_name%.%two_letters_code%.%file_extension%
+    translation: /translations/%file_name%.%two_letters_code%.%file_extension%

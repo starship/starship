@@ -45,6 +45,7 @@ chrono = "0.4"
 sysinfo = "0.9.5"
 byte-unit = "3.0.3"
 starship_module_config_derive = { version = "0.20", path = "../starship_module_config_derive" }
+yaml-rust = "0.4"
 
 [dev-dependencies]
 tempfile = "3.1.0"
