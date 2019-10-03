@@ -32,7 +32,7 @@
   <br />
   <a href="https://starship.rs">ウェブサイト</a>
   ·
-  <a href="#-installation">インストール</a>
+  <a href="#-インストール">インストール</a>
   ·
   <a href="https://starship.rs/config/">設定</a>
 </h4>
