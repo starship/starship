@@ -130,8 +130,8 @@ The prompt shows information you need while you're working, while staying sleek 
    $ pkg install starship
    ```
 
-   #### As alternative *if you don't use the platforms above 
-   * *[Download archives of precompiled binaries](https://github.com/starship/starship/releases)**.
+   #### As alternative if you don't use the platforms above 
+   * [Download archives of precompiled binaries](https://github.com/starship/starship/releases).
    * Extract the .tar.gz file via
 
    ```sh
