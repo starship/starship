@@ -95,9 +95,8 @@ The prompt shows information you need while you're working, while staying sleek 
 
 ### Getting Started
 
-1. Install the **starship** binary:
+1. Install the **starship** binary from one of this platforms:
 
-   **[Download archives of precompiled binaries](https://github.com/starship/starship/releases)** if you don't use the platforms below.
 
    #### Homebrew
 
@@ -129,6 +128,19 @@ The prompt shows information you need while you're working, while staying sleek 
 
    ```sh
    $ pkg install starship
+   ```
+
+   #### As alternative *if you don't use the platforms above 
+   * *[Download archives of precompiled binaries](https://github.com/starship/starship/releases)**.
+   * Extract the .tar.gz file via
+
+   ```sh
+   xvf starship-*.tar.gz
+   ```
+   * Change inside the new directory and move or copy the file to the right location:
+
+   ```sh
+   sudo mv starship /usr/local/bin/  
    ```
 
 1. Add the init script to your shell's config file:
