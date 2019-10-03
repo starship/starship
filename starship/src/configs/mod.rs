@@ -1,6 +1,7 @@
 pub mod battery;
 pub mod hostname;
 pub mod jobs;
+pub mod dotnet;
 pub mod rust;
 
 use crate::config::{ModuleConfig, RootModuleConfig};
@@ -28,12 +29,16 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "git_state",
                 "git_status",
                 "package",
-                "nodejs",
-                "ruby",
-                "rust",
-                "python",
+                // ↓ Toolchain version modules ↓
+                // (Let's keep these sorted alphabetically)
+                "dotnet",
                 "golang",
                 "java",
+                "nodejs",
+                "python",
+                "ruby",
+                "rust",
+                // ↑ Toolchain version modules ↑
                 "nix_shell",
                 "memory_usage",
                 "aws",
