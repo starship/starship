@@ -1,7 +1,7 @@
 pub mod battery;
+pub mod dotnet;
 pub mod hostname;
 pub mod jobs;
-pub mod dotnet;
 pub mod rust;
 
 use crate::config::{ModuleConfig, RootModuleConfig};
