@@ -5,6 +5,8 @@ use ansi_term::{ANSIString, ANSIStrings};
 use std::fmt;
 
 // List of all modules
+// Keep these ordered alphabetically.
+// Default ordering is handled in configs/mod.rs
 pub const ALL_MODULES: &[&str] = &[
     "aws",
     #[cfg(feature = "battery")]
@@ -12,6 +14,7 @@ pub const ALL_MODULES: &[&str] = &[
     "character",
     "cmd_duration",
     "directory",
+    "dotnet",
     "env_var",
     "git_branch",
     "git_state",
@@ -20,6 +23,7 @@ pub const ALL_MODULES: &[&str] = &[
     "hostname",
     "java",
     "jobs",
+    "kubernetes",
     "line_break",
     "memory_usage",
     "nix_shell",
