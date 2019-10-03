@@ -135,12 +135,12 @@ The prompt shows information you need while you're working, while staying sleek 
    * Extract the .tar.gz file 
 
    ```sh
-   tar xvf starship-*.tar.gz
+   # tar xvf starship-*.tar.gz
    ```
    * Change inside the new directory and move or copy the file to the right location:
 
    ```sh
-   sudo mv starship /usr/local/bin/  
+   # sudo mv starship /usr/local/bin/  
    ```
 
 1. Add the init script to your shell's config file:
