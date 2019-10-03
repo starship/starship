@@ -1,6 +1,6 @@
 use super::{Context, Module};
 
-use crate::config::RootModuleConfig;
+use crate::config::{RootModuleConfig, SegmentConfig};
 use crate::configs::jobs::JobsConfig;
 
 /// Creates a segment to show if there are any active jobs running
@@ -24,7 +24,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if num_of_jobs > config.threshold {
         module.create_segment(
             "number",
-            &config.number.with_value(&num_of_jobs.to_string()),
+            &SegmentConfig {
+                value: &num_of_jobs.to_string(),
+                style: None,
+            },
         );
     }
     module.get_prefix().set_value("");

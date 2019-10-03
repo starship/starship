@@ -9,7 +9,6 @@ pub struct JobsConfig<'a> {
     pub threshold: i64,
     pub style: Style,
     pub disabled: bool,
-    pub number: SegmentConfig<'a>,
 }
 
 impl<'a> RootModuleConfig<'a> for JobsConfig<'a> {
@@ -22,10 +21,6 @@ impl<'a> RootModuleConfig<'a> for JobsConfig<'a> {
             threshold: 1,
             style: Color::Red.bold(),
             disabled: false,
-            number: SegmentConfig {
-                value: "",
-                style: None,
-            },
         }
     }
 }
