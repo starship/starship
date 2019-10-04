@@ -40,11 +40,27 @@
 </h4>
 <p align="center">
   <a href="./README.md"
-    ><img height="15" src="./media/flag-us.png" alt="English"
+    ><img height="20" src="./media/flag-us.png" alt="English"
   /></a>
   &#0020;
   <a href="./translations/README.ja.md"
-    ><img height="15" src="./media/flag-jp.png" alt="日本語"
+    ><img height="20" src="./media/flag-jp.png" alt="日本語"
+  /></a>
+  &#0020;
+  <a href="https://translate.starship.rs/project/starship-prompt/zh-CN"
+    ><img height="20" src="./media/flag-cn.png" alt="中文"
+  /></a>
+  &#0020;
+  <a href="https://translate.starship.rs/project/starship-prompt/de"
+    ><img height="20" src="./media/flag-de.png" alt="Deutsch"
+  /></a>
+  &#0020;
+  <a href="https://translate.starship.rs/project/starship-prompt/fr"
+    ><img height="20" src="./media/flag-fr.png" alt="Français"
+  /></a>
+  &#0020;
+  <a href="https://translate.starship.rs/project/starship-prompt/ru"
+    ><img height="20" src="./media/flag-ru.png" alt="Русский"
   /></a>
 </p>
 
