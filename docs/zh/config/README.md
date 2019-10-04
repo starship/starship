@@ -1,18 +1,18 @@
-# 設定
+# Configuration
 
 ::: tip
 
-🔥Starshipの開発は現在も進んでいます。 多くの新しいオプションが今後のリリースで利用可能になります。
+🔥 Configuration is currently being worked on. Many new configuration options will be available in coming releases.
 
 :::
 
-Starshipの設定を開始するには、`~/.config/starship.toml` ファイルを作成します。
+To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
 ```shell
 $ touch ~/.config/starship.toml
 ```
 
-Starshipのすべての設定は、この[TOML](https://github.com/toml-lang/toml)ファイルで行われます。
+All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 
 ```toml
 # Don't print a new line at the start of the prompt
@@ -27,57 +27,57 @@ symbol = "➜"     # The "symbol" segment is being set to "➜"
 disabled = true
 ```
 
-### 用語
+### Terminology
 
-**モジュール**: OSのコンテキスト情報に基づいて情報を提供するプロンプト内のコンポーネントです。 たとえば、現在のディレクトリがNodeJSプロジェクトである場合、「nodejs」モジュールは、現在コンピューターにインストールされているNodeJSのバージョンを表示します。
+**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
-**セグメント**: モジュールを構成する小さなサブコンポーネントです。 たとえば、「nodejs」モジュールの「symbol」セグメントには、バージョン番号の前に表示される文字が含まれています（デフォルト: ⬢）。
+**Segment**: Smaller sub-components that compose a module. For example, the "symbol" segment in the "nodejs" module contains the character that is shown before the version number (⬢ by default).
 
-以下はNode モジュールの表現です。 次の例では、「シンボル」と「バージョン」はその中のセグメントです。 すべてのモジュールには、デフォルトの端末色であるprefixとsuffixもあります。
+Here is the representation of the node module. In the following example, "symbol" and "version" are segments within it. Every module also has a prefix and suffix that are the default terminal color.
 
 ```
 [prefix]      [symbol]     [version]    [suffix]
  "via "         "⬢"        "v10.4.1"       ""
 ```
 
-### スタイルの設定
+### Style Strings
 
-Starshipのほとんどのモジュールでは、表示スタイルを設定できます。 これは、設定を指定する文字列であるエントリ（`style`）で行われます。 スタイル文字列の例とその機能を次に示します。 完全な構文の詳細については、詳細は [高度な設定](/advanced-config/)を参照してください 。
+Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
-- `"fg:green bg:blue"` は、青色の背景に緑色のテキストを設定します
-- `"bg:blue fg:bright-green"` は、青色の背景に明るい緑色のテキストを設定します
-- `"bold fg:27"` は、 [ANSIカラー](https://i.stack.imgur.com/KTSQa.png) 27の太字テキストを設定します
-- `"underline bg:#bf5700"` は、焦げたオレンジ色の背景に下線付きのテキストを設定します
-- `"bold italic fg:purple"`は、紫色の太字斜体のテキストを設定します
-- `""` はすべてのスタイルを明示的に無効にします
+- `"fg:green bg:blue"` sets green text on a blue background
+- `"bg:blue fg:bright-green"` sets bright green text on a blue background
+- `"bold fg:27"` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
+- `"underline bg:#bf5700"` sets underlined text on a burnt orange background
+- `"bold italic fg:purple"` sets bold italic purple text
+- `""` explicitly disables all styling
 
-スタイリングがどのように見えるかは、端末エミュレータによって制御されることに注意してください。 たとえば、一部の端末エミュレータはテキストを太字にする代わりに色を明るくします。また、一部のカラーテーマは通常の色と明るい色と同じ値を使用します。また、斜体のテキストを取得するには、端末で斜体をサポートする必要があります。スタイリングがどのように見えるかは、端末エミュレータによって制御されることに注意してください。たとえば、一部の端末エミュレータはテキストを太字にする代わりに色を明るくします。また、一部のカラーテーマは通常の色と明るい色と同じ値を使用します。 また、斜体のテキストを取得するには、端末で斜体をサポートする必要があります。
+Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
-## プロンプト
+## Prompt
 
-これは、プロンプト全体のオプションのリストです。
+This is the list of prompt-wide configuration options.
 
-### オプション
+### Options
 
-| 変数             | デフォルト                   | 説明                       |
-| -------------- | ----------------------- | ------------------------ |
-| `add_newline`  | `true`                  | プロンプトの開始前に新しい行を追加します。    |
-| `prompt_order` | [link](#デフォルトのプロンプト表示順) | プロンプトモジュールを出力する順序を設定します。 |
+| Variable       | Default                       | Description                                            |
+| -------------- | ----------------------------- | ------------------------------------------------------ |
+| `add_newline`  | `true`                        | Add a new line before the start of the prompt.         |
+| `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
 
-# プロンプト表示の改行を無効にする
+# Disable the newline at the start of the prompt
 add_newline = false
-# デフォルトのプロンプト表示順を書き換える
+# Overwrite a default_prompt_order and  use custom prompt_order
 prompt_order=["rust","line_break","package","line_break","character"]
 ```
 
-### デフォルトのプロンプト表示順
+### Default Prompt Order
 
-デフォルトの`prompt_order`は、空の場合、または`prompt_order`が指定されていない場合に、プロンプトにモジュールが表示される順序を定義するために使用されます。 デフォルトは次のとおりです。
+The default `prompt_order` is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. The default is as shown:
 
 ```toml
 prompt_order = [
@@ -111,17 +111,17 @@ prompt_order = [
 
 ## AWS
 
-`aws` モジュールは現在のAWSプロファイルが表示されます。 これは`AWS_PROFILE`環境変数に基づいています。
+The `aws` module shows the current AWS profile. This is based on the `AWS_PROFILE` env var.
 
-### オプション
+### Options
 
-| 変数         | デフォルト           | 説明                            |
-| ---------- | --------------- | ----------------------------- |
-| `symbol`   | `"☁️ "`         | 現在のAWSプロファイルを表示する前に表示される記号です。 |
-| `style`    | `"bold yellow"` | モジュールのスタイルです。                 |
-| `disabled` | `false`         | `aws`モジュールを無効にします。            |
+| Variable   | Default         | Description                                                |
+| ---------- | --------------- | ---------------------------------------------------------- |
+| `symbol`   | `"☁️ "`         | The symbol used before displaying the current AWS profile. |
+| `style`    | `"bold yellow"` | The style for the module.                                  |
+| `disabled` | `false`         | Disables the `AWS` module.                                 |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -131,33 +131,33 @@ style = "bold blue"
 symbol = "🅰 "
 ```
 
-## バッテリー
+## Battery
 
-`battery`モジュールは、デバイスのバッテリー残量と現在の充電状態を示します。 モジュールは、デバイスのバッテリー残量が10％未満の場合にのみ表示されます。
+The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
-### オプション
+### Options
 
-| 変数                   | デフォルト                    | 説明                        |
-| -------------------- | ------------------------ | ------------------------- |
-| `full_symbol`        | `"•"`                    | バッテリーが満タンのときに表示される記号です。   |
-| `charging_symbol`    | `"⇡"`                    | バッテリーの充電中に表示される記号です。      |
-| `discharging_symbol` | `"⇣"`                    | バッテリーが放電しているときに表示される記号です。 |
-| `display`            | [link](#battery-display) | モジュールの閾値とスタイルを表示します。      |
-| `disabled`           | `false`                  | `battery`モジュールを無効にします。    |
+| Variable             | Default                  | Description                                       |
+| -------------------- | ------------------------ | ------------------------------------------------- |
+| `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
+| `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
+| `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
+| `display`            | [link](#battery-display) | Display threshold and style for the module.       |
+| `disabled`           | `false`                  | Disables the `battery` module.                    |
 
 <details>
-<summary>いくつかのまれなバッテリー状態のオプションもあります。</summary>
+<summary>There are also options for some uncommon battery states.</summary>
 
-| 変数               | 説明                       |
-| ---------------- | ------------------------ |
-| `unknown_symbol` | バッテリー状態が不明なときに表示される記号です。 |
-| `empty_symbol`   | バッテリーが空のときに表示される記号です。    |
+| Variable         | Description                                         |
+| ---------------- | --------------------------------------------------- |
+| `unknown_symbol` | The symbol shown when the battery state is unknown. |
+| `empty_symbol`   | The symbol shown when the battery state is empty.   |
 
-オプションを指定しない限り、バッテリーの状態が`unknown`もしくは`empty`になった場合にインジケーターは非表示になります。
+Note: Battery indicator will be hidden if the status is `unknown` or `empty` unless you specify the option in the config.
 
 </details>
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -168,10 +168,9 @@ charging_symbol = "⚡️"
 discharging_symbol = "💀"
 ```
 
-### バッテリーの表示
+### Battery Display
 
-`display</ 0> オプションを使用して、バッテリーインジケーターを表示するタイミング（閾値）と外観（スタイル）を定義します。
-<code>display` が提供されない場合、 デフォルトは次のとおりです。
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
 
 ```toml
 [[battery.display]]
@@ -179,49 +178,49 @@ threshold = 10
 style = "bold red"
 ```
 
-#### オプション
+#### Options
 
-`display`オプションは、次の表の通りです。
+The `display` option is an array of the following table.
 
-| 変数          | 説明                             |
-| ----------- | ------------------------------ |
-| `threshold` | バッテリーが表示される上限です。               |
-| `style`     | displayオプションが使用されている場合のスタイルです。 |
+| Variable    | Description                                     |
+| ----------- | ----------------------------------------------- |
+| `threshold` | The upper bound for the display option.         |
+| `style`     | The style used if the display option is in use. |
 
-#### 設定例
+#### Example
 
 ```toml
-[[battery.display]]  # バッテリー残量が0％〜10％の間は「太字の赤色」スタイルを利用する
+[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # バッテリー残量が10％〜30％の間は「太字の黄色」スタイルを利用する
+[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
 
-# 容量が30％を超えると、バッテリーインジケーターは表示されません
+# when capacity is over 30%, the battery indicator will not be displayed
 
 ```
 
-## 文字
+## Character
 
-`character`モジュールは、端末でテキストが入力される場所の横に文字（通常は矢印）を表示します。
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-文字は、最後のコマンドが成功したかどうかを示します。 これは、色の変更（赤/緑）またはその形状の変更(❯/✖) の2つの方法で行うことができます。 後者は`use_symbol_for_status`に`true`設定されている場合にのみ行われます。
+The character will tell you whether the last command was successful or not. It can do this in two ways: by changing color (red/green) or by changing its shape (❯/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
 
-### オプション
+### Options
 
-| 変数                      | デフォルト          | 説明                                           |
-| ----------------------- | -------------- | -------------------------------------------- |
-| `symbol`                | `"❯"`          | プロンプトでテキストを入力する前に使用される記号です。                  |
-| `error_symbol`          | `"✖"`          | 前のコマンドが失敗した場合にテキスト入力の前に使用される記号です。            |
-| `use_symbol_for_status` | `false`        | シンボルを変更してエラーステータスを示します。                      |
-| `vicmd_symbol`          | `"❮"`          | シェルがvimの通常モードである場合、プロンプトのテキスト入力の前に使用される記号です。 |
-| `style_success`         | `"bold green"` | 最後のコマンドが成功した場合に使用されるスタイルです。                  |
-| `style_failure`         | `"bold red"`   | 最後のコマンドが失敗した場合に使用されるスタイルです。                  |
-| `disabled`              | `false`        | `character`モジュールを無効にします。                     |
+| Variable                | Default        | Description                                                                         |
+| ----------------------- | -------------- | ----------------------------------------------------------------------------------- |
+| `symbol`                | `"❯"`          | The symbol used before the text input in the prompt.                                |
+| `error_symbol`          | `"✖"`          | The symbol used before text input if the previous command failed.                   |
+| `use_symbol_for_status` | `false`        | Indicate error status by changing the symbol.                                       |
+| `vicmd_symbol`          | `"❮"`          | The symbol used before the text input in the prompt if shell is in vim normal mode. |
+| `style_success`         | `"bold green"` | The style used if the last command was successful.                                  |
+| `style_failure`         | `"bold red"`   | The style used if the last command failed.                                          |
+| `disabled`              | `false`        | Disables the `character` module.                                                    |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -232,28 +231,28 @@ error_symbol = "✗"
 use_symbol_for_status = true
 ```
 
-## コマンド実行時間
+## Command Duration
 
-`cmd_duration`モジュールは、最後のコマンドの実行にかかった時間を示します。 モジュールが表示されるのは、コマンドが2秒以上かかった場合、または`min_time`値が存在する場合のみです。
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning BashでDEBUGトラップをhookしない
+::: warning Do not hook the DEBUG trap in Bash
 
-`bash`でStarshipを実行している場合、 `eval $(starship init $0)`実行した後に`DEBUG`トラップをフックしないでください。そうしないと、このモジュールが**おそらくですが**壊れます。
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-preexecのような機能を必要とするBashユーザーは、 [rcalorasのbash_preexecフレームワーク](https://github.com/rcaloras/bash-preexec)を使用できます。 `eval $(starship init $0)` を実行する前に、`preexec_functions`、および`precmd_functions`定義するだけで、通常どおり続行します。
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
-### オプション
+### Options
 
-| 変数         | デフォルト           | 説明                                                         |
+| Variable   | Default         | Description                                                |
 | ---------- | --------------- | ---------------------------------------------------------- |
-| `min_time` | `2`             | 時間を表示する最短期間です。                                             |
+| `min_time` | `2`             | Shortest duration to show time for.                        |
 | `prefix`   | `took`          | Prefix to display immediately before the command duration. |
 | `style`    | `"bold yellow"` | The style for the module.                                  |
 | `disabled` | `false`         | Disables the `cmd_duration` module.                        |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -263,34 +262,34 @@ min_time = 4
 prefix = "underwent "
 ```
 
-## ディレクトリ
+## Directory
 
-`directory`モジュールには、現在のディレクトリへのパスが表示され、3つの親フォルダは切り捨てられます。 ディレクトリは、現在のgitリポジトリであるとルートとなります。
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
-fishスタイルのpwdオプションを使用すると、切り捨てられたパスを非表示にする代わりに、オプションで有効にした番号に基づいて各ディレクトリの短縮名が表示されます。
+When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-例として、`~/Dev/Nix/nixpkgs/pkgs`で、`nixpkgs`がリポジトリルートであり、オプションが`1`に設定されている場合を挙げます。 以前は`nixpkgs/pkgs`でしたが、`~/D/N/nixpkgs/pkgs`が表示されます。
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
-### オプション
+### Options
 
-| 変数                  | デフォルト         | 説明                            |
-| ------------------- | ------------- | ----------------------------- |
-| `truncation_length` | `3`           | 現在のディレクトリを切り捨てる親フォルダーの数です。    |
-| `truncate_to_repo`  | `true`        | 現在いるgitリポジトリのルートに切り捨てるかどうかです。 |
-| `style`             | `"bold cyan"` | モジュールのスタイルです。                 |
-| `disabled`          | `false`       | `directory`モジュールを無効にします。      |
+| Variable            | Default       | Description                                                                      |
+| ------------------- | ------------- | -------------------------------------------------------------------------------- |
+| `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
+| `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `style`             | `"bold cyan"` | The style for the module.                                                        |
+| `disabled`          | `false`       | Disables the `directory` module.                                                 |
 
 <details>
-<summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| 変数                          | デフォルト  | 説明                                           |
-| --------------------------- | ------ | -------------------------------------------- |
-| `fish_style_pwd_dir_length` | `0`    | fish shellのpwdパスロジックを適用するときに使用する文字数です。       |
-| `use_logical_path`          | `true` | OSからのパスの代わりに、シェル(`PWD`) によって提供される論理パスを表示します。 |
+| Variable                    | Default | Description                                                                              |
+| --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
+| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
+| `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
 
 </details>
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -307,16 +306,16 @@ This module will only be shown in your prompt when one of the following files ar
 
 Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
-### オプション
+### Options
 
-| 変数          | デフォルト         | 説明                                                       |
+| Variable    | Default       | Description                                              |
 | ----------- | ------------- | -------------------------------------------------------- |
 | `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
 | `style`     | `"bold blue"` | The style for the module.                                |
 | `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
 | `disabled`  | `false`       | Disables the `dotnet` module.                            |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -331,12 +330,12 @@ heuristic = false
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
-- `variable`オプションが、既存の環境変数と一致する
-- `variable`オプションが定義されておらず、`default`オプションが定義されている
+- The `variable` configuration option matches an existing environment variable
+- The `variable` configuration option is not defined, but the `default` configuration option is
 
-### オプション
+### Options
 
-| 変数         | デフォルト            | 説明                                                                           |
+| Variable   | Default          | Description                                                                  |
 | ---------- | ---------------- | ---------------------------------------------------------------------------- |
 | `symbol`   |                  | The symbol used before displaying the variable value.                        |
 | `variable` |                  | The environment variable to be displayed.                                    |
@@ -346,7 +345,7 @@ The `env_var` module displays the current value of a selected environment variab
 | `style`    | `"dimmed black"` | The style for the module.                                                    |
 | `disabled` | `false`          | Disables the `env_var` module.                                               |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -360,9 +359,9 @@ default = "unknown shell"
 
 The `git_branch` module shows the active branch of the repo in your current directory.
 
-### オプション
+### Options
 
-| 変数                  | デフォルト           | 説明                                                                                    |
+| Variable            | Default         | Description                                                                           |
 | ------------------- | --------------- | ------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
 | `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
@@ -370,7 +369,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `style`             | `"bold purple"` | The style for the module.                                                             |
 | `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -385,9 +384,9 @@ truncation_symbol = ""
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
-### オプション
+### Options
 
-| 変数                 | デフォルト              | 説明                                                                                                               |
+| Variable           | Default            | Description                                                                                                      |
 | ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
 | `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
 | `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
@@ -400,7 +399,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
 | `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -414,9 +413,9 @@ cherry_pick = "🍒 PICKING"
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
-### オプション
+### Options
 
-| 変数                | デフォルト        | 説明                                                      |
+| Variable          | Default      | Description                                             |
 | ----------------- | ------------ | ------------------------------------------------------- |
 | `conflicted`      | `"="`        | This branch has merge conflicts.                        |
 | `ahead`           | `"⇡"`        | This branch is ahead of the branch being tracked.       |
@@ -434,7 +433,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `style`           | `"bold red"` | The style for the module.                               |
 | `disabled`        | `false`      | Disables the `git_status` module.                       |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -456,23 +455,23 @@ deleted = "🗑"
 
 The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
 
-- カレントディレクトリに`go.mod`ファイルが含まれている
-- カレントディレクトリに`go.sum`ファイルが含まれている
-- カレントディレクトリに`glide.yaml`ファイルが含まれている
-- カレントディレクトリに`Gopkg.yml`ファイルが含まれている
-- カレントディレクトリに`Gopkg.lock`ファイルが含まれている
-- カレントディレクトリに`Godeps`ファイルが含まれている
-- カレントディレクトリに`.go`の拡張子のファイルが含まれている
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
-### オプション
+### Options
 
-| 変数         | デフォルト         | 説明                                                       |
+| Variable   | Default       | Description                                              |
 | ---------- | ------------- | -------------------------------------------------------- |
 | `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
 | `style`    | `"bold cyan"` | The style for the module.                                |
 | `disabled` | `false`       | Disables the `golang` module.                            |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -485,9 +484,9 @@ symbol = "🏎💨 "
 
 The `hostname` module shows the system hostname.
 
-### オプション
+### Options
 
-| 変数         | デフォルト                 | 説明                                                   |
+| Variable   | Default               | Description                                          |
 | ---------- | --------------------- | ---------------------------------------------------- |
 | `ssh_only` | `true`                | Only show hostname when connected to an SSH session. |
 | `prefix`   | `""`                  | Prefix to display immediately before the hostname.   |
@@ -495,7 +494,7 @@ The `hostname` module shows the system hostname.
 | `style`    | `"bold dimmed green"` | The style for the module.                            |
 | `disabled` | `false`               | Disables the `hostname` module.                      |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -511,16 +510,16 @@ disabled = false
 
 The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
-### オプション
+### Options
 
-| 変数          | デフォルト         | 説明                                                    |
+| Variable    | Default       | Description                                           |
 | ----------- | ------------- | ----------------------------------------------------- |
 | `symbol`    | `"✦ "`        | The symbol used before displaying the number of jobs. |
 | `threshold` | `1`           | Show number of jobs if exceeded.                      |
 | `style`     | `"bold blue"` | The style for the module.                             |
 | `disabled`  | `false`       | Disables the `jobs` module.                           |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -536,15 +535,15 @@ threshold = 4
 Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace
 astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-### オプション
+### Options
 
-| 変数         | デフォルト         | 説明                                                  |
+| Variable   | Default       | Description                                         |
 | ---------- | ------------- | --------------------------------------------------- |
 | `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
 | `style`    | `"bold blue"` | The style for the module.                           |
 | `disabled` | `false`       | Disables the `kubernetes` module                    |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -560,13 +559,13 @@ disabled = true
 
 The `line_break` module separates the prompt into two lines.
 
-### オプション
+### Options
 
-| 変数         | デフォルト   | 説明                                                                 |
+| Variable   | Default | Description                                                        |
 | ---------- | ------- | ------------------------------------------------------------------ |
 | `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -579,9 +578,9 @@ disabled = true
 
 The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
-### オプション
+### Options
 
-| 変数           | デフォルト        | 説明                                 |
+| Variable     | Default      | Description                        |
 | ------------ | ------------ | ---------------------------------- |
 | `use_name`   | `false`      | Display the name of the nix-shell. |
 | `impure_msg` | `impure`     | Customize the "impure" msg.        |
@@ -589,7 +588,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 | `style`      | `"bold red"` | The style for the module.          |
 | `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -613,9 +612,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### オプション
+### Options
 
-| 変数                | デフォルト                    | 説明                                                            |
+| Variable          | Default                  | Description                                                   |
 | ----------------- | ------------------------ | ------------------------------------------------------------- |
 | `show_percentage` | `false`                  | Display memory usage as a percentage of the available memory. |
 | `show_swap`       | when total swap non-zero | Display swap usage.                                           |
@@ -624,7 +623,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `style`           | `"bold dimmed white"`    | The style for the module.                                     |
 | `disabled`        | `true`                   | Disables the `memory_usage` module.                           |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -641,18 +640,18 @@ style = "bold dimmed green"
 
 The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
 
-- カレントディレクトリに`pom.xml`, もしくは`build.gradle`ファイルが含まれている
-- カレントディレクトリに拡張子が`.java`, `.class`, もしくは`.jar`のファイルが含まれている
+- The current directory contains a `pom.xml` or `build.gradle` file
+- The current directory contains a file with the `.java`, `.class` or `.jar` extension
 
-### オプション
+### Options
 
-| 変数         | デフォルト          | 説明                                                     |
+| Variable   | Default        | Description                                            |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | モジュールのスタイルです。                                          |
+| `style`    | `"dimmed red"` | The style for the module.                              |
 | `disabled` | `false`        | Disables the `java` module.                            |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -665,19 +664,19 @@ symbol = "🌟 "
 
 The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
 
-- カレントディレクトリに`package.json`ファイルが含まれている
-- カレントディレクトリに`node_modules`ディレクトリが含まれている
-- カレントディレクトリに`.js`の拡張子のファイルが含まれている
+- The current directory contains a `package.json` file
+- The current directory contains a `node_modules` directory
+- The current directory contains a file with the `.js` extension
 
-### オプション
+### Options
 
-| 変数         | デフォルト          | 説明                                                       |
+| Variable   | Default        | Description                                              |
 | ---------- | -------------- | -------------------------------------------------------- |
 | `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
 | `style`    | `"bold green"` | The style for the module.                                |
 | `disabled` | `false`        | Disables the `nodejs` module.                            |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -690,21 +689,21 @@ symbol = "🤖 "
 
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
 
-- **npm** – `npm`パッケージバージョンは、現在のディレクトリにある`package.json`から抽出されます
-- **cargo** – `cargo`パッケージバージョンは、現在のディレクトリにある`Cargo.toml`から抽出されます。
-- **poetry** – `poetry`パッケージバージョンは、現在のディレクトリにある`pyproject.toml`から抽出されます
+- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
+- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
 
-> ⚠️ 表示されるバージョンは、パッケージマネージャーではなく、ソースコードが現在のディレクトリにあるパッケージのバージョンです。
+> ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
 
-### オプション
+### Options
 
-| 変数         | デフォルト        | 説明                                                         |
+| Variable   | Default      | Description                                                |
 | ---------- | ------------ | ---------------------------------------------------------- |
 | `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
 | `style`    | `"bold red"` | The style for the module.                                  |
 | `disabled` | `false`      | Disables the `package` module.                             |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -723,16 +722,16 @@ Otherwise, it will display the version number from `python --version` and show t
 
 The module will be shown if any of the following conditions are met:
 
-- カレントディレクトリに`.python-version`ファイルが含まれている
-- カレントディレクトリに`requirements.txt`ファイルが含まれている
-- カレントディレクトリに`pyproject.toml`ファイルが含まれている
-- カレントディレクトリに`.py`の拡張子のファイルが含まれている
-- カレントディレクトリに`Pipfile`ファイルが含まれている
-- カレントディレクトリに`tox.ini`ファイルが含まれている
+- The current directory contains a `.python-version` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a file with the `.py` extension
+- The current directory contains a `Pipfile` file
+- The current directory contains a `tox.ini` file
 
-### オプション
+### Options
 
-| 変数                   | デフォルト           | 説明                                                                          |
+| Variable             | Default         | Description                                                                 |
 | -------------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
 | `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
@@ -740,7 +739,7 @@ The module will be shown if any of the following conditions are met:
 | `style`              | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -755,18 +754,18 @@ pyenv_prefix = "foo "
 
 The `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
 
-- カレントディレクトリに`Gemfile`ファイルが含まれている
-- カレントディレクトリに`.rb`の拡張子のファイルが含まれている
+- The current directory contains a `Gemfile` file
+- The current directory contains a `.rb` file
 
-### オプション
+### Options
 
-| 変数         | デフォルト        | 説明                                                     |
+| Variable   | Default      | Description                                            |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
 | `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `ruby` module.                            |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -779,18 +778,18 @@ symbol = "🔺 "
 
 The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
 
-- カレントディレクトリに`Cargo.toml`ファイルが含まれている
-- カレントディレクトリに`.rs`の拡張子のファイルが含まれている
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
-### オプション
+### Options
 
-| 変数         | デフォルト        | 説明                                                     |
+| Variable   | Default      | Description                                            |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
 | `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `rust` module.                            |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -834,10 +833,10 @@ format = "🕙[ %T ]"
 
 The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
-- カレントユーザーがroot
-- カレントユーザーが、ログインしているユーザーとは異なる
-- ユーザーがSSHセッションとして接続されている
-- `show_always`変数がtrueに設定されている
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ### Options
 

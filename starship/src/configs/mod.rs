@@ -24,6 +24,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
             prompt_order: vec![
                 "username",
                 "hostname",
+                "kubernetes",
                 "directory",
                 "git_branch",
                 "git_state",
