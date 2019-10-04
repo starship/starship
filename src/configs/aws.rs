@@ -6,7 +6,7 @@ use starship_module_config_derive::ModuleConfig;
 #[derive(Clone, ModuleConfig)]
 pub struct AwsConfig<'a> {
     pub symbol: SegmentConfig<'a>,
-    pub profile: SegmentConfig<'a>,
+    pub region: SegmentConfig<'a>,
     pub style: Style,
     pub disabled: bool,
 }
@@ -18,7 +18,7 @@ impl<'a> RootModuleConfig<'a> for AwsConfig<'a> {
                 value: "☁️ ",
                 style: None,
             },
-            profile: SegmentConfig {
+            region: SegmentConfig {
                 value: "",
                 style: None,
             },

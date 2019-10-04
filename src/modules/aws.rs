@@ -1,15 +1,64 @@
 use std::env;
+use std::fs::File;
+use std::io::{BufRead, BufReader};
+
+use dirs::home_dir;
 
 use super::{Context, Module};
 
 use crate::config::RootModuleConfig;
 use crate::configs::aws::AwsConfig;
 
+fn get_aws_region_from_config(aws_profile: &Option<String>) -> Option<String> {
+    let mut config_location = home_dir()?;
+    config_location.push(".aws/config");
+
+    let file = File::open(&config_location).ok()?;
+    let reader = BufReader::new(file);
+    let lines = reader.lines().filter_map(Result::ok);
+
+    let region_line = if let Some(ref aws_profile) = aws_profile {
+        lines
+            .skip_while(|line| line != &format!("[profile {}]", aws_profile))
+            .skip(1)
+            .take_while(|line| !line.starts_with('['))
+            .find(|line| line.starts_with("region"))
+    } else {
+        lines
+            .skip_while(|line| line != "[default]")
+            .skip(1)
+            .take_while(|line| !line.starts_with('['))
+            .find(|line| line.starts_with("region"))
+    }?;
+
+    let region = region_line.split('=').nth(1)?;
+    let region = region.trim();
+
+    Some(region.to_string())
+}
+
+fn get_aws_region() -> Option<String> {
+    env::var("AWS_DEFAULT_REGION")
+        .or_else(|_| env::var("AWS_REGION"))
+        .ok()
+        .or_else(|| {
+            let aws_profile = env::var("AWS_PROFILE").ok();
+            let aws_region = get_aws_region_from_config(&aws_profile);
+
+            match (aws_profile, aws_region) {
+                (Some(profile), Some(region)) => Some(format!("{}({})", region, profile)),
+                (Some(profile), None) => Some(profile),
+                (None, Some(region)) => Some(region),
+                (None, None) => None,
+            }
+        })
+}
+
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const AWS_PREFIX: &str = "on ";
 
-    let aws_profile = env::var("AWS_PROFILE").ok()?;
-    if aws_profile.is_empty() {
+    let aws_region = get_aws_region()?;
+    if aws_region.is_empty() {
         return None;
     }
 
@@ -21,7 +70,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.get_prefix().set_value(AWS_PREFIX);
 
     module.create_segment("symbol", &config.symbol);
-    module.create_segment("profile", &config.profile.with_value(&aws_profile));
+    module.create_segment("region", &config.region.with_value(&aws_region));
 
     Some(module)
 }
