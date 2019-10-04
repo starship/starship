@@ -39,11 +39,11 @@
   <a href="https://starship.rs/config/">Configuration</a>
 </h4>
 <p align="center">
-  <a href="./README.md"
+  <a href="https://github.com/starship/starship/blob/master/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png" alt="English"
   /></a>
   &#0020;
-  <a href="./translations/README.ja.md"
+  <a href="https://github.com/starship/starship/blob/master/translations/README.ja.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png" alt="日本語"
   /></a>
   &#0020;
