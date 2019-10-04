@@ -32,15 +32,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             module.create_segment("version", &config.version.with_value(&version));
 
             if config.show_compose {
-                match get_docker_compose_version() {
-                    Some(compose_version) => {
-                        module.create_segment("prefix", &config.symbol.with_value(&" with "));
-                        module.create_segment(
-                            "version",
-                            &config.version.with_value(&compose_version.trim()),
-                        );
-                    }
-                    None => {}
+                if let Some(compose_version) = get_docker_compose_version() {
+                    module.create_segment("prefix", &config.symbol.with_value(&" with "));
+                    module.create_segment(
+                        "version",
+                        &config.version.with_value(&compose_version.trim()),
+                    );
                 }
             }
 
