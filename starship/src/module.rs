@@ -14,6 +14,7 @@ pub const ALL_MODULES: &[&str] = &[
     "character",
     "cmd_duration",
     "directory",
+    "docker",
     "dotnet",
     "env_var",
     "git_branch",

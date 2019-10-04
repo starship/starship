@@ -3,6 +3,7 @@ mod aws;
 mod character;
 mod cmd_duration;
 mod directory;
+mod docker;
 mod dotnet;
 mod env_var;
 mod git_branch;
@@ -40,6 +41,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "directory" => directory::module(context),
         "character" => character::module(context),
         "cmd_duration" => cmd_duration::module(context),
+        "docker" => docker::module(context),
         "dotnet" => dotnet::module(context),
         "env_var" => env_var::module(context),
         "git_branch" => git_branch::module(context),

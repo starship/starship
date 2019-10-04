@@ -1,4 +1,5 @@
 pub mod battery;
+pub mod docker;
 pub mod dotnet;
 pub mod rust;
 
@@ -38,6 +39,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "ruby",
                 "rust",
                 // ↑ Toolchain version modules ↑
+                "docker",
                 "nix_shell",
                 "memory_usage",
                 "aws",
