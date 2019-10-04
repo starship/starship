@@ -149,6 +149,8 @@ jobs:
           override: true
       - run: cargo install --force cargo-publish-all
       - run: cargo-publish-all --token $CRATES_IO_TOKEN --yes
+        env:
+          CRATES_IO_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
 
   github_release:
     if: startsWith(github.ref, 'refs/tags/v')
