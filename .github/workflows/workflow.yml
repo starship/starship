@@ -154,26 +154,24 @@ jobs:
 
   github_release:
     if: startsWith(github.ref, 'refs/tags/v')
-    name: Create GitHub release [${{ matrix.target }}]
+    name: Create GitHub release
     needs: [test, docker_test]
     strategy:
       fail-fast: false
       matrix:
-        # In order to use different target names on parallel ubuntu builds,
-        # we use `ubuntu-latest` and `ubuntu-18.04` to include them separately
-        os: [ubuntu-latest, ubuntu-18.04, macOS-latest]
+        target:
+          - x86_64-unknown-linux-gnu
+          - x86_64-unknown-linux-musl
+          - x86_64-apple-darwin
         include:
-          - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
-            bin: starship
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
             name: starship-x86_64-unknown-linux-gnu.tar.gz
-          - os: ubuntu-18.04
-            target: x86_64-unknown-linux-musl
-            bin: starship
+          - target: x86_64-unknown-linux-musl
+            os: ubuntu-latest
             name: starship-x86_64-unknown-linux-musl.tar.gz
-          - os: macOS-latest
-            target: x86_64-apple-darwin
-            bin: starship
+          - target: x86_64-apple-darwin
+            os: macOS-latest
             name: starship-x86_64-apple-darwin.tar.gz
     runs-on: ${{ matrix.os }}
     steps:
@@ -198,13 +196,13 @@ jobs:
 
       - name: Prepare build artifacts
         run: |
-          strip target/${{ matrix.target }}/release/${{ matrix.bin }}
+          strip target/${{ matrix.target }}/release/starship
           cd target/${{ matrix.target }}/release
           if [[ "${{ matrix.os }}" == "windows-latest" ]]
           then
-            7z a ../../../${{ matrix.name }} ${{ matrix.bin }}
+            7z a ../../../${{ matrix.name }} starship
           else
-            tar czvf ../../../${{ matrix.name }} ${{ matrix.bin }}
+            tar czvf ../../../${{ matrix.name }} starship
           fi
           cd -
 
