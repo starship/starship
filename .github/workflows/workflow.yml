@@ -138,7 +138,7 @@ jobs:
   # Publish all packages to Crates.io
   cargo_publish:
     if: startsWith(github.ref, 'refs/tags/v')
-    name: Publish Cargo Packages
+    name: Publish Cargo Package
     needs: [test, docker_test]
     runs-on: ubuntu-latest
     steps:
@@ -147,8 +147,8 @@ jobs:
         with:
           toolchain: stable
           override: true
-      - run: cargo install --force cargo-publish-all
-      - run: cargo-publish-all --token $CRATES_IO_TOKEN --yes
+      - run: cargo login $CRATES_IO_TOKEN
+      - run: cargo publish
         env:
           CRATES_IO_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
 
