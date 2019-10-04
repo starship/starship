@@ -54,7 +54,7 @@ fn get_docker_version() -> Option<String> {
     match Command::new("docker")
         .arg("version")
         .arg("--format")
-        .arg("{{.Client.Version}}")
+        .arg("{{.Server.Version}}")
         .output()
     {
         Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
