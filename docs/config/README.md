@@ -867,13 +867,13 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 | Variable   | Default       | Description                                                                                                         |
 | ---------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `12hr`     | `false`       | Enables 12 hour formatting                                                                                          |
+| `use_12hr` | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`   | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
 | `style`    | `bold yellow` | The style for the module time                                                                                       |
 | `disabled` | `true`        | Disables the `time` module.                                                                                         |
 
-If `12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
-Manually setting `format` will override the `12hr` setting.
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
+Manually setting `format` will override the `use_12hr` setting.
 
 ### Example
 
