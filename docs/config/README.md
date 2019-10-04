@@ -98,6 +98,7 @@ prompt_order = [
     "python",
     "ruby",
     "rust",
+    "docker",
     "nix_shell",
     "memory_usage",
     "aws",
@@ -274,6 +275,33 @@ running `eval $(starship init $0)`, and then proceed as normal.
 [cmd_duration]
 min_time = 4
 prefix = "underwent "
+```
+
+## Docker
+
+The `docker` module shows the currently installed Docker version. It can also be
+configured to show the currently installed Docker Compose version.
+
+This module will only be shown in your prompt when one of the following files are
+present in the current directory: `Dockerfile`, `docker-compose.yml`.
+
+### Options
+
+| Variable       | Default       | Description                                                                                                               |
+| -------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`       | `"🐳 "`       | The symbol used before displaying the version of docker.                                                                  |
+| `style`        | `"bold blue"` | The style for the module.                                                                                                 |
+| `disabled`     | `false`       | Disables the `docker` module.                                                                                             |
+| `show_compose` | `false`       | Disables displaying the `docker-compose` version. Disabled by default due to poor performance of `docker-compose version` |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[docker]
+symbol = "💙 "
+show_compose = true
 ```
 
 ## Directory
