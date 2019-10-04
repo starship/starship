@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: Workflow
 on: [push, pull_request]
 jobs:
   # Run the `rustfmt` code formatter
@@ -152,17 +152,20 @@ jobs:
 
   github_release:
     if: startsWith(github.ref, 'refs/tags/v')
-    name: Create GitHub release
+    name: Create GitHub release [${{ matrix.target }}]
     needs: [test, docker_test]
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        # In order to use different target names on parallel ubuntu builds,
+        # we use `ubuntu-latest` and `ubuntu-18.04` to include them separately
+        os: [ubuntu-latest, ubuntu-18.04, macOS-latest]
         include:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             bin: starship
             name: starship-x86_64-unknown-linux-gnu.tar.gz
-          - os: ubuntu-latest
+          - os: ubuntu-18.04
             target: x86_64-unknown-linux-musl
             bin: starship
             name: starship-x86_64-unknown-linux-musl.tar.gz
@@ -170,27 +173,27 @@ jobs:
             target: x86_64-apple-darwin
             bin: starship
             name: starship-x86_64-apple-darwin.tar.gz
-          # - os: windows-latest
-          #   target: x86_64-pc-windows-msvc
-          #   bin: starship.exe
-          #   name: starship-Windows-x86_64.zip
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
+
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           override: true
           target: ${{ matrix.target }}
+
       - name: Install musl tools
         if: matrix.target == 'x86_64-unknown-linux-musl'
         run: sudo apt-get install -y musl-tools
+
       - name: Build target
         uses: actions-rs/cargo@v1
         with:
           command: build
           args: --release --target ${{ matrix.target }}
+
       - name: Prepare build artifacts
         run: |
           strip target/${{ matrix.target }}/release/${{ matrix.bin }}
@@ -202,15 +205,18 @@ jobs:
             tar czvf ../../../${{ matrix.name }} ${{ matrix.bin }}
           fi
           cd -
+
       - name: Generate release notes
-        run: git-chglog -c .github/chglog/release.yml $(git describe --tags $(git rev-list --tags --max-count=1)) > ${{ github.workflow }}-RELEASE.txt
-      - name: Create GitHub release
+        run: |
+          # Temporary fix for https://github.com/actions/setup-go/issues/14
+          export PATH=$PATH:$(go env GOPATH)/bin
+          go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
+          git-chglog -c .github/chglog/release.yml $(git describe --tags $(git rev-list --tags --max-count=1)) > RELEASE.txt
+
+      - name: Create GitHub release ${{ matrix.target }}
         uses: softprops/action-gh-release@v1
         with:
-          draft: true
-          files: |
-            'starship*.tar.gz'
-            'starship*.zip'
-          body_path: ${{ github.workflow }}-RELEASE.txt
+          files: ${{ matrix.name }}
+          body_path: RELEASE.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
