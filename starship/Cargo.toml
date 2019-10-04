@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "0.20.0"
+version = "0.20.1"
 edition = "2018"
 authors = ["Matan Kushner <hello@matchai.me>"]
 homepage = "https://starship.rs"
@@ -44,7 +44,7 @@ once_cell = "1.2.0"
 chrono = "0.4"
 sysinfo = "0.9.5"
 byte-unit = "3.0.3"
-starship_module_config_derive = { version = "0.20", path = "../starship_module_config_derive" }
+starship_module_config_derive = { version = "0.1.0", path = "../starship_module_config_derive" }
 yaml-rust = "0.4"
 
 [dev-dependencies]
