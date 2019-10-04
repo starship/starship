@@ -1,45 +1,61 @@
 <p align="center">
-  <br />
-  <img
+  <br /><img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
     alt="Starship – Cross-shell prompt" />
 </p>
 <p align="center">
-  <a href="https://crates.io/crates/starship">
-    <img src="https://badgen.net/crates/v/starship" alt="Crates.io version" />
-  </a>
-  <a href="https://dev.azure.com/starship-control/starship/_build">
-    <img
+  <a href="https://crates.io/crates/starship"
+    ><img src="https://badgen.net/crates/v/starship" alt="Crates.io version" /></a>
+  <a href="https://dev.azure.com/starship-control/starship/_build"
+    ><img
       src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite"
-      alt="Azure Pipelines Build Status" />
-  </a>
-    <a href="https://repology.org/project/starship/versions">
-    <img src="https://repology.org/badge/tiny-repos/starship.svg" alt="Packaging status">
-  </a><br>
-  <a href="#-貢献">
-    <img
-      src="https://badgen.net/badge/all%20contributors/20/orange"
-      alt="All Contributors" />
-  </a>
-  <a href="https://discord.gg/8Jzqu3T">
-    <img
+      alt="Azure Pipelines Build Status" /></a>
+  <a href="https://repology.org/project/starship/versions"
+    ><img
+      src="https://repology.org/badge/tiny-repos/starship.svg"
+      alt="Packaging status" /></a
+><br /><a href="#contributors"
+    ><img
+      src="https://badgen.net/badge/all%20contributors/35/orange"
+      alt="All Contributors" /></a>
+  <a href="https://discord.gg/8Jzqu3T"
+    ><img
       src="https://badgen.net/badge/chat/on%20discord/7289da"
-      alt="Chat on Discord" />
-  </a>
+      alt="Chat on Discord" /></a>
 </p>
+
 <h4 align="center">
   <br />
-  <a href="https://starship.rs/ja/">ウェブサイト</a>
+  <a href="https://starship.rs">Website</a>
   ·
-  <a href="#-インストール">インストール</a>
+  <a href="#-installation">Installation</a>
   ·
-  <a href="https://starship.rs/ja/config/">設定</a>
+  <a href="https://starship.rs/config/">Configuration</a>
 </h4>
+<p align="center">
+  <a href="./README.md"
+    ><img height="20" src="./media/flag-us.png" alt="English" /></a>
+  &#0020;
+  <a href="./translations/README.ja.md"
+    ><img height="20" src="./media/flag-jp.png" alt="日本語" /></a>
+  &#0020;
+  <a href="https://translate.starship.rs/project/starship-prompt/zh-CN"
+    ><img height="20" src="./media/flag-cn.png" alt="中文" /></a>
+  &#0020;
+  <a href="https://translate.starship.rs/project/starship-prompt/de"
+    ><img height="20" src="./media/flag-de.png" alt="Deutsch" /></a>
+  &#0020;
+  <a href="https://translate.starship.rs/project/starship-prompt/fr"
+    ><img height="20" src="./media/flag-fr.png" alt="Français" /></a>
+  &#0020;
+  <a href="https://translate.starship.rs/project/starship-prompt/ru"
+    ><img height="20" src="./media/flag-ru.png" alt="Русский" /></a>
+</p>
 
 <h1></h1>
 
-<p align="center"> Starship は小さく、とても高速に動作し、非常にカスタマイズ可能なすべてのシェルに対応したプロンプトです！<br /> プロンプトには、作業中に必要な情報が表示されます。 <p>
+<p align="center"> Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br /> The prompt shows information you need while you're working, while staying sleek and out of the way. <p>
 
 <p align="center">
   <br>
@@ -166,11 +182,11 @@
 
 ## 🔧 設定
 
-Starship の設定方法の詳細に関しては、[ドキュメント](https://starship.rs/config/)をチェックしてください。
+For details on how to configure Starship, check out our [documentation](https://starship.rs/config/).
 
 ## 🤝 貢献
 
-私たちは常に**すべてのスキルレベル**の貢献者を探しています！ もし簡単にプロジェクトへ参加する方法をお探しなら、 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) に取り組んでみてください。
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
 ### 特に必要としています
 
@@ -181,11 +197,11 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
 - 👩‍💻 **Rust デベロッパー**
   - 慣用的な Rust の作成、効果的な Rust アーキテクチャの設計、パフォーマンスの最適化、クロスプラットフォームビルドの最適化などに関しては、_多く_の簡単な成果があります。 私（[@matchai](https://github.com/matchai)）は Rust の初心者です。 私たちを正しい方向に向けてください！
 
-もしあなたが Starship への貢献に興味がある場合は、我々の[貢献ガイド](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)をご覧ください。 また、気軽に我々の[Discord サーバー](https://discord.gg/8Jzqu3T)へ顔を出してください。 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ### 貢献者
 
-これらの素晴らしい方々に感謝します ([emoji key](https://allcontributors.org/docs/ja/emoji-key)):
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
@@ -239,11 +255,11 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-このプロジェクトは [all-contributors](https://allcontributors.org/docs/ja/overview) の仕様に従っています。 どんな種類の貢献でもお待ちしています！
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
 ## 💭影響を受けたプロダクト
 
-よければStarship の作成に影響を与えた、これまでのプロジェクトをチェックしてください 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - 宇宙飛行士のための ZSH プロンプト。
 
@@ -258,4 +274,4 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
 
 ## 📝 ライセンス
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> このプロジェクトは [ISC](https://github.com/starship/starship/blob/master/LICENSE) でライセンスされています。
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
