@@ -1,4 +1,6 @@
+pub mod aws;
 pub mod battery;
+pub mod character;
 pub mod dotnet;
 pub mod rust;
 

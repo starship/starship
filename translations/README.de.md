@@ -17,7 +17,7 @@
     <a href="https://repology.org/project/starship/versions">
     <img src="https://repology.org/badge/tiny-repos/starship.svg" alt="Packaging status">
   </a><br>
-  <a href="#-貢献">
+  <a href="#contributors">
     <img
       src="https://badgen.net/badge/all%20contributors/20/orange"
       alt="All Contributors" />
@@ -30,16 +30,16 @@
 </p>
 <h4 align="center">
   <br />
-  <a href="https://starship.rs">ウェブサイト</a>
+  <a href="https://starship.rs">Website</a>
   ·
-  <a href="#-installation">インストール</a>
+  <a href="#-installation">Installation</a>
   ·
-  <a href="https://starship.rs/config/">設定</a>
+  <a href="https://starship.rs/config/">Configuration</a>
 </h4>
 
 <h1></h1>
 
-<p align="center"> Starship は小さく、とても高速に動作し、非常にカスタマイズ可能なすべてのシェルに対応したプロンプトです！<br /> プロンプトには、作業中に必要な情報が表示されます。 <p>
+<p align="center"> Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br /> The prompt shows information you need while you're working, while staying sleek and out of the way. <p>
 
 <p align="center">
   <br>
@@ -48,48 +48,49 @@
   <br>
 </p>
 
-## 🍬 機能
+## 🍬 Features
 
-- 最後のコマンドがゼロ以外のコードで終了すると、プロンプト文字が赤に変わります
-- ログインユーザーと異なる場合にユーザー名を表示する
-- 現在の Java のバージョン (`☕`)
-- 現在の Node.js のバージョン (`⬢`)
-- 現在の Rust のバージョン (`🦀`)
-- 現在の Ruby のバージョン (`💎`)
-- 現在の Python のバージョン (`🐍`)
-- 現在の Go バージョン (`🐹`)
-- Nix-shell の環境検出
-- 指定した1つの環境変数の表示
-- カレントディレクトリにある現在のパッケージバージョン(`📦`)
+- Prompt character turns red if the last command exits with non-zero code
+- Current username if not the same as the logged-in user
+- Current Java version(`☕`)
+- Current Node.js version(`⬢`)
+- Current Rust version (`🦀`)
+- Current Ruby version (`💎`)
+- Current Python version (`🐍`)
+- Current Go version (`🐹`)
+- Nix-shell environment detection
+- Print an environment variable
+- Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-- 現在のバッテリー残量と状態
-- 現在の Git ブランチとリッチなリポジトリの状態
-  - `=` — 競合している変更
-  - `⇡` — リモートブランチより進んでいる変更
-  - `⇣` —リモートブランチに追いついていない変更
-  - `⇕` — 分岐した変更
-  - `?` — 追跡されていない変更
-  - `$` — stashされた変更
-  - `!` — 変更されたファイル
-  - `+` — 追加されたファイル
-  - `»` — 名前が変更されたファイル
-  - `✘` — 削除されたファイル
-- 閾値を超えた際の、コマンドの実行時間
-- バックグラウンドジョブのインジケーター (`✦`)
+- Current battery level and status
+- Current Git branch and rich repo status:
+  - `=` — conflicting changes
+  - `⇡` — ahead of remote branch
+  - `⇣` — behind of remote branch
+  - `⇕` — diverged changes
+  - `?` — untracked changes
+  - `$` — stashed changes
+  - `!` — modified files
+  - `+` — added files
+  - `»` — renamed files
+  - `✘` — deleted files
+- Execution time of the last command if it exceeds the set threshold
+- Indicator for jobs in the background (`✦`)
+- Current Kubernetes Cluster and Namespace (`☸`)
 
-## 🚀 インストール
+## 🚀 Installation
 
-### 必要なもの
+### Prerequisites
 
-- [Powerline フォント](https://github.com/powerline/fonts) がターミナルにインストールされて有効になっている必要があります（例えば [Fira Code](https://github.com/tonsky/FiraCode) を試してみてください）。
+- A [Powerline font](https://github.com/powerline/fonts) installed and enabled in your terminal (for example, try [Fira Code](https://github.com/tonsky/FiraCode)).
 
-### 入門
+### Getting Started
 
-1. **Starship** のバイナリをインストール
+1. Install the **starship** binary:
 
-   もし以下のプラットフォームを使用していない場合は **[コンパイル済みのバイナリファイルをダウンロード](https://github.com/starship/starship/releases)** してください。
+   **[Download archives of precompiled binaries](https://github.com/starship/starship/releases)** if you don't use the platforms below.
 
 
    #### Homebrew
@@ -99,7 +100,7 @@
    ```
 
 
-   #### Rust (v1.33 もしくはそれ以上)
+   #### Rust (v1.33 or higher)
 
    ```sh
    $ cargo install starship
@@ -108,7 +109,7 @@
 
    #### Arch Linux (AUR)
 
-   Starship は AUR 上の `starship` というパッケージ名で利用可能です。 `yay` またはお好きな AUR ヘルパーでインストールしてください。
+   Starship is available on the AUR under the name `starship`. Install it with `yay` or your favorite AUR helper.
 
    ```sh
    $ yay -S starship
@@ -128,12 +129,12 @@
    $ pkg install starship
    ```
 
-1. 初期化のためのスクリプトをシェルの設定ファイルに追加
+1. Add the init script to your shell's config file:
 
 
    #### Bash
 
-   `~/.bashrc` の最後に以下を追記してください
+   Add the following to the end of `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -144,7 +145,7 @@
 
    #### Fish
 
-   `~/.config/fish/config.fish` の最後に以下を追記してください
+   Add the following to the end of `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -155,7 +156,7 @@
 
    #### Zsh
 
-   `~/.zshrc` の最後に以下を追記してください
+   Add the following to the end of `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -163,28 +164,28 @@
    eval "$(starship init zsh)"
    ```
 
-## 🔧 設定
+## 🔧 Configuration
 
-Starship の設定方法の詳細に関しては、[ドキュメント](https://starship.rs/config/)をチェックしてください。
+For details on how to configure Starship, check out our [documentation](https://starship.rs/config/).
 
-## 🤝 貢献
+## 🤝 Contributing
 
-私たちは常に**すべてのスキルレベル**の貢献者を探しています！ もし簡単にプロジェクトへ参加する方法をお探しなら、 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) に取り組んでみてください。
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-### 特に必要としています
+### High Priority Needs
 
-- 👩‍💼 **プロダクトマネージャー**
-  - GitHub のプロジェクトには、整理/優先度付けがされていない機能や、Issue になっていないアイデアが多くあります。 プロダクトの方針を持っていただける方が Starship には必要です！
-- 👩‍🎨 **デザイナー**
-  - 目を引く Web サイトを作りたいですか？ 素晴らしい！ 我々は Starship の栄光を際立てる美しい Web サイトを作成したいと考えています。 Starship ブランドのデザインを手助けすることは、新しいアイデアを試す絶好の機会です！
-- 👩‍💻 **Rust デベロッパー**
-  - 慣用的な Rust の作成、効果的な Rust アーキテクチャの設計、パフォーマンスの最適化、クロスプラットフォームビルドの最適化などに関しては、_多く_の簡単な成果があります。 私（[@matchai](https://github.com/matchai)）は Rust の初心者です。 私たちを正しい方向に向けてください！
+- 👩‍💼 **Product Manager**
+  - We have a GitHub Project and many unorganized/unprioritized features, as well as ideas that haven't yet been made into issues. Starship needs someone to own the product direction!
+- 👩‍🎨 **Designer**
+  - Like making eye-catching websites? Excellent! We are looking to create a beautiful landing page showing off Starship in all its glory. Helping design for Starship's brand is a great opportunity to try out new ideas!
+- 👩‍💻 **Rust Developer**
+  - There is _a lot_ of low-hanging fruit when it comes to writing idiomatic Rust, designing effective Rust architecture, performance optimizations, cross-platform build optimizations, and more! I ([@matchai](https://github.com/matchai)) am a beginner to Rust. Come point us in the right direction!
 
-もしあなたが Starship への貢献に興味がある場合は、我々の[貢献ガイド](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)をご覧ください。 また、気軽に我々の[Discord サーバー](https://discord.gg/8Jzqu3T)へ顔を出してください。 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
-### 貢献者
+### Contributors
 
-これらの素晴らしい方々に感謝します ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
@@ -208,7 +209,7 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
     <td align="center"><a href="https://github.com/iamsauravsharma"><img src="https://avatars0.githubusercontent.com/u/38726015?v=4" width="100px;" alt="Saurav Sharma" /><br /><sub><b>Saurav Sharma</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=iamsauravsharma" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=iamsauravsharma" title="Documentation">📖</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/andytom"><img src="https://avatars1.githubusercontent.com/u/108836?v=4" width="100px;" alt="Thomas O'Donnell" /><br /><sub><b>Thomas O'Donnell</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=andytom" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=andytom" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/andytom"><img src="https://avatars1.githubusercontent.com/u/108836?v=4" width="100px;" alt="Thomas O'Donnell" /><br /><sub><b>Thomas O'Donnell</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=andytom" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=andytom" title="Tests">⚠️</a> <a href="https://github.com/starship/starship/commits?author=andytom" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/bbigras"><img src="https://avatars1.githubusercontent.com/u/24027?v=4" width="100px;" alt="Bruno Bigras" /><br /><sub><b>Bruno Bigras</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=bbigras" title="Code">💻</a> <a href="#review-bbigras" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://neilkistner.com/"><img src="https://avatars1.githubusercontent.com/u/186971?v=4" width="100px;" alt="Neil Kistner" /><br /><sub><b>Neil Kistner</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=wyze" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=wyze" title="Tests">⚠️</a> <a href="#review-wyze" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="http://ca.linkedin.com/in/qstrahl"><img src="https://avatars3.githubusercontent.com/u/2235277?v=4" width="100px;" alt="Quinn Strahl" /><br /><sub><b>Quinn Strahl</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=qstrahl" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=qstrahl" title="Tests">⚠️</a></td>
@@ -229,30 +230,32 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
     <td align="center"><a href="https://github.com/jakubclark"><img src="https://avatars0.githubusercontent.com/u/19486495?v=4" width="100px;" alt="Kuba Clark" /><br /><sub><b>Kuba Clark</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=jakubclark" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=jakubclark" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=jakubclark" title="Tests">⚠️</a></td>
     <td align="center"><a href="http://breax.org"><img src="https://avatars2.githubusercontent.com/u/862483?v=4" width="100px;" alt="Gimbar" /><br /><sub><b>Gimbar</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=gimbar" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=gimbar" title="Tests">⚠️</a> <a href="https://github.com/starship/starship/commits?author=gimbar" title="Documentation">📖</a></td>
     <td align="center"><a href="http://tomhotston.net"><img src="https://avatars0.githubusercontent.com/u/22729355?v=4" width="100px;" alt="Tom Hotston" /><br /><sub><b>Tom Hotston</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=TomHotston" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=TomHotston" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/bijancn"><img src="https://avatars3.githubusercontent.com/u/2117164?v=4" width="100px;" alt="Bijan Chokoufe Nejad" /><br /><sub><b>Bijan Chokoufe Nejad</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=bijancn" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=bijancn" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/bijancn"><img src="https://avatars3.githubusercontent.com/u/2117164?v=4" width="100px;" alt="Bijan Chokoufe Nejad" /><br /><sub><b>Bijan Chokoufe Nejad</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=bijancn" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=bijancn" title="Tests">⚠️</a> <a href="#review-bijancn" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://github.com/yuri1969"><img src="https://avatars3.githubusercontent.com/u/13468636?v=4" width="100px;" alt="yuri" /><br /><sub><b>yuri</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=yuri1969" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=yuri1969" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=yuri1969" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/TsubasaKawajiri"><img src="https://avatars2.githubusercontent.com/u/39114857?v=4" width="100px;" alt="TsubasaKawajiri" /><br /><sub><b>TsubasaKawajiri</b></sub></a><br /><a href="#translation-TsubasaKawajiri" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://github.com/qryxip"><img src="https://avatars2.githubusercontent.com/u/14125495?v=4" width="100px;" alt="Ryo Yamashita" /><br /><sub><b>Ryo Yamashita</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=qryxip" title="Code">💻</a></td>
   </tr>
 </table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-このプロジェクトは [all-contributors](https://github.com/all-contributors/all-contributors) の仕様に従っています。 どんな種類の貢献でもお待ちしています！
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
-## 影響を受けたプロダクト
+## 💭 Inspired By
 
-よければStarship の作成に影響を与えた、これまでのプロジェクトをチェックしてください 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - 宇宙飛行士のための ZSH プロンプト。
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - 多くの shell に対応した JavaScript で書かれた robbyrussell テーマ。
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme written in JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** - 多くの shell に対応しているカスタマイズ可能でアイコンを表示できる powerline のようなプロンプト。
+- **[reujab/silver](https://github.com/reujab/silver)** - A cross-shell customizable powerline-like prompt with icons.
 
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 ライセンス
+## 📝 License
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> このプロジェクトは [ISC](https://github.com/starship/starship/blob/master/LICENSE) でライセンスされています。
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
