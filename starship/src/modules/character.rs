@@ -1,5 +1,7 @@
 use super::{Context, Module};
-use ansi_term::Color;
+
+use crate::config::RootModuleConfig;
+use crate::configs::character::CharacterConfig;
 
 /// Creates a module for the prompt character
 ///
@@ -10,9 +12,6 @@ use ansi_term::Color;
 /// - If the exit-code was anything else, the arrow will be formatted with
 /// `style_failure` (red by default)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    const SUCCESS_CHAR: &str = "❯";
-    const FAILURE_CHAR: &str = "✖";
-    const VICMD_CHAR: &str = "❮";
     enum ShellEditMode {
         Normal,
         Insert,
@@ -21,19 +20,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // TODO: extend config to more modes
 
     let mut module = context.new_module("character");
+    let config: CharacterConfig = CharacterConfig::try_load(module.config);
     module.get_prefix().set_value("");
 
-    let style_success = module
-        .config_value_style("style_success")
-        .unwrap_or_else(|| Color::Green.bold());
-    let style_failure = module
-        .config_value_style("style_failure")
-        .unwrap_or_else(|| Color::Red.bold());
-
     let arguments = &context.arguments;
-    let use_symbol = module
-        .config_value_bool("use_symbol_for_status")
-        .unwrap_or(false);
     let exit_success = arguments.value_of("status_code").unwrap_or("0") == "0";
     let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
     let keymap = arguments.value_of("keymap").unwrap_or("viins");
@@ -48,21 +38,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         _ => ASSUMED_MODE,
     };
 
-    /* If an error symbol is set in the config, use symbols to indicate
-    success/failure, in addition to color */
-    let symbol = if use_symbol && !exit_success {
-        module.new_segment("error_symbol", FAILURE_CHAR)
+    if exit_success {
+        module.set_style(config.style_success);
     } else {
-        match mode {
-            ShellEditMode::Normal => module.new_segment("vicmd_symbol", VICMD_CHAR),
-            ShellEditMode::Insert => module.new_segment("symbol", SUCCESS_CHAR),
-        }
+        module.set_style(config.style_failure);
     };
 
-    if exit_success {
-        symbol.set_style(style_success);
+    /* If an error symbol is set in the config, use symbols to indicate
+    success/failure, in addition to color */
+    if config.use_symbol_for_status && !exit_success {
+        module.create_segment("error_symbol", &config.error_symbol)
     } else {
-        symbol.set_style(style_failure);
+        match mode {
+            ShellEditMode::Normal => module.create_segment("vicmd_symbol", &config.vicmd_symbol),
+            ShellEditMode::Insert => module.create_segment("symbol", &config.symbol),
+        }
     };
 
     Some(module)
