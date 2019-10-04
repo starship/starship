@@ -1,0 +1,34 @@
+trigger:
+  tags:
+    include: ["*"]
+
+stages:
+  - stage: Release
+    condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
+    jobs:
+    # Release binary on GitHub
+    - template: ci/github-release.yml
+      parameters:
+        name: github_release
+        rust_version: stable
+        contents: |
+          *
+          !*.rlib
+          !*.d
+          !.*
+        targets:
+          - x86_64-unknown-linux-gnu
+          - x86_64-unknown-linux-musl
+          - x86_64-pc-windows-gnu
+          - x86_64-pc-windows-msvc
+          - x86_64-apple-darwin
+        github:
+          gitHubConnection: StarshipRelease
+          repositoryName: starship/starship
+          isPreRelease: false
+
+    # Publish package to Crates.io
+    - template: ci/cargo-publish.yml
+      parameters:
+        name: cargo_publish
+        displayName: Publish to Crates.io
