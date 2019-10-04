@@ -149,8 +149,8 @@ jobs:
           override: true
       - run: cargo login $CRATES_IO_TOKEN
       - run: cargo publish
-        env:
-          CRATES_IO_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
+    env:
+      CRATES_IO_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
 
   # Create a PR to bump the brew formula version
   brew_bump_formula:
@@ -225,12 +225,12 @@ jobs:
           # Temporary fix for https://github.com/actions/setup-go/issues/14
           export PATH=$PATH:$(go env GOPATH)/bin
           go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
-          git-chglog -c .github/chglog/release.yml $(git describe --tags) > RELEASE.txt
+          git-chglog -c .github/chglog/release.yml $(git describe --tags) > RELEASE.md
 
       - name: Create GitHub release ${{ matrix.target }}
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ matrix.name }}
-          body_path: RELEASE.txt
+          body_path: RELEASE.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
