@@ -52,6 +52,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
             let mut module = context.new_module("kubernetes");
             let config: KubernetesConfig = KubernetesConfig::try_load(module.config);
+            if config.disabled {
+                return None;
+            };
 
             module.set_style(config.style);
             module.get_prefix().set_value(KUBERNETES_PREFIX);
