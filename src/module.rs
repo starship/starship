@@ -80,10 +80,12 @@ impl<'a> Module<'a> {
         let mut segment = Segment::new(name);
         let segment_config_mock = SegmentConfig { value, style: None };
 
-        if let Some(module_config) = self.config {
-            let segment_config = segment_config_mock.load_config(&module_config);
-            segment.set_style(segment_config.style.unwrap_or(self.style));
-            segment.set_value(segment_config.value);
+        if let Some(toml::Value::Table(module_config)) = self.config {
+            if let Some(symbol) = module_config.get(name) {
+                let segment_config = segment_config_mock.load_config(&symbol);
+                segment.set_style(segment_config.style.unwrap_or(self.style));
+                segment.set_value(segment_config.value);
+            }
         } else {
             segment.set_style(segment_config_mock.style.unwrap_or(self.style));
             segment.set_value(segment_config_mock.value);
