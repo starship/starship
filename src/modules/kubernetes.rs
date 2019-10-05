@@ -1,4 +1,3 @@
-use ansi_term::Color;
 use dirs;
 use yaml_rust::YamlLoader;
 
@@ -6,9 +5,12 @@ use std::env;
 use std::path;
 
 use super::{Context, Module};
+
+use crate::config::RootModuleConfig;
+use crate::configs::kubernetes::KubernetesConfig;
 use crate::utils;
 
-const KUBE_CHAR: &str = "☸ ";
+const KUBERNETES_PREFIX: &str = "on ";
 
 fn get_kube_context(contents: &str) -> Option<(String, String)> {
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
@@ -50,17 +52,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let (kube_ctx, kube_ns) = kube_cfg;
 
             let mut module = context.new_module("kubernetes");
+            let config: KubernetesConfig = KubernetesConfig::try_load(module.config);
 
-            let module_style = module
-                .config_value_style("style")
-                .unwrap_or_else(|| Color::Cyan.bold());
-            module.set_style(module_style);
-            module.get_prefix().set_value("on ");
+            module.set_style(config.style);
+            module.get_prefix().set_value(KUBERNETES_PREFIX);
 
-            module.new_segment("symbol", KUBE_CHAR);
-            module.new_segment("context", &kube_ctx);
+            module.create_segment("symbol", &config.symbol);
+            module.create_segment("context", &config.context.with_value(&kube_ctx));
             if kube_ns != "" {
-                module.new_segment("namespace", &format!(" ({})", kube_ns));
+                module.create_segment(
+                    "namespace",
+                    &config.namespace.with_value(&format!(" ({})", kube_ns)),
+                );
             }
             Some(module)
         }
