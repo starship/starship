@@ -11,13 +11,8 @@ should not display when disabled, should display *something* when enabled,
 and should have the correct prefixes and suffixes in a given config */
 
 #[test]
-fn config_enabled() -> io::Result<()> {
-    let output = common::render_module("time")
-        .use_config(toml::toml! {
-            [time]
-            disabled = false
-        })
-        .output()?;
+fn config_default() -> io::Result<()> {
+    let output = common::render_module("time").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     // We can't test what it actually is...but we can assert it's not blank
@@ -26,21 +21,10 @@ fn config_enabled() -> io::Result<()> {
 }
 
 #[test]
-fn config_blank() -> io::Result<()> {
-    let output = common::render_module("time").output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-
-    let expected = "";
-    assert_eq!(expected, actual);
-    Ok(())
-}
-
-#[test]
 fn config_check_prefix_and_suffix() -> io::Result<()> {
     let output = common::render_module("time")
         .use_config(toml::toml! {
             [time]
-            disabled = false
             format = "[%T]"
         })
         .output()?;
