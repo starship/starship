@@ -1,5 +1,7 @@
+use std::fs::File;
+use std::io::{self, Write};
+
 use ansi_term::Color;
-use std::io;
 
 use crate::common;
 
@@ -44,6 +46,62 @@ fn profile_set() -> io::Result<()> {
         .env("AWS_PROFILE", "astronauts")
         .output()?;
     let expected = format!("on {} ", Color::Yellow.bold().paint("☁️ astronauts"));
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+fn default_profile_set() -> io::Result<()> {
+    let dir = common::new_tempdir()?;
+    let config_path = dir.path().join("config");
+    let mut file = File::create(&config_path)?;
+
+    file.write_all(
+        "[default]
+region = us-east-1
+
+[profile astronauts]
+region = us-east-2
+"
+        .as_bytes(),
+    )?;
+
+    let output = common::render_module("aws")
+        .env_clear()
+        .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+        .output()?;
+    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️ us-east-1"));
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+fn profile_and_config_set() -> io::Result<()> {
+    let dir = common::new_tempdir()?;
+    let config_path = dir.path().join("config");
+    let mut file = File::create(&config_path)?;
+
+    file.write_all(
+        "[default]
+region = us-east-1
+
+[profile astronauts]
+region = us-east-2
+"
+        .as_bytes(),
+    )?;
+
+    let output = common::render_module("aws")
+        .env_clear()
+        .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+        .env("AWS_PROFILE", "astronauts")
+        .output()?;
+    let expected = format!(
+        "on {} ",
+        Color::Yellow.bold().paint("☁️ us-east-2(astronauts)")
+    );
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
