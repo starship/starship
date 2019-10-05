@@ -13,6 +13,7 @@ pub const ALL_MODULES: &[&str] = &[
     "battery",
     "character",
     "cmd_duration",
+    "conda",
     "directory",
     "dotnet",
     "env_var",
