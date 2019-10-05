@@ -28,7 +28,7 @@ impl<'a> RootModuleConfig<'a> for KubernetesConfig<'a> {
                 style: None,
             },
             style: Color::Cyan.bold(),
-            disabled: false,
+            disabled: true,
         }
     }
 }
