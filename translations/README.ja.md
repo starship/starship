@@ -27,11 +27,11 @@
 
 <h4 align="center">
   <br />
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship. rs/ja/">ウェブサイト</a>
   ·
-  <a href="#-installation">Installation</a>
+  <a href="#-インストール">インストール</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship. rs/ja/config/">設定</a>
 </h4>
 <p align="center">
   <a href="https://github.com/starship/starship/blob/master/README.md"
@@ -55,7 +55,7 @@
 
 <h1></h1>
 
-<p align="center"> Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br /> The prompt shows information you need while you're working, while staying sleek and out of the way. <p>
+<p align="center"> Starship は小さく、とても高速に動作し、非常にカスタマイズ可能なすべてのシェルに対応したプロンプトです！<br /> プロンプトには、作業中に必要な情報が表示されます。 <p>
 
 <p align="center">
   <br>
@@ -186,7 +186,7 @@ For details on how to configure Starship, check out our [documentation](https://
 
 ## 🤝 貢献
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+私たちは常に**すべてのスキルレベル**の貢献者を探しています！ If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
 ### 特に必要としています
 
@@ -201,7 +201,7 @@ If you are interested in helping contribute to starship, please take a look at o
 
 ### 貢献者
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+これらの素晴らしい方々に感謝します ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
