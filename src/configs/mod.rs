@@ -1,4 +1,6 @@
+pub mod aws;
 pub mod battery;
+pub mod character;
 pub mod cmd_duration;
 pub mod directory;
 pub mod dotnet;
@@ -25,6 +27,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
             prompt_order: vec![
                 "username",
                 "hostname",
+                "kubernetes",
                 "directory",
                 "git_branch",
                 "git_state",
