@@ -11,6 +11,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("time");
     let config: TimeConfig = TimeConfig::try_load(module.config);
+    if config.disabled {
+        return None;
+    };
 
     let default_format = if config.use_12hr { "%r" } else { "%T" };
     let time_format = config.format.unwrap_or(default_format);
