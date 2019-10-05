@@ -8,7 +8,7 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions?workflow=Workflow"
     ><img
-      src="https://github.com/starship/starship/workflows/Workflow/badge.svg"
+      src="https://github.com/starship/starship/workflows/Main%20workflow/badge.svg"
       alt="GitHub Actions workflow status"
   /></a>
   <a href="https://crates.io/crates/starship"
