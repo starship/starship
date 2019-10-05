@@ -6,13 +6,13 @@
   />
 </p>
 <p align="center">
+  <a href="https://github.com/starship/starship/actions"
+    ><img
+      src="https://github.com/starship/starship/workflows/Main%20workflow/badge.svg"
+      alt="GitHub Actions workflow status"
+  /></a>
   <a href="https://crates.io/crates/starship"
     ><img src="https://badgen.net/crates/v/starship" alt="Crates.io version"
-  /></a>
-  <a href="https://dev.azure.com/starship-control/starship/_build"
-    ><img
-      src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite"
-      alt="Azure Pipelines Build Status"
   /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img

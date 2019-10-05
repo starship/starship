@@ -574,13 +574,20 @@ can be done via `kubectl config set-context starship-cluster --namespace
 astronaut`. If the `$KUBECONFIG` env var is set the module will use that if
 not it will use the `~/.kube/config`.
 
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
 ### Options
 
 | Variable   | Default       | Description                                         |
 | ---------- | ------------- | --------------------------------------------------- |
 | `symbol`   | `"☸ "`       | The symbol used before displaying the Cluster info. |
 | `style`    | `"bold blue"` | The style for the module.                           |
-| `disabled` | `false`       | Disables the `kubernetes` module                    |
+| `disabled` | `true`        | Disables the `kubernetes` module                    |
 
 ### Example
 
@@ -590,7 +597,7 @@ not it will use the `~/.kube/config`.
 [kubernetes]
 symbol = "⛵ "
 style = "dim green"
-disabled = true
+disabled = false
 ```
 
 
