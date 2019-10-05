@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
+use crate::config::{ModuleConfig, RootModuleConfig};
 
 use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
@@ -18,7 +18,7 @@ impl<'a> RootModuleConfig<'a> for HostnameConfig<'a> {
             ssh_only: true,
             prefix: "",
             suffix: "",
-            style: Color::Red.bold(),
+            style: Color::Green.bold().dimmed(),
             disabled: false,
         }
     }

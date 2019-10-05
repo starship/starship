@@ -15,11 +15,11 @@ impl<'a> RootModuleConfig<'a> for JobsConfig<'a> {
     fn new() -> Self {
         JobsConfig {
             symbol: SegmentConfig {
-                value: "✦ ",
+                value: "✦",
                 style: None,
             },
             threshold: 1,
-            style: Color::Red.bold(),
+            style: Color::Blue.bold(),
             disabled: false,
         }
     }
