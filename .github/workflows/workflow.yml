@@ -1,4 +1,4 @@
-name: Workflow
+name: Main workflow
 on: [push, pull_request]
 jobs:
   # Run the `rustfmt` code formatter
