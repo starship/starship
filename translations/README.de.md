@@ -5,7 +5,7 @@
     alt="Starship – Cross-shell prompt" />
 </p>
 <p align="center">
-  <a href="https://github.com/starship/starship/actions?workflow=Workflow"
+  <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://github.com/starship/starship/workflows/Main%20workflow/badge.svg"
       alt="GitHub Actions workflow status" /></a>
