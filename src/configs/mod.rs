@@ -4,6 +4,7 @@ pub mod character;
 pub mod dotnet;
 pub mod kubernetes;
 pub mod rust;
+pub mod status;
 
 use crate::config::{ModuleConfig, RootModuleConfig};
 
