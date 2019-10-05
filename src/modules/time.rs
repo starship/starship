@@ -2,7 +2,7 @@ use chrono::{DateTime, Local};
 
 use super::{Context, Module};
 
-use crate::config::RootModuleConfig;
+use crate::config::{RootModuleConfig, SegmentConfig};
 use crate::configs::time::TimeConfig;
 
 /// Outputs the current time
@@ -27,7 +27,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     module.get_prefix().set_value(TIME_PREFIX);
 
-    module.create_segment("time", &config.time.with_value(&formatted_time_string));
+    module.create_segment(
+        "time",
+        &SegmentConfig {
+            value: &formatted_time_string,
+            style: None,
+        },
+    );
 
     Some(module)
 }
