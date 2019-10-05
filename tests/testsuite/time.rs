@@ -26,16 +26,6 @@ fn config_enabled() -> io::Result<()> {
 }
 
 #[test]
-fn config_blank() -> io::Result<()> {
-    let output = common::render_module("time").output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-
-    let expected = "";
-    assert_eq!(expected, actual);
-    Ok(())
-}
-
-#[test]
 fn config_check_prefix_and_suffix() -> io::Result<()> {
     let output = common::render_module("time")
         .use_config(toml::toml! {
