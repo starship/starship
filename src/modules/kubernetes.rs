@@ -4,9 +4,8 @@ use yaml_rust::YamlLoader;
 use std::env;
 use std::path;
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
 
-use crate::config::RootModuleConfig;
 use crate::configs::kubernetes::KubernetesConfig;
 use crate::utils;
 
