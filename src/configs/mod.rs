@@ -3,7 +3,9 @@ pub mod battery;
 pub mod character;
 pub mod conda;
 pub mod dotnet;
+pub mod kubernetes;
 pub mod rust;
+pub mod time;
 
 use crate::config::{ModuleConfig, RootModuleConfig};
 
