@@ -1,6 +1,8 @@
 use std::env;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+use std::path::PathBuf;
+use std::str::FromStr;
 
 use dirs::home_dir;
 
@@ -10,8 +12,14 @@ use crate::config::{RootModuleConfig, SegmentConfig};
 use crate::configs::aws::AwsConfig;
 
 fn get_aws_region_from_config(aws_profile: &Option<String>) -> Option<String> {
-    let mut config_location = home_dir()?;
-    config_location.push(".aws/config");
+    let config_location = env::var("AWS_CONFIG_FILE")
+        .ok()
+        .and_then(|path| PathBuf::from_str(&path).ok())
+        .or_else(|| {
+            let mut home = home_dir()?;
+            home.push(".aws/config");
+            Some(home)
+        })?;
 
     let file = File::open(&config_location).ok()?;
     let reader = BufReader::new(file);
