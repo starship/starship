@@ -1,4 +1,4 @@
-name: Workflow
+name: Main workflow
 on: [push, pull_request]
 jobs:
   # Run the `rustfmt` code formatter
@@ -135,10 +135,10 @@ jobs:
       - name: Run tests in Docker
         run: docker run --rm -v $(pwd):/src/starship starshipcommand/starship-test
 
-  # Publish all packages to Crates.io
+  # Publish starship to Crates.io
   cargo_publish:
     if: startsWith(github.ref, 'refs/tags/v')
-    name: Publish Cargo Packages
+    name: Publish Cargo Package
     needs: [test, docker_test]
     runs-on: ubuntu-latest
     steps:
@@ -147,14 +147,28 @@ jobs:
         with:
           toolchain: stable
           override: true
-      - run: cargo install --force cargo-publish-all
-      - run: cargo-publish-all --token $CRATES_IO_TOKEN --yes
-        env:
-          CRATES_IO_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
+      - run: cargo login $CRATES_IO_TOKEN
+      - run: cargo publish
+    env:
+      CRATES_IO_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
 
+  # Create a PR to bump the brew formula version
+  brew_bump_formula:
+    if: startsWith(github.ref, 'refs/tags/v')
+    name: Bump Brew Formula
+    needs: [test, docker_test]
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: export COMMIT_TAG=$(git describe --tags)
+      - run: brew bump-formula-pr --url=https://github.com/starship/starship/archive/${COMMIT_TAG}.tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Create GitHub release with Rust build targets and release notes
   github_release:
     if: startsWith(github.ref, 'refs/tags/v')
-    name: Create GitHub release
+    name: Create GitHub Release
     needs: [test, docker_test]
     strategy:
       fail-fast: false
@@ -211,12 +225,12 @@ jobs:
           # Temporary fix for https://github.com/actions/setup-go/issues/14
           export PATH=$PATH:$(go env GOPATH)/bin
           go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
-          git-chglog -c .github/chglog/release.yml $(git describe --tags $(git rev-list --tags --max-count=1)) > RELEASE.txt
+          git-chglog -c .github/chglog/release.yml $(git describe --tags) > RELEASE.md
 
       - name: Create GitHub release ${{ matrix.target }}
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ matrix.name }}
-          body_path: RELEASE.txt
+          body_path: RELEASE.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

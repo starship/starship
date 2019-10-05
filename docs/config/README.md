@@ -574,13 +574,20 @@ can be done via `kubectl config set-context starship-cluster --namespace
 astronaut`. If the `$KUBECONFIG` env var is set the module will use that if
 not it will use the `~/.kube/config`.
 
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
 ### Options
 
 | Variable   | Default       | Description                                         |
 | ---------- | ------------- | --------------------------------------------------- |
 | `symbol`   | `"☸ "`       | The symbol used before displaying the Cluster info. |
 | `style`    | `"bold blue"` | The style for the module.                           |
-| `disabled` | `false`       | Disables the `kubernetes` module                    |
+| `disabled` | `true`        | Disables the `kubernetes` module                    |
 
 ### Example
 
@@ -590,7 +597,7 @@ not it will use the `~/.kube/config`.
 [kubernetes]
 symbol = "⛵ "
 style = "dim green"
-disabled = true
+disabled = false
 ```
 
 
@@ -867,13 +874,13 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 | Variable   | Default       | Description                                                                                                         |
 | ---------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `12hr`     | `false`       | Enables 12 hour formatting                                                                                          |
+| `use_12hr` | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`   | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
 | `style`    | `bold yellow` | The style for the module time                                                                                       |
 | `disabled` | `true`        | Disables the `time` module.                                                                                         |
 
-If `12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
-Manually setting `format` will override the `12hr` setting.
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
+Manually setting `format` will override the `use_12hr` setting.
 
 ### Example
 
