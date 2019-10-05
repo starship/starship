@@ -85,17 +85,19 @@ The default `prompt_order` is used to define the order in which modules are show
 prompt_order = [
     "username",
     "hostname",
+    "kubernetes",
     "directory",
     "git_branch",
     "git_state",
     "git_status",
     "package",
-    "nodejs",
-    "ruby",
-    "rust",
-    "python",
+    "dotnet",
     "golang",
     "java",
+    "nodejs",
+    "python",
+    "ruby",
+    "rust",
     "nix_shell",
     "memory_usage",
     "aws",
@@ -257,11 +259,12 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Variable   | Default         | Description                         |
-| ---------- | --------------- | ----------------------------------- |
-| `min_time` | `2`             | Shortest duration to show time for. |
-| `style`    | `"bold yellow"` | The style for the module.           |
-| `disabled` | `false`         | Disables the `cmd_duration` module. |
+| Variable   | Default         | Description                                                |
+| ---------- | --------------- | ---------------------------------------------------------- |
+| `min_time` | `2`             | Shortest duration to show time for.                        |
+| `prefix`   | `took`          | Prefix to display immediately before the command duration. |
+| `style`    | `"bold yellow"` | The style for the module.                                  |
+| `disabled` | `false`         | Disables the `cmd_duration` module.                        |
 
 ### Example
 
@@ -270,6 +273,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 [cmd_duration]
 min_time = 4
+prefix = "underwent "
 ```
 
 ## Directory
@@ -312,6 +316,41 @@ it would have been `nixpkgs/pkgs`.
 
 [directory]
 truncation_length = 8
+```
+
+## Dotnet
+
+The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If
+the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module
+shows the latest installed version of the SDK.
+
+This module will only be shown in your prompt when one of the following files are present in the
+current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll
+also need the .NET Core command-line tools installed in order to use it correctly.
+
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast
+as running `dotnet --version`, but it may show an incorrect version if your .NET project has an
+unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by
+setting `heuristic = false` in the module options.
+
+### Options
+
+| Variable    | Default       | Description                                              |
+| ----------- | ------------- | -------------------------------------------------------- |
+| `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
+| `style`     | `"bold blue"` | The style for the module.                                |
+| `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
+| `disabled`  | `false`       | Disables the `dotnet` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[dotnet]
+symbol = "🥅 "
+style = "green"
+heuristic = false
 ```
 
 ## Environment Variable
@@ -526,6 +565,42 @@ symbol = "+ "
 threshold = 4
 ```
 
+
+## Kubernetes
+
+Displays the current Kubernetes context name and, if set, the namespace from
+the kubeconfig file. The namespace needs to be set in the kubeconfig file, this
+can be done via `kubectl config set-context starship-cluster --namespace
+astronaut`. If the `$KUBECONFIG` env var is set the module will use that if
+not it will use the `~/.kube/config`.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Variable   | Default       | Description                                         |
+| ---------- | ------------- | --------------------------------------------------- |
+| `symbol`   | `"☸ "`       | The symbol used before displaying the Cluster info. |
+| `style`    | `"bold blue"` | The style for the module.                           |
+| `disabled` | `true`        | Disables the `kubernetes` module                    |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[kubernetes]
+symbol = "⛵ "
+style = "dim green"
+disabled = false
+```
+
+
 ## Line Break
 
 The `line_break` module separates the prompt into two lines.
@@ -578,6 +653,13 @@ The `memory_usage` module shows current system memory and swap usage.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
 ### Options
 
 | Variable          | Default                  | Description                                                   |
@@ -587,7 +669,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 | `threshold`       | `75`                     | Hide the memory usage unless it exceeds this percentage.      |
 | `symbol`          | `"🐏 "`                  | The symbol used before displaying the memory usage.           |
 | `style`           | `"bold dimmed white"`    | The style for the module.                                     |
-| `disabled`        | `false`                  | Disables the `memory_usage` module.                           |
+| `disabled`        | `true`                   | Disables the `memory_usage` module.                           |
 
 ### Example
 

@@ -2,6 +2,7 @@
 extern crate clap;
 
 mod config;
+mod configs;
 mod context;
 mod init;
 mod module;

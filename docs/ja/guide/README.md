@@ -1,1 +1,1 @@
-../../../README.ja.md
+../../../translations/README.ja.md
