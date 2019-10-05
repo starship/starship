@@ -97,6 +97,7 @@ prompt_order = [
     "ruby",
     "rust",
     "nix_shell",
+    "conda",
     "memory_usage",
     "aws",
     "env_var",
@@ -263,30 +264,51 @@ min_time = 4
 prefix = "underwent "
 ```
 
-## ディレクトリ
+## Conda
 
-`directory`モジュールには、現在のディレクトリへのパスが表示され、3つの親フォルダは切り捨てられます。 ディレクトリは、現在のgitリポジトリであるとルートとなります。
-
-fishスタイルのpwdオプションを使用すると、切り捨てられたパスを非表示にする代わりに、オプションで有効にした番号に基づいて各ディレクトリの短縮名が表示されます。
-
-例として、`~/Dev/Nix/nixpkgs/pkgs`で、`nixpkgs`がリポジトリルートであり、オプションが`1`に設定されている場合を挙げます。 以前は`nixpkgs/pkgs`でしたが、`~/D/N/nixpkgs/pkgs`が表示されます。
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set. Note: This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`
 
 ### オプション
 
-| 変数                  | デフォルト         | 説明                            |
-| ------------------- | ------------- | ----------------------------- |
-| `truncation_length` | `3`           | 現在のディレクトリを切り捨てる親フォルダーの数です。    |
-| `truncate_to_repo`  | `true`        | 現在いるgitリポジトリのルートに切り捨てるかどうかです。 |
-| `style`             | `"bold cyan"` | モジュールのスタイルです。                 |
-| `disabled`          | `false`       | `directory`モジュールを無効にします。      |
+| 変数         | デフォルト          | 説明                                           |
+| ---------- | -------------- | -------------------------------------------- |
+| `symbol`   | `"C "`         | The symbol used before the environment name. |
+| `style`    | `"bold green"` | The style for the module.                    |
+| `disabled` | `false`        | Disables the `conda` module.                 |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[conda]
+style = "dimmed green"
+```
+
+## Directory
+
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+
+When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+
+### オプション
+
+| 変数                  | デフォルト         | 説明                                                                               |
+| ------------------- | ------------- | -------------------------------------------------------------------------------- |
+| `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
+| `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `style`             | `"bold cyan"` | The style for the module.                                                        |
+| `disabled`          | `false`       | Disables the `directory` module.                                                 |
 
 <details>
-<summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| 変数                          | デフォルト  | 説明                                           |
-| --------------------------- | ------ | -------------------------------------------- |
-| `fish_style_pwd_dir_length` | `0`    | fish shellのpwdパスロジックを適用するときに使用する文字数です。       |
-| `use_logical_path`          | `true` | OSからのパスの代わりに、シェル(`PWD`) によって提供される論理パスを表示します。 |
+| 変数                          | デフォルト  | 説明                                                                                       |
+| --------------------------- | ------ | ---------------------------------------------------------------------------------------- |
+| `fish_style_pwd_dir_length` | `0`    | The number of characters to use when applying fish shell pwd path logic.                 |
+| `use_logical_path`          | `true` | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
 
 </details>
 
@@ -655,7 +677,7 @@ The `java` module shows the currently installed version of Java. The module will
 | 変数         | デフォルト          | 説明                                                     |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | モジュールのスタイルです。                                          |
+| `style`    | `"dimmed red"` | The style for the module.                              |
 | `disabled` | `false`        | Disables the `java` module.                            |
 
 ### 設定例
@@ -788,15 +810,15 @@ The `rust` module shows the currently installed version of Rust. The module will
 - カレントディレクトリに`Cargo.toml`ファイルが含まれている
 - カレントディレクトリに`.rs`の拡張子のファイルが含まれている
 
-### オプション
+### Options
 
-| 変数         | デフォルト        | 説明                                                     |
+| Variable   | Default      | Description                                            |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
 | `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `rust` module.                            |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
