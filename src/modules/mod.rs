@@ -27,6 +27,7 @@ mod username;
 #[cfg(feature = "battery")]
 mod battery;
 
+use crate::config::RootModuleConfig;
 use crate::context::Context;
 use crate::module::Module;
 
