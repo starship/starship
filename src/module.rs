@@ -85,11 +85,14 @@ impl<'a> Module<'a> {
                 let segment_config = segment_config_mock.load_config(&symbol);
                 segment.set_style(segment_config.style.unwrap_or(self.style));
                 segment.set_value(segment_config.value);
+
+                self.segments.push(segment);
+                return self.segments.last_mut().unwrap();
             }
-        } else {
-            segment.set_style(segment_config_mock.style.unwrap_or(self.style));
-            segment.set_value(segment_config_mock.value);
         }
+
+        segment.set_style(segment_config_mock.style.unwrap_or(self.style));
+        segment.set_value(segment_config_mock.value);
 
         self.segments.push(segment);
         self.segments.last_mut().unwrap()
