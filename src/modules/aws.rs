@@ -1,8 +1,7 @@
 use std::env;
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
 
-use crate::config::RootModuleConfig;
 use crate::configs::aws::AwsConfig;
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {

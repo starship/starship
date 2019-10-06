@@ -13,6 +13,7 @@ pub const ALL_MODULES: &[&str] = &[
     "battery",
     "character",
     "cmd_duration",
+    "conda",
     "directory",
     "dotnet",
     "env_var",
@@ -80,14 +81,19 @@ impl<'a> Module<'a> {
         let mut segment = Segment::new(name);
         let segment_config_mock = SegmentConfig { value, style: None };
 
-        if let Some(module_config) = self.config {
-            let segment_config = segment_config_mock.load_config(&module_config);
-            segment.set_style(segment_config.style.unwrap_or(self.style));
-            segment.set_value(segment_config.value);
-        } else {
-            segment.set_style(segment_config_mock.style.unwrap_or(self.style));
-            segment.set_value(segment_config_mock.value);
+        if let Some(toml::Value::Table(module_config)) = self.config {
+            if let Some(symbol) = module_config.get(name) {
+                let segment_config = segment_config_mock.load_config(&symbol);
+                segment.set_style(segment_config.style.unwrap_or(self.style));
+                segment.set_value(segment_config.value);
+
+                self.segments.push(segment);
+                return self.segments.last_mut().unwrap();
+            }
         }
+
+        segment.set_style(segment_config_mock.style.unwrap_or(self.style));
+        segment.set_value(segment_config_mock.value);
 
         self.segments.push(segment);
         self.segments.last_mut().unwrap()

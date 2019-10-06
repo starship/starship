@@ -1,4 +1,4 @@
-name: Workflow
+name: Main workflow
 on: [push, pull_request]
 jobs:
   # Run the `rustfmt` code formatter
@@ -161,7 +161,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: export COMMIT_TAG=$(git describe --tags)
-      - run: brew bump-formula-pr --url=https://github.com/starship/starship/archive/$COMMIT_TAG.tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
+      - run: brew bump-formula-pr --url=https://github.com/starship/starship/archive/${COMMIT_TAG}.tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
