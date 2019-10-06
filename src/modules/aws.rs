@@ -45,30 +45,42 @@ fn get_aws_region_from_config(aws_profile: &Option<String>) -> Option<String> {
     Some(region.to_string())
 }
 
-fn get_aws_region() -> Option<String> {
+fn get_aws_region() -> Option<(String, String)> {
     env::var("AWS_DEFAULT_REGION")
         .ok()
+        .map(|region| (String::new(), region))
         .or_else(|| {
             let aws_profile = env::var("AWS_PROFILE").ok();
             let aws_region = get_aws_region_from_config(&aws_profile);
 
-            match (aws_profile, aws_region) {
-                (Some(profile), Some(region)) => Some(format!("{}({})", profile, region)),
-                (Some(profile), None) => Some(profile),
-                (None, Some(region)) => Some(region),
-                (None, None) => None,
+            if aws_profile.is_none() && aws_region.is_none() {
+                None
+            } else {
+                Some((
+                    aws_profile.unwrap_or_default(),
+                    aws_region.unwrap_or_default(),
+                ))
             }
         })
-        .or_else(|| env::var("AWS_REGION").ok())
+        .or_else(|| {
+            env::var("AWS_REGION")
+                .ok()
+                .map(|region| (String::new(), region))
+        })
 }
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const AWS_PREFIX: &str = "on ";
 
-    let aws_region = get_aws_region()?;
-    if aws_region.is_empty() {
+    let (aws_profile, aws_region) = get_aws_region()?;
+    if aws_profile.is_empty() && aws_region.is_empty() {
         return None;
     }
+    let aws_region = if aws_profile.is_empty() || aws_region.is_empty() {
+        aws_region
+    } else {
+        format!("({})", aws_region)
+    };
 
     let mut module = context.new_module("aws");
     let config: AwsConfig = AwsConfig::try_load(module.config);
@@ -78,6 +90,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.get_prefix().set_value(AWS_PREFIX);
 
     module.create_segment("symbol", &config.symbol);
+    module.create_segment(
+        "profile",
+        &SegmentConfig {
+            value: &aws_profile,
+            style: None,
+        },
+    );
     module.create_segment(
         "region",
         &SegmentConfig {
