@@ -64,14 +64,14 @@ pub fn create_fixture_repo() -> io::Result<PathBuf> {
     let fixture = path_str(&fixture_path)?;
 
     Command::new("git")
-        .args(&["clone", "-b", "master", fixture, fixture_repo_dir])
+        .args(&["clone", "-b", "master", &fixture, &fixture_repo_dir])
         .output()?;
 
-    git2::Repository::clone(fixture_repo_dir, repo_dir).ok();
+    git2::Repository::clone(&fixture_repo_dir, &repo_dir).ok();
 
     Command::new("git")
         .args(&["config", "--local", "user.email", "starship@example.com"])
-        .current_dir(repo_dir)
+        .current_dir(&repo_dir)
         .output()?;
 
     Command::new("git")
@@ -82,10 +82,11 @@ pub fn create_fixture_repo() -> io::Result<PathBuf> {
     Ok(repo_path)
 }
 
-fn path_str(repo_dir: &PathBuf) -> io::Result<&str> {
+fn path_str(repo_dir: &PathBuf) -> io::Result<String> {
     repo_dir
         .to_str()
         .ok_or_else(|| Error::from(ErrorKind::Other))
+        .map(|i| i.replace("\\", "/"))
 }
 
 /// Extends `std::process::Command` with methods for testing
