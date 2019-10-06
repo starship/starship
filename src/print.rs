@@ -41,16 +41,20 @@ pub fn prompt(args: ArgMatches) {
         .flatten()
         .collect::<Vec<Module>>(); // Remove segments set to `None`
 
+    let mut print_without_prefix = true;
     let mut printable = modules.iter();
 
-    // Print the first module without its prefix
-    if let Some(first_module) = printable.next() {
-        let module_without_prefix = first_module.to_string_without_prefix();
-        write!(handle, "{}", module_without_prefix).unwrap()
-    }
+    for module in printable {
+        // Skip printing the prefix of a module after the line_break
+        if print_without_prefix {
+            let module_without_prefix = module.to_string_without_prefix();
+            write!(handle, "{}", module_without_prefix).unwrap()
+        } else {
+            write!(handle, "{}", module).unwrap();
+        }
 
-    // Print all remaining modules
-    printable.for_each(|module| write!(handle, "{}", module).unwrap());
+        print_without_prefix = module.get_name() == "line_break"
+    }
 }
 
 pub fn module(module_name: &str, args: ArgMatches) {
