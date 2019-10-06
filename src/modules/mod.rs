@@ -12,6 +12,7 @@ mod git_status;
 mod golang;
 mod hostname;
 mod java;
+mod java_version_parser;
 mod jobs;
 mod kubernetes;
 mod line_break;
