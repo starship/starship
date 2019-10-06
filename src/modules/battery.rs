@@ -1,5 +1,4 @@
-use super::{Context, Module};
-use crate::config::RootModuleConfig;
+use super::{Context, Module, RootModuleConfig};
 use crate::configs::battery::BatteryConfig;
 
 /// Creates a module for the battery percentage and charging state

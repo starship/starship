@@ -99,6 +99,7 @@ prompt_order = [
     "ruby",
     "rust",
     "nix_shell",
+    "conda",
     "memory_usage",
     "aws",
     "env_var",
@@ -274,6 +275,28 @@ running `eval $(starship init $0)`, and then proceed as normal.
 [cmd_duration]
 min_time = 4
 prefix = "underwent "
+```
+
+## Conda
+
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+Note: This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`
+
+### Options
+
+| Variable   | Default        | Description                                  |
+| ---------- | -------------- | -------------------------------------------- |
+| `symbol`   | `"C "`         | The symbol used before the environment name. |
+| `style`    | `"bold green"` | The style for the module.                    |
+| `disabled` | `false`        | Disables the `conda` module.                 |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[conda]
+style = "dimmed green"
 ```
 
 ## Directory
