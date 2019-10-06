@@ -47,7 +47,6 @@ fn get_aws_region_from_config(aws_profile: &Option<String>) -> Option<String> {
 
 fn get_aws_region() -> Option<String> {
     env::var("AWS_DEFAULT_REGION")
-        .or_else(|_| env::var("AWS_REGION"))
         .ok()
         .or_else(|| {
             let aws_profile = env::var("AWS_PROFILE").ok();
@@ -60,6 +59,7 @@ fn get_aws_region() -> Option<String> {
                 (None, None) => None,
             }
         })
+        .or_else(|| env::var("AWS_REGION").ok())
 }
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
