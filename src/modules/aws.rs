@@ -7,8 +7,8 @@ use crate::configs::aws::AwsConfig;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const AWS_PREFIX: &str = "on ";
 
-    let aws_profile = env::var("AWS_PROFILE").ok()?;
-    if aws_profile.is_empty() {
+    let aws_profile = env::var("AWS_PROFILE").unwrap_or_else(|_| "".into());
+    if aws_profile.trim().is_empty() {
         return None;
     }
 
