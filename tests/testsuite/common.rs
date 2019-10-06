@@ -8,9 +8,15 @@ use std::{env, fs, io, process};
 static MANIFEST_DIR: Lazy<&'static Path> = Lazy::new(|| Path::new(env!("CARGO_MANIFEST_DIR")));
 static EMPTY_CONFIG: Lazy<PathBuf> = Lazy::new(|| MANIFEST_DIR.join("empty_config.toml"));
 
+#[cfg(windows)]
+const EXE_PATH: &str = "./target/debug/starship.exe";
+
+#[cfg(not(windows))]
+const EXE_PATH: &str = "./target/debug/starship";
+
 /// Render the full starship prompt
 pub fn render_prompt() -> process::Command {
-    let mut command = process::Command::new("./target/debug/starship");
+    let mut command = process::Command::new(EXE_PATH);
 
     command
         .arg("prompt")
@@ -23,7 +29,7 @@ pub fn render_prompt() -> process::Command {
 
 /// Render a specific starship module by name
 pub fn render_module(module_name: &str) -> process::Command {
-    let binary = fs::canonicalize("./target/debug/starship").unwrap();
+    let binary = fs::canonicalize(EXE_PATH).unwrap();
     let mut command = process::Command::new(binary);
 
     command
@@ -38,9 +44,13 @@ pub fn render_module(module_name: &str) -> process::Command {
 
 /// Create a temporary directory with full access permissions (rwxrwxrwt).
 pub fn new_tempdir() -> io::Result<tempfile::TempDir> {
-    //  Using `tempfile::TempDir` directly creates files on macOS within
-    // "/var/folders", which provides us with restricted permissions (rwxr-xr-x)
-    tempfile::tempdir_in("/tmp")
+    if cfg!(not(windows)) {
+        //  Using `tempfile::TempDir` directly creates files on macOS within
+        // "/var/folders", which provides us with restricted permissions (rwxr-xr-x)
+        tempfile::tempdir_in("/tmp")
+    } else {
+        tempfile::tempdir()
+    }
 }
 
 /// Create a repo from the fixture to be used in git module tests
