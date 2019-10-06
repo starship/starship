@@ -23,7 +23,7 @@ fn folder_without_node_files() -> io::Result<()> {
 #[ignore]
 fn folder_with_package_json() -> io::Result<()> {
     let dir = common::new_tempdir()?;
-    File::create(dir.path().join("package.json"))?;
+    File::create(dir.path().join("package.json"))?.sync_all()?;
 
     let output = common::render_module("nodejs")
         .arg("--path")
@@ -40,7 +40,7 @@ fn folder_with_package_json() -> io::Result<()> {
 #[ignore]
 fn folder_with_js_file() -> io::Result<()> {
     let dir = common::new_tempdir()?;
-    File::create(dir.path().join("index.js"))?;
+    File::create(dir.path().join("index.js"))?.sync_all()?;
 
     let output = common::render_module("nodejs")
         .arg("--path")

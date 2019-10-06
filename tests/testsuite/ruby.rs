@@ -23,7 +23,7 @@ fn folder_without_ruby_files() -> io::Result<()> {
 #[ignore]
 fn folder_with_gemfile() -> io::Result<()> {
     let dir = common::new_tempdir()?;
-    File::create(dir.path().join("Gemfile"))?;
+    File::create(dir.path().join("Gemfile"))?.sync_all()?;
 
     let output = common::render_module("ruby")
         .arg("--path")
@@ -40,7 +40,7 @@ fn folder_with_gemfile() -> io::Result<()> {
 #[ignore]
 fn folder_with_rb_file() -> io::Result<()> {
     let dir = common::new_tempdir()?;
-    File::create(dir.path().join("any.rb"))?;
+    File::create(dir.path().join("any.rb"))?.sync_all()?;
 
     let output = common::render_module("ruby")
         .arg("--path")

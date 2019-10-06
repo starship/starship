@@ -9,7 +9,7 @@ use crate::common;
 #[ignore]
 fn folder_with_python_version() -> io::Result<()> {
     let dir = common::new_tempdir()?;
-    File::create(dir.path().join(".python-version"))?;
+    File::create(dir.path().join(".python-version"))?.sync_all()?;
 
     let output = common::render_module("python")
         .arg("--path")
@@ -26,7 +26,7 @@ fn folder_with_python_version() -> io::Result<()> {
 #[ignore]
 fn folder_with_requirements_txt() -> io::Result<()> {
     let dir = common::new_tempdir()?;
-    File::create(dir.path().join("requirements.txt"))?;
+    File::create(dir.path().join("requirements.txt"))?.sync_all()?;
 
     let output = common::render_module("python")
         .arg("--path")
@@ -43,7 +43,7 @@ fn folder_with_requirements_txt() -> io::Result<()> {
 #[ignore]
 fn folder_with_pyproject_toml() -> io::Result<()> {
     let dir = common::new_tempdir()?;
-    File::create(dir.path().join("pyproject.toml"))?;
+    File::create(dir.path().join("pyproject.toml"))?.sync_all()?;
 
     let output = common::render_module("python")
         .arg("--path")
@@ -60,7 +60,7 @@ fn folder_with_pyproject_toml() -> io::Result<()> {
 #[ignore]
 fn folder_with_pipfile() -> io::Result<()> {
     let dir = common::new_tempdir()?;
-    File::create(dir.path().join("Pipfile"))?;
+    File::create(dir.path().join("Pipfile"))?.sync_all()?;
 
     let output = common::render_module("python")
         .arg("--path")
@@ -77,7 +77,7 @@ fn folder_with_pipfile() -> io::Result<()> {
 #[ignore]
 fn folder_with_tox() -> io::Result<()> {
     let dir = common::new_tempdir()?;
-    File::create(dir.path().join("tox.ini"))?;
+    File::create(dir.path().join("tox.ini"))?.sync_all()?;
 
     let output = common::render_module("python")
         .arg("--path")
@@ -94,7 +94,7 @@ fn folder_with_tox() -> io::Result<()> {
 #[ignore]
 fn folder_with_py_file() -> io::Result<()> {
     let dir = common::new_tempdir()?;
-    File::create(dir.path().join("main.py"))?;
+    File::create(dir.path().join("main.py"))?.sync_all()?;
 
     let output = common::render_module("python")
         .arg("--path")
@@ -111,7 +111,7 @@ fn folder_with_py_file() -> io::Result<()> {
 #[ignore]
 fn with_virtual_env() -> io::Result<()> {
     let dir = common::new_tempdir()?;
-    File::create(dir.path().join("main.py"))?;
+    File::create(dir.path().join("main.py"))?.sync_all()?;
     let output = common::render_module("python")
         .env("VIRTUAL_ENV", "/foo/bar/my_venv")
         .arg("--path")

@@ -58,7 +58,7 @@ fn shows_behind_with_count() -> io::Result<()> {
 fn shows_ahead() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
-    File::create(repo_dir.join("readme.md"))?;
+    File::create(repo_dir.join("readme.md"))?.sync_all()?;
 
     Command::new("git")
         .args(&["commit", "-am", "Update readme"])
@@ -82,7 +82,7 @@ fn shows_ahead() -> io::Result<()> {
 fn shows_ahead_with_count() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
-    File::create(repo_dir.join("readme.md"))?;
+    File::create(repo_dir.join("readme.md"))?.sync_all()?;
 
     Command::new("git")
         .args(&["commit", "-am", "Update readme"])
@@ -214,7 +214,7 @@ fn shows_conflicted() -> io::Result<()> {
 fn shows_untracked_file() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
-    File::create(repo_dir.join("license"))?;
+    File::create(repo_dir.join("license"))?.sync_all()?;
 
     let output = common::render_module("git_status")
         .arg("--path")
@@ -233,7 +233,7 @@ fn shows_untracked_file() -> io::Result<()> {
 fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
-    File::create(repo_dir.join("license"))?;
+    File::create(repo_dir.join("license"))?.sync_all()?;
 
     Command::new("git")
         .args(&["config", "status.showUntrackedFiles", "no"])
@@ -257,7 +257,7 @@ fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
 fn shows_stashed() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
-    File::create(repo_dir.join("readme.md"))?;
+    File::create(repo_dir.join("readme.md"))?.sync_all()?;
 
     Command::new("git")
         .arg("stash")
@@ -281,7 +281,7 @@ fn shows_stashed() -> io::Result<()> {
 fn shows_modified() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
-    File::create(repo_dir.join("readme.md"))?;
+    File::create(repo_dir.join("readme.md"))?.sync_all()?;
 
     let output = common::render_module("git_status")
         .arg("--path")
@@ -300,7 +300,7 @@ fn shows_modified() -> io::Result<()> {
 fn shows_staged_file() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
-    File::create(repo_dir.join("license"))?;
+    File::create(repo_dir.join("license"))?.sync_all()?;
 
     Command::new("git")
         .args(&["add", "."])
@@ -369,7 +369,7 @@ fn shows_deleted_file() -> io::Result<()> {
 #[ignore]
 fn prefix() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
-    File::create(repo_dir.join("prefix"))?;
+    File::create(repo_dir.join("prefix"))?.sync_all()?;
     let output = common::render_module("git_status")
         .arg("--path")
         .arg(repo_dir)
@@ -390,7 +390,7 @@ fn prefix() -> io::Result<()> {
 #[ignore]
 fn suffix() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
-    File::create(repo_dir.join("suffix"))?;
+    File::create(repo_dir.join("suffix"))?.sync_all()?;
     let output = common::render_module("git_status")
         .arg("--path")
         .arg(repo_dir)
