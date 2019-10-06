@@ -111,7 +111,9 @@ fn directory_in_root() -> io::Result<()> {
 #[test]
 #[cfg(target_os = "windows")]
 fn directory_in_root() -> io::Result<()> {
-    let output = common::render_module("directory").arg("--path=c:\\").output()?;
+    let output = common::render_module("directory")
+        .arg("--path=C:\\")
+        .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("/c"));
