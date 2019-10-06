@@ -10,7 +10,7 @@ use crate::common::{self, TestCommand};
 pub fn barrier() {}
 #[cfg(windows)]
 pub fn barrier() {
-    std::thread::sleep(std::time::Duration::from_millis(100));
+    std::thread::sleep(std::time::Duration::from_millis(500));
 }
 
 #[test]
