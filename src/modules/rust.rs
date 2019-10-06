@@ -3,9 +3,8 @@ use std::path::Path;
 use std::process::{Command, Output};
 use std::{env, fs};
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
 
-use crate::config::RootModuleConfig;
 use crate::configs::rust::RustConfig;
 
 /// Creates a module with the current Rust version
