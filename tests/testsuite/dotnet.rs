@@ -113,8 +113,8 @@ fn touch_path(workspace: &TempDir, relative_path: &str, contents: Option<&str>) 
         .create(true)
         .truncate(true)
         .open(&path)?;
-    write!(file, "{}", contents.unwrap_or(""))
-    file.sync_data();
+    write!(file, "{}", contents.unwrap_or(""))?;
+    file.sync_data()
 }
 
 fn make_pinned_sdk_json(version: &str) -> String {

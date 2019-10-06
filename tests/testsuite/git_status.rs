@@ -5,6 +5,14 @@ use std::process::Command;
 
 use crate::common::{self, TestCommand};
 
+/// Ensures commands finish on windows
+#[cfg(not(windows))]
+pub fn barrier() {}
+#[cfg(windows)]
+pub fn barrier() {
+    std::thread::sleep(std::time::Duration::from_millis(100));
+}
+
 #[test]
 #[ignore]
 fn shows_behind() -> io::Result<()> {
@@ -14,6 +22,7 @@ fn shows_behind() -> io::Result<()> {
         .args(&["reset", "--hard", "HEAD^"])
         .current_dir(repo_dir.as_path())
         .output()?;
+    barrier();
 
     let output = common::render_module("git_status")
         .arg("--path")
@@ -36,6 +45,7 @@ fn shows_behind_with_count() -> io::Result<()> {
         .args(&["reset", "--hard", "HEAD^"])
         .current_dir(repo_dir.as_path())
         .output()?;
+    barrier();
 
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
@@ -64,6 +74,7 @@ fn shows_ahead() -> io::Result<()> {
         .args(&["commit", "-am", "Update readme"])
         .current_dir(&repo_dir)
         .output()?;
+    barrier();
 
     let output = common::render_module("git_status")
         .arg("--path")
@@ -88,6 +99,7 @@ fn shows_ahead_with_count() -> io::Result<()> {
         .args(&["commit", "-am", "Update readme"])
         .current_dir(&repo_dir)
         .output()?;
+    barrier();
 
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
@@ -122,6 +134,8 @@ fn shows_diverged() -> io::Result<()> {
         .current_dir(repo_dir.as_path())
         .output()?;
 
+    barrier();
+
     let output = common::render_module("git_status")
         .arg("--path")
         .arg(repo_dir)
@@ -151,6 +165,8 @@ fn shows_diverged_with_count() -> io::Result<()> {
         .current_dir(repo_dir.as_path())
         .output()?;
 
+    barrier();
+
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
@@ -179,23 +195,29 @@ fn shows_conflicted() -> io::Result<()> {
         .args(&["reset", "--hard", "HEAD^"])
         .current_dir(repo_dir.as_path())
         .output()?;
+    barrier();
 
     fs::write(repo_dir.join("readme.md"), "# goodbye")?;
+    barrier();
 
     Command::new("git")
         .args(&["add", "."])
         .current_dir(repo_dir.as_path())
         .output()?;
 
+    barrier();
+
     Command::new("git")
         .args(&["commit", "-m", "Change readme"])
         .current_dir(repo_dir.as_path())
         .output()?;
 
+    barrier();
     Command::new("git")
         .args(&["pull", "--rebase"])
         .current_dir(repo_dir.as_path())
         .output()?;
+    barrier();
 
     let output = common::render_module("git_status")
         .arg("--path")
@@ -239,6 +261,7 @@ fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
         .args(&["config", "status.showUntrackedFiles", "no"])
         .current_dir(repo_dir.as_path())
         .output()?;
+    barrier();
 
     let output = common::render_module("git_status")
         .arg("--path")
@@ -263,6 +286,7 @@ fn shows_stashed() -> io::Result<()> {
         .arg("stash")
         .current_dir(repo_dir.as_path())
         .output()?;
+    barrier();
 
     let output = common::render_module("git_status")
         .arg("--path")
@@ -306,6 +330,7 @@ fn shows_staged_file() -> io::Result<()> {
         .args(&["add", "."])
         .current_dir(repo_dir.as_path())
         .output()?;
+    barrier();
 
     let output = common::render_module("git_status")
         .arg("--path")
@@ -333,6 +358,7 @@ fn shows_renamed_file() -> io::Result<()> {
         .args(&["add", "-A"])
         .current_dir(repo_dir.as_path())
         .output()?;
+    barrier();
 
     let output = common::render_module("git_status")
         .arg("--path")
