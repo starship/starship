@@ -15,14 +15,8 @@ pub struct DotnetConfig<'a> {
 impl<'a> RootModuleConfig<'a> for DotnetConfig<'a> {
     fn new() -> Self {
         DotnetConfig {
-            symbol: SegmentConfig {
-                value: "•NET ",
-                style: None,
-            },
-            version: SegmentConfig {
-                value: "",
-                style: None,
-            },
+            symbol: SegmentConfig::new("•NET "),
+            version: SegmentConfig::default(),
             style: Color::Blue.bold(),
             heuristic: true,
             disabled: false,

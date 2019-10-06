@@ -6,9 +6,8 @@ use std::str::FromStr;
 
 use dirs::home_dir;
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
 
-use crate::config::{RootModuleConfig, SegmentConfig};
 use crate::configs::aws::AwsConfig;
 
 fn get_aws_region_from_config(aws_profile: &Option<String>) -> Option<String> {
@@ -90,20 +89,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.get_prefix().set_value(AWS_PREFIX);
 
     module.create_segment("symbol", &config.symbol);
-    module.create_segment(
-        "profile",
-        &SegmentConfig {
-            value: &aws_profile,
-            style: None,
-        },
-    );
-    module.create_segment(
-        "region",
-        &SegmentConfig {
-            value: &aws_region,
-            style: None,
-        },
-    );
+    module.create_segment("profile", &config.profile.with_value(&aws_profile));
+    module.create_segment("region", &config.profile.with_value(&aws_region));
 
     Some(module)
 }
