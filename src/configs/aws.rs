@@ -14,14 +14,8 @@ pub struct AwsConfig<'a> {
 impl<'a> RootModuleConfig<'a> for AwsConfig<'a> {
     fn new() -> Self {
         AwsConfig {
-            symbol: SegmentConfig {
-                value: "☁️ ",
-                style: None,
-            },
-            profile: SegmentConfig {
-                value: "",
-                style: None,
-            },
+            symbol: SegmentConfig::new("☁️ "),
+            profile: SegmentConfig::default(),
             style: Color::Yellow.bold(),
             disabled: false,
         }

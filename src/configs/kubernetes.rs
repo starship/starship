@@ -15,18 +15,9 @@ pub struct KubernetesConfig<'a> {
 impl<'a> RootModuleConfig<'a> for KubernetesConfig<'a> {
     fn new() -> Self {
         KubernetesConfig {
-            symbol: SegmentConfig {
-                value: "☸ ",
-                style: None,
-            },
-            context: SegmentConfig {
-                value: "",
-                style: None,
-            },
-            namespace: SegmentConfig {
-                value: "",
-                style: None,
-            },
+            symbol: SegmentConfig::new("☸ "),
+            context: SegmentConfig::default(),
+            namespace: SegmentConfig::default(),
             style: Color::Cyan.bold(),
             disabled: true,
         }
