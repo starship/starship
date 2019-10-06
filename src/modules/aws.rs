@@ -53,7 +53,7 @@ fn get_aws_region() -> Option<String> {
             let aws_region = get_aws_region_from_config(&aws_profile);
 
             match (aws_profile, aws_region) {
-                (Some(profile), Some(region)) => Some(format!("{}({})", region, profile)),
+                (Some(profile), Some(region)) => Some(format!("{}({})", profile, region)),
                 (Some(profile), None) => Some(profile),
                 (None, Some(region)) => Some(region),
                 (None, None) => None,
