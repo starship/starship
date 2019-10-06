@@ -36,7 +36,7 @@ pub fn prompt(args: ArgMatches) {
 
     let modules = &prompt_order
         .par_iter()
-        .filter(|module| !context.is_module_disabled_in_config(module))
+        .filter(|module| context.is_module_enabled(module))
         .map(|module| modules::handle(module, &context)) // Compute modules
         .flatten()
         .collect::<Vec<Module>>(); // Remove segments set to `None`

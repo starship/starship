@@ -59,3 +59,18 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
         }
     }
 }
+
+/// Get the default disabled option in a module by name
+pub fn is_module_disabled_by_default(name: &str) -> bool {
+    match name {
+        "aws" => aws::AwsConfig::new().disabled,
+        "battery" => battery::BatteryConfig::new().disabled,
+        "character" => character::CharacterConfig::new().disabled,
+        "conda" => conda::CondaConfig::new().disabled,
+        "dotnet" => dotnet::DotnetConfig::new().disabled,
+        "kubernetes" => kubernetes::KubernetesConfig::new().disabled,
+        "rust" => rust::RustConfig::new().disabled,
+        "time" => time::TimeConfig::new().disabled,
+        _ => true,
+    }
+}

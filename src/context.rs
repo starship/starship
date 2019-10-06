@@ -1,4 +1,5 @@
 use crate::config::StarshipConfig;
+use crate::configs::is_module_disabled_by_default;
 use crate::module::Module;
 
 use clap::ArgMatches;
@@ -77,14 +78,18 @@ impl<'a> Context<'a> {
         Module::new(name, config)
     }
 
-    /// Check if `disabled` option of the module is true in configuration file.
-    pub fn is_module_disabled_in_config(&self, name: &str) -> bool {
+    /// Check the `disabled` configuration of the module
+    pub fn is_module_enabled(&self, name: &str) -> bool {
         let config = self.config.get_module_config(name);
 
-        // If the segment has "disabled" set to "true", don't show it
-        let disabled = config.and_then(|table| table.as_table()?.get("disabled")?.as_bool());
+        // Check the disabled option in the config
+        let config_disabled = config.and_then(|table| table.as_table()?.get("disabled")?.as_bool());
 
-        disabled == Some(true)
+        if let Some(disabled) = config_disabled {
+            disabled
+        } else {
+            is_module_disabled_by_default(name)
+        }
     }
 
     // returns a new ScanDir struct with reference to current dir_files of context
