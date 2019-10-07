@@ -669,7 +669,7 @@ style = "bold dimmed green"
 
 The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
 
-- カレントディレクトリに`pom.xml`, もしくは`build.gradle`ファイルが含まれている
+- The current directory contains a `pom.xml`, `build.gradle` or `build.sbt` file
 - カレントディレクトリに拡張子が`.java`, `.class`, もしくは`.jar`のファイルが含まれている
 
 ### オプション
