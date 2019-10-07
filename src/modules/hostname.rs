@@ -29,7 +29,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             return None;
         }
     };
-    
+
     let trim_at = module.config_value_str("trim_at").unwrap_or(".");
 
     //rustc doesn't let you do an "if" and an "if let" in the same if statement
