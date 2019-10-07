@@ -66,37 +66,25 @@ RUN curl https://pyenv.run | bash \
 # Check that Python was correctly installed
 RUN python --version
 
-# Install Java.
-ENV JAVA_HOME /home/nonroot/java
-ENV PATH $JAVA_HOME/bin:$PATH
-ENV JAVA_URL https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz
+# Install Dotnet
+ENV DOTNET_HOME /home/nonroot/dotnet
+ENV DOTNET_SDK_VERSION 2.2.402
 
-RUN mkdir -p "$JAVA_HOME"
-RUN set -eux; \
-    curl -fL -o $JAVA_HOME/openjdk.tgz "$JAVA_URL"; \
-    tar --extract \
-        --file $JAVA_HOME/openjdk.tgz \
-        --directory "$JAVA_HOME" \
-        --strip-components 1 \
-        --no-same-owner
+RUN mkdir -p "$DOTNET_HOME" \
+    && dotnet_download="$DOTNET_HOME/../dotnet.tar.gz" \
+    && curl -SL --output "$dotnet_download" https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-x64.tar.gz \
+    && tar -zxf "$dotnet_download" -C "$DOTNET_HOME" \
+    && rm "$dotnet_download"
 
-RUN java -version && javac -version
+ENV PATH $DOTNET_HOME:$PATH
+RUN dotnet help
 
 # Create blank project
 RUN USER=nonroot cargo new --bin /src/starship
 WORKDIR /src/starship
 
-# We want dependencies cached, so copy those first
-COPY ./Cargo.lock ./Cargo.lock
-COPY ./Cargo.toml ./Cargo.toml
-
-# Cargo.toml will fail to parse without my_benchmark
-RUN mkdir benches
-RUN touch benches/my_benchmark.rs
-
-# This is a dummy build to get dependencies cached
-RUN cargo build --release \
-  && rm -rf src target/debug/starship*
+# Copy the whole project
+COPY . .
 
 # "-Z unstable-options" is required for "--include-ignored"
 CMD ["cargo", "test", "--", "-Z", "unstable-options", "--include-ignored"]

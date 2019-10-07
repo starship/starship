@@ -1,8 +1,10 @@
 # Configuration
 
 ::: tip
+
 🔥 Configuration is currently being worked on.
 Many new configuration options will be available in coming releases.
+
 :::
 
 To get started configuring starship, create the following file: `~/.config/starship.toml`.
@@ -83,11 +85,13 @@ The default `prompt_order` is used to define the order in which modules are show
 prompt_order = [
     "username",
     "hostname",
+    "kubernetes",
     "directory",
     "git_branch",
     "git_state",
     "git_status",
     "package",
+    "dotnet",
     "elixir",
     "golang",
     "java",
@@ -96,6 +100,8 @@ prompt_order = [
     "ruby",
     "rust",
     "nix_shell",
+    "conda",
+    "memory_usage",
     "aws",
     "env_var",
     "cmd_duration",
@@ -114,11 +120,11 @@ The `aws` module shows the current AWS profile. This is based on the
 
 ### Options
 
-| Variable   | Default         | Description                                          |
-| ---------- | --------------- | ---------------------------------------------------- |
-| `disabled` | `false`         | Disables the `AWS` module                            |
-| `style`    | `"bold yellow"` | The style used for the module                        |
-| `symbol`   | `"☁️ "`         | The symbol before displaying the current AWS profile |
+| Variable   | Default         | Description                                                |
+| ---------- | --------------- | ---------------------------------------------------------- |
+| `symbol`   | `"☁️ "`         | The symbol used before displaying the current AWS profile. |
+| `style`    | `"bold yellow"` | The style for the module.                                  |
+| `disabled` | `false`         | Disables the `AWS` module.                                 |
 
 ### Example
 
@@ -242,8 +248,10 @@ The module will be shown only if the command took longer than two seconds, or
 the `min_time` config value, if it exists.
 
 ::: warning Do not hook the DEBUG trap in Bash
+
 If you are running Starship in `bash`, do not hook the `DEBUG` trap after running
 `eval $(starship init $0)`, or this module **will** break.
+
 :::
 
 Bash users who need preexec-like functionality can use
@@ -253,11 +261,12 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Variable   | Default         | Description                         |
-| ---------- | --------------- | ----------------------------------- |
-| `min_time` | `2`             | Shortest duration to show time for. |
-| `style`    | `"bold yellow"` | The style for the module.           |
-| `disabled` | `false`         | Disables the `cmd_duration` module. |
+| Variable   | Default         | Description                                                |
+| ---------- | --------------- | ---------------------------------------------------------- |
+| `min_time` | `2`             | Shortest duration to show time for.                        |
+| `prefix`   | `took`          | Prefix to display immediately before the command duration. |
+| `style`    | `"bold yellow"` | The style for the module.                                  |
+| `disabled` | `false`         | Disables the `cmd_duration` module.                        |
 
 ### Example
 
@@ -266,6 +275,29 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 [cmd_duration]
 min_time = 4
+prefix = "underwent "
+```
+
+## Conda
+
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+Note: This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`
+
+### Options
+
+| Variable   | Default        | Description                                  |
+| ---------- | -------------- | -------------------------------------------- |
+| `symbol`   | `"C "`         | The symbol used before the environment name. |
+| `style`    | `"bold green"` | The style for the module.                    |
+| `disabled` | `false`        | Disables the `conda` module.                 |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[conda]
+style = "dimmed green"
 ```
 
 ## Directory
@@ -310,6 +342,41 @@ it would have been `nixpkgs/pkgs`.
 truncation_length = 8
 ```
 
+## Dotnet
+
+The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If
+the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module
+shows the latest installed version of the SDK.
+
+This module will only be shown in your prompt when one of the following files are present in the
+current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll
+also need the .NET Core command-line tools installed in order to use it correctly.
+
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast
+as running `dotnet --version`, but it may show an incorrect version if your .NET project has an
+unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by
+setting `heuristic = false` in the module options.
+
+### Options
+
+| Variable    | Default       | Description                                              |
+| ----------- | ------------- | -------------------------------------------------------- |
+| `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
+| `style`     | `"bold blue"` | The style for the module.                                |
+| `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
+| `disabled`  | `false`       | Disables the `dotnet` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[dotnet]
+symbol = "🥅 "
+style = "green"
+heuristic = false
+```
+
 ## Elixir
 
 The `elixir` module shows the currently installed version of Elixir.
@@ -333,6 +400,7 @@ The module will be shown if any of the following conditions are met:
 
 [elixir]
 symbol = "⚗️ "
+style = "green"
 ```
 
 ## Environment Variable
@@ -547,6 +615,39 @@ symbol = "+ "
 threshold = 4
 ```
 
+## Kubernetes
+
+Displays the current Kubernetes context name and, if set, the namespace from
+the kubeconfig file. The namespace needs to be set in the kubeconfig file, this
+can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if
+not it will use the `~/.kube/config`.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Variable   | Default       | Description                                         |
+| ---------- | ------------- | --------------------------------------------------- |
+| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
+| `style`    | `"bold blue"` | The style for the module.                           |
+| `disabled` | `true`        | Disables the `kubernetes` module                    |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[kubernetes]
+symbol = "⛵ "
+style = "dim green"
+disabled = false
+```
+
 ## Line Break
 
 The `line_break` module separates the prompt into two lines.
@@ -591,6 +692,43 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
+```
+
+## Memory Usage
+
+The `memory_usage` module shows current system memory and swap usage.
+
+By default the swap usage is displayed if the total system swap is non-zero.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Variable          | Default                  | Description                                                   |
+| ----------------- | ------------------------ | ------------------------------------------------------------- |
+| `show_percentage` | `false`                  | Display memory usage as a percentage of the available memory. |
+| `show_swap`       | when total swap non-zero | Display swap usage.                                           |
+| `threshold`       | `75`                     | Hide the memory usage unless it exceeds this percentage.      |
+| `symbol`          | `"🐏 "`                  | The symbol used before displaying the memory usage.           |
+| `style`           | `"bold dimmed white"`    | The style for the module.                                     |
+| `disabled`        | `true`                   | Disables the `memory_usage` module.                           |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[memory_usage]
+show_percentage = true
+show_swap = true
+threshold = -1
+icon = " "
+style = "bold dimmed green"
 ```
 
 ## Java
@@ -773,21 +911,23 @@ The `time` module shows the current **local** time.
 The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
+
 This module is disabled by default.
 To enable it, set `disabled` to `false` in your configuration file.
+
 :::
 
 ### Options
 
 | Variable   | Default       | Description                                                                                                         |
 | ---------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `12hr`     | `false`       | Enables 12 hour formatting                                                                                          |
+| `use_12hr` | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`   | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
 | `style`    | `bold yellow` | The style for the module time                                                                                       |
 | `disabled` | `true`        | Disables the `time` module.                                                                                         |
 
-If `12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
-Manually setting `format` will override the `12hr` setting.
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
+Manually setting `format` will override the `use_12hr` setting.
 
 ### Example
 

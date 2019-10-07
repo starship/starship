@@ -1,17 +1,21 @@
-use crate::config::Config;
+use crate::config::{ModuleConfig, SegmentConfig};
 use crate::segment::Segment;
 use ansi_term::Style;
 use ansi_term::{ANSIString, ANSIStrings};
 use std::fmt;
 
 // List of all modules
+// Keep these ordered alphabetically.
+// Default ordering is handled in configs/mod.rs
 pub const ALL_MODULES: &[&str] = &[
     "aws",
     #[cfg(feature = "battery")]
     "battery",
     "character",
     "cmd_duration",
+    "conda",
     "directory",
+    "dotnet",
     "elixir",
     "env_var",
     "git_branch",
@@ -21,7 +25,9 @@ pub const ALL_MODULES: &[&str] = &[
     "hostname",
     "java",
     "jobs",
+    "kubernetes",
     "line_break",
+    "memory_usage",
     "nix_shell",
     "nodejs",
     "package",
@@ -36,7 +42,7 @@ pub const ALL_MODULES: &[&str] = &[
 /// (e.g. The git module shows the current git branch and status)
 pub struct Module<'a> {
     /// The module's configuration map if available
-    config: Option<&'a toml::value::Table>,
+    pub config: Option<&'a toml::Value>,
 
     /// The module's name, to be used in configuration and logging.
     _name: String,
@@ -56,7 +62,7 @@ pub struct Module<'a> {
 
 impl<'a> Module<'a> {
     /// Creates a module with no segments.
-    pub fn new(name: &str, config: Option<&'a toml::value::Table>) -> Module<'a> {
+    pub fn new(name: &str, config: Option<&'a toml::Value>) -> Module<'a> {
         Module {
             config,
             _name: name.to_string(),
@@ -68,17 +74,47 @@ impl<'a> Module<'a> {
     }
 
     /// Get a reference to a newly created segment in the module
+    #[deprecated(
+        since = "0.20.0",
+        note = "please use `module.create_segment()` instead"
+    )]
     pub fn new_segment(&mut self, name: &str, value: &str) -> &mut Segment {
         let mut segment = Segment::new(name);
-        segment.set_style(self.style);
-        // Use the provided value unless overwritten by config
-        segment.set_value(self.config_value_str(name).unwrap_or(value));
+        let segment_config_mock = SegmentConfig { value, style: None };
+
+        if let Some(toml::Value::Table(module_config)) = self.config {
+            if let Some(symbol) = module_config.get(name) {
+                let segment_config = segment_config_mock.load_config(&symbol);
+                segment.set_style(segment_config.style.unwrap_or(self.style));
+                segment.set_value(segment_config.value);
+
+                self.segments.push(segment);
+                return self.segments.last_mut().unwrap();
+            }
+        }
+
+        segment.set_style(segment_config_mock.style.unwrap_or(self.style));
+        segment.set_value(segment_config_mock.value);
+
+        self.segments.push(segment);
+        self.segments.last_mut().unwrap()
+    }
+
+    /// Get a reference to a newly created segment in the module
+    pub fn create_segment(&mut self, name: &str, segment_config: &SegmentConfig) -> &mut Segment {
+        let mut segment = Segment::new(name);
+        segment.set_style(segment_config.style.unwrap_or(self.style));
+        segment.set_value(segment_config.value);
         self.segments.push(segment);
 
         self.segments.last_mut().unwrap()
     }
 
     /// Should config exists, get a reference to a newly created segment in the module
+    #[deprecated(
+        since = "0.20.0",
+        note = "please use `module.create_segment()` instead"
+    )]
     pub fn new_segment_if_config_exists(&mut self, name: &str) -> Option<&mut Segment> {
         // Use the provided value unless overwritten by config
         if let Some(value) = self.config_value_str(name) {
@@ -90,6 +126,11 @@ impl<'a> Module<'a> {
         } else {
             None
         }
+    }
+
+    /// Get module's name
+    pub fn get_name(&self) -> &String {
+        &self._name
     }
 
     /// Whether a module has non-empty segments
@@ -145,28 +186,39 @@ impl<'a> Module<'a> {
     }
 
     /// Get a module's config value as a string
+    #[deprecated(
+        since = "0.20.0",
+        note = "please use <RootModuleConfig>::try_load(module.config) instead"
+    )]
     pub fn config_value_str(&self, key: &str) -> Option<&str> {
-        self.config.and_then(|config| config.get_as_str(key))
+        <&str>::from_config(self.config?.as_table()?.get(key)?)
     }
 
     /// Get a module's config value as an int
+    #[deprecated(
+        since = "0.20.0",
+        note = "please use <RootModuleConfig>::try_load(module.config) instead"
+    )]
     pub fn config_value_i64(&self, key: &str) -> Option<i64> {
-        self.config.and_then(|config| config.get_as_i64(key))
+        <i64>::from_config(self.config?.as_table()?.get(key)?)
     }
 
     /// Get a module's config value as a bool
+    #[deprecated(
+        since = "0.20.0",
+        note = "please use <RootModuleConfig>::try_load(module.config) instead"
+    )]
     pub fn config_value_bool(&self, key: &str) -> Option<bool> {
-        self.config.and_then(|config| config.get_as_bool(key))
+        <bool>::from_config(self.config?.as_table()?.get(key)?)
     }
 
     /// Get a module's config value as a style
+    #[deprecated(
+        since = "0.20.0",
+        note = "please use <RootModuleConfig>::try_load(module.config) instead"
+    )]
     pub fn config_value_style(&self, key: &str) -> Option<Style> {
-        self.config.and_then(|config| config.get_as_ansi_style(key))
-    }
-
-    /// Get a module's config value as an array
-    pub fn config_value_array(&self, key: &str) -> Option<&Vec<toml::Value>> {
-        self.config.and_then(|config| config.get_as_array(key))
+        <Style>::from_config(self.config?.as_table()?.get(key)?)
     }
 }
 
