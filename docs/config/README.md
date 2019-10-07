@@ -118,7 +118,7 @@ The `aws` module shows the current AWS profile. This is based on the
 | ---------- | --------------- | ---------------------------------------------------- |
 | `disabled` | `false`         | Disables the `AWS` module                            |
 | `style`    | `"bold yellow"` | The style used for the module                        |
-| `symbol`   | `"☁️ "`          | The symbol before displaying the current AWS profile |
+| `symbol`   | `"☁️ "`         | The symbol before displaying the current AWS profile |
 
 ### Example
 
@@ -308,6 +308,31 @@ it would have been `nixpkgs/pkgs`.
 
 [directory]
 truncation_length = 8
+```
+
+## Elixir
+
+The `elixir` module shows the currently installed version of Elixir.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `mix` file
+- The current directory contains a `.ex` or `.exs` file
+
+### Options
+
+| Variable   | Default         | Description                                              |
+| ---------- | --------------- | -------------------------------------------------------- |
+| `symbol`   | `"🧪 "`         | The symbol used before displaying the version of Elixir. |
+| `style`    | `"bold purple"` | The style for the module.                                |
+| `disabled` | `false`         | Disables the `elixir` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[elixir]
+symbol = "⚗️ "
 ```
 
 ## Environment Variable
@@ -566,31 +591,6 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
-```
-
-## Elixir
-
-The `elixir` module shows the currently installed version of Elixir.
-The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `mix` file
-- The current directory contains a `.ex` or `.exs` file
-
-### Options
-
-| Variable   | Default         | Description                                              |
-| ---------- | --------------- | -------------------------------------------------------- |
-| `symbol`   | `"🧪 "`         | The symbol used before displaying the version of Elixir. |
-| `style`    | `"bold purple"` | The style for the module.                                |
-| `disabled` | `false`         | Disables the `elixir` module.                            |
-
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[elixir]
-symbol = "⚗️ "
 ```
 
 ## Java
