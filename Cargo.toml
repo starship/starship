@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "0.20.1"
+version = "0.21.0"
 edition = "2018"
 authors = ["Matan Kushner <hello@matchai.me>"]
 homepage = "https://starship.rs"
@@ -16,7 +16,6 @@ The cross-shell prompt for astronauts. ☄🌌️
 exclude = ["docs/**/*"]
 
 [badges]
-azure-devops = { project = "starship-control/starship", pipeline = "Starship Test Suite" }
 is-it-maintained-issue-resolution = { repository = "starship/starship" }
 is-it-maintained-open-issues = { repository = "starship/starship" }
 maintenance = { status = "actively-developed" }
