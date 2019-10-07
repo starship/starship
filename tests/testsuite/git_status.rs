@@ -7,9 +7,9 @@ use crate::common::{self, TestCommand};
 
 /// Ensures commands finish on windows
 #[cfg(not(windows))]
-pub fn barrier() {}
+fn barrier() {}
 #[cfg(windows)]
-pub fn barrier() {
+fn barrier() {
     std::thread::sleep(std::time::Duration::from_millis(500));
 }
 
@@ -235,9 +235,9 @@ fn shows_conflicted() -> io::Result<()> {
 #[ignore]
 fn shows_untracked_file() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
-
+    barrier();
     File::create(repo_dir.join("license"))?.sync_all()?;
-
+    barrier();
     let output = common::render_module("git_status")
         .arg("--path")
         .arg(repo_dir)
@@ -254,8 +254,9 @@ fn shows_untracked_file() -> io::Result<()> {
 #[ignore]
 fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
-
+    barrier();
     File::create(repo_dir.join("license"))?.sync_all()?;
+    barrier();
 
     Command::new("git")
         .args(&["config", "status.showUntrackedFiles", "no"])
@@ -279,9 +280,10 @@ fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
 #[ignore]
 fn shows_stashed() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
+    barrier();
 
     File::create(repo_dir.join("readme.md"))?.sync_all()?;
-
+    barrier();
     Command::new("git")
         .arg("stash")
         .current_dir(repo_dir.as_path())
