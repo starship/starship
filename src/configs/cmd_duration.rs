@@ -6,7 +6,6 @@ use starship_module_config_derive::ModuleConfig;
 #[derive(Clone, ModuleConfig)]
 pub struct CmdDurationConfig<'a> {
     pub min_time: i64,
-    // TODO: Rewrite prefix with SegmentConfig
     pub prefix: &'a str,
     pub style: Style,
     pub disabled: bool,
