@@ -5,7 +5,11 @@ use std::process::Command;
 
 use crate::common::{self, TestCommand};
 
-/// Ensures commands finish on windows
+/// Right after the calls to git the filesystem state may not have finished
+/// updating yet causing some of the tests to fail. These barriers are placed
+/// after each call to git.
+/// This barrier is windows-specific though other operating systems may need it
+/// in the future.
 #[cfg(not(windows))]
 fn barrier() {}
 #[cfg(windows)]
