@@ -7,8 +7,7 @@ use crate::common;
 fn render_node_module() -> std::process::Command {
     let mut command = common::render_module("nodejs");
     if cfg!(windows) {
-        command
-        .env("SYSTEMROOT", std::env::var("SYSTEMROOT").unwrap());
+        command.env("SYSTEMROOT", std::env::var("SYSTEMROOT").unwrap());
     }
     command
 }
