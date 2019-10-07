@@ -98,7 +98,7 @@ fn suffix() -> io::Result<()> {
 }
 
 #[test]
-fn no_trim_end() -> io::Result<()> {
+fn no_trim_at() -> io::Result<()> {
     let hostname = match get_hostname() {
         Some(h) => h,
         None => return hostname_not_tested(),
@@ -108,7 +108,7 @@ fn no_trim_end() -> io::Result<()> {
         .use_config(toml::toml! {
             [hostname]
             ssh_only = false
-            trim_end = ""
+            trim_at = ""
         })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
@@ -118,18 +118,18 @@ fn no_trim_end() -> io::Result<()> {
 }
 
 #[test]
-fn trim_end() -> io::Result<()> {
+fn trim_at() -> io::Result<()> {
     let hostname = match get_hostname() {
         Some(h) => h,
         None => return hostname_not_tested(),
     };
-    let (remainder, trim_end) = hostname.split_at(1);
+    let (remainder, trim_at) = hostname.split_at(1);
     let output = common::render_module("hostname")
         .env_clear()
         .use_config(toml::toml! {
             [hostname]
             ssh_only = false
-            trim_end = trim_end
+            trim_at = trim_at
         })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();

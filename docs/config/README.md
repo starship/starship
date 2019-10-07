@@ -519,14 +519,14 @@ The `hostname` module shows the system hostname.
 
 ### Options
 
-| Variable   | Default               | Description                                                                         |
-| ---------- | --------------------- | ----------------------------------------------------------------------------------- |
-| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                |
-| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                  |
-| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                   |
-| `trim_end` | `""`                  | String to trim off the end, if present. Good for removing a shared base domain name |
-| `style`    | `"bold dimmed green"` | The style for the module.                                                           |
-| `disabled` | `false`               | Disables the `hostname` module.                                                     |
+| Variable   | Default               | Description                                                                                                                          |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
+| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
+| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### Example
 
@@ -537,7 +537,7 @@ The `hostname` module shows the system hostname.
 ssh_only = false
 prefix = "⟪"
 suffix = "⟫"
-trim_end = ".companyname.com"
+trim_at = ".companyname.com"
 disabled = false
 ```
 
