@@ -5,6 +5,7 @@ pub mod conda;
 pub mod dotnet;
 pub mod kubernetes;
 pub mod nodejs;
+pub mod package;
 pub mod rust;
 pub mod time;
 

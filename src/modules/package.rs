@@ -5,23 +5,23 @@ use ansi_term::Color;
 use serde_json as json;
 use toml;
 
+use super::{RootModuleConfig, SegmentConfig};
+use crate::configs::package::PackageConfig;
+
 /// Creates a module with the current package version
 ///
 /// Will display if a version is defined for your Node.js or Rust project (if one exists)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     match get_package_version() {
         Some(package_version) => {
-            const PACKAGE_CHAR: &str = "📦 ";
-
             let mut module = context.new_module("package");
-            let module_style = module
-                .config_value_style("style")
-                .unwrap_or_else(|| Color::Red.bold());
-            module.set_style(module_style);
+            let config: PackageConfig = PackageConfig::try_load(module.config);
+
+            module.set_style(config.style);
             module.get_prefix().set_value("is ");
 
-            module.new_segment("symbol", PACKAGE_CHAR);
-            module.new_segment("version", &package_version);
+            module.create_segment("symbol", &config.symbol);
+            module.create_segment("version", &SegmentConfig::new(package_version));
 
             Some(module)
         }
