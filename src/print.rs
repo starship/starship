@@ -1,5 +1,6 @@
 use clap::ArgMatches;
 use rayon::prelude::*;
+use std::fmt::Write as FmtWrite;
 use std::io::{self, Write};
 
 use crate::context::Context;
@@ -9,14 +10,18 @@ use crate::modules;
 
 pub fn prompt(args: ArgMatches) {
     let context = Context::new(args);
-    let config = context.config.get_root_config();
-
     let stdout = io::stdout();
     let mut handle = stdout.lock();
+    write!(handle, "{}", get_prompt(context)).unwrap();
+}
+
+pub fn get_prompt(context: Context) -> String {
+    let config = context.config.get_root_config();
+    let mut buf = String::new();
 
     // Write a new line before the prompt
     if config.add_newline {
-        writeln!(handle).unwrap();
+        writeln!(buf).unwrap();
     }
 
     let mut prompt_order: Vec<&str> = Vec::new();
@@ -48,13 +53,15 @@ pub fn prompt(args: ArgMatches) {
         // Skip printing the prefix of a module after the line_break
         if print_without_prefix {
             let module_without_prefix = module.to_string_without_prefix();
-            write!(handle, "{}", module_without_prefix).unwrap()
+            write!(buf, "{}", module_without_prefix).unwrap()
         } else {
-            write!(handle, "{}", module).unwrap();
+            write!(buf, "{}", module).unwrap();
         }
 
         print_without_prefix = module.get_name() == "line_break"
     }
+
+    buf
 }
 
 pub fn module(module_name: &str, args: ArgMatches) {
