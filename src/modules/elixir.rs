@@ -1,8 +1,9 @@
-use ansi_term::Color;
 use regex::Regex;
 use std::process::Command;
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
+
+use crate::configs::elixir::ElixirConfig;
 
 const ELIXIR_VERSION_PATTERN: &str = "\
 Erlang/OTP (?P<otp>\\d+)[^\\n]+
@@ -23,15 +24,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let (otp_version, elixir_version) = get_elixir_version()?;
 
     let mut module = context.new_module("elixir");
-    let module_style = module
-        .config_value_style("style")
-        .unwrap_or_else(|| Color::Purple.bold());
-    module.set_style(module_style);
+    let config = ElixirConfig::try_load(module.config);
+    module.set_style(config.style);
 
-    module.new_segment("symbol", "🔮 ");
-    module.new_segment(
-        "version",
-        &format!("{} (OTP {})", elixir_version, otp_version),
+    module.create_segment("symbol", &config.symbol);
+    module.create_segment("version", &config.version.with_value(&elixir_version));
+    module.create_segment(
+        "otp_version",
+        &config
+            .otp_version
+            .with_value(&format!(" (OTP {})", otp_version)),
     );
 
     Some(module)
