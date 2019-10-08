@@ -14,10 +14,7 @@ pub struct JobsConfig<'a> {
 impl<'a> RootModuleConfig<'a> for JobsConfig<'a> {
     fn new() -> Self {
         JobsConfig {
-            symbol: SegmentConfig {
-                value: "✦",
-                style: None,
-            },
+            symbol: SegmentConfig::new("✦"),
             threshold: 1,
             style: Color::Blue.bold(),
             disabled: false,

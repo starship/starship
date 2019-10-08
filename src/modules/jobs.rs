@@ -22,13 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
     module.create_segment("symbol", &config.symbol);
     if num_of_jobs > config.threshold {
-        module.create_segment(
-            "number",
-            &SegmentConfig {
-                value: &num_of_jobs.to_string(),
-                style: None,
-            },
-        );
+        module.create_segment("number", &SegmentConfig::new(&num_of_jobs.to_string()));
     }
     module.get_prefix().set_value("");
 
