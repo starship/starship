@@ -4,7 +4,7 @@ extern crate starship;
 extern crate test;
 
 #[cfg(test)]
-mod tests {
+mod benches {
     use ansi_term::Color;
     use starship::config::*;
     use starship_module_config_derive::ModuleConfig;
