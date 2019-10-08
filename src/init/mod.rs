@@ -96,7 +96,7 @@ fi"#,
         }
         Some("powershell") => {
             let script = format!(
-                "Invoke-Expression ((&\"{}\" init powershell --print-full-init) -join \"`n\")",
+                "Invoke-Expression (@(&\"{}\" init powershell --print-full-init) -join \"`n\")",
                 starship
             );
             Some(script)
