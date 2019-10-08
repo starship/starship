@@ -1,6 +1,5 @@
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
 
-use crate::config::RootModuleConfig;
 use crate::configs::character::CharacterConfig;
 
 /// Creates a module for the prompt character

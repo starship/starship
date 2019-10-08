@@ -14,14 +14,8 @@ pub struct RustConfig<'a> {
 impl<'a> RootModuleConfig<'a> for RustConfig<'a> {
     fn new() -> Self {
         RustConfig {
-            symbol: SegmentConfig {
-                value: "🦀 ",
-                style: None,
-            },
-            version: SegmentConfig {
-                value: "",
-                style: None,
-            },
+            symbol: SegmentConfig::new("🦀 "),
+            version: SegmentConfig::default(),
             style: Color::Red.bold(),
             disabled: false,
         }
