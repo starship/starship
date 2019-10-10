@@ -20,31 +20,36 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    match get_docker_version() {
-        Some(docker_version) => {
-            let mut module = context.new_module("docker");
-            let config = DockerConfig::try_load(module.config);
+    let mut module = context.new_module("docker");
+    let config = DockerConfig::try_load(module.config);
+    
+    if config.disabled {
+        return None
+    }
+    
+    module.set_style(config.style);
+    module.create_segment("symbol", &config.symbol);
 
-            let version = format!("{}{}", "v", docker_version.trim());
+    if config.show_versions {
+        match get_docker_version() {
+            Some(docker_version) => {
+                let version = format!("{}{}", "v", docker_version.trim());
+                module.create_segment("version", &config.version.with_value(&version));
 
-            module.set_style(config.style);
-            module.create_segment("symbol", &config.symbol);
-            module.create_segment("version", &config.version.with_value(&version));
-
-            if config.show_compose {
-                if let Some(compose_version) = get_docker_compose_version() {
-                    module.create_segment("prefix", &config.symbol.with_value(&" with v"));
-                    module.create_segment(
-                        "version",
-                        &config.version.with_value(&compose_version.trim()),
-                    );
+                if config.show_compose {
+                    if let Some(compose_version) = get_docker_compose_version() {
+                        module.create_segment("prefix", &config.symbol.with_value(&" with v"));
+                        module.create_segment(
+                            "version",
+                            &config.version.with_value(&compose_version.trim()),
+                        );
+                    }
                 }
             }
-
-            Some(module)
+            None => (),
         }
-        None => None,
-    }
+    };
+    Some(module)
 }
 
 fn get_docker_version() -> Option<String> {

@@ -9,6 +9,7 @@ pub struct DockerConfig<'a> {
     pub version: SegmentConfig<'a>,
     pub style: Style,
     pub disabled: bool,
+    pub show_versions: bool,
     pub show_compose: bool,
 }
 
@@ -24,8 +25,9 @@ impl<'a> RootModuleConfig<'a> for DockerConfig<'a> {
                 style: None,
             },
             style: Color::Blue.bold(),
-            disabled: false,
-            show_compose: false,
+            disabled: true,
+            show_versions: true,
+            show_compose: false
         }
     }
 }

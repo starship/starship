@@ -287,12 +287,13 @@ present in the current directory: `Dockerfile`, `docker-compose.yml`.
 
 ### Options
 
-| Variable       | Default       | Description                                                                                                               |
-| -------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `symbol`       | `"🐳 "`       | The symbol used before displaying the version of docker.                                                                  |
-| `style`        | `"bold blue"` | The style for the module.                                                                                                 |
-| `disabled`     | `false`       | Disables the `docker` module.                                                                                             |
-| `show_compose` | `false`       | Disables displaying the `docker-compose` version. Disabled by default due to poor performance of `docker-compose version` |
+| Variable        | Default       | Description                                                                                                              |
+| --------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `symbol`        | `"🐳 "`       | The symbol used before displaying the version of docker.                                                                 |
+| `style`         | `"bold blue"` | The style for the module.                                                                                                |
+| `disabled`      | `false`       | Disables the `docker` module.                                                                                            |
+| `show_versions` | `true`        | Allows turning off the version numbers if you only want to be alerted to the presence of docker files in a directory.    |
+| `show_compose`  | `false`       | Enables displaying the `docker-compose` version. Disabled by default due to poor performance of `docker-compose version` |
 
 ### Example
 
