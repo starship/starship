@@ -12,6 +12,7 @@ pub mod python;
 pub mod ruby;
 pub mod rust;
 pub mod time;
+pub mod username;
 
 use crate::config::{ModuleConfig, RootModuleConfig};
 
