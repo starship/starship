@@ -6,9 +6,9 @@ pub mod dotnet;
 pub mod hostname;
 pub mod jobs;
 pub mod kubernetes;
+pub mod memory_usage;
 pub mod rust;
 pub mod time;
-pub mod memory_usage;
 
 use crate::config::{ModuleConfig, RootModuleConfig};
 

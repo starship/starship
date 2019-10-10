@@ -6,8 +6,7 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::memory_usage::MemoryConfig;
 
 fn format_kib(n_kib: u64) -> String {
-    let byte = Byte::from_unit(n_kib as f64, ByteUnit::KiB)
-        .unwrap_or_else(|_| Byte::from_bytes(0));
+    let byte = Byte::from_unit(n_kib as f64, ByteUnit::KiB).unwrap_or_else(|_| Byte::from_bytes(0));
     let mut display_bytes = byte.get_appropriate_unit(true).format(0);
     display_bytes.retain(|c| c != ' ');
     display_bytes
@@ -37,7 +36,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut display = if show_percentage {
         format!("{:.0}%%", percent_mem_used)
     } else {
-        format!("{}/{}", format_kib(used_memory_kib), format_kib(total_memory_kib))
+        format!(
+            "{}/{}",
+            format_kib(used_memory_kib),
+            format_kib(total_memory_kib)
+        )
     };
 
     // swap only shown if enabled and there is swap on the system
@@ -46,11 +49,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let used_swap_kib = system.get_used_swap();
         let percent_swap_used = (used_swap_kib as f64 / total_swap_kib as f64) * 100.;
 
-        display = format!("{} | {}", display, if show_percentage {
-            format!("{:.0}%", percent_swap_used)
-        } else {
-            format!("{}/{}", format_kib(used_swap_kib), format_kib(total_swap_kib))
-        });
+        display = format!(
+            "{} | {}",
+            display,
+            if show_percentage {
+                format!("{:.0}%", percent_swap_used)
+            } else {
+                format!(
+                    "{}/{}",
+                    format_kib(used_swap_kib),
+                    format_kib(total_swap_kib)
+                )
+            }
+        );
     }
 
     module.create_segment("symbol", &config.symbol);
