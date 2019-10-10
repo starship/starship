@@ -8,6 +8,7 @@ pub mod jobs;
 pub mod kubernetes;
 pub mod rust;
 pub mod time;
+pub mod memory_usage;
 
 use crate::config::{ModuleConfig, RootModuleConfig};
 
