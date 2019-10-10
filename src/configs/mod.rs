@@ -9,6 +9,7 @@ pub mod kubernetes;
 pub mod nodejs;
 pub mod package;
 pub mod python;
+pub mod ruby;
 pub mod rust;
 pub mod time;
 
