@@ -38,18 +38,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.create_segment("symbol", &config.symbol);
 
     if config.pyenv_version_name {
-        let python_version = get_python_version()?;
+        let python_version = get_pyenv_version()?;
         module.create_segment("pyenv_prefix", &config.pyenv_prefix);
         module.create_segment("version", &SegmentConfig::new(&python_version.trim()));
     } else {
-        let python_version = get_pyenv_version()?;
-        let formatted_version = format_python_version(&python_version.trim());
-        let virtual_env = get_python_virtual_env()?;
+        let python_version = get_python_version()?;
+        let formatted_version = format_python_version(&python_version);
         module.create_segment("version", &SegmentConfig::new(&formatted_version));
-        module.create_segment(
-            "virtualenv",
-            &SegmentConfig::new(&format!("({})", virtual_env)),
-        );
+
+        if let Some(virtual_env) = get_python_virtual_env() {
+            module.create_segment(
+                "virtualenv",
+                &SegmentConfig::new(&format!("({})", virtual_env)),
+            );
+        };
     };
 
     Some(module)
