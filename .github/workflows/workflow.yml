@@ -1,0 +1,235 @@
+name: Main workflow
+on: [push, pull_request]
+jobs:
+  # Run the `rustfmt` code formatter
+  rustfmt:
+    name: Rustfmt [Formatter]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - run: rustup component add rustfmt
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+
+  # Run the `clippy` linting tool
+  clippy:
+    name: Clippy [Linter]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - run: rustup component add clippy
+      - uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --all-targets --all-features -- -D clippy::all
+
+  # Run a security audit on dependencies
+  cargo_audit:
+    name: Cargo Audit [Security]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - run: cargo install --force cargo-audit
+      - run: cargo generate-lockfile
+      - uses: actions-rs/cargo@v1
+        with:
+          command: audit
+
+  # Ensure that the project could be successfully compiled
+  cargo_check:
+    name: Compile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: check
+          args: --all
+
+  # Run tests on Linux, and macOS
+  # On both Rust stable and Rust nightly
+  test:
+    name: Test Suite
+    needs: [cargo_check]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macOS-latest]
+        rust: [stable, nightly]
+    steps:
+      # Checkout the branch being tested
+      - uses: actions/checkout@v1
+
+      # Install all the required dependencies for testing
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      # Install Node.js at a fixed version
+      - uses: actions/setup-node@master
+        with:
+          node-version: "12.0.0"
+
+      # Install Golang at a fixed version
+      - uses: actions/setup-go@master
+        with:
+          go-version: "1.12.1"
+
+      # Install Ruby at a fixed version
+      - uses: actions/setup-ruby@master
+        with:
+          ruby-version: "2.6.3"
+
+      # Install Python at a fixed version
+      - uses: actions/setup-python@master
+        with:
+          python-version: "3.6.9"
+
+      # Install dotnet at a fixed version
+      - uses: actions/setup-dotnet@master
+        with:
+          dotnet-version: "2.2.402"
+
+      # Run the ignored tests that expect the above setup
+      - name: Run all tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: -- -Z unstable-options --include-ignored
+
+  # Run the tests in the Docker image
+  docker_test:
+    name: Test in Docker
+    needs: [cargo_check]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Pull the pre-built Docker image
+        run: docker pull starshipcommand/starship-test
+      - name: Fix file permissions
+        run: chmod -R a+w .
+      - name: Build the Docker image
+        run:
+          docker build -f tests/Dockerfile --tag starshipcommand/starship-test --cache-from
+          starshipcommand/starship-test .
+      - name: Run tests in Docker
+        run: docker run --rm -v $(pwd):/src/starship starshipcommand/starship-test
+
+  # Publish starship to Crates.io
+  cargo_publish:
+    if: startsWith(github.ref, 'refs/tags/v')
+    name: Publish Cargo Package
+    needs: [test, docker_test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - run: cargo login $CRATES_IO_TOKEN
+      - run: cargo publish
+    env:
+      CRATES_IO_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
+
+  # Create a PR to bump the brew formula version
+  brew_bump_formula:
+    if: startsWith(github.ref, 'refs/tags/v')
+    name: Bump Brew Formula
+    needs: [test, docker_test]
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
+    env:
+      HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Create GitHub release with Rust build targets and release notes
+  github_release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    name: Create GitHub Release
+    needs: [test, docker_test]
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - x86_64-unknown-linux-gnu
+          - x86_64-unknown-linux-musl
+          - x86_64-apple-darwin
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+            name: starship-x86_64-unknown-linux-gnu.tar.gz
+          - target: x86_64-unknown-linux-musl
+            os: ubuntu-latest
+            name: starship-x86_64-unknown-linux-musl.tar.gz
+          - target: x86_64-apple-darwin
+            os: macOS-latest
+            name: starship-x86_64-apple-darwin.tar.gz
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          target: ${{ matrix.target }}
+
+      - name: Install musl tools
+        if: matrix.target == 'x86_64-unknown-linux-musl'
+        run: sudo apt-get install -y musl-tools
+
+      - name: Build target
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --target ${{ matrix.target }}
+
+      - name: Prepare build artifacts
+        run: |
+          strip target/${{ matrix.target }}/release/starship
+          cd target/${{ matrix.target }}/release
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]
+          then
+            7z a ../../../${{ matrix.name }} starship
+          else
+            tar czvf ../../../${{ matrix.name }} starship
+          fi
+          cd -
+
+      - name: Generate release notes
+        run: |
+          # Temporary fix for https://github.com/actions/setup-go/issues/14
+          export PATH=$PATH:$(go env GOPATH)/bin
+          go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
+          git-chglog -c .github/chglog/release.yml $(git describe --tags) > RELEASE.md
+
+      - name: Create GitHub release ${{ matrix.target }}
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ matrix.name }}
+          body_path: RELEASE.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
