@@ -33,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
             if config.show_compose {
                 if let Some(compose_version) = get_docker_compose_version() {
-                    module.create_segment("prefix", &config.symbol.with_value(&" with "));
+                    module.create_segment("prefix", &config.symbol.with_value(&" with v"));
                     module.create_segment(
                         "version",
                         &config.version.with_value(&compose_version.trim()),
