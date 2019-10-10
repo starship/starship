@@ -9,6 +9,7 @@ pub struct TimeConfig<'a> {
     pub format: Option<&'a str>,
     pub style: Style,
     pub disabled: bool,
+    pub utc_time_offset: &'a str,
 }
 
 impl<'a> RootModuleConfig<'a> for TimeConfig<'a> {
@@ -18,6 +19,7 @@ impl<'a> RootModuleConfig<'a> for TimeConfig<'a> {
             format: None,
             style: Color::Yellow.bold(),
             disabled: true,
+            utc_time_offset: "local",
         }
     }
 }

@@ -3,6 +3,8 @@ pub mod battery;
 pub mod character;
 pub mod conda;
 pub mod dotnet;
+pub mod hostname;
+pub mod jobs;
 pub mod kubernetes;
 pub mod nodejs;
 pub mod package;
