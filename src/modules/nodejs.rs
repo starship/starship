@@ -1,4 +1,3 @@
-use ansi_term::Color;
 use std::process::Command;
 
 use super::{Context, Module, RootModuleConfig, SegmentConfig};

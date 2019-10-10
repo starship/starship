@@ -1,7 +1,6 @@
 use super::{Context, Module};
 use crate::utils;
 
-use ansi_term::Color;
 use serde_json as json;
 use toml;
 
@@ -21,7 +20,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             module.get_prefix().set_value("is ");
 
             module.create_segment("symbol", &config.symbol);
-            module.create_segment("version", &SegmentConfig::new(package_version));
+            module.create_segment("version", &SegmentConfig::new(&package_version));
 
             Some(module)
         }
