@@ -573,7 +573,7 @@ more than the `threshold` config value, if it exists.
 
 | Variable    | Default       | Description                                           |
 | ----------- | ------------- | ----------------------------------------------------- |
-| `symbol`    | `"✦ "`        | The symbol used before displaying the number of jobs. |
+| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
 | `threshold` | `1`           | Show number of jobs if exceeded.                      |
 | `style`     | `"bold blue"` | The style for the module.                             |
 | `disabled`  | `false`       | Disables the `jobs` module.                           |
