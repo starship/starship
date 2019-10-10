@@ -48,7 +48,11 @@
   /></a>
   &#0020;
   <a href="https://translate.starship.rs/project/starship-prompt/zh-CN"
-    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png" alt="中文"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png" alt="简体中文"
+  /></a>
+  &#0020;
+  <a href="https://translate.starship.rs/project/starship-prompt/zh-TW"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png" alt="繁體中文"
   /></a>
   &#0020;
   <a href="https://translate.starship.rs/project/starship-prompt/de"
