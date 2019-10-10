@@ -8,6 +8,7 @@ pub mod jobs;
 pub mod kubernetes;
 pub mod nodejs;
 pub mod package;
+pub mod python;
 pub mod rust;
 pub mod time;
 
