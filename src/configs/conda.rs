@@ -4,27 +4,25 @@ use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
-pub struct DotnetConfig<'a> {
+pub struct CondaConfig<'a> {
     pub symbol: SegmentConfig<'a>,
-    pub version: SegmentConfig<'a>,
+    pub environment: SegmentConfig<'a>,
     pub style: Style,
-    pub heuristic: bool,
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for DotnetConfig<'a> {
+impl<'a> RootModuleConfig<'a> for CondaConfig<'a> {
     fn new() -> Self {
-        DotnetConfig {
+        CondaConfig {
             symbol: SegmentConfig {
-                value: "•NET ",
+                value: "C ",
                 style: None,
             },
-            version: SegmentConfig {
+            environment: SegmentConfig {
                 value: "",
                 style: None,
             },
-            style: Color::Blue.bold(),
-            heuristic: true,
+            style: Color::Green.bold(),
             disabled: false,
         }
     }
