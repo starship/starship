@@ -4,6 +4,7 @@ files:
       - /docs/%two_letters_code%
       - /docs/%locale%
       - /docs/guide
-    translation: /docs/%locale%/**/%original_file_name%
+      - /docs/translations
+    translation: /docs/translations/%locale%/**/%original_file_name%
   - source: /README.md
-    translation: /translations/%file_name%.%locale%.%file_extension%
+    translation: /docs/translations/%locale%/guide/%file_name%.%file_extension%
