@@ -16,6 +16,11 @@ fn format_kib(n_kib: u64) -> String {
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("memory_usage");
     let config = MemoryConfig::try_load(module.config);
+
+    if config.disabled {
+        return None
+    }
+
     module.set_style(config.style);
 
     let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_system());
