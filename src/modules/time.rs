@@ -1,40 +1,30 @@
-use ansi_term::Color;
-use chrono::{DateTime, FixedOffset, Local, TimeZone, Utc};
+use chrono::{DateTime, FixedOffset, Local, Utc};
 
 use super::{Context, Module};
 
+use crate::config::{RootModuleConfig, SegmentConfig};
+use crate::configs::time::TimeConfig;
+
 /// Outputs the current time
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    const TIME_PREFIX: &str = "at ";
+
     let mut module = context.new_module("time");
-
-    if module.config_value_bool("disabled").unwrap_or(true) {
+    let config: TimeConfig = TimeConfig::try_load(module.config);
+    if config.disabled {
         return None;
-    }
+    };
 
-    let module_style = module
-        .config_value_style("style")
-        .unwrap_or_else(|| Color::Yellow.bold());
-    module.set_style(module_style);
-
-    // Load module settings
-    let is_12hr = module.config_value_bool("12hr").unwrap_or(false);
-    let utc_time_offset_str = module
-        .config_value_str("utc_time_offset")
-        .unwrap_or("local");
-
-    let default_format = if is_12hr { "%r" } else { "%T" };
-    let time_format = module
-        .config_value_str("format")
-        .unwrap_or(default_format)
-        .to_owned();
+    let default_format = if config.use_12hr { "%r" } else { "%T" };
+    let time_format = config.format.unwrap_or(default_format);
 
     log::trace!(
         "Timer module is enabled with format string: {}",
         time_format
     );
 
-    let formatted_time = if utc_time_offset_str != "local" {
-        match create_offset_time_string(Utc::now(), &utc_time_offset_str, &time_format) {
+    let formatted_time_string = if config.utc_time_offset != "local" {
+        match create_offset_time_string(Utc::now(), &config.utc_time_offset, &time_format) {
             Ok(formatted_string) => formatted_string,
             Err(_) => {
                 log::warn!(
@@ -47,8 +37,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         format_time(&time_format, Local::now())
     };
 
-    module.new_segment("time", &formatted_time);
-    module.get_prefix().set_value("at ");
+    module.set_style(config.style);
+
+    module.get_prefix().set_value(TIME_PREFIX);
+
+    module.create_segment(
+        "time",
+        &SegmentConfig {
+            value: &formatted_time_string,
+            style: None,
+        },
+    );
 
     Some(module)
 }

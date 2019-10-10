@@ -175,7 +175,8 @@
       "contributions": [
         "code",
         "test",
-        "doc"
+        "doc",
+        "review"
       ]
     },
     {
@@ -380,6 +381,33 @@
       "name": "Ryo Yamashita",
       "avatar_url": "https://avatars2.githubusercontent.com/u/14125495?v=4",
       "profile": "https://github.com/qryxip",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "pbzweihander",
+      "name": "Thomas Lee",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/15262528?v=4",
+      "profile": "https://pbzweihander.github.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "pt2121",
+      "name": "(´⌣`ʃƪ)",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/616399?v=4",
+      "profile": "https://pt2121.github.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Southclaws",
+      "name": "Barnaby Keene",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1636971?v=4",
+      "profile": "https://southcla.ws",
       "contributions": [
         "code"
       ]
