@@ -6,6 +6,8 @@ pub mod conda;
 pub mod directory;
 pub mod dotnet;
 pub mod env_var;
+pub mod hostname;
+pub mod jobs;
 pub mod kubernetes;
 pub mod rust;
 pub mod time;

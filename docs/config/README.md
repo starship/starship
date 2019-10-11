@@ -573,7 +573,7 @@ more than the `threshold` config value, if it exists.
 
 | Variable    | Default       | Description                                           |
 | ----------- | ------------- | ----------------------------------------------------- |
-| `symbol`    | `"✦ "`        | The symbol used before displaying the number of jobs. |
+| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
 | `threshold` | `1`           | Show number of jobs if exceeded.                      |
 | `style`     | `"bold blue"` | The style for the module.                             |
 | `disabled`  | `false`       | Disables the `jobs` module.                           |
@@ -895,12 +895,13 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable   | Default       | Description                                                                                                         |
-| ---------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr` | `false`       | Enables 12 hour formatting                                                                                          |
-| `format`   | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`    | `bold yellow` | The style for the module time                                                                                       |
-| `disabled` | `true`        | Disables the `time` module.                                                                                         |
+| Variable          | Default       | Description                                                                                                         |
+| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `12hr`            | `false`       | Enables 12 hour formatting                                                                                          |
+| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `bold yellow` | The style for the module time                                                                                       |
+| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
+| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.     |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
 Manually setting `format` will override the `use_12hr` setting.
@@ -913,6 +914,7 @@ Manually setting `format` will override the `use_12hr` setting.
 [time]
 disabled = false
 format = "🕙[ %T ]"
+utc_time_offset = -5
 ```
 
 ## Username
