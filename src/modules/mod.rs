@@ -16,6 +16,7 @@ mod jobs;
 mod kubernetes;
 mod line_break;
 mod memory_usage;
+mod nim;
 mod nix_shell;
 mod nodejs;
 mod package;
@@ -55,6 +56,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "kubernetes" => kubernetes::module(context),
         "line_break" => line_break::module(context),
         "memory_usage" => memory_usage::module(context),
+        "nim" => nim::module(context),
         "nix_shell" => nix_shell::module(context),
         "nodejs" => nodejs::module(context),
         "package" => package::module(context),

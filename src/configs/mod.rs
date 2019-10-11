@@ -6,6 +6,7 @@ pub mod dotnet;
 pub mod hostname;
 pub mod jobs;
 pub mod kubernetes;
+pub mod nim;
 pub mod rust;
 pub mod time;
 
@@ -40,6 +41,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "dotnet",
                 "golang",
                 "java",
+                "nim",
                 "nodejs",
                 "python",
                 "ruby",

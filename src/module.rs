@@ -27,6 +27,7 @@ pub const ALL_MODULES: &[&str] = &[
     "kubernetes",
     "line_break",
     "memory_usage",
+    "nim",
     "nix_shell",
     "nodejs",
     "package",

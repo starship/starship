@@ -15,6 +15,7 @@ mod hostname;
 mod jobs;
 mod line_break;
 mod modules;
+mod nim;
 mod nix_shell;
 mod nodejs;
 mod python;
