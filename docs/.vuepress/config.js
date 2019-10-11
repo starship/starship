@@ -48,7 +48,7 @@ module.exports = {
         // Custom text for edit link. Defaults to "Edit this page"
         editLinkText: "GitHub で編集する",
         // Custom navbar values
-        nav: [{ text: "設定", link: "/ja/config/" }],
+        nav: [{ text: "設定", link: "/ja-JP/config/" }],
         // Custom sidebar values
         sidebar: [
           "/ja-JP/",
