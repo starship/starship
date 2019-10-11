@@ -5,6 +5,6 @@ files:
       - /docs/%locale%
       - /docs/guide
       - /docs/translations
-    translation: /docs/translations/%locale%/**/%original_file_name%
+    translation: /docs/%locale%/**/%original_file_name%
   - source: /README.md
-    translation: /docs/translations/%locale%/guide/%file_name%.%file_extension%
+    translation: /docs/%locale%/guide/%file_name%.%file_extension%
