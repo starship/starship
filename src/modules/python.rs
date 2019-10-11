@@ -43,6 +43,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_style(config.style);
     module.create_segment("symbol", &config.symbol);
 
+    // if hide_version is enabled we are done
+    if config.hide_version {
+        return Some(module);
+    }
+
     let python_version = select_python_version(pyenv_version_name)?;
 
     if pyenv_version_name {
