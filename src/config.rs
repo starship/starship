@@ -219,7 +219,7 @@ impl<'a> ModuleConfig<'a> for SegmentConfig<'a> {
 }
 
 impl<'a> SegmentConfig<'a> {
-    pub fn new(value: &'static str) -> Self {
+    pub fn new(value: &'a str) -> Self {
         Self { value, style: None }
     }
 

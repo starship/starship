@@ -402,6 +402,25 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Southclaws",
+      "name": "Barnaby Keene",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1636971?v=4",
+      "profile": "https://southcla.ws",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "keawade",
+      "name": "Keith Wade",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/7308850?v=4",
+      "profile": "http://keawade.io/",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
