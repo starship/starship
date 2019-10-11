@@ -18,7 +18,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config = MemoryConfig::try_load(module.config);
 
     if config.disabled {
-        return None
+        return None;
     }
 
     module.set_style(config.style);
