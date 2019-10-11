@@ -643,6 +643,29 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
+## Nim
+
+The `nim` module shows the Nim compiler version.
+The module will be shown when inside a directory with a `*.nimble` file.
+
+### Options
+
+| Variable   | Default         | Description                                             |
+| ---------- | --------------- | ------------------------------------------------------- |
+| `symbol`   | `"👑 "`         | The symbol used before displaying the compiler version. |
+| `style`    | `"bold yellow"` | The style for the module.                               |
+| `disabled` | `false`         | Disables the `nim` module.                              |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[nim]
+symbol = "💛 "
+style = "dim yellow"
+```
+
 ## Nix-shell
 
 The `nix_shell` module shows the nix-shell environment.
