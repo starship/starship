@@ -2,9 +2,8 @@ use std::env;
 use std::path::Path;
 use std::process::Command;
 
-use ansi_term::Color;
-
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
+use crate::configs::python::PythonConfig;
 
 /// Creates a module with the current Python version
 ///
@@ -16,6 +15,13 @@ use super::{Context, Module};
 ///     - Current directory contains a `Pipfile` file
 ///     - Current directory contains a `tox.ini` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("python");
+    let config = PythonConfig::try_load(module.config);
+
+    if config.disabled {
+        return None;
+    }
+
     let is_py_project = context
         .try_begin_scan()?
         .set_files(&[
@@ -32,36 +38,33 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let mut module = context.new_module("python");
-    let pyenv_version_name = module
-        .config_value_bool("pyenv_version_name")
-        .unwrap_or(false);
+    let pyenv_version_name = config.pyenv_version_name;
 
-    const PYTHON_CHAR: &str = "🐍 ";
-    let module_color = module
-        .config_value_style("style")
-        .unwrap_or_else(|| Color::Yellow.bold());
-    module.set_style(module_color);
-    module.new_segment("symbol", PYTHON_CHAR);
+    module.set_style(config.style);
+    module.create_segment("symbol", &config.symbol);
 
-    select_python_version(pyenv_version_name)
-        .map(|python_version| python_module(module, pyenv_version_name, python_version))
-}
-
-fn python_module(mut module: Module, pyenv_version_name: bool, python_version: String) -> Module {
-    const PYENV_PREFIX: &str = "pyenv ";
+    let python_version = select_python_version(pyenv_version_name)?;
 
     if pyenv_version_name {
-        module.new_segment("pyenv_prefix", PYENV_PREFIX);
-        module.new_segment("version", &python_version.trim());
+        module.create_segment("pyenv_prefix", &config.pyenv_prefix);
+        module.create_segment(
+            "version",
+            &config.version.with_value(&python_version.trim()),
+        );
     } else {
         let formatted_version = format_python_version(&python_version);
-        module.new_segment("version", &formatted_version);
-        get_python_virtual_env()
-            .map(|virtual_env| module.new_segment("virtualenv", &format!("({})", virtual_env)));
+        module.create_segment("version", &config.version.with_value(&formatted_version));
+        if let Some(venv_version) = get_python_virtual_env() {
+            module.create_segment(
+                "virtual_env",
+                &config
+                    .virtual_env
+                    .with_value(&format!("({})", venv_version)),
+            );
+        }
     };
 
-    module
+    Some(module)
 }
 
 fn select_python_version(pyenv_version_name: bool) -> Option<String> {

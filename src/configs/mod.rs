@@ -6,6 +6,7 @@ pub mod dotnet;
 pub mod hostname;
 pub mod jobs;
 pub mod kubernetes;
+pub mod python;
 pub mod rust;
 pub mod time;
 
