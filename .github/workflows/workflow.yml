@@ -1,5 +1,11 @@
 name: Main workflow
-on: [push, pull_request]
+on:
+  push:
+    paths-ignore:
+      - "docs/**"
+      - "**/*.md"
+  pull_request: []
+
 jobs:
   # Run the `rustfmt` code formatter
   rustfmt:
@@ -160,10 +166,9 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
-      - run: export COMMIT_TAG=$(git describe --tags)
-      - run: brew bump-formula-pr --url=https://github.com/starship/starship/archive/${COMMIT_TAG}.tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
+      - run: brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Create GitHub release with Rust build targets and release notes
   github_release:
