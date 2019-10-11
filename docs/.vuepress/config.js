@@ -5,7 +5,7 @@ module.exports = {
       title: "Starship",
       description: "The cross-shell prompt for astronauts"
     },
-    "/ja/": {
+    "/ja-JP/": {
       lang: "ja-JP",
       title: "Starship",
       description: "The cross-shell prompt for astronauts"
@@ -40,7 +40,7 @@ module.exports = {
           ["/advanced-config/", "Advanced Configuration"]
         ],
       },
-      "/ja/": {
+      "/ja-JP/": {
         // text for the language dropdown
         selectText: "言語",
         // label for this locale in the language dropdown
@@ -51,10 +51,10 @@ module.exports = {
         nav: [{ text: "設定", link: "/ja/config/" }],
         // Custom sidebar values
         sidebar: [
-          "/ja/",
-          ["/ja/guide/", "ガイド"],
-          ["/ja/config/", "設定"],
-          ["/ja/advanced-config/", "高度な設定"]
+          "/ja-JP/",
+          ["/ja-JP/guide/", "ガイド"],
+          ["/ja-JP/config/", "設定"],
+          ["/ja-JP/advanced-config/", "高度な設定"]
         ],
       },
     }
