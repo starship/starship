@@ -49,6 +49,10 @@ yaml-rust = "0.4"
 [dev-dependencies]
 tempfile = "3.1.0"
 
+[profile.release]
+codegen-units = 1
+lto = true
+
 [[bin]]
 name = "starship"
 path = "src/main.rs"
