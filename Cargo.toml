@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "0.22.0"
+version = "0.23.0"
 edition = "2018"
 authors = ["Matan Kushner <hello@matchai.me>"]
 homepage = "https://starship.rs"
@@ -48,6 +48,10 @@ yaml-rust = "0.4"
 
 [dev-dependencies]
 tempfile = "3.1.0"
+
+[profile.release]
+codegen-units = 1
+lto = true
 
 [[bin]]
 name = "starship"
