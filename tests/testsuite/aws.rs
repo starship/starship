@@ -18,7 +18,7 @@ fn profile_set() -> io::Result<()> {
         .env_clear()
         .env("AWS_PROFILE", "astronauts")
         .output()?;
-    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️ astronauts"));
+    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  astronauts"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
