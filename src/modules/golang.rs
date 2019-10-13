@@ -1,7 +1,8 @@
-use ansi_term::Color;
 use std::process::Command;
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
+
+use crate::configs::go::GoConfig;
 
 /// Creates a module with the current Go version
 ///
@@ -27,17 +28,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     match get_go_version() {
         Some(go_version) => {
-            const GO_CHAR: &str = "🐹 ";
-
             let mut module = context.new_module("golang");
-            let module_style = module
-                .config_value_style("style")
-                .unwrap_or_else(|| Color::Cyan.bold());
-            module.set_style(module_style);
+            let config: GoConfig = GoConfig::try_load(module.config);
+
+            module.set_style(config.style);
+            module.create_segment("symbol", &config.symbol);
 
             let formatted_version = format_go_version(&go_version)?;
-            module.new_segment("symbol", GO_CHAR);
-            module.new_segment("version", &formatted_version);
+            module.create_segment("version", &config.version.with_value(&formatted_version));
 
             Some(module)
         }
