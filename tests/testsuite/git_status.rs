@@ -295,6 +295,12 @@ fn shows_stashed() -> io::Result<()> {
         .output()?;
     barrier();
 
+    Command::new("git")
+        .args(&["reset", "--hard", "HEAD"])
+        .current_dir(repo_dir.as_path())
+        .output()?;
+    barrier();
+
     let output = common::render_module("git_status")
         .arg("--path")
         .arg(repo_dir)
