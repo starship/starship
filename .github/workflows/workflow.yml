@@ -166,6 +166,11 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
+      - run: |
+          cd $(brew --prefix)
+          git fetch origin
+          sudo git reset --hard origin/master
+          cd -
       - run: brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
     env:
       HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
