@@ -98,6 +98,7 @@
 - Execution time of the last command if it exceeds the set threshold
 - Indicator for jobs in the background (`✦`)
 - Current Kubernetes Cluster and Namespace (`☸`)
+- Current AWS profile (`☁️`)
 
 ## 🚀 Installation
 
