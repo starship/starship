@@ -79,6 +79,11 @@ pub fn create_fixture_repo() -> io::Result<PathBuf> {
         .current_dir(&repo_path)
         .output()?;
 
+    Command::new("git")
+        .args(&["reset", "--hard", "HEAD"])
+        .current_dir(&repo_path)
+        .output()?;
+
     Ok(repo_path)
 }
 
