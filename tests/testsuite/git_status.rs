@@ -285,11 +285,12 @@ fn shows_stashed() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
     File::create(repo_dir.join("readme.md"))?.sync_all()?;
-    barrier();
+
     Command::new("git")
         .arg("stash")
         .current_dir(repo_dir.as_path())
         .output()?;
+    barrier();
 
     let output = common::render_module("git_status")
         .arg("--path")
