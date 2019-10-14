@@ -219,6 +219,10 @@ impl<'a> ModuleConfig<'a> for SegmentConfig<'a> {
 }
 
 impl<'a> SegmentConfig<'a> {
+    pub fn new(value: &'a str) -> Self {
+        Self { value, style: None }
+    }
+
     /// Mutably set value
     pub fn set_value(&mut self, value: &'a str) {
         self.value = value;
@@ -243,6 +247,12 @@ impl<'a> SegmentConfig<'a> {
             value: self.value,
             style: Some(style),
         }
+    }
+}
+
+impl Default for SegmentConfig<'static> {
+    fn default() -> Self {
+        Self::new("")
     }
 }
 

@@ -1,8 +1,14 @@
 pub mod aws;
 pub mod battery;
 pub mod character;
+pub mod conda;
 pub mod dotnet;
+pub mod go;
+pub mod hostname;
+pub mod jobs;
+pub mod kubernetes;
 pub mod rust;
+pub mod time;
 
 use crate::config::{ModuleConfig, RootModuleConfig};
 
@@ -41,6 +47,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "rust",
                 // ↑ Toolchain version modules ↑
                 "nix_shell",
+                "conda",
                 "memory_usage",
                 "aws",
                 "env_var",

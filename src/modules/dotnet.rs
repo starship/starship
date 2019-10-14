@@ -5,8 +5,7 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::str;
 
-use super::{Context, Module};
-use crate::config::RootModuleConfig;
+use super::{Context, Module, RootModuleConfig};
 use crate::configs::dotnet::DotnetConfig;
 
 type JValue = serde_json::Value;
