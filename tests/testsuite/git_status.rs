@@ -283,6 +283,7 @@ fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
 #[ignore]
 fn shows_stashed() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
+    barrier();
 
     File::create(repo_dir.join("readme.md"))?.sync_all()?;
 
