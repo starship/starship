@@ -61,22 +61,22 @@ pub fn create_fixture_repo() -> io::Result<PathBuf> {
 
     let fixture_repo_dir = path_str(&fixture_repo_path)?;
     let repo_dir = path_str(&repo_path)?;
-    let fixture = path_str(&fixture_path)?;
 
     Command::new("git")
-        .args(&["clone", "-b", "master", &fixture, &fixture_repo_dir])
+        .args(&["clone", "-b", "master"])
+        .args(&[&fixture_path, &repo_path])
         .output()?;
 
     git2::Repository::clone(&fixture_repo_dir, &repo_dir).ok();
 
     Command::new("git")
         .args(&["config", "--local", "user.email", "starship@example.com"])
-        .current_dir(&repo_dir)
+        .current_dir(&repo_path)
         .output()?;
 
     Command::new("git")
         .args(&["config", "--local", "user.name", "starship"])
-        .current_dir(repo_dir)
+        .current_dir(&repo_path)
         .output()?;
 
     Ok(repo_path)
