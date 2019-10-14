@@ -157,6 +157,16 @@ The prompt shows information you need while you're working, while staying sleek 
    ```sh
    $ pkg install starship
    ```
+   
+   #### Other x86-64 Linux Platforms
+   
+   Download a prebuilt binary and place in /usr/local/bin/
+
+   ```sh
+   $ curl -s https://api.github.com/repos/starship/starship/releases/latest   | grep browser_download_url   | grep x86_64-unknown-linux-gnu   | cut -d '"' -f 4   | wget -qi -
+   $ tar xvf starship-*.tar.gz
+   $ sudo mv starship /usr/local/bin/
+   ```
 
 1. Add the init script to your shell's config file:
 
