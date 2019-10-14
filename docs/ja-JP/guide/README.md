@@ -17,7 +17,7 @@
       alt="Packaging status" /></a
 ><br /><a href="#contributors"
     ><img
-      src="https://badgen.net/badge/all%20contributors/35/orange"
+      src="https://badgen.net/badge/all%20contributors/40/orange"
       alt="All Contributors" /></a>
   <a href="https://discord.gg/8Jzqu3T"
     ><img
@@ -149,6 +149,17 @@
    $ pkg install starship
    ```
 
+
+   #### Other x86-64 Linux Platforms
+
+   Download a prebuilt binary and place in /usr/local/bin/
+
+   ```sh
+   $ wget -q --show-progress https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz
+   $ tar xvf starship-x86_64-unknown-linux-gnu.tar.gz
+   $ sudo mv starship /usr/local/bin/
+   ```
+
 1. 初期化のためのスクリプトをシェルの設定ファイルに追加
 
 
@@ -260,6 +271,7 @@ If you are interested in helping contribute to starship, please take a look at o
     <td align="center"><a href="https://pt2121.github.io"><img src="https://avatars0.githubusercontent.com/u/616399?v=4" width="100px;" alt="(´⌣`ʃƪ)"/><br /><sub><b>(´⌣`ʃƪ)</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=pt2121" title="Code">💻</a></td>
     <td align="center"><a href="https://southcla.ws"><img src="https://avatars1.githubusercontent.com/u/1636971?v=4" width="100px;" alt="Barnaby Keene" /><br /><sub><b>Barnaby Keene</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=Southclaws" title="Code">💻</a></td>
     <td align="center"><a href="http://keawade.io/"><img src="https://avatars2.githubusercontent.com/u/7308850?v=4" width="100px;" alt="Keith Wade" /><br /><sub><b>Keith Wade</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=keawade" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=keawade" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/LukeAI"><img src="https://avatars3.githubusercontent.com/u/43993778?v=4" width="100px;" alt="LukeAI" /><br /><sub><b>LukeAI</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=LukeAI" title="Documentation">📖</a></td>
   </tr>
 </table>
 
