@@ -5,7 +5,10 @@ use crate::common;
 
 #[test]
 fn no_profile_set() -> io::Result<()> {
-    let output = common::render_module("aws").env_clear().output()?;
+    let output = common::render_module("aws")
+        .env_clear()
+        .env("PATH", env!("PATH"))
+        .output()?;
     let expected = "";
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
