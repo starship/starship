@@ -118,7 +118,7 @@ The `aws` module shows the current AWS profile. This is based on the `AWS_PROFIL
 
 | Variable   | Default         | Description                                                |
 | ---------- | --------------- | ---------------------------------------------------------- |
-| `symbol`   | `"☁️ "`         | The symbol used before displaying the current AWS profile. |
+| `symbol`   | `"☁️  "`        | The symbol used before displaying the current AWS profile. |
 | `style`    | `"bold yellow"` | The style for the module.                                  |
 | `disabled` | `false`         | Disables the `AWS` module.                                 |
 
