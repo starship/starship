@@ -509,13 +509,14 @@ The `hostname` module shows the system hostname.
 
 ### オプション
 
-| 変数         | デフォルト                 | 説明                                                   |
-| ---------- | --------------------- | ---------------------------------------------------- |
-| `ssh_only` | `true`                | Only show hostname when connected to an SSH session. |
-| `prefix`   | `""`                  | Prefix to display immediately before the hostname.   |
-| `suffix`   | `""`                  | Suffix to display immediately after the hostname.    |
-| `style`    | `"bold dimmed green"` | The style for the module.                            |
-| `disabled` | `false`               | Disables the `hostname` module.                      |
+| 変数         | デフォルト                 | 説明                                                                                                                                   |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
+| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
+| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### 設定例
 
@@ -526,6 +527,7 @@ The `hostname` module shows the system hostname.
 ssh_only = false
 prefix = "⟪"
 suffix = "⟫"
+trim_at = ".companyname.com"
 disabled = false
 ```
 
