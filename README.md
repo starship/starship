@@ -20,7 +20,7 @@
       alt="Packaging status"/></a
   ><br /><a href="#contributors"
     ><img
-      src="https://badgen.net/badge/all%20contributors/40/orange"
+      src="https://badgen.net/badge/all%20contributors/41/orange"
       alt="All Contributors"
   /></a>
   <a href="https://discord.gg/8Jzqu3T"
