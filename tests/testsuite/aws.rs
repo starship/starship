@@ -100,7 +100,7 @@ region = us-east-2
         .output()?;
     let expected = format!(
         "on {} ",
-        Color::Yellow.bold().paint("☁️ astronauts(us-east-2)")
+        Color::Yellow.bold().paint("☁️  astronauts(us-east-2)")
     );
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
