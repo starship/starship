@@ -112,7 +112,7 @@ prompt_order = [
 
 ## AWS
 
-The `aws` module shows the current AWS profile. This is based on the `AWS_PROFILE` env var.
+The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
 
 ### Options
 
