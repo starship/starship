@@ -393,6 +393,34 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "pt2121",
+      "name": "(´⌣`ʃƪ)",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/616399?v=4",
+      "profile": "https://pt2121.github.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Southclaws",
+      "name": "Barnaby Keene",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1636971?v=4",
+      "profile": "https://southcla.ws",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "keawade",
+      "name": "Keith Wade",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/7308850?v=4",
+      "profile": "http://keawade.io/",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
