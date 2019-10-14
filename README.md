@@ -164,7 +164,7 @@ The prompt shows information you need while you're working, while staying sleek 
 
    ```sh
    $ wget -q --show-progress https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz
-   $ tar xvf starship-*.tar.gz
+   $ tar xvf starship-x86_64-unknown-linux-gnu.tar.gz
    $ sudo mv starship /usr/local/bin/
    ```
 
