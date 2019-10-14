@@ -92,6 +92,7 @@ The prompt shows information you need while you're working, while staying sleek 
 - Current Ruby version (`💎`)
 - Current Python version (`🐍`)
 - Current Go version (`🐹`)
+- Current Terraform workspace (`💠`)
 - Nix-shell environment detection
 - Print an environment variable
 - Current version of package in current directory (`📦`)

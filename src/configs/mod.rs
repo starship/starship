@@ -8,6 +8,7 @@ pub mod hostname;
 pub mod jobs;
 pub mod kubernetes;
 pub mod rust;
+pub mod terraform;
 pub mod time;
 
 use crate::config::{ModuleConfig, RootModuleConfig};
@@ -48,6 +49,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 // ↑ Toolchain version modules ↑
                 "nix_shell",
                 "conda",
+                "terraform",
                 "memory_usage",
                 "aws",
                 "env_var",

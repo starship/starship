@@ -100,6 +100,7 @@ prompt_order = [
     "rust",
     "nix_shell",
     "conda",
+    "terraform",
     "memory_usage",
     "aws",
     "env_var",
@@ -880,6 +881,28 @@ The module will be shown if any of the following conditions are met:
 [rust]
 symbol = "⚙️ "
 ```
+## Terraform
+
+The `terraform` module shows the current terraform workspace, if there is a file with the `.tf` extension in the current directory.
+It will first check the `$TF_WORKSPACE` environment variable, then `$TF_DATA_DIR/environment`, and finally `.terraform/environment`.
+
+### Options
+
+| Variable   | Default         | Description                                 |
+| ---------- | --------------- | ------------------------------------------- |
+| `symbol`   | `"💠 "`         | The symbol shown before the workspace name. |
+| `style`    | `"bold purple"` | The style for the module.                   |
+| `disabled` | `false`         | Disables the `terraform` module.            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+symbol = "T "
+```
+
 
 ## Time
 
