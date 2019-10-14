@@ -284,17 +284,15 @@ fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
 fn shows_stashed() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
     barrier();
-    barrier();
 
     File::create(repo_dir.join("readme.md"))?.sync_all()?;
 
     barrier();
 
     Command::new("git")
-        .arg("stash")
+        .args(&["stash", "--all"])
         .current_dir(repo_dir.as_path())
         .output()?;
-    barrier();
     barrier();
 
     let output = common::render_module("git_status")
