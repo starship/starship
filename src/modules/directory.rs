@@ -142,7 +142,13 @@ fn truncate(dir_string: String, length: usize) -> String {
         return dir_string;
     }
 
-    let components = dir_string.split('/').collect::<Vec<&str>>();
+    let mut components = dir_string.split('/').collect::<Vec<&str>>();
+
+    // If the first element is "" then there was a leading "/" and we should remove it so we can check the actual count of components
+    if (components[0] == "") {
+        components.remove(0);
+    }
+
     if components.len() <= length {
         return dir_string;
     }
@@ -271,6 +277,20 @@ mod tests {
         let path = "~/starship/engines/booster/rocket";
         let output = truncate(path.to_string(), 3);
         assert_eq!(output, "engines/booster/rocket")
+    }
+
+    #[test]
+    fn truncate_same_path_as_provided_length_from_root() {
+        let path = "/starship/engines/booster";
+        let output = truncate(path.to_string(), 3);
+        assert_eq!(output, "/starship/engines/booster");
+    }
+
+    #[test]
+    fn truncate_larger_path_than_provided_length_from_root() {
+        let path = "/starship/engines/booster/rocket";
+        let output = truncate(path.to_string(), 3);
+        assert_eq!(output, "engines/booster/rocket");
     }
 
     #[test]
