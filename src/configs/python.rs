@@ -6,9 +6,9 @@ use starship_module_config_derive::ModuleConfig;
 #[derive(Clone, ModuleConfig)]
 pub struct PythonConfig<'a> {
     pub symbol: SegmentConfig<'a>,
-    pub pyenv_version_name: bool,
-    pub pyenv_prefix: SegmentConfig<'a>,
     pub version: SegmentConfig<'a>,
+    pub pyenv_prefix: SegmentConfig<'a>,
+    pub pyenv_version_name: bool,
     pub style: Style,
     pub disabled: bool,
 }
