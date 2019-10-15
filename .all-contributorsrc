@@ -421,6 +421,26 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "LukeAI",
+      "name": "LukeAI",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/43993778?v=4",
+      "profile": "https://github.com/LukeAI",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "zekesonxx",
+      "name": "Zach Mertes",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/965509?v=4",
+      "profile": "https://github.com/zekesonxx",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7

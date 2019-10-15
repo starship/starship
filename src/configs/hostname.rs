@@ -8,6 +8,7 @@ pub struct HostnameConfig<'a> {
     pub ssh_only: bool,
     pub prefix: &'a str,
     pub suffix: &'a str,
+    pub trim_at: &'a str,
     pub style: Style,
     pub disabled: bool,
 }
@@ -18,6 +19,7 @@ impl<'a> RootModuleConfig<'a> for HostnameConfig<'a> {
             ssh_only: true,
             prefix: "",
             suffix: "",
+            trim_at: ".",
             style: Color::Green.bold().dimmed(),
             disabled: false,
         }
