@@ -19,11 +19,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // in the $PROMPT variable in zsh, % is a special character and needs to be escaped
     let shell = std::env::var("STARSHIP_SHELL").unwrap_or("bash".to_owned());
-    let percent_sign = if shell == "zsh" {
-        "%%"
-    } else {
-        "%"
-    };
+    let percent_sign = if shell == "zsh" { "%%" } else { "%" };
 
     if config.disabled {
         return None;
