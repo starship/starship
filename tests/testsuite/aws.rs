@@ -2,6 +2,7 @@ use std::fs::File;
 use std::io::{self, Write};
 
 use ansi_term::Color;
+use tempfile;
 
 use crate::common;
 
@@ -53,7 +54,7 @@ fn profile_set() -> io::Result<()> {
 
 #[test]
 fn default_profile_set() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
+    let dir = tempfile::tempdir()?;
     let config_path = dir.path().join("config");
     let mut file = File::create(&config_path)?;
 
@@ -79,7 +80,7 @@ region = us-east-2
 
 #[test]
 fn profile_and_config_set() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
+    let dir = tempfile::tempdir()?;
     let config_path = dir.path().join("config");
     let mut file = File::create(&config_path)?;
 

@@ -1,12 +1,13 @@
 use ansi_term::Color;
 use std::fs::File;
 use std::io;
+use tempfile;
 
 use crate::common;
 
 #[test]
 fn folder_without_ruby_files() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
+    let dir = tempfile::tempdir()?;
 
     let output = common::render_module("ruby")
         .arg("--path")
@@ -22,7 +23,7 @@ fn folder_without_ruby_files() -> io::Result<()> {
 #[test]
 #[ignore]
 fn folder_with_gemfile() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
+    let dir = tempfile::tempdir()?;
     File::create(dir.path().join("Gemfile"))?;
 
     let output = common::render_module("ruby")
@@ -39,7 +40,7 @@ fn folder_with_gemfile() -> io::Result<()> {
 #[test]
 #[ignore]
 fn folder_with_rb_file() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
+    let dir = tempfile::tempdir()?;
     File::create(dir.path().join("any.rb"))?;
 
     let output = common::render_module("ruby")
