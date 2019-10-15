@@ -30,6 +30,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     };
 
+    let trim_at = module.config_value_str("trim_at").unwrap_or(".");
+
+    //rustc doesn't let you do an "if" and an "if let" in the same if statement
+    // if this changes in the future this can become a lot cleaner
+    let host = if config.trim_at != "" {
+        if let Some(index) = host.find(config.trim_at) {
+            host.split_at(index).0
+        } else {
+            host.as_ref()
+        }
+    } else {
+        host.as_ref()
+    };
+
     module.set_style(config.style);
     module.new_segment(
         "hostname",
