@@ -17,6 +17,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("memory_usage");
     let config = MemoryConfig::try_load(module.config);
 
+    // in the $PROMPT variable in zsh, % is a special character and needs to be escaped
+    let shell = std::env::var("STARSHIP_SHELL").unwrap_or("bash".to_owned());
+    let percent_sign = if shell == "zsh" {
+        "%%"
+    } else {
+        "%"
+    };
+
     if config.disabled {
         return None;
     }
@@ -39,7 +47,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let show_percentage = config.show_percentage;
 
     let mut display = if show_percentage {
-        format!("{:.0}%%", percent_mem_used)
+        format!("{:.0}{}", percent_mem_used, percent_sign)
     } else {
         format!(
             "{}/{}",
@@ -58,7 +66,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "{} | {}",
             display,
             if show_percentage {
-                format!("{:.0}%%", percent_swap_used)
+                format!("{:.0}{}", percent_swap_used, percent_sign)
             } else {
                 format!(
                     "{}/{}",
