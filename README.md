@@ -201,6 +201,15 @@ The prompt shows information you need while you're working, while staying sleek 
    eval "$(starship init zsh)"
    ```
 
+   #### Powershell
+
+   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+
+   ```sh
+   # ~\Documents\PowerShell\Profile.ps1
+   Invoke-Expression (&starship init powershell)
+   ```
+
 ## 🔧 Configuration
 
 For details on how to configure Starship, check out our [documentation](https://starship.rs/config/).
