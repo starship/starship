@@ -1,6 +1,7 @@
-use ansi_term::Color;
-
 use super::{Context, Module};
+
+use crate::config::RootModuleConfig;
+use crate::configs::cmd_duration::CmdDurationConfig;
 
 /// Outputs the time it took the last command to execute
 ///
@@ -8,6 +9,7 @@ use super::{Context, Module};
 /// execute. Default is two seconds, but can be set by config option `min_time`.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("cmd_duration");
+    let config: CmdDurationConfig = CmdDurationConfig::try_load(module.config);
 
     let arguments = &context.arguments;
     let elapsed = arguments
@@ -16,36 +18,27 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .parse::<u64>()
         .ok()?;
 
-    let prefix = module
-        .config_value_str("prefix")
-        .unwrap_or("took ")
-        .to_owned();
-
-    let signed_config_min = module.config_value_i64("min_time").unwrap_or(2);
-
     /* TODO: Once error handling is implemented, warn the user if their config
     min time is nonsensical */
-    if signed_config_min < 0 {
+    if config.min_time < 0 {
         log::debug!(
             "[WARN]: min_time in [cmd_duration] ({}) was less than zero",
-            signed_config_min
+            config.min_time
         );
         return None;
     }
 
-    let config_min = signed_config_min as u64;
+    let config_min = config.min_time as u64;
 
     let module_color = match elapsed {
         time if time < config_min => return None,
-        _ => module
-            .config_value_style("style")
-            .unwrap_or_else(|| Color::Yellow.bold()),
+        _ => config.style,
     };
 
     module.set_style(module_color);
     module.new_segment(
         "cmd_duration",
-        &format!("{}{}", prefix, render_time(elapsed)),
+        &format!("{}{}", config.prefix, render_time(elapsed)),
     );
     module.get_prefix().set_value("");
 
