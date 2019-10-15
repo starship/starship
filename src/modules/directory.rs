@@ -1,8 +1,10 @@
-use ansi_term::Color;
 use path_slash::PathExt;
 use std::path::Path;
 
 use super::{Context, Module};
+
+use crate::config::{RootModuleConfig, SegmentConfig};
+use crate::configs::directory::DirectoryConfig;
 
 /// Creates a module with the current directory
 ///
@@ -16,27 +18,15 @@ use super::{Context, Module};
 /// Paths will be limited in length to `3` path components by default.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const HOME_SYMBOL: &str = "~";
-    const DIR_TRUNCATION_LENGTH: i64 = 3;
-    const FISH_STYLE_PWD_DIR_LENGTH: i64 = 0;
 
     let mut module = context.new_module("directory");
-    let module_color = module
-        .config_value_style("style")
-        .unwrap_or_else(|| Color::Cyan.bold());
-    module.set_style(module_color);
+    let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
 
-    let truncation_length = module
-        .config_value_i64("truncation_length")
-        .unwrap_or(DIR_TRUNCATION_LENGTH);
-    let truncate_to_repo = module.config_value_bool("truncate_to_repo").unwrap_or(true);
-    let fish_style_pwd_dir_length = module
-        .config_value_i64("fish_style_pwd_dir_length")
-        .unwrap_or(FISH_STYLE_PWD_DIR_LENGTH);
+    module.set_style(config.style);
 
     // Using environment PWD is the standard approach for determining logical path
-    let use_logical_path = module.config_value_bool("use_logical_path").unwrap_or(true);
     // If this is None for any reason, we fall back to reading the os-provided path
-    let logical_current_dir = if use_logical_path {
+    let logical_current_dir = if config.use_logical_path {
         match std::env::var("PWD") {
             Ok(x) => Some(x),
             Err(_) => {
@@ -58,7 +48,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = &context.get_repo().ok()?;
 
     let dir_string = match &repo.root {
-        Some(repo_root) if truncate_to_repo && (repo_root != &home_dir) => {
+        Some(repo_root) if config.truncate_to_repo && (repo_root != &home_dir) => {
             let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
 
             // Contract the path to the git repo root
@@ -69,21 +59,33 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     // Truncate the dir string to the maximum number of path components
-    let truncated_dir_string = truncate(dir_string, truncation_length as usize);
+    let truncated_dir_string = truncate(dir_string, config.truncation_length as usize);
 
-    if fish_style_pwd_dir_length > 0 {
+    if config.fish_style_pwd_dir_length > 0 {
         // If user is using fish style path, we need to add the segment first
         let contracted_home_dir = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
         let fish_style_dir = to_fish_style(
-            fish_style_pwd_dir_length as usize,
+            config.fish_style_pwd_dir_length as usize,
             contracted_home_dir,
             &truncated_dir_string,
         );
 
-        module.new_segment("path", &fish_style_dir);
+        module.create_segment(
+            "path",
+            &SegmentConfig {
+                value: &fish_style_dir,
+                style: None,
+            },
+        );
     }
 
-    module.new_segment("path", &truncated_dir_string);
+    module.create_segment(
+        "path",
+        &SegmentConfig {
+            value: &truncated_dir_string,
+            style: None,
+        },
+    );
 
     module.get_prefix().set_value("in ");
 

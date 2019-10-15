@@ -430,6 +430,17 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "zekesonxx",
+      "name": "Zach Mertes",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/965509?v=4",
+      "profile": "https://github.com/zekesonxx",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7

@@ -264,7 +264,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 | Variable   | Default         | Description                                                |
 | ---------- | --------------- | ---------------------------------------------------------- |
 | `min_time` | `2`             | Shortest duration to show time for.                        |
-| `prefix`   | `took`          | Prefix to display immediately before the command duration. |
+| `prefix`   | `took `         | Prefix to display immediately before the command duration. |
 | `style`    | `"bold yellow"` | The style for the module.                                  |
 | `disabled` | `false`         | Disables the `cmd_duration` module.                        |
 
@@ -428,7 +428,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 [git_branch]
 symbol = "🌱 "
-truncation_length = "4"
+truncation_length = 4
 truncation_symbol = ""
 ```
 
@@ -543,13 +543,14 @@ The `hostname` module shows the system hostname.
 
 ### Options
 
-| Variable   | Default               | Description                                          |
-| ---------- | --------------------- | ---------------------------------------------------- |
-| `ssh_only` | `true`                | Only show hostname when connected to an SSH session. |
-| `prefix`   | `""`                  | Prefix to display immediately before the hostname.   |
-| `suffix`   | `""`                  | Suffix to display immediately after the hostname.    |
-| `style`    | `"bold dimmed green"` | The style for the module.                            |
-| `disabled` | `false`               | Disables the `hostname` module.                      |
+| Variable   | Default               | Description                                                                                                                          |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
+| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
+| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### Example
 
@@ -560,6 +561,7 @@ The `hostname` module shows the system hostname.
 ssh_only = false
 prefix = "⟪"
 suffix = "⟫"
+trim_at = ".companyname.com"
 disabled = false
 ```
 
