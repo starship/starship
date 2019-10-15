@@ -4,7 +4,10 @@ on:
     paths-ignore:
       - "docs/**"
       - "**.md"
-  pull_request: []
+  pull_request:
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
 
 jobs:
   # Run the `rustfmt` code formatter
