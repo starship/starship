@@ -441,6 +441,17 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "davidkna",
+      "name": "David Knaack",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/835177?v=4",
+      "profile": "https://github.com/davidkna",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
