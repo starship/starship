@@ -36,17 +36,10 @@ pub fn render_module(module_name: &str) -> process::Command {
     command
 }
 
-/// Create a temporary directory with full access permissions (rwxrwxrwt).
-pub fn new_tempdir() -> io::Result<tempfile::TempDir> {
-    //  Using `tempfile::TempDir` directly creates files on macOS within
-    // "/var/folders", which provides us with restricted permissions (rwxr-xr-x)
-    tempfile::tempdir_in("/tmp")
-}
-
 /// Create a repo from the fixture to be used in git module tests
 pub fn create_fixture_repo() -> io::Result<PathBuf> {
-    let fixture_repo_path = new_tempdir()?.path().join("fixture");
-    let repo_path = new_tempdir()?.path().join("rocket");
+    let fixture_repo_path = tempfile::tempdir()?.path().join("fixture");
+    let repo_path = tempfile::tempdir()?.path().join("rocket");
     let fixture_path = env::current_dir()?.join("tests/fixtures/rocket.bundle");
 
     let fixture_repo_dir = path_str(&fixture_repo_path)?;
