@@ -58,7 +58,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "{} | {}",
             display,
             if show_percentage {
-                format!("{:.0}%", percent_swap_used)
+                format!("{:.0}%%", percent_swap_used)
             } else {
                 format!(
                     "{}/{}",
