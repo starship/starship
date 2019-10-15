@@ -1,8 +1,13 @@
 pub mod aws;
 pub mod battery;
 pub mod character;
+pub mod cmd_duration;
 pub mod conda;
+pub mod directory;
 pub mod dotnet;
+pub mod env_var;
+pub mod git_branch;
+pub mod go;
 pub mod hostname;
 pub mod jobs;
 pub mod kubernetes;

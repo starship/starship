@@ -7,6 +7,7 @@ use starship_module_config_derive::ModuleConfig;
 pub struct AwsConfig<'a> {
     pub symbol: SegmentConfig<'a>,
     pub profile: SegmentConfig<'a>,
+    pub region: SegmentConfig<'a>,
     pub style: Style,
     pub disabled: bool,
 }
@@ -14,8 +15,9 @@ pub struct AwsConfig<'a> {
 impl<'a> RootModuleConfig<'a> for AwsConfig<'a> {
     fn new() -> Self {
         AwsConfig {
-            symbol: SegmentConfig::new("☁️ "),
+            symbol: SegmentConfig::new("☁️  "),
             profile: SegmentConfig::default(),
+            region: SegmentConfig::default(),
             style: Color::Yellow.bold(),
             disabled: false,
         }
