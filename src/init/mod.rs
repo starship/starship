@@ -94,6 +94,21 @@ fi"#,
             );
             Some(script)
         }
+        Some("powershell") => {
+            // Explanation of syntax:
+            // &: Explicitly tells powershell to execute path with starship executable.
+            //
+            // @: multi-line stdout is returned as an array, but a single line or no lines
+            //    are returned as-is. @ ensures it's always an array.
+            //
+            // -join "`n": Joins the stdout array together as a string with newlines.
+            //             Powershell escapes with ` instead of \ thus `n translates to a newline.
+            let script = format!(
+                "Invoke-Expression (@(&\"{}\" init powershell --print-full-init) -join \"`n\")",
+                starship
+            );
+            Some(script)
+        }
         None => {
             println!(
                 "Invalid shell name provided: {}\\n\
@@ -130,6 +145,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         "bash" => Some(BASH_INIT),
         "zsh" => Some(ZSH_INIT),
         "fish" => Some(FISH_INIT),
+        "powershell" => Some(PWSH_INIT),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
@@ -168,3 +184,5 @@ const BASH_INIT: &str = include_str!("starship.bash");
 const ZSH_INIT: &str = include_str!("starship.zsh");
 
 const FISH_INIT: &str = include_str!("starship.fish");
+
+const PWSH_INIT: &str = include_str!("starship.ps1");

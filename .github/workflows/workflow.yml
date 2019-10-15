@@ -70,7 +70,7 @@ jobs:
           command: check
           args: --all
 
-  # Run tests on Linux, and macOS
+  # Run tests on Linux, macOS, and Windows
   # On both Rust stable and Rust nightly
   test:
     name: Test Suite
@@ -79,7 +79,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macOS-latest]
+        os: [ubuntu-latest, macOS-latest, windows-latest]
         rust: [stable, nightly]
     steps:
       # Checkout the branch being tested
@@ -109,7 +109,7 @@ jobs:
       # Install Python at a fixed version
       - uses: actions/setup-python@master
         with:
-          python-version: "3.6.9"
+          python-version: "3.7.4"
 
       # Install dotnet at a fixed version
       - uses: actions/setup-dotnet@master
@@ -187,6 +187,8 @@ jobs:
           - x86_64-unknown-linux-gnu
           - x86_64-unknown-linux-musl
           - x86_64-apple-darwin
+          - x86_64-pc-windows-gnu
+          - x86_64-pc-windows-msvc
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
@@ -197,6 +199,12 @@ jobs:
           - target: x86_64-apple-darwin
             os: macOS-latest
             name: starship-x86_64-apple-darwin.tar.gz
+          - target: x86_64-pc-windows-gnu
+            os: windows-latest
+            name: starship-x86_64-pc-windows-gnu.zip
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            name: starship-x86_64-pc-windows-msvc.zip
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
@@ -224,7 +232,7 @@ jobs:
           cd target/${{ matrix.target }}/release
           if [[ "${{ matrix.os }}" == "windows-latest" ]]
           then
-            7z a ../../../${{ matrix.name }} starship
+            7z a ../../../${{ matrix.name }} starship.exe
           else
             tar czvf ../../../${{ matrix.name }} starship
           fi

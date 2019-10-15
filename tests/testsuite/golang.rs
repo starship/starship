@@ -24,7 +24,7 @@ fn folder_without_go_files() -> io::Result<()> {
 #[ignore]
 fn folder_with_go_file() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
-    File::create(dir.path().join("main.go"))?;
+    File::create(dir.path().join("main.go"))?.sync_all()?;
 
     let output = common::render_module("golang")
         .arg("--path")
@@ -41,7 +41,7 @@ fn folder_with_go_file() -> io::Result<()> {
 #[ignore]
 fn folder_with_go_mod() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
-    File::create(dir.path().join("go.mod"))?;
+    File::create(dir.path().join("go.mod"))?.sync_all()?;
 
     let output = common::render_module("golang")
         .arg("--path")
@@ -58,7 +58,7 @@ fn folder_with_go_mod() -> io::Result<()> {
 #[ignore]
 fn folder_with_go_sum() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
-    File::create(dir.path().join("go.sum"))?;
+    File::create(dir.path().join("go.sum"))?.sync_all()?;
 
     let output = common::render_module("golang")
         .arg("--path")
@@ -93,7 +93,7 @@ fn folder_with_godeps() -> io::Result<()> {
 #[ignore]
 fn folder_with_glide_yaml() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
-    File::create(dir.path().join("glide.yaml"))?;
+    File::create(dir.path().join("glide.yaml"))?.sync_all()?;
 
     let output = common::render_module("golang")
         .arg("--path")
@@ -110,7 +110,7 @@ fn folder_with_glide_yaml() -> io::Result<()> {
 #[ignore]
 fn folder_with_gopkg_yml() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
-    File::create(dir.path().join("Gopkg.yml"))?;
+    File::create(dir.path().join("Gopkg.yml"))?.sync_all()?;
 
     let output = common::render_module("golang")
         .arg("--path")
@@ -127,7 +127,7 @@ fn folder_with_gopkg_yml() -> io::Result<()> {
 #[ignore]
 fn folder_with_gopkg_lock() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
-    File::create(dir.path().join("Gopkg.lock"))?;
+    File::create(dir.path().join("Gopkg.lock"))?.sync_all()?;
 
     let output = common::render_module("golang")
         .arg("--path")

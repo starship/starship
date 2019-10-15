@@ -8,9 +8,15 @@ use std::{env, fs, io, process};
 static MANIFEST_DIR: Lazy<&'static Path> = Lazy::new(|| Path::new(env!("CARGO_MANIFEST_DIR")));
 static EMPTY_CONFIG: Lazy<PathBuf> = Lazy::new(|| MANIFEST_DIR.join("empty_config.toml"));
 
+#[cfg(windows)]
+const EXE_PATH: &str = "./target/debug/starship.exe";
+
+#[cfg(not(windows))]
+const EXE_PATH: &str = "./target/debug/starship";
+
 /// Render the full starship prompt
 pub fn render_prompt() -> process::Command {
-    let mut command = process::Command::new("./target/debug/starship");
+    let mut command = process::Command::new(EXE_PATH);
 
     command
         .arg("prompt")
@@ -23,7 +29,7 @@ pub fn render_prompt() -> process::Command {
 
 /// Render a specific starship module by name
 pub fn render_module(module_name: &str) -> process::Command {
-    let binary = fs::canonicalize("./target/debug/starship").unwrap();
+    let binary = fs::canonicalize(EXE_PATH).unwrap();
     let mut command = process::Command::new(binary);
 
     command
@@ -44,31 +50,37 @@ pub fn create_fixture_repo() -> io::Result<PathBuf> {
 
     let fixture_repo_dir = path_str(&fixture_repo_path)?;
     let repo_dir = path_str(&repo_path)?;
-    let fixture = path_str(&fixture_path)?;
 
     Command::new("git")
-        .args(&["clone", "-b", "master", fixture, fixture_repo_dir])
+        .args(&["clone", "-b", "master"])
+        .args(&[&fixture_path, &repo_path])
         .output()?;
 
-    git2::Repository::clone(fixture_repo_dir, repo_dir).ok();
+    git2::Repository::clone(&fixture_repo_dir, &repo_dir).ok();
 
     Command::new("git")
         .args(&["config", "--local", "user.email", "starship@example.com"])
-        .current_dir(repo_dir)
+        .current_dir(&repo_path)
         .output()?;
 
     Command::new("git")
         .args(&["config", "--local", "user.name", "starship"])
-        .current_dir(repo_dir)
+        .current_dir(&repo_path)
+        .output()?;
+
+    Command::new("git")
+        .args(&["reset", "--hard", "HEAD"])
+        .current_dir(&repo_path)
         .output()?;
 
     Ok(repo_path)
 }
 
-fn path_str(repo_dir: &PathBuf) -> io::Result<&str> {
+fn path_str(repo_dir: &PathBuf) -> io::Result<String> {
     repo_dir
         .to_str()
         .ok_or_else(|| Error::from(ErrorKind::Other))
+        .map(|i| i.replace("\\", "/"))
 }
 
 /// Extends `std::process::Command` with methods for testing
