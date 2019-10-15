@@ -4,8 +4,11 @@ use std::io;
 
 use crate::common;
 
+/// Wrapper around common::render_module("nodejs") to work around platform quirks
 fn render_node_module() -> std::process::Command {
     let mut command = common::render_module("nodejs");
+
+    // If SYSTEMROOT is not set on Windows node will refuse to print its version
     if cfg!(windows) {
         let system_root = std::env::var("SYSTEMROOT")
             .map(|i| {

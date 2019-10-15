@@ -95,6 +95,14 @@ fi"#,
             Some(script)
         }
         Some("powershell") => {
+            // Explanation of syntax:
+            // &: Explicitly tells powershell to execute path with starship executable.
+            //
+            // @: multi-line stdout is returned as an array, but a single line or no lines
+            //    are returned as-is. @ ensures it's always an array.
+            //
+            // -join "`n": Joins the stdout array together as a string with newlines.
+            //             Powershell escapes with ` instead of \ thus `n translates to a newline.
             let script = format!(
                 "Invoke-Expression (@(&\"{}\" init powershell --print-full-init) -join \"`n\")",
                 starship
