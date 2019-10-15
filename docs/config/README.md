@@ -428,7 +428,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 [git_branch]
 symbol = "🌱 "
-truncation_length = "4"
+truncation_length = 4
 truncation_symbol = ""
 ```
 

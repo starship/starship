@@ -6,6 +6,7 @@ pub mod conda;
 pub mod directory;
 pub mod dotnet;
 pub mod env_var;
+pub mod git_branch;
 pub mod go;
 pub mod hostname;
 pub mod jobs;
