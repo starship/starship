@@ -199,7 +199,7 @@ jobs:
             name: starship-x86_64-pc-windows-msvc.zip
           - target: x86_64-pc-windows-gnu
             os: windows-latest
-            name: starship-x86_64-pc-windows-msvc.zip
+            name: starship-x86_64-pc-windows-gnu.zip
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
