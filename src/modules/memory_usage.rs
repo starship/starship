@@ -17,9 +17,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("memory_usage");
     let config = MemoryConfig::try_load(module.config);
 
-    // in the $PROMPT variable in zsh, % is a special character and needs to be escaped
-    let shell = std::env::var("STARSHIP_SHELL").unwrap_or("bash".to_owned());
-    let percent_sign = if shell == "zsh" { "%%" } else { "%" };
+    // TODO: Update when v1.0 printing refactor is implemented to only
+    // print escapes in a prompt context.
+    let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
+    let percent_sign = match shell.as_str() {
+        "zsh" => "%%", // % is an escape in zsh, see PROMPT in `man zshmisc`
+        "powershell" => "`%",
+        _ => "%",
+    };
 
     if config.disabled {
         return None;
