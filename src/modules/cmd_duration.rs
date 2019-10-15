@@ -9,10 +9,10 @@ use super::{Context, Module};
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("cmd_duration");
 
-    let arguments = &context.arguments;
-    let elapsed = arguments
-        .value_of("cmd_duration")
-        .unwrap_or("invalid_time")
+    let props = &context.properties;
+    let elapsed = props
+        .get("cmd_duration")
+        .unwrap_or(&"invalid_time".into())
         .parse::<u64>()
         .ok()?;
 

@@ -10,10 +10,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     module.set_style(config.style);
 
-    let arguments = &context.arguments;
-    let num_of_jobs = arguments
-        .value_of("jobs")
-        .unwrap_or("0")
+    let props = &context.properties;
+    let num_of_jobs = props
+        .get("jobs")
+        .unwrap_or(&"0".into())
         .trim()
         .parse::<i64>()
         .ok()?;

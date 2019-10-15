@@ -4,10 +4,12 @@ use crate::module::Module;
 use clap::ArgMatches;
 use git2::{Repository, RepositoryState};
 use once_cell::sync::OnceCell;
+use std::collections::HashMap;
 use std::env;
 use std::ffi::OsStr;
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::string::String;
 
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering
@@ -22,8 +24,8 @@ pub struct Context<'a> {
     /// A vector containing the full paths of all the files in `current_dir`.
     dir_files: OnceCell<Vec<PathBuf>>,
 
-    /// The map of arguments that were passed when starship was called.
-    pub arguments: ArgMatches<'a>,
+    /// Properties to provide to modules.
+    pub properties: HashMap<&'a str, String>,
 
     /// Private field to store Git information for modules who need it
     repo: OnceCell<Repo>,
@@ -49,12 +51,22 @@ impl<'a> Context<'a> {
     {
         let config = StarshipConfig::initialize();
 
+        // Unwrap the clap arguments into a simple hashtable
+        // we only care about single arguments at this point, there isn't a
+        // use-case for a list of arguments yet.
+        let properties: HashMap<&str, std::string::String> = arguments
+            .args
+            .iter()
+            .filter(|(_, v)| !v.vals.is_empty())
+            .map(|(a, b)| (*a, b.vals.first().cloned().unwrap().into_string().unwrap()))
+            .collect();
+
         // TODO: Currently gets the physical directory. Get the logical directory.
         let current_dir = Context::expand_tilde(dir.into());
 
         Context {
             config,
-            arguments,
+            properties,
             current_dir,
             dir_files: OnceCell::new(),
             repo: OnceCell::new(),
