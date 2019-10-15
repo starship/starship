@@ -3,6 +3,7 @@ pub mod battery;
 pub mod character;
 pub mod conda;
 pub mod dotnet;
+pub mod git_branch;
 pub mod go;
 pub mod hostname;
 pub mod jobs;
