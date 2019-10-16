@@ -11,5 +11,9 @@ function fish_prompt
     set -l starship_duration (math --scale=0 "$CMD_DURATION / 1000")
     ::STARSHIP:: prompt --status=$exit_code --keymap=$keymap --cmd-duration=$starship_duration --jobs=(count (jobs -p))
 end
+
+# disable virtualenv prompt, it breaks starship
+set VIRTUAL_ENV_DISABLE_PROMPT 1
+
 function fish_mode_prompt; end
 export STARSHIP_SHELL="fish"
