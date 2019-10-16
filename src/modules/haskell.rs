@@ -38,7 +38,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_haskell_version() -> Option<String> {
-    match Command::new("stack").arg("ghc").arg("--").arg("--numeric-version").arg("--no-install-ghc").output() {
+    match Command::new("stack")
+        .arg("ghc")
+        .arg("--")
+        .arg("--numeric-version")
+        .arg("--no-install-ghc")
+        .output()
+    {
         Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
         Err(_) => None,
     }
