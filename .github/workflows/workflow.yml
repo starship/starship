@@ -170,7 +170,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: |
-          cd $(brew --prefix)
+          cd $(brew --repo homebrew/core)
           git fetch origin
           sudo git reset --hard origin/master
           cd -
