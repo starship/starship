@@ -1,39 +1,129 @@
+use crate::configs::StarshipRootConfig;
 use crate::utils;
-use std::env;
+use ansi_term::{Color, Style};
+
+use std::clone::Clone;
+use std::marker::Sized;
 
 use dirs::home_dir;
-use toml::value::Table;
-use toml::value::Value;
+use std::env;
+use toml::Value;
 
-use ansi_term::Color;
+/// Root config of a module.
+pub trait RootModuleConfig<'a>
+where
+    Self: ModuleConfig<'a>,
+{
+    /// Create a new root module config with default values.
+    fn new() -> Self;
 
-pub trait Config {
-    fn initialize() -> Table;
-    fn config_from_file() -> Option<Table>;
-    fn get_module_config(&self, module_name: &str) -> Option<&Table>;
+    /// Load root module config from given Value and fill unset variables with default
+    /// values.
+    fn load(config: &'a Value) -> Self {
+        Self::new().load_config(config)
+    }
 
-    // Config accessor methods
-    fn get_as_bool(&self, key: &str) -> Option<bool>;
-    fn get_as_str(&self, key: &str) -> Option<&str>;
-    fn get_as_i64(&self, key: &str) -> Option<i64>;
-    fn get_as_array(&self, key: &str) -> Option<&Vec<Value>>;
-    fn get_as_ansi_style(&self, key: &str) -> Option<ansi_term::Style>;
-
-    // Internal implementation for accessors
-    fn get_config(&self, key: &str) -> Option<&Value>;
+    /// Helper function that will call RootModuleConfig::load(config) if config is Some,
+    /// or RootModuleConfig::new() if config is None.
+    fn try_load(config: Option<&'a Value>) -> Self {
+        if let Some(config) = config {
+            Self::load(config)
+        } else {
+            Self::new()
+        }
+    }
 }
 
-impl Config for Table {
+/// Parsable config.
+pub trait ModuleConfig<'a>
+where
+    Self: Sized + Clone,
+{
+    /// Construct a `ModuleConfig` from a toml value.
+    fn from_config(_config: &'a Value) -> Option<Self> {
+        None
+    }
+
+    /// Merge `self` with config from a toml table.
+    fn load_config(&self, config: &'a Value) -> Self {
+        Self::from_config(config).unwrap_or_else(|| self.clone())
+    }
+}
+
+// TODO: Add logging to default implementations
+impl<'a> ModuleConfig<'a> for &'a str {
+    fn from_config(config: &'a Value) -> Option<Self> {
+        config.as_str()
+    }
+}
+
+impl<'a> ModuleConfig<'a> for Style {
+    fn from_config(config: &Value) -> Option<Self> {
+        parse_style_string(config.as_str()?)
+    }
+}
+
+impl<'a> ModuleConfig<'a> for bool {
+    fn from_config(config: &Value) -> Option<Self> {
+        config.as_bool()
+    }
+}
+
+impl<'a> ModuleConfig<'a> for i64 {
+    fn from_config(config: &Value) -> Option<Self> {
+        config.as_integer()
+    }
+}
+
+impl<'a> ModuleConfig<'a> for f64 {
+    fn from_config(config: &Value) -> Option<Self> {
+        config.as_float()
+    }
+}
+
+impl<'a, T> ModuleConfig<'a> for Vec<T>
+where
+    T: ModuleConfig<'a>,
+{
+    fn from_config(config: &'a Value) -> Option<Self> {
+        config
+            .as_array()?
+            .iter()
+            .map(|value| T::from_config(value))
+            .collect()
+    }
+}
+
+impl<'a, T> ModuleConfig<'a> for Option<T>
+where
+    T: ModuleConfig<'a> + Sized,
+{
+    fn from_config(config: &'a Value) -> Option<Self> {
+        Some(T::from_config(config))
+    }
+}
+
+/// Root config of starship.
+pub struct StarshipConfig {
+    pub config: Option<Value>,
+}
+
+impl StarshipConfig {
     /// Initialize the Config struct
-    fn initialize() -> Table {
+    pub fn initialize() -> Self {
         if let Some(file_data) = Self::config_from_file() {
-            return file_data;
+            StarshipConfig {
+                config: Some(file_data),
+            }
+        } else {
+            StarshipConfig {
+                config: Some(Value::Table(toml::value::Table::new())),
+            }
         }
-        Self::new()
     }
 
     /// Create a config from a starship configuration file
-    fn config_from_file() -> Option<Table> {
+    fn config_from_file() -> Option<Value> {
         let file_path = if let Ok(path) = env::var("STARSHIP_CONFIG") {
             // Use $STARSHIP_CONFIG as the config path if available
             log::debug!("STARSHIP_CONFIG is set: \n{}", &path);
@@ -63,109 +153,106 @@ impl Config for Table {
         Some(config)
     }
 
-    /// Get the config value for a given key
-    fn get_config(&self, key: &str) -> Option<&Value> {
-        log::trace!("Looking for config key \"{}\"", key);
-        let value = self.get(key);
-        log_if_key_found(key, value);
-        value
-    }
-
     /// Get the subset of the table for a module by its name
-    fn get_module_config(&self, key: &str) -> Option<&Table> {
-        log::trace!("Looking for module key \"{}\"", key);
-        let value = self.get(key);
-        log_if_key_found(key, value);
-        value.and_then(|value| {
-            let casted = Value::as_table(value);
-            log_if_type_correct(key, value, casted);
-            casted
-        })
+    pub fn get_module_config(&self, module_name: &str) -> Option<&Value> {
+        let module_config = self.config.as_ref()?.as_table()?.get(module_name);
+        if module_config.is_some() {
+            log::debug!(
+                "Config found for \"{}\": \n{:?}",
+                &module_name,
+                &module_config
+            );
+        } else {
+            log::trace!("No config found for \"{}\"", &module_name);
+        }
+        module_config
     }
 
-    /// Get a key from a module's configuration as a boolean
-    fn get_as_bool(&self, key: &str) -> Option<bool> {
-        log::trace!("Looking for boolean key \"{}\"", key);
-        let value = self.get(key);
-        log_if_key_found(key, value);
-        value.and_then(|value| {
-            let casted = Value::as_bool(value);
-            log_if_type_correct(key, value, casted);
-            casted
-        })
-    }
-
-    /// Get a key from a module's configuration as a string
-    fn get_as_str(&self, key: &str) -> Option<&str> {
-        log::trace!("Looking for string key \"{}\"", key);
-        let value = self.get(key);
-        log_if_key_found(key, value);
-        value.and_then(|value| {
-            let casted = Value::as_str(value);
-            log_if_type_correct(key, value, casted);
-            casted
-        })
-    }
-
-    /// Get a key from a module's configuration as an integer
-    fn get_as_i64(&self, key: &str) -> Option<i64> {
-        log::trace!("Looking for integer key \"{}\"", key);
-        let value = self.get(key);
-        log_if_key_found(key, value);
-        value.and_then(|value| {
-            let casted = Value::as_integer(value);
-            log_if_type_correct(key, value, casted);
-            casted
-        })
-    }
-
-    /// Get a key from a module's configuration as a vector
-    fn get_as_array(&self, key: &str) -> Option<&Vec<Value>> {
-        log::trace!("Looking for array key \"{}\"", key);
-        let value = self.get(key);
-        log_if_key_found(key, value);
-        value.and_then(|value| {
-            let casted = Value::as_array(value);
-            log_if_type_correct(key, value, casted);
-            casted
-        })
-    }
-
-    /// Get a text key and attempt to interpret it into an ANSI style.
-    fn get_as_ansi_style(&self, key: &str) -> Option<ansi_term::Style> {
-        // TODO: This should probably not unwrap to an empty new Style but inform the user about the problem
-        self.get_as_str(key)
-            .map(|x| parse_style_string(x).unwrap_or_default())
+    pub fn get_root_config(&self) -> StarshipRootConfig {
+        if let Some(root_config) = &self.config {
+            StarshipRootConfig::load(root_config)
+        } else {
+            StarshipRootConfig::new()
+        }
     }
 }
 
-fn log_if_key_found(key: &str, something: Option<&Value>) {
-    if something.is_some() {
-        log::trace!("Value found for \"{}\": {:?}", key, &something);
-    } else {
-        log::trace!("No value found for \"{}\"", key);
+#[derive(Clone)]
+pub struct SegmentConfig<'a> {
+    pub value: &'a str,
+    pub style: Option<Style>,
+}
+
+impl<'a> ModuleConfig<'a> for SegmentConfig<'a> {
+    fn from_config(config: &'a Value) -> Option<Self> {
+        match config {
+            Value::String(ref config_str) => Some(Self {
+                value: config_str,
+                style: None,
+            }),
+            Value::Table(ref config_table) => Some(Self {
+                value: config_table.get("value")?.as_str()?,
+                style: config_table.get("style").and_then(<Style>::from_config),
+            }),
+            _ => None,
+        }
+    }
+
+    fn load_config(&self, config: &'a Value) -> Self {
+        let mut new_config = self.clone();
+        match config {
+            Value::String(ref config_str) => {
+                new_config.value = config_str;
+            }
+            Value::Table(ref config_table) => {
+                if let Some(Value::String(value)) = config_table.get("value") {
+                    new_config.value = value;
+                };
+                if let Some(style) = config_table.get("style") {
+                    new_config.style = <Style>::from_config(style);
+                };
+            }
+            _ => {}
+        };
+        new_config
     }
 }
 
-fn log_if_type_correct<T: std::fmt::Debug>(
-    key: &str,
-    something: &Value,
-    casted_something: Option<T>,
-) {
-    if let Some(casted) = casted_something {
-        log::trace!(
-            "Value under key \"{}\" has the expected type. Proceeding with {:?} which was build from {:?}.",
-            key,
-            casted,
-            something
-            );
-    } else {
-        log::debug!(
-            "Value under key \"{}\" did not have the expected type. Instead received {} of type {}.",
-            key,
-            something,
-            something.type_str()
-            );
+impl<'a> SegmentConfig<'a> {
+    pub fn new(value: &'a str) -> Self {
+        Self { value, style: None }
+    }
+
+    /// Mutably set value
+    pub fn set_value(&mut self, value: &'a str) {
+        self.value = value;
+    }
+
+    /// Mutably set style
+    pub fn set_style(&mut self, style: Style) {
+        self.style = Some(style);
+    }
+
+    /// Immutably set value
+    pub fn with_value(&self, value: &'a str) -> Self {
+        Self {
+            value,
+            style: self.style,
+        }
+    }
+
+    /// Immutably set style
+    pub fn with_style(&self, style: Style) -> Self {
+        Self {
+            value: self.value,
+            style: Some(style),
+        }
+    }
+}
+
+impl Default for SegmentConfig<'static> {
+    fn default() -> Self {
+        Self::new("")
     }
 }
 
@@ -275,85 +362,190 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ansi_term::Style;
+    use starship_module_config_derive::ModuleConfig;
+    use toml;
 
     #[test]
-    fn table_get_nonexisting() {
-        let table = toml::value::Table::new();
-        assert_eq!(table.get_as_bool("boolean"), None);
+    fn test_load_config() {
+        #[derive(Clone, ModuleConfig)]
+        struct TestConfig<'a> {
+            pub symbol: &'a str,
+            pub disabled: bool,
+            pub some_array: Vec<&'a str>,
+        }
+
+        let config = toml::toml! {
+            symbol = "T "
+            disabled = true
+            some_array = ["A"]
+        };
+        let default_config = TestConfig {
+            symbol: "S ",
+            disabled: false,
+            some_array: vec!["A", "B", "C"],
+        };
+        let rust_config = default_config.load_config(&config);
+
+        assert_eq!(rust_config.symbol, "T ");
+        assert_eq!(rust_config.disabled, true);
+        assert_eq!(rust_config.some_array, vec!["A"]);
     }
 
     #[test]
-    fn table_get_config() {
-        let mut table = toml::value::Table::new();
-        table.insert(String::from("config"), Value::Boolean(true));
-        assert_eq!(table.get_config("config"), Some(&Value::Boolean(true)));
-    }
+    fn test_load_nested_config() {
+        #[derive(Clone, ModuleConfig)]
+        struct TestConfig<'a> {
+            pub untracked: SegmentDisplayConfig<'a>,
+            pub modified: SegmentDisplayConfig<'a>,
+        }
 
-    #[test]
-    fn table_get_as_bool() {
-        let mut table = toml::value::Table::new();
+        #[derive(PartialEq, Debug, Clone, ModuleConfig)]
+        struct SegmentDisplayConfig<'a> {
+            pub value: &'a str,
+            pub style: Style,
+        }
 
-        table.insert(String::from("boolean"), Value::Boolean(true));
-        assert_eq!(table.get_as_bool("boolean"), Some(true));
+        let config = toml::toml! {
+            untracked.value = "x"
+            modified = { value = "•", style = "red" }
+        };
 
-        table.insert(String::from("string"), Value::String(String::from("true")));
-        assert_eq!(table.get_as_bool("string"), None);
-    }
+        let default_config = TestConfig {
+            untracked: SegmentDisplayConfig {
+                value: "?",
+                style: Color::Red.bold(),
+            },
+            modified: SegmentDisplayConfig {
+                value: "!",
+                style: Color::Red.bold(),
+            },
+        };
+        let git_status_config = default_config.load_config(&config);
 
-    #[test]
-    fn table_get_as_str() {
-        let mut table = toml::value::Table::new();
-
-        table.insert(String::from("string"), Value::String(String::from("hello")));
-        assert_eq!(table.get_as_str("string"), Some("hello"));
-
-        table.insert(String::from("boolean"), Value::Boolean(true));
-        assert_eq!(table.get_as_str("boolean"), None);
-    }
-
-    #[test]
-    fn table_get_as_i64() {
-        let mut table = toml::value::Table::new();
-
-        table.insert(String::from("integer"), Value::Integer(82));
-        assert_eq!(table.get_as_i64("integer"), Some(82));
-
-        table.insert(String::from("string"), Value::String(String::from("82")));
-        assert_eq!(table.get_as_bool("string"), None);
-    }
-
-    #[test]
-    fn table_get_as_array() {
-        let mut table = toml::value::Table::new();
-
-        table.insert(
-            String::from("array"),
-            Value::Array(vec![Value::Integer(1), Value::Integer(2)]),
+        assert_eq!(
+            git_status_config.untracked,
+            SegmentDisplayConfig {
+                value: "x",
+                style: Color::Red.bold(),
+            }
         );
         assert_eq!(
-            table.get_as_array("array"),
-            Some(&vec![Value::Integer(1), Value::Integer(2)])
+            git_status_config.modified,
+            SegmentDisplayConfig {
+                value: "•",
+                style: Color::Red.normal(),
+            }
         );
+    }
 
-        table.insert(String::from("string"), Value::String(String::from("82")));
-        assert_eq!(table.get_as_array("string"), None);
+    #[test]
+    fn test_load_optional_config() {
+        #[derive(Clone, ModuleConfig)]
+        struct TestConfig<'a> {
+            pub optional: Option<&'a str>,
+            pub hidden: Option<&'a str>,
+        }
+
+        let config = toml::toml! {
+            optional = "test"
+        };
+        let default_config = TestConfig {
+            optional: None,
+            hidden: None,
+        };
+        let rust_config = default_config.load_config(&config);
+
+        assert_eq!(rust_config.optional, Some("test"));
+        assert_eq!(rust_config.hidden, None);
+    }
+
+    #[test]
+    fn test_load_enum_config() {
+        #[derive(Clone, ModuleConfig)]
+        struct TestConfig {
+            pub switch_a: Switch,
+            pub switch_b: Switch,
+            pub switch_c: Switch,
+        }
+
+        #[derive(Debug, PartialEq, Clone)]
+        enum Switch {
+            ON,
+            OFF,
+        }
+
+        impl<'a> ModuleConfig<'a> for Switch {
+            fn from_config(config: &'a Value) -> Option<Self> {
+                match config.as_str()? {
+                    "on" => Some(Self::ON),
+                    "off" => Some(Self::OFF),
+                    _ => None,
+                }
+            }
+        }
+
+        let config = toml::toml! {
+            switch_a = "on"
+            switch_b = "any"
+        };
+        let default_config = TestConfig {
+            switch_a: Switch::OFF,
+            switch_b: Switch::OFF,
+            switch_c: Switch::OFF,
+        };
+        let rust_config = default_config.load_config(&config);
+
+        assert_eq!(rust_config.switch_a, Switch::ON);
+        assert_eq!(rust_config.switch_b, Switch::OFF);
+        assert_eq!(rust_config.switch_c, Switch::OFF);
+    }
+
+    #[test]
+    fn test_from_string() {
+        let config = Value::String(String::from("S"));
+        assert_eq!(<&str>::from_config(&config).unwrap(), "S");
+    }
+
+    #[test]
+    fn test_from_bool() {
+        let config = Value::Boolean(true);
+        assert_eq!(<bool>::from_config(&config).unwrap(), true);
+    }
+
+    #[test]
+    fn test_from_i64() {
+        let config = Value::Integer(42);
+        assert_eq!(<i64>::from_config(&config).unwrap(), 42);
+    }
+
+    #[test]
+    fn test_from_style() {
+        let config = Value::from("red bold");
+        assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.bold());
+    }
+
+    #[test]
+    fn test_from_vec() {
+        let config: Value = Value::Array(vec![Value::from("S")]);
+        assert_eq!(<Vec<&str>>::from_config(&config).unwrap(), vec!["S"]);
+    }
+
+    #[test]
+    fn test_from_option() {
+        let config: Value = Value::String(String::from("S"));
+        assert_eq!(<Option<&str>>::from_config(&config).unwrap(), Some("S"));
     }
 
     #[test]
     fn table_get_styles_bold_italic_underline_green_dimmy_silly_caps() {
-        let mut table = toml::value::Table::new();
-
-        table.insert(
-            String::from("mystyle"),
-            Value::String(String::from("bOlD ItAlIc uNdErLiNe GrEeN dimmed")),
-        );
-        assert!(table.get_as_ansi_style("mystyle").unwrap().is_bold);
-        assert!(table.get_as_ansi_style("mystyle").unwrap().is_italic);
-        assert!(table.get_as_ansi_style("mystyle").unwrap().is_underline);
-        assert!(table.get_as_ansi_style("mystyle").unwrap().is_dimmed);
+        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD");
+        let mystyle = <Style>::from_config(&config).unwrap();
+        assert!(mystyle.is_bold);
+        assert!(mystyle.is_italic);
+        assert!(mystyle.is_underline);
+        assert!(mystyle.is_dimmed);
         assert_eq!(
-            table.get_as_ansi_style("mystyle").unwrap(),
+            mystyle,
             ansi_term::Style::new()
                 .bold()
                 .italic()
@@ -365,56 +557,31 @@ mod tests {
 
     #[test]
     fn table_get_styles_plain_and_broken_styles() {
-        let mut table = toml::value::Table::new();
         // Test a "plain" style with no formatting
-        table.insert(String::from("plainstyle"), Value::String(String::from("")));
-        assert_eq!(
-            table.get_as_ansi_style("plainstyle").unwrap(),
-            ansi_term::Style::new()
-        );
+        let config = Value::from("");
+        let plain_style = <Style>::from_config(&config).unwrap();
+        assert_eq!(plain_style, ansi_term::Style::new());
 
         // Test a string that's clearly broken
-        table.insert(
-            String::from("broken"),
-            Value::String(String::from("djklgfhjkldhlhk;j")),
-        );
-        assert_eq!(
-            table.get_as_ansi_style("broken").unwrap(),
-            ansi_term::Style::new()
-        );
+        let config = Value::from("djklgfhjkldhlhk;j");
+        assert!(<Style>::from_config(&config).is_none());
 
         // Test a string that's nullified by `none`
-        table.insert(
-            String::from("nullified"),
-            Value::String(String::from("fg:red bg:green bold none")),
-        );
-        assert_eq!(
-            table.get_as_ansi_style("nullified").unwrap(),
-            ansi_term::Style::new()
-        );
+        let config = Value::from("fg:red bg:green bold none");
+        assert!(<Style>::from_config(&config).is_none());
 
         // Test a string that's nullified by `none` at the start
-        table.insert(
-            String::from("nullified-start"),
-            Value::String(String::from("none fg:red bg:green bold")),
-        );
-        assert_eq!(
-            table.get_as_ansi_style("nullified-start").unwrap(),
-            ansi_term::Style::new()
-        );
+        let config = Value::from("none fg:red bg:green bold");
+        assert!(<Style>::from_config(&config).is_none());
     }
 
     #[test]
     fn table_get_styles_ordered() {
-        let mut table = toml::value::Table::new();
-
         // Test a background style with inverted order (also test hex + ANSI)
-        table.insert(
-            String::from("flipstyle"),
-            Value::String(String::from("bg:#050505 underline fg:120")),
-        );
+        let config = Value::from("bg:#050505 underline fg:120");
+        let flipped_style = <Style>::from_config(&config).unwrap();
         assert_eq!(
-            table.get_as_ansi_style("flipstyle").unwrap(),
+            flipped_style,
             Style::new()
                 .underline()
                 .fg(Color::Fixed(120))
@@ -422,12 +589,10 @@ mod tests {
         );
 
         // Test that the last color style is always the one used
-        table.insert(
-            String::from("multistyle"),
-            Value::String(String::from("bg:120 bg:125 bg:127 fg:127 122 125")),
-        );
+        let config = Value::from("bg:120 bg:125 bg:127 fg:127 122 125");
+        let multi_style = <Style>::from_config(&config).unwrap();
         assert_eq!(
-            table.get_as_ansi_style("multistyle").unwrap(),
+            multi_style,
             Style::new().fg(Color::Fixed(125)).on(Color::Fixed(127))
         );
     }

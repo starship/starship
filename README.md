@@ -1,37 +1,35 @@
 <p align="center">
-  <br />
-  <img
+  <br /><img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
     alt="Starship – Cross-shell prompt"
   />
 </p>
 <p align="center">
-  <a href="https://crates.io/crates/starship">
-    <img src="https://badgen.net/crates/v/starship" alt="Crates.io version" />
-  </a>
-  <a href="https://dev.azure.com/starship-control/starship/_build">
-    <img
-      src="https://badgen.net/azure-pipelines/starship-control/starship/Starship%20Test%20Suite"
-      alt="Azure Pipelines Build Status"
-    />
-  </a>
-    <a href="https://repology.org/project/starship/versions">
-    <img src="https://repology.org/badge/tiny-repos/starship.svg" alt="Packaging status">
-  </a><br>
-  <a href="#contributors">
-    <img
-      src="https://badgen.net/badge/all%20contributors/20/orange"
+  <a href="https://github.com/starship/starship/actions"
+    ><img
+      src="https://github.com/starship/starship/workflows/Main%20workflow/badge.svg"
+      alt="GitHub Actions workflow status"
+  /></a>
+  <a href="https://crates.io/crates/starship"
+    ><img src="https://badgen.net/crates/v/starship" alt="Crates.io version"
+  /></a>
+  <a href="https://repology.org/project/starship/versions"
+    ><img
+      src="https://repology.org/badge/tiny-repos/starship.svg"
+      alt="Packaging status"/></a
+  ><br /><a href="#contributors"
+    ><img
+      src="https://badgen.net/badge/all%20contributors/42/orange"
       alt="All Contributors"
-    />
-  </a>
-  <a href="https://discord.gg/8Jzqu3T">
-    <img
+  /></a>
+  <a href="https://discord.gg/8Jzqu3T"
+    ><img
       src="https://badgen.net/badge/chat/on%20discord/7289da"
       alt="Chat on Discord"
-    />
-  </a>
+  /></a>
 </p>
+
 <h4 align="center">
   <br />
   <a href="https://starship.rs">Website</a>
@@ -40,6 +38,35 @@
   ·
   <a href="https://starship.rs/config/">Configuration</a>
 </h4>
+<p align="center">
+  <a href="https://github.com/starship/starship/blob/master/README.md"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png" alt="English"
+  /></a>
+  &#0020;
+  <a href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png" alt="日本語"
+  /></a>
+  &#0020;
+  <a href="https://translate.starship.rs/project/starship-prompt/zh-CN"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png" alt="简体中文"
+  /></a>
+  &#0020;
+  <a href="https://translate.starship.rs/project/starship-prompt/zh-TW"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png" alt="繁體中文"
+  /></a>
+  &#0020;
+  <a href="https://translate.starship.rs/project/starship-prompt/de"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png" alt="Deutsch"
+  /></a>
+  &#0020;
+  <a href="https://translate.starship.rs/project/starship-prompt/fr"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png" alt="Français"
+  /></a>
+  &#0020;
+  <a href="https://translate.starship.rs/project/starship-prompt/ru"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Русский"
+  /></a>
+</p>
 
 <h1></h1>
 
@@ -85,6 +112,8 @@ The prompt shows information you need while you're working, while staying sleek 
   - `✘` — deleted files
 - Execution time of the last command if it exceeds the set threshold
 - Indicator for jobs in the background (`✦`)
+- Current Kubernetes Cluster and Namespace (`☸`)
+- Current AWS profile (`☁️`)
 
 ## 🚀 Installation
 
@@ -129,6 +158,16 @@ The prompt shows information you need while you're working, while staying sleek 
    ```sh
    $ pkg install starship
    ```
+   
+   #### Other x86-64 Linux Platforms
+   
+   Download a prebuilt binary and place in /usr/local/bin/
+
+   ```sh
+   $ wget -q --show-progress https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz
+   $ tar xvf starship-x86_64-unknown-linux-gnu.tar.gz
+   $ sudo mv starship /usr/local/bin/
+   ```
 
 1. Add the init script to your shell's config file:
 
@@ -160,6 +199,15 @@ The prompt shows information you need while you're working, while staying sleek 
    # ~/.zshrc
 
    eval "$(starship init zsh)"
+   ```
+
+   #### Powershell
+
+   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+
+   ```sh
+   # ~\Documents\PowerShell\Profile.ps1
+   Invoke-Expression (&starship init powershell)
    ```
 
 ## 🔧 Configuration
@@ -207,7 +255,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/iamsauravsharma"><img src="https://avatars0.githubusercontent.com/u/38726015?v=4" width="100px;" alt="Saurav Sharma"/><br /><sub><b>Saurav Sharma</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=iamsauravsharma" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=iamsauravsharma" title="Documentation">📖</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/andytom"><img src="https://avatars1.githubusercontent.com/u/108836?v=4" width="100px;" alt="Thomas O'Donnell"/><br /><sub><b>Thomas O'Donnell</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=andytom" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=andytom" title="Tests">⚠️</a> <a href="https://github.com/starship/starship/commits?author=andytom" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/andytom"><img src="https://avatars1.githubusercontent.com/u/108836?v=4" width="100px;" alt="Thomas O'Donnell"/><br /><sub><b>Thomas O'Donnell</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=andytom" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=andytom" title="Tests">⚠️</a> <a href="https://github.com/starship/starship/commits?author=andytom" title="Documentation">📖</a> <a href="#review-andytom" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://github.com/bbigras"><img src="https://avatars1.githubusercontent.com/u/24027?v=4" width="100px;" alt="Bruno Bigras"/><br /><sub><b>Bruno Bigras</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=bbigras" title="Code">💻</a> <a href="#review-bbigras" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://neilkistner.com/"><img src="https://avatars1.githubusercontent.com/u/186971?v=4" width="100px;" alt="Neil Kistner"/><br /><sub><b>Neil Kistner</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=wyze" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=wyze" title="Tests">⚠️</a> <a href="#review-wyze" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="http://ca.linkedin.com/in/qstrahl"><img src="https://avatars3.githubusercontent.com/u/2235277?v=4" width="100px;" alt="Quinn Strahl"/><br /><sub><b>Quinn Strahl</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=qstrahl" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=qstrahl" title="Tests">⚠️</a></td>
@@ -228,9 +276,19 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/jakubclark"><img src="https://avatars0.githubusercontent.com/u/19486495?v=4" width="100px;" alt="Kuba Clark"/><br /><sub><b>Kuba Clark</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=jakubclark" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=jakubclark" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=jakubclark" title="Tests">⚠️</a></td>
     <td align="center"><a href="http://breax.org"><img src="https://avatars2.githubusercontent.com/u/862483?v=4" width="100px;" alt="Gimbar"/><br /><sub><b>Gimbar</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=gimbar" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=gimbar" title="Tests">⚠️</a> <a href="https://github.com/starship/starship/commits?author=gimbar" title="Documentation">📖</a></td>
     <td align="center"><a href="http://tomhotston.net"><img src="https://avatars0.githubusercontent.com/u/22729355?v=4" width="100px;" alt="Tom Hotston"/><br /><sub><b>Tom Hotston</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=TomHotston" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=TomHotston" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/bijancn"><img src="https://avatars3.githubusercontent.com/u/2117164?v=4" width="100px;" alt="Bijan Chokoufe Nejad"/><br /><sub><b>Bijan Chokoufe Nejad</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=bijancn" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=bijancn" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/bijancn"><img src="https://avatars3.githubusercontent.com/u/2117164?v=4" width="100px;" alt="Bijan Chokoufe Nejad"/><br /><sub><b>Bijan Chokoufe Nejad</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=bijancn" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=bijancn" title="Tests">⚠️</a> <a href="#review-bijancn" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://github.com/yuri1969"><img src="https://avatars3.githubusercontent.com/u/13468636?v=4" width="100px;" alt="yuri"/><br /><sub><b>yuri</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=yuri1969" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=yuri1969" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=yuri1969" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://github.com/TsubasaKawajiri"><img src="https://avatars2.githubusercontent.com/u/39114857?v=4" width="100px;" alt="TsubasaKawajiri"/><br /><sub><b>TsubasaKawajiri</b></sub></a><br /><a href="#translation-TsubasaKawajiri" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://github.com/qryxip"><img src="https://avatars2.githubusercontent.com/u/14125495?v=4" width="100px;" alt="Ryo Yamashita"/><br /><sub><b>Ryo Yamashita</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=qryxip" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://pbzweihander.github.io"><img src="https://avatars2.githubusercontent.com/u/15262528?v=4" width="100px;" alt="Thomas Lee"/><br /><sub><b>Thomas Lee</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=pbzweihander" title="Code">💻</a></td>
+    <td align="center"><a href="https://pt2121.github.io"><img src="https://avatars0.githubusercontent.com/u/616399?v=4" width="100px;" alt="(´⌣`ʃƪ)"/><br /><sub><b>(´⌣`ʃƪ)</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=pt2121" title="Code">💻</a></td>
+    <td align="center"><a href="https://southcla.ws"><img src="https://avatars1.githubusercontent.com/u/1636971?v=4" width="100px;" alt="Barnaby Keene"/><br /><sub><b>Barnaby Keene</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=Southclaws" title="Code">💻</a></td>
+    <td align="center"><a href="http://keawade.io/"><img src="https://avatars2.githubusercontent.com/u/7308850?v=4" width="100px;" alt="Keith Wade"/><br /><sub><b>Keith Wade</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=keawade" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=keawade" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/LukeAI"><img src="https://avatars3.githubusercontent.com/u/43993778?v=4" width="100px;" alt="LukeAI"/><br /><sub><b>LukeAI</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=LukeAI" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/zekesonxx"><img src="https://avatars1.githubusercontent.com/u/965509?v=4" width="100px;" alt="Zach Mertes"/><br /><sub><b>Zach Mertes</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=zekesonxx" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=zekesonxx" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=zekesonxx" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/davidkna"><img src="https://avatars2.githubusercontent.com/u/835177?v=4" width="100px;" alt="David Knaack"/><br /><sub><b>David Knaack</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=davidkna" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=davidkna" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=davidkna" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
