@@ -58,7 +58,7 @@ fn python_module(mut module: Module, pyenv_version_name: bool, python_version: S
         let formatted_version = format_python_version(&python_version);
         module.new_segment("version", &formatted_version);
         get_python_virtual_env()
-            .map(|virtual_env| module.new_segment("virtualenv", &format!("({})", virtual_env)));
+            .map(|virtual_env| module.new_segment("virtualenv", &format!(" ({})", virtual_env)));
     };
 
     module
