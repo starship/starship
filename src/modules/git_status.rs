@@ -1,7 +1,10 @@
 use ansi_term::Color;
 use git2::{Repository, StatusEntry};
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
+
+use crate::config::SegmentConfig;
+use crate::configs::git_status::GitStatusConfig;
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -26,7 +29,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const GIT_STATUS_UNTRACKED: &str = "?";
     const GIT_STATUS_STASHED: &str = "$";
     const GIT_STATUS_MODIFIED: &str = "!";
-    const GIT_STATUS_ADDED: &str = "+";
     const GIT_STATUS_RENAMED: &str = "»";
     const GIT_STATUS_DELETED: &str = "✘";
     const PREFIX: &str = "[";
@@ -38,7 +40,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repository = Repository::open(repo_root).ok()?;
 
     let mut module = context.new_module("git_status");
+    let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
+
     let show_sync_count = module.config_value_bool("show_sync_count").unwrap_or(false);
+
     let show_status_count = module
         .config_value_bool("show_status_count")
         .unwrap_or(false);
@@ -151,13 +156,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             show_status_count,
         );
 
-        new_segment_with_count(
+        create_segment_with_count(
             &mut module,
             "staged",
             repo_status.staged,
-            GIT_STATUS_ADDED,
-            show_status_count,
+            &config.staged,
+            config.staged_count_disabled
         );
+
+        if repo_status.staged > 0 {
+            module.create_segment("staged", &config.staged);
+
+            if !&config.staged_count_disabled {
+                 module.create_segment("staged_count", &config.staged.with_value(&repo_status.staged.to_string()));
+            }
+        }
 
         new_segment_with_count(
             &mut module,
@@ -173,6 +186,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     Some(module)
+}
+
+fn create_segment_with_count<'a>(
+    module: &mut Module<'a>,
+    name: &str,
+    count: usize,
+    config: &SegmentConfig<'a>,
+    count_disabled: bool,
+) {
+    if count > 0 {
+        module.create_segment(name, &config);
+
+        if !count_disabled {
+            module.create_segment(&format!("{}_count", name), &config.with_value(&count.to_string()));
+        }
+    }
+
 }
 
 /// Adds a segment with an optional count segment (e.g. "+2")
