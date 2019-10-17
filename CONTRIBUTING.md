@@ -99,7 +99,7 @@ If you are contributing to the design of Starship's website, the following secti
 
 After cloning the project, you can do the following to run the VuePress website on your local machine:
 
-1. cd into the /docs directory.
+1. `cd` into the `/docs` directory.
 2. Install the project dependencies:
 `npm install`
 3. Start the project in development mode:
