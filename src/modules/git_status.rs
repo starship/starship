@@ -22,9 +22,6 @@ use crate::configs::git_status::GitStatusConfig;
 ///   - `✘` — A file's deletion has been added to the staging area
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // This is the order that the sections will appear in
-    const GIT_STATUS_AHEAD: &str = "⇡";
-    const GIT_STATUS_BEHIND: &str = "⇣";
-    const GIT_STATUS_DIVERGED: &str = "⇕";
     const GIT_STATUS_STASHED: &str = "$";
     const PREFIX: &str = "[";
     const SUFFIX: &str = "] ";
@@ -37,11 +34,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_status");
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
 
-    let show_sync_count = module.config_value_bool("show_sync_count").unwrap_or(false);
-
-    let show_status_count = module
-        .config_value_bool("show_status_count")
-        .unwrap_or(false);
     let module_style = module
         .config_value_style("style")
         .unwrap_or_else(|| Color::Red.bold());
@@ -88,24 +80,24 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "conflicted",
             repo_status.conflicted,
             &config.conflicted,
-            config.conflicted_count_disabled
+            !config.conflicted_count_disabled
         );
     }
 
     // Add the ahead/behind segment
     if let Ok((ahead, behind)) = ahead_behind {
         let add_ahead = |m: &mut Module<'a>| {
-            new_segment_with_count(m, "ahead", ahead, GIT_STATUS_AHEAD, show_sync_count);
+            create_segment_with_count(m, "ahead", ahead, &config.ahead, config.show_sync_count);
         };
 
         let add_behind = |m: &mut Module<'a>| {
-            new_segment_with_count(m, "behind", behind, GIT_STATUS_BEHIND, show_sync_count);
+            create_segment_with_count(m, "behind", behind, &config.behind, config.show_sync_count);
         };
 
         if ahead > 0 && behind > 0 {
-            module.new_segment("diverged", GIT_STATUS_DIVERGED);
+            module.create_segment("diverged", &config.diverged);
 
-            if show_sync_count {
+            if config.show_sync_count {
                 add_ahead(&mut module);
                 add_behind(&mut module);
             }
@@ -132,7 +124,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "deleted",
             repo_status.deleted,
             &config.deleted,
-            config.deleted_count_disabled
+            !config.deleted_count_disabled
         );
 
         create_segment_with_count(
@@ -140,7 +132,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "renamed",
             repo_status.renamed,
             &config.renamed,
-            config.renamed_count_disabled
+            !config.renamed_count_disabled
         );
 
         create_segment_with_count(
@@ -148,7 +140,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "modified",
             repo_status.modified,
             &config.modified,
-            config.modified_count_disabled
+            !config.modified_count_disabled
         );
 
         create_segment_with_count(
@@ -156,7 +148,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "staged",
             repo_status.staged,
             &config.staged,
-            config.staged_count_disabled
+            !config.staged_count_disabled
         );
 
         create_segment_with_count(
@@ -164,7 +156,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "untracked",
             repo_status.untracked,
             &config.untracked,
-            config.untracked_count_disabled
+            !config.untracked_count_disabled
         );
     }
 
@@ -180,12 +172,12 @@ fn create_segment_with_count<'a>(
     name: &str,
     count: usize,
     config: &SegmentConfig<'a>,
-    count_disabled: bool,
+    show_count: bool,
 ) {
     if count > 0 {
         module.create_segment(name, &config);
 
-        if !count_disabled {
+        if show_count {
             module.create_segment(&format!("{}_count", name), &config.with_value(&count.to_string()));
         }
     }

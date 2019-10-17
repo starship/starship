@@ -5,6 +5,10 @@ use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct GitStatusConfig<'a> {
+    pub ahead: SegmentConfig<'a>,
+    pub behind: SegmentConfig<'a>,
+    pub diverged: SegmentConfig<'a>,
+    pub show_sync_count: bool,
     pub conflicted: SegmentConfig<'a>,
     pub conflicted_count_disabled: bool,
     pub deleted: SegmentConfig<'a>,
@@ -24,7 +28,11 @@ pub struct GitStatusConfig<'a> {
 impl<'a> RootModuleConfig<'a> for GitStatusConfig<'a> {
     fn new() -> Self {
         GitStatusConfig {
+            ahead: SegmentConfig::new("⇡"),
+            behind: SegmentConfig::new("⇣"),
+            diverged: SegmentConfig::new("⇕"),
             conflicted: SegmentConfig::new("="),
+            show_sync_count: false,
             conflicted_count_disabled: true,
             deleted: SegmentConfig::new("✘"),
             deleted_count_disabled: true,
