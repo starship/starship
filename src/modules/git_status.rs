@@ -22,15 +22,10 @@ use crate::configs::git_status::GitStatusConfig;
 ///   - `✘` — A file's deletion has been added to the staging area
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // This is the order that the sections will appear in
-    const GIT_STATUS_CONFLICTED: &str = "=";
     const GIT_STATUS_AHEAD: &str = "⇡";
     const GIT_STATUS_BEHIND: &str = "⇣";
     const GIT_STATUS_DIVERGED: &str = "⇕";
-    const GIT_STATUS_UNTRACKED: &str = "?";
     const GIT_STATUS_STASHED: &str = "$";
-    const GIT_STATUS_MODIFIED: &str = "!";
-    const GIT_STATUS_RENAMED: &str = "»";
-    const GIT_STATUS_DELETED: &str = "✘";
     const PREFIX: &str = "[";
     const SUFFIX: &str = "] ";
 
@@ -88,12 +83,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Add the conflicted segment
     if let Ok(repo_status) = repo_status {
-        new_segment_with_count(
+        create_segment_with_count(
             &mut module,
             "conflicted",
             repo_status.conflicted,
-            GIT_STATUS_CONFLICTED,
-            show_status_count,
+            &config.conflicted,
+            config.conflicted_count_disabled
         );
     }
 
@@ -132,28 +127,28 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Add all remaining status segments
     if let Ok(repo_status) = repo_status {
-        new_segment_with_count(
+        create_segment_with_count(
             &mut module,
             "deleted",
             repo_status.deleted,
-            GIT_STATUS_DELETED,
-            show_status_count,
+            &config.deleted,
+            config.deleted_count_disabled
         );
 
-        new_segment_with_count(
+        create_segment_with_count(
             &mut module,
             "renamed",
             repo_status.renamed,
-            GIT_STATUS_RENAMED,
-            show_status_count,
+            &config.renamed,
+            config.renamed_count_disabled
         );
 
-        new_segment_with_count(
+        create_segment_with_count(
             &mut module,
             "modified",
             repo_status.modified,
-            GIT_STATUS_MODIFIED,
-            show_status_count,
+            &config.modified,
+            config.modified_count_disabled
         );
 
         create_segment_with_count(
@@ -164,20 +159,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             config.staged_count_disabled
         );
 
-        if repo_status.staged > 0 {
-            module.create_segment("staged", &config.staged);
-
-            if !&config.staged_count_disabled {
-                 module.create_segment("staged_count", &config.staged.with_value(&repo_status.staged.to_string()));
-            }
-        }
-
-        new_segment_with_count(
+        create_segment_with_count(
             &mut module,
             "untracked",
             repo_status.untracked,
-            GIT_STATUS_UNTRACKED,
-            show_status_count,
+            &config.untracked,
+            config.untracked_count_disabled
         );
     }
 
