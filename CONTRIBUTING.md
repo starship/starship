@@ -101,8 +101,8 @@ After cloning the project, you can do the following to run the VuePress website 
 
 1. cd into the /docs directory.
 2. Install the project dependencies:
-```npm install```
+`npm install`
 3. Start the project in development mode:
-```npm run dev```
+`npm run dev`
 
 Once setup is complete, you can refer to VuePress documentation on the actual design implementation [here](https://v1.vuepress.vuejs.org/guide/).
