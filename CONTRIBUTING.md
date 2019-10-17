@@ -91,7 +91,7 @@ Benchmarks are located in the [`benches/`](benches) directory and are written us
 
 For the time being, benchmarks aren't actively used, but we plan to integrate benchmark comparison reporting into our CI pipeline in the near future. For the time being, they can be manually run with `cargo bench`.
 
-## Locally Running The VuePress Website
+## Running the Documentation Website Locally
 
 If you are contributing to the design of Starship's website, the following section will help you get started.
 
