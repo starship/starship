@@ -90,3 +90,19 @@ The reason for having _both_ the Dockerfile as well as the Azure Pipelines confi
 Benchmarks are located in the [`benches/`](benches) directory and are written using the [Criterion](https://crates.io/crates/criterion) library.
 
 For the time being, benchmarks aren't actively used, but we plan to integrate benchmark comparison reporting into our CI pipeline in the near future. For the time being, they can be manually run with `cargo bench`.
+
+## Locally Running The VuePress Website
+
+If you are contributing to the design of Starship's website, the following section will help you get started.
+
+### Setup
+
+After cloning the project, you can do the following to run the VuePress website on your local machine
+
+1. cd into the /docs directory.
+2. Install the project dependencies:
+```npm install```
+3. Start the project in development mode:
+```npm run dev```
+
+Once setup is complete, you can refer to VuePress documentation on the actual design implementation [here](https://v1.vuepress.vuejs.org/guide/).
