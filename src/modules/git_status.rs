@@ -1,4 +1,4 @@
-use ansi_term::Color;
+use ansi_term::{Color, Style};
 use git2::{Repository, StatusEntry};
 
 use super::{Context, Module, RootModuleConfig};
@@ -23,8 +23,6 @@ use crate::configs::git_status::GitStatusConfig;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // This is the order that the sections will appear in
     const GIT_STATUS_STASHED: &str = "$";
-    const PREFIX: &str = "[";
-    const SUFFIX: &str = "] ";
 
     let repo = context.get_repo().ok()?;
     let branch_name = repo.branch.as_ref()?;
@@ -34,27 +32,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_status");
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
 
-    let module_style = module
-        .config_value_style("style")
-        .unwrap_or_else(|| Color::Red.bold());
-    let start_symbol = module
-        .config_value_str("prefix")
-        .unwrap_or(PREFIX)
-        .to_owned();
-    let end_symbol = module
-        .config_value_str("suffix")
-        .unwrap_or(SUFFIX)
-        .to_owned();
-
     module
         .get_prefix()
-        .set_value(start_symbol)
-        .set_style(module_style);
+        .set_value(config.prefix)
+        .set_style(config.style);
     module
         .get_suffix()
-        .set_value(end_symbol)
-        .set_style(module_style);
-    module.set_style(module_style);
+        .set_value(config.suffix)
+        .set_style(config.style);
+    module.set_style(config.style);
 
     let ahead_behind = get_ahead_behind(&repository, branch_name);
     if ahead_behind == Ok((0, 0)) {

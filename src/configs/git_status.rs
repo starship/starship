@@ -21,6 +21,8 @@ pub struct GitStatusConfig<'a> {
     pub staged_count_disabled: bool,
     pub untracked: SegmentConfig<'a>,
     pub untracked_count_disabled: bool,
+    pub prefix: &'a str,
+    pub suffix: &'a str,
     pub style: Style,
     pub disabled: bool,
 }
@@ -44,6 +46,8 @@ impl<'a> RootModuleConfig<'a> for GitStatusConfig<'a> {
             staged_count_disabled: true,
             untracked: SegmentConfig::new("?"),
             untracked_count_disabled: true,
+            prefix: "[",
+            suffix: "] ",
             style: Color::Red.bold(),
             disabled: false,
         }
