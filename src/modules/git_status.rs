@@ -207,41 +207,54 @@ fn get_repo_status(repository: &Repository) -> Result<RepoStatus, git2::Error> {
     let repo_status: RepoStatus =
         repo_file_statuses
             .iter()
-            .fold(RepoStatus::default(), |mut repo_status, entry| {
-                count(&mut repo_status, entry);
-                repo_status
+            .fold(RepoStatus::default(), |repo_status, entry| {
+                count(repo_status, entry)
             });
 
     Ok(repo_status)
 }
 
 /// Increment RepoStatus counts for a given file status
-fn count(repo_status: &mut RepoStatus, status_entry: StatusEntry) {
+fn count(repo_status: RepoStatus, status_entry: StatusEntry) -> RepoStatus {
     let status = status_entry.status();
 
-    if status.is_conflicted() {
-        repo_status.conflicted += 1;
-    }
+    let repo_status = if status.is_conflicted() {
+        RepoStatus { conflicted: repo_status.conflicted + 1, .. repo_status }
+    } else {
+        repo_status
+    };    
 
-    if status.is_wt_deleted() || status.is_index_deleted() {
-        repo_status.deleted += 1;
-    }
+    let repo_status = if status.is_wt_deleted() || status.is_index_deleted() {
+        RepoStatus { deleted: repo_status.deleted + 1, .. repo_status }
+    } else {
+        repo_status
+    };
 
-    if status.is_wt_renamed() || status.is_index_renamed() {
-        repo_status.renamed += 1;
-    }
+    let repo_status = if status.is_wt_renamed() || status.is_index_renamed() {
+        RepoStatus { renamed: repo_status.renamed + 1, .. repo_status }
+    } else {
+        repo_status
+    };
 
-    if status.is_wt_modified() {
-        repo_status.modified += 1;
-    }
+    let repo_status = if status.is_wt_modified() {
+        RepoStatus { modified: repo_status.modified + 1, .. repo_status }
+    } else {
+        repo_status
+    };
 
-    if status.is_index_modified() || status.is_index_new() {
-        repo_status.staged += 1;
-    }
+    let repo_status = if status.is_index_modified() || status.is_index_new() {
+        RepoStatus { staged: repo_status.staged + 1, .. repo_status }
+    } else {
+        repo_status
+    };
 
-    if status.is_wt_new() {
-        repo_status.untracked += 1;
-    }
+    let repo_status = if status.is_wt_new() {
+        RepoStatus { untracked: repo_status.untracked + 1, .. repo_status }
+    } else {
+        repo_status
+    };
+
+    return repo_status;
 }
 
 /// Compares the current branch with the branch it is tracking to determine how
