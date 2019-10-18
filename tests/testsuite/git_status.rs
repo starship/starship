@@ -19,6 +19,7 @@ fn barrier() {
 }
 
 #[test]
+#[ignore]
 fn shows_behind() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -37,6 +38,7 @@ fn shows_behind() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_behind_with_count() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -62,6 +64,7 @@ fn shows_behind_with_count() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_ahead() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -81,6 +84,7 @@ fn shows_ahead() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_ahead_with_count() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -107,6 +111,7 @@ fn shows_ahead_with_count() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_diverged() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -125,6 +130,7 @@ fn shows_diverged() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_diverged_with_count() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -150,6 +156,7 @@ fn shows_diverged_with_count() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_conflicted() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -168,6 +175,7 @@ fn shows_conflicted() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_conflicted_with_count() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -190,6 +198,7 @@ fn shows_conflicted_with_count() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_untracked_file() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -208,6 +217,7 @@ fn shows_untracked_file() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_untracked_file_with_count() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -230,6 +240,7 @@ fn shows_untracked_file_with_count() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -254,6 +265,7 @@ fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_stashed() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
     barrier();
@@ -287,6 +299,7 @@ fn shows_stashed() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_modified() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -305,6 +318,7 @@ fn shows_modified() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_modified_with_count() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -327,6 +341,7 @@ fn shows_modified_with_count() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_staged_file() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -345,6 +360,7 @@ fn shows_staged_file() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_staged_file_with_count() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -367,6 +383,7 @@ fn shows_staged_file_with_count() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_renamed_file() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -385,6 +402,7 @@ fn shows_renamed_file() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_renamed_file_with_count() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -407,6 +425,7 @@ fn shows_renamed_file_with_count() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_deleted_file() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -425,6 +444,7 @@ fn shows_deleted_file() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn shows_deleted_file_with_count() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -450,6 +470,7 @@ fn shows_deleted_file_with_count() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn prefix() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
     File::create(repo_dir.join("prefix"))?.sync_all()?;
@@ -470,6 +491,7 @@ fn prefix() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn suffix() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
     File::create(repo_dir.join("suffix"))?.sync_all()?;
