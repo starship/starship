@@ -452,6 +452,15 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "CSumm",
+      "name": "Carl Summers",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/31711543?v=4",
+      "profile": "https://github.com/CSumm",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7
