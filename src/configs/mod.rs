@@ -11,6 +11,7 @@ pub mod go;
 pub mod hostname;
 pub mod jobs;
 pub mod kubernetes;
+pub mod package;
 pub mod python;
 pub mod ruby;
 pub mod rust;
