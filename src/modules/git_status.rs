@@ -1,4 +1,3 @@
-use ansi_term::{Color, Style};
 use git2::{Repository, StatusEntry};
 
 use super::{Context, Module, RootModuleConfig};
@@ -165,23 +164,6 @@ fn create_segment_with_count<'a>(
                 &format!("{}_count", name),
                 &config.with_value(&count.to_string()),
             );
-        }
-    }
-}
-
-/// Adds a segment with an optional count segment (e.g. "+2")
-fn new_segment_with_count<'a>(
-    module: &mut Module<'a>,
-    name: &str,
-    count: usize,
-    symbol: &str,
-    show_count: bool,
-) {
-    if count > 0 {
-        module.new_segment(name, symbol);
-
-        if show_count {
-            module.new_segment(&format!("{}_count", name), &count.to_string());
         }
     }
 }
