@@ -253,7 +253,7 @@ impl<'a> SegmentConfig<'a> {
     pub fn maybe_with_style(&self, style: Option<Style>) -> Self {
         Self {
             value: self.value,
-            style: style,
+            style,
         }
     }
 }

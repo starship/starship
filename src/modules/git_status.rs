@@ -271,7 +271,7 @@ fn count(repo_status: RepoStatus, status_entry: StatusEntry) -> RepoStatus {
         repo_status
     };
 
-    return repo_status;
+    repo_status
 }
 
 /// Compares the current branch with the branch it is tracking to determine how
