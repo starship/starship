@@ -1,24 +1,14 @@
-use ansi_term::Color;
-
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
 use byte_unit::{Byte, ByteUnit};
 use sysinfo::{RefreshKind, SystemExt};
 
+use crate::config::SegmentConfig;
+use crate::configs::memory_usage::MemoryUsageConfig;
+
 /// Creates a module with system memory usage information
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    const DEFAULT_THRESHOLD: i64 = 75;
-    const DEFAULT_SHOW_PERCENTAGE: bool = false;
-    const RAM_CHAR: &str = "🐏 ";
-
     let mut module = context.new_module("memory_usage");
-
-    if module.config_value_bool("disabled").unwrap_or(true) {
-        return None;
-    }
-
-    let module_style = module
-        .config_value_style("style")
-        .unwrap_or_else(|| Color::White.bold().dimmed());
+    let config = MemoryUsageConfig::try_load(module.config);
 
     let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_system());
 
@@ -30,19 +20,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let percent_mem_used = (used_memory_kib as f64 / total_memory_kib as f64) * 100.;
     let percent_swap_used = (used_swap_kib as f64 / total_swap_kib as f64) * 100.;
 
-    let threshold = module
-        .config_value_i64("threshold")
-        .unwrap_or(DEFAULT_THRESHOLD);
-
-    if percent_mem_used.round() < threshold as f64 {
+    if percent_mem_used.round() < config.threshold as f64 {
         return None;
     }
 
-    let show_percentage = module
-        .config_value_bool("show_percentage")
-        .unwrap_or(DEFAULT_SHOW_PERCENTAGE);
-
-    let (display_mem, display_swap) = if show_percentage {
+    let (display_mem, display_swap) = if config.show_percentage {
         (
             format!("{:.0}%", percent_mem_used),
             format!("{:.0}%", percent_swap_used),
@@ -69,20 +51,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         )
     };
 
-    let show_swap = module
-        .config_value_bool("show_swap")
-        .unwrap_or(total_swap_kib != 0);
+    module.create_segment("symbol", &config.symbol);
 
-    module.new_segment("symbol", RAM_CHAR);
-
-    module.set_style(module_style);
-    if show_swap {
-        module.new_segment(
+    module.set_style(config.style);
+    if config.show_swap {
+        module.create_segment(
             "memory_usage",
-            &format!("{} | {}", display_mem, display_swap),
+            &SegmentConfig::new("").with_value(&format!("{} | {}", display_mem, display_swap)),
         );
     } else {
-        module.new_segment("memory_usage", &display_mem);
+        module.create_segment(
+            "memory_usage",
+            &SegmentConfig::new("").with_value(&display_mem),
+        );
     }
 
     module.get_prefix().set_value("");
