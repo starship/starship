@@ -63,7 +63,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "conflicted",
             repo_status.conflicted,
             &config.conflicted,
-            !config.conflicted_count_disabled
+            !config.conflicted_count_disabled,
         );
     }
 
@@ -107,7 +107,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "deleted",
             repo_status.deleted,
             &config.deleted,
-            !config.deleted_count_disabled
+            !config.deleted_count_disabled,
         );
 
         create_segment_with_count(
@@ -115,7 +115,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "renamed",
             repo_status.renamed,
             &config.renamed,
-            !config.renamed_count_disabled
+            !config.renamed_count_disabled,
         );
 
         create_segment_with_count(
@@ -123,7 +123,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "modified",
             repo_status.modified,
             &config.modified,
-            !config.modified_count_disabled
+            !config.modified_count_disabled,
         );
 
         create_segment_with_count(
@@ -131,7 +131,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "staged",
             repo_status.staged,
             &config.staged,
-            !config.staged_count_disabled
+            !config.staged_count_disabled,
         );
 
         create_segment_with_count(
@@ -139,7 +139,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "untracked",
             repo_status.untracked,
             &config.untracked,
-            !config.untracked_count_disabled
+            !config.untracked_count_disabled,
         );
     }
 
@@ -161,10 +161,12 @@ fn create_segment_with_count<'a>(
         module.create_segment(name, &config);
 
         if show_count {
-            module.create_segment(&format!("{}_count", name), &config.with_value(&count.to_string()));
+            module.create_segment(
+                &format!("{}_count", name),
+                &config.with_value(&count.to_string()),
+            );
         }
     }
-
 }
 
 /// Adds a segment with an optional count segment (e.g. "+2")
