@@ -109,4 +109,4 @@ $ npm install
 $ npm run dev
 ```
 
-Once setup is complete, you can refer to VuePress documentation on the actual design implementation [here](https://v1.vuepress.vuejs.org/guide/).
+Once setup is complete, you can refer to VuePress documentation on the actual implementation here: https://vuepress.vuejs.org/guide/.
