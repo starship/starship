@@ -1,7 +1,8 @@
-use ansi_term::Color;
 use git2::{Repository, Status};
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
+
+use crate::configs::git_status::GitStatusConfig;
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -18,48 +19,23 @@ use super::{Context, Module};
 ///   - `»` — A renamed file has been added to the staging area
 ///   - `✘` — A file's deletion has been added to the staging area
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    // This is the order that the sections will appear in
-    const GIT_STATUS_CONFLICTED: &str = "=";
-    const GIT_STATUS_AHEAD: &str = "⇡";
-    const GIT_STATUS_BEHIND: &str = "⇣";
-    const GIT_STATUS_DIVERGED: &str = "⇕";
-    const GIT_STATUS_UNTRACKED: &str = "?";
-    const GIT_STATUS_STASHED: &str = "$";
-    const GIT_STATUS_MODIFIED: &str = "!";
-    const GIT_STATUS_ADDED: &str = "+";
-    const GIT_STATUS_RENAMED: &str = "»";
-    const GIT_STATUS_DELETED: &str = "✘";
-    const PREFIX: &str = "[";
-    const SUFFIX: &str = "] ";
-
     let repo = context.get_repo().ok()?;
     let branch_name = repo.branch.as_ref()?;
     let repo_root = repo.root.as_ref()?;
     let repository = Repository::open(repo_root).ok()?;
 
     let mut module = context.new_module("git_status");
-    let show_sync_count = module.config_value_bool("show_sync_count").unwrap_or(false);
-    let module_style = module
-        .config_value_style("style")
-        .unwrap_or_else(|| Color::Red.bold());
-    let start_symbol = module
-        .config_value_str("prefix")
-        .unwrap_or(PREFIX)
-        .to_owned();
-    let end_symbol = module
-        .config_value_str("suffix")
-        .unwrap_or(SUFFIX)
-        .to_owned();
+    let config = GitStatusConfig::try_load(module.config);
 
     module
         .get_prefix()
-        .set_value(start_symbol)
-        .set_style(module_style);
+        .set_value(config.prefix.value)
+        .set_style(config.style);
     module
         .get_suffix()
-        .set_value(end_symbol)
-        .set_style(module_style);
-    module.set_style(module_style);
+        .set_value(config.suffix.value)
+        .set_style(config.style);
+    module.set_style(config.style);
 
     let ahead_behind = get_ahead_behind(&repository, branch_name);
     if ahead_behind == Ok((0, 0)) {
@@ -81,32 +57,35 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Add the conflicted segment
     if let Ok(repo_status) = repo_status {
         if repo_status.is_conflicted() {
-            module.new_segment("conflicted", GIT_STATUS_CONFLICTED);
+            module.create_segment("conflicted", &config.conflicted);
         }
     }
 
     // Add the ahead/behind segment
     if let Ok((ahead, behind)) = ahead_behind {
         let add_ahead = |m: &mut Module<'a>| {
-            m.new_segment("ahead", GIT_STATUS_AHEAD);
+            m.create_segment("ahead", &config.ahead);
 
-            if show_sync_count {
-                m.new_segment("ahead_count", &ahead.to_string());
+            if config.show_sync_count {
+                m.create_segment("ahead_count", &config.ahead.with_value(&ahead.to_string()));
             }
         };
 
         let add_behind = |m: &mut Module<'a>| {
-            m.new_segment("behind", GIT_STATUS_BEHIND);
+            m.create_segment("behind", &config.behind);
 
-            if show_sync_count {
-                m.new_segment("behind_count", &behind.to_string());
+            if config.show_sync_count {
+                m.create_segment(
+                    "behind_count",
+                    &config.behind.with_value(&behind.to_string()),
+                );
             }
         };
 
         if ahead > 0 && behind > 0 {
-            module.new_segment("diverged", GIT_STATUS_DIVERGED);
+            module.create_segment("diverged", &config.diverged);
 
-            if show_sync_count {
+            if config.show_sync_count {
                 add_ahead(&mut module);
                 add_behind(&mut module);
             }
@@ -123,29 +102,29 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Add the stashed segment
     if stash_object.is_ok() {
-        module.new_segment("stashed", GIT_STATUS_STASHED);
+        module.create_segment("stashed", &config.stashed);
     }
 
     // Add all remaining status segments
     if let Ok(repo_status) = repo_status {
         if repo_status.is_wt_deleted() || repo_status.is_index_deleted() {
-            module.new_segment("deleted", GIT_STATUS_DELETED);
+            module.create_segment("deleted", &config.deleted);
         }
 
         if repo_status.is_wt_renamed() || repo_status.is_index_renamed() {
-            module.new_segment("renamed", GIT_STATUS_RENAMED);
+            module.create_segment("renamed", &config.renamed);
         }
 
         if repo_status.is_wt_modified() {
-            module.new_segment("modified", GIT_STATUS_MODIFIED);
+            module.create_segment("modified", &config.modified);
         }
 
         if repo_status.is_index_modified() || repo_status.is_index_new() {
-            module.new_segment("staged", GIT_STATUS_ADDED);
+            module.create_segment("staged", &config.staged);
         }
 
         if repo_status.is_wt_new() {
-            module.new_segment("untracked", GIT_STATUS_UNTRACKED);
+            module.create_segment("untracked", &config.untracked);
         }
     }
 
