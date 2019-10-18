@@ -43,9 +43,9 @@ impl<'a> RootModuleConfig<'a> for AwsConfig<'a> {
 impl<'a> ModuleConfig<'a> for AwsItems {
     fn from_config(config: &Value) -> Option<AwsItems> {
         match config {
-            Value::String(s) if s == "All" => Some(AwsItems::All),
-            Value::String(s) if s == "Region" => Some(AwsItems::Region),
-            Value::String(s) if s == "Profile" => Some(AwsItems::Profile),
+            Value::String(s) if s == "all" => Some(AwsItems::All),
+            Value::String(s) if s == "region" => Some(AwsItems::Region),
+            Value::String(s) if s == "profile" => Some(AwsItems::Profile),
             _ => None,
         }
     }
