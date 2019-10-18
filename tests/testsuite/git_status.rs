@@ -1,4 +1,4 @@
-use ansi_term::Color;
+use ansi_term::{Color, ANSIStrings};
 use std::fs::{self, File};
 use std::io;
 use std::path::PathBuf;
@@ -370,12 +370,18 @@ fn shows_staged_file_with_count() -> io::Result<()> {
         .use_config(toml::toml! {
             [git_status]
             staged_count.enabled = true
+            staged_count.style = "green"
         })
         .arg("--path")
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "+1")).to_string();
+    let expected = format!("{}", ANSIStrings(&[
+        Color::Red.bold().paint("[+"),
+        Color::Green.paint("1"),
+        Color::Red.bold().paint("] "),
+    ]));
+
 
     assert_eq!(expected, actual);
 
