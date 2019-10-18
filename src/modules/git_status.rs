@@ -21,9 +21,6 @@ use crate::configs::git_status::GitStatusConfig;
 ///   - `»` — A renamed file has been added to the staging area
 ///   - `✘` — A file's deletion has been added to the staging area
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    // This is the order that the sections will appear in
-    const GIT_STATUS_STASHED: &str = "$";
-
     let repo = context.get_repo().ok()?;
     let branch_name = repo.branch.as_ref()?;
     let repo_root = repo.root.as_ref()?;
@@ -100,7 +97,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Add the stashed segment
     if stash_object.is_ok() {
-        module.new_segment("stashed", GIT_STATUS_STASHED);
+        module.create_segment("stashed", &config.stashed);
     }
 
     // Add all remaining status segments
