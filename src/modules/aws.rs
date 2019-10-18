@@ -8,7 +8,7 @@ use dirs::home_dir;
 
 use super::{Context, Module, RootModuleConfig};
 
-use crate::configs::aws::{AwsItems, AwsConfig};
+use crate::configs::aws::{AwsConfig, AwsItems};
 
 fn get_aws_region_from_config(aws_profile: Option<&str>) -> Option<String> {
     let config_location = env::var("AWS_CONFIG_FILE")
@@ -44,34 +44,40 @@ fn get_aws_region_from_config(aws_profile: Option<&str>) -> Option<String> {
     Some(region.to_string())
 }
 
-fn get_aws_region() -> (String, String) {
+type Profile = String;
+type Region = String;
+
+fn get_aws_profile_and_region() -> (Option<Profile>, Option<Region>) {
     match (
         env::var("AWS_PROFILE").ok(),
         env::var("AWS_REGION").ok(),
         env::var("AWS_DEFAULT_REGION").ok(),
     ) {
-        (Some(p), Some(r), _) => (p, r),
-        (Some(p), None, None) => (p, String::new()),
-        (None, Some(r), None) => (String::new(), r),
-        (Some(ref p), None, Some(_)) => (
-            p.to_owned(),
-            get_aws_region_from_config(Some(p)).unwrap_or_default(),
-        ),
-        (None, None, Some(dr)) => (String::new(), dr),
-        (None, Some(r), Some(_)) => (String::new(), r),
-        (None, None, None) => (String::new(), String::new()),
+        (Some(p), Some(_), Some(dr)) => (Some(p), Some(dr)),
+        (Some(p), Some(r), None) => (Some(p), Some(r)),
+        (None, Some(r), None) => (None, Some(r)),
+        (Some(p), None, Some(dr)) => (Some(p), Some(dr)),
+        (Some(ref p), None, None) => (Some(p.to_owned()), get_aws_region_from_config(Some(p))),
+        (None, None, Some(dr)) => (None, Some(dr)),
+        (None, Some(_), Some(dr)) => (None, Some(dr)),
+        (None, None, None) => (None, get_aws_region_from_config(None)),
+    }
+}
+
+fn get_aws_region() -> Option<Region> {
+    match (
+        env::var("AWS_REGION").ok(),
+        env::var("AWS_DEFAULT_REGION").ok(),
+    ) {
+        (Some(r), None) => Some(r),
+        (None, Some(dr)) => Some(dr),
+        (Some(_), Some(dr)) => Some(dr),
+        (None, None) => get_aws_region_from_config(None),
     }
 }
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const AWS_PREFIX: &str = "on ";
-
-    let (aws_profile, aws_region) = get_aws_region();
-    if aws_profile.is_empty() && aws_region.is_empty() {
-        return None;
-    }
-
-    let aws_segment = format!("{} ({})", aws_profile, aws_region);
 
     let mut module = context.new_module("aws");
     let config: AwsConfig = AwsConfig::try_load(module.config);
@@ -82,9 +88,27 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     module.create_segment("symbol", &config.symbol);
     match config.displayed_items {
-        AwsItems::All => module.create_segment("all", &config.region.with_value(&aws_segment)),
-        AwsItems::Profile => module.create_segment("profile", &config.profile.with_value(&aws_profile)),
-        AwsItems::Region => module.create_segment("region", &config.region.with_value(&aws_region)),
+        AwsItems::All => {
+            let (aws_profile, aws_region) = get_aws_profile_and_region();
+
+            let aws_segment = match (&aws_profile, &aws_region) {
+                (None, None) => return None,
+                (Some(p), Some(r)) => format!("{}({})", p, r),
+                (Some(p), None) => format!("{}", p),
+                (None, Some(r)) => format!("{}", r),
+            };
+            module.create_segment("all", &config.region.with_value(&aws_segment));
+        }
+        AwsItems::Profile => {
+            let aws_profile = env::var("AWS_PROFILE").ok().unwrap_or_default();
+
+            module.create_segment("profile", &config.profile.with_value(&aws_profile));
+        }
+        AwsItems::Region => {
+            let aws_region = get_aws_region().unwrap_or_default();
+
+            module.create_segment("region", &config.region.with_value(&aws_region));
+        }
     };
 
     Some(module)
