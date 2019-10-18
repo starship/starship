@@ -184,7 +184,7 @@ fn shows_conflicted_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            conflicted_count_disabled = false
+            conflicted_count.enabled = true
         })
         .arg("--path")
         .arg(repo_dir)
@@ -226,7 +226,7 @@ fn shows_untracked_file_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            untracked_count_disabled = false
+            untracked_count.enabled = true
         })
         .arg("--path")
         .arg(repo_dir)
@@ -327,7 +327,7 @@ fn shows_modified_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            modified_count_disabled = false
+            modified_count.enabled = true
         })
         .arg("--path")
         .arg(repo_dir)
@@ -369,7 +369,7 @@ fn shows_staged_file_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            staged_count_disabled = false
+            staged_count.enabled = true
         })
         .arg("--path")
         .arg(repo_dir)
@@ -411,7 +411,7 @@ fn shows_renamed_file_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            renamed_count_disabled = false
+            renamed_count.enabled = true
         })
         .arg("--path")
         .arg(repo_dir)
@@ -453,7 +453,7 @@ fn shows_deleted_file_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            deleted_count_disabled = false
+            deleted_count.enabled = true
         })
         .arg("--path")
         .arg(repo_dir)

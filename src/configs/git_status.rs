@@ -11,17 +11,17 @@ pub struct GitStatusConfig<'a> {
     pub diverged: SegmentConfig<'a>,
     pub show_sync_count: bool,
     pub conflicted: SegmentConfig<'a>,
-    pub conflicted_count_disabled: bool,
+    pub conflicted_count: CountConfig,
     pub deleted: SegmentConfig<'a>,
-    pub deleted_count_disabled: bool,
+    pub deleted_count: CountConfig,
     pub renamed: SegmentConfig<'a>,
-    pub renamed_count_disabled: bool,
+    pub renamed_count: CountConfig,
     pub modified: SegmentConfig<'a>,
-    pub modified_count_disabled: bool,
+    pub modified_count: CountConfig,
     pub staged: SegmentConfig<'a>,
-    pub staged_count_disabled: bool,
+    pub staged_count: CountConfig,
     pub untracked: SegmentConfig<'a>,
-    pub untracked_count_disabled: bool,
+    pub untracked_count: CountConfig,
     pub prefix: &'a str,
     pub suffix: &'a str,
     pub style: Style,
@@ -37,21 +37,45 @@ impl<'a> RootModuleConfig<'a> for GitStatusConfig<'a> {
             diverged: SegmentConfig::new("⇕"),
             conflicted: SegmentConfig::new("="),
             show_sync_count: false,
-            conflicted_count_disabled: true,
+            conflicted_count: CountConfig {
+                enabled: false,
+                style: None,
+            },
             deleted: SegmentConfig::new("✘"),
-            deleted_count_disabled: true,
+            deleted_count: CountConfig {
+                enabled: false,
+                style: None,
+            },
             renamed: SegmentConfig::new("»"),
-            renamed_count_disabled: true,
+            renamed_count: CountConfig {
+                enabled: false,
+                style: None,
+            },
             modified: SegmentConfig::new("!"),
-            modified_count_disabled: true,
+            modified_count: CountConfig {
+                enabled: false,
+                style: None,
+            },
             staged: SegmentConfig::new("+"),
-            staged_count_disabled: true,
+            staged_count: CountConfig {
+                enabled: false,
+                style: None,
+            },
             untracked: SegmentConfig::new("?"),
-            untracked_count_disabled: true,
+            untracked_count: CountConfig {
+                enabled: false,
+                style: None,
+            },
             prefix: "[",
             suffix: "] ",
             style: Color::Red.bold(),
             disabled: false,
         }
     }
+}
+
+#[derive(Clone, Copy, ModuleConfig)]
+pub struct CountConfig {
+    pub enabled: bool,
+    pub style: Option<Style>,
 }

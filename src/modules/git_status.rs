@@ -3,7 +3,7 @@ use git2::{Repository, StatusEntry};
 use super::{Context, Module, RootModuleConfig};
 
 use crate::config::SegmentConfig;
-use crate::configs::git_status::GitStatusConfig;
+use crate::configs::git_status::{CountConfig, GitStatusConfig};
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -62,18 +62,36 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "conflicted",
             repo_status.conflicted,
             &config.conflicted,
-            !config.conflicted_count_disabled,
+            config.conflicted_count,
         );
     }
 
     // Add the ahead/behind segment
     if let Ok((ahead, behind)) = ahead_behind {
         let add_ahead = |m: &mut Module<'a>| {
-            create_segment_with_count(m, "ahead", ahead, &config.ahead, config.show_sync_count);
+            create_segment_with_count(
+                m,
+                "ahead",
+                ahead,
+                &config.ahead,
+                CountConfig {
+                    enabled: config.show_sync_count,
+                    style: None,
+                },
+            );
         };
 
         let add_behind = |m: &mut Module<'a>| {
-            create_segment_with_count(m, "behind", behind, &config.behind, config.show_sync_count);
+            create_segment_with_count(
+                m,
+                "behind",
+                behind,
+                &config.behind,
+                CountConfig {
+                    enabled: config.show_sync_count,
+                    style: None,
+                },
+            );
         };
 
         if ahead > 0 && behind > 0 {
@@ -106,7 +124,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "deleted",
             repo_status.deleted,
             &config.deleted,
-            !config.deleted_count_disabled,
+            config.deleted_count,
         );
 
         create_segment_with_count(
@@ -114,7 +132,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "renamed",
             repo_status.renamed,
             &config.renamed,
-            !config.renamed_count_disabled,
+            config.renamed_count,
         );
 
         create_segment_with_count(
@@ -122,7 +140,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "modified",
             repo_status.modified,
             &config.modified,
-            !config.modified_count_disabled,
+            config.modified_count,
         );
 
         create_segment_with_count(
@@ -130,7 +148,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "staged",
             repo_status.staged,
             &config.staged,
-            !config.staged_count_disabled,
+            config.staged_count,
         );
 
         create_segment_with_count(
@@ -138,7 +156,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "untracked",
             repo_status.untracked,
             &config.untracked,
-            !config.untracked_count_disabled,
+            config.untracked_count,
         );
     }
 
@@ -154,15 +172,15 @@ fn create_segment_with_count<'a>(
     name: &str,
     count: usize,
     config: &SegmentConfig<'a>,
-    show_count: bool,
+    count_config: CountConfig,
 ) {
     if count > 0 {
         module.create_segment(name, &config);
 
-        if show_count {
+        if count_config.enabled {
             module.create_segment(
                 &format!("{}_count", name),
-                &config.with_value(&count.to_string()),
+                &SegmentConfig::new(&count.to_string()).maybe_with_style(count_config.style),
             );
         }
     }
@@ -186,12 +204,11 @@ fn get_repo_status(repository: &Repository) -> Result<RepoStatus, git2::Error> {
         return Err(git2::Error::from_str("Repo has no status"));
     }
 
-    let repo_status: RepoStatus =
-        repo_file_statuses
-            .iter()
-            .fold(RepoStatus::default(), |repo_status, entry| {
-                count(repo_status, entry)
-            });
+    let repo_status: RepoStatus = repo_file_statuses
+        .iter()
+        .fold(RepoStatus::default(), |repo_status, entry| {
+            count(repo_status, entry)
+        });
 
     Ok(repo_status)
 }
@@ -201,37 +218,55 @@ fn count(repo_status: RepoStatus, status_entry: StatusEntry) -> RepoStatus {
     let status = status_entry.status();
 
     let repo_status = if status.is_conflicted() {
-        RepoStatus { conflicted: repo_status.conflicted + 1, .. repo_status }
+        RepoStatus {
+            conflicted: repo_status.conflicted + 1,
+            ..repo_status
+        }
     } else {
         repo_status
-    };    
+    };
 
     let repo_status = if status.is_wt_deleted() || status.is_index_deleted() {
-        RepoStatus { deleted: repo_status.deleted + 1, .. repo_status }
+        RepoStatus {
+            deleted: repo_status.deleted + 1,
+            ..repo_status
+        }
     } else {
         repo_status
     };
 
     let repo_status = if status.is_wt_renamed() || status.is_index_renamed() {
-        RepoStatus { renamed: repo_status.renamed + 1, .. repo_status }
+        RepoStatus {
+            renamed: repo_status.renamed + 1,
+            ..repo_status
+        }
     } else {
         repo_status
     };
 
     let repo_status = if status.is_wt_modified() {
-        RepoStatus { modified: repo_status.modified + 1, .. repo_status }
+        RepoStatus {
+            modified: repo_status.modified + 1,
+            ..repo_status
+        }
     } else {
         repo_status
     };
 
     let repo_status = if status.is_index_modified() || status.is_index_new() {
-        RepoStatus { staged: repo_status.staged + 1, .. repo_status }
+        RepoStatus {
+            staged: repo_status.staged + 1,
+            ..repo_status
+        }
     } else {
         repo_status
     };
 
     let repo_status = if status.is_wt_new() {
-        RepoStatus { untracked: repo_status.untracked + 1, .. repo_status }
+        RepoStatus {
+            untracked: repo_status.untracked + 1,
+            ..repo_status
+        }
     } else {
         repo_status
     };

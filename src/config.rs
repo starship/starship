@@ -248,6 +248,14 @@ impl<'a> SegmentConfig<'a> {
             style: Some(style),
         }
     }
+
+    /// Immutably set style
+    pub fn maybe_with_style(&self, style: Option<Style>) -> Self {
+        Self {
+            value: self.value,
+            style: style,
+        }
+    }
 }
 
 impl Default for SegmentConfig<'static> {
