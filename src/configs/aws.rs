@@ -1,8 +1,8 @@
 use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
 
-use toml::Value;
 use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
+use toml::Value;
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum AwsItems {
