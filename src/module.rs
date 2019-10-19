@@ -29,6 +29,7 @@ pub const ALL_MODULES: &[&str] = &[
     "memory_usage",
     "nix_shell",
     "nodejs",
+    "nodejs_npm",
     "package",
     "python",
     "ruby",

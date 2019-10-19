@@ -7,13 +7,14 @@ RUN mkdir /src && chmod -R a+w /src
 RUN useradd -ms /bin/bash nonroot
 USER nonroot
 
-# Install Node.js
+# Install Node.js and npm
 ENV NODE_VERSION 12.0.0
 ENV NVM_DIR /home/nonroot/.nvm
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 # Check that Node.js was correctly installed
 RUN node --version
+RUN npm --version
 
 # Install Go
 ENV GO_VERSION 1.12.1

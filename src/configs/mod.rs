@@ -12,6 +12,7 @@ pub mod hostname;
 pub mod jobs;
 pub mod kubernetes;
 pub mod nodejs;
+pub mod nodejs_npm;
 pub mod package;
 pub mod python;
 pub mod ruby;
@@ -51,6 +52,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "golang",
                 "java",
                 "nodejs",
+                "nodejs_npm",
                 "python",
                 "ruby",
                 "rust",
