@@ -62,7 +62,10 @@ fn profile_and_region_set() -> io::Result<()> {
         .env("AWS_PROFILE", "astronauts")
         .env("AWS_REGION", "ap-northeast-2")
         .output()?;
-    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  astronauts(ap-northeast-2)"));
+    let expected = format!(
+        "on {} ",
+        Color::Yellow.bold().paint("☁️  astronauts(ap-northeast-2)")
+    );
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
@@ -135,10 +138,7 @@ fn profile_and_region_set_and_only_display_region() -> io::Result<()> {
             displayed_items = "region"
         })
         .output()?;
-    let expected = format!(
-        "on {} ",
-        Color::Yellow.bold().paint("☁️  ap-northeast-1")
-    );
+    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  ap-northeast-1"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
@@ -155,10 +155,7 @@ fn profile_and_region_set_and_only_display_profile() -> io::Result<()> {
             displayed_items = "profile"
         })
         .output()?;
-    let expected = format!(
-        "on {} ",
-        Color::Yellow.bold().paint("☁️  astronauts")
-    );
+    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  astronauts"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
@@ -174,10 +171,7 @@ fn region_set_and_only_display_profile() -> io::Result<()> {
             displayed_items = "profile"
         })
         .output()?;
-    let expected = format!(
-        "on {} ",
-        Color::Yellow.bold().paint("☁️  ")
-    );
+    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  "));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())

@@ -94,8 +94,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let aws_segment = match (&aws_profile, &aws_region) {
                 (None, None) => return None,
                 (Some(p), Some(r)) => format!("{}({})", p, r),
-                (Some(p), None) => format!("{}", p),
-                (None, Some(r)) => format!("{}", r),
+                (Some(p), None) => p.to_string(),
+                (None, Some(r)) => r.to_string(),
             };
             module.create_segment("all", &config.region.with_value(&aws_segment));
         }
