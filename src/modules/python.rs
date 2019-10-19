@@ -49,7 +49,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         if let Some(virtual_env) = get_python_virtual_env() {
             module.create_segment(
                 "virtualenv",
-                &SegmentConfig::new(&format!("({})", virtual_env)),
+                &SegmentConfig::new(&format!(" ({})", virtual_env)),
             );
         };
     };

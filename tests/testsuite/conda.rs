@@ -5,7 +5,10 @@ use crate::common;
 
 #[test]
 fn not_in_env() -> io::Result<()> {
-    let output = common::render_module("conda").env_clear().output()?;
+    let output = common::render_module("conda")
+        .env_clear()
+        .env("PATH", env!("PATH"))
+        .output()?;
 
     let expected = "";
     let actual = String::from_utf8(output.stdout).unwrap();

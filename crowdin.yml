@@ -1,9 +1,8 @@
 files:
   - source: /docs/**/*.md
     ignore:
-      - /docs/%two_letters_code%
       - /docs/%locale%
       - /docs/guide
     translation: /docs/%locale%/**/%original_file_name%
   - source: /README.md
-    translation: /translations/%file_name%.%locale%.%file_extension%
+    translation: /docs/%locale%/guide/%file_name%.%file_extension%
