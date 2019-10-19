@@ -12,8 +12,13 @@ pub mod hostname;
 pub mod jobs;
 pub mod kubernetes;
 pub mod memory_usage;
+pub mod nodejs;
+pub mod package;
+pub mod python;
+pub mod ruby;
 pub mod rust;
 pub mod time;
+pub mod username;
 
 use crate::config::{ModuleConfig, RootModuleConfig};
 

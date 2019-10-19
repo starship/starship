@@ -441,6 +441,26 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "davidkna",
+      "name": "David Knaack",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/835177?v=4",
+      "profile": "https://github.com/davidkna",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "CSumm",
+      "name": "Carl Summers",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/31711543?v=4",
+      "profile": "https://github.com/CSumm",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7
