@@ -2,9 +2,9 @@ use std::env;
 use std::path::Path;
 use std::process::Command;
 
-use super::{Context, Module, RootModuleConfig};
+use ansi_term::Color;
 
-use crate::configs::python::PythonConfig;
+use super::{Context, Module};
 
 /// Creates a module with the current Python version
 ///
@@ -33,33 +33,32 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let mut module = context.new_module("python");
-    let config = PythonConfig::try_load(module.config);
+    let pyenv_version_name = module
+        .config_value_bool("pyenv_version_name")
+        .unwrap_or(false);
 
-    module.set_style(config.style);
-    module.create_segment("symbol", &config.symbol);
+    const PYTHON_CHAR: &str = "🐍 ";
+    let module_color = module
+        .config_value_style("style")
+        .unwrap_or_else(|| Color::Yellow.bold());
+    module.set_style(module_color);
+    module.new_segment("symbol", PYTHON_CHAR);
 
-    select_python_version(config.pyenv_version_name)
-        .map(|python_version| python_module(module, config.pyenv_version_name, python_version))
+    select_python_version(pyenv_version_name)
+        .map(|python_version| python_module(module, pyenv_version_name, python_version))
 }
 
 fn python_module(mut module: Module, pyenv_version_name: bool, python_version: String) -> Module {
-    let config = PythonConfig::try_load(module.config);
+    const PYENV_PREFIX: &str = "pyenv ";
 
     if pyenv_version_name {
-        module.create_segment("pyenv_prefix", &config.pyenv_prefix);
-        module.create_segment(
-            "version",
-            &config.version.with_value(&python_version.trim()),
-        );
+        module.new_segment("pyenv_prefix", PYENV_PREFIX);
+        module.new_segment("version", &python_version.trim());
     } else {
         let formatted_version = format_python_version(&python_version);
-        module.create_segment("version", &config.version.with_value(&formatted_version));
-        get_python_virtual_env().map(|virtual_env| {
-            module.create_segment(
-                "virtualenv",
-                &config.version.with_value(&format!(" ({})", virtual_env)),
-            )
-        });
+        module.new_segment("version", &formatted_version);
+        get_python_virtual_env()
+            .map(|virtual_env| module.new_segment("virtualenv", &format!(" ({})", virtual_env)));
     };
 
     module
