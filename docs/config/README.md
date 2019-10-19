@@ -95,6 +95,8 @@ prompt_order = [
     "golang",
     "java",
     "nodejs",
+    "nodejs_npm",
+    "nodejs_yarn",
     "python",
     "ruby",
     "rust",
@@ -758,6 +760,58 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [nodejs]
+symbol = "🤖 "
+```
+
+## NodeJS NPM
+
+The `nodejs_npm` module shows the currently installed version of npm.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `package.json` file
+- The current directory contains a `node_modules` directory
+- The current directory contains a file with the `.js` extension
+
+### Options
+
+| Variable   | Default      | Description                                           |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"npm "`     | The symbol used before displaying the version of npm. |
+| `style`    | `"bold red"` | The style for the module.                             |
+| `disabled` | `true`       | Disables the `nodejs_npm` module.                     |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[nodejs_npm]
+symbol = "🤖 "
+```
+
+## NodeJS Yarn
+
+The `nodejs_yarn` module shows the currently installed version of Yarn.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `package.json` file
+- The current directory contains a `node_modules` directory
+- The current directory contains a file with the `.js` extension
+
+### Options
+
+| Variable   | Default       | Description                                            |
+| ---------- | ------------- | ------------------------------------------------------ |
+| `symbol`   | `"🐈 "`       | The symbol used before displaying the version of yarn. |
+| `style`    | `"bold blue"` | The style for the module.                              |
+| `disabled` | `true`        | Disables the `nodejs_yarn` module.                     |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[nodejs_yarn]
 symbol = "🤖 "
 ```
 
