@@ -2,19 +2,12 @@ use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
 
 use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
-use toml::Value;
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, PartialEq)]
 pub enum AwsItems {
     All,
     Region,
     Profile,
-}
-
-impl std::fmt::Display for AwsItems {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "{:?}", self)
-    }
 }
 
 #[derive(Clone, ModuleConfig)]
@@ -41,7 +34,7 @@ impl<'a> RootModuleConfig<'a> for AwsConfig<'a> {
 }
 
 impl<'a> ModuleConfig<'a> for AwsItems {
-    fn from_config(config: &Value) -> Option<AwsItems> {
+    fn from_config(config: &toml::Value) -> Option<Self> {
         match config.as_str()? {
             "all" => Some(AwsItems::All),
             "region" => Some(AwsItems::Region),
