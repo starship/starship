@@ -12,7 +12,6 @@ pub mod hostname;
 pub mod jobs;
 pub mod kubernetes;
 pub mod memory_usage;
-pub mod package;
 pub mod rust;
 pub mod time;
 

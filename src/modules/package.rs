@@ -1,11 +1,9 @@
+use super::{Context, Module};
 use crate::utils;
 
+use ansi_term::Color;
 use serde_json as json;
 use toml;
-
-use super::{Context, Module, RootModuleConfig};
-
-use crate::configs::package::PackageConfig;
 
 /// Creates a module with the current package version
 ///
@@ -13,13 +11,17 @@ use crate::configs::package::PackageConfig;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     match get_package_version() {
         Some(package_version) => {
+            const PACKAGE_CHAR: &str = "📦 ";
+
             let mut module = context.new_module("package");
-            let config = PackageConfig::try_load(module.config);
-            module.set_style(config.style);
+            let module_style = module
+                .config_value_style("style")
+                .unwrap_or_else(|| Color::Red.bold());
+            module.set_style(module_style);
             module.get_prefix().set_value("is ");
 
-            module.create_segment("symbol", &config.symbol);
-            module.create_segment("version", &config.version.with_value(&package_version));
+            module.new_segment("symbol", PACKAGE_CHAR);
+            module.new_segment("version", &package_version);
 
             Some(module)
         }
