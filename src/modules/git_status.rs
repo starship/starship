@@ -262,16 +262,14 @@ fn count(repo_status: RepoStatus, status_entry: StatusEntry) -> RepoStatus {
         repo_status
     };
 
-    let repo_status = if status.is_wt_new() {
+    if status.is_wt_new() {
         RepoStatus {
             untracked: repo_status.untracked + 1,
             ..repo_status
         }
     } else {
         repo_status
-    };
-
-    repo_status
+    }
 }
 
 /// Compares the current branch with the branch it is tracking to determine how
