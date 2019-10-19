@@ -17,7 +17,8 @@ RUN node --version
 RUN npm --version
 
 # Install yarn
-ENV YARN_VERSION 1.19.1
+# Yarn version needs to match the version avilable in actions/setup-node.
+ENV YARN_VERSION 1.19.0
 ENV YARN_DIR /home/nonroot/.yarn
 ENV PATH $YARN_DIR/bin:$PATH
 RUN curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION

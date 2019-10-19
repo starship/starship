@@ -41,7 +41,7 @@ fn folder_with_package_json() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("with {} ", Color::Blue.bold().paint("🐈 v1.19.1"));
+    let expected = format!("with {} ", Color::Blue.bold().paint("🐈 v1.19.0"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -62,7 +62,7 @@ fn folder_with_js_file() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("with {} ", Color::Blue.bold().paint("🐈 v1.19.1"));
+    let expected = format!("with {} ", Color::Blue.bold().paint("🐈 v1.19.0"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -84,7 +84,7 @@ fn folder_with_node_modules() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("with {} ", Color::Blue.bold().paint("🐈 v1.19.1"));
+    let expected = format!("with {} ", Color::Blue.bold().paint("🐈 v1.19.0"));
     assert_eq!(expected, actual);
     Ok(())
 }
