@@ -6,11 +6,31 @@ use tempfile;
 use crate::common;
 use crate::common::TestCommand;
 
+/// Wrapper around common::render_module("nodejs_yarn") to work around platform quirks
+fn render_yarn_module() -> std::process::Command {
+    let mut command = common::render_module("nodejs_yarn");
+
+    // Appears to be the same issue as in the `nodejs` module.
+    if cfg!(windows) {
+        let system_root = std::env::var("SYSTEMROOT")
+            .map(|i| {
+                if i.trim().is_empty() {
+                    "C:\\WINDOWS".into()
+                } else {
+                    i
+                }
+            })
+            .unwrap_or_else(|_| "C:\\WINDOWS".into());
+        command.env("SYSTEMROOT", system_root);
+    }
+    command
+}
+
 #[test]
 fn folder_without_node_files() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
 
-    let output = common::render_module("nodejs_yarn")
+    let output = render_yarn_module()
         .use_config(toml::toml! {
             [nodejs_yarn]
             disabled = false
@@ -31,7 +51,7 @@ fn folder_with_package_json() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
     File::create(dir.path().join("package.json"))?.sync_all()?;
 
-    let output = common::render_module("nodejs_yarn")
+    let output = render_yarn_module()
         .use_config(toml::toml! {
             [nodejs_yarn]
             disabled = false
@@ -52,7 +72,7 @@ fn folder_with_js_file() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
     File::create(dir.path().join("index.js"))?.sync_all()?;
 
-    let output = common::render_module("nodejs_yarn")
+    let output = render_yarn_module()
         .use_config(toml::toml! {
             [nodejs_yarn]
             disabled = false
@@ -74,7 +94,7 @@ fn folder_with_node_modules() -> io::Result<()> {
     let node_modules = dir.path().join("node_modules");
     fs::create_dir_all(&node_modules)?;
 
-    let output = common::render_module("nodejs_yarn")
+    let output = render_yarn_module()
         .use_config(toml::toml! {
             [nodejs_yarn]
             disabled = false
