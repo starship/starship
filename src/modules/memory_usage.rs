@@ -10,6 +10,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("memory_usage");
     let config = MemoryUsageConfig::try_load(module.config);
 
+    if config.disabled {
+        return None;
+    }
+
     let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_system());
 
     let used_memory_kib = system.get_used_memory();
