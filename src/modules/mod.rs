@@ -19,6 +19,7 @@ mod memory_usage;
 mod nix_shell;
 mod nodejs;
 mod nodejs_npm;
+mod nodejs_yarn;
 mod package;
 mod python;
 mod ruby;
@@ -59,6 +60,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "nix_shell" => nix_shell::module(context),
         "nodejs" => nodejs::module(context),
         "nodejs_npm" => nodejs_npm::module(context),
+        "nodejs_yarn" => nodejs_yarn::module(context),
         "package" => package::module(context),
         "python" => python::module(context),
         "ruby" => ruby::module(context),

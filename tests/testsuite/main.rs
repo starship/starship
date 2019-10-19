@@ -18,6 +18,7 @@ mod modules;
 mod nix_shell;
 mod nodejs;
 mod nodejs_npm;
+mod nodejs_yarn;
 mod python;
 mod ruby;
 mod time;

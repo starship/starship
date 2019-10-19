@@ -16,6 +16,14 @@ RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | ba
 RUN node --version
 RUN npm --version
 
+# Install yarn
+ENV YARN_VERSION 1.19.1
+ENV YARN_DIR /home/nonroot/.yarn
+ENV PATH $YARN_DIR/bin:$PATH
+RUN curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
+# Check that yarn was correctly installed
+RUN yarn --version
+
 # Install Go
 ENV GO_VERSION 1.12.1
 ENV GOENV_ROOT /home/nonroot/.goenv

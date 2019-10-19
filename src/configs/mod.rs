@@ -13,6 +13,7 @@ pub mod jobs;
 pub mod kubernetes;
 pub mod nodejs;
 pub mod nodejs_npm;
+pub mod nodejs_yarn;
 pub mod package;
 pub mod python;
 pub mod ruby;
@@ -53,6 +54,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "java",
                 "nodejs",
                 "nodejs_npm",
+                "nodejs_yarn",
                 "python",
                 "ruby",
                 "rust",

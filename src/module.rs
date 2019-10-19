@@ -30,6 +30,7 @@ pub const ALL_MODULES: &[&str] = &[
     "nix_shell",
     "nodejs",
     "nodejs_npm",
+    "nodejs_yarn",
     "package",
     "python",
     "ruby",
