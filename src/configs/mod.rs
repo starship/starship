@@ -14,7 +14,6 @@ pub mod kubernetes;
 pub mod memory_usage;
 pub mod package;
 pub mod python;
-pub mod ruby;
 pub mod rust;
 pub mod time;
 
