@@ -68,6 +68,13 @@ fn get_pyenv_version() -> Option<String> {
 fn get_python_version() -> Option<String> {
     match Command::new("python").arg("--version").output() {
         Ok(output) => {
+            if !output.status.success() {
+                log::warn!(
+                    "Non-Zero exit code '{}' when executing `python --version`",
+                    output.status
+                );
+                return None;
+            }
             // We have to check both stdout and stderr since for Python versions
             // < 3.4, Python reports to stderr and for Python version >= 3.5,
             // Python reports to stdout
