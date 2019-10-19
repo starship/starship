@@ -57,13 +57,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if config.show_swap {
         module.create_segment(
             "memory_usage",
-            &SegmentConfig::new("").with_value(&format!("{} | {}", display_mem, display_swap)),
+            &SegmentConfig::new(&format!("{} | {}", display_mem, display_swap)),
         );
     } else {
-        module.create_segment(
-            "memory_usage",
-            &SegmentConfig::new("").with_value(&display_mem),
-        );
+        module.create_segment("memory_usage", &SegmentConfig::new(&display_mem));
     }
 
     module.get_prefix().set_value("");
