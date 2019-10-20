@@ -30,7 +30,7 @@
 
 <h4 align="center">
   <br />
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs">Site web</a>
   ·
   <a href="#-installation">Installation</a>
   ·
@@ -70,44 +70,44 @@
   <br>
 </p>
 
-## 🍬 Features
+## 🍬 Fonctionnalités
 
-- Prompt character turns red if the last command exits with non-zero code
-- Current username if not the same as the logged-in user
-- Current Java version(`☕`)
-- Current Node.js version(`⬢`)
-- Current Rust version (`🦀`)
-- Current Ruby version (`💎`)
-- Current Python version (`🐍`)
-- Current Go version (`🐹`)
-- Nix-shell environment detection
-- Print an environment variable
-- Current version of package in current directory (`📦`)
+- Le symbole de prompt devient rouge si la dernière commande a retournée un code différent de zéro
+- Affiche le nom de l'utilisateur courant s'il est différent de celui connecté
+- Version actuelle de Java (`☕`)
+- Version actuelle de Node.js (`⬢`)
+- Version actuelle de Rust (`🦀`)
+- Version actuelle de Ruby (`💎`)
+- Version actuelle de Python (`🐍`)
+- Version actuelle de Go (`🐹`)
+- Détection de l'environnement Nix-shell
+- Affiche une variable d'environnement
+- Version actuelle du paquet dans le répertoire courant (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-- Current battery level and status
-- Current Git branch and rich repo status:
-  - `=` — conflicting changes
-  - `⇡` — ahead of remote branch
-  - `⇣` — behind of remote branch
-  - `⇕` — diverged changes
-  - `?` — untracked changes
-  - `$` — stashed changes
-  - `!` — modified files
-  - `+` — added files
-  - `»` — renamed files
-  - `✘` — deleted files
-- Execution time of the last command if it exceeds the set threshold
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
+- Niveau et état actuels de la batterie
+- Branche Git actuelle et affichage "riche" du statut du dépôt:
+  - `=` — Conflits dans les changements
+  - `⇡` — En avance sur la branche distante
+  - `⇣` — En retard sur la branche distante
+  - `⇕` — Changements divergeant
+  - `?` — Changements non-suivis
+  - `$` — Changements remisés
+  - `!` — Fichiers modifiés
+  - `+` — Fichiers ajoutés
+  - `»` — Fichiers renommés
+  - `✘` — Fichiers supprimés
+- Temps d'exécution de la dernière commande si elle a excédée la limite
+- Indicateur pour les tâches en arrière-plan (`✦`)
+- Cluster et namespace Kubernetes actuels (`☸`)
 - Current AWS profile (`☁️`)
 
 ## 🚀 Installation
 
-### Prerequisites
+### Pré-requis
 
-- A [Powerline font](https://github.com/powerline/fonts) installed and enabled in your terminal (for example, try [Fira Code](https://github.com/tonsky/FiraCode)).
+- Une [police d'écriture Powerline](https://github.com/powerline/fonts) installée et activée dans votre terminal (Par exemple, essayez [Fira Code](https://github.com/tonsky/FiraCode)).
 
 ### Getting Started
 
