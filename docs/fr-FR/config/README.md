@@ -12,28 +12,28 @@ Pour commencer à configurer starship, créez le fichier suivant : `~/.config/st
 $ touch ~/.config/starship.toml
 ```
 
-All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
+Toute la configuration de starship est effectuée dans ce fichier [TOML](https://github.com/toml-lang/toml) :
 
 ```toml
-# Don't print a new line at the start of the prompt
+# N'écrivez pas une nouvelle ligne au début de la console
 add_newline = false
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]      # The name of the module we are configuring is "character"
-symbol = "➜"     # The "symbol" segment is being set to "➜"
+# Remplacez le symbole "❯" dans la console avec "➜"
+[character]      # Le nom du module que nous configurons est "character"
+symbol = "➜"     # Le segment "symbol" est mis comme "➜"
 
-# Disable the package module, hiding it from the prompt completely
+# Désactivez le module package, le cachant complètement de la console
 [package]
 disabled = true
 ```
 
-### Terminology
+### Terminologie
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
+**Module**: Un composant dans l'invite donnant des informations basées sur des informations contextuelles à propos de votre Système d'Exploitation. Par exemple, le module "nodejs" montre la version de NodeJS qui est actuellement installée sur votre ordinateur, si votre répertoire actuel est un projet NodeJS.
 
-**Segment**: Smaller sub-components that compose a module. For example, the "symbol" segment in the "nodejs" module contains the character that is shown before the version number (⬢ by default).
+**Segment**: Sous-composants plus petits qui composent un module. Par exemple, le segment "symbol" du module "nodejs" contient le caractère qui est affiché avant le numéro de version (⬢ par défaut).
 
-Here is the representation of the node module. In the following example, "symbol" and "version" are segments within it. Every module also has a prefix and suffix that are the default terminal color.
+Voici la représentation du module node. Dans l'exemple suivant, "symbol" et "version" sont des segments dans celui-ci. Chaque module a également un préfixe et un suffixe qui sont la couleur par défaut du terminal.
 
 ```
 [prefix]      [symbol]     [version]    [suffix]
