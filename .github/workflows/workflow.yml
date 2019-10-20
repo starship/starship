@@ -200,7 +200,6 @@ jobs:
           - x86_64-unknown-linux-musl
           - x86_64-apple-darwin
           - x86_64-pc-windows-gnu
-          - x86_64-pc-windows-msvc
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
@@ -214,9 +213,6 @@ jobs:
           - target: x86_64-pc-windows-gnu
             os: windows-latest
             name: starship-x86_64-pc-windows-gnu.zip
-          - target: x86_64-pc-windows-msvc
-            os: windows-latest
-            name: starship-x86_64-pc-windows-msvc.zip
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
