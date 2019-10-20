@@ -2,7 +2,7 @@ use super::common;
 use std::fs::{DirBuilder, OpenOptions};
 use std::io::{self, Error, ErrorKind, Write};
 use std::process::{Command, Stdio};
-use tempfile::TempDir;
+use tempfile::{self, TempDir};
 
 #[test]
 #[ignore]
@@ -81,7 +81,7 @@ fn shows_pinned_in_deeply_nested_project_within_repository() -> io::Result<()> {
 }
 
 fn create_workspace(is_repo: bool) -> io::Result<TempDir> {
-    let repo_dir = common::new_tempdir()?;
+    let repo_dir = tempfile::tempdir()?;
 
     if is_repo {
         let mut command = Command::new("git");
@@ -113,7 +113,8 @@ fn touch_path(workspace: &TempDir, relative_path: &str, contents: Option<&str>) 
         .create(true)
         .truncate(true)
         .open(&path)?;
-    write!(file, "{}", contents.unwrap_or(""))
+    write!(file, "{}", contents.unwrap_or(""))?;
+    file.sync_data()
 }
 
 fn make_pinned_sdk_json(version: &str) -> String {
