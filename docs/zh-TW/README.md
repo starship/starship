@@ -8,16 +8,16 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
 <div class="features">
   <div class="feature">
-    <h2>Compatibility First</h2>
-    <p>Works on the most common shells on the most common operating systems. Use it everywhere!</p>
+    <h2>兼容性優先</h2>
+    <p>能夠在最常見的作業系統之中最常見的 shell 上運作。 到處使用它吧！</p>
   </div>
   <div class="feature">
-    <h2>Rust-Powered</h2>
-    <p>Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.</p>
+    <h2>由 Rust 支持</h2>
+    <p>帶來同類最快速度以及 Rust 的安全性，讓你的提示字元盡可能快速與可靠。</p>
   </div>
   <div class="feature">
-    <h2>Customizable</h2>
-    <p>Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.</p>
+    <h2>可客製化</h2>
+    <p>任何些微的細節都可以隨你喜愛地客製化，讓你的提示字元可以隨你所欲地最小化或是充滿各種特色。</p>
   </div>
 </div>
 
@@ -28,11 +28,11 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
   </video>
 </div>
 
-### Quick Install
+### 快速安裝
 
-1. Install the **starship** binary:
+1. 安裝 **starship** 執行檔：
 
-   **[Download archives of precompiled binaries](https://github.com/starship/starship/releases)** if you don't use the platforms below.
+   如果你並非使用以下平台，請直接**[下載編譯好的執行檔的壓縮檔](https://github.com/starship/starship/releases)**。
 
 
    #### Homebrew
@@ -42,7 +42,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    ```
 
 
-   #### Rust (v1.33 or higher)
+   #### Rust (v1.33 或更高版本)
 
    ```sh
    $ cargo install starship
@@ -51,14 +51,14 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Arch Linux (AUR)
 
-   Starship is available on the AUR under the name `starship`. Install it with `yay` or your favorite AUR helper.
+   Starship 在 AUR 中已經以 `starship` 這個名字存在。 請使用 `yay` 或你喜歡的 AUR 幫手安裝。
 
    ```sh
    $ yay -S starship
    ```
 
 
-   #### Nix (unstable)
+   #### Nix (不穩定)
 
    ```sh
    $ nix-env --install starship
@@ -71,12 +71,12 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    $ pkg install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. 將初始化腳本 (script) 加入你的 shell 的設定檔：
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   將以下內容放到 `~/.bashrc` 的結尾：
 
    ```sh
    # ~/.bashrc
@@ -87,7 +87,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   將以下內容放到 `~/.config/fish/config.fish` 的結尾：
 
    ```sh
    # ~/.config/fish/config.fish
@@ -98,7 +98,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   將以下內容放到 `~/.zshrc` 的結尾：
 
    ```sh
    # ~/.zshrc
@@ -109,7 +109,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Powershell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   將以下內容放到 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 的結尾 (或是在 -Nix 上的 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`)：
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
