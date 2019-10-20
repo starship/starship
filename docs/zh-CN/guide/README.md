@@ -15,10 +15,13 @@
     ><img
       src="https://repology.org/badge/tiny-repos/starship.svg"
       alt="Packaging status" /></a
-><br /><a href="#contributors"
-    ><img
+><br />
+  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+  <a href="#contributors">
+    <img
       src="https://badgen.net/badge/all%20contributors/42/orange"
       alt="All Contributors" /></a>
+  <!-- ALL-CONTRIBUTORS-BADGE:END -->
   <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://badgen.net/badge/chat/on%20discord/7289da"
