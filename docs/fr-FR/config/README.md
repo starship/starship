@@ -1,12 +1,12 @@
 # Configuration
 
-::: tip
+::: remarque
 
-🔥 Configuration is currently being worked on. Many new configuration options will be available in coming releases.
+🔥 La configuration est en train d'être travaillée. Beaucoup de nouvelles options de configuration seront disponibles dans les prochaines versions.
 
 :::
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
+Pour commencer à configurer starship, créez le fichier suivant : `~/.config/starship.toml`.
 
 ```shell
 $ touch ~/.config/starship.toml
