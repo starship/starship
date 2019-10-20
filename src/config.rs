@@ -242,15 +242,7 @@ impl<'a> SegmentConfig<'a> {
     }
 
     /// Immutably set style
-    pub fn with_style(&self, style: Style) -> Self {
-        Self {
-            value: self.value,
-            style: Some(style),
-        }
-    }
-
-    /// Immutably set style
-    pub fn maybe_with_style(&self, style: Option<Style>) -> Self {
+    pub fn with_style(&self, style: Option<Style>) -> Self {
         Self {
             value: self.value,
             style,

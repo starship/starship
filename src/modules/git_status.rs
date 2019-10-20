@@ -180,7 +180,7 @@ fn create_segment_with_count<'a>(
         if count_config.enabled {
             module.create_segment(
                 &format!("{}_count", name),
-                &SegmentConfig::new(&count.to_string()).maybe_with_style(count_config.style),
+                &SegmentConfig::new(&count.to_string()).with_style(count_config.style),
             );
         }
     }
