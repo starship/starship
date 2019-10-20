@@ -3,8 +3,11 @@ on:
   push:
     paths-ignore:
       - "docs/**"
-      - "**/*.md"
-  pull_request: []
+      - "**.md"
+  pull_request:
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
 
 jobs:
   # Run the `rustfmt` code formatter
@@ -70,7 +73,7 @@ jobs:
           command: check
           args: --all
 
-  # Run tests on Linux, and macOS
+  # Run tests on Linux, macOS, and Windows
   # On both Rust stable and Rust nightly
   test:
     name: Test Suite
@@ -79,7 +82,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macOS-latest]
+        os: [ubuntu-latest, macOS-latest, windows-latest]
         rust: [stable, nightly]
     steps:
       # Checkout the branch being tested
@@ -109,7 +112,7 @@ jobs:
       # Install Python at a fixed version
       - uses: actions/setup-python@master
         with:
-          python-version: "3.6.9"
+          python-version: "3.7.4"
 
       # Install dotnet at a fixed version
       - uses: actions/setup-dotnet@master
@@ -166,9 +169,14 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
+      - run: |
+          cd $(brew --repo homebrew/core)
+          git fetch origin
+          sudo git reset --hard origin/master
+          cd -
       - run: brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
     env:
-      HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
 
   # Create GitHub release with Rust build targets and release notes
   github_release:
@@ -182,6 +190,8 @@ jobs:
           - x86_64-unknown-linux-gnu
           - x86_64-unknown-linux-musl
           - x86_64-apple-darwin
+          - x86_64-pc-windows-gnu
+          - x86_64-pc-windows-msvc
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
@@ -192,6 +202,12 @@ jobs:
           - target: x86_64-apple-darwin
             os: macOS-latest
             name: starship-x86_64-apple-darwin.tar.gz
+          - target: x86_64-pc-windows-gnu
+            os: windows-latest
+            name: starship-x86_64-pc-windows-gnu.zip
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            name: starship-x86_64-pc-windows-msvc.zip
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
@@ -215,12 +231,14 @@ jobs:
 
       - name: Prepare build artifacts
         run: |
-          strip target/${{ matrix.target }}/release/starship
-          cd target/${{ matrix.target }}/release
           if [[ "${{ matrix.os }}" == "windows-latest" ]]
           then
-            7z a ../../../${{ matrix.name }} starship
+            strip target/${{ matrix.target }}/release/starship.exe
+            cd target/${{ matrix.target }}/release
+            7z a ../../../${{ matrix.name }} starship.exe
           else
+            strip target/${{ matrix.target }}/release/starship
+            cd target/${{ matrix.target }}/release
             tar czvf ../../../${{ matrix.name }} starship
           fi
           cd -

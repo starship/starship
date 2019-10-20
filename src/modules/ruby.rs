@@ -1,7 +1,8 @@
-use ansi_term::Color;
 use std::process::Command;
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig, SegmentConfig};
+
+use crate::configs::ruby::RubyConfig;
 
 /// Creates a module with the current Ruby version
 ///
@@ -19,24 +20,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    match get_ruby_version() {
-        Some(ruby_version) => {
-            const RUBY_CHAR: &str = "💎 ";
+    let ruby_version = get_ruby_version()?;
+    let formatted_version = format_ruby_version(&ruby_version)?;
 
-            let mut module = context.new_module("ruby");
-            let module_style = module
-                .config_value_style("style")
-                .unwrap_or_else(|| Color::Red.bold());
-            module.set_style(module_style);
+    let mut module = context.new_module("ruby");
+    let config: RubyConfig = RubyConfig::try_load(module.config);
+    module.set_style(config.style);
 
-            let formatted_version = format_ruby_version(&ruby_version)?;
-            module.new_segment("symbol", RUBY_CHAR);
-            module.new_segment("version", &formatted_version);
+    module.create_segment("symbol", &config.symbol);
+    module.create_segment("version", &SegmentConfig::new(&formatted_version));
 
-            Some(module)
-        }
-        None => None,
-    }
+    Some(module)
 }
 
 fn get_ruby_version() -> Option<String> {

@@ -1,7 +1,8 @@
-use ansi_term::Color;
 use std::process::Command;
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig, SegmentConfig};
+
+use crate::configs::nodejs::NodejsConfig;
 
 /// Creates a module with the current Node.js version
 ///
@@ -23,17 +24,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     match get_node_version() {
         Some(node_version) => {
-            const NODE_CHAR: &str = "⬢ ";
-
             let mut module = context.new_module("nodejs");
-            let module_style = module
-                .config_value_style("style")
-                .unwrap_or_else(|| Color::Green.bold());
-            module.set_style(module_style);
+            let config: NodejsConfig = NodejsConfig::try_load(module.config);
+
+            module.set_style(config.style);
 
             let formatted_version = node_version.trim();
-            module.new_segment("symbol", NODE_CHAR);
-            module.new_segment("version", formatted_version);
+            module.create_segment("symbol", &config.symbol);
+            module.create_segment("version", &SegmentConfig::new(formatted_version));
 
             Some(module)
         }

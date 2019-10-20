@@ -3,6 +3,7 @@ use std::ffi::OsStr;
 use std::fs::OpenOptions;
 use std::io::{self, Error, ErrorKind, Write};
 use std::process::{Command, Stdio};
+use tempfile;
 
 #[test]
 #[ignore]
@@ -115,7 +116,7 @@ where
 }
 
 fn create_repo_with_conflict() -> io::Result<tempfile::TempDir> {
-    let repo_dir = common::new_tempdir()?;
+    let repo_dir = tempfile::tempdir()?;
     let path = path_str(&repo_dir)?;
     let conflicted_file = repo_dir.path().join("the_file");
 

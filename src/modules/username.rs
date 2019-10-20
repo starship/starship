@@ -1,8 +1,9 @@
-use ansi_term::{Color, Style};
 use std::env;
 use std::process::Command;
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig, SegmentConfig};
+
+use crate::configs::username::UsernameConfig;
 
 /// Creates a module with the current user's username
 ///
@@ -19,17 +20,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let user_uid = get_uid();
 
     let mut module = context.new_module("username");
-    let show_always = module.config_value_bool("show_always").unwrap_or(false);
+    let config: UsernameConfig = UsernameConfig::try_load(module.config);
 
-    if user != logname || ssh_connection.is_some() || user_uid == ROOT_UID || show_always {
-        let module_style = get_mod_style(user_uid, &module);
+    if user != logname || ssh_connection.is_some() || user_uid == ROOT_UID || config.show_always {
+        let module_style = match user_uid {
+            Some(0) => config.style_root,
+            _ => config.style_user,
+        };
+
         module.set_style(module_style);
-        module.new_segment("username", &user?);
+        module.create_segment("username", &SegmentConfig::new(&user?));
 
-        return Some(module);
+        Some(module)
+    } else {
+        None
     }
-
-    None
 }
 
 fn get_uid() -> Option<u32> {
@@ -38,16 +43,5 @@ fn get_uid() -> Option<u32> {
             .map(|uid| uid.trim().parse::<u32>().ok())
             .ok()?,
         Err(_) => None,
-    }
-}
-
-fn get_mod_style(user_uid: Option<u32>, module: &Module) -> Style {
-    match user_uid {
-        Some(0) => module
-            .config_value_style("style_root")
-            .unwrap_or_else(|| Color::Red.bold()),
-        _ => module
-            .config_value_style("style_user")
-            .unwrap_or_else(|| Color::Yellow.bold()),
     }
 }
