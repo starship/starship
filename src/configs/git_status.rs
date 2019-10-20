@@ -37,35 +37,17 @@ impl<'a> RootModuleConfig<'a> for GitStatusConfig<'a> {
             diverged: SegmentConfig::new("⇕"),
             conflicted: SegmentConfig::new("="),
             show_sync_count: false,
-            conflicted_count: CountConfig {
-                enabled: false,
-                style: None,
-            },
+            conflicted_count: CountConfig::default(),
             deleted: SegmentConfig::new("✘"),
-            deleted_count: CountConfig {
-                enabled: false,
-                style: None,
-            },
+            deleted_count: CountConfig::default(),
             renamed: SegmentConfig::new("»"),
-            renamed_count: CountConfig {
-                enabled: false,
-                style: None,
-            },
+            renamed_count: CountConfig::default(),
             modified: SegmentConfig::new("!"),
-            modified_count: CountConfig {
-                enabled: false,
-                style: None,
-            },
+            modified_count: CountConfig::default(),
             staged: SegmentConfig::new("+"),
-            staged_count: CountConfig {
-                enabled: false,
-                style: None,
-            },
+            staged_count: CountConfig::default(),
             untracked: SegmentConfig::new("?"),
-            untracked_count: CountConfig {
-                enabled: false,
-                style: None,
-            },
+            untracked_count: CountConfig::default(),
             prefix: "[",
             suffix: "] ",
             style: Color::Red.bold(),
@@ -74,7 +56,7 @@ impl<'a> RootModuleConfig<'a> for GitStatusConfig<'a> {
     }
 }
 
-#[derive(Clone, Copy, ModuleConfig)]
+#[derive(Clone, Copy, ModuleConfig, Default)]
 pub struct CountConfig {
     pub enabled: bool,
     pub style: Option<Style>,
