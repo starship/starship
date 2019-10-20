@@ -209,38 +209,38 @@ fn get_repo_status(repository: &Repository) -> Result<RepoStatus, git2::Error> {
     }
 
     let repo_status: RepoStatus = RepoStatus {
-        conflicted: statuses.iter().filter(|s| is_conflicted(&s)).count(),
-        deleted: statuses.iter().filter(|s| is_deleted(&s)).count(),
-        renamed: statuses.iter().filter(|s| is_renamed(&s)).count(),
-        modified: statuses.iter().filter(|s| is_modified(&s)).count(),
-        staged: statuses.iter().filter(|s| is_staged(&s)).count(),
-        untracked: statuses.iter().filter(|s| is_untracked(&s)).count(),
+        conflicted: statuses.iter().filter(|s| is_conflicted(**s)).count(),
+        deleted: statuses.iter().filter(|s| is_deleted(**s)).count(),
+        renamed: statuses.iter().filter(|s| is_renamed(**s)).count(),
+        modified: statuses.iter().filter(|s| is_modified(**s)).count(),
+        staged: statuses.iter().filter(|s| is_staged(**s)).count(),
+        untracked: statuses.iter().filter(|s| is_untracked(**s)).count(),
     };
 
     Ok(repo_status)
 }
 
-fn is_conflicted(status: &Status) -> bool {
+fn is_conflicted(status: Status) -> bool {
     status.is_conflicted()
 }
 
-fn is_deleted(status: &Status) -> bool {
+fn is_deleted(status: Status) -> bool {
     status.is_wt_deleted() || status.is_index_deleted()
 }
 
-fn is_renamed(status: &Status) -> bool {
+fn is_renamed(status: Status) -> bool {
     status.is_wt_renamed() || status.is_index_renamed()
 }
 
-fn is_modified(status: &Status) -> bool {
+fn is_modified(status: Status) -> bool {
     status.is_wt_modified()
 }
 
-fn is_staged(status: &Status) -> bool {
+fn is_staged(status: Status) -> bool {
     status.is_index_modified() || status.is_index_new()
 }
 
-fn is_untracked(status: &Status) -> bool {
+fn is_untracked(status: Status) -> bool {
     status.is_wt_new()
 }
 
