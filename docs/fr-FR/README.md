@@ -1,14 +1,14 @@
 ---
 home: true
 heroImage: /logo.svg
-actionText: Get Started →
+actionText: Commencez →
 actionLink: /guide/
-footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+footer: ISC licencié | Copyright © 2019-present Starship Contributors
 ---
 
 <div class="features">
   <div class="feature">
-    <h2>Compatibility First</h2>
+    <h2>Compatibilité d'abord</h2>
     <p>Works on the most common shells on the most common operating systems. Use it everywhere!</p>
   </div>
   <div class="feature">
