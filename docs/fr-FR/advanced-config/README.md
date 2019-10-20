@@ -27,7 +27,7 @@ starship_precmd_user_func="blastoff"
 function blastoff(){
     echo "🚀"
 }
-trap DEBUG blastoff     # Pièger DEBUG *avant* l'initiation de starship
+trap blastoff DEBUG     # Pièger DEBUG *avant* l'initiation de starship
 eval $(starship init bash)
 ```
 
@@ -38,7 +38,7 @@ Certaines commandes du shell changeront automatiquement le titre de la fenêtre 
 Tout d'abord, définir une fonction de changement de titre de fenêtre (identique en bash et zsh) :
 
 ```bash
-function set_titre_gagnant(){
+function set_titre_fenetre(){
     echo -ne "\033]0; TON_TITRE_FENETRE_ICI \007"
 }
 ```
