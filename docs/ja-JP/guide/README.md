@@ -100,7 +100,7 @@
   - `✘` — 削除されたファイル
 - 閾値を超えた際の、コマンドの実行時間
 - バックグラウンドジョブのインジケーター (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
+- 現在のKubernetesクラスタとネームスペース (`☸`)
 - Current AWS profile (`☁️`)
 
 ## 🚀 インストール
@@ -210,11 +210,11 @@
 
 ## 🔧 設定
 
-For details on how to configure Starship, check out our [documentation](https://starship.rs/config/).
+Starship の設定方法の詳細に関しては、[ドキュメント](https://starship.rs/config/)をチェックしてください。
 
 ## 🤝 貢献
 
-私たちは常に**すべてのスキルレベル**の貢献者を探しています！ If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+私たちは常に**すべてのスキルレベル**の貢献者を探しています！ もし簡単にプロジェクトへ参加する方法をお探しなら、 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) に取り組んでみてください。
 
 ### 特に必要としています
 
@@ -225,7 +225,7 @@ For details on how to configure Starship, check out our [documentation](https://
 - 👩‍💻 **Rust デベロッパー**
   - 慣用的な Rust の作成、効果的な Rust アーキテクチャの設計、パフォーマンスの最適化、クロスプラットフォームビルドの最適化などに関しては、_多く_の簡単な成果があります。 私（[@matchai](https://github.com/matchai)）は Rust の初心者です。 私たちを正しい方向に向けてください！
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+もしあなたが Starship への貢献に興味がある場合は、我々の[貢献ガイド](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)をご覧ください。 また、気軽に我々の[Discord サーバー](https://discord.gg/8Jzqu3T)へ顔を出してください。 👋
 
 ### 貢献者
 
@@ -295,11 +295,11 @@ If you are interested in helping contribute to starship, please take a look at o
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+このプロジェクトは [all-contributors](https://github.com/all-contributors/all-contributors) の仕様に従っています。 どんな種類の貢献でもお待ちしています！
 
 ## 💭影響を受けたプロダクト
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+よければStarship の作成に影響を与えた、これまでのプロジェクトをチェックしてください 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - 宇宙飛行士のための ZSH プロンプト。
 
@@ -314,4 +314,4 @@ Please check out these previous works that helped inspire the creation of starsh
 
 ## 📝 ライセンス
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> このプロジェクトは [ISC](https://github.com/starship/starship/blob/master/LICENSE) でライセンスされています。
