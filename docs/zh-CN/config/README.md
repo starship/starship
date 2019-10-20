@@ -1,18 +1,18 @@
-# Configuration
+# 配置
 
 ::: tip
 
-🔥 Configuration is currently being worked on. Many new configuration options will be available in coming releases.
+Starship 目前正在开发中。 很多新的配置选项将会在之后的版本中被公开。
 
 :::
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
+您需要创建配置文件 `~/.config/starship.toml` 以供 Starship 使用。
 
 ```shell
 $ touch ~/.config/starship.toml
 ```
 
-All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
+Starship 的所有配置都在此 [TOML](https://github.com/toml-lang/toml) 配置文件中完成：
 
 ```toml
 # Don't print a new line at the start of the prompt
@@ -27,7 +27,7 @@ symbol = "➜"     # The "symbol" segment is being set to "➜"
 disabled = true
 ```
 
-### Terminology
+### 术语
 
 **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
