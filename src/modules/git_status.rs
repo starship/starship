@@ -1,4 +1,4 @@
-use git2::{Repository, StatusEntry};
+use git2::{Repository, Status};
 
 use super::{Context, Module, RootModuleConfig};
 
@@ -198,78 +198,50 @@ fn get_repo_status(repository: &Repository) -> Result<RepoStatus, git2::Error> {
     status_options.renames_head_to_index(true);
     status_options.renames_index_to_workdir(true);
 
-    let repo_file_statuses = repository.statuses(Some(&mut status_options))?;
+    let statuses: Vec<Status> = repository
+        .statuses(Some(&mut status_options))?
+        .iter()
+        .map(|s| s.status())
+        .collect();
 
-    if repo_file_statuses.is_empty() {
+    if statuses.is_empty() {
         return Err(git2::Error::from_str("Repo has no status"));
     }
 
-    let repo_status: RepoStatus = repo_file_statuses
-        .iter()
-        .fold(RepoStatus::default(), |repo_status, entry| {
-            count(repo_status, entry)
-        });
+    let repo_status: RepoStatus = RepoStatus {
+        conflicted: statuses.iter().filter(|s| is_conflicted(&s)).count(),
+        deleted: statuses.iter().filter(|s| is_deleted(&s)).count(),
+        renamed: statuses.iter().filter(|s| is_renamed(&s)).count(),
+        modified: statuses.iter().filter(|s| is_modified(&s)).count(),
+        staged: statuses.iter().filter(|s| is_staged(&s)).count(),
+        untracked: statuses.iter().filter(|s| is_untracked(&s)).count(),
+    };
 
     Ok(repo_status)
 }
 
-/// Increment RepoStatus counts for a given file status
-fn count(repo_status: RepoStatus, status_entry: StatusEntry) -> RepoStatus {
-    let status = status_entry.status();
+fn is_conflicted(status: &Status) -> bool {
+    status.is_conflicted()
+}
 
-    let repo_status = if status.is_conflicted() {
-        RepoStatus {
-            conflicted: repo_status.conflicted + 1,
-            ..repo_status
-        }
-    } else {
-        repo_status
-    };
+fn is_deleted(status: &Status) -> bool {
+    status.is_wt_deleted() || status.is_index_deleted()
+}
 
-    let repo_status = if status.is_wt_deleted() || status.is_index_deleted() {
-        RepoStatus {
-            deleted: repo_status.deleted + 1,
-            ..repo_status
-        }
-    } else {
-        repo_status
-    };
+fn is_renamed(status: &Status) -> bool {
+    status.is_wt_renamed() || status.is_index_renamed()
+}
 
-    let repo_status = if status.is_wt_renamed() || status.is_index_renamed() {
-        RepoStatus {
-            renamed: repo_status.renamed + 1,
-            ..repo_status
-        }
-    } else {
-        repo_status
-    };
+fn is_modified(status: &Status) -> bool {
+    status.is_wt_modified()
+}
 
-    let repo_status = if status.is_wt_modified() {
-        RepoStatus {
-            modified: repo_status.modified + 1,
-            ..repo_status
-        }
-    } else {
-        repo_status
-    };
+fn is_staged(status: &Status) -> bool {
+    status.is_index_modified() || status.is_index_new()
+}
 
-    let repo_status = if status.is_index_modified() || status.is_index_new() {
-        RepoStatus {
-            staged: repo_status.staged + 1,
-            ..repo_status
-        }
-    } else {
-        repo_status
-    };
-
-    if status.is_wt_new() {
-        RepoStatus {
-            untracked: repo_status.untracked + 1,
-            ..repo_status
-        }
-    } else {
-        repo_status
-    }
+fn is_untracked(status: &Status) -> bool {
+    status.is_wt_new()
 }
 
 /// Compares the current branch with the branch it is tracking to determine how
