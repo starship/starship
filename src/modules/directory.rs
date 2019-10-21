@@ -26,10 +26,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Using environment PWD is the standard approach for determining logical path
     // If this is None for any reason, we fall back to reading the os-provided path
-    let logical_current_dir = if config.use_logical_path {
+    let physical_current_dir = if config.use_logical_path {
         None
     } else {
-        match std::env::var("PWD") {
+        match std::env::current_dir() {
             Ok(x) => Some(x),
             Err(e) => {
                 log::debug!("Error getting physical current directory: {}", e);
