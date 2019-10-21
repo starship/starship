@@ -30,11 +30,11 @@
 
 <h4 align="center">
   <br />
-  <a href="https://starship.rs/ja/">ウェブサイト</a>
+  <a href="https://starship.rs/ja-JP/">ウェブサイト</a>
   ·
   <a href="#-インストール">インストール</a>
   ·
-  <a href="https://starship.rs/ja/config/">設定</a>
+  <a href="https://starship.rs/ja-JP/config/">設定</a>
 </h4>
 <p align="center">
   <a href="https://github.com/starship/starship/blob/master/README.md"
@@ -210,7 +210,7 @@
 
 ## 🔧 設定
 
-Starship の設定方法の詳細に関しては、[ドキュメント](https://starship.rs/config/)をチェックしてください。
+Starship の設定方法の詳細に関しては、[ドキュメント](https://starship.rs/ja-JP/config/)をチェックしてください。
 
 ## 🤝 貢献
 
