@@ -171,7 +171,22 @@ fn region_set_and_only_display_profile() -> io::Result<()> {
             displayed_items = "profile"
         })
         .output()?;
-    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  "));
+    let expected = "";
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+fn region_not_set_and_only_display_region() -> io::Result<()> {
+    let output = common::render_module("aws")
+        .env_clear()
+        .use_config(toml::toml! {
+            [aws]
+            displayed_items = "region"
+        })
+        .output()?;
+    let expected = "";
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())

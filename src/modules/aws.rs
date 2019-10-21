@@ -100,12 +100,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             module.create_segment("all", &config.region.with_value(&aws_segment));
         }
         AwsItems::Profile => {
-            let aws_profile = env::var("AWS_PROFILE").ok().unwrap_or_default();
+            let aws_profile = env::var("AWS_PROFILE").ok()?;
 
             module.create_segment("profile", &config.profile.with_value(&aws_profile));
         }
         AwsItems::Region => {
-            let aws_region = get_aws_region().unwrap_or_default();
+            let aws_region = get_aws_region()?;
 
             module.create_segment("region", &config.region.with_value(&aws_region));
         }
