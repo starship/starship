@@ -30,11 +30,11 @@
 
 <h4 align="center">
   <br />
-  <a href="https://starship.rs">網站</a>
+  <a href="https://starship.rs/zh-TW/">網站</a>
   ·
-  <a href="#-installation">安裝</a>
+  <a href="#-安裝">安裝</a>
   ·
-  <a href="https://starship.rs/config/">設定</a>
+  <a href="https://starship.rs/zh-TW/config/">設定</a>
 </h4>
 <p align="center">
   <a href="https://github.com/starship/starship/blob/master/README.md"
@@ -210,7 +210,7 @@
 
 ## 🔧 設定
 
-關於如何設定 Starship，請看 [文件](https://starship.rs/config/) 。
+關於如何設定 Starship，請看 [文件](https://starship.rs/zh-TW/config/) 。
 
 ## 🤝 貢獻
 
