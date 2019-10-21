@@ -18,7 +18,9 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
+          profile: minimal
           toolchain: stable
+          components: rustfmt
           override: true
       - run: rustup component add rustfmt
       - uses: actions-rs/cargo@v1
@@ -34,9 +36,10 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
+          profile: minimal
           toolchain: stable
+          components: clippy
           override: true
-      - run: rustup component add clippy
       - uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -66,6 +69,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
+          profile: minimal
           toolchain: stable
           override: true
       - uses: actions-rs/cargo@v1
@@ -91,6 +95,7 @@ jobs:
       # Install all the required dependencies for testing
       - uses: actions-rs/toolchain@v1
         with:
+          profile: minimal
           toolchain: stable
           override: true
 
@@ -154,6 +159,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
+          profile: minimal
           toolchain: stable
           override: true
       - run: cargo login $CRATES_IO_TOKEN
@@ -170,6 +176,9 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: |
+          git config user.email "bot@starship.rs"
+          git config user.name "Starship Bot"
+      
           cd $(brew --repo homebrew/core)
           git fetch origin
           sudo git reset --hard origin/master
@@ -191,7 +200,6 @@ jobs:
           - x86_64-unknown-linux-musl
           - x86_64-apple-darwin
           - x86_64-pc-windows-gnu
-          - x86_64-pc-windows-msvc
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
@@ -205,9 +213,6 @@ jobs:
           - target: x86_64-pc-windows-gnu
             os: windows-latest
             name: starship-x86_64-pc-windows-gnu.zip
-          - target: x86_64-pc-windows-msvc
-            os: windows-latest
-            name: starship-x86_64-pc-windows-msvc.zip
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
@@ -215,6 +220,7 @@ jobs:
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
+          profile: minimal
           toolchain: stable
           override: true
           target: ${{ matrix.target }}
@@ -229,21 +235,20 @@ jobs:
           command: build
           args: --release --target ${{ matrix.target }}
 
-      - name: Prepare build artifacts
+      - name: Prepare build artifacts [Windows]
+        if: matrix.os == 'windows-latest'
         run: |
-          if [[ "${{ matrix.os }}" == "windows-latest" ]]
-          then
-            strip target/${{ matrix.target }}/release/starship.exe
-            cd target/${{ matrix.target }}/release
-            7z a ../../../${{ matrix.name }} starship.exe
-          else
-            strip target/${{ matrix.target }}/release/starship
-            cd target/${{ matrix.target }}/release
-            tar czvf ../../../${{ matrix.name }} starship
-          fi
-          cd -
+          strip target/${{ matrix.target }}/release/starship.exe
+          7z a ${{ matrix.name }} target/${{ matrix.target }}/release/starship.exe
+
+      - name: Prepare build artifacts [-nix]
+        if: matrix.os != 'windows-latest'
+        run: |
+          strip target/${{ matrix.target }}/release/starship
+          tar czvf ${{ matrix.name }} target/${{ matrix.target }}/release/starship
 
       - name: Generate release notes
+        if: matrix.os == 'ubuntu-latest'
         run: |
           # Temporary fix for https://github.com/actions/setup-go/issues/14
           export PATH=$PATH:$(go env GOPATH)/bin

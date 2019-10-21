@@ -147,7 +147,7 @@ fn truncate(dir_string: String, length: usize) -> String {
     let mut components = dir_string.split('/').collect::<Vec<&str>>();
 
     // If the first element is "" then there was a leading "/" and we should remove it so we can check the actual count of components
-    if (components[0] == "") {
+    if components[0] == "" {
         components.remove(0);
     }
 
