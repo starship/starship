@@ -1,23 +1,23 @@
 ---
 home: true
 heroImage: /logo.svg
-actionText: Get Started →
+actionText: Loslegen →
 actionLink: /guide/
-footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 ---
 
 <div class="features">
   <div class="feature">
-    <h2>Compatibility First</h2>
-    <p>Works on the most common shells on the most common operating systems. Use it everywhere!</p>
+    <h2>Kompatibel</h2>
+    <p>Läuft mit den beliebtesten Shells auf den beliebtesten Betriebssystemen. Überall einsetzbar!</p>
   </div>
   <div class="feature">
-    <h2>Rust-Powered</h2>
-    <p>Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.</p>
+    <h2>Antrieben von Rust</h2>
+    <p>Bringt die branchenweit beste Geschwindigkeit und Sicherheit von Rust mit, um Deine Eingaben so schnell und zuverlässig wie nur möglich zu machen.</p>
   </div>
   <div class="feature">
-    <h2>Customizable</h2>
-    <p>Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.</p>
+    <h2>Individualisierbar</h2>
+    <p>Jedes noch so kleine Detail kann nach Deinen Wünschen angepasst werden, um die Eingabeaufforderung so minimal oder funktionsreich zu gestalten, wie Du es möchtest.</p>
   </div>
 </div>
 
@@ -28,11 +28,11 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
   </video>
 </div>
 
-### Quick Install
+### Schnellinstallation
 
-1. Install the **starship** binary:
+1. Installiere die Binärversion von **starship**:
 
-   **[Download archives of precompiled binaries](https://github.com/starship/starship/releases)** if you don't use the platforms below.
+   **[Lade die vorkompilierte Binärversion herunter](https://github.com/starship/starship/releases)**, wenn du keine der unten gelisteten Plattformen verwendest.
 
 
    #### Homebrew
@@ -42,7 +42,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    ```
 
 
-   #### Rust (v1.33 or higher)
+   #### Rust (v1.33 oder neuer)
 
    ```sh
    $ cargo install starship
@@ -51,14 +51,14 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Arch Linux (AUR)
 
-   Starship is available on the AUR under the name `starship`. Install it with `yay` or your favorite AUR helper.
+   Starship ist via AUR unter dem Namen `starship` verfügbar. Installiere es mittels `yay` oder einem AUR-Helfer deiner Wahl.
 
    ```sh
    $ yay -S starship
    ```
 
 
-   #### Nix (unstable)
+   #### Nix (instabil)
 
    ```sh
    $ nix-env --install starship
@@ -71,12 +71,12 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    $ pkg install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Füge das init-Skript zur Konfigurationsdatei deiner Shell hinzu:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Trage folgendes am Ende der `~/.bashrc` ein:
 
    ```sh
    # ~/.bashrc
@@ -87,7 +87,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Trage folgendes am Ende der `~/.config/fish/config.fish` ein:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -98,10 +98,22 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Trage folgendes am Ende der `~/.zshrc` ein:
 
    ```sh
    # ~/.zshrc
 
    eval "$(starship init zsh)"
+   ```
+
+
+   #### Powershell
+
+   Trage folgendes in das Powershell-Profil ($Profile) ein. Standardmäßig gespeichert unter: `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` auf Windows, oder `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix:
+
+   ```sh
+   # notepad $PROFILE
+# ~\Documents\PowerShell\Profile.ps1
+
+   Invoke-Expression (&starship init powershell)
    ```

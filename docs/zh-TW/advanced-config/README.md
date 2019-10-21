@@ -1,18 +1,18 @@
-# Advanced Configuration
+# 進階設定
 
-While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
+正因為 Starship 是一個多才多藝的 shell，有時候你必須要做比修改 `starship.toml` 更多事情來讓它完成特定工作。 這個頁面說明了一些用於 Starship 的進階設定技巧。
 
 ::: warning
 
-The configurations in this section are subject to change in future releases of Starship.
+這個章節內的設定可能會隨著未來 Starship 的版本發行而變動。
 
 :::
 
-## Custom pre-prompt and pre-execution Commands in Bash
+## Bash 中的自定義預提示 (pre-prompt) 與預執行 (pre-execution) 指令
 
-Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+Bash 不像其他大多的 shell 具有正式的預執行/預指令框架。 因為這個原因，很難在 `bash` 中提供能完全自定義的 hook。 然而，Starship 有提供給你有限的能力來插入你自己的函式到渲染提示字元的程序中：
 
-- To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
+- 為了在畫出提示字元之前執行一個自定義的函式，請定義一個函式，並將它的名稱放入 `starship_precmd_user_func` 之中。 例如，為了要在提示字元前畫出一個火箭，你就要
 
 ```bash
 function blastoff(){
@@ -21,47 +21,47 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). However, you **must** trap the DEBUG signal *before* initializing Starship! Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
+- 為了要在一個指令前執行一個自定義的函式，你可以使用 [`DEBUG` trap 機制](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/)。 然而，你**必須**在初始化 Starship *之前* 對 DEBUG 訊號設下trap！ Starship 可以保留 DEBUG trap 的數值，但是如果該 trap 在 starship 啟動後被被覆寫，某些功能會損壞。
 
 ```bash
 function blastoff(){
     echo "🚀"
 }
-trap blastoff DEBUG     # Trap DEBUG *before* running starship
+trap blastoff DEBUG     # 在 Starship 啟用*前*對 DEBUG 訊號設下 trap
 eval $(starship init bash)
 ```
 
-## Change Window Title
+## 改變視窗標題
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
+有些 shell 的提示字元會幫你自動變更視窗標題（例如：為了反映出你目前的工作資料夾）。 Fish 甚至預設就會這樣做。 Starship 沒有幫你這樣做，但是可以用直覺的方式加入這個功能到 `bash` 或 `zsh` 之中。
 
-First, define a window title change function (identical in bash and zsh):
+首先，定義一個改變視窗標題的函式（在 bash 與 zsh 之中都一樣）：
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; YOUR_WINDOW_TITLE_HERE \007"
+    echo -ne "\033]0; 你的標題在此 \007"
 }
 ```
 
-You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
+你可以利用變數來自定義這個標題（`$USER`、`$HOSTNAME` 與 `$PWD` 是很受歡迎的選項）。
 
-In `bash`, set this function to be the precmd starship function:
+在 `bash` 中，將這個函式設定為 Starship 的預執行函式：
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-In `zsh`, add this to the `precmd_functions` array:
+在 `zsh` 中，將這個函式加入 `precmd_functions` 陣列：
 
 ```bash
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zsrhc`) to make it permanent.
+如果你喜歡這個結果，把這幾行加入你的 shell 設定檔中（`~/.bashrc` 或 `~/.zsrhc`）來將此設為永久設定。
 
-## Style Strings
+## 風格字串
 
-Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+風格字串是一個以空白分開的單詞清單。 單字並不會區分大小寫（換句話說，`bold` 與 `BoLd` 是被當作兩個相同的字串）。 每個單詞可以是下列其中之一：
 
   - `bold`
   - `underline`
@@ -71,14 +71,14 @@ Style strings are a list of words, separated by whitespace. The words are not ca
   - `<color>`
   - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing , though this may change in the future. The order of words in the string does not matter.
+其中 `<color>` 是指定顏色用的（下面解釋）。 `fg:<color>` 與 `<color>` 目前做一樣的事情，不過未來可能會改變。 單詞在字串中的順序不重要。
 
-The `none` token overrides all other tokens in a string, so that e.g. `fg:red none fg:blue` will still create a string with no styling. It may become an error to use `none` in conjunction with other tokens in the future.
+`none` 符號覆寫字串中其他所有符號，所以像是 `fg:red none fg:blue` 會創造出一個沒有任何風格的字串。 未來可能會將 `none` 與其他符號一起使用的情形視為是一種錯誤。
 
-A color specifier can be one of the following:
+一個顏色指定符號可以是下列其中之一：
 
- - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
- - A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
- - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+ - 任一個標準終端機顏色：`black`、`red`、`green`、`blue`、`yellow`、`purple`、`cyan`、`white`。 你可以選擇性地加上前綴 `bright-` 來取得明亮版本的顏色（例如：`bright-white`）。
+ - 一個 `#` 後面跟隨著六位數的十六進位數字。 這個指定了 [RGB 十六進制色碼](https://www.w3schools.com/colors/colors_hexadecimal.asp)。
+ - 一個介於 0~255 之間的數字。 這個指定了 [8-bit ANSI 色碼](https://i.stack.imgur.com/KTSQa.png)。
 
-If multiple colors are specified for foreground/background, the last one in the string will take priority.
+如果前景/後景被指定了多種顏色，最後一個顏色具有最高優先性。

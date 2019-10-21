@@ -15,10 +15,13 @@
     ><img
       src="https://repology.org/badge/tiny-repos/starship.svg"
       alt="Packaging status" /></a
-><br /><a href="#contributors"
-    ><img
-      src="https://badgen.net/badge/all%20contributors/35/orange"
+><br />
+  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+  <a href="#contributors">
+    <img
+      src="https://badgen.net/badge/all%20contributors/42/orange"
       alt="All Contributors" /></a>
+  <!-- ALL-CONTRIBUTORS-BADGE:END -->
   <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://badgen.net/badge/chat/on%20discord/7289da"
@@ -37,7 +40,7 @@
   <a href="https://github.com/starship/starship/blob/master/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png" alt="English" /></a>
   &#0020;
-  <a href="https://github.com/starship/starship/blob/master/translations/README.ja.md"
+  <a href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png" alt="日本語" /></a>
   &#0020;
   <a href="https://translate.starship.rs/project/starship-prompt/zh-CN"
@@ -67,24 +70,24 @@
   <br>
 </p>
 
-## 🍬 Features
+## 🍬 特性
 
-- Prompt character turns red if the last command exits with non-zero code
-- Current username if not the same as the logged-in user
-- Current Java version(`☕`)
-- Current Node.js version(`⬢`)
-- Current Rust version (`🦀`)
-- Current Ruby version (`💎`)
-- Current Python version (`🐍`)
-- Current Go version (`🐹`)
-- Nix-shell environment detection
-- Print an environment variable
-- Current version of package in current directory (`📦`)
+- 当上一个命令以非 0 状态退出时，提示字符会变为红色
+- 非当前登录用户的用户名
+- 当前 Java 版本(`☕`)
+- 当前 Node.js 版本(`⬢`)
+- 当前 Rust 版本 (`🦀`)
+- 当前 Ruby 版本 (`💎`)
+- 当前 Python 版本 (`🐍`)
+- 当前 Go 版本 (`🐹`)
+- Nix-shell 环境检测
+- 显示环境变量
+- 当前目录下现在的包版本 (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-- Current battery level and status
-- Current Git branch and rich repo status:
+- 当前电池剩余容量与状态
+- 当前 Git 分支与一应俱全的仓库状态
   - `=` — conflicting changes
   - `⇡` — ahead of remote branch
   - `⇣` — behind of remote branch
@@ -95,21 +98,22 @@
   - `+` — added files
   - `»` — renamed files
   - `✘` — deleted files
-- Execution time of the last command if it exceeds the set threshold
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
+- 如果超过设定阈值，上一个命令的执行时间
+- 后台运行进程数的指示器 (`✦`)
+- 当前 Kubernetes Cluster 与 Namespace (`☸`)
+- Current AWS profile (`☁️`)
 
-## 🚀 Installation
+## 🚀 安装
 
-### Prerequisites
+### 基础要求
 
-- A [Powerline font](https://github.com/powerline/fonts) installed and enabled in your terminal (for example, try [Fira Code](https://github.com/tonsky/FiraCode)).
+- 安装有一个 [Powerline 字体](https://github.com/powerline/fonts) (如 [Fira Code](https://github.com/tonsky/FiraCode)) 并在您的终端启用 。
 
-### Getting Started
+### 入门
 
-1. Install the **starship** binary:
+1. 安装 **starship** 二进制文件：
 
-   **[Download archives of precompiled binaries](https://github.com/starship/starship/releases)** if you don't use the platforms below.
+   如果您不使用下面的平台，你可以**[下载预编译的可执行文件](https://github.com/starship/starship/releases)**
 
 
    #### Homebrew
@@ -128,7 +132,7 @@
 
    #### Arch Linux (AUR)
 
-   Starship is available on the AUR under the name `starship`. Install it with `yay` or your favorite AUR helper.
+   你可以使用 `starship` 这个名称在 AUR 上找到 Starship。 使用 `yay`或您最喜欢的 AUR helper 安装它。
 
    ```sh
    $ yay -S starship
@@ -148,12 +152,23 @@
    $ pkg install starship
    ```
 
-1. Add the init script to your shell's config file:
+
+   #### Other x86-64 Linux Platforms
+
+   Download a prebuilt binary and place in /usr/local/bin/
+
+   ```sh
+   $ wget -q --show-progress https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz
+   $ tar xvf starship-x86_64-unknown-linux-gnu.tar.gz
+   $ sudo mv starship /usr/local/bin/
+   ```
+
+1. 将初始化脚本添加到您的 shell 的配置文件：
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   在 `~/.bashhrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.bashrc
@@ -164,7 +179,7 @@
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   在 `~/.config/fish/config.fish` 的最后，添加以下内容：
 
    ```sh
    # ~/.config/fish/config.fish
@@ -175,7 +190,7 @@
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   在 `~/.zshrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.zshrc
@@ -183,26 +198,36 @@
    eval "$(starship init zsh)"
    ```
 
-## 🔧 Configuration
+
+   #### Powershell
+
+   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+
+   ```sh
+   # ~\Documents\PowerShell\Profile.ps1
+   Invoke-Expression (&starship init powershell)
+   ```
+
+## 🔧 配置
 
 For details on how to configure Starship, check out our [documentation](https://starship.rs/config/).
 
-## 🤝 Contributing
+## 🤝 贡献
 
 We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-### High Priority Needs
+### 急需
 
-- 👩‍💼 **Product Manager**
-  - We have a GitHub Project and many unorganized/unprioritized features, as well as ideas that haven't yet been made into issues. Starship needs someone to own the product direction!
-- 👩‍🎨 **Designer**
-  - Like making eye-catching websites? Excellent! We are looking to create a beautiful landing page showing off Starship in all its glory. Helping design for Starship's brand is a great opportunity to try out new ideas!
-- 👩‍💻 **Rust Developer**
-  - There is _a lot_ of low-hanging fruit when it comes to writing idiomatic Rust, designing effective Rust architecture, performance optimizations, cross-platform build optimizations, and more! I ([@matchai](https://github.com/matchai)) am a beginner to Rust. Come point us in the right direction!
+- 👩‍💼 **项目经理**
+  - 我们有一个GitHub项目，有许多未经整理或没有被置于优先地位的新功能，还有许多想法没有被列入 issues。 我们需要人来为项目发展方向指路！
+- 👩‍🎨 **设计师**
+  - 想制作吸引人的网站吗？ 太棒了！ 我们正想要制作一个漂亮的主页，以彰显 Starship 的与众不同。 帮助设计 Starship 的品牌是尝试你新点子的一个巨大机会！
+- 👩‍💻 **Rust 开发者**
+  - 我们需要符合语言习惯的，高效的代码，需要性能优化与跨平台编译优化……你可以在这里收获_大量_的成果！ 我 ([@matchai](https://github.com/matchai)) 是一枚 Rust 新手. 快来为我们指点迷津！
 
 If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
-### Contributors
+### 贡献者
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
@@ -259,6 +284,12 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://pt2121.github.io"><img src="https://avatars0.githubusercontent.com/u/616399?v=4" width="100px;" alt="(´⌣`ʃƪ)"/><br /><sub><b>(´⌣`ʃƪ)</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=pt2121" title="Code">💻</a></td>
     <td align="center"><a href="https://southcla.ws"><img src="https://avatars1.githubusercontent.com/u/1636971?v=4" width="100px;" alt="Barnaby Keene" /><br /><sub><b>Barnaby Keene</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=Southclaws" title="Code">💻</a></td>
     <td align="center"><a href="http://keawade.io/"><img src="https://avatars2.githubusercontent.com/u/7308850?v=4" width="100px;" alt="Keith Wade" /><br /><sub><b>Keith Wade</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=keawade" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=keawade" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/LukeAI"><img src="https://avatars3.githubusercontent.com/u/43993778?v=4" width="100px;" alt="LukeAI" /><br /><sub><b>LukeAI</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=LukeAI" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/zekesonxx"><img src="https://avatars1.githubusercontent.com/u/965509?v=4" width="100px;" alt="Zach Mertes" /><br /><sub><b>Zach Mertes</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=zekesonxx" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=zekesonxx" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=zekesonxx" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/davidkna"><img src="https://avatars2.githubusercontent.com/u/835177?v=4" width="100px;" alt="David Knaack" /><br /><sub><b>David Knaack</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=davidkna" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=davidkna" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=davidkna" title="Tests">⚠️</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/CSumm"><img src="https://avatars1.githubusercontent.com/u/31711543?v=4" width="100px;" alt="Carl Summers" /><br /><sub><b>Carl Summers</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=CSumm" title="Documentation">📖</a></td>
   </tr>
 </table>
 
@@ -266,7 +297,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
-## 💭 Inspired By
+## 💭该项目受以下项目启发
 
 Please check out these previous works that helped inspire the creation of starship. 🙏
 
