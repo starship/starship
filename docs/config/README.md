@@ -99,6 +99,7 @@ prompt_order = [
     "ruby",
     "rust",
     "nix_shell",
+    "conda",
     "memory_usage",
     "aws",
     "env_var",
@@ -113,14 +114,15 @@ prompt_order = [
 
 ## AWS
 
-The `aws` module shows the current AWS profile. This is based on the
-`AWS_PROFILE` env var.
+The `aws` module shows the current AWS region and profile. This is based on
+`AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with
+`~/.aws/config` file.
 
 ### Options
 
 | Variable   | Default         | Description                                                |
 | ---------- | --------------- | ---------------------------------------------------------- |
-| `symbol`   | `"☁️ "`         | The symbol used before displaying the current AWS profile. |
+| `symbol`   | `"☁️  "`        | The symbol used before displaying the current AWS profile. |
 | `style`    | `"bold yellow"` | The style for the module.                                  |
 | `disabled` | `false`         | Disables the `AWS` module.                                 |
 
@@ -262,7 +264,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 | Variable   | Default         | Description                                                |
 | ---------- | --------------- | ---------------------------------------------------------- |
 | `min_time` | `2`             | Shortest duration to show time for.                        |
-| `prefix`   | `took`          | Prefix to display immediately before the command duration. |
+| `prefix`   | `took `         | Prefix to display immediately before the command duration. |
 | `style`    | `"bold yellow"` | The style for the module.                                  |
 | `disabled` | `false`         | Disables the `cmd_duration` module.                        |
 
@@ -274,6 +276,28 @@ running `eval $(starship init $0)`, and then proceed as normal.
 [cmd_duration]
 min_time = 4
 prefix = "underwent "
+```
+
+## Conda
+
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+Note: This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`
+
+### Options
+
+| Variable   | Default        | Description                                  |
+| ---------- | -------------- | -------------------------------------------- |
+| `symbol`   | `"C "`         | The symbol used before the environment name. |
+| `style`    | `"bold green"` | The style for the module.                    |
+| `disabled` | `false`        | Disables the `conda` module.                 |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[conda]
+style = "dimmed green"
 ```
 
 ## Directory
@@ -404,7 +428,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 [git_branch]
 symbol = "🌱 "
-truncation_length = "4"
+truncation_length = 4
 truncation_symbol = ""
 ```
 
@@ -519,13 +543,14 @@ The `hostname` module shows the system hostname.
 
 ### Options
 
-| Variable   | Default               | Description                                          |
-| ---------- | --------------------- | ---------------------------------------------------- |
-| `ssh_only` | `true`                | Only show hostname when connected to an SSH session. |
-| `prefix`   | `""`                  | Prefix to display immediately before the hostname.   |
-| `suffix`   | `""`                  | Suffix to display immediately after the hostname.    |
-| `style`    | `"bold dimmed green"` | The style for the module.                            |
-| `disabled` | `false`               | Disables the `hostname` module.                      |
+| Variable   | Default               | Description                                                                                                                          |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
+| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
+| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### Example
 
@@ -536,6 +561,7 @@ The `hostname` module shows the system hostname.
 ssh_only = false
 prefix = "⟪"
 suffix = "⟫"
+trim_at = ".companyname.com"
 disabled = false
 ```
 
@@ -550,7 +576,7 @@ more than the `threshold` config value, if it exists.
 
 | Variable    | Default       | Description                                           |
 | ----------- | ------------- | ----------------------------------------------------- |
-| `symbol`    | `"✦ "`        | The symbol used before displaying the number of jobs. |
+| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
 | `threshold` | `1`           | Show number of jobs if exceeded.                      |
 | `style`     | `"bold blue"` | The style for the module.                             |
 | `disabled`  | `false`       | Disables the `jobs` module.                           |
@@ -665,7 +691,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | Variable          | Default                  | Description                                                   |
 | ----------------- | ------------------------ | ------------------------------------------------------------- |
 | `show_percentage` | `false`                  | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | when total swap non-zero | Display swap usage.                                           |
+| `show_swap`       | `true`                   | Display swap usage if total swap is non-zero.                 |
 | `threshold`       | `75`                     | Hide the memory usage unless it exceeds this percentage.      |
 | `symbol`          | `"🐏 "`                  | The symbol used before displaying the memory usage.           |
 | `style`           | `"bold dimmed white"`    | The style for the module.                                     |
@@ -689,7 +715,7 @@ style = "bold dimmed green"
 The `java` module shows the currently installed version of Java.
 The module will be shown if any of the following conditions are met:
 
-- The current directory contains a `pom.xml` or `build.gradle` file
+- The current directory contains a `pom.xml`, `build.gradle` or `build.sbt` file
 - The current directory contains a file with the `.java`, `.class` or `.jar` extension
 
 ### Options
@@ -872,15 +898,16 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable   | Default       | Description                                                                                                         |
-| ---------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `12hr`     | `false`       | Enables 12 hour formatting                                                                                          |
-| `format`   | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`    | `bold yellow` | The style for the module time                                                                                       |
-| `disabled` | `true`        | Disables the `time` module.                                                                                         |
+| Variable          | Default       | Description                                                                                                         |
+| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `12hr`            | `false`       | Enables 12 hour formatting                                                                                          |
+| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `bold yellow` | The style for the module time                                                                                       |
+| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
+| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.     |
 
-If `12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
-Manually setting `format` will override the `12hr` setting.
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
+Manually setting `format` will override the `use_12hr` setting.
 
 ### Example
 
@@ -890,6 +917,7 @@ Manually setting `format` will override the `12hr` setting.
 [time]
 disabled = false
 format = "🕙[ %T ]"
+utc_time_offset = -5
 ```
 
 ## Username

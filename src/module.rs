@@ -13,6 +13,7 @@ pub const ALL_MODULES: &[&str] = &[
     "battery",
     "character",
     "cmd_duration",
+    "conda",
     "directory",
     "dotnet",
     "env_var",
@@ -125,6 +126,11 @@ impl<'a> Module<'a> {
         } else {
             None
         }
+    }
+
+    /// Get module's name
+    pub fn get_name(&self) -> &String {
+        &self._name
     }
 
     /// Whether a module has non-empty segments

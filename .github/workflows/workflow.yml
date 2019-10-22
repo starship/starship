@@ -1,5 +1,14 @@
 name: Main workflow
-on: [push, pull_request]
+on:
+  push:
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
+  pull_request:
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
+
 jobs:
   # Run the `rustfmt` code formatter
   rustfmt:
@@ -9,7 +18,9 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
+          profile: minimal
           toolchain: stable
+          components: rustfmt
           override: true
       - run: rustup component add rustfmt
       - uses: actions-rs/cargo@v1
@@ -25,9 +36,10 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
+          profile: minimal
           toolchain: stable
+          components: clippy
           override: true
-      - run: rustup component add clippy
       - uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -57,6 +69,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
+          profile: minimal
           toolchain: stable
           override: true
       - uses: actions-rs/cargo@v1
@@ -64,7 +77,7 @@ jobs:
           command: check
           args: --all
 
-  # Run tests on Linux, and macOS
+  # Run tests on Linux, macOS, and Windows
   # On both Rust stable and Rust nightly
   test:
     name: Test Suite
@@ -73,7 +86,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macOS-latest]
+        os: [ubuntu-latest, macOS-latest, windows-latest]
         rust: [stable, nightly]
     steps:
       # Checkout the branch being tested
@@ -82,6 +95,7 @@ jobs:
       # Install all the required dependencies for testing
       - uses: actions-rs/toolchain@v1
         with:
+          profile: minimal
           toolchain: stable
           override: true
 
@@ -103,7 +117,7 @@ jobs:
       # Install Python at a fixed version
       - uses: actions/setup-python@master
         with:
-          python-version: "3.6.9"
+          python-version: "3.7.4"
 
       # Install dotnet at a fixed version
       - uses: actions/setup-dotnet@master
@@ -145,6 +159,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
+          profile: minimal
           toolchain: stable
           override: true
       - run: cargo login $CRATES_IO_TOKEN
@@ -160,10 +175,17 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
-      - run: export COMMIT_TAG=$(git describe --tags)
-      - run: brew bump-formula-pr --url=https://github.com/starship/starship/archive/$COMMIT_TAG.tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
+      - run: |
+          git config user.email "bot@starship.rs"
+          git config user.name "Starship Bot"
+      
+          cd $(brew --repo homebrew/core)
+          git fetch origin
+          sudo git reset --hard origin/master
+          cd -
+      - run: brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
 
   # Create GitHub release with Rust build targets and release notes
   github_release:
@@ -177,6 +199,7 @@ jobs:
           - x86_64-unknown-linux-gnu
           - x86_64-unknown-linux-musl
           - x86_64-apple-darwin
+          - x86_64-pc-windows-gnu
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
@@ -187,6 +210,9 @@ jobs:
           - target: x86_64-apple-darwin
             os: macOS-latest
             name: starship-x86_64-apple-darwin.tar.gz
+          - target: x86_64-pc-windows-gnu
+            os: windows-latest
+            name: starship-x86_64-pc-windows-gnu.zip
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
@@ -194,6 +220,7 @@ jobs:
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
+          profile: minimal
           toolchain: stable
           override: true
           target: ${{ matrix.target }}
@@ -208,19 +235,20 @@ jobs:
           command: build
           args: --release --target ${{ matrix.target }}
 
-      - name: Prepare build artifacts
+      - name: Prepare build artifacts [Windows]
+        if: matrix.os == 'windows-latest'
+        run: |
+          strip target/${{ matrix.target }}/release/starship.exe
+          7z a ${{ matrix.name }} target/${{ matrix.target }}/release/starship.exe
+
+      - name: Prepare build artifacts [-nix]
+        if: matrix.os != 'windows-latest'
         run: |
           strip target/${{ matrix.target }}/release/starship
-          cd target/${{ matrix.target }}/release
-          if [[ "${{ matrix.os }}" == "windows-latest" ]]
-          then
-            7z a ../../../${{ matrix.name }} starship
-          else
-            tar czvf ../../../${{ matrix.name }} starship
-          fi
-          cd -
+          tar czvf ${{ matrix.name }} target/${{ matrix.target }}/release/starship
 
       - name: Generate release notes
+        if: matrix.os == 'ubuntu-latest'
         run: |
           # Temporary fix for https://github.com/actions/setup-go/issues/14
           export PATH=$PATH:$(go env GOPATH)/bin

@@ -5,8 +5,13 @@ module.exports = {
       title: "Starship",
       description: "The cross-shell prompt for astronauts"
     },
-    "/ja/": {
+    "/ja-JP/": {
       lang: "ja-JP",
+      title: "Starship",
+      description: "The cross-shell prompt for astronauts"
+    },
+    "/zh-TW/": {
+      lang: "zh-TW",
       title: "Starship",
       description: "The cross-shell prompt for astronauts"
     }
@@ -38,9 +43,9 @@ module.exports = {
           ["/guide/", "Guide"],
           ["/config/", "Configuration"],
           ["/advanced-config/", "Advanced Configuration"]
-        ],
+        ]
       },
-      "/ja/": {
+      "/ja-JP/": {
         // text for the language dropdown
         selectText: "言語",
         // label for this locale in the language dropdown
@@ -48,15 +53,32 @@ module.exports = {
         // Custom text for edit link. Defaults to "Edit this page"
         editLinkText: "GitHub で編集する",
         // Custom navbar values
-        nav: [{ text: "設定", link: "/ja/config/" }],
+        nav: [{ text: "設定", link: "/ja-JP/config/" }],
         // Custom sidebar values
         sidebar: [
-          "/ja/",
-          ["/ja/guide/", "ガイド"],
-          ["/ja/config/", "設定"],
-          ["/ja/advanced-config/", "高度な設定"]
-        ],
+          "/ja-JP/",
+          ["/ja-JP/guide/", "ガイド"],
+          ["/ja-JP/config/", "設定"],
+          ["/ja-JP/advanced-config/", "高度な設定"]
+        ]
       },
+      "/zh-TW/": {
+        // text for the language dropdown
+        selectText: "語言",
+        // label for this locale in the language dropdown
+        label: "繁體中文",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "在 GitHub 上修改此頁面",
+        // Custom navbar values
+        nav: [{ text: "設定", link: "/zh-TW/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/zh-TW/",
+          ["/zh-TW/guide/", "指引"],
+          ["/zh-TW/config/", "設定"],
+          ["/zh-TW/advanced-config/", "進階設定"]
+        ]
+      }
     }
   },
   plugins: [

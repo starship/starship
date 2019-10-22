@@ -1,7 +1,9 @@
-use ansi_term::Color;
 use std::env;
 
 use super::{Context, Module};
+
+use crate::config::RootModuleConfig;
+use crate::configs::env_var::EnvVarConfig;
 
 /// Creates a module with the value of the chosen environment variable
 ///
@@ -11,23 +13,22 @@ use super::{Context, Module};
 ///     - a variable named as the value of env_var.variable is defined
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("env_var");
-    let module_style = module
-        .config_value_style("style")
-        .unwrap_or_else(|| Color::Black.bold().dimmed());
+    let config: EnvVarConfig = EnvVarConfig::try_load(module.config);
 
-    let env_name = module.config_value_str("variable")?;
+    let env_value = get_env_value(config.variable?, config.default)?;
 
-    let default_value = module.config_value_str("default");
-
-    let env_value = get_env_value(env_name, default_value)?;
-
-    let prefix = module.config_value_str("prefix").unwrap_or("").to_owned();
-    let suffix = module.config_value_str("suffix").unwrap_or("").to_owned();
-
-    module.set_style(module_style);
+    module.set_style(config.style);
     module.get_prefix().set_value("with ");
-    module.new_segment_if_config_exists("symbol");
-    module.new_segment("env_var", &format!("{}{}{}", prefix, env_value, suffix));
+
+    if let Some(symbol) = config.symbol {
+        module.create_segment("symbol", &symbol);
+    }
+
+    // TODO: Use native prefix and suffix instead of stacking custom ones together with env_value.
+    module.new_segment(
+        "env_var",
+        &format!("{}{}{}", config.prefix, env_value, config.suffix),
+    );
 
     Some(module)
 }
