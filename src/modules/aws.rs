@@ -10,7 +10,10 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::aws::{AwsConfig, AwsItems};
 
-fn get_aws_region_from_config(aws_profile: Option<&str>) -> Option<String> {
+type Profile = String;
+type Region = String;
+
+fn get_aws_region_from_config(aws_profile: Option<&str>) -> Option<Region> {
     let config_location = env::var("AWS_CONFIG_FILE")
         .ok()
         .and_then(|path| PathBuf::from_str(&path).ok())
@@ -43,9 +46,6 @@ fn get_aws_region_from_config(aws_profile: Option<&str>) -> Option<String> {
 
     Some(region.to_string())
 }
-
-type Profile = String;
-type Region = String;
 
 fn get_aws_profile_and_region() -> (Option<Profile>, Option<Region>) {
     match (

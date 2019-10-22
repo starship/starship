@@ -9,7 +9,6 @@ use crate::common::{self, TestCommand};
 #[test]
 fn no_region_set() -> io::Result<()> {
     let output = common::render_module("aws")
-        .env_clear()
         .env("PATH", env!("PATH"))
         .output()?;
     let expected = "";
@@ -21,7 +20,6 @@ fn no_region_set() -> io::Result<()> {
 #[test]
 fn region_set() -> io::Result<()> {
     let output = common::render_module("aws")
-        .env_clear()
         .env("AWS_REGION", "ap-northeast-2")
         .output()?;
     let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  ap-northeast-2"));
@@ -33,7 +31,6 @@ fn region_set() -> io::Result<()> {
 #[test]
 fn default_region_set() -> io::Result<()> {
     let output = common::render_module("aws")
-        .env_clear()
         .env("AWS_REGION", "ap-northeast-2")
         .env("AWS_DEFAULT_REGION", "ap-northeast-1")
         .output()?;
@@ -58,7 +55,6 @@ fn profile_set() -> io::Result<()> {
 #[test]
 fn profile_and_region_set() -> io::Result<()> {
     let output = common::render_module("aws")
-        .env_clear()
         .env("AWS_PROFILE", "astronauts")
         .env("AWS_REGION", "ap-northeast-2")
         .output()?;
@@ -88,7 +84,6 @@ region = us-east-2
     )?;
 
     let output = common::render_module("aws")
-        .env_clear()
         .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
         .output()?;
     let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  us-east-1"));
@@ -117,6 +112,9 @@ region = us-east-2
         .env_clear()
         .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
         .env("AWS_PROFILE", "astronauts")
+        .use_config(toml::toml! {
+            [aws]
+        })
         .output()?;
     let expected = format!(
         "on {} ",
