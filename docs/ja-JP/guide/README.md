@@ -101,7 +101,7 @@
 - 閾値を超えた際の、コマンドの実行時間
 - バックグラウンドジョブのインジケーター (`✦`)
 - 現在のKubernetesクラスタとネームスペース (`☸`)
-- Current AWS profile (`☁️`)
+- 現在のAWSプロファイル (`☁️`)
 
 ## 🚀 インストール
 
@@ -153,9 +153,9 @@
    ```
 
 
-   #### Other x86-64 Linux Platforms
+   #### 他の x86-64 Linux プラットフォーム
 
-   Download a prebuilt binary and place in /usr/local/bin/
+   ビルド済みのバイナリをダウンロードして、/usr/local/bin/ に配置します
 
    ```sh
    $ wget -q --show-progress https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz
@@ -201,7 +201,7 @@
 
    #### Powershell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (それか Nix上の `~/.config/powershell/Microsoft.PowerShell_profile.ps1` )の末尾に以下を追加してください。
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
