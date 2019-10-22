@@ -118,7 +118,7 @@ prompt_order = [
 
 | 変数         | デフォルト           | 説明                            |
 | ---------- | --------------- | ----------------------------- |
-| `symbol`   | `"☁️  "`        | 現在のAWSプロファイルを表示する前に表示される記号です。 |
+| `symbol`   | `"☁️ "`         | 現在のAWSプロファイルを表示する前に表示される記号です。 |
 | `style`    | `"bold yellow"` | モジュールのスタイルです。                 |
 | `disabled` | `false`         | `aws`モジュールを無効にします。            |
 
@@ -266,7 +266,7 @@ prefix = "underwent "
 
 ## Conda
 
-`$CONDA_DEFAULT_ENV`が設定されている場合、`conda`モジュールは現在のcondaの環境を表示します。 Note: This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`
+`$CONDA_DEFAULT_ENV`が設定されている場合、`conda`モジュールは現在のcondaの環境を表示します。 Note: これはconda自身の プロンプト修飾子 を抑制しません。`conda config --set changeps1 False` で実行することができます。
 
 ### オプション
 
@@ -331,12 +331,12 @@ This module will only be shown in your prompt when one of the following files ar
 
 ### オプション
 
-| 変数          | デフォルト         | 説明                                                    |
-| ----------- | ------------- | ----------------------------------------------------- |
-| `symbol`    | `•NET "`      | dotnetのバージョンを表示する前に使用される記号です。                         |
-| `style`     | `"bold blue"` | モジュールのスタイルです。                                         |
-| `heuristic` | `true`        | Use faster version detection to keep starship snappy. |
-| `disabled`  | `false`       | `dotnet`モジュールを無効にします。                                 |
+| 変数          | デフォルト         | 説明                                   |
+| ----------- | ------------- | ------------------------------------ |
+| `symbol`    | `•NET "`      | dotnetのバージョンを表示する前に使用される記号です。        |
+| `style`     | `"bold blue"` | モジュールのスタイルです。                        |
+| `heuristic` | `true`        | より高速なバージョン検出を使用して、starshipの動作を維持します。 |
+| `disabled`  | `false`       | `dotnet`モジュールを無効にします。                |
 
 ### 設定例
 
