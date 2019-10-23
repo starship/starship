@@ -124,7 +124,56 @@ region = us-east-2
 }
 
 #[test]
-fn profile_and_region_set_and_only_display_region() -> io::Result<()> {
+fn profile_and_region_set_with_display_all() -> io::Result<()> {
+    let output = common::render_module("aws")
+        .env("AWS_PROFILE", "astronauts")
+        .env("AWS_REGION", "ap-northeast-1")
+        .use_config(toml::toml! {
+            [aws]
+            displayed_items = "all"
+        })
+        .output()?;
+    let expected = format!(
+        "on {} ",
+        Color::Yellow.bold().paint("☁️  astronauts(ap-northeast-1)")
+    );
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+fn profile_set_with_display_all() -> io::Result<()> {
+    let output = common::render_module("aws")
+        .env("AWS_PROFILE", "astronauts")
+        .use_config(toml::toml! {
+            [aws]
+            displayed_items = "all"
+        })
+        .output()?;
+    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  astronauts"));
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+fn region_set_with_display_all() -> io::Result<()> {
+    let output = common::render_module("aws")
+        .env("AWS_REGION", "ap-northeast-1")
+        .use_config(toml::toml! {
+            [aws]
+            displayed_items = "all"
+        })
+        .output()?;
+    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  ap-northeast-1"));
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+fn profile_and_region_set_with_display_region() -> io::Result<()> {
     let output = common::render_module("aws")
         .env("AWS_PROFILE", "astronauts")
         .env("AWS_DEFAULT_REGION", "ap-northeast-1")
@@ -140,7 +189,7 @@ fn profile_and_region_set_and_only_display_region() -> io::Result<()> {
 }
 
 #[test]
-fn profile_and_region_set_and_only_display_profile() -> io::Result<()> {
+fn profile_and_region_set_with_display_profile() -> io::Result<()> {
     let output = common::render_module("aws")
         .env("AWS_PROFILE", "astronauts")
         .env("AWS_REGION", "ap-northeast-1")
@@ -156,7 +205,7 @@ fn profile_and_region_set_and_only_display_profile() -> io::Result<()> {
 }
 
 #[test]
-fn region_set_and_only_display_profile() -> io::Result<()> {
+fn region_set_with_display_profile() -> io::Result<()> {
     let output = common::render_module("aws")
         .env("AWS_REGION", "ap-northeast-1")
         .use_config(toml::toml! {
@@ -171,7 +220,7 @@ fn region_set_and_only_display_profile() -> io::Result<()> {
 }
 
 #[test]
-fn region_not_set_and_only_display_region() -> io::Result<()> {
+fn region_not_set_with_display_region() -> io::Result<()> {
     let output = common::render_module("aws")
         .use_config(toml::toml! {
             [aws]
