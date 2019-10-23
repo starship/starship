@@ -235,7 +235,7 @@ use_symbol_for_status = true
 
 ## Befehlsdauer
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+Das `cmd_duration` Modul zeigt an wie lange der letzte Befehl ausgeführt wurde. Das Modul wird nur angezeigt wenn der letzte Befehl länger als zwei Sekunden ausgeführt wurde. Mit der `min_time` Option kann die Zeit eingestellt werden ab der <0>cmd_duration</0> angezeigt wird.
 
 ::: warning Nicht die DEBUG-trap in der Bash hooken
 
