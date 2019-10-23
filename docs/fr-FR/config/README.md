@@ -1,39 +1,39 @@
 # Configuration
 
-::: tip
+::: remarque
 
-🔥 Configuration is currently being worked on. Many new configuration options will be available in coming releases.
+🔥 La configuration est en train d'être travaillée. Beaucoup de nouvelles options de configuration seront disponibles dans les prochaines versions.
 
 :::
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
+Pour commencer à configurer starship, créez le fichier suivant : `~/.config/starship.toml`.
 
 ```shell
 $ touch ~/.config/starship.toml
 ```
 
-All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
+Toute la configuration de starship est effectuée dans ce fichier [TOML](https://github.com/toml-lang/toml) :
 
 ```toml
-# Don't print a new line at the start of the prompt
+# N'écrivez pas une nouvelle ligne au début de la console
 add_newline = false
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]      # The name of the module we are configuring is "character"
-symbol = "➜"     # The "symbol" segment is being set to "➜"
+# Remplacez le symbole "❯" dans la console avec "➜"
+[character]      # Le nom du module que nous configurons est "character"
+symbol = "➜"     # Le segment "symbol" est mis comme "➜"
 
-# Disable the package module, hiding it from the prompt completely
+# Désactivez le module package, le cachant complètement de la console
 [package]
 disabled = true
 ```
 
-### Terminology
+### Terminologie
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
+**Module**: Un composant dans l'invite donnant des informations basées sur des informations contextuelles à propos de votre Système d'Exploitation. Par exemple, le module "nodejs" montre la version de NodeJS qui est actuellement installée sur votre ordinateur, si votre répertoire actuel est un projet NodeJS.
 
-**Segment**: Smaller sub-components that compose a module. For example, the "symbol" segment in the "nodejs" module contains the character that is shown before the version number (⬢ by default).
+**Segment**: Sous-composants plus petits qui composent un module. Par exemple, le segment "symbol" du module "nodejs" contient le caractère qui est affiché avant le numéro de version (⬢ par défaut).
 
-Here is the representation of the node module. In the following example, "symbol" and "version" are segments within it. Every module also has a prefix and suffix that are the default terminal color.
+Voici la représentation du module node. Dans l'exemple suivant, "symbol" et "version" sont des segments dans celui-ci. Chaque module a également un préfixe et un suffixe qui sont la couleur par défaut du terminal.
 
 ```
 [prefix]      [symbol]     [version]    [suffix]
@@ -112,13 +112,13 @@ prompt_order = [
 
 ## AWS
 
-The `aws` module shows the current AWS profile. This is based on the `AWS_PROFILE` env var.
+The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
 
 ### Options
 
 | Variable   | Default         | Description                                                |
 | ---------- | --------------- | ---------------------------------------------------------- |
-| `symbol`   | `"☁️ "`         | The symbol used before displaying the current AWS profile. |
+| `symbol`   | `"☁️  "`        | The symbol used before displaying the current AWS profile. |
 | `style`    | `"bold yellow"` | The style for the module.                                  |
 | `disabled` | `false`         | Disables the `AWS` module.                                 |
 
@@ -398,7 +398,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 [git_branch]
 symbol = "🌱 "
-truncation_length = "4"
+truncation_length = 4
 truncation_symbol = ""
 ```
 
@@ -508,13 +508,14 @@ The `hostname` module shows the system hostname.
 
 ### Options
 
-| Variable   | Default               | Description                                          |
-| ---------- | --------------------- | ---------------------------------------------------- |
-| `ssh_only` | `true`                | Only show hostname when connected to an SSH session. |
-| `prefix`   | `""`                  | Prefix to display immediately before the hostname.   |
-| `suffix`   | `""`                  | Suffix to display immediately after the hostname.    |
-| `style`    | `"bold dimmed green"` | The style for the module.                            |
-| `disabled` | `false`               | Disables the `hostname` module.                      |
+| Variable   | Default               | Description                                                                                                                          |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
+| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
+| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### Example
 
@@ -525,6 +526,7 @@ The `hostname` module shows the system hostname.
 ssh_only = false
 prefix = "⟪"
 suffix = "⟫"
+trim_at = ".companyname.com"
 disabled = false
 ```
 
@@ -642,14 +644,14 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Variable          | Default                  | Description                                                   |
-| ----------------- | ------------------------ | ------------------------------------------------------------- |
-| `show_percentage` | `false`                  | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | when total swap non-zero | Display swap usage.                                           |
-| `threshold`       | `75`                     | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`                   | The symbol used before displaying the memory usage.           |
-| `style`           | `"bold dimmed white"`    | The style for the module.                                     |
-| `disabled`        | `true`                   | Disables the `memory_usage` module.                           |
+| Variable          | Default               | Description                                                   |
+| ----------------- | --------------------- | ------------------------------------------------------------- |
+| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
+| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
+| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
+| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
+| `style`           | `"bold dimmed white"` | The style for the module.                                     |
+| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
 ### Example
 
