@@ -67,9 +67,7 @@ fn combine_outputs(output: Output) -> String {
 
 /// Extract the java version from `java_out`.
 fn format_java_version(java_out: String) -> Option<String> {
-    java_version_parser::parse_jre_version(&java_out)
-        .map(|result| format!("v{}", result.1))
-        .ok()
+    java_version_parser::parse_jre_version(&java_out).map(|result| format!("v{}", result))
 }
 
 #[cfg(test)]
