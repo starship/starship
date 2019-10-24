@@ -5,7 +5,7 @@ use ansi_term::Color;
 
 use super::{Context, Module};
 
-use crate::modules::java_version_parser;
+use crate::modules::utils::java_version_parser;
 
 /// Creates a module with the current Java version
 ///
