@@ -39,7 +39,12 @@ impl<'a> Context<'a> {
         let path = arguments
             .value_of("path")
             .map(From::from)
-            .unwrap_or_else(|| env::current_dir().expect("Unable to identify current directory."));
+            .unwrap_or_else(|| {
+                env::var("PWD").map(PathBuf::from).unwrap_or_else(|err| {
+                    log::debug!("Unable to get path from $PWD: {}", err);
+                    env::current_dir().expect("Unable to identify current directory.")
+                })
+            });
 
         Context::new_with_dir(arguments, path)
     }
