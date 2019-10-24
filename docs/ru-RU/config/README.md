@@ -662,7 +662,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 show_percentage = true
 show_swap = true
 threshold = -1
-icon = " "
+symbol = " "
 style = "bold dimmed green"
 ```
 
