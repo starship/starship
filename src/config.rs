@@ -75,6 +75,19 @@ impl<'a> ModuleConfig<'a> for i64 {
     }
 }
 
+impl<'a> ModuleConfig<'a> for usize {
+    fn from_config(config: &Value) -> Option<Self> {
+        config.as_integer().and_then(|value: i64| {
+            // Downcasting i64 to usize
+            if value > 0 {
+                Some(value as usize)
+            } else {
+                None
+            }
+        })
+    }
+}
+
 impl<'a> ModuleConfig<'a> for f64 {
     fn from_config(config: &Value) -> Option<Self> {
         config.as_float()

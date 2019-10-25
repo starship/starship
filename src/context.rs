@@ -140,6 +140,7 @@ impl<'a> Context<'a> {
         self.dir_files
             .get_or_try_init(|| -> Result<Vec<PathBuf>, std::io::Error> {
                 let dir_files = fs::read_dir(&self.current_dir)?
+                    .take(self.config.get_root_config().limit_files)
                     .filter_map(Result::ok)
                     .map(|entry| entry.path())
                     .collect::<Vec<PathBuf>>();
