@@ -174,9 +174,9 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: |
-          git config user.email "bot@starship.rs"
-          git config user.name "Starship Bot"
-      
+          git config --global user.email "bot@starship.rs"
+          git config --global user.name "Starship Bot"
+      - run: |
           cd $(brew --repo homebrew/core)
           git fetch origin
           sudo git reset --hard origin/master
