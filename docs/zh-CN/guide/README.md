@@ -155,7 +155,7 @@
 
    #### Other x86-64 Linux Platforms
 
-   Download a prebuilt binary and place in /usr/local/bin/
+   下载预编译好的二进制文件到 /usr/local/bin/ 目录
 
    ```sh
    $ wget -q --show-progress https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz
@@ -210,7 +210,7 @@
 
 ## 🔧 配置
 
-For details on how to configure Starship, check out our [documentation](https://starship.rs/config/).
+关于如何配置 Starship ，详情请查看我们的[文档](https://starship.rs/config/)。
 
 ## 🤝 贡献
 
