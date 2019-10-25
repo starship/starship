@@ -706,7 +706,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 show_percentage = true
 show_swap = true
 threshold = -1
-icon = " "
+symbol = " "
 style = "bold dimmed green"
 ```
 

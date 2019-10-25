@@ -663,7 +663,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 show_percentage = true
 show_swap = true
 threshold = -1
-icon = " "
+symbol = " "
 style = "bold dimmed green"
 ```
 
