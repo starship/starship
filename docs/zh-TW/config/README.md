@@ -118,7 +118,7 @@ prompt_order = [
 
 | 變數         | 預設              | 說明                 |
 | ---------- | --------------- | ------------------ |
-| `symbol`   | `"☁️  "`        | 顯示在目前 AWS 配置之前的符號。 |
+| `symbol`   | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。 |
 | `style`    | `"bold yellow"` | 這個模組的風格。           |
 | `disabled` | `false`         | 停用 `AWS` 模組。       |
 
@@ -553,10 +553,9 @@ symbol = "+ "
 threshold = 4
 ```
 
-
 ## Kubernetes
 
-顯示現在 Kubernetes 主體名稱以及從 kubeconfig 檔案來的名稱空間 (如果有設定的話)。 這個名稱空間必須設定在 kubeconfig 檔案內，你可以透過 `kubectl config set-context starship-cluster --namespace astronaut` 指令做到。 如果有設定 `$KUBECONFIG` 環境變數，這個模組就會使用設定值；如果沒有，它就會使用 `~/.kube/config`。
+顯示現在 Kubernetes 主體名稱以及從 kubeconfig 檔案來的名稱空間 (如果有設定的話)。 The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. 如果有設定 `$KUBECONFIG` 環境變數，這個模組就會使用設定值；如果沒有，它就會使用 `~/.kube/config`。
 
 ::: tip
 
@@ -582,7 +581,6 @@ symbol = "⛵ "
 style = "dim green"
 disabled = false
 ```
-
 
 ## 換行
 
@@ -661,7 +659,7 @@ pure_msg = "pure shell"
 show_percentage = true
 show_swap = true
 threshold = -1
-icon = " "
+symbol = " "
 style = "bold dimmed green"
 ```
 
@@ -841,7 +839,7 @@ symbol = "⚙️ "
 
 | 變數                | 預設            | 說明                                                                                     |
 | ----------------- | ------------- | -------------------------------------------------------------------------------------- |
-| `12hr`            | `false`       | 啟用 12 小時格式。                                                                            |
+| `use_12hr`        | `false`       | 啟用 12 小時格式。                                                                            |
 | `format`          | 請看下列          | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。 |
 | `style`           | `bold yellow` | 這個模組的時間的風格。                                                                            |
 | `disabled`        | `true`        | 停用 `time` 模組。                                                                          |
