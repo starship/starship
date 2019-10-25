@@ -119,7 +119,7 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 
 | Variable   | Standardwert    | Beschreibung                                                        |
 | ---------- | --------------- | ------------------------------------------------------------------- |
-| `symbol`   | `"☁️  "`        | Symbol das vor der Anzahl des aktuellen AWS-Profils angezeigt wird. |
+| `symbol`   | `"☁️ "`         | Symbol das vor der Anzahl des aktuellen AWS-Profils angezeigt wird. |
 | `style`    | `"bold yellow"` | Stil für dieses Modul.                                              |
 | `disabled` | `false`         | Deaktiviert das `aws`-Modul.                                        |
 
@@ -554,11 +554,9 @@ symbol = "+ "
 threshold = 4
 ```
 
-
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace
-astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
@@ -584,7 +582,6 @@ symbol = "⛵ "
 style = "dim green"
 disabled = false
 ```
-
 
 ## Zeilenumbruch
 
@@ -663,7 +660,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 show_percentage = true
 show_swap = true
 threshold = -1
-icon = " "
+symbol = " "
 style = "bold dimmed green"
 ```
 
@@ -843,7 +840,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 | Variable          | Standardwert  | Beschreibung                                                                                                                              |
 | ----------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `12hr`            | `false`       | Aktiviert die Formatierung der Uhrzeit im 12-Stunden-Format.                                                                              |
+| `use_12hr`        | `false`       | Aktiviert die Formatierung der Uhrzeit im 12-Stunden-Format.                                                                              |
 | `format`          | Siehe unten   | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html).             |
 | `style`           | `bold yellow` | Stil für dieses Modul.                                                                                                                    |
 | `disabled`        | `true`        | Deaktiviert das `time`-Modul.                                                                                                             |
