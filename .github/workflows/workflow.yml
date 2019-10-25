@@ -100,27 +100,27 @@ jobs:
           override: true
 
       # Install Node.js at a fixed version
-      - uses: actions/setup-node@master
+      - uses: actions/setup-node@v1
         with:
           node-version: "12.0.0"
 
       # Install Golang at a fixed version
-      - uses: actions/setup-go@master
+      - uses: actions/setup-go@v1
         with:
           go-version: "1.12.1"
 
       # Install Ruby at a fixed version
-      - uses: actions/setup-ruby@master
+      - uses: actions/setup-ruby@v1
         with:
           ruby-version: "2.6.3"
 
       # Install Python at a fixed version
-      - uses: actions/setup-python@master
+      - uses: actions/setup-python@v1
         with:
           python-version: "3.7.4"
 
       # Install dotnet at a fixed version
-      - uses: actions/setup-dotnet@master
+      - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: "2.2.402"
 
