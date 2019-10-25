@@ -136,7 +136,7 @@ The prompt shows information you need while you're working, while staying sleek 
    $ brew install starship
    ```
 
-   #### Rust (v1.33 or higher)
+   #### Rust (v1.38 or higher)
 
    ```sh
    $ cargo install starship
