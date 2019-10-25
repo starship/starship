@@ -153,6 +153,7 @@ jobs:
   cargo_publish:
     if: startsWith(github.ref, 'refs/tags/v')
     name: Publish Cargo Package
+    needs: [test, docker_test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -170,6 +171,7 @@ jobs:
   brew_bump_formula:
     if: startsWith(github.ref, 'refs/tags/v')
     name: Bump Brew Formula
+    needs: [test, docker_test]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
@@ -189,6 +191,7 @@ jobs:
   github_release:
     if: startsWith(github.ref, 'refs/tags/v')
     name: Create GitHub Release
+    needs: [test, docker_test]
     strategy:
       fail-fast: false
       matrix:
