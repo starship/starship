@@ -554,11 +554,9 @@ symbol = "+ "
 threshold = 4
 ```
 
-
 ## Kubernetes
 
-現在のKubernetesコンテキスト名と、設定されている場合は、kubeconfigファイルに基づいてネームスペースを表示します。 ネームスペースはkubeconfigファイルで設定する必要があります。`kubectl config set-context starship-cluster --namespace
-astronaut`。 `$KUBECONFIG` 環境変数が設定されている場合、モジュールはそれを使用します `~/.kube/config` は使用しません。
+現在のKubernetesコンテキスト名と、設定されている場合は、kubeconfigファイルに基づいてネームスペースを表示します。 The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. `$KUBECONFIG` 環境変数が設定されている場合、モジュールはそれを使用します `~/.kube/config` は使用しません。
 
 ::: tip
 
@@ -584,7 +582,6 @@ symbol = "⛵ "
 style = "dim green"
 disabled = false
 ```
-
 
 ## 改行
 
@@ -664,7 +661,7 @@ pure_msg = "pure shell"
 show_percentage = true
 show_swap = true
 threshold = -1
-icon = " "
+symbol = " "
 style = "bold dimmed green"
 ```
 
@@ -842,15 +839,15 @@ symbol = "⚙️ "
 
 ### オプション
 
-| 変数                | デフォルト         | 説明                                                                                                                  |
-| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `12hr`            | `false`       | Enables 12 hour formatting                                                                                          |
-| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`           | `bold yellow` | The style for the module time                                                                                       |
-| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
-| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
+| 変数                | デフォルト          | 説明                                                                                                               |
+| ----------------- | -------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`        | 12時間のフォーマットを有効にします。                                                                                              |
+| `format`          | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。                |
+| `style`           | `bold yellow`  | モジュールのスタイルです。                                                                                                    |
+| `disabled`        | `true`         | `time`モジュールを無効にします。                                                                                              |
+| `utc_time_offset` | `local`        | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets. |
 
-`use_12hr`が`true`の場合、`format`のデフォルトは`"%r"`です。 それ以外の場合、デフォルトは`"%T"`です。 Manually setting `format` will override the `use_12hr` setting.
+`use_12hr`が`true`の場合、`format`のデフォルトは`"%r"`です。 それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、`use_12hr`の設定が上書きされます。
 
 ### 設定例
 
@@ -874,7 +871,7 @@ utc_time_offset = -5
 
 ### オプション
 
-| Variable      | Default         | Description               |
+| 変数            | デフォルト           | 説明                        |
 | ------------- | --------------- | ------------------------- |
 | `style_root`  | `"bold red"`    | ユーザーがrootのときに使用されるスタイルです。 |
 | `style_user`  | `"bold yellow"` | 非rootユーザーに使用されるスタイルです。    |
