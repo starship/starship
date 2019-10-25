@@ -178,7 +178,7 @@ jobs:
       - run: |
           git config --global user.email "bot@starship.rs"
           git config --global user.name "Starship Bot"
-      - run: |
+
           cd $(brew --repo homebrew/core)
           git fetch origin
           sudo git reset --hard origin/master
@@ -186,6 +186,32 @@ jobs:
       - run: brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
     env:
       HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
+
+  generate_changelog:
+    if: github.ref == 'refs/heads/master'
+    name: Update Changelog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Delete old changelog
+        run: rm -rf CHANGELOG.md
+      - name: Generate changelog
+        run: |
+          # Temporary fix for https://github.com/actions/setup-go/issues/14
+          export PATH=$PATH:$(go env GOPATH)/bin
+          go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
+          git-chglog -c .github/chglog/changelog.yml > CHANGELOG.md
+      - name: Commit new changelog
+        run: |
+          git config --global user.email "bot@starship.rs"
+          git config --global user.name "Starship Bot"
+
+          git checkout master
+          git add CHANGELOG.md
+          git commit -m "Update changelog"
+          git push "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git" master
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Create GitHub release with Rust build targets and release notes
   github_release:
