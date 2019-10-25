@@ -122,7 +122,7 @@ The `aws` module shows the current AWS region and profile. This is based on
 
 | Variable   | Default         | Description                                                |
 | ---------- | --------------- | ---------------------------------------------------------- |
-| `symbol`   | `"☁️  "`        | The symbol used before displaying the current AWS profile. |
+| `symbol`   | `"☁️ "`         | The symbol used before displaying the current AWS profile. |
 | `style`    | `"bold yellow"` | The style for the module.                                  |
 | `disabled` | `false`         | Disables the `AWS` module.                                 |
 
@@ -264,7 +264,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 | Variable   | Default         | Description                                                |
 | ---------- | --------------- | ---------------------------------------------------------- |
 | `min_time` | `2`             | Shortest duration to show time for.                        |
-| `prefix`   | `took `         | Prefix to display immediately before the command duration. |
+| `prefix`   | `took`          | Prefix to display immediately before the command duration. |
 | `style`    | `"bold yellow"` | The style for the module.                                  |
 | `disabled` | `false`         | Disables the `cmd_duration` module.                        |
 
@@ -591,13 +591,11 @@ symbol = "+ "
 threshold = 4
 ```
 
-
 ## Kubernetes
 
 Displays the current Kubernetes context name and, if set, the namespace from
 the kubeconfig file. The namespace needs to be set in the kubeconfig file, this
-can be done via `kubectl config set-context starship-cluster --namespace
-astronaut`. If the `$KUBECONFIG` env var is set the module will use that if
+can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if
 not it will use the `~/.kube/config`.
 
 ::: tip
@@ -611,7 +609,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 | Variable   | Default       | Description                                         |
 | ---------- | ------------- | --------------------------------------------------- |
-| `symbol`   | `"☸ "`       | The symbol used before displaying the Cluster info. |
+| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
 | `style`    | `"bold blue"` | The style for the module.                           |
 | `disabled` | `true`        | Disables the `kubernetes` module                    |
 
@@ -625,7 +623,6 @@ symbol = "⛵ "
 style = "dim green"
 disabled = false
 ```
-
 
 ## Line Break
 
@@ -688,14 +685,14 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable          | Default                  | Description                                                   |
-| ----------------- | ------------------------ | ------------------------------------------------------------- |
-| `show_percentage` | `false`                  | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | `true`                   | Display swap usage if total swap is non-zero.                 |
-| `threshold`       | `75`                     | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`                  | The symbol used before displaying the memory usage.           |
-| `style`           | `"bold dimmed white"`    | The style for the module.                                     |
-| `disabled`        | `true`                   | Disables the `memory_usage` module.                           |
+| Variable          | Default               | Description                                                   |
+| ----------------- | --------------------- | ------------------------------------------------------------- |
+| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
+| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
+| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
+| `symbol`          | `"🐏 "`               | The symbol used before displaying the memory usage.           |
+| `style`           | `"bold dimmed white"` | The style for the module.                                     |
+| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
 ### Example
 
@@ -900,11 +897,11 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 | Variable          | Default       | Description                                                                                                         |
 | ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `12hr`            | `false`       | Enables 12 hour formatting                                                                                          |
+| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
 | `style`           | `bold yellow` | The style for the module time                                                                                       |
 | `disabled`        | `true`        | Disables the `time` module.                                                                                         |
-| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.     |
+| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
 Manually setting `format` will override the `use_12hr` setting.
