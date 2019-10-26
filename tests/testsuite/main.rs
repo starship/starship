@@ -14,6 +14,7 @@ mod git_status;
 mod hg_branch;
 mod hostname;
 mod jobs;
+mod kubernetes;
 mod line_break;
 mod modules;
 mod nix_shell;

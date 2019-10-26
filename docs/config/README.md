@@ -772,7 +772,8 @@ threshold = 4
 
 Displays the current Kubernetes context name and, if set, the namespace from
 the kubeconfig file. The namespace needs to be set in the kubeconfig file, this
-can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if
+can be done via `kubectl config set-context starship-cluster --namespace astronaut`. 
+If the `$KUBECONFIG` env var is set the module will use that if
 not it will use the `~/.kube/config`.
 
 ::: tip
@@ -784,11 +785,21 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable   | Default       | Description                                         |
-| ---------- | ------------- | --------------------------------------------------- |
-| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
-| `style`    | `"bold blue"` | The style for the module.                           |
-| `disabled` | `true`        | Disables the `kubernetes` module                    |
+| Variable       | Default       | Description                                          |
+| -------------- | ------------- | ---------------------------------------------------- |
+| `symbol`       | `"☸ "`        | The symbol used before displaying the Cluster info.  |
+| `style`        | `"bold blue"` | The style for the module.                            |
+| `disabled`     | `true`        | Disables the `kubernetes` module.                    |
+| `environments` | `[]`          | Customized styles and symbols for specific contexts. |
+
+To customize the style of the module for specific environments, use the following configuration as
+part of the `environments` list:
+
+| Variable | Description                                                                                 |
+| -------- | ------------------------------------------------------------------------------------------- |
+| `name`   | **Required** If the value is part of the used context, this configuration will be used.     |
+| `style`  | The style for the module when using this context. If not set, will use module's style.      |
+| `symbol` | The symbol used before displaying the Cluster info. . If not set, will use module's symbol. |
 
 ### Example
 
@@ -799,6 +810,11 @@ To enable it, set `disabled` to `false` in your configuration file.
 symbol = "⛵ "
 style = "dimmed green"
 disabled = false
+environments = [
+    { name = "production", style = "bright-red", symbol = "☸☁ " },
+    { name = "staging", style = "yellow" },
+    { name = "develop", style = "green" },
+]
 ```
 
 ## Line Break

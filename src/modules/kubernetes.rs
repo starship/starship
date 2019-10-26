@@ -1,13 +1,14 @@
-use dirs;
-use yaml_rust::YamlLoader;
-
 use std::env;
 use std::path;
 
-use super::{Context, Module, RootModuleConfig};
+use ansi_term::Style;
+use dirs;
+use yaml_rust::YamlLoader;
 
 use crate::configs::kubernetes::KubernetesConfig;
 use crate::utils;
+
+use super::{Context, Module, RootModuleConfig, SegmentConfig};
 
 const KUBERNETES_PREFIX: &str = "on ";
 
@@ -64,10 +65,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 return None;
             };
 
-            module.set_style(config.style);
+            let symbol;
+            let style;
+
+            if let Some(env_cfg) = config
+                .environments
+                .iter()
+                .find(|env_cfg| kube_ctx.contains(env_cfg.name))
+            {
+                symbol = env_cfg.symbol.as_ref().or(Some(&config.symbol)).unwrap();
+                style = env_cfg.style.or(Some(config.style)).unwrap();
+            } else {
+                symbol = &config.symbol;
+                style = config.style;
+            }
+
+            module.set_style(style);
             module.get_prefix().set_value(KUBERNETES_PREFIX);
 
-            module.create_segment("symbol", &config.symbol);
+            module.create_segment("symbol", symbol);
             module.create_segment("context", &config.context.with_value(&kube_ctx));
             if kube_ns != "" {
                 module.create_segment(
