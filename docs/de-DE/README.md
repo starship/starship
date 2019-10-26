@@ -42,7 +42,7 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
    ```
 
 
-   #### Rust (v1.33 oder neuer)
+   #### Rust (v1.38 oder neuer)
 
    ```sh
    $ cargo install starship

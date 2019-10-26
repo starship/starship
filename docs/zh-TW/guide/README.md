@@ -123,7 +123,7 @@
    ```
 
 
-   #### Rust (v1.33 或更高版本)
+   #### Rust (v1.38 或更高版本)
 
    ```sh
    $ cargo install starship
