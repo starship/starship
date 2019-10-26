@@ -488,6 +488,17 @@
       "contributions": [
         "translation"
       ]
+    },
+    {
+      "login": "brianlow",
+      "name": "Brian Low",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/938138?v=4",
+      "profile": "https://github.com/brianlow",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
