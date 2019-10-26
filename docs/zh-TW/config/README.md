@@ -437,23 +437,37 @@ cherry_pick = "🍒 PICKING"
 
 ### 選項
 
-| 變數                | 預設           | 說明                               |
-| ----------------- | ------------ | -------------------------------- |
-| `conflicted`      | `"="`        | 這個分支有合併衝突。                       |
-| `ahead`           | `"⇡"`        | 這個分支超前正在追蹤的分支。                   |
-| `behind`          | `"⇣"`        | 這個分支落後正在追蹤的分支。                   |
-| `diverged`        | `"⇕"`        | 這個分支偏離正在追蹤的分支。                   |
-| `untracked`       | `"?"`        | 工作資料夾中有沒有追蹤的檔案。                  |
-| `stashed`         | `"$"`        | 本地儲存庫有 stash。                    |
-| `modified`        | `"!"`        | 工作資料夾中有修改過的檔案。                   |
-| `staged`          | `"+"`        | 一個新檔案被加入了暫存區 (staging area)。     |
-| `renamed`         | `"»"`        | 一個被改名的檔案被加入了暫存區 (staging area)。  |
-| `deleted`         | `"✘"`        | 一個刪除檔案的動作被加入了暫存區 (staging area)。 |
-| `show_sync_count` | `false`      | 顯示超前/落後追蹤的分支的數量。                 |
-| `prefix`          | `[`          | 在 git 狀態正前方顯示的前綴。                |
-| `suffix`          | `]`          | 在 git 狀態正後方顯示的後綴。                |
-| `style`           | `"bold red"` | 這個模組的風格。                         |
-| `disabled`        | `false`      | 停用 `git_status` 模組。              |
+| 變數                 | 預設                         | 說明                                                      |
+| ------------------ | -------------------------- | ------------------------------------------------------- |
+| `conflicted`       | `"="`                      | 這個分支有合併衝突。                                              |
+| `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
+| `ahead`            | `"⇡"`                      | This branch is ahead of the branch being tracked.       |
+| `behind`           | `"⇣"`                      | This branch is behind of the branch being tracked.      |
+| `diverged`         | `"⇕"`                      | This branch has diverged from the branch being tracked. |
+| `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
+| `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
+| `stashed`          | `"$"`                      | A stash exists for the local repository.                |
+| `modified`         | `"!"`                      | There are file modifications in the working directory.  |
+| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
+| `staged`           | `"+"`                      | A new file has been added to the staging area.          |
+| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files.        |
+| `renamed`          | `"»"`                      | A renamed file has been added to the staging area.      |
+| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.             |
+| `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.   |
+| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.             |
+| `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
+| `prefix`           | `[`                        | Prefix to display immediately before git status.        |
+| `suffix`           | `]`                        | Suffix to display immediately after git status.         |
+| `style`            | `"bold red"`               | The style for the module.                               |
+| `disabled`         | `false`                    | Disables the `git_status` module.                       |
+
+#### Git Status Counts
+
+| 變數        | 預設      | 說明                                                     |
+| --------- | ------- | ------------------------------------------------------ |
+| `enabled` | `false` | Show the number of files                               |
+| `style`   |         | Optionally style the count differently than the module |
+
 
 ### 範例
 
@@ -468,7 +482,10 @@ diverged = "😵"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"
-staged = "➕"
+staged.value = "++"
+staged.style = "green"
+staged_count.enabled = true
+staged_count.style = "green"
 renamed = "👅"
 deleted = "🗑"
 ```
@@ -487,11 +504,11 @@ deleted = "🗑"
 
 ### 選項
 
-| 變數         | 預設            | 說明                  |
-| ---------- | ------------- | ------------------- |
-| `symbol`   | `"🐹 "`        | 顯示在 Golang 版本之前的符號。 |
-| `style`    | `"bold cyan"` | 這個模組的風格。            |
-| `disabled` | `false`       | 停用 `golang` 模組。     |
+| 變數         | 預設            | 說明                                                       |
+| ---------- | ------------- | -------------------------------------------------------- |
+| `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
+| `style`    | `"bold cyan"` | The style for the module.                                |
+| `disabled` | `false`       | Disables the `golang` module.                            |
 
 ### 範例
 
@@ -508,14 +525,14 @@ symbol = "🏎💨 "
 
 ### 選項
 
-| 變數         | 預設                    | 說明                                                         |
-| ---------- | --------------------- | ---------------------------------------------------------- |
-| `ssh_only` | `true`                | 只在連接到一個 SSH session 時顯示主機名稱。                               |
-| `prefix`   | `""`                  | 在主機名稱正前方顯示的前綴。                                             |
-| `suffix`   | `""`                  | 在主機名稱正後方顯示的後綴。                                             |
-| `trim_at`  | `"."`                 | 擷取出主機名稱的斷點，以第一個符合的為準。 `"."` 會讓它停在第一個點的符號。 `""` 會停用任何的截斷功能。 |
-| `style`    | `"bold dimmed green"` | 這個模組的風格。                                                   |
-| `disabled` | `false`               | 停用 `hostname` 模組。                                          |
+| 變數         | 預設                    | 說明                                                                                                                                   |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
+| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
+| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### 範例
 
@@ -536,12 +553,12 @@ disabled = false
 
 ### 選項
 
-| 變數          | 預設            | 說明             |
-| ----------- | ------------- | -------------- |
-| `symbol`    | `"✦"`         | 在顯示工作數量之前用的符號。 |
-| `threshold` | `1`           | 在超過指定值時顯示工作數量。 |
-| `style`     | `"bold blue"` | 這個模組的風格。       |
-| `disabled`  | `false`       | 停用 `jobs` 模組。  |
+| 變數          | 預設            | 說明                                                    |
+| ----------- | ------------- | ----------------------------------------------------- |
+| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
+| `threshold` | `1`           | Show number of jobs if exceeded.                      |
+| `style`     | `"bold blue"` | The style for the module.                             |
+| `disabled`  | `false`       | Disables the `jobs` module.                           |
 
 ### 範例
 
@@ -565,11 +582,11 @@ threshold = 4
 
 ### 選項
 
-| 變數         | 預設            | 說明                       |
-| ---------- | ------------- | ------------------------ |
-| `symbol`   | `"☸ "`        | 顯示在叢集 (cluster) 資訊之前的符號。 |
-| `style`    | `"bold blue"` | 這個模組的風格。                 |
-| `disabled` | `true`        | 停用 `kubernetes` 模組。      |
+| 變數         | 預設            | 說明                                                  |
+| ---------- | ------------- | --------------------------------------------------- |
+| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
+| `style`    | `"bold blue"` | The style for the module.                           |
+| `disabled` | `true`        | Disables the `kubernetes` module                    |
 
 ### 範例
 
@@ -588,9 +605,9 @@ disabled = false
 
 ### 選項
 
-| 變數         | 預設      | 說明                            |
-| ---------- | ------- | ----------------------------- |
-| `disabled` | `false` | 停用 `line_break` 模組，讓提示字元變成一行。 |
+| 變數         | 預設      | 說明                                                                 |
+| ---------- | ------- | ------------------------------------------------------------------ |
+| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
 ### 範例
 
@@ -607,13 +624,13 @@ disabled = true
 
 ### 選項
 
-| 變數           | 預設           | 說明                 |
-| ------------ | ------------ | ------------------ |
-| `use_name`   | `false`      | 顯示 nix-shell 的名稱。  |
-| `impure_msg` | `impure`     | 自定義「impure」訊息。     |
-| `pure_msg`   | `pure`       | 自定義「pure」訊息。       |
-| `style`      | `"bold red"` | 這個模組的風格。           |
-| `disabled`   | `false`      | 停用 `nix_shell` 模組。 |
+| 變數           | 預設           | 說明                                 |
+| ------------ | ------------ | ---------------------------------- |
+| `use_name`   | `false`      | Display the name of the nix-shell. |
+| `impure_msg` | `impure`     | Customize the "impure" msg.        |
+| `pure_msg`   | `pure`       | Customize the "pure" msg.          |
+| `style`      | `"bold red"` | The style for the module.          |
+| `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
 ### 範例
 
@@ -641,14 +658,14 @@ pure_msg = "pure shell"
 
 ### 選項
 
-| 變數                | 預設                    | 說明                            |
-| ----------------- | --------------------- | ----------------------------- |
-| `show_percentage` | `false`               | 以剩餘記憶體佔有的百分比的方式顯示記憶體使用狀況。     |
-| `show_swap`       | `true`                | 如果總 swap 使用量不為零的話，顯示 swap 使用量 |
-| `threshold`       | `75`                  | 將記憶體使用量隱藏，除非使用量超過指定值。         |
-| `symbol`          | `"🐏 "`                | 顯示在記憶體使用量之前的符號。               |
-| `style`           | `"bold dimmed white"` | 這個模組的風格。                      |
-| `disabled`        | `true`                | 停用 `memory_usage` 模組。         |
+| 變數                | 預設                    | 說明                                                            |
+| ----------------- | --------------------- | ------------------------------------------------------------- |
+| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
+| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
+| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
+| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
+| `style`           | `"bold dimmed white"` | The style for the module.                                     |
+| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
 ### 範例
 
@@ -672,11 +689,11 @@ style = "bold dimmed green"
 
 ### 選項
 
-| 變數         | 預設             | 說明                |
-| ---------- | -------------- | ----------------- |
-| `symbol`   | `"☕ "`         | 顯示在 Java 版本之前的符號。 |
-| `style`    | `"dimmed red"` | 這個模組的風格。          |
-| `disabled` | `false`        | 停用 `java` 模組。     |
+| 變數         | 預設             | 說明                                                     |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | 這個模組的風格。                                               |
+| `disabled` | `false`        | Disables the `java` module.                            |
 
 ### 範例
 
@@ -697,11 +714,11 @@ symbol = "🌟 "
 
 ### 選項
 
-| 變數         | 預設             | 說明                   |
-| ---------- | -------------- | -------------------- |
-| `symbol`   | `"⬢ "`         | 在顯示 NodeJS 版本之前用的符號。 |
-| `style`    | `"bold green"` | 這個模組的風格。             |
-| `disabled` | `false`        | 停用 `nodejs` 模組。      |
+| 變數         | 預設             | 說明                                                       |
+| ---------- | -------------- | -------------------------------------------------------- |
+| `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
+| `style`    | `"bold green"` | 這個模組的風格。                                                 |
+| `disabled` | `false`        | Disables the `nodejs` module.                            |
 
 ### 範例
 
@@ -724,11 +741,11 @@ The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並
 
 ### 選項
 
-| 變數         | 預設           | 說明               |
-| ---------- | ------------ | ---------------- |
-| `symbol`   | `"📦 "`       | 顯示在套件的版本之前的符號。   |
-| `style`    | `"bold red"` | 這個模組的風格。         |
-| `disabled` | `false`      | 停用 `package` 模組。 |
+| 變數         | 預設           | 說明                                                         |
+| ---------- | ------------ | ---------------------------------------------------------- |
+| `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
+| `style`    | `"bold red"` | The style for the module.                                  |
+| `disabled` | `false`      | Disables the `package` module.                             |
 
 ### 範例
 
@@ -758,13 +775,13 @@ symbol = "🎁 "
 
 ### 選項
 
-| 變數                   | 預設              | 說明                                            |
-| -------------------- | --------------- | --------------------------------------------- |
-| `symbol`             | `"🐍 "`          | 顯示在 Python 版本之前的符號。                           |
-| `pyenv_version_name` | `false`         | 使用 pyenv 取得 Python 的版本。                       |
-| `pyenv_prefix`       | `"pyenv "`      | 顯示在 pyenv 版本之前的前綴 (預設顯示是 `pyenv MY_VERSION`)。 |
-| `style`              | `"bold yellow"` | 這個模組的風格。                                      |
-| `disabled`           | `false`         | 停用 `python` 模組。                               |
+| 變數                   | 預設              | 說明                                                                          |
+| -------------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
+| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
+| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
+| `style`              | `"bold yellow"` | The style for the module.                                                   |
+| `disabled`           | `false`         | Disables the `python` module.                                               |
 
 ### 範例
 
@@ -786,11 +803,11 @@ pyenv_prefix = "foo "
 
 ### 選項
 
-| 變數         | 預設           | 說明                |
-| ---------- | ------------ | ----------------- |
-| `symbol`   | `"💎 "`       | 顯示在 Ruby 版本之前的符號。 |
-| `style`    | `"bold red"` | 這個模組的風格。          |
-| `disabled` | `false`      | 停用 `ruby` 模組。     |
+| 變數         | 預設           | 說明                                                     |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
+| `style`    | `"bold red"` | 這個模組的風格。                                               |
+| `disabled` | `false`      | Disables the `ruby` module.                            |
 
 ### 範例
 
@@ -810,11 +827,11 @@ symbol = "🔺 "
 
 ### 選項
 
-| 變數         | 預設           | 說明                |
-| ---------- | ------------ | ----------------- |
-| `symbol`   | `"🦀 "`       | 顯示在 Rust 版本之前的符號。 |
-| `style`    | `"bold red"` | 這個模組的風格。          |
-| `disabled` | `false`      | 停用 `rust` 模組。     |
+| 變數         | 預設           | 說明                                                     |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
+| `style`    | `"bold red"` | The style for the module.                              |
+| `disabled` | `false`      | Disables the `rust` module.                            |
 
 ### 範例
 
@@ -837,13 +854,13 @@ symbol = "⚙️ "
 
 ### 選項
 
-| 變數                | 預設            | 說明                                                                                     |
-| ----------------- | ------------- | -------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`       | 啟用 12 小時格式。                                                                            |
-| `format`          | 請看下列          | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。 |
-| `style`           | `bold yellow` | 這個模組的時間的風格。                                                                            |
-| `disabled`        | `true`        | 停用 `time` 模組。                                                                          |
-| `utc_time_offset` | `local`       | 設定相對於 UTC 的時差。 範圍 -24 < x < 24。 允許使用浮點數來表示 30/45 分鐘時差的時區。                              |
+| 變數                | 預設            | 說明                                                                                                                  |
+| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
+| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `bold yellow` | The style for the module time                                                                                       |
+| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
+| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
 
 如果 `use_12hr` 是 `true` 的話，`format` 會被預設為 `"%r"`。 不然的話，它會被預設為 `"%T"`。 手動設定 `format` 的設定值會覆寫 `use_12hr` 的設定。
 
@@ -869,12 +886,12 @@ utc_time_offset = -5
 
 ### 選項
 
-| 變數            | 預設              | 說明                  |
-| ------------- | --------------- | ------------------- |
-| `style_root`  | `"bold red"`    | 使用者為 root 時使用的風格。   |
-| `style_user`  | `"bold yellow"` | 非 root 使用者時使用的風格。   |
-| `show_always` | `false`         | 總是顯示 `username` 模組。 |
-| `disabled`    | `false`         | 停用 `username` 模組。   |
+| Variable      | Default         | Description                           |
+| ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`    | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `show_always` | `false`         | Always shows the `username` module.   |
+| `disabled`    | `false`         | Disables the `username` module.       |
 
 ### 範例
 
