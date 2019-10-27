@@ -33,16 +33,16 @@ disabled = true
 
 **Сегмент**: Меньшие подкомпоненты, составляющие модуль. Например, сегмент "symbol" в модуле "nodejs" хранит символ, показываемый перед версией (⬢, по умолчанию).
 
-Вот представление модуля "nodejs". В следующем примере "symbol" и "version" - его сегменты. Every module also has a prefix and suffix that are the default terminal color.
+Вот представление модуля "nodejs". В следующем примере "symbol" и "version" - его сегменты. Также, каждый модуль имеет префикс и суффикс, являющиеся цветом терминала по умолчанию.
 
 ```
 [prefix]      [symbol]     [version]    [suffix]
  "via "         "⬢"        "v10.4.1"       ""
 ```
 
-### Style Strings
+### Стиль строк
 
-Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+В Starship, большинство модулей позволяют настроить стили отображения. Это делается записью (обычно называется `style`), которая представляет собой строку, определяющую конфигурацию. Ниже приведены несколько примеров стилей строк, а также, их действия. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
 - `"fg:green bg:blue"` sets green text on a blue background
 - `"bg:blue fg:bright-green"` sets bright green text on a blue background
