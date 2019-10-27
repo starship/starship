@@ -47,11 +47,11 @@ disabled = true
 - `"fg:green bg:blue"` устанавливает зеленый текст на синем фоне
 - `"bg:blue fg:bright-green"` устанавливает ярко-зеленый текст на синем фоне
 - `"bold fg:27"` устанавливает жирный текст с [цветом ANSI](https://i.stack.imgur.com/KTSQa.png) 27
-- `"underline bg:#bf5700"` sets underlined text on a burnt orange background
-- `"bold italic fg:purple"` sets bold italic purple text
-- `""` explicitly disables all styling
+- `"underline bg:#bf5700"` устанавливает подчёркиваемый текст цвета сожженного апельсина
+- `"bold italic fg:purple"` устанавливает жирный фиолетовый текст
+- `""` выключает все стили
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+Обратите внимание на то, что, вид стиля зависит от вашего эмулятора терминала. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
 ## Prompt
 
