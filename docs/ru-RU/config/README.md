@@ -42,11 +42,11 @@ disabled = true
 
 ### Стиль строк
 
-В Starship, большинство модулей позволяют настроить стили отображения. Это делается записью (обычно называется `style`), которая представляет собой строку, определяющую конфигурацию. Ниже приведены несколько примеров стилей строк, а также, их действия. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+В Starship, большинство модулей позволяют настроить стили отображения. Это делается записью (обычно называется `style`), которая представляет собой строку, определяющую конфигурацию. Ниже приведены несколько примеров стилей строк, а также, их действия. Подробнее о полном синтаксисе можно прочитать в [расширенном разделе конфигурации](/advanced-config/).
 
-- `"fg:green bg:blue"` sets green text on a blue background
-- `"bg:blue fg:bright-green"` sets bright green text on a blue background
-- `"bold fg:27"` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
+- `"fg:green bg:blue"` устанавливает зеленый текст на синем фоне
+- `"bg:blue fg:bright-green"` устанавливает ярко-зеленый текст на синем фоне
+- `"bold fg:27"` устанавливает жирный текст с [цветом ANSI](https://i.stack.imgur.com/KTSQa.png) 27
 - `"underline bg:#bf5700"` sets underlined text on a burnt orange background
 - `"bold italic fg:purple"` sets bold italic purple text
 - `""` explicitly disables all styling
