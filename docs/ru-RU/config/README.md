@@ -22,18 +22,18 @@ add_newline = false
 [character]      # Имя настраемого модуля - "character"
 symbol = "➜"      # Сегменту "symbol" присваеваем значение "➜"
 
-# Отключить модуль пакетов, полностью скрывая его из консоли
+# Отключить модуль пакетов, полностью скрывая его из терминала
 [package]
 disabled = true
 ```
 
 ### Терминология
 
-**Модуль**: Компонент строки, дающий информацию на основе контекстной информации вашей ОС. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
+**Модуль**: Компонент строки, дающий информацию на основе контекстной информации вашей ОС. Например, модуль "nodejs" показывает установленную версию NodeJS на вашем компьютере, если вы находитесь в директории проекта NodeJS.
 
-**Segment**: Smaller sub-components that compose a module. For example, the "symbol" segment in the "nodejs" module contains the character that is shown before the version number (⬢ by default).
+**Сегмент**: Меньшие подкомпоненты, составляющие модуль. Например, сегмент "symbol" в модуле "nodejs" хранит символ, показываемый перед версией (⬢, по умолчанию).
 
-Here is the representation of the node module. In the following example, "symbol" and "version" are segments within it. Every module also has a prefix and suffix that are the default terminal color.
+Вот представление модуля "nodejs". В следующем примере "symbol" и "version" - его сегменты. Every module also has a prefix and suffix that are the default terminal color.
 
 ```
 [prefix]      [symbol]     [version]    [suffix]
