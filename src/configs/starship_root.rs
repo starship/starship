@@ -6,7 +6,8 @@ use starship_module_config_derive::ModuleConfig;
 pub struct StarshipRootConfig<'a> {
     pub add_newline: bool,
     pub prompt_order: Vec<&'a str>,
-    pub limit_files: usize,
+    /// Milliseconds to wait before starship scans all files
+    pub scan_timeout: u64,
 }
 
 impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
@@ -48,7 +49,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "time",
                 "character",
             ],
-            limit_files: 3000,
+            scan_timeout: 50,
         }
     }
 }

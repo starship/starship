@@ -75,16 +75,20 @@ impl<'a> ModuleConfig<'a> for i64 {
     }
 }
 
-impl<'a> ModuleConfig<'a> for usize {
+impl<'a> ModuleConfig<'a> for u64 {
     fn from_config(config: &Value) -> Option<Self> {
-        config.as_integer().and_then(|value: i64| {
-            // Downcasting i64 to usize
-            if value > 0 {
-                Some(value as usize)
-            } else {
-                None
+        match config {
+            Value::Integer(value) => {
+                // Converting i64 to u64
+                if *value > 0 {
+                    Some(*value as u64)
+                } else {
+                    None
+                }
             }
-        })
+            Value::String(value) => value.parse::<u64>().ok(),
+            _ => None,
+        }
     }
 }
 
