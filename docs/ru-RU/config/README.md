@@ -15,21 +15,21 @@ $ touch ~/.config/starship.toml
 Вся конфигурация Starship выполняется в этом файле [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Don't print a new line at the start of the prompt
+# Не добавлять пустую строку в начале ввода
 add_newline = false
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]      # The name of the module we are configuring is "character"
-symbol = "➜"     # The "symbol" segment is being set to "➜"
+# Поменять символ "❯" на символ "➜"
+[character]      # Имя настраемого модуля - "character"
+symbol = "➜"      # Сегменту "symbol" присваеваем значение "➜"
 
-# Disable the package module, hiding it from the prompt completely
+# Отключить модуль пакетов, полностью скрывая его из консоли
 [package]
 disabled = true
 ```
 
-### Terminology
+### Терминология
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
+**Модуль**: Компонент строки, дающий информацию на основе контекстной информации вашей ОС. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
 **Segment**: Smaller sub-components that compose a module. For example, the "symbol" segment in the "nodejs" module contains the character that is shown before the version number (⬢ by default).
 
