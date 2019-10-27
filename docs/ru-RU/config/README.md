@@ -69,13 +69,13 @@ disabled = true
 ```toml
 # ~/.config/starship.toml
 
-# Disable the newline at the start of the prompt
+# Не добавлять пустую строку перед началом командной строки
 add_newline = false
-# Overwrite a default_prompt_order and  use custom prompt_order
+# Перезаписать default_prompt_order и использовать пользовательский prompt_order
 prompt_order=["rust","line_break","package","line_break","character"]
 ```
 
-### Default Prompt Order
+### Порядок модулей командной строки по умолчанию
 
 The default `prompt_order` is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. The default is as shown:
 
