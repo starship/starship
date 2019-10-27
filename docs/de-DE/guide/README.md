@@ -20,12 +20,12 @@
   <a href="#contributors">
     <img
       src="https://badgen.net/badge/all%20contributors/42/orange"
-      alt="All Contributors" /></a>
+      alt="Alle Mitwirkenden" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:END -->
   <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://badgen.net/badge/chat/on%20discord/7289da"
-      alt="Chat on Discord" /></a>
+      alt="Auf Discord chatten" /></a>
 </p>
 
 <h4 align="center">
