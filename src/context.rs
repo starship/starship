@@ -10,6 +10,7 @@ use std::ffi::OsStr;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::string::String;
+use std::time::{Duration, SystemTime};
 
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering
@@ -137,13 +138,23 @@ impl<'a> Context<'a> {
     }
 
     pub fn get_dir_files(&self) -> Result<&Vec<PathBuf>, std::io::Error> {
+        let start_time = SystemTime::now();
+        let scan_timeout = Duration::from_millis(self.config.get_root_config().scan_timeout);
+
         self.dir_files
             .get_or_try_init(|| -> Result<Vec<PathBuf>, std::io::Error> {
                 let dir_files = fs::read_dir(&self.current_dir)?
+                    .take_while(|_item| {
+                        SystemTime::now().duration_since(start_time).unwrap() < scan_timeout
+                    })
                     .filter_map(Result::ok)
                     .map(|entry| entry.path())
                     .collect::<Vec<PathBuf>>();
 
+                log::trace!(
+                    "Building a vector of directory files took {:?}",
+                    SystemTime::now().duration_since(start_time).unwrap()
+                );
                 Ok(dir_files)
             })
     }

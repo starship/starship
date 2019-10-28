@@ -6,6 +6,7 @@ use starship_module_config_derive::ModuleConfig;
 pub struct StarshipRootConfig<'a> {
     pub add_newline: bool,
     pub prompt_order: Vec<&'a str>,
+    pub scan_timeout: u64,
 }
 
 impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
@@ -47,6 +48,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "time",
                 "character",
             ],
+            scan_timeout: 30,
         }
     }
 }
