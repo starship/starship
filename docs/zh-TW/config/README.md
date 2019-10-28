@@ -59,20 +59,23 @@ Starship 內大多數的模組允許你設定他們的顯示風格。 這要透�
 
 ### 選項
 
-| 變數             | 預設                          | 說明               |
-| -------------- | --------------------------- | ---------------- |
-| `add_newline`  | `true`                      | 在提示字元前面加上換行字元。   |
-| `prompt_order` | [連結](#default-prompt-order) | 調整各個提示字元模組的顯示順序。 |
+| 變數             | 預設                          | 說明                                                    |
+| -------------- | --------------------------- | ----------------------------------------------------- |
+| `add_newline`  | `true`                      | 在提示字元前面加上換行字元。                                        |
+| `prompt_order` | [連結](#default-prompt-order) | 調整各個提示字元模組的顯示順序。                                      |
+| `scan_timeout` | `30`                        | Timeout for starship to scan files (in milliseconds). |
 
 ### 範例
 
 ```toml
 # ~/.config/starship.toml
 
-# 停用在提示字元前換行的功能
+# Disable the newline at the start of the prompt
 add_newline = false
-# 覆寫 default_prompt_order 並使用自訂的 prompt_order
+# Overwrite a default_prompt_order and  use custom prompt_order
 prompt_order=["rust","line_break","package","line_break","character"]
+# Wait 10 milliseconds for starship to check files under the current directory.
+scan_timeout = 10
 ```
 
 ### 預設的提示字元順序
