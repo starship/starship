@@ -19,5 +19,6 @@ mod nix_shell;
 mod nodejs;
 mod python;
 mod ruby;
+mod singularity;
 mod time;
 mod username;

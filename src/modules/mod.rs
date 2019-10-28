@@ -22,6 +22,7 @@ mod package;
 mod python;
 mod ruby;
 mod rust;
+mod singularity;
 mod time;
 mod username;
 mod utils;
@@ -62,6 +63,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "python" => python::module(context),
         "ruby" => ruby::module(context),
         "rust" => rust::module(context),
+        "singularity" => singularity::module(context),
         "time" => time::module(context),
         "username" => username::module(context),
         _ => {

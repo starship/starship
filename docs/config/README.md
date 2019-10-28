@@ -901,6 +901,39 @@ The module will be shown if any of the following conditions are met:
 symbol = "⚙️ "
 ```
 
+## Singularity
+
+The `singularity` module shows the current singularity image, if inside a container
+and `$SINGULARITY_NAME` is set.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Variable   | Default              | Description                                      |
+| ---------- | -------------------- | ------------------------------------------------ |
+| `label`    | `""`                 | Prefix before the image name display.            |
+| `prefix`   | `"["`                | Prefix to display immediately before image name. |
+| `suffix`   | `"]"`                | Suffix to display immediately after image name.  |
+| `symbol`   | `""`                 | The symbol used before the image name.           |
+| `style`    | `"bold dimmed blue"` | The style for the module.                        |
+| `disabled` | `true`              | Disables the `singularity` module.               |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[singularity]
+disabled = false
+symbol = "📦 "
+```
+
 ## Time
 
 The `time` module shows the current **local** time.
