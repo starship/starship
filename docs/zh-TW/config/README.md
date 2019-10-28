@@ -661,7 +661,7 @@ pure_msg = "pure shell"
 show_percentage = true
 show_swap = true
 threshold = -1
-icon = " "
+symbol = " "
 style = "bold dimmed green"
 ```
 
