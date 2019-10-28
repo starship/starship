@@ -63,17 +63,19 @@ Dies ist eine Liste mit Prompt-weiten Konfigurationsoptionen.
 | -------------- | ----------------------------- | ------------------------------------------------------------------ |
 | `add_newline`  | `true`                        | Neuer Zeilenumbruch bei Start des Prompts.                         |
 | `prompt_order` | [link](#default-prompt-order) | Stelle die Reihenfolge ein, in der die Module den prompt aufbauen. |
+| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).              |
 
 ### Beispiel
 
 ```toml
 # ~/.config/starship.toml
 
-# Kein Zeilenumbruch am Anfang der Eingabe
+# Disable the newline at the start of the prompt
 add_newline = false
-
-# Überscheibt die Standard-Reihenfolge und nutzt die folgende
+# Overwrite a default_prompt_order and  use custom prompt_order
 prompt_order=["rust","line_break","package","line_break","character"]
+# Wait 10 milliseconds for starship to check files under the current directory.
+scan_timeout = 10
 ```
 
 ### Default Promp Order
