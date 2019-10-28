@@ -63,16 +63,19 @@ disabled = true
 | -------------- | ----------------------------- | -------------------------------------------------------- |
 | `add_newline`  | `true`                        | Добавление пустой строки перед началом командной строки. |
 | `prompt_order` | [link](#default-prompt-order) | Настройка порядка появления модулей командной строки.    |
+| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).    |
 
 ### Пример
 
 ```toml
 # ~/.config/starship.toml
 
-# Не добавлять пустую строку перед началом командной строки
+# Disable the newline at the start of the prompt
 add_newline = false
-# Перезаписать default_prompt_order и использовать пользовательский prompt_order
+# Overwrite a default_prompt_order and  use custom prompt_order
 prompt_order=["rust","line_break","package","line_break","character"]
+# Wait 10 milliseconds for starship to check files under the current directory.
+scan_timeout = 10
 ```
 
 ### Порядок модулей командной строки по умолчанию
