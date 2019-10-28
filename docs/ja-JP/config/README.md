@@ -59,20 +59,23 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 
 ### オプション
 
-| 変数             | デフォルト                   | 説明                       |
-| -------------- | ----------------------- | ------------------------ |
-| `add_newline`  | `true`                  | プロンプトの開始前に新しい行を追加します。    |
-| `prompt_order` | [link](#デフォルトのプロンプト表示順) | プロンプトモジュールを出力する順序を設定します。 |
+| 変数             | デフォルト                   | 説明                                                    |
+| -------------- | ----------------------- | ----------------------------------------------------- |
+| `add_newline`  | `true`                  | プロンプトの開始前に新しい行を追加します。                                 |
+| `prompt_order` | [link](#デフォルトのプロンプト表示順) | プロンプトモジュールを出力する順序を設定します。                              |
+| `scan_timeout` | `30`                    | Timeout for starship to scan files (in milliseconds). |
 
 ### 設定例
 
 ```toml
 # ~/.config/starship.toml
 
-# プロンプト表示の改行を無効にする
+# Disable the newline at the start of the prompt
 add_newline = false
-# デフォルトのプロンプト表示順を書き換える
+# Overwrite a default_prompt_order and  use custom prompt_order
 prompt_order=["rust","line_break","package","line_break","character"]
+# Wait 10 milliseconds for starship to check files under the current directory.
+scan_timeout = 10
 ```
 
 ### デフォルトのプロンプト表示順
