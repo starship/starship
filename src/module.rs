@@ -42,6 +42,7 @@ pub const ALL_MODULES: &[&str] = &[
     "rust",
     "php",
     "terraform",
+    "singularity",
     "time",
     "username",
 ];

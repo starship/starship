@@ -28,6 +28,7 @@ mod php;
 mod python;
 mod ruby;
 mod rust;
+mod singularity;
 mod terraform;
 mod time;
 mod username;
@@ -74,6 +75,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "python" => python::module(context),
         "ruby" => ruby::module(context),
         "rust" => rust::module(context),
+        "singularity" => singularity::module(context),
         "terraform" => terraform::module(context),
         "time" => time::module(context),
         "crystal" => crystal::module(context),
