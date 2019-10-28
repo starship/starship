@@ -48,7 +48,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "time",
                 "character",
             ],
-            scan_timeout: 50,
+            scan_timeout: 30,
         }
     }
 }
