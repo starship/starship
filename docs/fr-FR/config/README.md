@@ -63,6 +63,7 @@ This is the list of prompt-wide configuration options.
 | -------------- | ----------------------------- | ------------------------------------------------------ |
 | `add_newline`  | `true`                        | Add a new line before the start of the prompt.         |
 | `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
+| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).  |
 
 ### Example
 
@@ -73,6 +74,8 @@ This is the list of prompt-wide configuration options.
 add_newline = false
 # Overwrite a default_prompt_order and  use custom prompt_order
 prompt_order=["rust","line_break","package","line_break","character"]
+# Wait 10 milliseconds for starship to check files under the current directory.
+scan_timeout = 10
 ```
 
 ### Default Prompt Order
