@@ -151,6 +151,10 @@ impl<'a> Context<'a> {
                     .map(|entry| entry.path())
                     .collect::<Vec<PathBuf>>();
 
+                log::trace!(
+                    "Building a vector of directory files took {:?}",
+                    SystemTime::now().duration_since(start_time).unwrap()
+                );
                 Ok(dir_files)
             })
     }
