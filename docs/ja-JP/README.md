@@ -42,7 +42,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    ```
 
 
-   #### Rust (v1.38 or higher)
+   #### Rust (v1.38 もしくはそれ以上)
 
    ```sh
    $ cargo install starship
