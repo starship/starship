@@ -441,29 +441,29 @@ cherry_pick = "🍒 PICKING"
 
 ### オプション
 
-| 変数                 | デフォルト                      | 説明                                                      |
-| ------------------ | -------------------------- | ------------------------------------------------------- |
-| `conflicted`       | `"="`                      | このブランチにはマージの競合があります。                                    |
-| `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
-| `ahead`            | `"⇡"`                      | This branch is ahead of the branch being tracked.       |
-| `behind`           | `"⇣"`                      | This branch is behind of the branch being tracked.      |
-| `diverged`         | `"⇕"`                      | This branch has diverged from the branch being tracked. |
-| `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
-| `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
-| `stashed`          | `"$"`                      | A stash exists for the local repository.                |
-| `modified`         | `"!"`                      | There are file modifications in the working directory.  |
-| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
-| `staged`           | `"+"`                      | A new file has been added to the staging area.          |
-| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files.        |
-| `renamed`          | `"»"`                      | A renamed file has been added to the staging area.      |
-| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.             |
-| `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.   |
-| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.             |
-| `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
-| `prefix`           | `[`                        | Prefix to display immediately before git status.        |
-| `suffix`           | `]`                        | Suffix to display immediately after git status.         |
-| `style`            | `"bold red"`               | The style for the module.                               |
-| `disabled`         | `false`                    | Disables the `git_status` module.                       |
+| 変数                 | デフォルト                      | 説明                                               |
+| ------------------ | -------------------------- | ------------------------------------------------ |
+| `conflicted`       | `"="`                      | このブランチにはマージの競合があります。                             |
+| `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.          |
+| `ahead`            | `"⇡"`                      | このブランチは、追跡されるブランチよりも先にあります。                      |
+| `behind`           | `"⇣"`                      | このブランチは、追跡されているブランチの背後にあります。                     |
+| `diverged`         | `"⇕"`                      | このブランチは、追跡されているブランチから分岐しています。                    |
+| `untracked`        | `"?"`                      | 作業ディレクトリに追跡されていないファイルがあります。                      |
+| `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.    |
+| `stashed`          | `"$"`                      | ローカルリポジトリ用のスタッシュが存在します。                          |
+| `modified`         | `"!"`                      | 作業ディレクトリにファイルの変更があります。                           |
+| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.     |
+| `staged`           | `"+"`                      | 新しいファイルがステージング領域に追加されました。                        |
+| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files. |
+| `renamed`          | `"»"`                      | 名前が変更されたファイルがステージング領域に追加されました。                   |
+| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.      |
+| `deleted`          | `"✘"`                      | ファイルの削除がステージング領域に追加されました。                        |
+| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.      |
+| `show_sync_count`  | `false`                    | 追跡されているブランチの先行/後方カウントを表示します。                     |
+| `prefix`           | `[`                        | このモジュールの先頭に表示される文字列です。                           |
+| `suffix`           | `]`                        | このモジュールの末尾に表示される文字列です。                           |
+| `style`            | `"bold red"`               | モジュールのスタイルです。                                    |
+| `disabled`         | `false`                    | `git_status`モジュールを無効にします。                        |
 
 #### Git Status Counts
 
@@ -508,11 +508,11 @@ deleted = "🗑"
 
 ### オプション
 
-| 変数         | デフォルト         | 説明                                                       |
-| ---------- | ------------- | -------------------------------------------------------- |
-| `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
-| `style`    | `"bold cyan"` | The style for the module.                                |
-| `disabled` | `false`       | Disables the `golang` module.                            |
+| 変数         | デフォルト         | 説明                            |
+| ---------- | ------------- | ----------------------------- |
+| `symbol`   | `"🐹 "`        | Golangのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold cyan"` | モジュールのスタイルです。                 |
+| `disabled` | `false`       | `golang`モジュールを無効にします。         |
 
 ### 設定例
 
@@ -529,14 +529,14 @@ symbol = "🏎💨 "
 
 ### オプション
 
-| 変数         | デフォルト                 | 説明                                                                                                                                   |
-| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
-| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
-| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
-| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
-| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
+| 変数         | デフォルト                 | 説明                                                                          |
+| ---------- | --------------------- | --------------------------------------------------------------------------- |
+| `ssh_only` | `true`                | SSHセッションに接続されている場合にのみホスト名を表示します。                                            |
+| `prefix`   | `""`                  | ホスト名の直前に表示するprefixです。                                                       |
+| `suffix`   | `""`                  | ホスト名の直後に表示するsuffixです。                                                       |
+| `trim_at`  | `"."`                 | この文字が最初にマッチするまでをホスト名と認識します。 `"."`は最初の. までをホスト名として認識します。 `""`を指定した場合トリムしません。 |
+| `style`    | `"bold dimmed green"` | モジュールのスタイルです。                                                               |
+| `disabled` | `false`               | `hostname`モジュールを無効にします。                                                     |
 
 ### 設定例
 
@@ -557,12 +557,12 @@ disabled = false
 
 ### オプション
 
-| 変数          | デフォルト         | 説明                                                    |
-| ----------- | ------------- | ----------------------------------------------------- |
-| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
-| `threshold` | `1`           | Show number of jobs if exceeded.                      |
-| `style`     | `"bold blue"` | The style for the module.                             |
-| `disabled`  | `false`       | Disables the `jobs` module.                           |
+| 変数          | デフォルト         | 説明                     |
+| ----------- | ------------- | ---------------------- |
+| `symbol`    | `"✦"`         | ジョブの数を表示する前に使用される記号です。 |
+| `threshold` | `1`           | 超過した場合、ジョブの数を表示します。    |
+| `style`     | `"bold blue"` | モジュールのスタイルです。          |
+| `disabled`  | `false`       | `jobs`モジュールを無効にします。    |
 
 ### 設定例
 
@@ -586,11 +586,11 @@ threshold = 4
 
 ### オプション
 
-| 変数         | デフォルト         | 説明                                                  |
-| ---------- | ------------- | --------------------------------------------------- |
-| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
-| `style`    | `"bold blue"` | The style for the module.                           |
-| `disabled` | `true`        | Disables the `kubernetes` module                    |
+| 変数         | デフォルト         | 説明                        |
+| ---------- | ------------- | ------------------------- |
+| `symbol`   | `"☸ "`        | クラスタ情報を表示する前に使用される記号です。   |
+| `style`    | `"bold blue"` | モジュールのスタイルです。             |
+| `disabled` | `true`        | `Kubernetes`モジュールを無効にします。 |
 
 ### 設定例
 
@@ -609,9 +609,9 @@ disabled = false
 
 ### オプション
 
-| 変数         | デフォルト   | 説明                                                                 |
-| ---------- | ------- | ------------------------------------------------------------------ |
-| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
+| 変数         | デフォルト   | 説明                                    |
+| ---------- | ------- | ------------------------------------- |
+| `disabled` | `false` | `line_break`モジュールを無効にして、プロンプトを1行にします。 |
 
 ### 設定例
 
@@ -628,13 +628,13 @@ disabled = true
 
 ### オプション
 
-| 変数           | デフォルト        | 説明                                 |
-| ------------ | ------------ | ---------------------------------- |
-| `use_name`   | `false`      | Display the name of the nix-shell. |
-| `impure_msg` | `impure`     | Customize the "impure" msg.        |
-| `pure_msg`   | `pure`       | Customize the "pure" msg.          |
-| `style`      | `"bold red"` | The style for the module.          |
-| `disabled`   | `false`      | Disables the `nix_shell` module.   |
+| 変数           | デフォルト        | 説明                       |
+| ------------ | ------------ | ------------------------ |
+| `use_name`   | `false`      | nix-shellの名前を表示します。      |
+| `impure_msg` | `impure`     | impureメッセージをカスタマイズします。   |
+| `pure_msg`   | `pure`       | pureメッセージをカスタマイズします。     |
+| `style`      | `"bold red"` | モジュールのスタイルです。            |
+| `disabled`   | `false`      | `nix_shell`モジュールを無効にします。 |
 
 ### 設定例
 
@@ -663,14 +663,14 @@ pure_msg = "pure shell"
 
 ### オプション
 
-| 変数                | デフォルト                 | 説明                                                            |
-| ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
-| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
-| `style`           | `"bold dimmed white"` | The style for the module.                                     |
-| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
+| 変数                | デフォルト                 | 説明                                            |
+| ----------------- | --------------------- | --------------------------------------------- |
+| `show_percentage` | `false`               | メモリ使用量を割合で表示します。                              |
+| `show_swap`       | `true`                | Display swap usage if total swap is non-zero. |
+| `threshold`       | `75`                  | この閾値を超えない限り、メモリ使用率は表示されません。                   |
+| `symbol`          | `"🐏 "`                | メモリ使用率を表示する前に使用される記号です。                       |
+| `style`           | `"bold dimmed white"` | モジュールのスタイルです。                                 |
+| `disabled`        | `true`                | `memory_usage`モジュールを無効にします。                   |
 
 ### 設定例
 
@@ -694,11 +694,11 @@ style = "bold dimmed green"
 
 ### オプション
 
-| 変数         | デフォルト          | 説明                                                     |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | モジュールのスタイルです。                                          |
-| `disabled` | `false`        | Disables the `java` module.                            |
+| 変数         | デフォルト          | 説明                          |
+| ---------- | -------------- | --------------------------- |
+| `symbol`   | `"☕ "`         | Javaのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"dimmed red"` | モジュールのスタイルです。               |
+| `disabled` | `false`        | `Java`モジュールを無効にします。         |
 
 ### 設定例
 
@@ -719,11 +719,11 @@ symbol = "🌟 "
 
 ### オプション
 
-| 変数         | デフォルト          | 説明                                                       |
-| ---------- | -------------- | -------------------------------------------------------- |
-| `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | モジュールのスタイルです。                                            |
-| `disabled` | `false`        | Disables the `nodejs` module.                            |
+| 変数         | デフォルト          | 説明                            |
+| ---------- | -------------- | ----------------------------- |
+| `symbol`   | `"⬢ "`         | NodeJSのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold green"` | モジュールのスタイルです。                 |
+| `disabled` | `false`        | `nodejs`モジュールを無効にします。         |
 
 ### 設定例
 
@@ -746,11 +746,11 @@ symbol = "🤖 "
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                                                         |
-| ---------- | ------------ | ---------------------------------------------------------- |
-| `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | The style for the module.                                  |
-| `disabled` | `false`      | Disables the `package` module.                             |
+| 変数         | デフォルト        | 説明                           |
+| ---------- | ------------ | ---------------------------- |
+| `symbol`   | `"📦 "`       | パッケージのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold red"` | モジュールのスタイルです。                |
+| `disabled` | `false`      | `package`モジュールを無効にします。       |
 
 ### 設定例
 
@@ -780,13 +780,13 @@ symbol = "🎁 "
 
 ### オプション
 
-| 変数                   | デフォルト           | 説明                                                                          |
-| -------------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
-| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
-| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
-| `style`              | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`           | `false`         | Disables the `python` module.                                               |
+| 変数                   | デフォルト           | 説明                                                   |
+| -------------------- | --------------- | ---------------------------------------------------- |
+| `symbol`             | `"🐍 "`          | Pythonのバージョンを表示する前に使用される記号です。                        |
+| `pyenv_version_name` | `false`         | pyenvを使用してPythonバージョンを取得します                          |
+| `pyenv_prefix`       | `"pyenv "`      | pyenvバージョン表示の前のprefix（デフォルトの表示は`pyenv MY_VERSION`）です |
+| `style`              | `"bold yellow"` | モジュールのスタイルです。                                        |
+| `disabled`           | `false`         | `python`モジュールを無効にします。                                |
 
 ### 設定例
 
@@ -808,11 +808,11 @@ pyenv_prefix = "foo "
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                                                     |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
-| `style`    | `"bold red"` | モジュールのスタイルです。                                          |
-| `disabled` | `false`      | Disables the `ruby` module.                            |
+| 変数         | デフォルト        | 説明                          |
+| ---------- | ------------ | --------------------------- |
+| `symbol`   | `"💎 "`       | Rubyのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold red"` | モジュールのスタイルです。               |
+| `disabled` | `false`      | `ruby`モジュールを無効にします。         |
 
 ### 設定例
 
@@ -832,11 +832,11 @@ symbol = "🔺 "
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                                                     |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
-| `style`    | `"bold red"` | The style for the module.                              |
-| `disabled` | `false`      | Disables the `rust` module.                            |
+| 変数         | デフォルト        | 説明                          |
+| ---------- | ------------ | --------------------------- |
+| `symbol`   | `"🦀 "`       | Rustのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold red"` | モジュールのスタイルです。               |
+| `disabled` | `false`      | `rust`モジュールを無効にします。         |
 
 ### 設定例
 
@@ -859,13 +859,13 @@ symbol = "⚙️ "
 
 ### オプション
 
-| 変数                | デフォルト         | 説明                                                                                                                  |
-| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
-| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`           | `bold yellow` | The style for the module time                                                                                       |
-| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
-| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
+| 変数                | デフォルト          | 説明                                                                                                               |
+| ----------------- | -------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`        | 12時間のフォーマットを有効にします。                                                                                              |
+| `format`          | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。                |
+| `style`           | `bold yellow`  | モジュールのスタイルです。                                                                                                    |
+| `disabled`        | `true`         | `time`モジュールを無効にします。                                                                                              |
+| `utc_time_offset` | `local`        | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets. |
 
 `use_12hr`が`true`の場合、`format`のデフォルトは`"%r"`です。 それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、`use_12hr`の設定が上書きされます。
 
@@ -891,12 +891,12 @@ utc_time_offset = -5
 
 ### オプション
 
-| Variable      | Default         | Description                           |
-| ------------- | --------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`    | The style used when the user is root. |
-| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
-| `show_always` | `false`         | Always shows the `username` module.   |
-| `disabled`    | `false`         | Disables the `username` module.       |
+| 変数            | デフォルト           | 説明                        |
+| ------------- | --------------- | ------------------------- |
+| `style_root`  | `"bold red"`    | ユーザーがrootのときに使用されるスタイルです。 |
+| `style_user`  | `"bold yellow"` | 非rootユーザーに使用されるスタイルです。    |
+| `show_always` | `false`         | `username`モジュールを常に表示します。  |
+| `disabled`    | `false`         | `username`モジュールを無効にします。   |
 
 ### 設定例
 
