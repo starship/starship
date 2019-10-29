@@ -123,7 +123,7 @@
    ```
 
 
-   #### Rust (v1.38 or higher)
+   #### Rust (v1.38 oder neuer)
 
    ```sh
    $ cargo install starship
