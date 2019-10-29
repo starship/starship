@@ -80,7 +80,7 @@ scan_timeout = 10
 
 ### Порядок модулей командной строки по умолчанию
 
-The default `prompt_order` is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. The default is as shown:
+По умолчанию, `prompt_order` определеят порядок появления модулей командной строки, если `prompt_order` пустой или не объявлен. Значение по умолчанию:
 
 ```toml
 prompt_order = [
@@ -115,15 +115,15 @@ prompt_order = [
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
+Модуль `aws` показывает текущий регион и профиль AWS. Основано на `AWS_REGION`, `AWS_DEFAULT_REGION`, и `AWS_PROFILE` переменных окружения и файле`~/.aws/config`.
 
 ### Опции
 
-| Переменная | По умолчанию    | Описание                                                   |
-| ---------- | --------------- | ---------------------------------------------------------- |
-| `symbol`   | `"☁️ "`         | The symbol used before displaying the current AWS profile. |
-| `style`    | `"bold yellow"` | The style for the module.                                  |
-| `disabled` | `false`         | Disables the `AWS` module.                                 |
+| Переменная | По умолчанию    | Описание                                        |
+| ---------- | --------------- | ----------------------------------------------- |
+| `symbol`   | `"☁️ "`         | Символ перед отображением текущего профиля AWS. |
+| `style`    | `"bold yellow"` | Стиль модуля.                                   |
+| `disabled` | `false`         | Отключает модуль `AWS`.                         |
 
 ### Пример
 
@@ -135,16 +135,16 @@ style = "bold blue"
 symbol = "🅰 "
 ```
 
-## Battery
+## Батарея
 
-The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
+Модуль `battery` показывает насколько заряжена батарея девайса и статус зарядки на данный момент. Модуль виден только, если заряд батареи устройства меньше 10%.
 
 ### Опции
 
 | Переменная           | По умолчанию             | Описание                                          |
 | -------------------- | ------------------------ | ------------------------------------------------- |
-| `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
+| `full_symbol`        | `"•"`                    | Показываемый символ при полной батарее.           |
+| `charging_symbol`    | `"⇡"`                    | Символ, показываемый при зарядке аккумулятора.    |
 | `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
 | `display`            | [link](#battery-display) | Display threshold and style for the module.       |
 | `disabled`           | `false`                  | Disables the `battery` module.                    |
