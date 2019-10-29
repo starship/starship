@@ -31,6 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     module.set_style(config.style);
+    module.create_segment("symbol", &config.symbol);
 
     let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_system());
 
@@ -47,7 +48,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let show_percentage = config.show_percentage;
 
-    let mut display = if show_percentage {
+    let ram = if show_percentage {
         format!("{:.0}{}", percent_mem_used, percent_sign)
     } else {
         format!(
@@ -56,6 +57,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             format_kib(total_memory_kib)
         )
     };
+    module.create_segment("ram", &config.ram.with_value(&ram));
+
+    module.create_segment("seperator", &config.seperator);
 
     // swap only shown if enabled and there is swap on the system
     let total_swap_kib = system.get_total_swap();
@@ -63,25 +67,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let used_swap_kib = system.get_used_swap();
         let percent_swap_used = (used_swap_kib as f64 / total_swap_kib as f64) * 100.;
 
-        display = format!(
-            "{} | {}",
-            display,
-            if show_percentage {
-                format!("{:.0}{}", percent_swap_used, percent_sign)
-            } else {
-                format!(
-                    "{}/{}",
-                    format_kib(used_swap_kib),
-                    format_kib(total_swap_kib)
-                )
-            }
-        );
+        let swap = if show_percentage {
+            format!("{:.0}{}", percent_swap_used, percent_sign)
+        } else {
+            format!(
+                "{}/{}",
+                format_kib(used_swap_kib),
+                format_kib(total_swap_kib)
+            )
+        };
+        module.create_segment("swap", &config.swap.with_value(&swap));
     }
-
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("memory_usage", &config.display.with_value(&display));
-
-    module.get_prefix().set_value("");
 
     Some(module)
 }
