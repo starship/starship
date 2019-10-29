@@ -1,7 +1,8 @@
-use ansi_term::Color;
 use std::process::Command;
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig, SegmentConfig};
+
+use crate::configs::haskell::HaskellConfig;
 
 /// Creates a module with the current Haskell Stack version
 ///
@@ -19,17 +20,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     match get_haskell_version() {
         Some(haskell_version) => {
-            const HASKELL_CHAR: &str = "λ ";
+            let formatted_version = format_haskell_version(&haskell_version)?;
 
             let mut module = context.new_module("haskell");
-            let module_style = module
-                .config_value_style("style")
-                .unwrap_or_else(|| Color::Red.bold());
-            module.set_style(module_style);
+            let config: HaskellConfig = HaskellConfig::try_load(module.config);
+            module.set_style(config.style);
 
-            let formatted_version = format_haskell_version(&haskell_version)?;
-            module.new_segment("symbol", HASKELL_CHAR);
-            module.new_segment("version", &formatted_version);
+            module.create_segment("symbol", &config.symbol);
+            module.create_segment("version", &SegmentConfig::new(&formatted_version));
 
             Some(module)
         }
@@ -51,10 +49,6 @@ fn get_haskell_version() -> Option<String> {
 }
 
 fn format_haskell_version(haskell_version: &str) -> Option<String> {
-    let version = haskell_version;
-
-    let mut formatted_version = String::with_capacity(version.len() + 1);
-    formatted_version.push('v');
-    formatted_version.push_str(version);
+    let formatted_version = format!("v {}", haskell_version);
     Some(formatted_version)
 }
