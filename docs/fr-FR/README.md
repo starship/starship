@@ -9,10 +9,10 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 <div class="features">
   <div class="feature">
     <h2>Compatibilité d'abord</h2>
-    <p>Works on the most common shells on the most common operating systems. Use it everywhere!</p>
+    <p>Fonctionne sur tous les principaux shells et système d'exploitation. Utilisez-le partout !</p>
   </div>
   <div class="feature">
-    <h2>Rust-Powered</h2>
+    <h2>Propulsé par Rust</h2>
     <p>Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.</p>
   </div>
   <div class="feature">
