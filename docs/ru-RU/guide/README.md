@@ -208,7 +208,7 @@
    Invoke-Expression (&starship init powershell)
    ```
 
-## 🔧 Configuration
+## 🔧 Конфигурация
 
 For details on how to configure Starship, check out our [documentation](https://starship.rs/config/).
 
