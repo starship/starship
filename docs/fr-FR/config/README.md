@@ -40,7 +40,7 @@ Voici la représentation du module node. Dans l'exemple suivant, "symbol" et "ve
  "via "         "⬢"        "v10.4.1"       ""
 ```
 
-### Style Strings
+### Chaînes de style
 
 Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
@@ -577,7 +577,7 @@ threshold = 4
 
 Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-::: tip
+::: remarque
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -653,7 +653,7 @@ The `memory_usage` module shows current system memory and swap usage.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
-::: tip
+::: remarque
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -849,7 +849,7 @@ symbol = "⚙️ "
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
-::: tip
+::: remarque
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
