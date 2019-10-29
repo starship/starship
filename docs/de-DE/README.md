@@ -92,7 +92,7 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
    ```sh
    # ~/.config/fish/config.fish
 
-   eval (starship init fish)
+   starship init fish | source
    ```
 
 

@@ -92,7 +92,7 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
    ```sh
    # ~/.config/fish/config.fish
 
-   eval (starship init fish)
+   starship init fish | source
    ```
 
 

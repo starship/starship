@@ -161,9 +161,9 @@ The prompt shows information you need while you're working, while staying sleek 
    ```sh
    $ pkg install starship
    ```
-   
+
    #### Other x86-64 Linux Platforms
-   
+
    Download a prebuilt binary and place in /usr/local/bin/
 
    ```sh
@@ -191,7 +191,7 @@ The prompt shows information you need while you're working, while staying sleek 
    ```sh
    # ~/.config/fish/config.fish
 
-   eval (starship init fish)
+   starship init fish | source
    ```
 
    #### Zsh
