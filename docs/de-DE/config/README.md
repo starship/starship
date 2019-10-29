@@ -29,11 +29,11 @@ disabled = true
 
 ### Terminologie
 
-**Module**: Eine Komponente in der Konsole, die auf kontextualisierte Informationen des OS basiert. Zum Beispiel das "nodejs" Modul zeigt die version von NodeJS, die derzeit auf deinem Rechner installiert ist, wenn dein Arbeitsordner ein NodeJS Projekt umfasst.
+**Module**: Eine Komponente in der Konsole, die auf kontextualisierte Informationen des OS basiert. Zum Beispiel zeigt das Modul "nodejs" die Version von NodeJS, die derzeit auf Ihrem Computer installiert ist, wenn Ihr aktuelles Verzeichnis ein NodeJS-Projekt ist.
 
-**Segment**: Kleinere Sub-Komponente die ein Modul ergeben. Zum Beispiel, das "symbol" Segment im "nodejs" Modul beinhaltet das Symbol das vor der Versionsnummer gezeigt wird (Standard: ⬢).
+**Segment**: Kleinere Unterkomponenten, die ein Modul erstellen. Zum Beispiel, das "symbol" Segment im "nodejs" Modul beinhaltet das Symbol das vor der Versionsnummer gezeigt wird (Standard: ⬢).
 
-Hier ist die Darstellung des Node Moduls. Im folgenden Beispiel betrachten wir die Segmente "symbol" und "version". Jedes Modul hat auch einen Prefix und einen Suffix, das auf die Standardfarbe des Terminals gesetzt ist.
+Hier eine Darstellung des Node-Moduls. Im folgenden Beispiel betrachten wir die Segmente "symbol" und "version". Jedes Modul hat einen Präfix und einen Suffix, welche auf die Standardfarbe des Terminals gesetzt sind.
 
 ```
 [prefix]      [symbol]     [version]    [suffix]
@@ -42,16 +42,16 @@ Hier ist die Darstellung des Node Moduls. Im folgenden Beispiel betrachten wir d
 
 ### Style-Strings
 
-Die meisten Module in starship lassen dich den Darstellungsstil verändern. Dies passiert meistens an einem bestimmten Eintrag (gewöhnlich `style` genannt), der einen String mit den Einstellungen darstellt. Es folgen ein paar Beispiele für solche Strings zusammen mit Beschreibungen was sie bewirken. Details zur vollen Syntax findest du im [Erweiterten Einstellungshandbuch](/advanced-config/).
+Die meisten Module in Starship lassen dich den Darstellungsstil verändern. Dies passiert meistens an einem bestimmten Eintrag (gewöhnlich `style` genannt), der einen String mit den Einstellungen darstellt. Es folgen ein paar Beispiele für solche Strings zusammen mit Beschreibungen was sie bewirken. Details zur vollen Syntax findest du im [Erweiterten Konfigurationshandbuch](/advanced-config/).
 
 - `"fg:green bg:blue"` setzt grünen Text auf blauen Hintergrund
 - `"bg:blue fg:bright-green"` setzt hell-grünen Text auf blauen Hintergrund
 - `"bold fg:27"` setzt dicke Schrift auf [ANSI Farbe](https://i.stack.imgur.com/KTSQa.png) 27
 - `"underline bg:#bf5700"` setzt unterstrichenen Text auf einen orangenen Hintergrund
-- `"bold italic fg:purple"` setzt dicke Kursivschrift lila
-- `""` deativiert explizit jeden Stil
+- `"bold italic fg:purple"` setzt dicke lila Kursivschrift
+- `""` deaktiviert explizit jeden Stil
 
-Wie genau sich diese Konfiguration auswirkt liegt an deinem Shell Emulator. Einige Emulatoren zum Beispiel werden die Farben erhellen statt Text dick zu machen, und ein paar Farbthemata benutzen dieselben werte für normale und helle Farben. Für kursiven Text muss dein Terminal Kursivschrift unterstützen.
+Wie genau sich diese Konfiguration auswirkt liegt an deinem Terminal-Emulator. Einige Emulatoren zum Beispiel werden die Farben erhellen statt Text dick zu machen, und ein paar Farbthemen benutzen dieselben Werte für normale und helle Farben. Für kursiven Text muss dein Terminal Kursivschrift unterstützen.
 
 ## Prompt
 
@@ -78,9 +78,9 @@ prompt_order=["rust","line_break","package","line_break","character"]
 scan_timeout = 10
 ```
 
-### Default Promp Order
+### Standard-Promptreihenfolge
 
-Die Standard `prompt_order` wird benutzt um die Reihenfolge der Module im Prompt zu definieren, falls `prompt_order` leer oder nicht gesetzt ist. Der default sieht wie folgt aus:
+Die Standard `prompt_order` wird benutzt um die Reihenfolge der Module im Prompt zu definieren, falls `prompt_order` leer oder nicht gesetzt ist. Die Standardwerte sind folgende:
 
 ```toml
 prompt_order = [
@@ -119,11 +119,11 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 
 ### Optionen
 
-| Variable   | Standardwert    | Beschreibung                                                        |
-| ---------- | --------------- | ------------------------------------------------------------------- |
-| `symbol`   | `"☁️ "`         | Symbol das vor der Anzahl des aktuellen AWS-Profils angezeigt wird. |
-| `style`    | `"bold yellow"` | Stil für dieses Modul.                                              |
-| `disabled` | `false`         | Deaktiviert das `aws`-Modul.                                        |
+| Variable   | Standardwert    | Beschreibung                                            |
+| ---------- | --------------- | ------------------------------------------------------- |
+| `symbol`   | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird. |
+| `style`    | `"bold yellow"` | Stil für dieses Modul.                                  |
+| `disabled` | `false`         | Deaktiviert das `aws`-Modul.                            |
 
 ### Beispiel
 
@@ -150,7 +150,7 @@ Das `battery` Modul zeigt, wie hoch der Akku des Geräts geladen ist und den akt
 | `disabled`           | `false`                  | Wenn der Wert auf `true` steht, wird das Akkustand-Modul deaktiviert.               |
 
 <details>
-<summary>Das Batterie-Modul unterstützt auch einige ungewöhnliche Zustände.</summary>
+<summary>Das Batterie-Modul unterstützt auch einige untypische Zustände.</summary>
 
 | Variable         | Beschreibung                                        |
 | ---------------- | --------------------------------------------------- |
@@ -174,7 +174,7 @@ discharging_symbol = "💀"
 
 ### Anzeige des Akkustandes
 
-Die `display` Konfiguration "threshold" stellt ein ab wann die Akkuanzeige eingeblendet wird. Mit "style" wird das Erscheinungsbild festgelegt. Wenn `display` nicht angegeben ist. Werden die folgenden Standardwerte verwendet:
+Die `display` Konfiguration "threshold" stellt ein ab wann die Akkuanzeige eingeblendet wird. Mit "style" wird das Erscheinungsbild festgelegt. Wenn `display` nicht angegeben ist. Die Standardwerte sind folgende:
 
 ```toml
 [[battery.display]]
@@ -685,7 +685,7 @@ style = "bold dimmed green"
 
 ## Java
 
-The `java` module shows the currently installed version of Java. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - The current directory contains a `pom.xml`, `build.gradle` or `build.sbt` file
 - The current directory contains a file with the `.java`, `.class` or `.jar` extension
@@ -709,7 +709,7 @@ symbol = "🌟 "
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+Das `nodejs` Modul zeigt die derzeit installierte Version von NodeJS. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - Das aktuelle Verzeichnis enthält eine `package.json`-Datei
 - The current directory contains a `node_modules` directory
