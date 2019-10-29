@@ -117,15 +117,15 @@ prompt_order = [
 
 The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
 
-### Options
+### Опции
 
-| Variable   | Default         | Description                                                |
+| Переменная | По умолчанию    | Описание                                                   |
 | ---------- | --------------- | ---------------------------------------------------------- |
 | `symbol`   | `"☁️ "`         | The symbol used before displaying the current AWS profile. |
 | `style`    | `"bold yellow"` | The style for the module.                                  |
 | `disabled` | `false`         | Disables the `AWS` module.                                 |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -139,9 +139,9 @@ symbol = "🅰 "
 
 The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
-### Options
+### Опции
 
-| Variable             | Default                  | Description                                       |
+| Переменная           | По умолчанию             | Описание                                          |
 | -------------------- | ------------------------ | ------------------------------------------------- |
 | `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
 | `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
@@ -152,7 +152,7 @@ The `battery` module shows how charged the device's battery is and its current c
 <details>
 <summary>There are also options for some uncommon battery states.</summary>
 
-| Variable         | Description                                         |
+| Переменная       | Описание                                            |
 | ---------------- | --------------------------------------------------- |
 | `unknown_symbol` | The symbol shown when the battery state is unknown. |
 | `empty_symbol`   | The symbol shown when the battery state is empty.   |
@@ -161,7 +161,7 @@ Note: Battery indicator will be hidden if the status is `unknown` or `empty` unl
 
 </details>
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -182,16 +182,16 @@ threshold = 10
 style = "bold red"
 ```
 
-#### Options
+#### Опции
 
 The `display` option is an array of the following table.
 
-| Variable    | Description                                     |
+| Переменная  | Описание                                        |
 | ----------- | ----------------------------------------------- |
 | `threshold` | The upper bound for the display option.         |
 | `style`     | The style used if the display option is in use. |
 
-#### Example
+#### Пример
 
 ```toml
 [[battery.display]]  # "bold red" style when capacity is between 0% and 10%
@@ -212,9 +212,9 @@ The `character` module shows a character (usually an arrow) beside where the tex
 
 The character will tell you whether the last command was successful or not. It can do this in two ways: by changing color (red/green) or by changing its shape (❯/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
 
-### Options
+### Опции
 
-| Variable                | Default        | Description                                                                         |
+| Переменная              | По умолчанию   | Описание                                                                            |
 | ----------------------- | -------------- | ----------------------------------------------------------------------------------- |
 | `symbol`                | `"❯"`          | The symbol used before the text input in the prompt.                                |
 | `error_symbol`          | `"✖"`          | The symbol used before text input if the previous command failed.                   |
@@ -224,7 +224,7 @@ The character will tell you whether the last command was successful or not. It c
 | `style_failure`         | `"bold red"`   | The style used if the last command failed.                                          |
 | `disabled`              | `false`        | Disables the `character` module.                                                    |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -247,16 +247,16 @@ If you are running Starship in `bash`, do not hook the `DEBUG` trap after runnin
 
 Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
-### Options
+### Опции
 
-| Variable   | Default         | Description                                                |
+| Переменная | По умолчанию    | Описание                                                   |
 | ---------- | --------------- | ---------------------------------------------------------- |
 | `min_time` | `2`             | Shortest duration to show time for.                        |
 | `prefix`   | `took`          | Prefix to display immediately before the command duration. |
 | `style`    | `"bold yellow"` | The style for the module.                                  |
 | `disabled` | `false`         | Disables the `cmd_duration` module.                        |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -270,15 +270,15 @@ prefix = "underwent "
 
 The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set. Note: This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`
 
-### Options
+### Опции
 
-| Variable   | Default        | Description                                  |
+| Переменная | По умолчанию   | Описание                                     |
 | ---------- | -------------- | -------------------------------------------- |
 | `symbol`   | `"C "`         | The symbol used before the environment name. |
 | `style`    | `"bold green"` | The style for the module.                    |
 | `disabled` | `false`        | Disables the `conda` module.                 |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -295,9 +295,9 @@ When using the fish style pwd option, instead of hiding the path that is truncat
 
 For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
-### Options
+### Опции
 
-| Variable            | Default       | Description                                                                      |
+| Переменная          | По умолчанию  | Описание                                                                         |
 | ------------------- | ------------- | -------------------------------------------------------------------------------- |
 | `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
@@ -307,14 +307,14 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Variable                    | Default | Description                                                                              |
-| --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
-| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
-| `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+| Переменная                  | По умолчанию | Описание                                                                                 |
+| --------------------------- | ------------ | ---------------------------------------------------------------------------------------- |
+| `fish_style_pwd_dir_length` | `0`          | The number of characters to use when applying fish shell pwd path logic.                 |
+| `use_logical_path`          | `true`       | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
 
 </details>
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -331,16 +331,16 @@ This module will only be shown in your prompt when one of the following files ar
 
 Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
-### Options
+### Опции
 
-| Variable    | Default       | Description                                              |
+| Переменная  | По умолчанию  | Описание                                                 |
 | ----------- | ------------- | -------------------------------------------------------- |
 | `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
 | `style`     | `"bold blue"` | The style for the module.                                |
 | `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
 | `disabled`  | `false`       | Disables the `dotnet` module.                            |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -358,19 +358,19 @@ The `env_var` module displays the current value of a selected environment variab
 - The `variable` configuration option matches an existing environment variable
 - The `variable` configuration option is not defined, but the `default` configuration option is
 
-### Options
+### Опции
 
-| Variable   | Default          | Description                                                                  |
-| ---------- | ---------------- | ---------------------------------------------------------------------------- |
-| `symbol`   |                  | The symbol used before displaying the variable value.                        |
-| `variable` |                  | The environment variable to be displayed.                                    |
-| `default`  |                  | The default value to be displayed when the selected variable is not defined. |
-| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
-| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed black"` | The style for the module.                                                    |
-| `disabled` | `false`          | Disables the `env_var` module.                                               |
+| Переменная     | По умолчанию     | Описание                                                                     |
+| -------------- | ---------------- | ---------------------------------------------------------------------------- |
+| `symbol`       |                  | The symbol used before displaying the variable value.                        |
+| `переменная`   |                  | The environment variable to be displayed.                                    |
+| `по умолчанию` |                  | The default value to be displayed when the selected variable is not defined. |
+| `prefix`       | `""`             | Prefix to display immediately before the variable value.                     |
+| `suffix`       | `""`             | Suffix to display immediately after the variable value.                      |
+| `style`        | `"dimmed black"` | The style for the module.                                                    |
+| `disabled`     | `false`          | Disables the `env_var` module.                                               |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -384,9 +384,9 @@ default = "unknown shell"
 
 The `git_branch` module shows the active branch of the repo in your current directory.
 
-### Options
+### Опции
 
-| Variable            | Default         | Description                                                                           |
+| Переменная          | По умолчанию    | Описание                                                                              |
 | ------------------- | --------------- | ------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
 | `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
@@ -394,7 +394,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `style`             | `"bold purple"` | The style for the module.                                                             |
 | `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -409,9 +409,9 @@ truncation_symbol = ""
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
-### Options
+### Опции
 
-| Variable           | Default            | Description                                                                                                      |
+| Переменная         | По умолчанию       | Описание                                                                                                         |
 | ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
 | `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
 | `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
@@ -424,7 +424,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
 | `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -438,9 +438,9 @@ cherry_pick = "🍒 PICKING"
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
-### Options
+### Опции
 
-| Variable           | Default                    | Description                                             |
+| Переменная         | По умолчанию               | Описание                                                |
 | ------------------ | -------------------------- | ------------------------------------------------------- |
 | `conflicted`       | `"="`                      | This branch has merge conflicts.                        |
 | `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
@@ -466,13 +466,13 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 #### Git Status Counts
 
-| Variable  | Default | Description                                            |
-| --------- | ------- | ------------------------------------------------------ |
-| `enabled` | `false` | Show the number of files                               |
-| `style`   |         | Optionally style the count differently than the module |
+| Переменная | По умолчанию | Описание                                               |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `enabled`  | `false`      | Show the number of files                               |
+| `style`    |              | Optionally style the count differently than the module |
 
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -505,15 +505,15 @@ The `golang` module shows the currently installed version of Golang. The module 
 - The current directory contains a `Godeps` directory
 - The current directory contains a file with the `.go` extension
 
-### Options
+### Опции
 
-| Variable   | Default       | Description                                              |
+| Переменная | По умолчанию  | Описание                                                 |
 | ---------- | ------------- | -------------------------------------------------------- |
 | `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
 | `style`    | `"bold cyan"` | The style for the module.                                |
 | `disabled` | `false`       | Disables the `golang` module.                            |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -526,9 +526,9 @@ symbol = "🏎💨 "
 
 The `hostname` module shows the system hostname.
 
-### Options
+### Опции
 
-| Variable   | Default               | Description                                                                                                                          |
+| Переменная | По умолчанию          | Описание                                                                                                                             |
 | ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
 | `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
@@ -537,7 +537,7 @@ The `hostname` module shows the system hostname.
 | `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
 | `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -554,16 +554,16 @@ disabled = false
 
 The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
-### Options
+### Опции
 
-| Variable    | Default       | Description                                           |
+| Переменная  | По умолчанию  | Описание                                              |
 | ----------- | ------------- | ----------------------------------------------------- |
 | `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
 | `threshold` | `1`           | Show number of jobs if exceeded.                      |
 | `style`     | `"bold blue"` | The style for the module.                             |
 | `disabled`  | `false`       | Disables the `jobs` module.                           |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -583,15 +583,15 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Options
+### Опции
 
-| Variable   | Default       | Description                                         |
+| Переменная | По умолчанию  | Описание                                            |
 | ---------- | ------------- | --------------------------------------------------- |
 | `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
 | `style`    | `"bold blue"` | The style for the module.                           |
 | `disabled` | `true`        | Disables the `kubernetes` module                    |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -606,13 +606,13 @@ disabled = false
 
 The `line_break` module separates the prompt into two lines.
 
-### Options
+### Опции
 
-| Variable   | Default | Description                                                        |
-| ---------- | ------- | ------------------------------------------------------------------ |
-| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
+| Переменная | По умолчанию | Описание                                                           |
+| ---------- | ------------ | ------------------------------------------------------------------ |
+| `disabled` | `false`      | Disables the `line_break` module, making the prompt a single line. |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -625,9 +625,9 @@ disabled = true
 
 The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
-### Options
+### Опции
 
-| Variable     | Default      | Description                        |
+| Переменная   | По умолчанию | Описание                           |
 | ------------ | ------------ | ---------------------------------- |
 | `use_name`   | `false`      | Display the name of the nix-shell. |
 | `impure_msg` | `impure`     | Customize the "impure" msg.        |
@@ -635,7 +635,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 | `style`      | `"bold red"` | The style for the module.          |
 | `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -659,9 +659,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Options
+### Опции
 
-| Variable          | Default               | Description                                                   |
+| Переменная        | По умолчанию          | Описание                                                      |
 | ----------------- | --------------------- | ------------------------------------------------------------- |
 | `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
 | `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
@@ -670,7 +670,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `style`           | `"bold dimmed white"` | The style for the module.                                     |
 | `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -690,15 +690,15 @@ The `java` module shows the currently installed version of Java. The module will
 - The current directory contains a `pom.xml`, `build.gradle` or `build.sbt` file
 - The current directory contains a file with the `.java`, `.class` or `.jar` extension
 
-### Options
+### Опции
 
-| Variable   | Default        | Description                                            |
+| Переменная | По умолчанию   | Описание                                               |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
 | `style`    | `"dimmed red"` | The style for the module.                              |
 | `disabled` | `false`        | Disables the `java` module.                            |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -715,15 +715,15 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js` extension
 
-### Options
+### Опции
 
-| Variable   | Default        | Description                                              |
+| Переменная | По умолчанию   | Описание                                                 |
 | ---------- | -------------- | -------------------------------------------------------- |
 | `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
 | `style`    | `"bold green"` | The style for the module.                                |
 | `disabled` | `false`        | Disables the `nodejs` module.                            |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -742,15 +742,15 @@ The `package` module is shown when the current directory is the repository for a
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
 
-### Options
+### Опции
 
-| Variable   | Default      | Description                                                |
+| Переменная | По умолчанию | Описание                                                   |
 | ---------- | ------------ | ---------------------------------------------------------- |
 | `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
 | `style`    | `"bold red"` | The style for the module.                                  |
 | `disabled` | `false`      | Disables the `package` module.                             |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -776,9 +776,9 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `Pipfile` file
 - The current directory contains a `tox.ini` file
 
-### Options
+### Опции
 
-| Variable             | Default         | Description                                                                 |
+| Переменная           | По умолчанию    | Описание                                                                    |
 | -------------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
 | `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
@@ -786,7 +786,7 @@ The module will be shown if any of the following conditions are met:
 | `style`              | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -804,15 +804,15 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.rb` file
 
-### Options
+### Опции
 
-| Variable   | Default      | Description                                            |
+| Переменная | По умолчанию | Описание                                               |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
 | `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `ruby` module.                            |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -828,15 +828,15 @@ The `rust` module shows the currently installed version of Rust. The module will
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
 
-### Options
+### Опции
 
-| Variable   | Default      | Description                                            |
+| Переменная | По умолчанию | Описание                                               |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
 | `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `rust` module.                            |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -855,9 +855,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Options
+### Опции
 
-| Variable          | Default       | Description                                                                                                         |
+| Переменная        | По умолчанию  | Описание                                                                                                            |
 | ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
@@ -867,7 +867,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
@@ -887,16 +887,16 @@ The `username` module shows active user's username. The module will be shown if 
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
 
-### Options
+### Опции
 
-| Variable      | Default         | Description                           |
+| Переменная    | По умолчанию    | Описание                              |
 | ------------- | --------------- | ------------------------------------- |
 | `style_root`  | `"bold red"`    | The style used when the user is root. |
 | `style_user`  | `"bold yellow"` | The style used for non-root users.    |
 | `show_always` | `false`         | Always shows the `username` module.   |
 | `disabled`    | `false`         | Disables the `username` module.       |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml
