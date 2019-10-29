@@ -40,7 +40,7 @@ Here is the representation of the node module. In the following example, "symbol
  "via "         "⬢"        "v10.4.1"       ""
 ```
 
-### Style Strings
+### 样式设定
 
 Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
