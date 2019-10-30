@@ -15,12 +15,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .is_match();
 
     if !is_haskell_project {
-        return None;
-    }
-
-    match get_haskell_version() {
-        Some(haskell_version) => {
-            let formatted_version = format_haskell_version(&haskell_version)?;
+        None
+    } else {
+        get_haskell_version().map(|haskell_version| {
+            let formatted_version = format_haskell_version(&haskell_version).unwrap();
 
             let mut module = context.new_module("haskell");
             let config: HaskellConfig = HaskellConfig::try_load(module.config);
@@ -28,10 +26,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
             module.create_segment("symbol", &config.symbol);
             module.create_segment("version", &SegmentConfig::new(&formatted_version));
-
-            Some(module)
-        }
-        None => None,
+            module
+        })
     }
 }
 
