@@ -59,8 +59,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
     module.create_segment("ram", &config.ram.with_value(&ram));
 
-    module.create_segment("seperator", &config.seperator);
-
     // swap only shown if enabled and there is swap on the system
     let total_swap_kib = system.get_total_swap();
     if config.show_swap && total_swap_kib > 0 {
@@ -76,6 +74,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 format_kib(total_swap_kib)
             )
         };
+
+        module.create_segment("seperator", &config.seperator);
         module.create_segment("swap", &config.swap.with_value(&swap));
     }
 
