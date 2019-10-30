@@ -45,6 +45,6 @@ fn get_haskell_version() -> Option<String> {
 }
 
 fn format_haskell_version(haskell_version: &str) -> Option<String> {
-    let formatted_version = format!("v {}", haskell_version);
+    let formatted_version = format!("v{}", haskell_version);
     Some(formatted_version)
 }
