@@ -98,6 +98,7 @@ prompt_order = [
     "golang",
     "java",
     "nodejs",
+    "dart",
     "python",
     "ruby",
     "rust",
@@ -303,6 +304,31 @@ Note: This does not suppress conda's own prompt modifier, you may want to run `c
 style = "dimmed green"
 ```
 
+## Dart
+
+The `dart` module shows the currently installed version of Dart.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `pubspec.yaml` file
+- The current directory contains a file with the `.dart` extension
+
+### Options
+
+| Variable   | Default       | Description                                            |
+| ---------- | ------------- | ------------------------------------------------------ |
+| `symbol`   | `"🎯 "`       | The symbol used before displaying the version of Dart. |
+| `style`    | `"bold blue"` | The style for the module.                              |
+| `disabled` | `false`       | Disables the `dart` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[dart]
+symbol = "🛸 "
+```
+
 ## Directory
 
 The `directory` module shows the path to your current directory, truncated to
@@ -474,37 +500,36 @@ current directory.
 
 ### Options
 
-| Variable            | Default                    | Description                                                     |
-| ------------------- | -------------------------- | --------------------------------------------------------------- |
-| `conflicted`        | `"="`                      | This branch has merge conflicts.                                |
-| `conflicted_count`  | [link](#git-status-counts) | Show and style the number of conflicts.                         |
-| `ahead`             | `"⇡"`                      | This branch is ahead of the branch being tracked.               |
-| `behind`            | `"⇣"`                      | This branch is behind of the branch being tracked.              |
-| `diverged`          | `"⇕"`                      | This branch has diverged from the branch being tracked.         |
-| `untracked`         | `"?"`                      | There are untracked files in the working directory.             |
-| `untracked_count`   | [link](#git-status-counts) | Show and style the number of untracked files.                   |
-| `stashed`           | `"$"`                      | A stash exists for the local repository.                        |
-| `modified`          | `"!"`                      | There are file modifications in the working directory.          |
-| `modified_count`    | [link](#git-status-counts) | Show and style the number of modified files.                    |
-| `staged`            | `"+"`                      | A new file has been added to the staging area.                  |
-| `staged_count`      | [link](#git-status-counts) | Show and style the number of files staged files.                |
-| `renamed`           | `"»"`                      | A renamed file has been added to the staging area.              |
-| `renamed_count`     | [link](#git-status-counts) | Show and style the number of renamed files.                     |
-| `deleted`           | `"✘"`                      | A file's deletion has been added to the staging area.           |
-| `deleted_count`     | [link](#git-status-counts) | Show and style the number of deleted files.                     |
-| `show_sync_count`   | `false`                    | Show ahead/behind count of the branch being tracked.            |
-| `prefix`            | `[`                        | Prefix to display immediately before git status.                |
-| `suffix`            | `]`                        | Suffix to display immediately after git status.                 |
-| `style`             | `"bold red"`               | The style for the module.                                       |
-| `disabled`          | `false`                    | Disables the `git_status` module.                               |
+| Variable           | Default                    | Description                                             |
+| ------------------ | -------------------------- | ------------------------------------------------------- |
+| `conflicted`       | `"="`                      | This branch has merge conflicts.                        |
+| `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
+| `ahead`            | `"⇡"`                      | This branch is ahead of the branch being tracked.       |
+| `behind`           | `"⇣"`                      | This branch is behind of the branch being tracked.      |
+| `diverged`         | `"⇕"`                      | This branch has diverged from the branch being tracked. |
+| `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
+| `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
+| `stashed`          | `"$"`                      | A stash exists for the local repository.                |
+| `modified`         | `"!"`                      | There are file modifications in the working directory.  |
+| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
+| `staged`           | `"+"`                      | A new file has been added to the staging area.          |
+| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files.        |
+| `renamed`          | `"»"`                      | A renamed file has been added to the staging area.      |
+| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.             |
+| `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.   |
+| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.             |
+| `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
+| `prefix`           | `[`                        | Prefix to display immediately before git status.        |
+| `suffix`           | `]`                        | Suffix to display immediately after git status.         |
+| `style`            | `"bold red"`               | The style for the module.                               |
+| `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
 #### Git Status Counts
 
-| Variable    | Default | Description                                            |
-| ----------- | ------- | ------------------------------------------------------ |
-| `enabled`   | `false` | Show the number of files                               |
-| `style`     |         | Optionally style the count differently than the module |
-
+| Variable  | Default | Description                                            |
+| --------- | ------- | ------------------------------------------------------ |
+| `enabled` | `false` | Show the number of files                               |
+| `style`   |         | Optionally style the count differently than the module |
 
 ### Example
 

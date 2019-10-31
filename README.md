@@ -91,6 +91,7 @@ The prompt shows information you need while you're working, while staying sleek 
 - Current username if not the same as the logged-in user
 - Current Java version(`☕`)
 - Current Node.js version(`⬢`)
+- Current Dart version(`🎯`)
 - Current Rust version (`🦀`)
 - Current Ruby version (`💎`)
 - Current Python version (`🐍`)
