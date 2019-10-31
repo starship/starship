@@ -4,6 +4,7 @@ mod cmd_duration;
 mod common;
 mod conda;
 mod configuration;
+mod dart;
 mod directory;
 mod dotnet;
 mod env_var;
