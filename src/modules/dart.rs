@@ -20,21 +20,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    match get_dart_version() {
-        Some(dart_version) => {
-            let mut module = context.new_module("dartlang");
-            let config: DartConfig = DartConfig::try_load(module.config);
+    let formatted_version = format_dart_version(&get_dart_version()?)?;
 
-            module.set_style(config.style);
-            module.create_segment("symbol", &config.symbol);
+    let mut module = context.new_module("dart");
+    let config: DartConfig = DartConfig::try_load(module.config);
 
-            let formatted_version = format_dart_version(&dart_version)?;
-            module.create_segment("version", &config.version.with_value(&formatted_version));
+    module.set_style(config.style);
+    module.create_segment("symbol", &config.symbol);
+    module.create_segment("version", &config.version.with_value(&formatted_version));
 
-            Some(module)
-        }
-        None => None,
-    }
+    Some(module)
 }
 
 fn get_dart_version() -> Option<String> {
