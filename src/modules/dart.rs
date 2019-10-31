@@ -52,12 +52,7 @@ fn format_dart_version(dart_stdout: &str) -> Option<String> {
 
     let version = dart_stdout.split(' ').nth(3)?;
 
-    let mut formatted_version = String::with_capacity(version.len() + 1);
-
-    formatted_version.push('v');
-    formatted_version.push_str(version);
-
-    Some(formatted_version)
+    Some(format!("v{}", version))
 }
 
 #[cfg(test)]
