@@ -33,20 +33,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_dart_version() -> Option<String> {
-    match Command::new("dart").arg("--version").output() {
-        Ok(output) => {
-            if !output.status.success() {
-                log::warn!(
-                    "Non-Zero exit code '{}' when executing `dart --version`",
-                    output.status
-                );
-                return None;
-            }
+    let output = Command::new("dart").arg("--version").output().ok()?;
 
-            Some(String::from_utf8(output.stderr).unwrap())
-        }
-        Err(_) => None,
+    if !output.status.success() {
+        log::warn!(
+            "Non-Zero exit code '{}' when executing `dart --version`",
+            output.status
+        );
+        return None;
     }
+
+    String::from_utf8(output.stderr).ok()
 }
 
 fn format_dart_version(dart_stdout: &str) -> Option<String> {
