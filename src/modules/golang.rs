@@ -26,21 +26,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    match get_go_version() {
-        Some(go_version) => {
-            let mut module = context.new_module("golang");
-            let config: GoConfig = GoConfig::try_load(module.config);
+    let mut module = context.new_module("golang");
+    let config: GoConfig = GoConfig::try_load(module.config);
 
-            module.set_style(config.style);
-            module.create_segment("symbol", &config.symbol);
+    module.set_style(config.style);
+    module.create_segment("symbol", &config.symbol);
 
-            let formatted_version = format_go_version(&go_version)?;
-            module.create_segment("version", &config.version.with_value(&formatted_version));
+    let formatted_version = format_go_version(&get_go_version()?)?;
+    module.create_segment("version", &config.version.with_value(&formatted_version));
 
-            Some(module)
-        }
-        None => None,
-    }
+    Some(module)
 }
 
 fn get_go_version() -> Option<String> {
@@ -51,7 +46,11 @@ fn get_go_version() -> Option<String> {
         .and_then(|output| String::from_utf8(output.stdout).ok())
 }
 
+
 fn format_go_version(go_stdout: &str) -> Option<String> {
+    // go version output looks like this:
+    // go version go1.13.3 linux/amd64
+
     let version = go_stdout
         // split into ["", "1.12.4 linux/amd64"]
         .splitn(2, "go version go")
@@ -62,10 +61,7 @@ fn format_go_version(go_stdout: &str) -> Option<String> {
         // return "1.12.4"
         .next()?;
 
-    let mut formatted_version = String::with_capacity(version.len() + 1);
-    formatted_version.push('v');
-    formatted_version.push_str(version);
-    Some(formatted_version)
+    Some(format!("v{}", version))
 }
 
 #[cfg(test)]
