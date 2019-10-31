@@ -3,6 +3,7 @@ pub mod battery;
 pub mod character;
 pub mod cmd_duration;
 pub mod conda;
+pub mod dart;
 pub mod directory;
 pub mod dotnet;
 pub mod env_var;
