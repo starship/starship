@@ -46,7 +46,6 @@ fn get_go_version() -> Option<String> {
         .and_then(|output| String::from_utf8(output.stdout).ok())
 }
 
-
 fn format_go_version(go_stdout: &str) -> Option<String> {
     // go version output looks like this:
     // go version go1.13.3 linux/amd64
