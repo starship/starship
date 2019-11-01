@@ -3,7 +3,7 @@ use std::path::Path;
 use std::process::Command;
 
 use super::{Context, Module, RootModuleConfig, SegmentConfig};
-use crate::configs::python::PythonConfig;
+use crate::configs::python::{PythonConfig, ShowVenv};
 
 /// Creates a module with the current Python version
 ///
@@ -46,12 +46,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let formatted_version = format_python_version(&python_version);
         module.create_segment("version", &SegmentConfig::new(&formatted_version));
 
-        if let Some(virtual_env) = get_python_virtual_env() {
-            module.create_segment(
-                "virtualenv",
-                &SegmentConfig::new(&format!(" ({})", virtual_env)),
-            );
-        };
+        if config.show_venv == ShowVenv::Always
+            || (config.show_venv == ShowVenv::NotInNix && env::var("IN_NIX_SHELL").is_err())
+        {
+            if let Some(virtual_env) = get_python_virtual_env() {
+                module.create_segment(
+                    "virtualenv",
+                    &SegmentConfig::new(&format!(" ({})", virtual_env)),
+                );
+            };
+        }
     };
 
     Some(module)

@@ -474,36 +474,36 @@ current directory.
 
 ### Options
 
-| Variable            | Default                    | Description                                                     |
-| ------------------- | -------------------------- | --------------------------------------------------------------- |
-| `conflicted`        | `"="`                      | This branch has merge conflicts.                                |
-| `conflicted_count`  | [link](#git-status-counts) | Show and style the number of conflicts.                         |
-| `ahead`             | `"⇡"`                      | This branch is ahead of the branch being tracked.               |
-| `behind`            | `"⇣"`                      | This branch is behind of the branch being tracked.              |
-| `diverged`          | `"⇕"`                      | This branch has diverged from the branch being tracked.         |
-| `untracked`         | `"?"`                      | There are untracked files in the working directory.             |
-| `untracked_count`   | [link](#git-status-counts) | Show and style the number of untracked files.                   |
-| `stashed`           | `"$"`                      | A stash exists for the local repository.                        |
-| `modified`          | `"!"`                      | There are file modifications in the working directory.          |
-| `modified_count`    | [link](#git-status-counts) | Show and style the number of modified files.                    |
-| `staged`            | `"+"`                      | A new file has been added to the staging area.                  |
-| `staged_count`      | [link](#git-status-counts) | Show and style the number of files staged files.                |
-| `renamed`           | `"»"`                      | A renamed file has been added to the staging area.              |
-| `renamed_count`     | [link](#git-status-counts) | Show and style the number of renamed files.                     |
-| `deleted`           | `"✘"`                      | A file's deletion has been added to the staging area.           |
-| `deleted_count`     | [link](#git-status-counts) | Show and style the number of deleted files.                     |
-| `show_sync_count`   | `false`                    | Show ahead/behind count of the branch being tracked.            |
-| `prefix`            | `[`                        | Prefix to display immediately before git status.                |
-| `suffix`            | `]`                        | Suffix to display immediately after git status.                 |
-| `style`             | `"bold red"`               | The style for the module.                                       |
-| `disabled`          | `false`                    | Disables the `git_status` module.                               |
+| Variable           | Default                    | Description                                             |
+| ------------------ | -------------------------- | ------------------------------------------------------- |
+| `conflicted`       | `"="`                      | This branch has merge conflicts.                        |
+| `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
+| `ahead`            | `"⇡"`                      | This branch is ahead of the branch being tracked.       |
+| `behind`           | `"⇣"`                      | This branch is behind of the branch being tracked.      |
+| `diverged`         | `"⇕"`                      | This branch has diverged from the branch being tracked. |
+| `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
+| `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
+| `stashed`          | `"$"`                      | A stash exists for the local repository.                |
+| `modified`         | `"!"`                      | There are file modifications in the working directory.  |
+| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
+| `staged`           | `"+"`                      | A new file has been added to the staging area.          |
+| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files.        |
+| `renamed`          | `"»"`                      | A renamed file has been added to the staging area.      |
+| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.             |
+| `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.   |
+| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.             |
+| `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
+| `prefix`           | `[`                        | Prefix to display immediately before git status.        |
+| `suffix`           | `]`                        | Suffix to display immediately after git status.         |
+| `style`            | `"bold red"`               | The style for the module.                               |
+| `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
 #### Git Status Counts
 
-| Variable    | Default | Description                                            |
-| ----------- | ------- | ------------------------------------------------------ |
-| `enabled`   | `false` | Show the number of files                               |
-| `style`     |         | Optionally style the count differently than the module |
+| Variable  | Default | Description                                            |
+| --------- | ------- | ------------------------------------------------------ |
+| `enabled` | `false` | Show the number of files                               |
+| `style`   |         | Optionally style the count differently than the module |
 
 
 ### Example
@@ -739,7 +739,7 @@ The module will be shown if any of the following conditions are met:
 
 | Variable   | Default        | Description                                            |
 | ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`        | The symbol used before displaying the version of Java. |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
 | `style`    | `"dimmed red"` | The style for the module.                              |
 | `disabled` | `false`        | Disables the `java` module.                            |
 
@@ -818,9 +818,7 @@ The `python` module shows the currently installed version of Python.
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
 
 Otherwise, it will display the version number from `python --version`
-and show the current Python virtual environment if one is
-activated.
-
+and the current Python virtual environment, according to `show_venv`
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.python-version` file
@@ -832,13 +830,17 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable             | Default         | Description                                                                 |
-| -------------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`             | `"🐍 "`         | The symbol used before displaying the version of Python.                    |
-| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
-| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
-| `style`              | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`           | `false`         | Disables the `python` module.                                               |
+| Variable             | Default         | Description                                                                         |
+| -------------------- | --------------- | ----------------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`         | The symbol used before displaying the version of Python.                            |
+| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                                     |
+| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`)         |
+| `show_venv`          | `"not_in_nix"`  | One of `always`, `never`, or `not_in_nix`. Selects when to show the virtualenv name |
+| `style`              | `"bold yellow"` | The style for the module.                                                           |
+| `disabled`           | `false`         | Disables the `python` module.                                                       |
+
+When `show_venv` is set to `"not_in_nix"`, the virtualenv name will not be shown
+while in a nix shell, as these tend to be very long.
 
 ### Example
 
