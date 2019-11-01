@@ -393,6 +393,7 @@ default = "unknown shell"
 | `truncation_symbol` | `"…"`           | 用來指示分支名稱被縮減的符號。 你可以用 "" 來表示不要顯示。 |
 | `style`             | `"bold purple"` | 這個模組的風格。                         |
 | `disabled`          | `false`         | 停用 `git_branch` 模組。              |
+| `prefix`            | `"on "`         | Prefix to display immediately before git branch.                |
 
 ### 範例
 

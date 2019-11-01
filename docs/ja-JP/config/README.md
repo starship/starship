@@ -394,6 +394,7 @@ default = "unknown shell"
 | `truncation_symbol` | `"…"`           | ブランチ名切り捨てられていることを示すための記号です。 記号なしに「」も使用できます。 |
 | `style`             | `"bold purple"` | モジュールのスタイルです。                               |
 | `disabled`          | `false`         | `git_branch`モジュールを無効にします。                   |
+| `prefix`            | `"on "`         | Prefix to display immediately before git branch.                |
 
 ### 設定例
 

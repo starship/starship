@@ -393,6 +393,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
 | `style`             | `"bold purple"` | The style for the module.                                                             |
 | `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
+| `prefix`            | `"on "`         | Prefix to display immediately before git branch.                |
 
 ### Пример
 

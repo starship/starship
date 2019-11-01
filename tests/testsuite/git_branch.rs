@@ -82,6 +82,36 @@ fn test_japanese_truncation() -> io::Result<()> {
     test_truncate_length("がんばってね", 4, "がんばっ", "…")
 }
 
+#[test]
+fn test_prefix() -> io::Result<()> {
+    let repo_dir = common::create_fixture_repo()?;
+    let branch_name = "prefix";
+
+    Command::new("git")
+        .args(&["checkout", "-b", branch_name])
+        .current_dir(repo_dir.as_path())
+        .output()?;
+
+    let output = common::render_module("git_branch")
+        .use_config(toml::toml! {
+            [git_branch]
+                prefix = ' '
+        })
+        .arg("--path")
+        .arg(repo_dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!(
+        " {} ",
+        Color::Purple
+            .bold()
+            .paint(format!("\u{e0a0} {}", branch_name)),
+    );
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
 fn test_truncate_length(
     branch_name: &str,
     truncate_length: i64,
