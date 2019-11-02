@@ -216,15 +216,15 @@ style = "bold yellow"
 
 ### Опции
 
-| Переменная              | По умолчанию   | Описание                                                                            |
-| ----------------------- | -------------- | ----------------------------------------------------------------------------------- |
-| `symbol`                | `"❯"`          | Символ, используемый перед вводом текста в командной строке.                        |
-| `error_symbol`          | `"✖"`          | Символ, используемый перед вводом текста, если предыдущая команда не удалась.       |
-| `use_symbol_for_status` | `false`        | Показывает статус ошибки путем изменения символа.                                   |
-| `vicmd_symbol`          | `"❮"`          | The symbol used before the text input in the prompt if shell is in vim normal mode. |
-| `style_success`         | `"bold green"` | The style used if the last command was successful.                                  |
-| `style_failure`         | `"bold red"`   | The style used if the last command failed.                                          |
-| `disabled`              | `false`        | Disables the `character` module.                                                    |
+| Переменная              | По умолчанию   | Описание                                                                                                    |
+| ----------------------- | -------------- | ----------------------------------------------------------------------------------------------------------- |
+| `symbol`                | `"❯"`          | Символ, используемый перед вводом текста в командной строке.                                                |
+| `error_symbol`          | `"✖"`          | Символ, используемый перед вводом текста, если предыдущая команда не удалась.                               |
+| `use_symbol_for_status` | `false`        | Показывает статус ошибки путем изменения символа.                                                           |
+| `vicmd_symbol`          | `"❮"`          | Символ, используемый перед вводом текста в строке, если командная строка находится в нормальном режиме vim. |
+| `style_success`         | `"bold green"` | Используемый стиль, если последняя команда была успешной.                                                   |
+| `style_failure`         | `"bold red"`   | Используемый стиль, если последняя команда была не успешной.                                                |
+| `disabled`              | `false`        | Отключает модуль `character`.                                                                               |
 
 ### Пример
 
@@ -237,11 +237,11 @@ error_symbol = "✗"
 use_symbol_for_status = true
 ```
 
-## Command Duration
+## Длительность команды
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+Модуль `cmd_duration` показывает время исполнения последней команды. Модуль будет показан только, если команда заняла более двух секунд, или если задан параметр `min_time`.
 
-::: warning Do not hook the DEBUG trap in Bash
+::: предупреждение Не подключайте ловушку DEBUG к Bash
 
 If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
