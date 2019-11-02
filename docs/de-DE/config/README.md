@@ -119,11 +119,12 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 
 ### Optionen
 
-| Variable   | Standardwert    | Beschreibung                                            |
-| ---------- | --------------- | ------------------------------------------------------- |
-| `symbol`   | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird. |
-| `style`    | `"bold yellow"` | Stil für dieses Modul.                                  |
-| `disabled` | `false`         | Deaktiviert das `aws`-Modul.                            |
+| Variable          | Standardwert    | Beschreibung                                                                |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☁️  "`        | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                     |
+| `style`           | `"bold yellow"` | Stil für dieses Modul.                                                      |
+| `disabled`        | `false`         | Deaktiviert das `aws`-Modul.                                                |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 
 ### Beispiel
 
@@ -133,6 +134,7 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 [aws]
 style = "bold blue"
 symbol = "🅰 "
+displayed_items = "region"
 ```
 
 ## Akkustand
@@ -775,6 +777,7 @@ Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 - The current directory contains a file with the `.py` extension
 - The current directory contains a `Pipfile` file
 - Das aktuelle Verzeichnis enthält eine `tox.ini`-Datei
+- A virtual environment is currently activated
 
 ### Optionen
 
