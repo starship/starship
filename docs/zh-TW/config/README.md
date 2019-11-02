@@ -59,20 +59,23 @@ Starship 內大多數的模組允許你設定他們的顯示風格。 這要透�
 
 ### 選項
 
-| 變數             | 預設                          | 說明               |
-| -------------- | --------------------------- | ---------------- |
-| `add_newline`  | `true`                      | 在提示字元前面加上換行字元。   |
-| `prompt_order` | [連結](#default-prompt-order) | 調整各個提示字元模組的顯示順序。 |
+| 變數             | 預設                          | 說明                                                    |
+| -------------- | --------------------------- | ----------------------------------------------------- |
+| `add_newline`  | `true`                      | 在提示字元前面加上換行字元。                                        |
+| `prompt_order` | [連結](#default-prompt-order) | 調整各個提示字元模組的顯示順序。                                      |
+| `scan_timeout` | `30`                        | Timeout for starship to scan files (in milliseconds). |
 
 ### 範例
 
 ```toml
 # ~/.config/starship.toml
 
-# 停用在提示字元前換行的功能
+# Disable the newline at the start of the prompt
 add_newline = false
-# 覆寫 default_prompt_order 並使用自訂的 prompt_order
+# Overwrite a default_prompt_order and  use custom prompt_order
 prompt_order=["rust","line_break","package","line_break","character"]
+# Wait 10 milliseconds for starship to check files under the current directory.
+scan_timeout = 10
 ```
 
 ### 預設的提示字元順序
@@ -118,7 +121,7 @@ prompt_order = [
 
 | 變數         | 預設              | 說明                 |
 | ---------- | --------------- | ------------------ |
-| `symbol`   | `"☁️  "`        | 顯示在目前 AWS 配置之前的符號。 |
+| `symbol`   | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。 |
 | `style`    | `"bold yellow"` | 這個模組的風格。           |
 | `disabled` | `false`         | 停用 `AWS` 模組。       |
 
@@ -437,23 +440,37 @@ cherry_pick = "🍒 PICKING"
 
 ### 選項
 
-| 變數                | 預設           | 說明                               |
-| ----------------- | ------------ | -------------------------------- |
-| `conflicted`      | `"="`        | 這個分支有合併衝突。                       |
-| `ahead`           | `"⇡"`        | 這個分支超前正在追蹤的分支。                   |
-| `behind`          | `"⇣"`        | 這個分支落後正在追蹤的分支。                   |
-| `diverged`        | `"⇕"`        | 這個分支偏離正在追蹤的分支。                   |
-| `untracked`       | `"?"`        | 工作資料夾中有沒有追蹤的檔案。                  |
-| `stashed`         | `"$"`        | 本地儲存庫有 stash。                    |
-| `modified`        | `"!"`        | 工作資料夾中有修改過的檔案。                   |
-| `staged`          | `"+"`        | 一個新檔案被加入了暫存區 (staging area)。     |
-| `renamed`         | `"»"`        | 一個被改名的檔案被加入了暫存區 (staging area)。  |
-| `deleted`         | `"✘"`        | 一個刪除檔案的動作被加入了暫存區 (staging area)。 |
-| `show_sync_count` | `false`      | 顯示超前/落後追蹤的分支的數量。                 |
-| `prefix`          | `[`          | 在 git 狀態正前方顯示的前綴。                |
-| `suffix`          | `]`          | 在 git 狀態正後方顯示的後綴。                |
-| `style`           | `"bold red"` | 這個模組的風格。                         |
-| `disabled`        | `false`      | 停用 `git_status` 模組。              |
+| 變數                 | 預設                       | 說明                                               |
+| ------------------ | ------------------------ | ------------------------------------------------ |
+| `conflicted`       | `"="`                    | 這個分支有合併衝突。                                       |
+| `conflicted_count` | [連結](#git-status-counts) | Show and style the number of conflicts.          |
+| `ahead`            | `"⇡"`                    | 這個分支超前正在追蹤的分支。                                   |
+| `behind`           | `"⇣"`                    | 這個分支落後正在追蹤的分支。                                   |
+| `diverged`         | `"⇕"`                    | 這個分支偏離正在追蹤的分支。                                   |
+| `untracked`        | `"?"`                    | 工作資料夾中有沒有追蹤的檔案。                                  |
+| `untracked_count`  | [連結](#git-status-counts) | Show and style the number of untracked files.    |
+| `stashed`          | `"$"`                    | 本地儲存庫有 stash。                                    |
+| `modified`         | `"!"`                    | 工作資料夾中有修改過的檔案。                                   |
+| `modified_count`   | [連結](#git-status-counts) | Show and style the number of modified files.     |
+| `staged`           | `"+"`                    | 一個新檔案被加入了暫存區 (staging area)。                     |
+| `staged_count`     | [連結](#git-status-counts) | Show and style the number of files staged files. |
+| `renamed`          | `"»"`                    | 一個被改名的檔案被加入了暫存區 (staging area)。                  |
+| `renamed_count`    | [連結](#git-status-counts) | Show and style the number of renamed files.      |
+| `deleted`          | `"✘"`                    | 一個刪除檔案的動作被加入了暫存區 (staging area)。                 |
+| `deleted_count`    | [連結](#git-status-counts) | Show and style the number of deleted files.      |
+| `show_sync_count`  | `false`                  | 顯示超前/落後追蹤的分支的數量。                                 |
+| `prefix`           | `[`                      | 在 git 狀態正前方顯示的前綴。                                |
+| `suffix`           | `]`                      | 在 git 狀態正後方顯示的後綴。                                |
+| `style`            | `"bold red"`             | 這個模組的風格。                                         |
+| `disabled`         | `false`                  | 停用 `git_status` 模組。                              |
+
+#### Git Status Counts
+
+| 變數        | 預設      | 說明                                                     |
+| --------- | ------- | ------------------------------------------------------ |
+| `enabled` | `false` | Show the number of files                               |
+| `style`   |         | Optionally style the count differently than the module |
+
 
 ### 範例
 
@@ -468,7 +485,10 @@ diverged = "😵"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"
-staged = "➕"
+staged.value = "++"
+staged.style = "green"
+staged_count.enabled = true
+staged_count.style = "green"
 renamed = "👅"
 deleted = "🗑"
 ```
@@ -553,10 +573,9 @@ symbol = "+ "
 threshold = 4
 ```
 
-
 ## Kubernetes
 
-顯示現在 Kubernetes 主體名稱以及從 kubeconfig 檔案來的名稱空間 (如果有設定的話)。 這個名稱空間必須設定在 kubeconfig 檔案內，你可以透過 `kubectl config set-context starship-cluster --namespace astronaut` 指令做到。 如果有設定 `$KUBECONFIG` 環境變數，這個模組就會使用設定值；如果沒有，它就會使用 `~/.kube/config`。
+顯示現在 Kubernetes 主體名稱以及從 kubeconfig 檔案來的名稱空間 (如果有設定的話)。 The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. 如果有設定 `$KUBECONFIG` 環境變數，這個模組就會使用設定值；如果沒有，它就會使用 `~/.kube/config`。
 
 ::: tip
 
@@ -582,7 +601,6 @@ symbol = "⛵ "
 style = "dim green"
 disabled = false
 ```
-
 
 ## 換行
 
@@ -841,7 +859,7 @@ symbol = "⚙️ "
 
 | 變數                | 預設            | 說明                                                                                     |
 | ----------------- | ------------- | -------------------------------------------------------------------------------------- |
-| `12hr`            | `false`       | 啟用 12 小時格式。                                                                            |
+| `use_12hr`        | `false`       | 啟用 12 小時格式。                                                                            |
 | `format`          | 請看下列          | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。 |
 | `style`           | `bold yellow` | 這個模組的時間的風格。                                                                            |
 | `disabled`        | `true`        | 停用 `time` 模組。                                                                          |
