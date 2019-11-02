@@ -119,11 +119,12 @@ prompt_order = [
 
 ### Опции
 
-| Переменная | По умолчанию    | Описание                                        |
-| ---------- | --------------- | ----------------------------------------------- |
-| `symbol`   | `"☁️ "`         | Символ перед отображением текущего профиля AWS. |
-| `style`    | `"bold yellow"` | Стиль модуля.                                   |
-| `disabled` | `false`         | Отключает модуль `AWS`.                         |
+| Переменная        | По умолчанию    | Описание                                                                    |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☁️  "`        | Символ перед отображением текущего профиля AWS.                             |
+| `style`           | `"bold yellow"` | Стиль модуля.                                                               |
+| `disabled`        | `false`         | Отключает модуль `AWS`.                                                     |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 
 ### Пример
 
@@ -133,6 +134,7 @@ prompt_order = [
 [aws]
 style = "bold blue"
 symbol = "🅰 "
+displayed_items = "region"
 ```
 
 ## Батарея
@@ -775,6 +777,7 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a file with the `.py` extension
 - The current directory contains a `Pipfile` file
 - The current directory contains a `tox.ini` file
+- A virtual environment is currently activated
 
 ### Опции
 
