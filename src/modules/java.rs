@@ -1,8 +1,11 @@
 use std::process::Command;
+use std::process::Output;
 
 use ansi_term::Color;
 
 use super::{Context, Module};
+
+use crate::modules::utils::java_version_parser;
 
 /// Creates a module with the current Java version
 ///
@@ -47,27 +50,24 @@ fn get_java_version() -> Option<String> {
     };
 
     match Command::new(java_command).arg("-Xinternalversion").output() {
-        Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
+        Ok(output) => Some(combine_outputs(output)),
         Err(_) => None,
     }
 }
 
-/// Extract the java version from `java_stdout`.
-/// The expected format is similar to: "JRE (1.8.0_222-b10)".
-/// Some Java vendors don't follow this format: "JRE (Zulu 8.40.0.25-CA-linux64)").
-fn format_java_version(java_stdout: String) -> Option<String> {
-    let start = java_stdout.find("JRE (")? + "JRE (".len();
-    let end = start
-        + (java_stdout[start..].find(|c| match c {
-            '0'..='9' | '.' => false,
-            _ => true,
-        })?);
+/// Combines the standard and error outputs.
+///
+/// This is due some Java vendors using `STDERR` as the output.
+fn combine_outputs(output: Output) -> String {
+    let std_out = String::from_utf8(output.stdout).unwrap();
+    let std_err = String::from_utf8(output.stderr).unwrap();
 
-    if start == end {
-        None
-    } else {
-        Some(format!("v{}", &java_stdout[start..end]))
-    }
+    format!("{}{}", std_out, std_err)
+}
+
+/// Extract the java version from `java_out`.
+fn format_java_version(java_out: String) -> Option<String> {
+    java_version_parser::parse_jre_version(&java_out).map(|result| format!("v{}", result))
 }
 
 #[cfg(test)]
@@ -98,8 +98,43 @@ mod tests {
 
     #[test]
     fn test_format_java_version_zulu() {
-        // Not currently supported
         let java_8 = String::from("OpenJDK 64-Bit Server VM (25.222-b10) for linux-amd64 JRE (Zulu 8.40.0.25-CA-linux64) (1.8.0_222-b10), built on Jul 11 2019 11:36:39 by \"zulu_re\" with gcc 4.4.7 20120313 (Red Hat 4.4.7-3)");
-        assert_eq!(format_java_version(java_8), None);
+        let java_11 = String::from("OpenJDK 64-Bit Server VM (11.0.4+11-LTS) for linux-amd64 JRE (Zulu11.33+15-CA) (11.0.4+11-LTS), built on Jul 11 2019 21:37:17 by \"zulu_re\" with gcc 4.9.2 20150212 (Red Hat 4.9.2-6)");
+        assert_eq!(format_java_version(java_8), Some(String::from("v1.8.0")));
+        assert_eq!(format_java_version(java_11), Some(String::from("v11.0.4")));
+    }
+
+    #[test]
+    fn test_format_java_version_eclipse_openj9() {
+        let java_8 = String::from("Eclipse OpenJ9 OpenJDK 64-bit Server VM (1.8.0_222-b10) from linux-amd64 JRE with Extensions for OpenJDK for Eclipse OpenJ9 8.0.222.0, built on Jul 17 2019 21:29:18 by jenkins with g++ (GCC) 7.3.1 20180303 (Red Hat 7.3.1-5)");
+        let java_11 = String::from("Eclipse OpenJ9 OpenJDK 64-bit Server VM (11.0.4+11) from linux-amd64 JRE with Extensions for OpenJDK for Eclipse OpenJ9 11.0.4.0, built on Jul 17 2019 21:51:37 by jenkins with g++ (GCC) 7.3.1 20180303 (Red Hat 7.3.1-5)");
+        assert_eq!(format_java_version(java_8), Some(String::from("v1.8.0")));
+        assert_eq!(format_java_version(java_11), Some(String::from("v11.0.4")));
+    }
+
+    #[test]
+    fn test_format_java_version_graalvm() {
+        let java_8 = String::from("OpenJDK 64-Bit GraalVM CE 19.2.0.1 (25.222-b08-jvmci-19.2-b02) for linux-amd64 JRE (8u222), built on Jul 19 2019 17:37:13 by \"buildslave\" with gcc 7.3.0");
+        assert_eq!(format_java_version(java_8), Some(String::from("v8")));
+    }
+
+    #[test]
+    fn test_format_java_version_amazon_corretto() {
+        let java_8 = String::from("OpenJDK 64-Bit Server VM (25.222-b10) for linux-amd64 JRE (1.8.0_222-b10), built on Jul 11 2019 20:48:53 by \"root\" with gcc 7.3.1 20180303 (Red Hat 7.3.1-5)");
+        let java_11 = String::from("OpenJDK 64-Bit Server VM (11.0.4+11-LTS) for linux-amd64 JRE (11.0.4+11-LTS), built on Jul 11 2019 20:06:11 by \"\" with gcc 7.3.1 20180303 (Red Hat 7.3.1-5)");
+        assert_eq!(format_java_version(java_8), Some(String::from("v1.8.0")));
+        assert_eq!(format_java_version(java_11), Some(String::from("v11.0.4")));
+    }
+
+    #[test]
+    fn test_format_java_version_sapmachine() {
+        let java_11 = String::from("OpenJDK 64-Bit Server VM (11.0.4+11-LTS-sapmachine) for linux-amd64 JRE (11.0.4+11-LTS-sapmachine), built on Jul 17 2019 08:58:43 by \"\" with gcc 7.3.0");
+        assert_eq!(format_java_version(java_11), Some(String::from("v11.0.4")));
+    }
+
+    #[test]
+    fn test_format_java_version_unknown() {
+        let unknown_jre = String::from("Unknown JRE");
+        assert_eq!(format_java_version(unknown_jre), None);
     }
 }

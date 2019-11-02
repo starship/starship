@@ -136,7 +136,7 @@ The prompt shows information you need while you're working, while staying sleek 
    $ brew install starship
    ```
 
-   #### Rust (v1.33 or higher)
+   #### Rust (v1.38 or higher)
 
    ```sh
    $ cargo install starship
@@ -161,9 +161,9 @@ The prompt shows information you need while you're working, while staying sleek 
    ```sh
    $ pkg install starship
    ```
-   
+
    #### Other x86-64 Linux Platforms
-   
+
    Download a prebuilt binary and place in /usr/local/bin/
 
    ```sh
@@ -191,7 +191,7 @@ The prompt shows information you need while you're working, while staying sleek 
    ```sh
    # ~/.config/fish/config.fish
 
-   eval (starship init fish)
+   starship init fish | source
    ```
 
    #### Zsh
@@ -298,6 +298,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://www.slmt.tw"><img src="https://avatars2.githubusercontent.com/u/6824412?v=4" width="100px;" alt="Yushan Lin"/><br /><sub><b>Yushan Lin</b></sub></a><br /><a href="#translation-SLMT" title="Translation">🌍</a></td>
     <td align="center"><a href="https://weihanglo.tw"><img src="https://avatars2.githubusercontent.com/u/14314532?v=4" width="100px;" alt="Weihang Lo"/><br /><sub><b>Weihang Lo</b></sub></a><br /><a href="#translation-weihanglo" title="Translation">🌍</a></td>
     <td align="center"><a href="https://github.com/pinshan"><img src="https://avatars0.githubusercontent.com/u/7709675?v=4" width="100px;" alt="pinshan"/><br /><sub><b>pinshan</b></sub></a><br /><a href="#translation-pinshan" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://github.com/brianlow"><img src="https://avatars2.githubusercontent.com/u/938138?v=4" width="100px;" alt="Brian Low"/><br /><sub><b>Brian Low</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=brianlow" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=brianlow" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=brianlow" title="Tests">⚠️</a></td>
   </tr>
 </table>
 

@@ -124,3 +124,20 @@ fn with_virtual_env() -> io::Result<()> {
     assert_eq!(expected, actual);
     Ok(())
 }
+
+#[test]
+#[ignore]
+fn with_active_venv() -> io::Result<()> {
+    let dir = tempfile::tempdir()?;
+
+    let output = common::render_module("python")
+        .env("VIRTUAL_ENV", "/foo/bar/my_venv")
+        .arg("--path")
+        .arg(dir.path())
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.4 (my_venv)"));
+    assert_eq!(expected, actual);
+    Ok(())
+}

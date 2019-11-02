@@ -9,7 +9,7 @@ use crate::configs::git_branch::GitBranchConfig;
 /// Will display the branch name if the current directory is a git repo
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_branch");
-    let mut config = GitBranchConfig::try_load(module.config);
+    let config = GitBranchConfig::try_load(module.config);
     module.set_style(config.style);
 
     module.get_prefix().set_value("on ");

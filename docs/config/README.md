@@ -65,6 +65,7 @@ This is the list of prompt-wide configuration options.
 | -------------- | ----------------------------- | ------------------------------------------------------ |
 | `add_newline`  | `true`                        | Add a new line before the start of the prompt.         |
 | `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
+| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).  |
 
 ### Example
 
@@ -75,6 +76,8 @@ This is the list of prompt-wide configuration options.
 add_newline = false
 # Overwrite a default_prompt_order and  use custom prompt_order
 prompt_order=["rust","line_break","package","line_break","character"]
+# Wait 10 milliseconds for starship to check files under the current directory.
+scan_timeout = 10
 ```
 
 ### Default Prompt Order
@@ -120,11 +123,12 @@ The `aws` module shows the current AWS region and profile. This is based on
 
 ### Options
 
-| Variable   | Default         | Description                                                |
-| ---------- | --------------- | ---------------------------------------------------------- |
-| `symbol`   | `"☁️  "`        | The symbol used before displaying the current AWS profile. |
-| `style`    | `"bold yellow"` | The style for the module.                                  |
-| `disabled` | `false`         | Disables the `AWS` module.                                 |
+| Variable          | Default         | Description                                                                 |
+| ----------------- | --------------- | ----------------------------------------------------------------------------|
+| `symbol`          | `"☁️  "`        | The symbol used before displaying the current AWS profile.                  |
+| `style`           | `"bold yellow"` | The style for the module.                                                   |
+| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 
 ### Example
 
@@ -134,6 +138,7 @@ The `aws` module shows the current AWS region and profile. This is based on
 [aws]
 style = "bold blue"
 symbol = "🅰 "
+displayed_items = "region"
 ```
 
 ## Battery
@@ -264,7 +269,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 | Variable   | Default         | Description                                                |
 | ---------- | --------------- | ---------------------------------------------------------- |
 | `min_time` | `2`             | Shortest duration to show time for.                        |
-| `prefix`   | `took `         | Prefix to display immediately before the command duration. |
+| `prefix`   | `took`          | Prefix to display immediately before the command duration. |
 | `style`    | `"bold yellow"` | The style for the module.                                  |
 | `disabled` | `false`         | Disables the `cmd_duration` module.                        |
 
@@ -471,23 +476,37 @@ current directory.
 
 ### Options
 
-| Variable          | Default      | Description                                             |
-| ----------------- | ------------ | ------------------------------------------------------- |
-| `conflicted`      | `"="`        | This branch has merge conflicts.                        |
-| `ahead`           | `"⇡"`        | This branch is ahead of the branch being tracked.       |
-| `behind`          | `"⇣"`        | This branch is behind of the branch being tracked.      |
-| `diverged`        | `"⇕"`        | This branch has diverged from the branch being tracked. |
-| `untracked`       | `"?"`        | There are untracked files in the working directory.     |
-| `stashed`         | `"$"`        | A stash exists for the local repository.                |
-| `modified`        | `"!"`        | There are file modifications in the working directory.  |
-| `staged`          | `"+"`        | A new file has been added to the staging area.          |
-| `renamed`         | `"»"`        | A renamed file has been added to the staging area.      |
-| `deleted`         | `"✘"`        | A file's deletion has been added to the staging area.   |
-| `show_sync_count` | `false`      | Show ahead/behind count of the branch being tracked.    |
-| `prefix`          | `[`          | Prefix to display immediately before git status.        |
-| `suffix`          | `]`          | Suffix to display immediately after git status.         |
-| `style`           | `"bold red"` | The style for the module.                               |
-| `disabled`        | `false`      | Disables the `git_status` module.                       |
+| Variable            | Default                    | Description                                                     |
+| ------------------- | -------------------------- | --------------------------------------------------------------- |
+| `conflicted`        | `"="`                      | This branch has merge conflicts.                                |
+| `conflicted_count`  | [link](#git-status-counts) | Show and style the number of conflicts.                         |
+| `ahead`             | `"⇡"`                      | This branch is ahead of the branch being tracked.               |
+| `behind`            | `"⇣"`                      | This branch is behind of the branch being tracked.              |
+| `diverged`          | `"⇕"`                      | This branch has diverged from the branch being tracked.         |
+| `untracked`         | `"?"`                      | There are untracked files in the working directory.             |
+| `untracked_count`   | [link](#git-status-counts) | Show and style the number of untracked files.                   |
+| `stashed`           | `"$"`                      | A stash exists for the local repository.                        |
+| `modified`          | `"!"`                      | There are file modifications in the working directory.          |
+| `modified_count`    | [link](#git-status-counts) | Show and style the number of modified files.                    |
+| `staged`            | `"+"`                      | A new file has been added to the staging area.                  |
+| `staged_count`      | [link](#git-status-counts) | Show and style the number of files staged files.                |
+| `renamed`           | `"»"`                      | A renamed file has been added to the staging area.              |
+| `renamed_count`     | [link](#git-status-counts) | Show and style the number of renamed files.                     |
+| `deleted`           | `"✘"`                      | A file's deletion has been added to the staging area.           |
+| `deleted_count`     | [link](#git-status-counts) | Show and style the number of deleted files.                     |
+| `show_sync_count`   | `false`                    | Show ahead/behind count of the branch being tracked.            |
+| `prefix`            | `[`                        | Prefix to display immediately before git status.                |
+| `suffix`            | `]`                        | Suffix to display immediately after git status.                 |
+| `style`             | `"bold red"`               | The style for the module.                                       |
+| `disabled`          | `false`                    | Disables the `git_status` module.                               |
+
+#### Git Status Counts
+
+| Variable    | Default | Description                                            |
+| ----------- | ------- | ------------------------------------------------------ |
+| `enabled`   | `false` | Show the number of files                               |
+| `style`     |         | Optionally style the count differently than the module |
+
 
 ### Example
 
@@ -502,7 +521,10 @@ diverged = "😵"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"
-staged = "➕"
+staged.value = "++"
+staged.style = "green"
+staged_count.enabled = true
+staged_count.style = "green"
 renamed = "👅"
 deleted = "🗑"
 ```
@@ -591,13 +613,11 @@ symbol = "+ "
 threshold = 4
 ```
 
-
 ## Kubernetes
 
 Displays the current Kubernetes context name and, if set, the namespace from
 the kubeconfig file. The namespace needs to be set in the kubeconfig file, this
-can be done via `kubectl config set-context starship-cluster --namespace
-astronaut`. If the `$KUBECONFIG` env var is set the module will use that if
+can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if
 not it will use the `~/.kube/config`.
 
 ::: tip
@@ -611,7 +631,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 | Variable   | Default       | Description                                         |
 | ---------- | ------------- | --------------------------------------------------- |
-| `symbol`   | `"☸ "`       | The symbol used before displaying the Cluster info. |
+| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
 | `style`    | `"bold blue"` | The style for the module.                           |
 | `disabled` | `true`        | Disables the `kubernetes` module                    |
 
@@ -625,7 +645,6 @@ symbol = "⛵ "
 style = "dim green"
 disabled = false
 ```
-
 
 ## Line Break
 
@@ -688,14 +707,14 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable          | Default                  | Description                                                   |
-| ----------------- | ------------------------ | ------------------------------------------------------------- |
-| `show_percentage` | `false`                  | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | `true`                   | Display swap usage if total swap is non-zero.                 |
-| `threshold`       | `75`                     | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`                  | The symbol used before displaying the memory usage.           |
-| `style`           | `"bold dimmed white"`    | The style for the module.                                     |
-| `disabled`        | `true`                   | Disables the `memory_usage` module.                           |
+| Variable          | Default               | Description                                                   |
+| ----------------- | --------------------- | ------------------------------------------------------------- |
+| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
+| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
+| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
+| `symbol`          | `"🐏 "`               | The symbol used before displaying the memory usage.           |
+| `style`           | `"bold dimmed white"` | The style for the module.                                     |
+| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
 ### Example
 
@@ -706,7 +725,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 show_percentage = true
 show_swap = true
 threshold = -1
-icon = " "
+symbol = " "
 style = "bold dimmed green"
 ```
 
@@ -812,6 +831,7 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a file with the `.py` extension
 - The current directory contains a `Pipfile` file
 - The current directory contains a `tox.ini` file
+- A virtual environment is currently activated
 
 ### Options
 
@@ -900,11 +920,11 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 | Variable          | Default       | Description                                                                                                         |
 | ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `12hr`            | `false`       | Enables 12 hour formatting                                                                                          |
+| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
 | `style`           | `bold yellow` | The style for the module time                                                                                       |
 | `disabled`        | `true`        | Disables the `time` module.                                                                                         |
-| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.     |
+| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
 Manually setting `format` will override the `use_12hr` setting.
