@@ -243,20 +243,20 @@ use_symbol_for_status = true
 
 ::: предупреждение Не подключайте ловушку DEBUG к Bash
 
-If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
+Если вы испоьзуете Starship в `bash`, не подключайте ловушку `DEBUG` после запуска `eval $(starship init $0)`, иначе этот модуль сломается.
 
 :::
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+Пользователи Bash, которым нужна функциональность, подобная preexec, могут использовать [фреймворк bash_preexec от rcaloras](https://github.com/rcaloras/bash-preexec). Просто определите массивы `preexec_functions` и `precmd_functions` перед запуском `eval $(starship init $0)`, а затем продолжайте нормально.
 
 ### Опции
 
-| Переменная | По умолчанию    | Описание                                                   |
-| ---------- | --------------- | ---------------------------------------------------------- |
-| `min_time` | `2`             | Shortest duration to show time for.                        |
-| `prefix`   | `took`          | Prefix to display immediately before the command duration. |
-| `style`    | `"bold yellow"` | The style for the module.                                  |
-| `disabled` | `false`         | Disables the `cmd_duration` module.                        |
+| Переменная | По умолчанию    | Описание                                                |
+| ---------- | --------------- | ------------------------------------------------------- |
+| `min_time` | `2`             | Кратчайшая длительность для показа времени.             |
+| `prefix`   | `took`          | Префикс, отображаемый перед продолжительностью команды. |
+| `style`    | `"bold yellow"` | Стиль модуля.                                           |
+| `disabled` | `false`         | Отключает модуль `cmd_duration`.                        |
 
 ### Пример
 
