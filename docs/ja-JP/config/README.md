@@ -119,11 +119,12 @@ prompt_order = [
 
 ### オプション
 
-| 変数         | デフォルト           | 説明                            |
-| ---------- | --------------- | ----------------------------- |
-| `symbol`   | `"☁️ "`         | 現在のAWSプロファイルを表示する前に表示される記号です。 |
-| `style`    | `"bold yellow"` | モジュールのスタイルです。                 |
-| `disabled` | `false`         | `aws`モジュールを無効にします。            |
+| 変数                | デフォルト           | 説明                                                                          |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☁️  "`        | 現在のAWSプロファイルを表示する前に表示される記号です。                                               |
+| `style`           | `"bold yellow"` | モジュールのスタイルです。                                                               |
+| `disabled`        | `false`         | `aws`モジュールを無効にします。                                                          |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 
 ### 設定例
 
@@ -133,6 +134,7 @@ prompt_order = [
 [aws]
 style = "bold blue"
 symbol = "🅰 "
+displayed_items = "region"
 ```
 
 ## バッテリー
@@ -777,6 +779,7 @@ symbol = "🎁 "
 - カレントディレクトリに`.py`の拡張子のファイルが含まれている
 - カレントディレクトリに`Pipfile`ファイルが含まれている
 - カレントディレクトリに`tox.ini`ファイルが含まれている
+- A virtual environment is currently activated
 
 ### オプション
 
