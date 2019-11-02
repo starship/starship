@@ -196,31 +196,31 @@ style = "bold red"
 #### Пример
 
 ```toml
-[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
+[[battery.display]] # стиль "bold red" (жирный красный) если заряд между 0% и 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
+[[battery.display]] # стиль "bold yellow" (жирный желтый) если заряд между 10% и 30%
 threshold = 30
 style = "bold yellow"
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# когда заряд батареи больше 30%, индикатор батареи скрыт
 
 ```
 
-## Character
+## Символ
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+Модуль `character` показывает символ (обычно, стрелка) рядом с вводимым текстом в терминале.
 
-The character will tell you whether the last command was successful or not. It can do this in two ways: by changing color (red/green) or by changing its shape (❯/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
+Символ показывает, была ли последняя команда успешной или нет. Это возможно двумя способами: меняя цвет (красный/зеленый) или изменяя его форму (❯/✖). Последнее будет исполняться только в том случае, если переменной `use_symbol_for_status` установлено значение `true`.
 
 ### Опции
 
 | Переменная              | По умолчанию   | Описание                                                                            |
 | ----------------------- | -------------- | ----------------------------------------------------------------------------------- |
-| `symbol`                | `"❯"`          | The symbol used before the text input in the prompt.                                |
-| `error_symbol`          | `"✖"`          | The symbol used before text input if the previous command failed.                   |
-| `use_symbol_for_status` | `false`        | Indicate error status by changing the symbol.                                       |
+| `symbol`                | `"❯"`          | Символ, используемый перед вводом текста в командной строке.                        |
+| `error_symbol`          | `"✖"`          | Символ, используемый перед вводом текста, если предыдущая команда не удалась.       |
+| `use_symbol_for_status` | `false`        | Показывает статус ошибки путем изменения символа.                                   |
 | `vicmd_symbol`          | `"❮"`          | The symbol used before the text input in the prompt if shell is in vim normal mode. |
 | `style_success`         | `"bold green"` | The style used if the last command was successful.                                  |
 | `style_failure`         | `"bold red"`   | The style used if the last command failed.                                          |
