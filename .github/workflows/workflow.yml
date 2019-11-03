@@ -166,25 +166,6 @@ jobs:
     env:
       CRATES_IO_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
 
-  # Create a PR to bump the brew formula version
-  brew_bump_formula:
-    if: startsWith(github.ref, 'refs/tags/v')
-    name: Bump Brew Formula
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v1
-      - run: |
-          git config --global user.email "bot@starship.rs"
-          git config --global user.name "Starship Bot"
-
-          cd $(brew --repo homebrew/core)
-          git fetch origin
-          sudo git reset --hard origin/master
-          cd -
-      - run: brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
-    env:
-      HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
-
   # Create GitHub release with Rust build targets and release notes
   github_release:
     if: startsWith(github.ref, 'refs/tags/v')
