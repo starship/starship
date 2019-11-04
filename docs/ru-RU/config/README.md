@@ -268,9 +268,9 @@ min_time = 4
 prefix = "underwent "
 ```
 
-## Conda
+## Конда
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set. Note: This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`
+Модуль `conda` показывает текущее окружение conda, если `$CONDA_DEFAULT_ENV` присвоено значение. Note: This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`
 
 ### Опции
 
