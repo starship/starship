@@ -835,13 +835,15 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable             | Default         | Description                                                                 |
-| -------------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`             | `"🐍 "`         | The symbol used before displaying the version of Python.                    |
-| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
-| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
-| `style`              | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`           | `false`         | Disables the `python` module.                                               |
+| Variable                     | Default         | Description                                                                 |
+| ---------------------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`                     | `"🐍 "`         | The symbol used before displaying the version of Python.                    |
+| `pyenv_version_name`         | `false`         | Use pyenv to get Python version                                             |
+| `pyenv_prefix`               | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
+| `display_virtualenv`         | `true`          | Configures whether to show the virtual environment's name.                  |
+| `only_display_in_virtualenv` | `false`         | Disables showing python information until the virtual environment is active.|
+| `style`                      | `"bold yellow"` | The style for the module.                                                   |
+| `disabled`                   | `false`         | Disables the `python` module.                                               |
 
 ### Example
 

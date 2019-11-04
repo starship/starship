@@ -9,6 +9,8 @@ pub struct PythonConfig<'a> {
     pub version: SegmentConfig<'a>,
     pub pyenv_prefix: SegmentConfig<'a>,
     pub pyenv_version_name: bool,
+    pub display_virtualenv: bool,
+    pub only_display_in_virtualenv: bool,
     pub style: Style,
     pub disabled: bool,
 }
@@ -20,6 +22,8 @@ impl<'a> RootModuleConfig<'a> for PythonConfig<'a> {
             version: SegmentConfig::default(),
             pyenv_prefix: SegmentConfig::new("pyenv "),
             pyenv_version_name: false,
+            display_virtualenv: true,
+            only_display_in_virtualenv: false,
             style: Color::Yellow.bold(),
             disabled: false,
         }

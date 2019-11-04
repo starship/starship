@@ -36,6 +36,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("python");
     let config: PythonConfig = PythonConfig::try_load(module.config);
 
+    if config.only_display_in_virtualenv && !is_venv {
+        return None;
+    }
+
     module.set_style(config.style);
     module.create_segment("symbol", &config.symbol);
 
@@ -48,12 +52,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let formatted_version = format_python_version(&python_version);
         module.create_segment("version", &SegmentConfig::new(&formatted_version));
 
-        if let Some(virtual_env) = get_python_virtual_env() {
-            module.create_segment(
-                "virtualenv",
-                &SegmentConfig::new(&format!(" ({})", virtual_env)),
-            );
-        };
+        if config.display_virtualenv {
+            if let Some(virtual_env) = get_python_virtual_env() {
+                module.create_segment(
+                    "virtualenv",
+                    &SegmentConfig::new(&format!(" ({})", virtual_env)),
+                );
+            };
+        }
     };
 
     Some(module)
