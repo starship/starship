@@ -1,13 +1,15 @@
+use std::clone::Clone;
+use std::env;
+use std::marker::Sized;
+use std::path::PathBuf;
+
+use ansi_term::{Color, Style};
+use dirs::home_dir;
+use toml::map::Map;
+use toml::Value;
+
 use crate::configs::StarshipRootConfig;
 use crate::utils;
-use ansi_term::{Color, Style};
-
-use std::clone::Clone;
-use std::marker::Sized;
-
-use dirs::home_dir;
-use std::env;
-use toml::Value;
 
 /// Root config of a module.
 pub trait RootModuleConfig<'a>
@@ -128,20 +130,90 @@ pub struct StarshipConfig {
 impl StarshipConfig {
     /// Initialize the Config struct
     pub fn initialize() -> Self {
-        if let Some(file_data) = Self::config_from_file() {
-            StarshipConfig {
-                config: Some(file_data),
+        let mut config = toml::value::Table::new();
+
+        if let Some(global_config_path) = Self::global_config_path() {
+            if let Some(cfg) = Self::config_from_file(global_config_path.as_str()) {
+                if let Some(table) = cfg.as_table() {
+                    config = Self::deep_merge(config.to_owned(), table.to_owned());
+                    log::debug!("Config modified: \n{:?}", config);
+                }
             }
-        } else {
-            StarshipConfig {
-                config: Some(Value::Table(toml::value::Table::new())),
+        }
+
+        if let Some(secondary_global_config_path) = Self::secondary_global_config_path() {
+            if let Some(cfg) = Self::config_from_file(secondary_global_config_path.as_str()) {
+                if let Some(table) = cfg.as_table() {
+                    config = Self::deep_merge(config.to_owned(), table.to_owned());
+                    log::debug!("Config modified: \n{:?}", config);
+                }
             }
+        }
+
+        if let Some(home_config_path) = Self::home_config_path() {
+            if let Some(cfg) = Self::config_from_file(home_config_path.as_str()) {
+                if let Some(table) = cfg.as_table() {
+                    config = Self::deep_merge(config.to_owned(), table.to_owned());
+                    log::debug!("Config modified: \n{:?}", config);
+                }
+            }
+        }
+
+        StarshipConfig {
+            config: Some(Value::Table(config)),
         }
     }
 
-    /// Create a config from a starship configuration file
-    fn config_from_file() -> Option<Value> {
-        let file_path = if let Ok(path) = env::var("STARSHIP_CONFIG") {
+    #[cfg(target_family = "unix")]
+    fn global_config_path() -> Option<String> {
+        Option::from(
+            PathBuf::new()
+                .join("/etc/starship.toml")
+                .join("starship.toml")
+                .to_str()?
+                .to_string(),
+        )
+    }
+
+    #[cfg(target_family = "unix")]
+    fn secondary_global_config_path() -> Option<String> {
+        Option::from(
+            PathBuf::new()
+                .join("/usr/local/etc/starship.toml")
+                .join("starship.toml")
+                .to_str()?
+                .to_string(),
+        )
+    }
+
+    // Windows directories are based on environment variables and their actual paths aren't actually static
+    // ProgramData shows up in Windows Vista
+    #[cfg(target_family = "windows")]
+    fn global_config_path() -> Option<String> {
+        Option::from(
+            PathBuf::new()
+                .join(std::env::var("ProgramData").unwrap())
+                .join("starship.toml")
+                .to_str()?
+                .to_string(),
+        )
+    }
+
+    // Windows directories are based on environment variables and their actual paths aren't actually static
+    // AppData is available in all versions of Windows
+    #[cfg(target_family = "windows")]
+    fn secondary_global_config_path() -> Option<String> {
+        Option::from(
+            PathBuf::new()
+                .join(std::env::var("AppData").unwrap())
+                .join("starship.toml")
+                .to_str()?
+                .to_string(),
+        )
+    }
+
+    fn home_config_path() -> Option<String> {
+        let home_file_path = if let Ok(path) = env::var("STARSHIP_CONFIG") {
             // Use $STARSHIP_CONFIG as the config path if available
             log::debug!("STARSHIP_CONFIG is set: \n{}", &path);
             path
@@ -153,21 +225,67 @@ impl StarshipConfig {
             log::debug!("Using default config path: {}", config_path_str);
             config_path_str
         };
+        Some(home_file_path)
+    }
 
+    /// Create a config from a starship configuration file
+    fn config_from_file(file_path: &str) -> Option<Value> {
         let toml_content = match utils::read_file(&file_path) {
             Ok(content) => {
-                log::trace!("Config file content: \n{}", &content);
+                log::trace!("Config file {} content: \n{}", file_path, &content);
                 Some(content)
             }
             Err(e) => {
-                log::debug!("Unable to read config file content: \n{}", &e);
+                log::debug!("Unable to read config file {} content: \n{}", file_path, &e);
                 None
             }
         }?;
 
-        let config = toml::from_str(&toml_content).ok()?;
-        log::debug!("Config parsed: \n{:?}", &config);
-        Some(config)
+        match toml::from_str(&toml_content) {
+            Ok(config) => {
+                log::debug!("Config parsed: \n{:?}", &config);
+                Some(config)
+            }
+            Err(err) => {
+                log::warn!("Failed to parse config: \n{}", err);
+                None
+            }
+        }
+    }
+
+    /// Returns a deeply merged map where the values of map2 will overwrite the values in map1 if there is a collision
+    fn deep_merge(map1: Map<String, Value>, map2: Map<String, Value>) -> Map<String, Value> {
+        if map1.is_empty() && map2.is_empty() {
+            return map2;
+        }
+        if map2.is_empty() && !map1.is_empty() {
+            return map1;
+        }
+        if map1.is_empty() && !map2.is_empty() {
+            return map2;
+        }
+
+        log::trace!("deep_merge maps: \n{:?}\n{:?}", map1, map2);
+        let mut merged = map1.clone();
+
+        for (k, v) in map2 {
+            if merged.contains_key(k.as_str()) && merged.get(k.as_str()).is_some() {
+                if merged.get(k.as_str()).unwrap().is_table() && v.is_table() {
+                    let new_value = Self::deep_merge(
+                        merged.get(k.as_str()).unwrap().as_table().unwrap().clone(),
+                        v.as_table().unwrap().clone(),
+                    );
+                    merged.insert(k, Value::from(new_value));
+                } else {
+                    merged.insert(k, v);
+                }
+            } else {
+                merged.insert(k, v);
+            }
+        }
+
+        log::trace!("deep_merge merged: \n{:?}", merged);
+        merged
     }
 
     /// Get the subset of the table for a module by its name
@@ -368,9 +486,11 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use starship_module_config_derive::ModuleConfig;
     use toml;
+
+    use super::*;
+    use crate::config::ModuleConfig;
 
     #[test]
     fn test_load_config() {

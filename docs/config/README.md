@@ -55,6 +55,22 @@ Most modules in starship allow you to configure their display styles. This is do
 
 Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
+### Global Config
+
+Default, system-wide configs can be added with the following config paths (later paths overrite former ones):
+
+#### Unix-like
+
+1. `/etc/starship.toml`
+2. `/usr/local/etc/starship.toml`
+3. `$HOME/starship.toml`
+
+#### Windows
+
+1. `%ProgramData%\starship.toml`
+2. `%AppData%\starship.toml`
+3. `%HomeDrive%%HomePath%\.config\starship.toml`
+
 ## Prompt
 
 This is the list of prompt-wide configuration options.
