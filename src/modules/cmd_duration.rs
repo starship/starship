@@ -38,7 +38,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_style(module_color);
     module.new_segment(
         "cmd_duration",
-        &format!("{}{}", config.prefix, render_time(elapsed)),
+        &format!("{}{}{}", config.prefix, render_time(elapsed), config.suffix),
     );
     module.get_prefix().set_value("");
 

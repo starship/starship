@@ -7,8 +7,10 @@ use starship_module_config_derive::ModuleConfig;
 pub struct CmdDurationConfig<'a> {
     pub min_time: i64,
     pub prefix: &'a str,
+    pub suffix: &'a str,
     pub style: Style,
     pub disabled: bool,
+
 }
 
 impl<'a> RootModuleConfig<'a> for CmdDurationConfig<'a> {
@@ -16,6 +18,7 @@ impl<'a> RootModuleConfig<'a> for CmdDurationConfig<'a> {
         CmdDurationConfig {
             min_time: 2,
             prefix: "took ",
+            suffix: "",
             style: Color::Yellow.bold(),
             disabled: false,
         }
