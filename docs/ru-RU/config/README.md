@@ -123,7 +123,7 @@ prompt_order = [
 | ----------------- | --------------- | ---------------------------------------------------------------- |
 | `symbol`          | `"☁️  "`        | Символ перед отображением текущего профиля AWS.                  |
 | `style`           | `"bold yellow"` | Стиль модуля.                                                    |
-| `disabled`        | `false`         | Отключает модуль `AWS`.                                          |
+| `disabled`        | `false`         | Отключение модуля `AWS`.                                         |
 | `displayed_items` | `all`           | Выбор элементов. Возможные значения [`all`, `profile`, `region`] |
 
 ### Пример
@@ -270,15 +270,15 @@ prefix = "underwent "
 
 ## Конда
 
-Модуль `conda` показывает текущее окружение conda, если `$CONDA_DEFAULT_ENV` присвоено значение. Note: This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`
+Модуль `conda` показывает текущее окружение conda, если `$CONDA_DEFAULT_ENV` присвоено значение. Примечание: Это не подавляет модификатор командной строки самой конды, вы можете запустить `conda config --set changeps1 False`
 
 ### Опции
 
-| Переменная | По умолчанию   | Описание                                     |
-| ---------- | -------------- | -------------------------------------------- |
-| `symbol`   | `"C "`         | The symbol used before the environment name. |
-| `style`    | `"bold green"` | The style for the module.                    |
-| `disabled` | `false`        | Disables the `conda` module.                 |
+| Переменная | По умолчанию   | Описание                          |
+| ---------- | -------------- | --------------------------------- |
+| `symbol`   | `"C "`         | Символ перед названием окружения. |
+| `style`    | `"bold green"` | Стиль модуля.                     |
+| `disabled` | `false`        | Отключает модуль `conda`.         |
 
 ### Пример
 
@@ -289,9 +289,9 @@ prefix = "underwent "
 style = "dimmed green"
 ```
 
-## Directory
+## Директория
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+Модуль `directory` показывает путь к вашей текущей директории, усеченной до трех родительских папок. Your directory will also be truncated to the root of the git repo that you're currently in.
 
 When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
