@@ -289,25 +289,25 @@ prefix = "underwent "
 style = "dimmed green"
 ```
 
-## Директория
+## Каталог
 
-Модуль `directory` показывает путь к вашей текущей директории, усеченной до трех родительских папок. Your directory will also be truncated to the root of the git repo that you're currently in.
+Модуль `directory` показывает путь к вашей текущей директории, усеченной до трех родительских папок. Ваш каталог также будет отсечен до корня git репозитория, в котором вы находитесь.
 
-When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+При использовании стиля оболочки fish, вместо скрытия усеченного каталога, вы увидите укороченное имя каталога, зависимое от числа символов вы установите для этой опции.
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+Например, возьмем `~/Dev/Nix/nixpkgs/pkgs` где `nixpkgs` является корневым репозиторием, и в опции установлено `1`. Вы увидите `~/D/N/nixpkgs/pkgs`, а до этого было бы `nixpkgs/pkgs`.
 
 ### Опции
 
-| Переменная          | По умолчанию  | Описание                                                                         |
-| ------------------- | ------------- | -------------------------------------------------------------------------------- |
-| `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `style`             | `"bold cyan"` | The style for the module.                                                        |
-| `disabled`          | `false`       | Disables the `directory` module.                                                 |
+| Переменная          | По умолчанию  | Описание                                                                     |
+| ------------------- | ------------- | ---------------------------------------------------------------------------- |
+| `truncation_length` | `3`           | Количество родительских папок, к которым должен быть усечен текущий каталог. |
+| `truncate_to_repo`  | `true`        | Следует или нет обрезать до корня репозитория git, в котором вы находитесь.  |
+| `style`             | `"bold cyan"` | Стиль модуля.                                                                |
+| `disabled`          | `false`       | Отключает модуль `directory`.                                                |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>Этот модуль имеет несколько расширенных опций конфигурации, которые контролируют отображение каталога.</summary>
 
 | Переменная                  | По умолчанию | Описание                                                                                 |
 | --------------------------- | ------------ | ---------------------------------------------------------------------------------------- |
@@ -327,11 +327,11 @@ truncation_length = 8
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+Модуль `dotnet` показывает соответствующую версию .NET Core SDK для текущего каталога. Если SDK был закреплен в текущей директории, будет показана закрепленная версия. В противном случае модуль отображает последнюю установленную версию SDK.
 
-This module will only be shown in your prompt when one of the following files are present in the current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll also need the .NET Core command-line tools installed in order to use it correctly.
+Этот модуль будет показан только, когда один из следующих файлов присутствует в текущей директории: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. Также, для правильного использования, нужны инструменты командной строки .NET Core.
 
-Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+Внутренне этот модуль использует свой собственный механизм определения версий. Обычно он в два раза быстрее, чем `dotnet --version`, но он может показывать неправильную версию, если ваш .NET проект имеет необычный формат каталога. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
 ### Опции
 
