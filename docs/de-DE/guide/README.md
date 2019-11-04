@@ -126,7 +126,7 @@
    #### Rust (v1.38 oder neuer)
 
    ```sh
-   $ cargo install starship
+   $ cargo install starship -f
    ```
 
 

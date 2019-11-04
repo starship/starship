@@ -45,7 +45,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    #### Rust (v1.38 或更高版本)
 
    ```sh
-   $ cargo install starship
+   $ cargo install starship -f
    ```
 
 

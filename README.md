@@ -139,7 +139,7 @@ The prompt shows information you need while you're working, while staying sleek 
    #### Rust (v1.38 or higher)
 
    ```sh
-   $ cargo install starship
+   $ cargo install starship -f
    ```
 
    #### Arch Linux (AUR)
