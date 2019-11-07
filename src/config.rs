@@ -240,16 +240,6 @@ impl<'a> SegmentConfig<'a> {
         Self { value, style: None }
     }
 
-    /// Mutably set value
-    pub fn set_value(&mut self, value: &'a str) {
-        self.value = value;
-    }
-
-    /// Mutably set style
-    pub fn set_style(&mut self, style: Style) {
-        self.style = Some(style);
-    }
-
     /// Immutably set value
     pub fn with_value(&self, value: &'a str) -> Self {
         Self {
