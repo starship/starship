@@ -59,11 +59,11 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 
 ### オプション
 
-| 変数             | デフォルト                   | 説明                                                    |
-| -------------- | ----------------------- | ----------------------------------------------------- |
-| `add_newline`  | `true`                  | プロンプトの開始前に新しい行を追加します。                                 |
-| `prompt_order` | [link](#デフォルトのプロンプト表示順) | プロンプトモジュールを出力する順序を設定します。                              |
-| `scan_timeout` | `30`                    | Timeout for starship to scan files (in milliseconds). |
+| 変数             | デフォルト                   | 説明                                     |
+| -------------- | ----------------------- | -------------------------------------- |
+| `add_newline`  | `true`                  | プロンプトの開始前に新しい行を追加します。                  |
+| `prompt_order` | [link](#デフォルトのプロンプト表示順) | プロンプトモジュールを出力する順序を設定します。               |
+| `scan_timeout` | `30`                    | ファイルをスキャンする際のタイムアウト時間(milliseconds)です。 |
 
 ### 設定例
 
@@ -328,9 +328,9 @@ truncation_length = 8
 
 ## Dotnet
 
-`dotnet` モジュールはカレントディレクトリに関係する.NET Core SDKのバージョンを表示します。 If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+`dotnet` モジュールはカレントディレクトリに関係する.NET Core SDKのバージョンを表示します。 もし SDKは現在のディレクトリに固定されているのであれば、その固定されたバージョンが表示されます。 それ以外の場合、モジュール SDKの最新のインストールバージョンを示します。
 
-This module will only be shown in your prompt when one of the following files are present in the current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll also need the .NET Core command-line tools installed in order to use it correctly.
+このモジュールは、カレントディレクトリに次のファイルのいずれかが存在する場合にのみプロンプトに表示されます。: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj` 正しく使用するには、.NET Coreコマンドラインツールもインストールする必要があります。
 
 内部的に、このモジュールは自身のバージョン検知のメカニズムを利用します。 Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
@@ -578,7 +578,7 @@ threshold = 4
 
 ## Kubernetes
 
-現在のKubernetesコンテキスト名と、設定されている場合は、kubeconfigファイルに基づいてネームスペースを表示します。 The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. `$KUBECONFIG` 環境変数が設定されている場合、モジュールはそれを使用します `~/.kube/config` は使用しません。
+現在のKubernetesコンテキスト名と、設定されている場合は、kubeconfigファイルに基づいてネームスペースを表示します。 ネームスペースはkubconfigで設定されている必要があります。それは `kubectl config set-context starship-cluster --namespace astronaut` のようなコマンドで設定することができます。 `$KUBECONFIG` 環境変数が設定されている場合、モジュールはそれを使用します `~/.kube/config` は使用しません。
 
 ::: tip
 
@@ -665,14 +665,14 @@ pure_msg = "pure shell"
 
 ### オプション
 
-| 変数                | デフォルト                 | 説明                                            |
-| ----------------- | --------------------- | --------------------------------------------- |
-| `show_percentage` | `false`               | メモリ使用量を割合で表示します。                              |
-| `show_swap`       | `true`                | Display swap usage if total swap is non-zero. |
-| `threshold`       | `75`                  | この閾値を超えない限り、メモリ使用率は表示されません。                   |
-| `symbol`          | `"🐏 "`                | メモリ使用率を表示する前に使用される記号です。                       |
-| `style`           | `"bold dimmed white"` | モジュールのスタイルです。                                 |
-| `disabled`        | `true`                | `memory_usage`モジュールを無効にします。                   |
+| 変数                | デフォルト                 | 説明                            |
+| ----------------- | --------------------- | ----------------------------- |
+| `show_percentage` | `false`               | メモリ使用量を割合で表示します。              |
+| `show_swap`       | `true`                | 合計スワップがゼロ以外の場合、スワップ使用量を表示します。 |
+| `threshold`       | `75`                  | この閾値を超えない限り、メモリ使用率は表示されません。   |
+| `symbol`          | `"🐏 "`                | メモリ使用率を表示する前に使用される記号です。       |
+| `style`           | `"bold dimmed white"` | モジュールのスタイルです。                 |
+| `disabled`        | `true`                | `memory_usage`モジュールを無効にします。   |
 
 ### 設定例
 
@@ -779,7 +779,7 @@ symbol = "🎁 "
 - カレントディレクトリに`.py`の拡張子のファイルが含まれている
 - カレントディレクトリに`Pipfile`ファイルが含まれている
 - カレントディレクトリに`tox.ini`ファイルが含まれている
-- A virtual environment is currently activated
+- 仮想環境がアクティブである
 
 ### オプション
 
@@ -862,13 +862,13 @@ symbol = "⚙️ "
 
 ### オプション
 
-| 変数                | デフォルト          | 説明                                                                                                               |
-| ----------------- | -------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`        | 12時間のフォーマットを有効にします。                                                                                              |
-| `format`          | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。                |
-| `style`           | `bold yellow`  | モジュールのスタイルです。                                                                                                    |
-| `disabled`        | `true`         | `time`モジュールを無効にします。                                                                                              |
-| `utc_time_offset` | `local`        | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| 変数                | デフォルト          | 説明                                                                                                |
+| ----------------- | -------------- | ------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`        | 12時間のフォーマットを有効にします。                                                                               |
+| `format`          | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。 |
+| `style`           | `bold yellow`  | モジュールのスタイルです。                                                                                     |
+| `disabled`        | `true`         | `time`モジュールを無効にします。                                                                               |
+| `utc_time_offset` | `local`        | 使用するUTCオフセットを設定します。 -24から24までの間で設定可能です。 フロートが30/45分のタイムゾーンオフセットに対応できるようにします。                      |
 
 `use_12hr`が`true`の場合、`format`のデフォルトは`"%r"`です。 それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、`use_12hr`の設定が上書きされます。
 
