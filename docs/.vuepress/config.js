@@ -16,7 +16,20 @@ module.exports = {
       description: "The cross-shell prompt for astronauts"
     }
   },
-  head: [["link", { rel: "icon", href: "/icon.png" }]],
+  head: [
+    ["link", { rel: "icon", href: "/icon.png" }],
+    ["meta", { property: "og:title", content: "Starship" }],
+    [
+      "meta",
+      {
+        property: "og:description",
+        content: "The cross-shell prompt for astronauts"
+      }
+    ],
+    ["meta", { property: "og:type", content: "website" }],
+    ["meta", { property: "og:url", content: "http://starship.rs/" }],
+    ["meta", { property: "og:image", content: "http://starship.rs/logo.svg" }]
+  ],
   themeConfig: {
     logo: "/icon.png",
     // the GitHub repo path
@@ -86,6 +99,12 @@ module.exports = {
       "@vuepress/google-analytics",
       {
         ga: "UA-71160903-4"
+      }
+    ],
+    [
+      "sitemap",
+      {
+        hostname: "https://starship.rs"
       }
     ]
   ]

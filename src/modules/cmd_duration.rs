@@ -1,4 +1,4 @@
-use super::{Context, Module};
+use super::{Context, Module, SegmentConfig};
 
 use crate::config::RootModuleConfig;
 use crate::configs::cmd_duration::CmdDurationConfig;
@@ -36,10 +36,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     module.set_style(module_color);
-    module.new_segment(
-        "cmd_duration",
-        &format!("{}{}", config.prefix, render_time(elapsed)),
-    );
+    let cmd_duration_stacked = &format!("{}{}", config.prefix, render_time(elapsed));
+    module.create_segment("cmd_duration", &SegmentConfig::new(&cmd_duration_stacked));
     module.get_prefix().set_value("");
 
     Some(module)

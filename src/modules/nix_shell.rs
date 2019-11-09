@@ -1,7 +1,8 @@
-use ansi_term::Color;
 use std::env;
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig, SegmentConfig};
+
+use crate::configs::nix_shell::NixShellConfig;
 
 // IN_NIX_SHELL should be "pure" or "impure" but lorri uses "1" for "impure"
 // https://github.com/target/lorri/issues/140
@@ -23,34 +24,31 @@ use super::{Context, Module};
 ///     - impure         // use_name == false in an impure nix-shell
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("nix_shell");
+    let config: NixShellConfig = NixShellConfig::try_load(module.config);
 
-    env::var("IN_NIX_SHELL")
-        .ok()
-        .and_then(|shell_type| {
-            if shell_type == "1" || shell_type == "impure" {
-                Some(module.config_value_str("impure_msg").unwrap_or("impure"))
-            } else if shell_type == "pure" {
-                Some(module.config_value_str("pure_msg").unwrap_or("pure"))
-            } else {
-                None
-            }
-        })
-        .map(|shell_type| {
-            if module.config_value_bool("use_name").unwrap_or(false) {
-                match env::var("name").ok() {
-                    Some(name) => format!("{} ({})", name, shell_type),
-                    None => shell_type.to_string(),
-                }
-            } else {
-                shell_type.to_string()
-            }
-        })
-        .map(|segment| {
-            let module_style = module
-                .config_value_style("style")
-                .unwrap_or_else(|| Color::Red.bold());
-            module.set_style(module_style);
-            module.new_segment("nix_shell", &segment);
-            module
-        })
+    module.set_style(config.style);
+
+    let shell_type = env::var("IN_NIX_SHELL").ok()?;
+    let shell_type_segment: SegmentConfig = match shell_type.as_ref() {
+        "1" | "impure" => config.impure_msg,
+        "pure" => config.pure_msg,
+        _ => {
+            return None;
+        }
+    };
+
+    if config.use_name {
+        if let Ok(name) = env::var("name") {
+            module.create_segment(
+                "nix_shell",
+                &shell_type_segment.with_value(&format!("{} ({})", name, shell_type_segment.value)),
+            );
+        } else {
+            module.create_segment("nix_shell", &shell_type_segment);
+        }
+    } else {
+        module.create_segment("nix_shell", &shell_type_segment);
+    }
+
+    Some(module)
 }

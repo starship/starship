@@ -1,6 +1,6 @@
 use std::env;
 
-use super::{Context, Module};
+use super::{Context, Module, SegmentConfig};
 
 use crate::config::RootModuleConfig;
 use crate::configs::env_var::EnvVarConfig;
@@ -25,10 +25,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // TODO: Use native prefix and suffix instead of stacking custom ones together with env_value.
-    module.new_segment(
-        "env_var",
-        &format!("{}{}{}", config.prefix, env_value, config.suffix),
-    );
+    let env_var_stacked = format!("{}{}{}", config.prefix, env_value, config.suffix);
+    module.create_segment("env_var", &SegmentConfig::new(&env_var_stacked));
 
     Some(module)
 }

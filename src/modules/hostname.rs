@@ -1,6 +1,6 @@
 use std::env;
 
-use super::{Context, Module};
+use super::{Context, Module, SegmentConfig};
 use std::ffi::OsString;
 
 use crate::config::RootModuleConfig;
@@ -30,8 +30,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     };
 
-    let trim_at = module.config_value_str("trim_at").unwrap_or(".");
-
     //rustc doesn't let you do an "if" and an "if let" in the same if statement
     // if this changes in the future this can become a lot cleaner
     let host = if config.trim_at != "" {
@@ -45,10 +43,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     module.set_style(config.style);
-    module.new_segment(
-        "hostname",
-        &format!("{}{}{}", config.prefix, host, config.suffix),
-    );
+    let hostname_stacked = format!("{}{}{}", config.prefix, host, config.suffix);
+    module.create_segment("hostname", &SegmentConfig::new(&hostname_stacked));
     module.get_prefix().set_value("on ");
 
     Some(module)

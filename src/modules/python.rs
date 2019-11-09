@@ -27,7 +27,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .set_extensions(&["py"])
         .is_match();
 
-    if !is_py_project {
+    let is_venv = env::var("VIRTUAL_ENV").ok().is_some();
+
+    if !is_py_project && !is_venv {
         return None;
     }
 
