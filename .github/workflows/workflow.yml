@@ -124,7 +124,12 @@ jobs:
         with:
           dotnet-version: "2.2.402"
 
-      # Run the ignored tests that expect the above setup
+      # Install PHP at a fixed version
+      - uses: shivammathur/setup-php@master
+        with:
+          php-version: '7.3.8'
+
+        # Run the ignored tests that expect the above setup
       - name: Run all tests
         uses: actions-rs/cargo@v1
         with:

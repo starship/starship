@@ -61,6 +61,18 @@ RUN mkdir -p "$DOTNET_HOME" \
 ENV PATH $DOTNET_HOME:$PATH
 RUN dotnet help
 
+# Install PHP
+ENV PHP_VERSION 7.3.8
+ENV PHPENV_ROOT /home/nonroot/.phpenv
+ENV PATH $PHPENV_ROOT/bin:$PHPENV_ROOT/shims:$PATH
+ENV CONFIGURE_OPTS "--without-tidy --disable-zip"
+RUN curl -L https://raw.githubusercontent.com/phpenv/phpenv-installer/master/bin/phpenv-installer | bash \
+  && phpenv install $PHP_VERSION \
+  && phpenv global $PHP_VERSION \
+  && chmod -R a+x $PHPENV_ROOT
+# Check that PHP was correctly installed
+RUN php --version
+
 # Create blank project
 RUN USER=nonroot cargo new --bin /src/starship
 WORKDIR /src/starship
