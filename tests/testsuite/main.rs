@@ -21,5 +21,6 @@ mod nix_shell;
 mod nodejs;
 mod python;
 mod ruby;
+mod terraform;
 mod time;
 mod username;

@@ -25,6 +25,7 @@ pub mod python;
 pub mod ruby;
 pub mod rust;
 mod starship_root;
+pub mod terraform;
 pub mod time;
 pub mod username;
 

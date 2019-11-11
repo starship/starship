@@ -36,6 +36,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "python",
                 "ruby",
                 "rust",
+                "terraform",
                 // ↑ Toolchain version modules ↑
                 "nix_shell",
                 "conda",
