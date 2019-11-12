@@ -75,7 +75,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             )
         };
 
-        module.create_segment("seperator", &config.seperator);
+        module.create_segment("separator", &config.separator);
         module.create_segment("swap", &config.swap.with_value(&swap));
     }
 
