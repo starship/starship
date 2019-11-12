@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "0.26.2"
+version = "0.26.3"
 edition = "2018"
 authors = ["Matan Kushner <hello@matchai.me>"]
 homepage = "https://starship.rs"
@@ -37,7 +37,7 @@ log = "0.4.8"
 # see: https://github.com/svartalf/rust-battery/issues/33
 battery = { version = "0.7.4", optional = true }
 path-slash = "0.1.1"
-unicode-segmentation = "1.5.0"
+unicode-segmentation = "1.6.0"
 gethostname = "0.2.0"
 once_cell = "1.2.0"
 chrono = "0.4"
