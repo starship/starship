@@ -59,11 +59,11 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 
 ### オプション
 
-| 変数             | デフォルト                   | 説明                                     |
-| -------------- | ----------------------- | -------------------------------------- |
-| `add_newline`  | `true`                  | プロンプトの開始前に新しい行を追加します。                  |
-| `prompt_order` | [link](#デフォルトのプロンプト表示順) | プロンプトモジュールを出力する順序を設定します。               |
-| `scan_timeout` | `30`                    | ファイルをスキャンする際のタイムアウト時間(milliseconds)です。 |
+| 変数             | デフォルト                   | 説明                                       |
+| -------------- | ----------------------- | ---------------------------------------- |
+| `add_newline`  | `true`                  | プロンプトの開始前に新しい行を追加します。                    |
+| `prompt_order` | [link](#デフォルトのプロンプト表示順) | プロンプトモジュールを出力する順序を設定します。                 |
+| `scan_timeout` | `30`                    | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。 |
 
 ### 設定例
 
@@ -332,7 +332,7 @@ truncation_length = 8
 
 このモジュールは、カレントディレクトリに次のファイルのいずれかが存在する場合にのみプロンプトに表示されます。: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj` 正しく使用するには、.NET Coreコマンドラインツールもインストールする必要があります。
 
-内部的に、このモジュールは自身のバージョン検知のメカニズムを利用します。 Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+内部的に、このモジュールは自身のバージョン検知のメカニズムを利用します。 `dotnet --version` を実行するより2倍速く実行できますが、.NET project一般的でないディレクトリlayoutの場合は間違ったバージョンが示されてしまうことがあります。 速度よりも精度が重要な場合は、次の方法でメカニズムを無効にできます。 モジュールオプションで`heuristic = false `を設定します。
 
 ### オプション
 
