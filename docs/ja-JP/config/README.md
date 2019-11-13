@@ -940,6 +940,7 @@ The `terraform` module shows the currently selected terraform workspace.
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf` extension
 
 ### Options
 

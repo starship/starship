@@ -937,6 +937,7 @@ symbol = "⚙️ "
 Das `terraform`-Modul zeigt den aktuellen Terraform-Workspace. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - Das aktuelle Verzeichnis enthält eine `.terraform`-Verzeichnis
+- Das aktuelle Verzeichnis enthält eine Datei mit der `.tf`-Erweiterung
 
 ### Optionen
 

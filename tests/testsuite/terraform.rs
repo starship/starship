@@ -22,6 +22,66 @@ fn folder_without_dotterraform() -> io::Result<()> {
 
 #[test]
 #[ignore]
+fn folder_with_tf_file() -> io::Result<()> {
+    let dir = tempfile::tempdir()?;
+    File::create(dir.path().join("main.tf"))?;
+
+    let output = common::render_module("terraform")
+        .arg("--path")
+        .arg(dir.path())
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("via {} ", Color::Fixed(105).bold().paint("💠 default"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[ignore]
+fn folder_with_workspace_override() -> io::Result<()> {
+    let dir = tempfile::tempdir()?;
+    File::create(dir.path().join("main.tf"))?;
+
+    let output = common::render_module("terraform")
+        .arg("--path")
+        .arg(dir.path())
+        .env_clear()
+        .env("TF_WORKSPACE", "development")
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("via {} ", Color::Fixed(105).bold().paint("💠 development"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[ignore]
+fn folder_with_datadir_override() -> io::Result<()> {
+    let dir = tempfile::tempdir()?;
+    File::create(dir.path().join("main.tf"))?;
+
+    let datadir = tempfile::tempdir()?;
+    let mut file = File::create(datadir.path().join("environment"))?;
+    file.write_all(b"development")?;
+    file.sync_all()?;
+
+    let output = common::render_module("terraform")
+        .arg("--path")
+        .arg(dir.path())
+        .env_clear()
+        .env("TF_DATA_DIR", datadir.path())
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("via {} ", Color::Fixed(105).bold().paint("💠 development"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[ignore]
 fn folder_with_dotterraform_no_environment() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
     let tf_dir = dir.path().join(".terraform");
