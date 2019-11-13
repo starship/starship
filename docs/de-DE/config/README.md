@@ -669,8 +669,9 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
 | `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
 | `symbol`          | `"🐏 "`                | Symbol das vor der Speicherauslastung angezeigt wird.         |
-| `style`           | `"bold dimmed white"` | Stil für dieses Modul.                                        |
-| `disabled`        | `true`                | Deaktiviert das `memory_usage`-Modul.                         |
+| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
+| `style`           | `"bold dimmed white"` | The style for the module.                                     |
+| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
 ### Beispiel
 
@@ -682,6 +683,7 @@ show_percentage = true
 show_swap = true
 threshold = -1
 symbol = " "
+separator = "/"
 style = "bold dimmed green"
 ```
 
