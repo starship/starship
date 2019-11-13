@@ -14,7 +14,7 @@ pub struct TerraformConfig<'a> {
 impl<'a> RootModuleConfig<'a> for TerraformConfig<'a> {
     fn new() -> Self {
         TerraformConfig {
-            symbol: SegmentConfig::new("🛠️ "),
+            symbol: SegmentConfig::new("💠 "),
             workspace: SegmentConfig::default(),
             style: Color::Fixed(105).bold(),
             disabled: false,

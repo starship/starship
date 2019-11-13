@@ -33,7 +33,7 @@ fn folder_with_dotterraform_no_environment() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Fixed(105).bold().paint("🛠️ default"));
+    let expected = format!("via {} ", Color::Fixed(105).bold().paint("💠 default"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -54,7 +54,7 @@ fn folder_with_dotterraform_with_environment() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Fixed(105).bold().paint("🛠️ development"));
+    let expected = format!("via {} ", Color::Fixed(105).bold().paint("💠 development"));
     assert_eq!(expected, actual);
     Ok(())
 }
