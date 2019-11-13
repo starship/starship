@@ -216,14 +216,18 @@ jobs:
       - name: Prepare build artifacts [Windows]
         if: matrix.os == 'windows-latest'
         run: |
-          strip target/${{ matrix.target }}/release/starship.exe
-          7z a ${{ matrix.name }} target/${{ matrix.target }}/release/starship.exe
+          cd target/${{ matrix.target }}/release
+          strip starship.exe
+          7z a ../../../${{ matrix.name }} starship.exe
+          cd -
 
       - name: Prepare build artifacts [-nix]
         if: matrix.os != 'windows-latest'
         run: |
-          strip target/${{ matrix.target }}/release/starship
-          tar czvf ${{ matrix.name }} target/${{ matrix.target }}/release/starship
+          cd target/${{ matrix.target }}/release
+          strip starship
+          tar czvf ../../../${{ matrix.name }} starship
+          cd -
 
       - name: Generate release notes
         if: matrix.os == 'ubuntu-latest'
