@@ -101,6 +101,7 @@ prompt_order = [
     "python",
     "ruby",
     "rust",
+    "terraform",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -929,6 +930,30 @@ symbol = "🔺 "
 
 [rust]
 symbol = "⚙️ "
+```
+
+## Terraform
+
+The `terraform` module shows the currently selected terraform workspace.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `.terraform` folder
+
+### Options
+
+| Variable   | Default       | Description                                                |
+| ---------- | ------------- | ---------------------------------------------------------- |
+| `symbol`   | `"💠 "`       | The symbol used before displaying the terraform workspace. |
+| `style`    | `"bold 105"`  | The style for the module.                                  |
+| `disabled` | `false`       | Disables the `terraform` module.                           |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+symbol = "🏎💨 "
 ```
 
 ## 時間
