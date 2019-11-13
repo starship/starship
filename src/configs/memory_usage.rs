@@ -9,7 +9,9 @@ pub struct MemoryConfig<'a> {
     pub show_swap: bool,
     pub threshold: i64,
     pub symbol: SegmentConfig<'a>,
-    pub display: SegmentConfig<'a>,
+    pub separator: SegmentConfig<'a>,
+    pub ram: SegmentConfig<'a>,
+    pub swap: SegmentConfig<'a>,
     pub style: Style,
     pub disabled: bool,
 }
@@ -20,8 +22,10 @@ impl<'a> RootModuleConfig<'a> for MemoryConfig<'a> {
             show_percentage: false,
             show_swap: true,
             threshold: 75,
-            display: SegmentConfig::default(),
             symbol: SegmentConfig::new("🐏 "),
+            separator: SegmentConfig::new(" | "),
+            ram: SegmentConfig::default(),
+            swap: SegmentConfig::default(),
             style: Color::White.bold().dimmed(),
             disabled: true,
         }
