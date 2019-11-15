@@ -123,49 +123,27 @@ The prompt shows information you need while you're working, while staying sleek 
 
 1. Install the **starship** binary:
 
-   **[Download archives of precompiled binaries](https://github.com/starship/starship/releases)** if you don't use the platforms below.
+   #### Install Latest Version
 
-   #### Homebrew
+   ##### With Shell:
 
-   ```sh
-   $ brew install starship
-   ```
+    ```sh
+    curl -fsSL https://starship.rs/install.sh | sh
+    ```
 
-   #### Rust (v1.38 or higher)
+   #### Install via Package Manager
 
-   ```sh
-   $ cargo install starship
-   ```
+   ##### With [Homebrew](https://brew.sh/):
 
-   #### Arch Linux (AUR)
+    ```sh
+    brew install starship
+    ```
 
-   Starship is available on the AUR under the name `starship`. Install it with `yay` or your favorite AUR helper.
+   ##### With [Scoop](https://scoop.sh):
 
-   ```sh
-   $ yay -S starship
-   ```
-
-   #### Nix (unstable)
-
-   ```sh
-   $ nix-env --install starship
-   ```
-
-   #### Termux
-
-   ```sh
-   $ pkg install starship
-   ```
-
-   #### Other x86-64 Linux Platforms
-
-   Download a prebuilt binary and place in /usr/local/bin/
-
-   ```sh
-   $ wget -q --show-progress https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz
-   $ tar xvf starship-x86_64-unknown-linux-gnu.tar.gz
-   $ sudo mv starship /usr/local/bin/
-   ```
+    ```powershell
+    scoop install starship
+    ```
 
 1. Add the init script to your shell's config file:
 
