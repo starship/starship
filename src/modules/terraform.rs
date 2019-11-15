@@ -5,10 +5,11 @@ use crate::utils;
 use std::env;
 use std::io;
 use std::path::PathBuf;
+use std::process::Command;
 
-/// Creates a module with the current Terraform workspace
+/// Creates a module with the current Terraform version and workspace
 ///
-/// Will display the Terraform workspace if any of the following criteria are met:
+/// Will display the Terraform version and workspace if any of the following criteria are met:
 ///     - Current directory contains a `.terraform` directory
 ///     - Current directory contains a file with the `.tf` extension
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -27,6 +28,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     module.set_style(config.style);
     module.create_segment("symbol", &config.symbol);
+
+    if config.show_version {
+        let terraform_version = format_terraform_version(&get_terraform_version()?)?;
+        module.create_segment("version", &config.version.with_value(&terraform_version));
+    }
 
     let terraform_workspace = &get_terraform_workspace(&context.current_dir)?;
     module.create_segment(
@@ -54,5 +60,74 @@ fn get_terraform_workspace(cwd: &PathBuf) -> Option<String> {
         Err(e) if e.kind() == io::ErrorKind::NotFound => Some("default".to_string()),
         Ok(s) => Some(s),
         _ => None,
+    }
+}
+
+fn get_terraform_version() -> Option<String> {
+    Command::new("terraform")
+        .arg("version")
+        .output()
+        .ok()
+        .and_then(|output| String::from_utf8(output.stdout).ok())
+}
+
+fn format_terraform_version(version: &str) -> Option<String> {
+    // `terraform version` output looks like this
+    // Terraform v0.12.14
+    // With potential extra output if it detects you are not running the latest version
+    Some(
+        version
+            .lines()
+            .next()?
+            .trim_start_matches("Terraform ")
+            .trim()
+            .to_owned()
+            + " ",
+    )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_format_terraform_version_release() {
+        let input = "Terraform v0.12.14";
+        assert_eq!(
+            format_terraform_version(input),
+            Some("v0.12.14 ".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_terraform_version_prerelease() {
+        let input = "Terraform v0.12.14-rc1";
+        assert_eq!(
+            format_terraform_version(input),
+            Some("v0.12.14-rc1 ".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_terraform_version_development() {
+        let input = "Terraform v0.12.14-dev (cca89f74)";
+        assert_eq!(
+            format_terraform_version(input),
+            Some("v0.12.14-dev (cca89f74) ".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_terraform_version_multiline() {
+        let input = "Terraform v0.12.13
+
+Your version of Terraform is out of date! The latest version
+is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
+
+";
+        assert_eq!(
+            format_terraform_version(input),
+            Some("v0.12.13 ".to_string())
+        );
     }
 }

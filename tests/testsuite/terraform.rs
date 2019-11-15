@@ -4,6 +4,7 @@ use std::io::{self, Write};
 use tempfile;
 
 use crate::common;
+use crate::common::TestCommand;
 
 #[test]
 fn folder_without_dotterraform() -> io::Result<()> {
@@ -115,6 +116,59 @@ fn folder_with_dotterraform_with_environment() -> io::Result<()> {
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("via {} ", Color::Fixed(105).bold().paint("💠 development"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[ignore]
+fn folder_with_dotterraform_with_version_no_environment() -> io::Result<()> {
+    let dir = tempfile::tempdir()?;
+    let tf_dir = dir.path().join(".terraform");
+    fs::create_dir(&tf_dir)?;
+
+    let output = common::render_module("terraform")
+        .arg("--path")
+        .arg(dir.path())
+        .use_config(toml::toml! {
+            [terraform]
+            show_version = true
+        })
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!(
+        "via {} ",
+        Color::Fixed(105).bold().paint("💠 v0.12.14 default")
+    );
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[ignore]
+fn folder_with_dotterraform_with_version_with_environment() -> io::Result<()> {
+    let dir = tempfile::tempdir()?;
+    let tf_dir = dir.path().join(".terraform");
+    fs::create_dir(&tf_dir)?;
+    let mut file = File::create(tf_dir.join("environment"))?;
+    file.write_all(b"development")?;
+    file.sync_all()?;
+
+    let output = common::render_module("terraform")
+        .arg("--path")
+        .arg(dir.path())
+        .use_config(toml::toml! {
+            [terraform]
+            show_version = true
+        })
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!(
+        "via {} ",
+        Color::Fixed(105).bold().paint("💠 v0.12.14 development")
+    );
     assert_eq!(expected, actual);
     Ok(())
 }

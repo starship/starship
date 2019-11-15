@@ -7,8 +7,10 @@ use starship_module_config_derive::ModuleConfig;
 pub struct TerraformConfig<'a> {
     pub symbol: SegmentConfig<'a>,
     pub workspace: SegmentConfig<'a>,
+    pub version: SegmentConfig<'a>,
     pub style: Style,
     pub disabled: bool,
+    pub show_version: bool,
 }
 
 impl<'a> RootModuleConfig<'a> for TerraformConfig<'a> {
@@ -16,8 +18,10 @@ impl<'a> RootModuleConfig<'a> for TerraformConfig<'a> {
         TerraformConfig {
             symbol: SegmentConfig::new("💠 "),
             workspace: SegmentConfig::default(),
+            version: SegmentConfig::default(),
             style: Color::Fixed(105).bold(),
             disabled: false,
+            show_version: false,
         }
     }
 }

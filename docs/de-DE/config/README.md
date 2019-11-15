@@ -934,18 +934,21 @@ symbol = "⚙️ "
 
 ## Terraform
 
-Das `terraform`-Modul zeigt den aktuellen Terraform-Workspace. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+Das `terraform`-Modul zeigt den aktuellen Terraform-Workspace und Version.
+By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use.
+Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - Das aktuelle Verzeichnis enthält eine `.terraform`-Verzeichnis
 - Das aktuelle Verzeichnis enthält eine Datei mit der `.tf`-Erweiterung
 
 ### Optionen
 
-| Variable   | Standardwert  | Beschreibung                                           |
-| ---------- | ------------- | ------------------------------------------------------ |
-| `symbol`   | `"💠 "`       | Symbol das vor den Terraform-Workspace angezeigt wird. |
-| `style`    | `"bold 105"`  | Stil für dieses Modul.                                 |
-| `disabled` | `false`       | Deaktiviert das `terraform`-Modul.                     |
+| Variable       | Standardwert  | Beschreibung                                               |
+| -------------- | ------------- | ---------------------------------------------------------- |
+| `symbol`       | `"💠 "`       | Symbol das vor den Terraform-Workspace angezeigt wird.     |
+| `style`        | `"bold 105"`  | Stil für dieses Modul.                                     |
+| `disabled`     | `false`       | Deaktiviert das `terraform`-Modul.                         |
+| `show_version` | `false`       | Ziegt den Terraform Version. Langzam in grossen Workspace. |
 
 ### Beispiel
 
