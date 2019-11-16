@@ -72,7 +72,12 @@ fn get_package_version() -> Option<String> {
 }
 
 fn format_version(version: &str) -> String {
-    format!("v{}", version.replace('"', "").trim())
+    let cleaned = version.replace('"', "").trim().to_string();
+    if cleaned.starts_with('v') {
+        cleaned
+    } else {
+        format!("v{}", cleaned)
+    }
 }
 
 #[cfg(test)]
@@ -82,6 +87,16 @@ mod tests {
     #[test]
     fn test_format_version() {
         assert_eq!(format_version("0.1.0"), "v0.1.0");
+        assert_eq!(format_version(" 0.1.0 "), "v0.1.0");
+        assert_eq!(format_version("0.1.0 "), "v0.1.0");
+        assert_eq!(format_version(" 0.1.0"), "v0.1.0");
+        assert_eq!(format_version("\"0.1.0\""), "v0.1.0");
+
+        assert_eq!(format_version("v0.1.0"), "v0.1.0");
+        assert_eq!(format_version(" v0.1.0 "), "v0.1.0");
+        assert_eq!(format_version(" v0.1.0"), "v0.1.0");
+        assert_eq!(format_version("v0.1.0 "), "v0.1.0");
+        assert_eq!(format_version("\"v0.1.0\""), "v0.1.0");
     }
 
     #[test]
