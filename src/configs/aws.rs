@@ -1,4 +1,5 @@
 use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
+use std::collections::HashMap;
 
 use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
@@ -18,6 +19,7 @@ pub struct AwsConfig<'a> {
     pub style: Style,
     pub disabled: bool,
     pub displayed_items: AwsItems,
+    pub region_aliases: HashMap<String, &'a str>,
 }
 
 impl<'a> RootModuleConfig<'a> for AwsConfig<'a> {
@@ -29,6 +31,7 @@ impl<'a> RootModuleConfig<'a> for AwsConfig<'a> {
             style: Color::Yellow.bold(),
             disabled: false,
             displayed_items: AwsItems::All,
+            region_aliases: HashMap::new(),
         }
     }
 }
