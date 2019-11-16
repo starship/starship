@@ -112,12 +112,13 @@ where
     }
 }
 
-impl<'a, T> ModuleConfig<'a> for HashMap<String, T>
+impl<'a, T, S: ::std::hash::BuildHasher + Default> ModuleConfig<'a> for HashMap<String, T, S>
 where
     T: ModuleConfig<'a>,
+    S: Clone,
 {
     fn from_config(config: &'a Value) -> Option<Self> {
-        let mut hm = HashMap::new();
+        let mut hm = HashMap::default();
 
         for (x, y) in config.as_table()?.iter() {
             hm.insert(x.clone(), T::from_config(y)?);
