@@ -1,3 +1,4 @@
+use std::env;
 use std::fs::File;
 use std::io::{Read, Result};
 use std::path::Path;
@@ -167,8 +168,27 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
     }
 }
 
+/// Return the version of the passed tool from an asdf .tool-versions file. This will only fetch
+/// the version from the current working dir not the global default.
+pub fn asdf_version(tool: &str) -> Option<String> {
+    let tool_versions_file = env::var("ASDF_DEFAULT_TOOL_VERSIONS_FILENAME")
+        .unwrap_or_else(|_| ".tool-versions".to_string());
+    let raw = read_file(tool_versions_file).ok()?;
+    parse_asdf_config(tool, &raw)
+}
+
+fn parse_asdf_config(tool: &str, conf: &str) -> Option<String> {
+    let filter = format!("{} ", tool);
+    conf.lines()
+        .find(|line| line.starts_with(&filter))
+        .and_then(|line| {
+            line.split_ascii_whitespace()
+                .nth(1)
+                .map(|version| version.to_string())
+        })
+}
+
 #[cfg(test)]
-#[cfg(not(windows))] // While the exec_cmd should work on Windows these tests assume a Unix-like environment.
 mod tests {
     use super::*;
 
@@ -183,7 +203,9 @@ mod tests {
         assert_eq!(result, expected)
     }
 
+    // While the exec_cmd should work on Windows these tests assume a Unix-like environment.
     #[test]
+    #[cfg(not(windows))]
     fn exec_no_output() {
         let result = internal_exec_cmd("true", &[]);
         let expected = Some(CommandOutput {
@@ -194,7 +216,9 @@ mod tests {
         assert_eq!(result, expected)
     }
 
+    // While the exec_cmd should work on Windows these tests assume a Unix-like environment.
     #[test]
+    #[cfg(not(windows))]
     fn exec_with_output_stdout() {
         let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello"]);
         let expected = Some(CommandOutput {
@@ -205,7 +229,9 @@ mod tests {
         assert_eq!(result, expected)
     }
 
+    // While the exec_cmd should work on Windows these tests assume a Unix-like environment.
     #[test]
+    #[cfg(not(windows))]
     fn exec_with_output_stderr() {
         let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello >&2"]);
         let expected = Some(CommandOutput {
@@ -216,7 +242,9 @@ mod tests {
         assert_eq!(result, expected)
     }
 
+    // While the exec_cmd should work on Windows these tests assume a Unix-like environment.
     #[test]
+    #[cfg(not(windows))]
     fn exec_with_output_both() {
         let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello; echo world >&2"]);
         let expected = Some(CommandOutput {
@@ -227,7 +255,9 @@ mod tests {
         assert_eq!(result, expected)
     }
 
+    // While the exec_cmd should work on Windows these tests assume a Unix-like environment.
     #[test]
+    #[cfg(not(windows))]
     fn exec_with_non_zero_exit_code() {
         let result = internal_exec_cmd("false", &[]);
         let expected = None;
@@ -271,5 +301,55 @@ mod tests {
         assert_eq!(&bresult3, "\\[OH NO\\]");
         assert_eq!(&bresult4, "herpaderp");
         assert_eq!(&bresult5, "");
+    }
+
+    #[test]
+    fn parse_empty_asdf_config() {
+        let config = "";
+        let tool = "ruby";
+        let expected = None;
+
+        let result = parse_asdf_config(&tool, &config);
+
+        assert_eq!(result, expected)
+    }
+
+    #[test]
+    fn parse_simple_asdf_config() {
+        let config = "ruby 2.5.3";
+        let tool = "ruby";
+        let expected = Some("2.5.3".to_string());
+
+        let result = parse_asdf_config(&tool, &config);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn parse_multiline_asdf_config() {
+        let config = "ruby 2.5.3
+nodejs 10.15.0
+python 3.8.0";
+
+        assert_eq!(
+            parse_asdf_config("ruby", &config),
+            Some("2.5.3".to_string())
+        );
+        assert_eq!(
+            parse_asdf_config("python", &config),
+            Some("3.8.0".to_string())
+        );
+        assert_eq!(parse_asdf_config("rust", &config), None);
+    }
+
+    #[test]
+    fn parse_invalid_asdf_config() {
+        let config = "ruby ";
+        let tool = "ruby";
+        let expected = None;
+
+        let result = parse_asdf_config(&tool, &config);
+
+        assert_eq!(result, expected);
     }
 }
