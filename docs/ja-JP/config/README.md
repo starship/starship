@@ -392,9 +392,9 @@ default = "unknown shell"
 | `symbol`            | `" "`          | 現在のディレクトリのリポジトリのブランチ名の前に使用されるシンボルです。        |
 | `truncation_length` | `2^63 - 1`      | gitブランチをX書記素に切り捨てます。                        |
 | `truncation_symbol` | `"…"`           | ブランチ名切り捨てられていることを示すための記号です。 記号なしに「」も使用できます。 |
+| `prefix`            | `"on "`         | Prefix to display immediately before git branch.                |
 | `style`             | `"bold purple"` | モジュールのスタイルです。                               |
 | `disabled`          | `false`         | `git_branch`モジュールを無効にします。                   |
-| `prefix`            | `"on "`         | Prefix to display immediately before git branch.                |
 
 ### 設定例
 

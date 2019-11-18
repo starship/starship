@@ -391,9 +391,9 @@ Das `git_branch`-Modul zeigt den aktiven Git-Branch des Repositories im aktuelle
 | `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
 | `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
+| `prefix`            | `"on "`         | Prefix to display immediately before git branch.                |
 | `style`             | `"bold purple"` | Stil für dieses Modul.                                                                |
 | `disabled`          | `false`         | Deaktiviert das `git_branch`-Modul.                                                   |
-| `prefix`            | `"on "`         | Prefix to display immediately before git branch.                |
 
 ### Beispiel
 

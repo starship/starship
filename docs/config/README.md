@@ -423,9 +423,9 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
 | `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
+| `prefix`            | `"on "`         | Prefix to display immediately before git branch.                |
 | `style`             | `"bold purple"` | The style for the module.                                                             |
 | `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
-| `prefix`            | `"on "`         | Prefix to display immediately before git branch.                |
 
 ### Example
 
