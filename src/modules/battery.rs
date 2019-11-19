@@ -1,5 +1,4 @@
-use super::{Context, Module};
-use crate::config::RootModuleConfig;
+use super::{Context, Module, RootModuleConfig};
 use crate::configs::battery::BatteryConfig;
 
 /// Creates a module for the battery percentage and charging state
@@ -9,6 +8,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
     let percentage_char = match shell.as_str() {
         "zsh" => "%%", // % is an escape in zsh, see PROMPT in `man zshmisc`
+        "powershell" => "`%",
         _ => "%",
     };
 

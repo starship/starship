@@ -2,6 +2,7 @@ mod aws;
 mod character;
 mod cmd_duration;
 mod common;
+mod conda;
 mod configuration;
 mod directory;
 mod dotnet;

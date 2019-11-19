@@ -17,18 +17,9 @@ pub struct CharacterConfig<'a> {
 impl<'a> RootModuleConfig<'a> for CharacterConfig<'a> {
     fn new() -> Self {
         CharacterConfig {
-            symbol: SegmentConfig {
-                value: "❯",
-                style: None,
-            },
-            error_symbol: SegmentConfig {
-                value: "✖",
-                style: None,
-            },
-            vicmd_symbol: SegmentConfig {
-                value: "❮",
-                style: None,
-            },
+            symbol: SegmentConfig::new("❯"),
+            error_symbol: SegmentConfig::new("✖"),
+            vicmd_symbol: SegmentConfig::new("❮"),
             use_symbol_for_status: false,
             style_success: Color::Green.bold(),
             style_failure: Color::Red.bold(),

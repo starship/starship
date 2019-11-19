@@ -38,7 +38,7 @@ RUN curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-ins
 RUN ruby --version
 
 # Install Python
-ENV PYTHON_VERSION 3.6.9
+ENV PYTHON_VERSION 3.7.5
 ENV PYENV_ROOT /home/nonroot/.pyenv
 ENV PATH $PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH
 RUN curl https://pyenv.run | bash \

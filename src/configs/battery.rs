@@ -18,18 +18,9 @@ pub struct BatteryConfig<'a> {
 impl<'a> RootModuleConfig<'a> for BatteryConfig<'a> {
     fn new() -> Self {
         BatteryConfig {
-            full_symbol: SegmentConfig {
-                value: "•",
-                style: None,
-            },
-            charging_symbol: SegmentConfig {
-                value: "↑",
-                style: None,
-            },
-            discharging_symbol: SegmentConfig {
-                value: "↓",
-                style: None,
-            },
+            full_symbol: SegmentConfig::new("•"),
+            charging_symbol: SegmentConfig::new("↑"),
+            discharging_symbol: SegmentConfig::new("↓"),
             unknown_symbol: None,
             empty_symbol: None,
             display: vec![BatteryDisplayConfig {
@@ -37,10 +28,7 @@ impl<'a> RootModuleConfig<'a> for BatteryConfig<'a> {
                 style: Color::Red.bold(),
             }],
             disabled: false,
-            percentage: SegmentConfig {
-                value: "",
-                style: None,
-            },
+            percentage: SegmentConfig::default(),
         }
     }
 }

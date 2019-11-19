@@ -111,7 +111,9 @@ fn directory_in_root() -> io::Result<()> {
 #[test]
 #[cfg(target_os = "windows")]
 fn directory_in_root() -> io::Result<()> {
-    let output = common::render_module("dir").arg("--path=C:\\").output()?;
+    let output = common::render_module("directory")
+        .arg("--path=C:\\")
+        .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("/c"));
@@ -447,68 +449,5 @@ fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
         Color::Cyan.bold().paint("~/src/meters/fuel-gauge")
     );
     assert_eq!(expected, actual);
-    Ok(())
-}
-
-#[test]
-#[ignore]
-fn use_logical_and_physical_paths() -> io::Result<()> {
-    /* This test is a bit of a smoke + mirrors trick because all it shows is that
-    the application is reading the PWD envar correctly (if the shell doesn't
-    correctly set PWD, we're still in trouble). */
-    let tmp_dir = Path::new("/tmp/starship/porthole/viewport");
-    let dir = tmp_dir.join("directory");
-    let sym = tmp_dir.join("symlink_to_directory");
-    fs::create_dir_all(&dir)?;
-    // Create a symlink on the appropriate system
-    #[cfg(target_family = "unix")]
-    std::os::unix::fs::symlink(&dir, &sym).unwrap();
-    #[cfg(target_family = "windows")]
-    std::os::windows::fs::symlink_file(&dir, &sym).unwrap();
-
-    // Test when using physical paths
-    let output = common::render_module("directory")
-        .use_config(toml::toml! {
-            [directory]
-            use_logical_path = false
-        })
-        .arg("--path")
-        .arg(&dir)
-        .env(
-            "PWD",
-            "/tmp/starship/porthole/viewport/symlink_to_directory",
-        )
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-
-    let expected = format!(
-        "in {} ",
-        Color::Cyan.bold().paint("porthole/viewport/directory")
-    );
-    assert_eq!(expected, actual);
-
-    // Test when using logical paths
-    let output = common::render_module("directory")
-        .use_config(toml::toml! {
-            [directory]
-            use_logical_path = true
-        })
-        .arg("--path")
-        .arg(&sym)
-        .env(
-            "PWD",
-            "/tmp/starship/porthole/viewport/symlink_to_directory",
-        )
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-
-    let expected = format!(
-        "in {} ",
-        Color::Cyan
-            .bold()
-            .paint("porthole/viewport/symlink_to_directory")
-    );
-    assert_eq!(expected, actual);
-
     Ok(())
 }

@@ -4,9 +4,8 @@ use yaml_rust::YamlLoader;
 use std::env;
 use std::path;
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
 
-use crate::config::RootModuleConfig;
 use crate::configs::kubernetes::KubernetesConfig;
 use crate::utils;
 
@@ -39,20 +38,31 @@ fn get_kube_context(contents: &str) -> Option<(String, String)> {
     Some((current_ctx.to_string(), ns.to_string()))
 }
 
+fn parse_kubectl_file(filename: &path::PathBuf) -> Option<(String, String)> {
+    let contents = utils::read_file(filename).ok()?;
+    get_kube_context(&contents)
+}
+
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let filename = match env::var("KUBECONFIG") {
-        Ok(path) => path::PathBuf::from(path),
-        Err(_) => dirs::home_dir()?.join(".kube").join("config"),
+    let kube_cfg = match env::var("KUBECONFIG") {
+        Ok(paths) => env::split_paths(&paths)
+            .filter_map(|filename| parse_kubectl_file(&filename))
+            .nth(0),
+        Err(_) => {
+            let filename = dirs::home_dir()?.join(".kube").join("config");
+            parse_kubectl_file(&filename)
+        }
     };
 
-    let contents = utils::read_file(filename).ok()?;
-
-    match get_kube_context(&contents) {
+    match kube_cfg {
         Some(kube_cfg) => {
             let (kube_ctx, kube_ns) = kube_cfg;
 
             let mut module = context.new_module("kubernetes");
             let config: KubernetesConfig = KubernetesConfig::try_load(module.config);
+            if config.disabled {
+                return None;
+            };
 
             module.set_style(config.style);
             module.get_prefix().set_value(KUBERNETES_PREFIX);

@@ -1,8 +1,8 @@
-use ansi_term::Color;
 use git2::RepositoryState;
 use std::path::{Path, PathBuf};
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use crate::configs::git_state::GitStateConfig;
 
 /// Creates a module with the state of the git repository at the current directory
 ///
@@ -10,97 +10,83 @@ use super::{Context, Module};
 /// If the progress information is available (e.g. rebasing 3/10), it will show that too.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_state");
+    let config: GitStateConfig = GitStateConfig::try_load(module.config);
+
+    module.set_style(config.style);
+    module.get_prefix().set_value("(");
+    module.get_suffix().set_value(") ");
 
     let repo = context.get_repo().ok()?;
     let repo_root = repo.root.as_ref()?;
     let repo_state = repo.state?;
-    let state_description = get_state_description(repo_state, repo_root);
 
-    if let StateDescription::Clean = state_description {
-        return None;
-    }
+    let state_description = get_state_description(repo_state, repo_root, config);
 
-    let module_style = module
-        .config_value_style("style")
-        .unwrap_or_else(|| Color::Yellow.bold());
-    module.set_style(module_style);
-    module.get_prefix().set_value("(");
-    module.get_suffix().set_value(") ");
-
-    let label = match state_description {
+    let label = match &state_description {
         StateDescription::Label(label) => label,
         StateDescription::LabelAndProgress(label, _) => label,
-        // Should only be possible if you've added a new variant to StateDescription
-        _ => panic!("Expected to have a label at this point in the control flow."),
+        StateDescription::Clean => {
+            return None;
+        }
     };
 
-    module.new_segment(label.segment_name, label.message_default);
+    module.create_segment(label.name, &label.segment);
 
-    if let StateDescription::LabelAndProgress(_, progress) = state_description {
-        module.new_segment("progress_current", &format!(" {}", progress.current));
-        module.new_segment("progress_divider", "/");
-        module.new_segment("progress_total", &format!("{}", progress.total));
+    if let StateDescription::LabelAndProgress(_, progress) = &state_description {
+        module.create_segment(
+            "progress_current",
+            &SegmentConfig::new(&format!(" {}", progress.current)),
+        );
+        module.create_segment("progress_divider", &SegmentConfig::new("/"));
+        module.create_segment(
+            "progress_total",
+            &SegmentConfig::new(&format!("{}", progress.total)),
+        );
     }
 
     Some(module)
 }
 
-static MERGE_LABEL: StateLabel = StateLabel {
-    segment_name: "merge",
-    message_default: "MERGING",
-};
-
-static REVERT_LABEL: StateLabel = StateLabel {
-    segment_name: "revert",
-    message_default: "REVERTING",
-};
-
-static CHERRY_LABEL: StateLabel = StateLabel {
-    segment_name: "cherry_pick",
-    message_default: "CHERRY-PICKING",
-};
-
-static BISECT_LABEL: StateLabel = StateLabel {
-    segment_name: "bisect",
-    message_default: "BISECTING",
-};
-
-static AM_LABEL: StateLabel = StateLabel {
-    segment_name: "am",
-    message_default: "AM",
-};
-
-static REBASE_LABEL: StateLabel = StateLabel {
-    segment_name: "rebase",
-    message_default: "REBASING",
-};
-
-static AM_OR_REBASE_LABEL: StateLabel = StateLabel {
-    segment_name: "am_or_rebase",
-    message_default: "AM/REBASE",
-};
-
 /// Returns the state of the current repository
 ///
 /// During a git operation it will show: REBASING, BISECTING, MERGING, etc.
-fn get_state_description(state: RepositoryState, root: &PathBuf) -> StateDescription {
+fn get_state_description<'a>(
+    state: RepositoryState,
+    root: &'a std::path::PathBuf,
+    config: GitStateConfig<'a>,
+) -> StateDescription<'a> {
     match state {
         RepositoryState::Clean => StateDescription::Clean,
-        RepositoryState::Merge => StateDescription::Label(&MERGE_LABEL),
-        RepositoryState::Revert => StateDescription::Label(&REVERT_LABEL),
-        RepositoryState::RevertSequence => StateDescription::Label(&REVERT_LABEL),
-        RepositoryState::CherryPick => StateDescription::Label(&CHERRY_LABEL),
-        RepositoryState::CherryPickSequence => StateDescription::Label(&CHERRY_LABEL),
-        RepositoryState::Bisect => StateDescription::Label(&BISECT_LABEL),
-        RepositoryState::ApplyMailbox => StateDescription::Label(&AM_LABEL),
-        RepositoryState::ApplyMailboxOrRebase => StateDescription::Label(&AM_OR_REBASE_LABEL),
-        RepositoryState::Rebase => describe_rebase(root),
-        RepositoryState::RebaseInteractive => describe_rebase(root),
-        RepositoryState::RebaseMerge => describe_rebase(root),
+        RepositoryState::Merge => StateDescription::Label(StateLabel::new("merge", config.merge)),
+        RepositoryState::Revert => {
+            StateDescription::Label(StateLabel::new("revert", config.revert))
+        }
+        RepositoryState::RevertSequence => {
+            StateDescription::Label(StateLabel::new("revert", config.revert))
+        }
+        RepositoryState::CherryPick => {
+            StateDescription::Label(StateLabel::new("cherry_pick", config.cherry_pick))
+        }
+        RepositoryState::CherryPickSequence => {
+            StateDescription::Label(StateLabel::new("cherry_pick", config.cherry_pick))
+        }
+        RepositoryState::Bisect => {
+            StateDescription::Label(StateLabel::new("bisect", config.bisect))
+        }
+        RepositoryState::ApplyMailbox => StateDescription::Label(StateLabel::new("am", config.am)),
+        RepositoryState::ApplyMailboxOrRebase => {
+            StateDescription::Label(StateLabel::new("am_or_rebase", config.am_or_rebase))
+        }
+        RepositoryState::Rebase => describe_rebase(root, config.rebase),
+        RepositoryState::RebaseInteractive => describe_rebase(root, config.rebase),
+        RepositoryState::RebaseMerge => describe_rebase(root, config.rebase),
     }
 }
 
-fn describe_rebase(root: &PathBuf) -> StateDescription {
+fn describe_rebase<'a>(
+    root: &'a PathBuf,
+    rebase_config: SegmentConfig<'a>,
+) -> StateDescription<'a> {
     /*
      *  Sadly, libgit2 seems to have some issues with reading the state of
      *  interactive rebases. So, instead, we'll poke a few of the .git files
@@ -108,8 +94,6 @@ fn describe_rebase(root: &PathBuf) -> StateDescription {
      *
      *  The following is based heavily on: https://github.com/magicmonty/bash-git-prompt
      */
-
-    let just_label = StateDescription::Label(&REBASE_LABEL);
 
     let dot_git = root.join(".git");
 
@@ -140,23 +124,31 @@ fn describe_rebase(root: &PathBuf) -> StateDescription {
     };
 
     match progress {
-        None => just_label,
-        Some(progress) => StateDescription::LabelAndProgress(&REBASE_LABEL, progress),
+        None => StateDescription::Label(StateLabel::new("rebase", rebase_config)),
+        Some(progress) => {
+            StateDescription::LabelAndProgress(StateLabel::new("rebase", rebase_config), progress)
+        }
     }
 }
 
-enum StateDescription {
+enum StateDescription<'a> {
     Clean,
-    Label(&'static StateLabel),
-    LabelAndProgress(&'static StateLabel, StateProgress),
+    Label(StateLabel<'a>),
+    LabelAndProgress(StateLabel<'a>, StateProgress),
 }
 
-struct StateLabel {
-    segment_name: &'static str,
-    message_default: &'static str,
+struct StateLabel<'a> {
+    name: &'static str,
+    segment: SegmentConfig<'a>,
 }
 
 struct StateProgress {
     current: usize,
     total: usize,
+}
+
+impl<'a> StateLabel<'a> {
+    fn new(name: &'static str, segment: SegmentConfig<'a>) -> Self {
+        Self { name, segment }
+    }
 }
