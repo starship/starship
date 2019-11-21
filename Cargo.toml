@@ -27,7 +27,7 @@ default = ["battery"]
 clap = "2.33.0"
 ansi_term = "0.12.1"
 dirs = "2.0.2"
-git2 = { version = "0.10.1", default-features = false, features = [] }
+git2 = { version = "0.10.2", default-features = false, features = [] }
 toml = "0.5.4"
 serde_json = "1.0.41"
 rayon = "1.2.0"
