@@ -33,10 +33,10 @@ starship_precmd() {
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(date +%s)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        PS1="$(::STARSHIP:: prompt --status=$STATUS --jobs="$(jobs -p | wc -l)" --cmd-duration=$STARSHIP_DURATION)"
+        PS1="\$(export STARSHIP_SHELL=""; ::STARSHIP:: prompt --status=$STATUS --jobs=\"$(jobs -p | wc -l)\" --cmd-duration=$STARSHIP_DURATION)"
         unset STARSHIP_START_TIME
     else
-        PS1="$(::STARSHIP:: prompt --status=$STATUS --jobs="$(jobs -p | wc -l)")"
+        PS1="\$(export STARSHIP_SHELL=""; ::STARSHIP:: prompt --status=$STATUS --jobs=\"$(jobs -p | wc -l)\")"
     fi
     PREEXEC_READY=true;  # Signal that we can safely restart the timer
 }
