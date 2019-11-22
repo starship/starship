@@ -166,10 +166,10 @@ jobs:
     env:
       CRATES_IO_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
 
-  # Create GitHub release with Rust build targets and release notes
-  github_release:
+  # Build sources for every OS
+  github_build:
     if: startsWith(github.ref, 'refs/tags/v')
-    name: Create GitHub Release
+    name: Build release binaries
     strategy:
       fail-fast: false
       matrix:
@@ -229,8 +229,47 @@ jobs:
           tar czvf ../../../${{ matrix.name }} starship
           cd -
 
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.name }}
+          path: ${{ matrix.name }}
+
+  # Create GitHub release with Rust build targets and release notes
+  github_release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    name: Create GitHub Release
+    needs: github_build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      # These can be squashed when https://github.com/actions/download-artifact/issues/6 is closed
+      - name: Download releases from github_build
+        uses: actions/download-artifact@v1
+        with:
+          name: starship-x86_64-unknown-linux-gnu.tar.gz
+          path: .
+      - name: Download releases from github_build
+        uses: actions/download-artifact@v1
+        with:
+          name: starship-x86_64-unknown-linux-musl.tar.gz
+          path: .
+      - name: Download releases from github_build
+        uses: actions/download-artifact@v1
+        with:
+          name: starship-x86_64-apple-darwin.tar.gz
+          path: .
+      - name: Download releases from github_build
+        uses: actions/download-artifact@v1
+        with:
+          name: starship-x86_64-pc-windows-msvc.zip
+          path: .
+
+      - name: Generate checksums
+        run: for file in starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
+
       - name: Generate release notes
-        if: matrix.os == 'ubuntu-latest'
         run: |
           # Temporary fix for https://github.com/actions/setup-go/issues/14
           export PATH=$PATH:$(go env GOPATH)/bin
@@ -240,7 +279,15 @@ jobs:
       - name: Create GitHub release ${{ matrix.target }}
         uses: softprops/action-gh-release@v1
         with:
-          files: ${{ matrix.name }}
+          files: |
+            starship-x86_64-unknown-linux-gnu.tar.gz
+            starship-x86_64-unknown-linux-gnu.tar.gz.sha256
+            starship-x86_64-unknown-linux-musl.tar.gz
+            starship-x86_64-unknown-linux-musl.tar.gz.sha256
+            starship-x86_64-apple-darwin.tar.gz
+            starship-x86_64-apple-darwin.tar.gz.sha256
+            starship-x86_64-pc-windows-msvc.zip
+            starship-x86_64-pc-windows-msvc.zip.sha256
           body_path: RELEASE.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
