@@ -49,7 +49,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .or_else(|| rustup_settings.lookup_override(&context.current_dir))
         .or_else(|| find_rust_toolchain_file(&context));
 
-    let (module_version, module_toolchain) = if let Some(toolchain_override) = toolchain_override {
+    let (version, toolchain) = if let Some(toolchain_override) = toolchain_override {
         match execute_rustup_run_rustc_version(&toolchain_override) {
             RustupRunRustcVersionOutcome::Ok(module_version) => (
                 module_version,
@@ -75,8 +75,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_style(config.style);
 
     module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &config.version.with_value(&module_version));
-    module.create_segment("toolchain", &config.toolchain.with_value(&module_toolchain));
+    module.create_segment(
+        "version",
+        &config.version.with_value(&if config.toolchain {
+            version
+        } else {
+            format!("{} ({})", version, toolchain)
+        }),
+    );
 
     Some(module)
 }
@@ -150,10 +156,10 @@ fn format_rustc_version(mut rustc_stdout: String) -> String {
 }
 
 fn format_toolchain(toolchain: &str, default_host_triple: Option<&str>) -> String {
-    let toolchain = default_host_triple
+    default_host_triple
         .map(|triple| toolchain.trim_end_matches(&format!("-{}", triple)))
-        .unwrap_or(toolchain);
-    format!(" ({})", toolchain)
+        .unwrap_or(toolchain)
+        .to_owned()
 }
 
 fn execute_rustc_version_verbose(toolchain: Option<&str>) -> Option<(String, String)> {
@@ -175,11 +181,11 @@ fn format_rustc_version_verbose(stdout: &str, toolchain: Option<&str>) -> Option
         }
     }
     let (release, host) = (release?, host?);
-    let module_version = format!("v{}", release);
-    let module_toolchain = toolchain
-        .map(|toolchain| format!(" ({})", toolchain))
-        .unwrap_or_else(|| format!(" (?-{})", host));
-    Some((module_version, module_toolchain))
+    let version = format!("v{}", release);
+    let toolchain = toolchain
+        .map(ToOwned::to_owned)
+        .unwrap_or_else(|| format!("?-{}", host));
+    Some((version, toolchain))
 }
 
 #[derive(Debug, PartialEq)]
@@ -200,7 +206,7 @@ struct RustupSettings {
 
 impl RustupSettings {
     fn load(cwd: &Path) -> Option<Self> {
-        // `rustup` uses `home::home_dir`, which may work differently from `dirs::home_dir` on
+        // `rustup` uses `home::home_dir`, which might work differently from `dirs::home_dir` on
         // Windows.
 
         // https://github.com/rust-lang/rustup.rs/blob/13979c9685bfc4f5baa578ad13c1cd1999419dd1/src/config.rs#L51-L55
@@ -280,14 +286,14 @@ mod tests {
                 version = "12"
 
                 [overrides]
-                "/home/user/src/starship" = "1.38.0-x86_64-unknown-linux-gnu"
+                "/home/user/src/starship" = "1.39.0-x86_64-unknown-linux-gnu"
             }),
             Some(RustupSettings {
                 default_host_triple: Some("x86_64-unknown-linux-gnu".to_owned()),
                 default_toolchain: Some("stable".to_owned()),
                 overrides: vec![(
                     "/home/user/src/starship".into(),
-                    "1.38.0-x86_64-unknown-linux-gnu".to_owned(),
+                    "1.39.0-x86_64-unknown-linux-gnu".to_owned(),
                 )]
             }),
         );
@@ -298,7 +304,7 @@ mod tests {
                 default_toolchain = "stable"
 
                 [overrides]
-                "/home/user/src/starship" = "1.38.0-x86_64-unknown-linux-gnu"
+                "/home/user/src/starship" = "1.39.0-x86_64-unknown-linux-gnu"
             }),
             None,
         );
@@ -380,45 +386,45 @@ mod tests {
 
     #[test]
     fn test_format_toolchain() {
-        assert_eq!(format_toolchain("stable", None), " (stable)");
+        assert_eq!(format_toolchain("stable", None), "stable");
         assert_eq!(
             format_toolchain("stable", Some("x86_64-unknown-linux")),
-            " (stable)",
+            "stable",
         );
         assert_eq!(
             format_toolchain("stable-x86_64-unknown-linux", None),
-            " (stable-x86_64-unknown-linux)",
+            "stable-x86_64-unknown-linux",
         );
         assert_eq!(
             format_toolchain("stable-x86_64-unknown-linux", Some("x86_64-unknown-linux")),
-            " (stable)",
+            "stable",
         );
     }
 
     #[test]
     fn test_format_rustc_version_verbose() {
-        static STABLE: &str = r#"rustc 1.38.0 (625451e37 2019-09-23)
+        static STABLE: &str = r#"rustc 1.39.0 (4560ea788 2019-11-04)
 binary: rustc
-commit-hash: 625451e376bb2e5283fc4741caa0a3e8a2ca4d54
-commit-date: 2019-09-23
+commit-hash: 4560ea788cb760f0a34127156c78e2552949f734
+commit-date: 2019-11-04
 host: x86_64-unknown-linux-gnu
-release: 1.38.0
+release: 1.39.0
 LLVM version: 9.0
 "#;
 
-        static BETA: &str = r#"rustc 1.39.0-beta.6 (224f0bc90 2019-10-15)
+        static BETA: &str = r#"rustc 1.40.0-beta.1 (76b40532a 2019-11-05)
 binary: rustc
-commit-hash: 224f0bc90c010b88ca6ec600c9b02f6e3638d78e
-commit-date: 2019-10-15
+commit-hash: 76b40532a01d604385d3167710429d40b59905dd
+commit-date: 2019-11-05
 host: x86_64-unknown-linux-gnu
-release: 1.39.0-beta.6
+release: 1.40.0-beta.1
 LLVM version: 9.0
 "#;
 
-        static NIGHTLY: &str = r#"rustc 1.40.0-nightly (fa0f7d008 2019-10-17)
+        static NIGHTLY: &str = r#"rustc 1.40.0-nightly (1423bec54 2019-11-05)
 binary: rustc
-commit-hash: fa0f7d0080d8e7e9eb20aa9cbf8013f96c81287f
-commit-date: 2019-10-17
+commit-hash: 1423bec54cf2db283b614e527cfd602b481485d1
+commit-date: 2019-11-05
 host: x86_64-unknown-linux-gnu
 release: 1.40.0-nightly
 LLVM version: 9.0
@@ -427,37 +433,37 @@ LLVM version: 9.0
         assert_eq!(
             format_rustc_version_verbose(STABLE, None),
             Some((
-                "v1.38.0".to_owned(),
-                " (?-x86_64-unknown-linux-gnu)".to_owned(),
+                "v1.39.0".to_owned(),
+                "?-x86_64-unknown-linux-gnu".to_owned(),
             )),
         );
         assert_eq!(
             format_rustc_version_verbose(STABLE, Some("stable")),
-            Some(("v1.38.0".to_owned(), " (stable)".to_owned())),
+            Some(("v1.39.0".to_owned(), "stable".to_owned())),
         );
 
         assert_eq!(
             format_rustc_version_verbose(BETA, None),
             Some((
-                "v1.39.0-beta.6".to_owned(),
-                " (?-x86_64-unknown-linux-gnu)".to_owned(),
+                "v1.40.0-beta.1".to_owned(),
+                "?-x86_64-unknown-linux-gnu".to_owned(),
             )),
         );
         assert_eq!(
             format_rustc_version_verbose(BETA, Some("beta")),
-            Some(("v1.39.0-beta.6".to_owned(), " (beta)".to_owned())),
+            Some(("v1.40.0-beta.1".to_owned(), "beta".to_owned())),
         );
 
         assert_eq!(
             format_rustc_version_verbose(NIGHTLY, None),
             Some((
                 "v1.40.0-nightly".to_owned(),
-                " (?-x86_64-unknown-linux-gnu)".to_owned(),
+                "?-x86_64-unknown-linux-gnu".to_owned(),
             )),
         );
         assert_eq!(
             format_rustc_version_verbose(NIGHTLY, Some("nightly")),
-            Some(("v1.40.0-nightly".to_owned(), " (nightly)".to_owned())),
+            Some(("v1.40.0-nightly".to_owned(), "nightly".to_owned())),
         );
     }
 }

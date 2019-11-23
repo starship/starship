@@ -7,7 +7,7 @@ use starship_module_config_derive::ModuleConfig;
 pub struct RustConfig<'a> {
     pub symbol: SegmentConfig<'a>,
     pub version: SegmentConfig<'a>,
-    pub toolchain: SegmentConfig<'a>,
+    pub toolchain: bool,
     pub style: Style,
     pub disabled: bool,
 }
@@ -17,7 +17,7 @@ impl<'a> RootModuleConfig<'a> for RustConfig<'a> {
         RustConfig {
             symbol: SegmentConfig::new("🦀 "),
             version: SegmentConfig::default(),
-            toolchain: SegmentConfig::default(),
+            toolchain: false,
             style: Color::Red.bold(),
             disabled: false,
         }
