@@ -78,9 +78,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.create_segment(
         "version",
         &config.version.with_value(&if config.toolchain {
-            version
-        } else {
             format!("{} ({})", version, toolchain)
+        } else {
+            version
         }),
     );
 
