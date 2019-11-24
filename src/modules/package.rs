@@ -1,6 +1,7 @@
 use super::{Context, Module};
 use crate::utils;
 
+use regex::Regex;
 use serde_json as json;
 use toml;
 
@@ -59,6 +60,14 @@ fn extract_poetry_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
+fn extract_gradle_version(file_contents: &str) -> Option<String> {
+    let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap();
+    let caps = re.captures(file_contents).unwrap();
+
+    let formatted_version = format_version(&caps["version"]);
+    Some(formatted_version)
+}
+
 fn get_package_version() -> Option<String> {
     if let Ok(cargo_toml) = utils::read_file("Cargo.toml") {
         extract_cargo_version(&cargo_toml)
@@ -66,6 +75,8 @@ fn get_package_version() -> Option<String> {
         extract_package_version(&package_json)
     } else if let Ok(poetry_toml) = utils::read_file("pyproject.toml") {
         extract_poetry_version(&poetry_toml)
+    } else if let Ok(build_gradle) = utils::read_file("build.gradle") {
+        extract_gradle_version(&build_gradle)
     } else {
         None
     }
