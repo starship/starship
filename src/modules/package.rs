@@ -188,4 +188,70 @@ mod tests {
             expected_version
         );
     }
+
+    #[test]
+    fn test_extract_gradle_version() {
+        let gradle_single_quotes = "plugins {
+    id 'java'
+    id 'test.plugin' version '0.2.0'
+}
+version '0.1.0'
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}";
+
+        let expected_version = Some("v0.1.0".to_string());
+        assert_eq!(
+            extract_gradle_version(&gradle_single_quotes),
+            expected_version
+        );
+
+        let gradle_double_quotes = "plugins {
+    id 'java'
+    id 'test.plugin' version '0.2.0'
+}
+version \"0.1.0\"
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}";
+
+        let expected_version = Some("v0.1.0".to_string());
+        assert_eq!(
+            extract_gradle_version(&gradle_double_quotes),
+            expected_version
+        );
+
+        let gradle_release_candidate = "plugins {
+    id 'java'
+    id 'test.plugin' version '0.2.0'
+}
+version '0.1.0-rc1'
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}";
+
+        let expected_version = Some("v0.1.0-rc1".to_string());
+        assert_eq!(
+            extract_gradle_version(&gradle_release_candidate),
+            expected_version
+        );
+
+        let gradle_without_version = "plugins {
+    id 'java'
+    id 'test.plugin' version '0.2.0'
+}
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}";
+
+        let expected_version = None;
+        assert_eq!(
+            extract_poetry_version(&gradle_without_version),
+            expected_version
+        );
+    }
 }
