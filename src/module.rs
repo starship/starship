@@ -17,6 +17,7 @@ pub const ALL_MODULES: &[&str] = &[
     "directory",
     "dotnet",
     "env_var",
+    "exit_code",
     "git_branch",
     "git_state",
     "git_status",

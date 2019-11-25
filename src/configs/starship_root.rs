@@ -41,6 +41,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "aws",
                 "env_var",
                 "cmd_duration",
+                "exit_code",
                 "line_break",
                 "jobs",
                 #[cfg(feature = "battery")]

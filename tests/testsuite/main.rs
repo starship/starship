@@ -7,6 +7,7 @@ mod configuration;
 mod directory;
 mod dotnet;
 mod env_var;
+mod exit_code;
 mod git_branch;
 mod git_state;
 mod git_status;

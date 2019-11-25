@@ -6,6 +6,7 @@ mod conda;
 mod directory;
 mod dotnet;
 mod env_var;
+mod exit_code;
 mod git_branch;
 mod git_state;
 mod git_status;
@@ -46,6 +47,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "directory" => directory::module(context),
         "dotnet" => dotnet::module(context),
         "env_var" => env_var::module(context),
+        "exit_code" => exit_code::module(context),
         "git_branch" => git_branch::module(context),
         "git_state" => git_state::module(context),
         "git_status" => git_status::module(context),

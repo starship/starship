@@ -107,6 +107,7 @@ prompt_order = [
     "aws",
     "env_var",
     "cmd_duration",
+    "exit_code",
     "line_break",
     "jobs",
     "battery",
@@ -410,6 +411,37 @@ The module will be shown only if any of the following conditions are met:
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+## Exit Code
+
+The `exit_code` module displays the exit status of the previous command.
+The module will be shown only if the exit status of the previous command is non-zero.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Variable   | Default          | Description                                                                  |
+| ---------- | ---------------- | ---------------------------------------------------------------------------- |
+| `prefix`   | `"exited "`      | Prefix to display immediately before the exit code.                          |
+| `suffix`   | `""`             | Suffix to display immediately after the exit code.                           |
+| `style`    | `"bold red"    ` | The style for the module.                                                    |
+| `disabled` | `true`           | Disables the `exit_code` module.                                             |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[exit_code]
+disabled = false
+prefix = "❌ "
 ```
 
 ## Git Branch
