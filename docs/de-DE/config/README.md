@@ -63,7 +63,7 @@ Dies ist eine Liste mit Prompt-weiten Konfigurationsoptionen.
 | -------------- | ----------------------------- | ------------------------------------------------------------------ |
 | `add_newline`  | `true`                        | Neuer Zeilenumbruch bei Start des Prompts.                         |
 | `prompt_order` | [link](#default-prompt-order) | Stelle die Reihenfolge ein, in der die Module den prompt aufbauen. |
-| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).              |
+| `scan_timeout` | `30`                          | Timeout für das Scannen von Dateien (in Millisekunden).            |
 
 ### Beispiel
 
