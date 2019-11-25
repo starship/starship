@@ -14,10 +14,10 @@ pub struct ExitCodeConfig<'a> {
 impl<'a> RootModuleConfig<'a> for ExitCodeConfig<'a> {
     fn new() -> Self {
         ExitCodeConfig {
-            prefix: "exited ",
-            suffix: "",
+            prefix: "",
+            suffix: " ",
             style: Color::Red.bold(),
-            disabled: true,
+            disabled: false,
         }
     }
 }
