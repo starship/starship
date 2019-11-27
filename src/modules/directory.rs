@@ -335,4 +335,11 @@ mod tests {
         let output = to_fish_style(1, path.to_string(), "C++");
         assert_eq!(output, "~/s/t/C/C/");
     }
+
+    #[test]
+    fn fish_style_with_unicode() {
+        let path = "~/starship/tmp/目录/目录";
+        let output = to_fish_style(1, path.to_string(), "目录");
+        assert_eq!(output, "~/s/t/目/");
+    }
 }
