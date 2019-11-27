@@ -182,11 +182,14 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
 
     components
         .into_iter()
-        .map(|word| match word {
-            "" => "",
-            _ if word.len() <= pwd_dir_length => word,
-            _ if word.starts_with('.') => &word[..=pwd_dir_length],
-            _ => &word[..pwd_dir_length],
+        .map(|word| -> String {
+            let chars: Vec<char> = word.chars().collect();
+            match word {
+                "" => "".to_string(),
+                _ if chars.len() <= pwd_dir_length => word.to_string(),
+                _ if word.starts_with('.') => chars[..=pwd_dir_length].iter().collect(),
+                _ => chars[..pwd_dir_length].iter().collect(),
+            }
         })
         .collect::<Vec<_>>()
         .join("/")
