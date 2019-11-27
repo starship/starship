@@ -12,7 +12,7 @@
       alt="GitHub Actions workflow status"
   /></a>
   <a href="https://crates.io/crates/starship"
-    ><img src="https://badgen.net/crates/v/starship" alt="Crates.io version"
+    ><img src="https://img.shields.io/crates/v/starship" alt="Crates.io version"
   /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
@@ -22,13 +22,13 @@
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
   <a href="#contributors">
     <img
-      src="https://badgen.net/badge/all%20contributors/42/orange"
+      src="https://img.shields.io/badge/all%20contributors-49-orange"
       alt="All Contributors"
   /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:END -->
   <a href="https://discord.gg/8Jzqu3T"
     ><img
-      src="https://badgen.net/badge/chat/on%20discord/7289da"
+      src="https://img.shields.io/discord/567163873606500352?logo=discord"
       alt="Chat on Discord"
   /></a>
 </p>
