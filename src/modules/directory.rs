@@ -1,4 +1,5 @@
 use path_slash::PathExt;
+use unicode_segmentation::UnicodeSegmentation;
 use std::path::Path;
 
 use super::{Context, Module};
@@ -183,12 +184,12 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
     components
         .into_iter()
         .map(|word| -> String {
-            let chars: Vec<char> = word.chars().collect();
+            let chars = UnicodeSegmentation::graphemes(word, true).collect::<Vec<&str>>();
             match word {
                 "" => "".to_string(),
                 _ if chars.len() <= pwd_dir_length => word.to_string(),
-                _ if word.starts_with('.') => chars[..=pwd_dir_length].iter().collect(),
-                _ => chars[..pwd_dir_length].iter().collect(),
+                _ if word.starts_with('.') => chars[..=pwd_dir_length].join(""),
+                _ => chars[..pwd_dir_length].join(""),
             }
         })
         .collect::<Vec<_>>()
