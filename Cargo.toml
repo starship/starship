@@ -35,7 +35,7 @@ pretty_env_logger = "0.3.1"
 log = "0.4.8"
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
-battery = { version = "0.7.4", optional = true }
+battery = { version = "0.7.5", optional = true }
 path-slash = "0.1.1"
 unicode-segmentation = "1.6.0"
 gethostname = "0.2.0"
