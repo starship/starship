@@ -792,7 +792,7 @@ dependencies = [
 
 [[package]]
 name = "starship"
-version = "0.26.4"
+version = "0.26.5"
 dependencies = [
  "ansi_term 0.12.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "battery 0.7.5 (registry+https://github.com/rust-lang/crates.io-index)",
