@@ -10,7 +10,7 @@
       src="https://github.com/starship/starship/workflows/Main%20workflow/badge.svg"
       alt="Workflow-Status der GitHub Actions" /></a>
   <a href="https://crates.io/crates/starship"
-    ><img src="https://badgen.net/crates/v/starship" alt="Crates.io-Version" /></a>
+    ><img src="https://img.shields.io/crates/v/starship" alt="Crates.io-Version" /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://repology.org/badge/tiny-repos/starship.svg"
@@ -19,12 +19,12 @@
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
   <a href="#contributors">
     <img
-      src="https://badgen.net/badge/all%20contributors/42/orange"
+      src="https://img.shields.io/badge/all%20contributors-49-orange"
       alt="Alle Mitwirkenden" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:END -->
   <a href="https://discord.gg/8Jzqu3T"
     ><img
-      src="https://badgen.net/badge/chat/on%20discord/7289da"
+      src="https://img.shields.io/discord/567163873606500352?logo=discord"
       alt="Auf Discord chatten" /></a>
 </p>
 
