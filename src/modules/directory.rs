@@ -1,6 +1,6 @@
 use path_slash::PathExt;
-use unicode_segmentation::UnicodeSegmentation;
 use std::path::Path;
+use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module};
 
@@ -339,8 +339,8 @@ mod tests {
 
     #[test]
     fn fish_style_with_unicode() {
-        let path = "~/starship/tmp/目录/目录";
+        let path = "~/starship/tmp/目录/a̐éö̲/目录";
         let output = to_fish_style(1, path.to_string(), "目录");
-        assert_eq!(output, "~/s/t/目/");
+        assert_eq!(output, "~/s/t/目/a̐/");
     }
 }
