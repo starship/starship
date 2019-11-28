@@ -7,6 +7,7 @@ mod directory;
 mod dotnet;
 mod env_var;
 mod git_branch;
+mod git_commit;
 mod git_state;
 mod git_status;
 mod golang;
@@ -47,6 +48,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "dotnet" => dotnet::module(context),
         "env_var" => env_var::module(context),
         "git_branch" => git_branch::module(context),
+        "git_commit" => git_commit::module(context),
         "git_state" => git_state::module(context),
         "git_status" => git_status::module(context),
         "golang" => golang::module(context),

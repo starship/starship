@@ -91,6 +91,7 @@ prompt_order = [
     "kubernetes",
     "directory",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
     "package",
@@ -435,6 +436,36 @@ The `git_branch` module shows the active branch of the repo in your current dire
 symbol = "🌱 "
 truncation_length = 4
 truncation_symbol = ""
+```
+
+
+## Git Commit
+
+The `git_commit` module shows the active branch of the repo in your current directory.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Variable    | Default   | Description                                      |
+| ------------| ----------| -------------------------------------------------|
+| `style`     | `"green"` | The style for the module.                        |
+| `prefix`    | `(`       | Prefix to display immediately before git commit. |
+| `suffix`    | `)`       | Suffix to display immediately after git commit.  |
+| `disabled`  | `true`    | Disables the `git_commit` module.                |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+disabled = false
 ```
 
 ## Git State

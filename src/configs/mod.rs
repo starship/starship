@@ -7,6 +7,7 @@ pub mod directory;
 pub mod dotnet;
 pub mod env_var;
 pub mod git_branch;
+pub mod git_commit;
 pub mod git_state;
 pub mod git_status;
 pub mod go;
