@@ -9,7 +9,7 @@
 Чтобы начать конфигурацию Starship, создайте следующий файл: `~/.config/starship.toml`.
 
 ```shell
-$ touch ~/.config/starship.toml
+$ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 Вся конфигурация Starship выполняется в этом файле [TOML](https://github.com/toml-lang/toml):
