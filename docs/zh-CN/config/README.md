@@ -9,7 +9,7 @@ Starship 目前正在开发中。 很多新的配置选项将会在之后的版�
 您需要创建配置文件 `~/.config/starship.toml` 以供 Starship 使用。
 
 ```shell
-$ touch ~/.config/starship.toml
+$ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 Starship 的所有配置都在此 [TOML](https://github.com/toml-lang/toml) 配置文件中完成：
