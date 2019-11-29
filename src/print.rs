@@ -1,10 +1,9 @@
 use clap::ArgMatches;
 use rayon::prelude::*;
-use std::fmt::Write as FmtWrite;
+use spongy::{Element, Formatter, Wrapper};
 use std::io::{self, Write};
 
 use crate::context::Context;
-use crate::module::Module;
 use crate::module::ALL_MODULES;
 use crate::modules;
 
@@ -17,51 +16,66 @@ pub fn prompt(args: ArgMatches) {
 
 pub fn get_prompt(context: Context) -> String {
     let config = context.config.get_root_config();
-    let mut buf = String::new();
+    let mut print_without_prefix = true;
+
+    let prompt = Formatter::new(config.prompt_order)
+        .into_elements()
+        .iter()
+        .map(|el: &Element| -> String {
+            match el {
+                Element::Text(t) => {
+                    if t.contains("\n") {
+                        print_without_prefix = true
+                    };
+                    t.to_owned()
+                }
+                Element::Wrapped(item) => match item.wrapper {
+                    Wrapper::DollarCurly => {
+                        // Parse query string from the item
+                        let (module_name, _query) = &item
+                            .text
+                            .find("?")
+                            .and_then(|index| {
+                                let (module_name, query_with_qmark) = item.text.split_at(index);
+                                let query = queryst::parse(query_with_qmark.get(1..).unwrap()).ok();
+                                Some((module_name, query))
+                            })
+                            .unwrap_or((&item.text, None));
+
+                        if ALL_MODULES.contains(&module_name.as_ref()) {
+                            if !context.is_module_disabled_in_config(&module_name) {
+                                if let Some(module) = modules::handle(&module_name, &context) {
+                                    return if print_without_prefix {
+                                        print_without_prefix = false;
+                                        format!("{}", module.to_string_without_prefix())
+                                    } else {
+                                        format!("{}", module)
+                                    };
+                                }
+                            }
+                        } else {
+                            log::debug!(
+                            "Expected prompt_order to contain value from {:?}. Instead received {}",
+                            ALL_MODULES,
+                            module_name,
+                            );
+                        };
+
+                        String::new()
+                    }
+                    _ => String::new(),
+                },
+            }
+        })
+        .collect::<Vec<String>>()
+        .join("");
 
     // Write a new line before the prompt
     if config.add_newline {
-        writeln!(buf).unwrap();
+        format!("\n{}", prompt)
+    } else {
+        prompt
     }
-
-    let mut prompt_order: Vec<&str> = Vec::new();
-
-    // Write out a custom prompt order
-    for module in config.prompt_order {
-        if ALL_MODULES.contains(&module) {
-            prompt_order.push(module);
-        } else {
-            log::debug!(
-                "Expected prompt_order to contain value from {:?}. Instead received {}",
-                ALL_MODULES,
-                module,
-            );
-        }
-    }
-
-    let modules = &prompt_order
-        .par_iter()
-        .filter(|module| !context.is_module_disabled_in_config(module))
-        .map(|module| modules::handle(module, &context)) // Compute modules
-        .flatten()
-        .collect::<Vec<Module>>(); // Remove segments set to `None`
-
-    let mut print_without_prefix = true;
-    let printable = modules.iter();
-
-    for module in printable {
-        // Skip printing the prefix of a module after the line_break
-        if print_without_prefix {
-            let module_without_prefix = module.to_string_without_prefix();
-            write!(buf, "{}", module_without_prefix).unwrap()
-        } else {
-            write!(buf, "{}", module).unwrap();
-        }
-
-        print_without_prefix = module.get_name() == "line_break"
-    }
-
-    buf
 }
 
 pub fn module(module_name: &str, args: ArgMatches) {
