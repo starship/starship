@@ -2,13 +2,13 @@
 
 ### What is the configuration used in the demo GIF?
 
-- **Terminal Emulator**: [iTerm2](#)
+- **Terminal Emulator**: [iTerm2](https://iterm2.com/)
   - **Theme**: Minimal
-  - **Color Scheme**: [Snazzy](#)
-  - **Font**: [Fira Code](#)
-- **Shell**: [Fish Shell](#)
-  - **Configuration**: [matchai's Dotfiles](#)
-  - **Prompt**: [Starship](#)
+  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+  - **Font**: [Fira Code](https://github.com/tonsky/FiraCode)
+- **Shell**: [Fish Shell](https://fishshell.com/)
+  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
+  - **Prompt**: [Starship](https://starship.rs/)
 
 ### Do `prompt_order` `<module>.disabled` do the same thing?
 
@@ -17,7 +17,7 @@ Yes, they can both be used to disable modules in the prompt. If all you plan to 
 - Disabling modules is more explicit than omitting them from the prompt_order
 - Newly created modules will be added to the prompt as Starship is updated
 
-### The docs say Starship is cross-shell, but it doesn't support X shell. Huh?
+### The docs say Starship is cross-shell, but it doesn't support X shell. Why?
 
 The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
 
@@ -34,7 +34,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=NUM_JOBS)"
 ```
 
-The [Bash implementation](#) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#Command-Duration) and to ensure that Starship is compatible with various Bash configurations.
+The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#Command-Duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
 
 For a list of all flags accepted by `starship prompt`, use the following command:
 
