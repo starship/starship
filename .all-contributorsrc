@@ -517,6 +517,16 @@
       "contributions": [
         "infra"
       ]
+    },
+    {
+      "login": "weirongxu",
+      "name": "Raidou",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1709861?v=4",
+      "profile": "https://github.com/weirongxu",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
