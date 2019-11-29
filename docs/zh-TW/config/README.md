@@ -9,7 +9,7 @@
 為了開始設定 Starship，請建立下右檔案： `~/.config/starship.toml`.
 
 ```shell
-$ touch ~/.config/starship.toml
+$ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 所有關於 Starship 的設定都在這個 [TOML](https://github.com/toml-lang/toml) 檔案內：
@@ -119,11 +119,12 @@ prompt_order = [
 
 ### 選項
 
-| 變數         | 預設              | 說明                 |
-| ---------- | --------------- | ------------------ |
-| `symbol`   | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。 |
-| `style`    | `"bold yellow"` | 這個模組的風格。           |
-| `disabled` | `false`         | 停用 `AWS` 模組。       |
+| 變數                | 預設              | 說明                                                                          |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☁️  "`        | 顯示在目前 AWS 配置之前的符號。                                                          |
+| `style`           | `"bold yellow"` | 這個模組的風格。                                                                    |
+| `disabled`        | `false`         | 停用 `AWS` 模組。                                                                |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 
 ### 範例
 
@@ -133,6 +134,7 @@ prompt_order = [
 [aws]
 style = "bold blue"
 symbol = "🅰 "
+displayed_items = "region"
 ```
 
 ## 電池
@@ -661,14 +663,15 @@ pure_msg = "pure shell"
 
 ### 選項
 
-| 變數                | 預設                    | 說明                            |
-| ----------------- | --------------------- | ----------------------------- |
-| `show_percentage` | `false`               | 以剩餘記憶體佔有的百分比的方式顯示記憶體使用狀況。     |
-| `show_swap`       | `true`                | 如果總 swap 使用量不為零的話，顯示 swap 使用量 |
-| `threshold`       | `75`                  | 將記憶體使用量隱藏，除非使用量超過指定值。         |
-| `symbol`          | `"🐏 "`                | 顯示在記憶體使用量之前的符號。               |
-| `style`           | `"bold dimmed white"` | 這個模組的風格。                      |
-| `disabled`        | `true`                | 停用 `memory_usage` 模組。         |
+| 變數                | 預設                    | 說明                                                            |
+| ----------------- | --------------------- | ------------------------------------------------------------- |
+| `show_percentage` | `false`               | 以剩餘記憶體佔有的百分比的方式顯示記憶體使用狀況。                                     |
+| `show_swap`       | `true`                | 如果總 swap 使用量不為零的話，顯示 swap 使用量                                 |
+| `threshold`       | `75`                  | 將記憶體使用量隱藏，除非使用量超過指定值。                                         |
+| `symbol`          | `"🐏 "`                | 顯示在記憶體使用量之前的符號。                                               |
+| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
+| `style`           | `"bold dimmed white"` | The style for the module.                                     |
+| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
 ### 範例
 
@@ -680,6 +683,7 @@ show_percentage = true
 show_swap = true
 threshold = -1
 symbol = " "
+separator = "/"
 style = "bold dimmed green"
 ```
 
@@ -775,6 +779,7 @@ symbol = "🎁 "
 - 目前資料夾中有一個 `.py` 副檔名的檔案
 - 目前資料夾中有一個 `Pipfile` 檔案
 - 目前資料夾中有一個 `tox.ini` 檔案
+- A virtual environment is currently activated
 
 ### 選項
 
