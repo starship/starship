@@ -847,8 +847,8 @@ dependencies = [
 
 [[package]]
 name = "spongy"
-version = "0.1.0"
-source = "git+https://github.com/heyrict/spongy#9a95828a9cf5dd22a9c781ebe2787b8a38276afe"
+version = "0.2.0"
+source = "git+https://github.com/heyrict/spongy"
 
 [[package]]
 name = "starship"
@@ -870,7 +870,7 @@ dependencies = [
  "queryst 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "rayon 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_json 1.0.42 (registry+https://github.com/rust-lang/crates.io-index)",
- "spongy 0.1.0 (git+https://github.com/heyrict/spongy)",
+ "spongy 0.2.0 (git+https://github.com/heyrict/spongy)",
  "starship_module_config_derive 0.1.0",
  "sysinfo 0.9.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "tempfile 3.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1236,7 +1236,7 @@ dependencies = [
 "checksum serde 1.0.102 (registry+https://github.com/rust-lang/crates.io-index)" = "0c4b39bd9b0b087684013a792c59e3e07a46a01d2322518d8a1104641a0b1be0"
 "checksum serde_json 1.0.42 (registry+https://github.com/rust-lang/crates.io-index)" = "1a3351dcbc1f067e2c92ab7c3c1f288ad1a4cffc470b5aaddb4c2e0a3ae80043"
 "checksum smallvec 0.6.13 (registry+https://github.com/rust-lang/crates.io-index)" = "f7b0758c52e15a8b5e3691eae6cc559f08eee9406e548a4477ba4e67770a82b6"
-"checksum spongy 0.1.0 (git+https://github.com/heyrict/spongy)" = "<none>"
+"checksum spongy 0.2.0 (git+https://github.com/heyrict/spongy)" = "<none>"
 "checksum static_assertions 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)" = "7f3eb36b47e512f8f1c9e3d10c2c1965bc992bd9cdb024fa581e2194501c83d3"
 "checksum strsim 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)" = "8ea5119cdb4c55b55d432abb513a0429384878c15dde60cc77b1c99de1a95a6a"
 "checksum syn 1.0.8 (registry+https://github.com/rust-lang/crates.io-index)" = "661641ea2aa15845cddeb97dad000d22070bb5c1fb456b96c1cba883ec691e92"
