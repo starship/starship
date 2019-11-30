@@ -24,7 +24,7 @@ mod ruby;
 mod rust;
 mod time;
 mod username;
-mod utils;
+pub mod utils;
 
 #[cfg(feature = "battery")]
 mod battery;

@@ -5,7 +5,7 @@ use std::io::{self, Write};
 
 use crate::context::Context;
 use crate::module::ALL_MODULES;
-use crate::modules;
+use crate::modules::{self, utils::query_parser::parse_query};
 
 pub fn prompt(args: ArgMatches) {
     let context = Context::new(args);
@@ -32,15 +32,7 @@ pub fn get_prompt(context: Context) -> String {
                 Element::Wrapped(item) => match item.wrapper {
                     Wrapper::DollarCurly => {
                         // Parse query string from the item
-                        let (module_name, _query) = &item
-                            .text
-                            .find('?')
-                            .and_then(|index| {
-                                let (module_name, query_with_qmark) = item.text.split_at(index);
-                                let query = queryst::parse(query_with_qmark.get(1..).unwrap()).ok();
-                                Some((module_name, query))
-                            })
-                            .unwrap_or((&item.text, None));
+                        let (module_name, _query) = parse_query(&item.text);
 
                         if ALL_MODULES.contains(&module_name) {
                             if !context.is_module_disabled_in_config(&module_name) {
