@@ -109,6 +109,10 @@ fi"#,
             );
             Some(script)
         }
+        Some("ion") => {
+            let script = format!("eval $({} init ion --print-full-init)", starship);
+            Some(script)
+        }
         None => {
             println!(
                 "Invalid shell name provided: {}\\n\
@@ -122,7 +126,7 @@ fi"#,
         Some(shell_basename) => {
             println!(
                 "printf \"\\n{0} is not yet supported by starship.\\n\
-                 For the time being, we support bash, zsh, and fish.\\n\
+                 For the time being, we support bash, zsh, fish and ion.\\n\
                  Please open an issue in the starship repo if you would like to \
                  see support for {0}:\\nhttps://github.com/starship/starship/issues/new\"\\n\\n",
                 shell_basename
@@ -146,6 +150,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         "zsh" => Some(ZSH_INIT),
         "fish" => Some(FISH_INIT),
         "powershell" => Some(PWSH_INIT),
+        "ion" => Some(ION_INIT),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
@@ -186,3 +191,5 @@ const ZSH_INIT: &str = include_str!("starship.zsh");
 const FISH_INIT: &str = include_str!("starship.fish");
 
 const PWSH_INIT: &str = include_str!("starship.ps1");
+
+const ION_INIT: &str = include_str!("starship.ion");

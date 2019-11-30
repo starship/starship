@@ -192,6 +192,16 @@ The prompt shows information you need while you're working, while staying sleek 
    Invoke-Expression (&starship init powershell)
    ```
 
+   #### Ion
+
+   Add the following to the end of `~/.config/ion/initrc`:
+
+   ```sh
+   # ~/.config/ion/initrc
+
+   eval $(starship init ion)
+   ```
+
 ## 🔧 Configuration
 
 For details on how to configure Starship, check out our [documentation](https://starship.rs/config/).
