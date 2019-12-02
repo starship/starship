@@ -10,7 +10,7 @@
   - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
-## Do `prompt_order` `<module>.disabled` do the same thing?
+## Do `prompt_order` and `<module>.disabled` do the same thing?
 
 Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
 
