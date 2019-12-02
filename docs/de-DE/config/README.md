@@ -91,6 +91,7 @@ prompt_order = [
     "git_branch",
     "git_state",
     "git_status",
+    "hg_branch",
     "package",
     "dotnet",
     "golang",
@@ -524,20 +525,45 @@ Das `golang`-Modul zeigt die aktuell installierte Version von Golang. Das Modul 
 symbol = "🏎💨 "
 ```
 
+## Mercurial Branch
+
+The `hg_branch` module shows the active branch of the repo in your current directory.
+
+### Optionen
+
+| Variable            | Standardwert    | Beschreibung                                                                                 |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
+| `style`             | `"bold purple"` | The style for the module.                                                                    |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[hg_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
+```
+
 ## Hostname
 
-Das `hostname`-Modul zeigt den Hostnamen des Systems an.
+The `hostname` module shows the system hostname.
 
 ### Optionen
 
 | Variable   | Standardwert          | Beschreibung                                                                                                                         |
 | ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                | Zeigt den Hostnamen nur, wenn via SSH-Sitzung verbunden.                                                                             |
-| `prefix`   | `""`                  | Prefix der unmittelbar vor dem Hostnamen angezeigt wird.                                                                             |
-| `suffix`   | `""`                  | Suffix der unmittelbar nach dem Hostnamen angezeigt wird.                                                                            |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
 | `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `style`    | `"bold dimmed green"` | Stil für dieses Modul.                                                                                                               |
-| `disabled` | `false`               | Deaktiviert das `hostname`-Modul.                                                                                                    |
+| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
+| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### Beispiel
 
@@ -546,8 +572,8 @@ Das `hostname`-Modul zeigt den Hostnamen des Systems an.
 
 [hostname]
 ssh_only = false
-prefix = "10218;"
-suffix = " 10219;"
+prefix = "⟪"
+suffix = "⟫"
 trim_at = ".companyname.com"
 disabled = false
 ```
@@ -558,12 +584,12 @@ The `jobs` module shows the current number of jobs running. The module will be s
 
 ### Optionen
 
-| Variable    | Standardwert  | Beschreibung                                                                     |
-| ----------- | ------------- | -------------------------------------------------------------------------------- |
-| `symbol`    | `"✦"`         | Symbol das vor der Anzahl der Jobs angezeigt wird.                               |
-| `threshold` | `1`           | Zeigt die Anzahl der Jobs wenn der angegebene Schwellenwert überschritten wurde. |
-| `style`     | `"bold blue"` | Stil für dieses Modul.                                                           |
-| `disabled`  | `false`       | Deaktiviert das `jobs`-Modul.                                                    |
+| Variable    | Standardwert  | Beschreibung                                          |
+| ----------- | ------------- | ----------------------------------------------------- |
+| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
+| `threshold` | `1`           | Show number of jobs if exceeded.                      |
+| `style`     | `"bold blue"` | The style for the module.                             |
+| `disabled`  | `false`       | Disables the `jobs` module.                           |
 
 ### Beispiel
 
@@ -581,17 +607,17 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
 ### Optionen
 
-| Variable   | Standardwert  | Beschreibung                                           |
-| ---------- | ------------- | ------------------------------------------------------ |
-| `symbol`   | `"☸ "`        | Symbol das vor der Cluster-Information angezeigt wird. |
-| `style`    | `"bold blue"` | Stil für dieses Modul.                                 |
-| `disabled` | `true`        | Deaktiviert das `kubernetes`-Modul                     |
+| Variable   | Standardwert  | Beschreibung                                        |
+| ---------- | ------------- | --------------------------------------------------- |
+| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
+| `style`    | `"bold blue"` | The style for the module.                           |
+| `disabled` | `true`        | Disables the `kubernetes` module                    |
 
 ### Beispiel
 
@@ -604,15 +630,15 @@ style = "dim green"
 disabled = false
 ```
 
-## Zeilenumbruch
+## Line Break
 
-Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
+The `line_break` module separates the prompt into two lines.
 
 ### Optionen
 
-| Variable   | Standardwert | Beschreibung                                                           |
-| ---------- | ------------ | ---------------------------------------------------------------------- |
-| `disabled` | `false`      | Deaktiviert das `line_break`-Modul, wodurch der Prompt einzeilig wird. |
+| Variable   | Standardwert | Beschreibung                                                       |
+| ---------- | ------------ | ------------------------------------------------------------------ |
+| `disabled` | `false`      | Disables the `line_break` module, making the prompt a single line. |
 
 ### Beispiel
 
@@ -623,19 +649,19 @@ Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
 disabled = true
 ```
 
-## Nix-Shell
+## Nix-shell
 
-Das `nix_shell`-Modul zeigt die nix-shell Umgebung an. Das Modul wird angezeigt, wenn es sich in einer nix-Shell-Umgebung befindet.
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### Optionen
 
 | Variable     | Standardwert | Beschreibung                       |
 | ------------ | ------------ | ---------------------------------- |
-| `use_name`   | `false`      | Namen der nix-Shell anzeigen.      |
-| `impure_msg` | `impure`     | Passt die "impure"-Nachricht an.   |
-| `pure_msg`   | `pure`       | Passt die "pure"-Nachricht an.     |
-| `style`      | `"bold red"` | Stil für dieses Modul.             |
-| `disabled`   | `false`      | Deaktiviert das `nix_shell`-Modul. |
+| `use_name`   | `false`      | Display the name of the nix-shell. |
+| `impure_msg` | `impure`     | Customize the "impure" msg.        |
+| `pure_msg`   | `pure`       | Customize the "pure" msg.          |
+| `style`      | `"bold red"` | The style for the module.          |
+| `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
 ### Beispiel
 
@@ -649,7 +675,7 @@ impure_msg = "impure shell"
 pure_msg = "pure shell"
 ```
 
-## Speicherauslastung
+## Memory Usage
 
 The `memory_usage` module shows current system memory and swap usage.
 
@@ -657,7 +683,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -668,7 +694,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
 | `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
 | `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`                | Symbol das vor der Speicherauslastung angezeigt wird.         |
+| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
 | `style`           | `"bold dimmed white"` | The style for the module.                                     |
 | `disabled`        | `true`                | Disables the `memory_usage` module.                           |
@@ -689,18 +715,18 @@ style = "bold dimmed green"
 
 ## Java
 
-Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `java` module shows the currently installed version of Java. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - The current directory contains a `pom.xml`, `build.gradle` or `build.sbt` file
 - The current directory contains a file with the `.java`, `.class` or `.jar` extension
 
 ### Optionen
 
-| Variable   | Standardwert   | Beschreibung                                    |
-| ---------- | -------------- | ----------------------------------------------- |
-| `symbol`   | `"☕ "`         | Symbol das vor der Java-Version angezeigt wird. |
-| `style`    | `"dimmed red"` | Stil für dieses Modul.                          |
-| `disabled` | `false`        | Deaktiviert das `Java`-Modul.                   |
+| Variable   | Standardwert   | Beschreibung                                           |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | Stil für dieses Modul.                                 |
+| `disabled` | `false`        | Disables the `java` module.                            |
 
 ### Beispiel
 
@@ -713,7 +739,7 @@ symbol = "🌟 "
 
 ## NodeJS
 
-Das `nodejs` Modul zeigt die derzeit installierte Version von NodeJS. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
 
 - Das aktuelle Verzeichnis enthält eine `package.json`-Datei
 - The current directory contains a `node_modules` directory
@@ -721,11 +747,11 @@ Das `nodejs` Modul zeigt die derzeit installierte Version von NodeJS. Das Modul 
 
 ### Optionen
 
-| Variable   | Standardwert   | Beschreibung                                      |
-| ---------- | -------------- | ------------------------------------------------- |
-| `symbol`   | `"⬢ "`         | Symbol das vor der NodeJS-Version angezeigt wird. |
-| `style`    | `"bold green"` | Stil für dieses Modul.                            |
-| `disabled` | `false`        | Deaktiviert das `nodejs`-Modul.                   |
+| Variable   | Standardwert   | Beschreibung                                             |
+| ---------- | -------------- | -------------------------------------------------------- |
+| `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
+| `style`    | `"bold green"` | Stil für dieses Modul.                                   |
+| `disabled` | `false`        | Disables the `nodejs` module.                            |
 
 ### Beispiel
 
@@ -736,7 +762,7 @@ Das `nodejs` Modul zeigt die derzeit installierte Version von NodeJS. Das Modul 
 symbol = "🤖 "
 ```
 
-## Paketversion
+## Package Version
 
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
 
@@ -748,11 +774,11 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Optionen
 
-| Variable   | Standardwert | Beschreibung                                    |
-| ---------- | ------------ | ----------------------------------------------- |
-| `symbol`   | `"📦 "`       | Symbol das vor der Paketversion angezeigt wird. |
-| `style`    | `"bold red"` | Stil für dieses Modul.                          |
-| `disabled` | `false`      | Deaktiviert das `package`-Modul.                |
+| Variable   | Standardwert | Beschreibung                                               |
+| ---------- | ------------ | ---------------------------------------------------------- |
+| `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
+| `style`    | `"bold red"` | The style for the module.                                  |
+| `disabled` | `false`      | Disables the `package` module.                             |
 
 ### Beispiel
 
@@ -771,7 +797,7 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
 
-Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.python-version` file
 - Das aktuelle Verzeichnis enthält eine `requirements.txt`-Datei
@@ -783,13 +809,13 @@ Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 ### Optionen
 
-| Variable             | Standardwert    | Beschreibung                                                        |
-| -------------------- | --------------- | ------------------------------------------------------------------- |
-| `symbol`             | `"🐍 "`          | Symbol das vor der Python-Version angezeigt wird.                   |
-| `pyenv_version_name` | `false`         | Verwende `pyenv` um die Python-Versionzu beziehen.                  |
-| `pyenv_prefix`       | `"pyenv "`      | Prefix zur Anzeige der pyenv-Version (Standard: `pyenv MY_VERSION`) |
-| `style`              | `"bold yellow"` | Stil für dieses Modul.                                              |
-| `disabled`           | `false`         | Deaktiviert das `python`-Modul.                                     |
+| Variable             | Standardwert    | Beschreibung                                                                |
+| -------------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
+| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
+| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
+| `style`              | `"bold yellow"` | The style for the module.                                                   |
+| `disabled`           | `false`         | Disables the `python` module.                                               |
 
 ### Beispiel
 
@@ -811,11 +837,11 @@ The `ruby` module shows the currently installed version of Ruby. Das Modul wird 
 
 ### Optionen
 
-| Variable   | Standardwert | Beschreibung                                    |
-| ---------- | ------------ | ----------------------------------------------- |
-| `symbol`   | `"💎 "`       | Symbol das vor der Ruby-Version angezeigt wird. |
-| `style`    | `"bold red"` | Stil für dieses Modul.                          |
-| `disabled` | `false`      | Deaktiviert das `ruby`-Modul.                   |
+| Variable   | Standardwert | Beschreibung                                           |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
+| `style`    | `"bold red"` | Stil für dieses Modul.                                 |
+| `disabled` | `false`      | Disables the `ruby` module.                            |
 
 ### Beispiel
 
@@ -828,18 +854,18 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
 
 ### Optionen
 
-| Variable   | Standardwert | Beschreibung                                    |
-| ---------- | ------------ | ----------------------------------------------- |
-| `symbol`   | `"🦀 "`       | Symbol das vor der Rust-Version angezeigt wird. |
-| `style`    | `"bold red"` | Stil für dieses Modul.                          |
-| `disabled` | `false`      | Deaktiviert das `rust`-Modul.                   |
+| Variable   | Standardwert | Beschreibung                                           |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
+| `style`    | `"bold red"` | The style for the module.                              |
+| `disabled` | `false`      | Disables the `rust` module.                            |
 
 ### Beispiel
 
@@ -850,27 +876,27 @@ The `rust` module shows the currently installed version of Rust. Das Modul wird 
 symbol = "⚙️ "
 ```
 
-## Uhrzeit
+## Time
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
 ### Optionen
 
-| Variable          | Standardwert  | Beschreibung                                                                                                                              |
-| ----------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`       | Aktiviert die Formatierung der Uhrzeit im 12-Stunden-Format.                                                                              |
-| `format`          | Siehe unten   | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html).             |
-| `style`           | `bold yellow` | Stil für dieses Modul.                                                                                                                    |
-| `disabled`        | `true`        | Deaktiviert das `time`-Modul.                                                                                                             |
-| `utc_time_offset` | `lokal`       | Legt das UTC-Offset fest, das verwendet werden soll. Reicht von -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| Variable          | Standardwert  | Beschreibung                                                                                                        |
+| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
+| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `bold yellow` | The style for the module time                                                                                       |
+| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
+| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
 
-Wird `use_12hr` auf `true` gestellt, so wird `format` automatisch auf `"%r"` gesetzt. Ansonsten ist der Standardwert hierfür `"%T"`. Wird hingegen `format` gesetzt, so überschreibt dies die Einstellung `use_12hr`.
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
 ### Beispiel
 
@@ -883,25 +909,25 @@ format = "🕙[ %T ]"
 utc_time_offset = -5
 ```
 
-## Benutzername
+## Username
 
-Das Modul `username` zeigt den Benutzernamen des aktiven Benutzers. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
 - Der aktuelle Benutzer ist root
 - Der aktuelle Benutzer ist nicht derjenige, der derzeit angemeldet ist
 - Der Benutzer ist über eine SSH-Sitzung verbunden
 - Die Variale `show_always` ist auf `true` gesetzt
 
-### Optionen
+### Options
 
-| Variable      | Standardwert    | Beschreibung                      |
-| ------------- | --------------- | --------------------------------- |
-| `style_root`  | `"bold red"`    | Stil beim root-Benutzer.          |
-| `style_user`  | `"bold yellow"` | Stil bei allen anderen Benutzern. |
-| `show_always` | `false`         | `username`-Modul immer anzeigen.  |
-| `disabled`    | `false`         | Deaktiviert das `username`-Modul. |
+| Variable      | Default         | Description                           |
+| ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`    | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `show_always` | `false`         | Always shows the `username` module.   |
+| `disabled`    | `false`         | Disables the `username` module.       |
 
-### Beispiel
+### Example
 
 ```toml
 # ~/.config/starship.toml
