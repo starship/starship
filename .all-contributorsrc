@@ -527,7 +527,19 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "rpl",
+      "name": "Luca Greco",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/11484?v=4",
+      "profile": "https://github.com/rpl",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
     }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 7,
+  "skipCi": true
 }
