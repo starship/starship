@@ -127,18 +127,11 @@ impl<'a> Module<'a> {
             .map(Segment::ansi_string)
             .collect::<Vec<ANSIString>>();
 
-        let mut ansi_strings = match shell.as_str() {
+        match shell.as_str() {
             "bash" => ansi_strings_modified(ansi_strings, shell),
             "zsh" => ansi_strings_modified(ansi_strings, shell),
             _ => ansi_strings,
-        };
-
-        /*
-        ansi_strings.insert(0, self.prefix.ansi_string());
-        ansi_strings.push(self.suffix.ansi_string());
-        */
-
-        ansi_strings
+        }
     }
 
     pub fn to_string_without_prefix(&self) -> String {

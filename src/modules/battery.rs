@@ -53,10 +53,7 @@ impl<'a> BatteryModule<'a> {
 
     fn display_style(&self, battery_status: &BatteryStatus) -> Option<Style> {
         // Parse config under `display`
-        let BatteryStatus {
-            state: _,
-            percentage,
-        } = battery_status;
+        let BatteryStatus { percentage, .. } = battery_status;
         let display_styles = &self.config.display;
         display_styles
             .iter()
@@ -65,10 +62,7 @@ impl<'a> BatteryModule<'a> {
     }
 
     fn symbol(&self, battery_status: &BatteryStatus) -> Option<&str> {
-        let BatteryStatus {
-            state,
-            percentage: _,
-        } = battery_status;
+        let BatteryStatus { state, .. } = battery_status;
 
         match state {
             battery::State::Full => Some(self.config.full_symbol),
