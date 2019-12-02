@@ -91,6 +91,7 @@ prompt_order = [
     "git_branch",
     "git_state",
     "git_status",
+    "hg_branch",
     "package",
     "dotnet",
     "golang",
@@ -524,20 +525,45 @@ deleted = "🗑"
 symbol = "🏎💨 "
 ```
 
-## 主機名稱
+## Mercurial Branch
 
-`hostname` 模組顯示系統的主機名稱。
+The `hg_branch` module shows the active branch of the repo in your current directory.
 
 ### 選項
 
-| 變數         | 預設                    | 說明                                                         |
-| ---------- | --------------------- | ---------------------------------------------------------- |
-| `ssh_only` | `true`                | 只在連接到一個 SSH session 時顯示主機名稱。                               |
-| `prefix`   | `""`                  | 在主機名稱正前方顯示的前綴。                                             |
-| `suffix`   | `""`                  | 在主機名稱正後方顯示的後綴。                                             |
-| `trim_at`  | `"."`                 | 擷取出主機名稱的斷點，以第一個符合的為準。 `"."` 會讓它停在第一個點的符號。 `""` 會停用任何的截斷功能。 |
-| `style`    | `"bold dimmed green"` | 這個模組的風格。                                                   |
-| `disabled` | `false`               | 停用 `hostname` 模組。                                          |
+| 變數                  | 預設              | 說明                                                                                           |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
+| `style`             | `"bold purple"` | The style for the module.                                                                    |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[hg_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
+```
+
+## Hostname
+
+The `hostname` module shows the system hostname.
+
+### 選項
+
+| 變數         | 預設                    | 說明                                                                                                                                   |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
+| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
+| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### 範例
 
@@ -552,18 +578,18 @@ trim_at = ".companyname.com"
 disabled = false
 ```
 
-## 工作
+## Jobs
 
-`jobs` 模組顯示現在正在執行中的工作。 這個模組只會在有背景工作正在執行時顯示。 這個模組會在工作數量超過一個，或者有設定 `threshold` 時且數量超過設定值時，顯示工作的數量。
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
 ### 選項
 
-| 變數          | 預設            | 說明             |
-| ----------- | ------------- | -------------- |
-| `symbol`    | `"✦"`         | 在顯示工作數量之前用的符號。 |
-| `threshold` | `1`           | 在超過指定值時顯示工作數量。 |
-| `style`     | `"bold blue"` | 這個模組的風格。       |
-| `disabled`  | `false`       | 停用 `jobs` 模組。  |
+| 變數          | 預設            | 說明                                                    |
+| ----------- | ------------- | ----------------------------------------------------- |
+| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
+| `threshold` | `1`           | Show number of jobs if exceeded.                      |
+| `style`     | `"bold blue"` | The style for the module.                             |
+| `disabled`  | `false`       | Disables the `jobs` module.                           |
 
 ### 範例
 
@@ -577,21 +603,21 @@ threshold = 4
 
 ## Kubernetes
 
-顯示現在 Kubernetes 主體名稱以及從 kubeconfig 檔案來的名稱空間 (如果有設定的話)。 The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. 如果有設定 `$KUBECONFIG` 環境變數，這個模組就會使用設定值；如果沒有，它就會使用 `~/.kube/config`。
+Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
 ### 選項
 
-| 變數         | 預設            | 說明                       |
-| ---------- | ------------- | ------------------------ |
-| `symbol`   | `"☸ "`        | 顯示在叢集 (cluster) 資訊之前的符號。 |
-| `style`    | `"bold blue"` | 這個模組的風格。                 |
-| `disabled` | `true`        | 停用 `kubernetes` 模組。      |
+| 變數         | 預設            | 說明                                                  |
+| ---------- | ------------- | --------------------------------------------------- |
+| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
+| `style`    | `"bold blue"` | The style for the module.                           |
+| `disabled` | `true`        | Disables the `kubernetes` module                    |
 
 ### 範例
 
@@ -604,15 +630,15 @@ style = "dim green"
 disabled = false
 ```
 
-## 換行
+## Line Break
 
-`line_break` 模組將提示字元分成兩行。
+The `line_break` module separates the prompt into two lines.
 
 ### 選項
 
-| 變數         | 預設      | 說明                            |
-| ---------- | ------- | ----------------------------- |
-| `disabled` | `false` | 停用 `line_break` 模組，讓提示字元變成一行。 |
+| 變數         | 預設      | 說明                                                                 |
+| ---------- | ------- | ------------------------------------------------------------------ |
+| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
 ### 範例
 
@@ -625,17 +651,17 @@ disabled = true
 
 ## Nix-shell
 
-`nix_shell` 模組顯示 nix-shell 環境。 這個模組會在 nix-shell 環境中顯示。
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### 選項
 
-| 變數           | 預設           | 說明                 |
-| ------------ | ------------ | ------------------ |
-| `use_name`   | `false`      | 顯示 nix-shell 的名稱。  |
-| `impure_msg` | `impure`     | 自定義「impure」訊息。     |
-| `pure_msg`   | `pure`       | 自定義「pure」訊息。       |
-| `style`      | `"bold red"` | 這個模組的風格。           |
-| `disabled`   | `false`      | 停用 `nix_shell` 模組。 |
+| 變數           | 預設           | 說明                                 |
+| ------------ | ------------ | ---------------------------------- |
+| `use_name`   | `false`      | Display the name of the nix-shell. |
+| `impure_msg` | `impure`     | Customize the "impure" msg.        |
+| `pure_msg`   | `pure`       | Customize the "pure" msg.          |
+| `style`      | `"bold red"` | The style for the module.          |
+| `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
 ### 範例
 
@@ -649,15 +675,15 @@ impure_msg = "impure shell"
 pure_msg = "pure shell"
 ```
 
-## 記憶體使用量
+## Memory Usage
 
-`memory_usage` 模組顯示現在系統記憶體與 swap 的使用量。
+The `memory_usage` module shows current system memory and swap usage.
 
-預設 swap 使用量會在系統總 swap 使用量不為 0 時顯示出來。
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -665,10 +691,10 @@ pure_msg = "pure shell"
 
 | 變數                | 預設                    | 說明                                                            |
 | ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | 以剩餘記憶體佔有的百分比的方式顯示記憶體使用狀況。                                     |
-| `show_swap`       | `true`                | 如果總 swap 使用量不為零的話，顯示 swap 使用量                                 |
-| `threshold`       | `75`                  | 將記憶體使用量隱藏，除非使用量超過指定值。                                         |
-| `symbol`          | `"🐏 "`                | 顯示在記憶體使用量之前的符號。                                               |
+| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
+| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
+| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
+| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
 | `style`           | `"bold dimmed white"` | The style for the module.                                     |
 | `disabled`        | `true`                | Disables the `memory_usage` module.                           |
@@ -689,18 +715,18 @@ style = "bold dimmed green"
 
 ## Java
 
-`java` 模組顯示現在安裝的 Java 版本。 這個模組在下列其中一個條件達成時顯示：
+The `java` module shows the currently installed version of Java. 這個模組在下列其中一個條件達成時顯示：
 
 - 現在資料夾中包含一個 `pom.xml`、`build.gradle` 或 `build.sbt` 檔案
 - 現在資料夾中包含一個檔案具有 `.java`、`.class` 或 `.jar` 副檔名
 
 ### 選項
 
-| 變數         | 預設             | 說明                |
-| ---------- | -------------- | ----------------- |
-| `symbol`   | `"☕ "`         | 顯示在 Java 版本之前的符號。 |
-| `style`    | `"dimmed red"` | 這個模組的風格。          |
-| `disabled` | `false`        | 停用 `java` 模組。     |
+| 變數         | 預設             | 說明                                                     |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | 這個模組的風格。                                               |
+| `disabled` | `false`        | Disables the `java` module.                            |
 
 ### 範例
 
@@ -713,7 +739,7 @@ symbol = "🌟 "
 
 ## NodeJS
 
-`nodejs` 模組顯示現在安裝的 NodeJS 版本。 這個模組在下列其中一個條件達成時顯示：
+The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
 
 - 現在資料夾中包含一個 `package.json` 檔案
 - 現在資料夾中包含一個 `node_modules` 資料夾
@@ -721,11 +747,11 @@ symbol = "🌟 "
 
 ### 選項
 
-| 變數         | 預設             | 說明                   |
-| ---------- | -------------- | -------------------- |
-| `symbol`   | `"⬢ "`         | 在顯示 NodeJS 版本之前用的符號。 |
-| `style`    | `"bold green"` | 這個模組的風格。             |
-| `disabled` | `false`        | 停用 `nodejs` 模組。      |
+| 變數         | 預設             | 說明                                                       |
+| ---------- | -------------- | -------------------------------------------------------- |
+| `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
+| `style`    | `"bold green"` | 這個模組的風格。                                                 |
+| `disabled` | `false`        | Disables the `nodejs` module.                            |
 
 ### 範例
 
@@ -736,9 +762,9 @@ symbol = "🌟 "
 symbol = "🤖 "
 ```
 
-## 套件版本
+## Package Version
 
-The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並顯示他的現在版本。 這個模組目前支援 `npm`、`cargo` 與 `poetry` 套件。
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
 
 - **npm** – `npm` 套件的版本是從現在資料夾中的 `package.json` 之中擷取出來的
 - **cargo** – `cargo` 套件的版本是從現在資料夾中的 `Cargo.toml` 之中擷取出來的
@@ -748,11 +774,11 @@ The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並
 
 ### 選項
 
-| 變數         | 預設           | 說明               |
-| ---------- | ------------ | ---------------- |
-| `symbol`   | `"📦 "`       | 顯示在套件的版本之前的符號。   |
-| `style`    | `"bold red"` | 這個模組的風格。         |
-| `disabled` | `false`      | 停用 `package` 模組。 |
+| 變數         | 預設           | 說明                                                         |
+| ---------- | ------------ | ---------------------------------------------------------- |
+| `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
+| `style`    | `"bold red"` | The style for the module.                                  |
+| `disabled` | `false`      | Disables the `package` module.                             |
 
 ### 範例
 
@@ -765,13 +791,13 @@ symbol = "🎁 "
 
 ## Python
 
-`python` 模組顯示現在安裝的 Python 版本
+The `python` module shows the currently installed version of Python.
 
-如果 `pyenv_version_name` 的值為 `true`, 會顯示 pyenv 內的版本名稱
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
 
-要不然就會顯示 `python -version` 的版本和有啟用的 Python 虛擬環境版本
+Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
 
-這個模組在下列任一條件時會顯示：
+The module will be shown if any of the following conditions are met:
 
 - 目前資料夾中有一個 `.python-version` 檔案
 - 目前資料夾中有一個 `requirements.txt` 檔案
@@ -783,13 +809,13 @@ symbol = "🎁 "
 
 ### 選項
 
-| 變數                   | 預設              | 說明                                            |
-| -------------------- | --------------- | --------------------------------------------- |
-| `symbol`             | `"🐍 "`          | 顯示在 Python 版本之前的符號。                           |
-| `pyenv_version_name` | `false`         | 使用 pyenv 取得 Python 的版本。                       |
-| `pyenv_prefix`       | `"pyenv "`      | 顯示在 pyenv 版本之前的前綴 (預設顯示是 `pyenv MY_VERSION`)。 |
-| `style`              | `"bold yellow"` | 這個模組的風格。                                      |
-| `disabled`           | `false`         | 停用 `python` 模組。                               |
+| 變數                   | 預設              | 說明                                                                          |
+| -------------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
+| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
+| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
+| `style`              | `"bold yellow"` | The style for the module.                                                   |
+| `disabled`           | `false`         | Disables the `python` module.                                               |
 
 ### 範例
 
@@ -804,18 +830,18 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-`ruby` 模組顯示現在安裝的 Ruby 版本。 這個模組在下列其中一個條件達成時顯示：
+The `ruby` module shows the currently installed version of Ruby. 這個模組在下列其中一個條件達成時顯示：
 
 - 目前資料夾中有一個 `Gemfile` 檔案
 - 目前資料夾中有一個 `.rb` 檔案
 
 ### 選項
 
-| 變數         | 預設           | 說明                |
-| ---------- | ------------ | ----------------- |
-| `symbol`   | `"💎 "`       | 顯示在 Ruby 版本之前的符號。 |
-| `style`    | `"bold red"` | 這個模組的風格。          |
-| `disabled` | `false`      | 停用 `ruby` 模組。     |
+| 變數         | 預設           | 說明                                                     |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
+| `style`    | `"bold red"` | 這個模組的風格。                                               |
+| `disabled` | `false`      | Disables the `ruby` module.                            |
 
 ### 範例
 
@@ -828,18 +854,18 @@ symbol = "🔺 "
 
 ## Rust
 
-`rust` 模組顯示現在安裝的 Rust 版本。 這個模組在下列其中一個條件達成時顯示：
+The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
 
 - 目前資料夾中有一個 `Cargo.toml` 檔案
 - 現在資料夾中包含一個檔案具有 `.rs` 副檔名
 
 ### 選項
 
-| 變數         | 預設           | 說明                |
-| ---------- | ------------ | ----------------- |
-| `symbol`   | `"🦀 "`       | 顯示在 Rust 版本之前的符號。 |
-| `style`    | `"bold red"` | 這個模組的風格。          |
-| `disabled` | `false`      | 停用 `rust` 模組。     |
+| 變數         | 預設           | 說明                                                     |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
+| `style`    | `"bold red"` | The style for the module.                              |
+| `disabled` | `false`      | Disables the `rust` module.                            |
 
 ### 範例
 
@@ -850,27 +876,27 @@ symbol = "🔺 "
 symbol = "⚙️ "
 ```
 
-## 時間
+## Time
 
-`time` 模組顯示目前的**當地**時間. `format` 設定值被 [`chrono`](https://crates.io/crates/chrono) crate 用來控制時間如何顯示。 請看 [chrono 的 strftime 文件](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)來了解有那些選項可以使用。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
 ### 選項
 
-| 變數                | 預設            | 說明                                                                                     |
-| ----------------- | ------------- | -------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`       | 啟用 12 小時格式。                                                                            |
-| `format`          | 請看下列          | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。 |
-| `style`           | `bold yellow` | 這個模組的時間的風格。                                                                            |
-| `disabled`        | `true`        | 停用 `time` 模組。                                                                          |
-| `utc_time_offset` | `local`       | 設定相對於 UTC 的時差。 範圍 -24 < x < 24。 允許使用浮點數來表示 30/45 分鐘時差的時區。                              |
+| 變數                | 預設            | 說明                                                                                                                  |
+| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
+| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `bold yellow` | The style for the module time                                                                                       |
+| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
+| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
 
-如果 `use_12hr` 是 `true` 的話，`format` 會被預設為 `"%r"`。 不然的話，它會被預設為 `"%T"`。 手動設定 `format` 的設定值會覆寫 `use_12hr` 的設定。
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
 ### 範例
 
@@ -883,25 +909,25 @@ format = "🕙[ %T ]"
 utc_time_offset = -5
 ```
 
-## 使用者名稱
+## Username
 
-`username` 模組顯示現在使用中的使用者名稱。 這個模組在下列其中一個條件達成時顯示：
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
 - 目前使用者為 root
 - 目前使用者並非登入時的使用者
 - 使用者透過 SSH session 進行連線
 - 變數 `show_always` 被設為 true
 
-### 選項
+### Options
 
-| 變數            | 預設              | 說明                  |
-| ------------- | --------------- | ------------------- |
-| `style_root`  | `"bold red"`    | 使用者為 root 時使用的風格。   |
-| `style_user`  | `"bold yellow"` | 非 root 使用者時使用的風格。   |
-| `show_always` | `false`         | 總是顯示 `username` 模組。 |
-| `disabled`    | `false`         | 停用 `username` 模組。   |
+| Variable      | Default         | Description                           |
+| ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`    | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `show_always` | `false`         | Always shows the `username` module.   |
+| `disabled`    | `false`         | Disables the `username` module.       |
 
-### 範例
+### Example
 
 ```toml
 # ~/.config/starship.toml
