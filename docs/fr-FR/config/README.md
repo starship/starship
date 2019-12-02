@@ -91,6 +91,7 @@ prompt_order = [
     "git_branch",
     "git_state",
     "git_status",
+    "hg_branch",
     "package",
     "dotnet",
     "golang",
@@ -524,6 +525,31 @@ The `golang` module shows the currently installed version of Golang. The module 
 symbol = "🏎💨 "
 ```
 
+## Mercurial Branch
+
+The `hg_branch` module shows the active branch of the repo in your current directory.
+
+### Options
+
+| Variable            | Default         | Description                                                                                  |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
+| `style`             | `"bold purple"` | The style for the module.                                                                    |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[hg_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
+```
+
 ## Hostname
 
 The `hostname` module shows the system hostname.
@@ -579,7 +605,7 @@ threshold = 4
 
 Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-::: remarque
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -655,7 +681,7 @@ The `memory_usage` module shows current system memory and swap usage.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
-::: remarque
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -854,7 +880,7 @@ symbol = "⚙️ "
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
-::: remarque
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
