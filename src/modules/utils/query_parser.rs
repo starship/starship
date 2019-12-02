@@ -40,6 +40,17 @@ pub fn get_percentage_char() -> &'static str {
     }
 }
 
+pub fn get_styled(query: &Option<Value>) -> Option<Segment> {
+    let value = query.as_ref()?.get("value")?.as_str()?.to_string();
+    let style = get_style_from_query(query);
+
+    Some(Segment {
+        _name: "_styled".to_string(),
+        value,
+        style,
+    })
+}
+
 pub fn format_segments<M>(
     format_str: &str,
     default_style: Option<Style>,
@@ -69,6 +80,7 @@ where
                                     style,
                                 })
                             }
+                            "styled" => get_styled(&query),
                             _ => mapper(segment_name, query),
                         }
                     }
