@@ -19,7 +19,7 @@ pub struct BatteryConfig<'a> {
 impl<'a> RootModuleConfig<'a> for BatteryConfig<'a> {
     fn new() -> Self {
         BatteryConfig {
-            format: "${symbol}${percentage}${%}",
+            format: "${symbol}${percentage}${%} ",
             full_symbol: "•",
             charging_symbol: "↑",
             discharging_symbol: "↓",
