@@ -61,6 +61,11 @@ RUN mkdir -p "$DOTNET_HOME" \
 ENV PATH $DOTNET_HOME:$PATH
 RUN dotnet help
 
+# Install Mercurial
+RUN HGPYTHON3=1 pip install mercurial
+# Check that Mercurial was correctly installed
+RUN hg --version
+
 # Create blank project
 RUN USER=nonroot cargo new --bin /src/starship
 WORKDIR /src/starship

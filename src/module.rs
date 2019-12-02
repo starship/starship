@@ -21,6 +21,7 @@ pub const ALL_MODULES: &[&str] = &[
     "git_state",
     "git_status",
     "golang",
+    "hg_branch",
     "hostname",
     "java",
     "jobs",
