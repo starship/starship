@@ -1,4 +1,5 @@
 // While adding out new module add out module to src/module.rs ALL_MODULES const array also.
+
 mod aws;
 mod character;
 mod cmd_duration;
@@ -24,6 +25,7 @@ mod ruby;
 mod rust;
 mod time;
 mod username;
+
 pub mod utils;
 
 #[cfg(feature = "battery")]
@@ -39,7 +41,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         // Default ordering is handled in configs/mod.rs
         "aws" => aws::module(context),
         #[cfg(feature = "battery")]
-        "battery" => battery::module(context),
+        "battery" => battery::BatteryModule::new(context).module(),
         "character" => character::module(context),
         "cmd_duration" => cmd_duration::module(context),
         "conda" => conda::module(context),

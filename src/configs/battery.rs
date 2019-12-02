@@ -5,11 +5,12 @@ use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct BatteryConfig<'a> {
-    pub full_symbol: SegmentConfig<'a>,
-    pub charging_symbol: SegmentConfig<'a>,
-    pub discharging_symbol: SegmentConfig<'a>,
-    pub unknown_symbol: Option<SegmentConfig<'a>>,
-    pub empty_symbol: Option<SegmentConfig<'a>>,
+    pub format: &'a str,
+    pub full_symbol: &'a str,
+    pub charging_symbol: &'a str,
+    pub discharging_symbol: &'a str,
+    pub unknown_symbol: Option<&'a str>,
+    pub empty_symbol: Option<&'a str>,
     pub display: Vec<BatteryDisplayConfig>,
     pub disabled: bool,
     pub percentage: SegmentConfig<'a>,
@@ -18,9 +19,10 @@ pub struct BatteryConfig<'a> {
 impl<'a> RootModuleConfig<'a> for BatteryConfig<'a> {
     fn new() -> Self {
         BatteryConfig {
-            full_symbol: SegmentConfig::new("•"),
-            charging_symbol: SegmentConfig::new("↑"),
-            discharging_symbol: SegmentConfig::new("↓"),
+            format: "${symbol}${percentage}${%}",
+            full_symbol: "•",
+            charging_symbol: "↑",
+            discharging_symbol: "↓",
             unknown_symbol: None,
             empty_symbol: None,
             display: vec![BatteryDisplayConfig {

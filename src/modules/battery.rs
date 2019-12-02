@@ -1,75 +1,89 @@
+use super::utils::query_parser::*;
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::battery::BatteryConfig;
+use crate::segment::Segment;
+use ansi_term::Style;
 
 /// Creates a module for the battery percentage and charging state
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    // TODO: Update when v1.0 printing refactor is implemented to only
-    // print escapes in a prompt context.
-    let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
-    let percentage_char = match shell.as_str() {
-        "zsh" => "%%", // % is an escape in zsh, see PROMPT in `man zshmisc`
-        "powershell" => "`%",
-        _ => "%",
-    };
+pub struct BatteryModule<'a> {
+    module: Module<'a>,
+    config: BatteryConfig<'a>,
+}
 
-    let battery_status = get_battery_status()?;
-    let BatteryStatus { state, percentage } = battery_status;
+impl<'a> BatteryModule<'a> {
+    pub fn new(context: &'a Context) -> Self {
+        let module = context.new_module("battery");
+        let config = BatteryConfig::try_load(module.config);
 
-    let mut module = context.new_module("battery");
-    let battery_config: BatteryConfig = BatteryConfig::try_load(module.config);
+        BatteryModule { module, config }
+    }
 
-    // Parse config under `display`
-    let display_styles = &battery_config.display;
-    let display_style = display_styles
-        .iter()
-        .find(|display_style| percentage <= display_style.threshold as f32);
+    pub fn module(mut self) -> Option<Module<'a>> {
+        let battery_status = get_battery_status()?;
 
-    if let Some(display_style) = display_style {
         // Set style based on percentage
-        module.set_style(display_style.style);
-        module.get_prefix().set_value("");
+        let module_style = self.display_style(&battery_status);
+
+        let segments: Vec<Segment> =
+            format_segments(self.config.format, module_style, |name, query| {
+                let style = get_style_from_query(&query).or(module_style);
+                match name {
+                    "symbol" => self.symbol(&battery_status).map(|value| Segment {
+                        _name: "symbol".to_string(),
+                        value: value.to_string(),
+                        style,
+                    }),
+                    "percentage" => {
+                        let percentage = battery_status.percentage.round().to_string();
+                        Some(Segment {
+                            _name: "percentage".to_string(),
+                            value: percentage,
+                            style,
+                        })
+                    }
+                    _ => None,
+                }
+            })
+            .ok()?;
+
+        self.module.set_segments(segments);
+
+        Some(self.module)
+    }
+
+    fn display_style(&self, battery_status: &BatteryStatus) -> Option<Style> {
+        // Parse config under `display`
+        let BatteryStatus {
+            state: _,
+            percentage,
+        } = battery_status;
+        let display_styles = &self.config.display;
+        display_styles
+            .iter()
+            .find(|display_style| *percentage <= display_style.threshold as f32)
+            .map(|display_style| display_style.style)
+    }
+
+    fn symbol(&self, battery_status: &BatteryStatus) -> Option<&str> {
+        let BatteryStatus {
+            state,
+            percentage: _,
+        } = battery_status;
 
         match state {
-            battery::State::Full => {
-                module.create_segment("full_symbol", &battery_config.full_symbol);
-            }
-            battery::State::Charging => {
-                module.create_segment("charging_symbol", &battery_config.charging_symbol);
-            }
-            battery::State::Discharging => {
-                module.create_segment("discharging_symbol", &battery_config.discharging_symbol);
-            }
+            battery::State::Full => Some(self.config.full_symbol),
+            battery::State::Charging => Some(self.config.charging_symbol),
+            battery::State::Discharging => Some(self.config.discharging_symbol),
             battery::State::Unknown => {
                 log::debug!("Unknown detected");
-                if let Some(unknown_symbol) = battery_config.unknown_symbol {
-                    module.create_segment("unknown_symbol", &unknown_symbol);
-                }
+                self.config.unknown_symbol
             }
-            battery::State::Empty => {
-                if let Some(empty_symbol) = battery_config.empty_symbol {
-                    module.create_segment("empty_symbol", &empty_symbol);
-                }
-            }
+            battery::State::Empty => self.config.empty_symbol,
             _ => {
                 log::debug!("Unhandled battery state `{}`", state);
-                return None;
+                None
             }
         }
-
-        let mut percent_string = Vec::<String>::with_capacity(2);
-        // Round the percentage to a whole number
-        percent_string.push(percentage.round().to_string());
-        percent_string.push(percentage_char.to_string());
-        module.create_segment(
-            "percentage",
-            &battery_config
-                .percentage
-                .with_value(percent_string.join("").as_ref()),
-        );
-
-        Some(module)
-    } else {
-        None
     }
 }
 

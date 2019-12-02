@@ -82,6 +82,10 @@ impl<'a> Module<'a> {
         self.segments.last_mut().unwrap()
     }
 
+    pub fn set_segments(&mut self, segments: Vec<Segment>) {
+        self.segments = segments;
+    }
+
     /// Get module's name
     pub fn get_name(&self) -> &String {
         &self._name
@@ -129,8 +133,10 @@ impl<'a> Module<'a> {
             _ => ansi_strings,
         };
 
+        /*
         ansi_strings.insert(0, self.prefix.ansi_string());
         ansi_strings.push(self.suffix.ansi_string());
+        */
 
         ansi_strings
     }

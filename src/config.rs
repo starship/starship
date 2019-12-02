@@ -272,7 +272,7 @@ impl Default for SegmentConfig<'static> {
  - 'italic'
  - '<color>'        (see the parse_color_string doc for valid color strings)
 */
-fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
+pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
     style_string
         .split_whitespace()
         .fold(Some(ansi_term::Style::new()), |maybe_style, token| {
