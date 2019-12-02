@@ -1,6 +1,6 @@
-use super::utils::query_parser::parse_query;
-use super::{Context, Module, SegmentConfig};
-use spongy::{parse_with, Item, Wrapper};
+use super::utils::query_parser::*;
+use super::{Context, Module};
+use crate::segment::Segment;
 
 use crate::config::RootModuleConfig;
 use crate::configs::cmd_duration::CmdDurationConfig;
@@ -37,23 +37,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         _ => config.style,
     };
 
-    let cmd_duration_stacked = parse_with(config.format, |item: &Item| -> Option<String> {
-        match item.wrapper {
-            Wrapper::DollarCurly => {
-                let (segment, _query) = parse_query(&item.text);
-                match segment {
-                    "duration" => Some(render_time(elapsed)),
-                    _ => None,
-                }
+    let segments: Vec<Segment> =
+        format_segments(config.format, Some(module_color), |name, query| {
+            let style = get_style_from_query(&query);
+            match name {
+                "duration" => Some(Segment {
+                    _name: "duration".to_string(),
+                    value: render_time(elapsed),
+                    style,
+                }),
+                _ => None,
             }
-            _ => None,
-        }
-    })
-    .ok()?;
+        })
+        .ok()?;
 
-    module.set_style(module_color);
-    module.create_segment("cmd_duration", &SegmentConfig::new(&cmd_duration_stacked));
-    module.get_prefix().set_value("");
+    module.set_segments(segments);
 
     Some(module)
 }
