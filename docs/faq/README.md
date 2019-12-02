@@ -1,6 +1,6 @@
-## FAQ
+# FAQ
 
-### What is the configuration used in the demo GIF?
+## What is the configuration used in the demo GIF?
 
 - **Terminal Emulator**: [iTerm2](https://iterm2.com/)
   - **Theme**: Minimal
@@ -10,14 +10,14 @@
   - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
-### Do `prompt_order` `<module>.disabled` do the same thing?
+## Do `prompt_order` `<module>.disabled` do the same thing?
 
 Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
 
 - Disabling modules is more explicit than omitting them from the prompt_order
 - Newly created modules will be added to the prompt as Starship is updated
 
-### The docs say Starship is cross-shell, but it doesn't support X shell. Why?
+## The docs say Starship is cross-shell, but it doesn't support X shell. Why?
 
 The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
 
