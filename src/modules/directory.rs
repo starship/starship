@@ -4,8 +4,10 @@ use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module};
 
-use crate::config::{RootModuleConfig, SegmentConfig};
+use crate::config::RootModuleConfig;
 use crate::configs::directory::DirectoryConfig;
+use crate::modules::utils::query_parser::*;
+use crate::segment::Segment;
 
 /// Creates a module with the current directory
 ///
@@ -22,8 +24,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
-
-    module.set_style(config.style);
 
     // Using environment PWD is the standard approach for determining logical path
     // If this is None for any reason, we fall back to reading the os-provided path
@@ -63,7 +63,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Truncate the dir string to the maximum number of path components
     let truncated_dir_string = truncate(dir_string, config.truncation_length as usize);
 
-    if config.fish_style_pwd_dir_length > 0 {
+    let path = if config.fish_style_pwd_dir_length > 0 {
         // If user is using fish style path, we need to add the segment first
         let contracted_home_dir = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
         let fish_style_dir = to_fish_style(
@@ -72,24 +72,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             &truncated_dir_string,
         );
 
-        module.create_segment(
-            "path",
-            &SegmentConfig {
-                value: &fish_style_dir,
-                style: None,
-            },
-        );
-    }
+        fish_style_dir + &truncated_dir_string
+    } else {
+        truncated_dir_string
+    };
 
-    module.create_segment(
-        "path",
-        &SegmentConfig {
-            value: &truncated_dir_string,
-            style: None,
-        },
-    );
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "path" => Some(Segment {
+                _name: "path".to_string(),
+                value: path.clone(),
+                style,
+            }),
+            _ => None,
+        }
+    })
+    .ok()?;
 
-    module.get_prefix().set_value("in ");
+    module.set_segments(segments);
 
     Some(module)
 }
