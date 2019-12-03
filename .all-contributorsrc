@@ -538,6 +538,15 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "lucarin91",
+      "name": "Luca Rinaldi",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/6934358?v=4",
+      "profile": "https://lucar.in",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
