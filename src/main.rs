@@ -62,6 +62,13 @@ fn main() {
         .help("The number of currently running jobs")
         .takes_value(true);
 
+    let max_length_arg = Arg::with_name("max_length")
+        .short("m")
+        .long("max-length")
+        .value_name("MAX_LENGTH")
+        .help("The maximum length of first prompt line")
+        .takes_value(true);
+
     let init_scripts_arg = Arg::with_name("print_full_init")
         .long("print-full-init")
         .help("Print the main initialization script (as opposed to the init stub)");

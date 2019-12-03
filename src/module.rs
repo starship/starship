@@ -96,6 +96,21 @@ impl<'a> Module<'a> {
         self.segments.iter().all(|segment| segment.is_empty())
     }
 
+    /// Total number of character in the module
+    pub fn segments_len(&self) -> usize {
+        self.segments.iter()
+            .fold(0, |acc, curr| acc + curr.value().chars().count())
+        + self.prefix.value.chars().count()
+        + self.suffix.value.chars().count()
+    }
+
+    /// Total number of character in the module, excluding the prefix
+    pub fn segments_len_without_prefix(&self) -> usize {
+        self.segments.iter()
+            .fold(0, |acc, curr| acc + curr.value().chars().count())
+            + self.suffix.value.chars().count()
+    }
+
     /// Get the module's prefix
     pub fn get_prefix(&mut self) -> &mut Affix {
         &mut self.prefix

@@ -39,6 +39,11 @@ pub fn get_prompt(context: Context) -> String {
         }
     }
 
+    let max_len = context.properties
+        .get("max_length")
+        .and_then(|value| { value.trim().parse::<usize>().ok() })
+        .unwrap_or(0);
+
     let modules = &prompt_order
         .par_iter()
         .filter(|module| !context.is_module_disabled_in_config(module))
@@ -49,13 +54,28 @@ pub fn get_prompt(context: Context) -> String {
     let mut print_without_prefix = true;
     let printable = modules.iter();
 
+    let mut segments_len = 0usize;
+
     for module in printable {
         // Skip printing the prefix of a module after the line_break
-        if print_without_prefix {
-            let module_without_prefix = module.to_string_without_prefix();
-            write!(buf, "{}", module_without_prefix).unwrap()
+        let len = if print_without_prefix {
+            segments_len = 0;
+            module.segments_len_without_prefix()
         } else {
-            write!(buf, "{}", module).unwrap();
+            module.segments_len()
+        };
+
+        if max_len == 0 ||
+            module.get_name() == "line_break" ||
+            segments_len + len < max_len - 1 {
+
+            if print_without_prefix {
+                write!(buf, "{}", module.to_string_without_prefix()).unwrap();
+            } else {
+                write!(buf, "{}", module).unwrap();
+            }
+
+            segments_len += len;
         }
 
         print_without_prefix = module.get_name() == "line_break"
