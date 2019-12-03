@@ -17,7 +17,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
             // NOTE: If this const value is changed then Default prompt order subheading inside
             // prompt heading of config docs needs to be updated according to changes made here.
             prompt_order: "${username}${hostname}${kubernetes}${directory} \
-                           ${git_branch}${git_state}${git_status} \
+                           ${git_branch}${git_state}${git_status}${hg_branch} \
                            ${package}${dotnet}${golang}${java} \
                            ${nodejs}${python}${ruby}${rust} \
                            ${nix_shell}${conda}${memory_usage}${aws} \

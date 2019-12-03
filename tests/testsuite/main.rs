@@ -11,6 +11,7 @@ mod git_branch;
 mod git_state;
 mod git_status;
 mod golang;
+mod hg_branch;
 mod hostname;
 mod jobs;
 mod line_break;
