@@ -1,13 +1,14 @@
-use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
+use crate::config::{ModuleConfig, RootModuleConfig};
 
 use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct CharacterConfig<'a> {
-    pub symbol: SegmentConfig<'a>,
-    pub error_symbol: SegmentConfig<'a>,
-    pub vicmd_symbol: SegmentConfig<'a>,
+    pub format: &'a str,
+    pub symbol: &'a str,
+    pub error_symbol: &'a str,
+    pub vicmd_symbol: &'a str,
     pub use_symbol_for_status: bool,
     pub style_success: Style,
     pub style_failure: Style,
@@ -17,9 +18,10 @@ pub struct CharacterConfig<'a> {
 impl<'a> RootModuleConfig<'a> for CharacterConfig<'a> {
     fn new() -> Self {
         CharacterConfig {
-            symbol: SegmentConfig::new("❯"),
-            error_symbol: SegmentConfig::new("✖"),
-            vicmd_symbol: SegmentConfig::new("❮"),
+            format: "${prompt_symbol} ",
+            symbol: "❯",
+            error_symbol: "✖",
+            vicmd_symbol: "❮",
             use_symbol_for_status: false,
             style_success: Color::Green.bold(),
             style_failure: Color::Red.bold(),

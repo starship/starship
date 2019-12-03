@@ -1,6 +1,8 @@
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::character::CharacterConfig;
+use crate::modules::utils::query_parser::*;
+use crate::segment::Segment;
 
 /// Creates a module for the prompt character
 ///
@@ -40,22 +42,37 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         _ => ASSUMED_MODE,
     };
 
-    if exit_success {
-        module.set_style(config.style_success);
+    let symbol_style = if exit_success {
+        config.style_success
     } else {
-        module.set_style(config.style_failure);
+        config.style_failure
     };
 
     /* If an error symbol is set in the config, use symbols to indicate
     success/failure, in addition to color */
-    if config.use_symbol_for_status && !exit_success {
-        module.create_segment("error_symbol", &config.error_symbol)
+    let prompt_symbol = if config.use_symbol_for_status && !exit_success {
+        &config.error_symbol
     } else {
         match mode {
-            ShellEditMode::Normal => module.create_segment("vicmd_symbol", &config.vicmd_symbol),
-            ShellEditMode::Insert => module.create_segment("symbol", &config.symbol),
+            ShellEditMode::Normal => &config.vicmd_symbol,
+            ShellEditMode::Insert => &config.symbol,
         }
     };
+
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query).or(Some(symbol_style));
+        match name {
+            "prompt_symbol" => Some(Segment {
+                _name: "prompt_symbol".to_string(),
+                value: prompt_symbol.to_string(),
+                style,
+            }),
+            _ => None,
+        }
+    })
+    .ok()?;
+
+    module.set_segments(segments);
 
     Some(module)
 }
