@@ -148,13 +148,14 @@ The module is only visible when the device's battery is below 10%.
 
 ### Options
 
-| Variable             | Default                  | Description                                       |
-| -------------------- | ------------------------ | ------------------------------------------------- |
-| `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
-| `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
-| `display`            | [link](#battery-display) | Display threshold and style for the module.       |
-| `disabled`           | `false`                  | Disables the `battery` module.                    |
+| Variable             | Default                       | Description                                       |
+| -------------------- | ----------------------------- | ------------------------------------------------- |
+| `format`             | `${symbol}${percentage}${%} ` | Display format for battery.                       |
+| `full_symbol`        | `"•"`                         | The symbol shown when the battery is full.        |
+| `charging_symbol`    | `"⇡"`                         | The symbol shown when the battery is charging.    |
+| `discharging_symbol` | `"⇣"`                         | The symbol shown when the battery is discharging. |
+| `display`            | [link](#battery-display)      | Display threshold and style for the module.       |
+| `disabled`           | `false`                       | Disables the `battery` module.                    |
 
 <details>
 <summary>There are also options for some uncommon battery states.</summary>
@@ -266,12 +267,12 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Variable   | Default         | Description                                                |
-| ---------- | --------------- | ---------------------------------------------------------- |
-| `min_time` | `2`             | Shortest duration to show time for.                        |
-| `prefix`   | `took`          | Prefix to display immediately before the command duration. |
-| `style`    | `"bold yellow"` | The style for the module.                                  |
-| `disabled` | `false`         | Disables the `cmd_duration` module.                        |
+| Variable   | Default            | Description                                                |
+| ---------- | ------------------ | ---------------------------------------------------------- |
+| `format`   | `took ${duration}` | Display format for cmd_duration.                           |
+| `min_time` | `2`                | Shortest duration to show time for.                        |
+| `style`    | `"bold yellow"`    | The style for the module.                                  |
+| `disabled` | `false`            | Disables the `cmd_duration` module.                        |
 
 ### Example
 
@@ -280,7 +281,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 [cmd_duration]
 min_time = 4
-prefix = "underwent "
+format = "underwent ${duration}"
 ```
 
 ## Conda
