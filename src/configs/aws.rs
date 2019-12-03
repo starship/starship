@@ -1,6 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
-
-use ansi_term::{Color, Style};
+use crate::config::{ModuleConfig, RootModuleConfig};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, PartialEq)]
@@ -12,10 +10,7 @@ pub enum AwsItems {
 
 #[derive(Clone, ModuleConfig)]
 pub struct AwsConfig<'a> {
-    pub symbol: SegmentConfig<'a>,
-    pub profile: SegmentConfig<'a>,
-    pub region: SegmentConfig<'a>,
-    pub style: Style,
+    pub format: &'a str,
     pub disabled: bool,
     pub displayed_items: AwsItems,
 }
@@ -23,10 +18,7 @@ pub struct AwsConfig<'a> {
 impl<'a> RootModuleConfig<'a> for AwsConfig<'a> {
     fn new() -> Self {
         AwsConfig {
-            symbol: SegmentConfig::new("☁️  "),
-            profile: SegmentConfig::default(),
-            region: SegmentConfig::default(),
-            style: Color::Yellow.bold(),
+            format: "on ${styled?value=☁️  &style=yellow bold}${items?style=yellow bold} ",
             disabled: false,
             displayed_items: AwsItems::All,
         }

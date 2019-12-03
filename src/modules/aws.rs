@@ -9,6 +9,8 @@ use dirs::home_dir;
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::aws::{AwsConfig, AwsItems};
+use crate::modules::utils::query_parser::*;
+use crate::segment::Segment;
 
 type Profile = String;
 type Region = String;
@@ -77,39 +79,38 @@ fn get_aws_region() -> Option<Region> {
 }
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    const AWS_PREFIX: &str = "on ";
-
     let mut module = context.new_module("aws");
     let config: AwsConfig = AwsConfig::try_load(module.config);
 
-    module.set_style(config.style);
-
-    module.get_prefix().set_value(AWS_PREFIX);
-
-    module.create_segment("symbol", &config.symbol);
-    match config.displayed_items {
+    let items = match config.displayed_items {
         AwsItems::All => {
             let (aws_profile, aws_region) = get_aws_profile_and_region();
 
-            let aws_segment = match (&aws_profile, &aws_region) {
+            match (&aws_profile, &aws_region) {
                 (None, None) => return None,
                 (Some(p), Some(r)) => format!("{}({})", p, r),
                 (Some(p), None) => p.to_string(),
                 (None, Some(r)) => r.to_string(),
-            };
-            module.create_segment("all", &config.region.with_value(&aws_segment));
+            }
         }
-        AwsItems::Profile => {
-            let aws_profile = env::var("AWS_PROFILE").ok()?;
-
-            module.create_segment("profile", &config.profile.with_value(&aws_profile));
-        }
-        AwsItems::Region => {
-            let aws_region = get_aws_region()?;
-
-            module.create_segment("region", &config.region.with_value(&aws_region));
-        }
+        AwsItems::Profile => env::var("AWS_PROFILE").ok()?,
+        AwsItems::Region => get_aws_region()?,
     };
+
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "items" => Some(Segment {
+                _name: "items".to_string(),
+                value: items.clone(),
+                style,
+            }),
+            _ => None,
+        }
+    })
+    .ok()?;
+
+    module.set_segments(segments);
 
     Some(module)
 }
