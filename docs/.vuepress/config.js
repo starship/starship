@@ -2,7 +2,7 @@ module.exports = {
   locales: {
     "/": {
       lang: "en-US",
-      title: "Starship",
+      title: "Starship: cross-shell-prompt ",
       description: "The cross-shell prompt for astronauts"
     },
     "/ja-JP/": {
@@ -18,12 +18,13 @@ module.exports = {
   },
   head: [
     ["link", { rel: "icon", href: "/icon.png" }],
+    ["meta", { name: "description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, and Powershell." }],
     ["meta", { property: "og:title", content: "Starship" }],
     [
       "meta",
       {
         property: "og:description",
-        content: "The cross-shell prompt for astronauts"
+        content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, and Powershell."
       }
     ],
     ["meta", { property: "og:type", content: "website" }],
@@ -31,7 +32,8 @@ module.exports = {
     ["meta", { property: "og:image", content: "https://starship.rs/logo.png" }],
     ["meta", { name: "twitter:card", content: "summary"}],
     ["meta", { name: "twitter:title", content: "Starship"}],
-    ["meta", { name: "twitter:image", content: "https://starship.rs/logo.png"}],
+    ["meta", { name: "twitter:description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, and Powershell.Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, and Powershell."}],
+    ["meta", { name: "twitter:image", content: "https://starship.rs/icon.png"}],
     ["meta", { name: "twitter:alt", content: "Starship: cross-shell prompt"}],
   ],
   themeConfig: {
