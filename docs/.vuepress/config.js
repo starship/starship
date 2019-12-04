@@ -19,7 +19,7 @@ module.exports = {
   head: [
     ["link", { rel: "icon", href: "/icon.png" }],
     ["meta", { name: "description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, and Powershell." }],
-    ["meta", { property: "og:title", content: "Starship" }],
+    ["meta", { property: "og:title", content: "Starship: Cross-Shell Prompt" }],
     [
       "meta",
       {
