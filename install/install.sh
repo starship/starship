@@ -130,7 +130,7 @@ detect_arch() {
 
 confirm() {
   if [ -z "${FORCE-}" ]; then
-    printf "${MAGENTA}?${NO_COLOR} $@ ${BOLD}[yN]${NO_COLOR} "
+    printf "${MAGENTA}?${NO_COLOR} $@ ${BOLD}[y/N]${NO_COLOR} "
     set +e
     read yn < /dev/tty
     rc=$?
