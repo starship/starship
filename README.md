@@ -39,27 +39,27 @@
   <a href="https://github.com/starship/starship/blob/master/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png" alt="English"
   /></a>
-  &#0020;
+  &nbsp;
   <a href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png" alt="日本語"
   /></a>
-  &#0020;
+  &nbsp;
   <a href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png" alt="繁體中文"
   /></a>
-  &#0020;
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/zh-CN"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png" alt="简体中文"
   /></a>
-  &#0020;
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/de"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png" alt="Deutsch"
   /></a>
-  &#0020;
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/fr"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png" alt="Français"
   /></a>
-  &#0020;
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/ru"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Русский"
   /></a>
