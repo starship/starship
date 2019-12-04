@@ -32,7 +32,7 @@ module.exports = {
     ["meta", { name: "twitter:card", content: "summary"}],
     ["meta", { name: "twitter:title", content: "Starship"}],
     ["meta", { name: "twitter:image", content: "https://starship.rs/logo.png"}],
-    ["meta", { name: "twitter:alt", content: "Starship: Cross-shell prompt"}],
+    ["meta", { name: "twitter:alt", content: "Starship: cross-shell prompt"}],
   ],
   themeConfig: {
     logo: "/icon.png",
