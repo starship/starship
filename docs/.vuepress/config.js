@@ -2,17 +2,17 @@ module.exports = {
   locales: {
     "/": {
       lang: "en-US",
-      title: "Starship: cross-shell-prompt ",
+      title: "Starship: Cross-Shell Prompt",
       description: "The cross-shell prompt for astronauts"
     },
     "/ja-JP/": {
       lang: "ja-JP",
-      title: "Starship",
+      title: "Starship: Cross-Shell Prompt",
       description: "The cross-shell prompt for astronauts"
     },
     "/zh-TW/": {
       lang: "zh-TW",
-      title: "Starship",
+      title: "Starship: Cross-Shell Prompt",
       description: "The cross-shell prompt for astronauts"
     }
   },
