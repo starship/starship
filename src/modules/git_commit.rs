@@ -32,9 +32,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let commit_oid = head_commit.id();
     module.create_segment(
         "hash",
-        &config
-            .hash
-            .with_value(&id_to_hex_abbrev(commit_oid.as_bytes(), 7)),
+        &config.hash.with_value(&id_to_hex_abbrev(
+            commit_oid.as_bytes(),
+            config.min_commit_hash_length,
+        )),
     );
 
     Some(module)

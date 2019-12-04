@@ -10,6 +10,7 @@ pub struct GitCommitConfig<'a> {
     pub suffix: &'a str,
     pub style: Style,
     pub disabled: bool,
+    pub min_commit_hash_length: usize,
 }
 
 impl<'a> RootModuleConfig<'a> for GitCommitConfig<'a> {
@@ -20,6 +21,8 @@ impl<'a> RootModuleConfig<'a> for GitCommitConfig<'a> {
             suffix: ") ",
             style: Color::Green.bold(),
             disabled: true,
+            // be consistent with git by default, which has DEFAULT_ABBREV set to 7
+            min_commit_hash_length: 7,
         }
     }
 }
