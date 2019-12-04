@@ -30,26 +30,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let config_min = config.min_time as u64;
+    if elapsed < config.min_time as u64 {
+        return None;
+    }
 
-    let module_color = match elapsed {
-        time if time < config_min => return None,
-        _ => config.style,
-    };
-
-    let segments: Vec<Segment> =
-        format_segments(config.format, Some(module_color), |name, query| {
-            let style = get_style_from_query(&query);
-            match name {
-                "duration" => Some(Segment {
-                    _name: "duration".to_string(),
-                    value: render_time(elapsed),
-                    style,
-                }),
-                _ => None,
-            }
-        })
-        .ok()?;
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "duration" => Some(Segment {
+                _name: "duration".to_string(),
+                value: render_time(elapsed),
+                style,
+            }),
+            _ => None,
+        }
+    })
+    .ok()?;
 
     module.set_segments(segments);
 
