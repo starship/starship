@@ -27,8 +27,12 @@ module.exports = {
       }
     ],
     ["meta", { property: "og:type", content: "website" }],
-    ["meta", { property: "og:url", content: "http://starship.rs/" }],
-    ["meta", { property: "og:image", content: "http://starship.rs/logo.svg" }]
+    ["meta", { property: "og:url", content: "https://starship.rs/" }],
+    ["meta", { property: "og:image", content: "https://starship.rs/logo.png" }],
+    ["meta", { name: "twitter:card", content: "summary"}],
+    ["meta", { name: "twitter:title", content: "Starship"}],
+    ["meta", { name: "twitter:image", content: "https://starship.rs/logo.png"}],
+    ["meta", { name: "twitter:alt", content: "Starship: Cross-shell prompt"}],
   ],
   themeConfig: {
     logo: "/icon.png",
