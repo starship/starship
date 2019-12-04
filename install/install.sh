@@ -1,5 +1,25 @@
 #!/bin/bash
 
+# Options
+#
+#   -V, --verbose
+#     Enable verbose output for the installer
+#
+#   -f, -y, --force, --yes
+#     Skip the confirmation prompt during installation
+#
+#   -p, --platform
+#     Override the platform identified by the installer
+#
+#   -b, --bin-dir
+#     Override the bin installation directory
+#
+#   -a, --arch
+#     Override the architecture identified by the installer
+#
+#   -B, --base-url
+#     Override the base URL used for downloading releases
+
 set -euo pipefail
 printf "\n"
 
@@ -165,17 +185,17 @@ fi
 while [ "$#" -gt 0 ]; do
   case "$1" in
     -p|--platform) PLATFORM="$2"; shift 2;;
-    -B|--bin-dir) BIN_DIR="$2"; shift 2;;
+    -b|--bin-dir) BIN_DIR="$2"; shift 2;;
     -a|--arch) ARCH="$2"; shift 2;;
-    -b|--base-url) BASE_URL="$2"; shift 2;;
+    -B|--base-url) BASE_URL="$2"; shift 2;;
 
     -V|--verbose) VERBOSE=1; shift 1;;
     -f|-y|--force|--yes) FORCE=1; shift 1;;
 
     -p=*|--platform=*) PLATFORM="${1#*=}"; shift 1;;
-    -B=*|--bin-dir=*) BIN_DIR="${1#*=}"; shift 1;;
+    -b=*|--bin-dir=*) BIN_DIR="${1#*=}"; shift 1;;
     -a=*|--arch=*) ARCH="${1#*=}"; shift 1;;
-    -b=*|--base-url=*) BASE_URL="${1#*=}"; shift 1;;
+    -B=*|--base-url=*) BASE_URL="${1#*=}"; shift 1;;
     -V=*|--verbose=*) VERBOSE="${1#*=}"; shift 1;;
     -f=*|-y=*|--force=*|--yes=*) FORCE="${1#*=}"; shift 1;;
 
