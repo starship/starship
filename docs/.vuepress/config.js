@@ -29,7 +29,7 @@ module.exports = {
     ],
     ["meta", { property: "og:type", content: "website" }],
     ["meta", { property: "og:url", content: "https://starship.rs/" }],
-    ["meta", { property: "og:image", content: "https://starship.rs/logo.png" }],
+    ["meta", { property: "og:image", content: "https://starship.rs/icon.png" }],
     ["meta", { name: "twitter:card", content: "summary"}],
     ["meta", { name: "twitter:title", content: "Starship: Cross-Shell Prompt"}],
     ["meta", { name: "twitter:description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, and Powershell.Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, and Powershell."}],
