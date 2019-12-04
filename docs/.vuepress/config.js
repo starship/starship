@@ -16,17 +16,12 @@ module.exports = {
       description: "The cross-shell prompt for astronauts"
     }
   },
+  // prettier-ignore
   head: [
     ["link", { rel: "icon", href: "/icon.png" }],
     ["meta", { name: "description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, and Powershell." }],
     ["meta", { property: "og:title", content: "Starship: Cross-Shell Prompt" }],
-    [
-      "meta",
-      {
-        property: "og:description",
-        content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, and Powershell."
-      }
-    ],
+    ["meta", { property: "og:description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, and Powershell."}],
     ["meta", { property: "og:type", content: "website" }],
     ["meta", { property: "og:url", content: "https://starship.rs/" }],
     ["meta", { property: "og:image", content: "https://starship.rs/icon.png" }],
