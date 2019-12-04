@@ -458,7 +458,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `prefix`                 | `(`       | Prefix to display immediately before git commit. |
 | `suffix`                 | `)`       | Suffix to display immediately after git commit.  |
 | `disabled`               | `true`    | Disables the `git_commit` module.                |
-| `min_commit_hash_length` | `7`       | Minimal length for git commit hash to display    |
+| `commit_hash_length` | `7`       | Minimal length for git commit hash to display    |
 
 ### Example
 
@@ -467,7 +467,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 [git_commit]
 disabled = false
-min_commit_hash_length = 4
+commit_hash_length = 4
 ```
 
 ## Git State

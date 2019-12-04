@@ -34,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         "hash",
         &config.hash.with_value(&id_to_hex_abbrev(
             commit_oid.as_bytes(),
-            config.min_commit_hash_length,
+            config.commit_hash_length,
         )),
     );
 
