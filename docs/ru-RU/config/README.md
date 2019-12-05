@@ -789,6 +789,30 @@ The `package` module is shown when the current directory is the repository for a
 symbol = "🎁 "
 ```
 
+## PHP
+
+The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `composer.json` file
+- The current directory contains a `.php` file
+
+### Опции
+
+| Переменная | По умолчанию | Описание                                              |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold red"` | The style for the module.                             |
+| `disabled` | `false`      | Disables the `php` module.                            |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[php]
+symbol = "🔹 "
+```
+
 ## Python
 
 The `python` module shows the currently installed version of Python.
@@ -886,9 +910,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Опции
+### Options
 
-| Переменная        | По умолчанию  | Описание                                                                                                            |
+| Variable          | Default       | Description                                                                                                         |
 | ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
@@ -898,7 +922,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
-### Пример
+### Example
 
 ```toml
 # ~/.config/starship.toml
