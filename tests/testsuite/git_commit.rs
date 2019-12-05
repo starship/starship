@@ -13,8 +13,7 @@ fn test_render_commit_hash() -> io::Result<()> {
         .current_dir(repo_dir.as_path())
         .output()?
         .stdout;
-    // 7 bytes hexed encoded equals 14 chars
-    git_output.truncate(14);
+    git_output.truncate(7);
     let expected_hash = str::from_utf8(&git_output).unwrap();
 
     let output = common::render_module("git_commit")

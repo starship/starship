@@ -41,11 +41,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
+/// len specifies length of hex encoded string
 pub fn id_to_hex_abbrev(bytes: &[u8], len: usize) -> String {
     bytes
         .iter()
         .map(|b| format!("{:02x}", b))
-        .take(len)
         .collect::<Vec<String>>()
         .join("")
+        .chars()
+        .into_iter()
+        .take(len)
+        .collect()
 }
