@@ -74,6 +74,7 @@
 - Current Rust version (`🦀`)
 - Current Ruby version (`💎`)
 - Current Python version (`🐍`)
+- Current PHP version (`🐘`)
 - Current Go version (`🐹`)
 - Nix-shell environment detection
 - Print an environment variable
