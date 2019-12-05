@@ -85,51 +85,17 @@ fn default_takes_effect() -> io::Result<()> {
 }
 
 #[test]
-fn symbol() -> io::Result<()> {
+fn format() -> io::Result<()> {
     let output = common::render_module("env_var")
         .env_clear()
         .use_config(toml::toml! {
             [env_var]
-            symbol = "■ "
+            format = "with ${styled?value=■ &style=black bold dimmed}${variable?style=black bold dimmed} "
             variable = "TEST_VAR"
         })
         .env("TEST_VAR", TEST_VAR_VALUE)
         .output()?;
     let expected = format!("with {} ", style().paint(format!("■ {}", TEST_VAR_VALUE)));
-    let actual = String::from_utf8(output.stdout).unwrap();
-    assert_eq!(expected, actual);
-    Ok(())
-}
-
-#[test]
-fn prefix() -> io::Result<()> {
-    let output = common::render_module("env_var")
-        .env_clear()
-        .use_config(toml::toml! {
-            [env_var]
-            variable = "TEST_VAR"
-            prefix = "_"
-        })
-        .env("TEST_VAR", TEST_VAR_VALUE)
-        .output()?;
-    let expected = format!("with {} ", style().paint(format!("_{}", TEST_VAR_VALUE)));
-    let actual = String::from_utf8(output.stdout).unwrap();
-    assert_eq!(expected, actual);
-    Ok(())
-}
-
-#[test]
-fn suffix() -> io::Result<()> {
-    let output = common::render_module("env_var")
-        .env_clear()
-        .use_config(toml::toml! {
-            [env_var]
-            variable = "TEST_VAR"
-            suffix = "_"
-        })
-        .env("TEST_VAR", TEST_VAR_VALUE)
-        .output()?;
-    let expected = format!("with {} ", style().paint(format!("{}_", TEST_VAR_VALUE)));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())

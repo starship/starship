@@ -1,9 +1,11 @@
 use std::env;
 
-use super::{Context, Module, SegmentConfig};
+use super::{Context, Module};
 
 use crate::config::RootModuleConfig;
 use crate::configs::env_var::EnvVarConfig;
+use crate::modules::utils::query_parser::*;
+use crate::segment::Segment;
 
 /// Creates a module with the value of the chosen environment variable
 ///
@@ -17,16 +19,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let env_value = get_env_value(config.variable?, config.default)?;
 
-    module.set_style(config.style);
-    module.get_prefix().set_value("with ");
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "variable" => Some(Segment {
+                _name: "variable".to_string(),
+                value: env_value.clone(),
+                style,
+            }),
+            _ => None,
+        }
+    })
+    .ok()?;
 
-    if let Some(symbol) = config.symbol {
-        module.create_segment("symbol", &symbol);
-    }
-
-    // TODO: Use native prefix and suffix instead of stacking custom ones together with env_value.
-    let env_var_stacked = format!("{}{}{}", config.prefix, env_value, config.suffix);
-    module.create_segment("env_var", &SegmentConfig::new(&env_var_stacked));
+    module.set_segments(segments);
 
     Some(module)
 }
