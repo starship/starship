@@ -73,6 +73,11 @@ RUN curl -L https://raw.githubusercontent.com/phpenv/phpenv-installer/master/bin
 # Check that PHP was correctly installed
 RUN php --version
 
+# Install Mercurial
+RUN HGPYTHON3=1 pip install mercurial
+# Check that Mercurial was correctly installed
+RUN hg --version
+
 # Create blank project
 RUN USER=nonroot cargo new --bin /src/starship
 WORKDIR /src/starship

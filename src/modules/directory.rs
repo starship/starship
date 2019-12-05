@@ -1,5 +1,6 @@
 use path_slash::PathExt;
 use std::path::Path;
+use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module};
 
@@ -182,11 +183,14 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
 
     components
         .into_iter()
-        .map(|word| match word {
-            "" => "",
-            _ if word.len() <= pwd_dir_length => word,
-            _ if word.starts_with('.') => &word[..=pwd_dir_length],
-            _ => &word[..pwd_dir_length],
+        .map(|word| -> String {
+            let chars = UnicodeSegmentation::graphemes(word, true).collect::<Vec<&str>>();
+            match word {
+                "" => "".to_string(),
+                _ if chars.len() <= pwd_dir_length => word.to_string(),
+                _ if word.starts_with('.') => chars[..=pwd_dir_length].join(""),
+                _ => chars[..pwd_dir_length].join(""),
+            }
         })
         .collect::<Vec<_>>()
         .join("/")
@@ -331,5 +335,12 @@ mod tests {
         let path = "~/starship/tmp/C++/C++/C++";
         let output = to_fish_style(1, path.to_string(), "C++");
         assert_eq!(output, "~/s/t/C/C/");
+    }
+
+    #[test]
+    fn fish_style_with_unicode() {
+        let path = "~/starship/tmp/目录/a̐éö̲/目录";
+        let output = to_fish_style(1, path.to_string(), "目录");
+        assert_eq!(output, "~/s/t/目/a̐/");
     }
 }

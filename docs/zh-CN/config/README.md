@@ -9,7 +9,7 @@ Starship 目前正在开发中。 很多新的配置选项将会在之后的版�
 您需要创建配置文件 `~/.config/starship.toml` 以供 Starship 使用。
 
 ```shell
-$ touch ~/.config/starship.toml
+$ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 Starship 的所有配置都在此 [TOML](https://github.com/toml-lang/toml) 配置文件中完成：
@@ -119,11 +119,12 @@ The `aws` module shows the current AWS region and profile. This is based on `AWS
 
 ### Options
 
-| Variable   | Default         | Description                                                |
-| ---------- | --------------- | ---------------------------------------------------------- |
-| `symbol`   | `"☁️ "`         | The symbol used before displaying the current AWS profile. |
-| `style`    | `"bold yellow"` | The style for the module.                                  |
-| `disabled` | `false`         | Disables the `AWS` module.                                 |
+| Variable          | Default         | Description                                                                 |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☁️  "`        | The symbol used before displaying the current AWS profile.                  |
+| `style`           | `"bold yellow"` | The style for the module.                                                   |
+| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 
 ### Example
 
@@ -133,6 +134,7 @@ The `aws` module shows the current AWS region and profile. This is based on `AWS
 [aws]
 style = "bold blue"
 symbol = "🅰 "
+displayed_items = "region"
 ```
 
 ## Battery
@@ -667,6 +669,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
 | `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
 | `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
+| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
 | `style`           | `"bold dimmed white"` | The style for the module.                                     |
 | `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
@@ -680,6 +683,7 @@ show_percentage = true
 show_swap = true
 threshold = -1
 symbol = " "
+separator = "/"
 style = "bold dimmed green"
 ```
 
@@ -775,6 +779,7 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a file with the `.py` extension
 - The current directory contains a `Pipfile` file
 - The current directory contains a `tox.ini` file
+- A virtual environment is currently activated
 
 ### Options
 

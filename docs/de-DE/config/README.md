@@ -9,7 +9,7 @@
 Um mit der Konfiguration von Starship zu beginnen, musst du die folgende Datei erstellen: `~/.config/starship.toml`.
 
 ```shell
-$ touch ~/.config/starship.toml
+$ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 Die gesamte Konfiguration von Starship wird über diese [TOML](https://github.com/toml-lang/toml)-Datei durchgeführt:
@@ -63,7 +63,7 @@ Dies ist eine Liste mit Prompt-weiten Konfigurationsoptionen.
 | -------------- | ----------------------------- | ------------------------------------------------------------------ |
 | `add_newline`  | `true`                        | Neuer Zeilenumbruch bei Start des Prompts.                         |
 | `prompt_order` | [link](#default-prompt-order) | Stelle die Reihenfolge ein, in der die Module den prompt aufbauen. |
-| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).              |
+| `scan_timeout` | `30`                          | Timeout für das Scannen von Dateien (in Millisekunden).            |
 
 ### Beispiel
 
@@ -119,11 +119,12 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 
 ### Optionen
 
-| Variable   | Standardwert    | Beschreibung                                            |
-| ---------- | --------------- | ------------------------------------------------------- |
-| `symbol`   | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird. |
-| `style`    | `"bold yellow"` | Stil für dieses Modul.                                  |
-| `disabled` | `false`         | Deaktiviert das `aws`-Modul.                            |
+| Variable          | Standardwert    | Beschreibung                                                                |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☁️  "`        | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                     |
+| `style`           | `"bold yellow"` | Stil für dieses Modul.                                                      |
+| `disabled`        | `false`         | Deaktiviert das `aws`-Modul.                                                |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 
 ### Beispiel
 
@@ -133,6 +134,7 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 [aws]
 style = "bold blue"
 symbol = "🅰 "
+displayed_items = "region"
 ```
 
 ## Akkustand
@@ -667,8 +669,9 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
 | `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
 | `symbol`          | `"🐏 "`                | Symbol das vor der Speicherauslastung angezeigt wird.         |
-| `style`           | `"bold dimmed white"` | Stil für dieses Modul.                                        |
-| `disabled`        | `true`                | Deaktiviert das `memory_usage`-Modul.                         |
+| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
+| `style`           | `"bold dimmed white"` | The style for the module.                                     |
+| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
 ### Beispiel
 
@@ -680,6 +683,7 @@ show_percentage = true
 show_swap = true
 threshold = -1
 symbol = " "
+separator = "/"
 style = "bold dimmed green"
 ```
 
@@ -775,6 +779,7 @@ Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 - The current directory contains a file with the `.py` extension
 - The current directory contains a `Pipfile` file
 - Das aktuelle Verzeichnis enthält eine `tox.ini`-Datei
+- A virtual environment is currently activated
 
 ### Optionen
 

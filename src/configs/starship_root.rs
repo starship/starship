@@ -24,6 +24,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "git_branch",
                 "git_state",
                 "git_status",
+                "hg_branch",
                 "package",
                 // ↓ Toolchain version modules ↓
                 // (Let's keep these sorted alphabetically)
