@@ -547,6 +547,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "REBELinBLUE",
+      "name": "Stephen Ball",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/2143908?v=4",
+      "profile": "https://github.com/REBELinBLUE",
+      "contributions": [
+        "code",
+        "test",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
