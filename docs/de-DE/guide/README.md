@@ -74,29 +74,30 @@
 - Derzeitige Rust-Version (`🦀`)
 - Derzeitige Ruby-Version (`💎`)
 - Derzeitige Python-Version (`🐍`)
-- Derzeitige Go-Version (`🐹`)
-- Erkennung von Nix-Shell-Umgebungen
-- Ausgabe von Umgebungsvariablen
-- Version des Paketmanagers im derzeitigen Pfad (`📦`)
+- Current PHP version (`🐘`)
+- Current Go version (`🐹`)
+- Nix-shell environment detection
+- Print an environment variable
+- Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-- Batteriestand und -status
-- Aktueller Git-Branch und ausführlicher Repository-Status:
-  - `=` — konkurrierende Änderungen
-  - `⇡` — vor remote branch
-  - `⇣` — hinter remote branch
-  - `⇕` — abweichende Änderungen
-  - `?` — ungespeicherte Änderungen
-  - `$` — gestashte Änderungen
-  - `!` — veränderte Dateien
-  - `+` — hinzugefügte Dateien
-  - `»` — umbenannte Dateien
-  - `✘` — gelöschte Dateien
-- Laufzeit des zuletzt ausgeführten Befehls, wenn sie länger als der gesetzte Schwellenwert ist
-- Anzeige für Hintergrundsprozesse (`✦`)
-- Aktueller Kubernetes Cluster und Namespace (`☸`)
-- Aktuelles AWS Profil (`☁️`)
+- Current battery level and status
+- Current Git branch and rich repo status:
+  - `=` — conflicting changes
+  - `⇡` — ahead of remote branch
+  - `⇣` — behind of remote branch
+  - `⇕` — diverged changes
+  - `?` — untracked changes
+  - `$` — stashed changes
+  - `!` — modified files
+  - `+` — added files
+  - `»` — renamed files
+  - `✘` — deleted files
+- Execution time of the last command if it exceeds the set threshold
+- Indicator for jobs in the background (`✦`)
+- Current Kubernetes Cluster and Namespace (`☸`)
+- Current AWS profile (`☁️`)
 
 ## 🚀 Installation
 
