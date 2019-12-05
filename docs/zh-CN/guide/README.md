@@ -74,15 +74,16 @@
 - 当前 Rust 版本 (`🦀`)
 - 当前 Ruby 版本 (`💎`)
 - 当前 Python 版本 (`🐍`)
-- 当前 Go 版本 (`🐹`)
-- Nix-shell 环境检测
-- 显示环境变量
-- 当前目录下现在的包版本 (`📦`)
+- Current PHP version (`🐘`)
+- Current Go version (`🐹`)
+- Nix-shell environment detection
+- Print an environment variable
+- Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-- 当前电池剩余容量与状态
-- 当前 Git 分支与一应俱全的仓库状态
+- Current battery level and status
+- Current Git branch and rich repo status:
   - `=` — conflicting changes
   - `⇡` — ahead of remote branch
   - `⇣` — behind of remote branch
@@ -93,9 +94,9 @@
   - `+` — added files
   - `»` — renamed files
   - `✘` — deleted files
-- 如果超过设定阈值，上一个命令的执行时间
-- 后台运行进程数的指示器 (`✦`)
-- 当前 Kubernetes Cluster 与 Namespace (`☸`)
+- Execution time of the last command if it exceeds the set threshold
+- Indicator for jobs in the background (`✦`)
+- Current Kubernetes Cluster and Namespace (`☸`)
 - Current AWS profile (`☁️`)
 
 ## 🚀 安装
