@@ -18,25 +18,20 @@ fn test_render_commit_hash() -> io::Result<()> {
     let expected_hash = str::from_utf8(&git_output).unwrap();
 
     let output = common::render_module("git_commit")
-        .use_config(
-            toml::from_str(
-                "
-                    [git_commit]
-                        disabled = false
-                ",
-            )
-            .unwrap(),
-        )
+        .use_config(toml::toml! {
+            [git_commit]
+                disabled = false
+        })
         .arg("--path")
         .arg(repo_dir)
         .output()?;
 
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = format!(
-        "{}",
-        Color::Green.bold().paint(format!("({}) ", expected_hash))
-    );
+    let expected = Color::Green
+        .bold()
+        .paint(format!("({}) ", expected_hash))
+        .to_string();
 
-    assert_eq!(expected, actual);
+    assert_eq!(&*expected, actual);
     Ok(())
 }
