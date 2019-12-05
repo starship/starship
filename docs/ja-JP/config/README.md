@@ -790,6 +790,30 @@ The `package` module is shown when the current directory is the repository for a
 symbol = "🎁 "
 ```
 
+## PHP
+
+The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `composer.json` file
+- The current directory contains a `.php` file
+
+### オプション
+
+| 変数         | デフォルト        | 説明                                                    |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold red"` | The style for the module.                             |
+| `disabled` | `false`      | Disables the `php` module.                            |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[php]
+symbol = "🔹 "
+```
+
 ## Python
 
 The `python` module shows the currently installed version of Python.
@@ -800,13 +824,13 @@ Otherwise, it will display the version number from `python --version` and show t
 
 The module will be shown if any of the following conditions are met:
 
-- カレントディレクトリに`.python-version`ファイルが含まれている
-- カレントディレクトリに`requirements.txt`ファイルが含まれている
-- カレントディレクトリに`pyproject.toml`ファイルが含まれている
-- カレントディレクトリに`.py`の拡張子のファイルが含まれている
-- カレントディレクトリに`Pipfile`ファイルが含まれている
-- カレントディレクトリに`tox.ini`ファイルが含まれている
-- 仮想環境がアクティブである
+- The current directory contains a `.python-version` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a file with the `.py` extension
+- The current directory contains a `Pipfile` file
+- The current directory contains a `tox.ini` file
+- A virtual environment is currently activated
 
 ### オプション
 
@@ -831,17 +855,17 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
 
-- カレントディレクトリに`Gemfile`ファイルが含まれている
-- カレントディレクトリに`.rb`の拡張子のファイルが含まれている
+- The current directory contains a `Gemfile` file
+- The current directory contains a `.rb` file
 
 ### オプション
 
 | 変数         | デフォルト        | 説明                                                     |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
-| `style`    | `"bold red"` | モジュールのスタイルです。                                          |
+| `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `ruby` module.                            |
 
 ### 設定例
@@ -857,8 +881,8 @@ symbol = "🔺 "
 
 The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
 
-- カレントディレクトリに`Cargo.toml`ファイルが含まれている
-- カレントディレクトリに`.rs`の拡張子のファイルが含まれている
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### オプション
 
@@ -887,9 +911,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### オプション
+### Options
 
-| 変数                | デフォルト         | 説明                                                                                                                  |
+| Variable          | Default       | Description                                                                                                         |
 | ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
@@ -899,7 +923,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -914,10 +938,10 @@ utc_time_offset = -5
 
 The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
-- カレントユーザーがroot
-- カレントユーザーが、ログインしているユーザーとは異なる
-- ユーザーがSSHセッションとして接続されている
-- `show_always`変数がtrueに設定されている
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ### Options
 
