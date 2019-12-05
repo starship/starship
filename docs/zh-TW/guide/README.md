@@ -74,29 +74,30 @@
 - 現在的 Rust 版本 (`🦀`)
 - 現在的 Ruby 版本 (`💎`)
 - 現在的 Python 版本 (`🐍`)
-- 現在的 Go 版本 (`🐹`)
-- 偵測 Nix-shell 的環境
-- 印出環境變數
-- 現在資料夾中的組件 (package) 版本 (`📦`)
+- Current PHP version (`🐘`)
+- Current Go version (`🐹`)
+- Nix-shell environment detection
+- Print an environment variable
+- Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-- 現在的電池電量與狀態
-- 現在的 Git branch 與豐富的程式庫 (repository) 狀態：
-  - `=` — 修改衝突
-  - `⇡` — 超前遠端 (remote) branch
-  - `⇣` — 落後遠端 (remote) branch
-  - `⇕` — 修改發散 (diverge)
-  - `?` — 修改未追蹤
-  - `$` — 隱藏的 (stashed) 修改
-  - `!` — 修改過的檔案
-  - `+` — 新增的檔案
-  - `»` — 重新命名的檔案
-  - `✘` — 刪除的檔案
-- 最近的指令花費的時間 (如果超過某個預先設定的門檻)
-- 標註背景執行的工作 (`✦`)
-- 現在的 Kubernetes 叢集以及名稱空間 (Namespace) (`☸`)
-- 目前的 AWS 配置 (`☁️`)
+- Current battery level and status
+- Current Git branch and rich repo status:
+  - `=` — conflicting changes
+  - `⇡` — ahead of remote branch
+  - `⇣` — behind of remote branch
+  - `⇕` — diverged changes
+  - `?` — untracked changes
+  - `$` — stashed changes
+  - `!` — modified files
+  - `+` — added files
+  - `»` — renamed files
+  - `✘` — deleted files
+- Execution time of the last command if it exceeds the set threshold
+- Indicator for jobs in the background (`✦`)
+- Current Kubernetes Cluster and Namespace (`☸`)
+- Current AWS profile (`☁️`)
 
 ## 🚀 安裝
 
