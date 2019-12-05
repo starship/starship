@@ -88,6 +88,7 @@ The prompt shows information you need while you're working, while staying sleek 
 - Current Rust version (`🦀`)
 - Current Ruby version (`💎`)
 - Current Python version (`🐍`)
+- Current PHP version (`🐘`)
 - Current Go version (`🐹`)
 - Nix-shell environment detection
 - Print an environment variable

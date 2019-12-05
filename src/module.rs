@@ -34,6 +34,7 @@ pub const ALL_MODULES: &[&str] = &[
     "python",
     "ruby",
     "rust",
+    "php",
     "time",
     "username",
 ];

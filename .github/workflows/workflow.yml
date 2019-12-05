@@ -124,6 +124,11 @@ jobs:
         with:
           dotnet-version: "2.2.402"
 
+      # Install PHP at a fixed version
+      - uses: shivammathur/setup-php@master
+        with:
+          php-version: '7.3.8'
+
       # Install Mercurial (pre-installed on linux, installed from pip on macos
       # and from choco on windows),
       - name: Install Mercurial (macos)
