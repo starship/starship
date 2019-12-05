@@ -8,6 +8,7 @@ mod directory;
 mod dotnet;
 mod env_var;
 mod git_branch;
+mod git_commit;
 mod git_state;
 mod git_status;
 mod golang;
