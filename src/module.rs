@@ -50,6 +50,9 @@ pub struct Module<'a> {
     /// The module's name, to be used in configuration and logging.
     _name: String,
 
+    /// The module's description
+    description: String,
+
     /// The styling to be inherited by all segments contained within this module.
     style: Style,
 
@@ -69,6 +72,7 @@ impl<'a> Module<'a> {
         Module {
             config,
             _name: name.to_string(),
+            description: "This is an example description".to_string(),
             style: Style::default(),
             prefix: Affix::default_prefix(name),
             segments: Vec::new(),
@@ -89,6 +93,11 @@ impl<'a> Module<'a> {
     /// Get module's name
     pub fn get_name(&self) -> &String {
         &self._name
+    }
+
+    /// Get module's description
+    pub fn get_description(&self) -> &String {
+        &self.description
     }
 
     /// Whether a module has non-empty segments
