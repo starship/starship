@@ -39,9 +39,10 @@ pub fn get_prompt(context: Context) -> String {
         }
     }
 
-    let max_len = context.properties
+    let max_len = context
+        .properties
         .get("max_length")
-        .and_then(|value| { value.trim().parse::<usize>().ok() })
+        .and_then(|value| value.trim().parse::<usize>().ok())
         .unwrap_or(0);
 
     let modules = &prompt_order
@@ -65,10 +66,7 @@ pub fn get_prompt(context: Context) -> String {
             module.segments_len()
         };
 
-        if max_len == 0 ||
-            module.get_name() == "line_break" ||
-            segments_len + len < max_len - 1 {
-
+        if max_len == 0 || module.get_name() == "line_break" || segments_len + len < max_len - 1 {
             if print_without_prefix {
                 write!(buf, "{}", module.to_string_without_prefix()).unwrap();
             } else {
