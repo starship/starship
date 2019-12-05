@@ -16,7 +16,7 @@
       src="https://repology.org/badge/tiny-repos/starship.svg"
       alt="Packaging status" /></a
 ><br />
-  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section --><a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-52-orange" alt="All Contributors"></a><!-- ALL-CONTRIBUTORS-BADGE:END -->
+  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section --><a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-53-orange" alt="All Contributors"></a><!-- ALL-CONTRIBUTORS-BADGE:END -->
   <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
@@ -298,6 +298,7 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
     <td align="center"><a href="https://github.com/weirongxu"><img src="https://avatars3.githubusercontent.com/u/1709861?v=4" width="100px;" alt="Raidou" /><br /><sub><b>Raidou</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=weirongxu" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=weirongxu" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://github.com/rpl"><img src="https://avatars1.githubusercontent.com/u/11484?v=4" width="100px;" alt="Luca Greco" /><br /><sub><b>Luca Greco</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=rpl" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=rpl" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=rpl" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://lucar.in"><img src="https://avatars2.githubusercontent.com/u/6934358?v=4" width="100px;" alt="Luca Rinaldi" /><br /><sub><b>Luca Rinaldi</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=lucarin91" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/REBELinBLUE"><img src="https://avatars1.githubusercontent.com/u/2143908?v=4" width="100px;" alt="Stephen Ball" /><br /><sub><b>Stephen Ball</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=REBELinBLUE" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=REBELinBLUE" title="Tests">⚠️</a> <a href="https://github.com/starship/starship/commits?author=REBELinBLUE" title="Documentation">📖</a></td>
   </tr>
 </table>
 
