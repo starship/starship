@@ -74,29 +74,30 @@
 - 現在の Rust のバージョン (`🦀`)
 - 現在の Ruby のバージョン (`💎`)
 - 現在の Python のバージョン (`🐍`)
-- 現在の Go バージョン (`🐹`)
-- Nix-shell の環境検出
-- 指定した1つの環境変数の表示
-- カレントディレクトリにある現在のパッケージバージョン(`📦`)
+- Current PHP version (`🐘`)
+- Current Go version (`🐹`)
+- Nix-shell environment detection
+- Print an environment variable
+- Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-- 現在のバッテリー残量と状態
-- 現在の Git ブランチとリッチなリポジトリの状態
-  - `=` — 競合している変更
-  - `⇡` — リモートブランチより進んでいる変更
-  - `⇣` —リモートブランチに追いついていない変更
-  - `⇕` — 分岐した変更
-  - `?` — 追跡されていない変更
-  - `$` — stashされた変更
-  - `!` — 変更されたファイル
-  - `+` — 追加されたファイル
-  - `»` — 名前が変更されたファイル
-  - `✘` — 削除されたファイル
-- 閾値を超えた際の、コマンドの実行時間
-- バックグラウンドジョブのインジケーター (`✦`)
-- 現在のKubernetesクラスタとネームスペース (`☸`)
-- 現在のAWSプロファイル (`☁️`)
+- Current battery level and status
+- Current Git branch and rich repo status:
+  - `=` — conflicting changes
+  - `⇡` — ahead of remote branch
+  - `⇣` — behind of remote branch
+  - `⇕` — diverged changes
+  - `?` — untracked changes
+  - `$` — stashed changes
+  - `!` — modified files
+  - `+` — added files
+  - `»` — renamed files
+  - `✘` — deleted files
+- Execution time of the last command if it exceeds the set threshold
+- Indicator for jobs in the background (`✦`)
+- Current Kubernetes Cluster and Namespace (`☸`)
+- Current AWS profile (`☁️`)
 
 ## 🚀 インストール
 
