@@ -34,9 +34,7 @@ fn test_render_commit_hash() -> io::Result<()> {
     let actual = String::from_utf8(output.stdout).unwrap();
     let expected = format!(
         "{}",
-        Color::Green
-            .bold()
-            .paint(format!("({}) ", expected_hash))
+        Color::Green.bold().paint(format!("({}) ", expected_hash))
     );
 
     assert_eq!(expected, actual);
