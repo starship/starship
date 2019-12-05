@@ -16,11 +16,11 @@
       src="https://repology.org/badge/tiny-repos/starship.svg"
       alt="Packaging status" /></a
 ><br />
-  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section --><a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-53-orange" alt="All Contributors"></a><!-- ALL-CONTRIBUTORS-BADGE:END -->
-  <a href="https://discord.gg/8Jzqu3T"
+    <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
       alt="Chat on Discord" /></a>
+  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section --><a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-53-orange" alt="All Contributors"></a><!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
 <h4 align="center">
@@ -34,22 +34,22 @@
 <p align="center">
   <a href="https://github.com/starship/starship/blob/master/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png" alt="English" /></a>
-  &#0020;
+  &nbsp;
   <a href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png" alt="日本語" /></a>
-  &#0020;
+  &nbsp;
   <a href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png" alt="繁體中文" /></a>
-  &#0020;
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/zh-CN"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png" alt="简体中文" /></a>
-  &#0020;
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/de"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png" alt="Deutsch" /></a>
-  &#0020;
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/fr"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png" alt="Français" /></a>
-  &#0020;
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/ru"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Русский" /></a>
 </p>
@@ -68,21 +68,18 @@
 ## 🍬 特色
 
 - 如果最近一個指令結束時回傳非零的代碼，提示字元將轉成紅色
-- 會在使用者與登入的使用者不同時顯示使用者名稱
+- Current Go version (`🐹`)
 - 現在的 Java 版本 (`☕`)
 - 現在的 Node.js 版本 (`⬢`)
-- 現在的 Rust 版本 (`🦀`)
-- 現在的 Ruby 版本 (`💎`)
-- 現在的 Python 版本 (`🐍`)
 - Current PHP version (`🐘`)
-- Current Go version (`🐹`)
-- Nix-shell environment detection
-- Print an environment variable
+- Current Python version (`🐍`)
+- Current Ruby version (`💎`)
+- Current Rust version (`🦀`)
+- Current .NET version (`•NET`)
 - Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-- Current battery level and status
 - Current Git branch and rich repo status:
   - `=` — conflicting changes
   - `⇡` — ahead of remote branch
@@ -94,10 +91,19 @@
   - `+` — added files
   - `»` — renamed files
   - `✘` — deleted files
-- Execution time of the last command if it exceeds the set threshold
+- Current Mercurial branch
+- Current battery level and status
+- `⇡` – charging
+- `⇣` – discharging
+- `•` – fully charged
 - Indicator for jobs in the background (`✦`)
 - Current Kubernetes Cluster and Namespace (`☸`)
-- Current AWS profile (`☁️`)
+- Current Amazon Web Services (AWS) profile (`☁️`)
+- Execution time of the last command
+- Custom environment variable value
+- Nix-shell environment detection
+- Current username if not the same as the logged-in user
+- Optional current time in 12/24hr format
 
 ## 🚀 安裝
 
@@ -109,54 +115,31 @@
 
 1. 安裝 **starship** 執行檔：
 
-   如果你並非使用以下平台，請直接**[下載編譯好的執行檔的壓縮檔](https://github.com/starship/starship/releases)**。
+
+   #### Install Latest Version
 
 
-   #### Homebrew
+   ##### With Shell:
 
    ```sh
-   $ brew install starship
+   curl -fsSL https://starship.rs/install.sh | sh
    ```
 
 
-   #### Rust (v1.38 或更高版本)
+   #### Install via Package Manager
+
+
+   ##### With [Homebrew](https://brew.sh/):
 
    ```sh
-   $ cargo install starship
+   brew install starship
    ```
 
 
-   #### Arch Linux (AUR)
+   ##### With [Scoop](https://scoop.sh):
 
-   Starship 在 AUR 中已經以 `starship` 這個名字存在。 請使用 `yay` 或你喜歡的 AUR 幫手安裝。
-
-   ```sh
-   $ yay -S starship
-   ```
-
-
-   #### Nix (不穩定)
-
-   ```sh
-   $ nix-env --install starship
-   ```
-
-
-   #### Termux
-
-   ```sh
-   $ pkg install starship
-   ```
-
-
-   #### 其他 x86-64 Linux 平台
-
-   下載一個預先建立好的執行檔，並放在 /usr/local/bin/ 下：
-
-   ```sh
-   $ wget -q --show-progress https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz
-   $ tar xvf starship-x86_64-unknown-linux-gnu.tar.gz
-   $ sudo mv starship /usr/local/bin/
+   ```powershell
+   scoop install starship
    ```
 
 1. 將初始化腳本 (script) 加入你的 shell 的設定檔：
@@ -304,6 +287,7 @@
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
