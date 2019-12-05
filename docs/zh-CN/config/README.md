@@ -789,6 +789,30 @@ The `package` module is shown when the current directory is the repository for a
 symbol = "🎁 "
 ```
 
+## PHP
+
+The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `composer.json` file
+- The current directory contains a `.php` file
+
+### Options
+
+| Variable   | Default      | Description                                           |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold red"` | The style for the module.                             |
+| `disabled` | `false`      | Disables the `php` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[php]
+symbol = "🔹 "
+```
+
 ## Python
 
 The `python` module shows the currently installed version of Python.
