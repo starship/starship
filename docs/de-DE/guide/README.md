@@ -16,11 +16,11 @@
       src="https://repology.org/badge/tiny-repos/starship.svg"
       alt="Paket-Status" /></a
 ><br />
-  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section --><a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-53-orange" alt="Alle Mitwirkenden"></a><!-- ALL-CONTRIBUTORS-BADGE:END -->
-  <a href="https://discord.gg/8Jzqu3T"
+    <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
-      alt="Auf Discord chatten" /></a>
+      alt="Chat on Discord" /></a>
+  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section --><a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-53-orange" alt="All Contributors"></a><!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
 <h4 align="center">
@@ -34,24 +34,24 @@
 <p align="center">
   <a href="https://github.com/starship/starship/blob/master/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png" alt="Englisch" /></a>
-  &#0020;
+  &nbsp;
   <a href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png" alt="日本語" /></a>
-  &#0020;
+  &nbsp;
   <a href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png" alt="繁體中文" /></a>
-  &#0020;
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/zh-CN"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png" alt="简体中文" /></a>
-  &#0020;
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/de"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png" alt="Deutsch" /></a>
-  &#0020;
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/fr"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png" alt="Français" /></a>
-  &#0020;
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/ru"
-    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Russisch" /></a>
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Русский" /></a>
 </p>
 
 <h1></h1>
@@ -68,21 +68,18 @@
 ## 🍬 Features
 
 - Anzeigetext wird rot wenn der letzte Befehl mit einem Exit-code größer null terminiert
-- Benutzername, wenn dieser nicht dem angemeldeten Benutzer entspricht
+- Current Go version (`🐹`)
 - Derzeitige Java-Version (`☕`)
 - Derzeitige Node.js-Version (`⬢`)
-- Derzeitige Rust-Version (`🦀`)
-- Derzeitige Ruby-Version (`💎`)
-- Derzeitige Python-Version (`🐍`)
 - Current PHP version (`🐘`)
-- Current Go version (`🐹`)
-- Nix-shell environment detection
-- Print an environment variable
+- Current Python version (`🐍`)
+- Current Ruby version (`💎`)
+- Current Rust version (`🦀`)
+- Current .NET version (`•NET`)
 - Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-- Current battery level and status
 - Current Git branch and rich repo status:
   - `=` — conflicting changes
   - `⇡` — ahead of remote branch
@@ -94,10 +91,19 @@
   - `+` — added files
   - `»` — renamed files
   - `✘` — deleted files
-- Execution time of the last command if it exceeds the set threshold
+- Current Mercurial branch
+- Current battery level and status
+- `⇡` – charging
+- `⇣` – discharging
+- `•` – fully charged
 - Indicator for jobs in the background (`✦`)
 - Current Kubernetes Cluster and Namespace (`☸`)
-- Current AWS profile (`☁️`)
+- Current Amazon Web Services (AWS) profile (`☁️`)
+- Execution time of the last command
+- Custom environment variable value
+- Nix-shell environment detection
+- Current username if not the same as the logged-in user
+- Optional current time in 12/24hr format
 
 ## 🚀 Installation
 
@@ -109,54 +115,31 @@
 
 1. Installiere die Binärversion von **starship**:
 
-   **[Lade die vorkompilierte Binärversion herunter](https://github.com/starship/starship/releases)**, wenn du keine der unten gelisteten Plattformen verwendest.
+
+   #### Install Latest Version
 
 
-   #### Homebrew
+   ##### With Shell:
 
    ```sh
-   $ brew install starship
+   curl -fsSL https://starship.rs/install.sh | sh
    ```
 
 
-   #### Rust (v1.38 oder neuer)
+   #### Install via Package Manager
+
+
+   ##### With [Homebrew](https://brew.sh/):
 
    ```sh
-   $ cargo install starship
+   brew install starship
    ```
 
 
-   #### Arch Linux (AUR)
+   ##### With [Scoop](https://scoop.sh):
 
-   Starship ist via AUR unter dem Namen `starship` verfügbar. Installiere es mittels `yay` oder einem AUR-Helfer deiner Wahl.
-
-   ```sh
-   $ yay -S starship
-   ```
-
-
-   #### Nix (instabil)
-
-   ```sh
-   $ nix-env --install starship
-   ```
-
-
-   #### Termux
-
-   ```sh
-   $ pkg install starship
-   ```
-
-
-   #### Andere Linux x86-64 Plattformen
-
-   Download einer vor-kompilierten ausführbaren Binärdatei und speichern unter: /usr/local/bin/
-
-   ```sh
-   $ wget -q --show-progress https://github.com/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz
-   $ tar xvf starship-x86_64-unknown-linux-gnu.tar.gz
-   $ sudo mv starship /usr/local/bin/
+   ```powershell
+   scoop install starship
    ```
 
 1. Füge das init-Skript zur Konfigurationsdatei deiner Shell hinzu:
@@ -304,6 +287,7 @@ Danke an diese wunderbaren Leute ([emoji-Schlüssel](https://allcontributors.org
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
