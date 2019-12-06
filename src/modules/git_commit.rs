@@ -49,7 +49,6 @@ pub fn id_to_hex_abbrev(bytes: &[u8], len: usize) -> String {
         .collect::<Vec<String>>()
         .join("")
         .chars()
-        .into_iter()
         .take(len)
         .collect()
 }
