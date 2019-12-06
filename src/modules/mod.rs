@@ -7,9 +7,11 @@ mod directory;
 mod dotnet;
 mod env_var;
 mod git_branch;
+mod git_commit;
 mod git_state;
 mod git_status;
 mod golang;
+mod hg_branch;
 mod hostname;
 mod java;
 mod jobs;
@@ -19,6 +21,7 @@ mod memory_usage;
 mod nix_shell;
 mod nodejs;
 mod package;
+mod php;
 mod python;
 mod ruby;
 mod rust;
@@ -47,9 +50,11 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "dotnet" => dotnet::module(context),
         "env_var" => env_var::module(context),
         "git_branch" => git_branch::module(context),
+        "git_commit" => git_commit::module(context),
         "git_state" => git_state::module(context),
         "git_status" => git_status::module(context),
         "golang" => golang::module(context),
+        "hg_branch" => hg_branch::module(context),
         "hostname" => hostname::module(context),
         "java" => java::module(context),
         "jobs" => jobs::module(context),
@@ -59,6 +64,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "nix_shell" => nix_shell::module(context),
         "nodejs" => nodejs::module(context),
         "package" => package::module(context),
+        "php" => php::module(context),
         "python" => python::module(context),
         "ruby" => ruby::module(context),
         "rust" => rust::module(context),

@@ -306,8 +306,8 @@ style = "dimmed green"
 | `truncation_length` | `3`           | Количество родительских папок, к которым должен быть усечен текущий каталог. |
 | `truncate_to_repo`  | `true`        | Следует или нет обрезать до корня репозитория git, в котором вы находитесь.  |
 | `prefix`            | `"in "`       | Prefix to display immediately before the directory.                          |
-| `style`             | `"bold cyan"` | The style for the module.                                                    |
-| `disabled`          | `false`       | Disables the `directory` module.                                             |
+| `style`             | `"bold cyan"` | Стиль модуля.                                                                |
+| `disabled`          | `false`       | Отключает модуль `directory`.                                                |
 
 <details>
 <summary>Этот модуль имеет несколько расширенных опций конфигурации, которые контролируют отображение каталога.</summary>

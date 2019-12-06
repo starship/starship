@@ -1,8 +1,7 @@
-use std::process::Command;
-
 use super::{Context, Module, RootModuleConfig, SegmentConfig};
 
 use crate::configs::ruby::RubyConfig;
+use crate::utils;
 
 /// Creates a module with the current Ruby version
 ///
@@ -20,7 +19,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let ruby_version = get_ruby_version()?;
+    let ruby_version = utils::exec_cmd("ruby", &["-v"])?.stdout;
     let formatted_version = format_ruby_version(&ruby_version)?;
 
     let mut module = context.new_module("ruby");
@@ -31,13 +30,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.create_segment("version", &SegmentConfig::new(&formatted_version));
 
     Some(module)
-}
-
-fn get_ruby_version() -> Option<String> {
-    match Command::new("ruby").arg("-v").output() {
-        Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
-        Err(_) => None,
-    }
 }
 
 fn format_ruby_version(ruby_version: &str) -> Option<String> {

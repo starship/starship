@@ -124,6 +124,22 @@ jobs:
         with:
           dotnet-version: "2.2.402"
 
+      # Install PHP at a fixed version
+      - uses: shivammathur/setup-php@master
+        with:
+          php-version: '7.3.8'
+
+      # Install Mercurial (pre-installed on linux, installed from pip on macos
+      # and from choco on windows),
+      - name: Install Mercurial (macos)
+        if: matrix.os == 'macOS-latest'
+        env:
+          HGPYTHON3: 1
+        run: pip install mercurial
+      - name: Install Mercurial (windows)
+        if: matrix.os == 'windows-latest'
+        run: choco install hg
+
       # Run the ignored tests that expect the above setup
       - name: Run all tests
         uses: actions-rs/cargo@v1

@@ -301,13 +301,13 @@ style = "dimmed green"
 
 ### 選項
 
-| 變數                  | 預設            | 說明                                                  |
-| ------------------- | ------------- | --------------------------------------------------- |
-| `truncation_length` | `3`           | 到達現在資料夾的路徑中，要被裁減掉的資料夾數目。                            |
-| `truncate_to_repo`  | `true`        | 是否要裁減到你現在所在的 git 儲存庫的根目錄。                           |
+| 變數                  | 預設            | 說明                        |
+| ------------------- | ------------- | ------------------------- |
+| `truncation_length` | `3`           | 到達現在資料夾的路徑中，要被裁減掉的資料夾數目。  |
+| `truncate_to_repo`  | `true`        | 是否要裁減到你現在所在的 git 儲存庫的根目錄。 |
 | `prefix`            | `"in "`       | Prefix to display immediately before the directory. |
-| `style`             | `"bold cyan"` | The style for the module.                           |
-| `disabled`          | `false`       | Disables the `directory` module.                    |
+| `style`             | `"bold cyan"` | 這個模組的風格。                  |
+| `disabled`          | `false`       | 停用 `directory` 模組。        |
 
 <details>
 <summary>這個模組有些進階設定選項可以控制顯示資料夾。</summary>

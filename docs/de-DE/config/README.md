@@ -306,8 +306,8 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `truncation_length` | `3`           | Die Anzahl der übergeordneten Ordner, die angezeigt werden.                      |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
 | `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
-| `style`             | `"bold cyan"` | The style for the module.                                                        |
-| `disabled`          | `false`       | Disables the `directory` module.                                                 |
+| `style`             | `"bold cyan"` | Stil für dieses Modul.                                                           |
+| `disabled`          | `false`       | Deaktiviert das `directory`-Modul.                                               |
 
 <details>
 <summary>Dieses Modul hat einige erweiterte Konfigurationsoptionen, welche die Darstellung von Verzeichnissen steuern.</summary>

@@ -1,9 +1,9 @@
 use std::env;
-use std::process::Command;
 
 use super::{Context, Module, RootModuleConfig, SegmentConfig};
 
 use crate::configs::username::UsernameConfig;
+use crate::utils;
 
 /// Creates a module with the current user's username
 ///
@@ -38,10 +38,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_uid() -> Option<u32> {
-    match Command::new("id").arg("-u").output() {
-        Ok(output) => String::from_utf8(output.stdout)
-            .map(|uid| uid.trim().parse::<u32>().ok())
-            .ok()?,
-        Err(_) => None,
-    }
+    utils::exec_cmd("id", &["-u"])?
+        .stdout
+        .trim()
+        .parse::<u32>()
+        .ok()
 }

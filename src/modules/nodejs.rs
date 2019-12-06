@@ -1,8 +1,7 @@
-use std::process::Command;
-
 use super::{Context, Module, RootModuleConfig, SegmentConfig};
 
 use crate::configs::nodejs::NodejsConfig;
+use crate::utils;
 
 /// Creates a module with the current Node.js version
 ///
@@ -22,26 +21,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    match get_node_version() {
-        Some(node_version) => {
-            let mut module = context.new_module("nodejs");
-            let config: NodejsConfig = NodejsConfig::try_load(module.config);
+    let node_version = utils::exec_cmd("node", &["--version"])?.stdout;
 
-            module.set_style(config.style);
+    let mut module = context.new_module("nodejs");
+    let config: NodejsConfig = NodejsConfig::try_load(module.config);
 
-            let formatted_version = node_version.trim();
-            module.create_segment("symbol", &config.symbol);
-            module.create_segment("version", &SegmentConfig::new(formatted_version));
+    module.set_style(config.style);
 
-            Some(module)
-        }
-        None => None,
-    }
-}
+    let formatted_version = node_version.trim();
+    module.create_segment("symbol", &config.symbol);
+    module.create_segment("version", &SegmentConfig::new(formatted_version));
 
-fn get_node_version() -> Option<String> {
-    match Command::new("node").arg("--version").output() {
-        Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
-        Err(_) => None,
-    }
+    Some(module)
 }
