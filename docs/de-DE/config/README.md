@@ -89,6 +89,7 @@ prompt_order = [
     "kubernetes",
     "directory",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
     "hg_branch",
@@ -122,7 +123,7 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 
 | Variable          | Standardwert    | Beschreibung                                                                |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️  "`        | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                     |
+| `symbol`          | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                     |
 | `style`           | `"bold yellow"` | Stil für dieses Modul.                                                      |
 | `disabled`        | `false`         | Deaktiviert das `aws`-Modul.                                                |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
@@ -336,12 +337,12 @@ Internally, this module uses its own mechanism for version detection. Typically 
 
 ### Optionen
 
-| Variable    | Standardwert  | Beschreibung                                                       |
-| ----------- | ------------- | ------------------------------------------------------------------ |
-| `symbol`    | `"•NET "`     | Symbol das vor der dotnet-Version angezeigt wird.                  |
-| `style`     | `"bold blue"` | Stil für dieses Modul.                                             |
-| `heuristic` | `true`        | Schnelle Versionserkennung nutzen um Starship bedienbar zu halten. |
-| `disabled`  | `false`       | Deaktiviert das `dotnet`-Modul.                                    |
+| Variable    | Standardwert  | Beschreibung                                          |
+| ----------- | ------------- | ----------------------------------------------------- |
+| `symbol`    | `"•NET "`     | Symbol das vor der dotnet-Version angezeigt wird.     |
+| `heuristic` | `true`        | Use faster version detection to keep starship snappy. |
+| `style`     | `"bold blue"` | The style for the module.                             |
+| `disabled`  | `false`       | Deaktiviert das `dotnet`-Modul.                       |
 
 ### Beispiel
 
@@ -408,7 +409,37 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git-Zustand
+## Git Commit
+
+The `git_commit` module shows the active branch of the repo in your current directory.
+
+::: tip
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Optionen
+
+| Variable             | Standardwert   | Beschreibung                                     |
+| -------------------- | -------------- | ------------------------------------------------ |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
+| `prefix`             | `(`            | Prefix to display immediately before git commit. |
+| `suffix`             | `)`            | Suffix to display immediately after git commit.  |
+| `style`              | `"bold green"` | The style for the module.                        |
+| `disabled`           | `true`         | Disables the `git_commit` module.                |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+disabled = false
+commit_hash_length = 4
+```
+
+## Git State
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
@@ -424,8 +455,8 @@ The `git_state` module will show in directories which are part of a git reposito
 | `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
 | `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
 | `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
-| `style`            | `"bold yellow"`    | Stil für dieses Modul.                                                                                           |
-| `disabled`         | `false`            | Deaktiviert das `git_state`-Modul.                                                                               |
+| `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
+| `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
 ### Beispiel
 
@@ -437,7 +468,7 @@ progress_divider = " of "
 cherry_pick = "🍒 PICKING"
 ```
 
-## Git-Status
+## Git Status
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
@@ -464,8 +495,8 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
 | `prefix`           | `[`                        | Prefix to display immediately before git status.        |
 | `suffix`           | `]`                        | Suffix to display immediately after git status.         |
-| `style`            | `"bold red"`               | Stil für dieses Modul.                                  |
-| `disabled`         | `false`                    | Deaktiviert das `git_status`-Modul.                     |
+| `style`            | `"bold red"`               | The style for the module.                               |
+| `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
 #### Git Status Counts
 
@@ -473,7 +504,6 @@ The `git_status` module shows symbols representing the state of the repo in your
 | --------- | ------------ | ------------------------------------------------------ |
 | `enabled` | `false`      | Show the number of files                               |
 | `style`   |              | Optionally style the count differently than the module |
-
 
 ### Beispiel
 
@@ -498,7 +528,7 @@ deleted = "🗑"
 
 ## Golang
 
-Das `golang`-Modul zeigt die aktuell installierte Version von Golang. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
 
 - Das aktuelle Verzeichnis enthält eine `go.mod`-Datei
 - Das aktuelle Verzeichnis enthält eine `go.sum`-Datei
@@ -510,11 +540,11 @@ Das `golang`-Modul zeigt die aktuell installierte Version von Golang. Das Modul 
 
 ### Optionen
 
-| Variable   | Standardwert  | Beschreibung                                      |
-| ---------- | ------------- | ------------------------------------------------- |
-| `symbol`   | `"🐹 "`        | Symbol das vor der Golang-Version angezeigt wird. |
-| `style`    | `"bold cyan"` | Stil für dieses Modul.                            |
-| `disabled` | `false`       | Deaktiviert das `golang`-Modul.                   |
+| Variable   | Standardwert  | Beschreibung                                             |
+| ---------- | ------------- | -------------------------------------------------------- |
+| `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
+| `style`    | `"bold cyan"` | The style for the module.                                |
+| `disabled` | `false`       | Disables the `golang` module.                            |
 
 ### Beispiel
 
@@ -715,7 +745,7 @@ style = "bold dimmed green"
 
 ## Java
 
-The `java` module shows the currently installed version of Java. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `pom.xml`, `build.gradle` or `build.sbt` file
 - The current directory contains a file with the `.java`, `.class` or `.jar` extension
@@ -750,7 +780,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 | Variable   | Standardwert   | Beschreibung                                             |
 | ---------- | -------------- | -------------------------------------------------------- |
 | `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | Stil für dieses Modul.                                   |
+| `style`    | `"bold green"` | The style for the module.                                |
 | `disabled` | `false`        | Disables the `nodejs` module.                            |
 
 ### Beispiel
@@ -883,15 +913,15 @@ The `rust` module shows the currently installed version of Rust. The module will
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
 
-### Optionen
+### Options
 
-| Variable   | Standardwert | Beschreibung                                           |
+| Variable   | Default      | Description                                            |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
 | `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `rust` module.                            |
 
-### Beispiel
+### Example
 
 ```toml
 # ~/.config/starship.toml
