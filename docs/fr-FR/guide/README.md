@@ -68,41 +68,41 @@
 ## 🍬 Fonctionnalités
 
 - Le symbole de prompt devient rouge si la dernière commande a retournée un code différent de zéro
-- Current Go version (`🐹`)
+- Version actuelle de Go (`🐹`)
 - Version actuelle de Java (`☕`)
 - Version actuelle de Node.js (`⬢`)
 - Current PHP version (`🐘`)
-- Current Python version (`🐍`)
-- Current Ruby version (`💎`)
-- Current Rust version (`🦀`)
+- Version actuelle de Python (`🐍`)
+- Version actuelle de Ruby (`💎`)
+- Version actuelle de Rust (`🦀`)
 - Current .NET version (`•NET`)
-- Current version of package in current directory (`📦`)
+- Version actuelle du paquet dans le répertoire courant (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-- Current Git branch and rich repo status:
-  - `=` — conflicting changes
-  - `⇡` — ahead of remote branch
-  - `⇣` — behind of remote branch
-  - `⇕` — diverged changes
-  - `?` — untracked changes
-  - `$` — stashed changes
-  - `!` — modified files
-  - `+` — added files
-  - `»` — renamed files
-  - `✘` — deleted files
+- Branche Git actuelle et affichage "riche" du statut du dépôt:
+  - `=` — Conflits dans les changements
+  - `⇡` — En avance sur la branche distante
+  - `⇣` — En retard sur la branche distante
+  - `⇕` — Changements divergeant
+  - `?` — Changements non-suivis
+  - `$` — Changements remisés
+  - `!` — Fichiers modifiés
+  - `+` — Fichiers ajoutés
+  - `»` — Fichiers renommés
+  - `✘` — Fichiers supprimés
 - Current Mercurial branch
-- Current battery level and status
+- Niveau et état actuels de la batterie
 - `⇡` – charging
 - `⇣` – discharging
 - `•` – fully charged
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
+- Indicateur pour les tâches en arrière-plan (`✦`)
+- Cluster et namespace Kubernetes actuels (`☸`)
 - Current Amazon Web Services (AWS) profile (`☁️`)
 - Execution time of the last command
 - Custom environment variable value
-- Nix-shell environment detection
-- Current username if not the same as the logged-in user
+- Détection de l'environnement Nix-shell
+- Affiche le nom de l'utilisateur courant s'il est différent de celui connecté
 - Optional current time in 12/24hr format
 
 ## 🚀 Installation
@@ -113,7 +113,7 @@
 
 ### Getting Started
 
-1. Install the **starship** binary:
+1. Installer le binaire **starship** :
 
 
    #### Install Latest Version
