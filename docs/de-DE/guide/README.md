@@ -19,8 +19,8 @@
     <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
-      alt="Chat on Discord" /></a>
-  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section --><a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-54-orange" alt="All Contributors"></a><!-- ALL-CONTRIBUTORS-BADGE:END -->
+      alt="Auf Discord chatten" /></a>
+  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section --><a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-54-orange" alt="Alle Mitwirkenden"></a><!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
 <h4 align="center">
@@ -51,7 +51,7 @@
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png" alt="Français" /></a>
   &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/ru"
-    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Русский" /></a>
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Russisch" /></a>
 </p>
 
 <h1></h1>
@@ -68,41 +68,41 @@
 ## 🍬 Features
 
 - Anzeigetext wird rot wenn der letzte Befehl mit einem Exit-code größer null terminiert
-- Current Go version (`🐹`)
+- Derzeitige Go-Version (`🐹`)
 - Derzeitige Java-Version (`☕`)
 - Derzeitige Node.js-Version (`⬢`)
 - Current PHP version (`🐘`)
-- Current Python version (`🐍`)
-- Current Ruby version (`💎`)
-- Current Rust version (`🦀`)
+- Derzeitige Python-Version (`🐍`)
+- Derzeitige Ruby-Version (`💎`)
+- Derzeitige Rust-Version (`🦀`)
 - Current .NET version (`•NET`)
-- Current version of package in current directory (`📦`)
+- Version des Paketmanagers im derzeitigen Pfad (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-- Current Git branch and rich repo status:
-  - `=` — conflicting changes
-  - `⇡` — ahead of remote branch
-  - `⇣` — behind of remote branch
-  - `⇕` — diverged changes
-  - `?` — untracked changes
-  - `$` — stashed changes
-  - `!` — modified files
-  - `+` — added files
-  - `»` — renamed files
-  - `✘` — deleted files
+- Aktueller Git-Branch und ausführlicher Repository-Status:
+  - `=` — konkurrierende Änderungen
+  - `⇡` — vor remote branch
+  - `⇣` — hinter remote branch
+  - `⇕` — abweichende Änderungen
+  - `?` — ungespeicherte Änderungen
+  - `$` — gestashte Änderungen
+  - `!` — veränderte Dateien
+  - `+` — hinzugefügte Dateien
+  - `»` — umbenannte Dateien
+  - `✘` — gelöschte Dateien
 - Current Mercurial branch
-- Current battery level and status
+- Batteriestand und -status
 - `⇡` – charging
 - `⇣` – discharging
 - `•` – fully charged
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
+- Anzeige für Hintergrundsprozesse (`✦`)
+- Aktueller Kubernetes Cluster und Namespace (`☸`)
 - Current Amazon Web Services (AWS) profile (`☁️`)
 - Execution time of the last command
 - Custom environment variable value
-- Nix-shell environment detection
-- Current username if not the same as the logged-in user
+- Erkennung von Nix-Shell-Umgebungen
+- Benutzername, wenn dieser nicht dem angemeldeten Benutzer entspricht
 - Optional current time in 12/24hr format
 
 ## 🚀 Installation
@@ -290,11 +290,11 @@ Danke an diese wunderbaren Leute ([emoji-Schlüssel](https://allcontributors.org
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+Dieses Projekt folgt der [all-contributors](https://github.com/all-contributors/all-contributors) spezifikation. Beiträge aller Art sind willkommen!
 
 ## 💭 Inspiriert durch
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Checkt bitte diese älteren Projekte, die das Entstehen von Starhip inspiriert haben. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Ein ZSH-Prompt für Astronauten.
 
@@ -304,9 +304,9 @@ Please check out these previous works that helped inspire the creation of starsh
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship Raketen Icon">
 </p>
 
 ## 📝 Lizenz
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Unter der [ISC](https://github.com/starship/starship/blob/master/LICENSE) Lizens.
