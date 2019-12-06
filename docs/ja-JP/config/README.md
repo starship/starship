@@ -89,6 +89,7 @@ prompt_order = [
     "kubernetes",
     "directory",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
     "hg_branch",
@@ -122,7 +123,7 @@ prompt_order = [
 
 | 変数                | デフォルト           | 説明                                                       |
 | ----------------- | --------------- | -------------------------------------------------------- |
-| `symbol`          | `"☁️  "`        | 現在のAWSプロファイルを表示する前に表示される記号です。                            |
+| `symbol`          | `"☁️ "`         | 現在のAWSプロファイルを表示する前に表示される記号です。                            |
 | `style`           | `"bold yellow"` | モジュールのスタイルです。                                            |
 | `disabled`        | `false`         | `aws`モジュールを無効にします。                                       |
 | `displayed_items` | `all`           | 表示するアイテムを選択します。 指定可能な値は以下です。[`all`, `profile`, `region`] |
@@ -337,12 +338,12 @@ truncation_length = 8
 
 ### オプション
 
-| 変数          | デフォルト         | 説明                                   |
-| ----------- | ------------- | ------------------------------------ |
-| `symbol`    | `•NET "`      | dotnetのバージョンを表示する前に使用される記号です。        |
-| `style`     | `"bold blue"` | モジュールのスタイルです。                        |
-| `heuristic` | `true`        | より高速なバージョン検出を使用して、starshipの動作を維持します。 |
-| `disabled`  | `false`       | `dotnet`モジュールを無効にします。                |
+| 変数          | デフォルト         | 説明                                                    |
+| ----------- | ------------- | ----------------------------------------------------- |
+| `symbol`    | `•NET "`      | dotnetのバージョンを表示する前に使用される記号です。                         |
+| `heuristic` | `true`        | Use faster version detection to keep starship snappy. |
+| `style`     | `"bold blue"` | The style for the module.                             |
+| `disabled`  | `false`       | `dotnet`モジュールを無効にします。                                 |
 
 ### 設定例
 
@@ -409,24 +410,54 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git の進行状態
+## Git Commit
 
-`git_state`モジュールはgitディレクトリの進行状態を表します。 (例: _REBASING_, _BISECTING_, その他) 進捗情報がある場合(例: REBASING 3/10)はその情報も表示されます。
+The `git_commit` module shows the active branch of the repo in your current directory.
+
+::: tip
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
+:::
 
 ### オプション
 
-| 変数                 | デフォルト              | 説明                                                        |
-| ------------------ | ------------------ | --------------------------------------------------------- |
-| `rebase`           | `"REBASING"`       | `rebase`進行中に表示されるテキストです。                                  |
-| `merge`            | `"MERGING"`        | `merge`進行中に表示されるテキストです。                                   |
-| `revert`           | `"REVERTING"`      | `revert`進行中に表示されるテキストです。                                  |
-| `cherry_pick`      | `"CHERRY-PICKING"` | `cherry-pick`進行中に表示されるテキストです。                             |
-| `bisect`           | `"BISECTING"`      | `disect`進行中に表示されるテキストです。                                  |
-| `am`               | `"AM"`             | `apply-mailbox` (`git am`)の進行中に表示されるテキストです。               |
-| `am_or_rebase`     | `"AM/REBASE"`      | あいまいな`apply-mailbox`または`rebase`が進行中のときに表示されるテキストです。       |
-| `progress_divider` | `"/"`              | 現在の進行量と合計進行量を分ける記号またはテキストです。 (例: `" of "` 、 `"3 of 10"` ) |
-| `style`            | `"bold yellow"`    | モジュールのスタイルです。                                             |
-| `disabled`         | `false`            | `git_state`モジュールを無効にします。                                  |
+| 変数                   | デフォルト          | 説明                                               |
+| -------------------- | -------------- | ------------------------------------------------ |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
+| `prefix`             | `(`            | Prefix to display immediately before git commit. |
+| `suffix`             | `)`            | Suffix to display immediately after git commit.  |
+| `style`              | `"bold green"` | The style for the module.                        |
+| `disabled`           | `true`         | Disables the `git_commit` module.                |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+disabled = false
+commit_hash_length = 4
+```
+
+## Git State
+
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+
+### オプション
+
+| 変数                 | デフォルト              | 説明                                                                                                               |
+| ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
+| `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
+| `revert`           | `"REVERTING"`      | The text displayed when a `revert` is in progress.                                                               |
+| `cherry_pick`      | `"CHERRY-PICKING"` | The text displayed when a `cherry-pick` is in progress.                                                          |
+| `bisect`           | `"BISECTING"`      | The text displayed when a `bisect` is in progress.                                                               |
+| `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
+| `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
+| `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
+| `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
+| `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
 ### 設定例
 
@@ -438,43 +469,42 @@ progress_divider = " of "
 cherry_pick = "🍒 PICKING"
 ```
 
-## Git の状態
+## Git Status
 
-`git_status`モジュールは、現在のディレクトリのリポジトリの状態を表すシンボルを表示します。
+The `git_status` module shows symbols representing the state of the repo in your current directory.
 
 ### オプション
 
-| 変数                 | デフォルト                      | 説明                              |
-| ------------------ | -------------------------- | ------------------------------- |
-| `conflicted`       | `"="`                      | このブランチにはマージの競合があります。            |
-| `conflicted_count` | [link](#git-status-counts) | 競合の数の表示およびスタイル設定します。            |
-| `ahead`            | `"⇡"`                      | このブランチは、追跡されるブランチよりも先にあります。     |
-| `behind`           | `"⇣"`                      | このブランチは、追跡されているブランチの背後にあります。    |
-| `diverged`         | `"⇕" `                     | このブランチは、追跡されているブランチから分岐しています。   |
-| `untracked`        | `"?"`                      | 作業ディレクトリに追跡されていないファイルがあります。     |
-| `untracked_count`  | [link](#git-status-counts) | 追跡されていないファイルの数を表示およびスタイル設定します。  |
-| `stashed`          | `"$"`                      | ローカルリポジトリ用のスタッシュが存在します。         |
-| `modified`         | `"!"`                      | 作業ディレクトリにファイルの変更があります。          |
-| `modified_count`   | [link](#git-status-counts) | 変更されたファイルの数を表示およびスタイル設定します。     |
-| `staged`           | `"+"`                      | 新しいファイルがステージング領域に追加されました。       |
-| `staged_count`     | [link](#git-status-counts) | ステージングされたファイルの数を表示およびスタイル設定します。 |
-| `renamed`          | `"»"`                      | 名前が変更されたファイルがステージング領域に追加されました。  |
-| `renamed_count`    | [link](#git-status-counts) | 名前を変更したファイルの数を表示およびスタイル設定します。   |
-| `deleted`          | `"✘"`                      | ファイルの削除がステージング領域に追加されました。       |
-| `deleted_count`    | [link](#git-status-counts) | 削除されたファイルの数を表示およびスタイルします。       |
-| `show_sync_count`  | `false`                    | 追跡されているブランチの先行/後方カウントを表示します。    |
-| `prefix`           | `[`                        | このモジュールの先頭に表示される文字列です。          |
-| `suffix`           | `]`                        | このモジュールの末尾に表示される文字列です。          |
-| `style`            | `"bold red"`               | モジュールのスタイルです。                   |
-| `disabled`         | `false`                    | `git_status`モジュールを無効にします。       |
+| 変数                 | デフォルト                      | 説明                                                      |
+| ------------------ | -------------------------- | ------------------------------------------------------- |
+| `conflicted`       | `"="`                      | This branch has merge conflicts.                        |
+| `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
+| `ahead`            | `"⇡"`                      | This branch is ahead of the branch being tracked.       |
+| `behind`           | `"⇣"`                      | This branch is behind of the branch being tracked.      |
+| `diverged`         | `"⇕"`                      | This branch has diverged from the branch being tracked. |
+| `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
+| `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
+| `stashed`          | `"$"`                      | A stash exists for the local repository.                |
+| `modified`         | `"!"`                      | There are file modifications in the working directory.  |
+| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
+| `staged`           | `"+"`                      | A new file has been added to the staging area.          |
+| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files.        |
+| `renamed`          | `"»"`                      | A renamed file has been added to the staging area.      |
+| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.             |
+| `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.   |
+| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.             |
+| `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
+| `prefix`           | `[`                        | Prefix to display immediately before git status.        |
+| `suffix`           | `]`                        | Suffix to display immediately after git status.         |
+| `style`            | `"bold red"`               | The style for the module.                               |
+| `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
 #### Git Statusのカウント
 
-| 変数        | デフォルト   | 説明                                |
-| --------- | ------- | --------------------------------- |
-| `enabled` | `false` | ファイルの数を表示します。                     |
-| `style`   |         | オプションで、モジュールとは異なるカウントのスタイルを設定します。 |
-
+| 変数        | デフォルト   | 説明                                                     |
+| --------- | ------- | ------------------------------------------------------ |
+| `enabled` | `false` | Show the number of files                               |
+| `style`   |         | Optionally style the count differently than the module |
 
 ### 設定例
 
@@ -499,7 +529,7 @@ deleted = "🗑"
 
 ## Golang
 
-`golang`モジュールは、現在インストールされているGolangのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`go.mod`ファイルが含まれている
 - カレントディレクトリに`go.sum`ファイルが含まれている
@@ -511,11 +541,11 @@ deleted = "🗑"
 
 ### オプション
 
-| 変数         | デフォルト         | 説明                            |
-| ---------- | ------------- | ----------------------------- |
-| `symbol`   | `"🐹 "`        | Golangのバージョンを表示する前に使用される記号です。 |
-| `style`    | `"bold cyan"` | モジュールのスタイルです。                 |
-| `disabled` | `false`       | `golang`モジュールを無効にします。         |
+| 変数         | デフォルト         | 説明                                                       |
+| ---------- | ------------- | -------------------------------------------------------- |
+| `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
+| `style`    | `"bold cyan"` | The style for the module.                                |
+| `disabled` | `false`       | Disables the `golang` module.                            |
 
 ### 設定例
 
@@ -716,7 +746,7 @@ style = "bold dimmed green"
 
 ## Java
 
-The `java` module shows the currently installed version of Java. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`pom.xml`, `build.gradle`,もしくは`build.sbt`が含まれている
 - カレントディレクトリに拡張子が`.java`, `.class`, もしくは`.jar`のファイルが含まれている
@@ -751,7 +781,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 | 変数         | デフォルト          | 説明                                                       |
 | ---------- | -------------- | -------------------------------------------------------- |
 | `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | モジュールのスタイルです。                                            |
+| `style`    | `"bold green"` | The style for the module.                                |
 | `disabled` | `false`        | Disables the `nodejs` module.                            |
 
 ### 設定例
@@ -884,15 +914,15 @@ The `rust` module shows the currently installed version of Rust. The module will
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
 
-### オプション
+### Options
 
-| 変数         | デフォルト        | 説明                                                     |
+| Variable   | Default      | Description                                            |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
 | `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `rust` module.                            |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
