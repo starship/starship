@@ -19,8 +19,8 @@
     <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
-      alt="Chat on Discord" /></a>
-  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section --><a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-54-orange" alt="All Contributors"></a><!-- ALL-CONTRIBUTORS-BADGE:END -->
+      alt="加入 Discord" /></a>
+  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section --><a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-54-orange" alt="所有贡献者"></a><!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
 <h4 align="center">
@@ -68,19 +68,19 @@
 ## 🍬 特性
 
 - 当上一个命令以非 0 状态退出时，提示字符会变为红色
-- Current Go version (`🐹`)
+- 当前 Go 版本 (`🐹`)
 - 当前 Java 版本(`☕`)
 - 当前 Node.js 版本(`⬢`)
 - Current PHP version (`🐘`)
-- Current Python version (`🐍`)
-- Current Ruby version (`💎`)
-- Current Rust version (`🦀`)
+- 当前 Python 版本 (`🐍`)
+- 当前 Ruby 版本 (`💎`)
+- 当前 Rust 版本 (`🦀`)
 - Current .NET version (`•NET`)
-- Current version of package in current directory (`📦`)
+- 当前目录下现在的包版本 (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-- Current Git branch and rich repo status:
+- 当前 Git 分支与一应俱全的仓库状态
   - `=` — conflicting changes
   - `⇡` — ahead of remote branch
   - `⇣` — behind of remote branch
@@ -92,17 +92,17 @@
   - `»` — renamed files
   - `✘` — deleted files
 - Current Mercurial branch
-- Current battery level and status
+- 当前电池剩余容量与状态
 - `⇡` – charging
 - `⇣` – discharging
 - `•` – fully charged
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
+- 后台运行进程数的指示器 (`✦`)
+- 当前 Kubernetes Cluster 与 Namespace (`☸`)
 - Current Amazon Web Services (AWS) profile (`☁️`)
 - Execution time of the last command
 - Custom environment variable value
-- Nix-shell environment detection
-- Current username if not the same as the logged-in user
+- Nix-shell 环境检测
+- 非当前登录用户的用户名
 - Optional current time in 12/24hr format
 
 ## 🚀 安装
@@ -290,11 +290,11 @@
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+此项目遵循 [all-contributors](https://github.com/all-contributors/all-contributors) 标准。 任何形式的贡献都将受到欢迎！
 
 ## 💭该项目受以下项目启发
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+请参考这些曾经为 Starship 提供启发的工程。 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
 
