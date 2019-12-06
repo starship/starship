@@ -126,8 +126,8 @@ The `aws` module shows the current AWS region and profile. This is based on
 ### Options
 
 | Variable          | Default         | Description                                                                 |
-| ----------------- | --------------- | ----------------------------------------------------------------------------|
-| `symbol`          | `"☁️  "`        | The symbol used before displaying the current AWS profile.                  |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
 | `style`           | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`        | `false`         | Disables the `AWS` module.                                                  |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
@@ -369,8 +369,8 @@ setting `heuristic = false` in the module options.
 | Variable    | Default       | Description                                              |
 | ----------- | ------------- | -------------------------------------------------------- |
 | `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
-| `style`     | `"bold blue"` | The style for the module.                                |
 | `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
+| `style`     | `"bold blue"` | The style for the module.                                |
 | `disabled`  | `false`       | Disables the `dotnet` module.                            |
 
 ### Example
@@ -439,7 +439,6 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-
 ## Git Commit
 
 The `git_commit` module shows the active branch of the repo in your current directory.
@@ -453,13 +452,13 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable              | Default   | Description                                      |
-| ------------          | ----------| -------------------------------------------------|
-| `commit_hash_length`  | `7`       | The length of the displayed git commit hash.     |
-| `style`               | `"green"` | The style for the module.                        |
-| `prefix`              | `(`       | Prefix to display immediately before git commit. |
-| `suffix`              | `)`       | Suffix to display immediately after git commit.  |
-| `disabled`            | `true`    | Disables the `git_commit` module.                |
+| Variable             | Default        | Description                                      |
+| -------------------- | -------------- | ------------------------------------------------ |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
+| `prefix`             | `(`            | Prefix to display immediately before git commit. |
+| `suffix`             | `)`            | Suffix to display immediately after git commit.  |
+| `style`              | `"bold green"` | The style for the module.                        |
+| `disabled`           | `true`         | Disables the `git_commit` module.                |
 
 ### Example
 
@@ -510,37 +509,36 @@ current directory.
 
 ### Options
 
-| Variable            | Default                    | Description                                                     |
-| ------------------- | -------------------------- | --------------------------------------------------------------- |
-| `conflicted`        | `"="`                      | This branch has merge conflicts.                                |
-| `conflicted_count`  | [link](#git-status-counts) | Show and style the number of conflicts.                         |
-| `ahead`             | `"⇡"`                      | This branch is ahead of the branch being tracked.               |
-| `behind`            | `"⇣"`                      | This branch is behind of the branch being tracked.              |
-| `diverged`          | `"⇕"`                      | This branch has diverged from the branch being tracked.         |
-| `untracked`         | `"?"`                      | There are untracked files in the working directory.             |
-| `untracked_count`   | [link](#git-status-counts) | Show and style the number of untracked files.                   |
-| `stashed`           | `"$"`                      | A stash exists for the local repository.                        |
-| `modified`          | `"!"`                      | There are file modifications in the working directory.          |
-| `modified_count`    | [link](#git-status-counts) | Show and style the number of modified files.                    |
-| `staged`            | `"+"`                      | A new file has been added to the staging area.                  |
-| `staged_count`      | [link](#git-status-counts) | Show and style the number of files staged files.                |
-| `renamed`           | `"»"`                      | A renamed file has been added to the staging area.              |
-| `renamed_count`     | [link](#git-status-counts) | Show and style the number of renamed files.                     |
-| `deleted`           | `"✘"`                      | A file's deletion has been added to the staging area.           |
-| `deleted_count`     | [link](#git-status-counts) | Show and style the number of deleted files.                     |
-| `show_sync_count`   | `false`                    | Show ahead/behind count of the branch being tracked.            |
-| `prefix`            | `[`                        | Prefix to display immediately before git status.                |
-| `suffix`            | `]`                        | Suffix to display immediately after git status.                 |
-| `style`             | `"bold red"`               | The style for the module.                                       |
-| `disabled`          | `false`                    | Disables the `git_status` module.                               |
+| Variable           | Default                    | Description                                             |
+| ------------------ | -------------------------- | ------------------------------------------------------- |
+| `conflicted`       | `"="`                      | This branch has merge conflicts.                        |
+| `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
+| `ahead`            | `"⇡"`                      | This branch is ahead of the branch being tracked.       |
+| `behind`           | `"⇣"`                      | This branch is behind of the branch being tracked.      |
+| `diverged`         | `"⇕"`                      | This branch has diverged from the branch being tracked. |
+| `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
+| `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
+| `stashed`          | `"$"`                      | A stash exists for the local repository.                |
+| `modified`         | `"!"`                      | There are file modifications in the working directory.  |
+| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
+| `staged`           | `"+"`                      | A new file has been added to the staging area.          |
+| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files.        |
+| `renamed`          | `"»"`                      | A renamed file has been added to the staging area.      |
+| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.             |
+| `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.   |
+| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.             |
+| `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
+| `prefix`           | `[`                        | Prefix to display immediately before git status.        |
+| `suffix`           | `]`                        | Suffix to display immediately after git status.         |
+| `style`            | `"bold red"`               | The style for the module.                               |
+| `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
 #### Git Status Counts
 
-| Variable    | Default | Description                                            |
-| ----------- | ------- | ------------------------------------------------------ |
-| `enabled`   | `false` | Show the number of files                               |
-| `style`     |         | Optionally style the count differently than the module |
-
+| Variable  | Default | Description                                            |
+| --------- | ------- | ------------------------------------------------------ |
+| `enabled` | `false` | Show the number of files                               |
+| `style`   |         | Optionally style the count differently than the module |
 
 ### Example
 
@@ -884,11 +882,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default      | Description                                            |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"🐘 "`      | The symbol used before displaying the version of PHP.  |
-| `style`    | `"bold red"` | The style for the module.                              |
-| `disabled` | `false`      | Disables the `php` module.                             |
+| Variable   | Default      | Description                                           |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`      | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold red"` | The style for the module.                             |
+| `disabled` | `false`      | Disables the `php` module.                            |
 
 ### Example
 
