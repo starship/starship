@@ -302,13 +302,13 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 
 ### オプション
 
-| 変数                  | デフォルト         | 説明                            |
-| ------------------- | ------------- | ----------------------------- |
-| `truncation_length` | `3`           | 現在のディレクトリを切り捨てる親フォルダーの数です。    |
-| `truncate_to_repo`  | `true`        | 現在いるgitリポジトリのルートに切り捨てるかどうかです。 |
+| 変数                  | デフォルト         | 説明                                                  |
+| ------------------- | ------------- | --------------------------------------------------- |
+| `truncation_length` | `3`           | 現在のディレクトリを切り捨てる親フォルダーの数です。                          |
+| `truncate_to_repo`  | `true`        | 現在いるgitリポジトリのルートに切り捨てるかどうかです。                       |
 | `prefix`            | `"in "`       | Prefix to display immediately before the directory. |
-| `style`             | `"bold cyan"` | モジュールのスタイルです。                 |
-| `disabled`          | `false`       | `directory`モジュールを無効にします。      |
+| `style`             | `"bold cyan"` | The style for the module.                           |
+| `disabled`          | `false`       | Disables the `directory` module.                    |
 
 <details>
 <summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
@@ -426,8 +426,8 @@ The `git_commit` module shows the active branch of the repo in your current dire
 | 変数                   | デフォルト          | 説明                                               |
 | -------------------- | -------------- | ------------------------------------------------ |
 | `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
-| `prefix`             | `(`            | Prefix to display immediately before git commit. |
-| `suffix`             | `)`            | Suffix to display immediately after git commit.  |
+| `prefix`             | `"("`          | Prefix to display immediately before git commit. |
+| `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
 | `style`              | `"bold green"` | モジュールのスタイルです。                                    |
 | `disabled`           | `true`         | Disables the `git_commit` module.                |
 
