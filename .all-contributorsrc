@@ -569,6 +569,16 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "wendorf",
+      "name": "Dan Wendorf",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/407342?v=4",
+      "profile": "https://github.com/wendorf",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
