@@ -89,6 +89,7 @@ prompt_order = [
     "kubernetes",
     "directory",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
     "hg_branch",
@@ -122,7 +123,7 @@ prompt_order = [
 
 | Переменная        | По умолчанию    | Описание                                                         |
 | ----------------- | --------------- | ---------------------------------------------------------------- |
-| `symbol`          | `"☁️  "`        | Символ перед отображением текущего профиля AWS.                  |
+| `symbol`          | `"☁️ "`         | Символ перед отображением текущего профиля AWS.                  |
 | `style`           | `"bold yellow"` | Стиль модуля.                                                    |
 | `disabled`        | `false`         | Отключение модуля `AWS`.                                         |
 | `displayed_items` | `all`           | Выбор элементов. Возможные значения [`all`, `profile`, `region`] |
@@ -336,12 +337,12 @@ truncation_length = 8
 
 ### Опции
 
-| Переменная  | По умолчанию  | Описание                                                          |
-| ----------- | ------------- | ----------------------------------------------------------------- |
-| `symbol`    | `"•NET "`     | Символ перед отображением текущей версии dotnet.                  |
-| `style`     | `"bold blue"` | Стиль модуля.                                                     |
-| `heuristic` | `true`        | Использовать быстрое определение версии, для сохранения скорости. |
-| `disabled`  | `false`       | Отключает модуль `dotnet`.                                        |
+| Переменная  | По умолчанию  | Описание                                              |
+| ----------- | ------------- | ----------------------------------------------------- |
+| `symbol`    | `"•NET "`     | Символ перед отображением текущей версии dotnet.      |
+| `heuristic` | `true`        | Use faster version detection to keep starship snappy. |
+| `style`     | `"bold blue"` | The style for the module.                             |
+| `disabled`  | `false`       | Отключает модуль `dotnet`.                            |
 
 ### Пример
 
@@ -406,6 +407,36 @@ The `git_branch` module shows the active branch of the repo in your current dire
 symbol = "🌱 "
 truncation_length = 4
 truncation_symbol = ""
+```
+
+## Git Commit
+
+The `git_commit` module shows the active branch of the repo in your current directory.
+
+::: tip
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Опции
+
+| Переменная           | По умолчанию   | Описание                                         |
+| -------------------- | -------------- | ------------------------------------------------ |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
+| `prefix`             | `(`            | Prefix to display immediately before git commit. |
+| `suffix`             | `)`            | Suffix to display immediately after git commit.  |
+| `style`              | `"bold green"` | The style for the module.                        |
+| `disabled`           | `true`         | Disables the `git_commit` module.                |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+disabled = false
+commit_hash_length = 4
 ```
 
 ## Git State
@@ -473,7 +504,6 @@ The `git_status` module shows symbols representing the state of the repo in your
 | ---------- | ------------ | ------------------------------------------------------ |
 | `enabled`  | `false`      | Show the number of files                               |
 | `style`    |              | Optionally style the count differently than the module |
-
 
 ### Пример
 
@@ -883,15 +913,15 @@ The `rust` module shows the currently installed version of Rust. The module will
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
 
-### Опции
+### Options
 
-| Переменная | По умолчанию | Описание                                               |
+| Variable   | Default      | Description                                            |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
 | `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `rust` module.                            |
 
-### Пример
+### Example
 
 ```toml
 # ~/.config/starship.toml
