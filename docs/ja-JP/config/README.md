@@ -304,6 +304,7 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 | ------------------- | ------------- | ----------------------------- |
 | `truncation_length` | `3`           | 現在のディレクトリを切り捨てる親フォルダーの数です。    |
 | `truncate_to_repo`  | `true`        | 現在いるgitリポジトリのルートに切り捨てるかどうかです。 |
+| `prefix`            | `"in "`       | Prefix to display immediately before the directory. |
 | `style`             | `"bold cyan"` | モジュールのスタイルです。                 |
 | `disabled`          | `false`       | `directory`モジュールを無効にします。      |
 

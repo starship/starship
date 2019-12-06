@@ -303,6 +303,7 @@ style = "dimmed green"
 | ------------------- | ------------- | ------------------------- |
 | `truncation_length` | `3`           | 到達現在資料夾的路徑中，要被裁減掉的資料夾數目。  |
 | `truncate_to_repo`  | `true`        | 是否要裁減到你現在所在的 git 儲存庫的根目錄。 |
+| `prefix`            | `"in "`       | Prefix to display immediately before the directory. |
 | `style`             | `"bold cyan"` | 這個模組的風格。                  |
 | `disabled`          | `false`       | 停用 `directory` 模組。        |
 
