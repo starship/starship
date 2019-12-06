@@ -454,11 +454,11 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 | Variable              | Default   | Description                                      |
 | ------------          | ----------| -------------------------------------------------|
+| `commit_hash_length`  | `7`       | The length of the displayed git commit hash.     |
 | `style`               | `"green"` | The style for the module.                        |
 | `prefix`              | `(`       | Prefix to display immediately before git commit. |
 | `suffix`              | `)`       | Suffix to display immediately after git commit.  |
 | `disabled`            | `true`    | Disables the `git_commit` module.                |
-| `commit_hash_length`  | `7`       | The length of the displayed git commit hash.     |
 
 ### Example
 
