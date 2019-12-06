@@ -3,6 +3,7 @@ use crate::segment::Segment;
 use ansi_term::Style;
 use ansi_term::{ANSIString, ANSIStrings};
 use std::fmt;
+use unicode_width::UnicodeWidthChar;
 
 // List of all modules
 // Keep these ordered alphabetically.
@@ -100,17 +101,17 @@ impl<'a> Module<'a> {
     pub fn segments_len(&self) -> usize {
         self.segments
             .iter()
-            .fold(0, |acc, curr| acc + curr.value().chars().count())
-            + self.prefix.value.chars().count()
-            + self.suffix.value.chars().count()
+            .fold(0, |acc, curr| acc + curr.value().chars().fold(0, |acc, curr| acc + curr.width().unwrap_or(0)))
+            + self.prefix.value.chars().fold(0, |acc, curr| acc + curr.width().unwrap_or(0))
+            + self.suffix.value.chars().fold(0, |acc, curr| acc + curr.width().unwrap_or(0))
     }
 
     /// Total number of character in the module, excluding the prefix
     pub fn segments_len_without_prefix(&self) -> usize {
         self.segments
             .iter()
-            .fold(0, |acc, curr| acc + curr.value().chars().count())
-            + self.suffix.value.chars().count()
+            .fold(0, |acc, curr| acc + curr.value().chars().fold(0, |acc, curr| acc + curr.width().unwrap_or(0)))
+            + self.suffix.value.chars().fold(0, |acc, curr| acc + curr.width().unwrap_or(0))
     }
 
     /// Get the module's prefix
