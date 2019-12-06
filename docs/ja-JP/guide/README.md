@@ -68,41 +68,41 @@
 ## 🍬 機能
 
 - 最後のコマンドがゼロ以外のコードで終了すると、プロンプト文字が赤に変わります
-- Current Go version (`🐹`)
+- 現在の Go バージョン (`🐹`)
 - 現在の Java のバージョン (`☕`)
 - 現在の Node.js のバージョン (`⬢`)
 - Current PHP version (`🐘`)
-- Current Python version (`🐍`)
-- Current Ruby version (`💎`)
-- Current Rust version (`🦀`)
+- 現在の Python のバージョン (`🐍`)
+- 現在の Ruby のバージョン (`💎`)
+- 現在の Rust のバージョン (`🦀`)
 - Current .NET version (`•NET`)
-- Current version of package in current directory (`📦`)
+- カレントディレクトリにある現在のパッケージバージョン(`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-- Current Git branch and rich repo status:
-  - `=` — conflicting changes
-  - `⇡` — ahead of remote branch
-  - `⇣` — behind of remote branch
-  - `⇕` — diverged changes
-  - `?` — untracked changes
-  - `$` — stashed changes
-  - `!` — modified files
-  - `+` — added files
-  - `»` — renamed files
-  - `✘` — deleted files
+- 現在の Git ブランチとリッチなリポジトリの状態
+  - `=` — 競合している変更
+  - `⇡` — リモートブランチより進んでいる変更
+  - `⇣` —リモートブランチに追いついていない変更
+  - `⇕` — 分岐した変更
+  - `?` — 追跡されていない変更
+  - `$` — stashされた変更
+  - `!` — 変更されたファイル
+  - `+` — 追加されたファイル
+  - `»` — 名前が変更されたファイル
+  - `✘` — 削除されたファイル
 - Current Mercurial branch
-- Current battery level and status
+- 現在のバッテリー残量と状態
 - `⇡` – charging
 - `⇣` – discharging
 - `•` – fully charged
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
+- バックグラウンドジョブのインジケーター (`✦`)
+- 現在のKubernetesクラスタとネームスペース (`☸`)
 - Current Amazon Web Services (AWS) profile (`☁️`)
 - Execution time of the last command
 - Custom environment variable value
-- Nix-shell environment detection
-- Current username if not the same as the logged-in user
+- Nix-shell の環境検出
+- ログインユーザーと異なる場合にユーザー名を表示する
 - Optional current time in 12/24hr format
 
 ## 🚀 インストール
@@ -290,11 +290,11 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+このプロジェクトは [all-contributors](https://allcontributors.org/docs/ja/overview) の仕様に従っています。 どんな種類の貢献でもお待ちしています！
 
 ## 💭影響を受けたプロダクト
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+よければStarship の作成に影響を与えた、これまでのプロジェクトをチェックしてください 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - 宇宙飛行士のための ZSH プロンプト。
 
@@ -309,4 +309,4 @@ Please check out these previous works that helped inspire the creation of starsh
 
 ## 📝 ライセンス
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> このプロジェクトは [ISC](https://github.com/starship/starship/blob/master/LICENSE) でライセンスされています。
