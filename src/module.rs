@@ -68,11 +68,11 @@ pub struct Module<'a> {
 
 impl<'a> Module<'a> {
     /// Creates a module with no segments.
-    pub fn new(name: &str, config: Option<&'a toml::Value>) -> Module<'a> {
+    pub fn new(name: &str, desc: &str, config: Option<&'a toml::Value>) -> Module<'a> {
         Module {
             config,
             _name: name.to_string(),
-            description: "This is an example description".to_string(),
+            description: desc.to_string(),
             style: Style::default(),
             prefix: Affix::default_prefix(name),
             segments: Vec::new(),

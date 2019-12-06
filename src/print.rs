@@ -1,8 +1,8 @@
 use clap::ArgMatches;
 use rayon::prelude::*;
-use unicode_width::UnicodeWidthChar;
 use std::fmt::Write as FmtWrite;
 use std::io::{self, Write};
+use unicode_width::UnicodeWidthChar;
 
 use crate::context::Context;
 use crate::module::Module;
@@ -80,7 +80,7 @@ pub fn explainer(args: ArgMatches) {
         std::cmp::max(acc, m.chars().count() + count_wide_chars(&m))
     });
 
-    println!("\nHere's a breakdown of your prompt:");
+    println!("\n Here's a breakdown of your prompt:");
     for (module, desc) in modules {
         let wide_chars = count_wide_chars(&module);
         println!(

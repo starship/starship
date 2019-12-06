@@ -11,6 +11,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::string::String;
 use std::time::{Duration, SystemTime};
+use crate::modules;
 
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering
@@ -91,8 +92,9 @@ impl<'a> Context<'a> {
     /// Create a new module
     pub fn new_module(&self, name: &str) -> Module {
         let config = self.config.get_module_config(name);
+        let desc = modules::description(name);
 
-        Module::new(name, config)
+        Module::new(name, desc, config)
     }
 
     /// Check if `disabled` option of the module is true in configuration file.
