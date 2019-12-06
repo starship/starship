@@ -9,6 +9,7 @@ pub struct PythonConfig<'a> {
     pub version: SegmentConfig<'a>,
     pub pyenv_prefix: SegmentConfig<'a>,
     pub pyenv_version_name: bool,
+    pub scan_for_pyfiles: bool,
     pub style: Style,
     pub disabled: bool,
 }
@@ -20,6 +21,7 @@ impl<'a> RootModuleConfig<'a> for PythonConfig<'a> {
             version: SegmentConfig::default(),
             pyenv_prefix: SegmentConfig::new("pyenv "),
             pyenv_version_name: false,
+            scan_for_pyfiles: true,
             style: Color::Yellow.bold(),
             disabled: false,
         }
