@@ -14,7 +14,7 @@ pub struct CmdDurationConfig<'a> {
 impl<'a> RootModuleConfig<'a> for CmdDurationConfig<'a> {
     fn new() -> Self {
         CmdDurationConfig {
-            min_time: 2,
+            min_time: 2_000,
             prefix: "took ",
             style: Color::Yellow.bold(),
             disabled: false,

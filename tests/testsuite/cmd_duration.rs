@@ -6,7 +6,7 @@ use crate::common::{self, TestCommand};
 #[test]
 fn config_blank_duration_1s() -> io::Result<()> {
     let output = common::render_module("cmd_duration")
-        .arg("--cmd-duration=1")
+        .arg("--cmd-duration=1000")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -18,7 +18,7 @@ fn config_blank_duration_1s() -> io::Result<()> {
 #[test]
 fn config_blank_duration_5s() -> io::Result<()> {
     let output = common::render_module("cmd_duration")
-        .arg("--cmd-duration=5")
+        .arg("--cmd-duration=5000")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -32,9 +32,9 @@ fn config_5s_duration_3s() -> io::Result<()> {
     let output = common::render_module("cmd_duration")
         .use_config(toml::toml! {
             [cmd_duration]
-            min_time = 5
+            min_time = 5000
         })
-        .arg("--cmd-duration=3")
+        .arg("--cmd-duration=3000")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -48,9 +48,9 @@ fn config_5s_duration_10s() -> io::Result<()> {
     let output = common::render_module("cmd_duration")
         .use_config(toml::toml! {
             [cmd_duration]
-            min_time = 5
+            min_time = 5000
         })
-        .arg("--cmd-duration=10")
+        .arg("--cmd-duration=10000")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -66,7 +66,7 @@ fn config_1s_duration_prefix_underwent() -> io::Result<()> {
             [cmd_duration]
             prefix = "underwent "
         })
-        .arg("--cmd-duration=1")
+        .arg("--cmd-duration=1000")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -82,7 +82,7 @@ fn config_5s_duration_prefix_underwent() -> io::Result<()> {
             [cmd_duration]
             prefix = "underwent "
         })
-        .arg("--cmd-duration=5")
+        .arg("--cmd-duration=5000")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 

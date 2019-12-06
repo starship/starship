@@ -1,3 +1,5 @@
+use std::time::SystemTime;
+
 #[macro_use]
 extern crate clap;
 
@@ -42,7 +44,7 @@ fn main() {
         .short("d")
         .long("cmd-duration")
         .value_name("CMD_DURATION")
-        .help("The execution duration of the last command, in seconds")
+        .help("The execution duration of the last command, in milliseconds")
         .takes_value(true);
 
     let keymap_arg = Arg::with_name("keymap")
@@ -108,6 +110,7 @@ fn main() {
                 .arg(&keymap_arg)
                 .arg(&jobs_arg),
         )
+        .subcommand(SubCommand::with_name("time").about("Prints time in milliseconds"))
         .get_matches();
 
     match matches.subcommand() {
@@ -130,6 +133,15 @@ fn main() {
             }
             if let Some(module_name) = sub_m.value_of("name") {
                 print::module(module_name, sub_m.clone());
+            }
+        }
+        ("time", _) => {
+            match SystemTime::now()
+                .duration_since(SystemTime::UNIX_EPOCH)
+                .ok()
+            {
+                Some(time) => println!("{}", time.as_millis()),
+                None => println!("{}", -1),
             }
         }
         _ => {}
