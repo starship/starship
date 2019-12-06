@@ -89,8 +89,10 @@ prompt_order = [
     "kubernetes",
     "directory",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
+    "hg_branch",
     "package",
     "dotnet",
     "golang",
@@ -121,7 +123,7 @@ prompt_order = [
 
 | 變數                | 預設              | 說明                                                                          |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️  "`        | 顯示在目前 AWS 配置之前的符號。                                                          |
+| `symbol`          | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。                                                          |
 | `style`           | `"bold yellow"` | 這個模組的風格。                                                                    |
 | `disabled`        | `false`         | 停用 `AWS` 模組。                                                                |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
@@ -339,8 +341,8 @@ truncation_length = 8
 | 變數          | 預設            | 說明                           |
 | ----------- | ------------- | ---------------------------- |
 | `symbol`    | `"•NET "`     | 在顯示 dotnet 版本之前用的符號。         |
-| `style`     | `"bold blue"` | 這個模組的風格。                     |
 | `heuristic` | `true`        | 使用更快速的版本偵測法來保持 starship 的速度。 |
+| `style`     | `"bold blue"` | 這個模組的風格。                     |
 | `disabled`  | `false`       | 停用 `dotnet` 模組。              |
 
 ### 範例
@@ -406,6 +408,36 @@ default = "unknown shell"
 symbol = "🌱 "
 truncation_length = 4
 truncation_symbol = ""
+```
+
+## Git Commit
+
+The `git_commit` module shows the active branch of the repo in your current directory.
+
+::: tip
+
+這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+
+:::
+
+### 選項
+
+| 變數                   | 預設             | 說明                                               |
+| -------------------- | -------------- | ------------------------------------------------ |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
+| `prefix`             | `(`            | Prefix to display immediately before git commit. |
+| `suffix`             | `)`            | Suffix to display immediately after git commit.  |
+| `style`              | `"bold green"` | 這個模組的風格。                                         |
+| `disabled`           | `true`         | Disables the `git_commit` module.                |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+disabled = false
+commit_hash_length = 4
 ```
 
 ## Git State
@@ -474,7 +506,6 @@ cherry_pick = "🍒 PICKING"
 | `enabled` | `false` | Show the number of files                               |
 | `style`   |         | Optionally style the count differently than the module |
 
-
 ### 範例
 
 ```toml
@@ -523,6 +554,31 @@ deleted = "🗑"
 
 [golang]
 symbol = "🏎💨 "
+```
+
+## Mercurial Branch
+
+The `hg_branch` module shows the active branch of the repo in your current directory.
+
+### 選項
+
+| 變數                  | 預設              | 說明                                                                                           |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`           | 用來指示分支名稱被縮減的符號。                                                                              |
+| `style`             | `"bold purple"` | 這個模組的風格。                                                                                     |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[hg_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
 ```
 
 ## 主機名稱
@@ -671,8 +727,8 @@ pure_msg = "pure shell"
 | `threshold`       | `75`                  | 將記憶體使用量隱藏，除非使用量超過指定值。                                         |
 | `symbol`          | `"🐏 "`                | 顯示在記憶體使用量之前的符號。                                               |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | The style for the module.                                     |
-| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
+| `style`           | `"bold dimmed white"` | 這個模組的風格。                                                      |
+| `disabled`        | `true`                | 停用 `memory_usage` 模組。                                         |
 
 ### 範例
 
@@ -764,6 +820,30 @@ The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並
 symbol = "🎁 "
 ```
 
+## PHP
+
+The `php` module shows the currently installed version of PHP. 這個模組在下列其中一個條件達成時顯示：
+
+- 現在資料夾中含有一個 `composer.json` 檔案
+- The current directory contains a `.php` file
+
+### 選項
+
+| 變數         | 預設           | 說明                                                    |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold red"` | 這個模組的風格。                                              |
+| `disabled` | `false`      | Disables the `php` module.                            |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[php]
+symbol = "🔹 "
+```
+
 ## Python
 
 `python` 模組顯示現在安裝的 Python 版本
@@ -772,7 +852,7 @@ symbol = "🎁 "
 
 要不然就會顯示 `python -version` 的版本和有啟用的 Python 虛擬環境版本
 
-這個模組在下列任一條件時會顯示：
+這個模組在下列其中一個條件達成時顯示：
 
 - 目前資料夾中有一個 `.python-version` 檔案
 - 目前資料夾中有一個 `requirements.txt` 檔案

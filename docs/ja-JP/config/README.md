@@ -89,8 +89,10 @@ prompt_order = [
     "kubernetes",
     "directory",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
+    "hg_branch",
     "package",
     "dotnet",
     "golang",
@@ -121,7 +123,7 @@ prompt_order = [
 
 | 変数                | デフォルト           | 説明                                                       |
 | ----------------- | --------------- | -------------------------------------------------------- |
-| `symbol`          | `"☁️  "`        | 現在のAWSプロファイルを表示する前に表示される記号です。                            |
+| `symbol`          | `"☁️ "`         | 現在のAWSプロファイルを表示する前に表示される記号です。                            |
 | `style`           | `"bold yellow"` | モジュールのスタイルです。                                            |
 | `disabled`        | `false`         | `aws`モジュールを無効にします。                                       |
 | `displayed_items` | `all`           | 表示するアイテムを選択します。 指定可能な値は以下です。[`all`, `profile`, `region`] |
@@ -340,8 +342,8 @@ truncation_length = 8
 | 変数          | デフォルト         | 説明                                   |
 | ----------- | ------------- | ------------------------------------ |
 | `symbol`    | `•NET "`      | dotnetのバージョンを表示する前に使用される記号です。        |
-| `style`     | `"bold blue"` | モジュールのスタイルです。                        |
 | `heuristic` | `true`        | より高速なバージョン検出を使用して、starshipの動作を維持します。 |
+| `style`     | `"bold blue"` | モジュールのスタイルです。                        |
 | `disabled`  | `false`       | `dotnet`モジュールを無効にします。                |
 
 ### 設定例
@@ -409,24 +411,54 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
+## Git Commit
+
+The `git_commit` module shows the active branch of the repo in your current directory.
+
+::: tip
+
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+
+:::
+
+### オプション
+
+| 変数                   | デフォルト          | 説明                                               |
+| -------------------- | -------------- | ------------------------------------------------ |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
+| `prefix`             | `(`            | Prefix to display immediately before git commit. |
+| `suffix`             | `)`            | Suffix to display immediately after git commit.  |
+| `style`              | `"bold green"` | モジュールのスタイルです。                                    |
+| `disabled`           | `true`         | Disables the `git_commit` module.                |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+disabled = false
+commit_hash_length = 4
+```
+
 ## Git の進行状態
 
 `git_state`モジュールはgitディレクトリの進行状態を表します。 (例: _REBASING_, _BISECTING_, その他) 進捗情報がある場合(例: REBASING 3/10)はその情報も表示されます。
 
 ### オプション
 
-| 変数                 | デフォルト              | 説明                                                        |
-| ------------------ | ------------------ | --------------------------------------------------------- |
-| `rebase`           | `"REBASING"`       | `rebase`進行中に表示されるテキストです。                                  |
-| `merge`            | `"MERGING"`        | `merge`進行中に表示されるテキストです。                                   |
-| `revert`           | `"REVERTING"`      | `revert`進行中に表示されるテキストです。                                  |
-| `cherry_pick`      | `"CHERRY-PICKING"` | `cherry-pick`進行中に表示されるテキストです。                             |
-| `bisect`           | `"BISECTING"`      | `disect`進行中に表示されるテキストです。                                  |
-| `am`               | `"AM"`             | `apply-mailbox` (`git am`)の進行中に表示されるテキストです。               |
-| `am_or_rebase`     | `"AM/REBASE"`      | あいまいな`apply-mailbox`または`rebase`が進行中のときに表示されるテキストです。       |
-| `progress_divider` | `"/"`              | 現在の進行量と合計進行量を分ける記号またはテキストです。 (例: `" of "` 、 `"3 of 10"` ) |
-| `style`            | `"bold yellow"`    | モジュールのスタイルです。                                             |
-| `disabled`         | `false`            | `git_state`モジュールを無効にします。                                  |
+| 変数                 | デフォルト              | 説明                                                       |
+| ------------------ | ------------------ | -------------------------------------------------------- |
+| `rebase`           | `"REBASING"`       | `rebase`進行中に表示されるテキストです。                                 |
+| `merge`            | `"MERGING"`        | `merge`進行中に表示されるテキストです。                                  |
+| `revert`           | `"REVERTING"`      | `revert`進行中に表示されるテキストです。                                 |
+| `cherry_pick`      | `"CHERRY-PICKING"` | `cherry-pick`進行中に表示されるテキストです。                            |
+| `bisect`           | `"BISECTING"`      | `disect`進行中に表示されるテキストです。                                 |
+| `am`               | `"AM"`             | `apply-mailbox` (`git am`) の進行中に表示されるテキストです。             |
+| `am_or_rebase`     | `"AM/REBASE"`      | あいまいな`apply-mailbox`または`rebase`が進行中のときに表示されるテキストです。      |
+| `progress_divider` | `"/"`              | 現在の進行量と合計進行量を分ける記号またはテキストです。 (例: `" of "` 、 `"3 of 10"`) |
+| `style`            | `"bold yellow"`    | モジュールのスタイルです。                                            |
+| `disabled`         | `false`            | `git_state`モジュールを無効にします。                                 |
 
 ### 設定例
 
@@ -450,7 +482,7 @@ cherry_pick = "🍒 PICKING"
 | `conflicted_count` | [link](#git-status-counts) | 競合の数の表示およびスタイル設定します。            |
 | `ahead`            | `"⇡"`                      | このブランチは、追跡されるブランチよりも先にあります。     |
 | `behind`           | `"⇣"`                      | このブランチは、追跡されているブランチの背後にあります。    |
-| `diverged`         | `"⇕" `                     | このブランチは、追跡されているブランチから分岐しています。   |
+| `diverged`         | `"⇕"`                      | このブランチは、追跡されているブランチから分岐しています。   |
 | `untracked`        | `"?"`                      | 作業ディレクトリに追跡されていないファイルがあります。     |
 | `untracked_count`  | [link](#git-status-counts) | 追跡されていないファイルの数を表示およびスタイル設定します。  |
 | `stashed`          | `"$"`                      | ローカルリポジトリ用のスタッシュが存在します。         |
@@ -474,7 +506,6 @@ cherry_pick = "🍒 PICKING"
 | --------- | ------- | --------------------------------- |
 | `enabled` | `false` | ファイルの数を表示します。                     |
 | `style`   |         | オプションで、モジュールとは異なるカウントのスタイルを設定します。 |
-
 
 ### 設定例
 
@@ -524,6 +555,31 @@ deleted = "🗑"
 
 [golang]
 symbol = "🏎💨 "
+```
+
+## Mercurial Branch
+
+The `hg_branch` module shows the active branch of the repo in your current directory.
+
+### オプション
+
+| 変数                  | デフォルト           | 説明                                                                                           |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`           | ブランチ名切り捨てられていることを示すための記号です。                                                                  |
+| `style`             | `"bold purple"` | モジュールのスタイルです。                                                                                |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[hg_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
 ```
 
 ## ホスト名
@@ -653,13 +709,14 @@ pure_msg = "pure shell"
 
 ## メモリ使用量
 
-`memory_usage`モジュールは、現在のシステムメモリとスワップ使用量を示します。
+`memory_usage</ 0>モジュールは、現在のシステムメモリとスワップ使用量を示します。</p>
 
-デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。
+<p spaces-before="0">デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。</p>
 
-::: tip
+<p spaces-before="0">::: tip</p>
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+<p spaces-before="0">このモジュールはデフォルトで無効になっています。
+有効にするには、設定ファイルで<code>disabled`を`false`に設定します。
 
 :::
 
@@ -672,8 +729,8 @@ pure_msg = "pure shell"
 | `threshold`       | `75`                  | この閾値を超えない限り、メモリ使用率は表示されません。                                   |
 | `symbol`          | `"🐏 "`                | メモリ使用率を表示する前に使用される記号です。                                       |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | The style for the module.                                     |
-| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
+| `style`           | `"bold dimmed white"` | モジュールのスタイルです。                                                 |
+| `disabled`        | `true`                | `memory_usage`モジュールを無効にします。                                   |
 
 ### 設定例
 
@@ -702,7 +759,7 @@ style = "bold dimmed green"
 | ---------- | -------------- | --------------------------- |
 | `symbol`   | `"☕ "`         | Javaのバージョンを表示する前に使用される記号です。 |
 | `style`    | `"dimmed red"` | モジュールのスタイルです。               |
-| `disabled` | `false`        | `java`モジュールを無効にします。         |
+| `disabled` | `false`        | `Java`モジュールを無効にします。         |
 
 ### 設定例
 
@@ -740,7 +797,7 @@ symbol = "🤖 "
 
 ## パッケージのバージョン
 
-`package` モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。 このモジュールは現在、 `npm` 、 `cargo` 、および`poetry`パッケージをサポートしています。
+`package`モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。 このモジュールは現在、 `npm` 、 `cargo` 、および`poetry`パッケージをサポートしています。
 
 - **npm** – `npm`パッケージバージョンは、現在のディレクトリにある`package.json`から抽出されます
 - **cargo** – `cargo`パッケージバージョンは、現在のディレクトリにある`Cargo.toml`から抽出されます。
@@ -754,7 +811,7 @@ symbol = "🤖 "
 | ---------- | ------------ | ---------------------------- |
 | `symbol`   | `"📦 "`       | パッケージのバージョンを表示する前に使用される記号です。 |
 | `style`    | `"bold red"` | モジュールのスタイルです。                |
-| `disabled` | `false`      | `package` モジュールを無効にします。      |
+| `disabled` | `false`      | `package`モジュールを無効にします。       |
 
 ### 設定例
 
@@ -765,13 +822,37 @@ symbol = "🤖 "
 symbol = "🎁 "
 ```
 
+## PHP
+
+The `php` module shows the currently installed version of PHP. 次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- カレントディレクトリに`composer.json`ファイルが含まれている
+- The current directory contains a `.php` file
+
+### オプション
+
+| 変数         | デフォルト        | 説明                                                    |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold red"` | モジュールのスタイルです。                                         |
+| `disabled` | `false`      | Disables the `php` module.                            |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[php]
+symbol = "🔹 "
+```
+
 ## Python
 
-`python` モジュールは、現在インストールされているPythonのバージョンを示します。
+`python`モジュールは、現在インストールされているPythonのバージョンを示します。
 
-`pyenvversionname` が `true` に設定されている場合 、pyenvでのバージョン名が表示されます 。
+`pyenvversionname`が`true`に設定されている場合 、pyenvでのバージョン名が表示されます 。
 
-それ以外の場合は、 `python --version` バージョン番号が表示され、アクティブになっている場合は現在のPython仮想環境が表示されます。
+それ以外の場合は、 `python --version`バージョン番号が表示され、アクティブになっている場合は現在のPython仮想環境が表示されます。
 
 次の条件のいずれかが満たされると、モジュールが表示されます。
 
@@ -785,13 +866,13 @@ symbol = "🎁 "
 
 ### オプション
 
-| 変数                   | デフォルト           | 説明                                                     |
-| -------------------- | --------------- | ------------------------------------------------------ |
-| `symbol`             | `"🐍 "`          | Pythonのバージョンを表示する前に使用される記号です。                          |
-| `pyenv_version_name` | `false`         | pyenvを使用してPythonバージョンを取得します                            |
-| `pyenv_prefix`       | `"pyenv "`      | pyenvバージョン表示の前のprefix (デフォルトの表示は`pyenv MY_VERSION`) です |
-| `style`              | `"bold yellow"` | モジュールのスタイルです。                                          |
-| `disabled`           | `false`         | `python`モジュールを無効にします。                                  |
+| 変数                   | デフォルト           | 説明                                                   |
+| -------------------- | --------------- | ---------------------------------------------------- |
+| `symbol`             | `"🐍 "`          | Pythonのバージョンを表示する前に使用される記号です。                        |
+| `pyenv_version_name` | `false`         | pyenvを使用してPythonバージョンを取得します                          |
+| `pyenv_prefix`       | `"pyenv "`      | pyenvバージョン表示の前のprefix（デフォルトの表示は`pyenv MY_VERSION`）です |
+| `style`              | `"bold yellow"` | モジュールのスタイルです。                                        |
+| `disabled`           | `false`         | `python`モジュールを無効にします。                                |
 
 ### 設定例
 
@@ -887,7 +968,7 @@ utc_time_offset = -5
 
 ## ユーザー名
 
-`username`モジュールはアクティブなユーザーのユーザー名を表示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントユーザーがroot
 - カレントユーザーが、ログインしているユーザーとは異なる
@@ -900,8 +981,8 @@ utc_time_offset = -5
 | ------------- | --------------- | ------------------------- |
 | `style_root`  | `"bold red"`    | ユーザーがrootのときに使用されるスタイルです。 |
 | `style_user`  | `"bold yellow"` | 非rootユーザーに使用されるスタイルです。    |
-| `show_always` | `false`         | `username` モジュールを常に表示します。 |
-| `disabled`    | `false`         | `username` モジュールを無効にします。  |
+| `show_always` | `false`         | `username`モジュールを常に表示します。  |
+| `disabled`    | `false`         | `username`モジュールを無効にします。   |
 
 ### 設定例
 
