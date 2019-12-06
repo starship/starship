@@ -89,6 +89,7 @@ prompt_order = [
     "kubernetes",
     "directory",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
     "hg_branch",
@@ -122,7 +123,7 @@ prompt_order = [
 
 | 變數                | 預設              | 說明                                                                          |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️  "`        | 顯示在目前 AWS 配置之前的符號。                                                          |
+| `symbol`          | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。                                                          |
 | `style`           | `"bold yellow"` | 這個模組的風格。                                                                    |
 | `disabled`        | `false`         | 停用 `AWS` 模組。                                                                |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
@@ -336,12 +337,12 @@ truncation_length = 8
 
 ### 選項
 
-| 變數          | 預設            | 說明                           |
-| ----------- | ------------- | ---------------------------- |
-| `symbol`    | `"•NET "`     | 在顯示 dotnet 版本之前用的符號。         |
-| `style`     | `"bold blue"` | 這個模組的風格。                     |
-| `heuristic` | `true`        | 使用更快速的版本偵測法來保持 starship 的速度。 |
-| `disabled`  | `false`       | 停用 `dotnet` 模組。              |
+| 變數          | 預設            | 說明                                                    |
+| ----------- | ------------- | ----------------------------------------------------- |
+| `symbol`    | `"•NET "`     | 在顯示 dotnet 版本之前用的符號。                                  |
+| `heuristic` | `true`        | Use faster version detection to keep starship snappy. |
+| `style`     | `"bold blue"` | The style for the module.                             |
+| `disabled`  | `false`       | 停用 `dotnet` 模組。                                       |
 
 ### 範例
 
@@ -408,24 +409,54 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git State
+## Git Commit
 
-`git_state` 模組會顯示在 git 儲存庫中的資料夾內，以及會在有作業正在進行時顯示，像是：_REBASING_、_BISECTING_ 等等。 如果有進展的資訊 (像是 REBASING 3/10)，也會一併顯示出來。
+The `git_commit` module shows the active branch of the repo in your current directory.
+
+::: tip
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
+:::
 
 ### 選項
 
-| 變數                 | 預設                 | 說明                                                 |
-| ------------------ | ------------------ | -------------------------------------------------- |
-| `rebase`           | `"REBASING"`       | `rebase` 進行中顯示的文字。                                 |
-| `merge`            | `"MERGING"`        | `merge` 進行中顯示的文字。                                  |
-| `revert`           | `"REVERTING"`      | `revert` 進行中顯示的文字。                                 |
-| `cherry_pick`      | `"CHERRY-PICKING"` | `cherry-pick` 進行中顯示的文字。                            |
-| `bisect`           | `"BISECTING"`      | `bisect` 進行中顯示的文字。                                 |
-| `am`               | `"AM"`             | `apply-mailbox` (`git am`) 進行中顯示的文字。               |
-| `am_or_rebase`     | `"AM/REBASE"`      | 當不容易分辨是 `apply-mailbox` 或 `rebase` 正在進行中時顯示的文字。    |
-| `progress_divider` | `"/"`              | 用來分開現在與總共進度量的符號。 (例如：`" of "` 會得到 `"3 of 10"` 的效果) |
-| `style`            | `"bold yellow"`    | 這個模組的風格。                                           |
-| `disabled`         | `false`            | 停用 `git_state` 模組。                                 |
+| 變數                   | 預設             | 說明                                               |
+| -------------------- | -------------- | ------------------------------------------------ |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
+| `prefix`             | `(`            | Prefix to display immediately before git commit. |
+| `suffix`             | `)`            | Suffix to display immediately after git commit.  |
+| `style`              | `"bold green"` | The style for the module.                        |
+| `disabled`           | `true`         | Disables the `git_commit` module.                |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+disabled = false
+commit_hash_length = 4
+```
+
+## Git State
+
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+
+### 選項
+
+| 變數                 | 預設                 | 說明                                                                                                               |
+| ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
+| `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
+| `revert`           | `"REVERTING"`      | The text displayed when a `revert` is in progress.                                                               |
+| `cherry_pick`      | `"CHERRY-PICKING"` | The text displayed when a `cherry-pick` is in progress.                                                          |
+| `bisect`           | `"BISECTING"`      | The text displayed when a `bisect` is in progress.                                                               |
+| `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
+| `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
+| `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
+| `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
+| `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
 ### 範例
 
@@ -439,33 +470,33 @@ cherry_pick = "🍒 PICKING"
 
 ## Git Status
 
-`git_status` 模組顯示用來表示現在資料夾之中儲存庫狀態的符號。
+The `git_status` module shows symbols representing the state of the repo in your current directory.
 
 ### 選項
 
-| 變數                 | 預設                       | 說明                                               |
-| ------------------ | ------------------------ | ------------------------------------------------ |
-| `conflicted`       | `"="`                    | 這個分支有合併衝突。                                       |
-| `conflicted_count` | [連結](#git-status-counts) | Show and style the number of conflicts.          |
-| `ahead`            | `"⇡"`                    | 這個分支超前正在追蹤的分支。                                   |
-| `behind`           | `"⇣"`                    | 這個分支落後正在追蹤的分支。                                   |
-| `diverged`         | `"⇕"`                    | 這個分支偏離正在追蹤的分支。                                   |
-| `untracked`        | `"?"`                    | 工作資料夾中有沒有追蹤的檔案。                                  |
-| `untracked_count`  | [連結](#git-status-counts) | Show and style the number of untracked files.    |
-| `stashed`          | `"$"`                    | 本地儲存庫有 stash。                                    |
-| `modified`         | `"!"`                    | 工作資料夾中有修改過的檔案。                                   |
-| `modified_count`   | [連結](#git-status-counts) | Show and style the number of modified files.     |
-| `staged`           | `"+"`                    | 一個新檔案被加入了暫存區 (staging area)。                     |
-| `staged_count`     | [連結](#git-status-counts) | Show and style the number of files staged files. |
-| `renamed`          | `"»"`                    | 一個被改名的檔案被加入了暫存區 (staging area)。                  |
-| `renamed_count`    | [連結](#git-status-counts) | Show and style the number of renamed files.      |
-| `deleted`          | `"✘"`                    | 一個刪除檔案的動作被加入了暫存區 (staging area)。                 |
-| `deleted_count`    | [連結](#git-status-counts) | Show and style the number of deleted files.      |
-| `show_sync_count`  | `false`                  | 顯示超前/落後追蹤的分支的數量。                                 |
-| `prefix`           | `[`                      | 在 git 狀態正前方顯示的前綴。                                |
-| `suffix`           | `]`                      | 在 git 狀態正後方顯示的後綴。                                |
-| `style`            | `"bold red"`             | 這個模組的風格。                                         |
-| `disabled`         | `false`                  | 停用 `git_status` 模組。                              |
+| 變數                 | 預設                         | 說明                                                      |
+| ------------------ | -------------------------- | ------------------------------------------------------- |
+| `conflicted`       | `"="`                      | This branch has merge conflicts.                        |
+| `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
+| `ahead`            | `"⇡"`                      | This branch is ahead of the branch being tracked.       |
+| `behind`           | `"⇣"`                      | This branch is behind of the branch being tracked.      |
+| `diverged`         | `"⇕"`                      | This branch has diverged from the branch being tracked. |
+| `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
+| `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
+| `stashed`          | `"$"`                      | A stash exists for the local repository.                |
+| `modified`         | `"!"`                      | There are file modifications in the working directory.  |
+| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
+| `staged`           | `"+"`                      | A new file has been added to the staging area.          |
+| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files.        |
+| `renamed`          | `"»"`                      | A renamed file has been added to the staging area.      |
+| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.             |
+| `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.   |
+| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.             |
+| `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
+| `prefix`           | `[`                        | Prefix to display immediately before git status.        |
+| `suffix`           | `]`                        | Suffix to display immediately after git status.         |
+| `style`            | `"bold red"`               | The style for the module.                               |
+| `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
 #### Git Status Counts
 
@@ -473,7 +504,6 @@ cherry_pick = "🍒 PICKING"
 | --------- | ------- | ------------------------------------------------------ |
 | `enabled` | `false` | Show the number of files                               |
 | `style`   |         | Optionally style the count differently than the module |
-
 
 ### 範例
 
@@ -498,7 +528,7 @@ deleted = "🗑"
 
 ## Golang
 
-`golang` 模組顯示現在安裝的 Golang 版本。 這個模組在下列其中一個條件達成時顯示：
+The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
 
 - 現在資料夾中含有一個 `go.mod` 檔案
 - 現在資料夾中含有一個 `go.sum` 檔案
@@ -510,11 +540,11 @@ deleted = "🗑"
 
 ### 選項
 
-| 變數         | 預設            | 說明                  |
-| ---------- | ------------- | ------------------- |
-| `symbol`   | `"🐹 "`        | 顯示在 Golang 版本之前的符號。 |
-| `style`    | `"bold cyan"` | 這個模組的風格。            |
-| `disabled` | `false`       | 停用 `golang` 模組。     |
+| 變數         | 預設            | 說明                                                       |
+| ---------- | ------------- | -------------------------------------------------------- |
+| `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
+| `style`    | `"bold cyan"` | The style for the module.                                |
+| `disabled` | `false`       | Disables the `golang` module.                            |
 
 ### 範例
 
@@ -715,7 +745,7 @@ style = "bold dimmed green"
 
 ## Java
 
-The `java` module shows the currently installed version of Java. 這個模組在下列其中一個條件達成時顯示：
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
 
 - 現在資料夾中包含一個 `pom.xml`、`build.gradle` 或 `build.sbt` 檔案
 - 現在資料夾中包含一個檔案具有 `.java`、`.class` 或 `.jar` 副檔名
@@ -750,7 +780,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 | 變數         | 預設             | 說明                                                       |
 | ---------- | -------------- | -------------------------------------------------------- |
 | `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | 這個模組的風格。                                                 |
+| `style`    | `"bold green"` | The style for the module.                                |
 | `disabled` | `false`        | Disables the `nodejs` module.                            |
 
 ### 範例
@@ -883,15 +913,15 @@ The `rust` module shows the currently installed version of Rust. The module will
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
 
-### 選項
+### Options
 
-| 變數         | 預設           | 說明                                                     |
+| Variable   | Default      | Description                                            |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
 | `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `rust` module.                            |
 
-### 範例
+### Example
 
 ```toml
 # ~/.config/starship.toml
