@@ -11,7 +11,7 @@ pub struct GoConfig<'a> {
 impl<'a> RootModuleConfig<'a> for GoConfig<'a> {
     fn new() -> Self {
         GoConfig {
-            format: "via ${styled?value=🐹 &style=cyan bold}${version?style=cyan bold}",
+            format: "via ${styled?value=🐹 &style=cyan bold}${version?style=cyan bold} ",
             disabled: false,
         }
     }

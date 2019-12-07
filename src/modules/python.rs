@@ -54,7 +54,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "pyenv" => {
                 let venv = get_python_virtual_env()?;
                 format_segments(config.pyenv_format, style, |name, query| {
-                    let style = get_style_from_query(&query);
+                    let style = get_style_from_query(&query).or(style);
                     match name {
                         "name" => Some(Segment {
                             _name: "pyenv_name".to_string(),
