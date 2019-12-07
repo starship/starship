@@ -1,6 +1,8 @@
+use super::utils::query_parser::*;
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::go::GoConfig;
+use crate::segment::Segment;
 use crate::utils;
 
 /// Creates a module with the current Go version
@@ -28,12 +30,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("golang");
     let config: GoConfig = GoConfig::try_load(module.config);
 
-    module.set_style(config.style);
-    module.create_segment("symbol", &config.symbol);
-
     let formatted_version =
         format_go_version(&utils::exec_cmd("go", &["version"])?.stdout.as_str())?;
-    module.create_segment("version", &config.version.with_value(&formatted_version));
+
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "version" => Some(Segment {
+                _name: "version".to_string(),
+                value: formatted_version.clone(),
+                style,
+            }),
+            _ => None,
+        }
+    })
+    .ok()?;
+
+    module.set_segments(segments);
 
     Some(module)
 }
