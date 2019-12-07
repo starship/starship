@@ -1,6 +1,8 @@
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::utils::query_parser::*;
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::nodejs::NodejsConfig;
+use crate::segment::Segment;
 use crate::utils;
 
 /// Creates a module with the current Node.js version
@@ -26,11 +28,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("nodejs");
     let config: NodejsConfig = NodejsConfig::try_load(module.config);
 
-    module.set_style(config.style);
-
     let formatted_version = node_version.trim();
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &SegmentConfig::new(formatted_version));
+
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "version" => Some(Segment {
+                _name: "version".to_string(),
+                value: formatted_version.to_string(),
+                style,
+            }),
+            _ => None,
+        }
+    })
+    .ok()?;
+
+    module.set_segments(segments);
 
     Some(module)
 }
