@@ -95,13 +95,11 @@ fn test_configured_symbols() -> io::Result<()> {
     expect_hg_branch_with_config(
         &repo_dir,
         r#"
-          symbol = "B "
           truncation_length = 14
           truncation_symbol = "%"
         "#,
         &[
             Expect::BranchName(&"branch-name-12"),
-            Expect::Symbol(&"B"),
             Expect::TruncationSymbol(&"%"),
         ],
     )
@@ -109,7 +107,7 @@ fn test_configured_symbols() -> io::Result<()> {
 
 #[test]
 #[ignore]
-fn test_configured_style() -> io::Result<()> {
+fn test_configured_format() -> io::Result<()> {
     let tempdir = tempfile::tempdir()?;
     let repo_dir = create_fixture_hgrepo(&tempdir)?;
     run_hg(&["branch", "-f", "branch-name-131"], &repo_dir)?;
@@ -127,11 +125,12 @@ fn test_configured_style() -> io::Result<()> {
     expect_hg_branch_with_config(
         &repo_dir,
         r#"
-          style = "underline blue"
+          format = "on ${styled?value=B &style=purple bold}${name?style=underline blue} "
         "#,
         &[
             Expect::BranchName(&"branch-name-131"),
             Expect::Style(Color::Blue.underline()),
+            Expect::Symbol(&"B"),
             Expect::TruncationSymbol(&""),
         ],
     )
