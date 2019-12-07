@@ -270,9 +270,11 @@ mod tests {
     #[test]
     fn test_module_is_empty_with_no_segments() {
         let name = "unit_test";
+        let desc = "This is a unit test";
         let module = Module {
             config: None,
             _name: name.to_string(),
+            description: desc.to_string(),
             style: Style::default(),
             prefix: Affix::default_prefix(name),
             segments: Vec::new(),
@@ -285,9 +287,11 @@ mod tests {
     #[test]
     fn test_module_is_empty_with_all_empty_segments() {
         let name = "unit_test";
+        let desc = "This is a unit test";
         let module = Module {
             config: None,
             _name: name.to_string(),
+            description: desc.to_string(),
             style: Style::default(),
             prefix: Affix::default_prefix(name),
             segments: vec![Segment::new("test_segment")],
