@@ -1,9 +1,11 @@
+use ansi_term::Style;
 use git2::{Repository, Status};
 
+use super::utils::query_parser::*;
 use super::{Context, Module, RootModuleConfig};
 
-use crate::config::SegmentConfig;
-use crate::configs::git_status::{CountConfig, GitStatusConfig};
+use crate::configs::git_status::GitStatusConfig;
+use crate::segment::Segment;
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -28,16 +30,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_status");
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
 
-    module
-        .get_prefix()
-        .set_value(config.prefix)
-        .set_style(config.style);
-    module
-        .get_suffix()
-        .set_value(config.suffix)
-        .set_style(config.style);
-    module.set_style(config.style);
-
     let ahead_behind = get_ahead_behind(&repository, branch_name);
     if ahead_behind == Ok((0, 0)) {
         log::trace!("No ahead/behind found");
@@ -55,135 +47,96 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo_status = get_repo_status(&repository);
     log::debug!("Repo status: {:?}", repo_status);
 
-    // Add the conflicted segment
-    if let Ok(repo_status) = repo_status {
-        create_segment_with_count(
-            &mut module,
-            "conflicted",
-            repo_status.conflicted,
-            &config.conflicted,
-            config.conflicted_count,
-        );
-    }
-
-    // Add the ahead/behind segment
-    if let Ok((ahead, behind)) = ahead_behind {
-        let add_ahead = |m: &mut Module<'a>| {
-            create_segment_with_count(
-                m,
-                "ahead",
-                ahead,
-                &config.ahead,
-                CountConfig {
-                    enabled: config.show_sync_count,
-                    style: None,
-                },
-            );
-        };
-
-        let add_behind = |m: &mut Module<'a>| {
-            create_segment_with_count(
-                m,
-                "behind",
-                behind,
-                &config.behind,
-                CountConfig {
-                    enabled: config.show_sync_count,
-                    style: None,
-                },
-            );
-        };
-
-        if ahead > 0 && behind > 0 {
-            module.create_segment("diverged", &config.diverged);
-
-            if config.show_sync_count {
-                add_ahead(&mut module);
-                add_behind(&mut module);
-            }
-        }
-
-        if ahead > 0 && behind == 0 {
-            add_ahead(&mut module);
-        }
-
-        if behind > 0 && ahead == 0 {
-            add_behind(&mut module);
-        }
-    }
-
-    // Add the stashed segment
-    if stash_object.is_ok() {
-        module.create_segment("stashed", &config.stashed);
-    }
-
-    // Add all remaining status segments
-    if let Ok(repo_status) = repo_status {
-        create_segment_with_count(
-            &mut module,
-            "deleted",
-            repo_status.deleted,
-            &config.deleted,
-            config.deleted_count,
-        );
-
-        create_segment_with_count(
-            &mut module,
-            "renamed",
-            repo_status.renamed,
-            &config.renamed,
-            config.renamed_count,
-        );
-
-        create_segment_with_count(
-            &mut module,
-            "modified",
-            repo_status.modified,
-            &config.modified,
-            config.modified_count,
-        );
-
-        create_segment_with_count(
-            &mut module,
-            "staged",
-            repo_status.staged,
-            &config.staged,
-            config.staged_count,
-        );
-
-        create_segment_with_count(
-            &mut module,
-            "untracked",
-            repo_status.untracked,
-            &config.untracked,
-            config.untracked_count,
-        );
-    }
-
     if module.is_empty() {
         return None;
     }
 
-    Some(module)
-}
-
-fn create_segment_with_count<'a>(
-    module: &mut Module<'a>,
-    name: &str,
-    count: usize,
-    config: &SegmentConfig<'a>,
-    count_config: CountConfig,
-) {
-    if count > 0 {
-        module.create_segment(name, &config);
-
-        if count_config.enabled {
-            module.create_segment(
-                &format!("{}_count", name),
-                &SegmentConfig::new(&count.to_string()).with_style(count_config.style),
-            );
+    let segments: Vec<Segment> = format_segments_nested(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "conflicted" => format_segment_with_count(
+                "conflicted",
+                config.conflicted_format,
+                repo_status.as_ref().ok()?.conflicted,
+                style,
+            ),
+            "ahead" => {
+                let (ahead, behind) = ahead_behind.as_ref().ok()?;
+                if (*ahead > 0 && *behind == 0) || config.show_sync_count {
+                    format_segment_with_count("ahead", config.ahead_format, *ahead, style)
+                } else {
+                    None
+                }
+            }
+            "behind" => {
+                let (ahead, behind) = ahead_behind.as_ref().ok()?;
+                if (*ahead == 0 && *behind > 0) || config.show_sync_count {
+                    format_segment_with_count("behind", config.behind_format, *behind, style)
+                } else {
+                    None
+                }
+            }
+            "diverged" => {
+                let (ahead, behind) = ahead_behind.as_ref().ok()?;
+                if *ahead > 0 && *behind > 0 {
+                    Some(vec![Segment {
+                        _name: "diverged".to_string(),
+                        value: config.diverged_format.to_string(),
+                        style,
+                    }])
+                } else {
+                    None
+                }
+            }
+            "stashed" => {
+                if stash_object.is_ok() {
+                    Some(vec![Segment {
+                        _name: "stashed".to_string(),
+                        value: config.stashed_format.to_string(),
+                        style,
+                    }])
+                } else {
+                    None
+                }
+            }
+            "deleted" => format_segment_with_count(
+                "deleted",
+                config.deleted_format,
+                repo_status.as_ref().ok()?.deleted,
+                style,
+            ),
+            "renamed" => format_segment_with_count(
+                "renamed",
+                config.renamed_format,
+                repo_status.as_ref().ok()?.renamed,
+                style,
+            ),
+            "modified" => format_segment_with_count(
+                "modified",
+                config.modified_format,
+                repo_status.as_ref().ok()?.modified,
+                style,
+            ),
+            "staged" => format_segment_with_count(
+                "staged",
+                config.staged_format,
+                repo_status.as_ref().ok()?.staged,
+                style,
+            ),
+            "untracked" => format_segment_with_count(
+                "untracked",
+                config.untracked_format,
+                repo_status.as_ref().ok()?.untracked,
+                style,
+            ),
+            _ => None,
         }
-    }
+    })
+    .ok()?;
+
+    module.set_segments(segments);
+
+    Some(module)
 }
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
@@ -268,4 +221,24 @@ struct RepoStatus {
     modified: usize,
     staged: usize,
     untracked: usize,
+}
+
+fn format_segment_with_count(
+    segment_name: &str,
+    format: &str,
+    count: usize,
+    default_style: Option<Style>,
+) -> Option<Vec<Segment>> {
+    format_segments(format, default_style, |name, query| {
+        let style = get_style_from_query(&query).or(default_style);
+        match name {
+            "count" => Some(Segment {
+                _name: format!("{}_count", &segment_name),
+                value: count.to_string(),
+                style,
+            }),
+            _ => None,
+        }
+    })
+    .ok()
 }
