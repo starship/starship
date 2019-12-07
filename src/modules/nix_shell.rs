@@ -1,8 +1,10 @@
 use std::env;
 
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::utils::query_parser::*;
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::nix_shell::NixShellConfig;
+use crate::segment::Segment;
 
 // IN_NIX_SHELL should be "pure" or "impure" but lorri uses "1" for "impure"
 // https://github.com/target/lorri/issues/140
@@ -26,29 +28,46 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("nix_shell");
     let config: NixShellConfig = NixShellConfig::try_load(module.config);
 
-    module.set_style(config.style);
-
     let shell_type = env::var("IN_NIX_SHELL").ok()?;
-    let shell_type_segment: SegmentConfig = match shell_type.as_ref() {
-        "1" | "impure" => config.impure_msg,
-        "pure" => config.pure_msg,
-        _ => {
-            return None;
-        }
+
+    match shell_type.as_ref() {
+        "impure" | "1" | "pure" => {}
+        _ => return None,
     };
 
-    if config.use_name {
-        if let Ok(name) = env::var("name") {
-            module.create_segment(
-                "nix_shell",
-                &shell_type_segment.with_value(&format!("{} ({})", name, shell_type_segment.value)),
-            );
-        } else {
-            module.create_segment("nix_shell", &shell_type_segment);
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "name" => {
+                let name = env::var("name").ok()?;
+                Some(Segment {
+                    _name: "name".to_string(),
+                    value: name.to_string(),
+                    style,
+                })
+            }
+            "impure_msg" => match shell_type.as_ref() {
+                "1" | "impure" => Some(Segment {
+                    _name: "impure_msg".to_string(),
+                    value: config.impure_msg.to_string(),
+                    style,
+                }),
+                _ => None,
+            },
+            "pure_msg" => match shell_type.as_ref() {
+                "pure" => Some(Segment {
+                    _name: "pure_msg".to_string(),
+                    value: config.pure_msg.to_string(),
+                    style,
+                }),
+                _ => None,
+            },
+            _ => None,
         }
-    } else {
-        module.create_segment("nix_shell", &shell_type_segment);
-    }
+    })
+    .ok()?;
+
+    module.set_segments(segments);
 
     Some(module)
 }
