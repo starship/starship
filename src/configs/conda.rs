@@ -1,28 +1,17 @@
-use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
+use crate::config::{ModuleConfig, RootModuleConfig};
 
-use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct CondaConfig<'a> {
-    pub symbol: SegmentConfig<'a>,
-    pub environment: SegmentConfig<'a>,
-    pub style: Style,
+    pub format: &'a str,
     pub disabled: bool,
 }
 
 impl<'a> RootModuleConfig<'a> for CondaConfig<'a> {
     fn new() -> Self {
         CondaConfig {
-            symbol: SegmentConfig {
-                value: "C ",
-                style: None,
-            },
-            environment: SegmentConfig {
-                value: "",
-                style: None,
-            },
-            style: Color::Green.bold(),
+            format: "via ${styled?value=C &style=green bold}${env?style=green bold} ",
             disabled: false,
         }
     }

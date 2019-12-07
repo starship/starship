@@ -1,9 +1,11 @@
 use std::env;
 
+use super::utils::query_parser::*;
 use super::{Context, Module};
 
 use crate::config::RootModuleConfig;
 use crate::configs::conda::CondaConfig;
+use crate::segment::Segment;
 
 /// Creates a module with the current Conda environment
 ///
@@ -18,10 +20,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("conda");
     let config = CondaConfig::try_load(module.config);
 
-    module.set_style(config.style);
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "env" => Some(Segment {
+                _name: "env".to_string(),
+                value: conda_env.clone(),
+                style,
+            }),
+            _ => None,
+        }
+    })
+    .ok()?;
 
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("environment", &config.environment.with_value(&conda_env));
+    module.set_segments(segments);
 
     Some(module)
 }
