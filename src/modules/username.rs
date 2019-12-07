@@ -1,8 +1,10 @@
 use std::env;
 
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::utils::query_parser::*;
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::username::UsernameConfig;
+use crate::segment::Segment;
 use crate::utils;
 
 /// Creates a module with the current user's username
@@ -28,8 +30,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             _ => config.style_user,
         };
 
-        module.set_style(module_style);
-        module.create_segment("username", &SegmentConfig::new(&user?));
+        let username = user?;
+        let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+            let style = get_style_from_query(&query).or(Some(module_style));
+            match name {
+                "username" => Some(Segment {
+                    _name: "username".to_string(),
+                    value: username.clone(),
+                    style,
+                }),
+                _ => None,
+            }
+        })
+        .ok()?;
+
+        module.set_segments(segments);
 
         Some(module)
     } else {
