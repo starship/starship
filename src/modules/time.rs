@@ -1,14 +1,14 @@
 use chrono::{DateTime, FixedOffset, Local, Utc};
 
+use super::utils::query_parser::*;
 use super::{Context, Module};
 
-use crate::config::{RootModuleConfig, SegmentConfig};
+use crate::config::RootModuleConfig;
 use crate::configs::time::TimeConfig;
+use crate::segment::Segment;
 
 /// Outputs the current time
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    const TIME_PREFIX: &str = "at ";
-
     let mut module = context.new_module("time");
     let config: TimeConfig = TimeConfig::try_load(module.config);
     if config.disabled {
@@ -16,7 +16,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let default_format = if config.use_12hr { "%r" } else { "%T" };
-    let time_format = config.format.unwrap_or(default_format);
+    let time_format = config.time_format.unwrap_or(default_format);
 
     log::trace!(
         "Timer module is enabled with format string: {}",
@@ -37,17 +37,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         format_time(&time_format, Local::now())
     };
 
-    module.set_style(config.style);
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "time" => Some(Segment {
+                _name: "time".to_string(),
+                value: formatted_time_string.clone(),
+                style,
+            }),
+            _ => None,
+        }
+    })
+    .ok()?;
 
-    module.get_prefix().set_value(TIME_PREFIX);
-
-    module.create_segment(
-        "time",
-        &SegmentConfig {
-            value: &formatted_time_string,
-            style: None,
-        },
-    );
+    module.set_segments(segments);
 
     Some(module)
 }

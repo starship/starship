@@ -41,7 +41,7 @@ fn config_check_prefix_and_suffix() -> io::Result<()> {
         .use_config(toml::toml! {
             [time]
             disabled = false
-            format = "[%T]"
+            time_format = "[%T]"
         })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
