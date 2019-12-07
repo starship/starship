@@ -51,6 +51,51 @@ pub fn get_styled(query: &Option<Value>) -> Option<Segment> {
     })
 }
 
+pub fn format_segments_nested<M>(
+    format_str: &str,
+    default_style: Option<Style>,
+    mapper: M,
+) -> Result<Vec<Segment>, Box<dyn Error>>
+where
+    M: Fn(&str, Option<Value>) -> Option<Vec<Segment>>,
+{
+    let segments = parse(format_str)?
+        .iter()
+        .map(|el: &Element| -> Option<Vec<Segment>> {
+            match el {
+                Element::Text(t) => Some(vec![Segment {
+                    _name: "_".to_string(),
+                    style: default_style,
+                    value: t.to_owned().to_string(),
+                }]),
+                Element::Wrapped(item) => match item.wrapper {
+                    Wrapper::DollarCurly => {
+                        let (segment_name, query) = parse_query(item.text);
+                        match segment_name {
+                            "%" => {
+                                let style = get_style_from_query(&query).or(default_style);
+                                Some(vec![Segment {
+                                    _name: "%".to_string(),
+                                    value: get_percentage_char().to_string(),
+                                    style,
+                                }])
+                            }
+                            "styled" => get_styled(&query).map(|seg| vec![seg]),
+                            _ => mapper(segment_name, query),
+                        }
+                    }
+                    _ => None,
+                },
+            }
+        })
+        .filter(|x| x.is_some())
+        .map(|x| x.unwrap())
+        .flatten()
+        .collect();
+
+    Ok(segments)
+}
+
 pub fn format_segments<M>(
     format_str: &str,
     default_style: Option<Style>,
