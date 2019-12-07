@@ -1,9 +1,11 @@
 use std::process::Command;
 use unicode_segmentation::UnicodeSegmentation;
 
+use super::utils::query_parser::*;
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::hg_branch::HgBranchConfig;
+use crate::segment::Segment;
 
 /// Creates a module with the Hg bookmark or branch in the current directory
 ///
@@ -21,12 +23,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("hg_branch");
     let config = HgBranchConfig::try_load(module.config);
-    module.set_style(config.style);
-
-    module.get_prefix().set_value("on ");
 
     let truncation_symbol = get_graphemes(config.truncation_symbol, 1);
-    module.create_segment("symbol", &config.symbol);
 
     // TODO: Once error handling is implemented, warn the user if their config
     // truncation length is nonsensical
@@ -54,10 +52,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         truncated_graphemes
     };
 
-    module.create_segment(
-        "name",
-        &config.branch_name.with_value(&truncated_and_symbol),
-    );
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "name" => Some(Segment {
+                _name: "name".to_string(),
+                value: truncated_and_symbol.clone(),
+                style,
+            }),
+            _ => None,
+        }
+    })
+    .ok()?;
+
+    module.set_segments(segments);
 
     Some(module)
 }
