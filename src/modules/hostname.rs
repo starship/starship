@@ -1,10 +1,12 @@
 use std::env;
 
-use super::{Context, Module, SegmentConfig};
+use super::utils::query_parser::*;
+use super::{Context, Module};
 use std::ffi::OsString;
 
 use crate::config::RootModuleConfig;
 use crate::configs::hostname::HostnameConfig;
+use crate::segment::Segment;
 
 /// Creates a module with the system hostname
 ///
@@ -42,10 +44,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         host.as_ref()
     };
 
-    module.set_style(config.style);
-    let hostname_stacked = format!("{}{}{}", config.prefix, host, config.suffix);
-    module.create_segment("hostname", &SegmentConfig::new(&hostname_stacked));
-    module.get_prefix().set_value("on ");
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "host" => Some(Segment {
+                _name: "host".to_string(),
+                value: host.to_string(),
+                style,
+            }),
+            _ => None,
+        }
+    })
+    .ok()?;
+
+    module.set_segments(segments);
 
     Some(module)
 }
