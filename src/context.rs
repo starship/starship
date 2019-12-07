@@ -1,6 +1,7 @@
 use crate::config::StarshipConfig;
 use crate::module::Module;
 
+use crate::modules;
 use clap::ArgMatches;
 use git2::{Repository, RepositoryState};
 use once_cell::sync::OnceCell;
@@ -11,7 +12,6 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::string::String;
 use std::time::{Duration, SystemTime};
-use crate::modules;
 
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering

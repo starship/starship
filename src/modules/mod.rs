@@ -83,7 +83,9 @@ pub fn description(module: &str) -> &'static str {
     match module {
         "aws" => "The current AWS region and profile",
         "battery" => "The current charge of the device's battery and its current charging status",
-        "character" => "A character (usually an arrow) beside where the text is entered in your terminal",
+        "character" => {
+            "A character (usually an arrow) beside where the text is entered in your terminal"
+        }
         "cmd_duration" => "How long the last command took to execute",
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
         "directory" => "The current working directory",
