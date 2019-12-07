@@ -26,10 +26,10 @@ fn test_render_commit_hash() -> io::Result<()> {
         .output()?;
 
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Green
-        .bold()
-        .paint(format!("({}) ", expected_hash))
-        .to_string();
+    let expected = format!(
+        "{} ",
+        Color::Green.bold().paint(format!("({})", expected_hash))
+    );
 
     assert_eq!(expected, actual);
     Ok(())
@@ -58,10 +58,10 @@ fn test_render_commit_hash_len_override() -> io::Result<()> {
         .output()?;
 
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Green
-        .bold()
-        .paint(format!("({}) ", expected_hash))
-        .to_string();
+    let expected = format!(
+        "{} ",
+        Color::Green.bold().paint(format!("({})", expected_hash))
+    );
 
     assert_eq!(expected, actual);
     Ok(())

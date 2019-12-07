@@ -1,7 +1,9 @@
+use super::utils::query_parser::*;
 use super::{Context, Module, RootModuleConfig};
 use git2::Repository;
 
 use crate::configs::git_commit::GitCommitConfig;
+use crate::segment::Segment;
 
 /// Creates a module with the Git commit in the current directory
 ///
@@ -13,16 +15,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    module
-        .get_prefix()
-        .set_value(config.prefix)
-        .set_style(config.style);
-    module
-        .get_suffix()
-        .set_value(config.suffix)
-        .set_style(config.style);
-    module.set_style(config.style);
-
     let repo = context.get_repo().ok()?;
     let repo_root = repo.root.as_ref()?;
     let git_repo = Repository::open(repo_root).ok()?;
@@ -30,13 +22,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let git_head = git_repo.head().ok()?;
     let head_commit = git_head.peel_to_commit().ok()?;
     let commit_oid = head_commit.id();
-    module.create_segment(
-        "hash",
-        &config.hash.with_value(&id_to_hex_abbrev(
-            commit_oid.as_bytes(),
-            config.commit_hash_length,
-        )),
-    );
+
+    let hash = id_to_hex_abbrev(commit_oid.as_bytes(), config.commit_hash_length);
+
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "hash" => Some(Segment {
+                _name: "hash".to_string(),
+                value: hash.clone(),
+                style,
+            }),
+            _ => None,
+        }
+    })
+    .ok()?;
+
+    module.set_segments(segments);
 
     Some(module)
 }
