@@ -91,6 +91,7 @@ prompt_order = [
     "kubernetes",
     "directory",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
     "hg_branch",
@@ -125,8 +126,8 @@ The `aws` module shows the current AWS region and profile. This is based on
 ### Options
 
 | Variable          | Default         | Description                                                                 |
-| ----------------- | --------------- | ----------------------------------------------------------------------------|
-| `symbol`          | `"☁️  "`        | The symbol used before displaying the current AWS profile.                  |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
 | `style`           | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`        | `false`         | Disables the `AWS` module.                                                  |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
@@ -327,6 +328,7 @@ it would have been `nixpkgs/pkgs`.
 | ------------------- | ------------- | -------------------------------------------------------------------------------- |
 | `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
 | `style`             | `"bold cyan"` | The style for the module.                                                        |
 | `disabled`          | `false`       | Disables the `directory` module.                                                 |
 
@@ -369,8 +371,8 @@ setting `heuristic = false` in the module options.
 | Variable    | Default       | Description                                              |
 | ----------- | ------------- | -------------------------------------------------------- |
 | `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
-| `style`     | `"bold blue"` | The style for the module.                                |
 | `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
+| `style`     | `"bold blue"` | The style for the module.                                |
 | `disabled`  | `false`       | Disables the `dotnet` module.                            |
 
 ### Example
@@ -439,6 +441,37 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
+## Git Commit
+
+The `git_commit` module shows the active branch of the repo in your current directory.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Variable             | Default        | Description                                      |
+| -------------------- | -------------- | ------------------------------------------------ |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
+| `prefix`             | `(`            | Prefix to display immediately before git commit. |
+| `suffix`             | `)`            | Suffix to display immediately after git commit.  |
+| `style`              | `"bold green"` | The style for the module.                        |
+| `disabled`           | `true`         | Disables the `git_commit` module.                |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+disabled = false
+commit_hash_length = 4
+```
+
 ## Git State
 
 The `git_state` module will show in directories which are part of a git
@@ -478,37 +511,36 @@ current directory.
 
 ### Options
 
-| Variable            | Default                    | Description                                                     |
-| ------------------- | -------------------------- | --------------------------------------------------------------- |
-| `conflicted`        | `"="`                      | This branch has merge conflicts.                                |
-| `conflicted_count`  | [link](#git-status-counts) | Show and style the number of conflicts.                         |
-| `ahead`             | `"⇡"`                      | This branch is ahead of the branch being tracked.               |
-| `behind`            | `"⇣"`                      | This branch is behind of the branch being tracked.              |
-| `diverged`          | `"⇕"`                      | This branch has diverged from the branch being tracked.         |
-| `untracked`         | `"?"`                      | There are untracked files in the working directory.             |
-| `untracked_count`   | [link](#git-status-counts) | Show and style the number of untracked files.                   |
-| `stashed`           | `"$"`                      | A stash exists for the local repository.                        |
-| `modified`          | `"!"`                      | There are file modifications in the working directory.          |
-| `modified_count`    | [link](#git-status-counts) | Show and style the number of modified files.                    |
-| `staged`            | `"+"`                      | A new file has been added to the staging area.                  |
-| `staged_count`      | [link](#git-status-counts) | Show and style the number of files staged files.                |
-| `renamed`           | `"»"`                      | A renamed file has been added to the staging area.              |
-| `renamed_count`     | [link](#git-status-counts) | Show and style the number of renamed files.                     |
-| `deleted`           | `"✘"`                      | A file's deletion has been added to the staging area.           |
-| `deleted_count`     | [link](#git-status-counts) | Show and style the number of deleted files.                     |
-| `show_sync_count`   | `false`                    | Show ahead/behind count of the branch being tracked.            |
-| `prefix`            | `[`                        | Prefix to display immediately before git status.                |
-| `suffix`            | `]`                        | Suffix to display immediately after git status.                 |
-| `style`             | `"bold red"`               | The style for the module.                                       |
-| `disabled`          | `false`                    | Disables the `git_status` module.                               |
+| Variable           | Default                    | Description                                             |
+| ------------------ | -------------------------- | ------------------------------------------------------- |
+| `conflicted`       | `"="`                      | This branch has merge conflicts.                        |
+| `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
+| `ahead`            | `"⇡"`                      | This branch is ahead of the branch being tracked.       |
+| `behind`           | `"⇣"`                      | This branch is behind of the branch being tracked.      |
+| `diverged`         | `"⇕"`                      | This branch has diverged from the branch being tracked. |
+| `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
+| `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
+| `stashed`          | `"$"`                      | A stash exists for the local repository.                |
+| `modified`         | `"!"`                      | There are file modifications in the working directory.  |
+| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
+| `staged`           | `"+"`                      | A new file has been added to the staging area.          |
+| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files.        |
+| `renamed`          | `"»"`                      | A renamed file has been added to the staging area.      |
+| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.             |
+| `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.   |
+| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.             |
+| `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
+| `prefix`           | `[`                        | Prefix to display immediately before git status.        |
+| `suffix`           | `]`                        | Suffix to display immediately after git status.         |
+| `style`            | `"bold red"`               | The style for the module.                               |
+| `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
 #### Git Status Counts
 
-| Variable    | Default | Description                                            |
-| ----------- | ------- | ------------------------------------------------------ |
-| `enabled`   | `false` | Show the number of files                               |
-| `style`     |         | Optionally style the count differently than the module |
-
+| Variable  | Default | Description                                            |
+| --------- | ------- | ------------------------------------------------------ |
+| `enabled` | `false` | Show the number of files                               |
+| `style`   |         | Optionally style the count differently than the module |
 
 ### Example
 
@@ -840,6 +872,31 @@ and `poetry` packages.
 
 [package]
 symbol = "🎁 "
+```
+
+## PHP
+
+The `php` module shows the currently installed version of PHP.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `composer.json` file
+- The current directory contains a `.php` file
+
+### Options
+
+| Variable   | Default      | Description                                           |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`      | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold red"` | The style for the module.                             |
+| `disabled` | `false`      | Disables the `php` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[php]
+symbol = "🔹 "
 ```
 
 ## Python

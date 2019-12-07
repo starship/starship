@@ -18,6 +18,7 @@ pub const ALL_MODULES: &[&str] = &[
     "dotnet",
     "env_var",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
     "golang",
@@ -34,6 +35,7 @@ pub const ALL_MODULES: &[&str] = &[
     "python",
     "ruby",
     "rust",
+    "php",
     "time",
     "username",
 ];

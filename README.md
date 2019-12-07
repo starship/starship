@@ -19,12 +19,12 @@
       src="https://repology.org/badge/tiny-repos/starship.svg"
       alt="Packaging status"/></a
   ><br />
-  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section --><a href="#contributors"><img src="https://badgen.net/badge/all%20contributors/51/orange" alt="All Contributors"></a><!-- ALL-CONTRIBUTORS-BADGE:END -->
-  <a href="https://discord.gg/8Jzqu3T"
+    <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
       alt="Chat on Discord"
   /></a>
+  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section --><a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-55-orange" alt="All Contributors"></a><!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
 <h4 align="center">
@@ -39,27 +39,27 @@
   <a href="https://github.com/starship/starship/blob/master/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png" alt="English"
   /></a>
-  &#0020;
+  &nbsp;
   <a href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png" alt="日本語"
   /></a>
-  &#0020;
+  &nbsp;
   <a href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png" alt="繁體中文"
   /></a>
-  &#0020;
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/zh-CN"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png" alt="简体中文"
   /></a>
-  &#0020;
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/de"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png" alt="Deutsch"
   /></a>
-  &#0020;
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/fr"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png" alt="Français"
   /></a>
-  &#0020;
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/ru"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Русский"
   /></a>
@@ -82,20 +82,18 @@ The prompt shows information you need while you're working, while staying sleek 
 ## 🍬 Features
 
 - Prompt character turns red if the last command exits with non-zero code
-- Current username if not the same as the logged-in user
+- Current Go version (`🐹`)
 - Current Java version(`☕`)
 - Current Node.js version(`⬢`)
-- Current Rust version (`🦀`)
-- Current Ruby version (`💎`)
+- Current PHP version (`🐘`)
 - Current Python version (`🐍`)
-- Current Go version (`🐹`)
-- Nix-shell environment detection
-- Print an environment variable
+- Current Ruby version (`💎`)
+- Current Rust version (`🦀`)
+- Current .NET version (`•NET`)
 - Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-- Current battery level and status
 - Current Git branch and rich repo status:
   - `=` — conflicting changes
   - `⇡` — ahead of remote branch
@@ -107,10 +105,19 @@ The prompt shows information you need while you're working, while staying sleek 
   - `+` — added files
   - `»` — renamed files
   - `✘` — deleted files
-- Execution time of the last command if it exceeds the set threshold
+- Current Mercurial branch
+- Current battery level and status
+- `⇡` – charging
+- `⇣` – discharging
+- `•` – fully charged
 - Indicator for jobs in the background (`✦`)
 - Current Kubernetes Cluster and Namespace (`☸`)
-- Current AWS profile (`☁️`)
+- Current Amazon Web Services (AWS) profile (`☁️`)
+- Execution time of the last command
+- Custom environment variable value
+- Nix-shell environment detection
+- Current username if not the same as the logged-in user
+- Optional current time in 12/24hr format
 
 ## 🚀 Installation
 
@@ -122,48 +129,26 @@ The prompt shows information you need while you're working, while staying sleek 
 
 1. Install the **starship** binary:
 
-   **[Download archives of precompiled binaries](https://github.com/starship/starship/releases)** if you don't use the platforms below.
+   #### Install Latest Version
 
-   #### Homebrew
+   ##### With Shell:
 
    ```sh
-   $ brew install starship
+   curl -fsSL https://starship.rs/install.sh | sh
    ```
 
-   #### Rust (v1.38 or higher)
+   #### Install via Package Manager
+
+   ##### With [Homebrew](https://brew.sh/):
 
    ```sh
-   $ cargo install starship
+   brew install starship
    ```
 
-   #### Arch Linux (AUR)
+   ##### With [Scoop](https://scoop.sh):
 
-   Starship is available on the AUR under the name `starship`. Install it with `yay` or your favorite AUR helper.
-
-   ```sh
-   $ yay -S starship
-   ```
-
-   #### Nix (unstable)
-
-   ```sh
-   $ nix-env --install starship
-   ```
-
-   #### Termux
-
-   ```sh
-   $ pkg install starship
-   ```
-
-   #### Other x86-64 Linux Platforms
-
-   Download a prebuilt binary and place in /usr/local/bin/
-
-   ```sh
-   $ wget -q --show-progress https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz
-   $ tar xvf starship-x86_64-unknown-linux-gnu.tar.gz
-   $ sudo mv starship /usr/local/bin/
+   ```powershell
+   scoop install starship
    ```
 
 1. Add the init script to your shell's config file:
@@ -300,6 +285,10 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/weirongxu"><img src="https://avatars3.githubusercontent.com/u/1709861?v=4" width="100px;" alt="Raidou"/><br /><sub><b>Raidou</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=weirongxu" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=weirongxu" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://github.com/rpl"><img src="https://avatars1.githubusercontent.com/u/11484?v=4" width="100px;" alt="Luca Greco"/><br /><sub><b>Luca Greco</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=rpl" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=rpl" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=rpl" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://lucar.in"><img src="https://avatars2.githubusercontent.com/u/6934358?v=4" width="100px;" alt="Luca Rinaldi"/><br /><sub><b>Luca Rinaldi</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=lucarin91" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/REBELinBLUE"><img src="https://avatars1.githubusercontent.com/u/2143908?v=4" width="100px;" alt="Stephen Ball"/><br /><sub><b>Stephen Ball</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=REBELinBLUE" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=REBELinBLUE" title="Tests">⚠️</a> <a href="https://github.com/starship/starship/commits?author=REBELinBLUE" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://about.houqp.me"><img src="https://avatars0.githubusercontent.com/u/670302?v=4" width="100px;" alt="Qingping Hou"/><br /><sub><b>Qingping Hou</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=houqp" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=houqp" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=houqp" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/wendorf"><img src="https://avatars3.githubusercontent.com/u/407342?v=4" width="100px;" alt="Dan Wendorf"/><br /><sub><b>Dan Wendorf</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=wendorf" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=wendorf" title="Tests">⚠️</a></td>
   </tr>
 </table>
 

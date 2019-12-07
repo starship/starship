@@ -89,8 +89,10 @@ prompt_order = [
     "kubernetes",
     "directory",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
+    "hg_branch",
     "package",
     "dotnet",
     "golang",
@@ -121,7 +123,7 @@ The `aws` module shows the current AWS region and profile. This is based on `AWS
 
 | Variable          | Default         | Description                                                                 |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️  "`        | The symbol used before displaying the current AWS profile.                  |
+| `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
 | `style`           | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`        | `false`         | Disables the `AWS` module.                                                  |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
@@ -303,6 +305,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | ------------------- | ------------- | -------------------------------------------------------------------------------- |
 | `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
 | `style`             | `"bold cyan"` | The style for the module.                                                        |
 | `disabled`          | `false`       | Disables the `directory` module.                                                 |
 
@@ -338,8 +341,8 @@ Internally, this module uses its own mechanism for version detection. Typically 
 | Variable    | Default       | Description                                              |
 | ----------- | ------------- | -------------------------------------------------------- |
 | `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
-| `style`     | `"bold blue"` | The style for the module.                                |
 | `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
+| `style`     | `"bold blue"` | The style for the module.                                |
 | `disabled`  | `false`       | Disables the `dotnet` module.                            |
 
 ### Example
@@ -405,6 +408,36 @@ The `git_branch` module shows the active branch of the repo in your current dire
 symbol = "🌱 "
 truncation_length = 4
 truncation_symbol = ""
+```
+
+## Git Commit
+
+The `git_commit` module shows the active branch of the repo in your current directory.
+
+::: remarque
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Variable             | Default        | Description                                      |
+| -------------------- | -------------- | ------------------------------------------------ |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
+| `prefix`             | `(`            | Prefix to display immediately before git commit. |
+| `suffix`             | `)`            | Suffix to display immediately after git commit.  |
+| `style`              | `"bold green"` | The style for the module.                        |
+| `disabled`           | `true`         | Disables the `git_commit` module.                |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+disabled = false
+commit_hash_length = 4
 ```
 
 ## Git State
@@ -473,7 +506,6 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `enabled` | `false` | Show the number of files                               |
 | `style`   |         | Optionally style the count differently than the module |
 
-
 ### Example
 
 ```toml
@@ -522,6 +554,31 @@ The `golang` module shows the currently installed version of Golang. The module 
 
 [golang]
 symbol = "🏎💨 "
+```
+
+## Mercurial Branch
+
+The `hg_branch` module shows the active branch of the repo in your current directory.
+
+### Options
+
+| Variable            | Default         | Description                                                                                  |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
+| `style`             | `"bold purple"` | The style for the module.                                                                    |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[hg_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
 ```
 
 ## Hostname
@@ -761,6 +818,30 @@ The `package` module is shown when the current directory is the repository for a
 
 [package]
 symbol = "🎁 "
+```
+
+## PHP
+
+The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `composer.json` file
+- The current directory contains a `.php` file
+
+### Options
+
+| Variable   | Default      | Description                                           |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold red"` | The style for the module.                             |
+| `disabled` | `false`      | Disables the `php` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[php]
+symbol = "🔹 "
 ```
 
 ## Python
