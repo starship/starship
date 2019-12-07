@@ -1,14 +1,14 @@
+use super::utils::query_parser::*;
 use super::{Context, Module};
 
-use crate::config::{RootModuleConfig, SegmentConfig};
+use crate::config::RootModuleConfig;
 use crate::configs::jobs::JobsConfig;
+use crate::segment::Segment;
 
 /// Creates a segment to show if there are any active jobs running
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("jobs");
     let config: JobsConfig = JobsConfig::try_load(module.config);
-
-    module.set_style(config.style);
 
     let props = &context.properties;
     let num_of_jobs = props
@@ -20,11 +20,27 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if num_of_jobs == 0 {
         return None;
     }
-    module.create_segment("symbol", &config.symbol);
-    if num_of_jobs > config.threshold {
-        module.create_segment("number", &SegmentConfig::new(&num_of_jobs.to_string()));
-    }
-    module.get_prefix().set_value("");
+
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "number" => {
+                if num_of_jobs > config.threshold {
+                    Some(Segment {
+                        _name: "number".to_string(),
+                        value: num_of_jobs.to_string(),
+                        style,
+                    })
+                } else {
+                    None
+                }
+            }
+            _ => None,
+        }
+    })
+    .ok()?;
+
+    module.set_segments(segments);
 
     Some(module)
 }
