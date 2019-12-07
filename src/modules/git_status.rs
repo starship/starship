@@ -47,10 +47,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo_status = get_repo_status(&repository);
     log::debug!("Repo status: {:?}", repo_status);
 
-    if module.is_empty() {
-        return None;
-    }
-
     let segments: Vec<Segment> = format_segments_nested(config.format, None, |name, query| {
         let style = get_style_from_query(&query);
         match name {
@@ -133,6 +129,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     })
     .ok()?;
+
+    if segments.is_empty() {
+        return None;
+    }
 
     module.set_segments(segments);
 
