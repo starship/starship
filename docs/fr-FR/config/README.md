@@ -101,7 +101,6 @@ prompt_order = [
     "python",
     "ruby",
     "rust",
-    "terraform",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -930,33 +929,6 @@ The `rust` module shows the currently installed version of Rust. The module will
 
 [rust]
 symbol = "⚙️ "
-```
-
-## Terraform
-
-The `terraform` module shows the currently selected terraform workspace and version.
-By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use.
-The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `.terraform` folder
-- Current directory contains a file with the `.tf` extension
-
-### Options
-
-| Variable       | Default       | Description                                                 |
-| -------------- | ------------- | ----------------------------------------------------------- |
-| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
-| `style`        | `"bold 105"`  | The style for the module.                                   |
-| `disabled`     | `false`       | Disables the `terraform` module.                            |
-| `show_version` | `false`       | Shows the terraform version. Very slow on large workspaces. |
-
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[terraform]
-symbol = "🏎💨 "
 ```
 
 ## Time
