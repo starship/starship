@@ -50,12 +50,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let segments: Vec<Segment> = format_segments_nested(config.format, None, |name, query| {
         let style = get_style_from_query(&query);
         match name {
-            "conflicted" => format_segment_with_count(
-                "conflicted",
-                config.conflicted_format,
-                repo_status.as_ref().ok()?.conflicted,
-                style,
-            ),
             "ahead" => {
                 let (ahead, behind) = ahead_behind.as_ref().ok()?;
                 if *ahead > 0 && *behind == 0 {
@@ -75,7 +69,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "diverged" => {
                 let (ahead, behind) = ahead_behind.as_ref().ok()?;
                 if *ahead > 0 && *behind > 0 {
-                    format_segments(config.diverged_format, None, |name, query| {
+                    format_segments(config.diverged_format, style, |name, query| {
                         let style = get_style_from_query(&query).or(style);
                         match name {
                             "ahead_count" => Some(Segment {
@@ -107,6 +101,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     None
                 }
             }
+            "conflicted" => format_segment_with_count(
+                "conflicted",
+                config.conflicted_format,
+                repo_status.as_ref().ok()?.conflicted,
+                style,
+            ),
             "deleted" => format_segment_with_count(
                 "deleted",
                 config.deleted_format,

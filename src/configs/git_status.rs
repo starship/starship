@@ -27,6 +27,7 @@ impl<'a> RootModuleConfig<'a> for GitStatusConfig<'a> {
                      ${diverged?style=red bold}\
                      ${ahead?style=red bold}\
                      ${behind?style=red bold}\
+                     ${conflicted?style=red bold}\
                      ${deleted?style=red bold}\
                      ${renamed?style=red bold}\
                      ${modified?style=red bold}\

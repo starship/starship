@@ -30,7 +30,7 @@ fn shows_behind() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "⇣")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[⇣]"));
 
     assert_eq!(expected, actual);
 
@@ -53,7 +53,7 @@ fn shows_behind_with_count() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "⇣1")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[⇣1]"));
 
     assert_eq!(expected, actual);
 
@@ -73,7 +73,7 @@ fn shows_ahead() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "⇡")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[⇡]"));
 
     assert_eq!(expected, actual);
 
@@ -97,7 +97,7 @@ fn shows_ahead_with_count() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "⇡1")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[⇡1]"));
 
     assert_eq!(expected, actual);
 
@@ -116,7 +116,7 @@ fn shows_diverged() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "⇕")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[⇕]"));
 
     assert_eq!(expected, actual);
 
@@ -139,10 +139,7 @@ fn shows_diverged_with_count() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red
-        .bold()
-        .paint(format!("[{}] ", "⇕⇡1⇣1"))
-        .to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[⇕⇡1⇣1]"));
 
     assert_eq!(expected, actual);
 
@@ -161,7 +158,7 @@ fn shows_conflicted() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "=")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[=]"));
 
     assert_eq!(expected, actual);
 
@@ -184,7 +181,7 @@ fn shows_conflicted_with_count() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "=1")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[=1]"));
 
     assert_eq!(expected, actual);
 
@@ -203,7 +200,7 @@ fn shows_untracked_file() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "?")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[?]"));
 
     assert_eq!(expected, actual);
 
@@ -226,7 +223,7 @@ fn shows_untracked_file_with_count() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "?1")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[?1]"));
 
     assert_eq!(expected, actual);
 
@@ -285,7 +282,7 @@ fn shows_stashed() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "$")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[$]"));
 
     assert_eq!(expected, actual);
 
@@ -304,7 +301,7 @@ fn shows_modified() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "!")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[!]"));
 
     assert_eq!(expected, actual);
 
@@ -327,7 +324,7 @@ fn shows_modified_with_count() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "!1")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[!1]"));
 
     assert_eq!(expected, actual);
 
@@ -346,7 +343,7 @@ fn shows_staged_file() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "+")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[+]"));
 
     assert_eq!(expected, actual);
 
@@ -370,11 +367,11 @@ fn shows_staged_file_with_count() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     let expected = format!(
-        "{}",
+        "{} ",
         ANSIStrings(&[
             Color::Red.bold().paint("[+"),
             Color::Green.paint("1"),
-            Color::Red.bold().paint("] "),
+            Color::Red.bold().paint("]"),
         ])
     );
 
@@ -395,7 +392,7 @@ fn shows_renamed_file() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "»")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[»]"));
 
     assert_eq!(expected, actual);
 
@@ -418,7 +415,7 @@ fn shows_renamed_file_with_count() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "»1")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[»1]"));
 
     assert_eq!(expected, actual);
 
@@ -437,7 +434,7 @@ fn shows_deleted_file() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "✘")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[✘]"));
 
     assert_eq!(expected, actual);
 
@@ -460,7 +457,7 @@ fn shows_deleted_file_with_count() -> io::Result<()> {
         .arg(repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "✘1")).to_string();
+    let expected = format!("{} ", Color::Red.bold().paint("[✘1]"));
 
     assert_eq!(expected, actual);
 

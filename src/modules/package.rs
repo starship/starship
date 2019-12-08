@@ -1,11 +1,13 @@
+use super::utils::query_parser::*;
+use super::RootModuleConfig;
 use super::{Context, Module};
-use crate::utils;
 
 use serde_json as json;
 use toml;
 
-use super::{RootModuleConfig, SegmentConfig};
 use crate::configs::package::PackageConfig;
+use crate::segment::Segment;
+use crate::utils;
 
 /// Creates a module with the current package version
 ///
@@ -16,11 +18,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let mut module = context.new_module("package");
             let config: PackageConfig = PackageConfig::try_load(module.config);
 
-            module.set_style(config.style);
-            module.get_prefix().set_value("is ");
+            let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+                let style = get_style_from_query(&query);
+                match name {
+                    "version" => Some(Segment {
+                        _name: "version".to_string(),
+                        value: package_version.clone(),
+                        style,
+                    }),
+                    _ => None,
+                }
+            })
+            .ok()?;
 
-            module.create_segment("symbol", &config.symbol);
-            module.create_segment("version", &SegmentConfig::new(&package_version));
+            module.set_segments(segments);
 
             Some(module)
         }

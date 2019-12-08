@@ -3,9 +3,11 @@ use std::path::Path;
 use std::process::{Command, Output};
 use std::{env, fs};
 
+use super::utils::query_parser::*;
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::rust::RustConfig;
+use crate::segment::Segment;
 
 /// Creates a module with the current Rust version
 ///
@@ -59,10 +61,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("rust");
     let config = RustConfig::try_load(module.config);
-    module.set_style(config.style);
 
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &config.version.with_value(&module_version));
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "version" => Some(Segment {
+                _name: "version".to_string(),
+                value: module_version.clone(),
+                style,
+            }),
+            _ => None,
+        }
+    })
+    .ok()?;
+
+    module.set_segments(segments);
 
     Some(module)
 }
