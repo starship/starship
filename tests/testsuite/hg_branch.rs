@@ -125,7 +125,7 @@ fn test_configured_format() -> io::Result<()> {
     expect_hg_branch_with_config(
         &repo_dir,
         r#"
-          format = "on ${styled?value=B &style=purple bold}${name?style=underline blue} "
+          format = "on ${styled?value=B &style=underline blue}${name?style=underline blue} "
         "#,
         &[
             Expect::BranchName(&"branch-name-131"),
