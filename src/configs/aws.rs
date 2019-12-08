@@ -16,6 +16,7 @@ pub struct AwsConfig<'a> {
     pub profile: SegmentConfig<'a>,
     pub region: SegmentConfig<'a>,
     pub style: Style,
+    pub prefix: &'a str,
     pub disabled: bool,
     pub displayed_items: AwsItems,
 }
@@ -27,6 +28,7 @@ impl<'a> RootModuleConfig<'a> for AwsConfig<'a> {
             profile: SegmentConfig::default(),
             region: SegmentConfig::default(),
             style: Color::Yellow.bold(),
+            prefix: "on ",
             disabled: false,
             displayed_items: AwsItems::All,
         }

@@ -125,6 +125,7 @@ prompt_order = [
 | ----------------- | --------------- | -------------------------------------------------------- |
 | `symbol`          | `"☁️ "`         | 現在のAWSプロファイルを表示する前に表示される記号です。                            |
 | `style`           | `"bold yellow"` | モジュールのスタイルです。                                            |
+| `prefix`          | `on `           | Prefix to display immediately before the module.                            |
 | `disabled`        | `false`         | `aws`モジュールを無効にします。                                       |
 | `displayed_items` | `all`           | 表示するアイテムを選択します。 指定可能な値は以下です。[`all`, `profile`, `region`] |
 

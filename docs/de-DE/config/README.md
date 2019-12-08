@@ -125,6 +125,7 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`          | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                     |
 | `style`           | `"bold yellow"` | Stil für dieses Modul.                                                      |
+| `prefix`          | `on `           | Prefix to display immediately before the module.                            |
 | `disabled`        | `false`         | Deaktiviert das `aws`-Modul.                                                |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 

@@ -125,6 +125,7 @@ prompt_order = [
 | ----------------- | --------------- | ---------------------------------------------------------------- |
 | `symbol`          | `"☁️ "`         | Символ перед отображением текущего профиля AWS.                  |
 | `style`           | `"bold yellow"` | Стиль модуля.                                                    |
+| `prefix`          | `on `           | Prefix to display immediately before the module.                            |
 | `disabled`        | `false`         | Отключение модуля `AWS`.                                         |
 | `displayed_items` | `all`           | Выбор элементов. Возможные значения [`all`, `profile`, `region`] |
 

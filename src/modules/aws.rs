@@ -77,14 +77,12 @@ fn get_aws_region() -> Option<Region> {
 }
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    const AWS_PREFIX: &str = "on ";
-
     let mut module = context.new_module("aws");
     let config: AwsConfig = AwsConfig::try_load(module.config);
 
     module.set_style(config.style);
 
-    module.get_prefix().set_value(AWS_PREFIX);
+    module.get_prefix().set_value(config.prefix);
 
     module.create_segment("symbol", &config.symbol);
     match config.displayed_items {

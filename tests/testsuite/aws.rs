@@ -232,3 +232,21 @@ fn region_not_set_with_display_region() -> io::Result<()> {
     assert_eq!(expected, actual);
     Ok(())
 }
+
+#[test]
+fn custom_prefix() -> io::Result<()> {
+    let output = common::render_module("aws")
+        .use_config(toml::toml! {
+            [aws]
+            prefix = "with AWS: "
+        })
+        .env("AWS_REGION", "ap-northeast-2")
+        .output()?;
+    let expected = format!(
+        "with AWS: {} ",
+        Color::Yellow.bold().paint("☁️  ap-northeast-2")
+    );
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected, actual);
+    Ok(())
+}

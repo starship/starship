@@ -125,6 +125,7 @@ prompt_order = [
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`          | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。                                                          |
 | `style`           | `"bold yellow"` | 這個模組的風格。                                                                    |
+| `prefix`          | `on `           | Prefix to display immediately before the module.                            |
 | `disabled`        | `false`         | 停用 `AWS` 模組。                                                                |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 
