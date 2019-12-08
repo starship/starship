@@ -1,9 +1,11 @@
 use byte_unit::{Byte, ByteUnit};
 use sysinfo::{RefreshKind, SystemExt};
 
+use super::utils::query_parser::*;
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::memory_usage::MemoryConfig;
+use crate::segment::Segment;
 
 fn format_kib(n_kib: u64) -> String {
     let byte = Byte::from_unit(n_kib as f64, ByteUnit::KiB).unwrap_or_else(|_| Byte::from_bytes(0));
@@ -30,9 +32,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    module.set_style(config.style);
-    module.create_segment("symbol", &config.symbol);
-
     let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_system());
 
     let used_memory_kib = system.get_used_memory();
@@ -46,38 +45,61 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let show_percentage = config.show_percentage;
-
-    let ram = if show_percentage {
-        format!("{:.0}{}", percent_mem_used, percent_sign)
-    } else {
-        format!(
-            "{}/{}",
-            format_kib(used_memory_kib),
-            format_kib(total_memory_kib)
-        )
-    };
-    module.create_segment("ram", &config.ram.with_value(&ram));
-
     // swap only shown if enabled and there is swap on the system
     let total_swap_kib = system.get_total_swap();
-    if config.show_swap && total_swap_kib > 0 {
-        let used_swap_kib = system.get_used_swap();
-        let percent_swap_used = (used_swap_kib as f64 / total_swap_kib as f64) * 100.;
 
-        let swap = if show_percentage {
-            format!("{:.0}{}", percent_swap_used, percent_sign)
-        } else {
-            format!(
-                "{}/{}",
-                format_kib(used_swap_kib),
-                format_kib(total_swap_kib)
-            )
-        };
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "ram%" => Some(Segment {
+                _name: "ram%".to_string(),
+                value: format!("{:.0}{}", percent_mem_used, percent_sign),
+                style,
+            }),
+            "ram" => Some(Segment {
+                _name: "ram".to_string(),
+                value: format!(
+                    "{}/{}",
+                    format_kib(used_memory_kib),
+                    format_kib(total_memory_kib)
+                ),
+                style,
+            }),
+            "swap%" => {
+                if total_swap_kib > 0 {
+                    let used_swap_kib = system.get_used_swap();
+                    let percent_swap_used = (used_swap_kib as f64 / total_swap_kib as f64) * 100.;
+                    Some(Segment {
+                        _name: "swap".to_string(),
+                        value: format!("{:.0}{}", percent_swap_used, percent_sign),
+                        style,
+                    })
+                } else {
+                    None
+                }
+            }
+            "swap" => {
+                if total_swap_kib > 0 {
+                    let used_swap_kib = system.get_used_swap();
+                    Some(Segment {
+                        _name: "swap".to_string(),
+                        value: format!(
+                            "{}/{}",
+                            format_kib(used_swap_kib),
+                            format_kib(total_swap_kib)
+                        ),
+                        style,
+                    })
+                } else {
+                    None
+                }
+            }
+            _ => None,
+        }
+    })
+    .ok()?;
 
-        module.create_segment("separator", &config.separator);
-        module.create_segment("swap", &config.swap.with_value(&swap));
-    }
+    module.set_segments(segments);
 
     Some(module)
 }
