@@ -1,9 +1,9 @@
 use clap::ArgMatches;
 use rayon::prelude::*;
-use spongy::{parse_with, Item, Wrapper};
 use std::io::{self, Write};
 
 use crate::context::Context;
+use crate::formatter::{parse_with, Item, Wrapper};
 use crate::module::ALL_MODULES;
 use crate::modules;
 use crate::modules::utils::query_parser::{get_styled, parse_query};
@@ -44,7 +44,6 @@ pub fn get_prompt(context: Context) -> String {
                     None
                 }
             }
-            _ => None,
         }
     })
     .unwrap();

@@ -46,7 +46,8 @@ byte-unit = "3.0.3"
 starship_module_config_derive = { version = "0.1.0", path = "starship_module_config_derive" }
 yaml-rust = "0.4"
 nom = "5.0.1"
-spongy = { git = "https://github.com/heyrict/spongy" }
+pest = "^2.1"
+pest_derive = "^2.1"
 queryst = "2.0"
 
 [dev-dependencies]

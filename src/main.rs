@@ -1,9 +1,12 @@
 #[macro_use]
 extern crate clap;
+#[macro_use]
+extern crate pest_derive;
 
 mod config;
 mod configs;
 mod context;
+mod formatter;
 mod init;
 mod module;
 mod modules;

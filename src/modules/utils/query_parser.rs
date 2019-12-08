@@ -1,10 +1,10 @@
 use crate::segment::Segment;
 use ansi_term::Style;
 use serde_json::Value;
-use spongy::{parse, Element, Wrapper};
 use std::error::Error;
 
 use crate::config::parse_style_string;
+use crate::formatter::{parse, Element, Wrapper};
 
 /// Parse query from a module query string
 ///
@@ -85,7 +85,6 @@ where
                             _ => mapper(segment_name, query),
                         }
                     }
-                    _ => None,
                 },
             }
         })
@@ -130,7 +129,6 @@ where
                             _ => mapper(segment_name, query),
                         }
                     }
-                    _ => None,
                 },
             }
         })

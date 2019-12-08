@@ -1,0 +1,13 @@
+expression = _{ SOI ~ value* ~ EOI }
+
+value = _{ text | wrapper }
+
+char = { !("${" | "\\") ~ ANY | "\\" ~ ANY }
+text_inner = @{ char+ }
+text = { text_inner }
+
+curly_wrapped = { !("{" | "}") ~ ANY }
+curly_inner = @{ curly_wrapped* }
+dollar_curly = { "${" ~ curly_inner ~ "}" }
+
+wrapper = _{ dollar_curly }
