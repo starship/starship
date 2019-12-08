@@ -972,7 +972,7 @@ dependencies = [
  "rayon 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_json 1.0.44 (registry+https://github.com/rust-lang/crates.io-index)",
  "spongy 0.3.0 (git+https://github.com/heyrict/spongy)",
- "starship_module_config_derive 0.1.0",
+ "starship_module_config_derive 0.1.1",
  "sysinfo 0.9.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "tempfile 3.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "toml 0.5.5 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -982,7 +982,7 @@ dependencies = [
 
 [[package]]
 name = "starship_module_config_derive"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "proc-macro2 1.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 1.0.2 (registry+https://github.com/rust-lang/crates.io-index)",

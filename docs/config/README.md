@@ -457,8 +457,8 @@ To enable it, set `disabled` to `false` in your configuration file.
 | Variable             | Default        | Description                                      |
 | -------------------- | -------------- | ------------------------------------------------ |
 | `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
-| `prefix`             | `(`            | Prefix to display immediately before git commit. |
-| `suffix`             | `)`            | Suffix to display immediately after git commit.  |
+| `prefix`             | `"("`          | Prefix to display immediately before git commit. |
+| `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
 | `style`              | `"bold green"` | The style for the module.                        |
 | `disabled`           | `true`         | Disables the `git_commit` module.                |
 
