@@ -47,6 +47,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo_status = get_repo_status(&repository);
     log::debug!("Repo status: {:?}", repo_status);
 
+    let will_repo_status_render = |rs: &RepoStatus| {
+        rs.conflicted > 0
+            || rs.deleted > 0
+            || rs.renamed > 0
+            || rs.modified > 0
+            || rs.staged > 0
+            || rs.untracked > 0
+    };
+
     // Do not render if no segment should be displayed
     if !(ahead_behind
         .as_ref()
@@ -55,14 +64,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         || stash_object.is_ok()
         || repo_status
             .as_ref()
-            .map(|rs| {
-                rs.conflicted > 0
-                    || rs.deleted > 0
-                    || rs.renamed > 0
-                    || rs.modified > 0
-                    || rs.staged > 0
-                    || rs.untracked > 0
-            })
+            .map(will_repo_status_render)
             .unwrap_or(false))
     {
         return None;
