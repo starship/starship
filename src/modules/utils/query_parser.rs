@@ -9,10 +9,11 @@ use crate::config::parse_style_string;
 /// Parse query from a module query string
 ///
 /// ## Example
-/// ```rust
+/// ```
+/// # use starship::modules::utils::query_parser::parse_query;
 /// let (module_name, query) = parse_query("rust?style=red bold");
 /// assert_eq!(module_name, "rust");
-/// assert_eq!(query.unwrap().get("style"), Some("red bold"));
+/// assert_eq!(query.unwrap().get("style").unwrap().as_str(), Some("red bold"));
 /// ```
 pub fn parse_query(qstr: &str) -> (&str, Option<Value>) {
     qstr.find('?')
