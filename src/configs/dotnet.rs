@@ -12,7 +12,7 @@ pub struct DotnetConfig<'a> {
 impl<'a> RootModuleConfig<'a> for DotnetConfig<'a> {
     fn new() -> Self {
         DotnetConfig {
-            format: "${styled?value=•NET &style=blue bold} ",
+            format: "${styled?value=•NET &style=blue bold}${version?style=blue bold} ",
             heuristic: true,
             disabled: false,
         }
