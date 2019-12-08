@@ -22,7 +22,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("character");
     let config: CharacterConfig = CharacterConfig::try_load(module.config);
-    module.get_prefix().set_value("");
 
     let props = &context.properties;
     let exit_code_default = std::string::String::from("0");

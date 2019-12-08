@@ -20,12 +20,12 @@ fn unknown_module_name() -> io::Result<()> {
 
 #[test]
 fn known_module_name() -> io::Result<()> {
-    let output = common::render_module("line_break").output()?;
+    let output = common::render_module("character").output()?;
     let actual_stdout = String::from_utf8(output.stdout).unwrap();
     let actual_stderr = String::from_utf8(output.stderr).unwrap();
-    let expected_stdout = "\n";
+    let expected_stdout = "❯";
     let expected_stderr = "";
-    assert_eq!(expected_stdout, actual_stdout);
+    assert!(actual_stdout.contains(expected_stdout));
     assert_eq!(expected_stderr, actual_stderr);
     Ok(())
 }
