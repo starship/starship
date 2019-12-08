@@ -1,8 +1,10 @@
 use git2::RepositoryState;
 use std::path::{Path, PathBuf};
 
+use super::utils::query_parser::*;
 use super::{Context, Module, RootModuleConfig, SegmentConfig};
 use crate::configs::git_state::GitStateConfig;
+use crate::segment::Segment;
 
 /// Creates a module with the state of the git repository at the current directory
 ///
@@ -12,15 +14,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_state");
     let config: GitStateConfig = GitStateConfig::try_load(module.config);
 
-    module.set_style(config.style);
-    module.get_prefix().set_value("(");
-    module.get_suffix().set_value(") ");
-
     let repo = context.get_repo().ok()?;
     let repo_root = repo.root.as_ref()?;
     let repo_state = repo.state?;
 
-    let state_description = get_state_description(repo_state, repo_root, config);
+    let state_description = get_state_description(repo_state, repo_root, &config);
 
     let label = match &state_description {
         StateDescription::Label(label) => label,
@@ -29,8 +27,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             return None;
         }
     };
-
-    module.create_segment(label.name, &label.segment);
 
     if let StateDescription::LabelAndProgress(_, progress) = &state_description {
         module.create_segment(
@@ -44,6 +40,40 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         );
     }
 
+    let segments: Vec<Segment> = format_segments_nested(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "label" => format_segments(label.segment, style, |_, _| None).ok(),
+            "progress" => {
+                if let StateDescription::LabelAndProgress(_, progress) = &state_description {
+                    format_segments(config.progress_format, style, |name, query| {
+                        let style = get_style_from_query(&query).or(style);
+                        match name {
+                            "current" => Some(Segment {
+                                _name: "progress_current".to_string(),
+                                value: progress.current.to_string(),
+                                style,
+                            }),
+                            "total" => Some(Segment {
+                                _name: "progress_total".to_string(),
+                                value: progress.total.to_string(),
+                                style,
+                            }),
+                            _ => None,
+                        }
+                    })
+                    .ok()
+                } else {
+                    None
+                }
+            }
+            _ => None,
+        }
+    })
+    .ok()?;
+
+    module.set_segments(segments);
+
     Some(module)
 }
 
@@ -53,7 +83,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn get_state_description<'a>(
     state: RepositoryState,
     root: &'a std::path::PathBuf,
-    config: GitStateConfig<'a>,
+    config: &'a GitStateConfig<'a>,
 ) -> StateDescription<'a> {
     match state {
         RepositoryState::Clean => StateDescription::Clean,
@@ -83,10 +113,7 @@ fn get_state_description<'a>(
     }
 }
 
-fn describe_rebase<'a>(
-    root: &'a PathBuf,
-    rebase_config: SegmentConfig<'a>,
-) -> StateDescription<'a> {
+fn describe_rebase<'a>(root: &'a PathBuf, rebase_config: &'a str) -> StateDescription<'a> {
     /*
      *  Sadly, libgit2 seems to have some issues with reading the state of
      *  interactive rebases. So, instead, we'll poke a few of the .git files
@@ -139,7 +166,7 @@ enum StateDescription<'a> {
 
 struct StateLabel<'a> {
     name: &'static str,
-    segment: SegmentConfig<'a>,
+    segment: &'a str,
 }
 
 struct StateProgress {
@@ -148,7 +175,7 @@ struct StateProgress {
 }
 
 impl<'a> StateLabel<'a> {
-    fn new(name: &'static str, segment: SegmentConfig<'a>) -> Self {
+    fn new(name: &'static str, segment: &'a str) -> Self {
         Self { name, segment }
     }
 }
