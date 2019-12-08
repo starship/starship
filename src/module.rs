@@ -117,10 +117,6 @@ impl<'a> Module<'a> {
             _ => ansi_strings,
         }
     }
-
-    pub fn to_string_without_prefix(&self) -> String {
-        ANSIStrings(&self.ansi_strings()[1..]).to_string()
-    }
 }
 
 impl<'a> fmt::Display for Module<'a> {
