@@ -47,7 +47,7 @@ fn shows_behind_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            show_sync_count = true
+            behind_format = "⇣${count}"
         })
         .arg("--path")
         .arg(repo_dir)
@@ -91,7 +91,7 @@ fn shows_ahead_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            show_sync_count = true
+            ahead_format = "⇡${count}"
         })
         .arg("--path")
         .arg(repo_dir)
@@ -133,7 +133,7 @@ fn shows_diverged_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            show_sync_count = true
+            diverged_format = "⇕⇡${ahead_count}⇣${behind_count}"
         })
         .arg("--path")
         .arg(repo_dir)
@@ -178,7 +178,7 @@ fn shows_conflicted_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            conflicted_count.enabled = true
+            conflicted_format = "=${count}"
         })
         .arg("--path")
         .arg(repo_dir)
@@ -220,7 +220,7 @@ fn shows_untracked_file_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            untracked_count.enabled = true
+            untracked_format = "?${count}"
         })
         .arg("--path")
         .arg(repo_dir)
@@ -321,7 +321,7 @@ fn shows_modified_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            modified_count.enabled = true
+            modified_format = "!${count}"
         })
         .arg("--path")
         .arg(repo_dir)
@@ -363,8 +363,7 @@ fn shows_staged_file_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            staged_count.enabled = true
-            staged_count.style = "green"
+            staged_format = "+${count?style=green}"
         })
         .arg("--path")
         .arg(repo_dir)
@@ -413,7 +412,7 @@ fn shows_renamed_file_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            renamed_count.enabled = true
+            renamed_format = "»${count}"
         })
         .arg("--path")
         .arg(repo_dir)
@@ -455,7 +454,7 @@ fn shows_deleted_file_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            deleted_count.enabled = true
+            deleted_format = "✘${count}"
         })
         .arg("--path")
         .arg(repo_dir)

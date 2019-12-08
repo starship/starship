@@ -5,7 +5,6 @@ use starship_module_config_derive::ModuleConfig;
 #[derive(Clone, ModuleConfig)]
 pub struct GitStatusConfig<'a> {
     pub format: &'a str,
-    pub show_sync_count: bool,
     pub stashed_format: &'a str,
     pub diverged_format: &'a str,
     pub ahead_format: &'a str,
@@ -35,7 +34,6 @@ impl<'a> RootModuleConfig<'a> for GitStatusConfig<'a> {
                      ${untracked?style=red bold}\
                      ${styled?value=]&style=red bold} \
                      ",
-            show_sync_count: false,
             stashed_format: "$",
             diverged_format: "⇕",
             ahead_format: "⇡",

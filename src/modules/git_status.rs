@@ -58,7 +58,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             ),
             "ahead" => {
                 let (ahead, behind) = ahead_behind.as_ref().ok()?;
-                if (*ahead > 0 && *behind == 0) || config.show_sync_count {
+                if *ahead > 0 && *behind == 0 {
                     format_segment_with_count("ahead", config.ahead_format, *ahead, style)
                 } else {
                     None
@@ -66,7 +66,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             }
             "behind" => {
                 let (ahead, behind) = ahead_behind.as_ref().ok()?;
-                if (*ahead == 0 && *behind > 0) || config.show_sync_count {
+                if *ahead == 0 && *behind > 0 {
                     format_segment_with_count("behind", config.behind_format, *behind, style)
                 } else {
                     None
@@ -75,11 +75,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "diverged" => {
                 let (ahead, behind) = ahead_behind.as_ref().ok()?;
                 if *ahead > 0 && *behind > 0 {
-                    Some(vec![Segment {
-                        _name: "diverged".to_string(),
-                        value: config.diverged_format.to_string(),
-                        style,
-                    }])
+                    format_segments(config.diverged_format, None, |name, query| {
+                        let style = get_style_from_query(&query).or(style);
+                        match name {
+                            "ahead_count" => Some(Segment {
+                                _name: "diverged_ahead_count".to_string(),
+                                value: ahead.to_string(),
+                                style,
+                            }),
+                            "behind_count" => Some(Segment {
+                                _name: "diverged_behind_count".to_string(),
+                                value: behind.to_string(),
+                                style,
+                            }),
+                            _ => None,
+                        }
+                    })
+                    .ok()
                 } else {
                     None
                 }
@@ -229,16 +241,20 @@ fn format_segment_with_count(
     count: usize,
     default_style: Option<Style>,
 ) -> Option<Vec<Segment>> {
-    format_segments(format, default_style, |name, query| {
-        let style = get_style_from_query(&query).or(default_style);
-        match name {
-            "count" => Some(Segment {
-                _name: format!("{}_count", &segment_name),
-                value: count.to_string(),
-                style,
-            }),
-            _ => None,
-        }
-    })
-    .ok()
+    if count > 0 {
+        format_segments(format, default_style, |name, query| {
+            let style = get_style_from_query(&query).or(default_style);
+            match name {
+                "count" => Some(Segment {
+                    _name: format!("{}_count", &segment_name),
+                    value: count.to_string(),
+                    style,
+                }),
+                _ => None,
+            }
+        })
+        .ok()
+    } else {
+        None
+    }
 }
