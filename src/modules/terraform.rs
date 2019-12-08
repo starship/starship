@@ -5,7 +5,6 @@ use crate::utils;
 use std::env;
 use std::io;
 use std::path::PathBuf;
-use std::process::Command;
 
 /// Creates a module with the current Terraform version and workspace
 ///
@@ -30,7 +29,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.create_segment("symbol", &config.symbol);
 
     if config.show_version {
-        let terraform_version = format_terraform_version(&get_terraform_version()?)?;
+        let terraform_version =
+            format_terraform_version(&utils::exec_cmd("terraform", &["version"])?.stdout.as_str())?;
         module.create_segment("version", &config.version.with_value(&terraform_version));
     }
 
@@ -57,18 +57,10 @@ fn get_terraform_workspace(cwd: &PathBuf) -> Option<String> {
         Err(_) => cwd.join(".terraform"),
     };
     match utils::read_file(datadir.join("environment")) {
-        Err(e) if e.kind() == io::ErrorKind::NotFound => Some("default".to_string()),
+        Err(ref e) if e.kind() == io::ErrorKind::NotFound => Some("default".to_string()),
         Ok(s) => Some(s),
         _ => None,
     }
-}
-
-fn get_terraform_version() -> Option<String> {
-    Command::new("terraform")
-        .arg("version")
-        .output()
-        .ok()
-        .and_then(|output| String::from_utf8(output.stdout).ok())
 }
 
 fn format_terraform_version(version: &str) -> Option<String> {
