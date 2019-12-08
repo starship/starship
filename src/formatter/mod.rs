@@ -69,12 +69,14 @@ where
         .map(|el: &Element| -> String {
             match el {
                 Element::Text(t) => t.to_owned().to_owned(),
-                Element::Wrapped(item) => mapper(item).unwrap_or(format!(
-                    "{}{}{}",
-                    item.wrapper.get_prefix(),
-                    item.text,
-                    item.wrapper.get_suffix()
-                )),
+                Element::Wrapped(item) => mapper(item).unwrap_or_else(|| {
+                    format!(
+                        "{}{}{}",
+                        item.wrapper.get_prefix(),
+                        item.text,
+                        item.wrapper.get_suffix()
+                    )
+                }),
             }
         })
         .collect::<Vec<String>>()
