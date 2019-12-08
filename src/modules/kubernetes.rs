@@ -4,12 +4,12 @@ use yaml_rust::YamlLoader;
 use std::env;
 use std::path;
 
+use super::utils::query_parser::*;
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::kubernetes::KubernetesConfig;
+use crate::segment::Segment;
 use crate::utils;
-
-const KUBERNETES_PREFIX: &str = "on ";
 
 fn get_kube_context(contents: &str) -> Option<(String, String)> {
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
@@ -64,17 +64,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 return None;
             };
 
-            module.set_style(config.style);
-            module.get_prefix().set_value(KUBERNETES_PREFIX);
+            let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+                let style = get_style_from_query(&query);
+                match name {
+                    "context" => Some(Segment {
+                        _name: "context".to_string(),
+                        value: if kube_ns == "" {
+                            kube_ctx.clone()
+                        } else {
+                            format!("{} ({})", &kube_ctx, &kube_ns)
+                        },
+                        style,
+                    }),
+                    _ => None,
+                }
+            })
+            .ok()?;
 
-            module.create_segment("symbol", &config.symbol);
-            module.create_segment("context", &config.context.with_value(&kube_ctx));
-            if kube_ns != "" {
-                module.create_segment(
-                    "namespace",
-                    &config.namespace.with_value(&format!(" ({})", kube_ns)),
-                );
-            }
+            module.set_segments(segments);
+
             Some(module)
         }
         None => None,
