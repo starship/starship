@@ -5,8 +5,10 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::str;
 
+use super::utils::query_parser::*;
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::dotnet::DotnetConfig;
+use crate::segment::Segment;
 
 type JValue = serde_json::Value;
 
@@ -40,9 +42,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         get_version_from_cli()?
     };
 
-    module.set_style(config.style);
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &config.version.with_value(&version.0));
+    let segments: Vec<Segment> = format_segments(config.format, None, |name, query| {
+        let style = get_style_from_query(&query);
+        match name {
+            "version" => Some(Segment {
+                _name: "version".to_string(),
+                value: version.0.clone(),
+                style,
+            }),
+            _ => None,
+        }
+    })
+    .ok()?;
+
+    module.set_segments(segments);
 
     Some(module)
 }
