@@ -8,9 +8,9 @@ pub struct TerraformConfig<'a> {
     pub symbol: SegmentConfig<'a>,
     pub workspace: SegmentConfig<'a>,
     pub version: SegmentConfig<'a>,
+    pub show_version: bool,
     pub style: Style,
     pub disabled: bool,
-    pub show_version: bool,
 }
 
 impl<'a> RootModuleConfig<'a> for TerraformConfig<'a> {
@@ -19,9 +19,9 @@ impl<'a> RootModuleConfig<'a> for TerraformConfig<'a> {
             symbol: SegmentConfig::new("💠 "),
             workspace: SegmentConfig::default(),
             version: SegmentConfig::default(),
+            show_version: false,
             style: Color::Fixed(105).bold(),
             disabled: false,
-            show_version: false,
         }
     }
 }
