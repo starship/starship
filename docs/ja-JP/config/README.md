@@ -101,6 +101,7 @@ prompt_order = [
     "python",
     "ruby",
     "rust",
+    "terraform",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -933,27 +934,52 @@ symbol = "🔺 "
 symbol = "⚙️ "
 ```
 
-## 時刻
+## Terraform
 
-`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf` extension
+
+### オプション
+
+| 変数             | デフォルト        | 説明                                                          |
+| -------------- | ------------ | ----------------------------------------------------------- |
+| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
+| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
+| `style`        | `"bold 105"` | The style for the module.                                   |
+| `disabled`     | `false`      | Disables the `terraform` module.                            |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+symbol = "🏎💨 "
+```
+
+## Time
+
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
 ### オプション
 
-| 変数                | デフォルト          | 説明                                                                                                |
-| ----------------- | -------------- | ------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`        | 12時間のフォーマットを有効にします。                                                                               |
-| `format`          | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。 |
-| `style`           | `bold yellow`  | モジュールのスタイルです。                                                                                     |
-| `disabled`        | `true`         | `time`モジュールを無効にします。                                                                               |
-| `utc_time_offset` | `local`        | 使用するUTCオフセットを設定します。 -24から24までの間で設定可能です。 フロートが30/45分のタイムゾーンオフセットに対応できるようにします。                      |
+| 変数                | デフォルト         | 説明                                                                                                                  |
+| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
+| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `bold yellow` | The style for the module time                                                                                       |
+| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
+| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
 
-`use_12hr` が `true` の場合、`format` のデフォルトは `"%r"` です。 それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、`use_12hr`の設定が上書きされます。
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
 ### 設定例
 
@@ -966,25 +992,25 @@ format = "🕙[ %T ]"
 utc_time_offset = -5
 ```
 
-## ユーザー名
+## Username
 
-`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
-- カレントユーザーがroot
-- カレントユーザーが、ログインしているユーザーとは異なる
-- ユーザーがSSHセッションとして接続されている
-- `show_always`変数がtrueに設定されている
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
-### オプション
+### Options
 
-| 変数            | デフォルト           | 説明                        |
-| ------------- | --------------- | ------------------------- |
-| `style_root`  | `"bold red"`    | ユーザーがrootのときに使用されるスタイルです。 |
-| `style_user`  | `"bold yellow"` | 非rootユーザーに使用されるスタイルです。    |
-| `show_always` | `false`         | `username`モジュールを常に表示します。  |
-| `disabled`    | `false`         | `username`モジュールを無効にします。   |
+| Variable      | Default         | Description                           |
+| ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`    | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `show_always` | `false`         | Always shows the `username` module.   |
+| `disabled`    | `false`         | Disables the `username` module.       |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml
