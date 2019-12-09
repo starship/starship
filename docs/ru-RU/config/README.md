@@ -101,6 +101,7 @@ prompt_order = [
     "python",
     "ruby",
     "rust",
+    "terraform",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -931,6 +932,31 @@ The `rust` module shows the currently installed version of Rust. The module will
 symbol = "⚙️ "
 ```
 
+## Terraform
+
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf` extension
+
+### Опции
+
+| Переменная     | По умолчанию | Описание                                                    |
+| -------------- | ------------ | ----------------------------------------------------------- |
+| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
+| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
+| `style`        | `"bold 105"` | The style for the module.                                   |
+| `disabled`     | `false`      | Disables the `terraform` module.                            |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+symbol = "🏎💨 "
+```
+
 ## Time
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
@@ -973,16 +999,16 @@ The `username` module shows active user's username. The module will be shown if 
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
 
-### Опции
+### Options
 
-| Переменная    | По умолчанию    | Описание                              |
+| Variable      | Default         | Description                           |
 | ------------- | --------------- | ------------------------------------- |
 | `style_root`  | `"bold red"`    | The style used when the user is root. |
 | `style_user`  | `"bold yellow"` | The style used for non-root users.    |
 | `show_always` | `false`         | Always shows the `username` module.   |
 | `disabled`    | `false`         | Disables the `username` module.       |
 
-### Пример
+### Example
 
 ```toml
 # ~/.config/starship.toml
