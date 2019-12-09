@@ -289,7 +289,11 @@ prefix = "underwent "
 
 The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
-Note: This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`
+::: tip
+
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+
+:::
 
 ### Options
 
