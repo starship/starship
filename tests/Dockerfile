@@ -77,6 +77,18 @@ RUN php --version
 RUN HGPYTHON3=1 pip install mercurial
 # Check that Mercurial was correctly installed
 RUN hg --version
+# Install Terraform
+ENV TERRAFORM_HOME /home/nonroot/terraform
+ENV TERRAFORM_VERSION 0.12.14
+ENV PATH ${TERRAFORM_HOME}:${PATH}
+
+RUN mkdir -p ${TERRAFORM_HOME} \
+    && terraform_download="${TERRAFORM_HOME}/terraform.zip" \
+    && curl -SL --output "${terraform_download}" "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" \
+    && unzip "${terraform_download}" -d "${TERRAFORM_HOME}" \
+    && rm "${terraform_download}"
+# Check that terraform was correctly installed
+RUN terraform version
 
 # Create blank project
 RUN USER=nonroot cargo new --bin /src/starship

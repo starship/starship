@@ -139,6 +139,11 @@ jobs:
       - name: Install Mercurial (windows)
         if: matrix.os == 'windows-latest'
         run: choco install hg
+      
+      # Install Terraform at a fixed version
+      - uses: volcano-coffee-company/setup-terraform@v1
+        with:
+          version: "0.12.14"
 
       # Run the ignored tests that expect the above setup
       - name: Run all tests

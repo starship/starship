@@ -25,6 +25,7 @@ mod php;
 mod python;
 mod ruby;
 mod rust;
+mod terraform;
 mod time;
 mod username;
 mod utils;
@@ -68,6 +69,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "python" => python::module(context),
         "ruby" => ruby::module(context),
         "rust" => rust::module(context),
+        "terraform" => terraform::module(context),
         "time" => time::module(context),
         "username" => username::module(context),
         _ => {
