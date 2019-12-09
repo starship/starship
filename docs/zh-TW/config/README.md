@@ -101,6 +101,7 @@ prompt_order = [
     "python",
     "ruby",
     "rust",
+    "terraform",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -931,27 +932,52 @@ symbol = "🔺 "
 symbol = "⚙️ "
 ```
 
-## 時間
+## Terraform
 
-`time` 模組顯示目前的**當地**時間. `format` 設定值被 [`chrono`](https://crates.io/crates/chrono) crate 用來控制時間如何顯示。 請看 [chrono 的 strftime 文件](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)來了解有那些選項可以使用。
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf` extension
+
+### 選項
+
+| 變數             | 預設           | 說明                                                          |
+| -------------- | ------------ | ----------------------------------------------------------- |
+| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
+| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
+| `style`        | `"bold 105"` | The style for the module.                                   |
+| `disabled`     | `false`      | Disables the `terraform` module.                            |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+symbol = "🏎💨 "
+```
+
+## Time
+
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
 ### 選項
 
-| 變數                | 預設            | 說明                                                                                     |
-| ----------------- | ------------- | -------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`       | 啟用 12 小時格式。                                                                            |
-| `format`          | 請看下列          | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。 |
-| `style`           | `bold yellow` | 這個模組的時間的風格。                                                                            |
-| `disabled`        | `true`        | 停用 `time` 模組。                                                                          |
-| `utc_time_offset` | `local`       | 設定相對於 UTC 的時差。 範圍 -24 < x < 24。 允許使用浮點數來表示 30/45 分鐘時差的時區。                              |
+| 變數                | 預設            | 說明                                                                                                                  |
+| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
+| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `bold yellow` | The style for the module time                                                                                       |
+| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
+| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
 
-如果 `use_12hr` 是 `true` 的話，`format` 會被預設為 `"%r"`。 不然的話，它會被預設為 `"%T"`。 手動設定 `format` 的設定值會覆寫 `use_12hr` 的設定。
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
 ### 範例
 
@@ -964,25 +990,25 @@ format = "🕙[ %T ]"
 utc_time_offset = -5
 ```
 
-## 使用者名稱
+## Username
 
-`username` 模組顯示現在使用中的使用者名稱。 這個模組在下列其中一個條件達成時顯示：
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
-- 目前使用者為 root
-- 目前使用者並非登入時的使用者
-- 使用者透過 SSH session 進行連線
-- 變數 `show_always` 被設為 true
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
-### 選項
+### Options
 
-| 變數            | 預設              | 說明                  |
-| ------------- | --------------- | ------------------- |
-| `style_root`  | `"bold red"`    | 使用者為 root 時使用的風格。   |
-| `style_user`  | `"bold yellow"` | 非 root 使用者時使用的風格。   |
-| `show_always` | `false`         | 總是顯示 `username` 模組。 |
-| `disabled`    | `false`         | 停用 `username` 模組。   |
+| Variable      | Default         | Description                           |
+| ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`    | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `show_always` | `false`         | Always shows the `username` module.   |
+| `disabled`    | `false`         | Disables the `username` module.       |
 
-### 範例
+### Example
 
 ```toml
 # ~/.config/starship.toml
