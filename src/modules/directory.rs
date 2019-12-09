@@ -236,48 +236,6 @@ mod tests {
     }
 
     #[test]
-    fn truncate_smaller_path_than_provided_length() {
-        let path = "~/starship";
-        let output = truncate(path.to_string(), 3);
-        assert_eq!(output, "~/starship")
-    }
-
-    #[test]
-    fn truncate_same_path_as_provided_length() {
-        let path = "~/starship/engines";
-        let output = truncate(path.to_string(), 3);
-        assert_eq!(output, "~/starship/engines")
-    }
-
-    #[test]
-    fn truncate_slightly_larger_path_than_provided_length() {
-        let path = "~/starship/engines/booster";
-        let output = truncate(path.to_string(), 3);
-        assert_eq!(output, "starship/engines/booster")
-    }
-
-    #[test]
-    fn truncate_larger_path_than_provided_length() {
-        let path = "~/starship/engines/booster/rocket";
-        let output = truncate(path.to_string(), 3);
-        assert_eq!(output, "engines/booster/rocket")
-    }
-
-    #[test]
-    fn truncate_same_path_as_provided_length_from_root() {
-        let path = "/starship/engines/booster";
-        let output = truncate(path.to_string(), 3);
-        assert_eq!(output, "/starship/engines/booster");
-    }
-
-    #[test]
-    fn truncate_larger_path_than_provided_length_from_root() {
-        let path = "/starship/engines/booster/rocket";
-        let output = truncate(path.to_string(), 3);
-        assert_eq!(output, "engines/booster/rocket");
-    }
-
-    #[test]
     fn fish_style_with_user_home_contracted_path() {
         let path = "~/starship/engines/booster/rocket";
         let output = to_fish_style(1, path.to_string(), "engines/booster/rocket");
