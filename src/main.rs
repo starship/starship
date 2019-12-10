@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate clap;
 
+mod bug_report;
 mod config;
 mod configs;
 mod context;
@@ -108,6 +109,10 @@ fn main() {
                 .arg(&keymap_arg)
                 .arg(&jobs_arg),
         )
+        .subcommand(
+            SubCommand::with_name("bug-report")
+                .about("Create a pre-populated GitHub issue with information about your configuration")
+        )
         .get_matches();
 
     match matches.subcommand() {
@@ -132,6 +137,7 @@ fn main() {
                 print::module(module_name, sub_m.clone());
             }
         }
+        ("bug-report", Some(_)) => bug_report::create(),
         _ => {}
     }
 }
