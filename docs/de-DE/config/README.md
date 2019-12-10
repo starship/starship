@@ -9,7 +9,7 @@
 Um mit der Konfiguration von Starship zu beginnen, musst du die folgende Datei erstellen: `~/.config/starship.toml`.
 
 ```shell
-$ touch ~/.config/starship.toml
+$ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 Die gesamte Konfiguration von Starship wird über diese [TOML](https://github.com/toml-lang/toml)-Datei durchgeführt:
@@ -63,7 +63,7 @@ Dies ist eine Liste mit Prompt-weiten Konfigurationsoptionen.
 | -------------- | ----------------------------- | ------------------------------------------------------------------ |
 | `add_newline`  | `true`                        | Neuer Zeilenumbruch bei Start des Prompts.                         |
 | `prompt_order` | [link](#default-prompt-order) | Stelle die Reihenfolge ein, in der die Module den prompt aufbauen. |
-| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).              |
+| `scan_timeout` | `30`                          | Timeout für das Scannen von Dateien (in Millisekunden).            |
 
 ### Beispiel
 
@@ -89,8 +89,10 @@ prompt_order = [
     "kubernetes",
     "directory",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
+    "hg_branch",
     "package",
     "dotnet",
     "golang",
@@ -119,11 +121,12 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 
 ### Optionen
 
-| Variable   | Standardwert    | Beschreibung                                            |
-| ---------- | --------------- | ------------------------------------------------------- |
-| `symbol`   | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird. |
-| `style`    | `"bold yellow"` | Stil für dieses Modul.                                  |
-| `disabled` | `false`         | Deaktiviert das `aws`-Modul.                            |
+| Variable          | Standardwert    | Beschreibung                                                                |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                     |
+| `style`           | `"bold yellow"` | Stil für dieses Modul.                                                      |
+| `disabled`        | `false`         | Deaktiviert das `aws`-Modul.                                                |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 
 ### Beispiel
 
@@ -133,6 +136,7 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 [aws]
 style = "bold blue"
 symbol = "🅰 "
+displayed_items = "region"
 ```
 
 ## Akkustand
@@ -301,6 +305,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | ------------------- | ------------- | -------------------------------------------------------------------------------- |
 | `truncation_length` | `3`           | Die Anzahl der übergeordneten Ordner, die angezeigt werden.                      |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
 | `style`             | `"bold cyan"` | Stil für dieses Modul.                                                           |
 | `disabled`          | `false`       | Deaktiviert das `directory`-Modul.                                               |
 
@@ -336,8 +341,8 @@ Internally, this module uses its own mechanism for version detection. Typically 
 | Variable    | Standardwert  | Beschreibung                                                       |
 | ----------- | ------------- | ------------------------------------------------------------------ |
 | `symbol`    | `"•NET "`     | Symbol das vor der dotnet-Version angezeigt wird.                  |
-| `style`     | `"bold blue"` | Stil für dieses Modul.                                             |
 | `heuristic` | `true`        | Schnelle Versionserkennung nutzen um Starship bedienbar zu halten. |
+| `style`     | `"bold blue"` | Stil für dieses Modul.                                             |
 | `disabled`  | `false`       | Deaktiviert das `dotnet`-Modul.                                    |
 
 ### Beispiel
@@ -403,6 +408,36 @@ Das `git_branch`-Modul zeigt den aktiven Git-Branch des Repositories im aktuelle
 symbol = "🌱 "
 truncation_length = 4
 truncation_symbol = ""
+```
+
+## Git Commit
+
+The `git_commit` module shows the active branch of the repo in your current directory.
+
+::: tip
+
+Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+
+:::
+
+### Optionen
+
+| Variable             | Standardwert   | Beschreibung                                     |
+| -------------------- | -------------- | ------------------------------------------------ |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
+| `prefix`             | `(`            | Prefix to display immediately before git commit. |
+| `suffix`             | `)`            | Suffix to display immediately after git commit.  |
+| `style`              | `"bold green"` | Stil für dieses Modul.                           |
+| `disabled`           | `true`         | Disables the `git_commit` module.                |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+disabled = false
+commit_hash_length = 4
 ```
 
 ## Git-Zustand
@@ -471,7 +506,6 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `enabled` | `false`      | Show the number of files                               |
 | `style`   |              | Optionally style the count differently than the module |
 
-
 ### Beispiel
 
 ```toml
@@ -520,6 +554,31 @@ Das `golang`-Modul zeigt die aktuell installierte Version von Golang. Das Modul 
 
 [golang]
 symbol = "🏎💨 "
+```
+
+## Mercurial Branch
+
+The `hg_branch` module shows the active branch of the repo in your current directory.
+
+### Optionen
+
+| Variable            | Standardwert    | Beschreibung                                                                                 |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
+| `style`             | `"bold purple"` | Stil für dieses Modul.                                                                       |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[hg_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
 ```
 
 ## Hostname
@@ -667,6 +726,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
 | `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
 | `symbol`          | `"🐏 "`                | Symbol das vor der Speicherauslastung angezeigt wird.         |
+| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
 | `style`           | `"bold dimmed white"` | Stil für dieses Modul.                                        |
 | `disabled`        | `true`                | Deaktiviert das `memory_usage`-Modul.                         |
 
@@ -680,6 +740,7 @@ show_percentage = true
 show_swap = true
 threshold = -1
 symbol = " "
+separator = "/"
 style = "bold dimmed green"
 ```
 
@@ -759,6 +820,30 @@ The `package` module is shown when the current directory is the repository for a
 symbol = "🎁 "
 ```
 
+## PHP
+
+The `php` module shows the currently installed version of PHP. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+
+- Das aktuelle Verzeichnis enthält eine `composer.json`-Datei
+- The current directory contains a `.php` file
+
+### Optionen
+
+| Variable   | Standardwert | Beschreibung                                          |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold red"` | Stil für dieses Modul.                                |
+| `disabled` | `false`      | Disables the `php` module.                            |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[php]
+symbol = "🔹 "
+```
+
 ## Python
 
 The `python` module shows the currently installed version of Python.
@@ -775,6 +860,7 @@ Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 - The current directory contains a file with the `.py` extension
 - The current directory contains a `Pipfile` file
 - Das aktuelle Verzeichnis enthält eine `tox.ini`-Datei
+- A virtual environment is currently activated
 
 ### Optionen
 
