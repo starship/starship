@@ -56,7 +56,7 @@
 
 <h1></h1>
 
-<p align="center"> Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br /> The prompt shows information you need while you're working, while staying sleek and out of the way. <p>
+<p align="center"> Starship – это минимальная, быстро и очень настраиваемая подсказка для любого оболочки! <br /> В подсказке показана необходимая вам информация, пока вы работаете. <p>
 
 <p align="center">
   <br>
@@ -65,12 +65,12 @@
   <br>
 </p>
 
-## 🍬 Features
+## свойство
 
-- Prompt character turns red if the last command exits with non-zero code
-- Current Go version (`🐹`)
-- Current Java version(`☕`)
-- Current Node.js version(`⬢`)
+- Символ подсказки становится красным, если последняя команда завершается с ненулевым кодом
+- Текущая версия Go (`🐹< / 0>)</li>
+<li>Текущая версия Java(<code>☕< / 0>)</li>
+<li>Current Node.js version(<code>⬢`)
 - Current PHP version (`🐘`)
 - Current Python version (`🐍`)
 - Current Ruby version (`💎`)
