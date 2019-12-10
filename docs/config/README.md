@@ -100,6 +100,7 @@ prompt_order = [
     "golang",
     "java",
     "nodejs",
+    "php",
     "python",
     "ruby",
     "rust",
