@@ -997,6 +997,41 @@ The module will be shown if any of the following conditions are met:
 symbol = "⚙️ "
 ```
 
+## Status
+
+The `status` module shows exit codes of your previous command pipeline.
+By default the module will be shown if any of the following conditions are met:
+
+- The pipeline includes a non-zero exit code
+- There's a mismatch between command exit code and last exit code in the pipeline
+
+### Options
+
+| Variable          | Default        | Description                                                                                      |
+| ----------------- | -------------- | ------------------------------------------------------------------------------------------------ |
+| `display_mode`    | "mismatch"     | Controls when the module is shown. Possible values: [`always`, `error`, `any error`, `mismatch`] |
+| `success`         | "dimmed white" | The style used if the last command was successful.                                               |
+| `error`           | "red"          | The style used if the last command failed.                                                       |
+| `pipe_prefix`     | "("            | Prefix to display immediately before the pipeline.                                               |
+| `pipe_suffix`     | ")"            | Suffix to display immediately after the pipeline.                                                |
+| `exit_prefix`     | "["            | Prefix to display immediately before the exit code.                                              |
+| `exit_suffix`     | "]"            | Suffix to display immediately after the exit code.                                               |
+| `use_symbols`     | false          | Indicate exit codes with symbols instead of values.                                              |
+| `success_symbol`  | "✔"            | The symbol used if the exit code is equal to 0.                                                  |
+| `error_symbol`    | "✖"            | The symbol used if the exit code is non-zero.                                                    |
+| `simple_pipeline` | true           | Show only one exit code if all values in the pipeline are equal.                                 |
+| `disabled`        | false          | Disables the `status` module.                                                                    |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[status]
+display_mode = "always"
+use_symbols = true
+```
+
 ## Terraform
 
 The `terraform` module shows the currently selected terraform workspace and version.
