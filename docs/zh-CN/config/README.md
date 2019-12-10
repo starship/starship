@@ -9,7 +9,7 @@ Starship 目前正在开发中。 很多新的配置选项将会在之后的版�
 您需要创建配置文件 `~/.config/starship.toml` 以供 Starship 使用。
 
 ```shell
-$ touch ~/.config/starship.toml
+$ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 Starship 的所有配置都在此 [TOML](https://github.com/toml-lang/toml) 配置文件中完成：
@@ -40,7 +40,7 @@ Here is the representation of the node module. In the following example, "symbol
  "via "         "⬢"        "v10.4.1"       ""
 ```
 
-### Style Strings
+### 样式设定
 
 Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
@@ -63,6 +63,7 @@ This is the list of prompt-wide configuration options.
 | -------------- | ----------------------------- | ------------------------------------------------------ |
 | `add_newline`  | `true`                        | Add a new line before the start of the prompt.         |
 | `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
+| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).  |
 
 ### Example
 
@@ -73,6 +74,8 @@ This is the list of prompt-wide configuration options.
 add_newline = false
 # Overwrite a default_prompt_order and  use custom prompt_order
 prompt_order=["rust","line_break","package","line_break","character"]
+# Wait 10 milliseconds for starship to check files under the current directory.
+scan_timeout = 10
 ```
 
 ### Default Prompt Order
@@ -86,8 +89,10 @@ prompt_order = [
     "kubernetes",
     "directory",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
+    "hg_branch",
     "package",
     "dotnet",
     "golang",
@@ -116,11 +121,12 @@ The `aws` module shows the current AWS region and profile. This is based on `AWS
 
 ### Options
 
-| Variable   | Default         | Description                                                |
-| ---------- | --------------- | ---------------------------------------------------------- |
-| `symbol`   | `"☁️  "`        | The symbol used before displaying the current AWS profile. |
-| `style`    | `"bold yellow"` | The style for the module.                                  |
-| `disabled` | `false`         | Disables the `AWS` module.                                 |
+| Variable          | Default         | Description                                                                 |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
+| `style`           | `"bold yellow"` | The style for the module.                                                   |
+| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 
 ### Example
 
@@ -130,6 +136,7 @@ The `aws` module shows the current AWS region and profile. This is based on `AWS
 [aws]
 style = "bold blue"
 symbol = "🅰 "
+displayed_items = "region"
 ```
 
 ## Battery
@@ -298,6 +305,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | ------------------- | ------------- | -------------------------------------------------------------------------------- |
 | `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
 | `style`             | `"bold cyan"` | The style for the module.                                                        |
 | `disabled`          | `false`       | Disables the `directory` module.                                                 |
 
@@ -333,8 +341,8 @@ Internally, this module uses its own mechanism for version detection. Typically 
 | Variable    | Default       | Description                                              |
 | ----------- | ------------- | -------------------------------------------------------- |
 | `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
-| `style`     | `"bold blue"` | The style for the module.                                |
 | `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
+| `style`     | `"bold blue"` | The style for the module.                                |
 | `disabled`  | `false`       | Disables the `dotnet` module.                            |
 
 ### Example
@@ -402,6 +410,36 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
+## Git Commit
+
+The `git_commit` module shows the active branch of the repo in your current directory.
+
+::: tip
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Variable             | Default        | Description                                      |
+| -------------------- | -------------- | ------------------------------------------------ |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
+| `prefix`             | `(`            | Prefix to display immediately before git commit. |
+| `suffix`             | `)`            | Suffix to display immediately after git commit.  |
+| `style`              | `"bold green"` | The style for the module.                        |
+| `disabled`           | `true`         | Disables the `git_commit` module.                |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+disabled = false
+commit_hash_length = 4
+```
+
 ## Git State
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
@@ -437,23 +475,36 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 ### Options
 
-| Variable          | Default      | Description                                             |
-| ----------------- | ------------ | ------------------------------------------------------- |
-| `conflicted`      | `"="`        | This branch has merge conflicts.                        |
-| `ahead`           | `"⇡"`        | This branch is ahead of the branch being tracked.       |
-| `behind`          | `"⇣"`        | This branch is behind of the branch being tracked.      |
-| `diverged`        | `"⇕"`        | This branch has diverged from the branch being tracked. |
-| `untracked`       | `"?"`        | There are untracked files in the working directory.     |
-| `stashed`         | `"$"`        | A stash exists for the local repository.                |
-| `modified`        | `"!"`        | There are file modifications in the working directory.  |
-| `staged`          | `"+"`        | A new file has been added to the staging area.          |
-| `renamed`         | `"»"`        | A renamed file has been added to the staging area.      |
-| `deleted`         | `"✘"`        | A file's deletion has been added to the staging area.   |
-| `show_sync_count` | `false`      | Show ahead/behind count of the branch being tracked.    |
-| `prefix`          | `[`          | Prefix to display immediately before git status.        |
-| `suffix`          | `]`          | Suffix to display immediately after git status.         |
-| `style`           | `"bold red"` | The style for the module.                               |
-| `disabled`        | `false`      | Disables the `git_status` module.                       |
+| Variable           | Default                    | Description                                             |
+| ------------------ | -------------------------- | ------------------------------------------------------- |
+| `conflicted`       | `"="`                      | This branch has merge conflicts.                        |
+| `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
+| `ahead`            | `"⇡"`                      | This branch is ahead of the branch being tracked.       |
+| `behind`           | `"⇣"`                      | This branch is behind of the branch being tracked.      |
+| `diverged`         | `"⇕"`                      | This branch has diverged from the branch being tracked. |
+| `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
+| `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
+| `stashed`          | `"$"`                      | A stash exists for the local repository.                |
+| `modified`         | `"!"`                      | There are file modifications in the working directory.  |
+| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
+| `staged`           | `"+"`                      | A new file has been added to the staging area.          |
+| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files.        |
+| `renamed`          | `"»"`                      | A renamed file has been added to the staging area.      |
+| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.             |
+| `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.   |
+| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.             |
+| `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
+| `prefix`           | `[`                        | Prefix to display immediately before git status.        |
+| `suffix`           | `]`                        | Suffix to display immediately after git status.         |
+| `style`            | `"bold red"`               | The style for the module.                               |
+| `disabled`         | `false`                    | Disables the `git_status` module.                       |
+
+#### Git Status Counts
+
+| Variable  | Default | Description                                            |
+| --------- | ------- | ------------------------------------------------------ |
+| `enabled` | `false` | Show the number of files                               |
+| `style`   |         | Optionally style the count differently than the module |
 
 ### Example
 
@@ -468,7 +519,10 @@ diverged = "😵"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"
-staged = "➕"
+staged.value = "++"
+staged.style = "green"
+staged_count.enabled = true
+staged_count.style = "green"
 renamed = "👅"
 deleted = "🗑"
 ```
@@ -500,6 +554,31 @@ The `golang` module shows the currently installed version of Golang. The module 
 
 [golang]
 symbol = "🏎💨 "
+```
+
+## Mercurial Branch
+
+The `hg_branch` module shows the active branch of the repo in your current directory.
+
+### Options
+
+| Variable            | Default         | Description                                                                                  |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
+| `style`             | `"bold purple"` | The style for the module.                                                                    |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[hg_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
 ```
 
 ## Hostname
@@ -553,11 +632,9 @@ symbol = "+ "
 threshold = 4
 ```
 
-
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace
-astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
@@ -583,7 +660,6 @@ symbol = "⛵ "
 style = "dim green"
 disabled = false
 ```
-
 
 ## Line Break
 
@@ -650,6 +726,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
 | `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
 | `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
+| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
 | `style`           | `"bold dimmed white"` | The style for the module.                                     |
 | `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
@@ -662,7 +739,8 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 show_percentage = true
 show_swap = true
 threshold = -1
-icon = " "
+symbol = " "
+separator = "/"
 style = "bold dimmed green"
 ```
 
@@ -742,6 +820,30 @@ The `package` module is shown when the current directory is the repository for a
 symbol = "🎁 "
 ```
 
+## PHP
+
+The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `composer.json` file
+- The current directory contains a `.php` file
+
+### Options
+
+| Variable   | Default      | Description                                           |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold red"` | The style for the module.                             |
+| `disabled` | `false`      | Disables the `php` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[php]
+symbol = "🔹 "
+```
+
 ## Python
 
 The `python` module shows the currently installed version of Python.
@@ -758,6 +860,7 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a file with the `.py` extension
 - The current directory contains a `Pipfile` file
 - The current directory contains a `tox.ini` file
+- A virtual environment is currently activated
 
 ### Options
 
@@ -842,7 +945,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | Variable          | Default       | Description                                                                                                         |
 | ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `12hr`            | `false`       | Enables 12 hour formatting                                                                                          |
+| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
 | `style`           | `bold yellow` | The style for the module time                                                                                       |
 | `disabled`        | `true`        | Disables the `time` module.                                                                                         |

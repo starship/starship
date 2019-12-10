@@ -42,7 +42,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    ```
 
 
-   #### Rust (v1.33 或更高版本)
+   #### Rust (v1.38 或更高版本)
 
    ```sh
    $ cargo install starship
@@ -92,7 +92,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    ```sh
    # ~/.config/fish/config.fish
 
-   eval (starship init fish)
+   starship init fish | source
    ```
 
 

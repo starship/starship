@@ -42,7 +42,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    ```
 
 
-   #### Rust (v1.33 もしくはそれ以上)
+   #### Rust (v1.38 もしくはそれ以上)
 
    ```sh
    $ cargo install starship
@@ -92,7 +92,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    ```sh
    # ~/.config/fish/config.fish
 
-   eval (starship init fish)
+   starship init fish | source
    ```
 
 
@@ -109,7 +109,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Powershell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (それか Nix上の `~/.config/powershell/Microsoft.PowerShell_profile.ps1` )の末尾に以下を追加してください。
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1

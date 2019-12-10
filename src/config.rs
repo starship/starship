@@ -75,9 +75,42 @@ impl<'a> ModuleConfig<'a> for i64 {
     }
 }
 
+impl<'a> ModuleConfig<'a> for u64 {
+    fn from_config(config: &Value) -> Option<Self> {
+        match config {
+            Value::Integer(value) => {
+                // Converting i64 to u64
+                if *value > 0 {
+                    Some(*value as u64)
+                } else {
+                    None
+                }
+            }
+            Value::String(value) => value.parse::<u64>().ok(),
+            _ => None,
+        }
+    }
+}
+
 impl<'a> ModuleConfig<'a> for f64 {
     fn from_config(config: &Value) -> Option<Self> {
         config.as_float()
+    }
+}
+
+impl<'a> ModuleConfig<'a> for usize {
+    fn from_config(config: &Value) -> Option<Self> {
+        match config {
+            Value::Integer(value) => {
+                if *value > 0 {
+                    Some(*value as usize)
+                } else {
+                    None
+                }
+            }
+            Value::String(value) => value.parse::<usize>().ok(),
+            _ => None,
+        }
     }
 }
 
@@ -223,16 +256,6 @@ impl<'a> SegmentConfig<'a> {
         Self { value, style: None }
     }
 
-    /// Mutably set value
-    pub fn set_value(&mut self, value: &'a str) {
-        self.value = value;
-    }
-
-    /// Mutably set style
-    pub fn set_style(&mut self, style: Style) {
-        self.style = Some(style);
-    }
-
     /// Immutably set value
     pub fn with_value(&self, value: &'a str) -> Self {
         Self {
@@ -242,10 +265,10 @@ impl<'a> SegmentConfig<'a> {
     }
 
     /// Immutably set style
-    pub fn with_style(&self, style: Style) -> Self {
+    pub fn with_style(&self, style: Option<Style>) -> Self {
         Self {
             value: self.value,
-            style: Some(style),
+            style,
         }
     }
 }

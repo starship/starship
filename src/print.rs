@@ -47,7 +47,7 @@ pub fn get_prompt(context: Context) -> String {
         .collect::<Vec<Module>>(); // Remove segments set to `None`
 
     let mut print_without_prefix = true;
-    let mut printable = modules.iter();
+    let printable = modules.iter();
 
     for module in printable {
         // Skip printing the prefix of a module after the line_break

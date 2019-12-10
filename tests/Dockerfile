@@ -38,7 +38,7 @@ RUN curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-ins
 RUN ruby --version
 
 # Install Python
-ENV PYTHON_VERSION 3.7.4
+ENV PYTHON_VERSION 3.7.5
 ENV PYENV_ROOT /home/nonroot/.pyenv
 ENV PATH $PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH
 RUN curl https://pyenv.run | bash \
@@ -60,6 +60,35 @@ RUN mkdir -p "$DOTNET_HOME" \
 
 ENV PATH $DOTNET_HOME:$PATH
 RUN dotnet help
+
+# Install PHP
+ENV PHP_VERSION 7.3.8
+ENV PHPENV_ROOT /home/nonroot/.phpenv
+ENV PATH $PHPENV_ROOT/bin:$PHPENV_ROOT/shims:$PATH
+ENV CONFIGURE_OPTS "--without-tidy --disable-zip"
+RUN curl -L https://raw.githubusercontent.com/phpenv/phpenv-installer/master/bin/phpenv-installer | bash \
+  && phpenv install $PHP_VERSION \
+  && phpenv global $PHP_VERSION \
+  && chmod -R a+x $PHPENV_ROOT
+# Check that PHP was correctly installed
+RUN php --version
+
+# Install Mercurial
+RUN HGPYTHON3=1 pip install mercurial
+# Check that Mercurial was correctly installed
+RUN hg --version
+# Install Terraform
+ENV TERRAFORM_HOME /home/nonroot/terraform
+ENV TERRAFORM_VERSION 0.12.14
+ENV PATH ${TERRAFORM_HOME}:${PATH}
+
+RUN mkdir -p ${TERRAFORM_HOME} \
+    && terraform_download="${TERRAFORM_HOME}/terraform.zip" \
+    && curl -SL --output "${terraform_download}" "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" \
+    && unzip "${terraform_download}" -d "${TERRAFORM_HOME}" \
+    && rm "${terraform_download}"
+# Check that terraform was correctly installed
+RUN terraform version
 
 # Create blank project
 RUN USER=nonroot cargo new --bin /src/starship

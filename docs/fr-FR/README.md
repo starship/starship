@@ -9,15 +9,15 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 <div class="features">
   <div class="feature">
     <h2>Compatibilité d'abord</h2>
-    <p>Works on the most common shells on the most common operating systems. Use it everywhere!</p>
+    <p>Fonctionne sur tous les principaux shells et système d'exploitation. Utilisez-le partout !</p>
   </div>
   <div class="feature">
-    <h2>Rust-Powered</h2>
-    <p>Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.</p>
+    <h2>Propulsé par Rust</h2>
+    <p>Profiter de toute la rapidité et la securité de Rust, pour rendre votre prompt le plus rapide et fiable possible.</p>
   </div>
   <div class="feature">
-    <h2>Customizable</h2>
-    <p>Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.</p>
+    <h2>Personnalisable</h2>
+    <p>Tous les petits détails sont personnalisable à votre goût, pour rendre votre prompt aussi léger ou complet que le vous souhaitez.</p>
   </div>
 </div>
 
@@ -28,11 +28,11 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
   </video>
 </div>
 
-### Quick Install
+### Installation
 
-1. Install the **starship** binary:
+1. Installer le binaire **starship** :
 
-   **[Download archives of precompiled binaries](https://github.com/starship/starship/releases)** if you don't use the platforms below.
+   **[Télécharger les archives des binaires précompilés](https://github.com/starship/starship/releases)** si vous n'utilisez pas une des plateformes citées ci-dessous.
 
 
    #### Homebrew
@@ -42,7 +42,7 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
    ```
 
 
-   #### Rust (v1.33 or higher)
+   #### Rust (v1.38 ou plus)
 
    ```sh
    $ cargo install starship
@@ -51,14 +51,14 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 
    #### Arch Linux (AUR)
 
-   Starship is available on the AUR under the name `starship`. Install it with `yay` or your favorite AUR helper.
+   Starship is disponible sur AUR sous le nom `starship`. Installer le avec `yay` ou votre client AUR favori.
 
    ```sh
    $ yay -S starship
    ```
 
 
-   #### Nix (unstable)
+   #### Nix (non stable)
 
    ```sh
    $ nix-env --install starship
@@ -92,7 +92,7 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
    ```sh
    # ~/.config/fish/config.fish
 
-   eval (starship init fish)
+   starship init fish | source
    ```
 
 

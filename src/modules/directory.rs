@@ -1,8 +1,10 @@
 use path_slash::PathExt;
 use std::path::Path;
+use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module};
 
+use super::utils::directory::truncate;
 use crate::config::{RootModuleConfig, SegmentConfig};
 use crate::configs::directory::DirectoryConfig;
 
@@ -26,21 +28,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Using environment PWD is the standard approach for determining logical path
     // If this is None for any reason, we fall back to reading the os-provided path
-    let logical_current_dir = if config.use_logical_path {
-        match std::env::var("PWD") {
+    let physical_current_dir = if config.use_logical_path {
+        None
+    } else {
+        match std::env::current_dir() {
             Ok(x) => Some(x),
-            Err(_) => {
-                log::debug!("Asked for logical path, but PWD was invalid.");
+            Err(e) => {
+                log::debug!("Error getting physical current directory: {}", e);
                 None
             }
         }
-    } else {
-        None
     };
-    let current_dir = logical_current_dir
-        .as_ref()
-        .map(|d| Path::new(d))
-        .unwrap_or_else(|| context.current_dir.as_ref());
+    let current_dir = Path::new(
+        physical_current_dir
+            .as_ref()
+            .unwrap_or_else(|| &context.current_dir),
+    );
 
     let home_dir = dirs::home_dir().unwrap();
     log::debug!("Current directory: {:?}", current_dir);
@@ -87,7 +90,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         },
     );
 
-    module.get_prefix().set_value("in ");
+    module.get_prefix().set_value(config.prefix);
 
     Some(module)
 }
@@ -135,30 +138,6 @@ const fn replace_c_dir(path: String) -> String {
     path
 }
 
-/// Truncate a path to only have a set number of path components
-///
-/// Will truncate a path to only show the last `length` components in a path.
-/// If a length of `0` is provided, the path will not be truncated.
-fn truncate(dir_string: String, length: usize) -> String {
-    if length == 0 {
-        return dir_string;
-    }
-
-    let mut components = dir_string.split('/').collect::<Vec<&str>>();
-
-    // If the first element is "" then there was a leading "/" and we should remove it so we can check the actual count of components
-    if components[0] == "" {
-        components.remove(0);
-    }
-
-    if components.len() <= length {
-        return dir_string;
-    }
-
-    let truncated_components = &components[components.len() - length..];
-    truncated_components.join("/")
-}
-
 /// Takes part before contracted path and replaces it with fish style path
 ///
 /// Will take the first letter of each directory before the contracted path and
@@ -181,11 +160,14 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
 
     components
         .into_iter()
-        .map(|word| match word {
-            "" => "",
-            _ if word.len() <= pwd_dir_length => word,
-            _ if word.starts_with('.') => &word[..=pwd_dir_length],
-            _ => &word[..pwd_dir_length],
+        .map(|word| -> String {
+            let chars = UnicodeSegmentation::graphemes(word, true).collect::<Vec<&str>>();
+            match word {
+                "" => "".to_string(),
+                _ if chars.len() <= pwd_dir_length => word.to_string(),
+                _ if word.starts_with('.') => chars[..=pwd_dir_length].join(""),
+                _ => chars[..pwd_dir_length].join(""),
+            }
         })
         .collect::<Vec<_>>()
         .join("/")
@@ -254,48 +236,6 @@ mod tests {
     }
 
     #[test]
-    fn truncate_smaller_path_than_provided_length() {
-        let path = "~/starship";
-        let output = truncate(path.to_string(), 3);
-        assert_eq!(output, "~/starship")
-    }
-
-    #[test]
-    fn truncate_same_path_as_provided_length() {
-        let path = "~/starship/engines";
-        let output = truncate(path.to_string(), 3);
-        assert_eq!(output, "~/starship/engines")
-    }
-
-    #[test]
-    fn truncate_slightly_larger_path_than_provided_length() {
-        let path = "~/starship/engines/booster";
-        let output = truncate(path.to_string(), 3);
-        assert_eq!(output, "starship/engines/booster")
-    }
-
-    #[test]
-    fn truncate_larger_path_than_provided_length() {
-        let path = "~/starship/engines/booster/rocket";
-        let output = truncate(path.to_string(), 3);
-        assert_eq!(output, "engines/booster/rocket")
-    }
-
-    #[test]
-    fn truncate_same_path_as_provided_length_from_root() {
-        let path = "/starship/engines/booster";
-        let output = truncate(path.to_string(), 3);
-        assert_eq!(output, "/starship/engines/booster");
-    }
-
-    #[test]
-    fn truncate_larger_path_than_provided_length_from_root() {
-        let path = "/starship/engines/booster/rocket";
-        let output = truncate(path.to_string(), 3);
-        assert_eq!(output, "engines/booster/rocket");
-    }
-
-    #[test]
     fn fish_style_with_user_home_contracted_path() {
         let path = "~/starship/engines/booster/rocket";
         let output = to_fish_style(1, path.to_string(), "engines/booster/rocket");
@@ -330,5 +270,12 @@ mod tests {
         let path = "~/starship/tmp/C++/C++/C++";
         let output = to_fish_style(1, path.to_string(), "C++");
         assert_eq!(output, "~/s/t/C/C/");
+    }
+
+    #[test]
+    fn fish_style_with_unicode() {
+        let path = "~/starship/tmp/目录/a̐éö̲/目录";
+        let output = to_fish_style(1, path.to_string(), "目录");
+        assert_eq!(output, "~/s/t/目/a̐/");
     }
 }

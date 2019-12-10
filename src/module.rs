@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, SegmentConfig};
+use crate::config::SegmentConfig;
 use crate::segment::Segment;
 use ansi_term::Style;
 use ansi_term::{ANSIString, ANSIStrings};
@@ -18,9 +18,11 @@ pub const ALL_MODULES: &[&str] = &[
     "dotnet",
     "env_var",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
     "golang",
+    "hg_branch",
     "hostname",
     "java",
     "jobs",
@@ -34,6 +36,8 @@ pub const ALL_MODULES: &[&str] = &[
     "ruby",
     "rust",
     "status",
+    "php",
+    "terraform",
     "time",
     "username",
 ];
@@ -74,33 +78,6 @@ impl<'a> Module<'a> {
     }
 
     /// Get a reference to a newly created segment in the module
-    #[deprecated(
-        since = "0.20.0",
-        note = "please use `module.create_segment()` instead"
-    )]
-    pub fn new_segment(&mut self, name: &str, value: &str) -> &mut Segment {
-        let mut segment = Segment::new(name);
-        let segment_config_mock = SegmentConfig { value, style: None };
-
-        if let Some(toml::Value::Table(module_config)) = self.config {
-            if let Some(symbol) = module_config.get(name) {
-                let segment_config = segment_config_mock.load_config(&symbol);
-                segment.set_style(segment_config.style.unwrap_or(self.style));
-                segment.set_value(segment_config.value);
-
-                self.segments.push(segment);
-                return self.segments.last_mut().unwrap();
-            }
-        }
-
-        segment.set_style(segment_config_mock.style.unwrap_or(self.style));
-        segment.set_value(segment_config_mock.value);
-
-        self.segments.push(segment);
-        self.segments.last_mut().unwrap()
-    }
-
-    /// Get a reference to a newly created segment in the module
     pub fn create_segment(&mut self, name: &str, segment_config: &SegmentConfig) -> &mut Segment {
         let mut segment = Segment::new(name);
         segment.set_style(segment_config.style.unwrap_or(self.style));
@@ -108,24 +85,6 @@ impl<'a> Module<'a> {
         self.segments.push(segment);
 
         self.segments.last_mut().unwrap()
-    }
-
-    /// Should config exists, get a reference to a newly created segment in the module
-    #[deprecated(
-        since = "0.20.0",
-        note = "please use `module.create_segment()` instead"
-    )]
-    pub fn new_segment_if_config_exists(&mut self, name: &str) -> Option<&mut Segment> {
-        // Use the provided value unless overwritten by config
-        if let Some(value) = self.config_value_str(name) {
-            let mut segment = Segment::new(name);
-            segment.set_style(self.style);
-            segment.set_value(value);
-            self.segments.push(segment);
-            Some(self.segments.last_mut().unwrap())
-        } else {
-            None
-        }
     }
 
     /// Get module's name
@@ -183,42 +142,6 @@ impl<'a> Module<'a> {
 
     pub fn to_string_without_prefix(&self) -> String {
         ANSIStrings(&self.ansi_strings()[1..]).to_string()
-    }
-
-    /// Get a module's config value as a string
-    #[deprecated(
-        since = "0.20.0",
-        note = "please use <RootModuleConfig>::try_load(module.config) instead"
-    )]
-    pub fn config_value_str(&self, key: &str) -> Option<&str> {
-        <&str>::from_config(self.config?.as_table()?.get(key)?)
-    }
-
-    /// Get a module's config value as an int
-    #[deprecated(
-        since = "0.20.0",
-        note = "please use <RootModuleConfig>::try_load(module.config) instead"
-    )]
-    pub fn config_value_i64(&self, key: &str) -> Option<i64> {
-        <i64>::from_config(self.config?.as_table()?.get(key)?)
-    }
-
-    /// Get a module's config value as a bool
-    #[deprecated(
-        since = "0.20.0",
-        note = "please use <RootModuleConfig>::try_load(module.config) instead"
-    )]
-    pub fn config_value_bool(&self, key: &str) -> Option<bool> {
-        <bool>::from_config(self.config?.as_table()?.get(key)?)
-    }
-
-    /// Get a module's config value as a style
-    #[deprecated(
-        since = "0.20.0",
-        note = "please use <RootModuleConfig>::try_load(module.config) instead"
-    )]
-    pub fn config_value_style(&self, key: &str) -> Option<Style> {
-        <Style>::from_config(self.config?.as_table()?.get(key)?)
     }
 }
 
