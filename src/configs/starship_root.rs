@@ -50,6 +50,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 #[cfg(feature = "battery")]
                 "battery",
                 "time",
+                "status",
                 "character",
             ],
             scan_timeout: 30,

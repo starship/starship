@@ -49,7 +49,7 @@ fi
 # Set up a function to redraw the prompt if the user switches vi modes
 function zle-keymap-select
 {
-    PROMPT=$(::STARSHIP:: prompt --keymap=$KEYMAP --jobs="$(jobs | wc -l)")
+    PROMPT=$(::STARSHIP:: prompt --status=$? --pipestatus="$pipestatus" --keymap=$KEYMAP --jobs="$(jobs | wc -l)")
     zle reset-prompt
 }
 

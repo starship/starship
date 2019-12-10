@@ -138,7 +138,6 @@ fn with_active_venv() -> io::Result<()> {
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.5 (my_venv)"));
->>>>>>> 757ca6a4263648a117e2d88eea1744220a61d124
     assert_eq!(expected, actual);
     Ok(())
 }

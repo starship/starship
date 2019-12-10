@@ -7,9 +7,9 @@ use crate::configs::status::{DisplayMode, StatusConfig};
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("status");
     let status_config = StatusConfig::try_load(module.config);
-    let arguments = &context.arguments;
-    let mut exit_code = arguments.value_of("status_code")?;
-    let mut pipestatus: Vec<&str> = match arguments.value_of("pipestatus") {
+    let props = &context.properties;
+    let mut exit_code = props.get("status_code")?.as_ref();
+    let mut pipestatus: Vec<&str> = match props.get("pipestatus") {
         Some(val) => val.split_ascii_whitespace().collect(),
         // fallback if --pipestatus is not provided
         None => vec![&exit_code],
@@ -63,7 +63,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let simple_pipeline = status_config.simple_pipeline;
-    let no_pipeline = (simple_pipeline && !pipeline_error) || pipestatus.len() == 1;
+    let no_pipeline = pipestatus.len() == 1
+        || (simple_pipeline && (!pipeline_error || no_repetitions(&pipestatus)));
     let output = if no_pipeline {
         pipestatus.last()?.to_string()
     } else {
@@ -82,4 +83,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     Some(module)
+}
+
+fn no_repetitions<'a, 'b: 'a>(pipeline: &'b [&'a str]) -> bool {
+    for status in pipeline[1..].iter() {
+        if *status != pipeline[0] {
+            return false;
+        }
+    }
+    true
 }
