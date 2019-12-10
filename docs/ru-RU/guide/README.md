@@ -70,12 +70,12 @@
 - Символ подсказки становится красным, если последняя команда завершается с ненулевым кодом
 - Текущая версия Go (`🐹< / 0>)</li>
 <li>Текущая версия Java(<code>☕< / 0>)</li>
-<li>Current Node.js version(<code>⬢`)
-- Current PHP version (`🐘`)
-- Current Python version (`🐍`)
-- Current Ruby version (`💎`)
-- Current Rust version (`🦀`)
-- Current .NET version (`•NET`)
+<li>Текущая версия Node.js (<code>⬢< / 0>)</li>
+<li>Текущая версия PHP (<code>🐘< / 0>)</li>
+<li>Текущая версия Python (<code>🐍< / 0>)</li>
+<li>Текущая версия Ruby (<code>💎< / 0>)</li>
+<li>Текущая версия Rust (<code>🦀< / 0>)</li>
+<li>Текущая версия .NET (<code>•NET`)
 - Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
