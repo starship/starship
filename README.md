@@ -134,7 +134,7 @@ The prompt shows information you need while you're working, while staying sleek 
    ##### With Shell:
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | sh
+   curl -fsSL https://starship.rs/install.sh | bash
    ```
 
    #### Install via Package Manager
