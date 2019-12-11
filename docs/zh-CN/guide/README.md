@@ -187,6 +187,17 @@
    Invoke-Expression (&starship init powershell)
    ```
 
+
+   #### Ion
+
+   Add the following to the end of `~/.config/ion/initrc`:
+
+   ```sh
+   # ~/.config/ion/initrc
+
+   eval $(starship init ion)
+   ```
+
 ## 🔧 配置
 
 关于如何配置 Starship ，详情请查看我们的[文档](https://starship.rs/config/)。
