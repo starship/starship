@@ -70,11 +70,11 @@ Dies ist eine Liste mit Prompt-weiten Konfigurationsoptionen.
 ```toml
 # ~/.config/starship.toml
 
-# Disable the newline at the start of the prompt
+# Kein Zeilenumbrunch am Anfang der Eingabe
 add_newline = false
-# Overwrite a default_prompt_order and  use custom prompt_order
+# Ersetze die vorgegebene Reihenfolge der Statuszeile mit einer eigenen
 prompt_order=["rust","line_break","package","line_break","character"]
-# Wait 10 milliseconds for starship to check files under the current directory.
+# Gib Starship zehn Millisekunden um die Dateien im akutellen Pfad zu prüfen.
 scan_timeout = 10
 ```
 
@@ -123,12 +123,12 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 
 ### Optionen
 
-| Variable          | Standardwert    | Beschreibung                                                                |
-| ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                     |
-| `style`           | `"bold yellow"` | Stil für dieses Modul.                                                      |
-| `disabled`        | `false`         | Deaktiviert das `aws`-Modul.                                                |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
+| Variable          | Standardwert    | Beschreibung                                                                          |
+| ----------------- | --------------- | ------------------------------------------------------------------------------------- |
+| `symbol`          | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                               |
+| `style`           | `"bold yellow"` | Stil für dieses Modul.                                                                |
+| `disabled`        | `false`         | Deaktiviert das `aws`-Modul.                                                          |
+| `displayed_items` | `all`           | Welche Objekte angezeigt werden sollen. Possible values: [`all`, `profile`, `region`] |
 
 ### Beispiel
 
