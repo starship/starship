@@ -691,7 +691,7 @@ disabled = true
 
 ## Nix-Shell
 
-The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
+Das `nix_shell`-Modul zeigt die nix-shell Umgebung an. Das Modul wird angezeigt, wenn es sich in einer nix-Shell-Umgebung befindet.
 
 ### Optionen
 
@@ -729,15 +729,15 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Optionen
 
-| Variable          | Standardwert          | Beschreibung                                                  |
-| ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
-| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`                | Symbol das vor der Speicherauslastung angezeigt wird.         |
-| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | Stil für dieses Modul.                                        |
-| `disabled`        | `true`                | Deaktiviert das `memory_usage`-Modul.                         |
+| Variable          | Standardwert          | Beschreibung                                                               |
+| ----------------- | --------------------- | -------------------------------------------------------------------------- |
+| `show_percentage` | `false`               | Zeigt die Speicherauslastung als Prozentsatz des verfügbaren Speichers an. |
+| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                              |
+| `threshold`       | `75`                  | Speicherauslastung ausblenden, wenn sie unter diesem Prozentsatz ist.      |
+| `symbol`          | `"🐏 "`                | Symbol das vor der Speicherauslastung angezeigt wird.                      |
+| `separator`       | `" | "`               | Symbol oder Text, der ram und swap usage trennt.                           |
+| `style`           | `"bold dimmed white"` | Stil für dieses Modul.                                                     |
+| `disabled`        | `true`                | Deaktiviert das `memory_usage`-Modul.                                      |
 
 ### Beispiel
 
@@ -748,17 +748,16 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 show_percentage = true
 show_swap = true
 threshold = -1
-symbol = " "
-separator = "/"
+icon = " "
 style = "bold dimmed green"
 ```
 
 ## Java
 
-The `java` module shows the currently installed version of Java. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
-- The current directory contains a `pom.xml`, `build.gradle` or `build.sbt` file
-- The current directory contains a file with the `.java`, `.class` or `.jar` extension
+- Das aktuelle Verzeichnis enthält `pom.xml`, `build.gradle` oder `build.sbt`
+- Das aktuelle Verzeichnis enthält eine Datei mit der `.java`, `.class` oder `.jar` Erweiterung
 
 ### Optionen
 
@@ -779,11 +778,11 @@ symbol = "🌟 "
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
+Das `nodejs`-Modul zeigt die aktuell installierte Version von NodeJS. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Das aktuelle Verzeichnis enthält eine `package.json`-Datei
-- The current directory contains a `node_modules` directory
-- The current directory contains a file with the `.js` extension
+- Das aktuelle Verzeichnis enthält ein `node_modules`-Verzeichnis
+- Das aktuelle Verzeichnis enthält eine Datei mit der `.js`-Erweiterung
 
 ### Optionen
 
@@ -859,17 +858,17 @@ Das `python`-Modul zeigt die aktuell installierte Version von Python.
 
 Wenn `pyenv_version_name` auf `true` gesetzt ist, wird die version der pyenv angezeigt.
 
-Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
+Andernfalls wird die gleiche Versionsnummer angezeigt wie `python --version`, sowie der Name des aktuellen virtualenvs, wenn eines aktiv ist.
 
-The module will be shown if any of the following conditions are met:
+Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- The current directory contains a `.python-version` file
+- Das aktuelle Verzeichnis enthält eine `.python-version`-Datei
 - Das aktuelle Verzeichnis enthält eine `requirements.txt`-Datei
 - Das aktuelle Verzeichnis enthält eine `pyproject.toml`-Datei
-- The current directory contains a file with the `.py` extension
-- The current directory contains a `Pipfile` file
+- Das aktuelle Verzeichnis enthält eine Datei mit der `.py`-Erweiterung
+- Das aktuelle Verzeichnis enthält eine `Pipfile`-Datei
 - Das aktuelle Verzeichnis enthält eine `tox.ini`-Datei
-- A virtual environment is currently activated
+- Ein virtualenv ist momentan aktiv
 
 ### Optionen
 
