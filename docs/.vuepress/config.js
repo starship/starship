@@ -19,15 +19,15 @@ module.exports = {
   // prettier-ignore
   head: [
     ["link", { rel: "icon", href: "/icon.png" }],
-    ["meta", { name: "description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, and Powershell." }],
+    ["meta", { name: "description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell." }],
     ["meta", { property: "og:title", content: "Starship: Cross-Shell Prompt" }],
-    ["meta", { property: "og:description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, and Powershell."}],
+    ["meta", { property: "og:description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell."}],
     ["meta", { property: "og:type", content: "website" }],
     ["meta", { property: "og:url", content: "https://starship.rs/" }],
     ["meta", { property: "og:image", content: "https://starship.rs/icon.png" }],
     ["meta", { name: "twitter:card", content: "summary"}],
     ["meta", { name: "twitter:title", content: "Starship: Cross-Shell Prompt"}],
-    ["meta", { name: "twitter:description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, and Powershell.Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, and Powershell."}],
+    ["meta", { name: "twitter:description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell.Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, and Powershell."}],
     ["meta", { name: "twitter:image", content: "https://starship.rs/icon.png"}],
     ["meta", { name: "twitter:alt", content: "Starship: Cross-Shell Prompt"}],
   ],
