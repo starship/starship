@@ -37,7 +37,7 @@ fn region_set_with_alias() -> io::Result<()> {
             ap-southeast-2 = "au"
         })
         .output()?;
-    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  ap-southeast-2 au"));
+    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  au"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())

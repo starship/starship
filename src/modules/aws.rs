@@ -80,7 +80,7 @@ fn get_aws_region() -> Option<Region> {
 fn alias_region(region: &str, aliases: &HashMap<String, &str>) -> String {
     match aliases.get(region) {
         None => region.to_string(),
-        Some(alias) => format!("{} {}", region, alias),
+        Some(alias) => alias.to_string(),
     }
 }
 
