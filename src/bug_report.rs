@@ -133,9 +133,9 @@ fn get_shell_info() -> ShellInfo {
 fn get_config_path(shell: &str) -> Option<PathBuf> {
     dirs::home_dir().and_then(|home_dir| {
         match shell {
-            "fish" => Some(".config/fish/config.fish"),
             "bash" => Some(".bashrc"),
-            "zsh" => Some(".zshrc"),
+            "fish" => Some(".config/fish/config.fish"),
+            "ion" => None, // ion doesn't provide a config file (yet)
             "powershell" => {
                 if cfg!(windows) {
                     Some("Documents/PowerShell/Microsoft.PowerShell_profile.ps1")
@@ -143,6 +143,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
                     Some(".config/powershell/Microsoft.PowerShell_profile.ps1")
                 }
             }
+            "zsh" => Some(".zshrc"),
             _ => None,
         }
         .map(|path| home_dir.join(path))
