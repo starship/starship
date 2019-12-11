@@ -247,7 +247,7 @@ Das `cmd_duration` Modul zeigt an wie lange der letzte Befehl ausgeführt wurde.
 
 ::: warning Nicht die DEBUG-trap in der Bash hooken
 
-If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
+Ist `bash` die Konsole der Wahl, dann nicht die `DEBUG`-trap nach der Ausführung von `eval $(starship init $0)` hooken, andernfalls **wird** dieses Modul unweigerlich untergehen.
 
 :::
 
@@ -1000,23 +1000,23 @@ utc_time_offset = -5
 
 ## Username
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+Das `username` Modul zeigt den Namen des aktiven Benutzers. The module will be shown if any of the following conditions are met:
 
 - The current user is root
 - The current user isn't the same as the one that is logged in
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
 
-### Options
+### Optionen
 
-| Variable      | Default         | Description                           |
-| ------------- | --------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`    | The style used when the user is root. |
-| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
-| `show_always` | `false`         | Always shows the `username` module.   |
-| `disabled`    | `false`         | Disables the `username` module.       |
+| Variable      | Standartwert    | Beschreibung                                   |
+| ------------- | --------------- | ---------------------------------------------- |
+| `style_root`  | `"bold red"`    | Stil wenn der Benutzer unter root läuft.       |
+| `style_user`  | `"bold yellow"` | Stil wenn der Benutzer nicht unter root läuft. |
+| `show_always` | `false`         | Immer das `username` Modul anzeigen.           |
+| `disabled`    | `false`         | Deavktiviert das `username` Modul.             |
 
-### Example
+### Beispiel
 
 ```toml
 # ~/.config/starship.toml
