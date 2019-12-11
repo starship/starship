@@ -1,5 +1,5 @@
-use std::path::{PathBuf, Path};
 use std::fs;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 
 pub fn create() {
@@ -12,7 +12,24 @@ pub fn create() {
         starship_config: get_starship_config(),
     };
 
-    make_github_issue_link(crate_version!(), environment)
+    let link = make_github_issue_link(crate_version!(), environment);
+
+    if open::that(&link)
+        .ok()
+        .and_then(|exit_status| {
+            if exit_status.success() {
+                Some(())
+            } else {
+                None
+            }
+        })
+        .is_none()
+    {
+        println!(
+            "I was unable to launch your browser. You'll have to copy this link instead:\n\n{}",
+            link
+        );
+    }
 }
 
 const UNKNOWN_SHELL: &'static str = "<unknown shell>";
@@ -26,12 +43,10 @@ struct Environment {
     starship_config: String,
 }
 
-fn make_github_issue_link(
-    starship_version: &str,
-    environment: Environment) {
-    let github_issue_url = "https://github.com/starship/starship/issues/new?title=Bug Report:&body=";
+fn make_github_issue_link(starship_version: &str, environment: Environment) -> String {
+    let title = urlencoding::encode("Bug Report:");
 
-    println!("{}## Bug Report
+    let body = urlencoding::encode(&format!("## Bug Report
 
 #### Current Behavior
 <!-- A clear and concise description of the behavior. -->
@@ -61,7 +76,6 @@ fn make_github_issue_link(
 
 #### Possible Solution
 <!--- Only if you have suggestions on a fix for the bug -->",
-             github_issue_url,
              starship_version,
              environment.shell_info.name,
              environment.shell_info.version,
@@ -69,6 +83,11 @@ fn make_github_issue_link(
              environment.os_version,
              environment.shell_info.config,
              environment.starship_config,
+    ));
+
+    format!(
+        "https://github.com/starship/starship/issues/new?title={}&body={}",
+        title, body
     )
 }
 
@@ -113,7 +132,9 @@ fn get_shell_info() -> ShellInfo {
 
 fn get_config_path(shell: &str) -> Option<PathBuf> {
     match shell {
-        "fish" => Some(expand_tilde(Path::new("~/.config/fish/config.fish").to_path_buf())),
+        "fish" => Some(expand_tilde(
+            Path::new("~/.config/fish/config.fish").to_path_buf(),
+        )),
         "bash" => Some(expand_tilde(Path::new("~/.bashrc").to_path_buf())),
         "zsh" => Some(expand_tilde(Path::new("~/.zshrc").to_path_buf())),
         _ => None,
@@ -121,8 +142,10 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
 }
 
 fn get_starship_config() -> String {
-    fs::read_to_string(expand_tilde(Path::new("~/.config/starship.toml").to_path_buf()))
-        .unwrap_or(UNKNOWN_CONFIG.to_string())
+    fs::read_to_string(expand_tilde(
+        Path::new("~/.config/starship.toml").to_path_buf(),
+    ))
+    .unwrap_or(UNKNOWN_CONFIG.to_string())
 }
 
 /// Convert a `~` in a path to the home directory
