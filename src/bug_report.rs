@@ -137,6 +137,14 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
         )),
         "bash" => Some(expand_tilde(Path::new("~/.bashrc").to_path_buf())),
         "zsh" => Some(expand_tilde(Path::new("~/.zshrc").to_path_buf())),
+        "powershell" => {
+            let path = if cfg!(windows) {
+                "~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1"
+            } else {
+                "~/.config/powershell/Microsoft.PowerShell_profile.ps1"
+            };
+            Some(expand_tilde(Path::new(path).to_path_buf()))
+        }
         _ => None,
     }
 }
