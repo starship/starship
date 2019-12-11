@@ -860,6 +860,8 @@ and `poetry` packages.
   in the current directory
 - **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present
   in the current directory
+- **composer** – The `composer` package version is extracted from the `composer.json` present
+  in the current directory
 
 > ⚠️ The version being shown is that of the package whose source code is in your
 > current directory, not your package manager.
