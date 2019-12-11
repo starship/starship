@@ -804,13 +804,13 @@ symbol = "🤖 "
 
 ## Paketversion
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
+Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository für ein Paket ist, und zeigt dessen aktuelle Version an. Das Modul unterstützt derzeit `npm`, `cargo`, und `poetry` Pakete.
 
-- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
-- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
-- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- **npm** – Die `npm` Paketversion wird aus dem `package.json` gelesen, das sich im aktuellen Verzeichnis befindet
+- **Cargo** – Die `Cargo` Paketversion wird aus dem `Cargo.toml` gelesen, das sich im aktuellen Verzeichnis befindet
+- **poetry** – Die `poetry` Paketversion wird aus der `pyproject.toml` gelesen, das sich im aktuellen Verzeichnis befindet
 
-> ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
+> ⚠️ Die angezeigte Version ist die des Pakets, dessen Quellcode im Verzeichnis liegt, nicht die des Paketmanagers.
 
 ### Optionen
 
@@ -831,18 +831,18 @@ symbol = "🎁 "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
+Das `php`-Modul zeigt die aktuell installierte Version von PHP. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Das aktuelle Verzeichnis enthält eine `composer.json`-Datei
-- The current directory contains a `.php` file
+- Das aktuelle Verzeichnis enthält eine `.php`-Datei
 
 ### Optionen
 
-| Variable   | Standardwert | Beschreibung                                          |
-| ---------- | ------------ | ----------------------------------------------------- |
-| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
-| `style`    | `"bold red"` | Stil für dieses Modul.                                |
-| `disabled` | `false`      | Disables the `php` module.                            |
+| Variable   | Standardwert | Beschreibung                                   |
+| ---------- | ------------ | ---------------------------------------------- |
+| `symbol`   | `"🐘 "`       | Symbol das vor der PHP-Version angezeigt wird. |
+| `style`    | `"bold red"` | Stil für dieses Modul.                         |
+| `disabled` | `false`      | Deaktiviert das `php`-Modul.                   |
 
 ### Beispiel
 
@@ -855,9 +855,9 @@ symbol = "🔹 "
 
 ## Python
 
-The `python` module shows the currently installed version of Python.
+Das `python`-Modul zeigt die aktuell installierte Version von Python.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
+Wenn `pyenv_version_name` auf `true` gesetzt ist, wird die version der pyenv angezeigt.
 
 Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
 
@@ -894,10 +894,10 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
+Das `ruby` Modul zeigt die derzeit installierte Version von Ruby an. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- The current directory contains a `Gemfile` file
-- The current directory contains a `.rb` file
+- Das aktuelle Verzeichnis enthält eine `Gemfile`-Datei
+- Das aktuelle Verzeichnis enthält eine `.rb`-Datei
 
 ### Optionen
 
@@ -921,7 +921,7 @@ symbol = "🔺 "
 Das `rust` Modul zeigt die derzeit installierte Version von Rust an. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Das aktuelle Verzeichnis enthält eine `Cargo.toml`-Datei
-- The current directory contains a file with the `.rs` extension
+- Das aktuelle Verzeichnis enthält eine Datei mit der `.rs`-Erweiterung
 
 ### Optionen
 
