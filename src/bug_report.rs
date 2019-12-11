@@ -1,5 +1,5 @@
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::process::Command;
 
 pub fn create() {
@@ -76,13 +76,13 @@ fn make_github_issue_link(starship_version: &str, environment: Environment) -> S
 
 #### Possible Solution
 <!--- Only if you have suggestions on a fix for the bug -->",
-             starship_version,
-             environment.shell_info.name,
-             environment.shell_info.version,
-             environment.os_type,
-             environment.os_version,
-             environment.shell_info.config,
-             environment.starship_config,
+                                            starship_version,
+                                            environment.shell_info.name,
+                                            environment.shell_info.version,
+                                            environment.os_type,
+                                            environment.os_version,
+                                            environment.shell_info.config,
+                                            environment.starship_config,
     ));
 
     format!(
@@ -131,36 +131,26 @@ fn get_shell_info() -> ShellInfo {
 }
 
 fn get_config_path(shell: &str) -> Option<PathBuf> {
-    match shell {
-        "fish" => Some(expand_tilde(
-            Path::new("~/.config/fish/config.fish").to_path_buf(),
-        )),
-        "bash" => Some(expand_tilde(Path::new("~/.bashrc").to_path_buf())),
-        "zsh" => Some(expand_tilde(Path::new("~/.zshrc").to_path_buf())),
-        "powershell" => {
-            let path = if cfg!(windows) {
-                "~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1"
-            } else {
-                "~/.config/powershell/Microsoft.PowerShell_profile.ps1"
-            };
-            Some(expand_tilde(Path::new(path).to_path_buf()))
+    dirs::home_dir().and_then(|home_dir| {
+        match shell {
+            "fish" => Some(".config/fish/config.fish"),
+            "bash" => Some(".bashrc"),
+            "zsh" => Some(".zshrc"),
+            "powershell" => {
+                if cfg!(windows) {
+                    Some("Documents/PowerShell/Microsoft.PowerShell_profile.ps1")
+                } else {
+                    Some(".config/powershell/Microsoft.PowerShell_profile.ps1")
+                }
+            }
+            _ => None,
         }
-        _ => None,
-    }
+        .map(|path| home_dir.join(path))
+    })
 }
 
 fn get_starship_config() -> String {
-    fs::read_to_string(expand_tilde(
-        Path::new("~/.config/starship.toml").to_path_buf(),
-    ))
-    .unwrap_or(UNKNOWN_CONFIG.to_string())
-}
-
-/// Convert a `~` in a path to the home directory
-fn expand_tilde(dir: PathBuf) -> PathBuf {
-    if dir.starts_with("~") {
-        let without_home = dir.strip_prefix("~").unwrap();
-        return dirs::home_dir().unwrap().join(without_home);
-    }
-    dir
+    dirs::home_dir()
+        .and_then(|home_dir| fs::read_to_string(home_dir.join(".config/starship.toml")).ok())
+        .unwrap_or(UNKNOWN_CONFIG.to_string())
 }
