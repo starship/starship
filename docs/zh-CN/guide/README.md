@@ -82,6 +82,7 @@
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
+  - composer (PHP)
 - 当前 Git 分支与一应俱全的仓库状态
   - `=` — conflicting changes
   - `⇡` — ahead of remote branch
