@@ -30,16 +30,16 @@ STATUS=$?
 # Gibt die Anzahl der laufenden Jobs an.
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Set the prompt to the output of `starship prompt`
+# Formatiere den prompt mit der Ausgabe von `starship prompt`
 PS1="$(starship prompt --status=$STATUS --jobs=NUM_JOBS)"
 ```
 
-The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#Command-Duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
+Die [Bash Implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) ist etwas komplexer, um erweiterte Funktionen wie das [Befehlsdauer-Modul](https://starship.rs/config/#Command-Duration) zu ermöglichen und um sicherzustellen, dass Starship mit vorinstallierten Bash Konfigurationen kompatibel ist.
 
-For a list of all flags accepted by `starship prompt`, use the following command:
+Für eine Liste aller Flaggen, die von `Starship-Eingabeaufforderung` akzeptiert wird, verwenden Sie den folgenden Befehl:
 
 ```sh
-starship prompt --version
+starship-Prompt --version
 ```
 
-The prompt will use as much context as is provided, but no flags are "required".
+Die Eingabeaufforderung verwendet so viel Kontext wie möglich, aber keine Flagge ist "notwendig".
