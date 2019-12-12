@@ -1,4 +1,4 @@
-use crate::utils;
+use crate::utils::exec_cmd;
 use std::fs;
 use std::path::PathBuf;
 
@@ -103,7 +103,7 @@ fn get_shell_info() -> ShellInfo {
 
     let shell = shell.unwrap();
 
-    let version = utils::exec_cmd(&shell, &["--version"])
+    let version = exec_cmd(&shell, &["--version"])
         .map(|output| output.stdout.trim().to_string())
         .unwrap_or(UNKNOWN_VERSION.to_string());
 
@@ -143,4 +143,56 @@ fn get_starship_config() -> String {
     dirs::home_dir()
         .and_then(|home_dir| fs::read_to_string(home_dir.join(".config/starship.toml")).ok())
         .unwrap_or(UNKNOWN_CONFIG.to_string())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use os_info;
+    use std::env;
+
+    #[test]
+    fn test_make_github_issue_link() {
+        let starship_version = "0.1.2";
+        let environment = Environment {
+            os_type: os_info::Type::Linux,
+            os_version: os_info::Version::semantic(1, 2, 3, Some("test".to_string())),
+            shell_info: ShellInfo {
+                name: "test_shell".to_string(),
+                version: "2.3.4".to_string(),
+                config: "No config".to_string(),
+            },
+            starship_config: "No Starship config".to_string(),
+        };
+
+        let link = make_github_issue_link(starship_version, environment);
+
+        assert!(link.contains(starship_version));
+        assert!(link.contains("Linux"));
+        assert!(link.contains("1.2.3"));
+        assert!(link.contains("test_shell"));
+        assert!(link.contains("2.3.4"));
+        assert!(link.contains("No%20config"));
+        assert!(link.contains("No%20Starship%20config"));
+    }
+
+    #[test]
+    fn test_get_shell_info() {
+        env::remove_var("STARSHIP_SHELL");
+        let unknown_shell = get_shell_info();
+        assert_eq!(UNKNOWN_SHELL, &unknown_shell.name);
+
+        env::set_var("STARSHIP_SHELL", "fish");
+
+        let fish_shell = get_shell_info();
+        assert_eq!("fish", &fish_shell.name);
+    }
+
+    #[test]
+    fn test_get_config_path() {
+        env::set_var("HOME", "/test/home");
+
+        let config_path = get_config_path("bash");
+        assert_eq!("/test/home/.bashrc", config_path.unwrap().to_str().unwrap());
+    }
 }
