@@ -808,6 +808,7 @@ Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository
 - **npm** – Die `npm` Paketversion wird aus dem `package.json` gelesen, das sich im aktuellen Verzeichnis befindet
 - **Cargo** – Die `Cargo` Paketversion wird aus dem `Cargo.toml` gelesen, das sich im aktuellen Verzeichnis befindet
 - **poetry** – Die `poetry` Paketversion wird aus der `pyproject.toml` gelesen, das sich im aktuellen Verzeichnis befindet
+- **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 
 > ⚠️ Die angezeigte Version ist die des Pakets, dessen Quellcode im Verzeichnis liegt, nicht die des Paketmanagers.
 
