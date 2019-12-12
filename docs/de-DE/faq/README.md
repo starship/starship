@@ -1,33 +1,33 @@
 # FAQ
 
-## What is the configuration used in the demo GIF?
+## Wie ist die Konfiguration im Demo GIF?
 
 - **Terminal Emulator**: [iTerm2](https://iterm2.com/)
   - **Theme**: Minimal
-  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+  - **Farbschema**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
   - **Font**: [Fira Code](https://github.com/tonsky/FiraCode)
 - **Shell**: [Fish Shell](https://fishshell.com/)
-  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
+  - **Konfiguration**: [Matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
-## Do `prompt_order` and `<module>.disabled` do the same thing?
+## Tun `prompt_order` und `<module>.disabled` dasselbe?
 
-Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
+Ja, beide können benutzt werden, um Module in der Prompt zu deaktivieren. Wenn nur Module deaktiviert werden wollen, sollte `<module>.disabled` benutzt werden, aus den folgenden Gründen:
 
-- Disabling modules is more explicit than omitting them from the prompt_order
-- Newly created modules will be added to the prompt as Starship is updated
+- Das Deaktivieren von Modulen ist expliziter als das Auslassen von Modulen in der prompt_order
+- Mit der Aktualisierung von Starship werden neu erstellte Module an die Eingabezeile angefügt
 
-## The docs say Starship is cross-shell, but it doesn't support X shell. Why?
+## Laut Dokumentation ist Starship cross-shell, aber es läuft nicht auf shell X. Warum?
 
-The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
+Starship ist auf so eine Weise gebaut, das die Unterstützung so gut wie jeder Shell möglch sein sollte. Die Starship Binärdatei läuft völlig unabhängig von der Shell, und sollte auf jeder benutzt werden können, die eine Anpassung des Stils erlaubt.
 
-Here's a small example getting Starship working with bash:
+Hier ist ein kleines Beispiel, wie man Starship auf bash zum Laufen bringt:
 
 ```sh
-# Get the status code from the last command executed
+# Den Statuscode des zuletzt ausgeführten Befehls abrufen
 STATUS=$?
 
-# Get the number of jobs running.
+# Gibt die Anzahl der laufenden Jobs an.
 NUM_JOBS=$(jobs -p | wc -l)
 
 # Set the prompt to the output of `starship prompt`
