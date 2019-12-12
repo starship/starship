@@ -82,6 +82,7 @@
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
+  - composer (PHP)
 - Branche Git actuelle et affichage "riche" du statut du dépôt:
   - `=` — Conflits dans les changements
   - `⇡` — En avance sur la branche distante
