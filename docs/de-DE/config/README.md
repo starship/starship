@@ -672,7 +672,7 @@ disabled = false
 
 ## Zeilenumbruch
 
-The `line_break` module separates the prompt into two lines.
+Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
 
 ### Optionen
 
@@ -717,13 +717,13 @@ pure_msg = "pure shell"
 
 ## Speicherauslastung
 
-The `memory_usage` module shows current system memory and swap usage.
+Das `memory_usage` Modul zeigt den aktuellen Systemspeicher und die swap-Nutzung an.
 
-By default the swap usage is displayed if the total system swap is non-zero.
+Standardmäßig wird die swap-Nutzung angezeigt, wenn der gesamte System-swap nicht Null ist.
 
-::: tip
+::: Tipp
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
 
 :::
 
@@ -732,10 +732,10 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | Variable          | Standardwert          | Beschreibung                                                               |
 | ----------------- | --------------------- | -------------------------------------------------------------------------- |
 | `show_percentage` | `false`               | Zeigt die Speicherauslastung als Prozentsatz des verfügbaren Speichers an. |
-| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                              |
+| `show_swap`       | `true`                | Swap-Nutzung anzeigen, wenn die Gesamtsumme des swaps nicht Null ist.      |
 | `threshold`       | `75`                  | Speicherauslastung ausblenden, wenn sie unter diesem Prozentsatz ist.      |
 | `symbol`          | `"🐏 "`                | Symbol das vor der Speicherauslastung angezeigt wird.                      |
-| `separator`       | `" | "`               | Symbol oder Text, der ram und swap usage trennt.                           |
+| `separator`       | `" | "`               | Symbol oder Text, der ram und swap-Nutzung trennt.                         |
 | `style`           | `"bold dimmed white"` | Stil für dieses Modul.                                                     |
 | `disabled`        | `true`                | Deaktiviert das `memory_usage`-Modul.                                      |
 
