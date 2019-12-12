@@ -33,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_style(config.style);
     module.create_segment("symbol", &config.symbol);
 
-    let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_system());
+    let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_memory());
 
     let used_memory_kib = system.get_used_memory();
     let total_memory_kib = system.get_total_memory();
