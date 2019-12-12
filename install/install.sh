@@ -261,4 +261,9 @@ info "Please follow the steps for your shell to complete the installation:
 
       eval \"\$(starship init zsh)\"
 
+  ${BOLD}${UNDERLINE}Ion${NO_COLOR}
+  Add the following to the end of ${BOLD}~/.config/ion/initrc${NO_COLOR}:
+
+      eval $(starship init ion)
+
 "
