@@ -82,6 +82,7 @@
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
+  - composer (PHP)
 - 現在的 Git branch 與豐富的程式庫 (repository) 狀態：
   - `=` — 修改衝突
   - `⇡` — 超前遠端 (remote) branch
