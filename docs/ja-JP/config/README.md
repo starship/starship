@@ -811,7 +811,7 @@ symbol = "🤖 "
 - **npm** – `npm`パッケージバージョンは、現在のディレクトリにある`package.json`から抽出されます
 - **cargo** – `cargo`パッケージバージョンは、現在のディレクトリにある`Cargo.toml`から抽出されます。
 - **poetry** – `poetry`パッケージバージョンは、現在のディレクトリにある`pyproject.toml`から抽出されます
-- **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
+- **composer** – `composer`パッケージバージョンは、現在のディレクトリにある`composer.json`から抽出されます
 
 > ⚠️ 表示されるバージョンは、パッケージマネージャーではなく、ソースコードが現在のディレクトリにあるパッケージのバージョンです。
 
@@ -834,10 +834,10 @@ symbol = "🎁 "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
+`php`モジュールは、現在インストールされているPHPのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`composer.json`ファイルが含まれている
-- The current directory contains a `.php` file
+- カレントディレクトリに`.php`の拡張子のファイルが含まれている
 
 ### オプション
 
@@ -897,7 +897,7 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
+`ruby`モジュールは、現在インストールされているRubyのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Gemfile`ファイルが含まれている
 - カレントディレクトリに`.rb`の拡張子のファイルが含まれている
@@ -921,7 +921,7 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
+`rust`モジュールには、現在インストールされているRustのバージョンが表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Cargo.toml`ファイルが含まれている
 - カレントディレクトリに`.rs`の拡張子のファイルが含まれている
@@ -945,19 +945,19 @@ symbol = "⚙️ "
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. The module will be shown if any of the following conditions are met:
+`terraform`モジュールには、現在選択されているterraformワークスペースとバージョンが表示されます。 デフォルトでは、Terraformのバージョンは表示されません。これは、多くのプラグインが使用されている場合、Terraformの現在のバージョンでは遅いためです。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `.terraform` folder
-- Current directory contains a file with the `.tf` extension
+- カレントディレクトリに`.terraform`フォルダが含まれている
+- カレントディレクトリに`.tf`の拡張子のファイルが含まれている
 
 ### オプション
 
-| 変数             | デフォルト        | 説明                                                          |
-| -------------- | ------------ | ----------------------------------------------------------- |
-| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
-| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
-| `style`        | `"bold 105"` | The style for the module.                                   |
-| `disabled`     | `false`      | Disables the `terraform` module.                            |
+| 変数             | デフォルト        | 説明                                            |
+| -------------- | ------------ | --------------------------------------------- |
+| `symbol`       | `"💠 "`       | Terraform ワークスペースを表示する前に使用される記号です。            |
+| `show_version` | `false`      | Terraformのバージョンを表示します。 大きなワークスペースでは非常に遅くなります。 |
+| `style`        | `"bold 105"` | モジュールのスタイルです。                                 |
+| `disabled`     | `false`      | `terraform`モジュールを無効にします。                      |
 
 ### 設定例
 
