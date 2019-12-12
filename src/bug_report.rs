@@ -1,6 +1,6 @@
+use crate::utils;
 use std::fs;
 use std::path::PathBuf;
-use std::process::Command;
 
 pub fn create() {
     let os_info = os_info::get();
@@ -110,12 +110,8 @@ fn get_shell_info() -> ShellInfo {
 
     let shell = shell.unwrap();
 
-    let version = Command::new(&shell)
-        .arg("--version")
-        .output()
-        .ok()
-        .and_then(|output| String::from_utf8(output.stdout).ok())
-        .map(|output| output.trim().to_string())
+    let version = utils::exec_cmd(&shell, &["--version"])
+        .map(|output| output.stdout.trim().to_string())
         .unwrap_or(UNKNOWN_VERSION.to_string());
 
     let config = get_config_path(&shell)
