@@ -82,6 +82,7 @@
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
+  - composer (PHP)
 - Aktueller Git-Branch und ausführlicher Repository-Status:
   - `=` — konkurrierende Änderungen
   - `⇡` — vor remote branch
