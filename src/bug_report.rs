@@ -15,15 +15,8 @@ pub fn create() {
     let link = make_github_issue_link(crate_version!(), environment);
 
     if open::that(&link)
-        .ok()
-        .and_then(|exit_status| {
-            if exit_status.success() {
-                Some(())
-            } else {
-                None
-            }
-        })
-        .is_none()
+        .map(|exit_status| exit_status.success())
+        .unwrap_or(false)
     {
         println!(
             "I was unable to launch your browser. You'll have to copy this link instead:\n\n{}",
