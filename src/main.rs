@@ -110,7 +110,11 @@ fn main() {
                 .arg(&keymap_arg)
                 .arg(&jobs_arg),
         )
-        .subcommand(SubCommand::with_name("time").about("Prints time in milliseconds"))
+        .subcommand(
+            SubCommand::with_name("time")
+                .about("Prints time in milliseconds")
+                .settings(&[AppSettings::Hidden]),
+        )
         .get_matches();
 
     match matches.subcommand() {

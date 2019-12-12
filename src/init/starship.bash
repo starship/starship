@@ -59,9 +59,14 @@ else
         }
         trap starship_preexec_all DEBUG
     fi
-
-    # Finally, prepare the precmd function and set up the start time.
-    PROMPT_COMMAND="$PROMPT_COMMAND;starship_precmd"
+ 
+    # Finally, prepare the precmd function and set up the start time. We will avoid to 
+    # add multiple instances of the starship function and keep other user functions if any.
+    if [[ -z "$PROMPT_COMMAND" ]]; then
+        PROMPT_COMMAND="starship_precmd"
+    elif [[ "$PROMPT_COMMAND" != *"starship_precmd" ]]; then
+        PROMPT_COMMAND="$PROMPT_COMMAND;starship_precmd"
+    fi
 fi
 
 # Set up the start time and STARSHIP_SHELL, which controls shell-specific sequences
