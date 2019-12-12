@@ -1,18 +1,18 @@
 # FAQ
 
-## What is the configuration used in the demo GIF?
+## デモGIFで使用される構成は何ですか？
 
-- **Terminal Emulator**: [iTerm2](https://iterm2.com/)
-  - **Theme**: Minimal
-  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [Fira Code](https://github.com/tonsky/FiraCode)
-- **Shell**: [Fish Shell](https://fishshell.com/)
-  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
-  - **Prompt**: [Starship](https://starship.rs/)
+- **ターミナルエミュレータ**:[ iTerm2 ](https://iterm2.com/)
+  - **テーマ**: Minimal
+  - **カラースキーム**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+  - **フォント**: [Fira Code](https://github.com/tonsky/FiraCode)
+- **シェル**: [Fish Shell](https://fishshell.com/)
+  - **設定**: [matchaiのDotfiles](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
+  - **プロンプト**: [Starship](https://starship.rs/)
 
-## Do `prompt_order` and `<module>.disabled` do the same thing?
+## `prompt_order` と `<module>.disabled` は同じことをしますか？
 
-Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
+はい、両方ともプロンプトでモジュールを無効にするために使用できます。 モジュールを無効にするだけの場合は、これらの理由から` <module> .disabled `を無効にする方法をお勧めします。
 
 - Disabling modules is more explicit than omitting them from the prompt_order
 - Newly created modules will be added to the prompt as Starship is updated
