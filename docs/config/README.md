@@ -269,7 +269,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 | Variable   | Default         | Description                                                |
 | ---------- | --------------- | ---------------------------------------------------------- |
-| `min_time` | `2`             | Shortest duration to show time for.                        |
+| `min_time` | `2_000`         | Shortest duration to show time for (in milliseconds).      |
 | `prefix`   | `took`          | Prefix to display immediately before the command duration. |
 | `style`    | `"bold yellow"` | The style for the module.                                  |
 | `disabled` | `false`         | Disables the `cmd_duration` module.                        |
@@ -280,7 +280,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 # ~/.config/starship.toml
 
 [cmd_duration]
-min_time = 4
+min_time = 500
 prefix = "underwent "
 ```
 
