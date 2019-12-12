@@ -82,6 +82,7 @@
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
+  - composer (PHP)
 - 現在の Git ブランチとリッチなリポジトリの状態
   - `=` — 競合している変更
   - `⇡` — リモートブランチより進んでいる変更
