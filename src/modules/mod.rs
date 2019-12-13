@@ -5,6 +5,7 @@ mod cmd_duration;
 mod conda;
 mod directory;
 mod dotnet;
+mod emberjs;
 mod env_var;
 mod git_branch;
 mod git_commit;
@@ -49,6 +50,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "conda" => conda::module(context),
         "directory" => directory::module(context),
         "dotnet" => dotnet::module(context),
+        "emberjs" => emberjs::module(context),
         "env_var" => env_var::module(context),
         "git_branch" => git_branch::module(context),
         "git_commit" => git_commit::module(context),

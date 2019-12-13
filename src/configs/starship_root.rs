@@ -43,6 +43,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "conda",
                 "memory_usage",
                 "aws",
+                "emberjs",
                 "env_var",
                 "cmd_duration",
                 "line_break",
