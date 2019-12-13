@@ -335,12 +335,12 @@ dependencies = [
 
 [[package]]
 name = "git2"
-version = "0.10.2"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "bitflags 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.66 (registry+https://github.com/rust-lang/crates.io-index)",
- "libgit2-sys 0.9.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libgit2-sys 0.10.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "url 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -415,7 +415,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "libgit2-sys"
-version = "0.9.2"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "cc 1.0.48 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -801,7 +801,7 @@ dependencies = [
  "clap 2.33.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "dirs 2.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "gethostname 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "git2 0.10.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "git2 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "nom 5.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "once_cell 1.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1090,7 +1090,7 @@ dependencies = [
 "checksum fuchsia-cprng 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "a06f77d526c1a601b7c4cdd98f54b5eaabffc14d5f2f0296febdc7f357c6d3ba"
 "checksum gethostname 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "d4ab273ca2a31eb6ca40b15837ccf1aa59a43c5db69ac10c542be342fae2e01d"
 "checksum getrandom 0.1.13 (registry+https://github.com/rust-lang/crates.io-index)" = "e7db7ca94ed4cd01190ceee0d8a8052f08a247aa1b469a7f68c6a3b71afcf407"
-"checksum git2 0.10.2 (registry+https://github.com/rust-lang/crates.io-index)" = "7c1af51ea8a906616af45a4ce78eacf25860f7a13ae7bf8a814693f0f4037a26"
+"checksum git2 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)" = "77519ef7c5beee314d0804d4534f01e0f9e8d9acdee2b7a48627e590b27e0ec4"
 "checksum hermit-abi 0.1.3 (registry+https://github.com/rust-lang/crates.io-index)" = "307c3c9f937f38e3534b1d6447ecf090cafcc9744e4a6360e8b037b2cf5af120"
 "checksum humantime 1.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "df004cfca50ef23c36850aaaa59ad52cc70d0e90243c3c7737a4dd32dc7a3c4f"
 "checksum idna 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "02e2673c30ee86b5b96a9cb52ad15718aa1f966f5ab9ad54a8b95d5ca33120a9"
@@ -1100,7 +1100,7 @@ dependencies = [
 "checksum lazycell 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "b294d6fa9ee409a054354afc4352b0b9ef7ca222c69b8812cbea9e7d2bf3783f"
 "checksum lexical-core 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)" = "2304bccb228c4b020f3a4835d247df0a02a7c4686098d4167762cfbbe4c5cb14"
 "checksum libc 0.2.66 (registry+https://github.com/rust-lang/crates.io-index)" = "d515b1f41455adea1313a4a2ac8a8a477634fbae63cc6100e3aebb207ce61558"
-"checksum libgit2-sys 0.9.2 (registry+https://github.com/rust-lang/crates.io-index)" = "4870c781f6063efb83150cd22c1ddf6ecf58531419e7570cdcced46970f64a16"
+"checksum libgit2-sys 0.10.0 (registry+https://github.com/rust-lang/crates.io-index)" = "d9ec6bca50549d34a392611dde775123086acbd994e3fff64954777ce2dc2e51"
 "checksum libz-sys 1.0.25 (registry+https://github.com/rust-lang/crates.io-index)" = "2eb5e43362e38e2bca2fd5f5134c4d4564a23a5c28e9b95411652021a8675ebe"
 "checksum linked-hash-map 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)" = "ae91b68aebc4ddb91978b11a1b02ddd8602a05ec19002801c5666000e05e0f83"
 "checksum log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)" = "14b6052be84e6b71ab17edffc2eeabf5c2c3ae1fdb464aae35ac50c67a44e1f7"
