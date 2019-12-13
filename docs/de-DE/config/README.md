@@ -748,7 +748,7 @@ style = "bold dimmed green"
 
 Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
-- The current directory contains a `pom.xml`, `build.gradle` or `build.sbt` file
+- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
 - The current directory contains a file with the `.java`, `.class` or `.jar` extension
 
 ### Optionen
