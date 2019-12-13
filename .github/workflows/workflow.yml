@@ -194,13 +194,13 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: |
-          echo "https://starship-bot:$GITHUB_TOKEN@github.com" > ~/.git-credentials
+          echo "https://starship-bot:$HOMEBREW_GITHUB_API_TOKEN@github.com" > ~/.git-credentials
           git config --global credential.helper store
           git config --global user.name "Starship Bot"
           git config --global user.email "bot@starship.rs"
           brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
         env:
-          GITHUB_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
+          HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
 
   # Build sources for every OS
   github_build:
