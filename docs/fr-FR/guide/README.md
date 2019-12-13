@@ -172,7 +172,7 @@
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Ajouter ce qui suit à la fin de `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -183,7 +183,7 @@
 
    #### Powershell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   Ajouter ce qui suit à la fin de `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` sur -Nix):
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
@@ -193,7 +193,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Ajouter ce qui suit à la fin de `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -203,18 +203,18 @@
 
 ## 🔧 Configuration
 
-For details on how to configure Starship, check out our [documentation](https://starship.rs/config/).
+Pour plus de détails sur la configuration de Starship, consultez notre [documentation](https://starship.rs/config/).
 
-## 🤝 Contributing
+## 🤝Contribution
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+Nous sommes toujours à la recherche de contributeurs de **tous les niveaux de compétence**! Si vous cherchez à faciliter votre entrée dans le projet, essayez un [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-### High Priority Needs
+### Besoins de priorité élevée
 
-- 👩‍💼 **Product Manager**
-  - We have a GitHub Project and many unorganized/unprioritized features, as well as ideas that haven't yet been made into issues. Starship needs someone to own the product direction!
+- 👩‍💼**Gestionnaire de produit**
+  - Nous avons un projet GitHub et de nombreuses fonctionnalités non organisées/non priorisées, ainsi que des idées qui n'ont pas encore été faites dans les issues. Starship a besoin de quelqu'un qui deciderait la direction du produit !
 - 👩‍🎨 **Designer**
-  - Like making eye-catching websites? Excellent! We are looking to create a beautiful landing page showing off Starship in all its glory. Helping design for Starship's brand is a great opportunity to try out new ideas!
+  - Vous aimez créer des sites Web attrayantes ? Excellent! We are looking to create a beautiful landing page showing off Starship in all its glory. Helping design for Starship's brand is a great opportunity to try out new ideas!
 - 👩‍💻 **Rust Developer**
   - There is _a lot_ of low-hanging fruit when it comes to writing idiomatic Rust, designing effective Rust architecture, performance optimizations, cross-platform build optimizations, and more! I ([@matchai](https://github.com/matchai)) am a beginner to Rust. Come point us in the right direction!
 
