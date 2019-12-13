@@ -58,7 +58,7 @@
 
 <h1></h1>
 
-<p align="center"> Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br /> The prompt shows information you need while you're working, while staying sleek and out of the way. <p>
+<p align="center"> Starship est un environnement minimal, extrêmement rapide et extrêmement personnalisable pour n'importe quelle terminale shell!<br /> Le prompt affiche les informations dont vous avez besoin pendant que vous travaillez, tout en restant élégant et hors du chemin. <p>
 
 <p align="center">
   <br>
@@ -73,16 +73,16 @@
 - Version actuelle de Go (`🐹`)
 - Version actuelle de Java (`☕`)
 - Version actuelle de Node.js (`⬢`)
-- Current PHP version (`🐘`)
+- Version actuelle de PHP (`🐘`)
 - Version actuelle de Python (`🐍`)
 - Version actuelle de Ruby (`💎`)
 - Version actuelle de Rust (`🦀`)
-- Current .NET version (`•NET`)
+- Version actuelle de .NET (`•NET`)
 - Version actuelle du paquet dans le répertoire courant (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-  - composer (PHP)
+  - compositeur (PHP)
 - Branche Git actuelle et affichage "riche" du statut du dépôt:
   - `=` — Conflits dans les changements
   - `⇡` — En avance sur la branche distante
@@ -94,7 +94,7 @@
   - `+` — Fichiers ajoutés
   - `»` — Fichiers renommés
   - `✘` — Fichiers supprimés
-- Current Mercurial branch
+- Branche Mercurial actuelle
 - Niveau et état actuels de la batterie
 - `⇡` – charging
 - `⇣` – discharging
