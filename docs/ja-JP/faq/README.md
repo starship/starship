@@ -39,7 +39,7 @@ Starshipに組み込まれた[Bashの実装](https://github.com/starship/starshi
 `Starshipのプロンプト`で受け入れられるすべてのフラグのリストは、次のコマンドを取得できます。
 
 ```sh
-starship prompt --version
+starship prompt --help
 ```
 
 プロンプトは提供されているコンテキストを使用しますが、フラグは「必須」ではありません。
