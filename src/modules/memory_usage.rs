@@ -22,7 +22,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
     let percent_sign = match shell.as_str() {
         "zsh" => "%%", // % is an escape in zsh, see PROMPT in `man zshmisc`
-        "powershell" => "`%",
         _ => "%",
     };
 
