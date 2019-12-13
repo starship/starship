@@ -214,15 +214,15 @@ Nous sommes toujours à la recherche de contributeurs de **tous les niveaux de c
 - 👩‍💼**Gestionnaire de produit**
   - Nous avons un projet GitHub et de nombreuses fonctionnalités non organisées/non priorisées, ainsi que des idées qui n'ont pas encore été faites dans les issues. Starship a besoin de quelqu'un qui deciderait la direction du produit !
 - 👩‍🎨 **Designer**
-  - Vous aimez créer des sites Web attrayantes ? Excellent! We are looking to create a beautiful landing page showing off Starship in all its glory. Helping design for Starship's brand is a great opportunity to try out new ideas!
-- 👩‍💻 **Rust Developer**
-  - There is _a lot_ of low-hanging fruit when it comes to writing idiomatic Rust, designing effective Rust architecture, performance optimizations, cross-platform build optimizations, and more! I ([@matchai](https://github.com/matchai)) am a beginner to Rust. Come point us in the right direction!
+  - Vous aimez créer des sites Web attrayantes ? Parfait ! Nous cherchons à créer une belle page d'atterrissage montrant Starship dans toute sa gloire. Aider au design pour Starship est une occasion excellente pour essayer de nouvelles idées!
+- 👩‍💻**Développeur Rust **
+  - Il y a _beaucoup_ de tâches simples lorsqu'il s'agit d'écrire Rust de façon idiomatique, de concevoir d'une architecture Rust efficace, des optimisations de performances, des optimisations des binaires multi-plateformes et plus encore ! Je ([@matchai](https://github.com/matchai)) suis un débutant de Rust. Venez nous diriger dans la bonne direction!
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Si vous êtes intéressé à aider à contribuer à Starship, veuillez jeter un coup d'oeil à notre [Guide de contribution](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Aussi, n'hésitez pas à vous rendre sur notre [serveur Discord](https://discord.gg/8Jzqu3T) pour dire bonjour. 👋
 
-### Contributors
+### Contributeurs
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+Merci à ces personnes merveilleuses ([clé emojis](https://allcontributors.org/docs/en/emoji-key)) :
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
