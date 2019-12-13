@@ -1,6 +1,9 @@
 use crate::utils::exec_cmd;
+use reqwest;
 use std::fs;
 use std::path::PathBuf;
+
+const GIT_IO_BASE_URL: &'static str = "https://git.io/";
 
 pub fn create() {
     let os_info = os_info::get();
@@ -17,8 +20,16 @@ pub fn create() {
     if open::that(&link).is_ok() {
         print!("Take a look at your browser. A GitHub issue has been populated with your configuration")
     } else {
+        let link = reqwest::Client::new()
+            .post(&format!("{}{}", GIT_IO_BASE_URL, "create"))
+            .form(&[("url", &link)])
+            .send()
+            .and_then(|mut response| response.text())
+            .map(|slug| format!("{}{}", GIT_IO_BASE_URL, slug))
+            .unwrap_or(link);
+
         println!(
-            "I was unable to launch your browser. You'll have to copy this link instead:\n\n{}",
+            "I was unable to launch your browser. You'll have to copy this link instead:\n\n  {}",
             link
         );
     }
