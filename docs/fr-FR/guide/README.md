@@ -96,17 +96,17 @@
   - `✘` — Fichiers supprimés
 - Branche Mercurial actuelle
 - Niveau et état actuels de la batterie
-- `⇡` – charging
-- `⇣` – discharging
-- `•` – fully charged
+- `⇡` – en charge
+- `⇣` – en décharge
+- `•` – entièrement chargé
 - Indicateur pour les tâches en arrière-plan (`✦`)
 - Cluster et namespace Kubernetes actuels (`☸`)
-- Current Amazon Web Services (AWS) profile (`☁️`)
-- Execution time of the last command
-- Custom environment variable value
+- Profil actuel d'Amazon Web Services/AWS (`☁️`)
+- Temps d'exécution de la dernière commande
+- Valeur des clés d'environnement personnalisée
 - Détection de l'environnement Nix-shell
 - Affiche le nom de l'utilisateur courant s'il est différent de celui connecté
-- Optional current time in 12/24hr format
+- L'heure courante au format 12/24h (optionel)
 
 ## 🚀 Installation
 
@@ -114,43 +114,43 @@
 
 - Une [police d'écriture Powerline](https://github.com/powerline/fonts) installée et activée dans votre terminal (Par exemple, essayez [Fira Code](https://github.com/tonsky/FiraCode)).
 
-### Getting Started
+### Démarrage rapide
 
 1. Installer le binaire **starship** :
 
 
-   #### Install Latest Version
+   #### Installer la dernière version
 
 
-   ##### With Shell:
+   ##### Avec Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Install via Package Manager
+   #### Installer via le gestionnaire de paquets
 
 
-   ##### With [Homebrew](https://brew.sh/):
+   ##### Avec [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### Avec [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Ajouter le script d'initialization à la fiche config de votre shell:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Ajouter ce qui suit à la fin de `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -161,7 +161,7 @@
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Ajoute ce qui suit à la fin de `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
