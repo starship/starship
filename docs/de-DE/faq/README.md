@@ -39,7 +39,7 @@ Die [Bash Implementation](https://github.com/starship/starship/blob/master/src/i
 Für eine Liste aller Flaggen, die von `Starship-Eingabeaufforderung` akzeptiert wird, verwenden Sie den folgenden Befehl:
 
 ```sh
-starship-Prompt --version
+starship prompt --help
 ```
 
 Die Eingabeaufforderung verwendet so viel Kontext wie möglich, aber keine Flagge ist "notwendig".
