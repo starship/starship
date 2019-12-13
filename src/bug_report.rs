@@ -14,10 +14,9 @@ pub fn create() {
 
     let link = make_github_issue_link(crate_version!(), environment);
 
-    if open::that(&link)
-        .map(|exit_status| exit_status.success())
-        .unwrap_or(false)
-    {
+    if open::that(&link).is_ok() {
+        print!("Take a look at your browser. A GitHub issue has been populated with your configuration")
+    } else {
         println!(
             "I was unable to launch your browser. You'll have to copy this link instead:\n\n{}",
             link
@@ -51,31 +50,31 @@ fn make_github_issue_link(starship_version: &str, environment: Environment) -> S
 <!-- Add any other context about the problem here. If applicable, add screenshots to help explain. -->
 
 #### Environment
-- Starship version: {}
-- {}: {}
-- Operating system: {} {}
+- Starship version: {starship_version}
+- {shell_name}: {shell_version}
+- Operating system: {os_name} {os_version}
 
 #### Relevant Shell Configuration
 
 ```bash
-{}
+{shell_config}
 ```
 
 #### Starship Configuration
 
-```bash
-{}
+```toml
+{starship_config}
 ```
 
 #### Possible Solution
 <!--- Only if you have suggestions on a fix for the bug -->",
-                                            starship_version,
-                                            environment.shell_info.name,
-                                            environment.shell_info.version,
-                                            environment.os_type,
-                                            environment.os_version,
-                                            environment.shell_info.config,
-                                            environment.starship_config,
+                                            starship_version = starship_version,
+                                            shell_name = environment.shell_info.name,
+                                            shell_version = environment.shell_info.version,
+                                            os_name = environment.os_type,
+                                            os_version = environment.os_version,
+                                            shell_config = environment.shell_info.config,
+                                            starship_config = environment.starship_config,
     ));
 
     format!(
