@@ -3,7 +3,7 @@ use reqwest;
 use std::fs;
 use std::path::PathBuf;
 
-const GIT_IO_BASE_URL: &'static str = "https://git.io/";
+const GIT_IO_BASE_URL: &str = "https://git.io/";
 
 pub fn create() {
     let os_info = os_info::get();
@@ -35,9 +35,9 @@ pub fn create() {
     }
 }
 
-const UNKNOWN_SHELL: &'static str = "<unknown shell>";
-const UNKNOWN_VERSION: &'static str = "<unknown version>";
-const UNKNOWN_CONFIG: &'static str = "<unknown config>";
+const UNKNOWN_SHELL: &str = "<unknown shell>";
+const UNKNOWN_VERSION: &str = "<unknown version>";
+const UNKNOWN_CONFIG: &str = "<unknown config>";
 
 struct Environment {
     os_type: os_info::Type,
@@ -115,12 +115,12 @@ fn get_shell_info() -> ShellInfo {
 
     let version = exec_cmd(&shell, &["--version"])
         .map(|output| output.stdout.trim().to_string())
-        .unwrap_or(UNKNOWN_VERSION.to_string());
+        .unwrap_or_else(|| UNKNOWN_VERSION.to_string());
 
     let config = get_config_path(&shell)
         .and_then(|config_path| fs::read_to_string(config_path).ok())
         .map(|config| config.trim().to_string())
-        .unwrap_or(UNKNOWN_CONFIG.to_string());
+        .unwrap_or_else(|| UNKNOWN_CONFIG.to_string());
 
     ShellInfo {
         name: shell,
@@ -152,7 +152,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
 fn get_starship_config() -> String {
     dirs::home_dir()
         .and_then(|home_dir| fs::read_to_string(home_dir.join(".config/starship.toml")).ok())
-        .unwrap_or(UNKNOWN_CONFIG.to_string())
+        .unwrap_or_else(|| UNKNOWN_CONFIG.to_string())
 }
 
 #[cfg(test)]
