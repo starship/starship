@@ -50,12 +50,12 @@ fn make_github_issue_link(starship_version: &str, environment: Environment) -> S
     let title = urlencoding::encode("Bug Report:");
 
     let body = urlencoding::encode(&format!("<!--
-┌────────────────────────────────────────────────────────────────────────┐
-│                                                                        │
-│   This issue has been pre-populated with your system's configuration   │
-│               ♥ Thank you for submitting a bug report ♥                │
-│                                                                        │
-└────────────────────────────────────────────────────────────────────────┘
+─────────────────────────────────────────────
+
+                                This issue has been pre-populated with your system's configuration                                 
+                                                      ♥ Thank you for submitting a bug report ♥                                                     
+ 
+─────────────────────────────────────────────
 -->
     
 ## Bug Report
