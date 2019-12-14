@@ -22,7 +22,7 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 </div>
 
 <div class="center">
-  <video class="demo-video" autoplay muted loop>
+  <video class="demo-video" muted autoplay loop playsinline>
     <source src="/demo.webm" type="video/webm">
     <source src="/demo.mp4" type="video/mp4">
   </video>

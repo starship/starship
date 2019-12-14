@@ -1,27 +1,27 @@
 # FAQ
 
-## What is the configuration used in the demo GIF?
+## デモGIFで使用される構成は何ですか？
 
-- **Terminal Emulator**: [iTerm2](https://iterm2.com/)
-  - **Theme**: Minimal
-  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [Fira Code](https://github.com/tonsky/FiraCode)
-- **Shell**: [Fish Shell](https://fishshell.com/)
-  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
-  - **Prompt**: [Starship](https://starship.rs/)
+- **ターミナルエミュレータ**:[ iTerm2 ](https://iterm2.com/)
+  - **テーマ**: Minimal
+  - **カラースキーム**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+  - **フォント**: [Fira Code](https://github.com/tonsky/FiraCode)
+- **シェル**: [Fish Shell](https://fishshell.com/)
+  - **設定**: [matchaiのDotfiles](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
+  - **プロンプト**: [Starship](https://starship.rs/)
 
-## Do `prompt_order` and `<module>.disabled` do the same thing?
+## `prompt_order` と `<module>.disabled` は同じことをしますか？
 
-Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
+はい、両方ともプロンプトでモジュールを無効にするために使用できます。 モジュールを無効にするだけの場合は、これらの理由から` <module> .disabled `を無効にする方法をお勧めします。
 
-- Disabling modules is more explicit than omitting them from the prompt_order
-- Newly created modules will be added to the prompt as Starship is updated
+- モジュールを無効にすると、prompt_orderからモジュールを省略するよりも明確になります。
+- Starshipが更新されると、新しく作成されたモジュールがプロンプトに追加されます
 
-## The docs say Starship is cross-shell, but it doesn't support X shell. Why?
+## ドキュメントによると、Starshipはクロスシェル対応をしているようですが、Xシェルはサポートしていません。 なぜですか？
 
-The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
+Starshipの構築方法は、事実上すべてのシェルのサポートを追加できるはずです。 Starshipのバイナリはステートレスであり、シェルに依存しないため、シェルがプロンプトのカスタマイズとシェルの拡張をサポートしている限り、Starshipを使用できます。
 
-Here's a small example getting Starship working with bash:
+Starshipをbashで動作させる小さな例を次に示します。
 
 ```sh
 # Get the status code from the last command executed
@@ -34,12 +34,12 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=NUM_JOBS)"
 ```
 
-The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#Command-Duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
+Starshipに組み込まれた[Bashの実装](https://github.com/starship/starship/blob/master/src/init/starship.bash)は、[ Command Durationモジュール](https://starship.rs/config/#Command-Duration)などの高度な機能を可能にし、Starshipが事前にインストールされたBash構成と互換性があるようにするため、少し複雑です。
 
-For a list of all flags accepted by `starship prompt`, use the following command:
+`Starshipのプロンプト`で受け入れられるすべてのフラグのリストは、次のコマンドを取得できます。
 
 ```sh
 starship prompt --help
 ```
 
-The prompt will use as much context as is provided, but no flags are "required".
+プロンプトは提供されているコンテキストを使用しますが、フラグは「必須」ではありません。
