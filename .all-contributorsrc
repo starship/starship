@@ -598,6 +598,16 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "jonstodle",
+      "name": "Jon Grythe Stødle",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1719761?v=4",
+      "profile": "http://jonstodle.com",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
