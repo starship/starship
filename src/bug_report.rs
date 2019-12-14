@@ -29,7 +29,7 @@ pub fn create() {
             .unwrap_or(link);
 
         println!(
-            "I was unable to launch your browser. You'll have to copy this link instead:\n\n  {}",
+            "Click this link to create a GitHub issue populated with your configuration:\n\n  {}",
             link
         );
     }
@@ -49,7 +49,16 @@ struct Environment {
 fn make_github_issue_link(starship_version: &str, environment: Environment) -> String {
     let title = urlencoding::encode("Bug Report:");
 
-    let body = urlencoding::encode(&format!("## Bug Report
+    let body = urlencoding::encode(&format!("<!--
+┌────────────────────────────────────────────────────────────────────────┐
+│                                                                        │
+│   This issue has been pre-populated with your system's configuration   │
+│               ♥ Thank you for submitting a bug report ♥                │
+│                                                                        │
+└────────────────────────────────────────────────────────────────────────┘
+-->
+    
+## Bug Report
 
 #### Current Behavior
 <!-- A clear and concise description of the behavior. -->
@@ -62,7 +71,7 @@ fn make_github_issue_link(starship_version: &str, environment: Environment) -> S
 
 #### Environment
 - Starship version: {starship_version}
-- {shell_name}: {shell_version}
+- {shell_name} version: {shell_version}
 - Operating system: {os_name} {os_version}
 
 #### Relevant Shell Configuration
@@ -134,7 +143,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
         match shell {
             "bash" => Some(".bashrc"),
             "fish" => Some(".config/fish/config.fish"),
-            "ion" => None, // ion doesn't provide a config file (yet)
+            "ion" => Some("~/.config/ion/initrc"),
             "powershell" => {
                 if cfg!(windows) {
                     Some("Documents/PowerShell/Microsoft.PowerShell_profile.ps1")
