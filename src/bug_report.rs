@@ -199,6 +199,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(windows))]
     fn test_get_config_path() {
         env::set_var("HOME", "/test/home");
 
