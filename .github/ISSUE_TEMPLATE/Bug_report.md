@@ -8,6 +8,7 @@ assignees: ''
 ---
 
 ## Bug Report
+<!-- We recommend running `starship bug-report` in the shell you are experiencing unexpected behavior. The command will automatically pre-fill a report with your system information. -->
 
 #### Current Behavior
 <!-- A clear and concise description of the behavior. -->
