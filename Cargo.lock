@@ -1430,8 +1430,8 @@ dependencies = [
  "tempfile 3.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "toml 0.5.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "unicode-segmentation 1.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "urlencoding 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "unicode-width 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "urlencoding 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "yaml-rust 0.4.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
