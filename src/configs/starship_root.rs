@@ -4,6 +4,7 @@ use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct StarshipRootConfig<'a> {
+    pub clear_before_printing: bool,
     pub add_newline: bool,
     pub prompt_order: Vec<&'a str>,
     pub scan_timeout: u64,
@@ -12,6 +13,7 @@ pub struct StarshipRootConfig<'a> {
 impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
     fn new() -> Self {
         StarshipRootConfig {
+            clear_before_printing: false,
             add_newline: true,
             // List of default prompt order
             // NOTE: If this const value is changed then Default prompt order subheading inside
