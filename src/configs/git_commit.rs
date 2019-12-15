@@ -10,6 +10,7 @@ pub struct GitCommitConfig<'a> {
     pub prefix: &'a str,
     pub suffix: &'a str,
     pub style: Style,
+    pub only_detached: bool,
     pub disabled: bool,
 }
 
@@ -22,6 +23,7 @@ impl<'a> RootModuleConfig<'a> for GitCommitConfig<'a> {
             prefix: "(",
             suffix: ") ",
             style: Color::Green.bold(),
+            only_detached: false,
             disabled: true,
         }
     }

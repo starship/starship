@@ -27,6 +27,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo_root = repo.root.as_ref()?;
     let git_repo = Repository::open(repo_root).ok()?;
 
+    let is_detached = git_repo.head_detached().ok()?;
+    if config.only_detached && !is_detached {
+        return None;
+    };
+
     let git_head = git_repo.head().ok()?;
     let head_commit = git_head.peel_to_commit().ok()?;
     let commit_oid = head_commit.id();
