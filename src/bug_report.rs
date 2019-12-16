@@ -159,7 +159,7 @@ fn get_terminal_info() -> TerminalInfo {
 
     TerminalInfo {
         name: terminal,
-        version: version,
+        version,
     }
 }
 
