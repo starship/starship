@@ -46,7 +46,7 @@ byte-unit = "3.0.3"
 starship_module_config_derive = { version = "0.1.0", path = "starship_module_config_derive" }
 yaml-rust = "0.4"
 nom = "5.0.1"
-os_info = "1.1.3"
+os_info = "1.2.0"
 urlencoding = "1.0.0"
 open = "1.3.2"
 reqwest = "0.9.24"
