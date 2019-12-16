@@ -7,8 +7,18 @@ assignees: ''
 
 ---
 
+<!--
+─────────────────────────────────────────────
+                                ⚠️ IMPORTANT: Please run the following command to create an issue:
+                                                                         
+                                                                            starship bug-report
+
+                                      An issue will be pre-populated with your system's configuration, 
+                                                          making the process a whole lot quicker 😊
+─────────────────────────────────────────────
+-->
+
 ## Bug Report
-<!-- We recommend running `starship bug-report` in the shell you are experiencing unexpected behavior. The command will automatically pre-fill a report with your system information. -->
 
 #### Current Behavior
 <!-- A clear and concise description of the behavior. -->
@@ -19,13 +29,16 @@ assignees: ''
 #### Additional context/Screenshots
 <!-- Add any other context about the problem here. If applicable, add screenshots to help explain. -->
 
+#### Possible Solution
+<!--- Only if you have suggestions on a fix for the bug -->
+
 #### Environment
 - Starship version: [the output of `starship --version`]
 - Shell type: [fish, zsh]
 - Shell version: [the output of `fish --version` or `zsh --version`]
 - Shell plugin manager: [e.g. oh-my-fish, oh-my-zsh, fisher, antigen]
 - Terminal emulator: [e.g. iTerm, Hyper, Terminator]
-- Operating system: [e.g. OSX 10.13.4, Windows 10]
+- Operating system: [e.g. macOS 10.13.4, Windows 10]
 
 #### Relevant Shell Configuration
 <!-- 
@@ -39,11 +52,8 @@ assignees: ''
 ```
 
 #### Starship Configuration
-<!-- Can be found in $XDG_CONFIG_HOME/starship.toml or  ~/.config/starship.toml -->
+<!-- Can be found in  ~/.config/starship.toml -->
 
 ```bash
 # Your configuration here
 ```
-
-#### Possible Solution
-<!--- Only if you have suggestions on a fix for the bug -->

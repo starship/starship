@@ -47,14 +47,12 @@ struct Environment {
 }
 
 fn make_github_issue_link(starship_version: &str, environment: Environment) -> String {
-    let title = urlencoding::encode("Bug Report:");
+    let template_filename = urlencoding::encode("Bug_report.md");
 
     let body = urlencoding::encode(&format!("<!--
 ─────────────────────────────────────────────
-
-                                This issue has been pre-populated with your system's configuration                                 
-                                                      ♥ Thank you for submitting a bug report ♥                                                     
- 
+                                This issue has been pre-populated with your system's configuration
+                                                      ♥ Thank you for submitting a bug report ♥
 ─────────────────────────────────────────────
 -->
     
@@ -68,6 +66,9 @@ fn make_github_issue_link(starship_version: &str, environment: Environment) -> S
 
 #### Additional context/Screenshots
 <!-- Add any other context about the problem here. If applicable, add screenshots to help explain. -->
+
+#### Possible Solution
+<!--- Only if you have suggestions on a fix for the bug -->
 
 #### Environment
 - Starship version: {starship_version}
@@ -84,22 +85,19 @@ fn make_github_issue_link(starship_version: &str, environment: Environment) -> S
 
 ```toml
 {starship_config}
-```
-
-#### Possible Solution
-<!--- Only if you have suggestions on a fix for the bug -->",
-                                            starship_version = starship_version,
-                                            shell_name = environment.shell_info.name,
-                                            shell_version = environment.shell_info.version,
-                                            os_name = environment.os_type,
-                                            os_version = environment.os_version,
-                                            shell_config = environment.shell_info.config,
-                                            starship_config = environment.starship_config,
+```",
+        starship_version = starship_version,
+        shell_name = environment.shell_info.name,
+        shell_version = environment.shell_info.version,
+        os_name = environment.os_type,
+        os_version = environment.os_version,
+        shell_config = environment.shell_info.config,
+        starship_config = environment.starship_config,
     ));
 
     format!(
-        "https://github.com/starship/starship/issues/new?title={}&body={}",
-        title, body
+        "https://github.com/starship/starship/issues/new?template={}&body={}",
+        template_filename, body
     )
 }
 
