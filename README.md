@@ -154,6 +154,12 @@ The prompt shows information you need while you're working, while staying sleek 
    scoop install starship
    ```
 
+   ##### Fedora
+
+   ```sh
+   sudo dnf install starship
+   ```
+   
 1. Add the init script to your shell's config file:
 
    #### Bash
