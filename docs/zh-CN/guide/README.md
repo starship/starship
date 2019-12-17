@@ -181,12 +181,13 @@
    ```
 
 
-   #### Powershell
+   #### PowerShell
 
    添加 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (或者`~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix)到：
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
+
    Invoke-Expression (&starship init powershell)
    ```
 
@@ -309,6 +310,7 @@
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 此项目遵循 [all-contributors](https://github.com/all-contributors/all-contributors) 标准。 任何形式的贡献都将受到欢迎！
