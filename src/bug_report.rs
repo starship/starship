@@ -207,7 +207,7 @@ mod tests {
     use std::env;
 
     #[test]
-    fn test_make_github_issue_link() {
+    fn test_format_env_info() {
         let starship_version = "0.1.2";
         let environment = Environment {
             os_type: os_info::Type::Linux,
@@ -224,15 +224,15 @@ mod tests {
             starship_config: "No Starship config".to_string(),
         };
 
-        let link = format_env_info(starship_version, environment);
+        let env_info = format_env_info(starship_version, environment);
 
-        assert!(link.contains(starship_version));
-        assert!(link.contains("Linux"));
-        assert!(link.contains("1.2.3"));
-        assert!(link.contains("test_shell"));
-        assert!(link.contains("2.3.4"));
-        assert!(link.contains("No%20config"));
-        assert!(link.contains("No%20Starship%20config"));
+        assert!(env_info.contains(starship_version));
+        assert!(env_info.contains("Linux"));
+        assert!(env_info.contains("1.2.3"));
+        assert!(env_info.contains("test_shell"));
+        assert!(env_info.contains("2.3.4"));
+        assert!(env_info.contains("No config"));
+        assert!(env_info.contains("No Starship config"));
     }
 
     #[test]
