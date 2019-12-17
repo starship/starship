@@ -19,10 +19,9 @@ pub fn create() {
 
     let link = get_github_issue_link();
     let env_info = format_env_info(crate_version!(), environment);
-    let copy_success = clipboard::ClipboardProvider::new()
+    let copy_failed = clipboard::ClipboardProvider::new()
         .and_then(|mut ctx: clipboard::ClipboardContext| ctx.set_contents(env_info.to_string()))
-        .map(|_| true)
-        .unwrap_or(false);
+        .is_err();
 
     if open::that(&link).is_ok() {
         print!("Take a look at your browser. A GitHub issue has been created and your environment info has been copied to your clipboard.")
@@ -41,7 +40,7 @@ pub fn create() {
         );
     }
 
-    if !copy_success {
+    if copy_failed {
         println!(
             "\n\nYour clipboard was unavailable, so here's the summary of your environment:\n\n{}",
             env_info
