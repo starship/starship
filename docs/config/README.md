@@ -450,7 +450,7 @@ truncation_symbol = ""
 
 ## Git Commit
 
-The `git_commit` module shows the active branch of the repo in your current directory.
+The `git_commit` module shows the current commit hash of the repo in your current directory.
 
 ::: tip
 
@@ -859,6 +859,8 @@ and `poetry` packages.
 - **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present
   in the current directory
 - **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present
+  in the current directory
+- **composer** – The `composer` package version is extracted from the `composer.json` present
   in the current directory
 
 > ⚠️ The version being shown is that of the package whose source code is in your

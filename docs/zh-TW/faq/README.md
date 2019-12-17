@@ -39,7 +39,7 @@ The [Bash implementation](https://github.com/starship/starship/blob/master/src/i
 For a list of all flags accepted by `starship prompt`, use the following command:
 
 ```sh
-starship prompt --version
+starship prompt --help
 ```
 
 The prompt will use as much context as is provided, but no flags are "required".
