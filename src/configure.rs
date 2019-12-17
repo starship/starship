@@ -12,9 +12,6 @@ pub fn edit_configuration(args: ArgMatches) {
     let editor = get_editor(context);
     let config_path = get_config_path();
 
-    println!("using {} as editor", editor);
-    println!("path: {}", config_path);
-
     Command::new(editor)
         .arg(config_path)
         .status()
