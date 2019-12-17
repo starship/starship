@@ -19,24 +19,24 @@ Oui, ils peuvent tous deux être utilisés pour désactiver les modules dans l'i
 
 ## La doc dit que Starship est cross-shell, mais il ne supporte pas X shell. Pourquoi ?
 
-Étant donné la façon dont Starship est construit, il devrait être possible d'ajouter le support pour pratiquement n'importe quel shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
+Étant donné la façon dont Starship est construit, il devrait être possible d'ajouter le support pour pratiquement n'importe quel shell. Le binaire de Starship est sans état et agnostique, donc tant que votre shell supporte la personnalisation rapide et l'expansion du shell, Starship peut être utilisé.
 
-Here's a small example getting Starship working with bash:
+Voici un petit exemple pour que Starship fonctionne avec bash :
 
 ```sh
-# Get the status code from the last command executed
+# Récupère le code d'état de la dernière commande exécutée
 STATUS=$?
 
-# Get the number of jobs running.
+# Récupère le nombre de tâches en cours d'exécution.
 NUM_JOBS=$(jobs -p | wc -l)
 
 # Set the prompt to the output of `starship prompt`
 PS1="$(starship prompt --status=$STATUS --jobs=NUM_JOBS)"
 ```
 
-The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#Command-Duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
+[L'implémentation Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) intégrée dans Starship est légèrement plus complexe pour permettre des fonctionnalités avancées comme le [module Durée de commande](https://starship.rs/config/#Command-Duration) et pour s'assurer que Starship est compatible avec les configurations Bash préinstallées.
 
-For a list of all flags accepted by `starship prompt`, use the following command:
+Pour une liste de tous les flags acceptés par `starship prompt`, utilisez la commande suivante :
 
 ```sh
 starship prompt --help
