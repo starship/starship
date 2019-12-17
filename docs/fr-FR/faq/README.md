@@ -30,7 +30,7 @@ STATUS=$?
 # Récupère le nombre de tâches en cours d'exécution.
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Set the prompt to the output of `starship prompt`
+# Définit l'invite de commande `starship prompt`
 PS1="$(starship prompt --status=$STATUS --jobs=NUM_JOBS)"
 ```
 
@@ -42,4 +42,4 @@ Pour une liste de tous les flags acceptés par `starship prompt`, utilisez la co
 starship prompt --help
 ```
 
-The prompt will use as much context as is provided, but no flags are "required".
+L'invite de commande utilisera toutes les données contextuelles fournies, mais aucun indicateur n'est "requis".
