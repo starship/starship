@@ -181,12 +181,13 @@
    ```
 
 
-   #### Powershell
+   #### PowerShell
 
    Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
+
    Invoke-Expression (&starship init powershell)
    ```
 
@@ -309,6 +310,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
