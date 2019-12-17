@@ -41,7 +41,7 @@ pub fn create() {
         );
     }
 
-    if copy_success {
+    if !copy_success {
         println!(
             "\n\nYour clipboard was unavailable, so here's the summary of your environment:\n\n{}",
             env_info
