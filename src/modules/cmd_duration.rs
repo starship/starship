@@ -36,7 +36,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     module.set_style(module_color);
-    let cmd_duration_stacked = &format!("{}{}", config.prefix, render_time(elapsed));
+    let cmd_duration_stacked = &format!(
+        "{}{}",
+        config.prefix,
+        render_time(elapsed, config.show_milliseconds)
+    );
     module.create_segment("cmd_duration", &SegmentConfig::new(&cmd_duration_stacked));
     module.get_prefix().set_value("");
 
@@ -44,21 +48,24 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 // Render the time into a nice human-readable string
-fn render_time(raw_millis: u128) -> String {
+fn render_time(raw_millis: u128, show_millis: bool) -> String {
     // Calculate a simple breakdown into days/hours/minutes/seconds/milliseconds
     let (millis, raw_seconds) = (raw_millis % 1000, raw_millis / 1000);
     let (seconds, raw_minutes) = (raw_seconds % 60, raw_seconds / 60);
     let (minutes, raw_hours) = (raw_minutes % 60, raw_minutes / 60);
     let (hours, days) = (raw_hours % 24, raw_hours / 24);
 
-    let components = [days, hours, minutes, seconds, millis];
-    let suffixes = ["d", "h", "m", "s", "ms"];
+    let components = [days, hours, minutes, seconds];
+    let suffixes = ["d", "h", "m", "s"];
 
-    let rendered_components: Vec<String> = components
+    let mut rendered_components: Vec<String> = components
         .iter()
         .zip(&suffixes)
         .map(render_time_component)
         .collect();
+    if show_millis || raw_millis < 1000 {
+        rendered_components.push(render_time_component((&millis, &"ms")));
+    }
     rendered_components.join("")
 }
 
