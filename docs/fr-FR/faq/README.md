@@ -4,22 +4,22 @@
 
 - **Émulateur de terminal**: [iTerm2](https://iterm2.com/)
   - **Thème** : Minimal
-  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+  - **Palette de couleurs**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
   - **Police d'écriture**: [Fira Code](https://github.com/tonsky/FiraCode)
 - **Shell** : [Fish Shell](https://fishshell.com/)
   - **Configuration**: [Dotfiles de matchai](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
   - **Invite de commande**: [Starship](https://starship.rs/)
 
-## Do `prompt_order` and `<module>.disabled` do the same thing?
+## Est-ce que `prompt_order` et `<module>.disabled` font la même chose ?
 
-Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
+Oui, ils peuvent tous deux être utilisés pour désactiver les modules dans l'invite de commande. Si tout ce que vous prévoyez de faire est de désactiver les modules, `<module>.disabled` est le meilleur moyen de le faire pour ces raisons :
 
-- Disabling modules is more explicit than omitting them from the prompt_order
-- Newly created modules will be added to the prompt as Starship is updated
+- Désactiver les modules est plus explicite que de les omettre dans le prompt_order
+- Les modules nouvellement créés seront ajoutés à l'invite de commande au fur et à mesure que Starship sera mis à jour
 
-## The docs say Starship is cross-shell, but it doesn't support X shell. Why?
+## La doc dit que Starship est cross-shell, mais il ne supporte pas X shell. Pourquoi ?
 
-The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
+Étant donné la façon dont Starship est construit, il devrait être possible d'ajouter le support pour pratiquement n'importe quel shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
 
 Here's a small example getting Starship working with bash:
 
