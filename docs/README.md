@@ -34,7 +34,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Install Latest Version
 
-   ##### With Shell:
+   With Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
@@ -42,13 +42,13 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Install via Package Manager
 
-   ##### With [Homebrew](https://brew.sh/):
+   With [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
-   ##### With [Scoop](https://scoop.sh):
+    With [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
