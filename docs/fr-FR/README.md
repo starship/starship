@@ -32,43 +32,28 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 
 1. Installer le binaire **starship** :
 
-   **[Télécharger les archives des binaires précompilés](https://github.com/starship/starship/releases)** si vous n'utilisez pas une des plateformes citées ci-dessous.
 
+   #### Install Latest Version
 
-   #### Homebrew
+   With Shell:
 
    ```sh
-   $ brew install starship
+   curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Rust (v1.38 ou plus)
+   #### Install via Package Manager
+
+   With [Homebrew](https://brew.sh/):
 
    ```sh
-   $ cargo install starship
+   brew install starship
    ```
 
+    With [Scoop](https://scoop.sh):
 
-   #### Arch Linux (AUR)
-
-   Starship is disponible sur AUR sous le nom `starship`. Installer le avec `yay` ou votre client AUR favori.
-
-   ```sh
-   $ yay -S starship
-   ```
-
-
-   #### Nix (non stable)
-
-   ```sh
-   $ nix-env --install starship
-   ```
-
-
-   #### Termux
-
-   ```sh
-   $ pkg install starship
+   ```powershell
+   scoop install starship
    ```
 
 1. Add the init script to your shell's config file:
@@ -113,5 +98,17 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
+
    Invoke-Expression (&starship init powershell)
+   ```
+
+
+   #### Ion
+
+   Add the following to the end of `~/.config/ion/initrc`:
+
+   ```sh
+   # ~/.config/ion/initrc
+
+   eval $(starship init ion)
    ```
