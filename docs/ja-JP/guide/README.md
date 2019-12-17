@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://github.com/starship/starship/workflows/Main%20workflow/badge.svg"
+      src="https://github.com/starship/starship/workflows/Main%20workflow/badge.svg?branch=master&event=push"
       alt="GitHub Actions workflow status" /></a>
   <a href="https://crates.io/crates/starship"
     ><img src="https://img.shields.io/crates/v/starship" alt="Crates.io version" /></a>
