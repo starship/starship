@@ -12,6 +12,7 @@ pub fn create() {
         os_type: os_info.os_type(),
         os_version: os_info.version().to_owned(),
         shell_info: get_shell_info(),
+        terminal_info: get_terminal_info(),
         starship_config: get_starship_config(),
     };
 
@@ -36,6 +37,7 @@ pub fn create() {
 }
 
 const UNKNOWN_SHELL: &str = "<unknown shell>";
+const UNKNOWN_TERMINAL: &str = "<unknown terminal>";
 const UNKNOWN_VERSION: &str = "<unknown version>";
 const UNKNOWN_CONFIG: &str = "<unknown config>";
 
@@ -43,6 +45,7 @@ struct Environment {
     os_type: os_info::Type,
     os_version: os_info::Version,
     shell_info: ShellInfo,
+    terminal_info: TerminalInfo,
     starship_config: String,
 }
 
@@ -74,6 +77,7 @@ fn make_github_issue_link(starship_version: &str, environment: Environment) -> S
 - Starship version: {starship_version}
 - {shell_name} version: {shell_version}
 - Operating system: {os_name} {os_version}
+- Terminal emulator: {terminal_name} {terminal_version}
 
 #### Relevant Shell Configuration
 
@@ -89,6 +93,8 @@ fn make_github_issue_link(starship_version: &str, environment: Environment) -> S
         starship_version = starship_version,
         shell_name = environment.shell_info.name,
         shell_version = environment.shell_info.version,
+        terminal_name = environment.terminal_info.name,
+        terminal_version = environment.terminal_info.version,
         os_name = environment.os_type,
         os_version = environment.os_version,
         shell_config = environment.shell_info.config,
@@ -136,6 +142,27 @@ fn get_shell_info() -> ShellInfo {
     }
 }
 
+#[derive(Debug)]
+struct TerminalInfo {
+    name: String,
+    version: String,
+}
+
+fn get_terminal_info() -> TerminalInfo {
+    let terminal = std::env::var("TERM_PROGRAM")
+        .or_else(|_| std::env::var("LC_TERMINAL"))
+        .unwrap_or_else(|_| UNKNOWN_TERMINAL.to_string());
+
+    let version = std::env::var("TERM_PROGRAM_VERSION")
+        .or_else(|_| std::env::var("LC_TERMINAL_VERSION"))
+        .unwrap_or_else(|_| UNKNOWN_VERSION.to_string());
+
+    TerminalInfo {
+        name: terminal,
+        version,
+    }
+}
+
 fn get_config_path(shell: &str) -> Option<PathBuf> {
     dirs::home_dir().and_then(|home_dir| {
         match shell {
@@ -178,6 +205,10 @@ mod tests {
                 name: "test_shell".to_string(),
                 version: "2.3.4".to_string(),
                 config: "No config".to_string(),
+            },
+            terminal_info: TerminalInfo {
+                name: "test_terminal".to_string(),
+                version: "5.6.7".to_string(),
             },
             starship_config: "No Starship config".to_string(),
         };
