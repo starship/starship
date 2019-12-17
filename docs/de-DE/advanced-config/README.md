@@ -61,7 +61,7 @@ Um die Funktion dauerhaft zu machen, schreiben Sie diese in die Shell-Konfigurat
 
 ## Style-Strings
 
-Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Jedes Wort kann eines der folgenden sein:
+Style-String sind Wortlisten, getrennt durch Leerzeichen. Die Wörter haben keine Groß- und Kleinschreibung (z.B. `bold` und `BoLd` werden als dieselbe Zeichenkette betrachtet). Jedes Wort kann eines der folgenden sein:
 
   - `bold`
   - `underline`
@@ -71,14 +71,14 @@ Style strings are a list of words, separated by whitespace. The words are not ca
   - `<color>`
   - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing , though this may change in the future. Die Reihenfolge der Wörter in der Zeichenkette spielt keine Rolle.
+wobei `<color>` eine Farbspezifikation ist (siehe unten). `fg:<color>` und `<color>` tun derzeit dasselbe , das kann sich in Zukunft aber ändern. Die Reihenfolge der Wörter in der Liste spielt keine Rolle.
 
-The `none` token overrides all other tokens in a string, so that e.g. `fg:red none fg:blue` will still create a string with no styling. It may become an error to use `none` in conjunction with other tokens in the future.
+`None` überschreibt alle anderen Tokens in einem String, so dass z.B. der string `fg:red none fg:blue` kein Styling anzeigen wird. In der Zukunft könnte die Unterstützung von `none` in Verbindung mit anderen Tokens fallen gelassen werden.
 
-A color specifier can be one of the following:
+Eine Farbspezifikation kann wie folgt aussehen:
 
- - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
- - Eine `#` gefolgt von einer sechsstelligen Hexadezimalnummer. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
- - Eine Zahl zwischen 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+ - Einer der Standardfarben der Konsole: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Optional kann ein `bright-` vorangestellt werden um die helle Version zu erhalten (z.B. `bright-white`).
+ - Eine `#` gefolgt von einer sechsstelligen Hexadezimalnummer. Dies ergibt einen [RGB hex Farbcode](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+ - Eine Zahl zwischen 0-255. Dies ergibt einen [8-bit ANSI-Farbcode](https://i.stack.imgur.com/KTSQa.png).
 
-If multiple colors are specified for foreground/background, the last one in the string will take priority.
+Wenn mehrere Farben für Vordergrund oder Hintergrund angegeben werden, hat die letzte Farbe der Zeichenkette Priorität.

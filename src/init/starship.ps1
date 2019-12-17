@@ -10,9 +10,9 @@ function global:prompt {
     if ($lastCmd = Get-History -Count 1) {
         $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalMilliseconds)
         # & ensures the path is interpreted as something to execute
-        $out = @(&::STARSHIP:: prompt --status=$lastexitcode --jobs=$jobs --cmd-duration=$duration)
+        $out = @(&::STARSHIP:: prompt "--path=$PWD" --status=$lastexitcode --jobs=$jobs --cmd-duration=$duration)
     } else {
-        $out = @(&::STARSHIP:: prompt --status=$lastexitcode --jobs=$jobs)
+        $out = @(&::STARSHIP:: prompt "--path=$PWD" --status=$lastexitcode --jobs=$jobs)
     }
 
     # Convert stdout (array of lines) to expected return type string

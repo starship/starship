@@ -89,16 +89,20 @@ prompt_order = [
     "kubernetes",
     "directory",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
+    "hg_branch",
     "package",
     "dotnet",
     "golang",
     "java",
     "nodejs",
+    "php",
     "python",
     "ruby",
     "rust",
+    "terraform",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -121,7 +125,7 @@ prompt_order = [
 
 | Переменная        | По умолчанию    | Описание                                                         |
 | ----------------- | --------------- | ---------------------------------------------------------------- |
-| `symbol`          | `"☁️  "`        | Символ перед отображением текущего профиля AWS.                  |
+| `symbol`          | `"☁️ "`         | Символ перед отображением текущего профиля AWS.                  |
 | `style`           | `"bold yellow"` | Стиль модуля.                                                    |
 | `disabled`        | `false`         | Отключение модуля `AWS`.                                         |
 | `displayed_items` | `all`           | Выбор элементов. Возможные значения [`all`, `profile`, `region`] |
@@ -270,15 +274,22 @@ prefix = "underwent "
 
 ## Конда
 
-Модуль `conda` показывает текущее окружение conda, если `$CONDA_DEFAULT_ENV` присвоено значение. Примечание: Это не подавляет модификатор командной строки самой конды, вы можете запустить `conda config --set changeps1 False`
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+
+::: tip
+
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+
+:::
 
 ### Опции
 
-| Переменная | По умолчанию   | Описание                          |
-| ---------- | -------------- | --------------------------------- |
-| `symbol`   | `"C "`         | Символ перед названием окружения. |
-| `style`    | `"bold green"` | Стиль модуля.                     |
-| `disabled` | `false`        | Отключает модуль `conda`.         |
+| Переменная          | По умолчанию   | Описание                                                                                                                                                                                                    |
+| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
+| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
+| `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
 
 ### Пример
 
@@ -291,11 +302,11 @@ style = "dimmed green"
 
 ## Каталог
 
-Модуль `directory` показывает путь к вашей текущей директории, усеченной до трех родительских папок. Ваш каталог также будет отсечен до корня git репозитория, в котором вы находитесь.
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
-При использовании стиля оболочки fish, вместо скрытия усеченного каталога, вы увидите укороченное имя каталога, зависимое от числа символов вы установите для этой опции.
+When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-Например, возьмем `~/Dev/Nix/nixpkgs/pkgs` где `nixpkgs` является корневым репозиторием, и в опции установлено `1`. Вы увидите `~/D/N/nixpkgs/pkgs`, а до этого было бы `nixpkgs/pkgs`.
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
 ### Опции
 
@@ -303,11 +314,12 @@ style = "dimmed green"
 | ------------------- | ------------- | ---------------------------------------------------------------------------- |
 | `truncation_length` | `3`           | Количество родительских папок, к которым должен быть усечен текущий каталог. |
 | `truncate_to_repo`  | `true`        | Следует или нет обрезать до корня репозитория git, в котором вы находитесь.  |
-| `style`             | `"bold cyan"` | Стиль модуля.                                                                |
-| `disabled`          | `false`       | Отключает модуль `directory`.                                                |
+| `prefix`            | `"in "`       | Prefix to display immediately before the directory.                          |
+| `style`             | `"bold cyan"` | The style for the module.                                                    |
+| `disabled`          | `false`       | Disables the `directory` module.                                             |
 
 <details>
-<summary>Этот модуль имеет несколько расширенных опций конфигурации, которые контролируют отображение каталога.</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | Переменная                  | По умолчанию | Описание                                                                                 |
 | --------------------------- | ------------ | ---------------------------------------------------------------------------------------- |
@@ -327,19 +339,19 @@ truncation_length = 8
 
 ## Dotnet
 
-Модуль `dotnet` показывает соответствующую версию .NET Core SDK для текущего каталога. Если SDK был закреплен в текущей директории, будет показана закрепленная версия. В противном случае модуль отображает последнюю установленную версию SDK.
+The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
 
-Этот модуль будет показан только, когда один из следующих файлов присутствует в текущей директории: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. Также, для правильного использования, нужны инструменты командной строки .NET Core.
+This module will only be shown in your prompt when one of the following files are present in the current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll also need the .NET Core command-line tools installed in order to use it correctly.
 
-Внутренне этот модуль использует свой собственный механизм определения версий. Обычно он в два раза быстрее, чем `dotnet --version`, но он может показывать неправильную версию, если ваш .NET проект имеет необычный формат каталога. Если точность важнее, чем скорость, вы можете отключить механизм опцией `heuristic = false` в настройках модуля.
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
 ### Опции
 
 | Переменная  | По умолчанию  | Описание                                                          |
 | ----------- | ------------- | ----------------------------------------------------------------- |
 | `symbol`    | `"•NET "`     | Символ перед отображением текущей версии dotnet.                  |
-| `style`     | `"bold blue"` | Стиль модуля.                                                     |
 | `heuristic` | `true`        | Использовать быстрое определение версии, для сохранения скорости. |
+| `style`     | `"bold blue"` | Стиль модуля.                                                     |
 | `disabled`  | `false`       | Отключает модуль `dotnet`.                                        |
 
 ### Пример
@@ -369,7 +381,7 @@ The `env_var` module displays the current value of a selected environment variab
 | `по умолчанию` |                  | The default value to be displayed when the selected variable is not defined. |
 | `prefix`       | `""`             | Prefix to display immediately before the variable value.                     |
 | `suffix`       | `""`             | Suffix to display immediately after the variable value.                      |
-| `style`        | `"dimmed black"` | The style for the module.                                                    |
+| `style`        | `"dimmed black"` | Стиль модуля.                                                                |
 | `disabled`     | `false`          | Disables the `env_var` module.                                               |
 
 ### Пример
@@ -393,7 +405,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
 | `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
-| `style`             | `"bold purple"` | The style for the module.                                                             |
+| `style`             | `"bold purple"` | Стиль модуля.                                                                         |
 | `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
 
 ### Пример
@@ -405,6 +417,36 @@ The `git_branch` module shows the active branch of the repo in your current dire
 symbol = "🌱 "
 truncation_length = 4
 truncation_symbol = ""
+```
+
+## Git Commit
+
+The `git_commit` module shows the active branch of the repo in your current directory.
+
+::: tip
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Опции
+
+| Переменная           | По умолчанию   | Описание                                         |
+| -------------------- | -------------- | ------------------------------------------------ |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
+| `prefix`             | `"("`          | Prefix to display immediately before git commit. |
+| `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
+| `style`              | `"bold green"` | Стиль модуля.                                    |
+| `disabled`           | `true`         | Disables the `git_commit` module.                |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+disabled = false
+commit_hash_length = 4
 ```
 
 ## Git State
@@ -423,7 +465,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
 | `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
 | `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
-| `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
+| `style`            | `"bold yellow"`    | Стиль модуля.                                                                                                    |
 | `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
 ### Пример
@@ -463,7 +505,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
 | `prefix`           | `[`                        | Prefix to display immediately before git status.        |
 | `suffix`           | `]`                        | Suffix to display immediately after git status.         |
-| `style`            | `"bold red"`               | The style for the module.                               |
+| `style`            | `"bold red"`               | Стиль модуля.                                           |
 | `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
 #### Git Status Counts
@@ -472,7 +514,6 @@ The `git_status` module shows symbols representing the state of the repo in your
 | ---------- | ------------ | ------------------------------------------------------ |
 | `enabled`  | `false`      | Show the number of files                               |
 | `style`    |              | Optionally style the count differently than the module |
-
 
 ### Пример
 
@@ -512,7 +553,7 @@ The `golang` module shows the currently installed version of Golang. The module 
 | Переменная | По умолчанию  | Описание                                                 |
 | ---------- | ------------- | -------------------------------------------------------- |
 | `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
-| `style`    | `"bold cyan"` | The style for the module.                                |
+| `style`    | `"bold cyan"` | Стиль модуля.                                            |
 | `disabled` | `false`       | Disables the `golang` module.                            |
 
 ### Пример
@@ -522,6 +563,31 @@ The `golang` module shows the currently installed version of Golang. The module 
 
 [golang]
 symbol = "🏎💨 "
+```
+
+## Mercurial Branch
+
+The `hg_branch` module shows the active branch of the repo in your current directory.
+
+### Опции
+
+| Переменная          | По умолчанию    | Описание                                                                                     |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
+| `style`             | `"bold purple"` | Стиль модуля.                                                                                |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[hg_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
 ```
 
 ## Hostname
@@ -536,7 +602,7 @@ The `hostname` module shows the system hostname.
 | `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
 | `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
 | `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
+| `style`    | `"bold dimmed green"` | Стиль модуля.                                                                                                                        |
 | `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### Пример
@@ -562,7 +628,7 @@ The `jobs` module shows the current number of jobs running. The module will be s
 | ----------- | ------------- | ----------------------------------------------------- |
 | `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
 | `threshold` | `1`           | Show number of jobs if exceeded.                      |
-| `style`     | `"bold blue"` | The style for the module.                             |
+| `style`     | `"bold blue"` | Стиль модуля.                                         |
 | `disabled`  | `false`       | Disables the `jobs` module.                           |
 
 ### Пример
@@ -590,7 +656,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | Переменная | По умолчанию  | Описание                                            |
 | ---------- | ------------- | --------------------------------------------------- |
 | `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
-| `style`    | `"bold blue"` | The style for the module.                           |
+| `style`    | `"bold blue"` | Стиль модуля.                                       |
 | `disabled` | `true`        | Disables the `kubernetes` module                    |
 
 ### Пример
@@ -634,7 +700,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 | `use_name`   | `false`      | Display the name of the nix-shell. |
 | `impure_msg` | `impure`     | Customize the "impure" msg.        |
 | `pure_msg`   | `pure`       | Customize the "pure" msg.          |
-| `style`      | `"bold red"` | The style for the module.          |
+| `style`      | `"bold red"` | Стиль модуля.                      |
 | `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
 ### Пример
@@ -670,7 +736,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
 | `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | The style for the module.                                     |
+| `style`           | `"bold dimmed white"` | Стиль модуля.                                                 |
 | `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
 ### Пример
@@ -699,7 +765,7 @@ The `java` module shows the currently installed version of Java. The module will
 | Переменная | По умолчанию   | Описание                                               |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | The style for the module.                              |
+| `style`    | `"dimmed red"` | Стиль модуля.                                          |
 | `disabled` | `false`        | Disables the `java` module.                            |
 
 ### Пример
@@ -724,7 +790,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 | Переменная | По умолчанию   | Описание                                                 |
 | ---------- | -------------- | -------------------------------------------------------- |
 | `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | The style for the module.                                |
+| `style`    | `"bold green"` | Стиль модуля.                                            |
 | `disabled` | `false`        | Disables the `nodejs` module.                            |
 
 ### Пример
@@ -743,6 +809,7 @@ The `package` module is shown when the current directory is the repository for a
 - **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
 - **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
 - **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
 
@@ -751,7 +818,7 @@ The `package` module is shown when the current directory is the repository for a
 | Переменная | По умолчанию | Описание                                                   |
 | ---------- | ------------ | ---------------------------------------------------------- |
 | `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | The style for the module.                                  |
+| `style`    | `"bold red"` | Стиль модуля.                                              |
 | `disabled` | `false`      | Disables the `package` module.                             |
 
 ### Пример
@@ -761,6 +828,30 @@ The `package` module is shown when the current directory is the repository for a
 
 [package]
 symbol = "🎁 "
+```
+
+## PHP
+
+The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `composer.json` file
+- The current directory contains a `.php` file
+
+### Опции
+
+| Переменная | По умолчанию | Описание                                              |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold red"` | Стиль модуля.                                         |
+| `disabled` | `false`      | Disables the `php` module.                            |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[php]
+symbol = "🔹 "
 ```
 
 ## Python
@@ -788,7 +879,7 @@ The module will be shown if any of the following conditions are met:
 | `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
 | `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
 | `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
-| `style`              | `"bold yellow"` | The style for the module.                                                   |
+| `style`              | `"bold yellow"` | Стиль модуля.                                                               |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
 
 ### Пример
@@ -814,7 +905,7 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 | Переменная | По умолчанию | Описание                                               |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
-| `style`    | `"bold red"` | The style for the module.                              |
+| `style`    | `"bold red"` | Стиль модуля.                                          |
 | `disabled` | `false`      | Disables the `ruby` module.                            |
 
 ### Пример
@@ -838,7 +929,7 @@ The `rust` module shows the currently installed version of Rust. The module will
 | Переменная | По умолчанию | Описание                                               |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
-| `style`    | `"bold red"` | The style for the module.                              |
+| `style`    | `"bold red"` | Стиль модуля.                                          |
 | `disabled` | `false`      | Disables the `rust` module.                            |
 
 ### Пример
@@ -848,6 +939,31 @@ The `rust` module shows the currently installed version of Rust. The module will
 
 [rust]
 symbol = "⚙️ "
+```
+
+## Terraform
+
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf` extension
+
+### Опции
+
+| Переменная     | По умолчанию | Описание                                                    |
+| -------------- | ------------ | ----------------------------------------------------------- |
+| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
+| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
+| `style`        | `"bold 105"` | The style for the module.                                   |
+| `disabled`     | `false`      | Disables the `terraform` module.                            |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+symbol = "🏎💨 "
 ```
 
 ## Time
@@ -892,16 +1008,16 @@ The `username` module shows active user's username. The module will be shown if 
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
 
-### Опции
+### Options
 
-| Переменная    | По умолчанию    | Описание                              |
+| Variable      | Default         | Description                           |
 | ------------- | --------------- | ------------------------------------- |
 | `style_root`  | `"bold red"`    | The style used when the user is root. |
 | `style_user`  | `"bold yellow"` | The style used for non-root users.    |
 | `show_always` | `false`         | Always shows the `username` module.   |
 | `disabled`    | `false`         | Disables the `username` module.       |
 
-### Пример
+### Example
 
 ```toml
 # ~/.config/starship.toml

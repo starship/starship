@@ -1,0 +1,15 @@
+# The PROMPT function is called whenever a prompt needs to be drawn. Docs: https://doc.redox-os.org/ion-manual/html/misc/06-prompt_fn.html
+fn PROMPT
+    # Save the status immediately, since the status is also updated after variable assignment, etc.
+    let STARSHIP_ION_STATUS = $?
+    # Save the ION_CMD_DURATION before running any other commands, but after the status since the
+    # duration is not updated during variable assignment
+    let STARSHIP_ION_CMD_DURATION = $ION_CMD_DURATION
+
+    # The STARSHIP between the colons will be replaced with the actual path to the starship executable.
+    # The jobs command outputs to stderr, therefore we need to pipe stderr to `wc -l`.
+    ::STARSHIP:: prompt --status $STARSHIP_ION_STATUS --jobs $(jobs ^| wc -l) --cmd-duration $STARSHIP_ION_CMD_DURATION
+end
+
+# Export the correct name of the shell
+export STARSHIP_SHELL="ion"

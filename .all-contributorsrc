@@ -547,6 +547,76 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "REBELinBLUE",
+      "name": "Stephen Ball",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/2143908?v=4",
+      "profile": "https://github.com/REBELinBLUE",
+      "contributions": [
+        "code",
+        "test",
+        "doc"
+      ]
+    },
+    {
+      "login": "houqp",
+      "name": "Qingping Hou",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/670302?v=4",
+      "profile": "http://about.houqp.me",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "wendorf",
+      "name": "Dan Wendorf",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/407342?v=4",
+      "profile": "https://github.com/wendorf",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "popey",
+      "name": "Alan Pope",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1841272?v=4",
+      "profile": "http://popey.com/",
+      "contributions": [
+        "infra"
+      ]
+    },
+    {
+      "login": "BuggStream",
+      "name": "BuggStream",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/51194915?v=4",
+      "profile": "https://github.com/BuggStream",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "jonstodle",
+      "name": "Jon Grythe Stødle",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1719761?v=4",
+      "profile": "http://jonstodle.com",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "JasonEtco",
+      "name": "Jason Etcovitch",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/10660468?v=4",
+      "profile": "https://jasonet.co",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,

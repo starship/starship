@@ -124,6 +124,11 @@ jobs:
         with:
           dotnet-version: "2.2.402"
 
+      # Install PHP at a fixed version
+      - uses: shivammathur/setup-php@master
+        with:
+          php-version: "7.3.8"
+
       # Install Mercurial (pre-installed on linux, installed from pip on macos
       # and from choco on windows),
       - name: Install Mercurial (macos)
@@ -134,6 +139,11 @@ jobs:
       - name: Install Mercurial (windows)
         if: matrix.os == 'windows-latest'
         run: choco install hg
+
+      # Install Terraform at a fixed version
+      - uses: volcano-coffee-company/setup-terraform@v1
+        with:
+          version: "0.12.14"
 
       # Run the ignored tests that expect the above setup
       - name: Run all tests
@@ -176,6 +186,27 @@ jobs:
       - run: cargo publish
     env:
       CRATES_IO_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
+
+  update_brew_formula:
+    if: startsWith(github.ref, 'refs/tags/v')
+    name: Update Brew Formula
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: |
+          echo "https://starship-bot:$HOMEBREW_GITHUB_API_TOKEN@github.com" > ~/.git-credentials
+          git config --global credential.helper store
+          git config --global user.name "Starship Bot"
+          git config --global user.email "bot@starship.rs"
+
+          cd $(brew --repo homebrew/core)	
+          git fetch origin
+          sudo git reset --hard origin/master	
+          cd -
+
+          brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
+        env:
+          HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
 
   # Build sources for every OS
   github_build:
