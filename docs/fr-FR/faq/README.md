@@ -1,14 +1,14 @@
-# FAQ
+# Foire aux questions
 
-## What is the configuration used in the demo GIF?
+## Quelle est la configuration utilisée dans le GIF de démonstration ?
 
-- **Terminal Emulator**: [iTerm2](https://iterm2.com/)
-  - **Theme**: Minimal
+- **Émulateur de terminal**: [iTerm2](https://iterm2.com/)
+  - **Thème** : Minimal
   - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [Fira Code](https://github.com/tonsky/FiraCode)
-- **Shell**: [Fish Shell](https://fishshell.com/)
-  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
-  - **Prompt**: [Starship](https://starship.rs/)
+  - **Police d'écriture**: [Fira Code](https://github.com/tonsky/FiraCode)
+- **Shell** : [Fish Shell](https://fishshell.com/)
+  - **Configuration**: [Dotfiles de matchai](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
+  - **Invite de commande**: [Starship](https://starship.rs/)
 
 ## Do `prompt_order` and `<module>.disabled` do the same thing?
 
