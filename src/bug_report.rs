@@ -62,8 +62,7 @@ struct Environment {
 }
 
 fn get_github_issue_link() -> String {
-    let body = urlencoding::encode(&format!(
-        "#### Current Behavior
+    let body = urlencoding::encode( "#### Current Behavior
 <!-- A clear and concise description of the behavior. -->
 
 #### Expected Behavior
@@ -77,8 +76,7 @@ fn get_github_issue_link() -> String {
 
 #### Environment
 <!-- Your environment information has been copied to the clipboard automatically. Paste it here. -->
-",
-    ))
+" )
         .replace("%20", "+");
 
     format!(
