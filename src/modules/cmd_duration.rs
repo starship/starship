@@ -83,22 +83,22 @@ mod tests {
 
     #[test]
     fn test_500ms() {
-        assert_eq!(render_time(500 as u128), "500ms")
+        assert_eq!(render_time(500 as u128, true), "500ms")
     }
     #[test]
     fn test_10s() {
-        assert_eq!(render_time(10_000 as u128), "10s")
+        assert_eq!(render_time(10_000 as u128, true), "10s")
     }
     #[test]
     fn test_90s() {
-        assert_eq!(render_time(90_000 as u128), "1m30s")
+        assert_eq!(render_time(90_000 as u128, true), "1m30s")
     }
     #[test]
     fn test_10110s() {
-        assert_eq!(render_time(10_110_000 as u128), "2h48m30s")
+        assert_eq!(render_time(10_110_000 as u128, true), "2h48m30s")
     }
     #[test]
     fn test_1d() {
-        assert_eq!(render_time(86_400_000 as u128), "1d")
+        assert_eq!(render_time(86_400_000 as u128, true), "1d")
     }
 }
