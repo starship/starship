@@ -1,15 +1,11 @@
-use crate::context::Context;
-use clap::ArgMatches;
-
 use std::env;
 use std::process::Command;
 
 const UNKNOWN_CONFIG: &str = "<unknown config>";
 const STD_EDITOR: &str = "vi";
 
-pub fn edit_configuration(args: ArgMatches) {
-    let context = Context::new(args);
-    let editor = get_editor(context);
+pub fn edit_configuration() {
+    let editor = get_editor();
     let config_path = get_config_path();
 
     Command::new(editor)
@@ -18,16 +14,10 @@ pub fn edit_configuration(args: ArgMatches) {
         .expect("failed to open file");
 }
 
-fn get_editor(context: Context) -> String {
-    let config = context.config.get_root_config();
-
-    if config.editor != "" {
-        config.editor.to_string()
-    } else {
-        match env::var("EDITOR") {
-            Ok(val) => val,
-            Err(_) => STD_EDITOR.to_string(),
-        }
+fn get_editor() -> String {
+    match env::var("EDITOR") {
+        Ok(val) => val,
+        Err(_) => STD_EDITOR.to_string(),
     }
 }
 

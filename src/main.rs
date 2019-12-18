@@ -139,7 +139,7 @@ fn main() {
                 print::module(module_name, sub_m.clone());
             }
         }
-        ("configure", Some(sub_m)) => configure::edit_configuration(sub_m.clone()),
+        ("configure", Some(_)) => configure::edit_configuration(),
         ("bug-report", Some(_)) => bug_report::create(),
         _ => {}
     }
