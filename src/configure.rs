@@ -20,17 +20,15 @@ pub fn edit_configuration(args: ArgMatches) {
 
 fn get_editor(context: Context) -> String {
     let config = context.config.get_root_config();
-    
-    let mut editor = match env::var("EDITOR") {
-        Ok(e) => e,
-        Err(_) => STD_EDITOR.to_string(),
-    };
 
     if config.editor != "" {
-        editor = config.editor.to_string();
+        config.editor.to_string()
+    } else {
+        match env::var("EDITOR") {
+            Ok(val) => val,
+            Err(_) => STD_EDITOR.to_string(),
+        }
     }
-    
-    editor
 }
 
 fn get_config_path() -> String {
@@ -42,7 +40,7 @@ fn get_config_path() -> String {
 
     let path = home_dir.unwrap().join(".config/starship.toml");
 
-    return match path.to_str() {
+    match path.to_str() {
         Some(p) => String::from(p),
         None => UNKNOWN_CONFIG.to_string(),
     }

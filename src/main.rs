@@ -3,8 +3,8 @@ extern crate clap;
 
 mod bug_report;
 mod config;
-mod configure;
 mod configs;
+mod configure;
 mod context;
 mod init;
 mod module;
@@ -111,10 +111,7 @@ fn main() {
                     .arg(&keymap_arg)
                     .arg(&jobs_arg),
             )
-            .subcommand(
-                SubCommand::with_name("configure")
-                    .about("Edit the starship configuration")   
-            )
+            .subcommand(SubCommand::with_name("configure").about("Edit the starship configuration"))
             .subcommand(SubCommand::with_name("bug-report").about(
                 "Create a pre-populated GitHub issue with information about your configuration",
             ))
