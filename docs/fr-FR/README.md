@@ -33,35 +33,35 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 1. Installer le binaire **starship** :
 
 
-   #### Install Latest Version
+   #### Installer la dernière version
 
-   With Shell:
+   Avec Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Install via Package Manager
+   #### Installer via le gestionnaire de paquets
 
-   With [Homebrew](https://brew.sh/):
+   Avec [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
-    With [Scoop](https://scoop.sh):
+    Avec [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Ajouter le script d'initialization à la fiche config de votre shell:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Ajouter ce qui suit à la fin de `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -72,7 +72,7 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Ajoute ce qui suit à la fin de `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -83,7 +83,7 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Ajouter ce qui suit à la fin de `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -94,7 +94,7 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 
    #### Powershell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   Ajouter ce qui suit à la fin de `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` sur -Nix):
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
@@ -105,7 +105,7 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Ajouter ce qui suit à la fin de `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
