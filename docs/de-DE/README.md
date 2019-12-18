@@ -97,7 +97,9 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
    Trage folgendes in das Powershell-Profil ($Profile) ein. Standardmäßig gespeichert unter: `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` auf Windows, oder `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix:
 
    ```sh
-   # ~\Documents\PowerShell\Profile.ps1
+   # notepad $PROFILE
+
+# ~\Documents\PowerShell\Profile.ps1
 
    Invoke-Expression (&starship init powershell)
    ```
