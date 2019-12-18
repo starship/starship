@@ -186,7 +186,9 @@
    Trage folgendes am Ende der `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (oder `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix) ein:
 
    ```sh
-   # ~\Documents\PowerShell\Profile.ps1
+   # notepad $PROFILE
+
+# ~\Documents\PowerShell\Profile.ps1
 
    Invoke-Expression (&starship init powershell)
    ```
