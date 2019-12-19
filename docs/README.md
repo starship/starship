@@ -54,6 +54,12 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    scoop install starship
    ```
 
+    On [Fedora](https://getfedora.org):
+
+   ```sh
+   dnf install starship
+   ```
+
 1. Add the init script to your shell's config file:
 
    #### Bash
