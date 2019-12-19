@@ -17,11 +17,7 @@ pub fn prompt(args: ArgMatches) {
 
 pub fn get_prompt(context: Context) -> String {
     let config = context.config.get_root_config();
-    let mut buf = String::new();
-
-    if config.clear_before_printing {
-        buf.push_str("\x1b[J");
-    }
+    let mut buf = String::from("\x1b[J");
 
     // Write a new line before the prompt
     if config.add_newline {

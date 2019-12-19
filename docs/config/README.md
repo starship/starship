@@ -61,20 +61,17 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Variable                | Default                       | Description                                                  |
-| ----------------------- | ----------------------------- | ------------------------------------------------------------ |
-| `clear_before_printing` | `false`                       | Clear the terminal to the bottom before printing the prompt. |
-| `add_newline`           | `true`                        | Add a new line before the start of the prompt.               |
-| `prompt_order`          | [link](#default-prompt-order) | Configure the order in which the prompt module occurs.       |
-| `scan_timeout`          | `30`                          | Timeout for starship to scan files (in milliseconds).        |
+| Variable       | Default                       | Description                                            |
+| -------------- | ----------------------------- | ------------------------------------------------------ |
+| `add_newline`  | `true`                        | Add a new line before the start of the prompt.         |
+| `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
+| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).  |
 
 ### Example
 
 ```toml
 # ~/.config/starship.toml
 
-# Clear the terminal from the prompt to the bottom of the terminal before printing.
-clear_before_printing = true
 # Disable the newline at the start of the prompt
 add_newline = false
 # Overwrite a default_prompt_order and  use custom prompt_order
