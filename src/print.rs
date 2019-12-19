@@ -17,12 +17,14 @@ pub fn prompt(args: ArgMatches) {
 
 pub fn get_prompt(context: Context) -> String {
     let config = context.config.get_root_config();
-    let mut buf = String::from("\x1b[J");
+    let mut buf = String::new();
 
     // Write a new line before the prompt
     if config.add_newline {
         writeln!(buf).unwrap();
     }
+
+    buf.push_str("\x1b[J");
 
     let mut prompt_order: Vec<&str> = Vec::new();
 
