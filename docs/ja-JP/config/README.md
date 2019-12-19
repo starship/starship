@@ -759,7 +759,7 @@ style = "bold dimmed green"
 
 `java`モジュールは、現在インストールされているJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`pom.xml`, `build.gradle`,もしくは`build.sbt`が含まれている
+- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
 - カレントディレクトリに拡張子が`.java`, `.class`, もしくは`.jar`のファイルが含まれている
 
 ### オプション
