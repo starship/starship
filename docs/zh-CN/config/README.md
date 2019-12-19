@@ -98,9 +98,11 @@ prompt_order = [
     "golang",
     "java",
     "nodejs",
+    "php",
     "python",
     "ruby",
     "rust",
+    "terraform",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -272,15 +274,22 @@ prefix = "underwent "
 
 ## Conda
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set. Note: This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+
+::: tip
+
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+
+:::
 
 ### Options
 
-| Variable   | Default        | Description                                  |
-| ---------- | -------------- | -------------------------------------------- |
-| `symbol`   | `"C "`         | The symbol used before the environment name. |
-| `style`    | `"bold green"` | The style for the module.                    |
-| `disabled` | `false`        | Disables the `conda` module.                 |
+| Variable            | Default        | Description                                                                                                                                                                                                 |
+| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
+| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
+| `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
 
 ### Example
 
@@ -425,8 +434,8 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | Variable             | Default        | Description                                      |
 | -------------------- | -------------- | ------------------------------------------------ |
 | `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
-| `prefix`             | `(`            | Prefix to display immediately before git commit. |
-| `suffix`             | `)`            | Suffix to display immediately after git commit.  |
+| `prefix`             | `"("`          | Prefix to display immediately before git commit. |
+| `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
 | `style`              | `"bold green"` | The style for the module.                        |
 | `disabled`           | `true`         | Disables the `git_commit` module.                |
 
@@ -800,6 +809,7 @@ The `package` module is shown when the current directory is the repository for a
 - **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
 - **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
 - **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
 
@@ -929,6 +939,31 @@ The `rust` module shows the currently installed version of Rust. The module will
 
 [rust]
 symbol = "⚙️ "
+```
+
+## Terraform
+
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf` extension
+
+### Options
+
+| Variable       | Default      | Description                                                 |
+| -------------- | ------------ | ----------------------------------------------------------- |
+| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
+| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
+| `style`        | `"bold 105"` | The style for the module.                                   |
+| `disabled`     | `false`      | Disables the `terraform` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+symbol = "🏎💨 "
 ```
 
 ## Time

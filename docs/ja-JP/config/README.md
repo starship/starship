@@ -98,9 +98,11 @@ prompt_order = [
     "golang",
     "java",
     "nodejs",
+    "php",
     "python",
     "ruby",
     "rust",
+    "terraform",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -273,15 +275,22 @@ prefix = "underwent "
 
 ## Conda
 
-`$CONDA_DEFAULT_ENV`が設定されている場合、`conda`モジュールは現在のcondaの環境を表示します。 Note: これはconda自身の プロンプト修飾子 を抑制しません。`conda config --set changeps1 False` で実行することができます。
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+
+::: tip
+
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+
+:::
 
 ### オプション
 
-| 変数         | デフォルト          | 説明                   |
-| ---------- | -------------- | -------------------- |
-| `symbol`   | `"C "`         | 環境名の直前に使用されるシンボルです。  |
-| `style`    | `"bold green"` | モジュールのスタイルです。        |
-| `disabled` | `false`        | `conda`モジュールを無効にします。 |
+| 変数                  | デフォルト          | 説明                                                                                                                                                                                                          |
+| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
+| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
+| `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
 
 ### 設定例
 
@@ -296,22 +305,22 @@ style = "dimmed green"
 
 `directory`モジュールには、現在のディレクトリへのパスが表示され、3つの親フォルダは切り捨てられます。 ディレクトリは、現在のgitリポジトリであるとルートとなります。
 
-fishスタイルのpwdオプションを使用すると、切り捨てられたパスを非表示にする代わりに、オプションで有効にした番号に基づいて各ディレクトリの短縮名が表示されます。
+When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-例として、`~/Dev/Nix/nixpkgs/pkgs`で、`nixpkgs`がリポジトリルートであり、オプションが`1`に設定されている場合を挙げます。 以前は`nixpkgs/pkgs`でしたが、`~/D/N/nixpkgs/pkgs`が表示されます。
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
 ### オプション
 
-| 変数                  | デフォルト         | 説明                            |
-| ------------------- | ------------- | ----------------------------- |
-| `truncation_length` | `3`           | 現在のディレクトリを切り捨てる親フォルダーの数です。    |
-| `truncate_to_repo`  | `true`        | 現在いるgitリポジトリのルートに切り捨てるかどうかです。 |
+| 変数                  | デフォルト         | 説明                                                  |
+| ------------------- | ------------- | --------------------------------------------------- |
+| `truncation_length` | `3`           | 現在のディレクトリを切り捨てる親フォルダーの数です。                          |
+| `truncate_to_repo`  | `true`        | 現在いるgitリポジトリのルートに切り捨てるかどうかです。                       |
 | `prefix`            | `"in "`       | Prefix to display immediately before the directory. |
-| `style`             | `"bold cyan"` | モジュールのスタイルです。                 |
-| `disabled`          | `false`       | `directory`モジュールを無効にします。      |
+| `style`             | `"bold cyan"` | The style for the module.                           |
+| `disabled`          | `false`       | Disables the `directory` module.                    |
 
 <details>
-<summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | 変数                          | デフォルト  | 説明                                           |
 | --------------------------- | ------ | -------------------------------------------- |
@@ -331,11 +340,11 @@ truncation_length = 8
 
 ## Dotnet
 
-`dotnet` モジュールはカレントディレクトリに関係する.NET Core SDKのバージョンを表示します。 もし SDKは現在のディレクトリに固定されているのであれば、その固定されたバージョンが表示されます。 それ以外の場合、モジュール SDKの最新のインストールバージョンを示します。
+The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
 
-このモジュールは、カレントディレクトリに次のファイルのいずれかが存在する場合にのみプロンプトに表示されます。: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj` 正しく使用するには、.NET Coreコマンドラインツールもインストールする必要があります。
+This module will only be shown in your prompt when one of the following files are present in the current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll also need the .NET Core command-line tools installed in order to use it correctly.
 
-内部的に、このモジュールは自身のバージョン検知のメカニズムを利用します。 `dotnet --version` を実行するより2倍速く実行できますが、.NET project一般的でないディレクトリlayoutの場合は間違ったバージョンが示されてしまうことがあります。 速度よりも精度が重要な場合は、次の方法でメカニズムを無効にできます。 モジュールオプションで`heuristic = false `を設定します。
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
 ### オプション
 
@@ -411,13 +420,13 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git Commit
+## Git コミット
 
 The `git_commit` module shows the active branch of the repo in your current directory.
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -426,8 +435,8 @@ The `git_commit` module shows the active branch of the repo in your current dire
 | 変数                   | デフォルト          | 説明                                               |
 | -------------------- | -------------- | ------------------------------------------------ |
 | `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
-| `prefix`             | `(`            | Prefix to display immediately before git commit. |
-| `suffix`             | `)`            | Suffix to display immediately after git commit.  |
+| `prefix`             | `"("`          | Prefix to display immediately before git commit. |
+| `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
 | `style`              | `"bold green"` | モジュールのスタイルです。                                    |
 | `disabled`           | `true`         | Disables the `git_commit` module.                |
 
@@ -443,7 +452,7 @@ commit_hash_length = 4
 
 ## Git の進行状態
 
-`git_state`モジュールはgitディレクトリの進行状態を表します。 (例: _REBASING_, _BISECTING_, その他) 進捗情報がある場合(例: REBASING 3/10)はその情報も表示されます。
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
 ### オプション
 
@@ -557,9 +566,9 @@ deleted = "🗑"
 symbol = "🏎💨 "
 ```
 
-## Mercurial Branch
+## Mercurial ブランチ
 
-The `hg_branch` module shows the active branch of the repo in your current directory.
+` hg_branch `モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを示します。
 
 ### オプション
 
@@ -802,6 +811,7 @@ symbol = "🤖 "
 - **npm** – `npm`パッケージバージョンは、現在のディレクトリにある`package.json`から抽出されます
 - **cargo** – `cargo`パッケージバージョンは、現在のディレクトリにある`Cargo.toml`から抽出されます。
 - **poetry** – `poetry`パッケージバージョンは、現在のディレクトリにある`pyproject.toml`から抽出されます
+- **composer** – `composer`パッケージバージョンは、現在のディレクトリにある`composer.json`から抽出されます
 
 > ⚠️ 表示されるバージョンは、パッケージマネージャーではなく、ソースコードが現在のディレクトリにあるパッケージのバージョンです。
 
@@ -824,10 +834,10 @@ symbol = "🎁 "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`php`モジュールは、現在インストールされているPHPのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`composer.json`ファイルが含まれている
-- The current directory contains a `.php` file
+- カレントディレクトリに`.php`の拡張子のファイルが含まれている
 
 ### オプション
 
@@ -848,13 +858,13 @@ symbol = "🔹 "
 
 ## Python
 
-`python`モジュールは、現在インストールされているPythonのバージョンを示します。
+The `python` module shows the currently installed version of Python.
 
-`pyenvversionname`が`true`に設定されている場合 、pyenvでのバージョン名が表示されます 。
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
 
-それ以外の場合は、 `python --version`バージョン番号が表示され、アクティブになっている場合は現在のPython仮想環境が表示されます。
+Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
 
-次の条件のいずれかが満たされると、モジュールが表示されます。
+The module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`.python-version`ファイルが含まれている
 - カレントディレクトリに`requirements.txt`ファイルが含まれている
@@ -933,27 +943,52 @@ symbol = "🔺 "
 symbol = "⚙️ "
 ```
 
-## 時刻
+## Terraform
 
-`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
+`terraform`モジュールには、現在選択されているterraformワークスペースとバージョンが表示されます。 デフォルトでは、Terraformのバージョンは表示されません。これは、多くのプラグインが使用されている場合、Terraformの現在のバージョンでは遅いためです。 次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- カレントディレクトリに`.terraform`フォルダが含まれている
+- カレントディレクトリに`.tf`の拡張子のファイルが含まれている
+
+### オプション
+
+| 変数             | デフォルト        | 説明                                            |
+| -------------- | ------------ | --------------------------------------------- |
+| `symbol`       | `"💠 "`       | Terraform ワークスペースを表示する前に使用される記号です。            |
+| `show_version` | `false`      | Terraformのバージョンを表示します。 大きなワークスペースでは非常に遅くなります。 |
+| `style`        | `"bold 105"` | モジュールのスタイルです。                                 |
+| `disabled`     | `false`      | `terraform`モジュールを無効にします。                      |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+symbol = "🏎💨 "
+```
+
+## Time
+
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
 ### オプション
 
-| 変数                | デフォルト          | 説明                                                                                                |
-| ----------------- | -------------- | ------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`        | 12時間のフォーマットを有効にします。                                                                               |
-| `format`          | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。 |
-| `style`           | `bold yellow`  | モジュールのスタイルです。                                                                                     |
-| `disabled`        | `true`         | `time`モジュールを無効にします。                                                                               |
-| `utc_time_offset` | `local`        | 使用するUTCオフセットを設定します。 -24から24までの間で設定可能です。 フロートが30/45分のタイムゾーンオフセットに対応できるようにします。                      |
+| 変数                | デフォルト         | 説明                                                                                                                  |
+| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
+| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `bold yellow` | The style for the module time                                                                                       |
+| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
+| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
 
-`use_12hr` が `true` の場合、`format` のデフォルトは `"%r"` です。 それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、`use_12hr`の設定が上書きされます。
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
 ### 設定例
 
@@ -966,25 +1001,25 @@ format = "🕙[ %T ]"
 utc_time_offset = -5
 ```
 
-## ユーザー名
+## Username
 
-`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
-- カレントユーザーがroot
-- カレントユーザーが、ログインしているユーザーとは異なる
-- ユーザーがSSHセッションとして接続されている
-- `show_always`変数がtrueに設定されている
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
-### オプション
+### Options
 
-| 変数            | デフォルト           | 説明                        |
-| ------------- | --------------- | ------------------------- |
-| `style_root`  | `"bold red"`    | ユーザーがrootのときに使用されるスタイルです。 |
-| `style_user`  | `"bold yellow"` | 非rootユーザーに使用されるスタイルです。    |
-| `show_always` | `false`         | `username`モジュールを常に表示します。  |
-| `disabled`    | `false`         | `username`モジュールを無効にします。   |
+| Variable      | Default         | Description                           |
+| ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`    | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `show_always` | `false`         | Always shows the `username` module.   |
+| `disabled`    | `false`         | Disables the `username` module.       |
 
-### 設定例
+### Example
 
 ```toml
 # ~/.config/starship.toml

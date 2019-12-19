@@ -8,7 +8,7 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://github.com/starship/starship/workflows/Main%20workflow/badge.svg"
+      src="https://github.com/starship/starship/workflows/Main%20workflow/badge.svg?branch=master&event=push"
       alt="GitHub Actions workflow status"
   /></a>
   <a href="https://crates.io/crates/starship"
@@ -25,7 +25,7 @@
       alt="Chat on Discord"
   /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-57-orange" alt="All Contributors"></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-59-orange" alt="All Contributors"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
@@ -186,12 +186,13 @@ The prompt shows information you need while you're working, while staying sleek 
    eval "$(starship init zsh)"
    ```
 
-   #### Powershell
+   #### PowerShell
 
    Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
+
    Invoke-Expression (&starship init powershell)
    ```
 
@@ -306,11 +307,14 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/BuggStream"><img src="https://avatars1.githubusercontent.com/u/51194915?v=4" width="100px;" alt=""/><br /><sub><b>BuggStream</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=BuggStream" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=BuggStream" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://jonstodle.com"><img src="https://avatars1.githubusercontent.com/u/1719761?v=4" width="100px;" alt=""/><br /><sub><b>Jon Grythe Stødle</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=jonstodle" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=jonstodle" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://jasonet.co"><img src="https://avatars1.githubusercontent.com/u/10660468?v=4" width="100px;" alt=""/><br /><sub><b>Jason Etcovitch</b></sub></a><br /><a href="https://github.com/starship/starship/issues?q=author%3AJasonEtco" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

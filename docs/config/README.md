@@ -450,7 +450,7 @@ truncation_symbol = ""
 
 ## Git Commit
 
-The `git_commit` module shows the active branch of the repo in your current directory.
+The `git_commit` module shows the current commit hash of the repo in your current directory.
 
 ::: tip
 
