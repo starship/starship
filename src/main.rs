@@ -1,3 +1,5 @@
+use std::time::SystemTime;
+
 #[macro_use]
 extern crate clap;
 
@@ -44,7 +46,7 @@ fn main() {
         .short("d")
         .long("cmd-duration")
         .value_name("CMD_DURATION")
-        .help("The execution duration of the last command, in seconds")
+        .help("The execution duration of the last command, in milliseconds")
         .takes_value(true);
 
     let keymap_arg = Arg::with_name("keymap")
@@ -115,6 +117,11 @@ fn main() {
             .subcommand(SubCommand::with_name("bug-report").about(
                 "Create a pre-populated GitHub issue with information about your configuration",
             ))
+            .subcommand(
+                SubCommand::with_name("time")
+                    .about("Prints time in milliseconds")
+                    .settings(&[AppSettings::Hidden]),
+            )
             .get_matches();
 
     match matches.subcommand() {
@@ -141,6 +148,15 @@ fn main() {
         }
         ("configure", Some(_)) => configure::edit_configuration(),
         ("bug-report", Some(_)) => bug_report::create(),
+        ("time", _) => {
+            match SystemTime::now()
+                .duration_since(SystemTime::UNIX_EPOCH)
+                .ok()
+            {
+                Some(time) => println!("{}", time.as_millis()),
+                None => println!("{}", -1),
+            }
+        }
         _ => {}
     }
 }

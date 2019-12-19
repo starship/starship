@@ -8,7 +8,7 @@ function global:prompt {
     $jobs = @(Get-Job | Where-Object { $_.State -eq 'Running' }).Count
 
     if ($lastCmd = Get-History -Count 1) {
-        $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalSeconds)
+        $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalMilliseconds)
         # & ensures the path is interpreted as something to execute
         $out = @(&::STARSHIP:: prompt "--path=$PWD" --status=$lastexitcode --jobs=$jobs --cmd-duration=$duration)
     } else {

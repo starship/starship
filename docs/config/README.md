@@ -270,12 +270,13 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Variable   | Default         | Description                                                |
-| ---------- | --------------- | ---------------------------------------------------------- |
-| `min_time` | `2`             | Shortest duration to show time for.                        |
-| `prefix`   | `took`          | Prefix to display immediately before the command duration. |
-| `style`    | `"bold yellow"` | The style for the module.                                  |
-| `disabled` | `false`         | Disables the `cmd_duration` module.                        |
+| Variable            | Default         | Description                                                |
+| ------------------- | --------------- | ---------------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
+| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
+| `style`             | `"bold yellow"` | The style for the module.                                  |
+| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
 
 ### Example
 
@@ -283,7 +284,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 # ~/.config/starship.toml
 
 [cmd_duration]
-min_time = 4
+min_time = 500
 prefix = "underwent "
 ```
 
@@ -299,12 +300,12 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### Options
 
-| Variable            | Default        | Description                                                                                                                                                                                   |
-| ------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Variable            | Default        | Description                                                                                                                                                                                                 |
+| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                  |
-| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                     |
-| `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                  |
+| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
+| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
+| `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
 
 ### Example
 
@@ -1010,12 +1011,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable       | Default       | Description                                                 |
-| -------------- | ------------- | ----------------------------------------------------------- |
-| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
-| `show_version` | `false`       | Shows the terraform version. Very slow on large workspaces. |
-| `style`        | `"bold 105"`  | The style for the module.                                   |
-| `disabled`     | `false`       | Disables the `terraform` module.                            |
+| Variable       | Default      | Description                                                 |
+| -------------- | ------------ | ----------------------------------------------------------- |
+| `symbol`       | `"💠 "`      | The symbol used before displaying the terraform workspace.  |
+| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
+| `style`        | `"bold 105"` | The style for the module.                                   |
+| `disabled`     | `false`      | Disables the `terraform` module.                            |
 
 ### Example
 
