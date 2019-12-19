@@ -255,12 +255,13 @@ use_symbol_for_status = true
 
 ### Опции
 
-| Переменная | По умолчанию    | Описание                                                |
-| ---------- | --------------- | ------------------------------------------------------- |
-| `min_time` | `2`             | Кратчайшая длительность для показа времени.             |
-| `prefix`   | `took`          | Префикс, отображаемый перед продолжительностью команды. |
-| `style`    | `"bold yellow"` | Стиль модуля.                                           |
-| `disabled` | `false`         | Отключает модуль `cmd_duration`.                        |
+| Переменная          | По умолчанию    | Описание                                                   |
+| ------------------- | --------------- | ---------------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
+| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
+| `style`             | `"bold yellow"` | The style for the module.                                  |
+| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
 
 ### Пример
 
@@ -268,7 +269,7 @@ use_symbol_for_status = true
 # ~/.config/starship.toml
 
 [cmd_duration]
-min_time = 4
+min_time = 500
 prefix = "underwent "
 ```
 
