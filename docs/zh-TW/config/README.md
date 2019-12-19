@@ -255,12 +255,13 @@ use_symbol_for_status = true
 
 ### 選項
 
-| 變數         | 預設              | 說明                    |
-| ---------- | --------------- | --------------------- |
-| `min_time` | `2`             | 會顯示的最短時間長度。           |
-| `prefix`   | `took`          | 在指令持續時間正前方顯示的前綴。      |
-| `style`    | `"bold yellow"` | 這個模組的風格。              |
-| `disabled` | `false`         | 停用 `cmd_duration` 模組。 |
+| 變數                  | 預設              | 說明                                                         |
+| ------------------- | --------------- | ---------------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
+| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
+| `style`             | `"bold yellow"` | The style for the module.                                  |
+| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
 
 ### 範例
 
@@ -268,7 +269,7 @@ use_symbol_for_status = true
 # ~/.config/starship.toml
 
 [cmd_duration]
-min_time = 4
+min_time = 500
 prefix = "underwent "
 ```
 
