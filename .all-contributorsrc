@@ -617,6 +617,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "etiennemabille",
+      "name": "Etienne Mabille",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/11175343?v=4",
+      "profile": "https://github.com/etiennemabille",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
