@@ -14,11 +14,16 @@
 
 # Will be run before *every* command (even ones in pipes!)
 starship_preexec() {
+    # Save previous command's last argument, otherwise it will be set to "starship_preexec"
+    local PREV_LAST_ARG=$1
+
     # Avoid restarting the timer for commands in the same pipeline
     if [ "$PREEXEC_READY" = "true" ]; then
         PREEXEC_READY=false
         STARSHIP_START_TIME=$(date +%s)
     fi
+    
+    : "$PREV_LAST_ARG"
 }
 
 # Will be run before the prompt is drawn
@@ -44,7 +49,7 @@ starship_precmd() {
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
 # then hook our functions into their framework.
 if [[ $preexec_functions ]]; then
-    preexec_functions+=(starship_preexec)
+    preexec_functions+=('starship_preexec "$_"')
     precmd_functions+=(starship_precmd)
 else
 # We want to avoid destroying an existing DEBUG hook. If we detect one, create
@@ -52,12 +57,12 @@ else
 # re-trap DEBUG to use this new function. This prevents a trap clobber.
     dbg_trap="$(trap -p DEBUG | cut -d' ' -f3 | tr -d \')"
     if [[ -z "$dbg_trap" ]]; then
-        trap starship_preexec DEBUG
-    elif [[ "$dbg_trap" != "starship_preexec" && "$dbg_trap" != "starship_preexec_all" ]]; then
+        trap 'starship_preexec "$_"' DEBUG
+    elif [[ "$dbg_trap" != 'starship_preexec "$_"' && "$dbg_trap" != 'starship_preexec_all "$_"' ]]; then
         function starship_preexec_all(){
-            $dbg_trap; starship_preexec
+            local PREV_LAST_ARG=$1 ; $dbg_trap; starship_preexec; : "$PREV_LAST_ARG";
         }
-        trap starship_preexec_all DEBUG
+        trap 'starship_preexec_all "$_"' DEBUG
     fi
 
     # Finally, prepare the precmd function and set up the start time.
