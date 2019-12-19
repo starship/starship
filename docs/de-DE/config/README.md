@@ -255,12 +255,13 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Optionen
 
-| Variable   | Standardwert    | Beschreibung                                                              |
-| ---------- | --------------- | ------------------------------------------------------------------------- |
-| `min_time` | `2`             | Kürzestes Wert für den die Ausführungsdauer angezeigt wird (in Sekunden). |
-| `prefix`   | `took`          | Prefix der unmittelbar vor der Ausführungszeit angezeigt wird.            |
-| `style`    | `"bold yellow"` | Stil für dieses Modul.                                                    |
-| `disabled` | `false`         | Deaktiviert das `cmd_duration`-Modul.                                     |
+| Variable            | Standardwert    | Beschreibung                                               |
+| ------------------- | --------------- | ---------------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
+| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
+| `style`             | `"bold yellow"` | The style for the module.                                  |
+| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
 
 ### Beispiel
 
@@ -268,7 +269,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 # ~/.config/starship.toml
 
 [cmd_duration]
-min_time = 4
+min_time = 500
 prefix = "underwent "
 ```
 
