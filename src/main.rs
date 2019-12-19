@@ -95,7 +95,8 @@ fn main() {
                     .arg(&path_arg)
                     .arg(&cmd_duration_arg)
                     .arg(&keymap_arg)
-                    .arg(&jobs_arg),
+                    .arg(&jobs_arg)
+                    .arg(&max_length_arg),
             )
             .subcommand(
                 SubCommand::with_name("module")
