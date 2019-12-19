@@ -153,7 +153,7 @@ fn main() {
                 Some(time) => println!("{}", time.as_millis()),
                 None => println!("{}", -1),
             }
-        },
+        }
         _ => {}
     }
 }
