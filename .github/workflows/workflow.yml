@@ -204,7 +204,7 @@ jobs:
           sudo git reset --hard origin/master	
           cd -
 
-          brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
+          brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration. If you have any questions, please ping `@matchai`." --no-browse -v starship --force
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
 
@@ -247,7 +247,8 @@ jobs:
 
       - name: Install musl tools
         if: matrix.target == 'x86_64-unknown-linux-musl'
-        run: sudo apt-get install -y musl-tools
+        # Install libssl-dev for openssl-sys
+        run: sudo apt-get install -y musl-tools libssl-dev 
 
       - name: Build target
         uses: actions-rs/cargo@v1
