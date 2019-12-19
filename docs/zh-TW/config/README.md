@@ -748,7 +748,7 @@ style = "bold dimmed green"
 
 `java` 模組顯示現在安裝的 Java 版本。 這個模組在下列其中一個條件達成時顯示：
 
-- 現在資料夾中包含一個 `pom.xml`、`build.gradle`, `build.gradle.kts` 或 `build.sbt` 檔案
+- 現在資料夾中包含一個 `pom.xml`、`build.gradle` 或 `build.sbt` 檔案
 - 現在資料夾中包含一個檔案具有 `.java`、`.class` 或 `.jar` 副檔名
 
 ### 選項
