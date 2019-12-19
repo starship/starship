@@ -256,12 +256,13 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 
 ### オプション
 
-| 変数         | デフォルト           | 説明                          |
-| ---------- | --------------- | --------------------------- |
-| `min_time` | `2`             | 時間を表示する最短期間です。              |
-| `prefix`   | `took`          | コマンド実行時間の直前に表示する文字列です。      |
-| `style`    | `"bold yellow"` | モジュールのスタイルです。               |
-| `disabled` | `false`         | `cmd_duration`モジュールを無効にします。 |
+| 変数                  | デフォルト           | 説明                                                         |
+| ------------------- | --------------- | ---------------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
+| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
+| `style`             | `"bold yellow"` | The style for the module.                                  |
+| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
 
 ### 設定例
 
@@ -269,7 +270,7 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 # ~/.config/starship.toml
 
 [cmd_duration]
-min_time = 4
+min_time = 500
 prefix = "underwent "
 ```
 
