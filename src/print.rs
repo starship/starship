@@ -24,6 +24,8 @@ pub fn get_prompt(context: Context) -> String {
         writeln!(buf).unwrap();
     }
 
+    buf.push_str("\x1b[J");
+
     let mut prompt_order: Vec<&str> = Vec::new();
 
     // Write out a custom prompt order
