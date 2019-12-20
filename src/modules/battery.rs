@@ -8,7 +8,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
     let percentage_char = match shell.as_str() {
         "zsh" => "%%", // % is an escape in zsh, see PROMPT in `man zshmisc`
-        "powershell" => "`%",
         _ => "%",
     };
 
@@ -75,27 +74,76 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn get_battery_status() -> Option<BatteryStatus> {
     let battery_manager = battery::Manager::new().ok()?;
-    match battery_manager.batteries().ok()?.next() {
-        Some(Ok(battery)) => {
-            log::debug!("Battery found: {:?}", battery);
-            let battery_status = BatteryStatus {
-                percentage: battery.state_of_charge().value * 100.0,
-                state: battery.state(),
-            };
-
-            Some(battery_status)
-        }
-        Some(Err(e)) => {
-            log::debug!("Unable to access battery information:\n{}", &e);
-            None
-        }
-        None => {
-            log::debug!("No batteries found");
-            None
-        }
+    let batteries = battery_manager.batteries().ok()?;
+    let battery_contructor = batteries
+        .filter_map(|battery| match battery {
+            Ok(battery) => {
+                log::debug!("Battery found: {:?}", battery);
+                Some(BatteryInfo {
+                    energy: battery.energy().value,
+                    energy_full: battery.energy_full().value,
+                    state: battery.state(),
+                })
+            }
+            Err(e) => {
+                log::debug!("Unable to access battery information:\n{}", &e);
+                None
+            }
+        })
+        .fold(
+            BatteryInfo {
+                energy: 0.0,
+                energy_full: 0.0,
+                state: battery::State::Unknown,
+            },
+            |mut acc, x| {
+                acc.energy += x.energy;
+                acc.energy_full += x.energy_full;
+                acc.state = merge_battery_states(acc.state, x.state);
+                acc
+            },
+        );
+    if battery_contructor.energy_full != 0.0 {
+        let battery = BatteryStatus {
+            percentage: battery_contructor.energy / battery_contructor.energy_full * 100.0,
+            state: battery_contructor.state,
+        };
+        log::debug!("Battery status: {:?}", battery);
+        Some(battery)
+    } else {
+        None
     }
 }
 
+/// the merge returns Charging if at least one is charging
+///                   Discharging if at least one is Discharging
+///                   Full if both are Full or one is Full and the other Unknow
+///                   Empty if both are Empty or one is Empty and the other Unknow
+///                   Unknown otherwise
+fn merge_battery_states(state1: battery::State, state2: battery::State) -> battery::State {
+    use battery::State::{Charging, Discharging, Unknown};
+    if state1 == Charging || state2 == Charging {
+        Charging
+    } else if state1 == Discharging || state2 == Discharging {
+        Discharging
+    } else if state1 == state2 {
+        state1
+    } else if state1 == Unknown {
+        state2
+    } else if state2 == Unknown {
+        state1
+    } else {
+        Unknown
+    }
+}
+
+struct BatteryInfo {
+    energy: f32,
+    energy_full: f32,
+    state: battery::State,
+}
+
+#[derive(Debug)]
 struct BatteryStatus {
     percentage: f32,
     state: battery::State,

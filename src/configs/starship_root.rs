@@ -22,8 +22,10 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "kubernetes",
                 "directory",
                 "git_branch",
+                "git_commit",
                 "git_state",
                 "git_status",
+                "hg_branch",
                 "package",
                 // ↓ Toolchain version modules ↓
                 // (Let's keep these sorted alphabetically)
@@ -31,9 +33,11 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "golang",
                 "java",
                 "nodejs",
+                "php",
                 "python",
                 "ruby",
                 "rust",
+                "terraform",
                 // ↑ Toolchain version modules ↑
                 "nix_shell",
                 "conda",

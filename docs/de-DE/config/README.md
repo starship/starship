@@ -9,7 +9,7 @@
 Um mit der Konfiguration von Starship zu beginnen, musst du die folgende Datei erstellen: `~/.config/starship.toml`.
 
 ```shell
-$ touch ~/.config/starship.toml
+$ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 Die gesamte Konfiguration von Starship wird über diese [TOML](https://github.com/toml-lang/toml)-Datei durchgeführt:
@@ -63,18 +63,18 @@ Dies ist eine Liste mit Prompt-weiten Konfigurationsoptionen.
 | -------------- | ----------------------------- | ------------------------------------------------------------------ |
 | `add_newline`  | `true`                        | Neuer Zeilenumbruch bei Start des Prompts.                         |
 | `prompt_order` | [link](#default-prompt-order) | Stelle die Reihenfolge ein, in der die Module den prompt aufbauen. |
-| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).              |
+| `scan_timeout` | `30`                          | Timeout für das Scannen von Dateien (in Millisekunden).            |
 
 ### Beispiel
 
 ```toml
 # ~/.config/starship.toml
 
-# Disable the newline at the start of the prompt
+# Kein Zeilenumbrunch am Anfang der Eingabe
 add_newline = false
-# Overwrite a default_prompt_order and  use custom prompt_order
+# Ersetze die vorgegebene Reihenfolge der Statuszeile mit einer eigenen
 prompt_order=["rust","line_break","package","line_break","character"]
-# Wait 10 milliseconds for starship to check files under the current directory.
+# Gib Starship zehn Millisekunden um die Dateien im akutellen Pfad zu prüfen.
 scan_timeout = 10
 ```
 
@@ -89,16 +89,20 @@ prompt_order = [
     "kubernetes",
     "directory",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
+    "hg_branch",
     "package",
     "dotnet",
     "golang",
     "java",
     "nodejs",
+    "php",
     "python",
     "ruby",
     "rust",
+    "terraform",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -119,11 +123,12 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 
 ### Optionen
 
-| Variable   | Standardwert    | Beschreibung                                            |
-| ---------- | --------------- | ------------------------------------------------------- |
-| `symbol`   | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird. |
-| `style`    | `"bold yellow"` | Stil für dieses Modul.                                  |
-| `disabled` | `false`         | Deaktiviert das `aws`-Modul.                            |
+| Variable          | Standardwert    | Beschreibung                                                                          |
+| ----------------- | --------------- | ------------------------------------------------------------------------------------- |
+| `symbol`          | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                               |
+| `style`           | `"bold yellow"` | Stil für dieses Modul.                                                                |
+| `disabled`        | `false`         | Deaktiviert das `aws`-Modul.                                                          |
+| `displayed_items` | `all`           | Welche Objekte angezeigt werden sollen. Possible values: [`all`, `profile`, `region`] |
 
 ### Beispiel
 
@@ -133,6 +138,7 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 [aws]
 style = "bold blue"
 symbol = "🅰 "
+displayed_items = "region"
 ```
 
 ## Akkustand
@@ -241,7 +247,7 @@ Das `cmd_duration` Modul zeigt an wie lange der letzte Befehl ausgeführt wurde.
 
 ::: warning Nicht die DEBUG-trap in der Bash hooken
 
-If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
+Ist `bash` die Konsole der Wahl, dann nicht die `DEBUG`-trap nach der Ausführung von `eval $(starship init $0)` hooken, andernfalls **wird** dieses Modul unweigerlich untergehen.
 
 :::
 
@@ -268,15 +274,22 @@ prefix = "underwent "
 
 ## Conda
 
-Das `conda`-Modul zeigt dessen aktuelle Umgebung an, sofern `$CONDA_DEFAULT_ENV` gesetzt ist. Hinweis: Dies unterdrückt conda's eigenen Prompt-Modifikator nicht, sie können jedoch `conda config --set changeps1 False` setzen, um dies zu realisieren.
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+
+::: tip
+
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+
+:::
 
 ### Optionen
 
-| Variable   | Standardwert   | Beschreibung                                      |
-| ---------- | -------------- | ------------------------------------------------- |
-| `symbol`   | `"C "`         | Symbol das vor dem Umgebungsnamen angezeigt wird. |
-| `style`    | `"bold green"` | Stil für dieses Modul.                            |
-| `disabled` | `false`        | Deaktiviert das `conda`-Modul.                    |
+| Variable            | Standardwert   | Beschreibung                                                                                                                                                                                                |
+| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
+| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
+| `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
 
 ### Beispiel
 
@@ -301,11 +314,12 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | ------------------- | ------------- | -------------------------------------------------------------------------------- |
 | `truncation_length` | `3`           | Die Anzahl der übergeordneten Ordner, die angezeigt werden.                      |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `style`             | `"bold cyan"` | Stil für dieses Modul.                                                           |
-| `disabled`          | `false`       | Deaktiviert das `directory`-Modul.                                               |
+| `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
+| `style`             | `"bold cyan"` | The style for the module.                                                        |
+| `disabled`          | `false`       | Disables the `directory` module.                                                 |
 
 <details>
-<summary>Dieses Modul hat einige erweiterte Konfigurationsoptionen, welche die Darstellung von Verzeichnissen steuern.</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | Variable                    | Standardwert | Beschreibung                                                                             |
 | --------------------------- | ------------ | ---------------------------------------------------------------------------------------- |
@@ -336,8 +350,8 @@ Internally, this module uses its own mechanism for version detection. Typically 
 | Variable    | Standardwert  | Beschreibung                                                       |
 | ----------- | ------------- | ------------------------------------------------------------------ |
 | `symbol`    | `"•NET "`     | Symbol das vor der dotnet-Version angezeigt wird.                  |
-| `style`     | `"bold blue"` | Stil für dieses Modul.                                             |
 | `heuristic` | `true`        | Schnelle Versionserkennung nutzen um Starship bedienbar zu halten. |
+| `style`     | `"bold blue"` | Stil für dieses Modul.                                             |
 | `disabled`  | `false`       | Deaktiviert das `dotnet`-Modul.                                    |
 
 ### Beispiel
@@ -382,7 +396,7 @@ default = "unknown shell"
 
 ## Git-Branch
 
-Das `git_branch`-Modul zeigt den aktiven Git-Branch des Repositories im aktuellen Verzeichnis an.
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### Optionen
 
@@ -403,6 +417,36 @@ Das `git_branch`-Modul zeigt den aktiven Git-Branch des Repositories im aktuelle
 symbol = "🌱 "
 truncation_length = 4
 truncation_symbol = ""
+```
+
+## Git Commit
+
+The `git_commit` module shows the active branch of the repo in your current directory.
+
+::: tip
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Optionen
+
+| Variable             | Standardwert   | Beschreibung                                     |
+| -------------------- | -------------- | ------------------------------------------------ |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
+| `prefix`             | `"("`          | Prefix to display immediately before git commit. |
+| `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
+| `style`              | `"bold green"` | Stil für dieses Modul.                           |
+| `disabled`           | `true`         | Disables the `git_commit` module.                |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+disabled = false
+commit_hash_length = 4
 ```
 
 ## Git-Zustand
@@ -471,7 +515,6 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `enabled` | `false`      | Show the number of files                               |
 | `style`   |              | Optionally style the count differently than the module |
 
-
 ### Beispiel
 
 ```toml
@@ -495,7 +538,7 @@ deleted = "🗑"
 
 ## Golang
 
-Das `golang`-Modul zeigt die aktuell installierte Version von Golang. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
 
 - Das aktuelle Verzeichnis enthält eine `go.mod`-Datei
 - Das aktuelle Verzeichnis enthält eine `go.sum`-Datei
@@ -522,9 +565,34 @@ Das `golang`-Modul zeigt die aktuell installierte Version von Golang. Das Modul 
 symbol = "🏎💨 "
 ```
 
+## Mercurial Branch
+
+The `hg_branch` module shows the active branch of the repo in your current directory.
+
+### Optionen
+
+| Variable            | Standardwert    | Beschreibung                                                                                 |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
+| `style`             | `"bold purple"` | Stil für dieses Modul.                                                                       |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[hg_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
+```
+
 ## Hostname
 
-Das `hostname`-Modul zeigt den Hostnamen des Systems an.
+The `hostname` module shows the system hostname.
 
 ### Optionen
 
@@ -579,7 +647,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -649,11 +717,11 @@ pure_msg = "pure shell"
 
 ## Speicherauslastung
 
-The `memory_usage` module shows current system memory and swap usage.
+Das `memory_usage` Modul zeigt den aktuellen Systemspeicher und die swap-Nutzung an.
 
-By default the swap usage is displayed if the total system swap is non-zero.
+Standardmäßig wird die swap-Nutzung angezeigt, wenn der gesamte System-swap nicht Null ist.
 
-::: tip
+::: Tipp
 
 Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
 
@@ -661,14 +729,15 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 ### Optionen
 
-| Variable          | Standardwert          | Beschreibung                                                  |
-| ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
-| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`                | Symbol das vor der Speicherauslastung angezeigt wird.         |
-| `style`           | `"bold dimmed white"` | Stil für dieses Modul.                                        |
-| `disabled`        | `true`                | Deaktiviert das `memory_usage`-Modul.                         |
+| Variable          | Standardwert          | Beschreibung                                                               |
+| ----------------- | --------------------- | -------------------------------------------------------------------------- |
+| `show_percentage` | `false`               | Zeigt die Speicherauslastung als Prozentsatz des verfügbaren Speichers an. |
+| `show_swap`       | `true`                | Swap-Nutzung anzeigen, wenn die Gesamtsumme des swaps nicht Null ist.      |
+| `threshold`       | `75`                  | Speicherauslastung ausblenden, wenn sie unter diesem Prozentsatz ist.      |
+| `symbol`          | `"🐏 "`                | Symbol das vor der Speicherauslastung angezeigt wird.                      |
+| `separator`       | `" | "`               | Symbol oder Text, der ram und swap-Nutzung trennt.                         |
+| `style`           | `"bold dimmed white"` | Stil für dieses Modul.                                                     |
+| `disabled`        | `true`                | Deaktiviert das `memory_usage`-Modul.                                      |
 
 ### Beispiel
 
@@ -679,7 +748,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 show_percentage = true
 show_swap = true
 threshold = -1
-symbol = " "
+icon = " "
 style = "bold dimmed green"
 ```
 
@@ -687,8 +756,8 @@ style = "bold dimmed green"
 
 Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
-- The current directory contains a `pom.xml`, `build.gradle` or `build.sbt` file
-- The current directory contains a file with the `.java`, `.class` or `.jar` extension
+- Das aktuelle Verzeichnis enthält `pom.xml`, `build.gradle` oder `build.sbt`
+- Das aktuelle Verzeichnis enthält eine Datei mit der `.java`, `.class` oder `.jar` Erweiterung
 
 ### Optionen
 
@@ -709,11 +778,11 @@ symbol = "🌟 "
 
 ## NodeJS
 
-Das `nodejs` Modul zeigt die derzeit installierte Version von NodeJS. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+Das `nodejs`-Modul zeigt die aktuell installierte Version von NodeJS. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Das aktuelle Verzeichnis enthält eine `package.json`-Datei
-- The current directory contains a `node_modules` directory
-- The current directory contains a file with the `.js` extension
+- Das aktuelle Verzeichnis enthält ein `node_modules`-Verzeichnis
+- Das aktuelle Verzeichnis enthält eine Datei mit der `.js`-Erweiterung
 
 ### Optionen
 
@@ -734,13 +803,14 @@ symbol = "🤖 "
 
 ## Paketversion
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
+Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository für ein Paket ist, und zeigt dessen aktuelle Version an. Das Modul unterstützt derzeit `npm`, `cargo`, und `poetry` Pakete.
 
-- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
-- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
-- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- **npm** – Die `npm` Paketversion wird aus dem `package.json` gelesen, das sich im aktuellen Verzeichnis befindet
+- **Cargo** – Die `Cargo` Paketversion wird aus dem `Cargo.toml` gelesen, das sich im aktuellen Verzeichnis befindet
+- **poetry** – Die `poetry` Paketversion wird aus der `pyproject.toml` gelesen, das sich im aktuellen Verzeichnis befindet
+- **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 
-> ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
+> ⚠️ Die angezeigte Version ist die des Pakets, dessen Quellcode im Verzeichnis liegt, nicht die des Paketmanagers.
 
 ### Optionen
 
@@ -759,22 +829,47 @@ The `package` module is shown when the current directory is the repository for a
 symbol = "🎁 "
 ```
 
+## PHP
+
+Das `php`-Modul zeigt die aktuell installierte Version von PHP. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+
+- Das aktuelle Verzeichnis enthält eine `composer.json`-Datei
+- Das aktuelle Verzeichnis enthält eine `.php`-Datei
+
+### Optionen
+
+| Variable   | Standardwert | Beschreibung                                   |
+| ---------- | ------------ | ---------------------------------------------- |
+| `symbol`   | `"🐘 "`       | Symbol das vor der PHP-Version angezeigt wird. |
+| `style`    | `"bold red"` | Stil für dieses Modul.                         |
+| `disabled` | `false`      | Deaktiviert das `php`-Modul.                   |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[php]
+symbol = "🔹 "
+```
+
 ## Python
 
-The `python` module shows the currently installed version of Python.
+Das `python`-Modul zeigt die aktuell installierte Version von Python.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
+Wenn `pyenv_version_name` auf `true` gesetzt ist, wird die version der pyenv angezeigt.
 
-Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
+Andernfalls wird die gleiche Versionsnummer angezeigt wie `python --version`, sowie der Name des aktuellen virtualenvs, wenn eines aktiv ist.
 
-Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- The current directory contains a `.python-version` file
+- Das aktuelle Verzeichnis enthält eine `.python-version`-Datei
 - Das aktuelle Verzeichnis enthält eine `requirements.txt`-Datei
 - Das aktuelle Verzeichnis enthält eine `pyproject.toml`-Datei
-- The current directory contains a file with the `.py` extension
-- The current directory contains a `Pipfile` file
+- Das aktuelle Verzeichnis enthält eine Datei mit der `.py`-Erweiterung
+- Das aktuelle Verzeichnis enthält eine `Pipfile`-Datei
 - Das aktuelle Verzeichnis enthält eine `tox.ini`-Datei
+- Ein virtualenv ist momentan aktiv
 
 ### Optionen
 
@@ -799,10 +894,10 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+Das `ruby` Modul zeigt die derzeit installierte Version von Ruby an. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- The current directory contains a `Gemfile` file
-- The current directory contains a `.rb` file
+- Das aktuelle Verzeichnis enthält eine `Gemfile`-Datei
+- Das aktuelle Verzeichnis enthält eine `.rb`-Datei
 
 ### Optionen
 
@@ -823,10 +918,10 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+Das `rust` Modul zeigt die derzeit installierte Version von Rust an. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- Das aktuelle Verzeichnis enthält eine `Cargo.toml`-Datei
+- Das aktuelle Verzeichnis enthält eine Datei mit der `.rs`-Erweiterung
 
 ### Optionen
 
@@ -845,11 +940,36 @@ The `rust` module shows the currently installed version of Rust. Das Modul wird 
 symbol = "⚙️ "
 ```
 
-## Uhrzeit
+## Terraform
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Das `Terraform` Modul zeigt den aktuell ausgewählten terraform Arbeitsbereich und die Version an. Standardmäßig wird die Terraform-Version nicht angezeigt, da dies bei aktuellen Versionen von Terraform langsam ist, wenn viele Plugins verwendet werden. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-::: tip
+- Das aktuelle Verzeichnis enthält eine `.terraform`-Datei
+- Das aktuelle Verzeichnis enthält eine Datei mit der `.tf`-Erweiterung
+
+### Optionen
+
+| Variable       | Standardwert | Beschreibung                                                |
+| -------------- | ------------ | ----------------------------------------------------------- |
+| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
+| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
+| `style`        | `"bold 105"` | The style for the module.                                   |
+| `disabled`     | `false`      | Disables the `terraform` module.                            |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+symbol = "🏎💨 "
+```
+
+## Zeit
+
+Das `time` Modul zeigt die aktuelle **lokale** Zeit an. Der `format` Wert wird von der crate [`chrono`](https://crates.io/crates/chrono) benutzt um die Zeit zu formatieren. Schau dir [die chrono strftime Dokumentation](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) an, um die möglichen Optionen zu sehen.
+
+::: Tipp
 
 Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
 
@@ -857,15 +977,15 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 ### Optionen
 
-| Variable          | Standardwert  | Beschreibung                                                                                                                              |
-| ----------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`       | Aktiviert die Formatierung der Uhrzeit im 12-Stunden-Format.                                                                              |
-| `format`          | Siehe unten   | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html).             |
-| `style`           | `bold yellow` | Stil für dieses Modul.                                                                                                                    |
-| `disabled`        | `true`        | Deaktiviert das `time`-Modul.                                                                                                             |
-| `utc_time_offset` | `lokal`       | Legt das UTC-Offset fest, das verwendet werden soll. Reicht von -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| Variable          | Standardwert  | Beschreibung                                                                                                                  |
+| ----------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`       | Aktiviert 12-Stunden-Format                                                                                                   |
+| `format`          | siehe unten   | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html). |
+| `style`           | `bold yellow` | Stil für dieses Modul                                                                                                         |
+| `disabled`        | `true`        | Deaktiviert das `time`-Modul.                                                                                                 |
+| `utc_time_offset` | `local`       | Verwendetes Zeitzonen-Offset. Liegt zwischen -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.        |
 
-Wird `use_12hr` auf `true` gestellt, so wird `format` automatisch auf `"%r"` gesetzt. Ansonsten ist der Standardwert hierfür `"%T"`. Wird hingegen `format` gesetzt, so überschreibt dies die Einstellung `use_12hr`.
+Wird `use_12hr` auf `true` gestellt, nimmt `format` automatisch den Wert `"%r"` an. Andernfalls ist es standardmäßig `"%T"`. Wird hingegen `format` gesetzt, so überschreibt dies die Einstellung `use_12hr`.
 
 ### Beispiel
 
@@ -878,23 +998,23 @@ format = "🕙[ %T ]"
 utc_time_offset = -5
 ```
 
-## Benutzername
+## Username
 
-Das Modul `username` zeigt den Benutzernamen des aktiven Benutzers. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+Das `username` Modul zeigt den Namen des aktiven Benutzers. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Der aktuelle Benutzer ist root
-- Der aktuelle Benutzer ist nicht derjenige, der derzeit angemeldet ist
-- Der Benutzer ist über eine SSH-Sitzung verbunden
-- Die Variale `show_always` ist auf `true` gesetzt
+- Der aktuelle Benutzer ist nicht der eingeloggte Benutzer
+- Der Benutzer ist aktuell via SSH verbunden
+- Die Variable `show_always` ist auf true gesetzt
 
 ### Optionen
 
-| Variable      | Standardwert    | Beschreibung                      |
-| ------------- | --------------- | --------------------------------- |
-| `style_root`  | `"bold red"`    | Stil beim root-Benutzer.          |
-| `style_user`  | `"bold yellow"` | Stil bei allen anderen Benutzern. |
-| `show_always` | `false`         | `username`-Modul immer anzeigen.  |
-| `disabled`    | `false`         | Deaktiviert das `username`-Modul. |
+| Variable      | Standartwert    | Beschreibung                                   |
+| ------------- | --------------- | ---------------------------------------------- |
+| `style_root`  | `"bold red"`    | Stil wenn der Benutzer unter root läuft.       |
+| `style_user`  | `"bold yellow"` | Stil wenn der Benutzer nicht unter root läuft. |
+| `show_always` | `false`         | Immer das `username` Modul anzeigen.           |
+| `disabled`    | `false`         | Deavktiviert das `username` Modul.             |
 
 ### Beispiel
 

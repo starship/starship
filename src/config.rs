@@ -99,6 +99,22 @@ impl<'a> ModuleConfig<'a> for f64 {
     }
 }
 
+impl<'a> ModuleConfig<'a> for usize {
+    fn from_config(config: &Value) -> Option<Self> {
+        match config {
+            Value::Integer(value) => {
+                if *value > 0 {
+                    Some(*value as usize)
+                } else {
+                    None
+                }
+            }
+            Value::String(value) => value.parse::<usize>().ok(),
+            _ => None,
+        }
+    }
+}
+
 impl<'a, T> ModuleConfig<'a> for Vec<T>
 where
     T: ModuleConfig<'a>,

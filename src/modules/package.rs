@@ -59,6 +59,17 @@ fn extract_poetry_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
+fn extract_composer_version(file_contents: &str) -> Option<String> {
+    let composer_json: json::Value = json::from_str(file_contents).ok()?;
+    let raw_version = composer_json.get("version")?.as_str()?;
+    if raw_version == "null" {
+        return None;
+    };
+
+    let formatted_version = format_version(raw_version);
+    Some(formatted_version)
+}
+
 fn get_package_version() -> Option<String> {
     if let Ok(cargo_toml) = utils::read_file("Cargo.toml") {
         extract_cargo_version(&cargo_toml)
@@ -66,13 +77,20 @@ fn get_package_version() -> Option<String> {
         extract_package_version(&package_json)
     } else if let Ok(poetry_toml) = utils::read_file("pyproject.toml") {
         extract_poetry_version(&poetry_toml)
+    } else if let Ok(composer_json) = utils::read_file("composer.json") {
+        extract_composer_version(&composer_json)
     } else {
         None
     }
 }
 
 fn format_version(version: &str) -> String {
-    format!("v{}", version.replace('"', "").trim())
+    let cleaned = version.replace('"', "").trim().to_string();
+    if cleaned.starts_with('v') {
+        cleaned
+    } else {
+        format!("v{}", cleaned)
+    }
 }
 
 #[cfg(test)]
@@ -82,6 +100,16 @@ mod tests {
     #[test]
     fn test_format_version() {
         assert_eq!(format_version("0.1.0"), "v0.1.0");
+        assert_eq!(format_version(" 0.1.0 "), "v0.1.0");
+        assert_eq!(format_version("0.1.0 "), "v0.1.0");
+        assert_eq!(format_version(" 0.1.0"), "v0.1.0");
+        assert_eq!(format_version("\"0.1.0\""), "v0.1.0");
+
+        assert_eq!(format_version("v0.1.0"), "v0.1.0");
+        assert_eq!(format_version(" v0.1.0 "), "v0.1.0");
+        assert_eq!(format_version(" v0.1.0"), "v0.1.0");
+        assert_eq!(format_version("v0.1.0 "), "v0.1.0");
+        assert_eq!(format_version("\"v0.1.0\""), "v0.1.0");
     }
 
     #[test]
@@ -159,6 +187,32 @@ mod tests {
         let expected_version = None;
         assert_eq!(
             extract_poetry_version(&poetry_without_version),
+            expected_version
+        );
+    }
+
+    #[test]
+    fn test_extract_composer_version() {
+        let composer_with_version = json::json!({
+            "name": "spacefish",
+            "version": "0.1.0"
+        })
+        .to_string();
+
+        let expected_version = Some("v0.1.0".to_string());
+        assert_eq!(
+            extract_composer_version(&composer_with_version),
+            expected_version
+        );
+
+        let composer_without_version = json::json!({
+            "name": "spacefish"
+        })
+        .to_string();
+
+        let expected_version = None;
+        assert_eq!(
+            extract_composer_version(&composer_without_version),
             expected_version
         );
     }
