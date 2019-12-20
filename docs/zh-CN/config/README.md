@@ -125,10 +125,11 @@ The `aws` module shows the current AWS region and profile. This is based on `AWS
 
 | Variable          | Default         | Description                                                                 |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
+| `symbol`          | `"☁️  "`        | The symbol used before displaying the current AWS profile.                  |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
 | `style`           | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`        | `false`         | Disables the `AWS` module.                                                  |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 
 ### Example
 
@@ -139,6 +140,9 @@ The `aws` module shows the current AWS region and profile. This is based on `AWS
 style = "bold blue"
 symbol = "🅰 "
 displayed_items = "region"
+[aws.region_aliases]
+ap-southeast-2 = "au"
+us-east-1 = "va"
 ```
 
 ## Battery
