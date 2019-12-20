@@ -125,11 +125,11 @@ The `aws` module shows the current AWS region and profile. This is based on
 
 | Variable          | Default         | Description                                                                 |
 | ----------------- | --------------- | ----------------------------------------------------------------------------|
-| `symbol`          | `"☁️  "`        | The symbol used before displaying the current AWS profile.                  |
-| `style`           | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
+| `symbol`          | `"☁️  "`         | The symbol used before displaying the current AWS profile.                  |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 | `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
+| `style`           | `"bold yellow"` | The style for the module.                                                   |
+| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
 
 ### Example
 
