@@ -15,13 +15,8 @@ pub fn edit_configuration() {
 }
 
 fn get_editor() -> String {
-    match env::var("VISUAL") {
-        Ok(val) => val,
-        Err(_) => match env::var("EDITOR") {
-            Ok(val) => val,
-            Err(_) => STD_EDITOR.to_string(),
-        },
-    }
+    let editor = env::var("VISUAL").or_else(|_| env::var("EDITOR"));
+    editor.unwrap_or_else(|_| STD_EDITOR.to_string())
 }
 
 fn get_config_path() -> OsString {
