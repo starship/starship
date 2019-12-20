@@ -2,7 +2,7 @@
   <br /><img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship – Cross-shell prompt" />
+    alt="Starship - подсказка для всех оболочек" />
 </p>
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
@@ -88,12 +88,12 @@
   - `⇡` — впереди удаленной ветки
   - `⇣` — позади удаленной ветки
   - `⇕` — неоднозначные изменения
-  - `?` — untracked changes
-  - `$` — stashed changes
-  - `!` — modified files
-  - `+` — added files
-  - `»` — renamed files
-  - `✘` — deleted files
+  - `?` — не отслеживаемые изменения
+  - `$` — отложенные изменения
+  - `!` — изменённые файлы
+  - `+` — добавленные файлы
+  - `»` — переименнованные файлы
+  - `✘` — удалённые файлы
 - Текущая ветка Mercurial
 - Текущий уровень и состояние заряда батареи
 - `⇡` – зарядка
@@ -216,14 +216,14 @@
   - У нас есть проект GitHub и множество неорганизованных/неприоритизированных функций, а также идей, которые еще не были добавлены в issues. Starship нуждается в ком-то для того, чтобы владеть направлением продукта!
 - 👩‍🎨 **Дизайнер**
   - Нравится создавать красивые сайты? Превосходно! Мы стремимся создать красивый лендинг, показывающий Starship во всей его красе. Помощь с дизайном бренда Starship - отличная возможность попробовать новые идеи!
-- 👩‍💻 **Rust Developer**
-  - There is _a lot_ of low-hanging fruit when it comes to writing idiomatic Rust, designing effective Rust architecture, performance optimizations, cross-platform build optimizations, and more! I ([@matchai](https://github.com/matchai)) am a beginner to Rust. Come point us in the right direction!
+- 👩‍💻 **Разработчик на Rust**
+  - Есть _много_ "лёгкой добычи", когда речь заходит о написании идиоматического Rust, проектировании эффективной архитектуры Rust, оптимизации производительности, оптимизации кроссплатформенной сборки и многом другом! Я ([@matchai](https://github.com/matchai)) - новичок в Rust. Направьте нас в нужном направлении!
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Если вы хотите помочь в создании Starship, пожалуйста, ознакомьтесь с нашим [Руководством по содействию](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Кроме того, заходите на наш [Discord сервер](https://discord.gg/8Jzqu3T) и поздоровайтесь. 👋
 
-### Contributors
+### Участники
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+Спасибо этим замечательным людям ([ключ эмодзи](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -313,11 +313,11 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+Этот проект соответствует спецификации [all-contributors](https://github.com/all-contributors/all-contributors). Помощь любого рода приветствуется!
 
-## 💭 Inspired By
+## 💭 Вдохновение
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Пожалуйста, ознакомьтесь с этими предыдущими работами, которые помогли вдохновить создание Starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
 
@@ -330,6 +330,6 @@ Please check out these previous works that helped inspire the creation of starsh
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 License
+## 📝 Лицензия
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Авторское право © 2019-настоящее, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Этот проект лицензирован под лицензией [ISC](https://github.com/starship/starship/blob/master/LICENSE).
