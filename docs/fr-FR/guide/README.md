@@ -69,7 +69,7 @@
 
 ## 🍬 Fonctionnalités
 
-- Le symbole de prompt devient rouge si la dernière commande a retournée un code différent de zéro
+- Le symbole de prompt devient rouge si la dernière commande a retourné un code différent de zéro
 - Version actuelle de Go (`🐹`)
 - Version actuelle de Java (`☕`)
 - Version actuelle de Node.js (`⬢`)
@@ -82,7 +82,7 @@
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-  - compositeur (PHP)
+  - composer (PHP)
 - Branche Git actuelle et affichage "riche" du statut du dépôt:
   - `=` — Conflits dans les changements
   - `⇡` — En avance sur la branche distante
