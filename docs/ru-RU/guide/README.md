@@ -67,7 +67,7 @@
   <br>
 </p>
 
-## свойство
+## 🍬 Особенности
 
 - Символ подсказки становится красным, если последняя команда завершается с ненулевым кодом
 - Текущая версия Go (`🐹< / 0>)</li>
@@ -78,79 +78,79 @@
 <li>Текущая версия Ruby (<code>💎< / 0>)</li>
 <li>Текущая версия Rust (<code>🦀< / 0>)</li>
 <li>Текущая версия .NET (<code>•NET`)
-- Current version of package in current directory (`📦`)
+- Текущая версия пакета в текущем каталоге (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
   - composer (PHP)
-- Current Git branch and rich repo status:
-  - `=` — conflicting changes
-  - `⇡` — ahead of remote branch
-  - `⇣` — behind of remote branch
-  - `⇕` — diverged changes
+- Текущая ветка Git и статус репозитория:
+  - `=` — конфликтующие изменения
+  - `⇡` — впереди удаленной ветки
+  - `⇣` — позади удаленной ветки
+  - `⇕` — неоднозначные изменения
   - `?` — untracked changes
   - `$` — stashed changes
   - `!` — modified files
   - `+` — added files
   - `»` — renamed files
   - `✘` — deleted files
-- Current Mercurial branch
-- Current battery level and status
-- `⇡` – charging
-- `⇣` – discharging
-- `•` – fully charged
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
-- Current Amazon Web Services (AWS) profile (`☁️`)
-- Execution time of the last command
-- Custom environment variable value
-- Nix-shell environment detection
-- Current username if not the same as the logged-in user
-- Optional current time in 12/24hr format
+- Текущая ветка Mercurial
+- Текущий уровень и состояние заряда батареи
+- `⇡` – зарядка
+- `⇣` – разрядка
+- `•` – полная зарядка
+- Индикатор задач в фоне (`✦`)
+- Текущий кластер и пространство имён Kubernetes (`☸`)
+- Текущий профиль Amazon Web Services (AWS) (`☁`)
+- Время выполнения последней команды
+- Значение переменной окружения
+- Обнаружение среды Nix-shell
+- Текущее имя пользователя, если оно не совпадает с именем залогиненного пользователя
+- Необязательное текущее время в 12- или 24-часовом формате
 
-## 🚀 Installation
+## 🚀 Установка
 
-### Prerequisites
+### Требования
 
-- A [Powerline font](https://github.com/powerline/fonts) installed and enabled in your terminal (for example, try [Fira Code](https://github.com/tonsky/FiraCode)).
+- Установленный и включённый [шрифт Powerline](https://github.com/powerline/fonts) (например, [Fira Code](https://github.com/tonsky/FiraCode)).
 
-### Getting Started
+### Начало работы
 
-1. Install the **starship** binary:
-
-
-   #### Install Latest Version
+1. Установите двоичный файл **starship**:
 
 
-   ##### With Shell:
+   #### Установить последнюю версию
+
+
+   ##### Через Bash:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Install via Package Manager
+   #### Установить через менеджер пакетов
 
 
-   ##### With [Homebrew](https://brew.sh/):
+   ##### С [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### С [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Добавить сценарий инициализации в конфигурационный файл вашей оболочки:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Добавьте следующее в конец `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -161,7 +161,7 @@
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Добавьте следующее в конец `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -172,7 +172,7 @@
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Добавьте следующее в конец `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -183,7 +183,7 @@
 
    #### PowerShell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   Добавьте следующее в конец `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (или `~/.config/powershell/Microsoft.PowerShell_profile.ps1` на -Nix):
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
@@ -194,7 +194,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Добавьте следующее в конец `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -204,18 +204,18 @@
 
 ## 🔧 Конфигурация
 
-For details on how to configure Starship, check out our [documentation](https://starship.rs/config/).
+Для получения подробной информации о том, как настроить Starship, ознакомьтесь с [документацией](https://starship.rs/config/).
 
-## 🤝 Contributing
+## 🤝 Помощь
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+Мы всегда ищем помощников **всех уровней навыков**! Если вы хотите облегчить свой путь к проекту, попробуйте [хорошие первые задачи](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-### High Priority Needs
+### Нужды с высоким приоритетом
 
-- 👩‍💼 **Product Manager**
-  - We have a GitHub Project and many unorganized/unprioritized features, as well as ideas that haven't yet been made into issues. Starship needs someone to own the product direction!
-- 👩‍🎨 **Designer**
-  - Like making eye-catching websites? Excellent! We are looking to create a beautiful landing page showing off Starship in all its glory. Helping design for Starship's brand is a great opportunity to try out new ideas!
+- 👩‍💼 **Менеджер продукта**
+  - У нас есть проект GitHub и множество неорганизованных/неприоритизированных функций, а также идей, которые еще не были добавлены в issues. Starship нуждается в ком-то для того, чтобы владеть направлением продукта!
+- 👩‍🎨 **Дизайнер**
+  - Нравится создавать красивые сайты? Превосходно! Мы стремимся создать красивый лендинг, показывающий Starship во всей его красе. Помощь с дизайном бренда Starship - отличная возможность попробовать новые идеи!
 - 👩‍💻 **Rust Developer**
   - There is _a lot_ of low-hanging fruit when it comes to writing idiomatic Rust, designing effective Rust architecture, performance optimizations, cross-platform build optimizations, and more! I ([@matchai](https://github.com/matchai)) am a beginner to Rust. Come point us in the right direction!
 
