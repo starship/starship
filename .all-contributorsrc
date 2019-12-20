@@ -626,6 +626,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Scotsguy",
+      "name": "AppleTheGolden",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/20385973?v=4",
+      "profile": "https://github.com/Scotsguy",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
