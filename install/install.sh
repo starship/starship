@@ -131,7 +131,7 @@ detect_arch() {
 
 confirm() {
   if [ -z "${FORCE-}" ]; then
-    printf "${MAGENTA}?${NO_COLOR} $@ ${BOLD}[y/N]${NO_COLOR} "	
+    printf "${MAGENTA}?${NO_COLOR} $@ ${BOLD}[y/N]${NO_COLOR} "
     set +e
     read -r yn < /dev/tty
     rc=$?
@@ -213,7 +213,7 @@ if [ "${ARCH}" = "i386" ]; then
   exit 1
 fi
 
-printf "  ${UNDERLINE}Configuration${NO_COLOR}\n"	
+printf "  ${UNDERLINE}Configuration${NO_COLOR}\n"
 info "${BOLD}Bin directory${NO_COLOR}: ${GREEN}${BIN_DIR}${NO_COLOR}"
 info "${BOLD}Platform${NO_COLOR}:      ${GREEN}${PLATFORM}${NO_COLOR}"
 info "${BOLD}Arch${NO_COLOR}:          ${GREEN}${ARCH}${NO_COLOR}"
