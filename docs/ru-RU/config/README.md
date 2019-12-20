@@ -123,12 +123,13 @@ prompt_order = [
 
 ### Опции
 
-| Переменная        | По умолчанию    | Описание                                                         |
-| ----------------- | --------------- | ---------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | Символ перед отображением текущего профиля AWS.                  |
-| `style`           | `"bold yellow"` | Стиль модуля.                                                    |
-| `disabled`        | `false`         | Отключение модуля `AWS`.                                         |
-| `displayed_items` | `all`           | Выбор элементов. Возможные значения [`all`, `profile`, `region`] |
+| Переменная        | По умолчанию    | Описание                                                                    |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☁️  "`        | Символ перед отображением текущего профиля AWS.                             |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
+| `style`           | `"bold yellow"` | The style for the module.                                                   |
+| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
 
 ### Пример
 
@@ -139,6 +140,9 @@ prompt_order = [
 style = "bold blue"
 symbol = "🅰 "
 displayed_items = "region"
+[aws.region_aliases]
+ap-southeast-2 = "au"
+us-east-1 = "va"
 ```
 
 ## Батарея
