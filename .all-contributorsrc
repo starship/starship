@@ -636,6 +636,17 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "mfs",
+      "name": "Mike Sampson",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/481987?v=4",
+      "profile": "http://sda.io",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
