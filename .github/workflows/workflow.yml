@@ -127,7 +127,7 @@ jobs:
       # Install PHP at a fixed version
       - uses: shivammathur/setup-php@v1
         with:
-          php-version: "7.3.8"
+          php-version: "7.3"
 
       # Install Mercurial (pre-installed on linux, installed from pip on macos
       # and from choco on windows),
