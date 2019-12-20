@@ -123,12 +123,13 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 
 ### Optionen
 
-| Variable          | Standardwert    | Beschreibung                                                                          |
-| ----------------- | --------------- | ------------------------------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                               |
-| `style`           | `"bold yellow"` | Stil für dieses Modul.                                                                |
-| `disabled`        | `false`         | Deaktiviert das `aws`-Modul.                                                          |
-| `displayed_items` | `all`           | Welche Objekte angezeigt werden sollen. Possible values: [`all`, `profile`, `region`] |
+| Variable          | Standardwert    | Beschreibung                                                                |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☁️  "`        | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                     |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
+| `style`           | `"bold yellow"` | The style for the module.                                                   |
+| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
 
 ### Beispiel
 
@@ -139,6 +140,9 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 style = "bold blue"
 symbol = "🅰 "
 displayed_items = "region"
+[aws.region_aliases]
+ap-southeast-2 = "au"
+us-east-1 = "va"
 ```
 
 ## Akkustand
