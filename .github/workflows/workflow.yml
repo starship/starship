@@ -247,8 +247,7 @@ jobs:
 
       - name: Install musl tools
         if: matrix.target == 'x86_64-unknown-linux-musl'
-        # Install libssl-dev for openssl-sys
-        run: sudo apt-get install -y musl-tools libssl-dev pkg-config
+        run: sudo apt-get install -y musl-tools
 
       - name: Build target
         uses: actions-rs/cargo@v1
