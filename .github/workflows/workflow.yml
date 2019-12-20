@@ -194,17 +194,17 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: |
-          echo "https://starship-bot:$HOMEBREW_GITHUB_API_TOKEN@github.com" > ~/.git-credentials
+          echo "https://matchai:$HOMEBREW_GITHUB_API_TOKEN@github.com" > ~/.git-credentials
           git config --global credential.helper store
-          git config --global user.name "Starship Bot"
-          git config --global user.email "bot@starship.rs"
+          git config --global user.name "Matan Kushner"
+          git config --global user.email "hello@matchai.dev"
 
           cd $(brew --repo homebrew/core)	
           git fetch origin
           sudo git reset --hard origin/master	
           cd -
 
-          brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration. If you have any questions, please ping `@matchai`." --no-browse -v starship --force
+          brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
 
