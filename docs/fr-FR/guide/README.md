@@ -58,7 +58,7 @@
 
 <h1></h1>
 
-<p align="center"> Starship est un environnement minimal, extrêmement rapide et extrêmement personnalisable pour n'importe quelle terminale shell!<br /> Le prompt affiche les informations dont vous avez besoin pendant que vous travaillez, tout en restant élégant et hors du chemin. <p>
+<p align="center"> Starship est l'invite de commande minimale, ultra rapide et extrêmement personnalisable pour n'importe quel shell !<br /> Il vous indique les informations dont vous avez besoin pendant que vous travaillez, tout en restant élégant et discret. <p>
 
 <p align="center">
   <br>
