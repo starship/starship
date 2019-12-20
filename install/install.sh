@@ -34,19 +34,19 @@ MAGENTA="$(tput setaf 5 2>/dev/null || echo '')"
 NO_COLOR="$(tput sgr0 2>/dev/null || echo '')"
 
 info() {
-  printf "%s>%s %s\n" "${BOLD}${GREY}" "${NO_COLOR}" "$@"
+  printf "${BOLD}${GREY}>${NO_COLOR} $@\n"
 }
 
 warn() {
-  printf "%s! %s%s\n" "${YELLOW}" "$@" "${NO_COLOR}"
+  printf "${YELLOW}! $@${NO_COLOR}\n"
 }
 
 error() {
-  printf "%sx %s%s\n" "${RED}" "$@" "${NO_COLOR}"
+  printf "${RED}x $@${NO_COLOR}\n" >&2
 }
 
 complete() {
-  printf "%s✓%s %s\n" "${GREEN}" "${NO_COLOR}" "$@"
+  printf "${GREEN}✓${NO_COLOR} $@\n"
 }
 
 fetch() {
@@ -131,7 +131,7 @@ detect_arch() {
 
 confirm() {
   if [ -z "${FORCE-}" ]; then
-    printf "%s?%s %s %s[y/N]%s " "${MAGENTA}" "${NO_COLOR}" "$@" "${BOLD}" "${NO_COLOR}"
+    printf "${MAGENTA}?${NO_COLOR} $@ ${BOLD}[y/N]${NO_COLOR} "	
     set +e
     read -r yn < /dev/tty
     rc=$?
@@ -213,7 +213,7 @@ if [ "${ARCH}" = "i386" ]; then
   exit 1
 fi
 
-printf "  %sConfiguration%s\n" "${UNDERLINE}" "${NO_COLOR}"
+printf "  ${UNDERLINE}Configuration${NO_COLOR}\n"	
 info "${BOLD}Bin directory${NO_COLOR}: ${GREEN}${BIN_DIR}${NO_COLOR}"
 info "${BOLD}Platform${NO_COLOR}:      ${GREEN}${PLATFORM}${NO_COLOR}"
 info "${BOLD}Arch${NO_COLOR}:          ${GREEN}${ARCH}${NO_COLOR}"
