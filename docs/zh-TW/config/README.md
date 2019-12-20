@@ -125,10 +125,11 @@ prompt_order = [
 
 | 變數                | 預設              | 說明                                                                          |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。                                                          |
-| `style`           | `"bold yellow"` | 這個模組的風格。                                                                    |
-| `disabled`        | `false`         | 停用 `AWS` 模組。                                                                |
+| `symbol`          | `"☁️  "`        | 顯示在目前 AWS 配置之前的符號。                                                          |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
+| `style`           | `"bold yellow"` | The style for the module.                                                   |
+| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
 
 ### 範例
 
@@ -139,6 +140,9 @@ prompt_order = [
 style = "bold blue"
 symbol = "🅰 "
 displayed_items = "region"
+[aws.region_aliases]
+ap-southeast-2 = "au"
+us-east-1 = "va"
 ```
 
 ## 電池
