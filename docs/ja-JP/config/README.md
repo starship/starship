@@ -123,12 +123,13 @@ prompt_order = [
 
 ### オプション
 
-| 変数                | デフォルト           | 説明                                                       |
-| ----------------- | --------------- | -------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | 現在のAWSプロファイルを表示する前に表示される記号です。                            |
-| `style`           | `"bold yellow"` | モジュールのスタイルです。                                            |
-| `disabled`        | `false`         | `aws`モジュールを無効にします。                                       |
-| `displayed_items` | `all`           | 表示するアイテムを選択します。 指定可能な値は以下です。[`all`, `profile`, `region`] |
+| 変数                | デフォルト           | 説明                                                                          |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☁️  "`        | 現在のAWSプロファイルを表示する前に表示される記号です。                                               |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
+| `style`           | `"bold yellow"` | The style for the module.                                                   |
+| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
 
 ### 設定例
 
@@ -139,6 +140,9 @@ prompt_order = [
 style = "bold blue"
 symbol = "🅰 "
 displayed_items = "region"
+[aws.region_aliases]
+ap-southeast-2 = "au"
+us-east-1 = "va"
 ```
 
 ## バッテリー
