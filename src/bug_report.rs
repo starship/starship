@@ -149,14 +149,10 @@ struct TerminalInfo {
 }
 
 fn get_terminal_info() -> TerminalInfo {
-    let terminal_str = std::env::var("TERM_PROGRAM")
+    let terminal = std::env::var("TERM_PROGRAM")
         .or_else(|_| std::env::var("LC_TERMINAL"))
-        .unwrap_or_else(|_| UNKNOWN_TERMINAL.to_string());
-
-    let terminal = terminal_str
-        .splitn(2, ".app")
-        .nth(0)
-        .unwrap_or_else(|| &terminal_str)
+        .unwrap_or_else(|_| UNKNOWN_TERMINAL.to_string())
+        .trim_end_matches(".app")
         .to_string();
 
     let version = std::env::var("TERM_PROGRAM_VERSION")
