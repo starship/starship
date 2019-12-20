@@ -3,6 +3,7 @@ use crate::utils;
 use ansi_term::{Color, Style};
 
 use std::clone::Clone;
+use std::collections::HashMap;
 use std::marker::Sized;
 
 use dirs::home_dir;
@@ -124,6 +125,22 @@ where
             .iter()
             .map(|value| T::from_config(value))
             .collect()
+    }
+}
+
+impl<'a, T, S: ::std::hash::BuildHasher + Default> ModuleConfig<'a> for HashMap<String, T, S>
+where
+    T: ModuleConfig<'a>,
+    S: Clone,
+{
+    fn from_config(config: &'a Value) -> Option<Self> {
+        let mut hm = HashMap::default();
+
+        for (x, y) in config.as_table()?.iter() {
+            hm.insert(x.clone(), T::from_config(y)?);
+        }
+
+        Some(hm)
     }
 }
 
