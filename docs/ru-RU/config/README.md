@@ -315,7 +315,7 @@ style = "dimmed green"
 | ------------------- | ------------- | ---------------------------------------------------------------------------- |
 | `truncation_length` | `3`           | Количество родительских папок, к которым должен быть усечен текущий каталог. |
 | `truncate_to_repo`  | `true`        | Следует или нет обрезать до корня репозитория git, в котором вы находитесь.  |
-| `prefix`            | `"in "`       | Prefix to display immediately before the directory.                          |
+| `prefix`            | `"in "`       | Префикс, отображаемый перед папкой.                                          |
 | `style`             | `"bold cyan"` | Стиль модуля.                                                                |
 | `disabled`          | `false`       | Отключает модуль `directory`.                                                |
 
@@ -422,11 +422,11 @@ truncation_symbol = ""
 
 ## Git Commit
 
-The `git_commit` module shows the current commit hash of the repo in your current directory.
+Модуль `git_commit` показывает хэш текущего коммита репозитория в вашем текущем каталоге.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 :::
 
