@@ -148,6 +148,13 @@ The prompt shows information you need while you're working, while staying sleek 
    brew install starship
    ```
 
+   ##### With [MacPorts](https://www.macports.org/):
+
+   ```sh
+   sudo port selfupdate
+   sudo port install starship
+   ```
+
    ##### With [Scoop](https://scoop.sh):
 
    ```powershell
