@@ -6,7 +6,6 @@ const STD_EDITOR: &str = "vi";
 
 pub fn edit_configuration() {
     let config_path = get_config_path();
-
     let editor_cmd = get_editor();
 
     let mut cmd_iter = editor_cmd
