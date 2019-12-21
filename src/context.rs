@@ -43,7 +43,7 @@ impl<'a> Context<'a> {
             .unwrap_or_else(|| {
                 env::var("PWD").map(PathBuf::from).unwrap_or_else(|err| {
                     log::debug!("Unable to get path from $PWD: {}", err);
-                    env::current_dir().expect("Unable to identify current directory.")
+                    env::current_dir().expect("Unable to identify current directory. Error")
                 })
             });
 
