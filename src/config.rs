@@ -142,6 +142,20 @@ where
 
         Some(hm)
     }
+
+    fn load_config(&self, config: &'a Value) -> Self {
+        let mut new_config = self.clone();
+        if let Value::Table(ref config_table) = config {
+            for (key, value) in config_table.iter() {
+                if let Some(current_value) = new_config.get_mut(key) {
+                    *current_value = current_value.load_config(value);
+                } else if let Some(new_value) = T::from_config(value) {
+                    new_config.insert(key.clone(), new_value);
+                }
+            }
+        }
+        new_config
+    }
 }
 
 impl<'a, T> ModuleConfig<'a> for Option<T>
