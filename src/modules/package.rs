@@ -36,7 +36,7 @@ fn extract_cargo_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
-fn extract_package_version(file_contents: &str) -> Option<String> {
+pub fn extract_package_version(file_contents: &str) -> Option<String> {
     let package_json: json::Value = json::from_str(file_contents).ok()?;
     let raw_version = package_json.get("version")?.as_str()?;
     if raw_version == "null" {
