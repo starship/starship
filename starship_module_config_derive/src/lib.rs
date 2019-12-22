@@ -33,7 +33,7 @@ fn impl_module_config(dinput: DeriveInput) -> proc_macro::TokenStream {
                     }
                 };
                 let new_from_tokens = quote! {
-                    #ident: <#ty>::from_config(config.get(stringify!(#ident))?)?,
+                    #ident: config.get(stringify!(#ident)).and_then(<#ty>::from_config)?,
                 };
 
                 load_tokens = quote! {
