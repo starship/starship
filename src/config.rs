@@ -227,7 +227,7 @@ impl StarshipConfig {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct SegmentConfig<'a> {
     pub value: &'a str,
     pub style: Option<Style>,
