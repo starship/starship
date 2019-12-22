@@ -15,6 +15,7 @@ mod hg_branch;
 mod hostname;
 mod java;
 mod jobs;
+mod js_library;
 mod kubernetes;
 mod line_break;
 mod memory_usage;
@@ -59,6 +60,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "hostname" => hostname::module(context),
         "java" => java::module(context),
         "jobs" => jobs::module(context),
+        "js_library" => js_library::module(context),
         "kubernetes" => kubernetes::module(context),
         "line_break" => line_break::module(context),
         "memory_usage" => memory_usage::module(context),

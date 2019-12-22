@@ -15,6 +15,7 @@ mod golang;
 mod hg_branch;
 mod hostname;
 mod jobs;
+mod js_library;
 mod line_break;
 mod modules;
 mod nix_shell;

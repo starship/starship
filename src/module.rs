@@ -26,6 +26,7 @@ pub const ALL_MODULES: &[&str] = &[
     "hostname",
     "java",
     "jobs",
+    "js_library",
     "kubernetes",
     "line_break",
     "memory_usage",

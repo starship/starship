@@ -41,6 +41,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 // ↑ Toolchain version modules ↑
                 "nix_shell",
                 "conda",
+                "js_library",
                 "memory_usage",
                 "aws",
                 "env_var",
