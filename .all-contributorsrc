@@ -647,6 +647,15 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "dominikbraun",
+      "name": "Dominik Braun",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/36575275?v=4",
+      "profile": "https://sternentstehung.de",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
