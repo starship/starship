@@ -105,6 +105,10 @@ impl<'a> Module<'a> {
         self.segments.iter().all(|segment| segment.is_empty())
     }
 
+    pub fn get_segments(&self) -> Vec<&str> {
+        self.segments.iter().map(Segment::get_value).collect()
+    }
+
     /// Get the module's prefix
     pub fn get_prefix(&mut self) -> &mut Affix {
         &mut self.prefix

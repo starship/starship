@@ -61,6 +61,12 @@ pub fn module(module_name: &str, args: ArgMatches) {
 pub fn explainer(args: ArgMatches) {
     let context = Context::new(args);
 
+    struct ModuleInfo {
+        value: String,
+        value_len: usize,
+        desc: String,
+    }
+
     let dont_print = vec!["line_break", "character"];
 
     let modules = compute_modules(&context)
@@ -68,27 +74,55 @@ pub fn explainer(args: ArgMatches) {
         .filter(|module| !dont_print.contains(&module.get_name().as_str()))
         .map(|module| {
             let ansi_strings = module.ansi_strings();
-            let desc = module.get_description();
-            (
-                ansi_term::ANSIStrings(&ansi_strings[1..ansi_strings.len() - 1]).to_string(),
-                desc.to_owned(),
-            )
+            let value = module.get_segments().join("");
+            ModuleInfo {
+                value: ansi_term::ANSIStrings(&ansi_strings[1..ansi_strings.len() - 1]).to_string(),
+                value_len: value.chars().count() + count_wide_chars(&value),
+                desc: module.get_description().to_owned(),
+            }
         })
-        .collect::<Vec<(String, String)>>();
+        .collect::<Vec<ModuleInfo>>();
 
-    let max_module_width = modules.iter().fold(0, |acc, (m, _)| {
-        std::cmp::max(acc, m.chars().count() + count_wide_chars(&m))
-    });
+    let mut max_ansi_module_width = 0;
+    let mut max_module_width = 0;
+
+    for info in &modules {
+        max_ansi_module_width = std::cmp::max(
+            max_ansi_module_width,
+            info.value.chars().count() + count_wide_chars(&info.value),
+        );
+        max_module_width = std::cmp::max(max_module_width, info.value_len);
+    }
+
+    let desc_width = term_size::dimensions()
+        .map(|(w, _)| w)
+        .map(|width| width - std::cmp::min(width, max_ansi_module_width));
 
     println!("\n Here's a breakdown of your prompt:");
-    for (module, desc) in modules {
-        let wide_chars = count_wide_chars(&module);
-        println!(
-            " {:width$}  -  {}",
-            module,
-            desc,
-            width = max_module_width - wide_chars
-        );
+    for info in modules {
+        let wide_chars = count_wide_chars(&info.value);
+
+        if let Some(desc_width) = desc_width {
+            let wrapped = textwrap::fill(&info.desc, desc_width);
+            let mut lines = wrapped.split('\n');
+            println!(
+                " {:width$}  -  {}",
+                info.value,
+                lines.next().unwrap(),
+                width = max_ansi_module_width - wide_chars
+            );
+
+            for line in lines {
+                println!("{}{}", " ".repeat(max_module_width + 6), line.trim());
+            }
+        } else {
+            println!(
+                " {:width$}  -  {}",
+                info.value,
+                info.desc,
+                width = max_ansi_module_width - wide_chars
+            );
+        };
     }
 }
 
