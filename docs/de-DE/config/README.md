@@ -125,7 +125,7 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 
 | Variable          | Standardwert    | Beschreibung                                                                |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️  "`        | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                     |
+| `symbol`          | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                     |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 | `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
 | `style`           | `"bold yellow"` | The style for the module.                                                   |
@@ -703,8 +703,8 @@ Das `nix_shell`-Modul zeigt die nix-shell Umgebung an. Das Modul wird angezeigt,
 | Variable     | Standardwert | Beschreibung                       |
 | ------------ | ------------ | ---------------------------------- |
 | `use_name`   | `false`      | Namen der nix-Shell anzeigen.      |
-| `impure_msg` | `impure`     | Passt die "impure"-Nachricht an.   |
-| `pure_msg`   | `pure`       | Passt die "pure"-Nachricht an.     |
+| `impure_msg` | `"impure"`   | Passt die "impure"-Nachricht an.   |
+| `pure_msg`   | `"pure"`     | Passt die "pure"-Nachricht an.     |
 | `style`      | `"bold red"` | Stil für dieses Modul.             |
 | `disabled`   | `false`      | Deaktiviert das `nix_shell`-Modul. |
 
@@ -720,29 +720,53 @@ impure_msg = "impure shell"
 pure_msg = "pure shell"
 ```
 
-## Speicherauslastung
+## Java
 
-Das `memory_usage` Modul zeigt den aktuellen Systemspeicher und die swap-Nutzung an.
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
 
-Standardmäßig wird die swap-Nutzung angezeigt, wenn der gesamte System-swap nicht Null ist.
+- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
+- Das aktuelle Verzeichnis enthält eine Datei mit der `.java`, `.class` oder `.jar` Erweiterung
 
-::: Tipp
+### Optionen
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+| Variable   | Standardwert   | Beschreibung                                           |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | The style for the module.                              |
+| `disabled` | `false`        | Disables the `java` module.                            |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[java]
+symbol = "🌟 "
+```
+
+## Memory Usage
+
+The `memory_usage` module shows current system memory and swap usage.
+
+By default the swap usage is displayed if the total system swap is non-zero.
+
+::: tip
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
 ### Optionen
 
-| Variable          | Standardwert          | Beschreibung                                                               |
-| ----------------- | --------------------- | -------------------------------------------------------------------------- |
-| `show_percentage` | `false`               | Zeigt die Speicherauslastung als Prozentsatz des verfügbaren Speichers an. |
-| `show_swap`       | `true`                | Swap-Nutzung anzeigen, wenn die Gesamtsumme des swaps nicht Null ist.      |
-| `threshold`       | `75`                  | Speicherauslastung ausblenden, wenn sie unter diesem Prozentsatz ist.      |
-| `symbol`          | `"🐏 "`                | Symbol das vor der Speicherauslastung angezeigt wird.                      |
-| `separator`       | `" | "`               | Symbol oder Text, der ram und swap-Nutzung trennt.                         |
-| `style`           | `"bold dimmed white"` | Stil für dieses Modul.                                                     |
-| `disabled`        | `true`                | Deaktiviert das `memory_usage`-Modul.                                      |
+| Variable          | Standardwert          | Beschreibung                                                  |
+| ----------------- | --------------------- | ------------------------------------------------------------- |
+| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
+| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
+| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
+| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
+| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
+| `style`           | `"bold dimmed white"` | The style for the module.                                     |
+| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
 ### Beispiel
 
@@ -753,32 +777,9 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 show_percentage = true
 show_swap = true
 threshold = -1
-icon = " "
+symbol = " "
+separator = "/"
 style = "bold dimmed green"
-```
-
-## Java
-
-Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
-
-- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
-- Das aktuelle Verzeichnis enthält eine Datei mit der `.java`, `.class` oder `.jar` Erweiterung
-
-### Optionen
-
-| Variable   | Standardwert   | Beschreibung                                    |
-| ---------- | -------------- | ----------------------------------------------- |
-| `symbol`   | `"☕ "`         | Symbol das vor der Java-Version angezeigt wird. |
-| `style`    | `"dimmed red"` | Stil für dieses Modul.                          |
-| `disabled` | `false`        | Deaktiviert das `Java`-Modul.                   |
-
-### Beispiel
-
-```toml
-# ~/.config/starship.toml
-
-[java]
-symbol = "🌟 "
 ```
 
 ## NodeJS
