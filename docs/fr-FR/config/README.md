@@ -125,7 +125,7 @@ The `aws` module shows the current AWS region and profile. This is based on `AWS
 
 | Variable          | Default         | Description                                                                 |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️  "`        | The symbol used before displaying the current AWS profile.                  |
+| `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 | `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
 | `style`           | `"bold yellow"` | The style for the module.                                                   |
@@ -703,8 +703,8 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 | Variable     | Default      | Description                        |
 | ------------ | ------------ | ---------------------------------- |
 | `use_name`   | `false`      | Display the name of the nix-shell. |
-| `impure_msg` | `impure`     | Customize the "impure" msg.        |
-| `pure_msg`   | `pure`       | Customize the "pure" msg.          |
+| `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
+| `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
 | `style`      | `"bold red"` | The style for the module.          |
 | `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
@@ -720,13 +720,37 @@ impure_msg = "impure shell"
 pure_msg = "pure shell"
 ```
 
+## Java
+
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
+- The current directory contains a file with the `.java`, `.class` or `.jar` extension
+
+### Options
+
+| Variable   | Default        | Description                                            |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | The style for the module.                              |
+| `disabled` | `false`        | Disables the `java` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[java]
+symbol = "🌟 "
+```
+
 ## Memory Usage
 
 The `memory_usage` module shows current system memory and swap usage.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
-::: remarque
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -756,30 +780,6 @@ threshold = -1
 symbol = " "
 separator = "/"
 style = "bold dimmed green"
-```
-
-## Java
-
-The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
-- The current directory contains a file with the `.java`, `.class` or `.jar` extension
-
-### Options
-
-| Variable   | Default        | Description                                            |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | The style for the module.                              |
-| `disabled` | `false`        | Disables the `java` module.                            |
-
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[java]
-symbol = "🌟 "
 ```
 
 ## NodeJS
