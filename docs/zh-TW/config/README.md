@@ -125,7 +125,7 @@ prompt_order = [
 
 | 變數                | 預設              | 說明                                                                          |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️  "`        | 顯示在目前 AWS 配置之前的符號。                                                          |
+| `symbol`          | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。                                                          |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 | `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
 | `style`           | `"bold yellow"` | The style for the module.                                                   |
@@ -703,8 +703,8 @@ disabled = true
 | 變數           | 預設           | 說明                 |
 | ------------ | ------------ | ------------------ |
 | `use_name`   | `false`      | 顯示 nix-shell 的名稱。  |
-| `impure_msg` | `impure`     | 自定義「impure」訊息。     |
-| `pure_msg`   | `pure`       | 自定義「pure」訊息。       |
+| `impure_msg` | `"impure"`   | 自定義「impure」訊息。     |
+| `pure_msg`   | `"pure"`     | 自定義「pure」訊息。       |
 | `style`      | `"bold red"` | 這個模組的風格。           |
 | `disabled`   | `false`      | 停用 `nix_shell` 模組。 |
 
@@ -720,15 +720,39 @@ impure_msg = "impure shell"
 pure_msg = "pure shell"
 ```
 
-## 記憶體使用量
+## Java
 
-`memory_usage` 模組顯示現在系統記憶體與 swap 的使用量。
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
 
-預設 swap 使用量會在系統總 swap 使用量不為 0 時顯示出來。
+- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
+- 現在資料夾中包含一個檔案具有 `.java`、`.class` 或 `.jar` 副檔名
+
+### 選項
+
+| 變數         | 預設             | 說明                                                     |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | The style for the module.                              |
+| `disabled` | `false`        | Disables the `java` module.                            |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[java]
+symbol = "🌟 "
+```
+
+## Memory Usage
+
+The `memory_usage` module shows current system memory and swap usage.
+
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -736,13 +760,13 @@ pure_msg = "pure shell"
 
 | 變數                | 預設                    | 說明                                                            |
 | ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | 以剩餘記憶體佔有的百分比的方式顯示記憶體使用狀況。                                     |
-| `show_swap`       | `true`                | 如果總 swap 使用量不為零的話，顯示 swap 使用量                                 |
-| `threshold`       | `75`                  | 將記憶體使用量隱藏，除非使用量超過指定值。                                         |
-| `symbol`          | `"🐏 "`                | 顯示在記憶體使用量之前的符號。                                               |
+| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
+| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
+| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
+| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | 這個模組的風格。                                                      |
-| `disabled`        | `true`                | 停用 `memory_usage` 模組。                                         |
+| `style`           | `"bold dimmed white"` | The style for the module.                                     |
+| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
 ### 範例
 
@@ -756,30 +780,6 @@ threshold = -1
 symbol = " "
 separator = "/"
 style = "bold dimmed green"
-```
-
-## Java
-
-`java` 模組顯示現在安裝的 Java 版本。 這個模組在下列其中一個條件達成時顯示：
-
-- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
-- 現在資料夾中包含一個檔案具有 `.java`、`.class` 或 `.jar` 副檔名
-
-### 選項
-
-| 變數         | 預設             | 說明                |
-| ---------- | -------------- | ----------------- |
-| `symbol`   | `"☕ "`         | 顯示在 Java 版本之前的符號。 |
-| `style`    | `"dimmed red"` | 這個模組的風格。          |
-| `disabled` | `false`        | 停用 `java` 模組。     |
-
-### 範例
-
-```toml
-# ~/.config/starship.toml
-
-[java]
-symbol = "🌟 "
 ```
 
 ## NodeJS
