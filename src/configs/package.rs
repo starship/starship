@@ -14,7 +14,7 @@ impl<'a> RootModuleConfig<'a> for PackageConfig<'a> {
     fn new() -> Self {
         PackageConfig {
             symbol: SegmentConfig::new("📦 "),
-            style: Color::Red.bold(),
+            style: Color::Green.bold(),
             disabled: false,
         }
     }
