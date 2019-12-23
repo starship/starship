@@ -987,8 +987,8 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `use_12hr`        | `false`       | Aktiviert 12-Stunden-Format                                                                                                   |
 | `format`          | siehe unten   | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html). |
 | `style`           | `bold yellow` | Stil für dieses Modul                                                                                                         |
-| `disabled`        | `true`        | Deaktiviert das `time`-Modul.                                                                                                 |
-| `utc_time_offset` | `local`       | Verwendetes Zeitzonen-Offset. Liegt zwischen -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.        |
+| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.              |
+| `disabled`        | `true`        | Disables the `time` module.                                                                                                   |
 
 Wird `use_12hr` auf `true` gestellt, nimmt `format` automatisch den Wert `"%r"` an. Andernfalls ist es standardmäßig `"%T"`. Wird hingegen `format` gesetzt, so überschreibt dies die Einstellung `use_12hr`.
 
