@@ -125,7 +125,7 @@ prompt_order = [
 
 | 変数                | デフォルト           | 説明                                                                          |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️  "`        | 現在のAWSプロファイルを表示する前に表示される記号です。                                               |
+| `symbol`          | `"☁️ "`         | 現在のAWSプロファイルを表示する前に表示される記号です。                                               |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 | `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
 | `style`           | `"bold yellow"` | The style for the module.                                                   |
@@ -704,8 +704,8 @@ disabled = true
 | 変数           | デフォルト        | 説明                       |
 | ------------ | ------------ | ------------------------ |
 | `use_name`   | `false`      | nix-shellの名前を表示します。      |
-| `impure_msg` | `impure`     | impureメッセージをカスタマイズします。   |
-| `pure_msg`   | `pure`       | pureメッセージをカスタマイズします。     |
+| `impure_msg` | `"impure"`   | impureメッセージをカスタマイズします。   |
+| `pure_msg`   | `"pure"`     | pureメッセージをカスタマイズします。     |
 | `style`      | `"bold red"` | モジュールのスタイルです。            |
 | `disabled`   | `false`      | `nix_shell`モジュールを無効にします。 |
 
@@ -721,16 +721,39 @@ impure_msg = "impure shell"
 pure_msg = "pure shell"
 ```
 
-## メモリ使用量
+## Java
 
-`memory_usage</ 0>モジュールは、現在のシステムメモリとスワップ使用量を示します。</p>
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
 
-<p spaces-before="0">デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。</p>
+- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
+- カレントディレクトリに拡張子が`.java`, `.class`, もしくは`.jar`のファイルが含まれている
 
-<p spaces-before="0">::: tip</p>
+### オプション
 
-<p spaces-before="0">このモジュールはデフォルトで無効になっています。
-有効にするには、設定ファイルで<code>disabled`を`false`に設定します。
+| 変数         | デフォルト          | 説明                                                     |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | The style for the module.                              |
+| `disabled` | `false`        | Disables the `java` module.                            |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[java]
+symbol = "🌟 "
+```
+
+## Memory Usage
+
+The `memory_usage` module shows current system memory and swap usage.
+
+By default the swap usage is displayed if the total system swap is non-zero.
+
+::: tip
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -738,13 +761,13 @@ pure_msg = "pure shell"
 
 | 変数                | デフォルト                 | 説明                                                            |
 | ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | メモリ使用量を割合で表示します。                                              |
-| `show_swap`       | `true`                | 合計スワップがゼロ以外の場合、スワップ使用量を表示します。                                 |
-| `threshold`       | `75`                  | この閾値を超えない限り、メモリ使用率は表示されません。                                   |
-| `symbol`          | `"🐏 "`                | メモリ使用率を表示する前に使用される記号です。                                       |
+| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
+| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
+| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
+| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | モジュールのスタイルです。                                                 |
-| `disabled`        | `true`                | `memory_usage`モジュールを無効にします。                                   |
+| `style`           | `"bold dimmed white"` | The style for the module.                                     |
+| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
 ### 設定例
 
@@ -758,30 +781,6 @@ threshold = -1
 symbol = " "
 separator = "/"
 style = "bold dimmed green"
-```
-
-## Java
-
-`java`モジュールは、現在インストールされているJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
-
-- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
-- カレントディレクトリに拡張子が`.java`, `.class`, もしくは`.jar`のファイルが含まれている
-
-### オプション
-
-| 変数         | デフォルト          | 説明                          |
-| ---------- | -------------- | --------------------------- |
-| `symbol`   | `"☕ "`         | Javaのバージョンを表示する前に使用される記号です。 |
-| `style`    | `"dimmed red"` | モジュールのスタイルです。               |
-| `disabled` | `false`        | `Java`モジュールを無効にします。         |
-
-### 設定例
-
-```toml
-# ~/.config/starship.toml
-
-[java]
-symbol = "🌟 "
 ```
 
 ## NodeJS
