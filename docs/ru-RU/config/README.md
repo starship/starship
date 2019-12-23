@@ -125,7 +125,7 @@ prompt_order = [
 
 | Переменная        | По умолчанию    | Описание                                                                    |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️  "`        | Символ перед отображением текущего профиля AWS.                             |
+| `symbol`          | `"☁️ "`         | Символ перед отображением текущего профиля AWS.                             |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 | `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
 | `style`           | `"bold yellow"` | The style for the module.                                                   |
@@ -703,8 +703,8 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 | Переменная   | По умолчанию | Описание                           |
 | ------------ | ------------ | ---------------------------------- |
 | `use_name`   | `false`      | Display the name of the nix-shell. |
-| `impure_msg` | `impure`     | Customize the "impure" msg.        |
-| `pure_msg`   | `pure`       | Customize the "pure" msg.          |
+| `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
+| `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
 | `style`      | `"bold red"` | Стиль модуля.                      |
 | `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
@@ -718,6 +718,30 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
+```
+
+## Java
+
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
+- The current directory contains a file with the `.java`, `.class` or `.jar` extension
+
+### Опции
+
+| Переменная | По умолчанию   | Описание                                               |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | The style for the module.                              |
+| `disabled` | `false`        | Disables the `java` module.                            |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[java]
+symbol = "🌟 "
 ```
 
 ## Memory Usage
@@ -741,7 +765,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
 | `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | Стиль модуля.                                                 |
+| `style`           | `"bold dimmed white"` | The style for the module.                                     |
 | `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
 ### Пример
@@ -756,30 +780,6 @@ threshold = -1
 symbol = " "
 separator = "/"
 style = "bold dimmed green"
-```
-
-## Java
-
-The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
-- The current directory contains a file with the `.java`, `.class` or `.jar` extension
-
-### Опции
-
-| Переменная | По умолчанию   | Описание                                               |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | Стиль модуля.                                          |
-| `disabled` | `false`        | Disables the `java` module.                            |
-
-### Пример
-
-```toml
-# ~/.config/starship.toml
-
-[java]
-symbol = "🌟 "
 ```
 
 ## NodeJS
