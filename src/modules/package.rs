@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use super::{Context, Module};
 use crate::utils;
 
@@ -11,7 +13,7 @@ use crate::configs::package::PackageConfig;
 ///
 /// Will display if a version is defined for your Node.js or Rust project (if one exists)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    match get_package_version() {
+    match get_package_version(&context.current_dir) {
         Some(package_version) => {
             let mut module = context.new_module("package");
             let config: PackageConfig = PackageConfig::try_load(module.config);
@@ -70,14 +72,14 @@ fn extract_composer_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
-fn get_package_version() -> Option<String> {
-    if let Ok(cargo_toml) = utils::read_file("Cargo.toml") {
+fn get_package_version(base_dir: &PathBuf) -> Option<String> {
+    if let Ok(cargo_toml) = utils::read_file(base_dir.join("Cargo.toml")) {
         extract_cargo_version(&cargo_toml)
-    } else if let Ok(package_json) = utils::read_file("package.json") {
+    } else if let Ok(package_json) = utils::read_file(base_dir.join("package.json")) {
         extract_package_version(&package_json)
-    } else if let Ok(poetry_toml) = utils::read_file("pyproject.toml") {
+    } else if let Ok(poetry_toml) = utils::read_file(base_dir.join("pyproject.toml")) {
         extract_poetry_version(&poetry_toml)
-    } else if let Ok(composer_json) = utils::read_file("composer.json") {
+    } else if let Ok(composer_json) = utils::read_file(base_dir.join("composer.json")) {
         extract_composer_version(&composer_json)
     } else {
         None
