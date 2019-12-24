@@ -8,11 +8,11 @@ This preset doesn't change anything except for the symbols used for each module.
 
 ![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
 
-### Prerequisites
+### 先決要求
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
 
-### Configuration
+### 設定
 
 ```toml
 [aws]
