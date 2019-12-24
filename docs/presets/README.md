@@ -7,6 +7,8 @@ If you have a preset to share, please submit a PR updating this file! 😊
 This preset doesn't change anything except for the symbols used for each module.
 If emojis aren't your thing, this might catch your eye!
 
+![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
+
 ### Configuration
 ```toml
 [aws]
