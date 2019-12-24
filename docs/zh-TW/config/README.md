@@ -128,8 +128,8 @@ prompt_order = [
 | `symbol`          | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。                                                          |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 | `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
-| `style`           | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
+| `style`           | `"bold yellow"` | 這個模組的風格。                                                                    |
+| `disabled`        | `false`         | 停用 `AWS` 模組。                                                                |
 
 ### 範例
 
@@ -263,9 +263,9 @@ use_symbol_for_status = true
 | ------------------- | --------------- | ---------------------------------------------------------- |
 | `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
 | `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
-| `style`             | `"bold yellow"` | The style for the module.                                  |
-| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
+| `prefix`            | `took`          | 在指令持續時間正前方顯示的前綴。                                           |
+| `style`             | `"bold yellow"` | 這個模組的風格。                                                   |
+| `disabled`          | `false`         | 停用 `cmd_duration` 模組。                                      |
 
 ### 範例
 
@@ -722,18 +722,18 @@ pure_msg = "pure shell"
 
 ## Java
 
-The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
+`java` 模組顯示現在安裝的 Java 版本。 這個模組在下列其中一個條件達成時顯示：
 
 - The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
 - 現在資料夾中包含一個檔案具有 `.java`、`.class` 或 `.jar` 副檔名
 
 ### 選項
 
-| 變數         | 預設             | 說明                                                     |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | The style for the module.                              |
-| `disabled` | `false`        | Disables the `java` module.                            |
+| 變數         | 預設             | 說明                |
+| ---------- | -------------- | ----------------- |
+| `symbol`   | `"☕ "`         | 顯示在 Java 版本之前的符號。 |
+| `style`    | `"dimmed red"` | 這個模組的風格。          |
+| `disabled` | `false`        | 停用 `java` 模組。     |
 
 ### 範例
 
@@ -744,15 +744,15 @@ The `java` module shows the currently installed version of Java. The module will
 symbol = "🌟 "
 ```
 
-## Memory Usage
+## 記憶體使用量
 
-The `memory_usage` module shows current system memory and swap usage.
+`memory_usage` 模組顯示現在系統記憶體與 swap 的使用量。
 
-By default the swap usage is displayed if the total system swap is non-zero.
+預設 swap 使用量會在系統總 swap 使用量不為 0 時顯示出來。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 :::
 
@@ -760,13 +760,13 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | 變數                | 預設                    | 說明                                                            |
 | ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
-| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
+| `show_percentage` | `false`               | 以剩餘記憶體佔有的百分比的方式顯示記憶體使用狀況。                                     |
+| `show_swap`       | `true`                | 如果總 swap 使用量不為零的話，顯示 swap 使用量                                 |
+| `threshold`       | `75`                  | 將記憶體使用量隱藏，除非使用量超過指定值。                                         |
+| `symbol`          | `"🐏 "`                | 顯示在記憶體使用量之前的符號。                                               |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | The style for the module.                                     |
-| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
+| `style`           | `"bold dimmed white"` | 這個模組的風格。                                                      |
+| `disabled`        | `true`                | 停用 `memory_usage` 模組。                                         |
 
 ### 範例
 
@@ -983,13 +983,13 @@ symbol = "🏎💨 "
 
 ### 選項
 
-| 變數                | 預設            | 說明                                                                                                               |
-| ----------------- | ------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`       | 啟用 12 小時格式。                                                                                                      |
-| `format`          | 請看下列          | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。                           |
-| `style`           | `bold yellow` | 這個模組的時間的風格。                                                                                                      |
-| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`        | Disables the `time` module.                                                                                      |
+| 變數                | 預設            | 說明                                                                                     |
+| ----------------- | ------------- | -------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`       | 啟用 12 小時格式。                                                                            |
+| `format`          | 請看下列          | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。 |
+| `style`           | `bold yellow` | 這個模組的時間的風格。                                                                            |
+| `utc_time_offset` | `local`       | 設定相對於 UTC 的時差。 範圍 -24 < x < 24。 允許使用浮點數來表示 30/45 分鐘時差的時區。                              |
+| `disabled`        | `true`        | 停用 `time` 模組。                                                                          |
 
 如果 `use_12hr` 是 `true` 的話，`format` 會被預設為 `"%r"`。 不然的話，它會被預設為 `"%T"`。 手動設定 `format` 的設定值會覆寫 `use_12hr` 的設定。
 
