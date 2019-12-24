@@ -44,7 +44,7 @@ impl Segment {
         self.value = value.into();
         self
     }
-    
+
     /// Gets the value of the segment.
     pub fn get_value(&self) -> &str {
         &self.value

@@ -122,10 +122,10 @@ fn main() {
                     .about("Prints time in milliseconds")
                     .settings(&[AppSettings::Hidden]),
             )
-        	.subcommand(
-            	SubCommand::with_name("explainer").about("Explains the currently showing modules"),
-        	)
-        	.get_matches();
+            .subcommand(
+                SubCommand::with_name("explainer").about("Explains the currently showing modules"),
+            )
+            .get_matches();
 
     match matches.subcommand() {
         ("init", Some(sub_m)) => {
