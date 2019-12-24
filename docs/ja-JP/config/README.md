@@ -123,13 +123,13 @@ prompt_order = [
 
 ### オプション
 
-| 変数                | デフォルト           | 説明                                                                          |
-| ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | 現在のAWSプロファイルを表示する前に表示される記号です。                                               |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
-| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
-| `style`           | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
+| 変数                | デフォルト           | 説明                                                              |
+| ----------------- | --------------- | --------------------------------------------------------------- |
+| `symbol`          | `"☁️ "`         | 現在のAWSプロファイルを表示する前に表示される記号です。                                   |
+| `displayed_items` | `all`           | 表示するアイテムを選択します。 指定可能な値は以下です。[`all`, `profile`, `region`]        |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name. |
+| `style`           | `"bold yellow"` | モジュールのスタイルです。                                                   |
+| `disabled`        | `false`         | `aws`モジュールを無効にします。                                              |
 
 ### 設定例
 
@@ -264,9 +264,9 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 | ------------------- | --------------- | ---------------------------------------------------------- |
 | `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
 | `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
-| `style`             | `"bold yellow"` | The style for the module.                                  |
-| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
+| `prefix`            | `took`          | コマンド実行時間の直前に表示する文字列です。                                     |
+| `style`             | `"bold yellow"` | モジュールのスタイルです。                                              |
+| `disabled`          | `false`         | `cmd_duration`モジュールを無効にします。                                |
 
 ### 設定例
 
@@ -723,18 +723,18 @@ pure_msg = "pure shell"
 
 ## Java
 
-The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
+`java`モジュールは、現在インストールされているJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
 - カレントディレクトリに拡張子が`.java`, `.class`, もしくは`.jar`のファイルが含まれている
 
 ### オプション
 
-| 変数         | デフォルト          | 説明                                                     |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | The style for the module.                              |
-| `disabled` | `false`        | Disables the `java` module.                            |
+| 変数         | デフォルト          | 説明                          |
+| ---------- | -------------- | --------------------------- |
+| `symbol`   | `"☕ "`         | Javaのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"dimmed red"` | モジュールのスタイルです。               |
+| `disabled` | `false`        | `Java`モジュールを無効にします。         |
 
 ### 設定例
 
@@ -745,15 +745,16 @@ The `java` module shows the currently installed version of Java. The module will
 symbol = "🌟 "
 ```
 
-## Memory Usage
+## メモリ使用量
 
-The `memory_usage` module shows current system memory and swap usage.
+`memory_usage</ 0>モジュールは、現在のシステムメモリとスワップ使用量を示します。</p>
 
-By default the swap usage is displayed if the total system swap is non-zero.
+<p spaces-before="0">デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。</p>
 
-::: tip
+<p spaces-before="0">::: tip</p>
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+<p spaces-before="0">このモジュールはデフォルトで無効になっています。
+有効にするには、設定ファイルで<code>disabled`を`false`に設定します。
 
 :::
 
@@ -761,13 +762,13 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | 変数                | デフォルト                 | 説明                                                            |
 | ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
-| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
+| `show_percentage` | `false`               | メモリ使用量を割合で表示します。                                              |
+| `show_swap`       | `true`                | 合計スワップがゼロ以外の場合、スワップ使用量を表示します。                                 |
+| `threshold`       | `75`                  | この閾値を超えない限り、メモリ使用率は表示されません。                                   |
+| `symbol`          | `"🐏 "`                | メモリ使用率を表示する前に使用される記号です。                                       |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | The style for the module.                                     |
-| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
+| `style`           | `"bold dimmed white"` | モジュールのスタイルです。                                                 |
+| `disabled`        | `true`                | `memory_usage`モジュールを無効にします。                                   |
 
 ### 設定例
 
@@ -984,13 +985,13 @@ symbol = "🏎💨 "
 
 ### オプション
 
-| 変数                | デフォルト          | 説明                                                                                                               |
-| ----------------- | -------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`        | 12時間のフォーマットを有効にします。                                                                                              |
-| `format`          | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。                |
-| `style`           | `bold yellow`  | モジュールのスタイルです。                                                                                                    |
-| `utc_time_offset` | `local`        | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`         | Disables the `time` module.                                                                                      |
+| 変数                | デフォルト          | 説明                                                                                                |
+| ----------------- | -------------- | ------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`        | 12時間のフォーマットを有効にします。                                                                               |
+| `format`          | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。 |
+| `style`           | `bold yellow`  | モジュールのスタイルです。                                                                                     |
+| `utc_time_offset` | `local`        | 使用するUTCオフセットを設定します。 -24から24までの間で設定可能です。 フロートが30/45分のタイムゾーンオフセットに対応できるようにします。                      |
+| `disabled`        | `true`         | `time`モジュールを無効にします。                                                                               |
 
 `use_12hr` が `true` の場合、`format` のデフォルトは `"%r"` です。 それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、`use_12hr`の設定が上書きされます。
 
