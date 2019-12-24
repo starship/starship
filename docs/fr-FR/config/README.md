@@ -750,7 +750,7 @@ The `memory_usage` module shows current system memory and swap usage.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
-::: tip
+::: remarque
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
