@@ -123,13 +123,13 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 
 ### Optionen
 
-| Variable          | Standardwert    | Beschreibung                                                                |
-| ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                     |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
-| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
-| `style`           | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
+| Variable          | Standardwert    | Beschreibung                                                                          |
+| ----------------- | --------------- | ------------------------------------------------------------------------------------- |
+| `symbol`          | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                               |
+| `displayed_items` | `all`           | Welche Objekte angezeigt werden sollen. Possible values: [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.                       |
+| `style`           | `"bold yellow"` | Stil für dieses Modul.                                                                |
+| `disabled`        | `false`         | Deaktiviert das `aws`-Modul.                                                          |
 
 ### Beispiel
 
@@ -259,13 +259,13 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Optionen
 
-| Variable            | Standardwert    | Beschreibung                                               |
-| ------------------- | --------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
-| `style`             | `"bold yellow"` | The style for the module.                                  |
-| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
+| Variable            | Standardwert    | Beschreibung                                                   |
+| ------------------- | --------------- | -------------------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).          |
+| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration.     |
+| `prefix`            | `took`          | Prefix der unmittelbar vor der Ausführungszeit angezeigt wird. |
+| `style`             | `"bold yellow"` | Stil für dieses Modul.                                         |
+| `disabled`          | `false`         | Deaktiviert das `cmd_duration`-Modul.                          |
 
 ### Beispiel
 
@@ -722,18 +722,18 @@ pure_msg = "pure shell"
 
 ## Java
 
-The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
+Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
 - Das aktuelle Verzeichnis enthält eine Datei mit der `.java`, `.class` oder `.jar` Erweiterung
 
 ### Optionen
 
-| Variable   | Standardwert   | Beschreibung                                           |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | The style for the module.                              |
-| `disabled` | `false`        | Disables the `java` module.                            |
+| Variable   | Standardwert   | Beschreibung                                    |
+| ---------- | -------------- | ----------------------------------------------- |
+| `symbol`   | `"☕ "`         | Symbol das vor der Java-Version angezeigt wird. |
+| `style`    | `"dimmed red"` | Stil für dieses Modul.                          |
+| `disabled` | `false`        | Deaktiviert das `Java`-Modul.                   |
 
 ### Beispiel
 
@@ -744,29 +744,29 @@ The `java` module shows the currently installed version of Java. The module will
 symbol = "🌟 "
 ```
 
-## Memory Usage
+## Speicherauslastung
 
-The `memory_usage` module shows current system memory and swap usage.
+Das `memory_usage` Modul zeigt den aktuellen Systemspeicher und die swap-Nutzung an.
 
-By default the swap usage is displayed if the total system swap is non-zero.
+Standardmäßig wird die swap-Nutzung angezeigt, wenn der gesamte System-swap nicht Null ist.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
 
 :::
 
 ### Optionen
 
-| Variable          | Standardwert          | Beschreibung                                                  |
-| ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
-| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
-| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | The style for the module.                                     |
-| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
+| Variable          | Standardwert          | Beschreibung                                                               |
+| ----------------- | --------------------- | -------------------------------------------------------------------------- |
+| `show_percentage` | `false`               | Zeigt die Speicherauslastung als Prozentsatz des verfügbaren Speichers an. |
+| `show_swap`       | `true`                | Swap-Nutzung anzeigen, wenn die Gesamtsumme des swaps nicht Null ist.      |
+| `threshold`       | `75`                  | Speicherauslastung ausblenden, wenn sie unter diesem Prozentsatz ist.      |
+| `symbol`          | `"🐏 "`                | Symbol das vor der Speicherauslastung angezeigt wird.                      |
+| `separator`       | `" | "`               | Symbol oder Text, der ram und swap-Nutzung trennt.                         |
+| `style`           | `"bold dimmed white"` | Stil für dieses Modul.                                                     |
+| `disabled`        | `true`                | Deaktiviert das `memory_usage`-Modul.                                      |
 
 ### Beispiel
 
@@ -777,8 +777,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 show_percentage = true
 show_swap = true
 threshold = -1
-symbol = " "
-separator = "/"
+icon = " "
 style = "bold dimmed green"
 ```
 
@@ -983,13 +982,13 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 ### Optionen
 
-| Variable          | Standardwert  | Beschreibung                                                                                                                  |
-| ----------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`       | Aktiviert 12-Stunden-Format                                                                                                   |
-| `format`          | siehe unten   | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html). |
-| `style`           | `bold yellow` | Stil für dieses Modul                                                                                                         |
-| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.              |
-| `disabled`        | `true`        | Disables the `time` module.                                                                                                   |
+| Variable          | Standardwert  | Beschreibung                                                                                                                              |
+| ----------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`       | Aktiviert 12-Stunden-Format                                                                                                               |
+| `format`          | siehe unten   | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html).             |
+| `style`           | `bold yellow` | Stil für dieses Modul                                                                                                                     |
+| `utc_time_offset` | `lokal`       | Legt das UTC-Offset fest, das verwendet werden soll. Reicht von -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`        | Deaktiviert das `time`-Modul.                                                                                                             |
 
 Wird `use_12hr` auf `true` gestellt, nimmt `format` automatisch den Wert `"%r"` an. Andernfalls ist es standardmäßig `"%T"`. Wird hingegen `format` gesetzt, so überschreibt dies die Einstellung `use_12hr`.
 
