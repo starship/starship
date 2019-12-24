@@ -123,13 +123,13 @@ prompt_order = [
 
 ### Опции
 
-| Переменная        | По умолчанию    | Описание                                                                    |
-| ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | Символ перед отображением текущего профиля AWS.                             |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
-| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
-| `style`           | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
+| Переменная        | По умолчанию    | Описание                                                         |
+| ----------------- | --------------- | ---------------------------------------------------------------- |
+| `symbol`          | `"☁️ "`         | Символ перед отображением текущего профиля AWS.                  |
+| `displayed_items` | `all`           | Выбор элементов. Возможные значения [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.  |
+| `style`           | `"bold yellow"` | Стиль модуля.                                                    |
+| `disabled`        | `false`         | Отключение модуля `AWS`.                                         |
 
 ### Пример
 
@@ -263,9 +263,9 @@ use_symbol_for_status = true
 | ------------------- | --------------- | ---------------------------------------------------------- |
 | `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
 | `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
-| `style`             | `"bold yellow"` | The style for the module.                                  |
-| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
+| `prefix`            | `took`          | Префикс, отображаемый перед продолжительностью команды.    |
+| `style`             | `"bold yellow"` | Стиль модуля.                                              |
+| `disabled`          | `false`         | Отключает модуль `cmd_duration`.                           |
 
 ### Пример
 
@@ -652,7 +652,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 :::
 
@@ -732,7 +732,7 @@ The `java` module shows the currently installed version of Java. The module will
 | Переменная | По умолчанию   | Описание                                               |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | The style for the module.                              |
+| `style`    | `"dimmed red"` | Стиль модуля.                                          |
 | `disabled` | `false`        | Disables the `java` module.                            |
 
 ### Пример
@@ -752,7 +752,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 :::
 
@@ -765,7 +765,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
 | `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | The style for the module.                                     |
+| `style`           | `"bold dimmed white"` | Стиль модуля.                                                 |
 | `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
 ### Пример
@@ -977,7 +977,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 :::
 
