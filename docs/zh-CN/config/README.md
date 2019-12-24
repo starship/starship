@@ -126,9 +126,10 @@ The `aws` module shows the current AWS region and profile. This is based on `AWS
 | Variable          | Default         | Description                                                                 |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
 | `style`           | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`        | `false`         | Disables the `AWS` module.                                                  |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 
 ### Example
 
@@ -139,6 +140,9 @@ The `aws` module shows the current AWS region and profile. This is based on `AWS
 style = "bold blue"
 symbol = "🅰 "
 displayed_items = "region"
+[aws.region_aliases]
+ap-southeast-2 = "au"
+us-east-1 = "va"
 ```
 
 ## Battery
@@ -255,12 +259,13 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Options
 
-| Variable   | Default         | Description                                                |
-| ---------- | --------------- | ---------------------------------------------------------- |
-| `min_time` | `2`             | Shortest duration to show time for.                        |
-| `prefix`   | `took`          | Prefix to display immediately before the command duration. |
-| `style`    | `"bold yellow"` | The style for the module.                                  |
-| `disabled` | `false`         | Disables the `cmd_duration` module.                        |
+| Variable            | Default         | Description                                                |
+| ------------------- | --------------- | ---------------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
+| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
+| `style`             | `"bold yellow"` | The style for the module.                                  |
+| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
 
 ### Example
 
@@ -268,7 +273,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 # ~/.config/starship.toml
 
 [cmd_duration]
-min_time = 4
+min_time = 500
 prefix = "underwent "
 ```
 
@@ -421,7 +426,7 @@ truncation_symbol = ""
 
 ## Git Commit
 
-The `git_commit` module shows the active branch of the repo in your current directory.
+The `git_commit` module shows the current commit hash of the repo in your current directory.
 
 ::: tip
 
@@ -698,8 +703,8 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 | Variable     | Default      | Description                        |
 | ------------ | ------------ | ---------------------------------- |
 | `use_name`   | `false`      | Display the name of the nix-shell. |
-| `impure_msg` | `impure`     | Customize the "impure" msg.        |
-| `pure_msg`   | `pure`       | Customize the "pure" msg.          |
+| `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
+| `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
 | `style`      | `"bold red"` | The style for the module.          |
 | `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
@@ -713,6 +718,30 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
+```
+
+## Java
+
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
+- The current directory contains a file with the `.java`, `.class` or `.jar` extension
+
+### Options
+
+| Variable   | Default        | Description                                            |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | The style for the module.                              |
+| `disabled` | `false`        | Disables the `java` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[java]
+symbol = "🌟 "
 ```
 
 ## Memory Usage
@@ -751,30 +780,6 @@ threshold = -1
 symbol = " "
 separator = "/"
 style = "bold dimmed green"
-```
-
-## Java
-
-The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `pom.xml`, `build.gradle` or `build.sbt` file
-- The current directory contains a file with the `.java`, `.class` or `.jar` extension
-
-### Options
-
-| Variable   | Default        | Description                                            |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | The style for the module.                              |
-| `disabled` | `false`        | Disables the `java` module.                            |
-
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[java]
-symbol = "🌟 "
 ```
 
 ## NodeJS
@@ -983,8 +988,8 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
 | `style`           | `bold yellow` | The style for the module time                                                                                       |
-| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
 | `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
+| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 

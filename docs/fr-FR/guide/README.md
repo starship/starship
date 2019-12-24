@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://github.com/starship/starship/workflows/Main%20workflow/badge.svg"
+      src="https://github.com/starship/starship/workflows/Main%20workflow/badge.svg?branch=master&event=push"
       alt="GitHub Actions état du workflow" /></a>
   <a href="https://crates.io/crates/starship"
     ><img src="https://img.shields.io/crates/v/starship" alt="Version Crates.io" /></a>
@@ -21,7 +21,7 @@
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
       alt="Discuter sur Discord" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-58-orange" alt="Tous les contributeurs"></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-63-orange" alt="Tous les contributeurs"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
@@ -58,7 +58,7 @@
 
 <h1></h1>
 
-<p align="center"> Starship est un environnement minimal, extrêmement rapide et extrêmement personnalisable pour n'importe quelle terminale shell!<br /> Le prompt affiche les informations dont vous avez besoin pendant que vous travaillez, tout en restant élégant et hors du chemin. <p>
+<p align="center"> Starship est l'invite de commande minimale, ultra rapide et extrêmement personnalisable pour n'importe quel shell !<br /> Il vous indique les informations dont vous avez besoin pendant que vous travaillez, tout en restant élégant et discret. <p>
 
 <p align="center">
   <br>
@@ -69,7 +69,7 @@
 
 ## 🍬 Fonctionnalités
 
-- Le symbole de prompt devient rouge si la dernière commande a retournée un code différent de zéro
+- Le symbole de prompt devient rouge si la dernière commande a retourné un code différent de zéro
 - Version actuelle de Go (`🐹`)
 - Version actuelle de Java (`☕`)
 - Version actuelle de Node.js (`⬢`)
@@ -82,7 +82,7 @@
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-  - compositeur (PHP)
+  - composer (PHP)
 - Branche Git actuelle et affichage "riche" du statut du dépôt:
   - `=` — Conflits dans les changements
   - `⇡` — En avance sur la branche distante
@@ -181,12 +181,13 @@
    ```
 
 
-   #### Powershell
+   #### PowerShell
 
    Ajouter ce qui suit à la fin de `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` sur -Nix):
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
+
    Invoke-Expression (&starship init powershell)
    ```
 
@@ -303,6 +304,11 @@ Merci à ces personnes merveilleuses ([clé emojis](https://allcontributors.org/
   <tr>
     <td align="center"><a href="https://github.com/BuggStream"><img src="https://avatars1.githubusercontent.com/u/51194915?v=4" width="100px;" alt="" /><br /><sub><b>BuggStream</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=BuggStream" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=BuggStream" title="Documentation">📖</a></td>
     <td align="center"><a href="http://jonstodle.com"><img src="https://avatars1.githubusercontent.com/u/1719761?v=4" width="100px;" alt="" /><br /><sub><b>Jon Grythe Stødle</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=jonstodle" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=jonstodle" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://jasonet.co"><img src="https://avatars1.githubusercontent.com/u/10660468?v=4" width="100px;" alt="" /><br /><sub><b>Jason Etcovitch</b></sub></a><br /><a href="https://github.com/starship/starship/issues?q=author%3AJasonEtco" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/etiennemabille"><img src="https://avatars3.githubusercontent.com/u/11175343?v=4" width="100px;" alt="" /><br /><sub><b>Etienne Mabille</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=etiennemabille" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Scotsguy"><img src="https://avatars3.githubusercontent.com/u/20385973?v=4" width="100px;" alt="" /><br /><sub><b>AppleTheGolden</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=Scotsguy" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=Scotsguy" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://sda.io"><img src="https://avatars1.githubusercontent.com/u/481987?v=4" width="100px;" alt="" /><br /><sub><b>Mike Sampson</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=mfs" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=mfs" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=mfs" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://sternentstehung.de"><img src="https://avatars3.githubusercontent.com/u/36575275?v=4" width="100px;" alt="" /><br /><sub><b>Dominik Braun</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=dominikbraun" title="Code">💻</a></td>
   </tr>
 </table>
 

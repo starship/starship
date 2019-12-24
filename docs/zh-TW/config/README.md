@@ -126,9 +126,10 @@ prompt_order = [
 | 變數                | 預設              | 說明                                                                          |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`          | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。                                                          |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
 | `style`           | `"bold yellow"` | 這個模組的風格。                                                                    |
 | `disabled`        | `false`         | 停用 `AWS` 模組。                                                                |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 
 ### 範例
 
@@ -139,6 +140,9 @@ prompt_order = [
 style = "bold blue"
 symbol = "🅰 "
 displayed_items = "region"
+[aws.region_aliases]
+ap-southeast-2 = "au"
+us-east-1 = "va"
 ```
 
 ## 電池
@@ -255,12 +259,13 @@ use_symbol_for_status = true
 
 ### 選項
 
-| 變數         | 預設              | 說明                    |
-| ---------- | --------------- | --------------------- |
-| `min_time` | `2`             | 會顯示的最短時間長度。           |
-| `prefix`   | `took`          | 在指令持續時間正前方顯示的前綴。      |
-| `style`    | `"bold yellow"` | 這個模組的風格。              |
-| `disabled` | `false`         | 停用 `cmd_duration` 模組。 |
+| 變數                  | 預設              | 說明                                                         |
+| ------------------- | --------------- | ---------------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
+| `prefix`            | `took`          | 在指令持續時間正前方顯示的前綴。                                           |
+| `style`             | `"bold yellow"` | 這個模組的風格。                                                   |
+| `disabled`          | `false`         | 停用 `cmd_duration` 模組。                                      |
 
 ### 範例
 
@@ -268,13 +273,13 @@ use_symbol_for_status = true
 # ~/.config/starship.toml
 
 [cmd_duration]
-min_time = 4
+min_time = 500
 prefix = "underwent "
 ```
 
 ## Conda
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+如果有設定 `$CONDA_DEFAULT_ENV` 時，`conda` 模組顯示現在 conda 的環境。
 
 ::: tip
 
@@ -287,9 +292,9 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | 變數                  | 預設             | 說明                                                                                                                                                                                                          |
 | ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
-| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
-| `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
+| `symbol`            | `"C "`         | 環境名稱前使用的符號。                                                                                                                                                                                                 |
+| `style`             | `"bold green"` | 這個模組的風格。                                                                                                                                                                                                    |
+| `disabled`          | `false`        | 停用 `conda` 模組。                                                                                                                                                                                              |
 
 ### 範例
 
@@ -302,11 +307,11 @@ style = "dimmed green"
 
 ## 資料夾
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+`directory` 模組顯示到現在資料夾的路徑，並裁減到前三層資料夾。 你的資料夾也會被裁減到你所在的 git 儲存庫的根目錄。
 
-When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+如果正在使用 fish 風格的 pwd 選項，將不會隱藏被裁減的資料夾，而是會根據你在選項中設定的數字看到每一層資料夾的縮寫。
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+例如，給定一個右列的路徑 `~/Dev/Nix/nixpkgs/pkgs` 其中 `nixpkgs` 是儲存庫的根目錄，而且該選項被設定為 `1`。 你會看到 `~/D/N/nixpkgs/pkgs`，而在這個設定之前則是 `nixpkgs/pkgs`。
 
 ### 選項
 
@@ -315,11 +320,11 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `truncation_length` | `3`           | 到達現在資料夾的路徑中，要被裁減掉的資料夾數目。                            |
 | `truncate_to_repo`  | `true`        | 是否要裁減到你現在所在的 git 儲存庫的根目錄。                           |
 | `prefix`            | `"in "`       | Prefix to display immediately before the directory. |
-| `style`             | `"bold cyan"` | The style for the module.                           |
-| `disabled`          | `false`       | Disables the `directory` module.                    |
+| `style`             | `"bold cyan"` | 這個模組的風格。                                            |
+| `disabled`          | `false`       | 停用 `directory` 模組。                                  |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>這個模組有些進階設定選項可以控制顯示資料夾。</summary>
 
 | 變數                          | 預設     | 說明                                   |
 | --------------------------- | ------ | ------------------------------------ |
@@ -339,11 +344,11 @@ truncation_length = 8
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+`dotnet` 模組顯示現在資料夾使用的 .NET Core SDK 的版本。 如果這個資料夾已經選定一個 SDK，則顯示這個 SDK 的版本。 如果沒有的話，則顯示最新安裝的 SDK 版本。
 
-This module will only be shown in your prompt when one of the following files are present in the current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll also need the .NET Core command-line tools installed in order to use it correctly.
+這個模組只會在下列檔案出現在你的現在資料夾中時，顯示在你的提示字元：`global.json`、`project.json`、`*.sln`、`*.csproj`、`*.fsproj`、`*.xproj`。 你也會需要安裝 .NET Core 文字命令工具來正確使用這個模組。
 
-Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+這個模組內部是使用它自己的機制來偵測版本。 一般來說這個模組有 `dotnet --version` 的兩倍快，但是它可能會在你的 .NET 專案有不尋常的資料夾結構時顯示不正確的版本。 如果精確度比速度更重要的話，你可以藉由設定模組中的 `heuristic = false` 選項來停用這個功能。
 
 ### 選項
 
@@ -367,7 +372,7 @@ heuristic = false
 
 ## 環境變數
 
-The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+`env_var`模組顯示一個選擇的環境變數的現在數值。 這個模組只在下列條件其中之一達到時顯示：
 
 - `variable` 設定選項符合一個存在的環境變數。
 - 沒有設定 `variable` 選項，但是有設定 `default` 選項。
@@ -396,7 +401,7 @@ default = "unknown shell"
 
 ## Git 分支
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+`git_branch` 模組顯示現在的資料夾中使用中的儲存庫的分支。
 
 ### 選項
 
@@ -421,11 +426,11 @@ truncation_symbol = ""
 
 ## Git Commit
 
-The `git_commit` module shows the active branch of the repo in your current directory.
+The `git_commit` module shows the current commit hash of the repo in your current directory.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 :::
 
@@ -451,7 +456,7 @@ commit_hash_length = 4
 
 ## Git State
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+`git_state` 模組會顯示在 git 儲存庫中的資料夾內，以及會在有作業正在進行時顯示，像是：_REBASING_、_BISECTING_ 等等。 如果有進展的資訊 (像是 REBASING 3/10)，也會一併顯示出來。
 
 ### 選項
 
@@ -480,7 +485,7 @@ cherry_pick = "🍒 PICKING"
 
 ## Git Status
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+`git_status` 模組顯示用來表示現在資料夾之中儲存庫狀態的符號。
 
 ### 選項
 
@@ -538,7 +543,7 @@ deleted = "🗑"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
+`golang` 模組顯示現在安裝的 Golang 版本。 這個模組在下列其中一個條件達成時顯示：
 
 - 現在資料夾中含有一個 `go.mod` 檔案
 - 現在資料夾中含有一個 `go.sum` 檔案
@@ -592,7 +597,7 @@ truncation_symbol = ""
 
 ## 主機名稱
 
-The `hostname` module shows the system hostname.
+`hostname` 模組顯示系統的主機名稱。
 
 ### 選項
 
@@ -620,7 +625,7 @@ disabled = false
 
 ## 工作
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
+`jobs` 模組顯示現在正在執行中的工作。 這個模組只會在有背景工作正在執行時顯示。 這個模組會在工作數量超過一個，或者有設定 `threshold` 時且數量超過設定值時，顯示工作的數量。
 
 ### 選項
 
@@ -643,11 +648,11 @@ threshold = 4
 
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+顯示現在 Kubernetes 主體名稱以及從 kubeconfig 檔案來的名稱空間 (如果有設定的話)。 The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. 如果有設定 `$KUBECONFIG` 環境變數，這個模組就會使用設定值；如果沒有，它就會使用 `~/.kube/config`。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 :::
 
@@ -672,7 +677,7 @@ disabled = false
 
 ## 換行
 
-The `line_break` module separates the prompt into two lines.
+`line_break` 模組將提示字元分成兩行。
 
 ### 選項
 
@@ -691,15 +696,15 @@ disabled = true
 
 ## Nix-shell
 
-The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
+`nix_shell` 模組顯示 nix-shell 環境。 這個模組會在 nix-shell 環境中顯示。
 
 ### 選項
 
 | 變數           | 預設           | 說明                 |
 | ------------ | ------------ | ------------------ |
 | `use_name`   | `false`      | 顯示 nix-shell 的名稱。  |
-| `impure_msg` | `impure`     | 自定義「impure」訊息。     |
-| `pure_msg`   | `pure`       | 自定義「pure」訊息。       |
+| `impure_msg` | `"impure"`   | 自定義「impure」訊息。     |
+| `pure_msg`   | `"pure"`     | 自定義「pure」訊息。       |
 | `style`      | `"bold red"` | 這個模組的風格。           |
 | `disabled`   | `false`      | 停用 `nix_shell` 模組。 |
 
@@ -715,15 +720,39 @@ impure_msg = "impure shell"
 pure_msg = "pure shell"
 ```
 
+## Java
+
+`java` 模組顯示現在安裝的 Java 版本。 這個模組在下列其中一個條件達成時顯示：
+
+- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
+- 現在資料夾中包含一個檔案具有 `.java`、`.class` 或 `.jar` 副檔名
+
+### 選項
+
+| 變數         | 預設             | 說明                |
+| ---------- | -------------- | ----------------- |
+| `symbol`   | `"☕ "`         | 顯示在 Java 版本之前的符號。 |
+| `style`    | `"dimmed red"` | 這個模組的風格。          |
+| `disabled` | `false`        | 停用 `java` 模組。     |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[java]
+symbol = "🌟 "
+```
+
 ## 記憶體使用量
 
-The `memory_usage` module shows current system memory and swap usage.
+`memory_usage` 模組顯示現在系統記憶體與 swap 的使用量。
 
-By default the swap usage is displayed if the total system swap is non-zero.
+預設 swap 使用量會在系統總 swap 使用量不為 0 時顯示出來。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 :::
 
@@ -753,33 +782,9 @@ separator = "/"
 style = "bold dimmed green"
 ```
 
-## Java
-
-The `java` module shows the currently installed version of Java. 這個模組在下列其中一個條件達成時顯示：
-
-- 現在資料夾中包含一個 `pom.xml`、`build.gradle` 或 `build.sbt` 檔案
-- 現在資料夾中包含一個檔案具有 `.java`、`.class` 或 `.jar` 副檔名
-
-### 選項
-
-| 變數         | 預設             | 說明                |
-| ---------- | -------------- | ----------------- |
-| `symbol`   | `"☕ "`         | 顯示在 Java 版本之前的符號。 |
-| `style`    | `"dimmed red"` | 這個模組的風格。          |
-| `disabled` | `false`        | 停用 `java` 模組。     |
-
-### 範例
-
-```toml
-# ~/.config/starship.toml
-
-[java]
-symbol = "🌟 "
-```
-
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
+`nodejs` 模組顯示現在安裝的 NodeJS 版本。 這個模組在下列其中一個條件達成時顯示：
 
 - 現在資料夾中包含一個 `package.json` 檔案
 - 現在資料夾中包含一個 `node_modules` 資料夾
@@ -804,7 +809,7 @@ symbol = "🤖 "
 
 ## 套件版本
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
+The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並顯示他的現在版本。 這個模組目前支援 `npm`、`cargo` 與 `poetry` 套件。
 
 - **npm** – `npm` 套件的版本是從現在資料夾中的 `package.json` 之中擷取出來的
 - **cargo** – `cargo` 套件的版本是從現在資料夾中的 `Cargo.toml` 之中擷取出來的
@@ -832,7 +837,7 @@ symbol = "🎁 "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
+The `php` module shows the currently installed version of PHP. 這個模組在下列其中一個條件達成時顯示：
 
 - 現在資料夾中含有一個 `composer.json` 檔案
 - The current directory contains a `.php` file
@@ -856,13 +861,13 @@ symbol = "🔹 "
 
 ## Python
 
-The `python` module shows the currently installed version of Python.
+`python` 模組顯示現在安裝的 Python 版本
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
+如果 `pyenv_version_name` 的值為 `true`, 會顯示 pyenv 內的版本名稱
 
-Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
+要不然就會顯示 `python -version` 的版本和有啟用的 Python 虛擬環境版本
 
-The module will be shown if any of the following conditions are met:
+這個模組在下列其中一個條件達成時顯示：
 
 - 目前資料夾中有一個 `.python-version` 檔案
 - 目前資料夾中有一個 `requirements.txt` 檔案
@@ -895,7 +900,7 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
+`ruby` 模組顯示現在安裝的 Ruby 版本。 這個模組在下列其中一個條件達成時顯示：
 
 - 目前資料夾中有一個 `Gemfile` 檔案
 - 目前資料夾中有一個 `.rb` 檔案
@@ -919,7 +924,7 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
+`rust` 模組顯示現在安裝的 Rust 版本。 這個模組在下列其中一個條件達成時顯示：
 
 - 目前資料夾中有一個 `Cargo.toml` 檔案
 - 現在資料夾中包含一個檔案具有 `.rs` 副檔名
@@ -943,7 +948,7 @@ symbol = "⚙️ "
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. The module will be shown if any of the following conditions are met:
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. 這個模組在下列其中一個條件達成時顯示：
 
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` extension
@@ -954,7 +959,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 | -------------- | ------------ | ----------------------------------------------------------- |
 | `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
 | `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
-| `style`        | `"bold 105"` | The style for the module.                                   |
+| `style`        | `"bold 105"` | 這個模組的風格。                                                    |
 | `disabled`     | `false`      | Disables the `terraform` module.                            |
 
 ### 範例
@@ -966,27 +971,27 @@ The `terraform` module shows the currently selected terraform workspace and vers
 symbol = "🏎💨 "
 ```
 
-## Time
+## 時間
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time` 模組顯示目前的**當地**時間. `format` 設定值被 [`chrono`](https://crates.io/crates/chrono) crate 用來控制時間如何顯示。 請看 [chrono 的 strftime 文件](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)來了解有那些選項可以使用。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 :::
 
 ### 選項
 
-| 變數                | 預設            | 說明                                                                                                                  |
-| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
-| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`           | `bold yellow` | The style for the module time                                                                                       |
-| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
-| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
+| 變數                | 預設            | 說明                                                                                     |
+| ----------------- | ------------- | -------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`       | 啟用 12 小時格式。                                                                            |
+| `format`          | 請看下列          | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。 |
+| `style`           | `bold yellow` | 這個模組的時間的風格。                                                                            |
+| `utc_time_offset` | `local`       | 設定相對於 UTC 的時差。 範圍 -24 < x < 24。 允許使用浮點數來表示 30/45 分鐘時差的時區。                              |
+| `disabled`        | `true`        | 停用 `time` 模組。                                                                          |
 
-If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
+如果 `use_12hr` 是 `true` 的話，`format` 會被預設為 `"%r"`。 不然的話，它會被預設為 `"%T"`。 手動設定 `format` 的設定值會覆寫 `use_12hr` 的設定。
 
 ### 範例
 
@@ -999,25 +1004,25 @@ format = "🕙[ %T ]"
 utc_time_offset = -5
 ```
 
-## Username
+## 使用者名稱
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+`username` 模組顯示現在使用中的使用者名稱。 這個模組在下列其中一個條件達成時顯示：
 
-- The current user is root
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- 目前使用者為 root
+- 目前使用者並非登入時的使用者
+- 使用者透過 SSH session 進行連線
+- 變數 `show_always` 被設為 true
 
-### Options
+### 選項
 
-| Variable      | Default         | Description                           |
-| ------------- | --------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`    | The style used when the user is root. |
-| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
-| `show_always` | `false`         | Always shows the `username` module.   |
-| `disabled`    | `false`         | Disables the `username` module.       |
+| 變數            | 預設              | 說明                  |
+| ------------- | --------------- | ------------------- |
+| `style_root`  | `"bold red"`    | 使用者為 root 時使用的風格。   |
+| `style_user`  | `"bold yellow"` | 非 root 使用者時使用的風格。   |
+| `show_always` | `false`         | 總是顯示 `username` 模組。 |
+| `disabled`    | `false`         | 停用 `username` 模組。   |
 
-### Example
+### 範例
 
 ```toml
 # ~/.config/starship.toml
