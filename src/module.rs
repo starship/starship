@@ -133,7 +133,10 @@ impl<'a> Module<'a> {
     /// Returns a vector of colored ANSIString elements to be later used with
     /// `ANSIStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<ANSIString> {
-        let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
+        self.ansi_strings_for_prompt(true)
+    }
+
+    pub fn ansi_strings_for_prompt(&self, is_prompt: bool) -> Vec<ANSIString> {
         let mut ansi_strings = self
             .segments
             .iter()
@@ -143,11 +146,14 @@ impl<'a> Module<'a> {
         ansi_strings.insert(0, self.prefix.ansi_string());
         ansi_strings.push(self.suffix.ansi_string());
 
-        ansi_strings = match shell.as_str() {
-            "bash" => ansi_strings_modified(ansi_strings, shell),
-            "zsh" => ansi_strings_modified(ansi_strings, shell),
-            _ => ansi_strings,
-        };
+        if is_prompt {
+            let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
+            ansi_strings = match shell.as_str() {
+                "bash" => ansi_strings_modified(ansi_strings, shell),
+                "zsh" => ansi_strings_modified(ansi_strings, shell),
+                _ => ansi_strings,
+            };
+        }
 
         ansi_strings
     }
