@@ -39,7 +39,7 @@ pub fn create() {
 const UNKNOWN_SHELL: &str = "<unknown shell>";
 const UNKNOWN_TERMINAL: &str = "<unknown terminal>";
 const UNKNOWN_VERSION: &str = "<unknown version>";
-const UNKNOWN_CONFIG: &str = "<unknown config>";
+const UNKNOWN_CONFIG: &str = "No configuration file found.";
 
 struct Environment {
     os_type: os_info::Type,
@@ -87,9 +87,7 @@ fn make_github_issue_link(starship_version: &str, environment: Environment) -> S
 
 #### Starship Configuration
 
-```toml
-{starship_config}
-```",
+{starship_config}",
         starship_version = starship_version,
         shell_name = environment.shell_info.name,
         shell_version = environment.shell_info.version,
@@ -186,9 +184,18 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
 }
 
 fn get_starship_config() -> String {
-    dirs::home_dir()
+    let config = dirs::home_dir()
         .and_then(|home_dir| fs::read_to_string(home_dir.join(".config/starship.toml")).ok())
-        .unwrap_or_else(|| UNKNOWN_CONFIG.to_string())
+        .unwrap_or_else(|| UNKNOWN_CONFIG.to_string());
+    if config == UNKNOWN_CONFIG.to_string() {
+        return config;
+    }
+    if config == "" {
+        return "Configuration file empty.".to_string();
+    }
+    else {
+        return "```toml\n".to_owned()+&config+"```";
+    }
 }
 
 #[cfg(test)]
