@@ -138,7 +138,7 @@ fn execute_rustup_run_rustc_version(toolchain: &str) -> RustupRunRustcVersionOut
 fn extract_toolchain_from_rustup_run_rustc_version(output: Output) -> RustupRunRustcVersionOutcome {
     if output.status.success() {
         if let Ok(stdout) = String::from_utf8(output.stdout) {
-            return RustupRunRustcVersionOutcome::Ok(format_rustc_version(stdout));
+            return RustupRunRustcVersionOutcome::Ok(format_rustc_version(&stdout));
         }
     } else if let Ok(stderr) = String::from_utf8(output.stderr) {
         if stderr.starts_with("error: toolchain '") && stderr.ends_with("' is not installed\n") {
@@ -148,11 +148,13 @@ fn extract_toolchain_from_rustup_run_rustc_version(output: Output) -> RustupRunR
     RustupRunRustcVersionOutcome::Err
 }
 
-fn format_rustc_version(mut rustc_stdout: String) -> String {
-    let offset = &rustc_stdout.find('(').unwrap_or_else(|| rustc_stdout.len());
-    let formatted_version: String = rustc_stdout.drain(..offset).collect();
-
-    format!("v{}", formatted_version.replace("rustc", "").trim())
+fn format_rustc_version(rustc_stdout: &str) -> String {
+    let release = rustc_stdout
+        .split_whitespace()
+        .nth(1)
+        .unwrap_or(rustc_stdout);
+    let release_core = release.find('-').map(|i| &release[..i]).unwrap_or(release);
+    format!("v{}", release_core)
 }
 
 fn format_toolchain(toolchain: &str, default_host_triple: Option<&str>) -> String {
@@ -181,7 +183,8 @@ fn format_rustc_version_verbose(stdout: &str, toolchain: Option<&str>) -> Option
         }
     }
     let (release, host) = (release?, host?);
-    let version = format!("v{}", release);
+    let release_core = release.find('-').map(|i| &release[..i]).unwrap_or(release);
+    let version = format!("v{}", release_core);
     let toolchain = toolchain
         .map(ToOwned::to_owned)
         .unwrap_or_else(|| format!("?-{}", host));
@@ -320,12 +323,12 @@ mod tests {
 
         static OK: Lazy<Output> = Lazy::new(|| Output {
             status: ExitStatus::from_raw(0),
-            stdout: b"rustc 1.34.0\n"[..].to_owned(),
+            stdout: b"rustc 1.40.0\n"[..].to_owned(),
             stderr: b"whatever"[..].to_owned(),
         });
         assert_eq!(
             extract_toolchain_from_rustup_run_rustc_version(OK.clone()),
-            RustupRunRustcVersionOutcome::Ok("v1.34.0".to_owned()),
+            RustupRunRustcVersionOutcome::Ok("v1.40.0".to_owned()),
         );
 
         static TOOLCHAIN_NOT_INSTALLED: Lazy<Output> = Lazy::new(|| Output {
@@ -371,17 +374,17 @@ mod tests {
 
     #[test]
     fn test_format_rustc_version() {
-        let nightly_input = String::from("rustc 1.34.0-nightly (b139669f3 2019-04-10)");
-        assert_eq!(format_rustc_version(nightly_input), "v1.34.0-nightly");
+        static NIGHTLY_INPUT: &str = "rustc 1.42.0-nightly (3e0a1c091 2019-12-26)";
+        assert_eq!(format_rustc_version(NIGHTLY_INPUT), "v1.42.0");
 
-        let beta_input = String::from("rustc 1.34.0-beta.1 (2bc1d406d 2019-04-10)");
-        assert_eq!(format_rustc_version(beta_input), "v1.34.0-beta.1");
+        static BETA_INPUT: &str = "rustc 1.41.0-beta.1 (eb3f7c2d3 2019-12-17)";
+        assert_eq!(format_rustc_version(BETA_INPUT), "v1.41.0");
 
-        let stable_input = String::from("rustc 1.34.0 (91856ed52 2019-04-10)");
-        assert_eq!(format_rustc_version(stable_input), "v1.34.0");
+        static STABLE_INPUT: &str = "rustc 1.40.0 (73528e339 2019-12-16)";
+        assert_eq!(format_rustc_version(STABLE_INPUT), "v1.40.0");
 
-        let version_without_hash = String::from("rustc 1.34.0");
-        assert_eq!(format_rustc_version(version_without_hash), "v1.34.0");
+        static VERSION_WITHOUT_HASH: &str = "rustc 1.40.0";
+        assert_eq!(format_rustc_version(VERSION_WITHOUT_HASH), "v1.40.0");
     }
 
     #[test]
@@ -403,67 +406,67 @@ mod tests {
 
     #[test]
     fn test_format_rustc_version_verbose() {
-        static STABLE: &str = r#"rustc 1.39.0 (4560ea788 2019-11-04)
+        static STABLE: &str = r#"rustc 1.40.0 (73528e339 2019-12-16)
 binary: rustc
-commit-hash: 4560ea788cb760f0a34127156c78e2552949f734
-commit-date: 2019-11-04
+commit-hash: 73528e339aae0f17a15ffa49a8ac608f50c6cf14
+commit-date: 2019-12-16
 host: x86_64-unknown-linux-gnu
-release: 1.39.0
+release: 1.40.0
 LLVM version: 9.0
 "#;
 
-        static BETA: &str = r#"rustc 1.40.0-beta.1 (76b40532a 2019-11-05)
+        static BETA: &str = r#"rustc 1.41.0-beta.1 (eb3f7c2d3 2019-12-17)
 binary: rustc
-commit-hash: 76b40532a01d604385d3167710429d40b59905dd
-commit-date: 2019-11-05
+commit-hash: eb3f7c2d3aec576f47eba854cfbd3c1187b8a2a0
+commit-date: 2019-12-17
 host: x86_64-unknown-linux-gnu
-release: 1.40.0-beta.1
+release: 1.41.0-beta.1
 LLVM version: 9.0
 "#;
 
-        static NIGHTLY: &str = r#"rustc 1.40.0-nightly (1423bec54 2019-11-05)
+        static NIGHTLY: &str = r#"rustc 1.42.0-nightly (3e0a1c091 2019-12-26)
 binary: rustc
-commit-hash: 1423bec54cf2db283b614e527cfd602b481485d1
-commit-date: 2019-11-05
+commit-hash: 3e0a1c09108b52e41113520c7fa516480a8b67f9
+commit-date: 2019-12-26
 host: x86_64-unknown-linux-gnu
-release: 1.40.0-nightly
+release: 1.42.0-nightly
 LLVM version: 9.0
 "#;
 
         assert_eq!(
             format_rustc_version_verbose(STABLE, None),
             Some((
-                "v1.39.0".to_owned(),
+                "v1.40.0".to_owned(),
                 "?-x86_64-unknown-linux-gnu".to_owned(),
             )),
         );
         assert_eq!(
             format_rustc_version_verbose(STABLE, Some("stable")),
-            Some(("v1.39.0".to_owned(), "stable".to_owned())),
+            Some(("v1.40.0".to_owned(), "stable".to_owned())),
         );
 
         assert_eq!(
             format_rustc_version_verbose(BETA, None),
             Some((
-                "v1.40.0-beta.1".to_owned(),
+                "v1.41.0".to_owned(),
                 "?-x86_64-unknown-linux-gnu".to_owned(),
             )),
         );
         assert_eq!(
             format_rustc_version_verbose(BETA, Some("beta")),
-            Some(("v1.40.0-beta.1".to_owned(), "beta".to_owned())),
+            Some(("v1.41.0".to_owned(), "beta".to_owned())),
         );
 
         assert_eq!(
             format_rustc_version_verbose(NIGHTLY, None),
             Some((
-                "v1.40.0-nightly".to_owned(),
+                "v1.42.0".to_owned(),
                 "?-x86_64-unknown-linux-gnu".to_owned(),
             )),
         );
         assert_eq!(
             format_rustc_version_verbose(NIGHTLY, Some("nightly")),
-            Some(("v1.40.0-nightly".to_owned(), "nightly".to_owned())),
+            Some(("v1.42.0".to_owned(), "nightly".to_owned())),
         );
     }
 }
