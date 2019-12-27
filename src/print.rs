@@ -58,7 +58,7 @@ pub fn module(module_name: &str, args: ArgMatches) {
     print!("{}", module);
 }
 
-pub fn explainer(args: ArgMatches) {
+pub fn explain(args: ArgMatches) {
     let context = Context::new(args);
 
     struct ModuleInfo {

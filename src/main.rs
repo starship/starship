@@ -123,7 +123,7 @@ fn main() {
                     .settings(&[AppSettings::Hidden]),
             )
             .subcommand(
-                SubCommand::with_name("explainer").about("Explains the currently showing modules"),
+                SubCommand::with_name("explain").about("Explains the currently showing modules"),
             )
             .get_matches();
 
@@ -160,7 +160,7 @@ fn main() {
                 None => println!("{}", -1),
             }
         }
-        ("explainer", Some(sub_m)) => print::explainer(sub_m.clone()),
+        ("explain", Some(sub_m)) => print::explain(sub_m.clone()),
         _ => {}
     }
 }
