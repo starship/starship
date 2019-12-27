@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::env;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -76,6 +77,13 @@ fn get_aws_region() -> Option<Region> {
     }
 }
 
+fn alias_region(region: &str, aliases: &HashMap<String, &str>) -> String {
+    match aliases.get(region) {
+        None => region.to_string(),
+        Some(alias) => (*alias).to_string(),
+    }
+}
+
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const AWS_PREFIX: &str = "on ";
 
@@ -93,9 +101,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
             let aws_segment = match (&aws_profile, &aws_region) {
                 (None, None) => return None,
-                (Some(p), Some(r)) => format!("{}({})", p, r),
+                (Some(p), Some(r)) => format!("{}({})", p, alias_region(r, &config.region_aliases)),
                 (Some(p), None) => p.to_string(),
-                (None, Some(r)) => r.to_string(),
+                (None, Some(r)) => alias_region(r, &config.region_aliases),
             };
             module.create_segment("all", &config.region.with_value(&aws_segment));
         }
@@ -105,7 +113,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             module.create_segment("profile", &config.profile.with_value(&aws_profile));
         }
         AwsItems::Region => {
-            let aws_region = get_aws_region()?;
+            let aws_region = alias_region(&get_aws_region()?, &config.region_aliases);
 
             module.create_segment("region", &config.region.with_value(&aws_region));
         }

@@ -22,7 +22,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
     let percent_sign = match shell.as_str() {
         "zsh" => "%%", // % is an escape in zsh, see PROMPT in `man zshmisc`
-        "powershell" => "`%",
         _ => "%",
     };
 
@@ -33,7 +32,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_style(config.style);
     module.create_segment("symbol", &config.symbol);
 
-    let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_system());
+    let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_memory());
 
     let used_memory_kib = system.get_used_memory();
     let total_memory_kib = system.get_total_memory();

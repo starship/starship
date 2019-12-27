@@ -9,7 +9,7 @@
 Starshipの設定を開始するには、`~/.config/starship.toml` ファイルを作成します。
 
 ```shell
-$ touch ~/.config/starship.toml
+$ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 Starshipのすべての設定は、この[TOML](https://github.com/toml-lang/toml)ファイルで行われます。
@@ -59,11 +59,11 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 
 ### オプション
 
-| 変数             | デフォルト                   | 説明                                                    |
-| -------------- | ----------------------- | ----------------------------------------------------- |
-| `add_newline`  | `true`                  | プロンプトの開始前に新しい行を追加します。                                 |
-| `prompt_order` | [link](#デフォルトのプロンプト表示順) | プロンプトモジュールを出力する順序を設定します。                              |
-| `scan_timeout` | `30`                    | Timeout for starship to scan files (in milliseconds). |
+| 変数             | デフォルト                   | 説明                                       |
+| -------------- | ----------------------- | ---------------------------------------- |
+| `add_newline`  | `true`                  | プロンプトの開始前に新しい行を追加します。                    |
+| `prompt_order` | [link](#デフォルトのプロンプト表示順) | プロンプトモジュールを出力する順序を設定します。                 |
+| `scan_timeout` | `30`                    | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。 |
 
 ### 設定例
 
@@ -89,16 +89,20 @@ prompt_order = [
     "kubernetes",
     "directory",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
+    "hg_branch",
     "package",
     "dotnet",
     "golang",
     "java",
     "nodejs",
+    "php",
     "python",
     "ruby",
     "rust",
+    "terraform",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -119,11 +123,13 @@ prompt_order = [
 
 ### オプション
 
-| 変数         | デフォルト           | 説明                            |
-| ---------- | --------------- | ----------------------------- |
-| `symbol`   | `"☁️ "`         | 現在のAWSプロファイルを表示する前に表示される記号です。 |
-| `style`    | `"bold yellow"` | モジュールのスタイルです。                 |
-| `disabled` | `false`         | `aws`モジュールを無効にします。            |
+| 変数                | デフォルト           | 説明                                                              |
+| ----------------- | --------------- | --------------------------------------------------------------- |
+| `symbol`          | `"☁️ "`         | 現在のAWSプロファイルを表示する前に表示される記号です。                                   |
+| `displayed_items` | `all`           | 表示するアイテムを選択します。 指定可能な値は以下です。[`all`, `profile`, `region`]        |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name. |
+| `style`           | `"bold yellow"` | モジュールのスタイルです。                                                   |
+| `disabled`        | `false`         | `aws`モジュールを無効にします。                                              |
 
 ### 設定例
 
@@ -133,6 +139,10 @@ prompt_order = [
 [aws]
 style = "bold blue"
 symbol = "🅰 "
+displayed_items = "region"
+[aws.region_aliases]
+ap-southeast-2 = "au"
+us-east-1 = "va"
 ```
 
 ## バッテリー
@@ -250,12 +260,13 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 
 ### オプション
 
-| 変数         | デフォルト           | 説明                          |
-| ---------- | --------------- | --------------------------- |
-| `min_time` | `2`             | 時間を表示する最短期間です。              |
-| `prefix`   | `took`          | コマンド実行時間の直前に表示する文字列です。      |
-| `style`    | `"bold yellow"` | モジュールのスタイルです。               |
-| `disabled` | `false`         | `cmd_duration`モジュールを無効にします。 |
+| 変数                  | デフォルト           | 説明                                                         |
+| ------------------- | --------------- | ---------------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
+| `prefix`            | `took`          | コマンド実行時間の直前に表示する文字列です。                                     |
+| `style`             | `"bold yellow"` | モジュールのスタイルです。                                              |
+| `disabled`          | `false`         | `cmd_duration`モジュールを無効にします。                                |
 
 ### 設定例
 
@@ -263,21 +274,28 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 # ~/.config/starship.toml
 
 [cmd_duration]
-min_time = 4
+min_time = 500
 prefix = "underwent "
 ```
 
 ## Conda
 
-`$CONDA_DEFAULT_ENV`が設定されている場合、`conda`モジュールは現在のcondaの環境を表示します。 Note: これはconda自身の プロンプト修飾子 を抑制しません。`conda config --set changeps1 False` で実行することができます。
+`$CONDA_DEFAULT_ENV`が設定されている場合、`conda`モジュールは現在のcondaの環境を表示します。
+
+::: tip
+
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+
+:::
 
 ### オプション
 
-| 変数         | デフォルト          | 説明                   |
-| ---------- | -------------- | -------------------- |
-| `symbol`   | `"C "`         | 環境名の直前に使用されるシンボルです。  |
-| `style`    | `"bold green"` | モジュールのスタイルです。        |
-| `disabled` | `false`        | `conda`モジュールを無効にします。 |
+| 変数                  | デフォルト          | 説明                                                                                                                                                                                                          |
+| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"C "`         | 環境名の直前に使用されるシンボルです。                                                                                                                                                                                         |
+| `style`             | `"bold green"` | モジュールのスタイルです。                                                                                                                                                                                               |
+| `disabled`          | `false`        | `conda`モジュールを無効にします。                                                                                                                                                                                        |
 
 ### 設定例
 
@@ -298,12 +316,13 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 
 ### オプション
 
-| 変数                  | デフォルト         | 説明                            |
-| ------------------- | ------------- | ----------------------------- |
-| `truncation_length` | `3`           | 現在のディレクトリを切り捨てる親フォルダーの数です。    |
-| `truncate_to_repo`  | `true`        | 現在いるgitリポジトリのルートに切り捨てるかどうかです。 |
-| `style`             | `"bold cyan"` | モジュールのスタイルです。                 |
-| `disabled`          | `false`       | `directory`モジュールを無効にします。      |
+| 変数                  | デフォルト         | 説明                                                  |
+| ------------------- | ------------- | --------------------------------------------------- |
+| `truncation_length` | `3`           | 現在のディレクトリを切り捨てる親フォルダーの数です。                          |
+| `truncate_to_repo`  | `true`        | 現在いるgitリポジトリのルートに切り捨てるかどうかです。                       |
+| `prefix`            | `"in "`       | Prefix to display immediately before the directory. |
+| `style`             | `"bold cyan"` | モジュールのスタイルです。                                       |
+| `disabled`          | `false`       | `directory`モジュールを無効にします。                            |
 
 <details>
 <summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
@@ -326,19 +345,19 @@ truncation_length = 8
 
 ## Dotnet
 
-`dotnet` モジュールはカレントディレクトリに関係する.NET Core SDKのバージョンを表示します。 If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+`dotnet` モジュールはカレントディレクトリに関係する.NET Core SDKのバージョンを表示します。 もし SDKは現在のディレクトリに固定されているのであれば、その固定されたバージョンが表示されます。 それ以外の場合、モジュール SDKの最新のインストールバージョンを示します。
 
-This module will only be shown in your prompt when one of the following files are present in the current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll also need the .NET Core command-line tools installed in order to use it correctly.
+このモジュールは、カレントディレクトリに次のファイルのいずれかが存在する場合にのみプロンプトに表示されます。: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj` 正しく使用するには、.NET Coreコマンドラインツールもインストールする必要があります。
 
-内部的に、このモジュールは自身のバージョン検知のメカニズムを利用します。 Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+内部的に、このモジュールは自身のバージョン検知のメカニズムを利用します。 `dotnet --version` を実行するより2倍速く実行できますが、.NET project一般的でないディレクトリlayoutの場合は間違ったバージョンが示されてしまうことがあります。 速度よりも精度が重要な場合は、次の方法でメカニズムを無効にできます。 モジュールオプションで`heuristic = false `を設定します。
 
 ### オプション
 
 | 変数          | デフォルト         | 説明                                   |
 | ----------- | ------------- | ------------------------------------ |
 | `symbol`    | `•NET "`      | dotnetのバージョンを表示する前に使用される記号です。        |
-| `style`     | `"bold blue"` | モジュールのスタイルです。                        |
 | `heuristic` | `true`        | より高速なバージョン検出を使用して、starshipの動作を維持します。 |
+| `style`     | `"bold blue"` | モジュールのスタイルです。                        |
 | `disabled`  | `false`       | `dotnet`モジュールを無効にします。                |
 
 ### 設定例
@@ -406,24 +425,54 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
+## Git コミット
+
+The `git_commit` module shows the current commit hash of the repo in your current directory.
+
+::: tip
+
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+
+:::
+
+### オプション
+
+| 変数                   | デフォルト          | 説明                                               |
+| -------------------- | -------------- | ------------------------------------------------ |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
+| `prefix`             | `"("`          | Prefix to display immediately before git commit. |
+| `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
+| `style`              | `"bold green"` | モジュールのスタイルです。                                    |
+| `disabled`           | `true`         | Disables the `git_commit` module.                |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+disabled = false
+commit_hash_length = 4
+```
+
 ## Git の進行状態
 
 `git_state`モジュールはgitディレクトリの進行状態を表します。 (例: _REBASING_, _BISECTING_, その他) 進捗情報がある場合(例: REBASING 3/10)はその情報も表示されます。
 
 ### オプション
 
-| 変数                 | デフォルト              | 説明                                                        |
-| ------------------ | ------------------ | --------------------------------------------------------- |
-| `rebase`           | `"REBASING"`       | `rebase`進行中に表示されるテキストです。                                  |
-| `merge`            | `"MERGING"`        | `merge`進行中に表示されるテキストです。                                   |
-| `revert`           | `"REVERTING"`      | `revert`進行中に表示されるテキストです。                                  |
-| `cherry_pick`      | `"CHERRY-PICKING"` | `cherry-pick`進行中に表示されるテキストです。                             |
-| `bisect`           | `"BISECTING"`      | `disect`進行中に表示されるテキストです。                                  |
-| `am`               | `"AM"`             | `apply-mailbox` (`git am`)の進行中に表示されるテキストです。               |
-| `am_or_rebase`     | `"AM/REBASE"`      | あいまいな`apply-mailbox`または`rebase`が進行中のときに表示されるテキストです。       |
-| `progress_divider` | `"/"`              | 現在の進行量と合計進行量を分ける記号またはテキストです。 (例: `" of "` 、 `"3 of 10"` ) |
-| `style`            | `"bold yellow"`    | モジュールのスタイルです。                                             |
-| `disabled`         | `false`            | `git_state`モジュールを無効にします。                                  |
+| 変数                 | デフォルト              | 説明                                                       |
+| ------------------ | ------------------ | -------------------------------------------------------- |
+| `rebase`           | `"REBASING"`       | `rebase`進行中に表示されるテキストです。                                 |
+| `merge`            | `"MERGING"`        | `merge`進行中に表示されるテキストです。                                  |
+| `revert`           | `"REVERTING"`      | `revert`進行中に表示されるテキストです。                                 |
+| `cherry_pick`      | `"CHERRY-PICKING"` | `cherry-pick`進行中に表示されるテキストです。                            |
+| `bisect`           | `"BISECTING"`      | `disect`進行中に表示されるテキストです。                                 |
+| `am`               | `"AM"`             | `apply-mailbox` (`git am`) の進行中に表示されるテキストです。             |
+| `am_or_rebase`     | `"AM/REBASE"`      | あいまいな`apply-mailbox`または`rebase`が進行中のときに表示されるテキストです。      |
+| `progress_divider` | `"/"`              | 現在の進行量と合計進行量を分ける記号またはテキストです。 (例: `" of "` 、 `"3 of 10"`) |
+| `style`            | `"bold yellow"`    | モジュールのスタイルです。                                            |
+| `disabled`         | `false`            | `git_state`モジュールを無効にします。                                 |
 
 ### 設定例
 
@@ -441,37 +490,36 @@ cherry_pick = "🍒 PICKING"
 
 ### オプション
 
-| 変数                 | デフォルト                      | 説明                                               |
-| ------------------ | -------------------------- | ------------------------------------------------ |
-| `conflicted`       | `"="`                      | このブランチにはマージの競合があります。                             |
-| `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.          |
-| `ahead`            | `"⇡"`                      | このブランチは、追跡されるブランチよりも先にあります。                      |
-| `behind`           | `"⇣"`                      | このブランチは、追跡されているブランチの背後にあります。                     |
-| `diverged`         | `"⇕"`                      | このブランチは、追跡されているブランチから分岐しています。                    |
-| `untracked`        | `"?"`                      | 作業ディレクトリに追跡されていないファイルがあります。                      |
-| `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.    |
-| `stashed`          | `"$"`                      | ローカルリポジトリ用のスタッシュが存在します。                          |
-| `modified`         | `"!"`                      | 作業ディレクトリにファイルの変更があります。                           |
-| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.     |
-| `staged`           | `"+"`                      | 新しいファイルがステージング領域に追加されました。                        |
-| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files. |
-| `renamed`          | `"»"`                      | 名前が変更されたファイルがステージング領域に追加されました。                   |
-| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.      |
-| `deleted`          | `"✘"`                      | ファイルの削除がステージング領域に追加されました。                        |
-| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.      |
-| `show_sync_count`  | `false`                    | 追跡されているブランチの先行/後方カウントを表示します。                     |
-| `prefix`           | `[`                        | このモジュールの先頭に表示される文字列です。                           |
-| `suffix`           | `]`                        | このモジュールの末尾に表示される文字列です。                           |
-| `style`            | `"bold red"`               | モジュールのスタイルです。                                    |
-| `disabled`         | `false`                    | `git_status`モジュールを無効にします。                        |
+| 変数                 | デフォルト                      | 説明                              |
+| ------------------ | -------------------------- | ------------------------------- |
+| `conflicted`       | `"="`                      | このブランチにはマージの競合があります。            |
+| `conflicted_count` | [link](#git-status-counts) | 競合の数の表示およびスタイル設定します。            |
+| `ahead`            | `"⇡"`                      | このブランチは、追跡されるブランチよりも先にあります。     |
+| `behind`           | `"⇣"`                      | このブランチは、追跡されているブランチの背後にあります。    |
+| `diverged`         | `"⇕"`                      | このブランチは、追跡されているブランチから分岐しています。   |
+| `untracked`        | `"?"`                      | 作業ディレクトリに追跡されていないファイルがあります。     |
+| `untracked_count`  | [link](#git-status-counts) | 追跡されていないファイルの数を表示およびスタイル設定します。  |
+| `stashed`          | `"$"`                      | ローカルリポジトリ用のスタッシュが存在します。         |
+| `modified`         | `"!"`                      | 作業ディレクトリにファイルの変更があります。          |
+| `modified_count`   | [link](#git-status-counts) | 変更されたファイルの数を表示およびスタイル設定します。     |
+| `staged`           | `"+"`                      | 新しいファイルがステージング領域に追加されました。       |
+| `staged_count`     | [link](#git-status-counts) | ステージングされたファイルの数を表示およびスタイル設定します。 |
+| `renamed`          | `"»"`                      | 名前が変更されたファイルがステージング領域に追加されました。  |
+| `renamed_count`    | [link](#git-status-counts) | 名前を変更したファイルの数を表示およびスタイル設定します。   |
+| `deleted`          | `"✘"`                      | ファイルの削除がステージング領域に追加されました。       |
+| `deleted_count`    | [link](#git-status-counts) | 削除されたファイルの数を表示およびスタイルします。       |
+| `show_sync_count`  | `false`                    | 追跡されているブランチの先行/後方カウントを表示します。    |
+| `prefix`           | `[`                        | このモジュールの先頭に表示される文字列です。          |
+| `suffix`           | `]`                        | このモジュールの末尾に表示される文字列です。          |
+| `style`            | `"bold red"`               | モジュールのスタイルです。                   |
+| `disabled`         | `false`                    | `git_status`モジュールを無効にします。       |
 
-#### Git Status Counts
+#### Git Statusのカウント
 
-| 変数        | デフォルト   | 説明                                                     |
-| --------- | ------- | ------------------------------------------------------ |
-| `enabled` | `false` | Show the number of files                               |
-| `style`   |         | Optionally style the count differently than the module |
-
+| 変数        | デフォルト   | 説明                                |
+| --------- | ------- | --------------------------------- |
+| `enabled` | `false` | ファイルの数を表示します。                     |
+| `style`   |         | オプションで、モジュールとは異なるカウントのスタイルを設定します。 |
 
 ### 設定例
 
@@ -521,6 +569,31 @@ deleted = "🗑"
 
 [golang]
 symbol = "🏎💨 "
+```
+
+## Mercurial ブランチ
+
+` hg_branch `モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを示します。
+
+### オプション
+
+| 変数                  | デフォルト           | 説明                                                                                           |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`           | ブランチ名切り捨てられていることを示すための記号です。                                                                  |
+| `style`             | `"bold purple"` | モジュールのスタイルです。                                                                                |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[hg_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
 ```
 
 ## ホスト名
@@ -576,7 +649,7 @@ threshold = 4
 
 ## Kubernetes
 
-現在のKubernetesコンテキスト名と、設定されている場合は、kubeconfigファイルに基づいてネームスペースを表示します。 The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. `$KUBECONFIG` 環境変数が設定されている場合、モジュールはそれを使用します `~/.kube/config` は使用しません。
+現在のKubernetesコンテキスト名と、設定されている場合は、kubeconfigファイルに基づいてネームスペースを表示します。 ネームスペースはkubconfigで設定されている必要があります。それは `kubectl config set-context starship-cluster --namespace astronaut` のようなコマンドで設定することができます。 `$KUBECONFIG` 環境変数が設定されている場合、モジュールはそれを使用します `~/.kube/config` は使用しません。
 
 ::: tip
 
@@ -631,8 +704,8 @@ disabled = true
 | 変数           | デフォルト        | 説明                       |
 | ------------ | ------------ | ------------------------ |
 | `use_name`   | `false`      | nix-shellの名前を表示します。      |
-| `impure_msg` | `impure`     | impureメッセージをカスタマイズします。   |
-| `pure_msg`   | `pure`       | pureメッセージをカスタマイズします。     |
+| `impure_msg` | `"impure"`   | impureメッセージをカスタマイズします。   |
+| `pure_msg`   | `"pure"`     | pureメッセージをカスタマイズします。     |
 | `style`      | `"bold red"` | モジュールのスタイルです。            |
 | `disabled`   | `false`      | `nix_shell`モジュールを無効にします。 |
 
@@ -648,48 +721,11 @@ impure_msg = "impure shell"
 pure_msg = "pure shell"
 ```
 
-## メモリ使用量
-
-`memory_usage</ 0>モジュールは、現在のシステムメモリとスワップ使用量を示します。</p>
-
-<p spaces-before="0">デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。</p>
-
-<p spaces-before="0">::: tip</p>
-
-<p spaces-before="0">このモジュールはデフォルトで無効になっています。
-有効にするには、設定ファイルで<code>disabled`を`false`に設定します。
-
-:::
-
-### オプション
-
-| 変数                | デフォルト                 | 説明                                            |
-| ----------------- | --------------------- | --------------------------------------------- |
-| `show_percentage` | `false`               | メモリ使用量を割合で表示します。                              |
-| `show_swap`       | `true`                | Display swap usage if total swap is non-zero. |
-| `threshold`       | `75`                  | この閾値を超えない限り、メモリ使用率は表示されません。                   |
-| `symbol`          | `"🐏 "`                | メモリ使用率を表示する前に使用される記号です。                       |
-| `style`           | `"bold dimmed white"` | モジュールのスタイルです。                                 |
-| `disabled`        | `true`                | `memory_usage`モジュールを無効にします。                   |
-
-### 設定例
-
-```toml
-# ~/.config/starship.toml
-
-[memory_usage]
-show_percentage = true
-show_swap = true
-threshold = -1
-symbol = " "
-style = "bold dimmed green"
-```
-
 ## Java
 
 `java`モジュールは、現在インストールされているJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`pom.xml`, `build.gradle`,もしくは`build.sbt`が含まれている
+- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
 - カレントディレクトリに拡張子が`.java`, `.class`, もしくは`.jar`のファイルが含まれている
 
 ### オプション
@@ -707,6 +743,45 @@ style = "bold dimmed green"
 
 [java]
 symbol = "🌟 "
+```
+
+## メモリ使用量
+
+`memory_usage</ 0>モジュールは、現在のシステムメモリとスワップ使用量を示します。</p>
+
+<p spaces-before="0">デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。</p>
+
+<p spaces-before="0">::: tip</p>
+
+<p spaces-before="0">このモジュールはデフォルトで無効になっています。
+有効にするには、設定ファイルで<code>disabled`を`false`に設定します。
+
+:::
+
+### オプション
+
+| 変数                | デフォルト                 | 説明                                                            |
+| ----------------- | --------------------- | ------------------------------------------------------------- |
+| `show_percentage` | `false`               | メモリ使用量を割合で表示します。                                              |
+| `show_swap`       | `true`                | 合計スワップがゼロ以外の場合、スワップ使用量を表示します。                                 |
+| `threshold`       | `75`                  | この閾値を超えない限り、メモリ使用率は表示されません。                                   |
+| `symbol`          | `"🐏 "`                | メモリ使用率を表示する前に使用される記号です。                                       |
+| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
+| `style`           | `"bold dimmed white"` | モジュールのスタイルです。                                                 |
+| `disabled`        | `true`                | `memory_usage`モジュールを無効にします。                                   |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[memory_usage]
+show_percentage = true
+show_swap = true
+threshold = -1
+symbol = " "
+separator = "/"
+style = "bold dimmed green"
 ```
 
 ## NodeJS
@@ -741,6 +816,7 @@ symbol = "🤖 "
 - **npm** – `npm`パッケージバージョンは、現在のディレクトリにある`package.json`から抽出されます
 - **cargo** – `cargo`パッケージバージョンは、現在のディレクトリにある`Cargo.toml`から抽出されます。
 - **poetry** – `poetry`パッケージバージョンは、現在のディレクトリにある`pyproject.toml`から抽出されます
+- **composer** – `composer`パッケージバージョンは、現在のディレクトリにある`composer.json`から抽出されます
 
 > ⚠️ 表示されるバージョンは、パッケージマネージャーではなく、ソースコードが現在のディレクトリにあるパッケージのバージョンです。
 
@@ -761,6 +837,30 @@ symbol = "🤖 "
 symbol = "🎁 "
 ```
 
+## PHP
+
+`php`モジュールは、現在インストールされているPHPのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- カレントディレクトリに`composer.json`ファイルが含まれている
+- カレントディレクトリに`.php`の拡張子のファイルが含まれている
+
+### オプション
+
+| 変数         | デフォルト        | 説明                                                    |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold red"` | モジュールのスタイルです。                                         |
+| `disabled` | `false`      | Disables the `php` module.                            |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[php]
+symbol = "🔹 "
+```
+
 ## Python
 
 `python`モジュールは、現在インストールされているPythonのバージョンを示します。
@@ -777,6 +877,7 @@ symbol = "🎁 "
 - カレントディレクトリに`.py`の拡張子のファイルが含まれている
 - カレントディレクトリに`Pipfile`ファイルが含まれている
 - カレントディレクトリに`tox.ini`ファイルが含まれている
+- 仮想環境がアクティブである
 
 ### オプション
 
@@ -847,6 +948,31 @@ symbol = "🔺 "
 symbol = "⚙️ "
 ```
 
+## Terraform
+
+`terraform`モジュールには、現在選択されているterraformワークスペースとバージョンが表示されます。 デフォルトでは、Terraformのバージョンは表示されません。これは、多くのプラグインが使用されている場合、Terraformの現在のバージョンでは遅いためです。 次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- カレントディレクトリに`.terraform`フォルダが含まれている
+- カレントディレクトリに`.tf`の拡張子のファイルが含まれている
+
+### オプション
+
+| 変数             | デフォルト        | 説明                                            |
+| -------------- | ------------ | --------------------------------------------- |
+| `symbol`       | `"💠 "`       | Terraform ワークスペースを表示する前に使用される記号です。            |
+| `show_version` | `false`      | Terraformのバージョンを表示します。 大きなワークスペースでは非常に遅くなります。 |
+| `style`        | `"bold 105"` | モジュールのスタイルです。                                 |
+| `disabled`     | `false`      | `terraform`モジュールを無効にします。                      |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+symbol = "🏎💨 "
+```
+
 ## 時刻
 
 `time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
@@ -859,15 +985,15 @@ symbol = "⚙️ "
 
 ### オプション
 
-| 変数                | デフォルト          | 説明                                                                                                               |
-| ----------------- | -------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`        | 12時間のフォーマットを有効にします。                                                                                              |
-| `format`          | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。                |
-| `style`           | `bold yellow`  | モジュールのスタイルです。                                                                                                    |
-| `disabled`        | `true`         | `time`モジュールを無効にします。                                                                                              |
-| `utc_time_offset` | `local`        | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| 変数                | デフォルト          | 説明                                                                                                |
+| ----------------- | -------------- | ------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`        | 12時間のフォーマットを有効にします。                                                                               |
+| `format`          | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。 |
+| `style`           | `bold yellow`  | モジュールのスタイルです。                                                                                     |
+| `utc_time_offset` | `local`        | 使用するUTCオフセットを設定します。 -24から24までの間で設定可能です。 フロートが30/45分のタイムゾーンオフセットに対応できるようにします。                      |
+| `disabled`        | `true`         | `time`モジュールを無効にします。                                                                               |
 
-`use_12hr`が`true`の場合、`format`のデフォルトは`"%r"`です。 それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、`use_12hr`の設定が上書きされます。
+`use_12hr` が `true` の場合、`format` のデフォルトは `"%r"` です。 それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、`use_12hr`の設定が上書きされます。
 
 ### 設定例
 
@@ -882,7 +1008,7 @@ utc_time_offset = -5
 
 ## ユーザー名
 
-`username`モジュールはアクティブなユーザーのユーザー名を表示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントユーザーがroot
 - カレントユーザーが、ログインしているユーザーとは異なる

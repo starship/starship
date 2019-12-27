@@ -3,6 +3,7 @@ use crate::utils;
 use ansi_term::{Color, Style};
 
 use std::clone::Clone;
+use std::collections::HashMap;
 use std::marker::Sized;
 
 use dirs::home_dir;
@@ -98,6 +99,22 @@ impl<'a> ModuleConfig<'a> for f64 {
     }
 }
 
+impl<'a> ModuleConfig<'a> for usize {
+    fn from_config(config: &Value) -> Option<Self> {
+        match config {
+            Value::Integer(value) => {
+                if *value > 0 {
+                    Some(*value as usize)
+                } else {
+                    None
+                }
+            }
+            Value::String(value) => value.parse::<usize>().ok(),
+            _ => None,
+        }
+    }
+}
+
 impl<'a, T> ModuleConfig<'a> for Vec<T>
 where
     T: ModuleConfig<'a>,
@@ -108,6 +125,22 @@ where
             .iter()
             .map(|value| T::from_config(value))
             .collect()
+    }
+}
+
+impl<'a, T, S: ::std::hash::BuildHasher + Default> ModuleConfig<'a> for HashMap<String, T, S>
+where
+    T: ModuleConfig<'a>,
+    S: Clone,
+{
+    fn from_config(config: &'a Value) -> Option<Self> {
+        let mut hm = HashMap::default();
+
+        for (x, y) in config.as_table()?.iter() {
+            hm.insert(x.clone(), T::from_config(y)?);
+        }
+
+        Some(hm)
     }
 }
 

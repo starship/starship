@@ -1,20 +1,19 @@
 use crate::configs::java::JavaConfig;
-use std::process::Command;
-use std::process::Output;
 
 use super::{Context, Module, RootModuleConfig, SegmentConfig};
 
 use crate::modules::utils::java_version_parser;
+use crate::utils;
 
 /// Creates a module with the current Java version
 ///
 /// Will display the Java version if any of the following criteria are met:
 ///     - Current directory contains a file with a `.java`, `.class` or `.jar` extension
-///     - Current directory contains a `pom.xml`, `build.gradle` or `build.sbt` file
+///     - Current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_java_project = context
         .try_begin_scan()?
-        .set_files(&["pom.xml", "build.gradle", "build.sbt"])
+        .set_files(&["pom.xml", "build.gradle", "build.gradle.kts", "build.sbt"])
         .set_extensions(&["java", "class", "jar"])
         .is_match();
 
@@ -44,20 +43,8 @@ fn get_java_version() -> Option<String> {
         Err(_) => String::from("java"),
     };
 
-    match Command::new(java_command).arg("-Xinternalversion").output() {
-        Ok(output) => Some(combine_outputs(output)),
-        Err(_) => None,
-    }
-}
-
-/// Combines the standard and error outputs.
-///
-/// This is due some Java vendors using `STDERR` as the output.
-fn combine_outputs(output: Output) -> String {
-    let std_out = String::from_utf8(output.stdout).unwrap();
-    let std_err = String::from_utf8(output.stderr).unwrap();
-
-    format!("{}{}", std_out, std_err)
+    let output = utils::exec_cmd(&java_command.as_str(), &["-Xinternalversion"])?;
+    Some(format!("{}{}", output.stdout, output.stderr))
 }
 
 /// Extract the java version from `java_out`.

@@ -9,7 +9,7 @@
 為了開始設定 Starship，請建立下右檔案： `~/.config/starship.toml`.
 
 ```shell
-$ touch ~/.config/starship.toml
+$ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 所有關於 Starship 的設定都在這個 [TOML](https://github.com/toml-lang/toml) 檔案內：
@@ -89,16 +89,20 @@ prompt_order = [
     "kubernetes",
     "directory",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
+    "hg_branch",
     "package",
     "dotnet",
     "golang",
     "java",
     "nodejs",
+    "php",
     "python",
     "ruby",
     "rust",
+    "terraform",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -119,11 +123,13 @@ prompt_order = [
 
 ### 選項
 
-| 變數         | 預設              | 說明                 |
-| ---------- | --------------- | ------------------ |
-| `symbol`   | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。 |
-| `style`    | `"bold yellow"` | 這個模組的風格。           |
-| `disabled` | `false`         | 停用 `AWS` 模組。       |
+| 變數                | 預設              | 說明                                                                          |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。                                                          |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
+| `style`           | `"bold yellow"` | 這個模組的風格。                                                                    |
+| `disabled`        | `false`         | 停用 `AWS` 模組。                                                                |
 
 ### 範例
 
@@ -133,6 +139,10 @@ prompt_order = [
 [aws]
 style = "bold blue"
 symbol = "🅰 "
+displayed_items = "region"
+[aws.region_aliases]
+ap-southeast-2 = "au"
+us-east-1 = "va"
 ```
 
 ## 電池
@@ -249,12 +259,13 @@ use_symbol_for_status = true
 
 ### 選項
 
-| 變數         | 預設              | 說明                    |
-| ---------- | --------------- | --------------------- |
-| `min_time` | `2`             | 會顯示的最短時間長度。           |
-| `prefix`   | `took`          | 在指令持續時間正前方顯示的前綴。      |
-| `style`    | `"bold yellow"` | 這個模組的風格。              |
-| `disabled` | `false`         | 停用 `cmd_duration` 模組。 |
+| 變數                  | 預設              | 說明                                                         |
+| ------------------- | --------------- | ---------------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
+| `prefix`            | `took`          | 在指令持續時間正前方顯示的前綴。                                           |
+| `style`             | `"bold yellow"` | 這個模組的風格。                                                   |
+| `disabled`          | `false`         | 停用 `cmd_duration` 模組。                                      |
 
 ### 範例
 
@@ -262,21 +273,28 @@ use_symbol_for_status = true
 # ~/.config/starship.toml
 
 [cmd_duration]
-min_time = 4
+min_time = 500
 prefix = "underwent "
 ```
 
 ## Conda
 
-如果有設定 `$CONDA_DEFAULT_ENV` 時，`conda` 模組顯示現在 conda 的環境。 注意：這不會抑制 conda 自己的提示字元修飾字，你可能會想執行 `conda config --set changeps1 False`。
+如果有設定 `$CONDA_DEFAULT_ENV` 時，`conda` 模組顯示現在 conda 的環境。
+
+::: tip
+
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+
+:::
 
 ### 選項
 
-| 變數         | 預設             | 說明             |
-| ---------- | -------------- | -------------- |
-| `symbol`   | `"C "`         | 環境名稱前使用的符號。    |
-| `style`    | `"bold green"` | 模組的風格。         |
-| `disabled` | `false`        | 停用 `conda` 模組。 |
+| 變數                  | 預設             | 說明                                                                                                                                                                                                          |
+| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"C "`         | 環境名稱前使用的符號。                                                                                                                                                                                                 |
+| `style`             | `"bold green"` | 這個模組的風格。                                                                                                                                                                                                    |
+| `disabled`          | `false`        | 停用 `conda` 模組。                                                                                                                                                                                              |
 
 ### 範例
 
@@ -297,12 +315,13 @@ style = "dimmed green"
 
 ### 選項
 
-| 變數                  | 預設            | 說明                        |
-| ------------------- | ------------- | ------------------------- |
-| `truncation_length` | `3`           | 到達現在資料夾的路徑中，要被裁減掉的資料夾數目。  |
-| `truncate_to_repo`  | `true`        | 是否要裁減到你現在所在的 git 儲存庫的根目錄。 |
-| `style`             | `"bold cyan"` | 這個模組的風格。                  |
-| `disabled`          | `false`       | 停用 `directory` 模組。        |
+| 變數                  | 預設            | 說明                                                  |
+| ------------------- | ------------- | --------------------------------------------------- |
+| `truncation_length` | `3`           | 到達現在資料夾的路徑中，要被裁減掉的資料夾數目。                            |
+| `truncate_to_repo`  | `true`        | 是否要裁減到你現在所在的 git 儲存庫的根目錄。                           |
+| `prefix`            | `"in "`       | Prefix to display immediately before the directory. |
+| `style`             | `"bold cyan"` | 這個模組的風格。                                            |
+| `disabled`          | `false`       | 停用 `directory` 模組。                                  |
 
 <details>
 <summary>這個模組有些進階設定選項可以控制顯示資料夾。</summary>
@@ -336,8 +355,8 @@ truncation_length = 8
 | 變數          | 預設            | 說明                           |
 | ----------- | ------------- | ---------------------------- |
 | `symbol`    | `"•NET "`     | 在顯示 dotnet 版本之前用的符號。         |
-| `style`     | `"bold blue"` | 這個模組的風格。                     |
 | `heuristic` | `true`        | 使用更快速的版本偵測法來保持 starship 的速度。 |
+| `style`     | `"bold blue"` | 這個模組的風格。                     |
 | `disabled`  | `false`       | 停用 `dotnet` 模組。              |
 
 ### 範例
@@ -403,6 +422,36 @@ default = "unknown shell"
 symbol = "🌱 "
 truncation_length = 4
 truncation_symbol = ""
+```
+
+## Git Commit
+
+The `git_commit` module shows the current commit hash of the repo in your current directory.
+
+::: tip
+
+這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+
+:::
+
+### 選項
+
+| 變數                   | 預設             | 說明                                               |
+| -------------------- | -------------- | ------------------------------------------------ |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
+| `prefix`             | `"("`          | Prefix to display immediately before git commit. |
+| `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
+| `style`              | `"bold green"` | 這個模組的風格。                                         |
+| `disabled`           | `true`         | Disables the `git_commit` module.                |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+disabled = false
+commit_hash_length = 4
 ```
 
 ## Git State
@@ -471,7 +520,6 @@ cherry_pick = "🍒 PICKING"
 | `enabled` | `false` | Show the number of files                               |
 | `style`   |         | Optionally style the count differently than the module |
 
-
 ### 範例
 
 ```toml
@@ -520,6 +568,31 @@ deleted = "🗑"
 
 [golang]
 symbol = "🏎💨 "
+```
+
+## Mercurial Branch
+
+The `hg_branch` module shows the active branch of the repo in your current directory.
+
+### 選項
+
+| 變數                  | 預設              | 說明                                                                                           |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`           | 用來指示分支名稱被縮減的符號。                                                                              |
+| `style`             | `"bold purple"` | 這個模組的風格。                                                                                     |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[hg_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
 ```
 
 ## 主機名稱
@@ -630,8 +703,8 @@ disabled = true
 | 變數           | 預設           | 說明                 |
 | ------------ | ------------ | ------------------ |
 | `use_name`   | `false`      | 顯示 nix-shell 的名稱。  |
-| `impure_msg` | `impure`     | 自定義「impure」訊息。     |
-| `pure_msg`   | `pure`       | 自定義「pure」訊息。       |
+| `impure_msg` | `"impure"`   | 自定義「impure」訊息。     |
+| `pure_msg`   | `"pure"`     | 自定義「pure」訊息。       |
 | `style`      | `"bold red"` | 這個模組的風格。           |
 | `disabled`   | `false`      | 停用 `nix_shell` 模組。 |
 
@@ -647,47 +720,11 @@ impure_msg = "impure shell"
 pure_msg = "pure shell"
 ```
 
-## 記憶體使用量
-
-`memory_usage` 模組顯示現在系統記憶體與 swap 的使用量。
-
-預設 swap 使用量會在系統總 swap 使用量不為 0 時顯示出來。
-
-::: tip
-
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
-
-:::
-
-### 選項
-
-| 變數                | 預設                    | 說明                            |
-| ----------------- | --------------------- | ----------------------------- |
-| `show_percentage` | `false`               | 以剩餘記憶體佔有的百分比的方式顯示記憶體使用狀況。     |
-| `show_swap`       | `true`                | 如果總 swap 使用量不為零的話，顯示 swap 使用量 |
-| `threshold`       | `75`                  | 將記憶體使用量隱藏，除非使用量超過指定值。         |
-| `symbol`          | `"🐏 "`                | 顯示在記憶體使用量之前的符號。               |
-| `style`           | `"bold dimmed white"` | 這個模組的風格。                      |
-| `disabled`        | `true`                | 停用 `memory_usage` 模組。         |
-
-### 範例
-
-```toml
-# ~/.config/starship.toml
-
-[memory_usage]
-show_percentage = true
-show_swap = true
-threshold = -1
-symbol = " "
-style = "bold dimmed green"
-```
-
 ## Java
 
 `java` 模組顯示現在安裝的 Java 版本。 這個模組在下列其中一個條件達成時顯示：
 
-- 現在資料夾中包含一個 `pom.xml`、`build.gradle` 或 `build.sbt` 檔案
+- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
 - 現在資料夾中包含一個檔案具有 `.java`、`.class` 或 `.jar` 副檔名
 
 ### 選項
@@ -705,6 +742,44 @@ style = "bold dimmed green"
 
 [java]
 symbol = "🌟 "
+```
+
+## 記憶體使用量
+
+`memory_usage` 模組顯示現在系統記憶體與 swap 的使用量。
+
+預設 swap 使用量會在系統總 swap 使用量不為 0 時顯示出來。
+
+::: tip
+
+這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+
+:::
+
+### 選項
+
+| 變數                | 預設                    | 說明                                                            |
+| ----------------- | --------------------- | ------------------------------------------------------------- |
+| `show_percentage` | `false`               | 以剩餘記憶體佔有的百分比的方式顯示記憶體使用狀況。                                     |
+| `show_swap`       | `true`                | 如果總 swap 使用量不為零的話，顯示 swap 使用量                                 |
+| `threshold`       | `75`                  | 將記憶體使用量隱藏，除非使用量超過指定值。                                         |
+| `symbol`          | `"🐏 "`                | 顯示在記憶體使用量之前的符號。                                               |
+| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
+| `style`           | `"bold dimmed white"` | 這個模組的風格。                                                      |
+| `disabled`        | `true`                | 停用 `memory_usage` 模組。                                         |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[memory_usage]
+show_percentage = true
+show_swap = true
+threshold = -1
+symbol = " "
+separator = "/"
+style = "bold dimmed green"
 ```
 
 ## NodeJS
@@ -739,6 +814,7 @@ The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並
 - **npm** – `npm` 套件的版本是從現在資料夾中的 `package.json` 之中擷取出來的
 - **cargo** – `cargo` 套件的版本是從現在資料夾中的 `Cargo.toml` 之中擷取出來的
 - **poetry** – `poetry` 套件的版本是從現在資料夾中的 `pyproject.toml` 之中擷取出來的
+- **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 
 > ⚠️ 顯示出來的版本是從你的現在資料夾之中擷取出來的，並非從套件管理員取得。
 
@@ -759,6 +835,30 @@ The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並
 symbol = "🎁 "
 ```
 
+## PHP
+
+The `php` module shows the currently installed version of PHP. 這個模組在下列其中一個條件達成時顯示：
+
+- 現在資料夾中含有一個 `composer.json` 檔案
+- The current directory contains a `.php` file
+
+### 選項
+
+| 變數         | 預設           | 說明                                                    |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold red"` | 這個模組的風格。                                              |
+| `disabled` | `false`      | Disables the `php` module.                            |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[php]
+symbol = "🔹 "
+```
+
 ## Python
 
 `python` 模組顯示現在安裝的 Python 版本
@@ -767,7 +867,7 @@ symbol = "🎁 "
 
 要不然就會顯示 `python -version` 的版本和有啟用的 Python 虛擬環境版本
 
-這個模組在下列任一條件時會顯示：
+這個模組在下列其中一個條件達成時顯示：
 
 - 目前資料夾中有一個 `.python-version` 檔案
 - 目前資料夾中有一個 `requirements.txt` 檔案
@@ -775,6 +875,7 @@ symbol = "🎁 "
 - 目前資料夾中有一個 `.py` 副檔名的檔案
 - 目前資料夾中有一個 `Pipfile` 檔案
 - 目前資料夾中有一個 `tox.ini` 檔案
+- A virtual environment is currently activated
 
 ### 選項
 
@@ -845,6 +946,31 @@ symbol = "🔺 "
 symbol = "⚙️ "
 ```
 
+## Terraform
+
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. 這個模組在下列其中一個條件達成時顯示：
+
+- The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf` extension
+
+### 選項
+
+| 變數             | 預設           | 說明                                                          |
+| -------------- | ------------ | ----------------------------------------------------------- |
+| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
+| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
+| `style`        | `"bold 105"` | 這個模組的風格。                                                    |
+| `disabled`     | `false`      | Disables the `terraform` module.                            |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+symbol = "🏎💨 "
+```
+
 ## 時間
 
 `time` 模組顯示目前的**當地**時間. `format` 設定值被 [`chrono`](https://crates.io/crates/chrono) crate 用來控制時間如何顯示。 請看 [chrono 的 strftime 文件](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)來了解有那些選項可以使用。
@@ -862,8 +988,8 @@ symbol = "⚙️ "
 | `use_12hr`        | `false`       | 啟用 12 小時格式。                                                                            |
 | `format`          | 請看下列          | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。 |
 | `style`           | `bold yellow` | 這個模組的時間的風格。                                                                            |
-| `disabled`        | `true`        | 停用 `time` 模組。                                                                          |
 | `utc_time_offset` | `local`       | 設定相對於 UTC 的時差。 範圍 -24 < x < 24。 允許使用浮點數來表示 30/45 分鐘時差的時區。                              |
+| `disabled`        | `true`        | 停用 `time` 模組。                                                                          |
 
 如果 `use_12hr` 是 `true` 的話，`format` 會被預設為 `"%r"`。 不然的話，它會被預設為 `"%T"`。 手動設定 `format` 的設定值會覆寫 `use_12hr` 的設定。
 
