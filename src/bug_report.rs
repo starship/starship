@@ -40,6 +40,7 @@ const UNKNOWN_SHELL: &str = "<unknown shell>";
 const UNKNOWN_TERMINAL: &str = "<unknown terminal>";
 const UNKNOWN_VERSION: &str = "<unknown version>";
 const UNKNOWN_CONFIG: &str = "<unknown config>";
+const GITHUB_CHAR_LIMIT: usize = 8100; // Magic number accepted by Github
 
 struct Environment {
     os_type: os_info::Type,
@@ -96,7 +97,7 @@ fn make_github_issue_link(starship_version: &str, environment: Environment) -> S
         body
     )
     .chars()
-    .take(8100) // Magic number accepted by Github
+    .take(GITHUB_CHAR_LIMIT)
     .collect()
 }
 
