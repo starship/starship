@@ -1,5 +1,4 @@
 use crate::utils::exec_cmd;
-use clipboard::ClipboardProvider;
 use reqwest;
 use std::fs;
 use std::path::PathBuf;
@@ -17,14 +16,10 @@ pub fn create() {
         starship_config: get_starship_config(),
     };
 
-    let link = get_github_issue_link();
-    let env_info = format_env_info(crate_version!(), environment);
-    let copy_failed = clipboard::ClipboardProvider::new()
-        .and_then(|mut ctx: clipboard::ClipboardContext| ctx.set_contents(env_info.to_string()))
-        .is_err();
+    let link = make_github_issue_link(crate_version!(), environment);
 
     if open::that(&link).is_ok() {
-        print!("Take a look at your browser. A GitHub issue has been created and your environment info has been copied to your clipboard.")
+        print!("Take a look at your browser. A GitHub issue has been populated with your configuration")
     } else {
         let link = reqwest::Client::new()
             .post(&format!("{}{}", GIT_IO_BASE_URL, "create"))
@@ -35,15 +30,8 @@ pub fn create() {
             .unwrap_or(link);
 
         println!(
-            "Your environment info has been copied to your clipboard. Click this link to create a GitHub issue:\n\n  {}",
+            "Click this link to create a GitHub issue populated with your configuration:\n\n  {}",
             link
-        );
-    }
-
-    if copy_failed {
-        println!(
-            "\n\nYour clipboard was unavailable, so here's the summary of your environment:\n\n{}",
-            env_info
         );
     }
 }
@@ -61,8 +49,8 @@ struct Environment {
     starship_config: String,
 }
 
-fn get_github_issue_link() -> String {
-    let body = urlencoding::encode( "#### Current Behavior
+fn make_github_issue_link(starship_version: &str, environment: Environment) -> String {
+    let body = urlencoding::encode(&format!("#### Current Behavior
 <!-- A clear and concise description of the behavior. -->
 
 #### Expected Behavior
@@ -75,19 +63,7 @@ fn get_github_issue_link() -> String {
 <!--- Only if you have suggestions on a fix for the bug -->
 
 #### Environment
-<!-- Your environment information has been copied to the clipboard automatically. Paste it here. -->
-" )
-        .replace("%20", "+");
-
-    format!(
-        "https://github.com/starship/starship/issues/new?body={}",
-        body
-    )
-}
-
-fn format_env_info(starship_version: &str, environment: Environment) -> String {
-    format!(
-        "- Starship version: {starship_version}
+- Starship version: {starship_version}
 - {shell_name} version: {shell_version}
 - Operating system: {os_name} {os_version}
 - Terminal emulator: {terminal_name} {terminal_version}
@@ -106,13 +82,22 @@ fn format_env_info(starship_version: &str, environment: Environment) -> String {
         starship_version = starship_version,
         shell_name = environment.shell_info.name,
         shell_version = environment.shell_info.version,
-        os_name = environment.os_type,
-        os_version = environment.os_version,
         terminal_name = environment.terminal_info.name,
         terminal_version = environment.terminal_info.version,
+        os_name = environment.os_type,
+        os_version = environment.os_version,
         shell_config = environment.shell_info.config,
         starship_config = environment.starship_config,
+    ))
+        .replace("%20", "+");
+
+    format!(
+        "https://github.com/starship/starship/issues/new?body={}",
+        body
     )
+    .chars()
+    .take(8100) // Magic number accepted by Github
+    .collect()
 }
 
 #[derive(Debug)]
@@ -221,7 +206,15 @@ mod tests {
             starship_config: "No Starship config".to_string(),
         };
 
-        let env_info = format_env_info(starship_version, environment);
+        let link = make_github_issue_link(starship_version, environment);
+
+        assert!(link.contains(starship_version));
+        assert!(link.contains("Linux"));
+        assert!(link.contains("1.2.3"));
+        assert!(link.contains("test_shell"));
+        assert!(link.contains("2.3.4"));
+        assert!(link.contains("No%20config"));
+        assert!(link.contains("No%20Starship%20config"));
 
         assert!(env_info.contains(starship_version));
         assert!(env_info.contains("Linux"));
