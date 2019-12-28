@@ -17,7 +17,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "package-lock.json",
             "yarn.lock",
             "pnpm-workspace.yaml",
-            "pnpm-lock.yaml"
+            "pnpm-lock.yaml",
         ])
         .set_extensions(&["js"])
         .set_folders(&["node_modules"])
