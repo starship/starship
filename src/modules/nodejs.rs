@@ -12,7 +12,13 @@ use crate::utils;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_js_project = context
         .try_begin_scan()?
-        .set_files(&["package.json"])
+        .set_files(&[
+            "package.json",
+            "package-lock.json",
+            "yarn.lock",
+            "pnpm-workspace.yaml",
+            "pnpm-lock.yaml"
+        ])
         .set_extensions(&["js"])
         .set_folders(&["node_modules"])
         .is_match();
