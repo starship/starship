@@ -4,6 +4,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::config::SegmentConfig;
 use crate::configs::git_status::{CountConfig, GitStatusConfig};
+use std::borrow::BorrowMut;
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -23,7 +24,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = context.get_repo().ok()?;
     let branch_name = repo.branch.as_ref()?;
     let repo_root = repo.root.as_ref()?;
-    let repository = Repository::open(repo_root).ok()?;
+    let mut repository = Repository::open(repo_root).ok()?;
 
     let mut module = context.new_module("git_status");
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
@@ -38,22 +39,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .set_style(config.style);
     module.set_style(config.style);
 
+    let repo_status = get_repo_status(repository.borrow_mut());
+    log::debug!("Repo status: {:?}", repo_status);
+
     let ahead_behind = get_ahead_behind(&repository, branch_name);
     if ahead_behind == Ok((0, 0)) {
         log::trace!("No ahead/behind found");
     } else {
         log::debug!("Repo ahead/behind: {:?}", ahead_behind);
     }
-
-    let stash_object = repository.revparse_single("refs/stash");
-    if stash_object.is_ok() {
-        log::debug!("Stash object: {:?}", stash_object);
-    } else {
-        log::trace!("No stash object found");
-    }
-
-    let repo_status = get_repo_status(&repository);
-    log::debug!("Repo status: {:?}", repo_status);
 
     // Add the conflicted segment
     if let Ok(repo_status) = repo_status {
@@ -113,8 +107,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // Add the stashed segment
-    if stash_object.is_ok() {
-        module.create_segment("stashed", &config.stashed);
+    if let Ok(repo_status) = repo_status {
+        create_segment_with_count(
+            &mut module,
+            "stashed",
+            repo_status.stashed,
+            &config.stashed,
+            config.stashed_count,
+        );
     }
 
     // Add all remaining status segments
@@ -187,16 +187,18 @@ fn create_segment_with_count<'a>(
 }
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
-fn get_repo_status(repository: &Repository) -> Result<RepoStatus, git2::Error> {
+fn get_repo_status(repository: &mut Repository) -> Result<RepoStatus, git2::Error> {
     let mut status_options = git2::StatusOptions::new();
 
     match repository.config()?.get_entry("status.showUntrackedFiles") {
         Ok(entry) => status_options.include_untracked(entry.value() != Some("no")),
         _ => status_options.include_untracked(true),
     };
-    status_options.renames_from_rewrites(true);
-    status_options.renames_head_to_index(true);
-    status_options.renames_index_to_workdir(true);
+    status_options
+        .renames_from_rewrites(true)
+        .renames_head_to_index(true)
+        .renames_index_to_workdir(true)
+        .include_unmodified(true);
 
     let statuses: Vec<Status> = repository
         .statuses(Some(&mut status_options))?
@@ -215,6 +217,7 @@ fn get_repo_status(repository: &Repository) -> Result<RepoStatus, git2::Error> {
         modified: statuses.iter().filter(|s| is_modified(**s)).count(),
         staged: statuses.iter().filter(|s| is_staged(**s)).count(),
         untracked: statuses.iter().filter(|s| is_untracked(**s)).count(),
+        stashed: stashed_count(repository)?,
     };
 
     Ok(repo_status)
@@ -244,6 +247,15 @@ fn is_untracked(status: Status) -> bool {
     status.is_wt_new()
 }
 
+fn stashed_count(repository: &mut Repository) -> Result<usize, git2::Error> {
+    let mut count = 0;
+    repository.stash_foreach(|_, _, _| {
+        count += 1;
+        true
+    })?;
+    Result::Ok(count)
+}
+
 /// Compares the current branch with the branch it is tracking to determine how
 /// far ahead or behind it is in relation
 fn get_ahead_behind(
@@ -268,4 +280,5 @@ struct RepoStatus {
     modified: usize,
     staged: usize,
     untracked: usize,
+    stashed: usize,
 }
