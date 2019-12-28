@@ -70,7 +70,8 @@ else
     if [[ -z "$PROMPT_COMMAND" ]]; then
         PROMPT_COMMAND="starship_precmd"
     elif [[ "$PROMPT_COMMAND" != *"starship_precmd" ]]; then
-        PROMPT_COMMAND="$PROMPT_COMMAND;starship_precmd"
+        # Remove any trailing semicolon before appending (PR #784)
+        PROMPT_COMMAND="${PROMPT_COMMAND%;};starship_precmd"
     fi
 fi
 
