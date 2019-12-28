@@ -15,7 +15,7 @@ jobs:
     name: Rustfmt [Formatter]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -33,7 +33,7 @@ jobs:
     name: Clippy [Linter]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -50,7 +50,7 @@ jobs:
     name: Cargo Audit [Security]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -66,7 +66,7 @@ jobs:
     name: Compile
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -90,7 +90,7 @@ jobs:
         rust: [stable, nightly]
     steps:
       # Checkout the branch being tested
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       # Install all the required dependencies for testing
       - uses: actions-rs/toolchain@v1
@@ -158,7 +158,7 @@ jobs:
     needs: [cargo_check]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
       - name: Pull the pre-built Docker image
         run: docker pull starshipcommand/starship-test
       - name: Fix file permissions
@@ -176,7 +176,7 @@ jobs:
     name: Publish Cargo Package
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -192,7 +192,7 @@ jobs:
     name: Update Brew Formula
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - run: |
           echo "https://matchai:$HOMEBREW_GITHUB_API_TOKEN@github.com" > ~/.git-credentials
           git config --global credential.helper store
@@ -235,7 +235,7 @@ jobs:
             name: starship-x86_64-pc-windows-msvc.zip
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
@@ -284,7 +284,7 @@ jobs:
     needs: github_build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       # These can be squashed when https://github.com/actions/download-artifact/issues/6 is closed
       - name: Download releases from github_build
