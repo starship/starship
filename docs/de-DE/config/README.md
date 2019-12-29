@@ -499,6 +499,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
 | `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
 | `stashed`          | `"$"`                      | A stash exists for the local repository.                |
+| `stashed_count`    | [link](#git-status-counts) | Show and style the number of stashes.                   |
 | `modified`         | `"!"`                      | There are file modifications in the working directory.  |
 | `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
 | `staged`           | `"+"`                      | A new file has been added to the staging area.          |
@@ -510,8 +511,8 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
 | `prefix`           | `[`                        | Prefix to display immediately before git status.        |
 | `suffix`           | `]`                        | Suffix to display immediately after git status.         |
-| `style`            | `"bold red"`               | Stil für dieses Modul.                                  |
-| `disabled`         | `false`                    | Deaktiviert das `git_status`-Modul.                     |
+| `style`            | `"bold red"`               | The style for the module.                               |
+| `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
 #### Git Status Counts
 
