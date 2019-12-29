@@ -490,29 +490,30 @@ cherry_pick = "🍒 PICKING"
 
 ### オプション
 
-| 変数                 | デフォルト                      | 説明                              |
-| ------------------ | -------------------------- | ------------------------------- |
-| `conflicted`       | `"="`                      | このブランチにはマージの競合があります。            |
-| `conflicted_count` | [link](#git-status-counts) | 競合の数の表示およびスタイル設定します。            |
-| `ahead`            | `"⇡"`                      | このブランチは、追跡されるブランチよりも先にあります。     |
-| `behind`           | `"⇣"`                      | このブランチは、追跡されているブランチの背後にあります。    |
-| `diverged`         | `"⇕"`                      | このブランチは、追跡されているブランチから分岐しています。   |
-| `untracked`        | `"?"`                      | 作業ディレクトリに追跡されていないファイルがあります。     |
-| `untracked_count`  | [link](#git-status-counts) | 追跡されていないファイルの数を表示およびスタイル設定します。  |
-| `stashed`          | `"$"`                      | ローカルリポジトリ用のスタッシュが存在します。         |
-| `modified`         | `"!"`                      | 作業ディレクトリにファイルの変更があります。          |
-| `modified_count`   | [link](#git-status-counts) | 変更されたファイルの数を表示およびスタイル設定します。     |
-| `staged`           | `"+"`                      | 新しいファイルがステージング領域に追加されました。       |
-| `staged_count`     | [link](#git-status-counts) | ステージングされたファイルの数を表示およびスタイル設定します。 |
-| `renamed`          | `"»"`                      | 名前が変更されたファイルがステージング領域に追加されました。  |
-| `renamed_count`    | [link](#git-status-counts) | 名前を変更したファイルの数を表示およびスタイル設定します。   |
-| `deleted`          | `"✘"`                      | ファイルの削除がステージング領域に追加されました。       |
-| `deleted_count`    | [link](#git-status-counts) | 削除されたファイルの数を表示およびスタイルします。       |
-| `show_sync_count`  | `false`                    | 追跡されているブランチの先行/後方カウントを表示します。    |
-| `prefix`           | `[`                        | このモジュールの先頭に表示される文字列です。          |
-| `suffix`           | `]`                        | このモジュールの末尾に表示される文字列です。          |
-| `style`            | `"bold red"`               | モジュールのスタイルです。                   |
-| `disabled`         | `false`                    | `git_status`モジュールを無効にします。       |
+| 変数                 | デフォルト                      | 説明                                                     |
+| ------------------ | -------------------------- | ------------------------------------------------------ |
+| `conflicted`       | `"="`                      | このブランチにはマージの競合があります。                                   |
+| `conflicted_count` | [link](#git-status-counts) | 競合の数の表示およびスタイル設定します。                                   |
+| `ahead`            | `"⇡"`                      | このブランチは、追跡されるブランチよりも先にあります。                            |
+| `behind`           | `"⇣"`                      | このブランチは、追跡されているブランチの背後にあります。                           |
+| `diverged`         | `"⇕"`                      | このブランチは、追跡されているブランチから分岐しています。                          |
+| `untracked`        | `"?"`                      | 作業ディレクトリに追跡されていないファイルがあります。                            |
+| `untracked_count`  | [link](#git-status-counts) | 追跡されていないファイルの数を表示およびスタイル設定します。                         |
+| `stashed`          | `"$"`                      | ローカルリポジトリ用のスタッシュが存在します。                                |
+| `stashed_count`    | [link](#git-status-counts) | Show and style the number of stashes.                  |
+| `modified`         | `"!"`                      | There are file modifications in the working directory. |
+| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.           |
+| `staged`           | `"+"`                      | A new file has been added to the staging area.         |
+| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files.       |
+| `renamed`          | `"»"`                      | A renamed file has been added to the staging area.     |
+| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.            |
+| `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.  |
+| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.            |
+| `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.   |
+| `prefix`           | `[`                        | Prefix to display immediately before git status.       |
+| `suffix`           | `]`                        | Suffix to display immediately after git status.        |
+| `style`            | `"bold red"`               | The style for the module.                              |
+| `disabled`         | `false`                    | Disables the `git_status` module.                      |
 
 #### Git Statusのカウント
 
