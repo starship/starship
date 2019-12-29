@@ -489,29 +489,30 @@ cherry_pick = "🍒 PICKING"
 
 ### 選項
 
-| 變數                 | 預設                       | 說明                                               |
-| ------------------ | ------------------------ | ------------------------------------------------ |
-| `conflicted`       | `"="`                    | 這個分支有合併衝突。                                       |
-| `conflicted_count` | [連結](#git-status-counts) | Show and style the number of conflicts.          |
-| `ahead`            | `"⇡"`                    | 這個分支超前正在追蹤的分支。                                   |
-| `behind`           | `"⇣"`                    | 這個分支落後正在追蹤的分支。                                   |
-| `diverged`         | `"⇕"`                    | 這個分支偏離正在追蹤的分支。                                   |
-| `untracked`        | `"?"`                    | 工作資料夾中有沒有追蹤的檔案。                                  |
-| `untracked_count`  | [連結](#git-status-counts) | Show and style the number of untracked files.    |
-| `stashed`          | `"$"`                    | 本地儲存庫有 stash。                                    |
-| `modified`         | `"!"`                    | 工作資料夾中有修改過的檔案。                                   |
-| `modified_count`   | [連結](#git-status-counts) | Show and style the number of modified files.     |
-| `staged`           | `"+"`                    | 一個新檔案被加入了暫存區 (staging area)。                     |
-| `staged_count`     | [連結](#git-status-counts) | Show and style the number of files staged files. |
-| `renamed`          | `"»"`                    | 一個被改名的檔案被加入了暫存區 (staging area)。                  |
-| `renamed_count`    | [連結](#git-status-counts) | Show and style the number of renamed files.      |
-| `deleted`          | `"✘"`                    | 一個刪除檔案的動作被加入了暫存區 (staging area)。                 |
-| `deleted_count`    | [連結](#git-status-counts) | Show and style the number of deleted files.      |
-| `show_sync_count`  | `false`                  | 顯示超前/落後追蹤的分支的數量。                                 |
-| `prefix`           | `[`                      | 在 git 狀態正前方顯示的前綴。                                |
-| `suffix`           | `]`                      | 在 git 狀態正後方顯示的後綴。                                |
-| `style`            | `"bold red"`             | 這個模組的風格。                                         |
-| `disabled`         | `false`                  | 停用 `git_status` 模組。                              |
+| 變數                 | 預設                         | 說明                                                     |
+| ------------------ | -------------------------- | ------------------------------------------------------ |
+| `conflicted`       | `"="`                      | 這個分支有合併衝突。                                             |
+| `conflicted_count` | [連結](#git-status-counts)   | Show and style the number of conflicts.                |
+| `ahead`            | `"⇡"`                      | 這個分支超前正在追蹤的分支。                                         |
+| `behind`           | `"⇣"`                      | 這個分支落後正在追蹤的分支。                                         |
+| `diverged`         | `"⇕"`                      | 這個分支偏離正在追蹤的分支。                                         |
+| `untracked`        | `"?"`                      | 工作資料夾中有沒有追蹤的檔案。                                        |
+| `untracked_count`  | [連結](#git-status-counts)   | Show and style the number of untracked files.          |
+| `stashed`          | `"$"`                      | 本地儲存庫有 stash。                                          |
+| `stashed_count`    | [link](#git-status-counts) | Show and style the number of stashes.                  |
+| `modified`         | `"!"`                      | There are file modifications in the working directory. |
+| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.           |
+| `staged`           | `"+"`                      | A new file has been added to the staging area.         |
+| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files.       |
+| `renamed`          | `"»"`                      | A renamed file has been added to the staging area.     |
+| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.            |
+| `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.  |
+| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.            |
+| `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.   |
+| `prefix`           | `[`                        | Prefix to display immediately before git status.       |
+| `suffix`           | `]`                        | Suffix to display immediately after git status.        |
+| `style`            | `"bold red"`               | The style for the module.                              |
+| `disabled`         | `false`                    | Disables the `git_status` module.                      |
 
 #### Git Status Counts
 
