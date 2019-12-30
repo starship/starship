@@ -1,5 +1,4 @@
 use std::ffi::OsStr;
-use std::ops::Deref;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
 use std::{env, fs, str};
@@ -49,8 +48,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .or_else(|| rustup_settings.lookup_override(&context.current_dir))
         .or_else(|| find_rust_toolchain_file(&context));
 
+    let mut module = context.new_module("rust");
+    let config = RustConfig::try_load(module.config);
+
     let (version, toolchain) = if let Some(toolchain_override) = toolchain_override {
-        match execute_rustup_run_rustc_version(&toolchain_override) {
+        match execute_rustup_run_rustc_version(&toolchain_override, config.toolchain) {
             RustupRunRustcVersionOutcome::Ok(module_version) => (
                 module_version,
                 format_toolchain(&toolchain_override, rustup_settings.default_host_triple()),
@@ -62,18 +64,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             RustupRunRustcVersionOutcome::RustupNotWorking => {
                 // If `rustup` is not in `$PATH` or cannot be executed for other reasons, we can
                 // safely execute `rustc --version`.
-                execute_rustc_version_verbose(rustup_settings.default_toolchain())?
+                execute_rustc_version_verbose(
+                    rustup_settings.default_toolchain(),
+                    config.toolchain,
+                )?
             }
             RustupRunRustcVersionOutcome::Err => return None,
         }
     } else {
-        execute_rustc_version_verbose(rustup_settings.default_toolchain())?
+        execute_rustc_version_verbose(rustup_settings.default_toolchain(), config.toolchain)?
     };
 
-    let mut module = context.new_module("rust");
-    let config = RustConfig::try_load(module.config);
     module.set_style(config.style);
-
     module.create_segment("symbol", &config.symbol);
     module.create_segment(
         "version",
@@ -127,18 +129,24 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
     }
 }
 
-fn execute_rustup_run_rustc_version(toolchain: &str) -> RustupRunRustcVersionOutcome {
+fn execute_rustup_run_rustc_version(
+    toolchain: &str,
+    core_only: bool,
+) -> RustupRunRustcVersionOutcome {
     Command::new("rustup")
         .args(&["run", toolchain, "rustc", "--version"])
         .output()
-        .map(extract_toolchain_from_rustup_run_rustc_version)
+        .map(|o| extract_toolchain_from_rustup_run_rustc_version(o, core_only))
         .unwrap_or(RustupRunRustcVersionOutcome::RustupNotWorking)
 }
 
-fn extract_toolchain_from_rustup_run_rustc_version(output: Output) -> RustupRunRustcVersionOutcome {
+fn extract_toolchain_from_rustup_run_rustc_version(
+    output: Output,
+    core_only: bool,
+) -> RustupRunRustcVersionOutcome {
     if output.status.success() {
         if let Ok(stdout) = String::from_utf8(output.stdout) {
-            return RustupRunRustcVersionOutcome::Ok(format_rustc_version(&stdout));
+            return RustupRunRustcVersionOutcome::Ok(format_rustc_version(&stdout, core_only));
         }
     } else if let Ok(stderr) = String::from_utf8(output.stderr) {
         if stderr.starts_with("error: toolchain '") && stderr.ends_with("' is not installed\n") {
@@ -148,13 +156,12 @@ fn extract_toolchain_from_rustup_run_rustc_version(output: Output) -> RustupRunR
     RustupRunRustcVersionOutcome::Err
 }
 
-fn format_rustc_version(rustc_stdout: &str) -> String {
-    let release = rustc_stdout
+fn format_rustc_version(short_version_string: &str, core_only: bool) -> String {
+    let release = short_version_string
         .split_whitespace()
         .nth(1)
-        .unwrap_or(rustc_stdout);
-    let release_core = release.find('-').map(|i| &release[..i]).unwrap_or(release);
-    format!("v{}", release_core)
+        .unwrap_or(short_version_string);
+    format_semver(release, core_only)
 }
 
 fn format_toolchain(toolchain: &str, default_host_triple: Option<&str>) -> String {
@@ -164,15 +171,22 @@ fn format_toolchain(toolchain: &str, default_host_triple: Option<&str>) -> Strin
         .to_owned()
 }
 
-fn execute_rustc_version_verbose(toolchain: Option<&str>) -> Option<(String, String)> {
+fn execute_rustc_version_verbose(
+    toolchain: Option<&str>,
+    core_only: bool,
+) -> Option<(String, String)> {
     let Output { status, stdout, .. } = Command::new("rustc").arg("-Vv").output().ok()?;
     if !status.success() {
         return None;
     }
-    format_rustc_version_verbose(str::from_utf8(&stdout).ok()?, toolchain)
+    format_rustc_version_verbose(str::from_utf8(&stdout).ok()?, toolchain, core_only)
 }
 
-fn format_rustc_version_verbose(stdout: &str, toolchain: Option<&str>) -> Option<(String, String)> {
+fn format_rustc_version_verbose(
+    stdout: &str,
+    toolchain: Option<&str>,
+    core_only: bool,
+) -> Option<(String, String)> {
     let (mut release, mut host) = (None, None);
     for line in stdout.lines() {
         if line.starts_with("release: ") {
@@ -183,12 +197,22 @@ fn format_rustc_version_verbose(stdout: &str, toolchain: Option<&str>) -> Option
         }
     }
     let (release, host) = (release?, host?);
-    let release_core = release.find('-').map(|i| &release[..i]).unwrap_or(release);
-    let version = format!("v{}", release_core);
+    let version = format_semver(release, core_only);
     let toolchain = toolchain
         .map(ToOwned::to_owned)
         .unwrap_or_else(|| format!("?-{}", host));
     Some((version, toolchain))
+}
+
+fn format_semver(semver: &str, core_only: bool) -> String {
+    format!(
+        "v{}",
+        if core_only {
+            semver.find('-').map(|i| &semver[..i]).unwrap_or(semver)
+        } else {
+            semver
+        },
+    )
 }
 
 #[derive(Debug, PartialEq)]
@@ -257,11 +281,11 @@ impl RustupSettings {
     }
 
     fn default_host_triple(&self) -> Option<&str> {
-        self.default_host_triple.as_ref().map(Deref::deref)
+        self.default_host_triple.as_deref()
     }
 
     fn default_toolchain(&self) -> Option<&str> {
-        self.default_toolchain.as_ref().map(Deref::deref)
+        self.default_toolchain.as_deref()
     }
 
     fn lookup_override(&self, cwd: &Path) -> Option<String> {
@@ -289,14 +313,14 @@ mod tests {
                 version = "12"
 
                 [overrides]
-                "/home/user/src/starship" = "1.39.0-x86_64-unknown-linux-gnu"
+                "/home/user/src/starship" = "1.40.0-x86_64-unknown-linux-gnu"
             }),
             Some(RustupSettings {
                 default_host_triple: Some("x86_64-unknown-linux-gnu".to_owned()),
                 default_toolchain: Some("stable".to_owned()),
                 overrides: vec![(
                     "/home/user/src/starship".into(),
-                    "1.39.0-x86_64-unknown-linux-gnu".to_owned(),
+                    "1.40.0-x86_64-unknown-linux-gnu".to_owned(),
                 )]
             }),
         );
@@ -321,70 +345,102 @@ mod tests {
         #[cfg(windows)]
         use std::os::windows::process::ExitStatusExt as _;
 
-        static OK: Lazy<Output> = Lazy::new(|| Output {
+        macro_rules! test {
+            () => {};
+            (($output:ident, $core_only:expr) => $expected:expr $(,$($rest:tt)*)?) => {
+                assert_eq!(
+                    extract_toolchain_from_rustup_run_rustc_version($output.clone(), $core_only),
+                    $expected,
+                );
+                test!($($($rest)*)?);
+            };
+        }
+
+        static STABLE: Lazy<Output> = Lazy::new(|| Output {
             status: ExitStatus::from_raw(0),
-            stdout: b"rustc 1.40.0\n"[..].to_owned(),
+            stdout: b"rustc 1.40.0 (73528e339 2019-12-16)\n"[..].to_owned(),
             stderr: b"whatever"[..].to_owned(),
         });
-        assert_eq!(
-            extract_toolchain_from_rustup_run_rustc_version(OK.clone()),
-            RustupRunRustcVersionOutcome::Ok("v1.40.0".to_owned()),
-        );
+
+        static BETA: Lazy<Output> = Lazy::new(|| Output {
+            status: ExitStatus::from_raw(0),
+            stdout: b"rustc 1.41.0-beta.1 (eb3f7c2d3 2019-12-17)\n"[..].to_owned(),
+            stderr: b"whatever"[..].to_owned(),
+        });
+
+        static NIGHTLY: Lazy<Output> = Lazy::new(|| Output {
+            status: ExitStatus::from_raw(0),
+            stdout: b"rustc 1.42.0-nightly (da3629b05 2019-12-29)\n"[..].to_owned(),
+            stderr: b"whatever"[..].to_owned(),
+        });
 
         static TOOLCHAIN_NOT_INSTALLED: Lazy<Output> = Lazy::new(|| Output {
             status: ExitStatus::from_raw(1),
             stdout: b"whatever"[..].to_owned(),
             stderr: b"error: toolchain 'channel-triple' is not installed\n"[..].to_owned(),
         });
-        assert_eq!(
-            extract_toolchain_from_rustup_run_rustc_version(TOOLCHAIN_NOT_INSTALLED.clone()),
-            RustupRunRustcVersionOutcome::ToolchainNotInstalled,
-        );
 
         static INVALID_STDOUT: Lazy<Output> = Lazy::new(|| Output {
             status: ExitStatus::from_raw(0),
             stdout: b"\xc3\x28"[..].to_owned(),
             stderr: b"whatever"[..].to_owned(),
         });
-        assert_eq!(
-            extract_toolchain_from_rustup_run_rustc_version(INVALID_STDOUT.clone()),
-            RustupRunRustcVersionOutcome::Err,
-        );
 
         static INVALID_STDERR: Lazy<Output> = Lazy::new(|| Output {
             status: ExitStatus::from_raw(1),
             stdout: b"whatever"[..].to_owned(),
             stderr: b"\xc3\x28"[..].to_owned(),
         });
-        assert_eq!(
-            extract_toolchain_from_rustup_run_rustc_version(INVALID_STDERR.clone()),
-            RustupRunRustcVersionOutcome::Err,
-        );
 
         static UNEXPECTED_FORMAT_OF_ERROR: Lazy<Output> = Lazy::new(|| Output {
             status: ExitStatus::from_raw(1),
             stdout: b"whatever"[..].to_owned(),
             stderr: b"error:"[..].to_owned(),
         });
-        assert_eq!(
-            extract_toolchain_from_rustup_run_rustc_version(UNEXPECTED_FORMAT_OF_ERROR.clone()),
-            RustupRunRustcVersionOutcome::Err,
+
+        test!(
+            (STABLE, false) => RustupRunRustcVersionOutcome::Ok("v1.40.0".to_owned()),
+            (STABLE, true) => RustupRunRustcVersionOutcome::Ok("v1.40.0".to_owned()),
+            (BETA, false) => RustupRunRustcVersionOutcome::Ok("v1.41.0-beta.1".to_owned()),
+            (BETA, true) => RustupRunRustcVersionOutcome::Ok("v1.41.0".to_owned()),
+            (NIGHTLY, false) => RustupRunRustcVersionOutcome::Ok("v1.42.0-nightly".to_owned()),
+            (NIGHTLY, true) => RustupRunRustcVersionOutcome::Ok("v1.42.0".to_owned()),
+            (TOOLCHAIN_NOT_INSTALLED, false) => RustupRunRustcVersionOutcome::ToolchainNotInstalled,
+            (TOOLCHAIN_NOT_INSTALLED, true) => RustupRunRustcVersionOutcome::ToolchainNotInstalled,
+            (INVALID_STDOUT, false) => RustupRunRustcVersionOutcome::Err,
+            (INVALID_STDOUT, true) => RustupRunRustcVersionOutcome::Err,
+            (INVALID_STDERR, false) => RustupRunRustcVersionOutcome::Err,
+            (INVALID_STDERR, true) => RustupRunRustcVersionOutcome::Err,
+            (UNEXPECTED_FORMAT_OF_ERROR, false) => RustupRunRustcVersionOutcome::Err,
+            (UNEXPECTED_FORMAT_OF_ERROR, true) => RustupRunRustcVersionOutcome::Err,
         );
     }
 
     #[test]
     fn test_format_rustc_version() {
-        static NIGHTLY_INPUT: &str = "rustc 1.42.0-nightly (3e0a1c091 2019-12-26)";
-        assert_eq!(format_rustc_version(NIGHTLY_INPUT), "v1.42.0");
+        macro_rules! test {
+            () => {};
+            (($input:expr, $core_only:expr) => $expected:expr $(,$($rest:tt)*)?) => {
+                assert_eq!(format_rustc_version($input, $core_only), $expected);
+                test!($($($rest)*)?);
+            };
+        }
 
-        static BETA_INPUT: &str = "rustc 1.41.0-beta.1 (eb3f7c2d3 2019-12-17)";
-        assert_eq!(format_rustc_version(BETA_INPUT), "v1.41.0");
+        static STABLE: &str = "rustc 1.40.0 (73528e339 2019-12-16)";
+        static BETA: &str = "rustc 1.41.0-beta.1 (eb3f7c2d3 2019-12-17)";
+        static NIGHTLY: &str = "rustc 1.42.0-nightly (da3629b05 2019-12-29)";
+        static STABLE_WITHOUT_HASH: &str = "rustc 1.40.0";
 
-        static STABLE_INPUT: &str = "rustc 1.40.0 (73528e339 2019-12-16)";
-        assert_eq!(format_rustc_version(STABLE_INPUT), "v1.40.0");
-
-        static VERSION_WITHOUT_HASH: &str = "rustc 1.40.0";
-        assert_eq!(format_rustc_version(VERSION_WITHOUT_HASH), "v1.40.0");
+        test!(
+            (NIGHTLY, false) => "v1.42.0-nightly",
+            (NIGHTLY, true) => "v1.42.0",
+            (BETA, false) => "v1.41.0-beta.1",
+            (BETA, true) => "v1.41.0",
+            (STABLE, false) => "v1.40.0",
+            (STABLE, true) => "v1.40.0",
+            (STABLE_WITHOUT_HASH, false) => "v1.40.0",
+            (STABLE_WITHOUT_HASH, true) => "v1.40.0",
+        );
     }
 
     #[test]
@@ -406,6 +462,19 @@ mod tests {
 
     #[test]
     fn test_format_rustc_version_verbose() {
+        macro_rules! test {
+            () => {};
+            (($input:expr, $toolchain:expr, $core_only:expr) => $expected:expr $(,$($rest:tt)*)?) => {
+                assert_eq!(
+                    format_rustc_version_verbose($input, $toolchain, $core_only)
+                        .as_ref()
+                        .map(|(s1, s2)| (&**s1, &**s2)),
+                    $expected,
+                );
+                test!($($($rest)*)?);
+            };
+        }
+
         static STABLE: &str = r#"rustc 1.40.0 (73528e339 2019-12-16)
 binary: rustc
 commit-hash: 73528e339aae0f17a15ffa49a8ac608f50c6cf14
@@ -424,49 +493,32 @@ release: 1.41.0-beta.1
 LLVM version: 9.0
 "#;
 
-        static NIGHTLY: &str = r#"rustc 1.42.0-nightly (3e0a1c091 2019-12-26)
+        static NIGHTLY: &str = r#"rustc 1.42.0-nightly (da3629b05 2019-12-29)
 binary: rustc
-commit-hash: 3e0a1c09108b52e41113520c7fa516480a8b67f9
-commit-date: 2019-12-26
+commit-hash: da3629b05f8f1b425a738bfe9fe9aedd47c5417a
+commit-date: 2019-12-29
 host: x86_64-unknown-linux-gnu
 release: 1.42.0-nightly
 LLVM version: 9.0
 "#;
 
-        assert_eq!(
-            format_rustc_version_verbose(STABLE, None),
-            Some((
-                "v1.40.0".to_owned(),
-                "?-x86_64-unknown-linux-gnu".to_owned(),
-            )),
-        );
-        assert_eq!(
-            format_rustc_version_verbose(STABLE, Some("stable")),
-            Some(("v1.40.0".to_owned(), "stable".to_owned())),
-        );
-
-        assert_eq!(
-            format_rustc_version_verbose(BETA, None),
-            Some((
-                "v1.41.0".to_owned(),
-                "?-x86_64-unknown-linux-gnu".to_owned(),
-            )),
-        );
-        assert_eq!(
-            format_rustc_version_verbose(BETA, Some("beta")),
-            Some(("v1.41.0".to_owned(), "beta".to_owned())),
-        );
-
-        assert_eq!(
-            format_rustc_version_verbose(NIGHTLY, None),
-            Some((
-                "v1.42.0".to_owned(),
-                "?-x86_64-unknown-linux-gnu".to_owned(),
-            )),
-        );
-        assert_eq!(
-            format_rustc_version_verbose(NIGHTLY, Some("nightly")),
-            Some(("v1.42.0".to_owned(), "nightly".to_owned())),
+        test!(
+            (STABLE, None, false) => Some(("v1.40.0", "?-x86_64-unknown-linux-gnu")),
+            (STABLE, None, true) => Some(("v1.40.0", "?-x86_64-unknown-linux-gnu")),
+            (STABLE, Some("stable"), false) => Some(("v1.40.0", "stable")),
+            (STABLE, Some("stable"), true) => Some(("v1.40.0", "stable")),
+            (BETA, None, false) => Some(("v1.41.0-beta.1", "?-x86_64-unknown-linux-gnu")),
+            (BETA, None, true) => Some(("v1.41.0", "?-x86_64-unknown-linux-gnu")),
+            (BETA, Some("beta"), false) => Some(("v1.41.0-beta.1", "beta")),
+            (BETA, Some("beta"), true) => Some(("v1.41.0", "beta")),
+            (NIGHTLY, None, false) => Some(("v1.42.0-nightly", "?-x86_64-unknown-linux-gnu")),
+            (NIGHTLY, None, true) => Some(("v1.42.0", "?-x86_64-unknown-linux-gnu")),
+            (NIGHTLY, Some("nightly"), false) => Some(("v1.42.0-nightly", "nightly")),
+            (NIGHTLY, Some("nightly"), true) => Some(("v1.42.0", "nightly")),
+            ("", None, false) => None,
+            ("", None, true) => None,
+            ("", Some("stable"), false) => None,
+            ("", Some("stable"), true) => None,
         );
     }
 }

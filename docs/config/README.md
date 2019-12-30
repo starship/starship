@@ -982,6 +982,10 @@ symbol = "🔺 "
 ## Rust
 
 The `rust` module shows the currently installed version of Rust.
+
+If `toolchain` is set to `true`, it will remove the [`<pre-release>`](https://semver.org/#spec-item-9) of the version and append the toolchain name.
+For example, it will display `v1.y.z (beta)` instead of `v1.y.z-beta.1`.
+
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Cargo.toml` file
