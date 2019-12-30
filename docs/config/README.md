@@ -533,6 +533,7 @@ current directory.
 | `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
 | `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
 | `stashed`          | `"$"`                      | A stash exists for the local repository.                |
+| `stashed_count`    | [link](#git-status-counts) | Show and style the number of stashes.                           |
 | `modified`         | `"!"`                      | There are file modifications in the working directory.  |
 | `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
 | `staged`           | `"+"`                      | A new file has been added to the staging area.          |
