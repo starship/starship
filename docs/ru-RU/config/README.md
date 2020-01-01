@@ -489,30 +489,30 @@ cherry_pick = "🍒 PICKING"
 
 ### Опции
 
-| Переменная         | По умолчанию               | Описание                                                |
-| ------------------ | -------------------------- | ------------------------------------------------------- |
-| `conflicted`       | `"="`                      | Эта ветка имеет конфликты слияния.                      |
-| `conflicted_count` | [link](#git-status-counts) | Показать и стилизовать количество конфликтов.           |
-| `ahead`            | `"⇡"`                      | Эта ветка впереди отслеживаемой ветви.                  |
-| `behind`           | `"⇣"`                      | Эта ветка позади отслеживаемой ветви.                   |
-| `diverged`         | `"⇕"`                      | This branch has diverged from the branch being tracked. |
-| `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
-| `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
-| `stashed`          | `"$"`                      | A stash exists for the local repository.                |
-| `stashed_count`    | [link](#git-status-counts) | Show and style the number of stashes.                   |
-| `modified`         | `"!"`                      | There are file modifications in the working directory.  |
-| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
-| `staged`           | `"+"`                      | A new file has been added to the staging area.          |
-| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files.        |
-| `renamed`          | `"»"`                      | A renamed file has been added to the staging area.      |
-| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.             |
-| `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.   |
-| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.             |
-| `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
-| `prefix`           | `[`                        | Prefix to display immediately before git status.        |
-| `suffix`           | `]`                        | Suffix to display immediately after git status.         |
-| `style`            | `"bold red"`               | The style for the module.                               |
-| `disabled`         | `false`                    | Disables the `git_status` module.                       |
+| Переменная         | По умолчанию                 | Описание                                               |
+| ------------------ | ---------------------------- | ------------------------------------------------------ |
+| `conflicted`       | `"="`                        | Эта ветка имеет конфликты слияния.                     |
+| `conflicted_count` | [ссылка](#git-status-counts) | Показывать в стиле количество конфликтов.              |
+| `ahead`            | `"⇡"`                        | Эта ветка впереди отслеживаемой ветви.                 |
+| `behind`           | `"⇣"`                        | Эта ветка позади отслеживаемой ветви.                  |
+| `diverged`         | `"⇕"`                        | Эта ветка расходится от отслеживаемой ветки.           |
+| `untracked`        | `"?"`                        | В рабочей директории есть неотслеженные файлы.         |
+| `untracked_count`  | [ссылка](#git-status-counts) | Показывать в стиле количество неотслеженных файлов.    |
+| `stashed`          | `"$"`                        | A stash exists for the local repository.               |
+| `stashed_count`    | [ссылка](#git-status-counts) | Show and style the number of stashes.                  |
+| `modified`         | `"!"`                        | There are file modifications in the working directory. |
+| `modified_count`   | [ссылка](#git-status-counts) | Show and style the number of modified files.           |
+| `staged`           | `"+"`                        | A new file has been added to the staging area.         |
+| `staged_count`     | [link](#git-status-counts)   | Show and style the number of files staged files.       |
+| `renamed`          | `"»"`                        | A renamed file has been added to the staging area.     |
+| `renamed_count`    | [link](#git-status-counts)   | Show and style the number of renamed files.            |
+| `deleted`          | `"✘"`                        | A file's deletion has been added to the staging area.  |
+| `deleted_count`    | [link](#git-status-counts)   | Show and style the number of deleted files.            |
+| `show_sync_count`  | `false`                      | Show ahead/behind count of the branch being tracked.   |
+| `prefix`           | `[`                          | Prefix to display immediately before git status.       |
+| `suffix`           | `]`                          | Suffix to display immediately after git status.        |
+| `style`            | `"bold red"`                 | The style for the module.                              |
+| `disabled`         | `false`                      | Disables the `git_status` module.                      |
 
 #### Git Status Counts
 
