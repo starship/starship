@@ -399,16 +399,16 @@ variable = "SHELL"
 default = "unknown shell"
 ```
 
-## Git Branch
+## Ветвь Git
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+Модуль `git_branch` показывает активную ветку репозитория в вашем текущей директории.
 
 ### Опции
 
 | Переменная          | По умолчанию    | Описание                                                                              |
 | ------------------- | --------------- | ------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
-| `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
+| `symbol`            | `" "`          | Символ, используемый перед именем ветки репозитория в вашей текущей директории.       |
+| `truncation_length` | `2^63 - 1`      | Отрезает ветку git до X графемов                                                      |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
 | `style`             | `"bold purple"` | Стиль модуля.                                                                         |
 | `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
