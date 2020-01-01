@@ -460,18 +460,18 @@ commit_hash_length = 4
 
 ### Опции
 
-| Переменная         | По умолчанию       | Описание                                                                                                         |
-| ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
-| `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
-| `revert`           | `"REVERTING"`      | The text displayed when a `revert` is in progress.                                                               |
-| `cherry_pick`      | `"CHERRY-PICKING"` | The text displayed when a `cherry-pick` is in progress.                                                          |
-| `bisect`           | `"BISECTING"`      | The text displayed when a `bisect` is in progress.                                                               |
-| `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
-| `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
-| `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
-| `style`            | `"bold yellow"`    | Стиль модуля.                                                                                                    |
-| `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
+| Переменная         | По умолчанию       | Описание                                                                                                      |
+| ------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------- |
+| `rebase`           | `"REBASING"`       | Текст, отображаемый в процессе операции `rebase`.                                                             |
+| `merge`            | `"MERGING"`        | Текст, отображаемый в процессе операции `merge`.                                                              |
+| `revert`           | `"REVERTING"`      | Текст, отображаемый в процессе операции `revert`.                                                             |
+| `cherry_pick`      | `"CHERRY-PICKING"` | Текст, отображаемый в процессе операции `cherry-pick`.                                                        |
+| `bisect`           | `"BISECTING"`      | Текст, отображаемый в процессе операции `bisect`.                                                             |
+| `am`               | `"AM"`             | Текст, отображаемый в процессе операции `apply-mailbox` (`git am`).                                           |
+| `am_or_rebase`     | `"AM/REBASE"`      | Текст, отображаемый, когда выполняется неоднозначный процесс `apply-mailbox` или `rebase`.                    |
+| `progress_divider` | `"/"`              | Символ или текст, который будет разделять текущую и общую сумму прогресса. (напр., `" из "`, для `"3 из 10"`) |
+| `style`            | `"bold yellow"`    | Стиль модуля.                                                                                                 |
+| `disabled`         | `false`            | Отключает модуль `git_state`.                                                                                 |
 
 ### Пример
 
@@ -483,18 +483,18 @@ progress_divider = " of "
 cherry_pick = "🍒 PICKING"
 ```
 
-## Git Status
+## Статус Git
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+Модуль `git_status` отображает символы, представляющие состояние репозитория в вашей текущей директории.
 
 ### Опции
 
 | Переменная         | По умолчанию               | Описание                                                |
 | ------------------ | -------------------------- | ------------------------------------------------------- |
-| `conflicted`       | `"="`                      | This branch has merge conflicts.                        |
-| `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
-| `ahead`            | `"⇡"`                      | This branch is ahead of the branch being tracked.       |
-| `behind`           | `"⇣"`                      | This branch is behind of the branch being tracked.      |
+| `conflicted`       | `"="`                      | Эта ветка имеет конфликты слияния.                      |
+| `conflicted_count` | [link](#git-status-counts) | Показать и стилизовать количество конфликтов.           |
+| `ahead`            | `"⇡"`                      | Эта ветка впереди отслеживаемой ветви.                  |
+| `behind`           | `"⇣"`                      | Эта ветка позади отслеживаемой ветви.                   |
 | `diverged`         | `"⇕"`                      | This branch has diverged from the branch being tracked. |
 | `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
 | `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
