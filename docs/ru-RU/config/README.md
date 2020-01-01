@@ -127,7 +127,7 @@ prompt_order = [
 | ----------------- | --------------- | ---------------------------------------------------------------- |
 | `symbol`          | `"☁️ "`         | Символ перед отображением текущего профиля AWS.                  |
 | `displayed_items` | `all`           | Выбор элементов. Возможные значения [`all`, `profile`, `region`] |
-| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.  |
+| `region_aliases`  |                 | Таблица региона псевдонимов, отображаемая вместе с именем AWS.   |
 | `style`           | `"bold yellow"` | Стиль модуля.                                                    |
 | `disabled`        | `false`         | Отключение модуля `AWS`.                                         |
 
@@ -259,13 +259,13 @@ use_symbol_for_status = true
 
 ### Опции
 
-| Переменная          | По умолчанию    | Описание                                                   |
-| ------------------- | --------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | Префикс, отображаемый перед продолжительностью команды.    |
-| `style`             | `"bold yellow"` | Стиль модуля.                                              |
-| `disabled`          | `false`         | Отключает модуль `cmd_duration`.                           |
+| Переменная          | По умолчанию    | Описание                                                             |
+| ------------------- | --------------- | -------------------------------------------------------------------- |
+| `min_time`          | `2_000`         | Кратчайшая продолжительность для показа времени (в миллисекундах).   |
+| `show_milliseconds` | `false`         | Показывать миллисекунды в дополнение к секундам в продолжительности. |
+| `prefix`            | `took`          | Префикс, отображаемый перед продолжительностью команды.              |
+| `style`             | `"bold yellow"` | Стиль модуля.                                                        |
+| `disabled`          | `false`         | Отключает модуль `cmd_duration`.                                     |
 
 ### Пример
 
@@ -283,7 +283,7 @@ prefix = "underwent "
 
 ::: tip
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+Это не подавляет модификатор командной строки самой conda. Возможно, вы захотите запустить `conda config --set changeps1 False`.
 
 :::
 
