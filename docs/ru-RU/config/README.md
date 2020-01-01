@@ -405,13 +405,13 @@ default = "unknown shell"
 
 ### Опции
 
-| Переменная          | По умолчанию    | Описание                                                                              |
-| ------------------- | --------------- | ------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`          | Символ, используемый перед именем ветки репозитория в вашей текущей директории.       |
-| `truncation_length` | `2^63 - 1`      | Отрезает ветку git до X графемов                                                      |
-| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
-| `style`             | `"bold purple"` | Стиль модуля.                                                                         |
-| `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
+| Переменная          | По умолчанию    | Описание                                                                                                        |
+| ------------------- | --------------- | --------------------------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | Символ, используемый перед именем ветки репозитория в вашей текущей директории.                                 |
+| `truncation_length` | `2^63 - 1`      | Отрезает ветку git до X графемов                                                                                |
+| `truncation_symbol` | `"…"`           | Символ, используемый для обозначения усечения названия ветки. Вы можете использовать "", чтобы не видеть символ |
+| `style`             | `"bold purple"` | Стиль модуля.                                                                                                   |
+| `disabled`          | `false`         | Отключает модуль `git_branch`.                                                                                  |
 
 ### Пример
 
@@ -424,7 +424,7 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git Commit
+## Коммит Git
 
 Модуль `git_commit` показывает хэш текущего коммита репозитория в вашем текущем каталоге.
 
@@ -436,13 +436,13 @@ truncation_symbol = ""
 
 ### Опции
 
-| Переменная           | По умолчанию   | Описание                                         |
-| -------------------- | -------------- | ------------------------------------------------ |
-| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
-| `prefix`             | `"("`          | Prefix to display immediately before git commit. |
-| `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
-| `style`              | `"bold green"` | Стиль модуля.                                    |
-| `disabled`           | `true`         | Disables the `git_commit` module.                |
+| Переменная           | По умолчанию   | Описание                                       |
+| -------------------- | -------------- | ---------------------------------------------- |
+| `commit_hash_length` | `7`            | Длина отображаемого хэша коммита git.          |
+| `prefix`             | `"("`          | Префикс, отображаемый сразу после коммита.     |
+| `suffix`             | `")"`          | Суффикс, отображаемый сразу после коммита git. |
+| `style`              | `"bold green"` | Стиль модуля.                                  |
+| `disabled`           | `true`         | Отключает модуль `git_commit`.                 |
 
 ### Пример
 
@@ -454,9 +454,9 @@ disabled = false
 commit_hash_length = 4
 ```
 
-## Git State
+## Состояние Git
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+Модуль `git_state` будет отображаться в директориях, являющимися частью репозитория git, и там, где выполняется операция, такие как: _REBASING_, _BISECTING_, и т. д. Если есть информация о прогрессе (например, REBASING 3/10), эта информация также будет показана.
 
 ### Опции
 
