@@ -503,11 +503,11 @@ cherry_pick = "🍒 PICKING"
 | `modified`         | `"!"`                        | There are file modifications in the working directory. |
 | `modified_count`   | [ссылка](#git-status-counts) | Show and style the number of modified files.           |
 | `staged`           | `"+"`                        | A new file has been added to the staging area.         |
-| `staged_count`     | [link](#git-status-counts)   | Show and style the number of files staged files.       |
+| `staged_count`     | [ссылка](#git-status-counts) | Show and style the number of files staged files.       |
 | `renamed`          | `"»"`                        | A renamed file has been added to the staging area.     |
-| `renamed_count`    | [link](#git-status-counts)   | Show and style the number of renamed files.            |
+| `renamed_count`    | [ссылка](#git-status-counts) | Show and style the number of renamed files.            |
 | `deleted`          | `"✘"`                        | A file's deletion has been added to the staging area.  |
-| `deleted_count`    | [link](#git-status-counts)   | Show and style the number of deleted files.            |
+| `deleted_count`    | [ссылка](#git-status-counts) | Show and style the number of deleted files.            |
 | `show_sync_count`  | `false`                      | Show ahead/behind count of the branch being tracked.   |
 | `prefix`           | `[`                          | Prefix to display immediately before git status.       |
 | `suffix`           | `]`                          | Suffix to display immediately after git status.        |
