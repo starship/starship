@@ -289,12 +289,12 @@ prefix = "underwent "
 
 ### Опции
 
-| Переменная          | По умолчанию   | Описание                                                                                                                                                                                                    |
-| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"C "`         | Символ перед названием окружения.                                                                                                                                                                           |
-| `style`             | `"bold green"` | Стиль модуля.                                                                                                                                                                                               |
-| `disabled`          | `false`        | Отключает модуль `conda`.                                                                                                                                                                                   |
+| Переменная          | По умолчанию   | Описание                                                                                                                                                                                                     |
+| ------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `truncation_length` | `1`            | Количество каталогов, в которых путь к окружению должен быть усечен, если окружение было создано через `conda create -p [path]`. `0` означает без усечения. Также смотрите модуль [`directory`](#directory). |
+| `symbol`            | `"C "`         | Символ перед названием окружения.                                                                                                                                                                            |
+| `style`             | `"bold green"` | Стиль модуля.                                                                                                                                                                                                |
+| `disabled`          | `false`        | Отключает модуль `conda`.                                                                                                                                                                                    |
 
 ### Пример
 
@@ -370,11 +370,11 @@ style = "green"
 heuristic = false
 ```
 
-## Environment Variable
+## Переменная Окружения
 
-The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+Модуль `env_var` отображает текущее значение выбранной переменной окружения. Модуль будет показан только в том случае, если любое из следующих условий соблюдено:
 
-- The `variable` configuration option matches an existing environment variable
+- Опция `variable` соответствует существующей переменной среды
 - The `variable` configuration option is not defined, but the `default` configuration option is
 
 ### Опции
