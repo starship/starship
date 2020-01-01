@@ -375,19 +375,19 @@ heuristic = false
 Модуль `env_var` отображает текущее значение выбранной переменной окружения. Модуль будет показан только в том случае, если любое из следующих условий соблюдено:
 
 - Опция `variable` соответствует существующей переменной среды
-- The `variable` configuration option is not defined, but the `default` configuration option is
+- Опция `variable` не определена, но определена опция `default`
 
 ### Опции
 
-| Переменная     | По умолчанию     | Описание                                                                     |
-| -------------- | ---------------- | ---------------------------------------------------------------------------- |
-| `symbol`       |                  | The symbol used before displaying the variable value.                        |
-| `переменная`   |                  | The environment variable to be displayed.                                    |
-| `по умолчанию` |                  | The default value to be displayed when the selected variable is not defined. |
-| `prefix`       | `""`             | Prefix to display immediately before the variable value.                     |
-| `suffix`       | `""`             | Suffix to display immediately after the variable value.                      |
-| `style`        | `"dimmed black"` | Стиль модуля.                                                                |
-| `disabled`     | `false`          | Disables the `env_var` module.                                               |
+| Переменная | По умолчанию     | Описание                                                                     |
+| ---------- | ---------------- | ---------------------------------------------------------------------------- |
+| `symbol`   |                  | Символ, используемый перед отображением значения переменной.                 |
+| `variable` |                  | Отображаемая переменная окружения.                                           |
+| `default`  |                  | The default value to be displayed when the selected variable is not defined. |
+| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
+| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
+| `style`    | `"dimmed black"` | Стиль модуля.                                                                |
+| `disabled` | `false`          | Disables the `env_var` module.                                               |
 
 ### Пример
 
