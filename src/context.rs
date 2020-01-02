@@ -1,6 +1,7 @@
 use crate::config::StarshipConfig;
 use crate::module::Module;
 
+use crate::modules;
 use clap::ArgMatches;
 use git2::{Repository, RepositoryState};
 use once_cell::sync::OnceCell;
@@ -91,8 +92,9 @@ impl<'a> Context<'a> {
     /// Create a new module
     pub fn new_module(&self, name: &str) -> Module {
         let config = self.config.get_module_config(name);
+        let desc = modules::description(name);
 
-        Module::new(name, config)
+        Module::new(name, desc, config)
     }
 
     /// Check if `disabled` option of the module is true in configuration file.

@@ -50,6 +50,9 @@ pub struct Module<'a> {
     /// The module's name, to be used in configuration and logging.
     _name: String,
 
+    /// The module's description
+    description: String,
+
     /// The styling to be inherited by all segments contained within this module.
     style: Style,
 
@@ -65,10 +68,11 @@ pub struct Module<'a> {
 
 impl<'a> Module<'a> {
     /// Creates a module with no segments.
-    pub fn new(name: &str, config: Option<&'a toml::Value>) -> Module<'a> {
+    pub fn new(name: &str, desc: &str, config: Option<&'a toml::Value>) -> Module<'a> {
         Module {
             config,
             _name: name.to_string(),
+            description: desc.to_string(),
             style: Style::default(),
             prefix: Affix::default_prefix(name),
             segments: Vec::new(),
@@ -91,9 +95,18 @@ impl<'a> Module<'a> {
         &self._name
     }
 
+    /// Get module's description
+    pub fn get_description(&self) -> &String {
+        &self.description
+    }
+
     /// Whether a module has non-empty segments
     pub fn is_empty(&self) -> bool {
         self.segments.iter().all(|segment| segment.is_empty())
+    }
+
+    pub fn get_segments(&self) -> Vec<&str> {
+        self.segments.iter().map(Segment::get_value).collect()
     }
 
     /// Get the module's prefix
@@ -120,7 +133,10 @@ impl<'a> Module<'a> {
     /// Returns a vector of colored ANSIString elements to be later used with
     /// `ANSIStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<ANSIString> {
-        let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
+        self.ansi_strings_for_prompt(true)
+    }
+
+    pub fn ansi_strings_for_prompt(&self, is_prompt: bool) -> Vec<ANSIString> {
         let mut ansi_strings = self
             .segments
             .iter()
@@ -130,11 +146,14 @@ impl<'a> Module<'a> {
         ansi_strings.insert(0, self.prefix.ansi_string());
         ansi_strings.push(self.suffix.ansi_string());
 
-        ansi_strings = match shell.as_str() {
-            "bash" => ansi_strings_modified(ansi_strings, shell),
-            "zsh" => ansi_strings_modified(ansi_strings, shell),
-            _ => ansi_strings,
-        };
+        if is_prompt {
+            let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
+            ansi_strings = match shell.as_str() {
+                "bash" => ansi_strings_modified(ansi_strings, shell),
+                "zsh" => ansi_strings_modified(ansi_strings, shell),
+                _ => ansi_strings,
+            };
+        }
 
         ansi_strings
     }
@@ -261,9 +280,11 @@ mod tests {
     #[test]
     fn test_module_is_empty_with_no_segments() {
         let name = "unit_test";
+        let desc = "This is a unit test";
         let module = Module {
             config: None,
             _name: name.to_string(),
+            description: desc.to_string(),
             style: Style::default(),
             prefix: Affix::default_prefix(name),
             segments: Vec::new(),
@@ -276,9 +297,11 @@ mod tests {
     #[test]
     fn test_module_is_empty_with_all_empty_segments() {
         let name = "unit_test";
+        let desc = "This is a unit test";
         let module = Module {
             config: None,
             _name: name.to_string(),
+            description: desc.to_string(),
             style: Style::default(),
             prefix: Affix::default_prefix(name),
             segments: vec![Segment::new("test_segment")],
