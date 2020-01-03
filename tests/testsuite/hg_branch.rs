@@ -29,7 +29,7 @@ fn test_hg_get_branch_fails() -> io::Result<()> {
     expect_hg_branch_with_config(
         tempdir.path(),
         "",
-        &[Expect::BranchName(&"(no branch)"), Expect::NoTruncation],
+        &[Expect::BranchName(&"default"), Expect::NoTruncation],
     )
 }
 
@@ -156,7 +156,7 @@ fn expect_hg_branch_with_config(
 
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let mut expect_branch_name = "(no branch)";
+    let mut expect_branch_name = "default";
     let mut expect_style = Color::Purple.bold();
     let mut expect_symbol = "\u{e0a0}";
     let mut expect_truncation_symbol = "…";
