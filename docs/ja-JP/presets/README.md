@@ -1,6 +1,8 @@
-# Presets
+# 準備するもの
 
-Here is a collection of community-submitted configuration presets for Starship. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+以下は、Starship用にコミュニティに提供された構成プリセットのコレクションです。 共有するプリセットがある場合は、このファイルを更新してPR</ 0>を送信してください！ 😊</p> 
+
+
 
 ## Nerd Font Symbols
 
@@ -8,11 +10,17 @@ This preset doesn't change anything except for the symbols used for each module.
 
 ![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
 
+
+
 ### 必要なもの
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
 
+
+
 ### 設定
+
+
 
 ```toml
 [aws]
