@@ -197,7 +197,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   `~/.config/ion/initrc `の最後に次を追加してください
 
    ```sh
    # ~/.config/ion/initrc
