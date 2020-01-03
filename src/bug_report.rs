@@ -178,8 +178,16 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
 }
 
 fn get_starship_config() -> String {
-    dirs::home_dir()
-        .and_then(|home_dir| fs::read_to_string(home_dir.join(".config/starship.toml")).ok())
+    std::env::var("STARSHIP_CONFIG")
+        .map(PathBuf::from)
+        .ok()
+        .or_else(|| {
+            dirs::home_dir().map(|mut home_dir| {
+                home_dir.push(".config/starship.toml");
+                home_dir
+            })
+        })
+        .and_then(|config_path| fs::read_to_string(config_path).ok())
         .unwrap_or_else(|| UNKNOWN_CONFIG.to_string())
 }
 
