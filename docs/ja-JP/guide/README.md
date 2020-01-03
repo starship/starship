@@ -21,7 +21,7 @@
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
       alt="Chat on Discord" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-63-orange" alt="All Contributors"></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-64-orange" alt="All Contributors"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
@@ -70,14 +70,14 @@
 ## 🍬 機能
 
 - 最後のコマンドがゼロ以外のコードで終了すると、プロンプト文字が赤に変わります
-- 現在の Go バージョン (`🐹`)
+- 現在の Go のバージョン (`🐹`)
 - 現在の Java のバージョン (`☕`)
 - 現在の Node.js のバージョン (`⬢`)
-- Current PHP version (`🐘`)
+- 現在の PHP のバージョン (`🐘`)
 - 現在の Python のバージョン (`🐍`)
 - 現在の Ruby のバージョン (`💎`)
 - 現在の Rust のバージョン (`🦀`)
-- Current .NET version (`•NET`)
+- 現在の .NET のバージョン (`•NET`)
 - カレントディレクトリにある現在のパッケージバージョン(`📦`)
   - npm (Node.js)
   - cargo (Rust)
@@ -94,58 +94,61 @@
   - `+` — 追加されたファイル
   - `»` — 名前が変更されたファイル
   - `✘` — 削除されたファイル
-- Current Mercurial branch
+- 現在の Mercurial ブランチ
 - 現在のバッテリー残量と状態
-- `⇡` – charging
-- `⇣` – discharging
-- `•` – fully charged
+- `⇡` – 充電中
+- `⇣` – 放電中
+- `•` – 満タン
 - バックグラウンドジョブのインジケーター (`✦`)
 - 現在のKubernetesクラスタとネームスペース (`☸`)
-- Current Amazon Web Services (AWS) profile (`☁️`)
-- Execution time of the last command
-- Custom environment variable value
-- Nix-shell の環境検出
-- ログインユーザーと異なる場合にユーザー名を表示する
-- Optional current time in 12/24hr format
+- 現在のAmazon Web Services (AWS) プロファイル(`☁️</ 0>)</li>
+<li>最後のコマンドの実行時間</li>
+<li>カスタム環境変数の値</li>
+<li>Nix-shell の環境検出</li>
+<li>ログインユーザーと異なる場合にユーザー名を表示する</li>
+<li>12/24時間形式のオプションの現在時刻</li>
+</ul>
 
-## 🚀 インストール
+<h2 spaces-before="0">🚀 インストール</h2>
 
-### 必要なもの
+<h3 spaces-before="0">必要なもの</h3>
 
-- [Powerline フォント](https://github.com/powerline/fonts) がターミナルにインストールされて有効になっている必要があります（例えば [Fira Code](https://github.com/tonsky/FiraCode) を試してみてください）。
+<ul>
+<li><a href="https://github.com/powerline/fonts">Powerline フォント</a> がターミナルにインストールされて有効になっている必要があります（例えば <a href="https://github.com/tonsky/FiraCode">Fira Code</a> を試してみてください）。</li>
+</ul>
 
-### 入門
+<h3 spaces-before="0">入門</h3>
 
-1. **Starship** のバイナリをインストール
+<ol start="1">
+<li><p spaces-before="0"><strong x-id="1">Starship</strong> のバイナリをインストール</p>
 
+<h4 spaces-before="3">最新版のインストール</h4>
 
-   #### Install Latest Version
+<h5 spaces-before="3">Shellを利用する</h5>
 
-
-   ##### With Shell:
-
-   ```sh
-   curl -fsSL https://starship.rs/install.sh | bash
-   ```
-
-
-   #### Install via Package Manager
+<pre><code class="sh">   curl -fsSL https://starship.rs/install.sh | bash
+`</pre>
 
 
-   ##### With [Homebrew](https://brew.sh/):
+   #### パッケージマネージャー経由でインストール
+
+
+   ##### [ Homebrew ](https://brew.sh/)の場合：
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### [ Scoop ](https://scoop.sh)の場合：
 
    ```powershell
    scoop install starship
    ```
 
-1. 初期化のためのスクリプトをシェルの設定ファイルに追加
+1
+
+初期化のためのスクリプトをシェルの設定ファイルに追加
 
 
    #### Bash
@@ -201,6 +204,7 @@
 
    eval $(starship init ion)
    ```
+</ol>
 
 ## 🔧 設定
 
@@ -309,6 +313,9 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
     <td align="center"><a href="https://github.com/Scotsguy"><img src="https://avatars3.githubusercontent.com/u/20385973?v=4" width="100px;" alt="" /><br /><sub><b>AppleTheGolden</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=Scotsguy" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=Scotsguy" title="Documentation">📖</a></td>
     <td align="center"><a href="http://sda.io"><img src="https://avatars1.githubusercontent.com/u/481987?v=4" width="100px;" alt="" /><br /><sub><b>Mike Sampson</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=mfs" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=mfs" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=mfs" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://sternentstehung.de"><img src="https://avatars3.githubusercontent.com/u/36575275?v=4" width="100px;" alt="" /><br /><sub><b>Dominik Braun</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=dominikbraun" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/dten"><img src="https://avatars0.githubusercontent.com/u/1019038?v=4" width="100px;" alt="" /><br /><sub><b>David Hewson</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=dten" title="Code">💻</a></td>
   </tr>
 </table>
 
