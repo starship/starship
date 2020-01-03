@@ -3,13 +3,13 @@ home: true
 heroImage: /logo.svg
 actionText: Empezar →
 actionLink: /guide/
-footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores de Starship
 ---
 
 <div class="features">
   <div class="feature">
-    <h2>Compatibility First</h2>
-    <p>Works on the most common shells on the most common operating systems. Use it everywhere!</p>
+    <h2>Compatibilidad primero</h2>
+    <p>Funciona en las interfaces de líneas de comando (shells) más comunes en los sistemas operativos más comunes. ¡Úsalo donde sea!</p>
   </div>
   <div class="feature">
     <h2>Rust-Powered</h2>
