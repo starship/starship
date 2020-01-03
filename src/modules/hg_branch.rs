@@ -11,7 +11,6 @@ use crate::configs::hg_branch::HgBranchConfig;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_hg_repo = context
         .try_begin_scan()?
-        .set_files(&[".hgignore"])
         .set_folders(&[".hg"])
         .is_match();
 
