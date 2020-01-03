@@ -1,7 +1,7 @@
 ---
 home: true
 heroImage: /logo.svg
-actionText: Get Started →
+actionText: Empezar →
 actionLink: /guide/
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 ---
