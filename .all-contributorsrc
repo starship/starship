@@ -658,6 +658,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "dten",
+      "name": "David Hewson",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1019038?v=4",
+      "profile": "https://github.com/dten",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
