@@ -8,10 +8,7 @@ use crate::configs::hg_branch::HgBranchConfig;
 ///
 /// Will display the bookmark or branch name if the current directory is an hg repo
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let is_hg_repo = context
-        .try_begin_scan()?
-        .set_folders(&[".hg"])
-        .is_match();
+    let is_hg_repo = context.try_begin_scan()?.set_folders(&[".hg"]).is_match();
 
     if !is_hg_repo {
         return None;
@@ -37,8 +34,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         config.truncation_length as usize
     };
 
-    let branch_name = get_hg_current_bookmark(context)
-        .unwrap_or_else(|| get_hg_branch_name(context));
+    let branch_name =
+        get_hg_current_bookmark(context).unwrap_or_else(|| get_hg_branch_name(context));
 
     let truncated_graphemes = get_graphemes(&branch_name, len);
     // The truncation symbol should only be added if we truncated
