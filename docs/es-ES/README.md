@@ -94,10 +94,10 @@ footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores
 
    #### Powershell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   Añade el siguiente código al final de `~\Documentos\PowerShell\Microsoft.PowerShell_profile.ps1` (o `~/.config/powershell/Microsoft.PowerShell_profile.ps1` en sistemas *nix):
 
    ```sh
-   # ~\Documents\PowerShell\Profile.ps1
+   # ~\Documentos\PowerShell\Profile.ps1
 
    Invoke-Expression (&starship init powershell)
    ```
@@ -105,7 +105,7 @@ footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Añade el siguiente código al final de `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
