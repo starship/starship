@@ -28,6 +28,11 @@ symbol = "➜"     # The "symbol" segment is being set to "➜"
 disabled = true
 ```
 
+You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+```shell
+export STARSHIP_CONFIG=~/.starship
+```
+
 ### Terminology
 
 **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
