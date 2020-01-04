@@ -12,7 +12,7 @@ footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores
     <p>Funciona en las interfaces de líneas de comando (shells) más comunes en los sistemas operativos más comunes. ¡Úsalo donde sea!</p>
   </div>
   <div class="feature">
-    <h2>Rust-Powered</h2>
+    <h2>Desarrollado en Rust</h2>
     <p>Obtén la mayor velocidad y seguridad de Rust, para hacer tu prompt lo más rápida y segura posible.</p>
   </div>
   <div class="feature">
