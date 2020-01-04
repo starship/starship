@@ -83,22 +83,22 @@
   - cargo (Rust)
   - poetry (Python)
   - composer (PHP)
-- Current Git branch and rich repo status:
-  - `=` — conflicting changes
-  - `⇡` — ahead of remote branch
-  - `⇣` — behind of remote branch
-  - `⇕` — diverged changes
-  - `?` — untracked changes
-  - `$` — stashed changes
-  - `!` — modified files
-  - `+` — added files
-  - `»` — renamed files
-  - `✘` — deleted files
-- Current Mercurial branch
-- Current battery level and status
-- `⇡` – charging
-- `⇣` – discharging
-- `•` – fully charged
+- Rama actual del repositorio git e información enriquecida de su estado:
+  - `=` — cambios conflictivos
+  - `⇡` — por delante de la rama remota
+  - `⇣` — por detrás de la rama remota
+  - `⇕` — cambios divergentes
+  - `?` — cambios sin rastrear
+  - `$` — cambios guardados
+  - `!` — archivos modificados
+  - `+` — archivos añadidos
+  - `»` — archivos renombrados
+  - `✘` — archivos eliminados
+- Rama Mercurial actual
+- Nivel y estado actual de la batería
+- `⇡` – cargando
+- `⇣` – descargándo
+- `•` –completamente cargada
 - Indicator for jobs in the background (`✦`)
 - Current Kubernetes Cluster and Namespace (`☸`)
 - Current Amazon Web Services (AWS) profile (`☁️`)
