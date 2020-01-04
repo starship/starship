@@ -71,8 +71,8 @@
 
 - Los caracteres de la prompt se colorean de rojo si el último comando termina con un código distinto a cero
 - Versión actual de Go (`🐹`)
-- Versión actual de Java (`☕`)
-- Versión actual de Node.js (`⬢`)
+- Current Java version (`☕`)
+- Current Node.js version (`⬢`)
 - Versión actual de PHP (`🐘`)
 - Versión actual de Python (`🐍`)
 - Versión actual de Ruby (`💎`)
