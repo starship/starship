@@ -1,8 +1,7 @@
-use std::process::Command;
-
 use super::{Context, Module, RootModuleConfig, SegmentConfig};
 
 use crate::configs::haskell::HaskellConfig;
+use crate::utils;
 
 /// Creates a module with the current Haskell Stack version
 ///
@@ -15,33 +14,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .is_match();
 
     if !is_haskell_project {
-        None
-    } else {
-        get_haskell_version().map(|haskell_version| {
-            let formatted_version = format_haskell_version(&haskell_version).unwrap();
-
-            let mut module = context.new_module("haskell");
-            let config: HaskellConfig = HaskellConfig::try_load(module.config);
-            module.set_style(config.style);
-
-            module.create_segment("symbol", &config.symbol);
-            module.create_segment("version", &SegmentConfig::new(&formatted_version));
-            module
-        })
+        return None;
     }
-}
 
-fn get_haskell_version() -> Option<String> {
-    match Command::new("stack")
-        .arg("ghc")
-        .arg("--")
-        .arg("--numeric-version")
-        .arg("--no-install-ghc")
-        .output()
-    {
-        Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
-        Err(_) => None,
-    }
+    let haskell_version = utils::exec_cmd("stack", &["ghc", "--", "--numeric-version", "--no-install-ghc"])?.stdout;
+    let formatted_version = format_haskell_version(&haskell_version)?;
+
+    let mut module = context.new_module("haskell");
+    let config: HaskellConfig = HaskellConfig::try_load(module.config);
+    module.set_style(config.style);
+
+    module.create_segment("symbol", &config.symbol);
+    module.create_segment("version", &SegmentConfig::new(&formatted_version));
+
+    Some(module)
 }
 
 fn format_haskell_version(haskell_version: &str) -> Option<String> {
