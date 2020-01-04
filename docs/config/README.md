@@ -111,7 +111,6 @@ prompt_order = [
     "ruby",
     "rust",
     "terraform",
-    "terraform",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -627,8 +626,15 @@ The module will be shown if any of the following conditions are met:
 | `style`    | `"bold red"`  | The style for the module.                                 |
 | `disabled` | `false`       | Disables the `haskell` module.                            |
 
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
 [haskell]
 symbol = "λx.x "
+```
 
 ## Mercurial Branch
 
