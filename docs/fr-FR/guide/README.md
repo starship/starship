@@ -71,8 +71,8 @@
 
 - Le symbole de prompt devient rouge si la dernière commande a retourné un code différent de zéro
 - Version actuelle de Go (`🐹`)
-- Version actuelle de Java (`☕`)
-- Version actuelle de Node.js (`⬢`)
+- Current Java version (`☕`)
+- Current Node.js version (`⬢`)
 - Version actuelle de PHP (`🐘`)
 - Version actuelle de Python (`🐍`)
 - Version actuelle de Ruby (`💎`)
