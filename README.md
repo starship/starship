@@ -85,8 +85,8 @@ The prompt shows information you need while you're working, while staying sleek 
 
 - Prompt character turns red if the last command exits with non-zero code
 - Current Go version (`🐹`)
-- Current Java version(`☕`)
-- Current Node.js version(`⬢`)
+- Current Java version (`☕`)
+- Current Node.js version (`⬢`)
 - Current PHP version (`🐘`)
 - Current Python version (`🐍`)
 - Current Ruby version (`💎`)
