@@ -27,11 +27,11 @@
 
 <h4 align="center">
   <br />
-  <a href="https://starship.rs">Website</a>
-  ·
-  <a href="#-installation">Installation</a>
-  ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs">Sitio web</a>
+
+<a href="#-installation">Instalación</a>
+
+<a href="https://starship.rs/config/">Configuración</a>
 </h4>
 <p align="center">
   <a href="https://github.com/starship/starship/blob/master/README.md"
@@ -58,7 +58,7 @@
 
 <h1></h1>
 
-<p align="center"> Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br /> The prompt shows information you need while you're working, while staying sleek and out of the way. <p>
+<p align="center"> ¡Starship es la prompt minimalista, ultrarápida y altamente personalizable para cualquier interfaz de línea de comandos!<br /> La prompt muestra información que necesitas mientras estás trabajando, mientras se mantiene elegante y fuera del camino. <p>
 
 <p align="center">
   <br>
@@ -67,12 +67,12 @@
   <br>
 </p>
 
-## 🍬 Features
+## 🍬 Características
 
-- Prompt character turns red if the last command exits with non-zero code
-- Current Go version (`🐹`)
-- Current Java version(`☕`)
-- Current Node.js version(`⬢`)
+- Los caracteres de la prompt se colorean de rojo si el último comando termina con un código distinto a cero
+- Versión actual de Go (`🐹`)
+- Versión actual de Java (`☕`)
+- Versión actual de Node.js (`⬢`)
 - Current PHP version (`🐘`)
 - Current Python version (`🐍`)
 - Current Ruby version (`💎`)
