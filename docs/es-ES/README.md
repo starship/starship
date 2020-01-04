@@ -13,11 +13,11 @@ footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores
   </div>
   <div class="feature">
     <h2>Rust-Powered</h2>
-    <p>Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.</p>
+    <p>Obtén la mayor velocidad y seguridad de Rust, para hacer tu prompt lo más rápida y segura posible.</p>
   </div>
   <div class="feature">
-    <h2>Customizable</h2>
-    <p>Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.</p>
+    <h2>Personalizable</h2>
+    <p>Puedes personalizar cada pequeño detalle a tu gusto, de manera que puedes tener una interfaz minimalista o rica en funcionalidades.</p>
   </div>
 </div>
 
@@ -28,40 +28,40 @@ footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores
   </video>
 </div>
 
-### Quick Install
+### Instalación rápida
 
-1. Install the **starship** binary:
+1. Instalar el binario de **starship**:
 
 
-   #### Install Latest Version
+   #### Instalar la última versión
 
-   With Shell:
+   Con la interfaz de línea de comandos:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Install via Package Manager
+   #### Instalar con un gestor de paquetes
 
-   With [Homebrew](https://brew.sh/):
+   Con [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
-    With [Scoop](https://scoop.sh):
+    Con [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Añade el script de inicio al archivo de configuración de tu interfaz de línea de comandos:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Añade el siguiente código al final de `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -72,7 +72,7 @@ footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Añade el siguiente código al final de `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -83,7 +83,7 @@ footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Añade el siguiente código al final de `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
