@@ -150,7 +150,7 @@
 
    #### Bash
 
-   Añade la siguiente línea al final de `~/.bashrc`:
+   Añade el siguiente código al final de `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -161,7 +161,7 @@
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Añade el siguiente código al final de `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -172,7 +172,7 @@
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Añade el siguiente código al final de `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -183,7 +183,7 @@
 
    #### PowerShell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   Añade el siguiente código al final de `~\Documentos\PowerShell\Microsoft.PowerShell_profile.ps1` (o `~/.config/powershell/Microsoft.PowerShell_profile.ps1` en *nix):
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
@@ -194,7 +194,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Añade el siguiente código al final de `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -202,9 +202,9 @@
    eval $(starship init ion)
    ```
 
-## 🔧 Configuration
+## 🔧 Configuración
 
-For details on how to configure Starship, check out our [documentation](https://starship.rs/config/).
+Para más detalles sobre cómo configurar Starship, consulta nuestra [documentación](https://starship.rs/config/).
 
 ## 🤝 Contributing
 
