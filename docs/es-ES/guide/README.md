@@ -99,58 +99,58 @@
 - `⇡` – cargando
 - `⇣` – descargándo
 - `•` –completamente cargada
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
-- Current Amazon Web Services (AWS) profile (`☁️`)
-- Execution time of the last command
+- Indicador para las tareas de fondo (`✦`)
+- Cluster y espacio de nombres actual de Kubernetes (`☸`)
+- Perfil actual de Amazon Web Services (AWS) (`☁️`)
+- Tiempo de ejecución del último comando
 - Custom environment variable value
-- Nix-shell environment detection
-- Current username if not the same as the logged-in user
-- Optional current time in 12/24hr format
+- Detección del entorno de la interfaz de línea de comandos *nix
+- Nombre de usuario actual si no es el mismo que el del usuario conectado
+- Hora actual opcional en formato 12/24 hrs.
 
-## 🚀 Installation
+## 🚀 Instalación
 
-### Prerequisites
+### Prerequisitos
 
-- A [Powerline font](https://github.com/powerline/fonts) installed and enabled in your terminal (for example, try [Fira Code](https://github.com/tonsky/FiraCode)).
+- Una [fuente Powerline](https://github.com/powerline/fonts) instalado y activada en tu terminal (por ejemplo, prueba con [Fira Code](https://github.com/tonsky/FiraCode)).
 
-### Getting Started
+### Comenzando
 
-1. Install the **starship** binary:
-
-
-   #### Install Latest Version
+1. Instala el binario de **starship**:
 
 
-   ##### With Shell:
+   #### Instalar la última versión
+
+
+   ##### Con la interfaz de línea de comandos:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Install via Package Manager
+   #### Instalar con un gestor de paquetes
 
 
-   ##### With [Homebrew](https://brew.sh/):
+   ##### Con [Homebew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### Con [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Añade el script de inicio al archivo de configuración de tu interfaz de línea de comandos:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Añade la siguiente línea al final de `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
