@@ -71,8 +71,8 @@
 
 - Anzeigetext wird rot wenn der letzte Befehl mit einem Exit-code größer null terminiert
 - Derzeitige Go-Version (`🐹`)
-- Derzeitige Java-Version (`☕`)
-- Derzeitige Node.js-Version (`⬢`)
+- Current Java version (`☕`)
+- Current Node.js version (`⬢`)
 - Current PHP version (`🐘`)
 - Derzeitige Python-Version (`🐍`)
 - Derzeitige Ruby-Version (`💎`)
