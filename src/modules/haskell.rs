@@ -35,6 +35,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn format_haskell_version(haskell_version: &str) -> Option<String> {
-    let formatted_version = format!("v{}", haskell_version);
+    let formatted_version = format!("v{}", haskell_version.trim());
     Some(formatted_version)
 }
