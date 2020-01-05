@@ -19,7 +19,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let haskell_version = utils::exec_cmd(
         "stack",
-        &["ghc", "--", "--numeric-version", "--no-install-ghc"]
+        &["ghc", "--", "--numeric-version", "--no-install-ghc"],
     )?
     .stdout;
     let formatted_version = format_haskell_version(&haskell_version)?;
