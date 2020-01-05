@@ -2,26 +2,26 @@
   <br /><img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship – Cross-shell prompt" />
+    alt="Starship - Prompt multi interfaz de línea de comandos" />
 </p>
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://github.com/starship/starship/workflows/Main%20workflow/badge.svg?branch=master&event=push"
-      alt="GitHub Actions workflow status" /></a>
+      alt="Estado del flujo de trabajo de GitHub Actions" /></a>
   <a href="https://crates.io/crates/starship"
-    ><img src="https://img.shields.io/crates/v/starship" alt="Crates.io version" /></a>
+    ><img src="https://img.shields.io/crates/v/starship" alt="Versión de Crates.io" /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://repology.org/badge/tiny-repos/starship.svg"
-      alt="Packaging status" /></a
+      alt="Estado de empaquetado" /></a
 ><br />
     <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
-      alt="Chat on Discord" /></a>
+      alt="Chat en Discord" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-64-orange" alt="All Contributors"></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-64-orange" alt="Todos los colaboradores"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
@@ -62,7 +62,7 @@
 
 <p align="center">
   <br>
-  <img alt="Starship with iTerm2 and the Snazzy theme" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" width="80%">
+  <img alt="Starship con iTerm 2 y el tema Snazzy" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" width="80%">
   <br>
   <br>
 </p>
@@ -219,11 +219,11 @@ Para más detalles sobre cómo configurar Starship, consulta nuestra [documentac
 - 👩‍💻 **Programador de Rust**
   - Hay _un montón_ de fruta madura cuando se trata de escribir Rust idiomático, diseñar una arquitectura Rust efectiva, optimizaciones de rendimiento, optimizaciones de compilación multiplataforma, ¡y mucho más! I ([@matchai](https://github.com/matchai)) soy un principiante con Rust. ¡Ven y llévanos por la dirección correcta!
 
-Si estás interesado en ayudar contribuyendo a starship, por favor échale un vistazo a [Guía de Colaboración](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Si estás interesado en ayudar contribuyendo a starship, por favor échale un vistazo a [Guía de Colaboración](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). También siéntete libre de pasarte por nuestro [servidor de Discord](https://discord.gg/8Jzqu3T) y saludarnos. 👋
 
-### Contributors
+### Colaboradores
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+Los agradecimientos van a estas maravillosas personas ([clave emoji](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -319,23 +319,23 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+Este proyecto sigue la especificación [todos-los-colaboradores](https://github.com/all-contributors/all-contributors). ¡Son bienvenidas contribuciones de cualquier tipo!
 
-## 💭 Inspired By
+## 💭 Inspirado por
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Por favor, revisa estos trabajos previos que ayudaron a inspirar la creación de starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Una prompt Zsh para astronautas.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - robbyrussel, tema multi interfaz de línea de comandos escrito en JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** - A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** - Una prompt con iconos, personalizable y multi interfaz de línea de comandos basada en PowerLine.
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Icono de cohete de Starship">
 </p>
 
-## 📝 License
+## 📝 Licencia
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Derechos de autor © 2019-presente, [Colaboradores de Starship](https://github.com/starship/starship/graphs/contributors).<br />Este proyecto está bajo una licencia [ISC](https://github.com/starship/starship/blob/master/LICENSE).
