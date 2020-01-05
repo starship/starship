@@ -32,7 +32,7 @@ fn folder_with_stack_yaml() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("λ v8.6.5"));
+    let expected = format!("via {} ", Color::Red.bold().paint("λ v8.6.5"));
     assert_eq!(expected, actual);
     Ok(())
 }
