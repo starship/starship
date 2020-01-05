@@ -206,20 +206,20 @@
 
 Para más detalles sobre cómo configurar Starship, consulta nuestra [documentación](https://starship.rs/config/).
 
-## 🤝 Contributing
+## 🤝 Contribuir
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+¡Siempre estamos buscando colaboradores de **todos los niveles y habilidades**! Si estás interesado en empezar en el proyecto con algo sencillo, prueba con un problema etiquetado como [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-### High Priority Needs
+### Necesidades de alta prioridad
 
-- 👩‍💼 **Product Manager**
-  - We have a GitHub Project and many unorganized/unprioritized features, as well as ideas that haven't yet been made into issues. Starship needs someone to own the product direction!
-- 👩‍🎨 **Designer**
-  - Like making eye-catching websites? Excellent! We are looking to create a beautiful landing page showing off Starship in all its glory. Helping design for Starship's brand is a great opportunity to try out new ideas!
-- 👩‍💻 **Rust Developer**
-  - There is _a lot_ of low-hanging fruit when it comes to writing idiomatic Rust, designing effective Rust architecture, performance optimizations, cross-platform build optimizations, and more! I ([@matchai](https://github.com/matchai)) am a beginner to Rust. Come point us in the right direction!
+- 👩‍💼 **Gerente de producto**
+  - Tenemos un proyecto en GitHub y muchas características sin organizar ni priorizar, así como ideas que aún no han sido escritas en issues de GitHub. ¡Starship necesita alguien que gestione la dirección del producto!
+- 👩‍🎨 **Diseñador/a**
+  - ¿Te gusta hacer sitios web llamativos? ¡Excelente! Estamos buscando crear una página principal que muestre Starship en toda su gloria. ¡Ayudar con el diseño de la marca de Starship es una gran oportunidad para probar nuevas ideas!
+- 👩‍💻 **Programador de Rust**
+  - Hay _un montón_ de fruta madura cuando se trata de escribir Rust idiomático, diseñar una arquitectura Rust efectiva, optimizaciones de rendimiento, optimizaciones de compilación multiplataforma, ¡y mucho más! I ([@matchai](https://github.com/matchai)) soy un principiante con Rust. ¡Ven y llévanos por la dirección correcta!
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Si estás interesado en ayudar contribuyendo a starship, por favor échale un vistazo a [Guía de Colaboración](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ### Contributors
 
