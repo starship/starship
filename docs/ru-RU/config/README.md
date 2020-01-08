@@ -27,7 +27,7 @@ symbol = "➜"      # Сегменту "symbol" присваеваем знач�
 disabled = true
 ```
 
-You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+Вы можете изменить расположение файла `starship.toml` переменной окружения `STARSHIP_CONFIG`:
 ```shell
 export STARSHIP_CONFIG=~/.starship
 ```
