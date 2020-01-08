@@ -53,10 +53,10 @@
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png" alt="Español" /></a>
   &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/fr"
-    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png" alt="Français" /></a>
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png" alt="Francés" /></a>
   &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/ru"
-    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Русский" /></a>
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Ruso" /></a>
 </p>
 
 <h1></h1>
@@ -74,8 +74,8 @@
 
 - Los caracteres de la prompt se colorean de rojo si el último comando termina con un código distinto a cero
 - Versión actual de Go (`🐹`)
-- Current Java version (`☕`)
-- Current Node.js version (`⬢`)
+- Versión actual de Java (`☕`)
+- Versión actual de Node.js (`⬢`)
 - Versión actual de PHP (`🐘`)
 - Versión actual de Python (`🐍`)
 - Versión actual de Ruby (`💎`)
@@ -106,7 +106,7 @@
 - Cluster y espacio de nombres actual de Kubernetes (`☸`)
 - Perfil actual de Amazon Web Services (AWS) (`☁️`)
 - Tiempo de ejecución del último comando
-- Custom environment variable value
+- Valor de variable de entorno personalizado
 - Detección del entorno de la interfaz de línea de comandos *nix
 - Nombre de usuario actual si no es el mismo que el del usuario conectado
 - Hora actual opcional en formato 12/24 hrs.
