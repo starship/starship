@@ -7,6 +7,7 @@ use tempfile;
 use crate::common::{self, TestCommand};
 
 #[test]
+#[ignore]
 fn no_region_set() -> io::Result<()> {
     let output = common::render_module("aws")
         .env("PATH", env!("PATH"))
@@ -235,6 +236,7 @@ fn region_set_with_display_profile() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn region_not_set_with_display_region() -> io::Result<()> {
     let output = common::render_module("aws")
         .use_config(toml::toml! {
