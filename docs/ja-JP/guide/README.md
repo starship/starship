@@ -127,23 +127,30 @@
 
 <h4 spaces-before="3">最新版のインストール</h4>
 
-<h5 spaces-before="3">Shellを利用する</h5>
+<h5 spaces-before="3">From prebuilt binary, with Shell:</h5>
 
 <pre><code class="sh">   curl -fsSL https://starship.rs/install.sh | bash
 `</pre>
 
 
+   ##### From source on [crates.io](https://crates.io/):
+
+   ```sh
+   cargo install starship
+   ```
+
+
    #### パッケージマネージャー経由でインストール
 
 
-   ##### [ Homebrew ](https://brew.sh/)の場合：
+   ##### With [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### [ Scoop ](https://scoop.sh)の場合：
+   ##### With [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
