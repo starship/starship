@@ -138,10 +138,16 @@ The prompt shows information you need while you're working, while staying sleek 
 
    #### Install Latest Version
 
-   ##### With Shell:
+   ##### From prebuilt binary, with Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
+   ```
+
+   ##### From source on [crates.io](https://crates.io/):
+
+   ```sh
+   cargo install starship
    ```
 
    #### Install via Package Manager
