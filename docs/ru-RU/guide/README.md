@@ -125,24 +125,31 @@
    #### Установить последнюю версию
 
 
-   ##### Через Bash:
+   ##### From prebuilt binary, with Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
+   ##### From source on [crates.io](https://crates.io/):
+
+   ```sh
+   cargo install starship
+   ```
+
+
    #### Установить через менеджер пакетов
 
 
-   ##### С [Homebrew](https://brew.sh/):
+   ##### With [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### С [Scoop](https://scoop.sh):
+   ##### With [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
