@@ -70,7 +70,7 @@ fn main() {
     let init_scripts_arg = Arg::with_name("print_full_init")
         .long("print-full-init")
         .help("Print the main initialization script (as opposed to the init stub)");
-  
+
     let matches =
         App::new("starship")
             .about("The cross-shell prompt for astronauts. ☄🌌️")
