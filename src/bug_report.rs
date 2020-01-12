@@ -151,8 +151,7 @@ fn get_terminal_info() -> TerminalInfo {
         .or_else(|_| std::env::var("LC_TERMINAL"))
         .unwrap_or_else(|_| UNKNOWN_TERMINAL.to_string())
         .trim_end_matches(".app")
-        .replace("_", " ")
-        .to_string();
+        .replace("_", " ");
 
     let version = std::env::var("TERM_PROGRAM_VERSION")
         .or_else(|_| std::env::var("LC_TERMINAL_VERSION"))
@@ -188,7 +187,7 @@ fn get_starship_config() -> String {
     let config = dirs::home_dir()
         .and_then(|home_dir| fs::read_to_string(home_dir.join(".config/starship.toml")).ok())
         .unwrap_or_else(|| UNKNOWN_CONFIG.to_string());
-    if config == UNKNOWN_CONFIG.to_string() {
+    if config == UNKNOWN_CONFIG {
         return config;
     }
     if config == "" {
