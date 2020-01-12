@@ -21,11 +21,11 @@ pub fn create() {
     if open::that(&link).is_ok() {
         print!("Take a look at your browser. A GitHub issue has been populated with your configuration")
     } else {
-        let link = reqwest::Client::new()
+        let link = reqwest::blocking::Client::new()
             .post(&format!("{}{}", GIT_IO_BASE_URL, "create"))
             .form(&[("url", &link)])
             .send()
-            .and_then(|mut response| response.text())
+            .and_then(|response| response.text())
             .map(|slug| format!("{}{}", GIT_IO_BASE_URL, slug))
             .unwrap_or(link);
 

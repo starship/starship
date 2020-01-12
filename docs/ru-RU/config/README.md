@@ -126,9 +126,10 @@ prompt_order = [
 | Переменная        | По умолчанию    | Описание                                                         |
 | ----------------- | --------------- | ---------------------------------------------------------------- |
 | `symbol`          | `"☁️ "`         | Символ перед отображением текущего профиля AWS.                  |
+| `displayed_items` | `all`           | Выбор элементов. Возможные значения [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.  |
 | `style`           | `"bold yellow"` | Стиль модуля.                                                    |
 | `disabled`        | `false`         | Отключение модуля `AWS`.                                         |
-| `displayed_items` | `all`           | Выбор элементов. Возможные значения [`all`, `profile`, `region`] |
 
 ### Пример
 
@@ -139,6 +140,9 @@ prompt_order = [
 style = "bold blue"
 symbol = "🅰 "
 displayed_items = "region"
+[aws.region_aliases]
+ap-southeast-2 = "au"
+us-east-1 = "va"
 ```
 
 ## Батарея
@@ -255,12 +259,13 @@ use_symbol_for_status = true
 
 ### Опции
 
-| Переменная | По умолчанию    | Описание                                                |
-| ---------- | --------------- | ------------------------------------------------------- |
-| `min_time` | `2`             | Кратчайшая длительность для показа времени.             |
-| `prefix`   | `took`          | Префикс, отображаемый перед продолжительностью команды. |
-| `style`    | `"bold yellow"` | Стиль модуля.                                           |
-| `disabled` | `false`         | Отключает модуль `cmd_duration`.                        |
+| Переменная          | По умолчанию    | Описание                                                   |
+| ------------------- | --------------- | ---------------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
+| `prefix`            | `took`          | Префикс, отображаемый перед продолжительностью команды.    |
+| `style`             | `"bold yellow"` | Стиль модуля.                                              |
+| `disabled`          | `false`         | Отключает модуль `cmd_duration`.                           |
 
 ### Пример
 
@@ -268,13 +273,13 @@ use_symbol_for_status = true
 # ~/.config/starship.toml
 
 [cmd_duration]
-min_time = 4
+min_time = 500
 prefix = "underwent "
 ```
 
 ## Конда
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+Модуль `conda` показывает текущее окружение conda, если `$CONDA_DEFAULT_ENV` присвоено значение.
 
 ::: tip
 
@@ -287,9 +292,9 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | Переменная          | По умолчанию   | Описание                                                                                                                                                                                                    |
 | ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
-| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
-| `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
+| `symbol`            | `"C "`         | Символ перед названием окружения.                                                                                                                                                                           |
+| `style`             | `"bold green"` | Стиль модуля.                                                                                                                                                                                               |
+| `disabled`          | `false`        | Отключает модуль `conda`.                                                                                                                                                                                   |
 
 ### Пример
 
@@ -302,11 +307,11 @@ style = "dimmed green"
 
 ## Каталог
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+Модуль `directory` показывает путь к вашей текущей директории, усеченной до трех родительских папок. Ваш каталог также будет отсечен до корня git репозитория, в котором вы находитесь.
 
-When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+При использовании стиля оболочки fish, вместо скрытия усеченного каталога, вы увидите укороченное имя каталога, зависимое от числа символов вы установите для этой опции.
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+Например, возьмем `~/Dev/Nix/nixpkgs/pkgs` где `nixpkgs` является корневым репозиторием, и в опции установлено `1`. Вы увидите `~/D/N/nixpkgs/pkgs`, а до этого было бы `nixpkgs/pkgs`.
 
 ### Опции
 
@@ -314,12 +319,12 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | ------------------- | ------------- | ---------------------------------------------------------------------------- |
 | `truncation_length` | `3`           | Количество родительских папок, к которым должен быть усечен текущий каталог. |
 | `truncate_to_repo`  | `true`        | Следует или нет обрезать до корня репозитория git, в котором вы находитесь.  |
-| `prefix`            | `"in "`       | Prefix to display immediately before the directory.                          |
-| `style`             | `"bold cyan"` | The style for the module.                                                    |
-| `disabled`          | `false`       | Disables the `directory` module.                                             |
+| `prefix`            | `"in "`       | Префикс, отображаемый перед папкой.                                          |
+| `style`             | `"bold cyan"` | Стиль модуля.                                                                |
+| `disabled`          | `false`       | Отключает модуль `directory`.                                                |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>Этот модуль имеет несколько расширенных опций конфигурации, которые контролируют отображение каталога.</summary>
 
 | Переменная                  | По умолчанию | Описание                                                                                 |
 | --------------------------- | ------------ | ---------------------------------------------------------------------------------------- |
@@ -339,11 +344,11 @@ truncation_length = 8
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+Модуль `dotnet` показывает соответствующую версию .NET Core SDK для текущего каталога. Если SDK был закреплен в текущей директории, будет показана закрепленная версия. В противном случае модуль отображает последнюю установленную версию SDK.
 
-This module will only be shown in your prompt when one of the following files are present in the current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll also need the .NET Core command-line tools installed in order to use it correctly.
+Этот модуль будет показан только, когда один из следующих файлов присутствует в текущей директории: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. Также, для правильного использования, нужны инструменты командной строки .NET Core.
 
-Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+Внутренне этот модуль использует свой собственный механизм определения версий. Обычно он в два раза быстрее, чем `dotnet --version`, но он может показывать неправильную версию, если ваш .NET проект имеет необычный формат каталога. Если точность важнее, чем скорость, вы можете отключить механизм опцией `heuristic = false` в настройках модуля.
 
 ### Опции
 
@@ -421,11 +426,11 @@ truncation_symbol = ""
 
 ## Git Commit
 
-The `git_commit` module shows the active branch of the repo in your current directory.
+Модуль `git_commit` показывает хэш текущего коммита репозитория в вашем текущем каталоге.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 :::
 
@@ -647,7 +652,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 :::
 
@@ -698,8 +703,8 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 | Переменная   | По умолчанию | Описание                           |
 | ------------ | ------------ | ---------------------------------- |
 | `use_name`   | `false`      | Display the name of the nix-shell. |
-| `impure_msg` | `impure`     | Customize the "impure" msg.        |
-| `pure_msg`   | `pure`       | Customize the "pure" msg.          |
+| `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
+| `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
 | `style`      | `"bold red"` | Стиль модуля.                      |
 | `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
@@ -715,6 +720,30 @@ impure_msg = "impure shell"
 pure_msg = "pure shell"
 ```
 
+## Java
+
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
+- The current directory contains a file with the `.java`, `.class` or `.jar` extension
+
+### Опции
+
+| Переменная | По умолчанию   | Описание                                               |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | Стиль модуля.                                          |
+| `disabled` | `false`        | Disables the `java` module.                            |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[java]
+symbol = "🌟 "
+```
+
 ## Memory Usage
 
 The `memory_usage` module shows current system memory and swap usage.
@@ -723,7 +752,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 :::
 
@@ -751,30 +780,6 @@ threshold = -1
 symbol = " "
 separator = "/"
 style = "bold dimmed green"
-```
-
-## Java
-
-The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `pom.xml`, `build.gradle` or `build.sbt` file
-- The current directory contains a file with the `.java`, `.class` or `.jar` extension
-
-### Опции
-
-| Переменная | По умолчанию   | Описание                                               |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | Стиль модуля.                                          |
-| `disabled` | `false`        | Disables the `java` module.                            |
-
-### Пример
-
-```toml
-# ~/.config/starship.toml
-
-[java]
-symbol = "🌟 "
 ```
 
 ## NodeJS
@@ -954,7 +959,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 | -------------- | ------------ | ----------------------------------------------------------- |
 | `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
 | `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
-| `style`        | `"bold 105"` | The style for the module.                                   |
+| `style`        | `"bold 105"` | Стиль модуля.                                               |
 | `disabled`     | `false`      | Disables the `terraform` module.                            |
 
 ### Пример
@@ -972,7 +977,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 :::
 
@@ -983,8 +988,8 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
 | `style`           | `bold yellow` | The style for the module time                                                                                       |
-| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
 | `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
+| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
@@ -1008,16 +1013,16 @@ The `username` module shows active user's username. The module will be shown if 
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
 
-### Options
+### Опции
 
-| Variable      | Default         | Description                           |
+| Переменная    | По умолчанию    | Описание                              |
 | ------------- | --------------- | ------------------------------------- |
 | `style_root`  | `"bold red"`    | The style used when the user is root. |
 | `style_user`  | `"bold yellow"` | The style used for non-root users.    |
 | `show_always` | `false`         | Always shows the `username` module.   |
 | `disabled`    | `false`         | Disables the `username` module.       |
 
-### Example
+### Пример
 
 ```toml
 # ~/.config/starship.toml

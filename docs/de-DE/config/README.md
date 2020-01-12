@@ -126,9 +126,10 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 | Variable          | Standardwert    | Beschreibung                                                                          |
 | ----------------- | --------------- | ------------------------------------------------------------------------------------- |
 | `symbol`          | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                               |
+| `displayed_items` | `all`           | Welche Objekte angezeigt werden sollen. Possible values: [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.                       |
 | `style`           | `"bold yellow"` | Stil für dieses Modul.                                                                |
 | `disabled`        | `false`         | Deaktiviert das `aws`-Modul.                                                          |
-| `displayed_items` | `all`           | Welche Objekte angezeigt werden sollen. Possible values: [`all`, `profile`, `region`] |
 
 ### Beispiel
 
@@ -139,6 +140,9 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 style = "bold blue"
 symbol = "🅰 "
 displayed_items = "region"
+[aws.region_aliases]
+ap-southeast-2 = "au"
+us-east-1 = "va"
 ```
 
 ## Akkustand
@@ -255,12 +259,13 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Optionen
 
-| Variable   | Standardwert    | Beschreibung                                                              |
-| ---------- | --------------- | ------------------------------------------------------------------------- |
-| `min_time` | `2`             | Kürzestes Wert für den die Ausführungsdauer angezeigt wird (in Sekunden). |
-| `prefix`   | `took`          | Prefix der unmittelbar vor der Ausführungszeit angezeigt wird.            |
-| `style`    | `"bold yellow"` | Stil für dieses Modul.                                                    |
-| `disabled` | `false`         | Deaktiviert das `cmd_duration`-Modul.                                     |
+| Variable            | Standardwert    | Beschreibung                                                   |
+| ------------------- | --------------- | -------------------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).          |
+| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration.     |
+| `prefix`            | `took`          | Prefix der unmittelbar vor der Ausführungszeit angezeigt wird. |
+| `style`             | `"bold yellow"` | Stil für dieses Modul.                                         |
+| `disabled`          | `false`         | Deaktiviert das `cmd_duration`-Modul.                          |
 
 ### Beispiel
 
@@ -268,13 +273,13 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 # ~/.config/starship.toml
 
 [cmd_duration]
-min_time = 4
+min_time = 500
 prefix = "underwent "
 ```
 
 ## Conda
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+Das `conda`-Modul zeigt dessen aktuelle Umgebung an, sofern `$CONDA_DEFAULT_ENV` gesetzt ist.
 
 ::: tip
 
@@ -287,9 +292,9 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | Variable            | Standardwert   | Beschreibung                                                                                                                                                                                                |
 | ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
-| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
-| `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
+| `symbol`            | `"C "`         | Symbol das vor dem Umgebungsnamen angezeigt wird.                                                                                                                                                           |
+| `style`             | `"bold green"` | Stil für dieses Modul.                                                                                                                                                                                      |
+| `disabled`          | `false`        | Deaktiviert das `conda`-Modul.                                                                                                                                                                              |
 
 ### Beispiel
 
@@ -315,11 +320,11 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `truncation_length` | `3`           | Die Anzahl der übergeordneten Ordner, die angezeigt werden.                      |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
 | `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
-| `style`             | `"bold cyan"` | The style for the module.                                                        |
-| `disabled`          | `false`       | Disables the `directory` module.                                                 |
+| `style`             | `"bold cyan"` | Stil für dieses Modul.                                                           |
+| `disabled`          | `false`       | Deaktiviert das `directory`-Modul.                                               |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>Dieses Modul hat einige erweiterte Konfigurationsoptionen, welche die Darstellung von Verzeichnissen steuern.</summary>
 
 | Variable                    | Standardwert | Beschreibung                                                                             |
 | --------------------------- | ------------ | ---------------------------------------------------------------------------------------- |
@@ -396,7 +401,7 @@ default = "unknown shell"
 
 ## Git-Branch
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+Das `git_branch`-Modul zeigt den aktiven Git-Branch des Repositories im aktuellen Verzeichnis an.
 
 ### Optionen
 
@@ -421,11 +426,11 @@ truncation_symbol = ""
 
 ## Git Commit
 
-The `git_commit` module shows the active branch of the repo in your current directory.
+The `git_commit` module shows the current commit hash of the repo in your current directory.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
 
 :::
 
@@ -538,7 +543,7 @@ deleted = "🗑"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
+Das `golang`-Modul zeigt die aktuell installierte Version von Golang. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - Das aktuelle Verzeichnis enthält eine `go.mod`-Datei
 - Das aktuelle Verzeichnis enthält eine `go.sum`-Datei
@@ -592,7 +597,7 @@ truncation_symbol = ""
 
 ## Hostname
 
-The `hostname` module shows the system hostname.
+Das `hostname`-Modul zeigt den Hostnamen des Systems an.
 
 ### Optionen
 
@@ -647,7 +652,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
 
 :::
 
@@ -698,8 +703,8 @@ Das `nix_shell`-Modul zeigt die nix-shell Umgebung an. Das Modul wird angezeigt,
 | Variable     | Standardwert | Beschreibung                       |
 | ------------ | ------------ | ---------------------------------- |
 | `use_name`   | `false`      | Namen der nix-Shell anzeigen.      |
-| `impure_msg` | `impure`     | Passt die "impure"-Nachricht an.   |
-| `pure_msg`   | `pure`       | Passt die "pure"-Nachricht an.     |
+| `impure_msg` | `"impure"`   | Passt die "impure"-Nachricht an.   |
+| `pure_msg`   | `"pure"`     | Passt die "pure"-Nachricht an.     |
 | `style`      | `"bold red"` | Stil für dieses Modul.             |
 | `disabled`   | `false`      | Deaktiviert das `nix_shell`-Modul. |
 
@@ -715,13 +720,37 @@ impure_msg = "impure shell"
 pure_msg = "pure shell"
 ```
 
+## Java
+
+Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+
+- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
+- Das aktuelle Verzeichnis enthält eine Datei mit der `.java`, `.class` oder `.jar` Erweiterung
+
+### Optionen
+
+| Variable   | Standardwert   | Beschreibung                                    |
+| ---------- | -------------- | ----------------------------------------------- |
+| `symbol`   | `"☕ "`         | Symbol das vor der Java-Version angezeigt wird. |
+| `style`    | `"dimmed red"` | Stil für dieses Modul.                          |
+| `disabled` | `false`        | Deaktiviert das `Java`-Modul.                   |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[java]
+symbol = "🌟 "
+```
+
 ## Speicherauslastung
 
 Das `memory_usage` Modul zeigt den aktuellen Systemspeicher und die swap-Nutzung an.
 
 Standardmäßig wird die swap-Nutzung angezeigt, wenn der gesamte System-swap nicht Null ist.
 
-::: Tipp
+::: tip
 
 Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
 
@@ -750,30 +779,6 @@ show_swap = true
 threshold = -1
 icon = " "
 style = "bold dimmed green"
-```
-
-## Java
-
-Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
-
-- Das aktuelle Verzeichnis enthält `pom.xml`, `build.gradle` oder `build.sbt`
-- Das aktuelle Verzeichnis enthält eine Datei mit der `.java`, `.class` oder `.jar` Erweiterung
-
-### Optionen
-
-| Variable   | Standardwert   | Beschreibung                                    |
-| ---------- | -------------- | ----------------------------------------------- |
-| `symbol`   | `"☕ "`         | Symbol das vor der Java-Version angezeigt wird. |
-| `style`    | `"dimmed red"` | Stil für dieses Modul.                          |
-| `disabled` | `false`        | Deaktiviert das `Java`-Modul.                   |
-
-### Beispiel
-
-```toml
-# ~/.config/starship.toml
-
-[java]
-symbol = "🌟 "
 ```
 
 ## NodeJS
@@ -953,7 +958,7 @@ Das `Terraform` Modul zeigt den aktuell ausgewählten terraform Arbeitsbereich u
 | -------------- | ------------ | ----------------------------------------------------------- |
 | `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
 | `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
-| `style`        | `"bold 105"` | The style for the module.                                   |
+| `style`        | `"bold 105"` | Stil für dieses Modul.                                      |
 | `disabled`     | `false`      | Disables the `terraform` module.                            |
 
 ### Beispiel
@@ -977,13 +982,13 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 ### Optionen
 
-| Variable          | Standardwert  | Beschreibung                                                                                                                  |
-| ----------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`       | Aktiviert 12-Stunden-Format                                                                                                   |
-| `format`          | siehe unten   | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html). |
-| `style`           | `bold yellow` | Stil für dieses Modul                                                                                                         |
-| `disabled`        | `true`        | Deaktiviert das `time`-Modul.                                                                                                 |
-| `utc_time_offset` | `local`       | Verwendetes Zeitzonen-Offset. Liegt zwischen -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.        |
+| Variable          | Standardwert  | Beschreibung                                                                                                                              |
+| ----------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`       | Aktiviert 12-Stunden-Format                                                                                                               |
+| `format`          | siehe unten   | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html).             |
+| `style`           | `bold yellow` | Stil für dieses Modul                                                                                                                     |
+| `utc_time_offset` | `lokal`       | Legt das UTC-Offset fest, das verwendet werden soll. Reicht von -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`        | Deaktiviert das `time`-Modul.                                                                                                             |
 
 Wird `use_12hr` auf `true` gestellt, nimmt `format` automatisch den Wert `"%r"` an. Andernfalls ist es standardmäßig `"%T"`. Wird hingegen `format` gesetzt, so überschreibt dies die Einstellung `use_12hr`.
 

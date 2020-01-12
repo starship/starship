@@ -15,7 +15,7 @@ jobs:
     name: Rustfmt [Formatter]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -33,7 +33,7 @@ jobs:
     name: Clippy [Linter]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -50,7 +50,7 @@ jobs:
     name: Cargo Audit [Security]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -66,7 +66,7 @@ jobs:
     name: Compile
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -90,7 +90,7 @@ jobs:
         rust: [stable, nightly]
     steps:
       # Checkout the branch being tested
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       # Install all the required dependencies for testing
       - uses: actions-rs/toolchain@v1
@@ -152,31 +152,13 @@ jobs:
           command: test
           args: -- -Z unstable-options --include-ignored
 
-  # Run the tests in the Docker image
-  docker_test:
-    name: Test in Docker
-    needs: [cargo_check]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: Pull the pre-built Docker image
-        run: docker pull starshipcommand/starship-test
-      - name: Fix file permissions
-        run: chmod -R a+w .
-      - name: Build the Docker image
-        run:
-          docker build -f tests/Dockerfile --tag starshipcommand/starship-test --cache-from
-          starshipcommand/starship-test .
-      - name: Run tests in Docker
-        run: docker run --rm -v $(pwd):/src/starship starshipcommand/starship-test
-
   # Publish starship to Crates.io
   cargo_publish:
     if: startsWith(github.ref, 'refs/tags/v')
     name: Publish Cargo Package
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -192,7 +174,7 @@ jobs:
     name: Update Brew Formula
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - run: |
           echo "https://matchai:$HOMEBREW_GITHUB_API_TOKEN@github.com" > ~/.git-credentials
           git config --global credential.helper store
@@ -235,7 +217,7 @@ jobs:
             name: starship-x86_64-pc-windows-msvc.zip
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
@@ -284,7 +266,7 @@ jobs:
     needs: github_build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       # These can be squashed when https://github.com/actions/download-artifact/issues/6 is closed
       - name: Download releases from github_build

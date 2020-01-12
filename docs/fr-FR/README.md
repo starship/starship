@@ -32,51 +32,36 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 
 1. Installer le binaire **starship** :
 
-   **[Télécharger les archives des binaires précompilés](https://github.com/starship/starship/releases)** si vous n'utilisez pas une des plateformes citées ci-dessous.
 
+   #### Installer la dernière version
 
-   #### Homebrew
+   Avec Shell:
 
    ```sh
-   $ brew install starship
+   curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Rust (v1.38 ou plus)
+   #### Installer via le gestionnaire de paquets
+
+   Avec [Homebrew](https://brew.sh/):
 
    ```sh
-   $ cargo install starship
+   brew install starship
    ```
 
+    Avec [Scoop](https://scoop.sh):
 
-   #### Arch Linux (AUR)
-
-   Starship is disponible sur AUR sous le nom `starship`. Installer le avec `yay` ou votre client AUR favori.
-
-   ```sh
-   $ yay -S starship
+   ```powershell
+   scoop install starship
    ```
 
-
-   #### Nix (non stable)
-
-   ```sh
-   $ nix-env --install starship
-   ```
-
-
-   #### Termux
-
-   ```sh
-   $ pkg install starship
-   ```
-
-1. Add the init script to your shell's config file:
+1. Ajouter le script d'initialization à la fiche config de votre shell:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Ajouter ce qui suit à la fin de `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -87,7 +72,7 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Ajoute ce qui suit à la fin de `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -98,7 +83,7 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Ajouter ce qui suit à la fin de `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -109,9 +94,21 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 
    #### Powershell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   Ajouter ce qui suit à la fin de `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` sur -Nix):
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
+
    Invoke-Expression (&starship init powershell)
+   ```
+
+
+   #### Ion
+
+   Ajouter ce qui suit à la fin de `~/.config/ion/initrc`:
+
+   ```sh
+   # ~/.config/ion/initrc
+
+   eval $(starship init ion)
    ```

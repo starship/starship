@@ -264,15 +264,7 @@ fn shows_stashed() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
     barrier();
 
-    File::create(repo_dir.join("readme.md"))?.sync_all()?;
-
-    barrier();
-
-    Command::new("git")
-        .args(&["stash", "--all"])
-        .current_dir(repo_dir.as_path())
-        .output()?;
-    barrier();
+    create_stash(&repo_dir)?;
 
     Command::new("git")
         .args(&["reset", "--hard", "HEAD"])
@@ -286,6 +278,36 @@ fn shows_stashed() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     let expected = Color::Red.bold().paint(format!("[{}] ", "$")).to_string();
+
+    assert_eq!(expected, actual);
+
+    Ok(())
+}
+
+#[test]
+fn shows_stashed_with_count() -> io::Result<()> {
+    let repo_dir = common::create_fixture_repo()?;
+    barrier();
+
+    create_stash(&repo_dir)?;
+    barrier();
+
+    Command::new("git")
+        .args(&["reset", "--hard", "HEAD"])
+        .current_dir(repo_dir.as_path())
+        .output()?;
+    barrier();
+
+    let output = common::render_module("git_status")
+        .use_config(toml::toml! {
+            [git_status]
+            stashed_count.enabled = true
+        })
+        .arg("--path")
+        .arg(repo_dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    let expected = Color::Red.bold().paint(format!("[{}] ", "$1")).to_string();
 
     assert_eq!(expected, actual);
 
@@ -573,6 +595,19 @@ fn create_conflict(repo_dir: &PathBuf) -> io::Result<()> {
 
     Command::new("git")
         .args(&["pull", "--rebase"])
+        .current_dir(repo_dir.as_path())
+        .output()?;
+    barrier();
+
+    Ok(())
+}
+
+fn create_stash(repo_dir: &PathBuf) -> io::Result<()> {
+    File::create(repo_dir.join("readme.md"))?.sync_all()?;
+    barrier();
+
+    Command::new("git")
+        .args(&["stash", "--all"])
         .current_dir(repo_dir.as_path())
         .output()?;
     barrier();

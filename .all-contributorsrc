@@ -515,7 +515,9 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/6401427?v=4",
       "profile": "https://marblenix.com",
       "contributions": [
-        "infra"
+        "infra",
+        "code",
+        "test"
       ]
     },
     {
@@ -646,6 +648,24 @@
         "code",
         "doc",
         "test"
+      ]
+    },
+    {
+      "login": "dominikbraun",
+      "name": "Dominik Braun",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/36575275?v=4",
+      "profile": "https://sternentstehung.de",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "dten",
+      "name": "David Hewson",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1019038?v=4",
+      "profile": "https://github.com/dten",
+      "contributions": [
+        "code"
       ]
     }
   ],

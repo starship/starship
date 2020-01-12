@@ -57,7 +57,8 @@ module.exports = {
           ["/guide/", "Guide"],
           ["/config/", "Configuration"],
           ["/advanced-config/", "Advanced Configuration"],
-          ["/faq/", "Frequently Asked Questions"]
+          ["/faq/", "Frequently Asked Questions"],
+          ["/presets/", "Presets"]
         ]
       },
       "/ja-JP/": {
