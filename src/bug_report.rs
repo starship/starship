@@ -192,9 +192,9 @@ fn get_starship_config() -> String {
         return config;
     }
     if config == "" {
-        return "Configuration file empty.".to_string();
+        "Configuration file empty.".to_string()
     } else {
-        return "```toml\n".to_owned() + &config + "```";
+        "```toml\n".to_owned() + &config + "```"
     }
 }
 
