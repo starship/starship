@@ -1,8 +1,7 @@
-use std::process::Command;
-
 use super::{Context, Module, RootModuleConfig, SegmentConfig};
 
 use crate::configs::php::PhpConfig;
+use crate::utils;
 
 /// Creates a module with the current PHP version
 ///
@@ -20,8 +19,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    match get_php_version() {
-        Some(php_version) => {
+    match utils::exec_cmd(
+        "php",
+        &[
+            "-r",
+            "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION;",
+        ],
+    ) {
+        Some(php_cmd_output) => {
+            let php_version = php_cmd_output.stdout;
+
             let mut module = context.new_module("php");
             let config: PhpConfig = PhpConfig::try_load(module.config);
 
@@ -34,17 +41,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             Some(module)
         }
         None => None,
-    }
-}
-
-fn get_php_version() -> Option<String> {
-    match Command::new("php")
-        .arg("-r")
-        .arg("echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION;")
-        .output()
-    {
-        Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
-        Err(_) => None,
     }
 }
 
