@@ -66,7 +66,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let no_pipeline = pipestatus.len() == 1
         || (simple_pipeline && (!pipeline_error || no_repetitions(&pipestatus)));
     let output = if no_pipeline {
-        pipestatus.last()?.to_string()
+        (*pipestatus.last()?).to_string()
     } else {
         let prefix = status_config.pipe_prefix;
         let suffix = status_config.pipe_suffix;
