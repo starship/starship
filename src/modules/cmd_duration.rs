@@ -36,13 +36,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     module.set_style(module_color);
-    let cmd_duration_stacked = &format!(
-        "{}{}",
-        config.prefix,
-        render_time(elapsed, config.show_milliseconds)
+    module.create_segment(
+        "cmd_duration",
+        &SegmentConfig::new(&render_time(elapsed, config.show_milliseconds)),
     );
-    module.create_segment("cmd_duration", &SegmentConfig::new(&cmd_duration_stacked));
-    module.get_prefix().set_value("");
+    module.get_prefix().set_value(config.prefix);
 
     Some(module)
 }
