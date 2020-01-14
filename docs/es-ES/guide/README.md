@@ -142,14 +142,14 @@
    #### Instalar con un gestor de paquetes
 
 
-   ##### With [Homebrew](https://brew.sh/):
+   ##### Con [Homebew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### Con [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
