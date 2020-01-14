@@ -56,7 +56,7 @@
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png" alt="Français" /></a>
   &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/ru"
-    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Русский" /></a>
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Russisch" /></a>
 </p>
 
 <h1></h1>
