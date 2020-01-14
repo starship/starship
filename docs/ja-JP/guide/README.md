@@ -143,14 +143,14 @@
    #### パッケージマネージャー経由でインストール
 
 
-   ##### With [Homebrew](https://brew.sh/):
+   ##### [ Homebrew ](https://brew.sh/)の場合：
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### [ Scoop ](https://scoop.sh)の場合：
 
    ```powershell
    scoop install starship
