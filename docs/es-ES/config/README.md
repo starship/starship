@@ -1,4 +1,4 @@
-# Configuration
+# Configuración
 
 ::: tip
 
