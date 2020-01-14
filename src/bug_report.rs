@@ -93,7 +93,8 @@ fn make_github_issue_link(starship_version: &str, environment: Environment) -> S
         .replace("%20", "+");
 
     format!(
-        "https://github.com/starship/starship/issues/new?body={}",
+        "https://github.com/starship/starship/issues/new?template={}&body={}",
+        urlencoding::encode("Bug_report.md"),
         body
     )
     .chars()
