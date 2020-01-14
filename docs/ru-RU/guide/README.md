@@ -142,14 +142,14 @@
    #### Установить через менеджер пакетов
 
 
-   ##### With [Homebrew](https://brew.sh/):
+   ##### С [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### С [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
