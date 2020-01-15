@@ -74,8 +74,8 @@
 
 - 最後のコマンドがゼロ以外のコードで終了すると、プロンプト文字が赤に変わります
 - 現在の Go のバージョン (`🐹`)
-- Current Java version (`☕`)
-- Current Node.js version (`⬢`)
+- 現在の Java のバージョン (`☕`)
+- 現在の Node.js のバージョン (`⬢`)
 - 現在の PHP のバージョン (`🐘`)
 - 現在の Python のバージョン (`🐍`)
 - 現在の Ruby のバージョン (`💎`)
@@ -127,13 +127,13 @@
 
 <h4 spaces-before="3">最新版のインストール</h4>
 
-<h5 spaces-before="3">From prebuilt binary, with Shell:</h5>
+<h5 spaces-before="3">ビルド済みのバイナリをインストール</h5>
 
 <pre><code class="sh">   curl -fsSL https://starship.rs/install.sh | bash
 `</pre>
 
 
-   ##### From source on [crates.io](https://crates.io/):
+   ##### [crates.io](https://crates.io/)からソースをインストール
 
    ```sh
    cargo install starship
