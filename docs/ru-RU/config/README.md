@@ -27,6 +27,11 @@ symbol = "➜"      # Сегменту "symbol" присваеваем знач�
 disabled = true
 ```
 
+Вы можете изменить расположение файла `starship.toml` переменной окружения `STARSHIP_CONFIG`:
+```shell
+export STARSHIP_CONFIG=~/.starship
+```
+
 ### Терминология
 
 **Модуль**: Компонент строки, дающий информацию на основе контекстной информации вашей ОС. Например, модуль "nodejs" показывает установленную версию NodeJS на вашем компьютере, если вы находитесь в директории проекта NodeJS.
@@ -127,7 +132,7 @@ prompt_order = [
 | ----------------- | --------------- | ---------------------------------------------------------------- |
 | `symbol`          | `"☁️ "`         | Символ перед отображением текущего профиля AWS.                  |
 | `displayed_items` | `all`           | Выбор элементов. Возможные значения [`all`, `profile`, `region`] |
-| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.  |
+| `region_aliases`  |                 | Таблица региона псевдонимов, отображаемая вместе с именем AWS.   |
 | `style`           | `"bold yellow"` | Стиль модуля.                                                    |
 | `disabled`        | `false`         | Отключение модуля `AWS`.                                         |
 
@@ -259,13 +264,13 @@ use_symbol_for_status = true
 
 ### Опции
 
-| Переменная          | По умолчанию    | Описание                                                   |
-| ------------------- | --------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | Префикс, отображаемый перед продолжительностью команды.    |
-| `style`             | `"bold yellow"` | Стиль модуля.                                              |
-| `disabled`          | `false`         | Отключает модуль `cmd_duration`.                           |
+| Переменная          | По умолчанию    | Описание                                                             |
+| ------------------- | --------------- | -------------------------------------------------------------------- |
+| `min_time`          | `2_000`         | Кратчайшая продолжительность для показа времени (в миллисекундах).   |
+| `show_milliseconds` | `false`         | Показывать миллисекунды в дополнение к секундам в продолжительности. |
+| `prefix`            | `took`          | Префикс, отображаемый перед продолжительностью команды.              |
+| `style`             | `"bold yellow"` | Стиль модуля.                                                        |
+| `disabled`          | `false`         | Отключает модуль `cmd_duration`.                                     |
 
 ### Пример
 
@@ -283,18 +288,18 @@ prefix = "underwent "
 
 ::: tip
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+Это не подавляет модификатор командной строки самой conda. Возможно, вы захотите запустить `conda config --set changeps1 False`.
 
 :::
 
 ### Опции
 
-| Переменная          | По умолчанию   | Описание                                                                                                                                                                                                    |
-| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"C "`         | Символ перед названием окружения.                                                                                                                                                                           |
-| `style`             | `"bold green"` | Стиль модуля.                                                                                                                                                                                               |
-| `disabled`          | `false`        | Отключает модуль `conda`.                                                                                                                                                                                   |
+| Переменная          | По умолчанию   | Описание                                                                                                                                                                                                     |
+| ------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `truncation_length` | `1`            | Количество каталогов, в которых путь к окружению должен быть усечен, если окружение было создано через `conda create -p [path]`. `0` означает без усечения. Также смотрите модуль [`directory`](#directory). |
+| `symbol`            | `"C "`         | Символ перед названием окружения.                                                                                                                                                                            |
+| `style`             | `"bold green"` | Стиль модуля.                                                                                                                                                                                                |
+| `disabled`          | `false`        | Отключает модуль `conda`.                                                                                                                                                                                    |
 
 ### Пример
 
@@ -370,24 +375,24 @@ style = "green"
 heuristic = false
 ```
 
-## Environment Variable
+## Переменная Окружения
 
-The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+Модуль `env_var` отображает текущее значение выбранной переменной окружения. Модуль будет показан только в том случае, если любое из следующих условий соблюдено:
 
-- The `variable` configuration option matches an existing environment variable
-- The `variable` configuration option is not defined, but the `default` configuration option is
+- Опция `variable` соответствует существующей переменной среды
+- Опция `variable` не определена, но определена опция `default`
 
 ### Опции
 
-| Переменная     | По умолчанию     | Описание                                                                     |
-| -------------- | ---------------- | ---------------------------------------------------------------------------- |
-| `symbol`       |                  | The symbol used before displaying the variable value.                        |
-| `переменная`   |                  | The environment variable to be displayed.                                    |
-| `по умолчанию` |                  | The default value to be displayed when the selected variable is not defined. |
-| `prefix`       | `""`             | Prefix to display immediately before the variable value.                     |
-| `suffix`       | `""`             | Suffix to display immediately after the variable value.                      |
-| `style`        | `"dimmed black"` | Стиль модуля.                                                                |
-| `disabled`     | `false`          | Disables the `env_var` module.                                               |
+| Переменная | По умолчанию     | Описание                                                           |
+| ---------- | ---------------- | ------------------------------------------------------------------ |
+| `symbol`   |                  | Символ, используемый перед отображением значения переменной.       |
+| `variable` |                  | Отображаемая переменная окружения.                                 |
+| `default`  |                  | Значение отображаемое, когда выбранная переменная не определена.   |
+| `prefix`   | `""`             | Префикс, отображаемый, непосредственно перед значением переменной. |
+| `suffix`   | `""`             | Префикс, отображаемый, непосредственно после значением переменной. |
+| `style`    | `"dimmed black"` | Стиль модуля.                                                      |
+| `disabled` | `false`          | Отключает модуль `env_var`.                                        |
 
 ### Пример
 
@@ -399,19 +404,19 @@ variable = "SHELL"
 default = "unknown shell"
 ```
 
-## Git Branch
+## Ветвь Git
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+Модуль `git_branch` показывает активную ветку репозитория в вашем текущей директории.
 
 ### Опции
 
-| Переменная          | По умолчанию    | Описание                                                                              |
-| ------------------- | --------------- | ------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
-| `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
-| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
-| `style`             | `"bold purple"` | Стиль модуля.                                                                         |
-| `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
+| Переменная          | По умолчанию    | Описание                                                                                                        |
+| ------------------- | --------------- | --------------------------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | Символ, используемый перед именем ветки репозитория в вашей текущей директории.                                 |
+| `truncation_length` | `2^63 - 1`      | Отрезает ветку git до X графемов                                                                                |
+| `truncation_symbol` | `"…"`           | Символ, используемый для обозначения усечения названия ветки. Вы можете использовать "", чтобы не видеть символ |
+| `style`             | `"bold purple"` | Стиль модуля.                                                                                                   |
+| `disabled`          | `false`         | Отключает модуль `git_branch`.                                                                                  |
 
 ### Пример
 
@@ -424,7 +429,7 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git Commit
+## Коммит Git
 
 Модуль `git_commit` показывает хэш текущего коммита репозитория в вашем текущем каталоге.
 
@@ -436,13 +441,13 @@ truncation_symbol = ""
 
 ### Опции
 
-| Переменная           | По умолчанию   | Описание                                         |
-| -------------------- | -------------- | ------------------------------------------------ |
-| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
-| `prefix`             | `"("`          | Prefix to display immediately before git commit. |
-| `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
-| `style`              | `"bold green"` | Стиль модуля.                                    |
-| `disabled`           | `true`         | Disables the `git_commit` module.                |
+| Переменная           | По умолчанию   | Описание                                       |
+| -------------------- | -------------- | ---------------------------------------------- |
+| `commit_hash_length` | `7`            | Длина отображаемого хэша коммита git.          |
+| `prefix`             | `"("`          | Префикс, отображаемый сразу после коммита.     |
+| `suffix`             | `")"`          | Суффикс, отображаемый сразу после коммита git. |
+| `style`              | `"bold green"` | Стиль модуля.                                  |
+| `disabled`           | `true`         | Отключает модуль `git_commit`.                 |
 
 ### Пример
 
@@ -454,24 +459,24 @@ disabled = false
 commit_hash_length = 4
 ```
 
-## Git State
+## Состояние Git
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+Модуль `git_state` будет отображаться в директориях, являющимися частью репозитория git, и там, где выполняется операция, такие как: _REBASING_, _BISECTING_, и т. д. Если есть информация о прогрессе (например, REBASING 3/10), эта информация также будет показана.
 
 ### Опции
 
-| Переменная         | По умолчанию       | Описание                                                                                                         |
-| ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
-| `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
-| `revert`           | `"REVERTING"`      | The text displayed when a `revert` is in progress.                                                               |
-| `cherry_pick`      | `"CHERRY-PICKING"` | The text displayed when a `cherry-pick` is in progress.                                                          |
-| `bisect`           | `"BISECTING"`      | The text displayed when a `bisect` is in progress.                                                               |
-| `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
-| `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
-| `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
-| `style`            | `"bold yellow"`    | Стиль модуля.                                                                                                    |
-| `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
+| Переменная         | По умолчанию       | Описание                                                                                                      |
+| ------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------- |
+| `rebase`           | `"REBASING"`       | Текст, отображаемый в процессе операции `rebase`.                                                             |
+| `merge`            | `"MERGING"`        | Текст, отображаемый в процессе операции `merge`.                                                              |
+| `revert`           | `"REVERTING"`      | Текст, отображаемый в процессе операции `revert`.                                                             |
+| `cherry_pick`      | `"CHERRY-PICKING"` | Текст, отображаемый в процессе операции `cherry-pick`.                                                        |
+| `bisect`           | `"BISECTING"`      | Текст, отображаемый в процессе операции `bisect`.                                                             |
+| `am`               | `"AM"`             | Текст, отображаемый в процессе операции `apply-mailbox` (`git am`).                                           |
+| `am_or_rebase`     | `"AM/REBASE"`      | Текст, отображаемый, когда выполняется неоднозначный процесс `apply-mailbox` или `rebase`.                    |
+| `progress_divider` | `"/"`              | Символ или текст, который будет разделять текущую и общую сумму прогресса. (напр., `" из "`, для `"3 из 10"`) |
+| `style`            | `"bold yellow"`    | Стиль модуля.                                                                                                 |
+| `disabled`         | `false`            | Отключает модуль `git_state`.                                                                                 |
 
 ### Пример
 
@@ -483,35 +488,36 @@ progress_divider = " of "
 cherry_pick = "🍒 PICKING"
 ```
 
-## Git Status
+## Статус Git
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+Модуль `git_status` отображает символы, представляющие состояние репозитория в вашей текущей директории.
 
 ### Опции
 
-| Переменная         | По умолчанию               | Описание                                                |
-| ------------------ | -------------------------- | ------------------------------------------------------- |
-| `conflicted`       | `"="`                      | This branch has merge conflicts.                        |
-| `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
-| `ahead`            | `"⇡"`                      | This branch is ahead of the branch being tracked.       |
-| `behind`           | `"⇣"`                      | This branch is behind of the branch being tracked.      |
-| `diverged`         | `"⇕"`                      | This branch has diverged from the branch being tracked. |
-| `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
-| `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
-| `stashed`          | `"$"`                      | A stash exists for the local repository.                |
-| `modified`         | `"!"`                      | There are file modifications in the working directory.  |
-| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
-| `staged`           | `"+"`                      | A new file has been added to the staging area.          |
-| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files.        |
-| `renamed`          | `"»"`                      | A renamed file has been added to the staging area.      |
-| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.             |
-| `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.   |
-| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.             |
-| `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
-| `prefix`           | `[`                        | Prefix to display immediately before git status.        |
-| `suffix`           | `]`                        | Suffix to display immediately after git status.         |
-| `style`            | `"bold red"`               | Стиль модуля.                                           |
-| `disabled`         | `false`                    | Disables the `git_status` module.                       |
+| Переменная         | По умолчанию                 | Описание                                               |
+| ------------------ | ---------------------------- | ------------------------------------------------------ |
+| `conflicted`       | `"="`                        | Эта ветка имеет конфликты слияния.                     |
+| `conflicted_count` | [ссылка](#git-status-counts) | Показывать в стиле количество конфликтов.              |
+| `ahead`            | `"⇡"`                        | Эта ветка впереди отслеживаемой ветви.                 |
+| `behind`           | `"⇣"`                        | Эта ветка позади отслеживаемой ветви.                  |
+| `diverged`         | `"⇕"`                        | Эта ветка расходится от отслеживаемой ветки.           |
+| `untracked`        | `"?"`                        | В рабочей директории есть неотслеженные файлы.         |
+| `untracked_count`  | [ссылка](#git-status-counts) | Показывать в стиле количество неотслеженных файлов.    |
+| `stashed`          | `"$"`                        | A stash exists for the local repository.               |
+| `stashed_count`    | [ссылка](#git-status-counts) | Show and style the number of stashes.                  |
+| `modified`         | `"!"`                        | There are file modifications in the working directory. |
+| `modified_count`   | [ссылка](#git-status-counts) | Show and style the number of modified files.           |
+| `staged`           | `"+"`                        | A new file has been added to the staging area.         |
+| `staged_count`     | [ссылка](#git-status-counts) | Show and style the number of files staged files.       |
+| `renamed`          | `"»"`                        | A renamed file has been added to the staging area.     |
+| `renamed_count`    | [ссылка](#git-status-counts) | Show and style the number of renamed files.            |
+| `deleted`          | `"✘"`                        | A file's deletion has been added to the staging area.  |
+| `deleted_count`    | [ссылка](#git-status-counts) | Show and style the number of deleted files.            |
+| `show_sync_count`  | `false`                      | Show ahead/behind count of the branch being tracked.   |
+| `prefix`           | `[`                          | Prefix to display immediately before git status.       |
+| `suffix`           | `]`                          | Suffix to display immediately after git status.        |
+| `style`            | `"bold red"`                 | Стиль модуля.                                          |
+| `disabled`         | `false`                      | Disables the `git_status` module.                      |
 
 #### Git Status Counts
 
@@ -580,7 +586,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
-| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
+| `truncation_symbol` | `"…"`           | Символ, используемый для обозначения усечения названия ветки.                                |
 | `style`             | `"bold purple"` | Стиль модуля.                                                                                |
 | `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
 
