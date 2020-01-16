@@ -27,6 +27,11 @@ symbol = "➜"     #  設定 "symbol" 區段為 "➜"
 disabled = true
 ```
 
+You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+```shell
+export STARSHIP_CONFIG=~/.starship
+```
+
 ### 術語
 
 **模組 (Module)**： 提示字元中的一個元件，基於你的作業系統提供的背景資訊來提供訊息。 舉例來說，如果你現在的資料夾是一個 NodeJS 專案，"nodejs" 模組會顯示出現在安裝在你的電腦上的 NodeJS 版本。
@@ -499,6 +504,7 @@ cherry_pick = "🍒 PICKING"
 | `untracked`        | `"?"`                    | 工作資料夾中有沒有追蹤的檔案。                                  |
 | `untracked_count`  | [連結](#git-status-counts) | Show and style the number of untracked files.    |
 | `stashed`          | `"$"`                    | 本地儲存庫有 stash。                                    |
+| `stashed_count`    | [連結](#git-status-counts) | Show and style the number of stashes.            |
 | `modified`         | `"!"`                    | 工作資料夾中有修改過的檔案。                                   |
 | `modified_count`   | [連結](#git-status-counts) | Show and style the number of modified files.     |
 | `staged`           | `"+"`                    | 一個新檔案被加入了暫存區 (staging area)。                     |

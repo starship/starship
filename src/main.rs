@@ -122,6 +122,9 @@ fn main() {
                     .about("Prints time in milliseconds")
                     .settings(&[AppSettings::Hidden]),
             )
+            .subcommand(
+                SubCommand::with_name("explain").about("Explains the currently showing modules"),
+            )
             .get_matches();
 
     match matches.subcommand() {
@@ -157,6 +160,7 @@ fn main() {
                 None => println!("{}", -1),
             }
         }
+        ("explain", Some(sub_m)) => print::explain(sub_m.clone()),
         _ => {}
     }
 }
