@@ -110,7 +110,7 @@ jobs:
           go-version: "1.12.1"
 
       # Install Ruby at a fixed version
-      - uses: actions/setup-ruby@v1
+      - uses: eregon/use-ruby-action@v1
         with:
           ruby-version: "2.6.3"
 
