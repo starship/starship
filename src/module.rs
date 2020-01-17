@@ -1,5 +1,6 @@
 use crate::config::SegmentConfig;
 use crate::segment::Segment;
+use crate::utils::wrap_colorseq_for_shell;
 use ansi_term::Style;
 use ansi_term::{ANSIString, ANSIStrings};
 use std::fmt;
@@ -170,44 +171,12 @@ impl<'a> fmt::Display for Module<'a> {
     }
 }
 
-/// Many shells cannot deal with raw unprintable characters (like ANSI escape sequences) and
-/// miscompute the cursor position as a result, leading to strange visual bugs. Here, we wrap these
-/// characters in shell-specific escape codes to indicate to the shell that they are zero-length.
 fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: String) -> Vec<ANSIString> {
-    const ESCAPE_BEGIN: char = '\u{1b}';
-    const MAYBE_ESCAPE_END: char = 'm';
     ansi_strings
-        .iter()
+        .into_iter()
         .map(|ansi| {
-            let mut escaped = false;
-            let final_string: String = ansi
-                .to_string()
-                .chars()
-                .map(|x| match x {
-                    ESCAPE_BEGIN => {
-                        escaped = true;
-                        match shell.as_str() {
-                            "bash" => String::from("\u{5c}\u{5b}\u{1b}"), // => \[ESC
-                            "zsh" => String::from("\u{25}\u{7b}\u{1b}"),  // => %{ESC
-                            _ => x.to_string(),
-                        }
-                    }
-                    MAYBE_ESCAPE_END => {
-                        if escaped {
-                            escaped = false;
-                            match shell.as_str() {
-                                "bash" => String::from("m\u{5c}\u{5d}"), // => m\]
-                                "zsh" => String::from("m\u{25}\u{7d}"),  // => m%}
-                                _ => x.to_string(),
-                            }
-                        } else {
-                            x.to_string()
-                        }
-                    }
-                    _ => x.to_string(),
-                })
-                .collect();
-            ANSIString::from(final_string)
+            let wrapped = wrap_colorseq_for_shell(ansi.to_string(), &shell);
+            ANSIString::from(wrapped)
         })
         .collect::<Vec<ANSIString>>()
 }
