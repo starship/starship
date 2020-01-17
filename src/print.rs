@@ -9,6 +9,7 @@ use crate::context::Context;
 use crate::module::Module;
 use crate::module::ALL_MODULES;
 use crate::modules;
+use crate::utils::wrap_seq_for_shell;
 
 pub fn prompt(args: ArgMatches) {
     let context = Context::new(args);
@@ -26,7 +27,13 @@ pub fn get_prompt(context: Context) -> String {
         writeln!(buf).unwrap();
     }
 
-    buf.push_str("\x1b[J");
+    // Clear the screen from the cursor to the end of the line to avoid certain
+    // shell bugs, while avoiding shell character-miscount bugs (see GH #739)
+    const CLEAR_TO_END: &'static str = "\x1b[J";
+    let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
+    let escaped_clear_seq = wrap_seq_for_shell(CLEAR_TO_END.to_string(), &shell, '\x1b', 'J');
+
+    buf.push_str(&escaped_clear_seq);
 
     let modules = compute_modules(&context);
 
