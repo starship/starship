@@ -98,18 +98,20 @@
   - `»` — переименнованные файлы
   - `✘` — удалённые файлы
 - Текущая ветка Mercurial
-- Текущий уровень и состояние заряда батареи
-- `⇡` – зарядка
-- `⇣` – разрядка
-- `•` – полная зарядка
-- Индикатор задач в фоне (`✦`)
-- Текущий кластер и пространство имён Kubernetes (`☸`)
-- Текущий профиль Amazon Web Services (AWS) (`☁`)
-- Время выполнения последней команды
-- Значение переменной окружения
-- Обнаружение среды Nix-shell
-- Текущее имя пользователя, если оно не совпадает с именем залогиненного пользователя
-- Необязательное текущее время в 12- или 24-часовом формате
+- Current battery level and status
+  - `⇡` – charging
+  - `⇣` – discharging
+  - `•` – fully charged
+- Indicator for jobs in the background (`✦`)
+- Current Kubernetes Cluster and Namespace (`☸`)
+- Current Amazon Web Services (AWS) profile (`☁️`)
+- Execution time of the last command
+- Custom environment variable value
+- Nix-shell environment detection
+- Current username if not the same as the logged-in user
+- Optional current time in 12/24hr format
+- Current Terraform Workspace and version (`💠`)
+- Current Conda environment (`C`)
 
 ## 🚀 Установка
 
