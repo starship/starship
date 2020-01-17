@@ -114,9 +114,9 @@ The prompt shows information you need while you're working, while staying sleek 
   - `✘` — deleted files
 - Current Mercurial branch
 - Current battery level and status
-- `⇡` – charging
-- `⇣` – discharging
-- `•` – fully charged
+  - `⇡` – charging
+  - `⇣` – discharging
+  - `•` – fully charged
 - Indicator for jobs in the background (`✦`)
 - Current Kubernetes Cluster and Namespace (`☸`)
 - Current Amazon Web Services (AWS) profile (`☁️`)
@@ -125,6 +125,8 @@ The prompt shows information you need while you're working, while staying sleek 
 - Nix-shell environment detection
 - Current username if not the same as the logged-in user
 - Optional current time in 12/24hr format
+- Current Terraform Workspace and version (`💠`)
+- Current Conda environment (`C`)
 
 ## 🚀 Installation
 
