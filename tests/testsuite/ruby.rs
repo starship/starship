@@ -32,7 +32,7 @@ fn folder_with_gemfile() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Red.bold().paint("💎 v2.7.0"));
+    let expected = format!("via {} ", Color::Red.bold().paint("💎 v2.6.3"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -49,7 +49,7 @@ fn folder_with_rb_file() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Red.bold().paint("💎 v2.7.0"));
+    let expected = format!("via {} ", Color::Red.bold().paint("💎 v2.6.3"));
     assert_eq!(expected, actual);
     Ok(())
 }
