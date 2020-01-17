@@ -50,6 +50,52 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
     }
 }
 
+// Convenience function to wrap ANSI color sequences (ECMA-48 SGR in `man console_codes`)
+pub fn wrap_colorseq_for_shell(ansi: String, shell: &str) -> String {
+    const ESCAPE_BEGIN: char = '\u{1b}';
+    const ESCAPE_END: char = 'm';
+    wrap_seq_for_shell(ansi, shell, ESCAPE_BEGIN, ESCAPE_END)
+}
+
+/// Many shells cannot deal with raw unprintable characters and miscompute the cursor position,
+/// leading to strange visual bugs like duplicated/missing chars. This wraps some escape seqs
+/// in shell-specific escapes to avoid this.
+pub fn wrap_seq_for_shell(
+    ansi: String,
+    shell: &str,
+    escape_begin: char,
+    escape_end: char,
+) -> String {
+    let mut escaped = false;
+    let final_string: String = ansi
+        .chars()
+        .map(|x| {
+            if x == escape_begin {
+                escaped = true;
+                match shell {
+                    "bash" => String::from("\u{5c}\u{5b}\u{1b}"), // => \[ESC
+                    "zsh" => String::from("\u{25}\u{7b}\u{1b}"),  // => %{ESC
+                    _ => x.to_string(),
+                }
+            } else if x == escape_end {
+                if escaped {
+                    escaped = false;
+                    match shell {
+                        "bash" => String::from("m\u{5c}\u{5d}"), // => m\]
+                        "zsh" => String::from("m\u{25}\u{7d}"),  // => m%}
+                        _ => x.to_string(),
+                    }
+                } else {
+                    x.to_string()
+                }
+            } else {
+                x.to_string()
+            }
+        })
+        .collect();
+    final_string
+}
+
 fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
     log::trace!("Executing command '{:?}' with args '{:?}'", cmd, args);
     match Command::new(cmd).args(args).output() {
