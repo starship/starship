@@ -129,6 +129,14 @@ jobs:
         with:
           php-version: "7.3"
 
+      # Install Mercurial (pre-installed on linux, installed from pip on macos
+      # and from choco on windows),
+      - name: Install Mercurial (macos)
+        if: matrix.os == 'macOS-latest'
+        env:
+          HGPYTHON3: 1
+        run: pip install mercurial
+
       # Install Terraform at a fixed version
       - uses: volcano-coffee-company/setup-terraform@v1
         with:
