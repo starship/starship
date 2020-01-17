@@ -129,8 +129,7 @@ jobs:
         with:
           php-version: "7.3"
 
-      # Install Mercurial (pre-installed on linux, installed from pip on macos
-      # and from choco on windows),
+      # Install Mercurial (pre-installed on Linux and windows)
       - name: Install Mercurial (macos)
         if: matrix.os == 'macOS-latest'
         env:
