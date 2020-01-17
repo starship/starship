@@ -98,18 +98,20 @@
   - `»` — renamed files
   - `✘` — deleted files
 - Current Mercurial branch
-- 当前电池剩余容量与状态
-- `⇡` – charging
-- `⇣` – discharging
-- `•` – fully charged
-- 后台运行进程数的指示器 (`✦`)
-- 当前 Kubernetes Cluster 与 Namespace (`☸`)
+- Current battery level and status
+  - `⇡` – charging
+  - `⇣` – discharging
+  - `•` – fully charged
+- Indicator for jobs in the background (`✦`)
+- Current Kubernetes Cluster and Namespace (`☸`)
 - Current Amazon Web Services (AWS) profile (`☁️`)
 - Execution time of the last command
 - Custom environment variable value
-- Nix-shell 环境检测
-- 非当前登录用户的用户名
+- Nix-shell environment detection
+- Current username if not the same as the logged-in user
 - Optional current time in 12/24hr format
+- Current Terraform Workspace and version (`💠`)
+- Current Conda environment (`C`)
 
 ## 🚀 安装
 
