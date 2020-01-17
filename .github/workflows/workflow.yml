@@ -92,6 +92,10 @@ jobs:
       # Checkout the branch being tested
       - uses: actions/checkout@v2
 
+      - name: Install Mercurial (windows)
+        if: matrix.os == 'windows-latest'
+        run: choco install hg
+
       # Install all the required dependencies for testing
       - uses: actions-rs/toolchain@v1
         with:
