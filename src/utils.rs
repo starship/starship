@@ -77,15 +77,15 @@ pub fn wrap_seq_for_shell(
             if x == escape_begin && !escaped {
                 escaped = true;
                 match shell {
-                    "bash" => String::from(format!("{}{}", BASH_BEG, escape_begin)),
-                    "zsh" => String::from(format!("{}{}", ZSH_BEG, escape_begin)),
+                    "bash" => format!("{}{}", BASH_BEG, escape_begin),
+                    "zsh" => format!("{}{}", ZSH_BEG, escape_begin),
                     _ => x.to_string(),
                 }
             } else if x == escape_end && escaped {
                 escaped = false;
                 match shell {
-                    "bash" => String::from(format!("{}{}", escape_end, BASH_END)),
-                    "zsh" => String::from(format!("{}{}", escape_end, ZSH_END)),
+                    "bash" => format!("{}{}", escape_end, BASH_END),
+                    "zsh" => format!("{}{}", escape_end, ZSH_END),
                     _ => x.to_string(),
                 }
             } else {
