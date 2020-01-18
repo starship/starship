@@ -692,10 +692,17 @@ threshold = 4
 
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from
-the kubeconfig file. The namespace needs to be set in the kubeconfig file, this
-can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if
-not it will use the `~/.kube/config`.
+Displays the current Kubernetes context name and/or the namespace -
+from the kubeconfig file (file pointed by `$KUBECONFIG` env var, or
+`~/.kube/config` by default).
+
+Module output depends whether Kubernetes namespace is configured
+for current context (this can be done via `kubectl config set-context starship-cluster
+--namespace astronaut`):
+
+- when namespace isn't configured, module simply shows the context name
+- when namespace is configured, module by default shows `context (namespace)`,
+  but this can be configured by `show_…` settings.
 
 ::: tip
 
@@ -706,11 +713,13 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable   | Default       | Description                                         |
-| ---------- | ------------- | --------------------------------------------------- |
-| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
-| `style`    | `"bold blue"` | The style for the module.                           |
-| `disabled` | `true`        | Disables the `kubernetes` module                    |
+| Variable         | Default       | Description                                         |
+| ---------------- | ------------- | --------------------------------------------------- |
+| `symbol`         | `"☸ "`        | The symbol used before displaying the Cluster info. |
+| `style`          | `"bold blue"` | The style for the module.                           |
+| `disabled`       | `true`        | Disables the `kubernetes` module                    |
+| `show_context`   | `true`        | Should context name be shown?                       |
+| `show_namespace` | `true`        | Should namespace name be shown?                     |
 
 ### Example
 
@@ -721,6 +730,8 @@ To enable it, set `disabled` to `false` in your configuration file.
 symbol = "⛵ "
 style = "dim green"
 disabled = false
+show_context = false
+show_namespace = true
 ```
 
 ## Line Break

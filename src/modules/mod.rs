@@ -100,7 +100,7 @@ pub fn description(module: &str) -> &'static str {
         "hostname" => "The system hostname",
         "java" => "The currently installed version of Java",
         "jobs" => "The current number of jobs running",
-        "kubernetes" => "The current Kubernetes context name and, if set, the namespace",
+        "kubernetes" => "The current Kubernetes context name and/or namespace",
         "line_break" => "Separates the prompt into two lines",
         "memory_usage" => "Current system memory and swap usage",
         "nix_shell" => "The nix-shell environment",

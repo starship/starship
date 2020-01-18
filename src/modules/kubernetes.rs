@@ -68,12 +68,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             module.get_prefix().set_value(KUBERNETES_PREFIX);
 
             module.create_segment("symbol", &config.symbol);
-            module.create_segment("context", &config.context.with_value(&kube_ctx));
-            if kube_ns != "" {
-                module.create_segment(
-                    "namespace",
-                    &config.namespace.with_value(&format!(" ({})", kube_ns)),
-                );
+            if config.show_context || kube_ns == "" {
+                module.create_segment("context", &config.context.with_value(&kube_ctx));
+            }
+            if config.show_namespace && kube_ns != "" {
+                if config.show_context {
+                    module.create_segment(
+                        "namespace",
+                        &config.namespace.with_value(&format!(" ({})", kube_ns)),
+                    );
+                } else {
+                    module.create_segment(
+                        "namespace",
+                        &config.namespace.with_value(&format!("{}", kube_ns)),
+                    );
+                }
             }
             Some(module)
         }

@@ -10,6 +10,8 @@ pub struct KubernetesConfig<'a> {
     pub namespace: SegmentConfig<'a>,
     pub style: Style,
     pub disabled: bool,
+    pub show_context: bool,
+    pub show_namespace: bool,
 }
 
 impl<'a> RootModuleConfig<'a> for KubernetesConfig<'a> {
@@ -20,6 +22,8 @@ impl<'a> RootModuleConfig<'a> for KubernetesConfig<'a> {
             namespace: SegmentConfig::default(),
             style: Color::Cyan.bold(),
             disabled: true,
+            show_context: true,
+            show_namespace: true,
         }
     }
 }
