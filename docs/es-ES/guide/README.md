@@ -98,18 +98,18 @@
   - `»` — archivos renombrados
   - `✘` — archivos eliminados
 - Rama Mercurial actual
-- Current battery level and status
-  - `⇡` – charging
-  - `⇣` – discharging
-  - `•` – fully charged
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
-- Current Amazon Web Services (AWS) profile (`☁️`)
-- Execution time of the last command
-- Custom environment variable value
-- Nix-shell environment detection
-- Current username if not the same as the logged-in user
-- Optional current time in 12/24hr format
+- Nivel y estado actual de la batería
+  - `⇡` – cargando
+  - `⇣` – descargándo
+  - `•` –completamente cargada
+- Indicador para las tareas de fondo (`✦`)
+- Cluster y espacio de nombres actual de Kubernetes (`☸`)
+- Perfil actual de Amazon Web Services (AWS) (`☁️`)
+- Tiempo de ejecución del último comando
+- Valor de variable de entorno personalizado
+- Detección del entorno de la interfaz de línea de comandos *nix
+- Nombre de usuario actual si no es el mismo que el del usuario conectado
+- Hora actual opcional en formato 12/24 hrs.
 - Current Terraform Workspace and version (`💠`)
 - Current Conda environment (`C`)
 
