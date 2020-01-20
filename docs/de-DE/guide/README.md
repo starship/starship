@@ -141,7 +141,7 @@
    ```
 
 
-   #### Install via Package Manager
+   #### Installation mithilfe eines Paket-Managers
 
 
    ##### Mit [Homebrew](https://brew.sh/):
@@ -208,7 +208,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Trage folgendes am Ende der `~/.config/ion/initrc` ein:
 
    ```sh
    # ~/.config/ion/initrc
