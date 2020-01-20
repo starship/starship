@@ -98,17 +98,17 @@
   - `»` — umbenannte Dateien
   - `✘` — gelöschte Dateien
 - Current Mercurial branch
-- Current battery level and status
+- Batteriestand und -status
   - `⇡` – charging
   - `⇣` – discharging
   - `•` – fully charged
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
+- Anzeige für Hintergrundsprozesse (`✦`)
+- Aktueller Kubernetes Cluster und Namespace (`☸`)
 - Current Amazon Web Services (AWS) profile (`☁️`)
 - Execution time of the last command
 - Custom environment variable value
-- Nix-shell environment detection
-- Current username if not the same as the logged-in user
+- Erkennung von Nix-Shell-Umgebungen
+- Benutzername, wenn dieser nicht dem angemeldeten Benutzer entspricht
 - Optional current time in 12/24hr format
 - Current Terraform Workspace and version (`💠`)
 - Current Conda environment (`C`)
