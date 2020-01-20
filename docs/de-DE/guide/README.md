@@ -111,7 +111,7 @@
 - Benutzername, wenn dieser nicht dem angemeldeten Benutzer entspricht
 - Optional current time in 12/24hr format
 - Aktueller "Terraform Workspace" Name und Version (`💠`)
-- Current Conda environment (`C`)
+- Aktuelle Conda-Umgebung (`C`)
 
 ## 🚀 Installation
 
@@ -144,14 +144,14 @@
    #### Install via Package Manager
 
 
-   ##### With [Homebrew](https://brew.sh/):
+   ##### Mit [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### Mit [scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
