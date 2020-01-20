@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Fetch all tags
+        run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+
       - name: Generate changelog file
         run: |
           # Temporary fix for https://github.com/actions/setup-go/issues/14
