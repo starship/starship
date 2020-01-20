@@ -98,19 +98,19 @@
   - `»` — 名前が変更されたファイル
   - `✘` — 削除されたファイル
 - 現在の Mercurial ブランチ
-- Current battery level and status
-  - `⇡` – charging
-  - `⇣` – discharging
-  - `•` – fully charged
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
-- Current Amazon Web Services (AWS) profile (`☁️`)
-- Execution time of the last command
-- Custom environment variable value
-- Nix-shell environment detection
-- Current username if not the same as the logged-in user
-- Optional current time in 12/24hr format
-- Current Terraform Workspace and version (`💠`)
+- 現在のバッテリー残量と状態
+  - `⇡` – 充電中
+  - `⇣` – 放電中
+  - `•` – 満タン
+- バックグラウンドジョブのインジケーター (`✦`)
+- 現在のKubernetesクラスタとネームスペース (`☸`)
+- 現在のAmazon Web Services (AWS) プロファイル(`☁️</ 0>)</li>
+<li>最後のコマンドの実行時間</li>
+<li>カスタム環境変数の値</li>
+<li>Nix-shell の環境検出</li>
+<li>ログインユーザーと異なる場合にユーザー名を表示する</li>
+<li>12/24時間形式のオプションの現在時刻</li>
+<li>Current Terraform Workspace and version (<code>💠`)
 - Current Conda environment (`C`)
 
 ## 🚀 インストール
