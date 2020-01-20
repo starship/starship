@@ -94,7 +94,26 @@ module.exports = {
           ["/zh-TW/config/", "設定"],
           ["/zh-TW/advanced-config/", "進階設定"]
         ]
-      }
+      },
+      "/ru-RU/": {
+        // text for the language dropdown
+        selectText: "Языки",
+        // label for this locale in the language dropdown
+        label: "Русский",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "Редактировать эту страницу на GitHub",
+        // Custom navbar values
+        nav: [{ text: "Настройка", link: "/ru-RU/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/",
+          ["/guide/", "Руководство"],
+          ["/config/", "Настройка"],
+          ["/advanced-config/", "Расширенная Настройка"],
+          ["/faq/", "Часто Задаваемые Вопросы"],
+          ["/presets/", "Предустановки"]
+        ]
+      },
     }
   },
   plugins: [
