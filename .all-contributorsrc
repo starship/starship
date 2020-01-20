@@ -667,6 +667,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "ivanovart",
+      "name": "Artem Ivanov",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5867379?v=4",
+      "profile": "https://github.com/ivanovart",
+      "contributions": [
+        "translation"
+      ]
     }
   ],
   "contributorsPerLine": 7,
