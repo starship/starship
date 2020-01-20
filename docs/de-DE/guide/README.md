@@ -74,13 +74,13 @@
 
 - Anzeigetext wird rot wenn der letzte Befehl mit einem Exit-code größer null terminiert
 - Derzeitige Go-Version (`🐹`)
-- Current Java version (`☕`)
-- Current Node.js version (`⬢`)
-- Current PHP version (`🐘`)
+- Derzeitige Java-Version (`☕`)
+- Derzeitige Node.js-Version (`⬢`)
+- Derzeitige PHP-Version (`🐘`)
 - Derzeitige Python-Version (`🐍`)
 - Derzeitige Ruby-Version (`💎`)
 - Derzeitige Rust-Version (`🦀`)
-- Current .NET version (`•NET`)
+- Derzeitige .NET-Version (`•NET`)
 - Version des Paketmanagers im derzeitigen Pfad (`📦`)
   - npm (Node.js)
   - cargo (Rust)
