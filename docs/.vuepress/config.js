@@ -14,6 +14,11 @@ module.exports = {
       lang: "zh-TW",
       title: "Starship",
       description: "The cross-shell prompt for astronauts"
+    },
+    "/ru-RU/": {
+      lang: "ru-RU",
+      title: "Starship",
+      description: "The cross-shell prompt for astronauts"
     }
   },
   // prettier-ignore
