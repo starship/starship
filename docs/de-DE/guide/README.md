@@ -106,7 +106,7 @@
 - Aktueller Kubernetes Cluster und Namespace (`☸`)
 - Aktuelles Amazon Web Services (AWS) Profil (`☁️`)
 - Anzeige der Laufzeit des letzten Befehls
-- Custom environment variable value
+- Wert einer beliebigen Umgebungsvariable
 - Erkennung von Nix-Shell-Umgebungen
 - Benutzername, wenn dieser nicht dem angemeldeten Benutzer entspricht
 - Optionale Uhrzeit im 12/24 Stunden Format
@@ -127,7 +127,7 @@
    #### Neueste Version installieren
 
 
-   ##### From prebuilt binary, with Shell:
+   ##### Neuster GitHub Release mit Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
@@ -340,7 +340,7 @@ Dieses Projekt folgt der [all-contributors](https://github.com/all-contributors/
 
 ## 💭 Inspiriert durch
 
-Checkt bitte diese älteren Projekte, die das Entstehen von Starhip inspiriert haben. 🙏
+Schaut euch bitte auch die Projekte an, die die Entstehung von Starship inspiriert haben. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Ein ZSH-Prompt für Astronauten.
 
