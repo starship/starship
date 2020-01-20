@@ -667,6 +667,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "gkeep",
+      "name": "Gennady Koshkin",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/20600053?v=4",
+      "profile": "https://github.com/gkeep",
+      "contributions": [
+        "translation"
+      ]
     }
   ],
   "contributorsPerLine": 7,
