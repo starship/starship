@@ -25,7 +25,7 @@
       alt="Chat on Discord"
   /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-64-orange" alt="All Contributors"></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-65-orange" alt="All Contributors"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
@@ -328,6 +328,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/dten"><img src="https://avatars0.githubusercontent.com/u/1019038?v=4" width="100px;" alt=""/><br /><sub><b>David Hewson</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=dten" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/gkeep"><img src="https://avatars3.githubusercontent.com/u/20600053?v=4" width="100px;" alt=""/><br /><sub><b>Gennady Koshkin</b></sub></a><br /><a href="#translation-gkeep" title="Translation">🌍</a></td>
   </tr>
 </table>
 
