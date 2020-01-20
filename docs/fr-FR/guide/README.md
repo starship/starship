@@ -98,18 +98,18 @@
   - `»` — Fichiers renommés
   - `✘` — Fichiers supprimés
 - Branche Mercurial actuelle
-- Current battery level and status
-  - `⇡` – charging
-  - `⇣` – discharging
-  - `•` – fully charged
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
-- Current Amazon Web Services (AWS) profile (`☁️`)
-- Execution time of the last command
-- Custom environment variable value
-- Nix-shell environment detection
-- Current username if not the same as the logged-in user
-- Optional current time in 12/24hr format
+- Niveau et état actuels de la batterie
+  - `⇡` – en charge
+  - `⇣` – en décharge
+  - `•` – entièrement chargé
+- Indicateur pour les tâches en arrière-plan (`✦`)
+- Cluster et namespace Kubernetes actuels (`☸`)
+- Profil actuel d'Amazon Web Services/AWS (`☁️`)
+- Temps d'exécution de la dernière commande
+- Valeur des clés d'environnement personnalisée
+- Détection de l'environnement Nix-shell
+- Affiche le nom de l'utilisateur courant s'il est différent de celui connecté
+- L'heure courante au format 12/24h (optionel)
 - Current Terraform Workspace and version (`💠`)
 - Current Conda environment (`C`)
 
