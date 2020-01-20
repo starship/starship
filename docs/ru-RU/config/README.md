@@ -654,7 +654,7 @@ threshold = 4
 
 ## Kubernetes
 
-Отображает текущее контекстное имя Kubernetes и, если применено, пространство имён из файла kubeconfig. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+Отображает текущее контекстное имя Kubernetes и, если применено, пространство имён из файла kubeconfig. Пространство имен дожно быть задано в файле kubeconfig, это делается через `kubectl config set-context starship-cluster --namespace astronaut`. Если переменная окружения `$KUBECONFIG` установлена, модуль будет использовать это, в противном случае будет использовать `~/.kube/config`.
 
 ::: tip
 
@@ -664,11 +664,11 @@ threshold = 4
 
 ### Опции
 
-| Переменная | По умолчанию  | Описание                                            |
-| ---------- | ------------- | --------------------------------------------------- |
-| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
-| `style`    | `"bold blue"` | Стиль модуля.                                       |
-| `disabled` | `true`        | Disables the `kubernetes` module                    |
+| Переменная | По умолчанию  | Описание                                                       |
+| ---------- | ------------- | -------------------------------------------------------------- |
+| `symbol`   | `"☸ "`        | Символ, используемый перед отображением информации о Кластере. |
+| `style`    | `"bold blue"` | Стиль модуля.                                                  |
+| `disabled` | `true`        | Отключает модуль `kubernetes`                                  |
 
 ### Пример
 
@@ -681,15 +681,15 @@ style = "dim green"
 disabled = false
 ```
 
-## Line Break
+## Перевод Строки
 
-The `line_break` module separates the prompt into two lines.
+Модуль `line_break` разделяет командную строку на две строки.
 
 ### Опции
 
-| Переменная | По умолчанию | Описание                                                           |
-| ---------- | ------------ | ------------------------------------------------------------------ |
-| `disabled` | `false`      | Disables the `line_break` module, making the prompt a single line. |
+| Переменная | По умолчанию | Описание                                                                 |
+| ---------- | ------------ | ------------------------------------------------------------------------ |
+| `disabled` | `false`      | Отключает модуль `line_break`, отображая командную строку в одну строку. |
 
 ### Пример
 
@@ -750,11 +750,11 @@ pure_msg = "pure shell"
 symbol = "🌟 "
 ```
 
-## Memory Usage
+## Использование памяти
 
-The `memory_usage` module shows current system memory and swap usage.
+Модуль `memory_usage` отображает текущую системную память и использование подкачки.
 
-By default the swap usage is displayed if the total system swap is non-zero.
+По умолчанию использование подкачки отображается, если общая сумма подкачки системы не равна нулю.
 
 ::: tip
 
@@ -764,15 +764,15 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ### Опции
 
-| Переменная        | По умолчанию          | Описание                                                      |
-| ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
-| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
-| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | Стиль модуля.                                                 |
-| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
+| Переменная        | По умолчанию          | Описание                                                                    |
+| ----------------- | --------------------- | --------------------------------------------------------------------------- |
+| `show_percentage` | `false`               | Отображать использование памяти в процентах от доступной памяти.            |
+| `show_swap`       | `true`                | Отображать использование подкачки, если общая сумма подкачки не равна нулю. |
+| `threshold`       | `75`                  | Скрывать использование памяти, если она не превышает этот процент.          |
+| `symbol`          | `"🐏 "`                | Символ, используемый перед отображением использования памяти.               |
+| `separator`       | `" | "`               | Символ или текст, который отделит использование памяти и подкачки.          |
+| `style`           | `"bold dimmed white"` | Стиль модуля.                                                               |
+| `disabled`        | `true`                | Отключает модуль `memory_usage`.                                            |
 
 ### Пример
 
@@ -790,19 +790,19 @@ style = "bold dimmed green"
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
+Модуль `nodejs` показывает установленную версию NodeJS. Модуль будет показан, если любое из следующих условий соблюдено:
 
-- The current directory contains a `package.json` file
-- The current directory contains a `node_modules` directory
-- The current directory contains a file with the `.js` extension
+- Текущий каталог содержит файл `package.json`
+- Текущий каталог содержит каталог `node_modules`
+- Текущий каталог содержит файл с расширением `.js`
 
 ### Опции
 
-| Переменная | По умолчанию   | Описание                                                 |
-| ---------- | -------------- | -------------------------------------------------------- |
-| `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | Стиль модуля.                                            |
-| `disabled` | `false`        | Disables the `nodejs` module.                            |
+| Переменная | По умолчанию   | Описание                                               |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"⬢ "`         | Символ, используемый перед отображением версии NodeJS. |
+| `style`    | `"bold green"` | Стиль модуля.                                          |
+| `disabled` | `false`        | Отключает модуль `nodejs`.                             |
 
 ### Пример
 
@@ -813,12 +813,12 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 symbol = "🤖 "
 ```
 
-## Package Version
+## Версия пакета
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
+Модуль `package` отображается, когда текущий каталог является репозиторием для пакета и показывает его текущую версию. Модуль в настоящее время поддерживает пакеты `npm`, `cargo` и `poetry`.
 
-- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
-- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- **npm** – Версия пакета `npm` из файла `package.json` в текущем каталоге
+- **cargo** – Версия пакета `cargo` из файла `Cargo.toml` в текущем каталоге
 - **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
 - **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 
@@ -867,21 +867,21 @@ symbol = "🔹 "
 
 ## Python
 
-The `python` module shows the currently installed version of Python.
+Модуль `python` показывает установленную версию Python.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
+Если `pyenv_version_name` установлено значение `true`, на экране появится имя версии pyenv.
 
-Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
+Иначе на экране будет показан номер версии из `python --version` и будет отображено текущее виртуального окружения Python, если активировано.
 
-The module will be shown if any of the following conditions are met:
+Модуль будет показан если любое из следующих условий соблюдено:
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a file with the `.py` extension
-- The current directory contains a `Pipfile` file
-- The current directory contains a `tox.ini` file
-- A virtual environment is currently activated
+- Текущий каталог содержит файл `.python-version`
+- Текущий каталог содержит файл `requirements.txt`
+- Текущий каталог содержит файл `pyproject.toml`
+- Текущий каталог содержит файл с расширением `.py`
+- Текущий каталог содержит файл `Pipfile`
+- Текущий каталог содержит файл `tox.ini`
+- Виртуальная среда в данный момент активирована
 
 ### Опции
 
@@ -979,7 +979,7 @@ symbol = "🏎💨 "
 
 ## Время
 
-Модуль `time` показывает текущее **локальное** время. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Модуль `time` показывает текущее **локальное** время. Значение конфигурации `format` используется пакетом [`chrono`](https://crates.io/crates/chrono) для контроля того, как отображается время. Ознакомьтесь с [документацией chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), чтобы увидеть доступные параметры.
 
 ::: tip
 
@@ -989,13 +989,13 @@ symbol = "🏎💨 "
 
 ### Опции
 
-| Переменная        | По умолчанию  | Описание                                                                                                            |
-| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
-| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`           | `bold yellow` | The style for the module time                                                                                       |
-| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
-| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
+| Переменная        | По умолчанию  | Описание                                                                                                                          |
+| ----------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`       | Включить 12-часовое форматирование                                                                                                |
+| `format`          | см. ниже      | [Строка формата chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), используемая для форматирования времени. |
+| `style`           | `bold yellow` | The style for the module time                                                                                                     |
+| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.                  |
+| `disabled`        | `true`        | Disables the `time` module.                                                                                                       |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
@@ -1010,23 +1010,23 @@ format = "🕙[ %T ]"
 utc_time_offset = -5
 ```
 
-## Username
+## Имя пользователя
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+Модуль `username` показывает имя активного пользователя. Модуль будет показан, если любое из следующих условий соблюдено:
 
-- The current user is root
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- Текущий пользователь - root
+- Текущий пользователь отличается от залогиненного
+- Пользователь подключен к SSH-сессии
+- Переменная `show_always` равна true
 
 ### Опции
 
-| Переменная    | По умолчанию    | Описание                              |
-| ------------- | --------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`    | The style used when the user is root. |
-| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
-| `show_always` | `false`         | Always shows the `username` module.   |
-| `disabled`    | `false`         | Disables the `username` module.       |
+| Переменная    | По умолчанию    | Описание                                                |
+| ------------- | --------------- | ------------------------------------------------------- |
+| `style_root`  | `"bold red"`    | Стиль, используемый для пользователя root.              |
+| `style_user`  | `"bold yellow"` | Стиль, используемый для всех пользователей, кроме root. |
+| `show_always` | `false`         | Всегда показывать модуль `username`.                    |
+| `disabled`    | `false`         | Отключает модуль `username`.                            |
 
 ### Пример
 
