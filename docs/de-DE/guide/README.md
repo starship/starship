@@ -124,7 +124,7 @@
 1. Installiere die Binärversion von **starship**:
 
 
-   #### Install Latest Version
+   #### Neueste Version installieren
 
 
    ##### From prebuilt binary, with Shell:
@@ -134,7 +134,7 @@
    ```
 
 
-   ##### From source on [crates.io](https://crates.io/):
+   ##### Von Quellcode auf [crates.io](https://crates.io/):
 
    ```sh
    cargo install starship
