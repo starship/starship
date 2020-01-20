@@ -105,11 +105,11 @@
 - Anzeige für Hintergrundsprozesse (`✦`)
 - Aktueller Kubernetes Cluster und Namespace (`☸`)
 - Aktuelles Amazon Web Services (AWS) Profil (`☁️`)
-- Execution time of the last command
+- Anzeige der Laufzeit des letzten Befehls
 - Custom environment variable value
 - Erkennung von Nix-Shell-Umgebungen
 - Benutzername, wenn dieser nicht dem angemeldeten Benutzer entspricht
-- Optional current time in 12/24hr format
+- Optionale Uhrzeit im 12/24 Stunden Format
 - Aktueller "Terraform Workspace" Name und Version (`💠`)
 - Aktuelle Conda-Umgebung (`C`)
 
