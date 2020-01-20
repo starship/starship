@@ -167,10 +167,10 @@ us-east-1 = "va"
 <details>
 <summary>Также, есть опции для некоторых нетипичных состояний батареи.</summary>
 
-| Переменная       | Описание                                            |
-| ---------------- | --------------------------------------------------- |
-| `unknown_symbol` | The symbol shown when the battery state is unknown. |
-| `empty_symbol`   | The symbol shown when the battery state is empty.   |
+| Переменная       | Описание                                                |
+| ---------------- | ------------------------------------------------------- |
+| `unknown_symbol` | Символ, отображаемый при неизвестном состоянии батареи. |
+| `empty_symbol`   | Символ, отображаемый при пустом состоянии батареи.      |
 
 Note: Battery indicator will be hidden if the status is `unknown` or `empty` unless you specify the option in the config.
 
@@ -333,7 +333,7 @@ style = "dimmed green"
 
 | Переменная                  | По умолчанию | Описание                                                                                 |
 | --------------------------- | ------------ | ---------------------------------------------------------------------------------------- |
-| `fish_style_pwd_dir_length` | `0`          | The number of characters to use when applying fish shell pwd path logic.                 |
+| `fish_style_pwd_dir_length` | `0`          | Количество символов, используемых при использовании логики создания пути из fish.        |
 | `use_logical_path`          | `true`       | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
 
 </details>
@@ -494,36 +494,36 @@ cherry_pick = "🍒 PICKING"
 
 ### Опции
 
-| Переменная         | По умолчанию                 | Описание                                               |
-| ------------------ | ---------------------------- | ------------------------------------------------------ |
-| `conflicted`       | `"="`                        | Эта ветка имеет конфликты слияния.                     |
-| `conflicted_count` | [ссылка](#git-status-counts) | Показывать в стиле количество конфликтов.              |
-| `ahead`            | `"⇡"`                        | Эта ветка впереди отслеживаемой ветви.                 |
-| `behind`           | `"⇣"`                        | Эта ветка позади отслеживаемой ветви.                  |
-| `diverged`         | `"⇕"`                        | Эта ветка расходится от отслеживаемой ветки.           |
-| `untracked`        | `"?"`                        | В рабочей директории есть неотслеженные файлы.         |
-| `untracked_count`  | [ссылка](#git-status-counts) | Показывать в стиле количество неотслеженных файлов.    |
-| `stashed`          | `"$"`                        | A stash exists for the local repository.               |
-| `stashed_count`    | [ссылка](#git-status-counts) | Show and style the number of stashes.                  |
-| `modified`         | `"!"`                        | There are file modifications in the working directory. |
-| `modified_count`   | [ссылка](#git-status-counts) | Show and style the number of modified files.           |
-| `staged`           | `"+"`                        | A new file has been added to the staging area.         |
-| `staged_count`     | [ссылка](#git-status-counts) | Show and style the number of files staged files.       |
-| `renamed`          | `"»"`                        | A renamed file has been added to the staging area.     |
-| `renamed_count`    | [ссылка](#git-status-counts) | Show and style the number of renamed files.            |
-| `deleted`          | `"✘"`                        | A file's deletion has been added to the staging area.  |
-| `deleted_count`    | [ссылка](#git-status-counts) | Show and style the number of deleted files.            |
-| `show_sync_count`  | `false`                      | Show ahead/behind count of the branch being tracked.   |
-| `prefix`           | `[`                          | Prefix to display immediately before git status.       |
-| `suffix`           | `]`                          | Suffix to display immediately after git status.        |
-| `style`            | `"bold red"`                 | Стиль модуля.                                          |
-| `disabled`         | `false`                      | Disables the `git_status` module.                      |
+| Переменная         | По умолчанию                 | Описание                                                 |
+| ------------------ | ---------------------------- | -------------------------------------------------------- |
+| `conflicted`       | `"="`                        | Эта ветка имеет конфликты слияния.                       |
+| `conflicted_count` | [ссылка](#git-status-counts) | Оформленно показывать количество конфликтов.             |
+| `ahead`            | `"⇡"`                        | Эта ветка впереди отслеживаемой ветви.                   |
+| `behind`           | `"⇣"`                        | Эта ветка позади отслеживаемой ветви.                    |
+| `diverged`         | `"⇕"`                        | Эта ветка расходится от отслеживаемой ветки.             |
+| `untracked`        | `"?"`                        | В рабочей директории есть неотслеженные файлы.           |
+| `untracked_count`  | [ссылка](#git-status-counts) | Показывать в стиле количество неотслеженных файлов.      |
+| `stashed`          | `"$"`                        | Для локального репозитория существует тайник.            |
+| `stashed_count`    | [ссылка](#git-status-counts) | Оформленно показывать количество тайников.               |
+| `modified`         | `"!"`                        | В рабочем директории есть изменения файлов.              |
+| `modified_count`   | [ссылка](#git-status-counts) | Оформленно показывать количество измененных файлов.      |
+| `staged`           | `"+"`                        | В промежуточную область добавлен новый файл.             |
+| `staged_count`     | [ссылка](#git-status-counts) | Show and style the number of files staged files.         |
+| `renamed`          | `"»"`                        | В промежуточную область добавлен переименованный файл.   |
+| `renamed_count`    | [ссылка](#git-status-counts) | Оформленно показывать количество переименованных файлов. |
+| `deleted`          | `"✘"`                        | Удаление файла было добавлено в промежуточную область.   |
+| `deleted_count`    | [ссылка](#git-status-counts) | Show and style the number of deleted files.              |
+| `show_sync_count`  | `false`                      | Show ahead/behind count of the branch being tracked.     |
+| `prefix`           | `[`                          | Prefix to display immediately before git status.         |
+| `suffix`           | `]`                          | Suffix to display immediately after git status.          |
+| `style`            | `"bold red"`                 | Стиль модуля.                                            |
+| `disabled`         | `false`                      | Disables the `git_status` module.                        |
 
 #### Git Status Counts
 
 | Переменная | По умолчанию | Описание                                               |
 | ---------- | ------------ | ------------------------------------------------------ |
-| `enabled`  | `false`      | Show the number of files                               |
+| `enabled`  | `false`      | Показать количество файлов                             |
 | `style`    |              | Optionally style the count differently than the module |
 
 ### Пример
@@ -551,21 +551,21 @@ deleted = "🗑"
 
 The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
 
-- The current directory contains a `go.mod` file
-- The current directory contains a `go.sum` file
-- The current directory contains a `glide.yaml` file
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- Текущий каталог содержит файл `go.mod`
+- Текущий каталог содержит файл `go.sum`
+- Текущий каталог содержит файл `glide.yaml`
+- Текущий каталог содержит файл `Gopkg.yml`
+- Текущий каталог содержит файл `Gopkg.lock`
+- Текущий каталог содержит папку `Godeps`
+- Текущий каталог содержит файл с расширением `.go`
 
 ### Опции
 
-| Переменная | По умолчанию  | Описание                                                 |
-| ---------- | ------------- | -------------------------------------------------------- |
-| `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
-| `style`    | `"bold cyan"` | Стиль модуля.                                            |
-| `disabled` | `false`       | Disables the `golang` module.                            |
+| Переменная | По умолчанию  | Описание                                               |
+| ---------- | ------------- | ------------------------------------------------------ |
+| `symbol`   | `"🐹 "`        | Символ, используемый перед отображением версии Golang. |
+| `style`    | `"bold cyan"` | Стиль модуля.                                          |
+| `disabled` | `false`       | Отключает модуль `golang`.                             |
 
 ### Пример
 
@@ -576,9 +576,9 @@ The `golang` module shows the currently installed version of Golang. The module 
 symbol = "🏎💨 "
 ```
 
-## Mercurial Branch
+## Ветка Mercurial
 
-The `hg_branch` module shows the active branch of the repo in your current directory.
+Модуль `hg_branch` показывает активную ветку репозитория в вашем текущем каталоге.
 
 ### Опции
 
@@ -601,9 +601,9 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Hostname
+## Имя хоста
 
-The `hostname` module shows the system hostname.
+Модуль `hostname` отображает имя системного хоста.
 
 ### Опции
 
