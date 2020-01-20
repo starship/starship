@@ -98,17 +98,17 @@
   - `»` — 重新命名的檔案
   - `✘` — 刪除的檔案
 - Current Mercurial branch
-- Current battery level and status
+- 現在的電池電量與狀態
   - `⇡` – charging
   - `⇣` – discharging
   - `•` – fully charged
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
+- 標註背景執行的工作 (`✦`)
+- 現在的 Kubernetes 叢集以及名稱空間 (Namespace) (`☸`)
 - Current Amazon Web Services (AWS) profile (`☁️`)
 - Execution time of the last command
 - Custom environment variable value
-- Nix-shell environment detection
-- Current username if not the same as the logged-in user
+- 偵測 Nix-shell 的環境
+- 會在使用者與登入的使用者不同時顯示使用者名稱
 - Optional current time in 12/24hr format
 - Current Terraform Workspace and version (`💠`)
 - Current Conda environment (`C`)
