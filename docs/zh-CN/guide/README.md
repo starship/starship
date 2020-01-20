@@ -99,9 +99,9 @@
   - `✘` — deleted files
 - Current Mercurial branch
 - 当前电池剩余容量与状态
-- `⇡` – charging
-- `⇣` – discharging
-- `•` – fully charged
+  - `⇡` – charging
+  - `⇣` – discharging
+  - `•` – fully charged
 - 后台运行进程数的指示器 (`✦`)
 - 当前 Kubernetes Cluster 与 Namespace (`☸`)
 - Current Amazon Web Services (AWS) profile (`☁️`)
@@ -110,6 +110,8 @@
 - Nix-shell 环境检测
 - 非当前登录用户的用户名
 - Optional current time in 12/24hr format
+- Current Terraform Workspace and version (`💠`)
+- Current Conda environment (`C`)
 
 ## 🚀 安装
 

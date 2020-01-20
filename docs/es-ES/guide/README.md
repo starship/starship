@@ -99,9 +99,9 @@
   - `✘` — archivos eliminados
 - Rama Mercurial actual
 - Nivel y estado actual de la batería
-- `⇡` – cargando
-- `⇣` – descargándo
-- `•` –completamente cargada
+  - `⇡` – cargando
+  - `⇣` – descargándo
+  - `•` –completamente cargada
 - Indicador para las tareas de fondo (`✦`)
 - Cluster y espacio de nombres actual de Kubernetes (`☸`)
 - Perfil actual de Amazon Web Services (AWS) (`☁️`)
@@ -110,6 +110,8 @@
 - Detección del entorno de la interfaz de línea de comandos *nix
 - Nombre de usuario actual si no es el mismo que el del usuario conectado
 - Hora actual opcional en formato 12/24 hrs.
+- Current Terraform Workspace and version (`💠`)
+- Current Conda environment (`C`)
 
 ## 🚀 Instalación
 

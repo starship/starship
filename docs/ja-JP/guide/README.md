@@ -99,9 +99,9 @@
   - `✘` — 削除されたファイル
 - 現在の Mercurial ブランチ
 - 現在のバッテリー残量と状態
-- `⇡` – 充電中
-- `⇣` – 放電中
-- `•` – 満タン
+  - `⇡` – 充電中
+  - `⇣` – 放電中
+  - `•` – 満タン
 - バックグラウンドジョブのインジケーター (`✦`)
 - 現在のKubernetesクラスタとネームスペース (`☸`)
 - 現在のAmazon Web Services (AWS) プロファイル(`☁️</ 0>)</li>
@@ -110,27 +110,28 @@
 <li>Nix-shell の環境検出</li>
 <li>ログインユーザーと異なる場合にユーザー名を表示する</li>
 <li>12/24時間形式のオプションの現在時刻</li>
-</ul>
+<li>Current Terraform Workspace and version (<code>💠`)
+- Current Conda environment (`C`)
 
-<h2 spaces-before="0">🚀 インストール</h2>
+## 🚀 インストール
 
-<h3 spaces-before="0">必要なもの</h3>
+### 必要なもの
 
-<ul>
-<li><a href="https://github.com/powerline/fonts">Powerline フォント</a> がターミナルにインストールされて有効になっている必要があります（例えば <a href="https://github.com/tonsky/FiraCode">Fira Code</a> を試してみてください）。</li>
-</ul>
+- [Powerline フォント](https://github.com/powerline/fonts) がターミナルにインストールされて有効になっている必要があります（例えば [Fira Code](https://github.com/tonsky/FiraCode) を試してみてください）。
 
-<h3 spaces-before="0">入門</h3>
+### 入門
 
-<ol start="1">
-<li><p spaces-before="0"><strong x-id="1">Starship</strong> のバイナリをインストール</p>
+1. **Starship** のバイナリをインストール
 
-<h4 spaces-before="3">最新版のインストール</h4>
 
-<h5 spaces-before="3">ビルド済みのバイナリをインストール</h5>
+   #### 最新版のインストール
 
-<pre><code class="sh">   curl -fsSL https://starship.rs/install.sh | bash
-`</pre>
+
+   ##### ビルド済みのバイナリをインストール
+
+   ```sh
+   curl -fsSL https://starship.rs/install.sh | bash
+   ```
 
 
    ##### [crates.io](https://crates.io/)からソースをインストール
@@ -156,9 +157,7 @@
    scoop install starship
    ```
 
-1
-
-初期化のためのスクリプトをシェルの設定ファイルに追加
+1. 初期化のためのスクリプトをシェルの設定ファイルに追加
 
 
    #### Bash
@@ -214,7 +213,6 @@
 
    eval $(starship init ion)
    ```
-</ol>
 
 ## 🔧 設定
 

@@ -99,9 +99,9 @@
   - `✘` — Fichiers supprimés
 - Branche Mercurial actuelle
 - Niveau et état actuels de la batterie
-- `⇡` – en charge
-- `⇣` – en décharge
-- `•` – entièrement chargé
+  - `⇡` – en charge
+  - `⇣` – en décharge
+  - `•` – entièrement chargé
 - Indicateur pour les tâches en arrière-plan (`✦`)
 - Cluster et namespace Kubernetes actuels (`☸`)
 - Profil actuel d'Amazon Web Services/AWS (`☁️`)
@@ -110,6 +110,8 @@
 - Détection de l'environnement Nix-shell
 - Affiche le nom de l'utilisateur courant s'il est différent de celui connecté
 - L'heure courante au format 12/24h (optionel)
+- Current Terraform Workspace and version (`💠`)
+- Current Conda environment (`C`)
 
 ## 🚀 Installation
 
