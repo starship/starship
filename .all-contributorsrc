@@ -694,6 +694,16 @@
       "contributions": [
         "translation"
       ]
+    },
+    {
+      "login": "pjbull",
+      "name": "Peter Bull",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1799186?v=4",
+      "profile": "http://www.drivendata.org",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
