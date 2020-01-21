@@ -21,7 +21,7 @@
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
       alt="Chat on Discord" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-64-orange" alt="All Contributors"></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-65-orange" alt="All Contributors"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
@@ -43,6 +43,9 @@
   <a href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png" alt="繁體中文" /></a>
   &nbsp;
+  <a href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Русский" /></a>
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/zh-CN"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png" alt="简体中文" /></a>
   &nbsp;
@@ -54,9 +57,6 @@
   &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/fr"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png" alt="Français" /></a>
-  &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/ru"
-    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Русский" /></a>
 </p>
 
 <h1></h1>
@@ -110,8 +110,8 @@
 <li>Nix-shell の環境検出</li>
 <li>ログインユーザーと異なる場合にユーザー名を表示する</li>
 <li>12/24時間形式のオプションの現在時刻</li>
-<li>Current Terraform Workspace and version (<code>💠`)
-- Current Conda environment (`C`)
+<li>現在の Terraform のワークスペースとバージョン (<code>💠`)
+- 現在の Conda の環境 (`C`)
 
 ## 🚀 インストール
 
@@ -324,6 +324,9 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/dten"><img src="https://avatars0.githubusercontent.com/u/1019038?v=4" width="100px;" alt="" /><br /><sub><b>David Hewson</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=dten" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/gkeep"><img src="https://avatars3.githubusercontent.com/u/20600053?v=4" width="100px;" alt="" /><br /><sub><b>Gennady Koshkin</b></sub></a><br /><a href="#translation-gkeep" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://blog.brightone.space"><img src="https://avatars1.githubusercontent.com/u/12615679?v=4" width="100px;" alt="" /><br /><sub><b>Oleksii Filonenko</b></sub></a><br /><a href="#translation-filalex77" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://github.com/ivanovart"><img src="https://avatars2.githubusercontent.com/u/5867379?v=4" width="100px;" alt="" /><br /><sub><b>Artem Ivanov</b></sub></a><br /><a href="#translation-ivanovart" title="Translation">🌍</a></td>
   </tr>
 </table>
 
