@@ -134,7 +134,7 @@
    ```
 
 
-   ##### Von Quellcode auf [crates.io](https://crates.io/):
+   ##### Von Quellcode auf [crates.io](https://crates.io/crates/starship):
 
    ```sh
    cargo install starship
@@ -157,7 +157,7 @@
    scoop install starship
    ```
 
-1. Füge das init-Skript zur Konfigurationsdatei deiner Shell hinzu:
+2. Füge das init-Skript zur Konfigurationsdatei deiner Shell hinzu:
 
 
    #### Bash
