@@ -50,7 +50,7 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
     }
 }
 
-// Convenience function to wrap ANSI color sequences (ECMA-48 SGR in `man console_codes`)
+/// Wraps ANSI color escape sequences in the shell-appropriate wrappers.
 pub fn wrap_colorseq_for_shell(ansi: String, shell: &str) -> String {
     const ESCAPE_BEGIN: char = '\u{1b}';
     const ESCAPE_END: char = 'm';
@@ -58,8 +58,8 @@ pub fn wrap_colorseq_for_shell(ansi: String, shell: &str) -> String {
 }
 
 /// Many shells cannot deal with raw unprintable characters and miscompute the cursor position,
-/// leading to strange visual bugs like duplicated/missing chars. This wraps some escape seqs
-/// in shell-specific escapes to avoid this.
+/// leading to strange visual bugs like duplicated/missing chars. This function wraps a specified
+/// sequence in shell-specific escapes to avoid these problems.
 pub fn wrap_seq_for_shell(
     ansi: String,
     shell: &str,
