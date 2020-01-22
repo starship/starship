@@ -49,13 +49,13 @@ pub fn get_prompt(context: Context) -> String {
 
 pub fn module(module_name: &str, args: ArgMatches) {
     let context = Context::new(args);
-
-    // If the module returns `None`, print an empty string
-    let module = modules::handle(module_name, &context)
-        .map(|m| m.to_string())
-        .unwrap_or_default();
-
+    let module = get_module(module_name, context).unwrap_or_default();
     print!("{}", module);
+}
+
+pub fn get_module(module_name: &str, context: Context) -> Option<String> {
+    modules::handle(module_name, &context)
+        .map(|m| m.to_string())
 }
 
 pub fn explain(args: ArgMatches) {
