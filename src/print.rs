@@ -29,11 +29,11 @@ pub fn get_prompt(context: Context) -> String {
 
     // Clear the screen from the cursor to the end of the line to avoid certain
     // shell bugs, while avoiding shell character-miscount bugs (see GH #739)
-    const CLEAR_TO_END: &str = "\x1b[J";
+    const CLEAR_TO_END: &str = "\x1b[J"; // An ASCII control code
     let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
-    let escaped_clear_seq = wrap_seq_for_shell(CLEAR_TO_END.to_string(), &shell, '\x1b', 'J');
-
-    buf.push_str(&escaped_clear_seq);
+    if shell == "fish" {
+        buf.push_str(CLEAR_TO_END);
+    }
 
     let modules = compute_modules(&context);
 
