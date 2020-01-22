@@ -1,9 +1,9 @@
+use ansi_term::ANSIStrings;
 use clap::ArgMatches;
 use rayon::prelude::*;
 use std::fmt::Write as FmtWrite;
 use std::io::{self, Write};
 use unicode_width::UnicodeWidthChar;
-use ansi_term::ANSIStrings;
 
 use crate::context::Context;
 use crate::module::Module;

@@ -33,7 +33,7 @@ pub struct Context<'a> {
     repo: OnceCell<Repo>,
 
     /// The shell the user is assumed to be running
-    pub shell: Shell
+    pub shell: Shell,
 }
 
 impl<'a> Context<'a> {
@@ -175,7 +175,7 @@ impl<'a> Context<'a> {
             "ion" => Shell::Ion,
             "powershell" => Shell::PowerShell,
             "zsh" => Shell::Zsh,
-            _ => Shell::Unknown
+            _ => Shell::Unknown,
         }
     }
 }
@@ -277,7 +277,7 @@ pub enum Shell {
     Ion,
     PowerShell,
     Zsh,
-    Unknown
+    Unknown,
 }
 
 #[cfg(test)]

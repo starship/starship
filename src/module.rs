@@ -1,6 +1,6 @@
 use crate::config::SegmentConfig;
-use crate::segment::Segment;
 use crate::context::Shell;
+use crate::segment::Segment;
 use ansi_term::Style;
 use ansi_term::{ANSIString, ANSIStrings};
 use std::fmt;
