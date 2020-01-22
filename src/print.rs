@@ -54,8 +54,7 @@ pub fn module(module_name: &str, args: ArgMatches) {
 }
 
 pub fn get_module(module_name: &str, context: Context) -> Option<String> {
-    modules::handle(module_name, &context)
-        .map(|m| m.to_string())
+    modules::handle(module_name, &context).map(|m| m.to_string())
 }
 
 pub fn explain(args: ArgMatches) {

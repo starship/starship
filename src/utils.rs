@@ -39,7 +39,7 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
     match command.as_str() {
         "node --version" => Some(CommandOutput {
             stdout: String::from("v12.0.0"),
-            stderr: String::default()
+            stderr: String::default(),
         }),
         "dummy_command" => Some(CommandOutput {
             stdout: String::from("stdout ok!"),

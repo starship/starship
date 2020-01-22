@@ -52,7 +52,6 @@ mod tests {
         Ok(())
     }
 
-
     #[test]
     fn folder_with_package_json() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
