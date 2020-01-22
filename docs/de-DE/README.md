@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 actionText: Loslegen →
-actionLink: /guide/
+actionLink: /de-DE/guide/
 footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 ---
 
