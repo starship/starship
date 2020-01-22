@@ -1,6 +1,6 @@
-use std::path::Path;
-use crate::context::{Context, Shell};
 use crate::config::StarshipConfig;
+use crate::context::{Context, Shell};
+use std::path::Path;
 
 /// Render a specific starship module by name
 pub fn render_module(module_name: &str, path: &Path) -> Option<String> {
