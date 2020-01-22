@@ -13,7 +13,7 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
   </div>
   <div class="feature">
     <h2>Rust-Powered</h2>
-    <p>Bringt die branchenweit beste Geschwindigkeit und Sicherheit von Rust mit, um Deine Eingaben so schnell und zuverlässig wie nur möglich zu machen.</p>
+    <p>Bringt die schnelligkeit und zuverlässigkeit von Rust in deinen Shell-prompt.</p>
   </div>
   <div class="feature">
     <h2>Individualisierbar</h2>
