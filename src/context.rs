@@ -270,6 +270,7 @@ fn get_current_branch(repository: &Repository) -> Option<String> {
     shorthand.map(std::string::ToString::to_string)
 }
 
+#[derive(Debug, Clone)]
 pub enum Shell {
     Bash,
     Fish,

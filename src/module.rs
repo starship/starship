@@ -156,8 +156,8 @@ impl<'a> Module<'a> {
         ansi_strings
     }
 
-    pub fn to_string_without_prefix(&self) -> String {
-        ANSIStrings(&self.ansi_strings()[1..]).to_string()
+    pub fn to_string_without_prefix(&self, shell: Shell) -> String {
+        ANSIStrings(&self.ansi_strings_for_shell(shell)[1..]).to_string()
     }
 }
 

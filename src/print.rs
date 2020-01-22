@@ -3,6 +3,7 @@ use rayon::prelude::*;
 use std::fmt::Write as FmtWrite;
 use std::io::{self, Write};
 use unicode_width::UnicodeWidthChar;
+use ansi_term::ANSIStrings;
 
 use crate::context::Context;
 use crate::module::Module;
@@ -35,10 +36,11 @@ pub fn get_prompt(context: Context) -> String {
     for module in printable {
         // Skip printing the prefix of a module after the line_break
         if print_without_prefix {
-            let module_without_prefix = module.to_string_without_prefix();
+            let module_without_prefix = module.to_string_without_prefix(context.shell.clone());
             write!(buf, "{}", module_without_prefix).unwrap()
         } else {
-            write!(buf, "{}", module).unwrap();
+            let module = module.ansi_strings_for_shell(context.shell.clone());
+            write!(buf, "{}", ANSIStrings(&module)).unwrap();
         }
 
         print_without_prefix = module.get_name() == "line_break"
