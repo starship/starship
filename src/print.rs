@@ -26,8 +26,8 @@ pub fn get_prompt(context: Context) -> String {
         writeln!(buf).unwrap();
     }
 
-    // A fix for a bug in fish (see #739,#279). Applying it to all shells breaks
-    // things (see #808,#824,#834). Should only be printed in fish
+    // A workaround for a fish bug (see #739,#279). Applying it to all shells
+    // breaks things (see #808,#824,#834). Should only be printed in fish.
     if std::env::var("STARSHIP_SHELL").unwrap_or_default() == "fish" {
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
     }
