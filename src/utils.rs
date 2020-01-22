@@ -36,8 +36,11 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
         0 => String::from(cmd),
         _ => format!("{} {}", cmd, args.join(" ")),
     };
-
     match command.as_str() {
+        "node --version" => Some(CommandOutput {
+            stdout: String::from("v12.0.0"),
+            stderr: String::default()
+        }),
         "dummy_command" => Some(CommandOutput {
             stdout: String::from("stdout ok!"),
             stderr: String::from("stderr ok!"),

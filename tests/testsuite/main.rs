@@ -18,7 +18,6 @@ mod jobs;
 mod line_break;
 mod modules;
 mod nix_shell;
-mod nodejs;
 mod python;
 mod ruby;
 mod terraform;
