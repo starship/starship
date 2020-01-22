@@ -14,7 +14,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_java_project = context
         .try_begin_scan()?
         .set_files(&["pom.xml", "build.gradle", "build.gradle.kts", "build.sbt"])
-        .set_extensions(&["java", "class", "jar"])
+        .set_extensions(&["java", "class", "jar", "gradle"])
         .is_match();
 
     if !is_java_project {
