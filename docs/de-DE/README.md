@@ -12,7 +12,7 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
     <p>Läuft mit den beliebtesten Shells auf den beliebtesten Betriebssystemen. Überall einsetzbar!</p>
   </div>
   <div class="feature">
-    <h2>Antrieben von Rust</h2>
+    <h2>Rust-Powered</h2>
     <p>Bringt die branchenweit beste Geschwindigkeit und Sicherheit von Rust mit, um Deine Eingaben so schnell und zuverlässig wie nur möglich zu machen.</p>
   </div>
   <div class="feature">
