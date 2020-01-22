@@ -34,7 +34,7 @@ mod utils;
 mod battery;
 
 use crate::config::{RootModuleConfig, SegmentConfig};
-use crate::context::Context;
+use crate::context::{Context, Shell};
 use crate::module::Module;
 
 pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {

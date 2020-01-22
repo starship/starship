@@ -72,7 +72,7 @@ pub fn explain(args: ArgMatches) {
         .into_iter()
         .filter(|module| !dont_print.contains(&module.get_name().as_str()))
         .map(|module| {
-            let ansi_strings = module.ansi_strings_for_prompt(false);
+            let ansi_strings = module.ansi_strings();
             let value = module.get_segments().join("");
             ModuleInfo {
                 value: ansi_term::ANSIStrings(&ansi_strings[1..ansi_strings.len() - 1]).to_string(),

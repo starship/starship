@@ -1,5 +1,6 @@
 use crate::config::SegmentConfig;
 use crate::segment::Segment;
+use crate::context::Shell;
 use ansi_term::Style;
 use ansi_term::{ANSIString, ANSIStrings};
 use std::fmt;
@@ -133,10 +134,10 @@ impl<'a> Module<'a> {
     /// Returns a vector of colored ANSIString elements to be later used with
     /// `ANSIStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<ANSIString> {
-        self.ansi_strings_for_prompt(true)
+        self.ansi_strings_for_shell(Shell::Unknown)
     }
 
-    pub fn ansi_strings_for_prompt(&self, is_prompt: bool) -> Vec<ANSIString> {
+    pub fn ansi_strings_for_shell(&self, shell: Shell) -> Vec<ANSIString> {
         let mut ansi_strings = self
             .segments
             .iter()
@@ -146,14 +147,11 @@ impl<'a> Module<'a> {
         ansi_strings.insert(0, self.prefix.ansi_string());
         ansi_strings.push(self.suffix.ansi_string());
 
-        if is_prompt {
-            let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
-            ansi_strings = match shell.as_str() {
-                "bash" => ansi_strings_modified(ansi_strings, shell),
-                "zsh" => ansi_strings_modified(ansi_strings, shell),
-                _ => ansi_strings,
-            };
-        }
+        ansi_strings = match shell {
+            Shell::Bash => ansi_strings_modified(ansi_strings, shell),
+            Shell::Zsh => ansi_strings_modified(ansi_strings, shell),
+            _ => ansi_strings,
+        };
 
         ansi_strings
     }
@@ -173,7 +171,7 @@ impl<'a> fmt::Display for Module<'a> {
 /// Many shells cannot deal with raw unprintable characters (like ANSI escape sequences) and
 /// miscompute the cursor position as a result, leading to strange visual bugs. Here, we wrap these
 /// characters in shell-specific escape codes to indicate to the shell that they are zero-length.
-fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: String) -> Vec<ANSIString> {
+fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: Shell) -> Vec<ANSIString> {
     const ESCAPE_BEGIN: char = '\u{1b}';
     const MAYBE_ESCAPE_END: char = 'm';
     ansi_strings
@@ -186,18 +184,18 @@ fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: String) -> Vec<AN
                 .map(|x| match x {
                     ESCAPE_BEGIN => {
                         escaped = true;
-                        match shell.as_str() {
-                            "bash" => String::from("\u{5c}\u{5b}\u{1b}"), // => \[ESC
-                            "zsh" => String::from("\u{25}\u{7b}\u{1b}"),  // => %{ESC
+                        match shell {
+                            Shell::Bash => String::from("\u{5c}\u{5b}\u{1b}"), // => \[ESC
+                            Shell::Zsh => String::from("\u{25}\u{7b}\u{1b}"),  // => %{ESC
                             _ => x.to_string(),
                         }
                     }
                     MAYBE_ESCAPE_END => {
                         if escaped {
                             escaped = false;
-                            match shell.as_str() {
-                                "bash" => String::from("m\u{5c}\u{5d}"), // => m\]
-                                "zsh" => String::from("m\u{25}\u{7d}"),  // => m%}
+                            match shell {
+                                Shell::Bash => String::from("m\u{5c}\u{5d}"), // => m\]
+                                Shell::Zsh => String::from("m\u{25}\u{7d}"),  // => m%}
                                 _ => x.to_string(),
                             }
                         } else {
