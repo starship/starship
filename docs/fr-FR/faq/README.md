@@ -1,45 +1,45 @@
-# Foire aux questions
+# FAQ
 
-## Quelle est la configuration utilisée dans le GIF de démonstration ?
+## What is the configuration used in the demo GIF?
 
-- **Émulateur de terminal**: [iTerm2](https://iterm2.com/)
-  - **Thème** : Minimal
-  - **Palette de couleurs**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Police d'écriture**: [Fira Code](https://github.com/tonsky/FiraCode)
-- **Shell** : [Fish Shell](https://fishshell.com/)
-  - **Configuration**: [Dotfiles de matchai](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
-  - **Invite de commande**: [Starship](https://starship.rs/)
+- **Terminal Emulator**: [iTerm2](https://iterm2.com/)
+  - **Theme**: Minimal
+  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+  - **Font**: [Fira Code](https://github.com/tonsky/FiraCode)
+- **Shell**: [Fish Shell](https://fishshell.com/)
+  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
+  - **Prompt**: [Starship](https://starship.rs/)
 
-## Est-ce que `prompt_order` et `<module>.disabled` font la même chose ?
+## Do `prompt_order` and `<module>.disabled` do the same thing?
 
-Oui, ils peuvent tous deux être utilisés pour désactiver les modules dans l'invite de commande. Si tout ce que vous prévoyez de faire est de désactiver les modules, `<module>.disabled` est le meilleur moyen de le faire pour ces raisons :
+Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
 
-- Désactiver les modules est plus explicite que de les omettre dans le prompt_order
-- Les modules nouvellement créés seront ajoutés à l'invite de commande au fur et à mesure que Starship sera mis à jour
+- Disabling modules is more explicit than omitting them from the prompt_order
+- Newly created modules will be added to the prompt as Starship is updated
 
-## La doc dit que Starship est cross-shell, mais il ne supporte pas X shell. Pourquoi ?
+## The docs say Starship is cross-shell, but it doesn't support X shell. Why?
 
-Étant donné la façon dont Starship est construit, il devrait être possible d'ajouter le support pour pratiquement n'importe quel shell. Le binaire de Starship est sans état et agnostique, donc tant que votre shell supporte la personnalisation rapide et l'expansion du shell, Starship peut être utilisé.
+The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
 
-Voici un petit exemple pour que Starship fonctionne avec bash :
+Here's a small example getting Starship working with bash:
 
 ```sh
-# Récupère le code d'état de la dernière commande exécutée
+# Get the status code from the last command executed
 STATUS=$?
 
-# Récupère le nombre de tâches en cours d'exécution.
+# Get the number of jobs running.
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Définit l'invite de commande `starship prompt`
+# Set the prompt to the output of `starship prompt`
 PS1="$(starship prompt --status=$STATUS --jobs=NUM_JOBS)"
 ```
 
-[L'implémentation Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) intégrée dans Starship est légèrement plus complexe pour permettre des fonctionnalités avancées comme le [module Durée de commande](https://starship.rs/config/#Command-Duration) et pour s'assurer que Starship est compatible avec les configurations Bash préinstallées.
+The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#Command-Duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
 
-Pour une liste de tous les flags acceptés par `starship prompt`, utilisez la commande suivante :
+For a list of all flags accepted by `starship prompt`, use the following command:
 
 ```sh
 starship prompt --help
 ```
 
-L'invite de commande utilisera toutes les données contextuelles fournies, mais aucun indicateur n'est "requis".
+The prompt will use as much context as is provided, but no flags are "required".
