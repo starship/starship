@@ -1,23 +1,23 @@
 ---
 home: true
 heroImage: /logo.svg
-actionText: Loslegen →
-actionLink: /de-DE/guide/
-footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
+actionText: Get Started →
+actionLink: /guide/
+footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 ---
 
 <div class="features">
   <div class="feature">
-    <h2>Kompatibel</h2>
-    <p>Läuft mit den beliebtesten Shells auf den beliebtesten Betriebssystemen. Überall einsetzbar!</p>
+    <h2>Compatibility First</h2>
+    <p>Works on the most common shells on the most common operating systems. Use it everywhere!</p>
   </div>
   <div class="feature">
     <h2>Rust-Powered</h2>
-    <p>Bringt die schnelligkeit und zuverlässigkeit von Rust in deinen Shell-prompt.</p>
+    <p>Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.</p>
   </div>
   <div class="feature">
-    <h2>Individualisierbar</h2>
-    <p>Jedes noch so kleine Detail kann nach Deinen Wünschen angepasst werden, um die Eingabeaufforderung so minimal oder funktionsreich zu gestalten, wie Du es möchtest.</p>
+    <h2>Customizable</h2>
+    <p>Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.</p>
   </div>
 </div>
 
@@ -28,9 +28,9 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
   </video>
 </div>
 
-### Schnellinstallation
+### Quick Install
 
-1. Installiere die Binärversion von **starship**:
+1. Install the **starship** binary:
 
 
    #### Install Latest Version
@@ -56,12 +56,12 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
    scoop install starship
    ```
 
-1. Füge das init-Skript zur Konfigurationsdatei deiner Shell hinzu:
+1. Add the init script to your shell's config file:
 
 
    #### Bash
 
-   Trage folgendes am Ende der `~/.bashrc` ein:
+   Add the following to the end of `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -72,7 +72,7 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 
    #### Fish
 
-   Trage folgendes am Ende der `~/.config/fish/config.fish` ein:
+   Add the following to the end of `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -83,7 +83,7 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 
    #### Zsh
 
-   Trage folgendes am Ende der `~/.zshrc` ein:
+   Add the following to the end of `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -94,12 +94,10 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 
    #### Powershell
 
-   Trage folgendes in das Powershell-Profil ($Profile) ein. Standardmäßig gespeichert unter: `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` auf Windows, oder `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix:
+   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
 
    ```sh
-   # notepad $PROFILE
-
-# ~\Documents\PowerShell\Profile.ps1
+   # ~\Documents\PowerShell\Profile.ps1
 
    Invoke-Expression (&starship init powershell)
    ```
