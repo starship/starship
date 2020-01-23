@@ -61,8 +61,8 @@ cargo fmt
 
 Testing is critical to making sure starship works as intended on systems big and small. Starship interfaces with many applications and system APIs when generating the prompt, so there's a lot of room for bugs to slip in.
 
-Unit tests and a subset of acceptance tests can be run with `cargo test`.
-The full acceptance test suite can be run in a Docker container with the included [`./integration_test`](integration_test) script.
+Unit tests and a subset of integration tests can be run with `cargo test`.
+The full integration test suite is run on GitHub as part of our GitHub Actions continuous integration.
 
 ### Unit Testing
 
@@ -70,18 +70,32 @@ Unit tests are written using the built-in Rust testing library in the same file 
 
 Unit tests should be fully isolated, only testing a given function's expected output given a specific input, and should be reproducible on any machine. Unit tests should not expect the computer running them to be in any particular state. This includes having any applications pre-installed, having any environment variables set, etc.
 
-### Acceptance Testing
+The previous point should be emphasized: even seemingly innocuous ideas like "if we can see the directory, we can read it" or "nobody will have their home directory be a git repo" have bitten us in the past. Having even a single test fail can completely break installation on some platforms, so be careful with tests!
 
-Acceptance tests are located in the [`tests/`](tests) directory and are also written using the built-in Rust testing library.
+### Integration Testing
 
-Acceptance tests should test full modules or the entire prompt. All integration tests expecting the testing environment to have preexisting state or making permanent changes to the filesystem should have the `#[ignore]` attribute. These tests will be run in a Docker container, by running the included [`./integration_test`](integration_test) script. All tests that don't depend on any preexisting state will be run alongside the unit tests with `cargo test`.
+Integration tests are located in the [`tests/`](tests) directory and are also written using the built-in Rust testing library.
 
-For tests that depend on having preexisting state, whatever needed state will have to be added to the project's Dockerfile ([`tests/Dockerfile`](tests/Dockerfile)) as well as the project's Azure Pipelines configuration ([`azure-pipelines.yml`](azure-pipelines.yml)).
+Integration tests should test full modules or the entire prompt. All integration tests that expect the testing environment to have pre-existing state or tests that make permanent changes to the filesystem should have the `#[ignore]` attribute added to them. All tests that don't depend on any preexisting state will be run alongside the unit tests with `cargo test`.
 
-The reason for having _both_ the Dockerfile as well as the Azure Pipelines configuration is in order to allow acceptance tests to be run on your local development environment via Docker, while also running our test suite on all supported OSes (Windows, Mac, Linux) on Azure Pipelines.
+For tests that depend on having preexisting state, whatever needed state will have to be added to the project's GitHub Actions workflow file([`.github/workflows/workflow.yml`](.github/workflows/workflow.yml)).
 
-### Benchmarking
+## Running the Documentation Website Locally
 
-Benchmarks are located in the [`benches/`](benches) directory and are written using the [Criterion](https://crates.io/crates/criterion) library.
+If you are contributing to the design of Starship's website, the following section will help you get started.
 
-For the time being, benchmarks aren't actively used, but we plan to integrate benchmark comparison reporting into our CI pipeline in the near future. For the time being, they can be manually run with `cargo bench`.
+### Setup
+
+After cloning the project, you can do the following to run the VuePress website on your local machine:
+
+1. `cd` into the `/docs` directory.
+2. Install the project dependencies:
+```
+$ npm install
+```
+3. Start the project in development mode:
+```
+$ npm run dev
+```
+
+Once setup is complete, you can refer to VuePress documentation on the actual implementation here: https://vuepress.vuejs.org/guide/.

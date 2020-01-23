@@ -6,7 +6,7 @@ use std::fmt;
 /// (e.g. The version that software is running).
 pub struct Segment {
     /// The segment's name, to be used in configuration and logging.
-    name: String,
+    _name: String,
 
     /// The segment's style. If None, will inherit the style of the module containing it.
     style: Option<Style>,
@@ -19,7 +19,7 @@ impl Segment {
     /// Creates a new segment with default fields.
     pub fn new(name: &str) -> Self {
         Self {
-            name: name.to_string(),
+            _name: name.to_string(),
             style: None,
             value: "".to_string(),
         }
@@ -45,12 +45,22 @@ impl Segment {
         self
     }
 
+    /// Gets the value of the segment.
+    pub fn get_value(&self) -> &str {
+        &self.value
+    }
+
     // Returns the ANSIString of the segment value, not including its prefix and suffix
     pub fn ansi_string(&self) -> ANSIString {
         match self.style {
             Some(style) => style.paint(&self.value),
             None => ANSIString::from(&self.value),
         }
+    }
+
+    /// Determines if the segment contains a value.
+    pub fn is_empty(&self) -> bool {
+        self.value.trim().is_empty()
     }
 }
 

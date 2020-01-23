@@ -1,5 +1,5 @@
 # will have compiled files and executables
-/target/
+target/
 
 # Remove Cargo.lock from gitignore if creating an executable, leave it for libraries
 # More information here https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html
@@ -14,6 +14,9 @@ Cargo.lock
 # Intellij IDE configuration
 .idea/
 /*.iml
+
+# Vim swap files
+*.swp
 
 # Compiled files for documentation
 docs/node_modules

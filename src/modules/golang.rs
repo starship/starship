@@ -1,7 +1,7 @@
-use ansi_term::Color;
-use std::process::Command;
+use super::{Context, Module, RootModuleConfig};
 
-use super::{Context, Module};
+use crate::configs::go::GoConfig;
+use crate::utils;
 
 /// Creates a module with the current Go version
 ///
@@ -15,43 +15,33 @@ use super::{Context, Module};
 ///     - Current directory contains a file with the `.go` extension
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_go_project = context
-        .new_scan_dir()
+        .try_begin_scan()?
         .set_files(&["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock"])
         .set_extensions(&["go"])
         .set_folders(&["Godeps"])
-        .scan();
+        .is_match();
 
     if !is_go_project {
         return None;
     }
 
-    match get_go_version() {
-        Some(go_version) => {
-            const GO_CHAR: &str = "🐹 ";
-            let module_color = Color::Cyan.bold();
+    let mut module = context.new_module("golang");
+    let config: GoConfig = GoConfig::try_load(module.config);
 
-            let mut module = context.new_module("golang")?;
-            module.set_style(module_color);
+    module.set_style(config.style);
+    module.create_segment("symbol", &config.symbol);
 
-            let formatted_version = format_go_version(&go_version)?;
-            module.new_segment("symbol", GO_CHAR);
-            module.new_segment("version", &formatted_version);
+    let formatted_version =
+        format_go_version(&utils::exec_cmd("go", &["version"])?.stdout.as_str())?;
+    module.create_segment("version", &config.version.with_value(&formatted_version));
 
-            Some(module)
-        }
-        None => None,
-    }
-}
-
-fn get_go_version() -> Option<String> {
-    Command::new("go")
-        .arg("version")
-        .output()
-        .ok()
-        .and_then(|output| String::from_utf8(output.stdout).ok())
+    Some(module)
 }
 
 fn format_go_version(go_stdout: &str) -> Option<String> {
+    // go version output looks like this:
+    // go version go1.13.3 linux/amd64
+
     let version = go_stdout
         // split into ["", "1.12.4 linux/amd64"]
         .splitn(2, "go version go")
@@ -62,10 +52,7 @@ fn format_go_version(go_stdout: &str) -> Option<String> {
         // return "1.12.4"
         .next()?;
 
-    let mut formatted_version = String::with_capacity(version.len() + 1);
-    formatted_version.push('v');
-    formatted_version.push_str(version);
-    Some(formatted_version)
+    Some(format!("v{}", version))
 }
 
 #[cfg(test)]

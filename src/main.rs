@@ -1,7 +1,12 @@
+use std::time::SystemTime;
+
 #[macro_use]
 extern crate clap;
 
+mod bug_report;
 mod config;
+mod configs;
+mod configure;
 mod context;
 mod init;
 mod module;
@@ -10,6 +15,7 @@ mod print;
 mod segment;
 mod utils;
 
+use crate::module::ALL_MODULES;
 use clap::{App, AppSettings, Arg, SubCommand};
 
 fn main() {
@@ -32,7 +38,7 @@ fn main() {
     let shell_arg = Arg::with_name("shell")
         .value_name("SHELL")
         .help(
-            "The name of the currently running shell\nCurrently supported options: bash, zsh, fish",
+            "The name of the currently running shell\nCurrently supported options: bash, zsh, fish, powershell, ion",
         )
         .required(true);
 
@@ -40,15 +46,15 @@ fn main() {
         .short("d")
         .long("cmd-duration")
         .value_name("CMD_DURATION")
-        .help("The execution duration of the last command, in seconds")
+        .help("The execution duration of the last command, in milliseconds")
         .takes_value(true);
 
     let keymap_arg = Arg::with_name("keymap")
         .short("k")
         .long("keymap")
         .value_name("KEYMAP")
-        // zsh only
-        .help("The keymap of zsh")
+        // fish/zsh only
+        .help("The keymap of fish/zsh")
         .takes_value(true);
 
     let jobs_arg = Arg::with_name("jobs")
@@ -58,54 +64,103 @@ fn main() {
         .help("The number of currently running jobs")
         .takes_value(true);
 
-    let matches = App::new("starship")
-        .about("The cross-shell prompt for astronauts. ☄🌌️")
-        // pull the version number from Cargo.toml
-        .version(crate_version!())
-        // pull the authors from Cargo.toml
-        .author(crate_authors!())
-        .after_help("https://github.com/starship/starship")
-        .setting(AppSettings::SubcommandRequiredElseHelp)
-        .subcommand(
-            SubCommand::with_name("init")
-                .about("Prints the shell function used to execute starship")
-                .arg(&shell_arg),
-        )
-        .subcommand(
-            SubCommand::with_name("prompt")
-                .about("Prints the full starship prompt")
-                .arg(&status_code_arg)
-                .arg(&path_arg)
-                .arg(&cmd_duration_arg)
-                .arg(&keymap_arg)
-                .arg(&jobs_arg),
-        )
-        .subcommand(
-            SubCommand::with_name("module")
-                .about("Prints a specific prompt module")
-                .arg(
-                    Arg::with_name("name")
-                        .help("The name of the module to be printed")
-                        .required(true),
-                )
-                .arg(&status_code_arg)
-                .arg(&path_arg)
-                .arg(&cmd_duration_arg)
-                .arg(&keymap_arg)
-                .arg(&jobs_arg),
-        )
-        .get_matches();
+    let init_scripts_arg = Arg::with_name("print_full_init")
+        .long("print-full-init")
+        .help("Print the main initialization script (as opposed to the init stub)");
+
+    let matches =
+        App::new("starship")
+            .about("The cross-shell prompt for astronauts. ☄🌌️")
+            // pull the version number from Cargo.toml
+            .version(crate_version!())
+            // pull the authors from Cargo.toml
+            .author(crate_authors!())
+            .after_help("https://github.com/starship/starship")
+            .setting(AppSettings::SubcommandRequiredElseHelp)
+            .subcommand(
+                SubCommand::with_name("init")
+                    .about("Prints the shell function used to execute starship")
+                    .arg(&shell_arg)
+                    .arg(&init_scripts_arg),
+            )
+            .subcommand(
+                SubCommand::with_name("prompt")
+                    .about("Prints the full starship prompt")
+                    .arg(&status_code_arg)
+                    .arg(&path_arg)
+                    .arg(&cmd_duration_arg)
+                    .arg(&keymap_arg)
+                    .arg(&jobs_arg),
+            )
+            .subcommand(
+                SubCommand::with_name("module")
+                    .about("Prints a specific prompt module")
+                    .arg(
+                        Arg::with_name("name")
+                            .help("The name of the module to be printed")
+                            .required(true)
+                            .required_unless("list"),
+                    )
+                    .arg(
+                        Arg::with_name("list")
+                            .short("l")
+                            .long("list")
+                            .help("List out all supported modules"),
+                    )
+                    .arg(&status_code_arg)
+                    .arg(&path_arg)
+                    .arg(&cmd_duration_arg)
+                    .arg(&keymap_arg)
+                    .arg(&jobs_arg),
+            )
+            .subcommand(SubCommand::with_name("configure").about("Edit the starship configuration"))
+            .subcommand(SubCommand::with_name("bug-report").about(
+                "Create a pre-populated GitHub issue with information about your configuration",
+            ))
+            .subcommand(
+                SubCommand::with_name("time")
+                    .about("Prints time in milliseconds")
+                    .settings(&[AppSettings::Hidden]),
+            )
+            .subcommand(
+                SubCommand::with_name("explain").about("Explains the currently showing modules"),
+            )
+            .get_matches();
 
     match matches.subcommand() {
         ("init", Some(sub_m)) => {
             let shell_name = sub_m.value_of("shell").expect("Shell name missing.");
-            init::init(shell_name)
+            if sub_m.is_present("print_full_init") {
+                init::init_main(shell_name).expect("can't init_main");
+            } else {
+                init::init_stub(shell_name).expect("can't init_stub");
+            }
         }
         ("prompt", Some(sub_m)) => print::prompt(sub_m.clone()),
         ("module", Some(sub_m)) => {
-            let module_name = sub_m.value_of("name").expect("Module name missing.");
-            print::module(module_name, sub_m.clone());
+            if sub_m.is_present("list") {
+                println!("Supported modules list");
+                println!("----------------------");
+                for modules in ALL_MODULES {
+                    println!("{}", modules);
+                }
+            }
+            if let Some(module_name) = sub_m.value_of("name") {
+                print::module(module_name, sub_m.clone());
+            }
         }
+        ("configure", Some(_)) => configure::edit_configuration(),
+        ("bug-report", Some(_)) => bug_report::create(),
+        ("time", _) => {
+            match SystemTime::now()
+                .duration_since(SystemTime::UNIX_EPOCH)
+                .ok()
+            {
+                Some(time) => println!("{}", time.as_millis()),
+                None => println!("{}", -1),
+            }
+        }
+        ("explain", Some(sub_m)) => print::explain(sub_m.clone()),
         _ => {}
     }
 }

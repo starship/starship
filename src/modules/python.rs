@@ -1,12 +1,9 @@
 use std::env;
 use std::path::Path;
-use std::process::Command;
 
-use ansi_term::Color;
-
-use crate::config::Config;
-
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use crate::configs::python::PythonConfig;
+use crate::utils;
 
 /// Creates a module with the current Python version
 ///
@@ -15,83 +12,74 @@ use super::{Context, Module};
 ///     - Current directory contains a `requirements.txt` file
 ///     - Current directory contains a `pyproject.toml` file
 ///     - Current directory contains a file with the `.py` extension
+///     - Current directory contains a `Pipfile` file
+///     - Current directory contains a `tox.ini` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_py_project = context
-        .new_scan_dir()
-        .set_files(&["requirements.txt", ".python-version", "pyproject.toml"])
+        .try_begin_scan()?
+        .set_files(&[
+            "requirements.txt",
+            ".python-version",
+            "pyproject.toml",
+            "Pipfile",
+            "tox.ini",
+        ])
         .set_extensions(&["py"])
-        .scan();
+        .is_match();
 
-    if !is_py_project {
+    let is_venv = env::var("VIRTUAL_ENV").ok().is_some();
+
+    if !is_py_project && !is_venv {
         return None;
     }
 
-    let mut module = context.new_module("python")?;
-    let pyenv_version_name = module
-        .config_value_bool("pyenv_version_name")
-        .unwrap_or(false);
+    let mut module = context.new_module("python");
+    let config: PythonConfig = PythonConfig::try_load(module.config);
 
-    const PYTHON_CHAR: &str = "🐍 ";
-    let module_color = Color::Yellow.bold();
-    module.set_style(module_color);
-    module.new_segment("symbol", PYTHON_CHAR);
+    module.set_style(config.style);
+    module.create_segment("symbol", &config.symbol);
 
-    select_python_version(pyenv_version_name)
-        .map(|python_version| python_module(module, pyenv_version_name, python_version))
-}
-
-fn python_module(mut module: Module, pyenv_version_name: bool, python_version: String) -> Module {
-    const PYENV_PREFIX: &str = "pyenv ";
-
-    if pyenv_version_name {
-        module.new_segment("pyenv_prefix", PYENV_PREFIX);
-        module.new_segment("version", &python_version.trim());
+    if config.pyenv_version_name {
+        let python_version = utils::exec_cmd("pyenv", &["version-name"])?.stdout;
+        module.create_segment("pyenv_prefix", &config.pyenv_prefix);
+        module.create_segment("version", &SegmentConfig::new(&python_version.trim()));
     } else {
+        let python_version = get_python_version()?;
         let formatted_version = format_python_version(&python_version);
-        module.new_segment("version", &formatted_version);
-        get_python_virtual_env()
-            .map(|virtual_env| module.new_segment("virtualenv", &format!("({})", virtual_env)));
+        module.create_segment("version", &SegmentConfig::new(&formatted_version));
+
+        if let Some(virtual_env) = get_python_virtual_env() {
+            module.create_segment(
+                "virtualenv",
+                &SegmentConfig::new(&format!(" ({})", virtual_env)),
+            );
+        };
     };
 
-    module
-}
-
-fn select_python_version(pyenv_version_name: bool) -> Option<String> {
-    if pyenv_version_name {
-        get_pyenv_version()
-    } else {
-        get_python_version()
-    }
-}
-
-fn get_pyenv_version() -> Option<String> {
-    Command::new("pyenv")
-        .arg("version-name")
-        .output()
-        .ok()
-        .and_then(|output| String::from_utf8(output.stdout).ok())
+    Some(module)
 }
 
 fn get_python_version() -> Option<String> {
-    match Command::new("python").arg("--version").output() {
-        Ok(output) => {
-            // We have to check both stdout and stderr since for Python versions
-            // < 3.4, Python reports to stderr and for Python version >= 3.5,
-            // Python reports to stdout
+    match utils::exec_cmd("python", &["--version"]) {
+        Some(output) => {
             if output.stdout.is_empty() {
-                let stderr_string = String::from_utf8(output.stderr).unwrap();
-                Some(stderr_string)
+                Some(output.stderr)
             } else {
-                let stdout_string = String::from_utf8(output.stdout).unwrap();
-                Some(stdout_string)
+                Some(output.stdout)
             }
         }
-        Err(_) => None,
+        None => None,
     }
 }
 
 fn format_python_version(python_stdout: &str) -> String {
-    format!("v{}", python_stdout.trim_start_matches("Python ").trim())
+    format!(
+        "v{}",
+        python_stdout
+            .trim_start_matches("Python ")
+            .trim_end_matches(":: Anaconda, Inc.")
+            .trim()
+    )
 }
 
 fn get_python_virtual_env() -> Option<String> {
@@ -110,5 +98,11 @@ mod tests {
     fn test_format_python_version() {
         let input = "Python 3.7.2";
         assert_eq!(format_python_version(input), "v3.7.2");
+    }
+
+    #[test]
+    fn test_format_python_version_anaconda() {
+        let input = "Python 3.6.10 :: Anaconda, Inc.";
+        assert_eq!(format_python_version(input), "v3.6.10");
     }
 }

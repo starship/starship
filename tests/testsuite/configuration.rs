@@ -20,20 +20,6 @@ fn char_symbol_configuration() -> io::Result<()> {
 }
 
 #[test]
-fn disabled_module() -> io::Result<()> {
-    let output = common::render_module("package")
-        .use_config(toml::toml! {
-            [package]
-            disabled = true
-        })
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-    assert_eq!("", actual);
-
-    Ok(())
-}
-
-#[test]
 fn add_newline_configuration() -> io::Result<()> {
     // Start prompt with newline
     let default_output = common::render_prompt().output()?;

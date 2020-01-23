@@ -1,12 +1,13 @@
 use ansi_term::Color;
 use std::fs::{self, File};
 use std::io;
+use tempfile;
 
-use crate::common::{self, TestCommand};
+use crate::common;
 
 #[test]
 fn folder_without_go_files() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
+    let dir = tempfile::tempdir()?;
 
     let output = common::render_module("golang")
         .arg("--path")
@@ -22,8 +23,8 @@ fn folder_without_go_files() -> io::Result<()> {
 #[test]
 #[ignore]
 fn folder_with_go_file() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
-    File::create(dir.path().join("main.go"))?;
+    let dir = tempfile::tempdir()?;
+    File::create(dir.path().join("main.go"))?.sync_all()?;
 
     let output = common::render_module("golang")
         .arg("--path")
@@ -31,7 +32,7 @@ fn folder_with_go_file() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.10"));
+    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -39,8 +40,8 @@ fn folder_with_go_file() -> io::Result<()> {
 #[test]
 #[ignore]
 fn folder_with_go_mod() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
-    File::create(dir.path().join("go.mod"))?;
+    let dir = tempfile::tempdir()?;
+    File::create(dir.path().join("go.mod"))?.sync_all()?;
 
     let output = common::render_module("golang")
         .arg("--path")
@@ -48,7 +49,7 @@ fn folder_with_go_mod() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.10"));
+    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -56,8 +57,8 @@ fn folder_with_go_mod() -> io::Result<()> {
 #[test]
 #[ignore]
 fn folder_with_go_sum() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
-    File::create(dir.path().join("go.sum"))?;
+    let dir = tempfile::tempdir()?;
+    File::create(dir.path().join("go.sum"))?.sync_all()?;
 
     let output = common::render_module("golang")
         .arg("--path")
@@ -65,7 +66,7 @@ fn folder_with_go_sum() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.10"));
+    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -73,7 +74,7 @@ fn folder_with_go_sum() -> io::Result<()> {
 #[test]
 #[ignore]
 fn folder_with_godeps() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
+    let dir = tempfile::tempdir()?;
     let godeps = dir.path().join("Godeps");
     fs::create_dir_all(&godeps)?;
 
@@ -83,7 +84,7 @@ fn folder_with_godeps() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.10"));
+    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -91,8 +92,8 @@ fn folder_with_godeps() -> io::Result<()> {
 #[test]
 #[ignore]
 fn folder_with_glide_yaml() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
-    File::create(dir.path().join("glide.yaml"))?;
+    let dir = tempfile::tempdir()?;
+    File::create(dir.path().join("glide.yaml"))?.sync_all()?;
 
     let output = common::render_module("golang")
         .arg("--path")
@@ -100,7 +101,7 @@ fn folder_with_glide_yaml() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.10"));
+    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -108,8 +109,8 @@ fn folder_with_glide_yaml() -> io::Result<()> {
 #[test]
 #[ignore]
 fn folder_with_gopkg_yml() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
-    File::create(dir.path().join("Gopkg.yml"))?;
+    let dir = tempfile::tempdir()?;
+    File::create(dir.path().join("Gopkg.yml"))?.sync_all()?;
 
     let output = common::render_module("golang")
         .arg("--path")
@@ -117,7 +118,7 @@ fn folder_with_gopkg_yml() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.10"));
+    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -125,8 +126,8 @@ fn folder_with_gopkg_yml() -> io::Result<()> {
 #[test]
 #[ignore]
 fn folder_with_gopkg_lock() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
-    File::create(dir.path().join("Gopkg.lock"))?;
+    let dir = tempfile::tempdir()?;
+    File::create(dir.path().join("Gopkg.lock"))?.sync_all()?;
 
     let output = common::render_module("golang")
         .arg("--path")
@@ -134,28 +135,7 @@ fn folder_with_gopkg_lock() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.10"));
-    assert_eq!(expected, actual);
-    Ok(())
-}
-
-#[test]
-#[ignore]
-fn config_disabled() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
-    File::create(dir.path().join("main.go"))?;
-
-    let output = common::render_module("golang")
-        .use_config(toml::toml! {
-            [golang]
-            disabled = true
-        })
-        .arg("--path")
-        .arg(dir.path())
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-
-    let expected = "";
+    let expected = format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1"));
     assert_eq!(expected, actual);
     Ok(())
 }

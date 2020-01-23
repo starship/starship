@@ -2,15 +2,15 @@ use std::fs::File;
 use std::io;
 
 use ansi_term::Color;
+use tempfile;
 
 use crate::common;
-use crate::common::TestCommand;
 
 #[test]
 #[ignore]
 fn folder_with_python_version() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
-    File::create(dir.path().join(".python-version"))?;
+    let dir = tempfile::tempdir()?;
+    File::create(dir.path().join(".python-version"))?.sync_all()?;
 
     let output = common::render_module("python")
         .arg("--path")
@@ -18,7 +18,7 @@ fn folder_with_python_version() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.6.9"));
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -26,8 +26,8 @@ fn folder_with_python_version() -> io::Result<()> {
 #[test]
 #[ignore]
 fn folder_with_requirements_txt() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
-    File::create(dir.path().join("requirements.txt"))?;
+    let dir = tempfile::tempdir()?;
+    File::create(dir.path().join("requirements.txt"))?.sync_all()?;
 
     let output = common::render_module("python")
         .arg("--path")
@@ -35,7 +35,7 @@ fn folder_with_requirements_txt() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.6.9"));
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -43,8 +43,8 @@ fn folder_with_requirements_txt() -> io::Result<()> {
 #[test]
 #[ignore]
 fn folder_with_pyproject_toml() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
-    File::create(dir.path().join("pyproject.toml"))?;
+    let dir = tempfile::tempdir()?;
+    File::create(dir.path().join("pyproject.toml"))?.sync_all()?;
 
     let output = common::render_module("python")
         .arg("--path")
@@ -52,7 +52,41 @@ fn folder_with_pyproject_toml() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.6.9"));
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[ignore]
+fn folder_with_pipfile() -> io::Result<()> {
+    let dir = tempfile::tempdir()?;
+    File::create(dir.path().join("Pipfile"))?.sync_all()?;
+
+    let output = common::render_module("python")
+        .arg("--path")
+        .arg(dir.path())
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[ignore]
+fn folder_with_tox() -> io::Result<()> {
+    let dir = tempfile::tempdir()?;
+    File::create(dir.path().join("tox.ini"))?.sync_all()?;
+
+    let output = common::render_module("python")
+        .arg("--path")
+        .arg(dir.path())
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -60,8 +94,8 @@ fn folder_with_pyproject_toml() -> io::Result<()> {
 #[test]
 #[ignore]
 fn folder_with_py_file() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
-    File::create(dir.path().join("main.py"))?;
+    let dir = tempfile::tempdir()?;
+    File::create(dir.path().join("main.py"))?.sync_all()?;
 
     let output = common::render_module("python")
         .arg("--path")
@@ -69,7 +103,7 @@ fn folder_with_py_file() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.6.9"));
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -77,8 +111,8 @@ fn folder_with_py_file() -> io::Result<()> {
 #[test]
 #[ignore]
 fn with_virtual_env() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
-    File::create(dir.path().join("main.py"))?;
+    let dir = tempfile::tempdir()?;
+    File::create(dir.path().join("main.py"))?.sync_all()?;
     let output = common::render_module("python")
         .env("VIRTUAL_ENV", "/foo/bar/my_venv")
         .arg("--path")
@@ -86,49 +120,24 @@ fn with_virtual_env() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!(
-        "via {} ",
-        Color::Yellow.bold().paint("🐍 v3.6.9(my_venv)")
-    );
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6 (my_venv)"));
     assert_eq!(expected, actual);
     Ok(())
 }
 
 #[test]
 #[ignore]
-fn with_pyenv() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
-    File::create(dir.path().join("main.py"))?;
+fn with_active_venv() -> io::Result<()> {
+    let dir = tempfile::tempdir()?;
+
     let output = common::render_module("python")
-        .use_config(toml::toml! {
-            [python]
-            pyenv_version_name = true
-        })
         .env("VIRTUAL_ENV", "/foo/bar/my_venv")
         .arg("--path")
         .arg(dir.path())
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 pyenv system"));
-    assert_eq!(expected, actual);
-    Ok(())
-}
 
-#[test]
-#[ignore]
-fn with_pyenv_no_output() -> io::Result<()> {
-    let dir = common::new_tempdir()?;
-    File::create(dir.path().join("main.py"))?;
-    let output = common::render_module("python")
-        .use_config(toml::toml! {
-            [python]
-            pyenv_version_name = true
-        })
-        .env("PATH", "")
-        .arg("--path")
-        .arg(dir.path())
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-    assert_eq!("", actual);
+    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6 (my_venv)"));
+    assert_eq!(expected, actual);
     Ok(())
 }

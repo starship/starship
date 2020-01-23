@@ -1,7 +1,7 @@
-use ansi_term::Color;
-use std::process::Command;
+use super::{Context, Module, RootModuleConfig, SegmentConfig};
 
-use super::{Context, Module};
+use crate::configs::ruby::RubyConfig;
+use crate::utils;
 
 /// Creates a module with the current Ruby version
 ///
@@ -10,38 +10,26 @@ use super::{Context, Module};
 ///     - Current directory contains a `Gemfile` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_rb_project = context
-        .new_scan_dir()
+        .try_begin_scan()?
         .set_files(&["Gemfile"])
         .set_extensions(&["rb"])
-        .scan();
+        .is_match();
 
     if !is_rb_project {
         return None;
     }
 
-    match get_ruby_version() {
-        Some(ruby_version) => {
-            const RUBY_CHAR: &str = "💎 ";
-            let module_color = Color::Red.bold();
+    let ruby_version = utils::exec_cmd("ruby", &["-v"])?.stdout;
+    let formatted_version = format_ruby_version(&ruby_version)?;
 
-            let mut module = context.new_module("ruby")?;
-            module.set_style(module_color);
+    let mut module = context.new_module("ruby");
+    let config: RubyConfig = RubyConfig::try_load(module.config);
+    module.set_style(config.style);
 
-            let formatted_version = format_ruby_version(&ruby_version)?;
-            module.new_segment("symbol", RUBY_CHAR);
-            module.new_segment("version", &formatted_version);
+    module.create_segment("symbol", &config.symbol);
+    module.create_segment("version", &SegmentConfig::new(&formatted_version));
 
-            Some(module)
-        }
-        None => None,
-    }
-}
-
-fn get_ruby_version() -> Option<String> {
-    match Command::new("ruby").arg("-v").output() {
-        Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
-        Err(_) => None,
-    }
+    Some(module)
 }
 
 fn format_ruby_version(ruby_version: &str) -> Option<String> {

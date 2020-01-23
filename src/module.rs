@@ -1,17 +1,57 @@
-use crate::config::Config;
+use crate::config::SegmentConfig;
 use crate::segment::Segment;
 use ansi_term::Style;
 use ansi_term::{ANSIString, ANSIStrings};
 use std::fmt;
 
+// List of all modules
+// Keep these ordered alphabetically.
+// Default ordering is handled in configs/mod.rs
+pub const ALL_MODULES: &[&str] = &[
+    "aws",
+    #[cfg(feature = "battery")]
+    "battery",
+    "character",
+    "cmd_duration",
+    "conda",
+    "directory",
+    "dotnet",
+    "env_var",
+    "git_branch",
+    "git_commit",
+    "git_state",
+    "git_status",
+    "golang",
+    "hg_branch",
+    "hostname",
+    "java",
+    "jobs",
+    "kubernetes",
+    "line_break",
+    "memory_usage",
+    "nix_shell",
+    "nodejs",
+    "package",
+    "python",
+    "ruby",
+    "rust",
+    "php",
+    "terraform",
+    "time",
+    "username",
+];
+
 /// A module is a collection of segments showing data for a single integration
 /// (e.g. The git module shows the current git branch and status)
 pub struct Module<'a> {
     /// The module's configuration map if available
-    config: Option<&'a toml::value::Table>,
+    pub config: Option<&'a toml::Value>,
 
     /// The module's name, to be used in configuration and logging.
-    name: String,
+    _name: String,
+
+    /// The module's description
+    description: String,
 
     /// The styling to be inherited by all segments contained within this module.
     style: Style,
@@ -28,10 +68,11 @@ pub struct Module<'a> {
 
 impl<'a> Module<'a> {
     /// Creates a module with no segments.
-    pub fn new(name: &str, config: Option<&'a toml::value::Table>) -> Module<'a> {
+    pub fn new(name: &str, desc: &str, config: Option<&'a toml::Value>) -> Module<'a> {
         Module {
             config,
-            name: name.to_string(),
+            _name: name.to_string(),
+            description: desc.to_string(),
             style: Style::default(),
             prefix: Affix::default_prefix(name),
             segments: Vec::new(),
@@ -40,19 +81,32 @@ impl<'a> Module<'a> {
     }
 
     /// Get a reference to a newly created segment in the module
-    pub fn new_segment(&mut self, name: &str, value: &str) -> &mut Segment {
+    pub fn create_segment(&mut self, name: &str, segment_config: &SegmentConfig) -> &mut Segment {
         let mut segment = Segment::new(name);
-        segment.set_style(self.style);
-        // Use the provided value unless overwritten by config
-        segment.set_value(self.config_value_str(name).unwrap_or(value));
+        segment.set_style(segment_config.style.unwrap_or(self.style));
+        segment.set_value(segment_config.value);
         self.segments.push(segment);
 
         self.segments.last_mut().unwrap()
     }
 
-    /// Whether a module has any segments
+    /// Get module's name
+    pub fn get_name(&self) -> &String {
+        &self._name
+    }
+
+    /// Get module's description
+    pub fn get_description(&self) -> &String {
+        &self.description
+    }
+
+    /// Whether a module has non-empty segments
     pub fn is_empty(&self) -> bool {
-        self.segments.is_empty()
+        self.segments.iter().all(|segment| segment.is_empty())
+    }
+
+    pub fn get_segments(&self) -> Vec<&str> {
+        self.segments.iter().map(Segment::get_value).collect()
     }
 
     /// Get the module's prefix
@@ -79,42 +133,33 @@ impl<'a> Module<'a> {
     /// Returns a vector of colored ANSIString elements to be later used with
     /// `ANSIStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<ANSIString> {
-        let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
-        let ansi_strings = self
+        self.ansi_strings_for_prompt(true)
+    }
+
+    pub fn ansi_strings_for_prompt(&self, is_prompt: bool) -> Vec<ANSIString> {
+        let mut ansi_strings = self
             .segments
             .iter()
             .map(Segment::ansi_string)
             .collect::<Vec<ANSIString>>();
 
-        let mut ansi_strings = match shell.as_str() {
-            "bash" => ansi_strings_modified(ansi_strings, shell),
-            "zsh" => ansi_strings_modified(ansi_strings, shell),
-            _ => ansi_strings,
-        };
-
         ansi_strings.insert(0, self.prefix.ansi_string());
         ansi_strings.push(self.suffix.ansi_string());
+
+        if is_prompt {
+            let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
+            ansi_strings = match shell.as_str() {
+                "bash" => ansi_strings_modified(ansi_strings, shell),
+                "zsh" => ansi_strings_modified(ansi_strings, shell),
+                _ => ansi_strings,
+            };
+        }
 
         ansi_strings
     }
 
     pub fn to_string_without_prefix(&self) -> String {
         ANSIStrings(&self.ansi_strings()[1..]).to_string()
-    }
-
-    /// Get a module's config value as a string
-    pub fn config_value_str(&self, key: &str) -> Option<&str> {
-        self.config.and_then(|config| config.get_as_str(key))
-    }
-
-    /// Get a module's config value as an int
-    pub fn config_value_i64(&self, key: &str) -> Option<i64> {
-        self.config.and_then(|config| config.get_as_i64(key))
-    }
-
-    /// Get a module's config value as a bool
-    pub fn config_value_bool(&self, key: &str) -> Option<bool> {
-        self.config.and_then(|config| config.get_as_bool(key))
     }
 }
 
@@ -170,7 +215,7 @@ fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: String) -> Vec<AN
 /// Module affixes are to be used for the prefix or suffix of a module.
 pub struct Affix {
     /// The affix's name, to be used in configuration and logging.
-    name: String,
+    _name: String,
 
     /// The affix's style.
     style: Style,
@@ -182,7 +227,7 @@ pub struct Affix {
 impl Affix {
     pub fn default_prefix(name: &str) -> Self {
         Self {
-            name: format!("{}_prefix", name),
+            _name: format!("{}_prefix", name),
             style: Style::default(),
             value: "via ".to_string(),
         }
@@ -190,7 +235,7 @@ impl Affix {
 
     pub fn default_suffix(name: &str) -> Self {
         Self {
-            name: format!("{}_suffix", name),
+            _name: format!("{}_suffix", name),
             style: Style::default(),
             value: " ".to_string(),
         }
@@ -225,5 +270,44 @@ impl Affix {
 impl fmt::Display for Affix {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.ansi_string())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_module_is_empty_with_no_segments() {
+        let name = "unit_test";
+        let desc = "This is a unit test";
+        let module = Module {
+            config: None,
+            _name: name.to_string(),
+            description: desc.to_string(),
+            style: Style::default(),
+            prefix: Affix::default_prefix(name),
+            segments: Vec::new(),
+            suffix: Affix::default_suffix(name),
+        };
+
+        assert!(module.is_empty());
+    }
+
+    #[test]
+    fn test_module_is_empty_with_all_empty_segments() {
+        let name = "unit_test";
+        let desc = "This is a unit test";
+        let module = Module {
+            config: None,
+            _name: name.to_string(),
+            description: desc.to_string(),
+            style: Style::default(),
+            prefix: Affix::default_prefix(name),
+            segments: vec![Segment::new("test_segment")],
+            suffix: Affix::default_suffix(name),
+        };
+
+        assert!(module.is_empty());
     }
 }
