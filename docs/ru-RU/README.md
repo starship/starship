@@ -1,23 +1,23 @@
 ---
 home: true
 heroImage: /logo.svg
-actionText: Начало работы →
-actionLink: /ru-RU/guide/
-footer: Под лицензией ISC | Авторское право © 2019-настоящее Starship Contributors
+actionText: Get Started →
+actionLink: /guide/
+footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 ---
 
 <div class="features">
   <div class="feature">
-    <h2>Совместивость в первую очередь</h2>
-    <p>Работает на большинстве распространенных оболочек и наиболее распространенных операционных системах. Используйте везде!</p>
+    <h2>Compatibility First</h2>
+    <p>Works on the most common shells on the most common operating systems. Use it everywhere!</p>
   </div>
   <div class="feature">
-    <h2>Основана на Rust</h2>
-    <p>Приносит наилучшую в своем классе скорость и безопасность Rust, чтобы сделать вашу подсказку как можно быстрее и надежнее.</p>
+    <h2>Rust-Powered</h2>
+    <p>Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.</p>
   </div>
   <div class="feature">
-    <h2>Настраиваемая</h2>
-    <p>Каждая маленькая деталь настраивается по вашему вкусу, чтобы сделать эту подсказку минимальной или функциональной, как вы захотите.</p>
+    <h2>Customizable</h2>
+    <p>Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.</p>
   </div>
 </div>
 
@@ -28,40 +28,40 @@ footer: Под лицензией ISC | Авторское право © 2019-н
   </video>
 </div>
 
-### Быстрая установка
+### Quick Install
 
-1. Установите двоичный файл **starship**:
+1. Install the **starship** binary:
 
 
-   #### Установить последнюю версию
+   #### Install Latest Version
 
-   Через Bash:
+   With Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Установить через менеджер пакетов
+   #### Install via Package Manager
 
-   С [Homebrew](https://brew.sh/):
+   With [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
-    С [Scoop](https://scoop.sh):
+    With [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Добавить сценарий инициализации в конфигурационный файл вашей оболочки:
+1. Add the init script to your shell's config file:
 
 
    #### Bash
 
-   Добавьте следующее в конец `~/.bashrc`:
+   Add the following to the end of `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -72,7 +72,7 @@ footer: Под лицензией ISC | Авторское право © 2019-н
 
    #### Fish
 
-   Добавьте следующее в конец `~/.config/fish/config.fish`:
+   Add the following to the end of `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -83,7 +83,7 @@ footer: Под лицензией ISC | Авторское право © 2019-н
 
    #### Zsh
 
-   Добавьте следующее в конец `~/.zshrc`:
+   Add the following to the end of `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -92,9 +92,9 @@ footer: Под лицензией ISC | Авторское право © 2019-н
    ```
 
 
-   #### PowerShell
+   #### Powershell
 
-   Добавьте следующее в конец `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (или `~/.config/powershell/Microsoft.PowerShell_profile.ps1` на -Nix):
+   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
@@ -105,7 +105,7 @@ footer: Под лицензией ISC | Авторское право © 2019-н
 
    #### Ion
 
-   Добавьте следующее в конец `~/.config/ion/initrc`:
+   Add the following to the end of `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
