@@ -19,19 +19,19 @@
     <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
-      alt="加入 Discord" /></a>
+      alt="Chat on Discord" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-68-orange" alt="所有贡献者"></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-68-orange" alt="All Contributors"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
 <h4 align="center">
   <br />
-  <a href="https://starship.rs">网站</a>
+  <a href="https://starship.rs">Website</a>
   ·
-  <a href="#-installation">安装</a>
+  <a href="#-installation">Installation</a>
   ·
-  <a href="https://starship.rs/config/">配置</a>
+  <a href="https://starship.rs/config/">Configuration</a>
 </h4>
 <p align="center">
   <a href="https://github.com/starship/starship/blob/master/README.md"
@@ -61,32 +61,32 @@
 
 <h1></h1>
 
-<p align="center"> Starship 是轻量的，快速的，可以快速定制的，适用于任何 shell 的提示符！<br /> 它可以在不影响流畅性=的情况下，在你工作时展示你所需要的信息。 <p>
+<p align="center"> Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br /> The prompt shows information you need while you're working, while staying sleek and out of the way. <p>
 
 <p align="center">
   <br>
-  <img alt="使用 iTerm 和 Snazz 主题的 Starship" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" width="80%">
+  <img alt="Starship with iTerm2 and the Snazzy theme" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" width="80%">
   <br>
   <br>
 </p>
 
-## 🍬 特性
+## 🍬 Features
 
-- 当上一个命令以非 0 状态退出时，提示字符会变为红色
-- 当前 Go 版本 (`🐹`)
+- Prompt character turns red if the last command exits with non-zero code
+- Current Go version (`🐹`)
 - Current Java version (`☕`)
 - Current Node.js version (`⬢`)
 - Current PHP version (`🐘`)
-- 当前 Python 版本 (`🐍`)
-- 当前 Ruby 版本 (`💎`)
-- 当前 Rust 版本 (`🦀`)
+- Current Python version (`🐍`)
+- Current Ruby version (`💎`)
+- Current Rust version (`🦀`)
 - Current .NET version (`•NET`)
-- 当前目录下现在的包版本 (`📦`)
+- Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
   - composer (PHP)
-- 当前 Git 分支与一应俱全的仓库状态
+- Current Git branch and rich repo status:
   - `=` — conflicting changes
   - `⇡` — ahead of remote branch
   - `⇣` — behind of remote branch
@@ -98,30 +98,30 @@
   - `»` — renamed files
   - `✘` — deleted files
 - Current Mercurial branch
-- 当前电池剩余容量与状态
+- Current battery level and status
   - `⇡` – charging
   - `⇣` – discharging
   - `•` – fully charged
-- 后台运行进程数的指示器 (`✦`)
-- 当前 Kubernetes Cluster 与 Namespace (`☸`)
+- Indicator for jobs in the background (`✦`)
+- Current Kubernetes Cluster and Namespace (`☸`)
 - Current Amazon Web Services (AWS) profile (`☁️`)
 - Execution time of the last command
 - Custom environment variable value
-- Nix-shell 环境检测
-- 非当前登录用户的用户名
+- Nix-shell environment detection
+- Current username if not the same as the logged-in user
 - Optional current time in 12/24hr format
 - Current Terraform Workspace and version (`💠`)
 - Current Conda environment (`C`)
 
-## 🚀 安装
+## 🚀 Installation
 
-### 基础要求
+### Prerequisites
 
-- 安装有一个 [Powerline 字体](https://github.com/powerline/fonts) (如 [Fira Code](https://github.com/tonsky/FiraCode)) 并在您的终端启用 。
+- A [Powerline font](https://github.com/powerline/fonts) installed and enabled in your terminal (for example, try [Fira Code](https://github.com/tonsky/FiraCode)).
 
-### 入门
+### Getting Started
 
-1. 安装 **starship** 二进制文件：
+1. Install the **starship** binary:
 
 
    #### Install Latest Version
@@ -157,12 +157,12 @@
    scoop install starship
    ```
 
-1. 将初始化脚本添加到您的 shell 的配置文件：
+1. Add the init script to your shell's config file:
 
 
    #### Bash
 
-   在 `~/.bashhrc` 的最后，添加以下内容：
+   Add the following to the end of `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -173,7 +173,7 @@
 
    #### Fish
 
-   在 `~/.config/fish/config.fish` 的最后，添加以下内容：
+   Add the following to the end of `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -184,7 +184,7 @@
 
    #### Zsh
 
-   在 `~/.zshrc` 的最后，添加以下内容：
+   Add the following to the end of `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -214,28 +214,28 @@
    eval $(starship init ion)
    ```
 
-## 🔧 配置
+## 🔧 Configuration
 
-关于如何配置 Starship ，详情请查看我们的[文档](https://starship.rs/config/)。
+For details on how to configure Starship, check out our [documentation](https://starship.rs/config/).
 
-## 🤝 贡献
+## 🤝 Contributing
 
-我们一直在寻找贡献者！你都可以参与贡献 ** 不论你的技能如何 **。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-### 急需
+### High Priority Needs
 
-- 👩‍💼 **项目经理**
-  - 我们有一个GitHub项目，有许多未经整理或没有被置于优先地位的新功能，还有许多想法没有被列入 issues。 我们需要人来为项目发展方向指路！
-- 👩‍🎨 **设计师**
-  - 想制作吸引人的网站吗？ 太棒了！ 我们正想要制作一个漂亮的主页，以彰显 Starship 的与众不同。 帮助设计 Starship 的品牌是尝试你新点子的一个巨大机会！
-- 👩‍💻 **Rust 开发者**
-  - 我们需要符合语言习惯的，高效的代码，需要性能优化与跨平台编译优化……你可以在这里收获_大量_的成果！ 我 ([@matchai](https://github.com/matchai)) 是一枚 Rust 新手. 快来为我们指点迷津！
+- 👩‍💼 **Product Manager**
+  - We have a GitHub Project and many unorganized/unprioritized features, as well as ideas that haven't yet been made into issues. Starship needs someone to own the product direction!
+- 👩‍🎨 **Designer**
+  - Like making eye-catching websites? Excellent! We are looking to create a beautiful landing page showing off Starship in all its glory. Helping design for Starship's brand is a great opportunity to try out new ideas!
+- 👩‍💻 **Rust Developer**
+  - There is _a lot_ of low-hanging fruit when it comes to writing idiomatic Rust, designing effective Rust architecture, performance optimizations, cross-platform build optimizations, and more! I ([@matchai](https://github.com/matchai)) am a beginner to Rust. Come point us in the right direction!
 
-如果您有兴趣贡献于 Starship，请查看我们的[贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 另外，你可以自由加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 。 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
-### 贡献者
+### Contributors
 
-感谢这些优秀的人 ([emoji key](https://allcontributors.org/docs/en/emoji-key))：
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -335,11 +335,11 @@
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-此项目遵循 [all-contributors](https://github.com/all-contributors/all-contributors) 标准。 任何形式的贡献都将受到欢迎！
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
-## 💭该项目受以下项目启发
+## 💭 Inspired By
 
-请参考这些曾经为 Starship 提供启发的工程。 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
 
