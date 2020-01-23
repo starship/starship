@@ -1,18 +1,18 @@
-# Configuration avancée
+# Advanced Configuration
 
-Alors que Starship est un shell polyvalent, vous devez parfois faire plus que d'éditer `starship.toml` pour le faire les choses. Cette page détaille quelques techniques de configuration avancées qu'on peut utiliser dans starship.
+While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
 
 ::: warning
 
-Les configurations de cette section sont sujettes à modification dans les versions à venir de Starship.
+The configurations in this section are subject to change in future releases of Starship.
 
 :::
 
-## Commandes pré-commande et pré-exécution personnalisées en Bash
+## Custom pre-prompt and pre-execution Commands in Bash
 
-Bash n'a pas de cadre officiel préexec/précmd comme la plupart des autres shell du commande. C'est pourquoi il est difficile de fournir des crochets entièrement personnalisables dans `bash`. Cependant, Starship vous donne une capacité limitée à insérer vos propres fonctions dans la procédure de rendu commande :
+Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
 
-- Pour exécuter une fonction personnalisée juste avant que commande soit dessinée, définissez une nouvelle fonction et assignez son nom à `starship_precmd_user_func`. Par exemple, pour dessiner une fusée avant la commande, vous feriez
+- To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
 
 ```bash
 function blastoff(){
@@ -21,47 +21,47 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Pour exécuter une fonction personnalisée juste avant l'exécution d'une commande, vous pouvez utiliser le [` DEBUG` mécanisme d'interruption ](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Cependant, vous **devez** pièger le signal DEBUG *avant* initialisation du Starship ! Starship peut préserver la valeur du piège DEBUG, mais si le piège est écrasé après le démarrage de Starship, certaines fonctionnalités vont casser.
+- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). However, you **must** trap the DEBUG signal *before* initializing Starship! Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
 
 ```bash
 function blastoff(){
     echo "🚀"
 }
-trap blastoff DEBUG     # Pièger DEBUG *avant* l'initiation de starship
+trap blastoff DEBUG     # Trap DEBUG *before* running starship
 eval $(starship init bash)
 ```
 
-## Modifier le style des fenêtres commande
+## Change Window Title
 
-Certaines commandes du shell changeront automatiquement le titre de la fenêtre (par exemple, refléter votre répertoire de travail). Fish le fait par défaut. Starship ne le fait pas, mais il est assez simple d'ajouter cette fonctionnalité à `bash` ou `zsh`.
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
 
-Tout d'abord, définir une fonction de changement de titre de fenêtre (identique en bash et zsh) :
+First, define a window title change function (identical in bash and zsh):
 
 ```bash
-function set_titre_fenetre(){
-    echo -ne "\033]0; TON_TITRE_FENETRE_ICI \007"
+function set_win_title(){
+    echo -ne "\033]0; YOUR_WINDOW_TITLE_HERE \007"
 }
 ```
 
-Vous pouvez utiliser des variables pour personnaliser ce titre (`$USER`, `$HOSTNAME`, et `$PWD` sont des choix populaires).
+You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
 
-Dans `bash`, définissez cette fonction comme la fonction précmd Starship :
-
-```bash
-starship_precmd_user_func="set_titre_gagnante"
-```
-
-Dans `zsh`, ajoutez ceci au tableau `precmd_functions` :
+In `bash`, set this function to be the precmd starship function:
 
 ```bash
-précmd_functions+=(set_titre_gagnant)
+starship_precmd_user_func="set_win_title"
 ```
 
-Si vous aimez le résultat, ajoutez ces lignes à votre fichier de configuration de shell (`~/.bashrc` ou `~/.zsrhc`) pour le rendre permanent.
+In `zsh`, add this to the `precmd_functions` array:
 
-## Chaînes de style
+```bash
+precmd_functions+=(set_win_title)
+```
 
-Les chaînes de style sont une liste de mots, séparés par des espaces blancs. Les mots ne sont pas sensibles à la casse (` bold ` et ` boLd ` sont considérés comme la même string). Chaque mot peut être l'un des suivants :
+If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zsrhc`) to make it permanent.
+
+## Style Strings
+
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
   - `bold`
   - `underline`
@@ -71,14 +71,14 @@ Les chaînes de style sont une liste de mots, séparés par des espaces blancs. 
   - `<color>`
   - `none`
 
-où `<color>` est un spécificateur de couleur (discuté ci-dessous). `fg:<color>` et `<color>` font actuellement la même chose , bien que cela puisse changer dans le futur. L'ordre des mots dans le string n'a pas d'importance.
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing , though this may change in the future. The order of words in the string does not matter.
 
-Le jeton ` none ` remplace tous les autres jetons d'une string, de sorte que, par exemple, ` fg: red none fg: blue ` créera toujours une string sans style. Il peut devenir une erreur d'utiliser `none` en conjonction avec d'autres jetons dans le futur.
+The `none` token overrides all other tokens in a string, so that e.g. `fg:red none fg:blue` will still create a string with no styling. It may become an error to use `none` in conjunction with other tokens in the future.
 
-Un spécificateur de couleur peut être l'un des éléments suivants :
+A color specifier can be one of the following:
 
- - Une des couleurs standard du terminal : `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Vous pouvez éventuellement les préfixer avec `bright-` pour obtenir la version lumineuse (par exemple `bright-white`).
- - Un `#` suivi d'un nombre hexadécimal de six chiffres. Ceci spécifie un [ Code hexadécimal de couleur RVB ](https://www.w3schools.com/colors/colors_hexadecimal.asp).
- - Un nombre entre 0-255. Ceci spécifie un [code de couleur ANSI 8 bits](https://i.stack.imgur.com/KTSQa.png).
+ - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
+ - A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+ - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
 
-Si plusieurs couleurs sont spécifiées pour le premier plan/arrière-plan, la dernière dans le string prendra la priorité.
+If multiple colors are specified for foreground/background, the last one in the string will take priority.
