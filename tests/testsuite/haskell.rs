@@ -1,4 +1,5 @@
 use ansi_term::Color;
+use dirs::home_dir;
 use std::fs::{File, OpenOptions};
 use std::io::{self, Write};
 use tempfile::{self, TempDir};
@@ -27,6 +28,7 @@ fn folder_with_stack_yaml() -> io::Result<()> {
     create_dummy_haskell_project(&dir, Some("nightly-2019-09-21 # Last GHC 8.6.5"))?;
 
     let output = common::render_module("haskell")
+        .env("HOME", home_dir().unwrap())
         .arg("--path")
         .arg(dir.path())
         .output()?;
