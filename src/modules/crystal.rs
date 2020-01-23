@@ -1,7 +1,7 @@
-use ansi_term::Color;
-use std::process::Command;
+use super::{Context, Module, RootModuleConfig, SegmentConfig};
 
-use super::{Context, Module};
+use crate::configs::crystal::CrystalConfig;
+use crate::utils;
 
 /// Creates a module with the current Crystal version
 ///
@@ -10,45 +10,33 @@ use super::{Context, Module};
 ///     - Current directory contains a `shard.yml` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_crystal_project = context
-        .new_scan_dir()
+        .try_begin_scan()?
         .set_files(&["shard.yml"])
         .set_extensions(&["cr"])
-        .scan();
+        .is_match();
 
     if !is_crystal_project {
         return None;
     }
 
-    match get_crystal_version() {
-        Some(crystal_version) => {
-            const CRYSTAL_CHAR: &str = "🔮 ";
-            let module_color = Color::Red.bold();
+    let crystal_version = utils::exec_cmd("crystal", &["-v"])?.stdout;
+    let formatted_version = format_crystal_version(&crystal_version)?;
 
-            let mut module = context.new_module("crystal")?;
-            module.set_style(module_color);
+    let mut module = context.new_module("crystal");
+    let config: CrystalConfig = CrystalConfig::try_load(module.config);
+    module.set_style(config.style);
 
-            let formatted_version = format_crystal_version(&crystal_version)?;
-            module.new_segment("symbol", CRYSTAL_CHAR);
-            module.new_segment("version", &formatted_version);
+    module.create_segment("symbol", &config.symbol);
+    module.create_segment("version", &SegmentConfig::new(&formatted_version));
 
-            Some(module)
-        }
-        None => None,
-    }
-}
-
-fn get_crystal_version() -> Option<String> {
-    match Command::new("crystal").arg("-v").output() {
-        Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
-        Err(_) => None,
-    }
+    Some(module)
 }
 
 fn format_crystal_version(crystal_version: &str) -> Option<String> {
     let version = crystal_version
-        // split into ["Crystal", "0.30.1", ...]
+        // split into ["Crystal", "0.32.1", ...]
         .split_whitespace()
-        // return "2.6.0p0"
+        // return "0.32.1"
         .nth(1)?;
 
     let mut formatted_version = String::with_capacity(version.len() + 1);

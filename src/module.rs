@@ -34,6 +34,7 @@ pub const ALL_MODULES: &[&str] = &[
     "package",
     "python",
     "ruby",
+    "crystal",
     "rust",
     "php",
     "terraform",
