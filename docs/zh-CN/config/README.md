@@ -1,18 +1,18 @@
-# 配置
+# Configuration
 
 ::: tip
 
-Starship 目前正在开发中。 很多新的配置选项将会在之后的版本中被公开。
+🔥 Configuration is currently being worked on. Many new configuration options will be available in coming releases.
 
 :::
 
-您需要创建配置文件 `~/.config/starship.toml` 以供 Starship 使用。
+To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
 ```shell
 $ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-Starship 的所有配置都在此 [TOML](https://github.com/toml-lang/toml) 配置文件中完成：
+All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 
 ```toml
 # Don't print a new line at the start of the prompt
@@ -32,7 +32,7 @@ You can change default `starship.toml` file location with `STARSHIP_CONFIG` envi
 export STARSHIP_CONFIG=~/.starship
 ```
 
-### 术语
+### Terminology
 
 **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
@@ -45,7 +45,7 @@ Here is the representation of the node module. In the following example, "symbol
  "via "         "⬢"        "v10.4.1"       ""
 ```
 
-### 样式设定
+### Style Strings
 
 Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
