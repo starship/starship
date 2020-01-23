@@ -73,45 +73,45 @@
 ## 🍬 機能
 
 - 最後のコマンドがゼロ以外のコードで終了すると、プロンプト文字が赤に変わります
-- 現在の Go のバージョン (`🐹`)
-- 現在の Java のバージョン (`☕`)
-- 現在の Node.js のバージョン (`⬢`)
-- 現在の PHP のバージョン (`🐘`)
-- 現在の Python のバージョン (`🐍`)
-- 現在の Ruby のバージョン (`💎`)
-- 現在の Rust のバージョン (`🦀`)
-- 現在の .NET のバージョン (`•NET`)
-- カレントディレクトリにある現在のパッケージバージョン(`📦`)
+- Current Go version (`🐹`)
+- Current Java version (`☕`)
+- Current Node.js version (`⬢`)
+- Current PHP version (`🐘`)
+- Current Python version (`🐍`)
+- Current Ruby version (`💎`)
+- Current Rust version (`🦀`)
+- Current .NET version (`•NET`)
+- Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
   - composer (PHP)
-- 現在の Git ブランチとリッチなリポジトリの状態
-  - `=` — 競合している変更
-  - `⇡` — リモートブランチより進んでいる変更
-  - `⇣` —リモートブランチに追いついていない変更
-  - `⇕` — 分岐した変更
-  - `?` — 追跡されていない変更
-  - `$` — stashされた変更
-  - `!` — 変更されたファイル
-  - `+` — 追加されたファイル
-  - `»` — 名前が変更されたファイル
-  - `✘` — 削除されたファイル
-- 現在の Mercurial ブランチ
-- 現在のバッテリー残量と状態
-  - `⇡` – 充電中
-  - `⇣` – 放電中
-  - `•` – 満タン
-- バックグラウンドジョブのインジケーター (`✦`)
-- 現在のKubernetesクラスタとネームスペース (`☸`)
-- 現在のAmazon Web Services (AWS) プロファイル(`☁️</ 0>)</li>
-<li>最後のコマンドの実行時間</li>
-<li>カスタム環境変数の値</li>
-<li>Nix-shell の環境検出</li>
-<li>ログインユーザーと異なる場合にユーザー名を表示する</li>
-<li>12/24時間形式のオプションの現在時刻</li>
-<li>現在の Terraform のワークスペースとバージョン (<code>💠`)
-- 現在の Conda の環境 (`C`)
+- Current Git branch and rich repo status:
+  - `=` — conflicting changes
+  - `⇡` — ahead of remote branch
+  - `⇣` — behind of remote branch
+  - `⇕` — diverged changes
+  - `?` — untracked changes
+  - `$` — stashed changes
+  - `!` — modified files
+  - `+` — added files
+  - `»` — renamed files
+  - `✘` — deleted files
+- Current Mercurial branch
+- Current battery level and status
+  - `⇡` – charging
+  - `⇣` – discharging
+  - `•` – fully charged
+- Indicator for jobs in the background (`✦`)
+- Current Kubernetes Cluster and Namespace (`☸`)
+- Current Amazon Web Services (AWS) profile (`☁️`)
+- Execution time of the last command
+- Custom environment variable value
+- Nix-shell environment detection
+- Current username if not the same as the logged-in user
+- Optional current time in 12/24hr format
+- Current Terraform Workspace and version (`💠`)
+- Current Conda environment (`C`)
 
 ## 🚀 インストール
 
@@ -124,34 +124,34 @@
 1. **Starship** のバイナリをインストール
 
 
-   #### 最新版のインストール
+   #### Install Latest Version
 
 
-   ##### ビルド済みのバイナリをインストール
+   ##### From prebuilt binary, with Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   ##### [crates.io](https://crates.io/)からソースをインストール
+   ##### From source on [crates.io](https://crates.io/):
 
    ```sh
    cargo install starship
    ```
 
 
-   #### パッケージマネージャー経由でインストール
+   #### Install via Package Manager
 
 
-   ##### [ Homebrew ](https://brew.sh/)の場合：
+   ##### With [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### [ Scoop ](https://scoop.sh)の場合：
+   ##### With [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
@@ -206,7 +206,7 @@
 
    #### Ion
 
-   `~/.config/ion/initrc `の最後に次を追加してください
+   Add the following to the end of `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -335,11 +335,11 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-このプロジェクトは [all-contributors](https://allcontributors.org/docs/ja/overview) の仕様に従っています。 どんな種類の貢献でもお待ちしています！
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
 ## 💭影響を受けたプロダクト
 
-よければStarship の作成に影響を与えた、これまでのプロジェクトをチェックしてください 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - 宇宙飛行士のための ZSH プロンプト。
 
@@ -354,4 +354,4 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
 
 ## 📝 ライセンス
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> このプロジェクトは [ISC](https://github.com/starship/starship/blob/master/LICENSE) でライセンスされています。
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
