@@ -1,18 +1,18 @@
-# Расширенная конфигурация
+# Advanced Configuration
 
-Хотя Starship - это универсальная оболочка, иногда вам нужно сделать больше, чем просто редактировать `starship.toml`, для того чтобы сделать определенные вещи. Эта страница описывает некоторые из дополнительных техник конфигурации, используемых в Starship.
+While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
 
 ::: warning
 
-Конфигурации в этом разделе могут быть изменены в будущих выпусках Starship.
+The configurations in this section are subject to change in future releases of Starship.
 
 :::
 
-## Пользовательские команды перед подсказкой и запуском в Bash
+## Custom pre-prompt and pre-execution Commands in Bash
 
-Bash не имеет формальной среды preexec/precmd, как и большинство других оболочек. Из-за этого трудно предоставить полностью настраиваемые хуки в `bash`. Тем не менее, Starship дает вам ограниченную возможность вставить собственные функции в процедуру отображения подсказки:
+Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
 
-- Чтобы запустить пользовательскую функцию прямо перед отображением подсказки, определите новую функцию и затем назначьте ей имя `starship_precmd_user_func`. Например, чтобы нарисовать ракету перед появлением подсказки, сделайте
+- To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
 
 ```bash
 function blastoff(){
@@ -21,7 +21,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Чтобы запустить пользовательскую функцию перед запуском команды, вы можете использовать [механизм ловушки `DEBUG`](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Тем не менее, вы **должны** поймать сигнал DEBUG *перед* инициализацией Starship! Starship может сохранить значение ловушки DEBUG, но если ловушка перезаписана после запуска Starship, некоторая функциональность сломается.
+- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). However, you **must** trap the DEBUG signal *before* initializing Starship! Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
 
 ```bash
 function blastoff(){
@@ -31,11 +31,11 @@ trap blastoff DEBUG     # Trap DEBUG *before* running starship
 eval $(starship init bash)
 ```
 
-## Изменение заголовка окна
+## Change Window Title
 
-Некоторые подсказки к оболочке автоматически меняют заголовок окна для вас (например, отражая ваш рабочий каталог). Fish даже делает это по умолчанию. Starship не делает этого, но достаточно легко добавить эту функциональность к `bash` или `zsh`.
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
 
-Сначала задайте функцию изменения заголовка окна (идентичную в bash и zsh):
+First, define a window title change function (identical in bash and zsh):
 
 ```bash
 function set_win_title(){
@@ -43,25 +43,25 @@ function set_win_title(){
 }
 ```
 
-Вы можете использовать переменные для настройки этого заголовка (`$USER`, `$HOSTNAME`, и `$PWD` являются популярными вариантами).
+You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
 
-В `bash`, установите эту функцию как функцию precmd в Starship:
+In `bash`, set this function to be the precmd starship function:
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-В `zsh`, добавьте это в массив `precmd_functions`:
+In `zsh`, add this to the `precmd_functions` array:
 
 ```bash
 precmd_functions+=(set_win_title)
 ```
 
-Если вам нравится результат, добавьте эти строки в конфигурационный файл оболочки (`~/.bashrc` или `~/.zsrhc`), чтобы сделать его постоянным.
+If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zsrhc`) to make it permanent.
 
-## Строки стиля
+## Style Strings
 
-Строки стиля - это список слов, разделенных пробелами. Слова не чувствительны к регистру (то есть `bold` и `BoLd` считаются одной строкой). Каждое слово может быть одним из следующих:
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
   - `bold`
   - `underline`
@@ -71,14 +71,14 @@ precmd_functions+=(set_win_title)
   - `<color>`
   - `none`
 
-где `<color>` является цветовым спецификатором (обсуждается ниже). `fg:<color>` и `<color>` в настоящее время делают одно и то же, хотя это может измениться в будущем. Порядок слов в строке не имеет значения.
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing , though this may change in the future. The order of words in the string does not matter.
 
-Токен `none` переопределяет все остальные токены в строке, например `fg:red none fg:blue` все равно создаст строку без стиля. Использование `none` в сочетании с другими токенами может стать ошибкой в будущем.
+The `none` token overrides all other tokens in a string, so that e.g. `fg:red none fg:blue` will still create a string with no styling. It may become an error to use `none` in conjunction with other tokens in the future.
 
-Цветовой спецификатор может быть одним из следующих:
+A color specifier can be one of the following:
 
- - Один из стандартных цветов терминалов: `black`, `red`, `green`, `blue`, `gellow`, `purple`, `cyan`, `white`. Вы можете по желанию добавить префикс `bright-`, чтобы получить яркую версию (например, `bright-white`).
- - `#`, за которой следует шестизначное шестнадцатеричное число. Это определяет [шестнадцатеричный код цвета RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
- - Число от 0 до 255. Это определяет [8-битный код цвета ANSI](https://i.stack.imgur.com/KTSQa.png).
+ - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
+ - A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+ - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
 
-Если для переднего плана/фона задано несколько цветов, то последняя из строк будет иметь приоритет.
+If multiple colors are specified for foreground/background, the last one in the string will take priority.
