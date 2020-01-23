@@ -136,6 +136,22 @@ jobs:
         with:
           python-version: "3.7.6"
 
+      # Install Stack at a fixed version (Linux & macOS version)
+      - name: Install Stack [-nix]
+        uses: mstksg/setup-stack@v1
+        if: matrix.os != 'windows-latest'
+        env:
+          ARGS: --resolver nightly-2019-09-21
+        run: stack $ARGS ghc -- --numeric-version --no-install-ghc
+
+      # Install Stack at a fixed version (Windows version), use Chocolatey
+      - name: Install Stack [-windows]
+        uses: crazy-max/ghaction-chocolatey@v1
+        if: matrix.os == 'windows-latest'
+        with:
+          args: install haskell-stack
+        run: stack $ARGS ghc -- --numeric-version --no-install-ghc
+
       # Install dotnet at a fixed version
       - uses: actions/setup-dotnet@v1
         with:
@@ -249,9 +265,6 @@ jobs:
         with:
           command: build
           args: --release --target ${{ matrix.target }}
-
-      - name: Setup stack
-        uses: mstksg/setup-stack@v1
 
       - name: Prepare build artifacts [Windows]
         if: matrix.os == 'windows-latest'
