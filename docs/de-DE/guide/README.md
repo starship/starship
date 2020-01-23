@@ -2,26 +2,26 @@
   <br /><img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship – Cross-Shell Prompt" />
+    alt="Starship – Cross-shell prompt" />
 </p>
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://github.com/starship/starship/workflows/Main%20workflow/badge.svg?branch=master&event=push"
-      alt="Workflow-Status der GitHub Actions" /></a>
+      alt="GitHub Actions workflow status" /></a>
   <a href="https://crates.io/crates/starship"
-    ><img src="https://img.shields.io/crates/v/starship" alt="Crates.io-Version" /></a>
+    ><img src="https://img.shields.io/crates/v/starship" alt="Crates.io version" /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://repology.org/badge/tiny-repos/starship.svg"
-      alt="Paket-Status" /></a
+      alt="Packaging status" /></a
 ><br />
     <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
       alt="Auf Discord chatten" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-68-orange" alt="Alle Mitwirkenden"></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-68-orange" alt="All Contributors"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
@@ -31,11 +31,11 @@
   ·
   <a href="#-installation">Installation</a>
   ·
-  <a href="https://starship.rs/config/">Konfiguration</a>
+  <a href="https://starship.rs/config/">Configuration</a>
 </h4>
 <p align="center">
   <a href="https://github.com/starship/starship/blob/master/README.md"
-    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png" alt="Englisch" /></a>
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png" alt="English" /></a>
   &nbsp;
   <a href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png" alt="日本語" /></a>
@@ -61,108 +61,108 @@
 
 <h1></h1>
 
-<p align="center"> Starship ist der leichtgewichtige, blitzschnelle und extrem anpassbare Prompt für jede Shell!<br /> Der Prompt zeigt dir alle Informationen die du für deine Arbeit brauchst ohne dich dabei zu stören. <p>
+<p align="center"> Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!<br /> The prompt shows information you need while you're working, while staying sleek and out of the way. <p>
 
 <p align="center">
   <br>
-  <img alt="Starship mit iTem2 und dem Theme „Snazzy“" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" width="80%">
+  <img alt="Starship with iTerm2 and the Snazzy theme" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" width="80%">
   <br>
   <br>
 </p>
 
 ## 🍬 Features
 
-- Anzeigetext wird rot wenn der letzte Befehl mit einem Exit-code größer null terminiert
-- Derzeitige Go-Version (`🐹`)
-- Derzeitige Java-Version (`☕`)
-- Derzeitige Node.js-Version (`⬢`)
-- Derzeitige PHP-Version (`🐘`)
-- Derzeitige Python-Version (`🐍`)
-- Derzeitige Ruby-Version (`💎`)
-- Derzeitige Rust-Version (`🦀`)
-- Derzeitige .NET-Version (`•NET`)
-- Version des Paketmanagers im derzeitigen Pfad (`📦`)
+- Prompt character turns red if the last command exits with non-zero code
+- Current Go version (`🐹`)
+- Current Java version (`☕`)
+- Current Node.js version (`⬢`)
+- Current PHP version (`🐘`)
+- Current Python version (`🐍`)
+- Current Ruby version (`💎`)
+- Current Rust version (`🦀`)
+- Current .NET version (`•NET`)
+- Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
   - composer (PHP)
-- Aktueller Git-Branch und ausführlicher Repository-Status:
-  - `=` — konkurrierende Änderungen
-  - `⇡` — vor remote branch
-  - `⇣` — hinter remote branch
-  - `⇕` — abweichende Änderungen
-  - `?` — ungespeicherte Änderungen
-  - `$` — gestashte Änderungen
-  - `!` — veränderte Dateien
-  - `+` — hinzugefügte Dateien
-  - `»` — umbenannte Dateien
-  - `✘` — gelöschte Dateien
-- Aktueller Mercurial Branch
-- Batteriestand und -status
-  - `⇡` – ladend
-  - `⇣` – entladend
-  - `•` – voll geladen
-- Anzeige für Hintergrundsprozesse (`✦`)
-- Aktueller Kubernetes Cluster und Namespace (`☸`)
-- Aktuelles Amazon Web Services (AWS) Profil (`☁️`)
-- Anzeige der Laufzeit des letzten Befehls
-- Wert einer beliebigen Umgebungsvariable
-- Erkennung von Nix-Shell-Umgebungen
-- Benutzername, wenn dieser nicht dem angemeldeten Benutzer entspricht
-- Optionale Uhrzeit im 12/24 Stunden Format
-- Aktueller "Terraform Workspace" Name und Version (`💠`)
-- Aktuelle Conda-Umgebung (`C`)
+- Current Git branch and rich repo status:
+  - `=` — conflicting changes
+  - `⇡` — ahead of remote branch
+  - `⇣` — behind of remote branch
+  - `⇕` — diverged changes
+  - `?` — untracked changes
+  - `$` — stashed changes
+  - `!` — modified files
+  - `+` — added files
+  - `»` — renamed files
+  - `✘` — deleted files
+- Current Mercurial branch
+- Current battery level and status
+  - `⇡` – charging
+  - `⇣` – discharging
+  - `•` – fully charged
+- Indicator for jobs in the background (`✦`)
+- Current Kubernetes Cluster and Namespace (`☸`)
+- Current Amazon Web Services (AWS) profile (`☁️`)
+- Execution time of the last command
+- Custom environment variable value
+- Nix-shell environment detection
+- Current username if not the same as the logged-in user
+- Optional current time in 12/24hr format
+- Current Terraform Workspace and version (`💠`)
+- Current Conda environment (`C`)
 
 ## 🚀 Installation
 
-### Voraussetzungen
+### Prerequisites
 
-- Eine [Powerline-Schriftart](https://github.com/powerline/fonts) installiert und in deinem Terminal aktiviert (z.B. [Fira Code](https://github.com/tonsky/FiraCode)).
+- A [Powerline font](https://github.com/powerline/fonts) installed and enabled in your terminal (for example, try [Fira Code](https://github.com/tonsky/FiraCode)).
 
-### Erste Schritte
+### Getting Started
 
-1. Installiere die Binärversion von **starship**:
-
-
-   #### Neueste Version installieren
+1. Install the **starship** binary:
 
 
-   ##### Neuster GitHub Release mit Shell:
+   #### Install Latest Version
+
+
+   ##### From prebuilt binary, with Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   ##### Von Quellcode auf [crates.io](https://crates.io/):
+   ##### From source on [crates.io](https://crates.io/):
 
    ```sh
    cargo install starship
    ```
 
 
-   #### Installation mithilfe eines Paket-Managers
+   #### Install via Package Manager
 
 
-   ##### Mit [Homebrew](https://brew.sh/):
+   ##### With [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### Mit [scoop](https://scoop.sh):
+   ##### With [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Füge das init-Skript zur Konfigurationsdatei deiner Shell hinzu:
+1. Add the init script to your shell's config file:
 
 
    #### Bash
 
-   Trage folgendes am Ende der `~/.bashrc` ein:
+   Add the following to the end of `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -173,7 +173,7 @@
 
    #### Fish
 
-   Trage folgendes am Ende der `~/.config/fish/config.fish` ein:
+   Add the following to the end of `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -184,7 +184,7 @@
 
    #### Zsh
 
-   Trage folgendes am Ende der `~/.zshrc` ein:
+   Add the following to the end of `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -195,12 +195,10 @@
 
    #### PowerShell
 
-   Trage folgendes am Ende der `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (oder `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix) ein:
+   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
 
    ```sh
-   # notepad $PROFILE
-
-# ~\Documents\PowerShell\Profile.ps1
+   # ~\Documents\PowerShell\Profile.ps1
 
    Invoke-Expression (&starship init powershell)
    ```
@@ -208,7 +206,7 @@
 
    #### Ion
 
-   Trage folgendes am Ende der `~/.config/ion/initrc` ein:
+   Add the following to the end of `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -216,28 +214,28 @@
    eval $(starship init ion)
    ```
 
-## 🔧 Konfiguration
+## 🔧 Configuration
 
-Weitere Informationen zur Konfiguration von Starship findest du in unserer [Dokumentation](https://starship.rs/config/).
+For details on how to configure Starship, check out our [documentation](https://starship.rs/config/).
 
-## 🤝 Mitwirken
+## 🤝 Contributing
 
-Wir sind immer auf der Suche nach Helfern **jeder Erfahrungsstufe**! Probleme mit dem Label [„Good first issues“](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) sind der beste Weg, um dich mit dem Projekt vertraut zu machen.
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-### Hohe Priorität
+### High Priority Needs
 
-- 👩‍💼 **Produktmanager**
-  - Wir haben ein GitHub Projekt und viele unorganisierte/-priorisierte Features sowohl in Entwicklung als auch in Planung. Starship braucht jemanden, der die weitere Richtung vorgibt!
+- 👩‍💼 **Product Manager**
+  - We have a GitHub Project and many unorganized/unprioritized features, as well as ideas that haven't yet been made into issues. Starship needs someone to own the product direction!
 - 👩‍🎨 **Designer**
-  - Erstellst du gerne schillernde Webseiten? Großartig! Wir wollen eine astreine Homepage, die Starship in all ihrer Glorie preißt. Starships Markendesign zu unterstützen ist ein guter Ort um neue Ideen auszuprobieren!
-- 👩‍💻 **Rust-Entwickler**
-  - Es gibt _so einige_ einfache Gelegenheiten für idiomatischen Rust code, das Designen effektiver Rust Architektur, Performanzoptimierung, plattformübergreifende Build-Optimierungen und vieles mehr! Ich ([@matchai](https://github.com/matchai)) bin neu in Rust. Zeig uns den richtigen Weg!
+  - Like making eye-catching websites? Excellent! We are looking to create a beautiful landing page showing off Starship in all its glory. Helping design for Starship's brand is a great opportunity to try out new ideas!
+- 👩‍💻 **Rust Developer**
+  - There is _a lot_ of low-hanging fruit when it comes to writing idiomatic Rust, designing effective Rust architecture, performance optimizations, cross-platform build optimizations, and more! I ([@matchai](https://github.com/matchai)) am a beginner to Rust. Come point us in the right direction!
 
-Falls du an Starship mitwirken willst, wirf bitte einen Blick auf den [Leitfaden zum Mitwirken](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Schau auch gerne auf unserem [Discord-Server](https://discord.gg/8Jzqu3T) vorbei. 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
-### Mitwirkende
+### Contributors
 
-Danke an diese wunderbaren Leute ([emoji-Schlüssel](https://allcontributors.org/docs/en/emoji-key)):
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -337,23 +335,23 @@ Danke an diese wunderbaren Leute ([emoji-Schlüssel](https://allcontributors.org
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-Dieses Projekt folgt der [all-contributors](https://github.com/all-contributors/all-contributors) spezifikation. Beiträge aller Art sind willkommen!
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
-## 💭 Inspiriert durch
+## 💭 Inspired By
 
-Schaut euch bitte auch die Projekte an, die die Entstehung von Starship inspiriert haben. 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Ein ZSH-Prompt für Astronauten.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Ein Shell-übergreifendes und in JavaScript geschriebenes robbyrussell-Theme.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme written in JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** - Shell-übergreifendes, anpassbares und Powerline-ähnliches Prompt mit Symbolen.
+- **[reujab/silver](https://github.com/reujab/silver)** - A cross-shell customizable powerline-like prompt with icons.
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship Raketen Icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 Lizenz
+## 📝 License
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Unter der [ISC](https://github.com/starship/starship/blob/master/LICENSE) Lizens.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
