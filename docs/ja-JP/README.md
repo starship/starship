@@ -33,24 +33,24 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 1. **Starship** のバイナリをインストール
 
 
-   #### 最新版のインストール
+   #### Install Latest Version
 
-   Shellを利用する
+   With Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### パッケージマネージャー経由でインストール
+   #### Install via Package Manager
 
-   [ Homebrew ](https://brew.sh/)の場合：
+   With [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
-    [ Scoop ](https://scoop.sh)の場合：
+    With [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
@@ -105,7 +105,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Ion
 
-   `~/.config/ion/initrc `の最後に次を追加してください
+   Add the following to the end of `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
