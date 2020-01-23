@@ -73,42 +73,42 @@
 ## 🍬 特色
 
 - 如果最近一個指令結束時回傳非零的代碼，提示字元將轉成紅色
-- 現在的 Go 版本 (`🐹`)
+- Current Go version (`🐹`)
 - Current Java version (`☕`)
 - Current Node.js version (`⬢`)
 - Current PHP version (`🐘`)
-- 現在的 Python 版本 (`🐍`)
-- 現在的 Ruby 版本 (`💎`)
-- 現在的 Rust 版本 (`🦀`)
+- Current Python version (`🐍`)
+- Current Ruby version (`💎`)
+- Current Rust version (`🦀`)
 - Current .NET version (`•NET`)
-- 現在資料夾中的組件 (package) 版本 (`📦`)
+- Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
   - composer (PHP)
-- 現在的 Git branch 與豐富的程式庫 (repository) 狀態：
-  - `=` — 修改衝突
-  - `⇡` — 超前遠端 (remote) branch
-  - `⇣` — 落後遠端 (remote) branch
-  - `⇕` — 修改發散 (diverge)
-  - `?` — 修改未追蹤
-  - `$` — 隱藏的 (stashed) 修改
-  - `!` — 修改過的檔案
-  - `+` — 新增的檔案
-  - `»` — 重新命名的檔案
-  - `✘` — 刪除的檔案
+- Current Git branch and rich repo status:
+  - `=` — conflicting changes
+  - `⇡` — ahead of remote branch
+  - `⇣` — behind of remote branch
+  - `⇕` — diverged changes
+  - `?` — untracked changes
+  - `$` — stashed changes
+  - `!` — modified files
+  - `+` — added files
+  - `»` — renamed files
+  - `✘` — deleted files
 - Current Mercurial branch
-- 現在的電池電量與狀態
+- Current battery level and status
   - `⇡` – charging
   - `⇣` – discharging
   - `•` – fully charged
-- 標註背景執行的工作 (`✦`)
-- 現在的 Kubernetes 叢集以及名稱空間 (Namespace) (`☸`)
+- Indicator for jobs in the background (`✦`)
+- Current Kubernetes Cluster and Namespace (`☸`)
 - Current Amazon Web Services (AWS) profile (`☁️`)
 - Execution time of the last command
 - Custom environment variable value
-- 偵測 Nix-shell 的環境
-- 會在使用者與登入的使用者不同時顯示使用者名稱
+- Nix-shell environment detection
+- Current username if not the same as the logged-in user
 - Optional current time in 12/24hr format
 - Current Terraform Workspace and version (`💠`)
 - Current Conda environment (`C`)
@@ -335,11 +335,11 @@
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-這個專案遵守 [all-contributors](https://github.com/all-contributors/all-contributors) 規範。 歡迎任何種類的貢獻者！
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
 ## 💭 發想來自
 
-請看之前這些幫助我們創造 Starship 的前任作品。 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - 給太空人的 ZSH 提示。
 
@@ -354,4 +354,4 @@
 
 ## 📝 許可
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> 這個專案使用 [ISC](https://github.com/starship/starship/blob/master/LICENSE) 許可。
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
