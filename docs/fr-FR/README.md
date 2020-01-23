@@ -1,23 +1,23 @@
 ---
 home: true
 heroImage: /logo.svg
-actionText: Commencez →
+actionText: Get Started →
 actionLink: /guide/
-footer: ISC licencié | Copyright © 2019-present Starship Contributors
+footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 ---
 
 <div class="features">
   <div class="feature">
-    <h2>Compatibilité d'abord</h2>
-    <p>Fonctionne sur tous les principaux shells et système d'exploitation. Utilisez-le partout !</p>
+    <h2>Compatibility First</h2>
+    <p>Works on the most common shells on the most common operating systems. Use it everywhere!</p>
   </div>
   <div class="feature">
-    <h2>Propulsé par Rust</h2>
-    <p>Profiter de toute la rapidité et la securité de Rust, pour rendre votre prompt le plus rapide et fiable possible.</p>
+    <h2>Rust-Powered</h2>
+    <p>Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.</p>
   </div>
   <div class="feature">
-    <h2>Personnalisable</h2>
-    <p>Tous les petits détails sont personnalisable à votre goût, pour rendre votre prompt aussi léger ou complet que le vous souhaitez.</p>
+    <h2>Customizable</h2>
+    <p>Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.</p>
   </div>
 </div>
 
@@ -28,14 +28,14 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
   </video>
 </div>
 
-### Installation
+### Quick Install
 
-1. Installer le binaire **starship** :
+1. Install the **starship** binary:
 
 
    #### Installer la dernière version
 
-   Avec Shell:
+   With Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
@@ -44,13 +44,13 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 
    #### Installer via le gestionnaire de paquets
 
-   Avec [Homebrew](https://brew.sh/):
+   With [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
-    Avec [Scoop](https://scoop.sh):
+    With [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
