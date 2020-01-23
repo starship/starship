@@ -140,9 +140,6 @@ jobs:
       - name: Install Stack [-nix]
         uses: mstksg/setup-stack@v1
         if: matrix.os != 'windows-latest'
-        env:
-          ARGS: --resolver nightly-2019-09-21
-        run: stack $ARGS ghc -- --numeric-version --no-install-ghc
 
       # Install Stack at a fixed version (Windows version), use Chocolatey
       - name: Install Stack [-windows]
@@ -150,6 +147,10 @@ jobs:
         if: matrix.os == 'windows-latest'
         with:
           args: install haskell-stack
+
+      - name: Install GHC version
+        env:
+          ARGS: --resolver nightly-2019-09-21
         run: stack $ARGS ghc -- --numeric-version --no-install-ghc
 
       # Install dotnet at a fixed version
