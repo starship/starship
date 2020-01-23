@@ -844,10 +844,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default | Description                                              |
-| ---------- | ------- | -------------------------------------------------------- |
-| `symbol`   | `"🔮 "`   | The symbol used before displaying the version of crystal.|
-| `disabled` | `false` | Disables the `crystal` module.                           |
+| Variable   | Default      | Description                                                  |
+| ---------- | ------------ | ------------------------------------------------------------ |
+| `symbol`   | `"🔮 "`      | The symbol used before displaying the version of crystal.    |
+| `style`    | `"bold red"` | The style for the module.                                    |
+| `disabled` | `false`      | Disables the `crystal` module.                               |
 
 ### Example
 
@@ -855,7 +856,8 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [crystal]
-symbol = "☕ "
+symbol = "🔮 "
+style = "bold red"
 disabled = false
 ```
 
