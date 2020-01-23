@@ -730,7 +730,7 @@ pure_msg = "pure shell"
 
 Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
-- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
+- Das aktuelle Verzeichnis enthält eine der folgenden Dateien:`pom.xml`, `build.gradle` oder `build.gradle.kts`
 - Das aktuelle Verzeichnis enthält eine Datei mit der `.java`, `.class` oder `.jar` Erweiterung
 
 ### Optionen
@@ -960,12 +960,12 @@ Das `Terraform` Modul zeigt den aktuell ausgewählten terraform Arbeitsbereich u
 
 ### Optionen
 
-| Variable       | Standardwert | Beschreibung                                                |
-| -------------- | ------------ | ----------------------------------------------------------- |
-| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
-| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
-| `style`        | `"bold 105"` | Stil für dieses Modul.                                      |
-| `disabled`     | `false`      | Disables the `terraform` module.                            |
+| Variable       | Standardwert | Beschreibung                                                                           |
+| -------------- | ------------ | -------------------------------------------------------------------------------------- |
+| `symbol`       | `"💠 "`       | Das Symbol das vor dem Terraform-Workspacenamen angezeigt wird.                        |
+| `show_version` | `false`      | Blendet die Terraform Versionsnummer ein. Kann In großen Workspaces sehr langsam sein. |
+| `style`        | `"bold 105"` | Stil für dieses Modul.                                                                 |
+| `disabled`     | `false`      | Deaktiviert das `terraform` Modul.                                                     |
 
 ### Beispiel
 

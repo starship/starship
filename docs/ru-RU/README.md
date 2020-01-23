@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 actionText: Начало работы →
-actionLink: /guide/
+actionLink: /ru-RU/guide/
 footer: Под лицензией ISC | Авторское право © 2019-настоящее Starship Contributors
 ---
 
