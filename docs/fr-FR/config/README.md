@@ -1,28 +1,28 @@
 # Configuration
 
-::: remarque
+::: tip
 
-🔥 La configuration est en train d'être travaillée. Beaucoup de nouvelles options de configuration seront disponibles dans les prochaines versions.
+🔥 Configuration is currently being worked on. Many new configuration options will be available in coming releases.
 
 :::
 
-Pour commencer à configurer starship, créez le fichier suivant : `~/.config/starship.toml`.
+To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
 ```shell
 $ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-Toute la configuration de starship est effectuée dans ce fichier [TOML](https://github.com/toml-lang/toml) :
+All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 
 ```toml
-# N'écrivez pas une nouvelle ligne au début de la console
+# Don't print a new line at the start of the prompt
 add_newline = false
 
-# Remplacez le symbole "❯" dans la console avec "➜"
-[character]      # Le nom du module que nous configurons est "character"
-symbol = "➜"     # Le segment "symbol" est mis comme "➜"
+# Replace the "❯" symbol in the prompt with "➜"
+[character]      # The name of the module we are configuring is "character"
+symbol = "➜"     # The "symbol" segment is being set to "➜"
 
-# Désactivez le module package, le cachant complètement de la console
+# Disable the package module, hiding it from the prompt completely
 [package]
 disabled = true
 ```
@@ -32,22 +32,22 @@ You can change default `starship.toml` file location with `STARSHIP_CONFIG` envi
 export STARSHIP_CONFIG=~/.starship
 ```
 
-### Terminologie
+### Terminology
 
-**Module**: Un composant dans l'invite donnant des informations basées sur des informations contextuelles à propos de votre Système d'Exploitation. Par exemple, le module "nodejs" montre la version de NodeJS qui est actuellement installée sur votre ordinateur, si votre répertoire actuel est un projet NodeJS.
+**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
-**Segment**: Sous-composants plus petits qui composent un module. Par exemple, le segment "symbol" du module "nodejs" contient le caractère qui est affiché avant le numéro de version (⬢ par défaut).
+**Segment**: Smaller sub-components that compose a module. For example, the "symbol" segment in the "nodejs" module contains the character that is shown before the version number (⬢ by default).
 
-Voici la représentation du module node. Dans l'exemple suivant, "symbol" et "version" sont des segments dans celui-ci. Chaque module a également un préfixe et un suffixe qui sont la couleur par défaut du terminal.
+Here is the representation of the node module. In the following example, "symbol" and "version" are segments within it. Every module also has a prefix and suffix that are the default terminal color.
 
 ```
 [prefix]      [symbol]     [version]    [suffix]
  "via "         "⬢"        "v10.4.1"       ""
 ```
 
-### Chaînes de style
+### Style Strings
 
-La plupart des modules de Starship vous permettent de configurer leurs styles d'affichage. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
 - `"fg:green bg:blue"` sets green text on a blue background
 - `"bg:blue fg:bright-green"` sets bright green text on a blue background
@@ -286,7 +286,7 @@ prefix = "underwent "
 
 The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
-::: remarque
+::: tip
 
 This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
@@ -433,7 +433,7 @@ truncation_symbol = ""
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
-::: remarque
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -656,7 +656,7 @@ threshold = 4
 
 Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-::: remarque
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -756,7 +756,7 @@ The `memory_usage` module shows current system memory and swap usage.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
-::: remarque
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -981,7 +981,7 @@ symbol = "🏎💨 "
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
-::: remarque
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
