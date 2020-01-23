@@ -143,7 +143,7 @@ jobs:
 
       # Install Stack at a fixed version (Windows version), use Chocolatey
       - name: Install Stack [-windows]
-        uses: crazy-max/ghaction-chocolatey@v1
+        uses: crazy-max/ghaction-chocolatey@v1.0.2
         if: matrix.os == 'windows-latest'
         with:
           args: install haskell-stack
