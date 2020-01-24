@@ -1,5 +1,6 @@
 use ansi_term::Color;
 use dirs::home_dir;
+use std::env;
 use std::fs::{File, OpenOptions};
 use std::io::{self, Write};
 use tempfile::{self, TempDir};
@@ -29,6 +30,8 @@ fn folder_with_stack_yaml() -> io::Result<()> {
 
     let output = common::render_module("haskell")
         .env("HOME", home_dir().unwrap())
+        .env("LOCALAPPDATA", env::var("LOCALAPPDATA").unwrap())
+        .env("STACK_ROOT", env::var("STACK_ROOT").unwrap())
         .arg("--path")
         .arg(dir.path())
         .output()?;
