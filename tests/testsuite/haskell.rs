@@ -30,8 +30,8 @@ fn folder_with_stack_yaml() -> io::Result<()> {
 
     let output = common::render_module("haskell")
         .env("HOME", home_dir().unwrap())
-        .env("LOCALAPPDATA", env::var("LOCALAPPDATA").unwrap())
-        .env("STACK_ROOT", env::var("STACK_ROOT").unwrap())
+        .env("LOCALAPPDATA", env::var("LOCALAPPDATA").unwrap_or_default())
+        .env("STACK_ROOT", env::var("STACK_ROOT").unwrap_or_default())
         .arg("--path")
         .arg(dir.path())
         .output()?;
