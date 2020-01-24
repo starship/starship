@@ -33,7 +33,7 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 1. Installiere die Binärversion von **starship**:
 
 
-   #### Install Latest Version
+   #### Neueste Version installieren
 
    With Shell:
 
@@ -42,15 +42,15 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
    ```
 
 
-   #### Install via Package Manager
+   #### Installation mithilfe eines Paket-Managers
 
-   With [Homebrew](https://brew.sh/):
+   Mit [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
-    With [Scoop](https://scoop.sh):
+    Mit [scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
@@ -105,7 +105,7 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Trage folgendes am Ende der `~/.config/ion/initrc` ein:
 
    ```sh
    # ~/.config/ion/initrc
