@@ -731,7 +731,7 @@ pure_msg = "pure shell"
 
 `java`モジュールは、現在インストールされているJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
+- カレントディレクトリに`pom.xml`, `build.gradle.kts`,もしくは`build.sbt`が含まれている
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
 ### オプション
