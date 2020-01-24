@@ -1,23 +1,23 @@
 ---
 home: true
 heroImage: /logo.svg
-actionText: Get Started →
+actionText: Empezar →
 actionLink: /guide/
-footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores de Starship
 ---
 
 <div class="features">
   <div class="feature">
-    <h2>Compatibility First</h2>
-    <p>Works on the most common shells on the most common operating systems. Use it everywhere!</p>
+    <h2>Compatibilidad primero</h2>
+    <p>Funciona en las interfaces de líneas de comando (shells) más comunes en los sistemas operativos más comunes. ¡Úsalo donde sea!</p>
   </div>
   <div class="feature">
-    <h2>Rust-Powered</h2>
-    <p>Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.</p>
+    <h2>Desarrollado en Rust</h2>
+    <p>Obtén la mayor velocidad y seguridad de Rust, para hacer tu prompt lo más rápida y segura posible.</p>
   </div>
   <div class="feature">
-    <h2>Customizable</h2>
-    <p>Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.</p>
+    <h2>Personalizable</h2>
+    <p>Puedes personalizar cada pequeño detalle a tu gusto, de manera que puedes tener una interfaz minimalista o rica en funcionalidades.</p>
   </div>
 </div>
 
@@ -28,40 +28,40 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
   </video>
 </div>
 
-### Quick Install
+### Instalación rápida
 
-1. Install the **starship** binary:
+1. Instalar el binario de **starship**:
 
 
-   #### Install Latest Version
+   #### Instalar la última versión
 
-   With Shell:
+   Con la interfaz de línea de comandos:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Install via Package Manager
+   #### Instalar con un gestor de paquetes
 
-   With [Homebrew](https://brew.sh/):
+   Con [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
-    With [Scoop](https://scoop.sh):
+    Con [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Añade el script de inicio al archivo de configuración de tu interfaz de línea de comandos:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Añade el siguiente código al final de `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -72,7 +72,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Añade el siguiente código al final de `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -83,7 +83,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Añade el siguiente código al final de `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -94,10 +94,10 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Powershell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   Añade el siguiente código al final de `~\Documentos\PowerShell\Microsoft.PowerShell_profile.ps1` (o `~/.config/powershell/Microsoft.PowerShell_profile.ps1` en sistemas *nix):
 
    ```sh
-   # ~\Documents\PowerShell\Profile.ps1
+   # ~\Documentos\PowerShell\Profile.ps1
 
    Invoke-Expression (&starship init powershell)
    ```
@@ -105,7 +105,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Añade el siguiente código al final de `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
