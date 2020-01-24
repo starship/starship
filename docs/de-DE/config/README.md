@@ -730,7 +730,7 @@ pure_msg = "pure shell"
 
 Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
-- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
+- Das aktuelle Verzeichnis enthält `pom.xml`, `build.gradle.kts` oder `build.sbt`
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
 ### Optionen
