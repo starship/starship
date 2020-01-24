@@ -1,6 +1,5 @@
 use ansi_term::Color;
 use dirs::home_dir;
-use std::env;
 use std::fs::{File, OpenOptions};
 use std::io::{self, Write};
 use tempfile::{self, TempDir};
@@ -24,17 +23,31 @@ fn folder_without_stack_yaml() -> io::Result<()> {
 
 #[test]
 #[ignore]
+#[cfg(not(windows))]
 fn folder_with_stack_yaml() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
     create_dummy_haskell_project(&dir, Some("nightly-2019-09-21 # Last GHC 8.6.5"))?;
 
-    let output = common::render_module("haskell")
-        .env("HOME", home_dir().unwrap())
-        .env("LOCALAPPDATA", env::var("LOCALAPPDATA").unwrap_or_default())
-        .env("STACK_ROOT", env::var("STACK_ROOT").unwrap_or_default())
-        .arg("--path")
-        .arg(dir.path())
-        .output()?;
+    let output = if cfg!(windows) {
+        let mut app_data = home_dir().unwrap();
+        app_data.push("AppData");
+        app_data.push("Local");
+        eprintln!("{}", app_data.to_str().unwrap());
+        common::render_module("haskell")
+            .env("HOME", home_dir().unwrap())
+            .env("LOCALAPPDATA", app_data)
+            .env("STACK_ROOT", r"C:\sr")
+            .arg("--path")
+            .arg(dir.path())
+            .output()?
+    } else {
+        common::render_module("haskell")
+            .env("HOME", home_dir().unwrap())
+            .arg("--path")
+            .arg(dir.path())
+            .output()?
+    };
+
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("via {} ", Color::Red.bold().paint("λ v8.6.5"));
