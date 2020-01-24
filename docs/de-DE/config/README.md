@@ -27,7 +27,7 @@ symbol = "➜"     # Das "symbol" Feld wird "➜" gesetzt
 disabled = true
 ```
 
-You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+Sie können den Pfad zur `starship.toml` mit der `STARSHIP_CONFIG` Umgebungsvariable ändern:
 ```shell
 export STARSHIP_CONFIG=~/.starship
 ```
@@ -128,13 +128,13 @@ Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungs
 
 ### Optionen
 
-| Variable          | Standardwert    | Beschreibung                                                                          |
-| ----------------- | --------------- | ------------------------------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                               |
-| `displayed_items` | `all`           | Welche Objekte angezeigt werden sollen. Possible values: [`all`, `profile`, `region`] |
-| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.                       |
-| `style`           | `"bold yellow"` | Stil für dieses Modul.                                                                |
-| `disabled`        | `false`         | Deaktiviert das `aws`-Modul.                                                          |
+| Variable          | Standardwert    | Beschreibung                                                                         |
+| ----------------- | --------------- | ------------------------------------------------------------------------------------ |
+| `symbol`          | `"☁️ "`         | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                              |
+| `displayed_items` | `all`           | Welche Objekte angezeigt werden sollen. Mögliche Werte: [`Alle`, `Profil`, `Region`] |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.                      |
+| `style`           | `"bold yellow"` | Stil für dieses Modul.                                                               |
+| `disabled`        | `false`         | Deaktiviert das `aws`-Modul.                                                         |
 
 ### Beispiel
 
