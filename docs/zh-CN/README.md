@@ -1,23 +1,23 @@
 ---
 home: true
 heroImage: /logo.svg
-actionText: Get Started →
+actionText: 入门 →
 actionLink: /guide/
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 ---
 
 <div class="features">
   <div class="feature">
-    <h2>Compatibility First</h2>
-    <p>Works on the most common shells on the most common operating systems. Use it everywhere!</p>
+    <h2>注重兼容性</h2>
+    <p>能在各种常见的 Shell 上运行。 尝试着在各种地方使用它吧！</p>
   </div>
   <div class="feature">
-    <h2>Rust-Powered</h2>
-    <p>Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.</p>
+    <h2>Rust 制造</h2>
+    <p>具有 Rust 独树一帜的速度与安全性。</p>
   </div>
   <div class="feature">
-    <h2>Customizable</h2>
-    <p>Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.</p>
+    <h2>可自定义</h2>
+    <p>每个小细节都可以按您喜欢的自定义，不论是最小化以求速度，还是最大化以获得最完善的功能。</p>
   </div>
 </div>
 
@@ -28,9 +28,9 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
   </video>
 </div>
 
-### Quick Install
+### 快速安装
 
-1. Install the **starship** binary:
+1. 安装 **starship** 二进制文件：
 
 
    #### Install Latest Version
@@ -56,12 +56,12 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. 将初始化脚本添加到您的 shell 的配置文件：
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   在 `~/.bashhrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.bashrc
@@ -72,7 +72,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   在 `~/.config/fish/config.fish` 的最后，添加以下内容：
 
    ```sh
    # ~/.config/fish/config.fish
@@ -83,7 +83,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   在 `~/.zshrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.zshrc
@@ -94,7 +94,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Powershell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   添加 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (或者`~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix)到：
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
