@@ -1,6 +1,6 @@
 # Configuration
 
-::: remarque
+::: tip
 
 🔥 La configuration est en train d'être travaillée. Beaucoup de nouvelles options de configuration seront disponibles dans les prochaines versions.
 
@@ -286,7 +286,7 @@ prefix = "underwent "
 
 The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
-::: remarque
+::: tip
 
 This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
@@ -433,7 +433,7 @@ truncation_symbol = ""
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
-::: remarque
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
