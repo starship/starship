@@ -730,7 +730,7 @@ pure_msg = "pure shell"
 
 `java` 模組顯示現在安裝的 Java 版本。 這個模組在下列其中一個條件達成時顯示：
 
-- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
+- 現在資料夾中包含一個 `pom.xml`、`build.gradle.kts` 或 `build.sbt` 檔案
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
 ### 選項
