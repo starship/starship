@@ -265,13 +265,13 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Optionen
 
-| Variable            | Standardwert    | Beschreibung                                                   |
-| ------------------- | --------------- | -------------------------------------------------------------- |
-| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).          |
-| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration.     |
-| `prefix`            | `took`          | Prefix der unmittelbar vor der Ausführungszeit angezeigt wird. |
-| `style`             | `"bold yellow"` | Stil für dieses Modul.                                         |
-| `disabled`          | `false`         | Deaktiviert das `cmd_duration`-Modul.                          |
+| Variable            | Standardwert    | Beschreibung                                                       |
+| ------------------- | --------------- | ------------------------------------------------------------------ |
+| `min_time`          | `2_000`         | Schwellwert für kleinste anzuzeigende Laufzeit (in Millisekunden). |
+| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration.         |
+| `prefix`            | `took`          | Prefix der unmittelbar vor der Ausführungszeit angezeigt wird.     |
+| `style`             | `"bold yellow"` | Stil für dieses Modul.                                             |
+| `disabled`          | `false`         | Deaktiviert das `cmd_duration`-Modul.                              |
 
 ### Beispiel
 
