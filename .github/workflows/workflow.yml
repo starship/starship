@@ -145,6 +145,9 @@ jobs:
         uses: crazy-max/ghaction-chocolatey@v1
         with:
           args: install elm-platform --version 0.19.1 -y
+        
+      - name: Test Elm
+        run: elm --version
 
       # Install Golang at a fixed version
       - uses: actions/setup-go@v1
