@@ -704,6 +704,18 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "m0nhawk",
+      "name": "Andrew Prokhorenkov",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/8220926?v=4",
+      "profile": "https://andrewpro.me",
+      "contributions": [
+        "code",
+        "doc",
+        "test",
+        "projectManagement"
+      ]
     }
   ],
   "contributorsPerLine": 7,
