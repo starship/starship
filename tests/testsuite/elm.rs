@@ -22,6 +22,7 @@ fn folder_without_elm() -> io::Result<()> {
 
 #[test]
 #[ignore]
+#[cfg(not(windows))]
 fn folder_with_elm_json() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
     File::create(dir.path().join("elm.json"))?.sync_all()?;
@@ -39,6 +40,7 @@ fn folder_with_elm_json() -> io::Result<()> {
 
 #[test]
 #[ignore]
+#[cfg(not(windows))]
 fn folder_with_elm_package_json() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
     File::create(dir.path().join("elm-package.json"))?.sync_all()?;
@@ -56,6 +58,7 @@ fn folder_with_elm_package_json() -> io::Result<()> {
 
 #[test]
 #[ignore]
+#[cfg(not(windows))]
 fn folder_with_elm_stuff_directory() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
     let elmstuff = dir.path().join("elm-stuff");
@@ -74,6 +77,7 @@ fn folder_with_elm_stuff_directory() -> io::Result<()> {
 
 #[test]
 #[ignore]
+#[cfg(not(windows))]
 fn folder_with_elm_file() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
     File::create(dir.path().join("main.elm"))?.sync_all()?;
