@@ -80,7 +80,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 } else {
                     module.create_segment(
                         "namespace",
-                        &config.namespace.with_value(kube_ns.to_string()),
+                        &config.namespace.with_value(&kube_ns),
                     );
                 }
             }
