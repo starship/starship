@@ -74,42 +74,43 @@
 
 - Le symbole de prompt devient rouge si la dernière commande a retourné un code différent de zéro
 - Version actuelle de Go (`🐹`)
-- Version actuelle de Java (`☕`)
-- Version actuelle de Node.js (`⬢`)
-- Version actuelle de PHP (`🐘`)
-- Version actuelle de Python (`🐍`)
-- Version actuelle de Ruby (`💎`)
-- Version actuelle de Rust (`🦀`)
-- Version actuelle de .NET (`•NET`)
-- Version actuelle du paquet dans le répertoire courant (`📦`)
+- Current Haskell version (`λ`)
+- Current Java version(`☕`)
+- Current Node.js version(`⬢`)
+- Current PHP version (`🐘`)
+- Current Python version (`🐍`)
+- Current Ruby version (`💎`)
+- Current Rust version (`🦀`)
+- Current .NET version (`•NET`)
+- Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
   - composer (PHP)
-- Branche Git actuelle et affichage "riche" du statut du dépôt:
-  - `=` — Conflits dans les changements
-  - `⇡` — En avance sur la branche distante
-  - `⇣` — En retard sur la branche distante
-  - `⇕` — Changements divergeant
-  - `?` — Changements non-suivis
-  - `$` — Changements remisés
-  - `!` — Fichiers modifiés
-  - `+` — Fichiers ajoutés
-  - `»` — Fichiers renommés
-  - `✘` — Fichiers supprimés
-- Branche Mercurial actuelle
-- Niveau et état actuels de la batterie
-  - `⇡` – en charge
-  - `⇣` – en décharge
-  - `•` – entièrement chargé
-- Indicateur pour les tâches en arrière-plan (`✦`)
-- Cluster et namespace Kubernetes actuels (`☸`)
-- Profil actuel d'Amazon Web Services/AWS (`☁️`)
-- Temps d'exécution de la dernière commande
-- Valeur des clés d'environnement personnalisée
-- Détection de l'environnement Nix-shell
-- Affiche le nom de l'utilisateur courant s'il est différent de celui connecté
-- L'heure courante au format 12/24h (optionel)
+- Current Git branch and rich repo status:
+  - `=` — conflicting changes
+  - `⇡` — ahead of remote branch
+  - `⇣` — behind of remote branch
+  - `⇕` — diverged changes
+  - `?` — untracked changes
+  - `$` — stashed changes
+  - `!` — modified files
+  - `+` — added files
+  - `»` — renamed files
+  - `✘` — deleted files
+- Current Mercurial branch
+- Current battery level and status
+  - `⇡` – charging
+  - `⇣` – discharging
+  - `•` – fully charged
+- Indicator for jobs in the background (`✦`)
+- Current Kubernetes Cluster and Namespace (`☸`)
+- Current Amazon Web Services (AWS) profile (`☁️`)
+- Execution time of the last command
+- Custom environment variable value
+- Nix-shell environment detection
+- Current username if not the same as the logged-in user
+- Optional current time in 12/24hr format
 - Current Terraform Workspace and version (`💠`)
 - Current Conda environment (`C`)
 
