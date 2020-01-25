@@ -54,12 +54,12 @@
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Русский"
   /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/zh-CN"
-    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png" alt="简体中文"
+  <a href="https://github.com/starship/starship/blob/master/docs/de-DE/guide/README.md"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png" alt="Deutsch"
   /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/de"
-    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png" alt="Deutsch"
+  <a href="https://translate.starship.rs/project/starship-prompt/zh-CN"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png" alt="简体中文"
   /></a>
   &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/es"
@@ -89,8 +89,9 @@ The prompt shows information you need while you're working, while staying sleek 
 
 - Prompt character turns red if the last command exits with non-zero code
 - Current Go version (`🐹`)
-- Current Java version (`☕`)
-- Current Node.js version (`⬢`)
+- Current Haskell version (`λ`)
+- Current Java version(`☕`)
+- Current Node.js version(`⬢`)
 - Current PHP version (`🐘`)
 - Current Python version (`🐍`)
 - Current Ruby version (`💎`)

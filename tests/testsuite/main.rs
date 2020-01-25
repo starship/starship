@@ -12,6 +12,7 @@ mod git_commit;
 mod git_state;
 mod git_status;
 mod golang;
+mod haskell;
 mod hg_branch;
 mod hostname;
 mod jobs;

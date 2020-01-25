@@ -11,6 +11,7 @@ mod git_commit;
 mod git_state;
 mod git_status;
 mod golang;
+mod haskell;
 mod hg_branch;
 mod hostname;
 mod java;
@@ -55,6 +56,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "git_state" => git_state::module(context),
         "git_status" => git_status::module(context),
         "golang" => golang::module(context),
+        "haskell" => haskell::module(context),
         "hg_branch" => hg_branch::module(context),
         "hostname" => hostname::module(context),
         "java" => java::module(context),

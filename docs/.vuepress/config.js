@@ -19,6 +19,11 @@ module.exports = {
       lang: "ru-RU",
       title: "Starship",
       description: "The cross-shell prompt for astronauts"
+    },
+    "/de-DE/": {
+      lang: "de-DE",
+      title: "Starship",
+      description: "The cross-shell prompt for astronauts"
     }
   },
   // prettier-ignore
@@ -119,6 +124,25 @@ module.exports = {
           ["/presets/", "Предустановки"]
         ]
       },
+      "/de-DE/": {
+        // text for the language dropdown
+        selectText: "Sprachen",
+        // label for this locale in the language dropdown
+        label: "Deutsch",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "Bearbeite diese Seite auf GitHub",
+        // Custom navbar values
+        nav: [{ text: "Konfiguration", link: "/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/",
+          ["/guide/", "Anleitung"],
+          ["/config/", "Konfiguration"],
+          ["/advanced-config/", "Erweiterte Konfiguration"],
+          ["/faq/", "Häufig gestellte Fragen"],
+          ["/presets/", "Konfigurations-Beispiele"]
+        ]
+      }
     }
   },
   plugins: [

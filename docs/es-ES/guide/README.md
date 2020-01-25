@@ -21,7 +21,7 @@
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
       alt="Chat en Discord" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-65-orange" alt="Todos los colaboradores"></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-68-orange" alt="Todos los colaboradores"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
@@ -46,11 +46,11 @@
   <a href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Русский" /></a>
   &nbsp;
+  <a href="https://github.com/starship/starship/blob/master/docs/de-DE/guide/README.md"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png" alt="Deutsch" /></a>
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/zh-CN"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png" alt="简体中文" /></a>
-  &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/de"
-    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png" alt="Deutsch" /></a>
   &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/es"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png" alt="Español" /></a>
@@ -327,6 +327,7 @@ Los agradecimientos van a estas maravillosas personas ([clave emoji](https://all
     <td align="center"><a href="https://github.com/gkeep"><img src="https://avatars3.githubusercontent.com/u/20600053?v=4" width="100px;" alt="" /><br /><sub><b>Gennady Koshkin</b></sub></a><br /><a href="#translation-gkeep" title="Translation">🌍</a></td>
     <td align="center"><a href="https://blog.brightone.space"><img src="https://avatars1.githubusercontent.com/u/12615679?v=4" width="100px;" alt="" /><br /><sub><b>Oleksii Filonenko</b></sub></a><br /><a href="#translation-filalex77" title="Translation">🌍</a></td>
     <td align="center"><a href="https://github.com/ivanovart"><img src="https://avatars2.githubusercontent.com/u/5867379?v=4" width="100px;" alt="" /><br /><sub><b>Artem Ivanov</b></sub></a><br /><a href="#translation-ivanovart" title="Translation">🌍</a></td>
+    <td align="center"><a href="http://www.drivendata.org"><img src="https://avatars3.githubusercontent.com/u/1799186?v=4" width="100px;" alt="" /><br /><sub><b>Peter Bull</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=pjbull" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=pjbull" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
