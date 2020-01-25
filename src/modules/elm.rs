@@ -22,11 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let elm_version = utils::exec_cmd(
-        "elm",
-        &["--version"],
-    )?
-    .stdout;
+    let elm_version = utils::exec_cmd("elm", &["--version"])?.stdout;
     let formatted_version = format_elm_version(&elm_version)?;
 
     let mut module = context.new_module("elm");
