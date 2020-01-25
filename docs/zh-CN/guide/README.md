@@ -74,19 +74,20 @@
 
 - 当上一个命令以非 0 状态退出时，提示字符会变为红色
 - 当前 Go 版本 (`🐹`)
-- Current Java version (`☕`)
-- Current Node.js version (`⬢`)
+- Current Haskell version (`λ`)
+- Current Java version(`☕`)
+- Current Node.js version(`⬢`)
 - Current PHP version (`🐘`)
-- 当前 Python 版本 (`🐍`)
-- 当前 Ruby 版本 (`💎`)
-- 当前 Rust 版本 (`🦀`)
+- Current Python version (`🐍`)
+- Current Ruby version (`💎`)
+- Current Rust version (`🦀`)
 - Current .NET version (`•NET`)
-- 当前目录下现在的包版本 (`📦`)
+- Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
   - composer (PHP)
-- 当前 Git 分支与一应俱全的仓库状态
+- Current Git branch and rich repo status:
   - `=` — conflicting changes
   - `⇡` — ahead of remote branch
   - `⇣` — behind of remote branch
@@ -98,17 +99,17 @@
   - `»` — renamed files
   - `✘` — deleted files
 - Current Mercurial branch
-- 当前电池剩余容量与状态
+- Current battery level and status
   - `⇡` – charging
   - `⇣` – discharging
   - `•` – fully charged
-- 后台运行进程数的指示器 (`✦`)
-- 当前 Kubernetes Cluster 与 Namespace (`☸`)
+- Indicator for jobs in the background (`✦`)
+- Current Kubernetes Cluster and Namespace (`☸`)
 - Current Amazon Web Services (AWS) profile (`☁️`)
 - Execution time of the last command
 - Custom environment variable value
-- Nix-shell 环境检测
-- 非当前登录用户的用户名
+- Nix-shell environment detection
+- Current username if not the same as the logged-in user
 - Optional current time in 12/24hr format
 - Current Terraform Workspace and version (`💠`)
 - Current Conda environment (`C`)
