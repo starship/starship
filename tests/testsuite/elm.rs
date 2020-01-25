@@ -58,8 +58,8 @@ fn folder_with_elm_package_json() -> io::Result<()> {
 #[ignore]
 fn folder_with_elm_stuff_directory() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
-    let godeps = dir.path().join("elm-stuff");
-    fs::create_dir_all(&godeps)?;
+    let elmstuff = dir.path().join("elm-stuff");
+    fs::create_dir_all(&elmstuff)?;
 
     let output = common::render_module("elm")
         .arg("--path")
