@@ -133,8 +133,10 @@ jobs:
           ARGS: --resolver nightly-2019-09-21
         run: stack $ARGS ghc -- --numeric-version --no-install-ghc
 
-      # Install Elm
-      - uses: justgook/setup-elm@v1
+      # Install Elm [-nix]
+      - name: Install Elm [-nix]
+        if: matrix.os != 'windows-latest'
+        uses: justgook/setup-elm@v1
         with:
           elm-version: 0.19.1
 
