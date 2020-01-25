@@ -268,7 +268,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 | Variable            | Standardwert    | Beschreibung                                                       |
 | ------------------- | --------------- | ------------------------------------------------------------------ |
 | `min_time`          | `2_000`         | Schwellwert für kleinste anzuzeigende Laufzeit (in Millisekunden). |
-| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration.         |
+| `show_milliseconds` | `false`         | Zeige Millisekunden zusätzlich zu Sekunden.                        |
 | `prefix`            | `took`          | Prefix der unmittelbar vor der Ausführungszeit angezeigt wird.     |
 | `style`             | `"bold yellow"` | Stil für dieses Modul.                                             |
 | `disabled`          | `false`         | Deaktiviert das `cmd_duration`-Modul.                              |
