@@ -6,6 +6,7 @@ pub mod conda;
 pub mod crystal;
 pub mod directory;
 pub mod dotnet;
+pub mod elm;
 pub mod env_var;
 pub mod git_branch;
 pub mod git_commit;

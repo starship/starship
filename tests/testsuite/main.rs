@@ -6,6 +6,7 @@ mod conda;
 mod configuration;
 mod directory;
 mod dotnet;
+mod elm;
 mod env_var;
 mod git_branch;
 mod git_commit;

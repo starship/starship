@@ -95,6 +95,7 @@ prompt_order = [
     "hostname",
     "kubernetes",
     "directory",
+    "elm",
     "git_branch",
     "git_commit",
     "git_state",
@@ -403,6 +404,34 @@ setting `heuristic = false` in the module options.
 symbol = "🥅 "
 style = "green"
 heuristic = false
+```
+
+## Elm
+
+The `elm` module shows the currently installed version of Elm version.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
+- The current directory contains a `elm-stuff` folder
+- The current directory contains a `*.elm` files
+
+### Options
+
+| Variable   | Default       | Description                                               |
+| ---------- | ------------- | --------------------------------------------------------- |
+| `symbol`   | `"🌳 "`       | The symbol used before displaying the version of Haskell. |
+| `style`    | `"bold cyan"` | The style for the module.                                 |
+| `disabled` | `false`       | Disables the `elm` module.                                |
+
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[haskell]
+symbol = "λx.x "
 ```
 
 ## Environment Variable
