@@ -133,6 +133,19 @@ jobs:
           ARGS: --resolver nightly-2019-09-21
         run: stack $ARGS ghc -- --numeric-version --no-install-ghc
 
+      # Install Elm [-nix]
+      - uses: jorelali/setup-elm@v1
+        if: matrix.os != 'windows-latest'
+        with:
+          elm-version: 0.19.1
+
+      # Install Elm [-windows]
+      - name: Install Elm [-windows]
+        if: matrix.os == 'windows-latest'
+        uses: crazy-max/ghaction-chocolatey@v1
+        with:
+          args: install elm-platform --version 0.19.1 -y
+
       # Install Golang at a fixed version
       - uses: actions/setup-go@v1
         with:
