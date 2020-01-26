@@ -287,7 +287,7 @@ prefix = "underwent "
 
 Модуль `conda` показывает текущее окружение conda, если `$CONDA_DEFAULT_ENV` присвоено значение.
 
-::: tip
+::: tip Подсказка
 
 Это не подавляет модификатор командной строки самой conda. Возможно, вы захотите запустить `conda config --set changeps1 False`.
 
@@ -434,7 +434,7 @@ truncation_symbol = ""
 
 Модуль `git_commit` показывает хэш текущего коммита репозитория в вашем текущем каталоге.
 
-::: tip
+::: tip Подсказка
 
 По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
@@ -678,21 +678,21 @@ threshold = 4
 
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+Отображает текущее контекстное имя Kubernetes и, если применено, пространство имён из файла kubeconfig. Пространство имен дожно быть задано в файле kubeconfig, это делается через `kubectl config set-context starship-cluster --namespace astronaut`. Если переменная окружения `$KUBECONFIG` задана, модуль будет использовать его значение, в противном случае будет использовать `~/.kube/config`.
 
-::: tip
+::: tip Подсказка
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 :::
 
 ### Опции
 
-| Переменная | По умолчанию  | Описание                                            |
-| ---------- | ------------- | --------------------------------------------------- |
-| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
-| `style`    | `"bold blue"` | The style for the module.                           |
-| `disabled` | `true`        | Disables the `kubernetes` module                    |
+| Переменная | По умолчанию  | Описание                                                      |
+| ---------- | ------------- | ------------------------------------------------------------- |
+| `symbol`   | `"☸ "`        | Символ, используемый перед отображением информации о Cluster. |
+| `style`    | `"bold blue"` | Стиль модуля.                                                 |
+| `disabled` | `true`        | Отключает модуль `kubernetes`                                 |
 
 ### Пример
 
@@ -705,15 +705,15 @@ style = "dim green"
 disabled = false
 ```
 
-## Line Break
+## Разрыв Строки
 
-The `line_break` module separates the prompt into two lines.
+Модуль `line_break` разделяет командную строку на две строки.
 
 ### Опции
 
-| Переменная | По умолчанию | Описание                                                           |
-| ---------- | ------------ | ------------------------------------------------------------------ |
-| `disabled` | `false`      | Disables the `line_break` module, making the prompt a single line. |
+| Переменная | По умолчанию | Описание                                                                 |
+| ---------- | ------------ | ------------------------------------------------------------------------ |
+| `disabled` | `false`      | Отключает модуль `line_break`, отображая командную строку в одну строку. |
 
 ### Пример
 
@@ -726,17 +726,17 @@ disabled = true
 
 ## Nix-shell
 
-The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
+Модуль `nix_shell` показывает окружение nix-shell. Модуль будет показываться внутри среды nix-shell.
 
 ### Опции
 
-| Переменная   | По умолчанию | Описание                           |
-| ------------ | ------------ | ---------------------------------- |
-| `use_name`   | `false`      | Display the name of the nix-shell. |
-| `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
-| `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
-| `style`      | `"bold red"` | The style for the module.          |
-| `disabled`   | `false`      | Disables the `nix_shell` module.   |
+| Переменная   | По умолчанию | Описание                      |
+| ------------ | ------------ | ----------------------------- |
+| `use_name`   | `false`      | Отображать имя nix-shell.     |
+| `impure_msg` | `"impure"`   | Настроить сообщение "impure". |
+| `pure_msg`   | `"pure"`     | Настройте сообщение "pure".   |
+| `style`      | `"bold red"` | Стиль модуля.                 |
+| `disabled`   | `false`      | Отключает модуль `nix_shell`. |
 
 ### Пример
 
@@ -780,7 +780,7 @@ The `memory_usage` module shows current system memory and swap usage.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
-::: tip
+::: tip Подсказка
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -1005,7 +1005,7 @@ symbol = "🏎💨 "
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
-::: tip
+::: tip Подсказка
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
