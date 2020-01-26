@@ -146,15 +146,24 @@ impl<'a> Context<'a> {
     }
 }
 
+#[derive(Debug)]
 pub struct DirContents {
+    // HashSet of all files, no folders, relative to the base directory given at construction.
     files: HashSet<PathBuf>,
+    // HashSet of all file names, e.g. the last section without any folders, as strings.
     file_names: HashSet<String>,
+    // HashSet of all folders, relative to the base directory given at construction.
     folders: HashSet<PathBuf>,
+    // HashSet of all extensions found, without dots, e.g. "js" instead of ".js".
     extensions: HashSet<String>,
 }
 
 impl DirContents {
-    fn from_path_with_timeout(p: &PathBuf, timeout: Duration) -> Result<Self, std::io::Error> {
+    fn from_path(base: &PathBuf) -> Result<Self, std::io::Error> {
+        Self::from_path_with_timeout(base, Duration::from_secs(30))
+    }
+
+    fn from_path_with_timeout(base: &PathBuf, timeout: Duration) -> Result<Self, std::io::Error> {
         let start = SystemTime::now();
 
         let mut folders: HashSet<PathBuf> = HashSet::new();
@@ -162,11 +171,11 @@ impl DirContents {
         let mut file_names: HashSet<String> = HashSet::new();
         let mut extensions: HashSet<String> = HashSet::new();
 
-        fs::read_dir(p)?
+        fs::read_dir(base)?
             .take_while(|_| SystemTime::now().duration_since(start).unwrap() < timeout)
             .filter_map(Result::ok)
             .for_each(|entry| {
-                let path = PathBuf::from(entry.path().strip_prefix(p).unwrap());
+                let path = PathBuf::from(entry.path().strip_prefix(base).unwrap());
                 if path.is_dir() {
                     folders.insert(path);
                 } else {
@@ -298,12 +307,9 @@ mod tests {
     }
 
     #[test]
-    fn test_scan_dir() {
-        let t = Duration::from_secs(999);
-
-        let empty = testdir(&[]).unwrap();
-        let empty_dc =
-            DirContents::from_path_with_timeout(&PathBuf::from(empty.path()), t).unwrap();
+    fn test_scan_dir() -> Result<(), Box<dyn std::error::Error>> {
+        let empty = testdir(&[])?;
+        let empty_dc = DirContents::from_path(&PathBuf::from(empty.path()))?;
 
         assert_eq!(
             ScanDir {
@@ -316,8 +322,8 @@ mod tests {
             false
         );
 
-        let rust = testdir(&["README.md", "Cargo.toml", "src/main.rs"]).unwrap();
-        let rust_dc = DirContents::from_path_with_timeout(&PathBuf::from(rust.path()), t).unwrap();
+        let rust = testdir(&["README.md", "Cargo.toml", "src/main.rs"])?;
+        let rust_dc = DirContents::from_path(&PathBuf::from(rust.path()))?;
         assert_eq!(
             ScanDir {
                 dir_contents: &rust_dc,
@@ -329,8 +335,8 @@ mod tests {
             false
         );
 
-        let java = testdir(&["README.md", "src/com/test/Main.java", "pom.xml"]).unwrap();
-        let java_dc = DirContents::from_path_with_timeout(&PathBuf::from(java.path()), t).unwrap();
+        let java = testdir(&["README.md", "src/com/test/Main.java", "pom.xml"])?;
+        let java_dc = DirContents::from_path(&PathBuf::from(java.path()))?;
         assert_eq!(
             ScanDir {
                 dir_contents: &java_dc,
@@ -342,8 +348,8 @@ mod tests {
             false
         );
 
-        let node = testdir(&["README.md", "node_modules/lodash/main.js", "package.json"]).unwrap();
-        let node_dc = DirContents::from_path_with_timeout(&PathBuf::from(node.path()), t).unwrap();
+        let node = testdir(&["README.md", "node_modules/lodash/main.js", "package.json"])?;
+        let node_dc = DirContents::from_path(&PathBuf::from(node.path()))?;
         assert_eq!(
             ScanDir {
                 dir_contents: &node_dc,
@@ -354,5 +360,7 @@ mod tests {
             .is_match(),
             true
         );
+
+        Ok(())
     }
 }
