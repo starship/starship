@@ -148,12 +148,14 @@ impl<'a> Context<'a> {
         Ok(files.contains(Path::new(name)))
     }
 
-    pub fn get_folders_files_extensions(&self) -> Result<&(HashSet<PathBuf>, HashSet<PathBuf>, HashSet<String>), std::io::Error> {
+    pub fn get_folders_files_extensions(
+        &self,
+    ) -> Result<&(HashSet<PathBuf>, HashSet<PathBuf>, HashSet<String>), std::io::Error> {
         let start_time = SystemTime::now();
         let scan_timeout = Duration::from_millis(self.config.get_root_config().scan_timeout);
 
-        self.folders_files_extensions
-            .get_or_try_init(|| -> Result<(HashSet<PathBuf>, HashSet<PathBuf>, HashSet<String>), std::io::Error> {
+        self.folders_files_extensions.get_or_try_init(
+            || -> Result<(HashSet<PathBuf>, HashSet<PathBuf>, HashSet<String>), std::io::Error> {
                 let mut folders: HashSet<PathBuf> = HashSet::new();
                 let mut files: HashSet<PathBuf> = HashSet::new();
                 let mut extensions: HashSet<String> = HashSet::new();
@@ -170,7 +172,9 @@ impl<'a> Context<'a> {
                         } else {
                             files.insert(path.clone());
                             if !path.to_string_lossy().starts_with('.') {
-                                path.extension().map(|ext| extensions.insert(ext.to_string_lossy().to_string()));
+                                path.extension().map(|ext| {
+                                    extensions.insert(ext.to_string_lossy().to_string())
+                                });
                             }
                         }
                     });
@@ -181,7 +185,8 @@ impl<'a> Context<'a> {
                 );
 
                 Ok((folders, files, extensions))
-            })
+            },
+        )
     }
 }
 
@@ -228,15 +233,27 @@ impl<'a> ScanDir<'a> {
     pub fn is_match(&self) -> bool {
         let (folders, files, extensions) = self.folders_files_extensions;
 
-        if self.folders.iter().any(|folder| folders.contains(Path::new(folder))) {
+        if self
+            .folders
+            .iter()
+            .any(|folder| folders.contains(Path::new(folder)))
+        {
             return true;
         }
 
-        if self.files.iter().any(|file| files.contains(Path::new(file))) {
+        if self
+            .files
+            .iter()
+            .any(|file| files.contains(Path::new(file)))
+        {
             return true;
         }
 
-        if self.extensions.iter().any(|ext| extensions.contains(ext.to_owned())) {
+        if self
+            .extensions
+            .iter()
+            .any(|ext| extensions.contains(ext.to_owned()))
+        {
             return true;
         }
 
@@ -257,11 +274,15 @@ mod tests {
     use std::iter::FromIterator;
     use std::str::FromStr;
 
-    fn folders_files_extensions(folders: &[&str], files: &[&str], extensions: &[&str]) -> (HashSet<PathBuf>, HashSet<PathBuf>, HashSet<String>) {
+    fn folders_files_extensions(
+        folders: &[&str],
+        files: &[&str],
+        extensions: &[&str],
+    ) -> (HashSet<PathBuf>, HashSet<PathBuf>, HashSet<String>) {
         (
             HashSet::from_iter(folders.iter().map(|f| PathBuf::from_str(f).unwrap())),
             HashSet::from_iter(files.iter().map(|f| PathBuf::from_str(f).unwrap())),
-            HashSet::from_iter(extensions.iter().map(|s| s.to_string()))
+            HashSet::from_iter(extensions.iter().map(|s| s.to_string())),
         )
     }
 
