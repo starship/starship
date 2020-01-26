@@ -261,7 +261,7 @@ Ist `bash` die Konsole der Wahl, dann nicht die `DEBUG`-trap nach der Ausführun
 
 :::
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+Bash Nutzer, die eine "preexec" ähnliche Funktion benötigen, können [rcaloras bash_preexec Framework](https://github.com/rcaloras/bash-preexec) verwenden. Definieren Sie einfach die Arrays `preexec_functions` und `precmd_functions` bevor sie `eval $(starship init $0)` ausführen, und fahren Sie dann wie gewohnt fort.
 
 ### Optionen
 
@@ -325,7 +325,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | ------------------- | ------------- | -------------------------------------------------------------------------------- |
 | `truncation_length` | `3`           | Die Anzahl der übergeordneten Ordner, die angezeigt werden.                      |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
+| `prefix`            | `"in "`       | Präfix der vor dem Verzeichnis angezeigt wird.                                   |
 | `style`             | `"bold cyan"` | Stil für dieses Modul.                                                           |
 | `disabled`          | `false`       | Deaktiviert das `directory`-Modul.                                               |
 
@@ -385,15 +385,15 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Optionen
 
-| Variable   | Standardwert     | Beschreibung                                                                 |
-| ---------- | ---------------- | ---------------------------------------------------------------------------- |
-| `symbol`   |                  | The symbol used before displaying the variable value.                        |
-| `variable` |                  | The environment variable to be displayed.                                    |
-| `default`  |                  | The default value to be displayed when the selected variable is not defined. |
-| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
-| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed black"` | Stil für dieses Modul.                                                       |
-| `disabled` | `false`          | Deaktiviert das `env_var`-Modul.                                             |
+| Variable   | Standardwert     | Beschreibung                                                                             |
+| ---------- | ---------------- | ---------------------------------------------------------------------------------------- |
+| `symbol`   |                  | Das Symbol, das vor der Anzeige der Variable verwendet wird.                             |
+| `variable` |                  | Die anzuzeigende Umgebungsvariable.                                                      |
+| `default`  |                  | Der Standardwert, der angezeigt wird, wenn die ausgewählte Variable nicht definiert ist. |
+| `prefix`   | `""`             | Präfix der vor der Variable angezeigt wird.                                              |
+| `suffix`   | `""`             | Suffix der nach der Variable angezeigt wird.                                             |
+| `style`    | `"dimmed black"` | Stil für dieses Modul.                                                                   |
+| `disabled` | `false`          | Deaktiviert das `env_var`-Modul.                                                         |
 
 ### Beispiel
 
@@ -411,13 +411,13 @@ Das `git_branch`-Modul zeigt den aktiven Git-Branch des Repositories im aktuelle
 
 ### Optionen
 
-| Variable            | Standardwert    | Beschreibung                                                                          |
-| ------------------- | --------------- | ------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
-| `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
-| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
-| `style`             | `"bold purple"` | Stil für dieses Modul.                                                                |
-| `disabled`          | `false`         | Deaktiviert das `git_branch`-Modul.                                                   |
+| Variable            | Standardwert    | Beschreibung                                                                                           |
+| ------------------- | --------------- | ------------------------------------------------------------------------------------------------------ |
+| `symbol`            | `" "`          | Das Symbol, das vor dem Branchnamen des Git-Repositorys in Ihrem aktuellen Verzeichnis angezeigt wird. |
+| `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                                  |
+| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol                  |
+| `style`             | `"bold purple"` | Stil für dieses Modul.                                                                                 |
+| `disabled`          | `false`         | Deaktiviert das `git_branch`-Modul.                                                                    |
 
 ### Beispiel
 
