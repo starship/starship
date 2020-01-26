@@ -74,21 +74,21 @@
 
 - Символ подсказки становится красным, если последняя команда завершается с ненулевым кодом
 - Текущая версия Go (`🐹`)
-- Current Haskell version (`λ`)
-- Current Java version(`☕`)
-- Current Node.js version(`⬢`)
-- Current PHP version (`🐘`)
-- Current Python version (`🐍`)
-- Current Ruby version (`💎`)
-- Current Rust version (`🦀`)
-- Current .NET version (`•NET`)
-- Current version of package in current directory (`📦`)
+- Текущая версия Haskell (`λ`)
+- Текущая версия Java (`☕`)
+- Текущая версия Node.js (`⬢`)
+- Текущая версия PHP (`🐘`)
+- Текущая версия Python (`🐍`)
+- Текущая версия Ruby (`💎`)
+- Текущая версия Rust (`🦀`)
+- Текущая версия .NET (`•NET`)
+- Текущая версия пакета в текущей директории (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-  - composer (PHP)
-- Current Git branch and rich repo status:
-  - `=` — conflicting changes
+  - композитор (PHP)
+- Текущая ветка Git и статус репозитория:
+  - `=` — конфликтующие изменения
   - `⇡` — ahead of remote branch
   - `⇣` — behind of remote branch
   - `⇕` — diverged changes
