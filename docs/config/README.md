@@ -420,7 +420,7 @@ The module will be shown if any of the following conditions are met:
 
 | Variable   | Default       | Description                                               |
 | ---------- | ------------- | --------------------------------------------------------- |
-| `symbol`   | `"🌳 "`       | The symbol used before displaying the version of Haskell. |
+| `symbol`   | `"🌳 "`       | The symbol used before displaying the version of Elm. |
 | `style`    | `"bold cyan"` | The style for the module.                                 |
 | `disabled` | `false`       | Disables the `elm` module.                                |
 
