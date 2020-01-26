@@ -106,7 +106,10 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
         Some(line.trim().to_owned())
     }
 
-    if let Ok(true) = context.dir_contents().map(|dir| dir.has_file("rust-toolchain")) {
+    if let Ok(true) = context
+        .dir_contents()
+        .map(|dir| dir.has_file("rust-toolchain"))
+    {
         if let Some(toolchain) = read_first_line(Path::new("rust-toolchain")) {
             return Some(toolchain);
         }

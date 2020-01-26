@@ -169,9 +169,8 @@ impl DirContents {
                     folders.insert(path);
                 } else {
                     if !path.to_string_lossy().starts_with('.') {
-                        path.extension().map(|ext| {
-                            extensions.insert(ext.to_string_lossy().to_string())
-                        });
+                        path.extension()
+                            .map(|ext| extensions.insert(ext.to_string_lossy().to_string()));
                     }
                     files.insert(path);
                 }
@@ -182,7 +181,11 @@ impl DirContents {
             SystemTime::now().duration_since(start).unwrap()
         );
 
-        Ok(DirContents { folders, files, extensions })
+        Ok(DirContents {
+            folders,
+            files,
+            extensions,
+        })
     }
 
     pub fn files(&self) -> impl Iterator<Item = &PathBuf> {
@@ -255,9 +258,9 @@ impl<'a> ScanDir<'a> {
     /// based on the current Pathbuf check to see
     /// if any of this criteria match or exist and returning a boolean
     pub fn is_match(&self) -> bool {
-        self.dir_contents.has_any_extension(self.extensions) ||
-        self.dir_contents.has_any_folder(self.folders) ||
-        self.dir_contents.has_any_file(self.files)
+        self.dir_contents.has_any_extension(self.extensions)
+            || self.dir_contents.has_any_folder(self.folders)
+            || self.dir_contents.has_any_file(self.files)
     }
 }
 
@@ -289,40 +292,57 @@ mod tests {
         let t = Duration::from_secs(999);
 
         let empty = testdir(&[]).unwrap();
-        let empty_dc = DirContents::from_path_with_timeout(&PathBuf::from(empty.path()), t).unwrap();
+        let empty_dc =
+            DirContents::from_path_with_timeout(&PathBuf::from(empty.path()), t).unwrap();
 
-        assert_eq!(ScanDir {
-            dir_contents: &empty_dc,
-            files: &["package.json"],
-            extensions: &["js"],
-            folders: &["node_modules"],
-        }.is_match(), false);
+        assert_eq!(
+            ScanDir {
+                dir_contents: &empty_dc,
+                files: &["package.json"],
+                extensions: &["js"],
+                folders: &["node_modules"],
+            }
+            .is_match(),
+            false
+        );
 
         let rust = testdir(&["README.md", "Cargo.toml", "src/main.rs"]).unwrap();
         let rust_dc = DirContents::from_path_with_timeout(&PathBuf::from(rust.path()), t).unwrap();
-        assert_eq!(ScanDir {
-            dir_contents: &rust_dc,
-            files: &["package.json"],
-            extensions: &["js"],
-            folders: &["node_modules"],
-        }.is_match(), false);
+        assert_eq!(
+            ScanDir {
+                dir_contents: &rust_dc,
+                files: &["package.json"],
+                extensions: &["js"],
+                folders: &["node_modules"],
+            }
+            .is_match(),
+            false
+        );
 
         let java = testdir(&["README.md", "src/com/test/Main.java", "pom.xml"]).unwrap();
         let java_dc = DirContents::from_path_with_timeout(&PathBuf::from(java.path()), t).unwrap();
-        assert_eq!(ScanDir {
-            dir_contents: &java_dc,
-            files: &["package.json"],
-            extensions: &["js"],
-            folders: &["node_modules"],
-        }.is_match(), false);
+        assert_eq!(
+            ScanDir {
+                dir_contents: &java_dc,
+                files: &["package.json"],
+                extensions: &["js"],
+                folders: &["node_modules"],
+            }
+            .is_match(),
+            false
+        );
 
         let node = testdir(&["README.md", "node_modules/lodash/main.js", "package.json"]).unwrap();
         let node_dc = DirContents::from_path_with_timeout(&PathBuf::from(node.path()), t).unwrap();
-        assert_eq!(ScanDir {
-            dir_contents: &node_dc,
-            files: &["package.json"],
-            extensions: &["js"],
-            folders: &["node_modules"],
-        }.is_match(), true);
+        assert_eq!(
+            ScanDir {
+                dir_contents: &node_dc,
+                files: &["package.json"],
+                extensions: &["js"],
+                folders: &["node_modules"],
+            }
+            .is_match(),
+            true
+        );
     }
 }
