@@ -612,7 +612,7 @@ symbol = "λx.x "
 | `truncation_length` | `2^63 - 1`      | Обрезает имя ветки hg до X графемов                                                      |
 | `truncation_symbol` | `"…"`           | Символ, используемый для обозначения усечения названия ветки.                            |
 | `style`             | `"bold purple"` | Стиль модуля.                                                                            |
-| `disabled`          | `true`          | Disables the `hg_branch` module.                                                         |
+| `disabled`          | `true`          | Отключает модуль `hg_branch`.                                                            |
 
 ### Пример
 
@@ -625,20 +625,20 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Hostname
+## Имя хоста
 
-The `hostname` module shows the system hostname.
+Модуль `hostname` отображает имя системы (хоста).
 
 ### Опции
 
-| Переменная | По умолчанию          | Описание                                                                                                                             |
-| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
-| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
-| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
-| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
-| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
+| Переменная | По умолчанию          | Описание                                                                                                                                   |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                | Показывать имя хоста только при подключении через SSH.                                                                                     |
+| `prefix`   | `""`                  | Префикс, отображаемый непосредственно перед именем хоста.                                                                                  |
+| `suffix`   | `""`                  | Суффикс, отображаемый непосредственно перед именем хоста.                                                                                  |
+| `trim_at`  | `"."`                 | Символы, по которую имя хоста будет сокращено после первого совпадения. `"."` остановится после первой точки. `""` отключит любое усечение |
+| `style`    | `"bold dimmed green"` | Стиль модуля.                                                                                                                              |
+| `disabled` | `false`               | Отключает модуль `hostname`.                                                                                                               |
 
 ### Пример
 
@@ -653,18 +653,18 @@ trim_at = ".companyname.com"
 disabled = false
 ```
 
-## Jobs
+## Работы
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
+Модуль `jobs` отображает текущее количество запущенных работ. Модуль будет показан только если работы выполняются в фоне. Модуль покажет количество запущенных задач при более 1 задачи, или больше, чем значение настройки `threshold`, если оно существует.
 
 ### Опции
 
-| Переменная  | По умолчанию  | Описание                                              |
-| ----------- | ------------- | ----------------------------------------------------- |
-| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
-| `threshold` | `1`           | Show number of jobs if exceeded.                      |
-| `style`     | `"bold blue"` | The style for the module.                             |
-| `disabled`  | `false`       | Disables the `jobs` module.                           |
+| Переменная  | По умолчанию  | Описание                                                  |
+| ----------- | ------------- | --------------------------------------------------------- |
+| `symbol`    | `"✦"`         | Символ, используемый перед отображением количества работ. |
+| `threshold` | `1`           | Показывать количество работ, если превышено.              |
+| `style`     | `"bold blue"` | Стиль модуля.                                             |
+| `disabled`  | `false`       | Отключает модуль `jobs`.                                  |
 
 ### Пример
 
