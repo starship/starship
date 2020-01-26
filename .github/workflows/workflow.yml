@@ -133,11 +133,6 @@ jobs:
           ARGS: --resolver nightly-2019-09-21
         run: stack $ARGS ghc -- --numeric-version --no-install-ghc
 
-      # Install Node.js at a fixed version
-      - uses: actions/setup-node@v1
-        with:
-          node-version: "12.0.0"
-
       # Install Golang at a fixed version
       - uses: actions/setup-go@v1
         with:

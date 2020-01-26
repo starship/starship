@@ -1,3 +1,4 @@
+use ansi_term::ANSIStrings;
 use clap::ArgMatches;
 use rayon::prelude::*;
 use std::fmt::Write as FmtWrite;
@@ -35,10 +36,11 @@ pub fn get_prompt(context: Context) -> String {
     for module in printable {
         // Skip printing the prefix of a module after the line_break
         if print_without_prefix {
-            let module_without_prefix = module.to_string_without_prefix();
+            let module_without_prefix = module.to_string_without_prefix(context.shell.clone());
             write!(buf, "{}", module_without_prefix).unwrap()
         } else {
-            write!(buf, "{}", module).unwrap();
+            let module = module.ansi_strings_for_shell(context.shell.clone());
+            write!(buf, "{}", ANSIStrings(&module)).unwrap();
         }
 
         print_without_prefix = module.get_name() == "line_break"
@@ -49,13 +51,12 @@ pub fn get_prompt(context: Context) -> String {
 
 pub fn module(module_name: &str, args: ArgMatches) {
     let context = Context::new(args);
-
-    // If the module returns `None`, print an empty string
-    let module = modules::handle(module_name, &context)
-        .map(|m| m.to_string())
-        .unwrap_or_default();
-
+    let module = get_module(module_name, context).unwrap_or_default();
     print!("{}", module);
+}
+
+pub fn get_module(module_name: &str, context: Context) -> Option<String> {
+    modules::handle(module_name, &context).map(|m| m.to_string())
 }
 
 pub fn explain(args: ArgMatches) {
@@ -73,7 +74,7 @@ pub fn explain(args: ArgMatches) {
         .into_iter()
         .filter(|module| !dont_print.contains(&module.get_name().as_str()))
         .map(|module| {
-            let ansi_strings = module.ansi_strings_for_prompt(false);
+            let ansi_strings = module.ansi_strings();
             let value = module.get_segments().join("");
             ModuleInfo {
                 value: ansi_term::ANSIStrings(&ansi_strings[1..ansi_strings.len() - 1]).to_string(),
