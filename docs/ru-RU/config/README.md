@@ -578,17 +578,17 @@ symbol = "🏎💨 "
 ```
 ## Haskell
 
-The `haskell` module shows the currently installed version of Haskell Stack version. The module will be shown if any of the following conditions are met:
+Модуль `haskell` показывает установленную версию Haskell Stack. Модуль будет показан, если любое из следующих условий соблюдено:
 
-- The current directory contains a `stack.yaml` file
+- Текущий каталог содержит файл `stack.yaml`
 
 ### Опции
 
-| Переменная | По умолчанию | Описание                                                  |
-| ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold red"` | The style for the module.                                 |
-| `disabled` | `false`      | Disables the `haskell` module.                            |
+| Переменная | По умолчанию | Описание                                          |
+| ---------- | ------------ | ------------------------------------------------- |
+| `symbol`   | `"λ "`       | Символ перед отображением текущей версии Haskell. |
+| `style`    | `"bold red"` | Стиль модуля.                                     |
+| `disabled` | `false`      | Отключает модуль `haskell`.                       |
 
 
 ### Пример
@@ -600,19 +600,19 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 symbol = "λx.x "
 ```
 
-## Mercurial Branch
+## Ветвь Mercurial
 
-The `hg_branch` module shows the active branch of the repo in your current directory.
+Модуль `hg_branch` показывает активную ветку репозитория в вашей текущей директории.
 
 ### Опции
 
-| Переменная          | По умолчанию    | Описание                                                                                     |
-| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
-| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
-| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
-| `style`             | `"bold purple"` | The style for the module.                                                                    |
-| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+| Переменная          | По умолчанию    | Описание                                                                                 |
+| ------------------- | --------------- | ---------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | Символ, используемый перед закладкой hg или именем ветви репозитория в текущем каталоге. |
+| `truncation_length` | `2^63 - 1`      | Обрезает имя ветки hg до X графемов                                                      |
+| `truncation_symbol` | `"…"`           | Символ, используемый для обозначения усечения названия ветки.                            |
+| `style`             | `"bold purple"` | Стиль модуля.                                                                            |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                         |
 
 ### Пример
 
