@@ -176,7 +176,7 @@ impl DirContents {
             .filter_map(Result::ok)
             .for_each(|entry| {
                 let path = PathBuf::from(entry.path().strip_prefix(base).unwrap());
-                if path.is_dir() {
+                if entry.path().is_dir() {
                     folders.insert(path);
                 } else {
                     if !path.to_string_lossy().starts_with('.') {
