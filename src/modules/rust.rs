@@ -1,4 +1,3 @@
-use std::ffi::OsStr;
 use std::path::Path;
 use std::process::{Command, Output};
 use std::{env, fs};
@@ -107,13 +106,8 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
         Some(line.trim().to_owned())
     }
 
-    if let Some(path) = context
-        .get_dir_files()
-        .ok()?
-        .iter()
-        .find(|p| p.file_name() == Some(OsStr::new("rust-toolchain")))
-    {
-        if let Some(toolchain) = read_first_line(path) {
+    if let Ok(true) = context.has_file("rust-toolchain") {
+        if let Some(toolchain) = read_first_line(Path::new("rust-toolchain")) {
             return Some(toolchain);
         }
     }
