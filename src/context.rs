@@ -22,8 +22,8 @@ pub struct Context<'a> {
     /// The current working directory that starship is being called in.
     pub current_dir: PathBuf,
 
-    /// A vector containing the full paths of all the files in `current_dir`.
-    folders_files_extensions: OnceCell<(HashSet<PathBuf>, HashSet<PathBuf>, HashSet<String>)>,
+    /// A struct containing directory contents in a lookup-optimised format.
+    dir_contents: OnceCell<DirContents>,
 
     /// Properties to provide to modules.
     pub properties: HashMap<&'a str, String>,
@@ -74,7 +74,7 @@ impl<'a> Context<'a> {
             config,
             properties,
             current_dir,
-            folders_files_extensions: OnceCell::new(),
+            dir_contents: OnceCell::new(),
             repo: OnceCell::new(),
         }
     }
@@ -110,7 +110,7 @@ impl<'a> Context<'a> {
     // see ScanDir for methods
     pub fn try_begin_scan(&'a self) -> Option<ScanDir<'a>> {
         Some(ScanDir {
-            folders_files_extensions: self.get_folders_files_extensions().ok()?,
+            dir_contents: self.dir_contents().ok()?,
             files: &[],
             folders: &[],
             extensions: &[],
@@ -138,55 +138,79 @@ impl<'a> Context<'a> {
             })
     }
 
-    pub fn files(&self) -> Result<impl Iterator<Item = &PathBuf>, std::io::Error> {
-        let (_, files, _) = self.get_folders_files_extensions()?;
-        Ok(files.iter())
+    pub fn dir_contents(&self) -> Result<&DirContents, std::io::Error> {
+        self.dir_contents.get_or_try_init(|| {
+            let timeout = Duration::from_millis(self.config.get_root_config().scan_timeout);
+            DirContents::from_path_with_timeout(&self.current_dir, timeout)
+        })
+    }
+}
+
+pub struct DirContents {
+    files: HashSet<PathBuf>,
+    folders: HashSet<PathBuf>,
+    extensions: HashSet<String>,
+}
+
+impl DirContents {
+    fn from_path_with_timeout(p: &PathBuf, timeout: Duration) -> Result<Self, std::io::Error> {
+        let start = SystemTime::now();
+
+        let mut folders: HashSet<PathBuf> = HashSet::new();
+        let mut files: HashSet<PathBuf> = HashSet::new();
+        let mut extensions: HashSet<String> = HashSet::new();
+
+        fs::read_dir(p)?
+            .take_while(|_| SystemTime::now().duration_since(start).unwrap() < timeout)
+            .filter_map(Result::ok)
+            .for_each(|entry| {
+                let path = PathBuf::from(entry.path().strip_prefix(p).unwrap());
+                if path.is_dir() {
+                    folders.insert(path);
+                } else {
+                    if !path.to_string_lossy().starts_with('.') {
+                        path.extension().map(|ext| {
+                            extensions.insert(ext.to_string_lossy().to_string())
+                        });
+                    }
+                    files.insert(path);
+                }
+            });
+
+        log::trace!(
+            "Building HashSets of directory files, folders and extensions took {:?}",
+            SystemTime::now().duration_since(start).unwrap()
+        );
+
+        Ok(DirContents { folders, files, extensions })
     }
 
-    pub fn has_file(&self, name: &str) -> Result<bool, std::io::Error> {
-        let (_, files, _) = self.get_folders_files_extensions()?;
-        Ok(files.contains(Path::new(name)))
+    pub fn files(&self) -> impl Iterator<Item = &PathBuf> {
+        self.files.iter()
     }
 
-    pub fn get_folders_files_extensions(
-        &self,
-    ) -> Result<&(HashSet<PathBuf>, HashSet<PathBuf>, HashSet<String>), std::io::Error> {
-        let start_time = SystemTime::now();
-        let scan_timeout = Duration::from_millis(self.config.get_root_config().scan_timeout);
+    pub fn has_file(&self, path: &str) -> bool {
+        self.files.contains(Path::new(path))
+    }
 
-        self.folders_files_extensions.get_or_try_init(
-            || -> Result<(HashSet<PathBuf>, HashSet<PathBuf>, HashSet<String>), std::io::Error> {
-                let mut folders: HashSet<PathBuf> = HashSet::new();
-                let mut files: HashSet<PathBuf> = HashSet::new();
-                let mut extensions: HashSet<String> = HashSet::new();
+    pub fn has_any_file(&self, paths: &[&str]) -> bool {
+        paths.iter().any(|path| self.has_file(path))
+    }
 
-                fs::read_dir(&self.current_dir)?
-                    .take_while(|_item| {
-                        SystemTime::now().duration_since(start_time).unwrap() < scan_timeout
-                    })
-                    .filter_map(Result::ok)
-                    .for_each(|entry| {
-                        let path = entry.path();
-                        if path.is_dir() {
-                            folders.insert(path.clone());
-                        } else {
-                            files.insert(path.clone());
-                            if !path.to_string_lossy().starts_with('.') {
-                                path.extension().map(|ext| {
-                                    extensions.insert(ext.to_string_lossy().to_string())
-                                });
-                            }
-                        }
-                    });
+    pub fn has_folder(&self, path: &str) -> bool {
+        self.folders.contains(Path::new(path))
+    }
 
-                log::trace!(
-                    "Building HashSets of directory files, folders and extensions took {:?}",
-                    SystemTime::now().duration_since(start_time).unwrap()
-                );
+    pub fn has_any_folder(&self, paths: &[&str]) -> bool {
+        paths.iter().any(|path| self.has_folder(path))
+    }
 
-                Ok((folders, files, extensions))
-            },
-        )
+    pub fn has_extension(&self, ext: &str) -> bool {
+        self.extensions.contains(ext)
+    }
+
+    pub fn has_any_extension(&self, exts: &[&str]) -> bool {
+        exts.iter().any(|ext| self.has_extension(ext))
     }
 }
 
@@ -206,7 +230,7 @@ pub struct Repo {
 // A struct of Criteria which will be used to verify current PathBuf is
 // of X language, criteria can be set via the builder pattern
 pub struct ScanDir<'a> {
-    folders_files_extensions: &'a (HashSet<PathBuf>, HashSet<PathBuf>, HashSet<String>),
+    dir_contents: &'a DirContents,
     files: &'a [&'a str],
     folders: &'a [&'a str],
     extensions: &'a [&'a str],
@@ -231,33 +255,9 @@ impl<'a> ScanDir<'a> {
     /// based on the current Pathbuf check to see
     /// if any of this criteria match or exist and returning a boolean
     pub fn is_match(&self) -> bool {
-        let (folders, files, extensions) = self.folders_files_extensions;
-
-        if self
-            .folders
-            .iter()
-            .any(|folder| folders.contains(Path::new(folder)))
-        {
-            return true;
-        }
-
-        if self
-            .files
-            .iter()
-            .any(|file| files.contains(Path::new(file)))
-        {
-            return true;
-        }
-
-        if self
-            .extensions
-            .iter()
-            .any(|ext| extensions.contains(ext.to_owned()))
-        {
-            return true;
-        }
-
-        false
+        self.dir_contents.has_any_extension(self.extensions) ||
+        self.dir_contents.has_any_folder(self.folders) ||
+        self.dir_contents.has_any_file(self.files)
     }
 }
 
@@ -271,80 +271,58 @@ fn get_current_branch(repository: &Repository) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::iter::FromIterator;
-    use std::str::FromStr;
 
-    fn folders_files_extensions(
-        folders: &[&str],
-        files: &[&str],
-        extensions: &[&str],
-    ) -> (HashSet<PathBuf>, HashSet<PathBuf>, HashSet<String>) {
-        (
-            HashSet::from_iter(folders.iter().map(|f| PathBuf::from_str(f).unwrap())),
-            HashSet::from_iter(files.iter().map(|f| PathBuf::from_str(f).unwrap())),
-            HashSet::from_iter(extensions.iter().map(|s| s.to_string())),
-        )
+    fn testdir(paths: &[&str]) -> Result<tempfile::TempDir, std::io::Error> {
+        let dir = tempfile::tempdir()?;
+        for path in paths {
+            let p = dir.path().join(Path::new(path));
+            if let Some(parent) = p.parent() {
+                fs::create_dir_all(parent)?;
+            }
+            fs::File::create(p)?.sync_all()?;
+        }
+        Ok(dir)
     }
 
     #[test]
-    fn test_criteria_scan_fails() {
-        let empty = ScanDir {
-            folders_files_extensions: &folders_files_extensions(&[], &[], &[]),
-            files: &["package.json"],
-            extensions: &["js"],
-            folders: &["node_modules"],
-        };
-        assert_eq!(empty.is_match(), false);
+    fn test_scan_dir() {
+        let t = Duration::from_secs(999);
 
-        let folder_doesnt_match = ScanDir {
-            folders_files_extensions: &folders_files_extensions(&[], &["foo"], &[]),
-            files: &["package.json"],
-            extensions: &["js"],
-            folders: &["node_modules"],
-        };
-        assert_eq!(folder_doesnt_match.is_match(), false);
+        let empty = testdir(&[]).unwrap();
+        let empty_dc = DirContents::from_path_with_timeout(&PathBuf::from(empty.path()), t).unwrap();
 
-        let file_doesnt_match = ScanDir {
-            folders_files_extensions: &folders_files_extensions(&["foo"], &[], &[]),
+        assert_eq!(ScanDir {
+            dir_contents: &empty_dc,
             files: &["package.json"],
             extensions: &["js"],
             folders: &["node_modules"],
-        };
-        assert_eq!(file_doesnt_match.is_match(), false);
+        }.is_match(), false);
 
-        let extension_doesnt_match = ScanDir {
-            folders_files_extensions: &folders_files_extensions(&[], &[], &["foo"]),
+        let rust = testdir(&["README.md", "Cargo.toml", "src/main.rs"]).unwrap();
+        let rust_dc = DirContents::from_path_with_timeout(&PathBuf::from(rust.path()), t).unwrap();
+        assert_eq!(ScanDir {
+            dir_contents: &rust_dc,
             files: &["package.json"],
             extensions: &["js"],
             folders: &["node_modules"],
-        };
-        assert_eq!(extension_doesnt_match.is_match(), false);
-    }
+        }.is_match(), false);
 
-    #[test]
-    fn test_criteria_scan_passes() {
-        let file_matches = ScanDir {
-            folders_files_extensions: &folders_files_extensions(&[], &["package.json"], &[]),
+        let java = testdir(&["README.md", "src/com/test/Main.java", "pom.xml"]).unwrap();
+        let java_dc = DirContents::from_path_with_timeout(&PathBuf::from(java.path()), t).unwrap();
+        assert_eq!(ScanDir {
+            dir_contents: &java_dc,
             files: &["package.json"],
             extensions: &["js"],
             folders: &["node_modules"],
-        };
-        assert_eq!(file_matches.is_match(), true);
+        }.is_match(), false);
 
-        let folder_matches = ScanDir {
-            folders_files_extensions: &folders_files_extensions(&["node_modules"], &[], &[]),
+        let node = testdir(&["README.md", "node_modules/lodash/main.js", "package.json"]).unwrap();
+        let node_dc = DirContents::from_path_with_timeout(&PathBuf::from(node.path()), t).unwrap();
+        assert_eq!(ScanDir {
+            dir_contents: &node_dc,
             files: &["package.json"],
             extensions: &["js"],
             folders: &["node_modules"],
-        };
-        assert_eq!(folder_matches.is_match(), true);
-
-        let extension_matches = ScanDir {
-            folders_files_extensions: &folders_files_extensions(&[], &[], &["js"]),
-            files: &["package.json"],
-            extensions: &["js"],
-            folders: &["node_modules"],
-        };
-        assert_eq!(extension_matches.is_match(), true);
+        }.is_match(), true);
     }
 }
