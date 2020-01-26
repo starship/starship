@@ -148,6 +148,7 @@ impl<'a> Context<'a> {
 
 pub struct DirContents {
     files: HashSet<PathBuf>,
+    file_names: HashSet<String>,
     folders: HashSet<PathBuf>,
     extensions: HashSet<String>,
 }
@@ -158,6 +159,7 @@ impl DirContents {
 
         let mut folders: HashSet<PathBuf> = HashSet::new();
         let mut files: HashSet<PathBuf> = HashSet::new();
+        let mut file_names: HashSet<String> = HashSet::new();
         let mut extensions: HashSet<String> = HashSet::new();
 
         fs::read_dir(p)?
@@ -172,6 +174,9 @@ impl DirContents {
                         path.extension()
                             .map(|ext| extensions.insert(ext.to_string_lossy().to_string()));
                     }
+                    if let Some(file_name) = path.file_name() {
+                        file_names.insert(file_name.to_string_lossy().to_string());
+                    }
                     files.insert(path);
                 }
             });
@@ -184,6 +189,7 @@ impl DirContents {
         Ok(DirContents {
             folders,
             files,
+            file_names,
             extensions,
         })
     }
@@ -196,8 +202,12 @@ impl DirContents {
         self.files.contains(Path::new(path))
     }
 
-    pub fn has_any_file(&self, paths: &[&str]) -> bool {
-        paths.iter().any(|path| self.has_file(path))
+    pub fn has_file_name(&self, name: &str) -> bool {
+        self.file_names.contains(name)
+    }
+
+    pub fn has_any_file_name(&self, names: &[&str]) -> bool {
+        names.iter().any(|name| self.has_file_name(name))
     }
 
     pub fn has_folder(&self, path: &str) -> bool {
@@ -260,7 +270,7 @@ impl<'a> ScanDir<'a> {
     pub fn is_match(&self) -> bool {
         self.dir_contents.has_any_extension(self.extensions)
             || self.dir_contents.has_any_folder(self.folders)
-            || self.dir_contents.has_any_file(self.files)
+            || self.dir_contents.has_any_file_name(self.files)
     }
 }
 
