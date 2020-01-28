@@ -191,18 +191,17 @@ fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: Shell) -> Vec<ANS
                             _ => x.to_string(),
                         }
                     }
-                    MAYBE_ESCAPE_END => {
-                        if escaped {
-                            escaped = false;
-                            match shell {
-                                Shell::Bash => String::from("m\u{5c}\u{5d}"), // => m\]
-                                Shell::Zsh => String::from("m\u{25}\u{7d}"),  // => m%}
-                                _ => x.to_string(),
-                            }
-                        } else {
-                            x.to_string()
+                    MAYBE_ESCAPE_END if escaped => {
+                        escaped = false;
+                        match shell {
+                            Shell::Bash => String::from("m\u{5c}\u{5d}"), // => m\]
+                            Shell::Zsh => String::from("m\u{25}\u{7d}"),  // => m%}
+                            _ => x.to_string(),
                         }
                     }
+                    // escape the $ character to avoid $() code injection on bash shell,
+                    // see #658 for more
+                    '$' if Shell::Bash == shell => String::from("\\$"),
                     _ => x.to_string(),
                 })
                 .collect();
