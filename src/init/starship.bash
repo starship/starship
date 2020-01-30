@@ -69,9 +69,9 @@ else
     # add multiple instances of the starship function and keep other user functions if any.
     if [[ -z "$PROMPT_COMMAND" ]]; then
         PROMPT_COMMAND="starship_precmd"
-    elif [[ "$PROMPT_COMMAND" != *"starship_precmd" ]]; then
-        # Remove any trailing semicolon before appending (PR #784)
-        PROMPT_COMMAND="${PROMPT_COMMAND%;};starship_precmd;"
+    elif [[ "$PROMPT_COMMAND" != *"starship_precmd"* ]]; then
+        # Prevent syntax error by separating with newline character (PR #890)
+        PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}'starship_precmd'$'\n'
     fi
 fi
 
