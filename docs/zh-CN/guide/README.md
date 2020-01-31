@@ -99,20 +99,20 @@
   - `»` —— 文件重命名
   - `✘` —— 文件被删除
 - 显示当前的 Mercurial 分支
-- 当前电量剩余与电源状态
+- 显示当前电量剩余与电源状态
   - `⇡` —— 电池充电中
   - `⇣` —— 电池耗电中
   - `•` —— 电池已充满
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
-- Current Amazon Web Services (AWS) profile (`☁️`)
-- Execution time of the last command
-- Custom environment variable value
-- Nix-shell environment detection
-- Current username if not the same as the logged-in user
-- Optional current time in 12/24hr format
-- Current Terraform Workspace and version (`💠`)
-- Current Conda environment (`C`)
+- 显示后台运行进程数（`✦`）
+- 显示当前 Kubernetes 集群与命名空间（`☸`）
+- 显示当前 AWS 配置（`☁️`）
+- 显示上一条命令的执行用时
+- 自定义环境变量值
+- Nix-shell 环境检测
+- 如果当前用户与不是登录用户，显示当前用户名
+- 12/24 小时格式的时间显示（可选）
+- 显示 Terraform 工作区和当前版本（`💠`）
+- 显示当前 Conda 环境 （`C`）
 
 ## 🚀 安装
 
