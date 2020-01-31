@@ -44,13 +44,13 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### 通过软件包管理器安装
 
-   通过 [Homebrew](https://brew.sh/) 安装：
+   使用 [Homebrew](https://brew.sh/)：
 
    ```sh
    brew install starship
    ```
 
-    通过 [Scoop](https://scoop.sh) 安装：
+    使用 [Scoop](https://scoop.sh)：
 
    ```powershell
    scoop install starship
@@ -94,7 +94,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Powershell
 
-   添加 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (或者`~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix)到：
+   在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` （对于 *nix 系统是`~/.config/powershell/Microsoft.PowerShell_profile.ps1`）的最后，添加以下内容：
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
@@ -105,7 +105,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   在 `~/.config/ion/initrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.config/ion/initrc
