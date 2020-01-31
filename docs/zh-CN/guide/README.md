@@ -88,11 +88,11 @@
   - poetry (Python)
   - composer (PHP)
 - 显示当前的 Git 分支与各种仓库状态：
-  - `=` — conflicting changes
-  - `⇡` — ahead of remote branch
-  - `⇣` — behind of remote branch
-  - `⇕` — diverged changes
-  - `?` — untracked changes
+  - `=` —— 修改冲突
+  - `⇡` —— 领先于远程分支
+  - `⇣` —— 落后于远程分支
+  - `⇕` —— 与远程分支存在分歧
+  - `?` —— 未追踪的变更
   - `$` — stashed changes
   - `!` — modified files
   - `+` — added files
