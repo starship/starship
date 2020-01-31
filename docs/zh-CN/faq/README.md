@@ -19,9 +19,9 @@
 
 ## 你们的文档说“Starship 是跨 shell 的”，但它不支持 X shell。 为什么？
 
-Starship 的构建方式决定了它应当能够增加对几乎所有 shell 的支持。 The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
+Starship 的构建方式决定了它应当能够增加对几乎所有 shell 的支持。 Starship 的二进制文件是无状态、不知道当前 shell 的，所以只要你的 shell 支持自定义提示符和 shell 扩展，就能使用 Starship。
 
-Here's a small example getting Starship working with bash:
+这是一个在 bash 上使用 Starship 的简单例子：
 
 ```sh
 # Get the status code from the last command executed
