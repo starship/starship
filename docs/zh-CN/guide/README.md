@@ -207,7 +207,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   在 `~/.config/ion/initrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.config/ion/initrc
@@ -221,7 +221,7 @@
 
 ## 🤝 贡献
 
-我们一直在寻找贡献者！你都可以参与贡献 ** 不论你的技能如何 **。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
+我们一直在寻找贡献者！**不论你的技能水平如何**，你都可以为项目做出贡献。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
 
 ### 急需
 
