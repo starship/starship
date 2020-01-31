@@ -116,43 +116,43 @@
 
 ## 🚀 安装
 
-### 基础要求
+### 前置要求
 
-- 安装有一个 [Powerline 字体](https://github.com/powerline/fonts) (如 [Fira Code](https://github.com/tonsky/FiraCode)) 并在您的终端启用 。
+- 安装一种 [Powerline 字体](https://github.com/powerline/fonts)（如 [Fira Code](https://github.com/tonsky/FiraCode)）并在您的终端启用 。
 
-### 入门
+### 开始安装
 
 1. 安装 **starship** 二进制文件：
 
 
-   #### Install Latest Version
+   #### 安装最新版本
 
 
-   ##### From prebuilt binary, with Shell:
+   ##### 下载预构建的二进制文件，使用 Shell 命令：
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   ##### From source on [crates.io](https://crates.io/):
+   ##### 直接从 [crates.io](https://crates.io/) 获取源代码编译：
 
    ```sh
    cargo install starship
    ```
 
 
-   #### Install via Package Manager
+   #### 通过软件包管理器安装
 
 
-   ##### With [Homebrew](https://brew.sh/):
+   ##### 使用 [Homebrew](https://brew.sh/)
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### 使用 [Scoop](https://scoop.sh)：
 
    ```powershell
    scoop install starship
