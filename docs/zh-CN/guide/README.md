@@ -112,7 +112,7 @@
 - 如果当前用户与不是登录用户，显示当前用户名
 - 12/24 小时格式的时间显示（可选）
 - 显示 Terraform 工作区和当前版本（`💠`）
-- 显示当前 Conda 环境 （`C`）
+- 显示当前 Conda 环境（`C`）
 
 ## 🚀 安装
 
@@ -221,7 +221,7 @@
 
 ## 🤝 贡献
 
-我们一直在寻找贡献者！**不论你的技能水平如何**，你都可以为项目做出贡献。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
+我们一直在寻求各种形式的贡献！**不论您的技能水平如何**，您都可以为项目做出贡献。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
 
 ### 急需
 
