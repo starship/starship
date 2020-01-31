@@ -196,7 +196,7 @@
 
    #### PowerShell
 
-   添加 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (或者`~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix)到：
+   将以下内容添加到`~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (或`~/.config/powershell/Microsoft.PowerShell_profile.ps1`，对于 *nix 系统)：
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
