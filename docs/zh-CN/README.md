@@ -8,12 +8,12 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
 <div class="features">
   <div class="feature">
-    <h2>注重兼容性</h2>
-    <p>能在各种常见的 Shell 上运行。 尝试着在各种地方使用它吧！</p>
+    <h2>兼容性优先</h2>
+    <p>Starship 可以在各种常见的操作系统和常见的 shell 上运行。 尝试着在各种地方使用它吧！</p>
   </div>
   <div class="feature">
-    <h2>Rust 制造</h2>
-    <p>具有 Rust 独树一帜的速度与安全性。</p>
+    <h2>使用 Rust 编写</h2>
+    <p>具有 Rust 独树一帜的速度与安全性，使你的提示符尽可能的快速可靠。</p>
   </div>
   <div class="feature">
     <h2>可自定义</h2>
@@ -33,24 +33,24 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 1. 安装 **starship** 二进制文件：
 
 
-   #### Install Latest Version
+   #### 安装最新版本
 
-   With Shell:
+   使用 Shell 命令：
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Install via Package Manager
+   #### 通过软件包管理器安装
 
-   With [Homebrew](https://brew.sh/):
+   通过 [Homebrew](https://brew.sh/) 安装：
 
    ```sh
    brew install starship
    ```
 
-    With [Scoop](https://scoop.sh):
+    通过 [Scoop](https://scoop.sh) 安装：
 
    ```powershell
    scoop install starship
