@@ -61,7 +61,7 @@
 
 <h1></h1>
 
-<p align="center"> Starship 是轻量的，快速的，可以快速定制的，适用于任何 shell 的提示符！<br /> 它可以在不影响流畅性=的情况下，在你工作时展示你所需要的信息。 <p>
+<p align="center"> Starship 可以适配于任何 shell，是一种轻量，快速，高度可定制化的提示符工具！<br /> 它在可以你工作时展示你所需要的信息，兼备的流畅的使用体验。 <p>
 
 <p align="center">
   <br>
@@ -73,21 +73,21 @@
 ## 🍬 特性
 
 - 当上一个命令以非 0 状态退出时，提示字符会变为红色
-- 当前 Go 版本 (`🐹`)
-- Current Haskell version (`λ`)
-- Current Java version(`☕`)
-- Current Node.js version(`⬢`)
-- Current PHP version (`🐘`)
-- Current Python version (`🐍`)
-- Current Ruby version (`💎`)
-- Current Rust version (`🦀`)
-- Current .NET version (`•NET`)
-- Current version of package in current directory (`📦`)
+- 显示当前 Go 版本（`🐹`）
+- 显示当前 Haskell 版本（`λ`）
+- 显示当前 Java 版本（`☕`）
+- 显示当前 Node.js 版本（`⬢`）
+- 显示当前 PHP 版本（`🐘`）
+- 显示当前 Python 版本（`🐍`）
+- 显示当前 Ruby 版本（`💎`）
+- 显示当前 Rust 版本（`🦀`）
+- 显示当前 .NET 版本（`•NET`）
+- 显示当前目录中项目的版本（`📦`）
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
   - composer (PHP)
-- Current Git branch and rich repo status:
+- 显示当前的 Git 分支与各种仓库状态：
   - `=` — conflicting changes
   - `⇡` — ahead of remote branch
   - `⇣` — behind of remote branch
