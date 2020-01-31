@@ -42,4 +42,4 @@ PS1="$(starship prompt --status=$STATUS --jobs=NUM_JOBS)"
 starship prompt --help
 ```
 
-The prompt will use as much context as is provided, but no flags are "required".
+Starship 会处理所提供的全部上下文参数并在提示符中显示，但没有参数是“必需”的。
