@@ -92,17 +92,17 @@
   - `⇡` —— 领先于远程分支
   - `⇣` —— 落后于远程分支
   - `⇕` —— 与远程分支存在分歧
-  - `?` —— 未追踪的变更
-  - `$` — stashed changes
-  - `!` — modified files
-  - `+` — added files
-  - `»` — renamed files
-  - `✘` — deleted files
-- Current Mercurial branch
-- Current battery level and status
-  - `⇡` – charging
-  - `⇣` – discharging
-  - `•` – fully charged
+  - `?` —— 存在未记录的文件
+  - `$` —— 存在 stash 暂存
+  - `!` —— 存在被修改的文件
+  - `+` —— 暂存区中存在内容
+  - `»` —— 文件重命名
+  - `✘` —— 文件被删除
+- 显示当前的 Mercurial 分支
+- 当前电量剩余与电源状态
+  - `⇡` —— 电池充电中
+  - `⇣` —— 电池耗电中
+  - `•` —— 电池已充满
 - Indicator for jobs in the background (`✦`)
 - Current Kubernetes Cluster and Namespace (`☸`)
 - Current Amazon Web Services (AWS) profile (`☁️`)
