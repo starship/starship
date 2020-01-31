@@ -12,14 +12,14 @@
 
 ## `prompt_order` 和 `<module>.disabled` 的效果是一样的吗？
 
-是的，他们都可以用来禁用提示符中的模块。 如果你只是想禁用组件，推荐使用 `<module>.disabled`，原因如下：
+是的，他们都可以用来禁用提示符中的组件。 如果你只是想禁用组件，推荐使用 `<module>.disabled`，原因如下：
 
-- Disabling modules is more explicit than omitting them from the prompt_order
-- Newly created modules will be added to the prompt as Starship is updated
+- “禁用组件”比在 prompt_order 中忽略某个组件更为清晰明确
+- 当 Starship 升级后，新组件将能够自动被加入提示符中
 
-## The docs say Starship is cross-shell, but it doesn't support X shell. Why?
+## 你们的文档说“Starship 是跨 shell 的”，但它不支持 X shell。 为什么？
 
-The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
+Starship 的构建方式决定了它应当能够增加对几乎所有 shell 的支持。 The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
 
 Here's a small example getting Starship working with bash:
 
