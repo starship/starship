@@ -99,3 +99,15 @@ $ npm run dev
 ```
 
 Once setup is complete, you can refer to VuePress documentation on the actual implementation here: https://vuepress.vuejs.org/guide/.
+
+### Git/GitHub workflow
+
+This is our preferred process for opening a PR on GitHub:
+
+1. Fork this repository
+2. Create a branch off of `master` for your work: `git checkout -b my-feature-branch`
+3. Make some changes, committing them along the way
+4. When your changes are ready for review, push your branch: `git push origin my-feature-branch`
+5. Create a pull request from your branch to `starship/master`
+6. No need to assign the pull request to anyone, we'll review it when we can
+7. When the changes have been reviewed and approved, someone will squash and merge for you

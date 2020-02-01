@@ -5,7 +5,7 @@ use std::fmt::Write as FmtWrite;
 use std::io::{self, Write};
 use unicode_width::UnicodeWidthChar;
 
-use crate::context::Context;
+use crate::context::{Context, Shell};
 use crate::module::Module;
 use crate::module::ALL_MODULES;
 use crate::modules;
@@ -26,7 +26,11 @@ pub fn get_prompt(context: Context) -> String {
         writeln!(buf).unwrap();
     }
 
-    buf.push_str("\x1b[J");
+    // A workaround for a fish bug (see #739,#279). Applying it to all shells
+    // breaks things (see #808,#824,#834). Should only be printed in fish.
+    if let Shell::Fish = context.shell {
+        buf.push_str("\x1b[J"); // An ASCII control code to clear screen
+    }
 
     let modules = compute_modules(&context);
 
