@@ -170,11 +170,11 @@ impl<'a> fmt::Display for Module<'a> {
     }
 }
 
-fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: String) -> Vec<ANSIString> {
+fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: Shell) -> Vec<ANSIString> {
     ansi_strings
         .into_iter()
         .map(|ansi| {
-            let wrapped = wrap_colorseq_for_shell(ansi.to_string(), &shell);
+            let wrapped = wrap_colorseq_for_shell(ansi.to_string(), shell);
             ANSIString::from(wrapped)
         })
         .collect::<Vec<ANSIString>>()

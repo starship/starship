@@ -3,6 +3,8 @@ use std::io::{Read, Result};
 use std::path::Path;
 use std::process::Command;
 
+use crate::context::Shell;
+
 /// Return the string contents of a file
 pub fn read_file<P: AsRef<Path>>(file_name: P) -> Result<String> {
     let mut file = File::open(file_name)?;
@@ -51,7 +53,7 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
 }
 
 /// Wraps ANSI color escape sequences in the shell-appropriate wrappers.
-pub fn wrap_colorseq_for_shell(ansi: String, shell: &str) -> String {
+pub fn wrap_colorseq_for_shell(ansi: String, shell: Shell) -> String {
     const ESCAPE_BEGIN: char = '\u{1b}';
     const ESCAPE_END: char = 'm';
     wrap_seq_for_shell(ansi, shell, ESCAPE_BEGIN, ESCAPE_END)
@@ -62,7 +64,7 @@ pub fn wrap_colorseq_for_shell(ansi: String, shell: &str) -> String {
 /// sequence in shell-specific escapes to avoid these problems.
 pub fn wrap_seq_for_shell(
     ansi: String,
-    shell: &str,
+    shell: Shell,
     escape_begin: char,
     escape_end: char,
 ) -> String {
@@ -80,15 +82,15 @@ pub fn wrap_seq_for_shell(
             if x == escape_begin && !escaped {
                 escaped = true;
                 match shell {
-                    "bash" => format!("{}{}", BASH_BEG, escape_begin),
-                    "zsh" => format!("{}{}", ZSH_BEG, escape_begin),
+                    Shell::Bash => format!("{}{}", BASH_BEG, escape_begin),
+                    Shell::Zsh => format!("{}{}", ZSH_BEG, escape_begin),
                     _ => x.to_string(),
                 }
             } else if x == escape_end && escaped {
                 escaped = false;
                 match shell {
-                    "bash" => format!("{}{}", escape_end, BASH_END),
-                    "zsh" => format!("{}{}", escape_end, ZSH_END),
+                    Shell::Bash => format!("{}{}", escape_end, BASH_END),
+                    Shell::Zsh => format!("{}{}", escape_end, ZSH_END),
                     _ => x.to_string(),
                 }
             } else {
@@ -199,12 +201,12 @@ mod tests {
         let test4 = "herpaderp";
         let test5 = "";
 
-        let zresult0 = wrap_seq_for_shell(test0.to_string(), "zsh", '\x1b', 'm');
-        let zresult1 = wrap_seq_for_shell(test1.to_string(), "zsh", '\x1b', 'm');
-        let zresult2 = wrap_seq_for_shell(test2.to_string(), "zsh", '\x1b', 'J');
-        let zresult3 = wrap_seq_for_shell(test3.to_string(), "zsh", 'O', 'O');
-        let zresult4 = wrap_seq_for_shell(test4.to_string(), "zsh", '\x1b', 'm');
-        let zresult5 = wrap_seq_for_shell(test5.to_string(), "zsh", '\x1b', 'm');
+        let zresult0 = wrap_seq_for_shell(test0.to_string(), Shell::Zsh, '\x1b', 'm');
+        let zresult1 = wrap_seq_for_shell(test1.to_string(), Shell::Zsh, '\x1b', 'm');
+        let zresult2 = wrap_seq_for_shell(test2.to_string(), Shell::Zsh, '\x1b', 'J');
+        let zresult3 = wrap_seq_for_shell(test3.to_string(), Shell::Zsh, 'O', 'O');
+        let zresult4 = wrap_seq_for_shell(test4.to_string(), Shell::Zsh, '\x1b', 'm');
+        let zresult5 = wrap_seq_for_shell(test5.to_string(), Shell::Zsh, '\x1b', 'm');
 
         assert_eq!(&zresult0, "%{\x1b2m%}hellomynamekeyes%{\x1b2m%}");
         assert_eq!(&zresult1, "%{\x1b]330;m%}lol%{\x1b]0m%}");
@@ -213,12 +215,12 @@ mod tests {
         assert_eq!(&zresult4, "herpaderp");
         assert_eq!(&zresult5, "");
 
-        let bresult0 = wrap_seq_for_shell(test0.to_string(), "bash", '\x1b', 'm');
-        let bresult1 = wrap_seq_for_shell(test1.to_string(), "bash", '\x1b', 'm');
-        let bresult2 = wrap_seq_for_shell(test2.to_string(), "bash", '\x1b', 'J');
-        let bresult3 = wrap_seq_for_shell(test3.to_string(), "bash", 'O', 'O');
-        let bresult4 = wrap_seq_for_shell(test4.to_string(), "bash", '\x1b', 'm');
-        let bresult5 = wrap_seq_for_shell(test5.to_string(), "bash", '\x1b', 'm');
+        let bresult0 = wrap_seq_for_shell(test0.to_string(), Shell::Bash, '\x1b', 'm');
+        let bresult1 = wrap_seq_for_shell(test1.to_string(), Shell::Bash, '\x1b', 'm');
+        let bresult2 = wrap_seq_for_shell(test2.to_string(), Shell::Bash, '\x1b', 'J');
+        let bresult3 = wrap_seq_for_shell(test3.to_string(), Shell::Bash, 'O', 'O');
+        let bresult4 = wrap_seq_for_shell(test4.to_string(), Shell::Bash, '\x1b', 'm');
+        let bresult5 = wrap_seq_for_shell(test5.to_string(), Shell::Bash, '\x1b', 'm');
 
         assert_eq!(&bresult0, "\\[\x1b2m\\]hellomynamekeyes\\[\x1b2m\\]");
         assert_eq!(&bresult1, "\\[\x1b]330;m\\]lol\\[\x1b]0m\\]");
