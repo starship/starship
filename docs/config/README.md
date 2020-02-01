@@ -28,6 +28,11 @@ symbol = "➜"     # The "symbol" segment is being set to "➜"
 disabled = true
 ```
 
+You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+```shell
+export STARSHIP_CONFIG=~/.starship
+```
+
 ### Terminology
 
 **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
@@ -98,6 +103,7 @@ prompt_order = [
     "package",
     "dotnet",
     "golang",
+    "haskell",
     "java",
     "nodejs",
     "php",
@@ -533,6 +539,7 @@ current directory.
 | `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
 | `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
 | `stashed`          | `"$"`                      | A stash exists for the local repository.                |
+| `stashed_count`    | [link](#git-status-counts) | Show and style the number of stashes.                           |
 | `modified`         | `"!"`                      | There are file modifications in the working directory.  |
 | `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
 | `staged`           | `"+"`                      | A new file has been added to the staging area.          |
@@ -603,6 +610,30 @@ The module will be shown if any of the following conditions are met:
 
 [golang]
 symbol = "🏎💨 "
+```
+## Haskell
+
+The `haskell` module shows the currently installed version of Haskell Stack version.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `stack.yaml` file
+
+### Options
+
+| Variable   | Default       | Description                                               |
+| ---------- | ------------- | --------------------------------------------------------- |
+| `symbol`   | `"λ "`        | The symbol used before displaying the version of Haskell. |
+| `style`    | `"bold red"`  | The style for the module.                                 |
+| `disabled` | `false`       | Disables the `haskell` module.                            |
+
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[haskell]
+symbol = "λx.x "
 ```
 
 ## Mercurial Branch
@@ -768,8 +799,8 @@ pure_msg = "pure shell"
 The `java` module shows the currently installed version of Java.
 The module will be shown if any of the following conditions are met:
 
-- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
-- The current directory contains a file with the `.java`, `.class` or `.jar` extension
+- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
+- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
 ### Options
 

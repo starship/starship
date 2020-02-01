@@ -32,43 +32,28 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
 1. **Starship** のバイナリをインストール
 
-   もし以下のプラットフォームを使用していない場合は **[コンパイル済みのバイナリファイルをダウンロード](https://github.com/starship/starship/releases)** してください。
 
+   #### 最新版のインストール
 
-   #### Homebrew
+   Shellを利用する
 
    ```sh
-   $ brew install starship
+   curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Rust (v1.38 もしくはそれ以上)
+   #### パッケージマネージャー経由でインストール
+
+   [ Homebrew ](https://brew.sh/)の場合：
 
    ```sh
-   $ cargo install starship
+   brew install starship
    ```
 
+    [ Scoop ](https://scoop.sh)の場合：
 
-   #### Arch Linux (AUR)
-
-   Starship は AUR 上の `starship` というパッケージ名で利用可能です。 `yay` またはお好きな AUR ヘルパーでインストールしてください。
-
-   ```sh
-   $ yay -S starship
-   ```
-
-
-   #### Nix (unstable)
-
-   ```sh
-   $ nix-env --install starship
-   ```
-
-
-   #### Termux
-
-   ```sh
-   $ pkg install starship
+   ```powershell
+   scoop install starship
    ```
 
 1. 初期化のためのスクリプトをシェルの設定ファイルに追加
@@ -113,5 +98,17 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
+
    Invoke-Expression (&starship init powershell)
+   ```
+
+
+   #### Ion
+
+   `~/.config/ion/initrc `の最後に次を追加してください
+
+   ```sh
+   # ~/.config/ion/initrc
+
+   eval $(starship init ion)
    ```

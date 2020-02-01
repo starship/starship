@@ -40,11 +40,16 @@ fn get_editor_internal(visual: Option<OsString>, editor: Option<OsString>) -> Os
 }
 
 fn get_config_path() -> OsString {
-    dirs::home_dir()
-        .expect("Couldn't find home directory")
-        .join(".config/starship.toml")
-        .as_os_str()
-        .to_owned()
+    let config_path = env::var_os("STARSHIP_CONFIG").unwrap_or_else(|| "".into());
+    if config_path.is_empty() {
+        dirs::home_dir()
+            .expect("couldn't find home directory")
+            .join(".config/starship.toml")
+            .as_os_str()
+            .to_owned()
+    } else {
+        config_path
+    }
 }
 
 #[cfg(test)]

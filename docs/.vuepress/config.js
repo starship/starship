@@ -14,6 +14,16 @@ module.exports = {
       lang: "zh-TW",
       title: "Starship",
       description: "The cross-shell prompt for astronauts"
+    },
+    "/ru-RU/": {
+      lang: "ru-RU",
+      title: "Starship",
+      description: "The cross-shell prompt for astronauts"
+    },
+    "/de-DE/": {
+      lang: "de-DE",
+      title: "Starship",
+      description: "The cross-shell prompt for astronauts"
     }
   },
   // prettier-ignore
@@ -31,6 +41,7 @@ module.exports = {
     ["meta", { name: "twitter:image", content: "https://starship.rs/icon.png"}],
     ["meta", { name: "twitter:alt", content: "Starship: Cross-Shell Prompt"}],
   ],
+  theme: "default-prefers-color-scheme",
   themeConfig: {
     logo: "/icon.png",
     // the GitHub repo path
@@ -57,7 +68,8 @@ module.exports = {
           ["/guide/", "Guide"],
           ["/config/", "Configuration"],
           ["/advanced-config/", "Advanced Configuration"],
-          ["/faq/", "Frequently Asked Questions"]
+          ["/faq/", "Frequently Asked Questions"],
+          ["/presets/", "Presets"]
         ]
       },
       "/ja-JP/": {
@@ -92,6 +104,44 @@ module.exports = {
           ["/zh-TW/guide/", "指引"],
           ["/zh-TW/config/", "設定"],
           ["/zh-TW/advanced-config/", "進階設定"]
+        ]
+      },
+      "/ru-RU/": {
+        // text for the language dropdown
+        selectText: "Языки",
+        // label for this locale in the language dropdown
+        label: "Русский",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "Редактировать эту страницу на GitHub",
+        // Custom navbar values
+        nav: [{ text: "Настройка", link: "/ru-RU/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/",
+          ["/guide/", "Руководство"],
+          ["/config/", "Настройка"],
+          ["/advanced-config/", "Расширенная Настройка"],
+          ["/faq/", "Часто Задаваемые Вопросы"],
+          ["/presets/", "Предустановки"]
+        ]
+      },
+      "/de-DE/": {
+        // text for the language dropdown
+        selectText: "Sprachen",
+        // label for this locale in the language dropdown
+        label: "Deutsch",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "Bearbeite diese Seite auf GitHub",
+        // Custom navbar values
+        nav: [{ text: "Konfiguration", link: "/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/",
+          ["/guide/", "Anleitung"],
+          ["/config/", "Konfiguration"],
+          ["/advanced-config/", "Erweiterte Konfiguration"],
+          ["/faq/", "Häufig gestellte Fragen"],
+          ["/presets/", "Konfigurations-Beispiele"]
         ]
       }
     }

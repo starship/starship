@@ -73,7 +73,13 @@ fn get_python_version() -> Option<String> {
 }
 
 fn format_python_version(python_stdout: &str) -> String {
-    format!("v{}", python_stdout.trim_start_matches("Python ").trim())
+    format!(
+        "v{}",
+        python_stdout
+            .trim_start_matches("Python ")
+            .trim_end_matches(":: Anaconda, Inc.")
+            .trim()
+    )
 }
 
 fn get_python_virtual_env() -> Option<String> {
@@ -92,5 +98,11 @@ mod tests {
     fn test_format_python_version() {
         let input = "Python 3.7.2";
         assert_eq!(format_python_version(input), "v3.7.2");
+    }
+
+    #[test]
+    fn test_format_python_version_anaconda() {
+        let input = "Python 3.6.10 :: Anaconda, Inc.";
+        assert_eq!(format_python_version(input), "v3.6.10");
     }
 }

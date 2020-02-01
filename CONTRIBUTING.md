@@ -61,8 +61,8 @@ cargo fmt
 
 Testing is critical to making sure starship works as intended on systems big and small. Starship interfaces with many applications and system APIs when generating the prompt, so there's a lot of room for bugs to slip in.
 
-Unit tests and a subset of acceptance tests can be run with `cargo test`.
-The full acceptance test suite can be run in a Docker container with the included [`./acceptance_test`](acceptance_test) script.
+Unit tests and a subset of integration tests can be run with `cargo test`.
+The full integration test suite is run on GitHub as part of our GitHub Actions continuous integration.
 
 ### Unit Testing
 
@@ -72,24 +72,13 @@ Unit tests should be fully isolated, only testing a given function's expected ou
 
 The previous point should be emphasized: even seemingly innocuous ideas like "if we can see the directory, we can read it" or "nobody will have their home directory be a git repo" have bitten us in the past. Having even a single test fail can completely break installation on some platforms, so be careful with tests!
 
-### Acceptance Testing
+### Integration Testing
 
-Acceptance tests are located in the [`tests/`](tests) directory and are also written using the built-in Rust testing library.
+Integration tests are located in the [`tests/`](tests) directory and are also written using the built-in Rust testing library.
 
-Acceptance tests should test full modules or the entire prompt. All acceptance tests expecting the testing environment to have preexisting state or making permanent changes to the filesystem should have the `#[ignore]` attribute. All tests that don't depend on any preexisting state will be run alongside the unit tests with `cargo test`.
+Integration tests should test full modules or the entire prompt. All integration tests that expect the testing environment to have pre-existing state or tests that make permanent changes to the filesystem should have the `#[ignore]` attribute added to them. All tests that don't depend on any preexisting state will be run alongside the unit tests with `cargo test`.
 
-Acceptance tests require Docker to be installed, as they are run inside a Docker container. This can be done as described in the official [documentation](https://docs.docker.com/install/). The acceptance tests can then be executed by running the included [`./acceptance_test`](acceptance_test) script. It might be necessary to run [`./acceptance_test`](acceptance_test) with `sudo` if your user is not part of the `docker` group.
-
-
-For tests that depend on having preexisting state, whatever needed state will have to be added to the project's Dockerfile ([`tests/Dockerfile`](tests/Dockerfile)) as well as the project's Azure Pipelines configuration ([`azure-pipelines.yml`](azure-pipelines.yml)).
-
-The reason for having _both_ the Dockerfile as well as the Azure Pipelines configuration is in order to allow acceptance tests to be run on your local development environment via Docker, while also running our test suite on all supported OSes (Windows, Mac, Linux) on Azure Pipelines.
-
-### Benchmarking
-
-Benchmarks are located in the [`benches/`](benches) directory and are written using the [Criterion](https://crates.io/crates/criterion) library.
-
-For the time being, benchmarks aren't actively used, but we plan to integrate benchmark comparison reporting into our CI pipeline in the near future. For the time being, they can be manually run with `cargo bench`.
+For tests that depend on having preexisting state, whatever needed state will have to be added to the project's GitHub Actions workflow file([`.github/workflows/workflow.yml`](.github/workflows/workflow.yml)).
 
 ## Running the Documentation Website Locally
 
@@ -110,3 +99,15 @@ $ npm run dev
 ```
 
 Once setup is complete, you can refer to VuePress documentation on the actual implementation here: https://vuepress.vuejs.org/guide/.
+
+### Git/GitHub workflow
+
+This is our preferred process for opening a PR on GitHub:
+
+1. Fork this repository
+2. Create a branch off of `master` for your work: `git checkout -b my-feature-branch`
+3. Make some changes, committing them along the way
+4. When your changes are ready for review, push your branch: `git push origin my-feature-branch`
+5. Create a pull request from your branch to `starship/master`
+6. No need to assign the pull request to anyone, we'll review it when we can
+7. When the changes have been reviewed and approved, someone will squash and merge for you

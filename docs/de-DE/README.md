@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 actionText: Loslegen →
-actionLink: /guide/
+actionLink: /de-DE/guide/
 footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 ---
 
@@ -12,8 +12,8 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
     <p>Läuft mit den beliebtesten Shells auf den beliebtesten Betriebssystemen. Überall einsetzbar!</p>
   </div>
   <div class="feature">
-    <h2>Antrieben von Rust</h2>
-    <p>Bringt die branchenweit beste Geschwindigkeit und Sicherheit von Rust mit, um Deine Eingaben so schnell und zuverlässig wie nur möglich zu machen.</p>
+    <h2>Rust-Powered</h2>
+    <p>Bringt die schnelligkeit und zuverlässigkeit von Rust in deinen Shell-prompt.</p>
   </div>
   <div class="feature">
     <h2>Individualisierbar</h2>
@@ -32,43 +32,28 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 
 1. Installiere die Binärversion von **starship**:
 
-   **[Lade die vorkompilierte Binärversion herunter](https://github.com/starship/starship/releases)**, wenn du keine der unten gelisteten Plattformen verwendest.
 
+   #### Install Latest Version
 
-   #### Homebrew
+   With Shell:
 
    ```sh
-   $ brew install starship
+   curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Rust (v1.38 oder neuer)
+   #### Install via Package Manager
+
+   With [Homebrew](https://brew.sh/):
 
    ```sh
-   $ cargo install starship
+   brew install starship
    ```
 
+    With [Scoop](https://scoop.sh):
 
-   #### Arch Linux (AUR)
-
-   Starship ist via AUR unter dem Namen `starship` verfügbar. Installiere es mittels `yay` oder einem AUR-Helfer deiner Wahl.
-
-   ```sh
-   $ yay -S starship
-   ```
-
-
-   #### Nix (instabil)
-
-   ```sh
-   $ nix-env --install starship
-   ```
-
-
-   #### Termux
-
-   ```sh
-   $ pkg install starship
+   ```powershell
+   scoop install starship
    ```
 
 1. Füge das init-Skript zur Konfigurationsdatei deiner Shell hinzu:
@@ -113,7 +98,19 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 
    ```sh
    # notepad $PROFILE
+
 # ~\Documents\PowerShell\Profile.ps1
 
    Invoke-Expression (&starship init powershell)
+   ```
+
+
+   #### Ion
+
+   Add the following to the end of `~/.config/ion/initrc`:
+
+   ```sh
+   # ~/.config/ion/initrc
+
+   eval $(starship init ion)
    ```

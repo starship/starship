@@ -1,6 +1,7 @@
 use crate::config::StarshipConfig;
 use crate::module::Module;
 
+use crate::modules;
 use clap::ArgMatches;
 use git2::{Repository, RepositoryState};
 use once_cell::sync::OnceCell;
@@ -30,6 +31,9 @@ pub struct Context<'a> {
 
     /// Private field to store Git information for modules who need it
     repo: OnceCell<Repo>,
+
+    /// The shell the user is assumed to be running
+    pub shell: Shell,
 }
 
 impl<'a> Context<'a> {
@@ -70,12 +74,15 @@ impl<'a> Context<'a> {
         // TODO: Currently gets the physical directory. Get the logical directory.
         let current_dir = Context::expand_tilde(dir.into());
 
+        let shell = Context::get_shell();
+
         Context {
             config,
             properties,
             current_dir,
             dir_files: OnceCell::new(),
             repo: OnceCell::new(),
+            shell,
         }
     }
 
@@ -91,8 +98,9 @@ impl<'a> Context<'a> {
     /// Create a new module
     pub fn new_module(&self, name: &str) -> Module {
         let config = self.config.get_module_config(name);
+        let desc = modules::description(name);
 
-        Module::new(name, config)
+        Module::new(name, desc, config)
     }
 
     /// Check if `disabled` option of the module is true in configuration file.
@@ -157,6 +165,18 @@ impl<'a> Context<'a> {
                 );
                 Ok(dir_files)
             })
+    }
+
+    fn get_shell() -> Shell {
+        let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
+        match shell.as_str() {
+            "bash" => Shell::Bash,
+            "fish" => Shell::Fish,
+            "ion" => Shell::Ion,
+            "powershell" => Shell::PowerShell,
+            "zsh" => Shell::Zsh,
+            _ => Shell::Unknown,
+        }
     }
 }
 
@@ -248,6 +268,16 @@ fn get_current_branch(repository: &Repository) -> Option<String> {
     let shorthand = head.shorthand();
 
     shorthand.map(std::string::ToString::to_string)
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum Shell {
+    Bash,
+    Fish,
+    Ion,
+    PowerShell,
+    Zsh,
+    Unknown,
 }
 
 #[cfg(test)]

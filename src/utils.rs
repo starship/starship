@@ -25,7 +25,32 @@ impl PartialEq for CommandOutput {
 }
 
 /// Execute a command and return the output on stdout and stderr if sucessful
+#[cfg(not(test))]
 pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+    internal_exec_cmd(&cmd, &args)
+}
+
+#[cfg(test)]
+pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+    let command = match args.len() {
+        0 => String::from(cmd),
+        _ => format!("{} {}", cmd, args.join(" ")),
+    };
+    match command.as_str() {
+        "node --version" => Some(CommandOutput {
+            stdout: String::from("v12.0.0"),
+            stderr: String::default(),
+        }),
+        "dummy_command" => Some(CommandOutput {
+            stdout: String::from("stdout ok!"),
+            stderr: String::from("stderr ok!"),
+        }),
+        // If we don't have a mocked command fall back to executing the command
+        _ => internal_exec_cmd(&cmd, &args),
+    }
+}
+
+fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
     log::trace!("Executing command '{:?}' with args '{:?}'", cmd, args);
     match Command::new(cmd).args(args).output() {
         Ok(output) => {
@@ -54,8 +79,19 @@ mod tests {
     use super::*;
 
     #[test]
+    fn exec_mocked_command() {
+        let result = exec_cmd("dummy_command", &[]);
+        let expected = Some(CommandOutput {
+            stdout: String::from("stdout ok!"),
+            stderr: String::from("stderr ok!"),
+        });
+
+        assert_eq!(result, expected)
+    }
+
+    #[test]
     fn exec_no_output() {
-        let result = exec_cmd("true", &[]);
+        let result = internal_exec_cmd("true", &[]);
         let expected = Some(CommandOutput {
             stdout: String::from(""),
             stderr: String::from(""),
@@ -66,7 +102,7 @@ mod tests {
 
     #[test]
     fn exec_with_output_stdout() {
-        let result = exec_cmd("/bin/echo", &["-n", "hello"]);
+        let result = internal_exec_cmd("/bin/echo", &["-n", "hello"]);
         let expected = Some(CommandOutput {
             stdout: String::from("hello"),
             stderr: String::from(""),
@@ -77,7 +113,7 @@ mod tests {
 
     #[test]
     fn exec_with_output_stderr() {
-        let result = exec_cmd("/bin/sh", &["-c", "echo hello >&2"]);
+        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello >&2"]);
         let expected = Some(CommandOutput {
             stdout: String::from(""),
             stderr: String::from("hello\n"),
@@ -88,7 +124,7 @@ mod tests {
 
     #[test]
     fn exec_with_output_both() {
-        let result = exec_cmd("/bin/sh", &["-c", "echo hello; echo world >&2"]);
+        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello; echo world >&2"]);
         let expected = Some(CommandOutput {
             stdout: String::from("hello\n"),
             stderr: String::from("world\n"),
@@ -99,7 +135,7 @@ mod tests {
 
     #[test]
     fn exec_with_non_zero_exit_code() {
-        let result = exec_cmd("false", &[]);
+        let result = internal_exec_cmd("false", &[]);
         let expected = None;
 
         assert_eq!(result, expected)

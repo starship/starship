@@ -1,23 +1,23 @@
 ---
 home: true
 heroImage: /logo.svg
-actionText: Get Started →
-actionLink: /guide/
-footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+actionText: Начало работы →
+actionLink: /ru-RU/guide/
+footer: Под лицензией ISC | Авторское право © 2019-настоящее Starship Contributors
 ---
 
 <div class="features">
   <div class="feature">
-    <h2>Compatibility First</h2>
-    <p>Works on the most common shells on the most common operating systems. Use it everywhere!</p>
+    <h2>Совместивость в первую очередь</h2>
+    <p>Работает на большинстве распространенных оболочек и наиболее распространенных операционных системах. Используйте везде!</p>
   </div>
   <div class="feature">
-    <h2>Rust-Powered</h2>
-    <p>Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.</p>
+    <h2>Основана на Rust</h2>
+    <p>Приносит наилучшую в своем классе скорость и безопасность Rust, чтобы сделать вашу подсказку как можно быстрее и надежнее.</p>
   </div>
   <div class="feature">
-    <h2>Customizable</h2>
-    <p>Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.</p>
+    <h2>Настраиваемая</h2>
+    <p>Каждая маленькая деталь настраивается по вашему вкусу, чтобы сделать эту подсказку минимальной или функциональной, как вы захотите.</p>
   </div>
 </div>
 
@@ -28,55 +28,40 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
   </video>
 </div>
 
-### Quick Install
+### Быстрая установка
 
-1. Install the **starship** binary:
-
-   **[Download archives of precompiled binaries](https://github.com/starship/starship/releases)** if you don't use the platforms below.
+1. Установите двоичный файл **starship**:
 
 
-   #### Homebrew
+   #### Установить последнюю версию
+
+   Через Bash:
 
    ```sh
-   $ brew install starship
+   curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Rust (v1.38 or higher)
+   #### Установить через менеджер пакетов
+
+   С [Homebrew](https://brew.sh/):
 
    ```sh
-   $ cargo install starship
+   brew install starship
    ```
 
+    С [Scoop](https://scoop.sh):
 
-   #### Arch Linux (AUR)
-
-   Starship is available on the AUR under the name `starship`. Install it with `yay` or your favorite AUR helper.
-
-   ```sh
-   $ yay -S starship
+   ```powershell
+   scoop install starship
    ```
 
-
-   #### Nix (unstable)
-
-   ```sh
-   $ nix-env --install starship
-   ```
-
-
-   #### Termux
-
-   ```sh
-   $ pkg install starship
-   ```
-
-1. Add the init script to your shell's config file:
+1. Добавить сценарий инициализации в конфигурационный файл вашей оболочки:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Добавьте следующее в конец `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -87,7 +72,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Добавьте следующее в конец `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -98,7 +83,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Добавьте следующее в конец `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -107,11 +92,23 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    ```
 
 
-   #### Powershell
+   #### PowerShell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   Добавьте следующее в конец `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (или `~/.config/powershell/Microsoft.PowerShell_profile.ps1` на -Nix):
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
+
    Invoke-Expression (&starship init powershell)
+   ```
+
+
+   #### Ion
+
+   Добавьте следующее в конец `~/.config/ion/initrc`:
+
+   ```sh
+   # ~/.config/ion/initrc
+
+   eval $(starship init ion)
    ```

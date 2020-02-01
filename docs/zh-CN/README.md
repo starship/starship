@@ -32,43 +32,28 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
 1. 安装 **starship** 二进制文件：
 
-   如果您不使用下面的平台，你可以**[下载预编译的可执行文件](https://github.com/starship/starship/releases)**
 
+   #### Install Latest Version
 
-   #### Homebrew
+   With Shell:
 
    ```sh
-   $ brew install starship
+   curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Rust (v1.38 or higher)
+   #### Install via Package Manager
+
+   With [Homebrew](https://brew.sh/):
 
    ```sh
-   $ cargo install starship
+   brew install starship
    ```
 
+    With [Scoop](https://scoop.sh):
 
-   #### Arch Linux (AUR)
-
-   Starship可在AUR下以 `starship`"之名使用 使用`yay`或你最偏爱的AUR helper来安装。
-
-   ```sh
-   $ yay -S starship
-   ```
-
-
-   #### Nix (unstable)
-
-   ```sh
-   $ nix-env --install starship
-   ```
-
-
-   #### Termux
-
-   ```sh
-   $ pkg install starship
+   ```powershell
+   scoop install starship
    ```
 
 1. 将初始化脚本添加到您的 shell 的配置文件：
@@ -113,5 +98,17 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
+
    Invoke-Expression (&starship init powershell)
+   ```
+
+
+   #### Ion
+
+   Add the following to the end of `~/.config/ion/initrc`:
+
+   ```sh
+   # ~/.config/ion/initrc
+
+   eval $(starship init ion)
    ```

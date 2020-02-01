@@ -1,7 +1,8 @@
 use crate::utils::exec_cmd;
-use reqwest;
+use serde_urlencoded;
 use std::fs;
 use std::path::PathBuf;
+use ureq;
 
 const GIT_IO_BASE_URL: &str = "https://git.io/";
 
@@ -16,18 +17,22 @@ pub fn create() {
         starship_config: get_starship_config(),
     };
 
-    let link = make_github_issue_link(crate_version!(), environment);
+    let mut link = make_github_issue_link(crate_version!(), environment);
 
     if open::that(&link).is_ok() {
         print!("Take a look at your browser. A GitHub issue has been populated with your configuration")
     } else {
-        let link = reqwest::Client::new()
-            .post(&format!("{}{}", GIT_IO_BASE_URL, "create"))
-            .form(&[("url", &link)])
-            .send()
-            .and_then(|mut response| response.text())
-            .map(|slug| format!("{}{}", GIT_IO_BASE_URL, slug))
-            .unwrap_or(link);
+        let data = serde_urlencoded::to_string(&[("url", &link)]);
+        if let Ok(data) = data {
+            let short_link = ureq::post(&format!("{}{}", GIT_IO_BASE_URL, "create"))
+                .set("Content-Type", "application/x-www-form-urlencoded")
+                .send_string(&data)
+                .into_string()
+                .map(|slug| format!("{}{}", GIT_IO_BASE_URL, slug));
+            if let Ok(short_link) = short_link {
+                link = short_link;
+            }
+        }
 
         println!(
             "Click this link to create a GitHub issue populated with your configuration:\n\n  {}",
@@ -40,6 +45,7 @@ const UNKNOWN_SHELL: &str = "<unknown shell>";
 const UNKNOWN_TERMINAL: &str = "<unknown terminal>";
 const UNKNOWN_VERSION: &str = "<unknown version>";
 const UNKNOWN_CONFIG: &str = "<unknown config>";
+const GITHUB_CHAR_LIMIT: usize = 8100; // Magic number accepted by Github
 
 struct Environment {
     os_type: os_info::Type,
@@ -50,18 +56,7 @@ struct Environment {
 }
 
 fn make_github_issue_link(starship_version: &str, environment: Environment) -> String {
-    let template_filename = urlencoding::encode("Bug_report.md");
-
-    let body = urlencoding::encode(&format!("<!--
-─────────────────────────────────────────────
-                                This issue has been pre-populated with your system's configuration
-                                                      ♥ Thank you for submitting a bug report ♥
-─────────────────────────────────────────────
--->
-    
-## Bug Report
-
-#### Current Behavior
+    let body = urlencoding::encode(&format!("#### Current Behavior
 <!-- A clear and concise description of the behavior. -->
 
 #### Expected Behavior
@@ -99,12 +94,17 @@ fn make_github_issue_link(starship_version: &str, environment: Environment) -> S
         os_version = environment.os_version,
         shell_config = environment.shell_info.config,
         starship_config = environment.starship_config,
-    ));
+    ))
+        .replace("%20", "+");
 
     format!(
         "https://github.com/starship/starship/issues/new?template={}&body={}",
-        template_filename, body
+        urlencoding::encode("Bug_report.md"),
+        body
     )
+    .chars()
+    .take(GITHUB_CHAR_LIMIT)
+    .collect()
 }
 
 #[derive(Debug)]
@@ -184,8 +184,16 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
 }
 
 fn get_starship_config() -> String {
-    dirs::home_dir()
-        .and_then(|home_dir| fs::read_to_string(home_dir.join(".config/starship.toml")).ok())
+    std::env::var("STARSHIP_CONFIG")
+        .map(PathBuf::from)
+        .ok()
+        .or_else(|| {
+            dirs::home_dir().map(|mut home_dir| {
+                home_dir.push(".config/starship.toml");
+                home_dir
+            })
+        })
+        .and_then(|config_path| fs::read_to_string(config_path).ok())
         .unwrap_or_else(|| UNKNOWN_CONFIG.to_string())
 }
 
@@ -196,7 +204,7 @@ mod tests {
     use std::env;
 
     #[test]
-    fn test_make_github_issue_link() {
+    fn test_make_github_link() {
         let starship_version = "0.1.2";
         let environment = Environment {
             os_type: os_info::Type::Linux,
@@ -220,8 +228,8 @@ mod tests {
         assert!(link.contains("1.2.3"));
         assert!(link.contains("test_shell"));
         assert!(link.contains("2.3.4"));
-        assert!(link.contains("No%20config"));
-        assert!(link.contains("No%20Starship%20config"));
+        assert!(link.contains("No+config"));
+        assert!(link.contains("No+Starship+config"));
     }
 
     #[test]
