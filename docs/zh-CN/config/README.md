@@ -157,13 +157,13 @@ us-east-1 = "va"
 
 ### 配置项
 
-| 字段                   | 默认值                     | 描述              |
-| -------------------- | ----------------------- | --------------- |
-| `full_symbol`        | `"•"`                   | 显示于电池充满时。       |
-| `charging_symbol`    | `"⇡"`                   | 显示于正在充电时。       |
-| `discharging_symbol` | `"⇣"`                   | 显示于电池放电时。       |
-| `display`            | [见下文](#battery-display) | 电量显示阈值和样式。      |
-| `disabled`           | `false`                 | 禁用 `battery` 组件 |
+| 字段                   | 默认值                     | 描述               |
+| -------------------- | ----------------------- | ---------------- |
+| `full_symbol`        | `"•"`                   | 显示于电池充满时。        |
+| `charging_symbol`    | `"⇡"`                   | 显示于正在充电时。        |
+| `discharging_symbol` | `"⇣"`                   | 显示于电池放电时。        |
+| `display`            | [见下文](#battery-display) | 电量显示阈值和样式。       |
+| `disabled`           | `false`                 | 禁用 `battery` 组件。 |
 
 <details>
 <summary>也有一些给不常见的电源状态设立的字段。</summary>
@@ -238,7 +238,7 @@ style = "bold yellow"
 | `vicmd_symbol`          | `"❮"`          | 如果 shell 处于 vim 的 normal 模式，提示符中在输入文本之前显示的符号。 |
 | `style_success`         | `"bold green"` | 上次命令成功时使用的样式。                                 |
 | `style_failure`         | `"bold red"`   | 上次命令失败时使用的样式。                                 |
-| `disabled`              | `false`        | 禁用 `character` 组件                             |
+| `disabled`              | `false`        | 禁用 `character` 组件。                            |
 
 ### 示例
 
@@ -302,7 +302,7 @@ prefix = "underwent "
 | `style`             | `"bold green"` | 此组件的样式。                                                                                                          |
 | `disabled`          | `false`        | 禁用 `conda` 组件。                                                                                                   |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
