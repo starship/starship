@@ -253,7 +253,7 @@ use_symbol_for_status = true
 
 ## Command Duration
 
-`cmd_duration` 组件显示上一个命令执行的时间。 The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+`cmd_duration` 组件显示上一个命令执行的时间。 此组件只在命令执行时间长于两秒时显示，或者当其 `min_time` 字段被设置时，按此值为执行时间的显示下限。
 
 ::: warning Do not hook the DEBUG trap in Bash
 
