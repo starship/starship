@@ -202,12 +202,12 @@ style = "bold red"
 
 `display` 字段的子字段如下：
 
-| 字段          | Description                                     |
-| ----------- | ----------------------------------------------- |
-| `threshold` | The upper bound for the display option.         |
-| `style`     | The style used if the display option is in use. |
+| 字段          | 描述                            |
+| ----------- | ----------------------------- |
+| `threshold` | 电池电量低于此阈值时电池指示器组件才会被显示，默认为 10 |
+| `style`     | 若组件被显示，则使用此样式                 |
 
-#### Example
+#### 示例
 
 ```toml
 [[battery.display]]  # "bold red" style when capacity is between 0% and 10%
