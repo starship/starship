@@ -53,16 +53,16 @@ Starship 中的大多数组件允许您为其设置显示样式。 显示样式�
 - `"bg:blue fg:bright-green"` 在蓝色背景上显示亮绿色文本
 - `"bold fg:27"` 设置粗体字，用 27 号 [ANSI 标准色](https://i.stack.imgur.com/KTSQa.png)
 - `"underline bg:#bf5700"` 在深橙色背景上显示带下划线文本
-- `"bold italic fg:purple"` sets bold italic purple text
-- `""` explicitly disables all styling
+- `"bold italic fg:purple"` 设置文本为粗体、意大利体，颜色为紫色
+- `""` 显式禁用所有样式
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+请注意，最终的显示样式将由您的终端模拟器控制。 例如，有的终端模拟器对于“bold”属性的文本是加亮颜色而不是加粗文字，有的颜色主题对“普通”和“明亮”两种属性的颜色使用相同的颜色值。 此外，要获得意大利体文本（一般设计为斜体），您的终端必须支持意大利体显示。
 
-## Prompt
+## 提示符
 
-This is the list of prompt-wide configuration options.
+以下是关于提示符的配置项。
 
-### Options
+### 配置项
 
 | Variable       | Default                       | Description                                            |
 | -------------- | ----------------------------- | ------------------------------------------------------ |
