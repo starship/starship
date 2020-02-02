@@ -36,7 +36,7 @@ export STARSHIP_CONFIG=~/.starship
 
 **组件（Module）**：提示符的组成部分，通过来自系统的上下文信息向用户显示各种信息。 比如“nodejs”组件会在当前目录是一个 NodeJS 项目时显示您当前安装的 NodeJS 版本。
 
-**Segment**: Smaller sub-components that compose a module. For example, the "symbol" segment in the "nodejs" module contains the character that is shown before the version number (⬢ by default).
+**字段（Segment）**：组成组件的下级单位。 For example, the "symbol" segment in the "nodejs" module contains the character that is shown before the version number (⬢ by default).
 
 Here is the representation of the node module. In the following example, "symbol" and "version" are segments within it. Every module also has a prefix and suffix that are the default terminal color.
 
