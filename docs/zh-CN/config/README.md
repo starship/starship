@@ -253,7 +253,7 @@ use_symbol_for_status = true
 
 ## Command Duration
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+`cmd_duration` 组件显示上一个命令执行的时间。 The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
 ::: warning Do not hook the DEBUG trap in Bash
 
