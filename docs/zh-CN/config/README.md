@@ -47,12 +47,12 @@ export STARSHIP_CONFIG=~/.starship
 
 ### 样式字符串
 
-Starship 中的大多数组件允许您为其设置显示样式。 显示样式可以通过一个字符串字段（一般是 `style`）来设置。 以下的例子给出了一些样式字符串并描述了它们的效果。 For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+Starship 中的大多数组件允许您为其设置显示样式。 显示样式可以通过一个字符串字段（一般是 `style`）来设置。 以下的例子给出了一些样式字符串并描述了它们的效果。 样式字符串的完整语法请查阅 [高级配置指南](/advanced-config/)。
 
-- `"fg:green bg:blue"` sets green text on a blue background
-- `"bg:blue fg:bright-green"` sets bright green text on a blue background
-- `"bold fg:27"` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
-- `"underline bg:#bf5700"` sets underlined text on a burnt orange background
+- `"fg:green bg:blue"` 在蓝色背景上显示绿色文本
+- `"bg:blue fg:bright-green"` 在蓝色背景上显示亮绿色文本
+- `"bold fg:27"` 设置粗体字，用 27 号 [ANSI 标准色](https://i.stack.imgur.com/KTSQa.png)
+- `"underline bg:#bf5700"` 在深橙色背景上显示带下划线文本
 - `"bold italic fg:purple"` sets bold italic purple text
 - `""` explicitly disables all styling
 
