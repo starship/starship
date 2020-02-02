@@ -38,16 +38,16 @@ export STARSHIP_CONFIG=~/.starship
 
 **字段（Segment）**：组成组件的下级单位。 例如，“nodejs”组件中的“symbol”字段包含了在版本号之前显示的字符（默认为 ⬢）。
 
-以下定义了整个 node 组件的显示格式。 在下面这个例子里，“symbol”和“version”是其中的字段。 Every module also has a prefix and suffix that are the default terminal color.
+以下定义了整个 node 组件的显示格式。 在下面这个例子里，“symbol”和“version”是其中的字段。 每一个组件都有一个以终端默认颜色显示的前缀（prefix）和后缀（suffix）。
 
 ```
 [prefix]      [symbol]     [version]    [suffix]
  "via "         "⬢"        "v10.4.1"       ""
 ```
 
-### 样式设定
+### 样式字符串
 
-Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+Starship 中的大多数组件允许您为其设置显示样式。 显示样式可以通过一个字符串字段（一般是 `style`）来设置。 以下的例子给出了一些样式字符串并描述了它们的效果。 For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
 - `"fg:green bg:blue"` sets green text on a blue background
 - `"bg:blue fg:bright-green"` sets bright green text on a blue background
