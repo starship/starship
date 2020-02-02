@@ -230,17 +230,17 @@ style = "bold yellow"
 
 ### 配置项
 
-| 字段                      | 默认值            | 描述                                                                                  |
-| ----------------------- | -------------- | ----------------------------------------------------------------------------------- |
-| `symbol`                | `"❯"`          | 提示符中在输入文本之前显示的符号。                                                                   |
-| `error_symbol`          | `"✖"`          | 如果上一条命令失败，提示符中在输入文本之前显示的符号。                                                         |
-| `use_symbol_for_status` | `false`        | Indicate error status by changing the symbol.                                       |
-| `vicmd_symbol`          | `"❮"`          | The symbol used before the text input in the prompt if shell is in vim normal mode. |
-| `style_success`         | `"bold green"` | The style used if the last command was successful.                                  |
-| `style_failure`         | `"bold red"`   | The style used if the last command failed.                                          |
-| `disabled`              | `false`        | Disables the `character` module.                                                    |
+| 字段                      | 默认值            | 描述                                            |
+| ----------------------- | -------------- | --------------------------------------------- |
+| `symbol`                | `"❯"`          | 提示符中在输入文本之前显示的符号。                             |
+| `error_symbol`          | `"✖"`          | 如果上一条命令失败，提示符中在输入文本之前显示的符号。                   |
+| `use_symbol_for_status` | `false`        | 指示是否改变显示符号来指出错误状态。                            |
+| `vicmd_symbol`          | `"❮"`          | 如果 shell 处于 vim 的 normal 模式，提示符中在输入文本之前显示的符号。 |
+| `style_success`         | `"bold green"` | 上次命令成功时使用的样式。                                 |
+| `style_failure`         | `"bold red"`   | 上次命令失败时使用的样式。                                 |
+| `disabled`              | `false`        | 禁用 `character` 组件                             |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
