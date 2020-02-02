@@ -157,27 +157,27 @@ us-east-1 = "va"
 
 ### 配置项
 
-| Variable             | Default                  | Description                                       |
-| -------------------- | ------------------------ | ------------------------------------------------- |
-| `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
-| `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
-| `display`            | [link](#battery-display) | Display threshold and style for the module.       |
-| `disabled`           | `false`                  | Disables the `battery` module.                    |
+| 字段                   | 默认值                     | 描述              |
+| -------------------- | ----------------------- | --------------- |
+| `full_symbol`        | `"•"`                   | 显示于电池充满时        |
+| `charging_symbol`    | `"⇡"`                   | 显示于正在充电时        |
+| `discharging_symbol` | `"⇣"`                   | 显示于电池放电时        |
+| `display`            | [见下文](#battery-display) | 电量显示阈值和样式。      |
+| `disabled`           | `false`                 | 禁用 `battery` 组件 |
 
 <details>
-<summary>There are also options for some uncommon battery states.</summary>
+<summary>也有一些给不常见的电源状态设立的字段。</summary>
 
-| Variable         | Description                                         |
-| ---------------- | --------------------------------------------------- |
-| `unknown_symbol` | The symbol shown when the battery state is unknown. |
-| `empty_symbol`   | The symbol shown when the battery state is empty.   |
+| 字段               | 描述         |
+| ---------------- | ---------- |
+| `unknown_symbol` | 显示于电池状态未知时 |
+| `empty_symbol`   | 显示于电池状态为空时 |
 
-Note: Battery indicator will be hidden if the status is `unknown` or `empty` unless you specify the option in the config.
+注意：如果状态为 `unknown` 或 `empty`，电池指示器将被隐藏，除非您在配置中指定相关选项。
 
 </details>
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
