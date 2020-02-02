@@ -15,14 +15,14 @@ $ mkdir -p ~/.config && touch ~/.config/starship.toml
 Starship 的所有配置都在此 [TOML](https://github.com/toml-lang/toml) 配置文件中完成：
 
 ```toml
-# Don't print a new line at the start of the prompt
+# 不用在提示符的开始换行
 add_newline = false
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]      # The name of the module we are configuring is "character"
-symbol = "➜"     # The "symbol" segment is being set to "➜"
+# 将提示符标志由“❯”换成“➜”
+[character]      # 正在配置的组件名称是“character”
+symbol = "➜"     # “symbol”字段被设置为 "➜"
 
-# Disable the package module, hiding it from the prompt completely
+# 禁用 package 组件，它不会在提示符中被显示出来
 [package]
 disabled = true
 ```
