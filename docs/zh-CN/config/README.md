@@ -85,7 +85,7 @@ scan_timeout = 10
 
 ### 默认的组件顺序
 
-The default `prompt_order` is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. The default is as shown:
+如果 `prompt_order` 是空值或未设置，提示信息中组件的显示顺序会设置为 `prompt_order` 的默认值。 默认设置如下：
 
 ```toml
 prompt_order = [
@@ -125,11 +125,11 @@ prompt_order = [
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
+`aws` 组件显示当前 AWS 主机所在区域与配置。 各组件基于 `AWS_REGION`，`AWS_DEFAULT_REGION` 和 `AWS_PROFILE` 环境变量与 `~/.aws/config` 文件。
 
-### Options
+### 配置项
 
-| Variable          | Default         | Description                                                                 |
+| 字段                | 默认值             | Description                                                                 |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
