@@ -257,23 +257,23 @@ use_symbol_for_status = true
 
 ::: warning 不要在 Bash 里捕获 DEBUG 信号
 
-如果您正在 `bash` 上使用 Starship，在运行 `eval $(starship)` 后，不要捕获 `DEBUG` 信号，否则此组件 **将会中断**。
+如果您正在 `bash` 上使用 Starship，在运行 `eval $(starship)` 后，不要捕获 `DEBUG` 信号，否则此组件**将会**坏掉。
 
 :::
 
 需要在自动每一条命令前执行某些操作的 Bash 用户可以使用 [rcaloras 的 bash_preexec 框架](https://github.com/rcaloras/bash-preexec)。 只需要在执行 `eval $(starship init $0)` 前简单地定义 `preexec_functions` 和 `precmd_functions` 两个列表，就可以照常运行了。
 
-### Options
+### 配置项
 
-| Variable            | Default         | Description                                                |
-| ------------------- | --------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
-| `style`             | `"bold yellow"` | The style for the module.                                  |
-| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
+| 字段                  | 默认值             | 描述                     |
+| ------------------- | --------------- | ---------------------- |
+| `min_time`          | `2_000`         | 显示此组件所需的最短执行时长（单位：毫秒）。 |
+| `show_milliseconds` | `false`         | 除了秒数外在执行时长中额外显示毫秒。     |
+| `prefix`            | `took`          | 直接在执行时长前显示的前缀。         |
+| `style`             | `"bold yellow"` | 此组件的样式                 |
+| `disabled`          | `false`         | 禁用 `cmd_duration` 组件   |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -285,22 +285,22 @@ prefix = "underwent "
 
 ## Conda
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+`conda` 组件在 `$CONDA_DEFAULT_ENV` 被设置时显示当前 conda 环境。
 
 ::: tip
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+此组件没有禁用 conda 自带的提示符修改，您可能需要执行 `conda config --set changeps1 False`。
 
 :::
 
-### Options
+### 配置项
 
-| Variable            | Default        | Description                                                                                                                                                                                                 |
-| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
-| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
-| `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
+| 字段                  | 默认值            | 描述                                                                                                                           |
+| ------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`            | 如果这个 conda 环境是通过 `conda create -p [path]` 创建的，环境路径的目录深度应该被截断到此数量。 `0` 表示不用截断。 Also see the [`directory`](#directory) module. |
+| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                 |
+| `style`             | `"bold green"` | The style for the module.                                                                                                    |
+| `disabled`          | `false`        | Disables the `conda` module.                                                                                                 |
 
 ### Example
 
