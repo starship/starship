@@ -64,22 +64,22 @@ Starship 中的大多数组件允许您为其设置显示样式。 显示样式�
 
 ### 配置项
 
-| Variable       | Default                       | Description                                            |
-| -------------- | ----------------------------- | ------------------------------------------------------ |
-| `add_newline`  | `true`                        | Add a new line before the start of the prompt.         |
-| `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
-| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).  |
+| 字段             | 默认值                          | 描述                        |
+| -------------- | ---------------------------- | ------------------------- |
+| `add_newline`  | `true`                       | 在提示符与提示信息间换行              |
+| `prompt_order` | [见下文](#default-prompt-order) | 配置各组件在提示信息中出现的顺序          |
+| `scan_timeout` | `30`                         | starship 扫描文件的超时时间（单位：毫秒） |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
 
-# Disable the newline at the start of the prompt
+# 不用在提示符前换行
 add_newline = false
-# Overwrite a default_prompt_order and  use custom prompt_order
+# 使用自定义的组件顺序替换默认组件顺序
 prompt_order=["rust","line_break","package","line_break","character"]
-# Wait 10 milliseconds for starship to check files under the current directory.
+# 当 starship 扫描当前目录下的文件和文件夹时，最多使用 10 毫秒
 scan_timeout = 10
 ```
 
