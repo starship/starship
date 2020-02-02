@@ -83,7 +83,7 @@ prompt_order=["rust","line_break","package","line_break","character"]
 scan_timeout = 10
 ```
 
-### Default Prompt Order
+### 默认的组件顺序
 
 The default `prompt_order` is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. The default is as shown:
 
