@@ -190,7 +190,7 @@ discharging_symbol = "💀"
 
 ### Battery 组件的显示
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
+`display` 选项用于定义电池指示器的显示阈值（threshold）和显示效果（style）。 如果 `display` 没有设置， 默认配置如下所示：
 
 ```toml
 [[battery.display]]
