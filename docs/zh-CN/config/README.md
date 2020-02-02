@@ -125,19 +125,19 @@ prompt_order = [
 
 ## AWS
 
-`aws` 组件显示当前 AWS 主机所在区域与配置。 各组件基于 `AWS_REGION`，`AWS_DEFAULT_REGION` 和 `AWS_PROFILE` 环境变量与 `~/.aws/config` 文件。
+`aws` 组件显示当前 AWS 主机所在区域与配置信息。 各组件基于 `AWS_REGION`，`AWS_DEFAULT_REGION` 和 `AWS_PROFILE` 环境变量与 `~/.aws/config` 文件。
 
 ### 配置项
 
-| 字段                | 默认值             | Description                                                                 |
-| ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
-| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
-| `style`           | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
+| 字段                | 默认值             | 描述                                            |
+| ----------------- | --------------- | --------------------------------------------- |
+| `symbol`          | `"☁️ "`         | 这个字段的内容会显示在当前 AWS 配置信息之前                      |
+| `displayed_items` | `all`           | 选择要显示的字段。 可能的值有： [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | 地区缩写列表，用来显示在 AWS 主机名之后。                       |
+| `style`           | `"bold yellow"` | 本组件的样式                                        |
+| `disabled`        | `false`         | 禁用 `AWS` 组件                                   |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
