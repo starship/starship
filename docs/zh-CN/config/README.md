@@ -198,11 +198,11 @@ threshold = 10
 style = "bold red"
 ```
 
-#### Options
+#### 配置项
 
-The `display` option is an array of the following table.
+`display` 字段的子字段如下：
 
-| Variable    | Description                                     |
+| 字段          | Description                                     |
 | ----------- | ----------------------------------------------- |
 | `threshold` | The upper bound for the display option.         |
 | `style`     | The style used if the display option is in use. |
