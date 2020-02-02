@@ -224,16 +224,16 @@ style = "bold yellow"
 
 ## Character
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+`character` 组件用于在您输入终端的文本旁显示一个字符（通常是一个箭头）。
 
-The character will tell you whether the last command was successful or not. It can do this in two ways: by changing color (red/green) or by changing its shape (❯/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
+这个字符可以告诉您最后一个命令是否执行成功。 它可以用两种方式完成这一功能：改变字符颜色（红色/绿色）或者改变其形状（❯/✖）。 后者仅在 `use_symbol_for_status` 设置为 `true` 时才能实现。
 
-### Options
+### 配置项
 
-| Variable                | Default        | Description                                                                         |
+| 字段                      | 默认值            | 描述                                                                                  |
 | ----------------------- | -------------- | ----------------------------------------------------------------------------------- |
-| `symbol`                | `"❯"`          | The symbol used before the text input in the prompt.                                |
-| `error_symbol`          | `"✖"`          | The symbol used before text input if the previous command failed.                   |
+| `symbol`                | `"❯"`          | 提示符中在输入文本之前显示的符号。                                                                   |
+| `error_symbol`          | `"✖"`          | 如果上一条命令失败，提示符中在输入文本之前显示的符号。                                                         |
 | `use_symbol_for_status` | `false`        | Indicate error status by changing the symbol.                                       |
 | `vicmd_symbol`          | `"❮"`          | The symbol used before the text input in the prompt if shell is in vim normal mode. |
 | `style_success`         | `"bold green"` | The style used if the last command was successful.                                  |
