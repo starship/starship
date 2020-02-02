@@ -202,23 +202,23 @@ style = "bold red"
 
 `display` 字段的子字段如下：
 
-| 字段          | 描述                            |
-| ----------- | ----------------------------- |
-| `threshold` | 电池电量低于此阈值时电池指示器组件才会被显示，默认为 10 |
-| `style`     | 若组件被显示，则使用此样式                 |
+| 字段          | 描述               |
+| ----------- | ---------------- |
+| `threshold` | 当前显示设置的电量上限（见示例） |
+| `style`     | 若组件被显示，则使用此样式    |
 
 #### 示例
 
 ```toml
-[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
+[[battery.display]]  # 当电量在 0% 到 10% 时以 "bold red" 样式显示
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
+[[battery.display]]  # 当电量在 10% 到 30% 时以 "bold yellow" 样式显示
 threshold = 30
 style = "bold yellow"
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# 当电量在 30% 时以上时，电池指示器组件将不会显示出来
 
 ```
 
