@@ -153,9 +153,9 @@ us-east-1 = "va"
 
 ## Battery
 
-The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
+`battery` 组件显示电池充电情况和当前充电状态。 这个组件只会在当前电量低于 10% 时显示。
 
-### Options
+### 配置项
 
 | Variable             | Default                  | Description                                       |
 | -------------------- | ------------------------ | ------------------------------------------------- |
