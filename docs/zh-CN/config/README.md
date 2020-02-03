@@ -432,7 +432,7 @@ truncation_symbol = ""
 
 ## Git Commit
 
-The `git_commit` module shows the current commit hash of the repo in your current directory.
+`git_commit` 组件显示当前目录的 git 仓库的当前提交的哈希值。
 
 ::: tip
 
