@@ -602,17 +602,17 @@ symbol = "λx.x "
 
 ## Mercurial Branch
 
-The `hg_branch` module shows the active branch of the repo in your current directory.
+`hg_branch` 组件显示当前目录的 hg 仓库的活动分支。
 
 ### 配置项
 
-| 字段                  | 默认值             | 描述                                                                                           |
-| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
-| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
-| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
-| `style`             | `"bold purple"` | 此组件的样式。                                                                                      |
-| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+| 字段                  | 默认值             | 描述                              |
+| ------------------- | --------------- | ------------------------------- |
+| `symbol`            | `" "`          | 该字段的内容显示于当前仓库的 hg 书签或活动分支名之前。   |
+| `truncation_length` | `2^63 - 1`      | 将显示的 hg 分支名截断到该数量的字素（graphemes） |
+| `truncation_symbol` | `"…"`           | 此字段的内容用来表示分支名称被截断。              |
+| `style`             | `"bold purple"` | 此组件的样式。                         |
+| `disabled`          | `true`          | 禁用 `hg_branch` 组件。              |
 
 ### 示例
 
@@ -627,18 +627,18 @@ truncation_symbol = ""
 
 ## Hostname
 
-The `hostname` module shows the system hostname.
+`hostname` 组件显示系统主机名。
 
 ### 配置项
 
-| 字段         | 默认值                   | 描述                                                                                                                                   |
-| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
-| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
-| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
-| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `style`    | `"bold dimmed green"` | 此组件的样式。                                                                                                                              |
-| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
+| 字段         | 默认值                   | 描述                                                                                    |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------- |
+| `ssh_only` | `true`                | 仅在连接到 SSH 会话时显示主机名。                                                                   |
+| `prefix`   | `""`                  | 直接在主机名前显示的前缀。                                                                         |
+| `suffix`   | `""`                  | 直接在主机名后显示的后缀。                                                                         |
+| `trim_at`  | `"."`                 | 当主机名过长被截断时，会截断成第一次匹配该字符串之前的主机名。 `"."` 会让主机名截断到第一个点处。 `""` will disable any truncation |
+| `style`    | `"bold dimmed green"` | 此组件的样式。                                                                               |
+| `disabled` | `false`               | Disables the `hostname` module.                                                       |
 
 ### 示例
 
