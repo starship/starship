@@ -462,22 +462,22 @@ commit_hash_length = 4
 
 ## Git State
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+`git_state` 组件会显示当前目录在哪个 git 仓库中，以及正在进行的操作，例如：_REBASING_，_BISECTING_ 等。 进度信息（例如 REBASING 3/10）如果存在则也会被显示。
 
 ### 配置项
 
-| 字段                 | 默认值                | 描述                                                                                                               |
-| ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
-| `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
-| `revert`           | `"REVERTING"`      | The text displayed when a `revert` is in progress.                                                               |
-| `cherry_pick`      | `"CHERRY-PICKING"` | The text displayed when a `cherry-pick` is in progress.                                                          |
-| `bisect`           | `"BISECTING"`      | The text displayed when a `bisect` is in progress.                                                               |
-| `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
-| `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
-| `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
-| `style`            | `"bold yellow"`    | 此组件的样式。                                                                                                          |
-| `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
+| 字段                 | 默认值                | 描述                                                    |
+| ------------------ | ------------------ | ----------------------------------------------------- |
+| `rebase`           | `"REBASING"`       | `rebase` 时显示的文本。                                      |
+| `merge`            | `"MERGING"`        | `merge` 时显示的文本。                                       |
+| `revert`           | `"REVERTING"`      | `revert` 时显示的文本。                                      |
+| `cherry_pick`      | `"CHERRY-PICKING"` | `cherry-pick` 时显示的文本。                                 |
+| `bisect`           | `"BISECTING"`      | `bisect` 时显示的文本。                                      |
+| `am`               | `"AM"`             | 正在执行 `apply-mailbox`（`git am`）时显示的文本。                 |
+| `am_or_rebase`     | `"AM/REBASE"`      | 当无法分辨正在执行的是 `apply-mailbox` 还是 `rebase` 时显示的文本。       |
+| `progress_divider` | `"/"`              | 将当前进度与总进度分开的符号或文本。 （例如，设置为 `" of "` 时效果是 `"3 of 10"`） |
+| `style`            | `"bold yellow"`    | 此组件的样式。                                               |
+| `disabled`         | `false`            | 禁用 `git_state` 模块                                     |
 
 ### 示例
 
