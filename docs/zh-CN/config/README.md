@@ -631,14 +631,14 @@ truncation_symbol = ""
 
 ### 配置项
 
-| 字段         | 默认值                   | 描述                                                                                    |
-| ---------- | --------------------- | ------------------------------------------------------------------------------------- |
-| `ssh_only` | `true`                | 仅在连接到 SSH 会话时显示主机名。                                                                   |
-| `prefix`   | `""`                  | 直接在主机名前显示的前缀。                                                                         |
-| `suffix`   | `""`                  | 直接在主机名后显示的后缀。                                                                         |
-| `trim_at`  | `"."`                 | 当主机名过长被截断时，会截断成第一次匹配该字符串之前的主机名。 `"."` 会让主机名截断到第一个点处。 `""` will disable any truncation |
-| `style`    | `"bold dimmed green"` | 此组件的样式。                                                                               |
-| `disabled` | `false`               | Disables the `hostname` module.                                                       |
+| 字段         | 默认值                   | 描述                                                                 |
+| ---------- | --------------------- | ------------------------------------------------------------------ |
+| `ssh_only` | `true`                | 仅在连接到 SSH 会话时显示主机名。                                                |
+| `prefix`   | `""`                  | 直接在主机名前显示的前缀。                                                      |
+| `suffix`   | `""`                  | 直接在主机名后显示的后缀。                                                      |
+| `trim_at`  | `"."`                 | 当主机名过长被截断时，会截断成第一次匹配该字符串之前的主机名。 `"."` 会让主机名截断到第一个点处。 `""` 会禁用任何截断。 |
+| `style`    | `"bold dimmed green"` | 此组件的样式。                                                            |
+| `disabled` | `false`               | 禁用 `hostname` 组件。                                                  |
 
 ### 示例
 
@@ -655,16 +655,16 @@ disabled = false
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
+`jobs` 组件显示当前正在运行的任务数量。 仅当有后台任务运行时，此组件才会显示。 如果有超过 1 个作业，模块将显示正在运行的作业数量，如果配置了 `threshold` 字段，则使用它作为显示作业数量的下限。
 
 ### 配置项
 
-| 字段          | 默认值           | 描述                                                    |
-| ----------- | ------------- | ----------------------------------------------------- |
-| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
-| `threshold` | `1`           | Show number of jobs if exceeded.                      |
-| `style`     | `"bold blue"` | 此组件的样式。                                               |
-| `disabled`  | `false`       | Disables the `jobs` module.                           |
+| 字段          | 默认值           | 描述                   |
+| ----------- | ------------- | -------------------- |
+| `symbol`    | `"✦"`         | 这个字段的内容会显示在当前作业数量之前。 |
+| `threshold` | `1`           | 如果超过此字段的值，显示任务数量。    |
+| `style`     | `"bold blue"` | 此组件的样式。              |
+| `disabled`  | `false`       | 禁用 `jobs` 组件。        |
 
 ### 示例
 
@@ -678,21 +678,21 @@ threshold = 4
 
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+显示当前的 Kubernetes 上下文名以及，如果有相关设置，则显示来自 kubeconig 文件的命名空间。 命名空间需要在 kubeconfig 文件中设置，这可以通过 `kubectl config set-context starship-cluster --namespace astronaut` 完成。 如果设置了环境变量 `$KUBECONFIG`，此组件将使用该值，否则会使用 `~/.kube/config`。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
 ### 配置项
 
-| 字段         | 默认值           | 描述                                                  |
-| ---------- | ------------- | --------------------------------------------------- |
-| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
-| `style`    | `"bold blue"` | 此组件的样式。                                             |
-| `disabled` | `true`        | Disables the `kubernetes` module                    |
+| 字段         | 默认值           | 描述                   |
+| ---------- | ------------- | -------------------- |
+| `symbol`   | `"☸ "`        | 这个字段的内容会显示在当前集群信息之前。 |
+| `style`    | `"bold blue"` | 此组件的样式。              |
+| `disabled` | `true`        | 禁用 `kubernetes` 组件。  |
 
 ### 示例
 
@@ -707,13 +707,13 @@ disabled = false
 
 ## Line Break
 
-The `line_break` module separates the prompt into two lines.
+`line_break` 组件将提示分隔为两行。
 
 ### 配置项
 
-| 字段         | 默认值     | 描述                                                                 |
-| ---------- | ------- | ------------------------------------------------------------------ |
-| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
+| 字段         | 默认值     | 描述                          |
+| ---------- | ------- | --------------------------- |
+| `disabled` | `false` | 禁用 `line_break` 组件，使提示成为单行。 |
 
 ### 示例
 
@@ -726,17 +726,17 @@ disabled = true
 
 ## Nix-shell
 
-The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
+`nix_shell` 组件显示 nix-shell 环境。 当处于一个 nix-shell 环境中时，此组件会被显示。
 
 ### 配置项
 
-| 字段           | 默认值          | 描述                                 |
-| ------------ | ------------ | ---------------------------------- |
-| `use_name`   | `false`      | Display the name of the nix-shell. |
-| `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
-| `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
-| `style`      | `"bold red"` | 此组件的样式。                            |
-| `disabled`   | `false`      | Disables the `nix_shell` module.   |
+| 字段           | 默认值          | 描述                               |
+| ------------ | ------------ | -------------------------------- |
+| `use_name`   | `false`      | 显示 nix-shell 的名称。                |
+| `impure_msg` | `"impure"`   | 自定义“impure”消息。                   |
+| `pure_msg`   | `"pure"`     | 自定义“pure”消息。                     |
+| `style`      | `"bold red"` | 此组件的样式。                          |
+| `disabled`   | `false`      | Disables the `nix_shell` module. |
 
 ### 示例
 
