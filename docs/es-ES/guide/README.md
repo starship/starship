@@ -75,42 +75,42 @@
 - Los caracteres de la prompt se colorean de rojo si el último comando termina con un código distinto a cero
 - Versión actual de Go (`🐹`)
 - Current Haskell version (`λ`)
-- Current Java version(`☕`)
-- Current Node.js version(`⬢`)
-- Current PHP version (`🐘`)
-- Current Python version (`🐍`)
-- Current Ruby version (`💎`)
-- Current Rust version (`🦀`)
-- Current .NET version (`•NET`)
-- Current version of package in current directory (`📦`)
+- Versión actual de Java (`☕`)
+- Versión actual de Node.js (`⬢`)
+- Versión actual de PHP (`🐘`)
+- Versión actual de Python (`🐍`)
+- Versión actual de Ruby (`💎`)
+- Versión actual de Rust (`🦀`)
+- Versión actual de .NET (`•NET`)
+- Versión actual del paquete en el directorio actual (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
   - composer (PHP)
-- Current Git branch and rich repo status:
-  - `=` — conflicting changes
-  - `⇡` — ahead of remote branch
-  - `⇣` — behind of remote branch
-  - `⇕` — diverged changes
-  - `?` — untracked changes
-  - `$` — stashed changes
-  - `!` — modified files
-  - `+` — added files
-  - `»` — renamed files
-  - `✘` — deleted files
-- Current Mercurial branch
-- Current battery level and status
-  - `⇡` – charging
-  - `⇣` – discharging
-  - `•` – fully charged
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
-- Current Amazon Web Services (AWS) profile (`☁️`)
-- Execution time of the last command
-- Custom environment variable value
-- Nix-shell environment detection
-- Current username if not the same as the logged-in user
-- Optional current time in 12/24hr format
+- Rama actual del repositorio git e información enriquecida de su estado:
+  - `=` — cambios conflictivos
+  - `⇡` — por delante de la rama remota
+  - `⇣` — por detrás de la rama remota
+  - `⇕` — cambios divergentes
+  - `?` — cambios sin rastrear
+  - `$` — cambios guardados
+  - `!` — archivos modificados
+  - `+` — archivos añadidos
+  - `»` — archivos renombrados
+  - `✘` — archivos eliminados
+- Rama Mercurial actual
+- Nivel y estado actual de la batería
+  - `⇡` – cargando
+  - `⇣` – descargándo
+  - `•` –completamente cargada
+- Indicador para las tareas de fondo (`✦`)
+- Cluster y espacio de nombres actual de Kubernetes (`☸`)
+- Perfil actual de Amazon Web Services (AWS) (`☁️`)
+- Tiempo de ejecución del último comando
+- Valor de variable de entorno personalizado
+- Detección del entorno de la interfaz de línea de comandos *nix
+- Nombre de usuario actual si no es el mismo que el del usuario conectado
+- Hora actual opcional en formato 12/24 hrs.
 - Current Terraform Workspace and version (`💠`)
 - Current Conda environment (`C`)
 
