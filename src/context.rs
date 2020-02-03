@@ -177,10 +177,6 @@ pub struct DirContents {
 }
 
 impl DirContents {
-    fn from_path(base: &PathBuf) -> Result<Self, std::io::Error> {
-        Self::from_path_with_timeout(base, Duration::from_secs(30))
-    }
-
     fn from_path_with_timeout(base: &PathBuf, timeout: Duration) -> Result<Self, std::io::Error> {
         let start = SystemTime::now();
 
