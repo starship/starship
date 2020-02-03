@@ -413,7 +413,7 @@ default = "unknown shell"
 
 | 字段                  | 默认值             | 描述                                                                                    |
 | ------------------- | --------------- | ------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
+| `symbol`            | `" "`          | 该字段的内容显示于当前仓库活动分支名之前。                                                                 |
 | `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
 | `style`             | `"bold purple"` | 此组件的样式。                                                                               |
