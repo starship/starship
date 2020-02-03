@@ -411,13 +411,13 @@ default = "unknown shell"
 
 ### 配置项
 
-| 字段                  | 默认值             | 描述                                                                                    |
-| ------------------- | --------------- | ------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`          | 该字段的内容显示于当前仓库活动分支名之前。                                                                 |
-| `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
-| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
-| `style`             | `"bold purple"` | 此组件的样式。                                                                               |
-| `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
+| 字段                  | 默认值             | 描述                                    |
+| ------------------- | --------------- | ------------------------------------- |
+| `symbol`            | `" "`          | 该字段的内容显示于当前仓库活动分支名之前。                 |
+| `truncation_length` | `2^63 - 1`      | 将显示的分支名截断到该数量的字素（graphemes）           |
+| `truncation_symbol` | `"…"`           | 此字段的内容用来表示分支名称被截断。 您可以使用 "" 以不显示任何符号。 |
+| `style`             | `"bold purple"` | 此组件的样式。                               |
+| `disabled`          | `false`         | 禁用 `git_branch` 组件。                   |
 
 ### 示例
 
