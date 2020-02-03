@@ -550,23 +550,23 @@ deleted = "🗑"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
+`golang` 组件显示当前安装的 Golang 版本。 此组件只有满足以下条件之一时才会被显示：
 
-- The current directory contains a `go.mod` file
-- The current directory contains a `go.sum` file
-- The current directory contains a `glide.yaml` file
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- 当前目录包含 `go.mod` 文件
+- 当前目录包含 `go.sum` 文件
+- 当前目录包含 `glide.yaml` 文件
+- 当前目录包含 `Gopkg.yml` 文件
+- 当前目录包含 `Gopkg.lock` 文件
+- 当前目录包含 `Godeps` 目录
+- 当前目录包含一个使用 `.go` 扩展名的文件
 
 ### 配置项
 
-| 字段         | 默认值           | 描述                                                       |
-| ---------- | ------------- | -------------------------------------------------------- |
-| `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
-| `style`    | `"bold cyan"` | 此组件的样式。                                                  |
-| `disabled` | `false`       | Disables the `golang` module.                            |
+| 字段         | 默认值           | 描述                         |
+| ---------- | ------------- | -------------------------- |
+| `symbol`   | `"🐹 "`        | 这个字段的内容会显示在当前 Golang 版本之前。 |
+| `style`    | `"bold cyan"` | 此组件的样式。                    |
+| `disabled` | `false`       | 禁用 `golang` 组件。            |
 
 ### 示例
 
