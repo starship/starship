@@ -579,16 +579,16 @@ symbol = "🏎💨 "
 ```
 ## Haskell
 
-The `haskell` module shows the currently installed version of Haskell Stack version. The module will be shown if any of the following conditions are met:
+The `haskell` module shows the currently installed version of Haskell Stack version. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `stack.yaml` file
+- カレントディレクトリに`stack.yaml`ファイルが含まれている
 
 ### オプション
 
 | 変数         | デフォルト        | 説明                                                        |
 | ---------- | ------------ | --------------------------------------------------------- |
 | `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold red"` | The style for the module.                                 |
+| `style`    | `"bold red"` | モジュールのスタイルです。                                             |
 | `disabled` | `false`      | Disables the `haskell` module.                            |
 
 
@@ -601,9 +601,9 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 symbol = "λx.x "
 ```
 
-## Mercurial Branch
+## Mercurial ブランチ
 
-The `hg_branch` module shows the active branch of the repo in your current directory.
+` hg_branch `モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを示します。
 
 ### オプション
 
@@ -611,8 +611,8 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
-| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
-| `style`             | `"bold purple"` | The style for the module.                                                                    |
+| `truncation_symbol` | `"…"`           | ブランチ名切り捨てられていることを示すための記号です。                                                                  |
+| `style`             | `"bold purple"` | モジュールのスタイルです。                                                                                |
 | `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
 
 ### 設定例
@@ -626,20 +626,20 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Hostname
+## ホスト名
 
-The `hostname` module shows the system hostname.
+`hostname`モジュールには、システムのホスト名が表示されます。
 
 ### オプション
 
-| 変数         | デフォルト                 | 説明                                                                                                                                   |
-| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
-| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
-| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
-| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
-| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
+| 変数         | デフォルト                 | 説明                                                                          |
+| ---------- | --------------------- | --------------------------------------------------------------------------- |
+| `ssh_only` | `true`                | SSHセッションに接続されている場合にのみホスト名を表示します。                                            |
+| `prefix`   | `""`                  | ホスト名の直前に表示するprefixです。                                                       |
+| `suffix`   | `""`                  | ホスト名の直後に表示するsuffixです。                                                       |
+| `trim_at`  | `"."`                 | この文字が最初にマッチするまでをホスト名と認識します。 `"."`は最初の. までをホスト名として認識します。 `""`を指定した場合トリムしません。 |
+| `style`    | `"bold dimmed green"` | モジュールのスタイルです。                                                               |
+| `disabled` | `false`               | `hostname`モジュールを無効にします。                                                     |
 
 ### 設定例
 
@@ -654,18 +654,18 @@ trim_at = ".companyname.com"
 disabled = false
 ```
 
-## Jobs
+## ジョブ
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
+`jobs`モジュールには、実行中のジョブの現在の数が表示されます。 このモジュールは、実行中のバックグラウンドジョブがある場合にのみ表示されます。 1つ以上のジョブがある、または`threshold`に指定した値以上にジョブがある場合は実行中のジョブの数を表示します。
 
 ### オプション
 
-| 変数          | デフォルト         | 説明                                                    |
-| ----------- | ------------- | ----------------------------------------------------- |
-| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
-| `threshold` | `1`           | Show number of jobs if exceeded.                      |
-| `style`     | `"bold blue"` | The style for the module.                             |
-| `disabled`  | `false`       | Disables the `jobs` module.                           |
+| 変数          | デフォルト         | 説明                     |
+| ----------- | ------------- | ---------------------- |
+| `symbol`    | `"✦"`         | ジョブの数を表示する前に使用される記号です。 |
+| `threshold` | `1`           | 超過した場合、ジョブの数を表示します。    |
+| `style`     | `"bold blue"` | モジュールのスタイルです。          |
+| `disabled`  | `false`       | `jobs`モジュールを無効にします。    |
 
 ### 設定例
 
@@ -679,21 +679,21 @@ threshold = 4
 
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+現在のKubernetesコンテキスト名と、設定されている場合は、kubeconfigファイルに基づいてネームスペースを表示します。 ネームスペースはkubconfigで設定されている必要があります。それは `kubectl config set-context starship-cluster --namespace astronaut` のようなコマンドで設定することができます。 `$KUBECONFIG` 環境変数が設定されている場合、モジュールはそれを使用します `~/.kube/config` は使用しません。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
 ### オプション
 
-| 変数         | デフォルト         | 説明                                                  |
-| ---------- | ------------- | --------------------------------------------------- |
-| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
-| `style`    | `"bold blue"` | The style for the module.                           |
-| `disabled` | `true`        | Disables the `kubernetes` module                    |
+| 変数         | デフォルト         | 説明                        |
+| ---------- | ------------- | ------------------------- |
+| `symbol`   | `"☸ "`        | クラスタ情報を表示する前に使用される記号です。   |
+| `style`    | `"bold blue"` | モジュールのスタイルです。             |
+| `disabled` | `true`        | `Kubernetes`モジュールを無効にします。 |
 
 ### 設定例
 
@@ -706,15 +706,15 @@ style = "dim green"
 disabled = false
 ```
 
-## Line Break
+## 改行
 
-The `line_break` module separates the prompt into two lines.
+`line_break`モジュールは、プロンプトを2行に分割します。
 
 ### オプション
 
-| 変数         | デフォルト   | 説明                                                                 |
-| ---------- | ------- | ------------------------------------------------------------------ |
-| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
+| 変数         | デフォルト   | 説明                                    |
+| ---------- | ------- | ------------------------------------- |
+| `disabled` | `false` | `line_break`モジュールを無効にして、プロンプトを1行にします。 |
 
 ### 設定例
 
@@ -727,17 +727,17 @@ disabled = true
 
 ## Nix-shell
 
-The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
+`nix_shell`モジュールは、nix-shell環境を示しています。 このモジュールは、nixシェル環境内にあるときに表示されます。
 
 ### オプション
 
-| 変数           | デフォルト        | 説明                                 |
-| ------------ | ------------ | ---------------------------------- |
-| `use_name`   | `false`      | Display the name of the nix-shell. |
-| `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
-| `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
-| `style`      | `"bold red"` | The style for the module.          |
-| `disabled`   | `false`      | Disables the `nix_shell` module.   |
+| 変数           | デフォルト        | 説明                       |
+| ------------ | ------------ | ------------------------ |
+| `use_name`   | `false`      | nix-shellの名前を表示します。      |
+| `impure_msg` | `"impure"`   | impureメッセージをカスタマイズします。   |
+| `pure_msg`   | `"pure"`     | pureメッセージをカスタマイズします。     |
+| `style`      | `"bold red"` | モジュールのスタイルです。            |
+| `disabled`   | `false`      | `nix_shell`モジュールを無効にします。 |
 
 ### 設定例
 
@@ -753,18 +753,18 @@ pure_msg = "pure shell"
 
 ## Java
 
-The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
+`java`モジュールは、現在インストールされているJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
+- カレントディレクトリに`pom.xml`, `build.gradle.kts`,もしくは`build.sbt`が含まれている
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
 ### オプション
 
-| 変数         | デフォルト          | 説明                                                     |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | The style for the module.                              |
-| `disabled` | `false`        | Disables the `java` module.                            |
+| 変数         | デフォルト          | 説明                          |
+| ---------- | -------------- | --------------------------- |
+| `symbol`   | `"☕ "`         | Javaのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"dimmed red"` | モジュールのスタイルです。               |
+| `disabled` | `false`        | `Java`モジュールを無効にします。         |
 
 ### 設定例
 
@@ -775,15 +775,16 @@ The `java` module shows the currently installed version of Java. The module will
 symbol = "🌟 "
 ```
 
-## Memory Usage
+## メモリ使用量
 
-The `memory_usage` module shows current system memory and swap usage.
+`memory_usage</ 0>モジュールは、現在のシステムメモリとスワップ使用量を示します。</p>
 
-By default the swap usage is displayed if the total system swap is non-zero.
+<p spaces-before="0">デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。</p>
 
-::: tip
+<p spaces-before="0">::: tip</p>
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+<p spaces-before="0">このモジュールはデフォルトで無効になっています。
+有効にするには、設定ファイルで<code>disabled`を`false`に設定します。
 
 :::
 
@@ -791,13 +792,13 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | 変数                | デフォルト                 | 説明                                                            |
 | ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
-| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
+| `show_percentage` | `false`               | メモリ使用量を割合で表示します。                                              |
+| `show_swap`       | `true`                | 合計スワップがゼロ以外の場合、スワップ使用量を表示します。                                 |
+| `threshold`       | `75`                  | この閾値を超えない限り、メモリ使用率は表示されません。                                   |
+| `symbol`          | `"🐏 "`                | メモリ使用率を表示する前に使用される記号です。                                       |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | The style for the module.                                     |
-| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
+| `style`           | `"bold dimmed white"` | モジュールのスタイルです。                                                 |
+| `disabled`        | `true`                | `memory_usage`モジュールを無効にします。                                   |
 
 ### 設定例
 
@@ -815,19 +816,19 @@ style = "bold dimmed green"
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
+`nodejs`モジュールは、現在インストールされているNodeJSのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `package.json` file
-- The current directory contains a `node_modules` directory
-- The current directory contains a file with the `.js` extension
+- カレントディレクトリに`package.json`ファイルが含まれている
+- カレントディレクトリに`node_modules`ディレクトリが含まれている
+- カレントディレクトリに`.js`の拡張子のファイルが含まれている
 
 ### オプション
 
-| 変数         | デフォルト          | 説明                                                       |
-| ---------- | -------------- | -------------------------------------------------------- |
-| `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | モジュールのスタイルです。                                            |
-| `disabled` | `false`        | Disables the `nodejs` module.                            |
+| 変数         | デフォルト          | 説明                            |
+| ---------- | -------------- | ----------------------------- |
+| `symbol`   | `"⬢ "`         | NodeJSのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold green"` | モジュールのスタイルです。                 |
+| `disabled` | `false`        | `nodejs`モジュールを無効にします。         |
 
 ### 設定例
 
@@ -838,24 +839,24 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 symbol = "🤖 "
 ```
 
-## Package Version
+## パッケージのバージョン
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
+`package`モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。 このモジュールは現在、 `npm` 、 `cargo` 、および`poetry`パッケージをサポートしています。
 
-- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
-- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
-- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
-- **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
+- **npm** – `npm`パッケージバージョンは、現在のディレクトリにある`package.json`から抽出されます
+- **cargo** – `cargo`パッケージバージョンは、現在のディレクトリにある`Cargo.toml`から抽出されます。
+- **poetry** – `poetry`パッケージバージョンは、現在のディレクトリにある`pyproject.toml`から抽出されます
+- **composer** – `composer`パッケージバージョンは、現在のディレクトリにある`composer.json`から抽出されます
 
 > ⚠️ 表示されるバージョンは、パッケージマネージャーではなく、ソースコードが現在のディレクトリにあるパッケージのバージョンです。
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                                                         |
-| ---------- | ------------ | ---------------------------------------------------------- |
-| `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | モジュールのスタイルです。                                              |
-| `disabled` | `false`      | Disables the `package` module.                             |
+| 変数         | デフォルト        | 説明                           |
+| ---------- | ------------ | ---------------------------- |
+| `symbol`   | `"📦 "`       | パッケージのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold red"` | モジュールのスタイルです。                |
+| `disabled` | `false`      | `package`モジュールを無効にします。       |
 
 ### 設定例
 
@@ -868,17 +869,17 @@ symbol = "🎁 "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
+`php`モジュールは、現在インストールされているPHPのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `composer.json` file
-- The current directory contains a `.php` file
+- カレントディレクトリに`composer.json`ファイルが含まれている
+- カレントディレクトリに`.php`の拡張子のファイルが含まれている
 
 ### オプション
 
 | 変数         | デフォルト        | 説明                                                    |
 | ---------- | ------------ | ----------------------------------------------------- |
 | `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
-| `style`    | `"bold red"` | The style for the module.                             |
+| `style`    | `"bold red"` | モジュールのスタイルです。                                         |
 | `disabled` | `false`      | Disables the `php` module.                            |
 
 ### 設定例
@@ -892,31 +893,31 @@ symbol = "🔹 "
 
 ## Python
 
-The `python` module shows the currently installed version of Python.
+`python`モジュールは、現在インストールされているPythonのバージョンを示します。
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
+`pyenvversionname`が`true`に設定されている場合 、pyenvでのバージョン名が表示されます 。
 
-Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
+それ以外の場合は、 `python --version`バージョン番号が表示され、アクティブになっている場合は現在のPython仮想環境が表示されます。
 
-The module will be shown if any of the following conditions are met:
+次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a file with the `.py` extension
-- The current directory contains a `Pipfile` file
-- The current directory contains a `tox.ini` file
-- A virtual environment is currently activated
+- カレントディレクトリに`.python-version`ファイルが含まれている
+- カレントディレクトリに`requirements.txt`ファイルが含まれている
+- カレントディレクトリに`pyproject.toml`ファイルが含まれている
+- カレントディレクトリに`.py`の拡張子のファイルが含まれている
+- カレントディレクトリに`Pipfile`ファイルが含まれている
+- カレントディレクトリに`tox.ini`ファイルが含まれている
+- 仮想環境がアクティブである
 
 ### オプション
 
-| 変数                   | デフォルト           | 説明                                                                          |
-| -------------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
-| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
-| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
-| `style`              | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`           | `false`         | Disables the `python` module.                                               |
+| 変数                   | デフォルト           | 説明                                                   |
+| -------------------- | --------------- | ---------------------------------------------------- |
+| `symbol`             | `"🐍 "`          | Pythonのバージョンを表示する前に使用される記号です。                        |
+| `pyenv_version_name` | `false`         | pyenvを使用してPythonバージョンを取得します                          |
+| `pyenv_prefix`       | `"pyenv "`      | pyenvバージョン表示の前のprefix（デフォルトの表示は`pyenv MY_VERSION`）です |
+| `style`              | `"bold yellow"` | モジュールのスタイルです。                                        |
+| `disabled`           | `false`         | `python`モジュールを無効にします。                                |
 
 ### 設定例
 
@@ -931,18 +932,18 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`ruby`モジュールは、現在インストールされているRubyのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `Gemfile` file
-- The current directory contains a `.rb` file
+- カレントディレクトリに`Gemfile`ファイルが含まれている
+- カレントディレクトリに`.rb`の拡張子のファイルが含まれている
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                                                     |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
-| `style`    | `"bold red"` | モジュールのスタイルです。                                          |
-| `disabled` | `false`      | Disables the `ruby` module.                            |
+| 変数         | デフォルト        | 説明                          |
+| ---------- | ------------ | --------------------------- |
+| `symbol`   | `"💎 "`       | Rubyのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold red"` | モジュールのスタイルです。               |
+| `disabled` | `false`      | `ruby`モジュールを無効にします。         |
 
 ### 設定例
 
@@ -955,18 +956,18 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
+`rust`モジュールには、現在インストールされているRustのバージョンが表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- カレントディレクトリに`Cargo.toml`ファイルが含まれている
+- カレントディレクトリに`.rs`の拡張子のファイルが含まれている
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                                                     |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
-| `style`    | `"bold red"` | The style for the module.                              |
-| `disabled` | `false`      | Disables the `rust` module.                            |
+| 変数         | デフォルト        | 説明                          |
+| ---------- | ------------ | --------------------------- |
+| `symbol`   | `"🦀 "`       | Rustのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold red"` | モジュールのスタイルです。               |
+| `disabled` | `false`      | `rust`モジュールを無効にします。         |
 
 ### 設定例
 
@@ -979,19 +980,19 @@ symbol = "⚙️ "
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. The module will be shown if any of the following conditions are met:
+`terraform`モジュールには、現在選択されているterraformワークスペースとバージョンが表示されます。 デフォルトでは、Terraformのバージョンは表示されません。これは、多くのプラグインが使用されている場合、Terraformの現在のバージョンでは遅いためです。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `.terraform` folder
-- Current directory contains a file with the `.tf` extension
+- カレントディレクトリに`.terraform`フォルダが含まれている
+- カレントディレクトリに`.tf`の拡張子のファイルが含まれている
 
 ### オプション
 
-| 変数             | デフォルト        | 説明                                                          |
-| -------------- | ------------ | ----------------------------------------------------------- |
-| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
-| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
-| `style`        | `"bold 105"` | The style for the module.                                   |
-| `disabled`     | `false`      | Disables the `terraform` module.                            |
+| 変数             | デフォルト        | 説明                                            |
+| -------------- | ------------ | --------------------------------------------- |
+| `symbol`       | `"💠 "`       | Terraform ワークスペースを表示する前に使用される記号です。            |
+| `show_version` | `false`      | Terraformのバージョンを表示します。 大きなワークスペースでは非常に遅くなります。 |
+| `style`        | `"bold 105"` | モジュールのスタイルです。                                 |
+| `disabled`     | `false`      | `terraform`モジュールを無効にします。                      |
 
 ### 設定例
 
@@ -1002,27 +1003,27 @@ The `terraform` module shows the currently selected terraform workspace and vers
 symbol = "🏎💨 "
 ```
 
-## Time
+## 時刻
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
 ### オプション
 
-| 変数                | デフォルト         | 説明                                                                                                                  |
-| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
-| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`           | `bold yellow` | The style for the module time                                                                                       |
-| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
-| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
+| 変数                | デフォルト          | 説明                                                                                                |
+| ----------------- | -------------- | ------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`        | 12時間のフォーマットを有効にします。                                                                               |
+| `format`          | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。 |
+| `style`           | `bold yellow`  | モジュールのスタイルです。                                                                                     |
+| `utc_time_offset` | `local`        | 使用するUTCオフセットを設定します。 -24から24までの間で設定可能です。 フロートが30/45分のタイムゾーンオフセットに対応できるようにします。                      |
+| `disabled`        | `true`         | `time`モジュールを無効にします。                                                                               |
 
-If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
+`use_12hr` が `true` の場合、`format` のデフォルトは `"%r"` です。 それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、`use_12hr`の設定が上書きされます。
 
 ### 設定例
 
@@ -1035,25 +1036,25 @@ format = "🕙[ %T ]"
 utc_time_offset = -5
 ```
 
-## Username
+## ユーザー名
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current user is root
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- カレントユーザーがroot
+- カレントユーザーが、ログインしているユーザーとは異なる
+- ユーザーがSSHセッションとして接続されている
+- `show_always`変数がtrueに設定されている
 
-### Options
+### オプション
 
-| Variable      | Default         | Description                           |
-| ------------- | --------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`    | The style used when the user is root. |
-| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
-| `show_always` | `false`         | Always shows the `username` module.   |
-| `disabled`    | `false`         | Disables the `username` module.       |
+| 変数            | デフォルト           | 説明                        |
+| ------------- | --------------- | ------------------------- |
+| `style_root`  | `"bold red"`    | ユーザーがrootのときに使用されるスタイルです。 |
+| `style_user`  | `"bold yellow"` | 非rootユーザーに使用されるスタイルです。    |
+| `show_always` | `false`         | `username`モジュールを常に表示します。  |
+| `disabled`    | `false`         | `username`モジュールを無効にします。   |
 
-### Example
+### 設定例
 
 ```toml
 # ~/.config/starship.toml
