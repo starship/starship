@@ -378,7 +378,7 @@ heuristic = false
 
 ## Environment Variable
 
-The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+`env_var` 组件显示选定的环境变量的当前值。 此组件只有满足以下条件才会被显示：
 
 - The `variable` configuration option matches an existing environment variable
 - The `variable` configuration option is not defined, but the `default` configuration option is
