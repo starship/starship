@@ -1,25 +1,24 @@
 ---
 home: true
 heroImage: /logo.svg
-actionText: Commencez →
-actionLink: /guide/
-footer: ISC licencié | Copyright © 2019-present Starship Contributors
+heroText:
+tagline: The cross-shell prompt for astronauts
+actionText: Get Started →
+actionLink: ./guide/
+features:
+  - 
+    title: Compatibility First
+    details: Works on the most common shells on the most common operating systems. Use it everywhere!
+  - 
+    title: Rust-Powered
+    details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
+  - 
+    title: Customizable
+    details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
+footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+#Used for the description meta tag, for SEO
+description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell.
 ---
-
-<div class="features">
-  <div class="feature">
-    <h2>Compatibilité d'abord</h2>
-    <p>Fonctionne sur tous les principaux shells et système d'exploitation. Utilisez-le partout !</p>
-  </div>
-  <div class="feature">
-    <h2>Propulsé par Rust</h2>
-    <p>Profiter de toute la rapidité et la securité de Rust, pour rendre votre prompt le plus rapide et fiable possible.</p>
-  </div>
-  <div class="feature">
-    <h2>Personnalisable</h2>
-    <p>Tous les petits détails sont personnalisable à votre goût, pour rendre votre prompt aussi léger ou complet que le vous souhaitez.</p>
-  </div>
-</div>
 
 <div class="center">
   <video class="demo-video" muted autoplay loop playsinline>
@@ -50,7 +49,7 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
    brew install starship
    ```
 
-    Avec [Scoop](https://scoop.sh):
+   Avec [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
