@@ -730,13 +730,13 @@ disabled = true
 
 ### 配置项
 
-| 字段           | 默认值          | 描述                               |
-| ------------ | ------------ | -------------------------------- |
-| `use_name`   | `false`      | 显示 nix-shell 的名称。                |
-| `impure_msg` | `"impure"`   | 自定义“impure”消息。                   |
-| `pure_msg`   | `"pure"`     | 自定义“pure”消息。                     |
-| `style`      | `"bold red"` | 此组件的样式。                          |
-| `disabled`   | `false`      | Disables the `nix_shell` module. |
+| 字段           | 默认值          | 描述                 |
+| ------------ | ------------ | ------------------ |
+| `use_name`   | `false`      | 显示 nix-shell 的名称。  |
+| `impure_msg` | `"impure"`   | 自定义“impure”消息。     |
+| `pure_msg`   | `"pure"`     | 自定义“pure”消息。       |
+| `style`      | `"bold red"` | 此组件的样式。            |
+| `disabled`   | `false`      | 禁用 `nix_shell` 组件。 |
 
 ### 示例
 
@@ -752,7 +752,7 @@ pure_msg = "pure shell"
 
 ## Java
 
-The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
+`java` 组件显示当前安装的 Java 版本。 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
