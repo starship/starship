@@ -1,8 +1,10 @@
 ---
 home: true
 heroImage: /logo.svg
+heroText: null
+tagline: The cross-shell prompt for astronauts
 actionText: Начало работы →
-actionLink: /ru-RU/guide/
+actionLink: ./guide/
 footer: Под лицензией ISC | Авторское право © 2019-настоящее Starship Contributors
 ---
 
