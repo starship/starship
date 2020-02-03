@@ -752,18 +752,18 @@ pure_msg = "pure shell"
 
 ## Java
 
-`java` 组件显示当前安装的 Java 版本。 The module will be shown if any of the following conditions are met:
+`java` 组件显示当前安装的 Java 版本。 此组件将在符合以下条件之一时显示：
 
-- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
-- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
+- 当前目录包含 `pom.xml`，`build.gradle.kts` 或 `build.sbt` 文件
+- 当前目录包含一个扩展名为 `.java`，`.class`，`.gradle` 或 `.jar` 的文件
 
 ### 配置项
 
-| 字段         | 默认值            | 描述                                                     |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | 此组件的样式。                                                |
-| `disabled` | `false`        | Disables the `java` module.                            |
+| 字段         | 默认值            | 描述                       |
+| ---------- | -------------- | ------------------------ |
+| `symbol`   | `"☕ "`         | 这个字段的内容会显示在当前 Java 版本之前。 |
+| `style`    | `"dimmed red"` | 此组件的样式。                  |
+| `disabled` | `false`        | 禁用 `java` 组件。            |
 
 ### 示例
 
