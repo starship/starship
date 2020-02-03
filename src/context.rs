@@ -150,6 +150,18 @@ impl<'a> Context<'a> {
             DirContents::from_path_with_timeout(&self.current_dir, timeout)
         })
     }
+
+    fn get_shell() -> Shell {
+        let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
+        match shell.as_str() {
+            "bash" => Shell::Bash,
+            "fish" => Shell::Fish,
+            "ion" => Shell::Ion,
+            "powershell" => Shell::PowerShell,
+            "zsh" => Shell::Zsh,
+            _ => Shell::Unknown,
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -239,18 +251,6 @@ impl DirContents {
 
     pub fn has_any_extension(&self, exts: &[&str]) -> bool {
         exts.iter().any(|ext| self.has_extension(ext))
-    }
-
-    fn get_shell() -> Shell {
-        let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
-        match shell.as_str() {
-            "bash" => Shell::Bash,
-            "fish" => Shell::Fish,
-            "ion" => Shell::Ion,
-            "powershell" => Shell::PowerShell,
-            "zsh" => Shell::Zsh,
-            _ => Shell::Unknown,
-        }
     }
 }
 
