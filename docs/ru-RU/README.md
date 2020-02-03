@@ -3,20 +3,21 @@ home: true
 heroImage: /logo.svg
 heroText:
 tagline: The cross-shell prompt for astronauts
-actionText: Get Started →
-actionLink: ./guide/
+actionText: Начало работы →
+actionLink: ./ru-RU/guide/
 features:
   - 
-    title: Compatibility First
-    details: Works on the most common shells on the most common operating systems. Use it everywhere!
+    title: Совместивость в первую очередь
+    details: Работает на большинстве распространенных оболочек и наиболее распространенных операционных системах. Используйте везде!
   - 
-    title: Rust-Powered
-    details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
+    title: Основана на Rust
+    details: Приносит наилучшую в своем классе скорость и безопасность Rust, чтобы сделать вашу подсказку как можно быстрее и надежнее.
   - 
-    title: Customizable
-    details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
-footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+    title: Настраиваемая
+    details: Каждая маленькая деталь настраивается по вашему вкусу, чтобы сделать эту подсказку минимальной или функциональной, как вы захотите.
+footer: Под лицензией ISC | Авторское право © 2019-настоящее Starship Contributors
 #Used for the description meta tag, for SEO
+metaTitle: "Starship: Cross-Shell Prompt"
 description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell.
 ---
 
