@@ -496,30 +496,30 @@ cherry_pick = "🍒 PICKING"
 
 ### オプション
 
-| 変数                 | デフォルト                      | 説明                                    |
-| ------------------ | -------------------------- | ------------------------------------- |
-| `conflicted`       | `"="`                      | このブランチにはマージの競合があります。                  |
-| `conflicted_count` | [link](#git-status-counts) | 競合の数の表示およびスタイル設定します。                  |
-| `ahead`            | `"⇡"`                      | このブランチは、追跡されるブランチよりも先にあります。           |
-| `behind`           | `"⇣"`                      | このブランチは、追跡されているブランチの背後にあります。          |
-| `diverged`         | `"⇕"`                      | このブランチは、追跡されているブランチから分岐しています。         |
-| `untracked`        | `"?"`                      | 作業ディレクトリに追跡されていないファイルがあります。           |
-| `untracked_count`  | [link](#git-status-counts) | 追跡されていないファイルの数を表示およびスタイル設定します。        |
-| `stashed`          | `"$"`                      | ローカルリポジトリ用のスタッシュが存在します。               |
-| `stashed_count`    | [link](#git-status-counts) | Show and style the number of stashes. |
-| `modified`         | `"!"`                      | 作業ディレクトリにファイルの変更があります。                |
-| `modified_count`   | [link](#git-status-counts) | 変更されたファイルの数を表示およびスタイル設定します。           |
-| `staged`           | `"+"`                      | 新しいファイルがステージング領域に追加されました。             |
-| `staged_count`     | [link](#git-status-counts) | ステージングされたファイルの数を表示およびスタイル設定します。       |
-| `renamed`          | `"»"`                      | 名前が変更されたファイルがステージング領域に追加されました。        |
-| `renamed_count`    | [link](#git-status-counts) | 名前を変更したファイルの数を表示およびスタイル設定します。         |
-| `deleted`          | `"✘"`                      | ファイルの削除がステージング領域に追加されました。             |
-| `deleted_count`    | [link](#git-status-counts) | 削除されたファイルの数を表示およびスタイルします。             |
-| `show_sync_count`  | `false`                    | 追跡されているブランチの先行/後方カウントを表示します。          |
-| `prefix`           | `[`                        | このモジュールの先頭に表示される文字列です。                |
-| `suffix`           | `]`                        | このモジュールの末尾に表示される文字列です。                |
-| `style`            | `"bold red"`               | モジュールのスタイルです。                         |
-| `disabled`         | `false`                    | `git_status`モジュールを無効にします。             |
+| 変数                 | デフォルト                      | 説明                              |
+| ------------------ | -------------------------- | ------------------------------- |
+| `conflicted`       | `"="`                      | このブランチにはマージの競合があります。            |
+| `conflicted_count` | [link](#git-status-counts) | 競合の数の表示およびスタイル設定します。            |
+| `ahead`            | `"⇡"`                      | このブランチは、追跡されるブランチよりも先にあります。     |
+| `behind`           | `"⇣"`                      | このブランチは、追跡されているブランチの背後にあります。    |
+| `diverged`         | `"⇕"`                      | このブランチは、追跡されているブランチから分岐しています。   |
+| `untracked`        | `"?"`                      | 作業ディレクトリに追跡されていないファイルがあります。     |
+| `untracked_count`  | [link](#git-status-counts) | 追跡されていないファイルの数を表示およびスタイル設定します。  |
+| `stashed`          | `"$"`                      | ローカルリポジトリ用のスタッシュが存在します。         |
+| `stashed_count`    | [link](#git-status-counts) | スタッシュの数の表示およびスタイル設定します。         |
+| `modified`         | `"!"`                      | 作業ディレクトリにファイルの変更があります。          |
+| `modified_count`   | [link](#git-status-counts) | 変更されたファイルの数を表示およびスタイル設定します。     |
+| `staged`           | `"+"`                      | 新しいファイルがステージング領域に追加されました。       |
+| `staged_count`     | [link](#git-status-counts) | ステージングされたファイルの数を表示およびスタイル設定します。 |
+| `renamed`          | `"»"`                      | 名前が変更されたファイルがステージング領域に追加されました。  |
+| `renamed_count`    | [link](#git-status-counts) | 名前を変更したファイルの数を表示およびスタイル設定します。   |
+| `deleted`          | `"✘"`                      | ファイルの削除がステージング領域に追加されました。       |
+| `deleted_count`    | [link](#git-status-counts) | 削除されたファイルの数を表示およびスタイルします。       |
+| `show_sync_count`  | `false`                    | 追跡されているブランチの先行/後方カウントを表示します。    |
+| `prefix`           | `[`                        | このモジュールの先頭に表示される文字列です。          |
+| `suffix`           | `]`                        | このモジュールの末尾に表示される文字列です。          |
+| `style`            | `"bold red"`               | モジュールのスタイルです。                   |
+| `disabled`         | `false`                    | `git_status`モジュールを無効にします。       |
 
 #### Git Statusのカウント
 
@@ -756,7 +756,7 @@ pure_msg = "pure shell"
 `java`モジュールは、現在インストールされているJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`pom.xml`, `build.gradle.kts`,もしくは`build.sbt`が含まれている
-- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
+- カレントディレクトリに拡張子が`.java`, `.class`, `.gradle`, もしくは`.jar`のファイルが含まれている
 
 ### オプション
 
@@ -790,15 +790,15 @@ symbol = "🌟 "
 
 ### オプション
 
-| 変数                | デフォルト                 | 説明                                                            |
-| ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | メモリ使用量を割合で表示します。                                              |
-| `show_swap`       | `true`                | 合計スワップがゼロ以外の場合、スワップ使用量を表示します。                                 |
-| `threshold`       | `75`                  | この閾値を超えない限り、メモリ使用率は表示されません。                                   |
-| `symbol`          | `"🐏 "`                | メモリ使用率を表示する前に使用される記号です。                                       |
-| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | モジュールのスタイルです。                                                 |
-| `disabled`        | `true`                | `memory_usage`モジュールを無効にします。                                   |
+| 変数                | デフォルト                 | 説明                            |
+| ----------------- | --------------------- | ----------------------------- |
+| `show_percentage` | `false`               | メモリ使用量を割合で表示します。              |
+| `show_swap`       | `true`                | 合計スワップがゼロ以外の場合、スワップ使用量を表示します。 |
+| `threshold`       | `75`                  | この閾値を超えない限り、メモリ使用率は表示されません。   |
+| `symbol`          | `"🐏 "`                | メモリ使用率を表示する前に使用される記号です。       |
+| `separator`       | `" | "`               | RAMとスワップの使用を分離する記号またはテキストです。  |
+| `style`           | `"bold dimmed white"` | モジュールのスタイルです。                 |
+| `disabled`        | `true`                | `memory_usage`モジュールを無効にします。   |
 
 ### 設定例
 
@@ -876,11 +876,11 @@ symbol = "🎁 "
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                                                    |
-| ---------- | ------------ | ----------------------------------------------------- |
-| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
-| `style`    | `"bold red"` | モジュールのスタイルです。                                         |
-| `disabled` | `false`      | Disables the `php` module.                            |
+| 変数         | デフォルト        | 説明                         |
+| ---------- | ------------ | -------------------------- |
+| `symbol`   | `"🐘 "`       | PHPのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold red"` | モジュールのスタイルです。              |
+| `disabled` | `false`      | `php`モジュールを無効にします。         |
 
 ### 設定例
 
