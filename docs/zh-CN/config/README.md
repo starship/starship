@@ -378,22 +378,22 @@ heuristic = false
 
 ## Environment Variable
 
-`env_var` 组件显示选定的环境变量的当前值。 此组件只有满足以下条件才会被显示：
+`env_var` 组件显示选定的环境变量的当前值。 此组件只有满足以下条件之一时才会被显示：
 
-- The `variable` configuration option matches an existing environment variable
-- The `variable` configuration option is not defined, but the `default` configuration option is
+- 设置的 `variable` 是一个已存在的环境变量
+- 未定义 `variable`，但定义了 `default`
 
 ### 配置项
 
-| 字段         | 默认值              | 描述                                                                           |
-| ---------- | ---------------- | ---------------------------------------------------------------------------- |
-| `symbol`   |                  | The symbol used before displaying the variable value.                        |
-| `字段`       |                  | The environment variable to be displayed.                                    |
-| `默认值`      |                  | The default value to be displayed when the selected variable is not defined. |
-| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
-| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed black"` | 此组件的样式。                                                                      |
-| `disabled` | `false`          | Disables the `env_var` module.                                               |
+| 字段         | 默认值              | 描述                  |
+| ---------- | ---------------- | ------------------- |
+| `symbol`   |                  | 这个字段的内容会显示在环境变量值之前。 |
+| `variable` |                  | 要显示的环境变量。           |
+| `default`  |                  | 所选变量未定义时显示的默认值。     |
+| `prefix`   | `""`             | 直接在显示环境变量值前显示的前缀。   |
+| `suffix`   | `""`             | 直接在显示环境变量值后显示的后缀。   |
+| `style`    | `"dimmed black"` | 此组件的样式。             |
+| `disabled` | `false`          | 禁用 `env_var` 组件。    |
 
 ### 示例
 
@@ -407,7 +407,7 @@ default = "unknown shell"
 
 ## Git Branch
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+`git_branch` 组件显示当前目录的 git 仓库的活动分支。
 
 ### 配置项
 
