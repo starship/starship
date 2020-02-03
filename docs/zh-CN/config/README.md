@@ -319,27 +319,27 @@ When using the fish style pwd option, instead of hiding the path that is truncat
 
 For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
-### Options
+### 配置项
 
-| Variable            | Default       | Description                                                                      |
+| 字段                  | 默认值           | 描述                                                                               |
 | ------------------- | ------------- | -------------------------------------------------------------------------------- |
 | `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
 | `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
-| `style`             | `"bold cyan"` | The style for the module.                                                        |
+| `style`             | `"bold cyan"` | 此组件的样式。                                                                          |
 | `disabled`          | `false`       | Disables the `directory` module.                                                 |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Variable                    | Default | Description                                                                              |
-| --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
-| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
-| `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+| 字段                          | 默认值    | 描述                                                                                       |
+| --------------------------- | ------ | ---------------------------------------------------------------------------------------- |
+| `fish_style_pwd_dir_length` | `0`    | The number of characters to use when applying fish shell pwd path logic.                 |
+| `use_logical_path`          | `true` | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
 
 </details>
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -356,16 +356,16 @@ This module will only be shown in your prompt when one of the following files ar
 
 Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
-### Options
+### 配置项
 
-| Variable    | Default       | Description                                              |
+| 字段          | 默认值           | 描述                                                       |
 | ----------- | ------------- | -------------------------------------------------------- |
 | `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
 | `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
-| `style`     | `"bold blue"` | The style for the module.                                |
+| `style`     | `"bold blue"` | 此组件的样式。                                                  |
 | `disabled`  | `false`       | Disables the `dotnet` module.                            |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -383,19 +383,19 @@ The `env_var` module displays the current value of a selected environment variab
 - The `variable` configuration option matches an existing environment variable
 - The `variable` configuration option is not defined, but the `default` configuration option is
 
-### Options
+### 配置项
 
-| Variable   | Default          | Description                                                                  |
+| 字段         | 默认值              | 描述                                                                           |
 | ---------- | ---------------- | ---------------------------------------------------------------------------- |
 | `symbol`   |                  | The symbol used before displaying the variable value.                        |
-| `variable` |                  | The environment variable to be displayed.                                    |
-| `default`  |                  | The default value to be displayed when the selected variable is not defined. |
+| `字段`       |                  | The environment variable to be displayed.                                    |
+| `默认值`      |                  | The default value to be displayed when the selected variable is not defined. |
 | `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
 | `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed black"` | The style for the module.                                                    |
+| `style`    | `"dimmed black"` | 此组件的样式。                                                                      |
 | `disabled` | `false`          | Disables the `env_var` module.                                               |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -409,17 +409,17 @@ default = "unknown shell"
 
 The `git_branch` module shows the active branch of the repo in your current directory.
 
-### Options
+### 配置项
 
-| Variable            | Default         | Description                                                                           |
+| 字段                  | 默认值             | 描述                                                                                    |
 | ------------------- | --------------- | ------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
 | `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
-| `style`             | `"bold purple"` | The style for the module.                                                             |
+| `style`             | `"bold purple"` | 此组件的样式。                                                                               |
 | `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -440,17 +440,17 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Options
+### 配置项
 
-| Variable             | Default        | Description                                      |
+| 字段                   | 默认值            | 描述                                               |
 | -------------------- | -------------- | ------------------------------------------------ |
 | `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
 | `prefix`             | `"("`          | Prefix to display immediately before git commit. |
 | `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
-| `style`              | `"bold green"` | The style for the module.                        |
+| `style`              | `"bold green"` | 此组件的样式。                                          |
 | `disabled`           | `true`         | Disables the `git_commit` module.                |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -464,9 +464,9 @@ commit_hash_length = 4
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
-### Options
+### 配置项
 
-| Variable           | Default            | Description                                                                                                      |
+| 字段                 | 默认值                | 描述                                                                                                               |
 | ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
 | `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
 | `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
@@ -476,10 +476,10 @@ The `git_state` module will show in directories which are part of a git reposito
 | `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
 | `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
 | `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
-| `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
+| `style`            | `"bold yellow"`    | 此组件的样式。                                                                                                          |
 | `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -493,41 +493,41 @@ cherry_pick = "🍒 PICKING"
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
-### Options
+### 配置项
 
-| Variable           | Default                    | Description                                             |
-| ------------------ | -------------------------- | ------------------------------------------------------- |
-| `conflicted`       | `"="`                      | This branch has merge conflicts.                        |
-| `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
-| `ahead`            | `"⇡"`                      | This branch is ahead of the branch being tracked.       |
-| `behind`           | `"⇣"`                      | This branch is behind of the branch being tracked.      |
-| `diverged`         | `"⇕"`                      | This branch has diverged from the branch being tracked. |
-| `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
-| `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
-| `stashed`          | `"$"`                      | A stash exists for the local repository.                |
-| `stashed_count`    | [link](#git-status-counts) | Show and style the number of stashes.                   |
-| `modified`         | `"!"`                      | There are file modifications in the working directory.  |
-| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
-| `staged`           | `"+"`                      | A new file has been added to the staging area.          |
-| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files.        |
-| `renamed`          | `"»"`                      | A renamed file has been added to the staging area.      |
-| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.             |
-| `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.   |
-| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.             |
-| `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
-| `prefix`           | `[`                        | Prefix to display immediately before git status.        |
-| `suffix`           | `]`                        | Suffix to display immediately after git status.         |
-| `style`            | `"bold red"`               | The style for the module.                               |
-| `disabled`         | `false`                    | Disables the `git_status` module.                       |
+| 字段                 | 默认值                       | 描述                                                      |
+| ------------------ | ------------------------- | ------------------------------------------------------- |
+| `conflicted`       | `"="`                     | This branch has merge conflicts.                        |
+| `conflicted_count` | [见下文](#git-status-counts) | Show and style the number of conflicts.                 |
+| `ahead`            | `"⇡"`                     | This branch is ahead of the branch being tracked.       |
+| `behind`           | `"⇣"`                     | This branch is behind of the branch being tracked.      |
+| `diverged`         | `"⇕"`                     | This branch has diverged from the branch being tracked. |
+| `untracked`        | `"?"`                     | There are untracked files in the working directory.     |
+| `untracked_count`  | [见下文](#git-status-counts) | Show and style the number of untracked files.           |
+| `stashed`          | `"$"`                     | A stash exists for the local repository.                |
+| `stashed_count`    | [见下文](#git-status-counts) | Show and style the number of stashes.                   |
+| `modified`         | `"!"`                     | There are file modifications in the working directory.  |
+| `modified_count`   | [见下文](#git-status-counts) | Show and style the number of modified files.            |
+| `staged`           | `"+"`                     | A new file has been added to the staging area.          |
+| `staged_count`     | [见下文](#git-status-counts) | Show and style the number of files staged files.        |
+| `renamed`          | `"»"`                     | A renamed file has been added to the staging area.      |
+| `renamed_count`    | [见下文](#git-status-counts) | Show and style the number of renamed files.             |
+| `deleted`          | `"✘"`                     | A file's deletion has been added to the staging area.   |
+| `deleted_count`    | [见下文](#git-status-counts) | Show and style the number of deleted files.             |
+| `show_sync_count`  | `false`                   | Show ahead/behind count of the branch being tracked.    |
+| `prefix`           | `[`                       | Prefix to display immediately before git status.        |
+| `suffix`           | `]`                       | Suffix to display immediately after git status.         |
+| `style`            | `"bold red"`              | 此组件的样式。                                                 |
+| `disabled`         | `false`                   | Disables the `git_status` module.                       |
 
 #### Git Status Counts
 
-| Variable  | Default | Description                                            |
+| 字段        | 默认值     | 描述                                                     |
 | --------- | ------- | ------------------------------------------------------ |
 | `enabled` | `false` | Show the number of files                               |
 | `style`   |         | Optionally style the count differently than the module |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -560,15 +560,15 @@ The `golang` module shows the currently installed version of Golang. The module 
 - The current directory contains a `Godeps` directory
 - The current directory contains a file with the `.go` extension
 
-### Options
+### 配置项
 
-| Variable   | Default       | Description                                              |
+| 字段         | 默认值           | 描述                                                       |
 | ---------- | ------------- | -------------------------------------------------------- |
 | `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
-| `style`    | `"bold cyan"` | The style for the module.                                |
+| `style`    | `"bold cyan"` | 此组件的样式。                                                  |
 | `disabled` | `false`       | Disables the `golang` module.                            |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -582,16 +582,16 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 
 - The current directory contains a `stack.yaml` file
 
-### Options
+### 配置项
 
-| Variable   | Default      | Description                                               |
+| 字段         | 默认值          | 描述                                                        |
 | ---------- | ------------ | --------------------------------------------------------- |
 | `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold red"` | The style for the module.                                 |
+| `style`    | `"bold red"` | 此组件的样式。                                                   |
 | `disabled` | `false`      | Disables the `haskell` module.                            |
 
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -604,17 +604,17 @@ symbol = "λx.x "
 
 The `hg_branch` module shows the active branch of the repo in your current directory.
 
-### Options
+### 配置项
 
-| Variable            | Default         | Description                                                                                  |
+| 字段                  | 默认值             | 描述                                                                                           |
 | ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
-| `style`             | `"bold purple"` | The style for the module.                                                                    |
+| `style`             | `"bold purple"` | 此组件的样式。                                                                                      |
 | `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -629,18 +629,18 @@ truncation_symbol = ""
 
 The `hostname` module shows the system hostname.
 
-### Options
+### 配置项
 
-| Variable   | Default               | Description                                                                                                                          |
+| 字段         | 默认值                   | 描述                                                                                                                                   |
 | ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
 | `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
 | `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
 | `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
+| `style`    | `"bold dimmed green"` | 此组件的样式。                                                                                                                              |
 | `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -657,16 +657,16 @@ disabled = false
 
 The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
-### Options
+### 配置项
 
-| Variable    | Default       | Description                                           |
+| 字段          | 默认值           | 描述                                                    |
 | ----------- | ------------- | ----------------------------------------------------- |
 | `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
 | `threshold` | `1`           | Show number of jobs if exceeded.                      |
-| `style`     | `"bold blue"` | The style for the module.                             |
+| `style`     | `"bold blue"` | 此组件的样式。                                               |
 | `disabled`  | `false`       | Disables the `jobs` module.                           |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -686,15 +686,15 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Options
+### 配置项
 
-| Variable   | Default       | Description                                         |
+| 字段         | 默认值           | 描述                                                  |
 | ---------- | ------------- | --------------------------------------------------- |
 | `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
-| `style`    | `"bold blue"` | The style for the module.                           |
+| `style`    | `"bold blue"` | 此组件的样式。                                             |
 | `disabled` | `true`        | Disables the `kubernetes` module                    |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -709,13 +709,13 @@ disabled = false
 
 The `line_break` module separates the prompt into two lines.
 
-### Options
+### 配置项
 
-| Variable   | Default | Description                                                        |
+| 字段         | 默认值     | 描述                                                                 |
 | ---------- | ------- | ------------------------------------------------------------------ |
 | `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -728,17 +728,17 @@ disabled = true
 
 The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
-### Options
+### 配置项
 
-| Variable     | Default      | Description                        |
+| 字段           | 默认值          | 描述                                 |
 | ------------ | ------------ | ---------------------------------- |
 | `use_name`   | `false`      | Display the name of the nix-shell. |
 | `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
 | `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
-| `style`      | `"bold red"` | The style for the module.          |
+| `style`      | `"bold red"` | 此组件的样式。                            |
 | `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -757,15 +757,15 @@ The `java` module shows the currently installed version of Java. The module will
 - The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
-### Options
+### 配置项
 
-| Variable   | Default        | Description                                            |
+| 字段         | 默认值            | 描述                                                     |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | The style for the module.                              |
+| `style`    | `"dimmed red"` | 此组件的样式。                                                |
 | `disabled` | `false`        | Disables the `java` module.                            |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -786,19 +786,19 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Options
+### 配置项
 
-| Variable          | Default               | Description                                                   |
+| 字段                | 默认值                   | 描述                                                            |
 | ----------------- | --------------------- | ------------------------------------------------------------- |
 | `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
 | `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
 | `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
 | `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | The style for the module.                                     |
+| `style`           | `"bold dimmed white"` | 此组件的样式。                                                       |
 | `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -820,15 +820,15 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js` extension
 
-### Options
+### 配置项
 
-| Variable   | Default        | Description                                              |
+| 字段         | 默认值            | 描述                                                       |
 | ---------- | -------------- | -------------------------------------------------------- |
 | `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | The style for the module.                                |
+| `style`    | `"bold green"` | 此组件的样式。                                                  |
 | `disabled` | `false`        | Disables the `nodejs` module.                            |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -848,15 +848,15 @@ The `package` module is shown when the current directory is the repository for a
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
 
-### Options
+### 配置项
 
-| Variable   | Default      | Description                                                |
+| 字段         | 默认值          | 描述                                                         |
 | ---------- | ------------ | ---------------------------------------------------------- |
 | `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | The style for the module.                                  |
+| `style`    | `"bold red"` | 此组件的样式。                                                    |
 | `disabled` | `false`      | Disables the `package` module.                             |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -872,15 +872,15 @@ The `php` module shows the currently installed version of PHP. The module will b
 - The current directory contains a `composer.json` file
 - The current directory contains a `.php` file
 
-### Options
+### 配置项
 
-| Variable   | Default      | Description                                           |
+| 字段         | 默认值          | 描述                                                    |
 | ---------- | ------------ | ----------------------------------------------------- |
 | `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
-| `style`    | `"bold red"` | The style for the module.                             |
+| `style`    | `"bold red"` | 此组件的样式。                                               |
 | `disabled` | `false`      | Disables the `php` module.                            |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -907,17 +907,17 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `tox.ini` file
 - A virtual environment is currently activated
 
-### Options
+### 配置项
 
-| Variable             | Default         | Description                                                                 |
+| 字段                   | 默认值             | 描述                                                                          |
 | -------------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
 | `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
 | `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
-| `style`              | `"bold yellow"` | The style for the module.                                                   |
+| `style`              | `"bold yellow"` | 此组件的样式。                                                                     |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -935,15 +935,15 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.rb` file
 
-### Options
+### 配置项
 
-| Variable   | Default      | Description                                            |
+| 字段         | 默认值          | 描述                                                     |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
-| `style`    | `"bold red"` | The style for the module.                              |
+| `style`    | `"bold red"` | 此组件的样式。                                                |
 | `disabled` | `false`      | Disables the `ruby` module.                            |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -959,15 +959,15 @@ The `rust` module shows the currently installed version of Rust. The module will
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
 
-### Options
+### 配置项
 
-| Variable   | Default      | Description                                            |
+| 字段         | 默认值          | 描述                                                     |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
-| `style`    | `"bold red"` | The style for the module.                              |
+| `style`    | `"bold red"` | 此组件的样式。                                                |
 | `disabled` | `false`      | Disables the `rust` module.                            |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -983,16 +983,16 @@ The `terraform` module shows the currently selected terraform workspace and vers
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` extension
 
-### Options
+### 配置项
 
-| Variable       | Default      | Description                                                 |
+| 字段             | 默认值          | 描述                                                          |
 | -------------- | ------------ | ----------------------------------------------------------- |
 | `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
 | `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
-| `style`        | `"bold 105"` | The style for the module.                                   |
+| `style`        | `"bold 105"` | 此组件的样式。                                                     |
 | `disabled`     | `false`      | Disables the `terraform` module.                            |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -1011,9 +1011,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Options
+### 配置项
 
-| Variable          | Default       | Description                                                                                                         |
+| 字段                | 默认值           | 描述                                                                                                                  |
 | ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
@@ -1023,7 +1023,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
@@ -1043,16 +1043,16 @@ The `username` module shows active user's username. The module will be shown if 
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
 
-### Options
+### 配置项
 
-| Variable      | Default         | Description                           |
+| 字段            | 默认值             | 描述                                    |
 | ------------- | --------------- | ------------------------------------- |
 | `style_root`  | `"bold red"`    | The style used when the user is root. |
 | `style_user`  | `"bold yellow"` | The style used for non-root users.    |
 | `show_always` | `false`         | Always shows the `username` module.   |
 | `disabled`    | `false`         | Disables the `username` module.       |
 
-### Example
+### 示例
 
 ```toml
 # ~/.config/starship.toml
