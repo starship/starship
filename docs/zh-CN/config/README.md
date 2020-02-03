@@ -315,19 +315,19 @@ style = "dimmed green"
 
 `directory` 组件显示当前目录的路径，显示的路径会截断到三个父目录以内。 如果您处于一个 git 仓库中，显示的路径则最多会截断到该仓库的根目录。
 
-When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+当使用 fish 风格的当前目录显示样式时，您会看到基于您的设置的每个上级目录的短名称，而不是隐藏被截断的上级目录。
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+例如，对于 `~/Dev/Nix/nixpkgs/pkgs`，其中 `nixpkgs` 是 git 仓库根目录，fish 风格相关选项设置为 `1`。 您将会看到 `~/D/N/nixpkgs/pkgs`，而在设置 fish 风格之前，当前路径将显示成 `nixpkgs/pkgs`。
 
 ### 配置项
 
-| 字段                  | 默认值           | 描述                                                                               |
-| ------------------- | ------------- | -------------------------------------------------------------------------------- |
-| `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
-| `style`             | `"bold cyan"` | 此组件的样式。                                                                          |
-| `disabled`          | `false`       | Disables the `directory` module.                                                 |
+| 字段                  | 默认值           | 描述                                                  |
+| ------------------- | ------------- | --------------------------------------------------- |
+| `truncation_length` | `3`           | 当前目录路径被截断后最多保留的父目录数量。                               |
+| `truncate_to_repo`  | `true`        | 是否只截断到您当前处于的 git 仓库根目录下。                            |
+| `prefix`            | `"in "`       | Prefix to display immediately before the directory. |
+| `style`             | `"bold cyan"` | 此组件的样式。                                             |
+| `disabled`          | `false`       | Disables the `directory` module.                    |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
