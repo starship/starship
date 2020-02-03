@@ -1,25 +1,24 @@
 ---
 home: true
 heroImage: /logo.svg
-actionText: 入门 →
-actionLink: /guide/
+heroText:
+tagline: The cross-shell prompt for astronauts
+actionText: Get Started →
+actionLink: ./guide/
+features:
+  - 
+    title: Compatibility First
+    details: Works on the most common shells on the most common operating systems. Use it everywhere!
+  - 
+    title: Rust-Powered
+    details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
+  - 
+    title: Customizable
+    details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+#Used for the description meta tag, for SEO
+description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell.
 ---
-
-<div class="features">
-  <div class="feature">
-    <h2>兼容性优先</h2>
-    <p>Starship 可以在各种常见的操作系统和常见的 shell 上运行。 尝试着在各种地方使用它吧！</p>
-  </div>
-  <div class="feature">
-    <h2>使用 Rust 编写</h2>
-    <p>具有 Rust 独树一帜的速度与安全性，使你的提示符尽可能的快速可靠。</p>
-  </div>
-  <div class="feature">
-    <h2>可自定义</h2>
-    <p>每个小细节都可以按您喜欢的自定义，不论是最小化以求速度，还是最大化以获得最完善的功能。</p>
-  </div>
-</div>
 
 <div class="center">
   <video class="demo-video" muted autoplay loop playsinline>
@@ -50,7 +49,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
    brew install starship
    ```
 
-    使用 [Scoop](https://scoop.sh)：
+   使用 [Scoop](https://scoop.sh)：
 
    ```powershell
    scoop install starship
