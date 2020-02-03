@@ -1,25 +1,24 @@
 ---
 home: true
 heroImage: /logo.svg
-actionText: Loslegen →
-actionLink: /de-DE/guide/
-footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
+heroText:
+tagline: The cross-shell prompt for astronauts
+actionText: Get Started →
+actionLink: ./guide/
+features:
+  - 
+    title: Compatibility First
+    details: Works on the most common shells on the most common operating systems. Use it everywhere!
+  - 
+    title: Rust-Powered
+    details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
+  - 
+    title: Customizable
+    details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
+footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+#Used for the description meta tag, for SEO
+description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell.
 ---
-
-<div class="features">
-  <div class="feature">
-    <h2>Kompatibel</h2>
-    <p>Läuft mit den beliebtesten Shells auf den beliebtesten Betriebssystemen. Überall einsetzbar!</p>
-  </div>
-  <div class="feature">
-    <h2>Rust-Powered</h2>
-    <p>Bringt die schnelligkeit und zuverlässigkeit von Rust in deinen Shell-prompt.</p>
-  </div>
-  <div class="feature">
-    <h2>Individualisierbar</h2>
-    <p>Jedes noch so kleine Detail kann nach Deinen Wünschen angepasst werden, um die Eingabeaufforderung so minimal oder funktionsreich zu gestalten, wie Du es möchtest.</p>
-  </div>
-</div>
 
 <div class="center">
   <video class="demo-video" muted autoplay loop playsinline>
@@ -50,7 +49,7 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
    brew install starship
    ```
 
-    Mit [scoop](https://scoop.sh):
+   Mit [scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
