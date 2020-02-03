@@ -578,9 +578,9 @@ symbol = "🏎💨 "
 ```
 ## Haskell
 
-The `haskell` module shows the currently installed version of Haskell Stack version. The module will be shown if any of the following conditions are met:
+`haskell` 组件显示当前安装的 Haskell Stack 版本。 此组件只有满足以下条件之一时才会被显示：
 
-- The current directory contains a `stack.yaml` file
+- 当前目录包含 `stack.yaml` 文件
 
 ### 配置项
 
