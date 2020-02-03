@@ -321,21 +321,21 @@ style = "dimmed green"
 
 ### 配置项
 
-| 字段                  | 默认值           | 描述                                                  |
-| ------------------- | ------------- | --------------------------------------------------- |
-| `truncation_length` | `3`           | 当前目录路径被截断后最多保留的父目录数量。                               |
-| `truncate_to_repo`  | `true`        | 是否只截断到您当前处于的 git 仓库根目录下。                            |
-| `prefix`            | `"in "`       | Prefix to display immediately before the directory. |
-| `style`             | `"bold cyan"` | 此组件的样式。                                             |
-| `disabled`          | `false`       | Disables the `directory` module.                    |
+| 字段                  | 默认值           | 描述                       |
+| ------------------- | ------------- | ------------------------ |
+| `truncation_length` | `3`           | 当前目录路径被截断后最多保留的父目录数量。    |
+| `truncate_to_repo`  | `true`        | 是否只截断到您当前处于的 git 仓库根目录下。 |
+| `prefix`            | `"in "`       | 直接在显示路径前显示的前缀。           |
+| `style`             | `"bold cyan"` | 此组件的样式。                  |
+| `disabled`          | `false`       | 禁用 `directory` 组件。       |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>此组件有几个高级配置选项来控制当前目录路径的显示方式。</summary>
 
-| 字段                          | 默认值    | 描述                                                                                       |
-| --------------------------- | ------ | ---------------------------------------------------------------------------------------- |
-| `fish_style_pwd_dir_length` | `0`    | The number of characters to use when applying fish shell pwd path logic.                 |
-| `use_logical_path`          | `true` | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+| 字段                          | 默认值    | 描述                                    |
+| --------------------------- | ------ | ------------------------------------- |
+| `fish_style_pwd_dir_length` | `0`    | 使用 fish shell 当前目录路径逻辑时每个省略目录名使用的字符数。 |
+| `use_logical_path`          | `true` | 显示由 shell 提供的逻辑路径（`PWD`）而不是 OS 提供的路径。 |
 
 </details>
 
