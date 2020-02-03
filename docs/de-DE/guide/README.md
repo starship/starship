@@ -75,44 +75,44 @@
 - Anzeigetext wird rot wenn der letzte Befehl mit einem Exit-code größer null terminiert
 - Derzeitige Go-Version (`🐹`)
 - Current Haskell version (`λ`)
-- Current Java version(`☕`)
-- Current Node.js version(`⬢`)
-- Current PHP version (`🐘`)
-- Current Python version (`🐍`)
-- Current Ruby version (`💎`)
-- Current Rust version (`🦀`)
-- Current .NET version (`•NET`)
-- Current version of package in current directory (`📦`)
+- Derzeitige Java-Version (`☕`)
+- Derzeitige Node.js-Version (`⬢`)
+- Derzeitige PHP-Version (`🐘`)
+- Derzeitige Python-Version (`🐍`)
+- Derzeitige Ruby-Version (`💎`)
+- Derzeitige Rust-Version (`🦀`)
+- Derzeitige .NET-Version (`•NET`)
+- Version des Paketmanagers im derzeitigen Pfad (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
   - composer (PHP)
-- Current Git branch and rich repo status:
-  - `=` — conflicting changes
-  - `⇡` — ahead of remote branch
-  - `⇣` — behind of remote branch
-  - `⇕` — diverged changes
-  - `?` — untracked changes
-  - `$` — stashed changes
-  - `!` — modified files
-  - `+` — added files
-  - `»` — renamed files
-  - `✘` — deleted files
-- Current Mercurial branch
-- Current battery level and status
-  - `⇡` – charging
-  - `⇣` – discharging
-  - `•` – fully charged
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
-- Current Amazon Web Services (AWS) profile (`☁️`)
-- Execution time of the last command
-- Custom environment variable value
-- Nix-shell environment detection
-- Current username if not the same as the logged-in user
-- Optional current time in 12/24hr format
-- Current Terraform Workspace and version (`💠`)
-- Current Conda environment (`C`)
+- Aktueller Git-Branch und ausführlicher Repository-Status:
+  - `=` — konkurrierende Änderungen
+  - `⇡` — vor remote branch
+  - `⇣` — hinter remote branch
+  - `⇕` — abweichende Änderungen
+  - `?` — ungespeicherte Änderungen
+  - `$` — gestashte Änderungen
+  - `!` — veränderte Dateien
+  - `+` — hinzugefügte Dateien
+  - `»` — umbenannte Dateien
+  - `✘` — gelöschte Dateien
+- Aktueller Mercurial Branch
+- Batteriestand und -status
+  - `⇡` – ladend
+  - `⇣` – entladend
+  - `•` – voll geladen
+- Anzeige für Hintergrundsprozesse (`✦`)
+- Aktueller Kubernetes Cluster und Namespace (`☸`)
+- Aktuelles Amazon Web Services (AWS) Profil (`☁️`)
+- Anzeige der Laufzeit des letzten Befehls
+- Wert einer beliebigen Umgebungsvariable
+- Erkennung von Nix-Shell-Umgebungen
+- Benutzername, wenn dieser nicht dem angemeldeten Benutzer entspricht
+- Optionale Uhrzeit im 12/24 Stunden Format
+- Aktueller "Terraform Workspace" Name und Version (`💠`)
+- Aktuelle Conda-Umgebung (`C`)
 
 ## 🚀 Installation
 
