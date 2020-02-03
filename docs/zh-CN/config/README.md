@@ -352,18 +352,18 @@ truncation_length = 8
 
 `dotnet` 模块显示与当前目录下使用的 .NET Core SDK 相关联的版本。 如果当前目录已被绑定了一个版本的 SDK，则显示被帮定的版本。 否则此组件将显示最新安装的 SDK 版本。
 
-此组件只会在以下文件之一出现在当前目录中时显示：`global.json`，`project.json`，`*.sln`，`*.csproj`，`*.fsproj`，`*.xproj`。 为了正确使用此组件，你还需要安装 .NET Core 命令行工具。
+此组件只会在以下文件之一出现在当前目录中时显示：`global.json`，`project.json`，`*.sln`，`*.csproj`，`*.fsproj`，`*.xproj`。 为了正确使用此组件，您还需要安装 .NET Core 命令行工具。
 
-Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+在内部，此组件使用自己的版本检测机制。 一般来说此组件是直接执行 `dotnet --version` 的两倍快，但当你的 .NET 项目使用了不常见的目录布局时此组件可能显示一个错误的版本。 如果相比于速度您更需要正确的版本号，您可以在组件设置中设置 `heuristic = false` 来禁用该机制。
 
 ### 配置项
 
-| 字段          | 默认值           | 描述                                                       |
-| ----------- | ------------- | -------------------------------------------------------- |
-| `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
-| `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
-| `style`     | `"bold blue"` | 此组件的样式。                                                  |
-| `disabled`  | `false`       | Disables the `dotnet` module.                            |
+| 字段          | 默认值           | 描述                             |
+| ----------- | ------------- | ------------------------------ |
+| `symbol`    | `"•NET "`     | 这个字段的内容会显示在当前 .NET 版本之前。       |
+| `heuristic` | `true`        | 使用更快的版本探测机制以保证 starship 的运行速度。 |
+| `style`     | `"bold blue"` | 此组件的样式。                        |
+| `disabled`  | `false`       | 禁用 `dotnet` 组件。                |
 
 ### 示例
 
