@@ -17,7 +17,7 @@ features:
     details: 每个小细节都可以按您喜欢的自定义，不论是最小化以求速度，还是最大化以获得最完善的功能。
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 #Used for the description meta tag, for SEO
-metaTitle: "Starship: Cross-Shell Prompt"
+metaTitle: "Starship：可用于各种 Shell 的提示符"
 description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell.
 ---
 
