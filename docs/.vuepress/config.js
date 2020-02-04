@@ -21,7 +21,7 @@ module.exports = {
       description: "The cross-shell prompt for astronauts"
     },
     "/zh-CN/": {
-      lang: "zh-TW",
+      lang: "zh-CN",
       title: "Starship",
       description: "The cross-shell prompt for astronauts"
     },
