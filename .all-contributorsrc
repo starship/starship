@@ -87,7 +87,9 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/1578005?v=4",
       "profile": "https://github.com/youssefhabri",
       "contributions": [
-        "code"
+        "code",
+        "doc",
+        "test"
       ]
     },
     {
