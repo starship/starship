@@ -814,19 +814,19 @@ style = "bold dimmed green"
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
+`nodejs` 组件显示当前安装的 NodeJS 版本。 此组件将在符合以下任意条件之一时显示：
 
-- The current directory contains a `package.json` file
-- The current directory contains a `node_modules` directory
-- The current directory contains a file with the `.js` extension
+- 当前目录包含 `package.json` 文件
+- 当前目录包含 `node_modules` 目录
+- 当前目录包含一个使用 `.js` 扩展名的文件
 
 ### 配置项
 
-| 字段         | 默认值            | 描述                                                       |
-| ---------- | -------------- | -------------------------------------------------------- |
-| `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | 此组件的样式。                                                  |
-| `disabled` | `false`        | Disables the `nodejs` module.                            |
+| 字段         | 默认值            | 描述                         |
+| ---------- | -------------- | -------------------------- |
+| `symbol`   | `"⬢ "`         | 这个字段的内容会显示在当前 NodeJS 版本之前。 |
+| `style`    | `"bold green"` | 此组件的样式。                    |
+| `disabled` | `false`        | 禁用 `nodejs` 组件。            |
 
 ### 示例
 
@@ -839,7 +839,7 @@ symbol = "🤖 "
 
 ## Package Version
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
+当前目录是软件包的代码仓库时，将显示 `package` 组件，并显示软件包当前版本。 The module currently supports `npm`, `cargo`, and `poetry` packages.
 
 - **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
 - **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
