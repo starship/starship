@@ -21,21 +21,21 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- 要在一个命令运行前运行自定义函数，您可以使用 [`DEBUG` trap 机制](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/)。 然而，您**必须**在捕捉 DEBUG 信号*之前*启动 Starship！ Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
+- 要在一个命令运行前运行自定义函数，您可以使用 [`DEBUG` trap 机制](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/)。 然而，您**必须**在捕捉 DEBUG 信号*之前*启动 Starship！ Starship 可以保留 DEBUG trap 的值，但如果该 trap 在 starship 启动后被覆盖，一些功能将会被破坏。
 
 ```bash
 function blastoff(){
     echo "🚀"
 }
-trap blastoff DEBUG     # Trap DEBUG *before* running starship
+trap blastoff DEBUG     # 启动 starship *之前* 设置 DEBUG trap
 eval $(starship init bash)
 ```
 
 ## 更改窗口标题
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
+一些 shell 提示符会自动更改您的窗口标题（比如为了提示您的工作目录）。 Fish 甚至默认会执行此功能。 Starship 没有实现此功能，但将这个功能添加到 `bash` 或 `zsh` 是相当简单的。
 
-First, define a window title change function (identical in bash and zsh):
+首先，定义窗口标题更改函数（在 bash 和 zsh 中相同）：
 
 ```bash
 function set_win_title(){
@@ -43,15 +43,15 @@ function set_win_title(){
 }
 ```
 
-You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
+您可以使用变量来定制标题（常用的有 `$USER`，`$HOSTNAME` 和 `$PWD`）。
 
-In `bash`, set this function to be the precmd starship function:
+在 `bash` 中，设置此函数为 starship 预执行函数：
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-In `zsh`, add this to the `precmd_functions` array:
+在 `zsh`中，将此函数添加到 `reservmd_functions` 列表：
 
 ```bash
 precmd_functions+=(set_win_title)
