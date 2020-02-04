@@ -4,7 +4,7 @@ heroImage: /logo.svg
 heroText:
 tagline: The cross-shell prompt for astronauts
 actionText: Начало работы →
-actionLink: ./ru-RU/guide/
+actionLink: ./guide/
 features:
   - 
     title: Совместивость в первую очередь
