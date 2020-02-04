@@ -881,9 +881,8 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [crystal]
-symbol = "🔮 "
-style = "bold red"
-disabled = false
+symbol = "✨ "
+style = "bold blue"
 ```
 
 ## NodeJS

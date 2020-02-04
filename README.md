@@ -97,7 +97,7 @@ The prompt shows information you need while you're working, while staying sleek 
 - Current Ruby version (`💎`)
 - Current Rust version (`🦀`)
 - Current .NET version (`•NET`)
-- Current Crystal version (`🔮 `).
+- Current Crystal version (`🔮`).
 - Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
