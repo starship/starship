@@ -788,15 +788,15 @@ symbol = "🌟 "
 
 ### 配置项
 
-| 字段                | 默认值                   | 描述                                                            |
-| ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
-| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
-| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | 此组件的样式。                                                       |
-| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
+| 字段                | 默认值                   | 描述                         |
+| ----------------- | --------------------- | -------------------------- |
+| `show_percentage` | `false`               | 用可用内存的百分比来显示内存使用情况。        |
+| `show_swap`       | `true`                | 如果总交换区使用量为非零，则显示交换区使用情况。   |
+| `threshold`       | `75`                  | 隐藏内存使用情况，除非它超过这个百分比。       |
+| `symbol`          | `"🐏 "`                | 这个字段的内容会显示在当前内存使用情况之前。     |
+| `separator`       | `" | "`               | 此字段所设置的符号或文本会分隔内存和交换区使用情况。 |
+| `style`           | `"bold dimmed white"` | 此组件的样式。                    |
+| `disabled`        | `true`                | 禁用 `memory_usage` 模块       |
 
 ### 示例
 
