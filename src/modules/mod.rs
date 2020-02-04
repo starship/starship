@@ -3,6 +3,7 @@ mod aws;
 mod character;
 mod cmd_duration;
 mod conda;
+mod crystal;
 mod directory;
 mod dotnet;
 mod env_var;
@@ -73,6 +74,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "rust" => rust::module(context),
         "terraform" => terraform::module(context),
         "time" => time::module(context),
+        "crystal" => crystal::module(context),
         "username" => username::module(context),
         _ => {
             eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
