@@ -21,7 +21,7 @@
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
       alt="加入 Discord" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-68-orange" alt="所有贡献者"></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-69-orange" alt="所有贡献者"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
@@ -61,7 +61,7 @@
 
 <h1></h1>
 
-<p align="center"> Starship 是轻量的，快速的，可以快速定制的，适用于任何 shell 的提示符！<br /> 它可以在不影响流畅性=的情况下，在你工作时展示你所需要的信息。 <p>
+<p align="center"> Starship 可以适配于任何 shell，是一种轻量，快速，高度可定制化的提示符工具！<br /> 它在可以你工作时展示你所需要的信息，兼备的流畅的使用体验。 <p>
 
 <p align="center">
   <br>
@@ -73,85 +73,86 @@
 ## 🍬 特性
 
 - 当上一个命令以非 0 状态退出时，提示字符会变为红色
-- 当前 Go 版本 (`🐹`)
-- Current Java version (`☕`)
-- Current Node.js version (`⬢`)
-- Current PHP version (`🐘`)
-- 当前 Python 版本 (`🐍`)
-- 当前 Ruby 版本 (`💎`)
-- 当前 Rust 版本 (`🦀`)
-- Current .NET version (`•NET`)
-- 当前目录下现在的包版本 (`📦`)
+- 显示当前 Go 版本（`🐹`）
+- 显示当前 Haskell 版本（`λ`）
+- 显示当前 Java 版本（`☕`）
+- 显示当前 Node.js 版本（`⬢`）
+- 显示当前 PHP 版本（`🐘`）
+- 显示当前 Python 版本（`🐍`）
+- 显示当前 Ruby 版本（`💎`）
+- 显示当前 Rust 版本（`🦀`）
+- 显示当前 .NET 版本（`•NET`）
+- 显示当前目录中项目的版本（`📦`）
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-  - composer (PHP)
-- 当前 Git 分支与一应俱全的仓库状态
-  - `=` — conflicting changes
-  - `⇡` — ahead of remote branch
-  - `⇣` — behind of remote branch
-  - `⇕` — diverged changes
-  - `?` — untracked changes
-  - `$` — stashed changes
-  - `!` — modified files
-  - `+` — added files
-  - `»` — renamed files
-  - `✘` — deleted files
-- Current Mercurial branch
-- 当前电池剩余容量与状态
-  - `⇡` – charging
-  - `⇣` – discharging
-  - `•` – fully charged
-- 后台运行进程数的指示器 (`✦`)
-- 当前 Kubernetes Cluster 与 Namespace (`☸`)
-- Current Amazon Web Services (AWS) profile (`☁️`)
-- Execution time of the last command
-- Custom environment variable value
+  - composer（PHP）
+- 显示当前的 Git 分支与各种仓库状态：
+  - `=` —— 修改冲突
+  - `⇡` —— 领先于远程分支
+  - `⇣` —— 落后于远程分支
+  - `⇕` —— 与远程分支存在分歧
+  - `?` —— 存在未记录的文件
+  - `$` —— 存在 stash 快照
+  - `!` —— 存在被修改的文件
+  - `+` —— 暂存区中存在内容
+  - `»` —— 文件重命名
+  - `✘` —— 文件被删除
+- 显示当前的 Mercurial 分支
+- 显示当前电量剩余与电源状态
+  - `⇡` —— 电池充电中
+  - `⇣` —— 电池耗电中
+  - `•` —— 电池已充满
+- 显示后台运行进程数（`✦`）
+- 显示当前 Kubernetes 集群与命名空间（`☸`）
+- 显示当前 AWS 配置（`☁️`）
+- 显示上一条命令的执行用时
+- 自定义环境变量值
 - Nix-shell 环境检测
-- 非当前登录用户的用户名
-- Optional current time in 12/24hr format
-- Current Terraform Workspace and version (`💠`)
-- Current Conda environment (`C`)
+- 如果当前用户与不是登录用户，显示当前用户名
+- 12/24 小时格式的时间显示（可选）
+- 显示 Terraform 工作区和当前版本（`💠`）
+- 显示当前 Conda 环境（`C`）
 
 ## 🚀 安装
 
-### 基础要求
+### 前置要求
 
-- 安装有一个 [Powerline 字体](https://github.com/powerline/fonts) (如 [Fira Code](https://github.com/tonsky/FiraCode)) 并在您的终端启用 。
+- 安装一种 [Powerline 字体](https://github.com/powerline/fonts)（如 [Fira Code](https://github.com/tonsky/FiraCode)）并在您的终端启用 。
 
-### 入门
+### 开始安装
 
 1. 安装 **starship** 二进制文件：
 
 
-   #### Install Latest Version
+   #### 安装最新版本
 
 
-   ##### From prebuilt binary, with Shell:
+   ##### 下载预构建的二进制文件，使用 Shell 命令：
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   ##### From source on [crates.io](https://crates.io/):
+   ##### 直接从 [crates.io](https://crates.io/) 获取源代码编译：
 
    ```sh
    cargo install starship
    ```
 
 
-   #### Install via Package Manager
+   #### 通过软件包管理器安装
 
 
-   ##### With [Homebrew](https://brew.sh/):
+   ##### 使用 [Homebrew](https://brew.sh/)
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### 使用 [Scoop](https://scoop.sh)：
 
    ```powershell
    scoop install starship
@@ -195,7 +196,7 @@
 
    #### PowerShell
 
-   添加 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (或者`~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix)到：
+   将以下内容添加到`~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (或`~/.config/powershell/Microsoft.PowerShell_profile.ps1`，对于 *nix 系统)：
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
@@ -206,7 +207,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   在 `~/.config/ion/initrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.config/ion/initrc
@@ -220,7 +221,7 @@
 
 ## 🤝 贡献
 
-我们一直在寻找贡献者！你都可以参与贡献 ** 不论你的技能如何 **。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
+我们一直在寻求各种形式的贡献！**不论您的技能水平如何**，您都可以为项目做出贡献。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
 
 ### 急需
 
@@ -328,6 +329,7 @@
     <td align="center"><a href="https://blog.brightone.space"><img src="https://avatars1.githubusercontent.com/u/12615679?v=4" width="100px;" alt="" /><br /><sub><b>Oleksii Filonenko</b></sub></a><br /><a href="#translation-filalex77" title="Translation">🌍</a></td>
     <td align="center"><a href="https://github.com/ivanovart"><img src="https://avatars2.githubusercontent.com/u/5867379?v=4" width="100px;" alt="" /><br /><sub><b>Artem Ivanov</b></sub></a><br /><a href="#translation-ivanovart" title="Translation">🌍</a></td>
     <td align="center"><a href="http://www.drivendata.org"><img src="https://avatars3.githubusercontent.com/u/1799186?v=4" width="100px;" alt="" /><br /><sub><b>Peter Bull</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=pjbull" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=pjbull" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://andrewpro.me"><img src="https://avatars1.githubusercontent.com/u/8220926?v=4" width="100px;" alt="" /><br /><sub><b>Andrew Prokhorenkov</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=m0nhawk" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=m0nhawk" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=m0nhawk" title="Tests">⚠️</a> <a href="#projectManagement-m0nhawk" title="Project Management">📆</a></td>
   </tr>
 </table>
 

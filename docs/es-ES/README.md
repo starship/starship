@@ -1,27 +1,25 @@
 ---
 home: true
 heroImage: /logo.svg
-heroText: null
+heroText:
 tagline: The cross-shell prompt for astronauts
 actionText: Empezar →
 actionLink: ./guide/
+features:
+  - 
+    title: Compatibilidad primero
+    details: Funciona en las interfaces de líneas de comando (shells) más comunes en los sistemas operativos más comunes. ¡Úsalo donde sea!
+  - 
+    title: Desarrollado en Rust
+    details: Obtén la mayor velocidad y seguridad de Rust, para hacer tu prompt lo más rápida y segura posible.
+  - 
+    title: Personalizable
+    details: Puedes personalizar cada pequeño detalle a tu gusto, de manera que puedes tener una interfaz minimalista o rica en funcionalidades.
 footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores de Starship
+#Used for the description meta tag, for SEO
+metaTitle: "Starship: Cross-Shell Prompt"
+description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell.
 ---
-
-<div class="features">
-  <div class="feature">
-    <h2>Compatibilidad primero</h2>
-    <p>Funciona en las interfaces de líneas de comando (shells) más comunes en los sistemas operativos más comunes. ¡Úsalo donde sea!</p>
-  </div>
-  <div class="feature">
-    <h2>Desarrollado en Rust</h2>
-    <p>Obtén la mayor velocidad y seguridad de Rust, para hacer tu prompt lo más rápida y segura posible.</p>
-  </div>
-  <div class="feature">
-    <h2>Personalizable</h2>
-    <p>Puedes personalizar cada pequeño detalle a tu gusto, de manera que puedes tener una interfaz minimalista o rica en funcionalidades.</p>
-  </div>
-</div>
 
 <div class="center">
   <video class="demo-video" muted autoplay loop playsinline>
@@ -52,7 +50,7 @@ footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores
    brew install starship
    ```
 
-    Con [Scoop](https://scoop.sh):
+   Con [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
