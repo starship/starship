@@ -4,7 +4,7 @@ heroImage: /logo.svg
 heroText:
 tagline: The cross-shell prompt for astronauts
 actionText: Get Started →
-actionLink: ./zh-TW/guide/
+actionLink: ./guide/
 features:
   - 
     title: 兼容性優先
