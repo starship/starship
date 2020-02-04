@@ -61,7 +61,7 @@ If you like the result, add these lines to your shell configuration file (`~/.ba
 
 ## 样式设定
 
-样式字符串是用空白分隔的单词列表。 The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+样式字符串是用空格分隔的单词列表。 其中单词不是大小写敏感的（例如 `bold` 和 `BoLd` 被视为同一字符串）。 每个单词可以是以下之一：
 
   - `bold`
   - `underline`
@@ -71,14 +71,14 @@ If you like the result, add these lines to your shell configuration file (`~/.ba
   - `<color>`
   - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing , though this may change in the future. The order of words in the string does not matter.
+`<color>` 是颜色说明符（下面解释）。 `fg:<color>` 和 `<color>` 当前产生一样的效果，尽管未来可能会改变。 字符串中的单词顺序不影响结果。
 
-The `none` token overrides all other tokens in a string, so that e.g. `fg:red none fg:blue` will still create a string with no styling. It may become an error to use `none` in conjunction with other tokens in the future.
+`none` 标识符会覆盖字符串中所有其他标识符，比如 `fg:red none fg:blue` 将创建一个没有样式设置的字符串。 未来可能会将 `none` 与其它标识符一起使用视为一种错误。
 
-颜色指定器可以是以下内容之一：
+颜色说明符可以是以下内容之一：
 
- - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
- - A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
- - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+ - 标准终端颜色之一：`black`，`red`，`green`，`blue`，`yellow`，`purple`，`cyan`，`white`。 您可以使用可选前缀 `bright-` 来获取明亮版本的颜色（例如，`bright-white`）。
+ - 一个 `#` 后跟一个六位十六进制数。 这将指定一个 [十六进制 RGB 颜色代码](https://www.w3schools.com/colors/colors_hexadecimal.asp)。
+ - 0-255 之间的数字。 这将指定一个 [8 位 ANSI 颜色码](https://i.stack.imgur.com/KTSQa.png)。
 
-If multiple colors are specified for foreground/background, the last one in the string will take priority.
+如果为文本/背景指定了多个颜色，字符串中最后指定的颜色将具有最高优先级。
