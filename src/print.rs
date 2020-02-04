@@ -1,10 +1,11 @@
+use ansi_term::ANSIStrings;
 use clap::ArgMatches;
 use rayon::prelude::*;
 use std::fmt::Write as FmtWrite;
 use std::io::{self, Write};
 use unicode_width::UnicodeWidthChar;
 
-use crate::context::Context;
+use crate::context::{Context, Shell};
 use crate::module::Module;
 use crate::module::ALL_MODULES;
 use crate::modules;
@@ -25,7 +26,11 @@ pub fn get_prompt(context: Context) -> String {
         writeln!(buf).unwrap();
     }
 
-    buf.push_str("\x1b[J");
+    // A workaround for a fish bug (see #739,#279). Applying it to all shells
+    // breaks things (see #808,#824,#834). Should only be printed in fish.
+    if let Shell::Fish = context.shell {
+        buf.push_str("\x1b[J"); // An ASCII control code to clear screen
+    }
 
     let modules = compute_modules(&context);
 
@@ -35,10 +40,11 @@ pub fn get_prompt(context: Context) -> String {
     for module in printable {
         // Skip printing the prefix of a module after the line_break
         if print_without_prefix {
-            let module_without_prefix = module.to_string_without_prefix();
+            let module_without_prefix = module.to_string_without_prefix(context.shell.clone());
             write!(buf, "{}", module_without_prefix).unwrap()
         } else {
-            write!(buf, "{}", module).unwrap();
+            let module = module.ansi_strings_for_shell(context.shell.clone());
+            write!(buf, "{}", ANSIStrings(&module)).unwrap();
         }
 
         print_without_prefix = module.get_name() == "line_break"
@@ -49,13 +55,12 @@ pub fn get_prompt(context: Context) -> String {
 
 pub fn module(module_name: &str, args: ArgMatches) {
     let context = Context::new(args);
-
-    // If the module returns `None`, print an empty string
-    let module = modules::handle(module_name, &context)
-        .map(|m| m.to_string())
-        .unwrap_or_default();
-
+    let module = get_module(module_name, context).unwrap_or_default();
     print!("{}", module);
+}
+
+pub fn get_module(module_name: &str, context: Context) -> Option<String> {
+    modules::handle(module_name, &context).map(|m| m.to_string())
 }
 
 pub fn explain(args: ArgMatches) {
@@ -73,7 +78,7 @@ pub fn explain(args: ArgMatches) {
         .into_iter()
         .filter(|module| !dont_print.contains(&module.get_name().as_str()))
         .map(|module| {
-            let ansi_strings = module.ansi_strings_for_prompt(false);
+            let ansi_strings = module.ansi_strings();
             let value = module.get_segments().join("");
             ModuleInfo {
                 value: ansi_term::ANSIStrings(&ansi_strings[1..ansi_strings.len() - 1]).to_string(),

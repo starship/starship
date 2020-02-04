@@ -29,7 +29,6 @@ module.exports = {
   // prettier-ignore
   head: [
     ["link", { rel: "icon", href: "/icon.png" }],
-    ["meta", { name: "description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell." }],
     ["meta", { property: "og:title", content: "Starship: Cross-Shell Prompt" }],
     ["meta", { property: "og:description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell."}],
     ["meta", { property: "og:type", content: "website" }],
@@ -41,6 +40,7 @@ module.exports = {
     ["meta", { name: "twitter:image", content: "https://starship.rs/icon.png"}],
     ["meta", { name: "twitter:alt", content: "Starship: Cross-Shell Prompt"}],
   ],
+  theme: "default-prefers-color-scheme",
   themeConfig: {
     logo: "/icon.png",
     // the GitHub repo path
@@ -116,12 +116,12 @@ module.exports = {
         nav: [{ text: "Настройка", link: "/ru-RU/config/" }],
         // Custom sidebar values
         sidebar: [
-          "/",
-          ["/guide/", "Руководство"],
-          ["/config/", "Настройка"],
-          ["/advanced-config/", "Расширенная Настройка"],
-          ["/faq/", "Часто Задаваемые Вопросы"],
-          ["/presets/", "Предустановки"]
+          "/ru-RU/",
+          ["/ru-RU/guide/", "Руководство"],
+          ["/ru-RU/config/", "Настройка"],
+          ["/ru-RU/advanced-config/", "Расширенная Настройка"],
+          ["/ru-RU/faq/", "Часто Задаваемые Вопросы"],
+          ["/ru-RU/presets/", "Предустановки"]
         ]
       },
       "/de-DE/": {
@@ -135,12 +135,12 @@ module.exports = {
         nav: [{ text: "Konfiguration", link: "/config/" }],
         // Custom sidebar values
         sidebar: [
-          "/",
-          ["/guide/", "Anleitung"],
-          ["/config/", "Konfiguration"],
-          ["/advanced-config/", "Erweiterte Konfiguration"],
-          ["/faq/", "Häufig gestellte Fragen"],
-          ["/presets/", "Konfigurations-Beispiele"]
+          "/de-DE/",
+          ["/de-DE/guide/", "Anleitung"],
+          ["/de-DE/config/", "Konfiguration"],
+          ["/de-DE/advanced-config/", "Erweiterte Konfiguration"],
+          ["/de-DE/faq/", "Häufig gestellte Fragen"],
+          ["/de-DE/presets/", "Konfigurations-Beispiele"]
         ]
       }
     }

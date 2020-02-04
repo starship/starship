@@ -103,6 +103,7 @@ prompt_order = [
     "package",
     "dotnet",
     "golang",
+    "haskell",
     "java",
     "nodejs",
     "php",
@@ -610,6 +611,30 @@ The module will be shown if any of the following conditions are met:
 [golang]
 symbol = "🏎💨 "
 ```
+## Haskell
+
+The `haskell` module shows the currently installed version of Haskell Stack version.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `stack.yaml` file
+
+### Options
+
+| Variable   | Default       | Description                                               |
+| ---------- | ------------- | --------------------------------------------------------- |
+| `symbol`   | `"λ "`        | The symbol used before displaying the version of Haskell. |
+| `style`    | `"bold red"`  | The style for the module.                                 |
+| `disabled` | `false`       | Disables the `haskell` module.                            |
+
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[haskell]
+symbol = "λx.x "
+```
 
 ## Mercurial Branch
 
@@ -774,8 +799,8 @@ pure_msg = "pure shell"
 The `java` module shows the currently installed version of Java.
 The module will be shown if any of the following conditions are met:
 
-- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
-- The current directory contains a file with the `.java`, `.class` or `.jar` extension
+- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
+- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
 ### Options
 
