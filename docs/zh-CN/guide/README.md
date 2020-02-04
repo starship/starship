@@ -82,37 +82,38 @@
 - 显示当前 Ruby 版本（`💎`）
 - 显示当前 Rust 版本（`🦀`）
 - 显示当前 .NET 版本（`•NET`）
-- 显示当前目录中项目的版本（`📦`）
+- Current Crystal version (`🔮`).
+- Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-  - composer（PHP）
-- 显示当前的 Git 分支与各种仓库状态：
-  - `=` —— 修改冲突
-  - `⇡` —— 领先于远程分支
-  - `⇣` —— 落后于远程分支
-  - `⇕` —— 与远程分支存在分歧
-  - `?` —— 存在未记录的文件
-  - `$` —— 存在 stash 快照
-  - `!` —— 存在被修改的文件
-  - `+` —— 暂存区中存在内容
-  - `»` —— 文件重命名
-  - `✘` —— 文件被删除
-- 显示当前的 Mercurial 分支
-- 显示当前电量剩余与电源状态
-  - `⇡` —— 电池充电中
-  - `⇣` —— 电池耗电中
-  - `•` —— 电池已充满
-- 显示后台运行进程数（`✦`）
-- 显示当前 Kubernetes 集群与命名空间（`☸`）
-- 显示当前 AWS 配置（`☁️`）
-- 显示上一条命令的执行用时
-- 自定义环境变量值
-- Nix-shell 环境检测
-- 如果当前用户与不是登录用户，显示当前用户名
-- 12/24 小时格式的时间显示（可选）
-- 显示 Terraform 工作区和当前版本（`💠`）
-- 显示当前 Conda 环境（`C`）
+  - composer (PHP)
+- Current Git branch and rich repo status:
+  - `=` — conflicting changes
+  - `⇡` — ahead of remote branch
+  - `⇣` — behind of remote branch
+  - `⇕` — diverged changes
+  - `?` — untracked changes
+  - `$` — stashed changes
+  - `!` — modified files
+  - `+` — added files
+  - `»` — renamed files
+  - `✘` — deleted files
+- Current Mercurial branch
+- Current battery level and status
+  - `⇡` – charging
+  - `⇣` – discharging
+  - `•` – fully charged
+- Indicator for jobs in the background (`✦`)
+- Current Kubernetes Cluster and Namespace (`☸`)
+- Current Amazon Web Services (AWS) profile (`☁️`)
+- Execution time of the last command
+- Custom environment variable value
+- Nix-shell environment detection
+- Current username if not the same as the logged-in user
+- Optional current time in 12/24hr format
+- Current Terraform Workspace and version (`💠`)
+- Current Conda environment (`C`)
 
 ## 🚀 安装
 
@@ -249,7 +250,7 @@
     <td align="center"><a href="https://github.com/sirMerr"><img src="https://avatars2.githubusercontent.com/u/11183523?v=4" width="100px;" alt="" /><br /><sub><b>Tiffany Le-Nguyen</b></sub></a><br /><a href="#ideas-sirMerr" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-sirMerr" title="Maintenance">🚧</a> <a href="https://github.com/starship/starship/pulls?q=is%3Apr+reviewed-by%3AsirMerr" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/starship/starship/commits?author=sirMerr" title="Documentation">📖</a></td>
     <td align="center"><a href="https://about.snuggi.es"><img src="https://avatars0.githubusercontent.com/u/26250962?v=4" width="100px;" alt="" /><br /><sub><b>​Snuggle</b></sub></a><br /><a href="#design-Snuggle" title="Design">🎨</a> <a href="#ideas-Snuggle" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-Snuggle" title="Maintenance">🚧</a> <a href="https://github.com/starship/starship/pulls?q=is%3Apr+reviewed-by%3ASnuggle" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://github.com/mehcode"><img src="https://avatars1.githubusercontent.com/u/753919?v=4" width="100px;" alt="" /><br /><sub><b>Ryan Leckey</b></sub></a><br /><a href="https://github.com/starship/starship/pulls?q=is%3Apr+reviewed-by%3Amehcode" title="Reviewed Pull Requests">👀</a></td>
-    <td align="center"><a href="https://github.com/youssefhabri"><img src="https://avatars3.githubusercontent.com/u/1578005?v=4" width="100px;" alt="" /><br /><sub><b>Youssef Habri</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=youssefhabri" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/youssefhabri"><img src="https://avatars3.githubusercontent.com/u/1578005?v=4" width="100px;" alt="" /><br /><sub><b>Youssef Habri</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=youssefhabri" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=youssefhabri" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=youssefhabri" title="Tests">⚠️</a></td>
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/chipbuster"><img src="https://avatars2.githubusercontent.com/u/4605384?v=4" width="100px;" alt="" /><br /><sub><b>Kevin Song</b></sub></a><br /><a href="https://github.com/starship/starship/issues?q=author%3Achipbuster" title="Bug reports">🐛</a> <a href="https://github.com/starship/starship/commits?author=chipbuster" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=chipbuster" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=chipbuster" title="Tests">⚠️</a></td>
