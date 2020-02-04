@@ -86,7 +86,7 @@
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-  - composer (PHP)
+  - composer（PHP）
 - 显示当前的 Git 分支与各种仓库状态：
   - `=` —— 修改冲突
   - `⇡` —— 领先于远程分支
