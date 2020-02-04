@@ -839,22 +839,22 @@ symbol = "🤖 "
 
 ## Package Version
 
-当前目录是软件包的代码仓库时，将显示 `package` 组件，并显示软件包当前版本。 The module currently supports `npm`, `cargo`, and `poetry` packages.
+当前目录是软件包的代码仓库时，将显示 `package` 组件，并显示软件包当前版本。 此组件目前支持`npm`, `cargo`, 和 `poetry` 软件包。
 
-- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
-- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
-- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
-- **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
+- **npm** —— `npm` 软件包版本从当前目录下的 `package.json` 中得到
+- **cargo** —— `cargo` 软件包的版本从当前目录下的 `Cargo.toml` 中得到
+- **poetry** —— `poetry` 软件包版本从当前目录下的 `pyproject.toml` 中得到
+- **composer** —— `composer` 软件包版本从当前目录下的 `composer.json` 中得到
 
-> ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
+> ⚠ 此组件显示的是源代码在当前目录中的软件包的版本，而不是包管理器的版本。
 
 ### 配置项
 
-| 字段         | 默认值          | 描述                                                         |
-| ---------- | ------------ | ---------------------------------------------------------- |
-| `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | 此组件的样式。                                                    |
-| `disabled` | `false`      | Disables the `package` module.                             |
+| 字段         | 默认值          | 描述                    |
+| ---------- | ------------ | --------------------- |
+| `symbol`   | `"📦 "`       | 这个字段的内容会显示在当前软件包版本之前。 |
+| `style`    | `"bold red"` | 此组件的样式。               |
+| `disabled` | `false`      | 禁用 `package` 组件。      |
 
 ### 示例
 
@@ -867,10 +867,10 @@ symbol = "🎁 "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
+`php` 组件显示当前安装的 PHP 版本。 此组件将在符合以下任意条件之一时显示：
 
-- The current directory contains a `composer.json` file
-- The current directory contains a `.php` file
+- 当前目录包含一个 `composer.json` 文件
+- 当前目录包含一个 `.php` 文件
 
 ### 配置项
 
