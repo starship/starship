@@ -33,7 +33,7 @@ fn folder_with_composer_file() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Red.bold().paint("🐘 v7.3.8"));
+    let expected = format!("via {} ", Color::Fixed(147).bold().paint("🐘 v7.3.8"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -50,7 +50,7 @@ fn folder_with_php_file() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Red.bold().paint("🐘 v7.3.8"));
+    let expected = format!("via {} ", Color::Fixed(147).bold().paint("🐘 v7.3.8"));
     assert_eq!(expected, actual);
     Ok(())
 }

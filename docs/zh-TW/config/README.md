@@ -101,6 +101,7 @@ prompt_order = [
     "package",
     "dotnet",
     "golang",
+    "haskell",
     "java",
     "nodejs",
     "php",
@@ -575,6 +576,29 @@ deleted = "🗑"
 [golang]
 symbol = "🏎💨 "
 ```
+## Haskell
+
+The `haskell` module shows the currently installed version of Haskell Stack version. 這個模組在下列其中一個條件達成時顯示：
+
+- 目前資料夾中有一個 `stack.yaml` 檔案
+
+### 選項
+
+| 變數         | 預設           | 說明                                                        |
+| ---------- | ------------ | --------------------------------------------------------- |
+| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
+| `style`    | `"bold red"` | 這個模組的風格。                                                  |
+| `disabled` | `false`      | Disables the `haskell` module.                            |
+
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[haskell]
+symbol = "λx.x "
+```
 
 ## Mercurial Branch
 
@@ -730,8 +754,8 @@ pure_msg = "pure shell"
 
 `java` 模組顯示現在安裝的 Java 版本。 這個模組在下列其中一個條件達成時顯示：
 
-- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
-- 現在資料夾中包含一個檔案具有 `.java`、`.class` 或 `.jar` 副檔名
+- 現在資料夾中包含一個 `pom.xml`、`build.gradle.kts` 或 `build.sbt` 檔案
+- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
 ### 選項
 
@@ -845,7 +869,7 @@ symbol = "🎁 "
 
 The `php` module shows the currently installed version of PHP. 這個模組在下列其中一個條件達成時顯示：
 
-- 現在資料夾中含有一個 `composer.json` 檔案
+- 現在資料夾中包含一個 `composer.json` 檔案
 - The current directory contains a `.php` file
 
 ### 選項

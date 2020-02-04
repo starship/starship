@@ -1,16 +1,16 @@
-# Presets
+# 社区配置分享
 
-Here is a collection of community-submitted configuration presets for Starship. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+这里有一系列社区提供的 Starship 预设配置。 如果您想分享一套配置，请 [提交 PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) 来更新此文件！ 😊
 
 ## Nerd Font Symbols
 
-This preset doesn't change anything except for the symbols used for each module. If emojis aren't your thing, this might catch your eye!
+除了每个组件使用的符号外，这套配置不会改变任何内容。 如果你不喜欢 emoji，这可能会吸引你的眼球！
 
 ![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
 
 ### 基础要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
+- 安装一种 [Nerd 字体](https://www.nerdfonts.com/) 并在您的终端启用（示例使用的是 Fira Code 字体）。
 
 ### 配置
 

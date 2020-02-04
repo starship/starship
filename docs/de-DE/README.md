@@ -1,25 +1,25 @@
 ---
 home: true
 heroImage: /logo.svg
+heroText:
+tagline: The cross-shell prompt for astronauts
 actionText: Loslegen →
-actionLink: /de-DE/guide/
+actionLink: ./guide/
+features:
+  - 
+    title: Kompatibel
+    details: Läuft mit den beliebtesten Shells auf den beliebtesten Betriebssystemen. Überall einsetzbar!
+  - 
+    title: Rust-Powered
+    details: Bringt die schnelligkeit und zuverlässigkeit von Rust in deinen Shell-prompt.
+  - 
+    title: Individualisierbar
+    details: Jedes noch so kleine Detail kann nach Deinen Wünschen angepasst werden, um die Eingabeaufforderung so minimal oder funktionsreich zu gestalten, wie Du es möchtest.
 footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
+#Used for the description meta tag, for SEO
+metaTitle: "Starship: Cross-Shell Prompt"
+description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell.
 ---
-
-<div class="features">
-  <div class="feature">
-    <h2>Kompatibel</h2>
-    <p>Läuft mit den beliebtesten Shells auf den beliebtesten Betriebssystemen. Überall einsetzbar!</p>
-  </div>
-  <div class="feature">
-    <h2>Rust-Powered</h2>
-    <p>Bringt die schnelligkeit und zuverlässigkeit von Rust in deinen Shell-prompt.</p>
-  </div>
-  <div class="feature">
-    <h2>Individualisierbar</h2>
-    <p>Jedes noch so kleine Detail kann nach Deinen Wünschen angepasst werden, um die Eingabeaufforderung so minimal oder funktionsreich zu gestalten, wie Du es möchtest.</p>
-  </div>
-</div>
 
 <div class="center">
   <video class="demo-video" muted autoplay loop playsinline>
@@ -33,7 +33,7 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 1. Installiere die Binärversion von **starship**:
 
 
-   #### Install Latest Version
+   #### Neueste Version installieren
 
    With Shell:
 
@@ -42,15 +42,15 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
    ```
 
 
-   #### Install via Package Manager
+   #### Installation mithilfe eines Paket-Managers
 
-   With [Homebrew](https://brew.sh/):
+   Mit [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
-    With [Scoop](https://scoop.sh):
+   Mit [scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
@@ -97,9 +97,7 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
    Trage folgendes in das Powershell-Profil ($Profile) ein. Standardmäßig gespeichert unter: `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` auf Windows, oder `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix:
 
    ```sh
-   # notepad $PROFILE
-
-# ~\Documents\PowerShell\Profile.ps1
+   # ~\Documents\PowerShell\Profile.ps1
 
    Invoke-Expression (&starship init powershell)
    ```
@@ -107,7 +105,7 @@ footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Trage folgendes am Ende der `~/.config/ion/initrc` ein:
 
    ```sh
    # ~/.config/ion/initrc

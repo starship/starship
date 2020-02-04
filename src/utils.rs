@@ -36,8 +36,11 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
         0 => String::from(cmd),
         _ => format!("{} {}", cmd, args.join(" ")),
     };
-
     match command.as_str() {
+        "node --version" => Some(CommandOutput {
+            stdout: String::from("v12.0.0"),
+            stderr: String::default(),
+        }),
         "dummy_command" => Some(CommandOutput {
             stdout: String::from("stdout ok!"),
             stderr: String::from("stderr ok!"),
@@ -99,9 +102,9 @@ mod tests {
 
     #[test]
     fn exec_with_output_stdout() {
-        let result = internal_exec_cmd("/bin/echo", &["-n", "hello"]);
+        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello"]);
         let expected = Some(CommandOutput {
-            stdout: String::from("hello"),
+            stdout: String::from("hello\n"),
             stderr: String::from(""),
         });
 

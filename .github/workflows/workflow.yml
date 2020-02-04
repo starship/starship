@@ -116,10 +116,22 @@ jobs:
           toolchain: stable
           override: true
 
-      # Install Node.js at a fixed version
-      - uses: actions/setup-node@v1
+      # Install Stack at a fixed version (Linux & macOS version)
+      - name: Install Stack [-nix]
+        if: matrix.os != 'windows-latest'
+        uses: mstksg/setup-stack@v1
+
+      # Install Stack at a fixed version (Windows version), use Chocolatey
+      - name: Install Stack [-windows]
+        if: matrix.os == 'windows-latest'
+        uses: crazy-max/ghaction-chocolatey@v1
         with:
-          node-version: "12.0.0"
+          args: install haskell-stack -y
+
+      - name: Install GHC version
+        env:
+          ARGS: --resolver nightly-2019-09-21
+        run: stack $ARGS ghc -- --numeric-version --no-install-ghc
 
       # Install Golang at a fixed version
       - uses: actions/setup-go@v1
