@@ -82,6 +82,19 @@ fetch() {
   fi
 }
 
+install() {
+ local sudo 
+ if [ -w $BIN_DIR ]; then
+	 sudo=''
+ else
+	 info "Root privileges are required to proceed the installation"
+	 sudo='sudo'
+ fi
+ fetch "${URL}" \
+	| ${sudo} tar xzf${VERBOSE} - \
+	-C "${BIN_DIR}"
+}
+
 # Currently supporting:
 #   - win (Git Bash)
 #   - darwin
@@ -240,9 +253,7 @@ confirm "Install Starship ${GREEN}latest${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}
 
 info "Installing Starship, please wait…"
 
-fetch "${URL}" \
-  | tar xzf${VERBOSE} - \
-    -C "${BIN_DIR}"
+install
 
 complete "Starship installed"
 echo
