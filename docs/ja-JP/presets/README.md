@@ -1,8 +1,6 @@
 # 準備するもの
 
-以下は、Starship用にコミュニティに提供された構成プリセットのコレクションです。 共有するプリセットがある場合は、このファイルを更新してPR</ 0>を送信してください！ 😊</p> 
-
-
+以下は、Starship用にコミュニティに提供された構成プリセットのコレクションです。 共有するプリセットがある場合は、このファイルを更新して[PR](https://github.com/starship/starship/edit/master/docs/presets/README.md)を送信してください！ 😊
 
 ## Nerd Font Symbols
 
@@ -10,17 +8,11 @@
 
 ![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
 
-
-
 ### 必要なもの
 
-- 端末にインストールされ、有効になっているNerd Font</ 0>（例ではFira Code Nerd Fontを使用)</li> </ul> 
-  
-  
+- 端末にインストールされ、有効になっている[Nerd Font](https://www.nerdfonts.com/)（例ではFira Code Nerd Fontを使用)
 
 ### 設定
-
-
 
 ```toml
 [aws]
