@@ -1045,12 +1045,12 @@ utc_time_offset = -5
 
 ### 配置项
 
-| 字段            | 默认值             | 描述                                    |
-| ------------- | --------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`    | The style used when the user is root. |
-| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
-| `show_always` | `false`         | Always shows the `username` module.   |
-| `disabled`    | `false`         | Disables the `username` module.       |
+| 字段            | 默认值             | 描述                  |
+| ------------- | --------------- | ------------------- |
+| `style_root`  | `"bold red"`    | 当前用户为 root 时使用的样式。  |
+| `style_user`  | `"bold yellow"` | 非 root 用户使用的样式。     |
+| `show_always` | `false`         | 总是显示 `username` 组件。 |
+| `disabled`    | `false`         | 禁用 `username` 组件。   |
 
 ### 示例
 
