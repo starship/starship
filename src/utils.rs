@@ -102,9 +102,9 @@ mod tests {
 
     #[test]
     fn exec_with_output_stdout() {
-        let result = internal_exec_cmd("/bin/echo", &["-n", "hello"]);
+        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello"]);
         let expected = Some(CommandOutput {
-            stdout: String::from("hello"),
+            stdout: String::from("hello\n"),
             stderr: String::from(""),
         });
 
