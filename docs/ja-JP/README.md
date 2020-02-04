@@ -4,7 +4,7 @@ heroImage: /logo.svg
 heroText:
 tagline: The cross-shell prompt for astronauts
 actionText: Get Started →
-actionLink: ./ja-JP/guide/
+actionLink: ./guide/
 features:
   - 
     title: 互換性優先
