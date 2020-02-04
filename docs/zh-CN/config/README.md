@@ -839,7 +839,7 @@ symbol = "🤖 "
 
 ## Package Version
 
-当前目录是软件包的代码仓库时，将显示 `package` 组件，并显示软件包当前版本。 此组件目前支持`npm`, `cargo`, 和 `poetry` 软件包。
+当前目录是软件包的代码仓库时，将显示 `package` 组件，并显示软件包当前版本。 此组件目前支持`npm`，`cargo` 和 `poetry` 软件包。
 
 - **npm** —— `npm` 软件包版本从当前目录下的 `package.json` 中得到
 - **cargo** —— `cargo` 软件包的版本从当前目录下的 `Cargo.toml` 中得到
@@ -874,11 +874,11 @@ symbol = "🎁 "
 
 ### 配置项
 
-| 字段         | 默认值          | 描述                                                    |
-| ---------- | ------------ | ----------------------------------------------------- |
-| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
-| `style`    | `"bold red"` | 此组件的样式。                                               |
-| `disabled` | `false`      | Disables the `php` module.                            |
+| 字段         | 默认值          | 描述                      |
+| ---------- | ------------ | ----------------------- |
+| `symbol`   | `"🐘 "`       | 这个字段的内容会显示在当前 PHP 版本之前。 |
+| `style`    | `"bold red"` | 此组件的样式。                 |
+| `disabled` | `false`      | 禁用 `php` 组件。            |
 
 ### 示例
 
@@ -891,31 +891,31 @@ symbol = "🔹 "
 
 ## Python
 
-The `python` module shows the currently installed version of Python.
+`python` 组件显示当前安装的 Python 版本。
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
+如果 `pyenv_version_name` 设置为 `true`，则将显示 pyenv 版本名称。
 
-Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
+否则，它将显示来自 `python --version` 的版本号，并显示当前的 Python 虚拟环境，如果激活了的话。
 
-The module will be shown if any of the following conditions are met:
+此组件将在符合以下任意条件之一时显示：
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a file with the `.py` extension
-- The current directory contains a `Pipfile` file
-- The current directory contains a `tox.ini` file
-- A virtual environment is currently activated
+- 当前目录包含 `.python-version` 文件
+- 当前目录包含 `requirements.txt` 文件
+- 当前目录包含 `pyproject.toml` 文件
+- 当前目录包含一个使用 `.py` 扩展名的文件
+- 当前目录包含 `Pipfile` 文件
+- 当前目录包含一个 `tox.ini` 文件
+- 当前处于一个活跃的 python 虚拟环境中
 
 ### 配置项
 
-| 字段                   | 默认值             | 描述                                                                          |
-| -------------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
-| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
-| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
-| `style`              | `"bold yellow"` | 此组件的样式。                                                                     |
-| `disabled`           | `false`         | Disables the `python` module.                                               |
+| 字段                   | 默认值             | 描述                                        |
+| -------------------- | --------------- | ----------------------------------------- |
+| `symbol`             | `"🐍 "`          | 这个字段的内容会显示在当前 Python 版本之前。                |
+| `pyenv_version_name` | `false`         | 使用 pyenv 获取 Python 版本                     |
+| `pyenv_prefix`       | `"pyenv "`      | 在 pyenv 版本前显示的前缀（默认显示 `pyenv MY_VERSION`） |
+| `style`              | `"bold yellow"` | 此组件的样式。                                   |
+| `disabled`           | `false`         | 禁用 `python` 组件。                           |
 
 ### 示例
 
@@ -930,10 +930,10 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
+`ruby` 组件显示当前安装的 Ruby 版本。 此组件将在符合以下任意条件之一时显示：
 
-- The current directory contains a `Gemfile` file
-- The current directory contains a `.rb` file
+- 当前目录包含 `Gemfile` 文件
+- 当前目录包含 `.rb` 文件
 
 ### 配置项
 
@@ -941,7 +941,7 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
 | `style`    | `"bold red"` | 此组件的样式。                                                |
-| `disabled` | `false`      | Disables the `ruby` module.                            |
+| `disabled` | `false`      | 禁用 `ruby` 组件。                                          |
 
 ### 示例
 
@@ -954,18 +954,18 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
+`rust` 组件显示当前安装的 Rust 版本。 此组件将在符合以下任意条件时显示：
 
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- 当前目录包含 `Cargo.toml` 文件
+- 当前目录包含一个使用 `.rs` 扩展名的文件
 
 ### 配置项
 
-| 字段         | 默认值          | 描述                                                     |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
-| `style`    | `"bold red"` | 此组件的样式。                                                |
-| `disabled` | `false`      | Disables the `rust` module.                            |
+| 字段         | 默认值          | 描述                          |
+| ---------- | ------------ | --------------------------- |
+| `symbol`   | `"🦀 "`       | 这个字段的内容会显示在当前 Rust 版本之前。    |
+| `style`    | `"bold red"` | 此组件的样式。                     |
+| `disabled` | `false`      | Disables the `rust` module. |
 
 ### 示例
 
