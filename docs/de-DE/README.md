@@ -4,7 +4,7 @@ heroImage: /logo.svg
 heroText:
 tagline: The cross-shell prompt for astronauts
 actionText: Loslegen →
-actionLink: ./de-DE/guide/
+actionLink: ./guide/
 features:
   - 
     title: Kompatibel
