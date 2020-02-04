@@ -776,13 +776,13 @@ symbol = "🌟 "
 
 ## Memory Usage
 
-The `memory_usage` module shows current system memory and swap usage.
+`memory_usage` 组件显示当前系统内存和交换区使用情况。
 
-By default the swap usage is displayed if the total system swap is non-zero.
+默认情况下，如果系统交换区使用不为 0，则会显示交换区使用情况。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
