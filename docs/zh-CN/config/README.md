@@ -961,11 +961,11 @@ symbol = "🔺 "
 
 ### 配置项
 
-| 字段         | 默认值          | 描述                          |
-| ---------- | ------------ | --------------------------- |
-| `symbol`   | `"🦀 "`       | 这个字段的内容会显示在当前 Rust 版本之前。    |
-| `style`    | `"bold red"` | 此组件的样式。                     |
-| `disabled` | `false`      | Disables the `rust` module. |
+| 字段         | 默认值          | 描述                       |
+| ---------- | ------------ | ------------------------ |
+| `symbol`   | `"🦀 "`       | 这个字段的内容会显示在当前 Rust 版本之前。 |
+| `style`    | `"bold red"` | 此组件的样式。                  |
+| `disabled` | `false`      | 禁用 `rust` 组件。            |
 
 ### 示例
 
@@ -978,19 +978,19 @@ symbol = "⚙️ "
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. The module will be shown if any of the following conditions are met:
+`terraform` 组件显示当前选定的 terraform 工作区和版本。 默认情况下不会显示 terraform 版本，因为当使用大量插件时，当前版本 terraform 查询版本号很慢。 此组件将在符合以下任意条件时显示：
 
-- The current directory contains a `.terraform` folder
-- Current directory contains a file with the `.tf` extension
+- 当前目录包含 `.terraform` 目录
+- 当前目录包含一个使用 `.tf` 扩展名的文件
 
 ### 配置项
 
-| 字段             | 默认值          | 描述                                                          |
-| -------------- | ------------ | ----------------------------------------------------------- |
-| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
-| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
-| `style`        | `"bold 105"` | 此组件的样式。                                                     |
-| `disabled`     | `false`      | Disables the `terraform` module.                            |
+| 字段             | 默认值          | 描述                               |
+| -------------- | ------------ | -------------------------------- |
+| `symbol`       | `"💠 "`       | 这个字段的内容会显示在当前 terraform 工作区之前。   |
+| `show_version` | `false`      | 显示 terraform 版本信息。 在大型工作空间中非常缓慢。 |
+| `style`        | `"bold 105"` | 此组件的样式。                          |
+| `disabled`     | `false`      | 禁用 `terraform` 组件。               |
 
 ### 示例
 
