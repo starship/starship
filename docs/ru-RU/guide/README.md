@@ -82,37 +82,38 @@
 - Текущая версия Ruby (`💎`)
 - Текущая версия Rust (`🦀`)
 - Текущая версия .NET (`•NET`)
-- Текущая версия пакета в текущей директории (`📦`)
+- Current Crystal version (`🔮`).
+- Current version of package in current directory (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-  - композитор (PHP)
-- Текущая ветка Git и статус репозитория:
-  - `=` — конфликтующие изменения
-  - `⇡` — впереди отслеживаемой ветви
-  - `⇣` — позади отслеживаемой ветви
-  - `⇕` — расходящиеся изменения
-  - `?` — не отслеживаемые изменения
-  - `$` — отложенные в тайник изменения
-  - `!` — изменённые файлы
-  - `+` — добавленные файлы
-  - `»` — переименнованные файлы
-  - `✘` — удалённые файлы
-- Текущая ветвь Mercurial
-- Текущий уровень и состояние заряда батареи
-  - `⇡` – зарядка
-  - `⇣` – разрядка
-  - `•` – полностью заряжено
-- Индикатор работ в фоне (`✦`)
-- Текущий кластер и пространство имён Kubernetes (`☸`)
-- Текущий профиль Amazon Web Services (AWS) (`☁`)
-- Время исполнения последней команды
-- Значение переменной окружения
-- Обнаружение среды Nix-shell
-- Текущее имя пользователя, если оно не совпадает с логином
-- Необязательное текущее время в 12- или 24-часовом формате
-- Текущее рабочее пространство и версия Terraform (`💠`)
-- Текущая среда Conda (`C`)
+  - composer (PHP)
+- Current Git branch and rich repo status:
+  - `=` — conflicting changes
+  - `⇡` — ahead of remote branch
+  - `⇣` — behind of remote branch
+  - `⇕` — diverged changes
+  - `?` — untracked changes
+  - `$` — stashed changes
+  - `!` — modified files
+  - `+` — added files
+  - `»` — renamed files
+  - `✘` — deleted files
+- Current Mercurial branch
+- Current battery level and status
+  - `⇡` – charging
+  - `⇣` – discharging
+  - `•` – fully charged
+- Indicator for jobs in the background (`✦`)
+- Current Kubernetes Cluster and Namespace (`☸`)
+- Current Amazon Web Services (AWS) profile (`☁️`)
+- Execution time of the last command
+- Custom environment variable value
+- Nix-shell environment detection
+- Current username if not the same as the logged-in user
+- Optional current time in 12/24hr format
+- Current Terraform Workspace and version (`💠`)
+- Current Conda environment (`C`)
 
 ## 🚀 Установка
 
@@ -249,7 +250,7 @@
     <td align="center"><a href="https://github.com/sirMerr"><img src="https://avatars2.githubusercontent.com/u/11183523?v=4" width="100px;" alt="" /><br /><sub><b>Tiffany Le-Nguyen</b></sub></a><br /><a href="#ideas-sirMerr" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-sirMerr" title="Maintenance">🚧</a> <a href="https://github.com/starship/starship/pulls?q=is%3Apr+reviewed-by%3AsirMerr" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/starship/starship/commits?author=sirMerr" title="Documentation">📖</a></td>
     <td align="center"><a href="https://about.snuggi.es"><img src="https://avatars0.githubusercontent.com/u/26250962?v=4" width="100px;" alt="" /><br /><sub><b>​Snuggle</b></sub></a><br /><a href="#design-Snuggle" title="Design">🎨</a> <a href="#ideas-Snuggle" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-Snuggle" title="Maintenance">🚧</a> <a href="https://github.com/starship/starship/pulls?q=is%3Apr+reviewed-by%3ASnuggle" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://github.com/mehcode"><img src="https://avatars1.githubusercontent.com/u/753919?v=4" width="100px;" alt="" /><br /><sub><b>Ryan Leckey</b></sub></a><br /><a href="https://github.com/starship/starship/pulls?q=is%3Apr+reviewed-by%3Amehcode" title="Reviewed Pull Requests">👀</a></td>
-    <td align="center"><a href="https://github.com/youssefhabri"><img src="https://avatars3.githubusercontent.com/u/1578005?v=4" width="100px;" alt="" /><br /><sub><b>Youssef Habri</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=youssefhabri" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/youssefhabri"><img src="https://avatars3.githubusercontent.com/u/1578005?v=4" width="100px;" alt="" /><br /><sub><b>Youssef Habri</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=youssefhabri" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=youssefhabri" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=youssefhabri" title="Tests">⚠️</a></td>
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/chipbuster"><img src="https://avatars2.githubusercontent.com/u/4605384?v=4" width="100px;" alt="" /><br /><sub><b>Kevin Song</b></sub></a><br /><a href="https://github.com/starship/starship/issues?q=author%3Achipbuster" title="Bug reports">🐛</a> <a href="https://github.com/starship/starship/commits?author=chipbuster" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=chipbuster" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=chipbuster" title="Tests">⚠️</a></td>
