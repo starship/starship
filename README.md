@@ -58,7 +58,7 @@
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png" alt="Deutsch"
   /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/zh-CN"
+  <a href="https://github.com/starship/starship/blob/master/docs/zh-CN/guide/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png" alt="简体中文"
   /></a>
   &nbsp;

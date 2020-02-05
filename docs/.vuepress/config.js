@@ -5,13 +5,8 @@ module.exports = {
       title: "Starship",
       description: "The cross-shell prompt for astronauts"
     },
-    "/ja-JP/": {
-      lang: "ja-JP",
-      title: "Starship",
-      description: "The cross-shell prompt for astronauts"
-    },
-    "/zh-TW/": {
-      lang: "zh-TW",
+    "/de-DE/": {
+      lang: "de-DE",
       title: "Starship",
       description: "The cross-shell prompt for astronauts"
     },
@@ -20,11 +15,21 @@ module.exports = {
       title: "Starship",
       description: "The cross-shell prompt for astronauts"
     },
-    "/de-DE/": {
-      lang: "de-DE",
+    "/ja-JP/": {
+      lang: "ja-JP",
       title: "Starship",
       description: "The cross-shell prompt for astronauts"
-    }
+    },
+    "/zh-CN/": {
+      lang: "zh-CN",
+      title: "Starship",
+      description: "The cross-shell prompt for astronauts"
+    },
+    "/zh-TW/": {
+      lang: "zh-TW",
+      title: "Starship",
+      description: "The cross-shell prompt for astronauts"
+    },
   },
   // prettier-ignore
   head: [
@@ -71,38 +76,23 @@ module.exports = {
           ["/presets/", "Presets"]
         ]
       },
-      "/ja-JP/": {
+      "/de-DE/": {
         // text for the language dropdown
-        selectText: "言語",
+        selectText: "Sprachen",
         // label for this locale in the language dropdown
-        label: "日本語",
+        label: "Deutsch",
         // Custom text for edit link. Defaults to "Edit this page"
-        editLinkText: "GitHub で編集する",
+        editLinkText: "Bearbeite diese Seite auf GitHub",
         // Custom navbar values
-        nav: [{ text: "設定", link: "/ja-JP/config/" }],
+        nav: [{ text: "Konfiguration", link: "/config/" }],
         // Custom sidebar values
         sidebar: [
-          "/ja-JP/",
-          ["/ja-JP/guide/", "ガイド"],
-          ["/ja-JP/config/", "設定"],
-          ["/ja-JP/advanced-config/", "高度な設定"]
-        ]
-      },
-      "/zh-TW/": {
-        // text for the language dropdown
-        selectText: "語言",
-        // label for this locale in the language dropdown
-        label: "繁體中文",
-        // Custom text for edit link. Defaults to "Edit this page"
-        editLinkText: "在 GitHub 上修改此頁面",
-        // Custom navbar values
-        nav: [{ text: "設定", link: "/zh-TW/config/" }],
-        // Custom sidebar values
-        sidebar: [
-          "/zh-TW/",
-          ["/zh-TW/guide/", "指引"],
-          ["/zh-TW/config/", "設定"],
-          ["/zh-TW/advanced-config/", "進階設定"]
+          "/de-DE/",
+          ["/de-DE/guide/", "Anleitung"],
+          ["/de-DE/config/", "Konfiguration"],
+          ["/de-DE/advanced-config/", "Erweiterte Konfiguration"],
+          ["/de-DE/faq/", "Häufig gestellte Fragen"],
+          ["/de-DE/presets/", "Konfigurations-Beispiele"]
         ]
       },
       "/ru-RU/": {
@@ -124,25 +114,61 @@ module.exports = {
           ["/ru-RU/presets/", "Предустановки"]
         ]
       },
-      "/de-DE/": {
+      "/ja-JP/": {
         // text for the language dropdown
-        selectText: "Sprachen",
+        selectText: "言語",
         // label for this locale in the language dropdown
-        label: "Deutsch",
+        label: "日本語",
         // Custom text for edit link. Defaults to "Edit this page"
-        editLinkText: "Bearbeite diese Seite auf GitHub",
+        editLinkText: "GitHub で編集する",
         // Custom navbar values
-        nav: [{ text: "Konfiguration", link: "/config/" }],
+        nav: [{ text: "設定", link: "/ja-JP/config/" }],
         // Custom sidebar values
         sidebar: [
-          "/de-DE/",
-          ["/de-DE/guide/", "Anleitung"],
-          ["/de-DE/config/", "Konfiguration"],
-          ["/de-DE/advanced-config/", "Erweiterte Konfiguration"],
-          ["/de-DE/faq/", "Häufig gestellte Fragen"],
-          ["/de-DE/presets/", "Konfigurations-Beispiele"]
+          "/ja-JP/",
+          ["/ja-JP/guide/", "ガイド"],
+          ["/ja-JP/config/", "設定"],
+          ["/ja-JP/advanced-config/", "高度な設定"],
+          ["/ru-RU/faq/", "FAQ"],
+          ["/ru-RU/presets/", "準備するもの"]
         ]
-      }
+      },
+      "/zh-TW/": {
+        // text for the language dropdown
+        selectText: "語言",
+        // label for this locale in the language dropdown
+        label: "繁體中文",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "在 GitHub 上修改此頁面",
+        // Custom navbar values
+        nav: [{ text: "設定", link: "/zh-TW/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/zh-TW/",
+          ["/zh-TW/guide/", "指引"],
+          ["/zh-TW/config/", "設定"],
+          ["/zh-TW/advanced-config/", "進階設定"]
+        ]
+      },
+      "/zh-CN/": {
+        // text for the language dropdown
+        selectText: "语言",
+        // label for this locale in the language dropdown
+        label: "简体中文",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "在 GitHub 上修改此页",
+        // Custom navbar values
+        nav: [{ text: "配置", link: "/zh-CN/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/zh-CN/",
+          ["/zh-CN/guide/", "指南"],
+          ["/zh-CN/config/", "配置"],
+          ["/zh-CN/advanced-config/", "高级配置"],
+          ["/zh-CN/faq/", "常见问题"],
+          ["/zh-CN/presets/", "社区配置分享"]
+        ]
+      },
     }
   },
   plugins: [
