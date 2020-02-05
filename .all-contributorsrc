@@ -715,8 +715,7 @@
       "contributions": [
         "code",
         "doc",
-        "test",
-        "projectManagement"
+        "test"
       ]
     },
     {
