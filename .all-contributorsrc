@@ -718,6 +718,15 @@
         "test",
         "projectManagement"
       ]
+    },
+    {
+      "login": "chirsz-ever",
+      "name": "chirsz",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/31474766?v=4",
+      "profile": "https://github.com/chirsz-ever",
+      "contributions": [
+        "translation"
+      ]
     }
   ],
   "contributorsPerLine": 7,
