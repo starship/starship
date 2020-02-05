@@ -21,7 +21,7 @@
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
       alt="Chat on Discord" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-69-orange" alt="All Contributors"></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-70-orange" alt="All Contributors"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
@@ -330,7 +330,8 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
     <td align="center"><a href="https://blog.brightone.space"><img src="https://avatars1.githubusercontent.com/u/12615679?v=4" width="100px;" alt="" /><br /><sub><b>Oleksii Filonenko</b></sub></a><br /><a href="#translation-filalex77" title="Translation">🌍</a></td>
     <td align="center"><a href="https://github.com/ivanovart"><img src="https://avatars2.githubusercontent.com/u/5867379?v=4" width="100px;" alt="" /><br /><sub><b>Artem Ivanov</b></sub></a><br /><a href="#translation-ivanovart" title="Translation">🌍</a></td>
     <td align="center"><a href="http://www.drivendata.org"><img src="https://avatars3.githubusercontent.com/u/1799186?v=4" width="100px;" alt="" /><br /><sub><b>Peter Bull</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=pjbull" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=pjbull" title="Tests">⚠️</a></td>
-    <td align="center"><a href="https://andrewpro.me"><img src="https://avatars1.githubusercontent.com/u/8220926?v=4" width="100px;" alt="" /><br /><sub><b>Andrew Prokhorenkov</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=m0nhawk" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=m0nhawk" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=m0nhawk" title="Tests">⚠️</a> <a href="#projectManagement-m0nhawk" title="Project Management">📆</a></td>
+    <td align="center"><a href="https://andrewpro.me"><img src="https://avatars1.githubusercontent.com/u/8220926?v=4" width="100px;" alt="" /><br /><sub><b>Andrew Prokhorenkov</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=m0nhawk" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=m0nhawk" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=m0nhawk" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/chirsz-ever"><img src="https://avatars2.githubusercontent.com/u/31474766?v=4" width="100px;" alt="" /><br /><sub><b>chirsz</b></sub></a><br /><a href="#translation-chirsz-ever" title="Translation">🌍</a></td>
   </tr>
 </table>
 
