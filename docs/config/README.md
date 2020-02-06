@@ -431,7 +431,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [elm]
-symbol = "λx.x "
+symbol = " "
 ```
 
 ## Environment Variable
@@ -663,7 +663,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [haskell]
-symbol = "λx.x "
+symbol = " "
 ```
 
 ## Mercurial Branch
