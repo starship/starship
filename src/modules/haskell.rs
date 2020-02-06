@@ -55,7 +55,7 @@ mod tests {
     #[test]
     fn folder_with_hpack_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        File::create(dir.path().join("project.yaml"))?.sync_all()?;
+        File::create(dir.path().join("package.yaml"))?.sync_all()?;
         let actual = render_module("haskell", dir.path());
         let expected = Some(format!("via {} ", Color::Red.bold().paint("λ v8.6.5")));
         assert_eq!(expected, actual);
