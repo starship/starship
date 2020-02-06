@@ -1,8 +1,7 @@
 use crate::utils::exec_cmd;
-use serde_urlencoded;
+use reqwest;
 use std::fs;
 use std::path::PathBuf;
-use ureq;
 
 const GIT_IO_BASE_URL: &str = "https://git.io/";
 
@@ -17,22 +16,18 @@ pub fn create() {
         starship_config: get_starship_config(),
     };
 
-    let mut link = make_github_issue_link(crate_version!(), environment);
+    let link = make_github_issue_link(crate_version!(), environment);
 
     if open::that(&link).is_ok() {
         print!("Take a look at your browser. A GitHub issue has been populated with your configuration")
     } else {
-        let data = serde_urlencoded::to_string(&[("url", &link)]);
-        if let Ok(data) = data {
-            let short_link = ureq::post(&format!("{}{}", GIT_IO_BASE_URL, "create"))
-                .set("Content-Type", "application/x-www-form-urlencoded")
-                .send_string(&data)
-                .into_string()
-                .map(|slug| format!("{}{}", GIT_IO_BASE_URL, slug));
-            if let Ok(short_link) = short_link {
-                link = short_link;
-            }
-        }
+        let link = reqwest::blocking::Client::new()
+            .post(&format!("{}{}", GIT_IO_BASE_URL, "create"))
+            .form(&[("url", &link)])
+            .send()
+            .and_then(|response| response.text())
+            .map(|slug| format!("{}{}", GIT_IO_BASE_URL, slug))
+            .unwrap_or(link);
 
         println!(
             "Click this link to create a GitHub issue populated with your configuration:\n\n  {}",
