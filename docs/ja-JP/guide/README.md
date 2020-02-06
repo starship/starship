@@ -73,15 +73,16 @@
 ## 🍬 機能
 
 - 最後のコマンドがゼロ以外のコードで終了すると、プロンプト文字が赤に変わります
-- 現在の Go のバージョン (`🐹`)
+- Current Elm version (`🌳`)
+- Current Go version (`🐹`)
 - Current Haskell version (`λ`)
-- 現在の Java のバージョン (`☕`)
-- 現在の Node.js のバージョン (`⬢`)
-- 現在の PHP のバージョン (`🐘`)
-- 現在の Python のバージョン (`🐍`)
-- 現在の Ruby のバージョン (`💎`)
-- 現在の Rust のバージョン (`🦀`)
-- 現在の .NET のバージョン (`•NET`)
+- Current Java version(`☕`)
+- Current Node.js version(`⬢`)
+- Current PHP version (`🐘`)
+- Current Python version (`🐍`)
+- Current Ruby version (`💎`)
+- Current Rust version (`🦀`)
+- Current .NET version (`•NET`)
 - Current Crystal version (`🔮`).
 - Current version of package in current directory (`📦`)
   - npm (Node.js)
