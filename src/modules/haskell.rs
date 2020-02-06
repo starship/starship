@@ -22,7 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         &["ghc", "--", "--numeric-version", "--no-install-ghc"],
     )?
     .stdout;
-    let formatted_version = format_haskell_version(&haskell_version)?;
+    let formatted_version = Some(format!("v{}", haskell_version.trim()))?;
 
     let mut module = context.new_module("haskell");
     let config: HaskellConfig = HaskellConfig::try_load(module.config);
@@ -34,7 +34,30 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_haskell_version(haskell_version: &str) -> Option<String> {
-    let formatted_version = format!("v{}", haskell_version.trim());
-    Some(formatted_version)
+#[cfg(test)]
+mod tests {
+    use crate::modules::utils::test::render_module;
+    use ansi_term::Color;
+    use std::fs::File;
+    use std::io;
+    use tempfile;
+
+    #[test]
+    fn folder_without_stack_yaml() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let actual = render_module("haskell", dir.path());
+        let expected = None;
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn folder_with_stack_yaml() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("stack.yaml"))?.sync_all()?;
+        let actual = render_module("haskell", dir.path());
+        let expected = Some(format!("via {} ", Color::Red.bold().paint("λ v8.6.5")));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
 }
