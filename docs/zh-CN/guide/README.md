@@ -73,15 +73,16 @@
 ## 🍬 特性
 
 - 当上一个命令以非 0 状态退出时，提示字符会变为红色
-- 显示当前 Go 版本（`🐹`）
-- 显示当前 Haskell 版本（`λ`）
-- 显示当前 Java 版本（`☕`）
-- 显示当前 Node.js 版本（`⬢`）
-- 显示当前 PHP 版本（`🐘`）
-- 显示当前 Python 版本（`🐍`）
-- 显示当前 Ruby 版本（`💎`）
-- 显示当前 Rust 版本（`🦀`）
-- 显示当前 .NET 版本（`•NET`）
+- Current Elm version (`🌳`)
+- Current Go version (`🐹`)
+- Current Haskell version (`λ`)
+- Current Java version(`☕`)
+- Current Node.js version(`⬢`)
+- Current PHP version (`🐘`)
+- Current Python version (`🐍`)
+- Current Ruby version (`💎`)
+- Current Rust version (`🦀`)
+- Current .NET version (`•NET`)
 - Current Crystal version (`🔮`).
 - Current version of package in current directory (`📦`)
   - npm (Node.js)
