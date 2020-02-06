@@ -43,6 +43,10 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             stdout: String::from("0.19.1"),
             stderr: String::default(),
         }),
+        "stack ghc -- --numeric-version --no-install-ghc" => Some(CommandOutput {
+            stdout: String::from("8.6.5"),
+            stderr: String::default(),
+        }),
         "node --version" => Some(CommandOutput {
             stdout: String::from("v12.0.0"),
             stderr: String::default(),
