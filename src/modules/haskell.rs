@@ -7,6 +7,8 @@ use crate::utils;
 ///
 /// Will display the Haskell version if any of the following criteria are met:
 ///     - Current directory contains a `stack.yaml` file
+///     - Current directory contains a `.cabal` file
+///     - Current directory contains a `package.yaml` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_haskell_project = context
         .try_begin_scan()?
