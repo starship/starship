@@ -38,7 +38,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
     use crate::modules::utils::test::render_module;
     use ansi_term::Color;
-    use std::fs::{File};
+    use std::fs::File;
     use std::io;
     use tempfile;
 
