@@ -73,15 +73,16 @@
 ## 🍬 Fonctionnalités
 
 - Le symbole de prompt devient rouge si la dernière commande a retourné un code différent de zéro
-- Version actuelle de Go (`🐹`)
+- Current Elm version (`🌳`)
+- Current Go version (`🐹`)
 - Current Haskell version (`λ`)
-- Version actuelle de Java (`☕`)
-- Version actuelle de Node.js (`⬢`)
-- Version actuelle de PHP (`🐘`)
-- Version actuelle de Python (`🐍`)
-- Version actuelle de Ruby (`💎`)
-- Version actuelle de Rust (`🦀`)
-- Version actuelle de .NET (`•NET`)
+- Current Java version(`☕`)
+- Current Node.js version(`⬢`)
+- Current PHP version (`🐘`)
+- Current Python version (`🐍`)
+- Current Ruby version (`💎`)
+- Current Rust version (`🦀`)
+- Current .NET version (`•NET`)
 - Current Crystal version (`🔮`).
 - Current version of package in current directory (`📦`)
   - npm (Node.js)
