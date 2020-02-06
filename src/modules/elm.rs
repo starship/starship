@@ -23,7 +23,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let elm_version = utils::exec_cmd("elm", &["--version"])?.stdout;
-    let formatted_version = format_elm_version(&elm_version)?;
+    let formatted_version = Some(format!("v{}", elm_version.trim()))?;
 
     let mut module = context.new_module("elm");
     let config: ElmConfig = ElmConfig::try_load(module.config);
@@ -33,11 +33,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.create_segment("version", &SegmentConfig::new(&formatted_version));
 
     Some(module)
-}
-
-fn format_elm_version(elm_version: &str) -> Option<String> {
-    let formatted_version = format!("v{}", elm_version.trim());
-    Some(formatted_version)
 }
 
 #[cfg(test)]
