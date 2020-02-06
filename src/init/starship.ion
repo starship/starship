@@ -4,6 +4,7 @@ fn PROMPT
     let STARSHIP_ION_STATUS = $?
     # Save the ION_CMD_DURATION before running any other commands, but after the status since the
     # duration is not updated during variable assignment
+    # Account for variable name change sometime during December 2019 - January 2020
     let STARSHIP_ION_CMD_DURATION = $or($CMD_DURATION $ION_CMD_DURATION)
     let STARSHIP_ION_CMD_DURATION = $((STARSHIP_ION_CMD_DURATION * 1000))
 
