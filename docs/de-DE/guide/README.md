@@ -73,15 +73,16 @@
 ## 🍬 Features
 
 - Anzeigetext wird rot wenn der letzte Befehl mit einem Exit-code größer null terminiert
-- Derzeitige Go-Version (`🐹`)
+- Current Elm version (`🌳`)
+- Current Go version (`🐹`)
 - Current Haskell version (`λ`)
-- Derzeitige Java-Version (`☕`)
-- Derzeitige Node.js-Version (`⬢`)
-- Derzeitige PHP-Version (`🐘`)
-- Derzeitige Python-Version (`🐍`)
-- Derzeitige Ruby-Version (`💎`)
-- Derzeitige Rust-Version (`🦀`)
-- Derzeitige .NET-Version (`•NET`)
+- Current Java version(`☕`)
+- Current Node.js version(`⬢`)
+- Current PHP version (`🐘`)
+- Current Python version (`🐍`)
+- Current Ruby version (`💎`)
+- Current Rust version (`🦀`)
+- Current .NET version (`•NET`)
 - Current Crystal version (`🔮`).
 - Current version of package in current directory (`📦`)
   - npm (Node.js)
