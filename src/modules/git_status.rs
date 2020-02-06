@@ -4,7 +4,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::config::SegmentConfig;
 use crate::configs::git_status::{CountConfig, GitStatusConfig};
-use std::borrow::BorrowMut;
+use std::borrow::BorrowMut; 
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -21,13 +21,19 @@ use std::borrow::BorrowMut;
 ///   - `»` — A renamed file has been added to the staging area
 ///   - `✘` — A file's deletion has been added to the staging area
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("git_status");
+    let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
+    
+    if config.disabled_for.iter().find(|x| context.current_dir.starts_with(x)).is_some() {
+        return None;
+    }
+    
     let repo = context.get_repo().ok()?;
     let branch_name = repo.branch.as_ref()?;
     let repo_root = repo.root.as_ref()?;
     let mut repository = Repository::open(repo_root).ok()?;
 
-    let mut module = context.new_module("git_status");
-    let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
+   
 
     module
         .get_prefix()

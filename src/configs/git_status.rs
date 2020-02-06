@@ -2,6 +2,7 @@ use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
 
 use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
+use std::path::PathBuf;
 
 #[derive(Clone, ModuleConfig)]
 pub struct GitStatusConfig<'a> {
@@ -27,6 +28,7 @@ pub struct GitStatusConfig<'a> {
     pub suffix: &'a str,
     pub style: Style,
     pub disabled: bool,
+    pub disabled_for: Vec<PathBuf>
 }
 
 impl<'a> RootModuleConfig<'a> for GitStatusConfig<'a> {
@@ -54,6 +56,7 @@ impl<'a> RootModuleConfig<'a> for GitStatusConfig<'a> {
             suffix: "] ",
             style: Color::Red.bold(),
             disabled: false,
+            disabled_for: Vec::new()
         }
     }
 }

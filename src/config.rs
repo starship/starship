@@ -10,6 +10,8 @@ use dirs::home_dir;
 use std::env;
 use toml::Value;
 
+use std::path::PathBuf;
+
 /// Root config of a module.
 pub trait RootModuleConfig<'a>
 where
@@ -55,6 +57,12 @@ where
 impl<'a> ModuleConfig<'a> for &'a str {
     fn from_config(config: &'a Value) -> Option<Self> {
         config.as_str()
+    }
+}
+
+impl<'a> ModuleConfig<'a> for PathBuf {
+    fn from_config(config: &Value) -> Option<Self> {
+        config.as_str().map(|path| PathBuf::from(path))
     }
 }
 

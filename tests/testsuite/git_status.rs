@@ -259,6 +259,60 @@ fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
 }
 
 #[test]
+fn doesnt_show_untracked_file_if_disabled_for_path() -> io::Result<()> {
+    let repo_dir = common::create_fixture_repo()?;
+    let repo_path = repo_dir.as_path();
+
+    create_untracked(&repo_dir)?;
+
+    let output = common::render_module("git_status")
+        .use_config(toml::from_str(&format!(
+            "
+                [git_status]
+                disabled_for = [\"{}\"]
+            ",
+            repo_path.to_str().unwrap(),
+        )).unwrap()
+        )
+        .arg("--path")
+        .arg(repo_dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    let expected = "";
+
+    assert_eq!(expected, actual);
+
+    Ok(())
+}
+
+#[test]
+fn doesnt_show_untracked_file_if_disabled_for_many_path() -> io::Result<()> {
+    let repo_dir = common::create_fixture_repo()?;
+    let repo_path = repo_dir.as_path();
+
+    create_untracked(&repo_dir)?;
+
+    let output = common::render_module("git_status")
+        .use_config(toml::from_str(&format!(
+            "
+                [git_status]
+                disabled_for = [\"also/a/path\",\"{}\"]
+            ",
+            repo_path.to_str().unwrap(),
+        )).unwrap()
+        )
+        .arg("--path")
+        .arg(repo_dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    let expected = "";
+
+    assert_eq!(expected, actual);
+
+    Ok(())
+}
+
+#[test]
 #[ignore]
 fn shows_stashed() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;

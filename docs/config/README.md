@@ -583,6 +583,7 @@ current directory.
 | `suffix`           | `]`                        | Suffix to display immediately after git status.         |
 | `style`            | `"bold red"`               | The style for the module.                               |
 | `disabled`         | `false`                    | Disables the `git_status` module.                       |
+| `disabled_for`     | `[]`                       | Disables the `git_status` module for the listed directories     |
 
 #### Git Status Counts
 
@@ -610,6 +611,7 @@ staged_count.enabled = true
 staged_count.style = "green"
 renamed = "👅"
 deleted = "🗑"
+disabled_for = ["my/big/slow/repo"]
 ```
 
 ## Golang
