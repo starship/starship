@@ -88,6 +88,7 @@ The prompt shows information you need while you're working, while staying sleek 
 ## 🍬 Features
 
 - Prompt character turns red if the last command exits with non-zero code
+- Current Elm version (`🌳`)
 - Current Go version (`🐹`)
 - Current Haskell version (`λ`)
 - Current Java version(`☕`)
