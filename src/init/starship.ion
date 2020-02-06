@@ -4,7 +4,7 @@ fn PROMPT
     let STARSHIP_ION_STATUS = $?
     # Save the ION_CMD_DURATION before running any other commands, but after the status since the
     # duration is not updated during variable assignment
-    let STARSHIP_ION_CMD_DURATION = $CMD_DURATION
+    let STARSHIP_ION_CMD_DURATION = $or($CMD_DURATION $ION_CMD_DURATION)
 
     # The STARSHIP between the colons will be replaced with the actual path to the starship executable.
     # The jobs command outputs to stderr, therefore we need to pipe stderr to `wc -l`.
