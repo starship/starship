@@ -100,6 +100,7 @@ prompt_order = [
     "hg_branch",
     "package",
     "dotnet",
+    "elm",
     "golang",
     "haskell",
     "java",
@@ -377,6 +378,33 @@ style = "green"
 heuristic = false
 ```
 
+## Elm
+
+The `elm` module shows the currently installed version of Elm version. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
+- The current directory contains a `elm-stuff` folder
+- The current directory contains a `*.elm` files
+
+### Options
+
+| Variable   | Default       | Description                                           |
+| ---------- | ------------- | ----------------------------------------------------- |
+| `symbol`   | `"🌳 "`        | The symbol used before displaying the version of Elm. |
+| `style`    | `"bold cyan"` | The style for the module.                             |
+| `disabled` | `false`       | Disables the `elm` module.                            |
+
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[elm]
+symbol = " "
+```
+
 ## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
@@ -598,7 +626,7 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 # ~/.config/starship.toml
 
 [haskell]
-symbol = "λx.x "
+symbol = " "
 ```
 
 ## Mercurial Branch
