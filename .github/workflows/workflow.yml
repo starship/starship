@@ -92,6 +92,23 @@ jobs:
       # Checkout the branch being tested
       - uses: actions/checkout@v2
 
+      # Cache files between builds
+      - name: Cache cargo registry
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+      - name: Cache cargo index
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+      - name: Cache cargo build
+        uses: actions/cache@v1
+        with:
+          path: target
+          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+
       # Install all the required dependencies for testing
       - uses: actions-rs/toolchain@v1
         with:
@@ -99,10 +116,22 @@ jobs:
           toolchain: stable
           override: true
 
-      # Install Node.js at a fixed version
-      - uses: actions/setup-node@v1
+      # Install Stack at a fixed version (Linux & macOS version)
+      - name: Install Stack [-nix]
+        if: matrix.os != 'windows-latest'
+        uses: mstksg/setup-stack@v1
+
+      # Install Stack at a fixed version (Windows version), use Chocolatey
+      - name: Install Stack [-windows]
+        if: matrix.os == 'windows-latest'
+        uses: crazy-max/ghaction-chocolatey@v1
         with:
-          node-version: "12.0.0"
+          args: install haskell-stack -y
+
+      - name: Install GHC version
+        env:
+          ARGS: --resolver nightly-2019-09-21
+        run: stack $ARGS ghc -- --numeric-version --no-install-ghc
 
       # Install Golang at a fixed version
       - uses: actions/setup-go@v1
@@ -110,14 +139,14 @@ jobs:
           go-version: "1.12.1"
 
       # Install Ruby at a fixed version
-      - uses: actions/setup-ruby@v1
+      - uses: eregon/use-ruby-action@v1
         with:
           ruby-version: "2.6.3"
 
       # Install Python at a fixed version
       - uses: actions/setup-python@v1
         with:
-          python-version: "3.7.5"
+          python-version: "3.7.6"
 
       # Install dotnet at a fixed version
       - uses: actions/setup-dotnet@v1
@@ -129,16 +158,12 @@ jobs:
         with:
           php-version: "7.3"
 
-      # Install Mercurial (pre-installed on linux, installed from pip on macos
-      # and from choco on windows),
+      # Install Mercurial (pre-installed on Linux and windows)
       - name: Install Mercurial (macos)
         if: matrix.os == 'macOS-latest'
         env:
           HGPYTHON3: 1
         run: pip install mercurial
-      - name: Install Mercurial (windows)
-        if: matrix.os == 'windows-latest'
-        run: choco install hg
 
       # Install Terraform at a fixed version
       - uses: volcano-coffee-company/setup-terraform@v1
@@ -151,24 +176,6 @@ jobs:
         with:
           command: test
           args: -- -Z unstable-options --include-ignored
-
-  # Run the tests in the Docker image
-  docker_test:
-    name: Test in Docker
-    needs: [cargo_check]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Pull the pre-built Docker image
-        run: docker pull starshipcommand/starship-test
-      - name: Fix file permissions
-        run: chmod -R a+w .
-      - name: Build the Docker image
-        run:
-          docker build -f tests/Dockerfile --tag starshipcommand/starship-test --cache-from
-          starshipcommand/starship-test .
-      - name: Run tests in Docker
-        run: docker run --rm -v $(pwd):/src/starship starshipcommand/starship-test
 
   # Publish starship to Crates.io
   cargo_publish:

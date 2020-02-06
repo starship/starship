@@ -28,6 +28,11 @@ symbol = "➜"     # The "symbol" segment is being set to "➜"
 disabled = true
 ```
 
+You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+```shell
+export STARSHIP_CONFIG=~/.starship
+```
+
 ### Terminology
 
 **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
@@ -97,7 +102,9 @@ prompt_order = [
     "hg_branch",
     "package",
     "dotnet",
+    "elm",
     "golang",
+    "haskell",
     "java",
     "nodejs",
     "php",
@@ -110,6 +117,7 @@ prompt_order = [
     "memory_usage",
     "aws",
     "env_var",
+    "crystal",
     "cmd_duration",
     "line_break",
     "jobs",
@@ -398,6 +406,34 @@ style = "green"
 heuristic = false
 ```
 
+## Elm
+
+The `elm` module shows the currently installed version of Elm version.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
+- The current directory contains a `elm-stuff` folder
+- The current directory contains a `*.elm` files
+
+### Options
+
+| Variable   | Default       | Description                                               |
+| ---------- | ------------- | --------------------------------------------------------- |
+| `symbol`   | `"🌳 "`       | The symbol used before displaying the version of Elm. |
+| `style`    | `"bold cyan"` | The style for the module.                                 |
+| `disabled` | `false`       | Disables the `elm` module.                                |
+
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[elm]
+symbol = " "
+```
+
 ## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable.
@@ -605,6 +641,30 @@ The module will be shown if any of the following conditions are met:
 [golang]
 symbol = "🏎💨 "
 ```
+## Haskell
+
+The `haskell` module shows the currently installed version of Haskell Stack version.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `stack.yaml` file
+
+### Options
+
+| Variable   | Default       | Description                                               |
+| ---------- | ------------- | --------------------------------------------------------- |
+| `symbol`   | `"λ "`        | The symbol used before displaying the version of Haskell. |
+| `style`    | `"bold red"`  | The style for the module.                                 |
+| `disabled` | `false`       | Disables the `haskell` module.                            |
+
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[haskell]
+symbol = " "
+```
 
 ## Mercurial Branch
 
@@ -769,8 +829,8 @@ pure_msg = "pure shell"
 The `java` module shows the currently installed version of Java.
 The module will be shown if any of the following conditions are met:
 
-- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
-- The current directory contains a file with the `.java`, `.class` or `.jar` extension
+- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
+- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
 ### Options
 
@@ -826,6 +886,32 @@ threshold = -1
 symbol = " "
 separator = "/"
 style = "bold dimmed green"
+```
+
+## Crystal
+
+The `crystal` module shows the currently installed version of Crystal.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `shard.yml` file
+- The current directory contains a `.cr` file
+
+### Options
+
+| Variable   | Default      | Description                                                  |
+| ---------- | ------------ | ------------------------------------------------------------ |
+| `symbol`   | `"🔮 "`      | The symbol used before displaying the version of crystal.    |
+| `style`    | `"bold red"` | The style for the module.                                    |
+| `disabled` | `false`      | Disables the `crystal` module.                               |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[crystal]
+symbol = "✨ "
+style = "bold blue"
 ```
 
 ## NodeJS

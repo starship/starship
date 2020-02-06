@@ -10,7 +10,7 @@
       src="https://github.com/starship/starship/workflows/Main%20workflow/badge.svg?branch=master&event=push"
       alt="GitHub Actions workflow status" /></a>
   <a href="https://crates.io/crates/starship"
-    ><img src="https://img.shields.io/crates/v/starship" alt="Crates.io version" /></a>
+    ><img src="https://img.shields.io/crates/v/starship" alt="Версия Crates.io" /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://repology.org/badge/tiny-repos/starship.svg"
@@ -19,9 +19,9 @@
     <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
-      alt="Chat on Discord" /></a>
+      alt="Чат в Discord" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-63-orange" alt="All Contributors"></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-69-orange" alt="Все Участники"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
@@ -43,17 +43,20 @@
   <a href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png" alt="繁體中文" /></a>
   &nbsp;
+  <a href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Русский" /></a>
+  &nbsp;
+  <a href="https://github.com/starship/starship/blob/master/docs/de-DE/guide/README.md"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png" alt="Deutsch" /></a>
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/zh-CN"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png" alt="简体中文" /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/de"
-    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png" alt="Deutsch" /></a>
+  <a href="https://translate.starship.rs/project/starship-prompt/es"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png" alt="Español" /></a>
   &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/fr"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png" alt="Français" /></a>
-  &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/ru"
-    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Русский" /></a>
 </p>
 
 <h1></h1>
@@ -62,7 +65,7 @@
 
 <p align="center">
   <br>
-  <img alt="Starship with iTerm2 and the Snazzy theme" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" width="80%">
+  <img alt="Starship в iTerm2 с темой Snazzy" src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" width="80%">
   <br>
   <br>
 </p>
@@ -70,43 +73,46 @@
 ## 🍬 Особенности
 
 - Символ подсказки становится красным, если последняя команда завершается с ненулевым кодом
-- Текущая версия Go (`🐹< / 0>)</li>
-<li>Текущая версия Java(<code>☕< / 0>)</li>
-<li>Текущая версия Node.js (<code>⬢< / 0>)</li>
-<li>Текущая версия PHP (<code>🐘< / 0>)</li>
-<li>Текущая версия Python (<code>🐍< / 0>)</li>
-<li>Текущая версия Ruby (<code>💎< / 0>)</li>
-<li>Текущая версия Rust (<code>🦀< / 0>)</li>
-<li>Текущая версия .NET (<code>•NET`)
-- Текущая версия пакета в текущем каталоге (`📦`)
+- Текущая версия Go (`🐹`)
+- Текущая версия Haskell (`λ`)
+- Текущая версия Java (`☕`)
+- Текущая версия Node.js (`⬢`)
+- Текущая версия PHP (`🐘`)
+- Текущая версия Python (`🐍`)
+- Текущая версия Ruby (`💎`)
+- Текущая версия Rust (`🦀`)
+- Текущая версия .NET (`•NET`)
+- Текущая версия пакета в текущей директории (`📦`)
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-  - composer (PHP)
+  - композитор (PHP)
 - Текущая ветка Git и статус репозитория:
   - `=` — конфликтующие изменения
-  - `⇡` — впереди удаленной ветки
-  - `⇣` — позади удаленной ветки
-  - `⇕` — неоднозначные изменения
+  - `⇡` — впереди отслеживаемой ветви
+  - `⇣` — позади отслеживаемой ветви
+  - `⇕` — расходящиеся изменения
   - `?` — не отслеживаемые изменения
-  - `$` — отложенные изменения
+  - `$` — отложенные в тайник изменения
   - `!` — изменённые файлы
   - `+` — добавленные файлы
   - `»` — переименнованные файлы
   - `✘` — удалённые файлы
-- Текущая ветка Mercurial
+- Текущая ветвь Mercurial
 - Текущий уровень и состояние заряда батареи
-- `⇡` – зарядка
-- `⇣` – разрядка
-- `•` – полная зарядка
-- Индикатор задач в фоне (`✦`)
+  - `⇡` – зарядка
+  - `⇣` – разрядка
+  - `•` – полностью заряжено
+- Индикатор работ в фоне (`✦`)
 - Текущий кластер и пространство имён Kubernetes (`☸`)
 - Текущий профиль Amazon Web Services (AWS) (`☁`)
-- Время выполнения последней команды
+- Время исполнения последней команды
 - Значение переменной окружения
 - Обнаружение среды Nix-shell
-- Текущее имя пользователя, если оно не совпадает с именем залогиненного пользователя
+- Текущее имя пользователя, если оно не совпадает с логином
 - Необязательное текущее время в 12- или 24-часовом формате
+- Текущее рабочее пространство и версия Terraform (`💠`)
+- Текущая среда Conda (`C`)
 
 ## 🚀 Установка
 
@@ -122,10 +128,17 @@
    #### Установить последнюю версию
 
 
-   ##### Через Bash:
+   ##### Из прекомпилированного двоичного файла, с Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
+   ```
+
+
+   ##### Из источника на [crates.io](https://crates.io/):
+
+   ```sh
+   cargo install starship
    ```
 
 
@@ -290,7 +303,7 @@
     <td align="center"><a href="https://github.com/pinshan"><img src="https://avatars0.githubusercontent.com/u/7709675?v=4" width="100px;" alt="" /><br /><sub><b>pinshan</b></sub></a><br /><a href="#translation-pinshan" title="Translation">🌍</a></td>
     <td align="center"><a href="https://github.com/brianlow"><img src="https://avatars2.githubusercontent.com/u/938138?v=4" width="100px;" alt="" /><br /><sub><b>Brian Low</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=brianlow" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=brianlow" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=brianlow" title="Tests">⚠️</a></td>
     <td align="center"><a href="http://matiaskotlik.github.io"><img src="https://avatars2.githubusercontent.com/u/20362627?v=4" width="100px;" alt="" /><br /><sub><b>Matias Kotlik</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=matiaskotlik" title="Code">💻</a></td>
-    <td align="center"><a href="https://marblenix.com"><img src="https://avatars0.githubusercontent.com/u/6401427?v=4" width="100px;" alt="" /><br /><sub><b>marblenix</b></sub></a><br /><a href="#infra-marblenix" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="https://marblenix.com"><img src="https://avatars0.githubusercontent.com/u/6401427?v=4" width="100px;" alt="" /><br /><sub><b>marblenix</b></sub></a><br /><a href="#infra-marblenix" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/starship/starship/commits?author=marblenix" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=marblenix" title="Tests">⚠️</a></td>
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/weirongxu"><img src="https://avatars3.githubusercontent.com/u/1709861?v=4" width="100px;" alt="" /><br /><sub><b>Raidou</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=weirongxu" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=weirongxu" title="Tests">⚠️</a></td>
@@ -309,6 +322,14 @@
     <td align="center"><a href="https://github.com/Scotsguy"><img src="https://avatars3.githubusercontent.com/u/20385973?v=4" width="100px;" alt="" /><br /><sub><b>AppleTheGolden</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=Scotsguy" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=Scotsguy" title="Documentation">📖</a></td>
     <td align="center"><a href="http://sda.io"><img src="https://avatars1.githubusercontent.com/u/481987?v=4" width="100px;" alt="" /><br /><sub><b>Mike Sampson</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=mfs" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=mfs" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=mfs" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://sternentstehung.de"><img src="https://avatars3.githubusercontent.com/u/36575275?v=4" width="100px;" alt="" /><br /><sub><b>Dominik Braun</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=dominikbraun" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/dten"><img src="https://avatars0.githubusercontent.com/u/1019038?v=4" width="100px;" alt="" /><br /><sub><b>David Hewson</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=dten" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/gkeep"><img src="https://avatars3.githubusercontent.com/u/20600053?v=4" width="100px;" alt="" /><br /><sub><b>Gennady Koshkin</b></sub></a><br /><a href="#translation-gkeep" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://blog.brightone.space"><img src="https://avatars1.githubusercontent.com/u/12615679?v=4" width="100px;" alt="" /><br /><sub><b>Oleksii Filonenko</b></sub></a><br /><a href="#translation-filalex77" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://github.com/ivanovart"><img src="https://avatars2.githubusercontent.com/u/5867379?v=4" width="100px;" alt="" /><br /><sub><b>Artem Ivanov</b></sub></a><br /><a href="#translation-ivanovart" title="Translation">🌍</a></td>
+    <td align="center"><a href="http://www.drivendata.org"><img src="https://avatars3.githubusercontent.com/u/1799186?v=4" width="100px;" alt="" /><br /><sub><b>Peter Bull</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=pjbull" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=pjbull" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://andrewpro.me"><img src="https://avatars1.githubusercontent.com/u/8220926?v=4" width="100px;" alt="" /><br /><sub><b>Andrew Prokhorenkov</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=m0nhawk" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=m0nhawk" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=m0nhawk" title="Tests">⚠️</a> <a href="#projectManagement-m0nhawk" title="Project Management">📆</a></td>
   </tr>
 </table>
 
@@ -330,7 +351,7 @@
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Иконка ракеты Starship">
 </p>
 
 ## 📝 Лицензия

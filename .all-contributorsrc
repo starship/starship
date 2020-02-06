@@ -87,7 +87,9 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/1578005?v=4",
       "profile": "https://github.com/youssefhabri",
       "contributions": [
-        "code"
+        "code",
+        "doc",
+        "test"
       ]
     },
     {
@@ -657,6 +659,72 @@
       "profile": "https://sternentstehung.de",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "dten",
+      "name": "David Hewson",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1019038?v=4",
+      "profile": "https://github.com/dten",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "gkeep",
+      "name": "Gennady Koshkin",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/20600053?v=4",
+      "profile": "https://github.com/gkeep",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "filalex77",
+      "name": "Oleksii Filonenko",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/12615679?v=4",
+      "profile": "https://blog.brightone.space",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "ivanovart",
+      "name": "Artem Ivanov",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5867379?v=4",
+      "profile": "https://github.com/ivanovart",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "pjbull",
+      "name": "Peter Bull",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1799186?v=4",
+      "profile": "http://www.drivendata.org",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "m0nhawk",
+      "name": "Andrew Prokhorenkov",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/8220926?v=4",
+      "profile": "https://andrewpro.me",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "chirsz-ever",
+      "name": "chirsz",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/31474766?v=4",
+      "profile": "https://github.com/chirsz-ever",
+      "contributions": [
+        "translation"
       ]
     }
   ],

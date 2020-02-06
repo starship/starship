@@ -27,6 +27,11 @@ symbol = "➜"     # The "symbol" segment is being set to "➜"
 disabled = true
 ```
 
+`STARSHIP_CONFIG` 環境変数を使用して、デフォルトの`starship.toml` ファイルの場所を変更できます。
+```shell
+export STARSHIP_CONFIG=~/.starship
+```
+
 ### 用語
 
 **モジュール**: OSのコンテキスト情報に基づいて情報を提供するプロンプト内のコンポーネントです。 たとえば、現在のディレクトリがNodeJSプロジェクトである場合、「nodejs」モジュールは、現在コンピューターにインストールされているNodeJSのバージョンを表示します。
@@ -96,6 +101,7 @@ prompt_order = [
     "package",
     "dotnet",
     "golang",
+    "haskell",
     "java",
     "nodejs",
     "php",
@@ -123,13 +129,13 @@ prompt_order = [
 
 ### オプション
 
-| 変数                | デフォルト           | 説明                                                              |
-| ----------------- | --------------- | --------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | 現在のAWSプロファイルを表示する前に表示される記号です。                                   |
-| `displayed_items` | `all`           | 表示するアイテムを選択します。 指定可能な値は以下です。[`all`, `profile`, `region`]        |
-| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name. |
-| `style`           | `"bold yellow"` | モジュールのスタイルです。                                                   |
-| `disabled`        | `false`         | `aws`モジュールを無効にします。                                              |
+| 変数                | デフォルト           | 説明                                                       |
+| ----------------- | --------------- | -------------------------------------------------------- |
+| `symbol`          | `"☁️ "`         | 現在のAWSプロファイルを表示する前に表示される記号です。                            |
+| `displayed_items` | `all`           | 表示するアイテムを選択します。 指定可能な値は以下です。[`all`, `profile`, `region`] |
+| `region_aliases`  |                 | AWS名に加えて表示するリージョンのエイリアスです。                               |
+| `style`           | `"bold yellow"` | モジュールのスタイルです。                                            |
+| `disabled`        | `false`         | `aws`モジュールを無効にします。                                       |
 
 ### 設定例
 
@@ -284,7 +290,7 @@ prefix = "underwent "
 
 ::: tip
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+Note: これはconda自身の プロンプト修飾子 を抑制しません。`conda config --set changeps1 False` で実行することができます。
 
 :::
 
@@ -316,13 +322,13 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 
 ### オプション
 
-| 変数                  | デフォルト         | 説明                                                  |
-| ------------------- | ------------- | --------------------------------------------------- |
-| `truncation_length` | `3`           | 現在のディレクトリを切り捨てる親フォルダーの数です。                          |
-| `truncate_to_repo`  | `true`        | 現在いるgitリポジトリのルートに切り捨てるかどうかです。                       |
-| `prefix`            | `"in "`       | Prefix to display immediately before the directory. |
-| `style`             | `"bold cyan"` | モジュールのスタイルです。                                       |
-| `disabled`          | `false`       | `directory`モジュールを無効にします。                            |
+| 変数                  | デフォルト         | 説明                            |
+| ------------------- | ------------- | ----------------------------- |
+| `truncation_length` | `3`           | 現在のディレクトリを切り捨てる親フォルダーの数です。    |
+| `truncate_to_repo`  | `true`        | 現在いるgitリポジトリのルートに切り捨てるかどうかです。 |
+| `prefix`            | `"in "`       | ディレクトリ名の直前に表示するprefixです。      |
+| `style`             | `"bold cyan"` | モジュールのスタイルです。                 |
+| `disabled`          | `false`       | `directory`モジュールを無効にします。      |
 
 <details>
 <summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
@@ -427,7 +433,7 @@ truncation_symbol = ""
 
 ## Git コミット
 
-The `git_commit` module shows the current commit hash of the repo in your current directory.
+`git_commit`モジュールは、現在のディレクトリにあるリポジトリの現在のコミットハッシュを表示します。
 
 ::: tip
 
@@ -437,13 +443,13 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 
 ### オプション
 
-| 変数                   | デフォルト          | 説明                                               |
-| -------------------- | -------------- | ------------------------------------------------ |
-| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
-| `prefix`             | `"("`          | Prefix to display immediately before git commit. |
-| `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
-| `style`              | `"bold green"` | モジュールのスタイルです。                                    |
-| `disabled`           | `true`         | Disables the `git_commit` module.                |
+| 変数                   | デフォルト          | 説明                        |
+| -------------------- | -------------- | ------------------------- |
+| `commit_hash_length` | `7`            | 表示されるgitコミットハッシュの長さです。    |
+| `prefix`             | `"("`          | このモジュールの先頭に表示される文字列です。    |
+| `suffix`             | `")"`          | このモジュールの末尾に表示される文字列です。    |
+| `style`              | `"bold green"` | モジュールのスタイルです。             |
+| `disabled`           | `true`         | `git_commit`モジュールを無効にします。 |
 
 ### 設定例
 
@@ -500,6 +506,7 @@ cherry_pick = "🍒 PICKING"
 | `untracked`        | `"?"`                      | 作業ディレクトリに追跡されていないファイルがあります。     |
 | `untracked_count`  | [link](#git-status-counts) | 追跡されていないファイルの数を表示およびスタイル設定します。  |
 | `stashed`          | `"$"`                      | ローカルリポジトリ用のスタッシュが存在します。         |
+| `stashed_count`    | [link](#git-status-counts) | スタッシュの数の表示およびスタイル設定します。         |
 | `modified`         | `"!"`                      | 作業ディレクトリにファイルの変更があります。          |
 | `modified_count`   | [link](#git-status-counts) | 変更されたファイルの数を表示およびスタイル設定します。     |
 | `staged`           | `"+"`                      | 新しいファイルがステージング領域に追加されました。       |
@@ -569,6 +576,29 @@ deleted = "🗑"
 
 [golang]
 symbol = "🏎💨 "
+```
+## Haskell
+
+The `haskell` module shows the currently installed version of Haskell Stack version. 次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- カレントディレクトリに`stack.yaml`ファイルが含まれている
+
+### オプション
+
+| 変数         | デフォルト        | 説明                                                        |
+| ---------- | ------------ | --------------------------------------------------------- |
+| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
+| `style`    | `"bold red"` | モジュールのスタイルです。                                             |
+| `disabled` | `false`      | Disables the `haskell` module.                            |
+
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[haskell]
+symbol = "λx.x "
 ```
 
 ## Mercurial ブランチ
@@ -725,8 +755,8 @@ pure_msg = "pure shell"
 
 `java`モジュールは、現在インストールされているJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
-- カレントディレクトリに拡張子が`.java`, `.class`, もしくは`.jar`のファイルが含まれている
+- カレントディレクトリに`pom.xml`, `build.gradle.kts`,もしくは`build.sbt`が含まれている
+- カレントディレクトリに拡張子が`.java`, `.class`, `.gradle`, もしくは`.jar`のファイルが含まれている
 
 ### オプション
 
@@ -760,15 +790,15 @@ symbol = "🌟 "
 
 ### オプション
 
-| 変数                | デフォルト                 | 説明                                                            |
-| ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | メモリ使用量を割合で表示します。                                              |
-| `show_swap`       | `true`                | 合計スワップがゼロ以外の場合、スワップ使用量を表示します。                                 |
-| `threshold`       | `75`                  | この閾値を超えない限り、メモリ使用率は表示されません。                                   |
-| `symbol`          | `"🐏 "`                | メモリ使用率を表示する前に使用される記号です。                                       |
-| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | モジュールのスタイルです。                                                 |
-| `disabled`        | `true`                | `memory_usage`モジュールを無効にします。                                   |
+| 変数                | デフォルト                 | 説明                            |
+| ----------------- | --------------------- | ----------------------------- |
+| `show_percentage` | `false`               | メモリ使用量を割合で表示します。              |
+| `show_swap`       | `true`                | 合計スワップがゼロ以外の場合、スワップ使用量を表示します。 |
+| `threshold`       | `75`                  | この閾値を超えない限り、メモリ使用率は表示されません。   |
+| `symbol`          | `"🐏 "`                | メモリ使用率を表示する前に使用される記号です。       |
+| `separator`       | `" | "`               | RAMとスワップの使用を分離する記号またはテキストです。  |
+| `style`           | `"bold dimmed white"` | モジュールのスタイルです。                 |
+| `disabled`        | `true`                | `memory_usage`モジュールを無効にします。   |
 
 ### 設定例
 
@@ -846,11 +876,11 @@ symbol = "🎁 "
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                                                    |
-| ---------- | ------------ | ----------------------------------------------------- |
-| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
-| `style`    | `"bold red"` | モジュールのスタイルです。                                         |
-| `disabled` | `false`      | Disables the `php` module.                            |
+| 変数         | デフォルト        | 説明                         |
+| ---------- | ------------ | -------------------------- |
+| `symbol`   | `"🐘 "`       | PHPのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold red"` | モジュールのスタイルです。              |
+| `disabled` | `false`      | `php`モジュールを無効にします。         |
 
 ### 設定例
 

@@ -30,7 +30,9 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 // ↓ Toolchain version modules ↓
                 // (Let's keep these sorted alphabetically)
                 "dotnet",
+                "elm",
                 "golang",
+                "haskell",
                 "java",
                 "nodejs",
                 "php",

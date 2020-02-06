@@ -1,25 +1,25 @@
 ---
 home: true
 heroImage: /logo.svg
+heroText:
+tagline: The cross-shell prompt for astronauts
 actionText: Get Started →
-actionLink: /ja-JP/guide/
+actionLink: ./guide/
+features:
+  - 
+    title: 互換性優先
+    details: 一般的なほとんどのOSの一般的なほとんどのシェル上で動作します。 あらゆるところで使用してください！
+  - 
+    title: Rust 製
+    details: Rust の最高レベルの速度と安全性を用いることで、可能な限り高速かつ信頼性を高くしています。
+  - 
+    title: カスタマイズ可能
+    details: それぞれの細かい点は好みにカスタマイズが出来るため、ミニマルにも多機能にも好きなようにプロンプトを設定することができます。
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+#Used for the description meta tag, for SEO
+metaTitle: "Starship: Cross-Shell Prompt"
+description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell.
 ---
-
-<div class="features">
-  <div class="feature">
-    <h2>互換性優先</h2>
-    <p>一般的なほとんどのOSの一般的なほとんどのシェル上で動作します。 あらゆるところで使用してください！</p>
-  </div>
-  <div class="feature">
-    <h2>Rust 製</h2>
-    <p>Rust の最高レベルの速度と安全性を用いることで、可能な限り高速かつ信頼性を高くしています。</p>
-  </div>
-  <div class="feature">
-    <h2>カスタマイズ可能</h2>
-    <p>それぞれの細かい点は好みにカスタマイズが出来るため、ミニマルにも多機能にも好きなようにプロンプトを設定することができます。</p>
-  </div>
-</div>
 
 <div class="center">
   <video class="demo-video" muted autoplay loop playsinline>
@@ -33,24 +33,24 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 1. **Starship** のバイナリをインストール
 
 
-   #### Install Latest Version
+   #### 最新版のインストール
 
-   With Shell:
+   Shellを利用する
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Install via Package Manager
+   #### パッケージマネージャー経由でインストール
 
-   With [Homebrew](https://brew.sh/):
+   [ Homebrew ](https://brew.sh/)の場合：
 
    ```sh
    brew install starship
    ```
 
-    With [Scoop](https://scoop.sh):
+   [ Scoop ](https://scoop.sh)の場合：
 
    ```powershell
    scoop install starship
@@ -105,7 +105,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   `~/.config/ion/initrc `の最後に次を追加してください
 
    ```sh
    # ~/.config/ion/initrc

@@ -45,6 +45,11 @@ impl Segment {
         self
     }
 
+    /// Gets the value of the segment.
+    pub fn get_value(&self) -> &str {
+        &self.value
+    }
+
     // Returns the ANSIString of the segment value, not including its prefix and suffix
     pub fn ansi_string(&self) -> ANSIString {
         match self.style {

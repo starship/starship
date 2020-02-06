@@ -27,6 +27,11 @@ symbol = "➜"     #  設定 "symbol" 區段為 "➜"
 disabled = true
 ```
 
+You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+```shell
+export STARSHIP_CONFIG=~/.starship
+```
+
 ### 術語
 
 **模組 (Module)**： 提示字元中的一個元件，基於你的作業系統提供的背景資訊來提供訊息。 舉例來說，如果你現在的資料夾是一個 NodeJS 專案，"nodejs" 模組會顯示出現在安裝在你的電腦上的 NodeJS 版本。
@@ -96,6 +101,7 @@ prompt_order = [
     "package",
     "dotnet",
     "golang",
+    "haskell",
     "java",
     "nodejs",
     "php",
@@ -499,6 +505,7 @@ cherry_pick = "🍒 PICKING"
 | `untracked`        | `"?"`                    | 工作資料夾中有沒有追蹤的檔案。                                  |
 | `untracked_count`  | [連結](#git-status-counts) | Show and style the number of untracked files.    |
 | `stashed`          | `"$"`                    | 本地儲存庫有 stash。                                    |
+| `stashed_count`    | [連結](#git-status-counts) | Show and style the number of stashes.            |
 | `modified`         | `"!"`                    | 工作資料夾中有修改過的檔案。                                   |
 | `modified_count`   | [連結](#git-status-counts) | Show and style the number of modified files.     |
 | `staged`           | `"+"`                    | 一個新檔案被加入了暫存區 (staging area)。                     |
@@ -568,6 +575,29 @@ deleted = "🗑"
 
 [golang]
 symbol = "🏎💨 "
+```
+## Haskell
+
+The `haskell` module shows the currently installed version of Haskell Stack version. 這個模組在下列其中一個條件達成時顯示：
+
+- 目前資料夾中有一個 `stack.yaml` 檔案
+
+### 選項
+
+| 變數         | 預設           | 說明                                                        |
+| ---------- | ------------ | --------------------------------------------------------- |
+| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
+| `style`    | `"bold red"` | 這個模組的風格。                                                  |
+| `disabled` | `false`      | Disables the `haskell` module.                            |
+
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[haskell]
+symbol = "λx.x "
 ```
 
 ## Mercurial Branch
@@ -724,8 +754,8 @@ pure_msg = "pure shell"
 
 `java` 模組顯示現在安裝的 Java 版本。 這個模組在下列其中一個條件達成時顯示：
 
-- The current directory contains a `pom.xml`, `build.gradle`, `build.gradle.kts` or `build.sbt` file
-- 現在資料夾中包含一個檔案具有 `.java`、`.class` 或 `.jar` 副檔名
+- 現在資料夾中包含一個 `pom.xml`、`build.gradle.kts` 或 `build.sbt` 檔案
+- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
 ### 選項
 
@@ -839,7 +869,7 @@ symbol = "🎁 "
 
 The `php` module shows the currently installed version of PHP. 這個模組在下列其中一個條件達成時顯示：
 
-- 現在資料夾中含有一個 `composer.json` 檔案
+- 現在資料夾中包含一個 `composer.json` 檔案
 - The current directory contains a `.php` file
 
 ### 選項

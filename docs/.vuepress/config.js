@@ -5,8 +5,23 @@ module.exports = {
       title: "Starship",
       description: "The cross-shell prompt for astronauts"
     },
+    "/de-DE/": {
+      lang: "de-DE",
+      title: "Starship",
+      description: "The cross-shell prompt for astronauts"
+    },
+    "/ru-RU/": {
+      lang: "ru-RU",
+      title: "Starship",
+      description: "The cross-shell prompt for astronauts"
+    },
     "/ja-JP/": {
       lang: "ja-JP",
+      title: "Starship",
+      description: "The cross-shell prompt for astronauts"
+    },
+    "/zh-CN/": {
+      lang: "zh-CN",
       title: "Starship",
       description: "The cross-shell prompt for astronauts"
     },
@@ -14,12 +29,11 @@ module.exports = {
       lang: "zh-TW",
       title: "Starship",
       description: "The cross-shell prompt for astronauts"
-    }
+    },
   },
   // prettier-ignore
   head: [
     ["link", { rel: "icon", href: "/icon.png" }],
-    ["meta", { name: "description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell." }],
     ["meta", { property: "og:title", content: "Starship: Cross-Shell Prompt" }],
     ["meta", { property: "og:description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell."}],
     ["meta", { property: "og:type", content: "website" }],
@@ -31,6 +45,7 @@ module.exports = {
     ["meta", { name: "twitter:image", content: "https://starship.rs/icon.png"}],
     ["meta", { name: "twitter:alt", content: "Starship: Cross-Shell Prompt"}],
   ],
+  theme: "default-prefers-color-scheme",
   themeConfig: {
     logo: "/icon.png",
     // the GitHub repo path
@@ -61,6 +76,44 @@ module.exports = {
           ["/presets/", "Presets"]
         ]
       },
+      "/de-DE/": {
+        // text for the language dropdown
+        selectText: "Sprachen",
+        // label for this locale in the language dropdown
+        label: "Deutsch",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "Bearbeite diese Seite auf GitHub",
+        // Custom navbar values
+        nav: [{ text: "Konfiguration", link: "/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/de-DE/",
+          ["/de-DE/guide/", "Anleitung"],
+          ["/de-DE/config/", "Konfiguration"],
+          ["/de-DE/advanced-config/", "Erweiterte Konfiguration"],
+          ["/de-DE/faq/", "Häufig gestellte Fragen"],
+          ["/de-DE/presets/", "Konfigurations-Beispiele"]
+        ]
+      },
+      "/ru-RU/": {
+        // text for the language dropdown
+        selectText: "Языки",
+        // label for this locale in the language dropdown
+        label: "Русский",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "Редактировать эту страницу на GitHub",
+        // Custom navbar values
+        nav: [{ text: "Настройка", link: "/ru-RU/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/ru-RU/",
+          ["/ru-RU/guide/", "Руководство"],
+          ["/ru-RU/config/", "Настройка"],
+          ["/ru-RU/advanced-config/", "Расширенная Настройка"],
+          ["/ru-RU/faq/", "Часто Задаваемые Вопросы"],
+          ["/ru-RU/presets/", "Предустановки"]
+        ]
+      },
       "/ja-JP/": {
         // text for the language dropdown
         selectText: "言語",
@@ -75,7 +128,9 @@ module.exports = {
           "/ja-JP/",
           ["/ja-JP/guide/", "ガイド"],
           ["/ja-JP/config/", "設定"],
-          ["/ja-JP/advanced-config/", "高度な設定"]
+          ["/ja-JP/advanced-config/", "高度な設定"],
+          ["/ru-RU/faq/", "FAQ"],
+          ["/ru-RU/presets/", "準備するもの"]
         ]
       },
       "/zh-TW/": {
@@ -94,7 +149,26 @@ module.exports = {
           ["/zh-TW/config/", "設定"],
           ["/zh-TW/advanced-config/", "進階設定"]
         ]
-      }
+      },
+      "/zh-CN/": {
+        // text for the language dropdown
+        selectText: "语言",
+        // label for this locale in the language dropdown
+        label: "简体中文",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "在 GitHub 上修改此页",
+        // Custom navbar values
+        nav: [{ text: "配置", link: "/zh-CN/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/zh-CN/",
+          ["/zh-CN/guide/", "指南"],
+          ["/zh-CN/config/", "配置"],
+          ["/zh-CN/advanced-config/", "高级配置"],
+          ["/zh-CN/faq/", "常见问题"],
+          ["/zh-CN/presets/", "社区配置分享"]
+        ]
+      },
     }
   },
   plugins: [

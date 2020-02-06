@@ -21,7 +21,7 @@
       src="https://img.shields.io/discord/567163873606500352?logo=discord"
       alt="Chat on Discord" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-63-orange" alt="All Contributors"></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-69-orange" alt="All Contributors"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
@@ -43,17 +43,20 @@
   <a href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png" alt="繁體中文" /></a>
   &nbsp;
+  <a href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Русский" /></a>
+  &nbsp;
+  <a href="https://github.com/starship/starship/blob/master/docs/de-DE/guide/README.md"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png" alt="Deutsch" /></a>
+  &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/zh-CN"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png" alt="简体中文" /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/de"
-    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png" alt="Deutsch" /></a>
+  <a href="https://translate.starship.rs/project/starship-prompt/es"
+    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png" alt="Español" /></a>
   &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/fr"
     ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png" alt="Français" /></a>
-  &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/ru"
-    ><img height="20" src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png" alt="Русский" /></a>
 </p>
 
 <h1></h1>
@@ -70,14 +73,15 @@
 ## 🍬 機能
 
 - 最後のコマンドがゼロ以外のコードで終了すると、プロンプト文字が赤に変わります
-- 現在の Go バージョン (`🐹`)
+- 現在の Go のバージョン (`🐹`)
+- Current Haskell version (`λ`)
 - 現在の Java のバージョン (`☕`)
 - 現在の Node.js のバージョン (`⬢`)
-- Current PHP version (`🐘`)
+- 現在の PHP のバージョン (`🐘`)
 - 現在の Python のバージョン (`🐍`)
 - 現在の Ruby のバージョン (`💎`)
 - 現在の Rust のバージョン (`🦀`)
-- Current .NET version (`•NET`)
+- 現在の .NET のバージョン (`•NET`)
 - カレントディレクトリにある現在のパッケージバージョン(`📦`)
   - npm (Node.js)
   - cargo (Rust)
@@ -94,19 +98,21 @@
   - `+` — 追加されたファイル
   - `»` — 名前が変更されたファイル
   - `✘` — 削除されたファイル
-- Current Mercurial branch
+- 現在の Mercurial ブランチ
 - 現在のバッテリー残量と状態
-- `⇡` – charging
-- `⇣` – discharging
-- `•` – fully charged
+  - `⇡` – 充電中
+  - `⇣` – 放電中
+  - `•` – 満タン
 - バックグラウンドジョブのインジケーター (`✦`)
 - 現在のKubernetesクラスタとネームスペース (`☸`)
-- Current Amazon Web Services (AWS) profile (`☁️`)
-- Execution time of the last command
-- Custom environment variable value
-- Nix-shell の環境検出
-- ログインユーザーと異なる場合にユーザー名を表示する
-- Optional current time in 12/24hr format
+- 現在のAmazon Web Services (AWS) プロファイル(`☁️</ 0>)</li>
+<li>最後のコマンドの実行時間</li>
+<li>カスタム環境変数の値</li>
+<li>Nix-shell の環境検出</li>
+<li>ログインユーザーと異なる場合にユーザー名を表示する</li>
+<li>12/24時間形式のオプションの現在時刻</li>
+<li>現在の Terraform のワークスペースとバージョン (<code>💠`)
+- 現在の Conda の環境 (`C`)
 
 ## 🚀 インストール
 
@@ -119,27 +125,34 @@
 1. **Starship** のバイナリをインストール
 
 
-   #### Install Latest Version
+   #### 最新版のインストール
 
 
-   ##### With Shell:
+   ##### ビルド済みのバイナリをインストール
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Install via Package Manager
+   ##### [crates.io](https://crates.io/)からソースをインストール
+
+   ```sh
+   cargo install starship
+   ```
 
 
-   ##### With [Homebrew](https://brew.sh/):
+   #### パッケージマネージャー経由でインストール
+
+
+   ##### [ Homebrew ](https://brew.sh/)の場合：
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### [ Scoop ](https://scoop.sh)の場合：
 
    ```powershell
    scoop install starship
@@ -194,7 +207,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   `~/.config/ion/initrc `の最後に次を追加してください
 
    ```sh
    # ~/.config/ion/initrc
@@ -290,7 +303,7 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
     <td align="center"><a href="https://github.com/pinshan"><img src="https://avatars0.githubusercontent.com/u/7709675?v=4" width="100px;" alt="" /><br /><sub><b>pinshan</b></sub></a><br /><a href="#translation-pinshan" title="Translation">🌍</a></td>
     <td align="center"><a href="https://github.com/brianlow"><img src="https://avatars2.githubusercontent.com/u/938138?v=4" width="100px;" alt="" /><br /><sub><b>Brian Low</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=brianlow" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=brianlow" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=brianlow" title="Tests">⚠️</a></td>
     <td align="center"><a href="http://matiaskotlik.github.io"><img src="https://avatars2.githubusercontent.com/u/20362627?v=4" width="100px;" alt="" /><br /><sub><b>Matias Kotlik</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=matiaskotlik" title="Code">💻</a></td>
-    <td align="center"><a href="https://marblenix.com"><img src="https://avatars0.githubusercontent.com/u/6401427?v=4" width="100px;" alt="" /><br /><sub><b>marblenix</b></sub></a><br /><a href="#infra-marblenix" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="https://marblenix.com"><img src="https://avatars0.githubusercontent.com/u/6401427?v=4" width="100px;" alt="" /><br /><sub><b>marblenix</b></sub></a><br /><a href="#infra-marblenix" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/starship/starship/commits?author=marblenix" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=marblenix" title="Tests">⚠️</a></td>
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/weirongxu"><img src="https://avatars3.githubusercontent.com/u/1709861?v=4" width="100px;" alt="" /><br /><sub><b>Raidou</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=weirongxu" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=weirongxu" title="Tests">⚠️</a></td>
@@ -309,6 +322,14 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
     <td align="center"><a href="https://github.com/Scotsguy"><img src="https://avatars3.githubusercontent.com/u/20385973?v=4" width="100px;" alt="" /><br /><sub><b>AppleTheGolden</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=Scotsguy" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=Scotsguy" title="Documentation">📖</a></td>
     <td align="center"><a href="http://sda.io"><img src="https://avatars1.githubusercontent.com/u/481987?v=4" width="100px;" alt="" /><br /><sub><b>Mike Sampson</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=mfs" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=mfs" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=mfs" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://sternentstehung.de"><img src="https://avatars3.githubusercontent.com/u/36575275?v=4" width="100px;" alt="" /><br /><sub><b>Dominik Braun</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=dominikbraun" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/dten"><img src="https://avatars0.githubusercontent.com/u/1019038?v=4" width="100px;" alt="" /><br /><sub><b>David Hewson</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=dten" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/gkeep"><img src="https://avatars3.githubusercontent.com/u/20600053?v=4" width="100px;" alt="" /><br /><sub><b>Gennady Koshkin</b></sub></a><br /><a href="#translation-gkeep" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://blog.brightone.space"><img src="https://avatars1.githubusercontent.com/u/12615679?v=4" width="100px;" alt="" /><br /><sub><b>Oleksii Filonenko</b></sub></a><br /><a href="#translation-filalex77" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://github.com/ivanovart"><img src="https://avatars2.githubusercontent.com/u/5867379?v=4" width="100px;" alt="" /><br /><sub><b>Artem Ivanov</b></sub></a><br /><a href="#translation-ivanovart" title="Translation">🌍</a></td>
+    <td align="center"><a href="http://www.drivendata.org"><img src="https://avatars3.githubusercontent.com/u/1799186?v=4" width="100px;" alt="" /><br /><sub><b>Peter Bull</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=pjbull" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=pjbull" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://andrewpro.me"><img src="https://avatars1.githubusercontent.com/u/8220926?v=4" width="100px;" alt="" /><br /><sub><b>Andrew Prokhorenkov</b></sub></a><br /><a href="https://github.com/starship/starship/commits?author=m0nhawk" title="Code">💻</a> <a href="https://github.com/starship/starship/commits?author=m0nhawk" title="Documentation">📖</a> <a href="https://github.com/starship/starship/commits?author=m0nhawk" title="Tests">⚠️</a> <a href="#projectManagement-m0nhawk" title="Project Management">📆</a></td>
   </tr>
 </table>
 
