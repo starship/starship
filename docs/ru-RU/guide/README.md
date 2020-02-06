@@ -73,15 +73,16 @@
 ## 🍬 Особенности
 
 - Символ подсказки становится красным, если последняя команда завершается с ненулевым кодом
-- Текущая версия Go (`🐹`)
-- Текущая версия Haskell (`λ`)
-- Текущая версия Java (`☕`)
-- Текущая версия Node.js (`⬢`)
-- Текущая версия PHP (`🐘`)
-- Текущая версия Python (`🐍`)
-- Текущая версия Ruby (`💎`)
-- Текущая версия Rust (`🦀`)
-- Текущая версия .NET (`•NET`)
+- Current Elm version (`🌳`)
+- Current Go version (`🐹`)
+- Current Haskell version (`λ`)
+- Current Java version(`☕`)
+- Current Node.js version(`⬢`)
+- Current PHP version (`🐘`)
+- Current Python version (`🐍`)
+- Current Ruby version (`💎`)
+- Current Rust version (`🦀`)
+- Current .NET version (`•NET`)
 - Current Crystal version (`🔮`).
 - Current version of package in current directory (`📦`)
   - npm (Node.js)
