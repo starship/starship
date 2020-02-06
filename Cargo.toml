@@ -13,7 +13,7 @@ categories = ["command-line-utilities"]
 description = """
 The cross-shell prompt for astronauts. ☄🌌️
 """
-exclude = ["docs/**/*"]
+exclude = ["docs/**/*", "media/**/*"]
 
 [badges]
 is-it-maintained-issue-resolution = { repository = "starship/starship" }
