@@ -73,14 +73,15 @@
 ## 🍬 特色
 
 - 如果最近一個指令結束時回傳非零的代碼，提示字元將轉成紅色
-- 現在的 Go 版本 (`🐹`)
+- Current Elm version (`🌳`)
+- Current Go version (`🐹`)
 - Current Haskell version (`λ`)
-- 現在的 Java 版本 (`☕`)
-- 現在的 Node.js 版本 (`⬢`)
+- Current Java version(`☕`)
+- Current Node.js version(`⬢`)
 - Current PHP version (`🐘`)
-- 現在的 Python 版本 (`🐍`)
-- 現在的 Ruby 版本 (`💎`)
-- 現在的 Rust 版本 (`🦀`)
+- Current Python version (`🐍`)
+- Current Ruby version (`💎`)
+- Current Rust version (`🦀`)
 - Current .NET version (`•NET`)
 - Current Crystal version (`🔮`).
 - Current version of package in current directory (`📦`)
