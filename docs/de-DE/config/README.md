@@ -100,6 +100,7 @@ prompt_order = [
     "hg_branch",
     "package",
     "dotnet",
+    "elm",
     "golang",
     "haskell",
     "java",
@@ -377,7 +378,34 @@ style = "green"
 heuristic = false
 ```
 
-## Umgebungsvariablen
+## Elm
+
+The `elm` module shows the currently installed version of Elm version. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
+- The current directory contains a `elm-stuff` folder
+- The current directory contains a `*.elm` files
+
+### Optionen
+
+| Variable   | Standardwert  | Beschreibung                                          |
+| ---------- | ------------- | ----------------------------------------------------- |
+| `symbol`   | `"🌳 "`        | The symbol used before displaying the version of Elm. |
+| `style`    | `"bold cyan"` | The style for the module.                             |
+| `disabled` | `false`       | Disables the `elm` module.                            |
+
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[elm]
+symbol = " "
+```
+
+## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
@@ -386,15 +414,15 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Optionen
 
-| Variable   | Standardwert     | Beschreibung                                                                             |
-| ---------- | ---------------- | ---------------------------------------------------------------------------------------- |
-| `symbol`   |                  | Das Symbol, das vor der Anzeige der Variable verwendet wird.                             |
-| `variable` |                  | Die anzuzeigende Umgebungsvariable.                                                      |
-| `default`  |                  | Der Standardwert, der angezeigt wird, wenn die ausgewählte Variable nicht definiert ist. |
-| `prefix`   | `""`             | Präfix der vor der Variable angezeigt wird.                                              |
-| `suffix`   | `""`             | Suffix der nach der Variable angezeigt wird.                                             |
-| `style`    | `"dimmed black"` | Stil für dieses Modul.                                                                   |
-| `disabled` | `false`          | Deaktiviert das `env_var`-Modul.                                                         |
+| Variable   | Standardwert     | Beschreibung                                                                 |
+| ---------- | ---------------- | ---------------------------------------------------------------------------- |
+| `symbol`   |                  | The symbol used before displaying the variable value.                        |
+| `variable` |                  | The environment variable to be displayed.                                    |
+| `default`  |                  | The default value to be displayed when the selected variable is not defined. |
+| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
+| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
+| `style`    | `"dimmed black"` | The style for the module.                                                    |
+| `disabled` | `false`          | Disables the `env_var` module.                                               |
 
 ### Beispiel
 
@@ -406,19 +434,19 @@ variable = "SHELL"
 default = "unknown shell"
 ```
 
-## Git-Branch
+## Git Branch
 
-Das `git_branch`-Modul zeigt den aktiven Git-Branch des Repositories im aktuellen Verzeichnis an.
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### Optionen
 
-| Variable            | Standardwert    | Beschreibung                                                                                           |
-| ------------------- | --------------- | ------------------------------------------------------------------------------------------------------ |
-| `symbol`            | `" "`          | Das Symbol, das vor dem Branchnamen des Git-Repositorys in Ihrem aktuellen Verzeichnis angezeigt wird. |
-| `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                                  |
-| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol                  |
-| `style`             | `"bold purple"` | Stil für dieses Modul.                                                                                 |
-| `disabled`          | `false`         | Deaktiviert das `git_branch`-Modul.                                                                    |
+| Variable            | Standardwert    | Beschreibung                                                                          |
+| ------------------- | --------------- | ------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
+| `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
+| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
+| `style`             | `"bold purple"` | Stil für dieses Modul.                                                                |
+| `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
 
 ### Beispiel
 
@@ -437,7 +465,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -448,7 +476,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
 | `prefix`             | `"("`          | Prefix to display immediately before git commit. |
 | `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
-| `style`              | `"bold green"` | Stil für dieses Modul.                           |
+| `style`              | `"bold green"` | The style for the module.                        |
 | `disabled`           | `true`         | Disables the `git_commit` module.                |
 
 ### Beispiel
@@ -461,7 +489,7 @@ disabled = false
 commit_hash_length = 4
 ```
 
-## Git-Zustand
+## Git State
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
@@ -477,8 +505,8 @@ The `git_state` module will show in directories which are part of a git reposito
 | `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
 | `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
 | `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
-| `style`            | `"bold yellow"`    | Stil für dieses Modul.                                                                                           |
-| `disabled`         | `false`            | Deaktiviert das `git_state`-Modul.                                                                               |
+| `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
+| `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
 ### Beispiel
 
@@ -490,7 +518,7 @@ progress_divider = " of "
 cherry_pick = "🍒 PICKING"
 ```
 
-## Git-Status
+## Git Status
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
@@ -518,8 +546,8 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
 | `prefix`           | `[`                        | Prefix to display immediately before git status.        |
 | `suffix`           | `]`                        | Suffix to display immediately after git status.         |
-| `style`            | `"bold red"`               | Stil für dieses Modul.                                  |
-| `disabled`         | `false`                    | Deaktiviert das `git_status`-Modul.                     |
+| `style`            | `"bold red"`               | The style for the module.                               |
+| `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
 #### Git Status Counts
 
@@ -551,23 +579,23 @@ deleted = "🗑"
 
 ## Golang
 
-Das `golang`-Modul zeigt die aktuell installierte Version von Golang. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `golang` module shows the currently installed version of Golang. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
-- Das aktuelle Verzeichnis enthält eine `go.mod`-Datei
-- Das aktuelle Verzeichnis enthält eine `go.sum`-Datei
-- Das aktuelle Verzeichnis enthält eine `glide.yaml`-Datei
-- Das aktuelle Verzeichnis enthält eine `Gopkg.yml`-Datei
-- Das aktuelle Verzeichnis enthält eine `Gopkg.lock`-Datei
-- Das aktuelle Verzeichnis enthält ein `Godeps`-Verzeichnis
-- Das aktuelle Verzeichnis enthält eine Datei mit der `.go`-Erweiterung
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
 ### Optionen
 
-| Variable   | Standardwert  | Beschreibung                                      |
-| ---------- | ------------- | ------------------------------------------------- |
-| `symbol`   | `"🐹 "`        | Symbol das vor der Golang-Version angezeigt wird. |
-| `style`    | `"bold cyan"` | Stil für dieses Modul.                            |
-| `disabled` | `false`       | Deaktiviert das `golang`-Modul.                   |
+| Variable   | Standardwert  | Beschreibung                                             |
+| ---------- | ------------- | -------------------------------------------------------- |
+| `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
+| `style`    | `"bold cyan"` | Stil für dieses Modul.                                   |
+| `disabled` | `false`       | Disables the `golang` module.                            |
 
 ### Beispiel
 
@@ -579,16 +607,16 @@ symbol = "🏎💨 "
 ```
 ## Haskell
 
-The `haskell` module shows the currently installed version of Haskell Stack version. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `haskell` module shows the currently installed version of Haskell Stack version. The module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `stack.yaml`-Datei
+- The current directory contains a `stack.yaml` file
 
 ### Optionen
 
 | Variable   | Standardwert | Beschreibung                                              |
 | ---------- | ------------ | --------------------------------------------------------- |
 | `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold red"` | Stil für dieses Modul.                                    |
+| `style`    | `"bold red"` | The style for the module.                                 |
 | `disabled` | `false`      | Disables the `haskell` module.                            |
 
 
@@ -598,7 +626,7 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 # ~/.config/starship.toml
 
 [haskell]
-symbol = "λx.x "
+symbol = " "
 ```
 
 ## Mercurial Branch
@@ -612,7 +640,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
-| `style`             | `"bold purple"` | Stil für dieses Modul.                                                                       |
+| `style`             | `"bold purple"` | The style for the module.                                                                    |
 | `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
 
 ### Beispiel
@@ -628,18 +656,18 @@ truncation_symbol = ""
 
 ## Hostname
 
-Das `hostname`-Modul zeigt den Hostnamen des Systems an.
+The `hostname` module shows the system hostname.
 
 ### Optionen
 
 | Variable   | Standardwert          | Beschreibung                                                                                                                         |
 | ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                | Zeigt den Hostnamen nur, wenn via SSH-Sitzung verbunden.                                                                             |
-| `prefix`   | `""`                  | Prefix der unmittelbar vor dem Hostnamen angezeigt wird.                                                                             |
-| `suffix`   | `""`                  | Suffix der unmittelbar nach dem Hostnamen angezeigt wird.                                                                            |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
 | `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `style`    | `"bold dimmed green"` | Stil für dieses Modul.                                                                                                               |
-| `disabled` | `false`               | Deaktiviert das `hostname`-Modul.                                                                                                    |
+| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
+| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### Beispiel
 
@@ -648,8 +676,8 @@ Das `hostname`-Modul zeigt den Hostnamen des Systems an.
 
 [hostname]
 ssh_only = false
-prefix = "10218;"
-suffix = " 10219;"
+prefix = "⟪"
+suffix = "⟫"
 trim_at = ".companyname.com"
 disabled = false
 ```
@@ -660,12 +688,12 @@ The `jobs` module shows the current number of jobs running. The module will be s
 
 ### Optionen
 
-| Variable    | Standardwert  | Beschreibung                                                                     |
-| ----------- | ------------- | -------------------------------------------------------------------------------- |
-| `symbol`    | `"✦"`         | Symbol das vor der Anzahl der Jobs angezeigt wird.                               |
-| `threshold` | `1`           | Zeigt die Anzahl der Jobs wenn der angegebene Schwellenwert überschritten wurde. |
-| `style`     | `"bold blue"` | Stil für dieses Modul.                                                           |
-| `disabled`  | `false`       | Deaktiviert das `jobs`-Modul.                                                    |
+| Variable    | Standardwert  | Beschreibung                                          |
+| ----------- | ------------- | ----------------------------------------------------- |
+| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
+| `threshold` | `1`           | Show number of jobs if exceeded.                      |
+| `style`     | `"bold blue"` | The style for the module.                             |
+| `disabled`  | `false`       | Disables the `jobs` module.                           |
 
 ### Beispiel
 
@@ -683,17 +711,17 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
 ### Optionen
 
-| Variable   | Standardwert  | Beschreibung                                           |
-| ---------- | ------------- | ------------------------------------------------------ |
-| `symbol`   | `"☸ "`        | Symbol das vor der Cluster-Information angezeigt wird. |
-| `style`    | `"bold blue"` | Stil für dieses Modul.                                 |
-| `disabled` | `true`        | Deaktiviert das `kubernetes`-Modul                     |
+| Variable   | Standardwert  | Beschreibung                                        |
+| ---------- | ------------- | --------------------------------------------------- |
+| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
+| `style`    | `"bold blue"` | The style for the module.                           |
+| `disabled` | `true`        | Disables the `kubernetes` module                    |
 
 ### Beispiel
 
@@ -706,15 +734,15 @@ style = "dim green"
 disabled = false
 ```
 
-## Zeilenumbruch
+## Line Break
 
-Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
+The `line_break` module separates the prompt into two lines.
 
 ### Optionen
 
-| Variable   | Standardwert | Beschreibung                                                           |
-| ---------- | ------------ | ---------------------------------------------------------------------- |
-| `disabled` | `false`      | Deaktiviert das `line_break`-Modul, wodurch der Prompt einzeilig wird. |
+| Variable   | Standardwert | Beschreibung                                                       |
+| ---------- | ------------ | ------------------------------------------------------------------ |
+| `disabled` | `false`      | Disables the `line_break` module, making the prompt a single line. |
 
 ### Beispiel
 
@@ -725,19 +753,19 @@ Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
 disabled = true
 ```
 
-## Nix-Shell
+## Nix-shell
 
-Das `nix_shell`-Modul zeigt die nix-shell Umgebung an. Das Modul wird angezeigt, wenn es sich in einer nix-Shell-Umgebung befindet.
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### Optionen
 
 | Variable     | Standardwert | Beschreibung                       |
 | ------------ | ------------ | ---------------------------------- |
-| `use_name`   | `false`      | Namen der nix-Shell anzeigen.      |
-| `impure_msg` | `"impure"`   | Passt die "impure"-Nachricht an.   |
-| `pure_msg`   | `"pure"`     | Passt die "pure"-Nachricht an.     |
-| `style`      | `"bold red"` | Stil für dieses Modul.             |
-| `disabled`   | `false`      | Deaktiviert das `nix_shell`-Modul. |
+| `use_name`   | `false`      | Display the name of the nix-shell. |
+| `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
+| `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
+| `style`      | `"bold red"` | The style for the module.          |
+| `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
 ### Beispiel
 
@@ -753,18 +781,18 @@ pure_msg = "pure shell"
 
 ## Java
 
-Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält `pom.xml`, `build.gradle.kts` oder `build.sbt`
+- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
 ### Optionen
 
-| Variable   | Standardwert   | Beschreibung                                    |
-| ---------- | -------------- | ----------------------------------------------- |
-| `symbol`   | `"☕ "`         | Symbol das vor der Java-Version angezeigt wird. |
-| `style`    | `"dimmed red"` | Stil für dieses Modul.                          |
-| `disabled` | `false`        | Deaktiviert das `Java`-Modul.                   |
+| Variable   | Standardwert   | Beschreibung                                           |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | The style for the module.                              |
+| `disabled` | `false`        | Disables the `java` module.                            |
 
 ### Beispiel
 
@@ -775,29 +803,29 @@ Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul w
 symbol = "🌟 "
 ```
 
-## Speicherauslastung
+## Memory Usage
 
-Das `memory_usage` Modul zeigt den aktuellen Systemspeicher und die swap-Nutzung an.
+The `memory_usage` module shows current system memory and swap usage.
 
-Standardmäßig wird die swap-Nutzung angezeigt, wenn der gesamte System-swap nicht Null ist.
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
 ### Optionen
 
-| Variable          | Standardwert          | Beschreibung                                                               |
-| ----------------- | --------------------- | -------------------------------------------------------------------------- |
-| `show_percentage` | `false`               | Zeigt die Speicherauslastung als Prozentsatz des verfügbaren Speichers an. |
-| `show_swap`       | `true`                | Swap-Nutzung anzeigen, wenn die Gesamtsumme des swaps nicht Null ist.      |
-| `threshold`       | `75`                  | Speicherauslastung ausblenden, wenn sie unter diesem Prozentsatz ist.      |
-| `symbol`          | `"🐏 "`                | Symbol das vor der Speicherauslastung angezeigt wird.                      |
-| `separator`       | `" | "`               | Symbol oder Text, der ram und swap-Nutzung trennt.                         |
-| `style`           | `"bold dimmed white"` | Stil für dieses Modul.                                                     |
-| `disabled`        | `true`                | Deaktiviert das `memory_usage`-Modul.                                      |
+| Variable          | Standardwert          | Beschreibung                                                  |
+| ----------------- | --------------------- | ------------------------------------------------------------- |
+| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
+| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
+| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
+| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
+| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
+| `style`           | `"bold dimmed white"` | The style for the module.                                     |
+| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
 ### Beispiel
 
@@ -808,13 +836,14 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 show_percentage = true
 show_swap = true
 threshold = -1
-icon = " "
+symbol = " "
+separator = "/"
 style = "bold dimmed green"
 ```
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `crystal` module shows the currently installed version of Crystal. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `shard.yml` file
 - The current directory contains a `.cr` file
@@ -878,7 +907,7 @@ The `package` module is shown when the current directory is the repository for a
 | Variable   | Standardwert | Beschreibung                                               |
 | ---------- | ------------ | ---------------------------------------------------------- |
 | `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | Stil für dieses Modul.                                     |
+| `style`    | `"bold red"` | The style for the module.                                  |
 | `disabled` | `false`      | Disables the `package` module.                             |
 
 ### Beispiel
@@ -955,7 +984,7 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.rb` file
@@ -965,7 +994,7 @@ The `ruby` module shows the currently installed version of Ruby. Das Modul wird 
 | Variable   | Standardwert | Beschreibung                                           |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
-| `style`    | `"bold red"` | Stil für dieses Modul.                                 |
+| `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `ruby` module.                            |
 
 ### Beispiel
@@ -986,7 +1015,7 @@ The `rust` module shows the currently installed version of Rust. The module will
 
 ### Optionen
 
-| Variable   | Standardwert | Beschreibung                                           |
+| Variable   | Standartwert | Beschreibung                                           |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
 | `style`    | `"bold red"` | The style for the module.                              |
@@ -1010,7 +1039,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 
 ### Optionen
 
-| Variable       | Standartwert | Beschreibung                                                |
+| Variable       | Standardwert | Beschreibung                                                |
 | -------------- | ------------ | ----------------------------------------------------------- |
 | `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
 | `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
@@ -1036,9 +1065,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Optionen
+### Options
 
-| Variable          | Standardwert  | Beschreibung                                                                                                        |
+| Variable          | Default       | Description                                                                                                         |
 | ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
@@ -1048,7 +1077,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
-### Beispiel
+### Example
 
 ```toml
 # ~/.config/starship.toml
