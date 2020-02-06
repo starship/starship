@@ -73,15 +73,16 @@
 ## 🍬 Características
 
 - Los caracteres de la prompt se colorean de rojo si el último comando termina con un código distinto a cero
-- Versión actual de Go (`🐹`)
+- Current Elm version (`🌳`)
+- Current Go version (`🐹`)
 - Current Haskell version (`λ`)
-- Versión actual de Java (`☕`)
-- Versión actual de Node.js (`⬢`)
-- Versión actual de PHP (`🐘`)
-- Versión actual de Python (`🐍`)
-- Versión actual de Ruby (`💎`)
-- Versión actual de Rust (`🦀`)
-- Versión actual de .NET (`•NET`)
+- Current Java version(`☕`)
+- Current Node.js version(`⬢`)
+- Current PHP version (`🐘`)
+- Current Python version (`🐍`)
+- Current Ruby version (`💎`)
+- Current Rust version (`🦀`)
+- Current .NET version (`•NET`)
 - Current Crystal version (`🔮`).
 - Current version of package in current directory (`📦`)
   - npm (Node.js)
