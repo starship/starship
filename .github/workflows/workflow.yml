@@ -133,24 +133,6 @@ jobs:
           ARGS: --resolver nightly-2019-09-21
         run: stack $ARGS ghc -- --numeric-version --no-install-ghc
 
-      # Install Elm [-nix]
-      - name: Install Elm [-nix]
-        if: matrix.os != 'windows-latest'
-        uses: justgook/setup-elm@v1
-        with:
-          elm-version: 0.19.1
-
-      # Install Elm [-windows]
-      - name: Install Elm [-windows]
-        if: matrix.os == 'windows-latest'
-        uses: crazy-max/ghaction-chocolatey@v1
-        with:
-          args: install elm-platform --version 0.19.1 -y
-
-      - name: Test Elm
-        if: matrix.os != 'windows-latest'
-        run: elm --version
-
       # Install Golang at a fixed version
       - uses: actions/setup-go@v1
         with:
