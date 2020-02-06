@@ -10,7 +10,7 @@ use crate::utils;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_haskell_project = context
         .try_begin_scan()?
-        .set_files(&["package.yaml", "stack.yaml"])
+        .set_files(&["package.yaml", "stack.yaml", "package.yml", "stack.yml"])
         .set_extensions(&["cabal"])
         .is_match();
 
