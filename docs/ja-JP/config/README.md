@@ -1074,7 +1074,7 @@ symbol = "🏎💨 "
 | `use_12hr`        | `false`        | 12時間のフォーマットを有効にします。                                                                               |
 | `format`          | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。 |
 | `style`           | `bold yellow`  | モジュールのスタイルです。                                                                                     |
-| `utc_time_offset` | `local`        | 使用するUTCオフセットを設定します。 -24から24までの間で設定可能です。 フロートが30/45分のタイムゾーンオフセットに対応できるようにします。                      |
+| `utc_time_offset` | `local`        | 使用するUTCオフセットを設定します。 Range from -24 < x < 24. フロートが30/45分のタイムゾーンオフセットに対応できるようにします。                 |
 | `disabled`        | `true`         | `time`モジュールを無効にします。                                                                               |
 
 `use_12hr` が `true` の場合、`format` のデフォルトは `"%r"` です。 それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、`use_12hr`の設定が上書きされます。
