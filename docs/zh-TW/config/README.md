@@ -8,7 +8,7 @@
 
 為了開始設定 Starship，請建立下右檔案： `~/.config/starship.toml`.
 
-```shell
+```sh
 $ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
@@ -28,7 +28,7 @@ disabled = true
 ```
 
 You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
-```shell
+```sh
 export STARSHIP_CONFIG=~/.starship
 ```
 
@@ -100,6 +100,7 @@ prompt_order = [
     "hg_branch",
     "package",
     "dotnet",
+    "elm",
     "golang",
     "haskell",
     "java",
@@ -114,6 +115,7 @@ prompt_order = [
     "memory_usage",
     "aws",
     "env_var",
+    "crystal",
     "cmd_duration",
     "line_break",
     "jobs",
@@ -376,6 +378,33 @@ style = "green"
 heuristic = false
 ```
 
+## Elm
+
+The `elm` module shows the currently installed version of Elm. 這個模組在下列其中一個條件達成時顯示：
+
+- 現在資料夾中包含一個 `elm.json` 檔案
+- 現在資料夾中包含一個 `elm-package.json` 檔案
+- The current directory contains a `elm-stuff` folder
+- The current directory contains a `*.elm` files
+
+### 選項
+
+| 變數         | 預設            | 說明                                                    |
+| ---------- | ------------- | ----------------------------------------------------- |
+| `symbol`   | `"🌳 "`        | The symbol used before displaying the version of Elm. |
+| `style`    | `"bold cyan"` | 這個模組的風格。                                              |
+| `disabled` | `false`       | Disables the `elm` module.                            |
+
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[elm]
+symbol = " "
+```
+
 ## 環境變數
 
 `env_var`模組顯示一個選擇的環境變數的現在數值。 這個模組只在下列條件其中之一達到時顯示：
@@ -580,7 +609,7 @@ symbol = "🏎💨 "
 
 The `haskell` module shows the currently installed version of Haskell Stack version. 這個模組在下列其中一個條件達成時顯示：
 
-- 目前資料夾中有一個 `stack.yaml` 檔案
+- 現在資料夾中含有一個 `stack.yaml` 檔案
 
 ### 選項
 
@@ -597,7 +626,7 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 # ~/.config/starship.toml
 
 [haskell]
-symbol = "λx.x "
+symbol = " "
 ```
 
 ## Mercurial Branch
@@ -812,6 +841,31 @@ separator = "/"
 style = "bold dimmed green"
 ```
 
+## Crystal
+
+The `crystal` module shows the currently installed version of Crystal. 這個模組在下列其中一個條件達成時顯示：
+
+- 現在資料夾中含有一個 `shard.yml` 檔案
+- The current directory contains a `.cr` file
+
+### 選項
+
+| 變數         | 預設           | 說明                                                        |
+| ---------- | ------------ | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`       | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"` | 這個模組的風格。                                                  |
+| `disabled` | `false`      | Disables the `crystal` module.                            |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[crystal]
+symbol = "✨ "
+style = "bold blue"
+```
+
 ## NodeJS
 
 `nodejs` 模組顯示現在安裝的 NodeJS 版本。 這個模組在下列其中一個條件達成時顯示：
@@ -869,7 +923,7 @@ symbol = "🎁 "
 
 The `php` module shows the currently installed version of PHP. 這個模組在下列其中一個條件達成時顯示：
 
-- 現在資料夾中包含一個 `composer.json` 檔案
+- 目前資料夾中有一個 `composer.json` 檔案
 - The current directory contains a `.php` file
 
 ### 選項

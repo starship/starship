@@ -8,7 +8,7 @@
 
 Um mit der Konfiguration von Starship zu beginnen, musst du die folgende Datei erstellen: `~/.config/starship.toml`.
 
-```shell
+```sh
 $ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
@@ -28,7 +28,7 @@ disabled = true
 ```
 
 Sie können den Pfad zur `starship.toml` mit der `STARSHIP_CONFIG` Umgebungsvariable ändern:
-```shell
+```sh
 export STARSHIP_CONFIG=~/.starship
 ```
 
@@ -100,6 +100,7 @@ prompt_order = [
     "hg_branch",
     "package",
     "dotnet",
+    "elm",
     "golang",
     "haskell",
     "java",
@@ -114,6 +115,7 @@ prompt_order = [
     "memory_usage",
     "aws",
     "env_var",
+    "crystal",
     "cmd_duration",
     "line_break",
     "jobs",
@@ -253,7 +255,7 @@ use_symbol_for_status = true
 
 ## Befehlsdauer
 
-Das `cmd_duration` Modul zeigt an wie lange der letzte Befehl ausgeführt wurde. Das Modul wird nur angezeigt wenn der letzte Befehl länger als zwei Sekunden ausgeführt wurde. Mit der `min_time` Option kann die Zeit eingestellt werden ab der <0>cmd_duration</0> angezeigt wird.
+Das `cmd_duration` Modul zeigt an wie lange der letzte Befehl ausgeführt wurde. Das Modul wird nur angezeigt wenn der letzte Befehl länger als zwei Sekunden ausgeführt wurde. Mit der `min_time` Option kann die Zeit eingestellt werden ab der `cmd_duration` angezeigt wird.
 
 ::: warning Nicht die DEBUG-trap in der Bash hooken
 
@@ -374,6 +376,33 @@ Internally, this module uses its own mechanism for version detection. Typically 
 symbol = "🥅 "
 style = "green"
 heuristic = false
+```
+
+## Elm
+
+The `elm` module shows the currently installed version of Elm. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+
+- Das aktuelle Verzeichnis enthält eine `elm.json`-Datei
+- Das aktuelle Verzeichnis enthält eine `elm-package.json`-Datei
+- The current directory contains a `elm-stuff` folder
+- The current directory contains a `*.elm` files
+
+### Optionen
+
+| Variable   | Standardwert  | Beschreibung                                          |
+| ---------- | ------------- | ----------------------------------------------------- |
+| `symbol`   | `"🌳 "`        | The symbol used before displaying the version of Elm. |
+| `style`    | `"bold cyan"` | Stil für dieses Modul.                                |
+| `disabled` | `false`       | Disables the `elm` module.                            |
+
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[elm]
+symbol = " "
 ```
 
 ## Umgebungsvariablen
@@ -597,7 +626,7 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 # ~/.config/starship.toml
 
 [haskell]
-symbol = "λx.x "
+symbol = " "
 ```
 
 ## Mercurial Branch
@@ -811,9 +840,34 @@ icon = " "
 style = "bold dimmed green"
 ```
 
+## Crystal
+
+The `crystal` module shows the currently installed version of Crystal. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+
+- Das aktuelle Verzeichnis enthält eine `shard.yml`-Datei
+- The current directory contains a `.cr` file
+
+### Optionen
+
+| Variable   | Standardwert | Beschreibung                                              |
+| ---------- | ------------ | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`       | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"` | Stil für dieses Modul.                                    |
+| `disabled` | `false`      | Disables the `crystal` module.                            |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[crystal]
+symbol = "✨ "
+style = "bold blue"
+```
+
 ## NodeJS
 
-Das `nodejs` Modul zeigt die derzeit installierte Version von NodeJS. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+Das `nodejs` Modul zeigt die derzeit installierte Version von NodeJS. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - Das aktuelle Verzeichnis enthält eine `package.json`-Datei
 - Das aktuelle Verzeichnis enthält ein `node_modules`-Verzeichnis
@@ -960,7 +1014,7 @@ Das `rust` Modul zeigt die derzeit installierte Version von Rust an. Das Modul w
 
 ### Optionen
 
-| Variable   | Standardwert | Beschreibung                                    |
+| Variable   | Standartwert | Beschreibung                                    |
 | ---------- | ------------ | ----------------------------------------------- |
 | `symbol`   | `"🦀 "`       | Symbol das vor der Rust-Version angezeigt wird. |
 | `style`    | `"bold red"` | Stil für dieses Modul.                          |
@@ -1012,7 +1066,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 ### Optionen
 
-| Variable          | Standartwert  | Beschreibung                                                                                                                              |
+| Variable          | Standardwert  | Beschreibung                                                                                                                              |
 | ----------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `use_12hr`        | `false`       | Aktiviert die Formatierung der Uhrzeit im 12-Stunden-Format.                                                                              |
 | `format`          | Siehe unten   | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html).             |
