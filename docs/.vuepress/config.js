@@ -134,8 +134,8 @@ module.exports = {
           ["/ja-JP/guide/", "ガイド"],
           ["/ja-JP/config/", "設定"],
           ["/ja-JP/advanced-config/", "高度な設定"],
-          ["/ru-RU/faq/", "FAQ"],
-          ["/ru-RU/presets/", "準備するもの"]
+          ["/ja-JP/faq/", "FAQ"],
+          ["/ja-JP/presets/", "準備するもの"]
         ]
       },
       "/zh-TW/": {
