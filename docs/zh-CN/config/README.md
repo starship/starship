@@ -8,7 +8,7 @@ Starship 目前正在开发中。 很多新的配置选项将会在之后的版�
 
 您需要创建配置文件 `~/.config/starship.toml` 以供 Starship 使用。
 
-```shell
+```sh
 $ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
@@ -28,7 +28,7 @@ disabled = true
 ```
 
 你可以设置环境变量 `STARSHIP_CONFIG` 来修改 starship 查找配置文件 `starship.toml` 时查找的位置：
-```shell
+```sh
 export STARSHIP_CONFIG=~/.starship
 ```
 
@@ -380,7 +380,7 @@ heuristic = false
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm version. 此组件只有满足以下条件之一时才会被显示：
+The `elm` module shows the currently installed version of Elm. 此组件只有满足以下条件之一时才会被显示：
 
 - 当前目录包含 `elm.json` 文件
 - 当前目录包含 `elm-package.json` 文件
