@@ -17,6 +17,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let env_value = get_env_value(config.variable?, config.default)?;
 
+    //rustc doesn't let you do an "if" and an "if let" in the same if statement
+    // if this changes in the future this can become a lot cleaner
+    let env_value = if config.trim_before_last != "" {
+        if let Some(index) = env_value.rfind(config.trim_before_last) {
+            env_value.split_at(index + 1).1
+        } else {
+            env_value.as_ref()
+        }
+    } else {
+        env_value.as_ref()
+    };
+
     module.set_style(config.style);
     module.get_prefix().set_value("with ");
 

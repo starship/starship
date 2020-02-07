@@ -10,6 +10,7 @@ pub struct EnvVarConfig<'a> {
     pub default: Option<&'a str>,
     pub prefix: &'a str,
     pub suffix: &'a str,
+    pub trim_before_last: &'a str,
     pub style: Style,
     pub disabled: bool,
 }
@@ -22,6 +23,7 @@ impl<'a> RootModuleConfig<'a> for EnvVarConfig<'a> {
             default: None,
             prefix: "",
             suffix: "",
+            trim_before_last: "",
             style: Color::Black.bold().dimmed(),
             disabled: false,
         }
