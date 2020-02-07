@@ -7,10 +7,13 @@ use crate::utils;
 ///
 /// Will display the Haskell version if any of the following criteria are met:
 ///     - Current directory contains a `stack.yaml` file
+///     - Current directory contains a `.cabal` file
+///     - Current directory contains a `package.yaml` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_haskell_project = context
         .try_begin_scan()?
-        .set_files(&["stack.yaml"])
+        .set_files(&["package.yaml", "stack.yaml", "package.yml", "stack.yml"])
+        .set_extensions(&["cabal"])
         .is_match();
 
     if !is_haskell_project {
@@ -47,6 +50,25 @@ mod tests {
         let dir = tempfile::tempdir()?;
         let actual = render_module("haskell", dir.path());
         let expected = None;
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn folder_with_hpack_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("package.yaml"))?.sync_all()?;
+        let actual = render_module("haskell", dir.path());
+        let expected = Some(format!("via {} ", Color::Red.bold().paint("λ v8.6.5")));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+    #[test]
+    fn folder_with_cabal_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("test.cabal"))?.sync_all()?;
+        let actual = render_module("haskell", dir.path());
+        let expected = Some(format!("via {} ", Color::Red.bold().paint("λ v8.6.5")));
         assert_eq!(expected, actual);
         Ok(())
     }
