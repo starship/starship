@@ -8,7 +8,7 @@
 
 Starshipの設定を開始するには、`~/.config/starship.toml` ファイルを作成します。
 
-```shell
+```sh
 $ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
@@ -28,7 +28,7 @@ disabled = true
 ```
 
 `STARSHIP_CONFIG` 環境変数を使用して、デフォルトの`starship.toml` ファイルの場所を変更できます。
-```shell
+```sh
 export STARSHIP_CONFIG=~/.starship
 ```
 
@@ -100,6 +100,7 @@ prompt_order = [
     "hg_branch",
     "package",
     "dotnet",
+    "elm",
     "golang",
     "haskell",
     "java",
@@ -114,6 +115,7 @@ prompt_order = [
     "memory_usage",
     "aws",
     "env_var",
+    "crystal",
     "cmd_duration",
     "line_break",
     "jobs",
@@ -190,8 +192,7 @@ discharging_symbol = "💀"
 
 ### バッテリーの表示
 
-`display</ 0> オプションを使用して、バッテリーインジケーターを表示するタイミング（閾値）と外観（スタイル）を定義します。
-<code>display` が提供されない場合、 デフォルトは次のとおりです。
+`display` オプションを使用して、バッテリーインジケーターを表示するタイミング（閾値）と外観（スタイル）を定義します。 `display` が提供されない場合、 デフォルトは次のとおりです。
 
 ```toml
 [[battery.display]]
@@ -375,6 +376,33 @@ truncation_length = 8
 symbol = "🥅 "
 style = "green"
 heuristic = false
+```
+
+## Elm
+
+`elm`モジュールは、現在インストールされているElmのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- カレントディレクトリに`elm.json`ファイルが含まれている
+- カレントディレクトリに`elm-package.json`ファイルが含まれている
+- カレントディレクトリに`elm-stuff`フォルダが含まれている
+- カレントディレクトリに`*.elm`ファイルが含まれている
+
+### オプション
+
+| 変数         | デフォルト         | 説明                         |
+| ---------- | ------------- | -------------------------- |
+| `symbol`   | `"🌳 "`        | Elmのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold cyan"` | モジュールのスタイルです。              |
+| `disabled` | `false`       | `elm`モジュールを無効にします。         |
+
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[elm]
+symbol = " "
 ```
 
 ## 環境変数
@@ -598,7 +626,7 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 # ~/.config/starship.toml
 
 [haskell]
-symbol = "λx.x "
+symbol = " "
 ```
 
 ## Mercurial ブランチ
@@ -777,14 +805,13 @@ symbol = "🌟 "
 
 ## メモリ使用量
 
-`memory_usage</ 0>モジュールは、現在のシステムメモリとスワップ使用量を示します。</p>
+`memory_usage`モジュールは、現在のシステムメモリとスワップ使用量を示します。
 
-<p spaces-before="0">デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。</p>
+デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。
 
-<p spaces-before="0">::: tip</p>
+::: tip
 
-<p spaces-before="0">このモジュールはデフォルトで無効になっています。
-有効にするには、設定ファイルで<code>disabled`を`false`に設定します。
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
@@ -812,6 +839,31 @@ threshold = -1
 symbol = " "
 separator = "/"
 style = "bold dimmed green"
+```
+
+## Crystal
+
+`crystal`モジュールには、現在インストールされているCrystalのバージョンが表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- カレントディレクトリに`shard.yml`ファイルが含まれている
+- カレントディレクトリに`.cr`の拡張子のファイルが含まれている
+
+### オプション
+
+| 変数         | デフォルト        | 説明                             |
+| ---------- | ------------ | ------------------------------ |
+| `symbol`   | `"🔮 "`       | Crystalのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold red"` | モジュールのスタイルです。                  |
+| `disabled` | `false`      | `crystal`モジュールを無効にします。         |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[crystal]
+symbol = "✨ "
+style = "bold blue"
 ```
 
 ## NodeJS
