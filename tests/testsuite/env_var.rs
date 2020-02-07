@@ -135,6 +135,24 @@ fn suffix() -> io::Result<()> {
     Ok(())
 }
 
+#[test]
+fn trim_before_last() -> io::Result<()> {
+    let output = common::render_module("env_var")
+        .env_clear()
+        .use_config(toml::toml! {
+            [env_var]
+            variable = "TEST_VAR"
+            suffix = "_"
+            trim_before_last = "-"
+        })
+        .env("TEST_VAR", "long-variable-value-with-hyphens")
+        .output()?;
+    let expected = format!("with {} ", style().paint("hyphens_"));
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
 fn style() -> Style {
     // default style
     Color::Black.bold().dimmed()
