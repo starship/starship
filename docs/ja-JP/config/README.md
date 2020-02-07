@@ -8,7 +8,7 @@
 
 Starshipの設定を開始するには、`~/.config/starship.toml` ファイルを作成します。
 
-```shell
+```sh
 $ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
@@ -28,7 +28,7 @@ disabled = true
 ```
 
 `STARSHIP_CONFIG` 環境変数を使用して、デフォルトの`starship.toml` ファイルの場所を変更できます。
-```shell
+```sh
 export STARSHIP_CONFIG=~/.starship
 ```
 
@@ -381,7 +381,7 @@ heuristic = false
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm version. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `elm` module shows the currently installed version of Elm. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`elm.json`ファイルが含まれている
 - カレントディレクトリに`elm-package.json`ファイルが含まれている
