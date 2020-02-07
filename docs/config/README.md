@@ -444,15 +444,16 @@ The module will be shown only if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default          | Description                                                                  |
-| ---------- | ---------------- | ---------------------------------------------------------------------------- |
-| `symbol`   |                  | The symbol used before displaying the variable value.                        |
-| `variable` |                  | The environment variable to be displayed.                                    |
-| `default`  |                  | The default value to be displayed when the selected variable is not defined. |
-| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
-| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed black"` | The style for the module.                                                    |
-| `disabled` | `false`          | Disables the `env_var` module.                                               |
+| Variable           | Default          | Description                                                                                                                                     |
+| ------------------ | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`           |                  | The symbol used before displaying the variable value.                                                                                           |
+| `variable`         |                  | The environment variable to be displayed.                                                                                                       |
+| `default`          |                  | The default value to be displayed when the selected variable is not defined.                                                                    |
+| `prefix`           | `""`             | Prefix to display immediately before the variable value.                                                                                        |
+| `suffix`           | `""`             | Suffix to display immediately after the variable value.                                                                                         |
+| `trim_before_last` | `""`             | String that the variable value is cut off before, until the last match. `"/"` will start after the last slash. `""` will disable any truncation |
+| `style`            | `"dimmed black"` | The style for the module.                                                                                                                       |
+| `disabled`         | `false`          | Disables the `env_var` module.                                                                                                                  |
 
 ### Example
 
@@ -462,6 +463,7 @@ The module will be shown only if any of the following conditions are met:
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+trim_before_last = "/"
 ```
 
 ## Git Branch
