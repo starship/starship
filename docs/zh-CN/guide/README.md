@@ -74,47 +74,47 @@
 
 - 当上一个命令以非 0 状态退出时，提示字符会变为红色
 - Current Elm version (`🌳`)
-- Current Go version (`🐹`)
-- Current Haskell version (`λ`)
-- Current Java version(`☕`)
-- Current Node.js version(`⬢`)
-- Current PHP version (`🐘`)
-- Current Python version (`🐍`)
-- Current Ruby version (`💎`)
-- Current Rust version (`🦀`)
-- Current .NET version (`•NET`)
+- 当前 Go 版本 (`🐹`)
+- 显示当前 Haskell 版本（`λ`）
+- 当前 Java 版本(`☕`)
+- 当前 Node.js 版本(`⬢`)
+- 显示当前 PHP 版本（`🐘`）
+- 显示当前 Python 版本（`🐍`）
+- 当前 Ruby 版本 (`💎`)
+- 当前 Rust 版本 (`🦀`)
+- 显示当前 .NET 版本（`•NET`）
 - Current Crystal version (`🔮`).
-- Current version of package in current directory (`📦`)
+- 显示当前目录中项目的版本（`📦`）
   - npm (Node.js)
   - cargo (Rust)
   - poetry (Python)
-  - composer (PHP)
-- Current Git branch and rich repo status:
-  - `=` — conflicting changes
-  - `⇡` — ahead of remote branch
-  - `⇣` — behind of remote branch
-  - `⇕` — diverged changes
-  - `?` — untracked changes
-  - `$` — stashed changes
-  - `!` — modified files
-  - `+` — added files
-  - `»` — renamed files
-  - `✘` — deleted files
-- Current Mercurial branch
-- Current battery level and status
-  - `⇡` – charging
-  - `⇣` – discharging
-  - `•` – fully charged
-- Indicator for jobs in the background (`✦`)
-- Current Kubernetes Cluster and Namespace (`☸`)
-- Current Amazon Web Services (AWS) profile (`☁️`)
-- Execution time of the last command
-- Custom environment variable value
-- Nix-shell environment detection
-- Current username if not the same as the logged-in user
-- Optional current time in 12/24hr format
-- Current Terraform Workspace and version (`💠`)
-- Current Conda environment (`C`)
+  - composer（PHP）
+- 当前 Git 分支与一应俱全的仓库状态
+  - `=` —— 修改冲突
+  - `⇡` —— 领先于远程分支
+  - `⇣` —— 落后于远程分支
+  - `⇕` —— 与远程分支存在分歧
+  - `?` —— 存在未记录的文件
+  - `$` —— 存在 stash 快照
+  - `!` —— 存在被修改的文件
+  - `+` —— 暂存区中存在内容
+  - `»` —— 文件重命名
+  - `✘` —— 文件被删除
+- 显示当前的 Mercurial 分支
+- 当前电池剩余容量与状态
+  - `⇡` —— 电池充电中
+  - `⇣` —— 电池耗电中
+  - `•` —— 电池已充满
+- 显示后台运行进程数（`✦`）
+- 显示当前 Kubernetes 集群与命名空间（`☸`）
+- 显示当前 AWS 配置（`☁️`）
+- 显示上一条命令的执行用时
+- 自定义环境变量值
+- Nix-shell 环境检测
+- 非当前登录用户的用户名
+- 12/24 小时格式的时间显示（可选）
+- 显示 Terraform 工作区和当前版本（`💠`）
+- 显示当前 Conda 环境（`C`）
 
 ## 🚀 安装
 
