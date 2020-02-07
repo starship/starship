@@ -466,7 +466,7 @@ truncation_symbol = ""
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+このモジュールはデフォルトで無効になっています。 To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
