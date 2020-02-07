@@ -9,9 +9,6 @@ use crate::configs::git_commit::GitCommitConfig;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_commit");
     let config = GitCommitConfig::try_load(module.config);
-    if config.disabled {
-        return None;
-    };
 
     module
         .get_prefix()

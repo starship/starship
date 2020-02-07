@@ -19,7 +19,7 @@ fn test_render_commit_hash() -> io::Result<()> {
     let output = common::render_module("git_commit")
         .use_config(toml::toml! {
             [git_commit]
-                disabled = false
+                only_detached = false
         })
         .arg("--path")
         .arg(repo_dir)
@@ -50,7 +50,7 @@ fn test_render_commit_hash_len_override() -> io::Result<()> {
     let output = common::render_module("git_commit")
         .use_config(toml::toml! {
             [git_commit]
-                disabled = false
+                only_detached = false
                 commit_hash_length = 14
         })
         .arg("--path")
@@ -72,11 +72,6 @@ fn test_render_commit_hash_only_detached_on_branch() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
     let output = common::render_module("git_commit")
-        .use_config(toml::toml! {
-            [git_commit]
-                disabled = false
-                only_detached = true
-        })
         .arg("--path")
         .arg(repo_dir)
         .output()?;
@@ -105,11 +100,6 @@ fn test_render_commit_hash_only_detached_on_detached() -> io::Result<()> {
     let expected_hash = str::from_utf8(&git_output).unwrap();
 
     let output = common::render_module("git_commit")
-        .use_config(toml::toml! {
-            [git_commit]
-                disabled = false
-                only_detached = true
-        })
         .arg("--path")
         .arg(repo_dir)
         .output()?;

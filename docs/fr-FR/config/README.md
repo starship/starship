@@ -463,21 +463,16 @@ truncation_symbol = ""
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
-::: tip
-
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
-
-:::
-
 ### Options
 
-| Variable             | Default        | Description                                      |
-| -------------------- | -------------- | ------------------------------------------------ |
-| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
-| `prefix`             | `"("`          | Prefix to display immediately before git commit. |
-| `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
-| `style`              | `"bold green"` | The style for the module.                        |
-| `disabled`           | `true`         | Disables the `git_commit` module.                |
+| Variable             | Default        | Description                                           |
+| -------------------- | -------------- | ----------------------------------------------------- |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.          |
+| `prefix`             | `"("`          | Prefix to display immediately before git commit.      |
+| `suffix`             | `")"`          | Suffix to display immediately after git commit.       |
+| `style`              | `"bold green"` | The style for the module.                             |
+| `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
+| `disabled`           | `false`        | Disables the `git_commit` module.                     |
 
 ### Example
 
@@ -485,7 +480,6 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 # ~/.config/starship.toml
 
 [git_commit]
-disabled = false
 commit_hash_length = 4
 ```
 

@@ -463,12 +463,6 @@ truncation_symbol = ""
 
 `git_commit` 组件显示当前目录的 git 仓库的当前提交的哈希值。
 
-::: tip
-
-此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
-
-:::
-
 ### 配置项
 
 | 字段                   | 默认值            | 描述                   |
@@ -477,7 +471,8 @@ truncation_symbol = ""
 | `prefix`             | `"("`          | 直接在 git 提交哈希值前显示的前缀。 |
 | `suffix`             | `")"`          | 直接在 git 提交哈希值后显示的后缀。 |
 | `style`              | `"bold green"` | 此组件的样式。              |
-| `disabled`           | `true`         | 禁用 `git_commit` 组件。  |
+| `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
+| `disabled`           | `false`         | 禁用 `git_commit` 组件。  |
 
 ### 示例
 
@@ -485,7 +480,6 @@ truncation_symbol = ""
 # ~/.config/starship.toml
 
 [git_commit]
-disabled = false
 commit_hash_length = 4
 ```
 

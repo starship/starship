@@ -23,8 +23,8 @@ impl<'a> RootModuleConfig<'a> for GitCommitConfig<'a> {
             prefix: "(",
             suffix: ") ",
             style: Color::Green.bold(),
-            only_detached: false,
-            disabled: true,
+            only_detached: true,
+            disabled: false,
         }
     }
 }
