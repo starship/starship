@@ -8,7 +8,7 @@
 
 To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
-```shell
+```sh
 $ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
@@ -28,7 +28,7 @@ disabled = true
 ```
 
 You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
-```shell
+```sh
 export STARSHIP_CONFIG=~/.starship
 ```
 
@@ -380,7 +380,7 @@ heuristic = false
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm version. The module will be shown if any of the following conditions are met:
+The `elm` module shows the currently installed version of Elm. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `elm.json` file
 - The current directory contains a `elm-package.json` file
