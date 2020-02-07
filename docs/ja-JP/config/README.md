@@ -8,7 +8,7 @@
 
 Starshipの設定を開始するには、`~/.config/starship.toml` ファイルを作成します。
 
-```sh
+```shell
 $ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
@@ -28,7 +28,7 @@ disabled = true
 ```
 
 `STARSHIP_CONFIG` 環境変数を使用して、デフォルトの`starship.toml` ファイルの場所を変更できます。
-```sh
+```shell
 export STARSHIP_CONFIG=~/.starship
 ```
 
@@ -100,7 +100,6 @@ prompt_order = [
     "hg_branch",
     "package",
     "dotnet",
-    "elm",
     "golang",
     "haskell",
     "java",
@@ -115,7 +114,6 @@ prompt_order = [
     "memory_usage",
     "aws",
     "env_var",
-    "crystal",
     "cmd_duration",
     "line_break",
     "jobs",
@@ -379,33 +377,6 @@ style = "green"
 heuristic = false
 ```
 
-## Elm
-
-The `elm` module shows the currently installed version of Elm. 次の条件のいずれかが満たされると、モジュールが表示されます。
-
-- カレントディレクトリに`elm.json`ファイルが含まれている
-- カレントディレクトリに`elm-package.json`ファイルが含まれている
-- The current directory contains a `elm-stuff` folder
-- The current directory contains a `*.elm` files
-
-### オプション
-
-| 変数         | デフォルト         | 説明                                                    |
-| ---------- | ------------- | ----------------------------------------------------- |
-| `symbol`   | `"🌳 "`        | The symbol used before displaying the version of Elm. |
-| `style`    | `"bold cyan"` | モジュールのスタイルです。                                         |
-| `disabled` | `false`       | Disables the `elm` module.                            |
-
-
-### 設定例
-
-```toml
-# ~/.config/starship.toml
-
-[elm]
-symbol = " "
-```
-
 ## 環境変数
 
 `env_var`モジュールは、選択された環境変数の現在の値を表示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
@@ -627,7 +598,7 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 # ~/.config/starship.toml
 
 [haskell]
-symbol = " "
+symbol = "λx.x "
 ```
 
 ## Mercurial ブランチ
@@ -841,31 +812,6 @@ threshold = -1
 symbol = " "
 separator = "/"
 style = "bold dimmed green"
-```
-
-## Crystal
-
-`crystal`モジュールには、現在インストールされているCrystalのバージョンが表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
-
-- カレントディレクトリに`shard.yml`ファイルが含まれている
-- カレントディレクトリに`.cr`の拡張子のファイルが含まれている
-
-### オプション
-
-| 変数         | デフォルト        | 説明                             |
-| ---------- | ------------ | ------------------------------ |
-| `symbol`   | `"🔮 "`       | Crystalのバージョンを表示する前に使用される記号です。 |
-| `style`    | `"bold red"` | モジュールのスタイルです。                  |
-| `disabled` | `false`      | `crystal`モジュールを無効にします。         |
-
-### 設定例
-
-```toml
-# ~/.config/starship.toml
-
-[crystal]
-symbol = "✨ "
-style = "bold blue"
 ```
 
 ## NodeJS
