@@ -8,7 +8,7 @@ Starship 目前正在开发中。 很多新的配置选项将会在之后的版�
 
 您需要创建配置文件 `~/.config/starship.toml` 以供 Starship 使用。
 
-```shell
+```sh
 $ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
@@ -28,7 +28,7 @@ disabled = true
 ```
 
 你可以设置环境变量 `STARSHIP_CONFIG` 来修改 starship 查找配置文件 `starship.toml` 时查找的位置：
-```shell
+```sh
 export STARSHIP_CONFIG=~/.starship
 ```
 
@@ -45,7 +45,7 @@ export STARSHIP_CONFIG=~/.starship
  "via "         "⬢"        "v10.4.1"       ""
 ```
 
-### 样式设定
+### 样式字符串
 
 Starship 中的大多数组件允许您为其设置显示样式。 显示样式可以通过一个字符串字段（一般是 `style`）来设置。 以下的例子给出了一些样式字符串并描述了它们的效果。 样式字符串的完整语法请查阅 [高级配置指南](/advanced-config/)。
 
@@ -100,6 +100,7 @@ prompt_order = [
     "hg_branch",
     "package",
     "dotnet",
+    "elm",
     "golang",
     "haskell",
     "java",
@@ -114,6 +115,7 @@ prompt_order = [
     "memory_usage",
     "aws",
     "env_var",
+    "crystal",
     "cmd_duration",
     "line_break",
     "jobs",
@@ -190,7 +192,7 @@ discharging_symbol = "💀"
 
 ### Battery 组件的显示
 
-`display` 选项用于定义电池指示器的显示阈值（threshold）和显示效果（style）。 如果 `display` 没有设置， 默认设置如下：
+`display` 选项用于定义电池指示器的显示阈值（threshold）和显示效果（style）。 如果 `display` 没有设置， 默认配置如下所示：
 
 ```toml
 [[battery.display]]
@@ -374,6 +376,33 @@ truncation_length = 8
 symbol = "🥅 "
 style = "green"
 heuristic = false
+```
+
+## Elm
+
+The `elm` module shows the currently installed version of Elm. 此组件只有满足以下条件之一时才会被显示：
+
+- 当前目录包含 `elm.json` 文件
+- 当前目录包含 `elm-package.json` 文件
+- The current directory contains a `elm-stuff` folder
+- The current directory contains a `*.elm` files
+
+### 配置项
+
+| 字段         | 默认值           | 描述                                                    |
+| ---------- | ------------- | ----------------------------------------------------- |
+| `symbol`   | `"🌳 "`        | The symbol used before displaying the version of Elm. |
+| `style`    | `"bold cyan"` | 此组件的样式。                                               |
+| `disabled` | `false`       | Disables the `elm` module.                            |
+
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[elm]
+symbol = " "
 ```
 
 ## Environment Variable
@@ -597,7 +626,7 @@ symbol = "🏎💨 "
 # ~/.config/starship.toml
 
 [haskell]
-symbol = "λx.x "
+symbol = " "
 ```
 
 ## Mercurial Branch
@@ -812,9 +841,34 @@ separator = "/"
 style = "bold dimmed green"
 ```
 
+## Crystal
+
+The `crystal` module shows the currently installed version of Crystal. 此组件只有满足以下条件之一时才会被显示：
+
+- 当前目录包含 `shard.yml` 文件
+- The current directory contains a `.cr` file
+
+### 配置项
+
+| 字段         | 默认值          | 描述                                                        |
+| ---------- | ------------ | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`       | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"` | 此组件的样式。                                                   |
+| `disabled` | `false`      | Disables the `crystal` module.                            |
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[crystal]
+symbol = "✨ "
+style = "bold blue"
+```
+
 ## NodeJS
 
-`nodejs` 组件显示当前安装的 NodeJS 版本。 此组件只有满足以下条件之一时才会被显示：
+`nodejs` 组件显示当前安装的 NodeJS 版本。 此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含 `package.json` 文件
 - 当前目录包含 `node_modules` 目录
@@ -1018,7 +1072,7 @@ symbol = "🏎💨 "
 | `use_12hr`        | `false`       | 启用 12 小时格式                                                                                |
 | `format`          | 见下文解释         | 用来格式化时间显示的 [chrono 格式字符串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) |
 | `style`           | `bold yellow` | 显示时间的样式。                                                                                  |
-| `utc_time_offset` | `local`       | 设置所用 UTC 偏移量。 Range from -24 < x < 24. 允许使用浮点数来得到 30/45 分钟的时区偏移。                          |
+| `utc_time_offset` | `local`       | 设置所用 UTC 偏移量。 范围是 -24 < x < 24。 允许使用浮点数来得到 30/45 分钟的时区偏移。                                 |
 | `disabled`        | `true`        | 禁用 `time` 组件。                                                                             |
 
 如果 `use_12hr` 为 `true`，则`format` 默认值为 `"%r"`。 否则，其默认值为 `"%T"`。 手动设置 `format` 将使 `use_12hr` 被忽略。
