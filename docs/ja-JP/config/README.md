@@ -381,20 +381,20 @@ heuristic = false
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`elm`モジュールは、現在インストールされているElmのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`elm.json`ファイルが含まれている
 - カレントディレクトリに`elm-package.json`ファイルが含まれている
-- The current directory contains a `elm-stuff` folder
-- The current directory contains a `*.elm` files
+- カレントディレクトリに`elm-stuff`フォルダが含まれている
+- カレントディレクトリに`*.elm`ファイルが含まれている
 
 ### オプション
 
-| 変数         | デフォルト         | 説明                                                    |
-| ---------- | ------------- | ----------------------------------------------------- |
-| `symbol`   | `"🌳 "`        | The symbol used before displaying the version of Elm. |
-| `style`    | `"bold cyan"` | モジュールのスタイルです。                                         |
-| `disabled` | `false`       | Disables the `elm` module.                            |
+| 変数         | デフォルト         | 説明                         |
+| ---------- | ------------- | -------------------------- |
+| `symbol`   | `"🌳 "`        | Elmのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold cyan"` | モジュールのスタイルです。              |
+| `disabled` | `false`       | `elm`モジュールを無効にします。         |
 
 
 ### 設定例
@@ -466,7 +466,7 @@ truncation_symbol = ""
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
@@ -806,14 +806,13 @@ symbol = "🌟 "
 
 ## メモリ使用量
 
-`memory_usage</ 0>モジュールは、現在のシステムメモリとスワップ使用量を示します。</p>
+`memory_usage`モジュールは、現在のシステムメモリとスワップ使用量を示します。
 
-<p spaces-before="0">デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。</p>
+デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。
 
-<p spaces-before="0">::: tip</p>
+::: tip
 
-<p spaces-before="0">このモジュールはデフォルトで無効になっています。
-有効にするには、設定ファイルで<code>disabled`を`false`に設定します。
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
