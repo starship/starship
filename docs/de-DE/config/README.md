@@ -1014,7 +1014,7 @@ Das `rust` Modul zeigt die derzeit installierte Version von Rust an. Das Modul w
 
 ### Optionen
 
-| Variable   | Standartwert | Beschreibung                                    |
+| Variable   | Standardwert | Beschreibung                                    |
 | ---------- | ------------ | ----------------------------------------------- |
 | `symbol`   | `"🦀 "`       | Symbol das vor der Rust-Version angezeigt wird. |
 | `style`    | `"bold red"` | Stil für dieses Modul.                          |
@@ -1071,7 +1071,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `use_12hr`        | `false`       | Aktiviert die Formatierung der Uhrzeit im 12-Stunden-Format.                                                                              |
 | `format`          | Siehe unten   | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html).             |
 | `style`           | `bold yellow` | Stil für dieses Modul.                                                                                                                    |
-| `utc_time_offset` | `lokal`       | Legt das UTC-Offset fest, das verwendet werden soll. Reicht von -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `utc_time_offset` | `lokal`       | Legt das UTC-Offset fest, das verwendet werden soll. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets. |
 | `disabled`        | `true`        | Deaktiviert das `time`-Modul.                                                                                                             |
 
 Wird `use_12hr` auf `true` gestellt, so wird `format` automatisch auf `"%r"` gesetzt. Ansonsten ist der Standardwert hierfür `"%T"`. Wird hingegen `format` gesetzt, so überschreibt dies die Einstellung `use_12hr`.
