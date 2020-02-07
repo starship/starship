@@ -241,7 +241,7 @@ confirm "Install Starship ${GREEN}latest${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}
 info "Installing Starship, please wait…"
 
 fetch "${URL}" \
-  | tar xzf${VERBOSE} - \
+  | sudo tar xzf${VERBOSE} - \
     -C "${BIN_DIR}"
 
 complete "Starship installed"
