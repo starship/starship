@@ -28,7 +28,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     module.set_style(config.style);
 
-    let shell_type = env::var("IN_NIX_SHELL").ok()?;
+    let in_nix_shell = env::var("IN_NIX_SHELL");
+
+    if in_nix_shell.is_ok() {
+        module.create_segment("symbol", &config.symbol);
+    }
+
+    let shell_type = in_nix_shell.ok()?;
+
     let shell_type_segment: SegmentConfig = match shell_type.as_ref() {
         "1" | "impure" => config.impure_msg,
         "pure" => config.pure_msg,
