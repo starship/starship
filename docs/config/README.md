@@ -29,6 +29,7 @@ disabled = true
 ```
 
 You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+
 ```shell
 export STARSHIP_CONFIG=~/.starship
 ```
@@ -418,12 +419,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default       | Description                                               |
-| ---------- | ------------- | --------------------------------------------------------- |
+| Variable   | Default       | Description                                           |
+| ---------- | ------------- | ----------------------------------------------------- |
 | `symbol`   | `"🌳 "`       | The symbol used before displaying the version of Elm. |
-| `style`    | `"bold cyan"` | The style for the module.                                 |
-| `disabled` | `false`       | Disables the `elm` module.                                |
-
+| `style`    | `"bold cyan"` | The style for the module.                             |
+| `disabled` | `false`       | Disables the `elm` module.                            |
 
 ### Example
 
@@ -569,7 +569,7 @@ current directory.
 | `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
 | `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
 | `stashed`          | `"$"`                      | A stash exists for the local repository.                |
-| `stashed_count`    | [link](#git-status-counts) | Show and style the number of stashes.                           |
+| `stashed_count`    | [link](#git-status-counts) | Show and style the number of stashes.                   |
 | `modified`         | `"!"`                      | There are file modifications in the working directory.  |
 | `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
 | `staged`           | `"+"`                      | A new file has been added to the staging area.          |
@@ -641,6 +641,7 @@ The module will be shown if any of the following conditions are met:
 [golang]
 symbol = "🏎💨 "
 ```
+
 ## Haskell
 
 The `haskell` module shows the currently installed version of Haskell Stack version.
@@ -650,12 +651,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default       | Description                                               |
-| ---------- | ------------- | --------------------------------------------------------- |
-| `symbol`   | `"λ "`        | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold red"`  | The style for the module.                                 |
-| `disabled` | `false`       | Disables the `haskell` module.                            |
-
+| Variable   | Default      | Description                                               |
+| ---------- | ------------ | --------------------------------------------------------- |
+| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
+| `style`    | `"bold red"` | The style for the module.                                 |
+| `disabled` | `false`      | Disables the `haskell` module.                            |
 
 ### Example
 
@@ -804,13 +804,14 @@ The module will be shown when inside a nix-shell environment.
 
 ### Options
 
-| Variable     | Default      | Description                        |
-| ------------ | ------------ | ---------------------------------- |
-| `use_name`   | `false`      | Display the name of the nix-shell. |
-| `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
-| `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
-| `style`      | `"bold red"` | The style for the module.          |
-| `disabled`   | `false`      | Disables the `nix_shell` module.   |
+| Variable     | Default      | Description                                    |
+| ------------ | ------------ | ---------------------------------------------- |
+| `symbol`     | ``          | The symbol used before showing the shell state |
+| `use_name`   | `false`      | Display the name of the nix-shell.             |
+| `impure_msg` | `"impure"`   | Customize the "impure" msg.                    |
+| `pure_msg`   | `"pure"`     | Customize the "pure" msg.                      |
+| `style`      | `"bold red"` | The style for the module.                      |
+| `disabled`   | `false`      | Disables the `nix_shell` module.               |
 
 ### Example
 
@@ -898,11 +899,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default      | Description                                                  |
-| ---------- | ------------ | ------------------------------------------------------------ |
-| `symbol`   | `"🔮 "`      | The symbol used before displaying the version of crystal.    |
-| `style`    | `"bold red"` | The style for the module.                                    |
-| `disabled` | `false`      | Disables the `crystal` module.                               |
+| Variable   | Default      | Description                                               |
+| ---------- | ------------ | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`      | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"` | The style for the module.                                 |
+| `disabled` | `false`      | Disables the `crystal` module.                            |
 
 ### Example
 
