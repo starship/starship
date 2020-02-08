@@ -8,7 +8,7 @@
 
 To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
-```shell
+```sh
 $ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
@@ -28,7 +28,7 @@ disabled = true
 ```
 
 You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
-```shell
+```sh
 export STARSHIP_CONFIG=~/.starship
 ```
 
@@ -100,6 +100,7 @@ prompt_order = [
     "hg_branch",
     "package",
     "dotnet",
+    "elm",
     "golang",
     "haskell",
     "java",
@@ -114,6 +115,7 @@ prompt_order = [
     "memory_usage",
     "aws",
     "env_var",
+    "crystal",
     "cmd_duration",
     "line_break",
     "jobs",
@@ -376,6 +378,33 @@ style = "green"
 heuristic = false
 ```
 
+## Elm
+
+The `elm` module shows the currently installed version of Elm. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
+- The current directory contains a `elm-stuff` folder
+- The current directory contains a `*.elm` files
+
+### Options
+
+| Variable   | Default       | Description                                           |
+| ---------- | ------------- | ----------------------------------------------------- |
+| `symbol`   | `"🌳 "`        | The symbol used before displaying the version of Elm. |
+| `style`    | `"bold cyan"` | The style for the module.                             |
+| `disabled` | `false`       | Disables the `elm` module.                            |
+
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[elm]
+symbol = " "
+```
+
 ## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
@@ -597,7 +626,7 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 # ~/.config/starship.toml
 
 [haskell]
-symbol = "λx.x "
+symbol = " "
 ```
 
 ## Mercurial Branch
@@ -810,6 +839,31 @@ threshold = -1
 symbol = " "
 separator = "/"
 style = "bold dimmed green"
+```
+
+## Crystal
+
+The `crystal` module shows the currently installed version of Crystal. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `shard.yml` file
+- The current directory contains a `.cr` file
+
+### Options
+
+| Variable   | Default      | Description                                               |
+| ---------- | ------------ | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`       | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"` | The style for the module.                                 |
+| `disabled` | `false`      | Disables the `crystal` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[crystal]
+symbol = "✨ "
+style = "bold blue"
 ```
 
 ## NodeJS

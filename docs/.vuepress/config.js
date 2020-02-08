@@ -29,7 +29,7 @@ module.exports = {
       lang: "zh-TW",
       title: "Starship",
       description: "The cross-shell prompt for astronauts"
-    },
+    }
   },
   // prettier-ignore
   head: [
@@ -56,6 +56,11 @@ module.exports = {
     docsDir: "docs",
     // defaults to false, set to true to enable
     editLinks: true,
+    // enables Algolia DocSearch
+    algolia: {
+      apiKey: "107bdc34b894d5d1dd0824b420184c2d",
+      indexName: "starship"
+    },
     locales: {
       "/": {
         // text for the language dropdown
@@ -129,8 +134,8 @@ module.exports = {
           ["/ja-JP/guide/", "ガイド"],
           ["/ja-JP/config/", "設定"],
           ["/ja-JP/advanced-config/", "高度な設定"],
-          ["/ru-RU/faq/", "FAQ"],
-          ["/ru-RU/presets/", "準備するもの"]
+          ["/ja-JP/faq/", "FAQ"],
+          ["/ja-JP/presets/", "準備するもの"]
         ]
       },
       "/zh-TW/": {
@@ -168,7 +173,7 @@ module.exports = {
           ["/zh-CN/faq/", "常见问题"],
           ["/zh-CN/presets/", "社区配置分享"]
         ]
-      },
+      }
     }
   },
   plugins: [
