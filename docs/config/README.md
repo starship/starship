@@ -804,14 +804,14 @@ The module will be shown when inside a nix-shell environment.
 
 ### Options
 
-| Variable     | Default      | Description                                    |
-| ------------ | ------------ | ---------------------------------------------- |
-| `symbol`     | ``          | The symbol used before showing the shell state |
-| `use_name`   | `false`      | Display the name of the nix-shell.             |
-| `impure_msg` | `"impure"`   | Customize the "impure" msg.                    |
-| `pure_msg`   | `"pure"`     | Customize the "pure" msg.                      |
-| `style`      | `"bold red"` | The style for the module.                      |
-| `disabled`   | `false`      | Disables the `nix_shell` module.               |
+| Variable     | Default       | Description                                    |
+| ------------ | ------------- | ---------------------------------------------- |
+| `symbol`     | `❄`           | The symbol used before showing the shell state |
+| `use_name`   | `false`       | Display the name of the nix-shell.             |
+| `impure_msg` | `"impure"`    | Customize the "impure" msg.                    |
+| `pure_msg`   | `"pure"`      | Customize the "pure" msg.                      |
+| `style`      | `"bold blue"` | The style for the module.                      |
+| `disabled`   | `false`       | Disables the `nix_shell` module.               |
 
 ### Example
 
