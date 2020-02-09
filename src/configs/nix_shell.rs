@@ -17,7 +17,7 @@ impl<'a> RootModuleConfig<'a> for NixShellConfig<'a> {
     fn new() -> Self {
         NixShellConfig {
             use_name: false,
-            symbol: SegmentConfig::new(" "),
+            symbol: SegmentConfig::new("❄️ "),
             impure_msg: SegmentConfig::new("impure"),
             pure_msg: SegmentConfig::new("pure"),
             style: Color::Blue.bold(),
