@@ -5,13 +5,13 @@ use std::path::PathBuf;
 
 const GIT_IO_BASE_URL: &str = "https://git.io/";
 
-pub fn create() {
+pub async fn create() {
     let os_info = os_info::get();
 
     let environment = Environment {
         os_type: os_info.os_type(),
         os_version: os_info.version().to_owned(),
-        shell_info: get_shell_info(),
+        shell_info: get_shell_info().await,
         terminal_info: get_terminal_info(),
         starship_config: get_starship_config(),
     };
@@ -109,7 +109,7 @@ struct ShellInfo {
     config: String,
 }
 
-fn get_shell_info() -> ShellInfo {
+async fn get_shell_info() -> ShellInfo {
     let shell = std::env::var("STARSHIP_SHELL");
     if shell.is_err() {
         return ShellInfo {
@@ -122,6 +122,7 @@ fn get_shell_info() -> ShellInfo {
     let shell = shell.unwrap();
 
     let version = exec_cmd(&shell, &["--version"])
+        .await
         .map(|output| output.stdout.trim().to_string())
         .unwrap_or_else(|| UNKNOWN_VERSION.to_string());
 
@@ -227,15 +228,15 @@ mod tests {
         assert!(link.contains("No+Starship+config"));
     }
 
-    #[test]
-    fn test_get_shell_info() {
+    #[tokio::test]
+    async fn test_get_shell_info() {
         env::remove_var("STARSHIP_SHELL");
-        let unknown_shell = get_shell_info();
+        let unknown_shell = get_shell_info().await;
         assert_eq!(UNKNOWN_SHELL, &unknown_shell.name);
 
         env::set_var("STARSHIP_SHELL", "fish");
 
-        let fish_shell = get_shell_info();
+        let fish_shell = get_shell_info().await;
         assert_eq!("fish", &fish_shell.name);
     }
 

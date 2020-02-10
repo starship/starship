@@ -9,7 +9,7 @@ use crate::utils;
 ///     - Current directory contains a `stack.yaml` file
 ///     - Current directory contains a `.cabal` file
 ///     - Current directory contains a `package.yaml` file
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'_>) -> Option<Module<'a>> {
     let is_haskell_project = context
         .try_begin_scan()?
         .set_files(&["package.yaml", "stack.yaml", "package.yml", "stack.yml"])
@@ -23,7 +23,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let haskell_version = utils::exec_cmd(
         "stack",
         &["ghc", "--", "--numeric-version", "--no-install-ghc"],
-    )?
+    )
+    .await?
     .stdout;
     let formatted_version = Some(format!("v{}", haskell_version.trim()))?;
 
@@ -45,39 +46,39 @@ mod tests {
     use std::io;
     use tempfile;
 
-    #[test]
-    fn folder_without_stack_yaml() -> io::Result<()> {
+    #[tokio::test]
+    async fn folder_without_stack_yaml() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = render_module("haskell", dir.path());
+        let actual = render_module("haskell", dir.path()).await;
         let expected = None;
         assert_eq!(expected, actual);
         Ok(())
     }
 
-    #[test]
-    fn folder_with_hpack_file() -> io::Result<()> {
+    #[tokio::test]
+    async fn folder_with_hpack_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("package.yaml"))?.sync_all()?;
-        let actual = render_module("haskell", dir.path());
+        let actual = render_module("haskell", dir.path()).await;
         let expected = Some(format!("via {} ", Color::Red.bold().paint("λ v8.6.5")));
         assert_eq!(expected, actual);
         Ok(())
     }
-    #[test]
-    fn folder_with_cabal_file() -> io::Result<()> {
+    #[tokio::test]
+    async fn folder_with_cabal_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        File::create(dir.path().join("test.cabal"))?.sync_all()?;
-        let actual = render_module("haskell", dir.path());
+        File::create(dir.path().join("tokio::test.cabal"))?.sync_all()?;
+        let actual = render_module("haskell", dir.path()).await;
         let expected = Some(format!("via {} ", Color::Red.bold().paint("λ v8.6.5")));
         assert_eq!(expected, actual);
         Ok(())
     }
 
-    #[test]
-    fn folder_with_stack_yaml() -> io::Result<()> {
+    #[tokio::test]
+    async fn folder_with_stack_yaml() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("stack.yaml"))?.sync_all()?;
-        let actual = render_module("haskell", dir.path());
+        let actual = render_module("haskell", dir.path()).await;
         let expected = Some(format!("via {} ", Color::Red.bold().paint("λ v8.6.5")));
         assert_eq!(expected, actual);
         Ok(())

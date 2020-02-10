@@ -14,7 +14,7 @@ use crate::utils;
 ///     - Current directory contains a file with the `.py` extension
 ///     - Current directory contains a `Pipfile` file
 ///     - Current directory contains a `tox.ini` file
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'_>) -> Option<Module<'a>> {
     let is_py_project = context
         .try_begin_scan()?
         .set_files(&[
@@ -40,11 +40,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.create_segment("symbol", &config.symbol);
 
     if config.pyenv_version_name {
-        let python_version = utils::exec_cmd("pyenv", &["version-name"])?.stdout;
+        let python_version = utils::exec_cmd("pyenv", &["version-name"]).await?.stdout;
         module.create_segment("pyenv_prefix", &config.pyenv_prefix);
         module.create_segment("version", &SegmentConfig::new(&python_version.trim()));
     } else {
-        let python_version = get_python_version()?;
+        let python_version = get_python_version().await?;
         let formatted_version = format_python_version(&python_version);
         module.create_segment("version", &SegmentConfig::new(&formatted_version));
 
@@ -59,8 +59,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_python_version() -> Option<String> {
-    match utils::exec_cmd("python", &["--version"]) {
+async fn get_python_version() -> Option<String> {
+    match utils::exec_cmd("python", &["--version"]).await {
         Some(output) => {
             if output.stdout.is_empty() {
                 Some(output.stderr)

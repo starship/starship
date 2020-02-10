@@ -18,7 +18,8 @@ mod utils;
 use crate::module::ALL_MODULES;
 use clap::{App, AppSettings, Arg, SubCommand};
 
-fn main() {
+#[tokio::main]
+async fn main() {
     pretty_env_logger::init();
 
     let status_code_arg = Arg::with_name("status_code")
@@ -136,7 +137,7 @@ fn main() {
                 init::init_stub(shell_name).expect("can't init_stub");
             }
         }
-        ("prompt", Some(sub_m)) => print::prompt(sub_m.clone()),
+        ("prompt", Some(sub_m)) => print::prompt(sub_m.clone()).await,
         ("module", Some(sub_m)) => {
             if sub_m.is_present("list") {
                 println!("Supported modules list");
@@ -146,11 +147,11 @@ fn main() {
                 }
             }
             if let Some(module_name) = sub_m.value_of("name") {
-                print::module(module_name, sub_m.clone());
+                print::module(module_name, sub_m.clone()).await;
             }
         }
         ("configure", Some(_)) => configure::edit_configuration(),
-        ("bug-report", Some(_)) => bug_report::create(),
+        ("bug-report", Some(_)) => bug_report::create().await,
         ("time", _) => {
             match SystemTime::now()
                 .duration_since(SystemTime::UNIX_EPOCH)
@@ -160,7 +161,7 @@ fn main() {
                 None => println!("{}", -1),
             }
         }
-        ("explain", Some(sub_m)) => print::explain(sub_m.clone()),
+        ("explain", Some(sub_m)) => print::explain(sub_m.clone()).await,
         _ => {}
     }
 }

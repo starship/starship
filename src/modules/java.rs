@@ -10,7 +10,7 @@ use crate::utils;
 /// Will display the Java version if any of the following criteria are met:
 ///     - Current directory contains a file with a `.java`, `.class`, `.gradle` or `.jar` extension
 ///     - Current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'_>) -> Option<Module<'a>> {
     let is_java_project = context
         .try_begin_scan()?
         .set_files(&["pom.xml", "build.gradle.kts", "build.sbt"])
@@ -21,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    match get_java_version() {
+    match get_java_version().await {
         Some(java_version) => {
             let mut module = context.new_module("java");
             let config: JavaConfig = JavaConfig::try_load(module.config);
@@ -37,13 +37,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 }
 
-fn get_java_version() -> Option<String> {
+async fn get_java_version() -> Option<String> {
     let java_command = match std::env::var("JAVA_HOME") {
         Ok(java_home) => format!("{}/bin/java", java_home),
         Err(_) => String::from("java"),
     };
 
-    let output = utils::exec_cmd(&java_command.as_str(), &["-Xinternalversion"])?;
+    let output = utils::exec_cmd(&java_command.as_str(), &["-Xinternalversion"]).await?;
     Some(format!("{}{}", output.stdout, output.stderr))
 }
 

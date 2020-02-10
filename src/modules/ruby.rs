@@ -8,7 +8,7 @@ use crate::utils;
 /// Will display the Ruby version if any of the following criteria are met:
 ///     - Current directory contains a `.rb` file
 ///     - Current directory contains a `Gemfile` file
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'_>) -> Option<Module<'a>> {
     let is_rb_project = context
         .try_begin_scan()?
         .set_files(&["Gemfile"])
@@ -19,7 +19,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let ruby_version = utils::exec_cmd("ruby", &["-v"])?.stdout;
+    let ruby_version = utils::exec_cmd("ruby", &["-v"]).await?.stdout;
     let formatted_version = format_ruby_version(&ruby_version)?;
 
     let mut module = context.new_module("ruby");

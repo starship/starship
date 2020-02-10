@@ -8,7 +8,7 @@ use crate::utils;
 /// Will display the PHP version if any of the following criteria are met:
 ///     - Current directory contains a `.php` file
 ///     - Current directory contains a `composer.json` file
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'_>) -> Option<Module<'a>> {
     let is_php_project = context
         .try_begin_scan()?
         .set_files(&["composer.json"])
@@ -25,7 +25,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "-r",
             "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION;",
         ],
-    ) {
+    )
+    .await
+    {
         Some(php_cmd_output) => {
             let php_version = php_cmd_output.stdout;
 

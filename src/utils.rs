@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::{Read, Result};
 use std::path::Path;
-use std::process::Command;
+use tokio::process::Command;
 
 use crate::context::Shell;
 
@@ -28,12 +28,12 @@ impl PartialEq for CommandOutput {
 
 /// Execute a command and return the output on stdout and stderr if sucessful
 #[cfg(not(test))]
-pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
-    internal_exec_cmd(&cmd, &args)
+pub async fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+    internal_exec_cmd(&cmd, &args).await
 }
 
 #[cfg(test)]
-pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+pub async fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
     let command = match args.len() {
         0 => String::from(cmd),
         _ => format!("{} {}", cmd, args.join(" ")),
@@ -60,7 +60,7 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             stderr: String::from("stderr ok!"),
         }),
         // If we don't have a mocked command fall back to executing the command
-        _ => internal_exec_cmd(&cmd, &args),
+        _ => internal_exec_cmd(&cmd, &args).await,
     }
 }
 
@@ -113,9 +113,9 @@ pub fn wrap_seq_for_shell(
     final_string
 }
 
-fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+async fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
     log::trace!("Executing command '{:?}' with args '{:?}'", cmd, args);
-    match Command::new(cmd).args(args).output() {
+    match Command::new(cmd).args(args).output().await {
         Ok(output) => {
             let stdout_string = String::from_utf8(output.stdout).unwrap();
             let stderr_string = String::from_utf8(output.stderr).unwrap();
@@ -141,9 +141,9 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
 mod tests {
     use super::*;
 
-    #[test]
-    fn exec_mocked_command() {
-        let result = exec_cmd("dummy_command", &[]);
+    #[tokio::test]
+    async fn exec_mocked_command() {
+        let result = exec_cmd("dummy_command", &[]).await;
         let expected = Some(CommandOutput {
             stdout: String::from("stdout ok!"),
             stderr: String::from("stderr ok!"),
@@ -152,9 +152,9 @@ mod tests {
         assert_eq!(result, expected)
     }
 
-    #[test]
-    fn exec_no_output() {
-        let result = internal_exec_cmd("true", &[]);
+    #[tokio::test]
+    async fn exec_no_output() {
+        let result = internal_exec_cmd("true", &[]).await;
         let expected = Some(CommandOutput {
             stdout: String::from(""),
             stderr: String::from(""),
@@ -163,9 +163,9 @@ mod tests {
         assert_eq!(result, expected)
     }
 
-    #[test]
-    fn exec_with_output_stdout() {
-        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello"]);
+    #[tokio::test]
+    async fn exec_with_output_stdout() {
+        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello"]).await;
         let expected = Some(CommandOutput {
             stdout: String::from("hello\n"),
             stderr: String::from(""),
@@ -174,9 +174,9 @@ mod tests {
         assert_eq!(result, expected)
     }
 
-    #[test]
-    fn exec_with_output_stderr() {
-        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello >&2"]);
+    #[tokio::test]
+    async fn exec_with_output_stderr() {
+        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello >&2"]).await;
         let expected = Some(CommandOutput {
             stdout: String::from(""),
             stderr: String::from("hello\n"),
@@ -185,9 +185,9 @@ mod tests {
         assert_eq!(result, expected)
     }
 
-    #[test]
-    fn exec_with_output_both() {
-        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello; echo world >&2"]);
+    #[tokio::test]
+    async fn exec_with_output_both() {
+        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello; echo world >&2"]).await;
         let expected = Some(CommandOutput {
             stdout: String::from("hello\n"),
             stderr: String::from("world\n"),
@@ -196,9 +196,9 @@ mod tests {
         assert_eq!(result, expected)
     }
 
-    #[test]
-    fn exec_with_non_zero_exit_code() {
-        let result = internal_exec_cmd("false", &[]);
+    #[tokio::test]
+    async fn exec_with_non_zero_exit_code() {
+        let result = internal_exec_cmd("false", &[]).await;
         let expected = None;
 
         assert_eq!(result, expected)

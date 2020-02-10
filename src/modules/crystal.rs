@@ -8,7 +8,7 @@ use crate::utils;
 /// Will display the Crystal version if any of the following criteria are met:
 ///     - Current directory contains a `.cr` file
 ///     - Current directory contains a `shard.yml` file
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'_>) -> Option<Module<'a>> {
     let is_crystal_project = context
         .try_begin_scan()?
         .set_files(&["shard.yml"])
@@ -19,7 +19,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let crystal_version = utils::exec_cmd("crystal", &["--version"])?.stdout;
+    let crystal_version = utils::exec_cmd("crystal", &["--version"]).await?.stdout;
     let formatted_version = format_crystal_version(&crystal_version)?;
 
     let mut module = context.new_module("crystal");
@@ -53,32 +53,32 @@ mod tests {
     use std::io;
     use tempfile;
 
-    #[test]
-    fn folder_without_crystal_files() -> io::Result<()> {
+    #[tokio::test]
+    async fn folder_without_crystal_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = render_module("crystal", dir.path());
+        let actual = render_module("crystal", dir.path()).await;
         let expected = None;
         assert_eq!(expected, actual);
         Ok(())
     }
 
-    #[test]
-    fn folder_with_shard_file() -> io::Result<()> {
+    #[tokio::test]
+    async fn folder_with_shard_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("shard.yml"))?.sync_all()?;
 
-        let actual = render_module("crystal", dir.path());
+        let actual = render_module("crystal", dir.path()).await;
         let expected = Some(format!("via {} ", Color::Red.bold().paint("🔮 v0.32.1")));
         assert_eq!(expected, actual);
         Ok(())
     }
 
-    #[test]
-    fn folder_with_cr_file() -> io::Result<()> {
+    #[tokio::test]
+    async fn folder_with_cr_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.cr"))?.sync_all()?;
 
-        let actual = render_module("crystal", dir.path());
+        let actual = render_module("crystal", dir.path()).await;
         let expected = Some(format!("via {} ", Color::Red.bold().paint("🔮 v0.32.1")));
         assert_eq!(expected, actual);
         Ok(())

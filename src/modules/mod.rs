@@ -40,7 +40,7 @@ use crate::config::{RootModuleConfig, SegmentConfig};
 use crate::context::{Context, Shell};
 use crate::module::Module;
 
-pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
+pub async fn handle<'a>(module: &str, context: &'a Context<'_>) -> Option<Module<'a>> {
     match module {
         // Keep these ordered alphabetically.
         // Default ordering is handled in configs/mod.rs
@@ -51,33 +51,33 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "cmd_duration" => cmd_duration::module(context),
         "conda" => conda::module(context),
         "directory" => directory::module(context),
-        "dotnet" => dotnet::module(context),
-        "elm" => elm::module(context),
+        "dotnet" => dotnet::module(context).await,
+        "elm" => elm::module(context).await,
         "env_var" => env_var::module(context),
         "git_branch" => git_branch::module(context),
         "git_commit" => git_commit::module(context),
         "git_state" => git_state::module(context),
         "git_status" => git_status::module(context),
-        "golang" => golang::module(context),
-        "haskell" => haskell::module(context),
+        "golang" => golang::module(context).await,
+        "haskell" => haskell::module(context).await,
         "hg_branch" => hg_branch::module(context),
         "hostname" => hostname::module(context),
-        "java" => java::module(context),
+        "java" => java::module(context).await,
         "jobs" => jobs::module(context),
         "kubernetes" => kubernetes::module(context),
         "line_break" => line_break::module(context),
         "memory_usage" => memory_usage::module(context),
         "nix_shell" => nix_shell::module(context),
-        "nodejs" => nodejs::module(context),
+        "nodejs" => nodejs::module(context).await,
         "package" => package::module(context),
-        "php" => php::module(context),
-        "python" => python::module(context),
-        "ruby" => ruby::module(context),
+        "php" => php::module(context).await,
+        "python" => python::module(context).await,
+        "ruby" => ruby::module(context).await,
         "rust" => rust::module(context),
-        "terraform" => terraform::module(context),
+        "terraform" => terraform::module(context).await,
         "time" => time::module(context),
-        "crystal" => crystal::module(context),
-        "username" => username::module(context),
+        "crystal" => crystal::module(context).await,
+        "username" => username::module(context).await,
         _ => {
             eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
             None

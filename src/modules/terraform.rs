@@ -11,7 +11,7 @@ use std::path::PathBuf;
 /// Will display the Terraform version and workspace if any of the following criteria are met:
 ///     - Current directory contains a `.terraform` directory
 ///     - Current directory contains a file with the `.tf` extension
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'_>) -> Option<Module<'a>> {
     let is_terraform_project = context
         .try_begin_scan()?
         .set_folders(&[".terraform"])
@@ -29,8 +29,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.create_segment("symbol", &config.symbol);
 
     if config.show_version {
-        let terraform_version =
-            format_terraform_version(&utils::exec_cmd("terraform", &["version"])?.stdout.as_str())?;
+        let terraform_version = format_terraform_version(
+            &utils::exec_cmd("terraform", &["version"])
+                .await?
+                .stdout
+                .as_str(),
+        )?;
         module.create_segment("version", &config.version.with_value(&terraform_version));
     }
 

@@ -9,7 +9,7 @@ use crate::utils;
 ///     - Current directory contains a `.js` file
 ///     - Current directory contains a `package.json` file
 ///     - Current directory contains a `node_modules` directory
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'_>) -> Option<Module<'a>> {
     let is_js_project = context
         .try_begin_scan()?
         .set_files(&["package.json"])
@@ -21,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let node_version = utils::exec_cmd("node", &["--version"])?.stdout;
+    let node_version = utils::exec_cmd("node", &["--version"]).await?.stdout;
 
     let mut module = context.new_module("nodejs");
     let config: NodejsConfig = NodejsConfig::try_load(module.config);
@@ -43,44 +43,44 @@ mod tests {
     use std::io;
     use tempfile;
 
-    #[test]
-    fn folder_without_node_files() -> io::Result<()> {
+    #[tokio::test]
+    async fn folder_without_node_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = render_module("nodejs", dir.path());
+        let actual = render_module("nodejs", dir.path()).await;
         let expected = None;
         assert_eq!(expected, actual);
         Ok(())
     }
 
-    #[test]
-    fn folder_with_package_json() -> io::Result<()> {
+    #[tokio::test]
+    async fn folder_with_package_json() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("package.json"))?.sync_all()?;
 
-        let actual = render_module("nodejs", dir.path());
+        let actual = render_module("nodejs", dir.path()).await;
         let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
         assert_eq!(expected, actual);
         Ok(())
     }
 
-    #[test]
-    fn folder_with_js_file() -> io::Result<()> {
+    #[tokio::test]
+    async fn folder_with_js_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("index.js"))?.sync_all()?;
 
-        let actual = render_module("nodejs", dir.path());
+        let actual = render_module("nodejs", dir.path()).await;
         let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
         assert_eq!(expected, actual);
         Ok(())
     }
 
-    #[test]
-    fn folder_with_node_modules() -> io::Result<()> {
+    #[tokio::test]
+    async fn folder_with_node_modules() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let node_modules = dir.path().join("node_modules");
         fs::create_dir_all(&node_modules)?;
 
-        let actual = render_module("nodejs", dir.path());
+        let actual = render_module("nodejs", dir.path()).await;
         let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
         assert_eq!(expected, actual);
         Ok(())

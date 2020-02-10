@@ -13,7 +13,7 @@ use crate::utils;
 ///     - Current directory contains a `Gopkg.lock` file
 ///     - Current directory contains a `Godeps` directory
 ///     - Current directory contains a file with the `.go` extension
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'_>) -> Option<Module<'a>> {
     let is_go_project = context
         .try_begin_scan()?
         .set_files(&["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock"])
@@ -32,7 +32,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.create_segment("symbol", &config.symbol);
 
     let formatted_version =
-        format_go_version(&utils::exec_cmd("go", &["version"])?.stdout.as_str())?;
+        format_go_version(&utils::exec_cmd("go", &["version"]).await?.stdout.as_str())?;
     module.create_segment("version", &config.version.with_value(&formatted_version));
 
     Some(module)

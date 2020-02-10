@@ -1,6 +1,12 @@
+#![feature(pin)]
 use ansi_term::ANSIStrings;
 use clap::ArgMatches;
-use rayon::prelude::*;
+use futures::prelude::*;
+use futures_util::{
+    future::FutureExt,
+    stream::{self, StreamExt},
+};
+use pin_utils::pin_mut;
 use std::fmt::Write as FmtWrite;
 use std::io::{self, Write};
 use unicode_width::UnicodeWidthChar;
@@ -10,14 +16,14 @@ use crate::module::Module;
 use crate::module::ALL_MODULES;
 use crate::modules;
 
-pub fn prompt(args: ArgMatches) {
+pub async fn prompt(args: ArgMatches<'_>) {
     let context = Context::new(args);
     let stdout = io::stdout();
     let mut handle = stdout.lock();
-    write!(handle, "{}", get_prompt(context)).unwrap();
+    write!(handle, "{}", get_prompt(&context).await).unwrap();
 }
 
-pub fn get_prompt(context: Context) -> String {
+pub async fn get_prompt<'a>(context: &'a Context<'_>) -> String {
     let config = context.config.get_root_config();
     let mut buf = String::new();
 
@@ -32,38 +38,37 @@ pub fn get_prompt(context: Context) -> String {
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
     }
 
-    let modules = compute_modules(&context);
-
     let mut print_without_prefix = true;
-    let printable = modules.iter();
 
-    for module in printable {
-        // Skip printing the prefix of a module after the line_break
-        if print_without_prefix {
-            let module_without_prefix = module.to_string_without_prefix(context.shell.clone());
-            write!(buf, "{}", module_without_prefix).unwrap()
-        } else {
-            let module = module.ansi_strings_for_shell(context.shell.clone());
-            write!(buf, "{}", ANSIStrings(&module)).unwrap();
+    let list = compute_modules(&context);
+    pin_mut!(list);
+    while let Some(x) = list.next().await {
+        if let Some(module) = x {
+            if print_without_prefix {
+                let module_without_prefix = module.to_string_without_prefix(context.shell.clone());
+                write!(buf, "{}", module_without_prefix).unwrap();
+            } else {
+                let module = module.ansi_strings_for_shell(context.shell.clone());
+                write!(buf, "{}", ANSIStrings(&module)).unwrap();
+            }
+            print_without_prefix = module.get_name() == "line_break";
         }
-
-        print_without_prefix = module.get_name() == "line_break"
     }
-
     buf
 }
-
-pub fn module(module_name: &str, args: ArgMatches) {
+pub async fn module(module_name: &str, args: ArgMatches<'_>) {
     let context = Context::new(args);
-    let module = get_module(module_name, context).unwrap_or_default();
+    let module = get_module(module_name, context).await.unwrap_or_default();
     print!("{}", module);
 }
 
-pub fn get_module(module_name: &str, context: Context) -> Option<String> {
-    modules::handle(module_name, &context).map(|m| m.to_string())
+pub async fn get_module(module_name: &str, context: Context<'_>) -> Option<String> {
+    modules::handle(module_name, &context)
+        .await
+        .map(|m| m.to_string())
 }
 
-pub fn explain(args: ArgMatches) {
+pub async fn explain(args: ArgMatches<'_>) {
     let context = Context::new(args);
 
     struct ModuleInfo {
@@ -74,8 +79,13 @@ pub fn explain(args: ArgMatches) {
 
     let dont_print = vec!["line_break", "character"];
 
-    let modules = compute_modules(&context)
+    let computed = compute_modules(&context)
+        .collect::<Vec<Option<Module>>>()
+        .await;
+
+    let modules = computed
         .into_iter()
+        .filter_map(|x| x)
         .filter(|module| !dont_print.contains(&module.get_name().as_str()))
         .map(|module| {
             let ansi_strings = module.ansi_strings();
@@ -131,8 +141,13 @@ pub fn explain(args: ArgMatches) {
     }
 }
 
-fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
+fn compute_modules<'a>(
+    context: &'a Context,
+) -> impl futures_util::stream::Stream<Item = Option<Module<'a>>> {
     let mut prompt_order: Vec<&str> = Vec::new();
+
+    let handle = |v| modules::handle(v, &context);
+    let isDisabled = |module| !context.is_module_disabled_in_config(module);
 
     // Write out a custom prompt order
     for module in context.config.get_root_config().prompt_order {
@@ -147,12 +162,17 @@ fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
         }
     }
 
-    prompt_order
-        .par_iter()
-        .filter(|module| !context.is_module_disabled_in_config(module))
-        .map(|module| modules::handle(module, &context)) // Compute modules
-        .flatten() // Remove segments set to `None`
-        .collect::<Vec<Module<'a>>>()
+    futures_util::stream::unfold(
+        prompt_order.into_iter().filter(|x| isDisabled(x)),
+        |items| {
+            async move {
+                match items.next() {
+                    Some(v) => Some((handle(v).await, items)),
+                    _ => None,
+                }
+            }
+        },
+    )
 }
 
 fn count_wide_chars(value: &str) -> usize {
