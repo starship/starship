@@ -83,13 +83,18 @@ fetch() {
 }
 
 install() {
- local sudo 
+ local sudo
+ local msg
  if [ -w $BIN_DIR ]; then
-	 sudo=''
+	 sudo=""
+	 msg="Installing Starship, please wait…"
  else
-	 info "Root privileges are required to proceed the installation"
-	 sudo='sudo'
+	 warn "Escalated permission are required to install to ${BIN_DIR}"
+	 sudo -v || (error "Aborting installation(Pleave provide root password)";exit 1)
+	 sudo="sudo -v"
+	 msg="Installing Starship, please wait…"
  fi
+ info "$msg"
  fetch "${URL}" \
 	| ${sudo} tar xzf${VERBOSE} - \
 	-C "${BIN_DIR}"
@@ -251,11 +256,9 @@ info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
 check_bin_dir "${BIN_DIR}"
 confirm "Install Starship ${GREEN}latest${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
 
-info "Installing Starship, please wait…"
-
 install
-
 complete "Starship installed"
+
 echo
 info "Please follow the steps for your shell to complete the installation:
 
