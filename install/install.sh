@@ -90,9 +90,9 @@ install() {
 	 msg="Installing Starship, please wait…"
  else
 	 warn "Escalated permission are required to install to ${BIN_DIR}"
-	 sudo -v || (error "Aborting installation(Pleave provide root password)";exit 1)
-	 sudo="sudo -v"
-	 msg="Installing Starship, please wait…"
+	 sudo -v || (error "Aborting installation (Please provide root password)";exit 1)
+	 sudo="sudo"
+	 msg="Installing Starship as root, please wait…"
  fi
  info "$msg"
  fetch "${URL}" \
