@@ -1228,7 +1228,7 @@ dependencies = [
  "reqwest 0.10.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_json 1.0.47 (registry+https://github.com/rust-lang/crates.io-index)",
  "starship_module_config_derive 0.1.1",
- "sysinfo 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sysinfo 0.11.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "tempfile 3.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "term_size 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "textwrap 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1270,7 +1270,7 @@ dependencies = [
 
 [[package]]
 name = "sysinfo"
-version = "0.11.0"
+version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "cfg-if 0.1.10 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1833,7 +1833,7 @@ dependencies = [
 "checksum static_assertions 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)" = "7f3eb36b47e512f8f1c9e3d10c2c1965bc992bd9cdb024fa581e2194501c83d3"
 "checksum strsim 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)" = "8ea5119cdb4c55b55d432abb513a0429384878c15dde60cc77b1c99de1a95a6a"
 "checksum syn 1.0.14 (registry+https://github.com/rust-lang/crates.io-index)" = "af6f3550d8dff9ef7dc34d384ac6f107e5d31c8f57d9f28e0081503f547ac8f5"
-"checksum sysinfo 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)" = "30d769f0b7a5f7c1b59dfbdbf9e8826fe48afe9dca69849bda7b953714f34375"
+"checksum sysinfo 0.11.1 (registry+https://github.com/rust-lang/crates.io-index)" = "0c641c7c1ef287a28bda593ee68b01791ae6d47a1712832c4415791b9a31d8df"
 "checksum tempfile 3.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "7a6e24d9338a0a5be79593e2fa15a648add6138caa803e2d5bc782c371732ca9"
 "checksum term_size 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)" = "9e5b9a66db815dcfd2da92db471106457082577c3c278d4138ab3e3b4e189327"
 "checksum termcolor 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "bb6bfa289a4d7c5766392812c0a1f4c1ba45afa1ad47803c11e1f407d846d75f"
