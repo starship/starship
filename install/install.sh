@@ -85,7 +85,7 @@ fetch() {
 install() {
  local sudo
  local msg
- if [ -w $BIN_DIR ]; then
+ if [ -w "$BIN_DIR" ]; then
 	 sudo=""
 	 msg="Installing Starship, please wait…"
  else
