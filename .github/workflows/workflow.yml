@@ -116,11 +116,6 @@ jobs:
           toolchain: stable
           override: true
 
-      # Install Ruby at a fixed version
-      - uses: eregon/use-ruby-action@v1
-        with:
-          ruby-version: "2.6.3"
-
       # Install Python at a fixed version
       - uses: actions/setup-python@v1
         with:
