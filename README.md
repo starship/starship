@@ -8,7 +8,7 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&logo=github&style=flat-square"
+      src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
       alt="GitHub Actions workflow status"
   /></a>
   <a href="https://crates.io/crates/starship"
@@ -21,7 +21,7 @@
   ><br />
     <a href="https://discord.gg/8Jzqu3T"
     ><img
-      src="https://img.shields.io/discord/567163873606500352?label=discord&logo=discord&logoColor=white&style=flat-square"
+      src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
       alt="Chat on Discord"
   /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
