@@ -61,6 +61,11 @@ module.exports = {
       apiKey: "107bdc34b894d5d1dd0824b420184c2d",
       indexName: "starship"
     },
+    postcss: {
+      plugins: [
+        require('css-prefers-color-scheme/postcss'),
+      ]
+    },
     locales: {
       "/": {
         // text for the language dropdown
