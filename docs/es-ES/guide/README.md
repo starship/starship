@@ -7,21 +7,21 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://github.com/starship/starship/workflows/Main%20workflow/badge.svg?branch=master&event=push"
+      src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
       alt="Estado del flujo de trabajo de GitHub Actions" /></a>
   <a href="https://crates.io/crates/starship"
-    ><img src="https://img.shields.io/crates/v/starship" alt="Versión de Crates.io" /></a>
+    ><img src="https://img.shields.io/crates/v/starship?style=flat-square" alt="Versión de Crates.io" /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
-      src="https://repology.org/badge/tiny-repos/starship.svg"
+      src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
       alt="Estado de empaquetado" /></a
 ><br />
     <a href="https://discord.gg/8Jzqu3T"
     ><img
-      src="https://img.shields.io/discord/567163873606500352?logo=discord"
+      src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
       alt="Chat en Discord" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-70-orange" alt="Todos los colaboradores"></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-70-orange?style=flat-square" alt="Todos los colaboradores"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
@@ -338,6 +338,7 @@ Los agradecimientos van a estas maravillosas personas ([clave emoji](https://all
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 Este proyecto sigue la especificación [todos-los-colaboradores](https://github.com/all-contributors/all-contributors). ¡Son bienvenidas contribuciones de cualquier tipo!
