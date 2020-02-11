@@ -7,21 +7,21 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://github.com/starship/starship/workflows/Main%20workflow/badge.svg?branch=master&event=push"
+      src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
       alt="GitHub Actions workflow status" /></a>
   <a href="https://crates.io/crates/starship"
-    ><img src="https://img.shields.io/crates/v/starship" alt="Crates.io version" /></a>
+    ><img src="https://img.shields.io/crates/v/starship?style=flat-square" alt="Crates.io version" /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
-      src="https://repology.org/badge/tiny-repos/starship.svg"
+      src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
       alt="Packaging status" /></a
 ><br />
     <a href="https://discord.gg/8Jzqu3T"
     ><img
-      src="https://img.shields.io/discord/567163873606500352?logo=discord"
+      src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
       alt="Chat on Discord" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-70-orange" alt="All Contributors"></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-70-orange?style=flat-square" alt="All Contributors"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
@@ -338,6 +338,7 @@ Starship の設定方法の詳細に関しては、[ドキュメント](https://
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 このプロジェクトは [all-contributors](https://allcontributors.org/docs/ja/overview) の仕様に従っています。 どんな種類の貢献でもお待ちしています！
