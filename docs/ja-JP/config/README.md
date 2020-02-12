@@ -463,6 +463,12 @@ truncation_symbol = ""
 
 `git_commit`モジュールは、現在のディレクトリにあるリポジトリの現在のコミットハッシュを表示します。
 
+::: tip
+
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+
+:::
+
 ### オプション
 
 | 変数                   | デフォルト          | 説明                        |
@@ -471,8 +477,7 @@ truncation_symbol = ""
 | `prefix`             | `"("`          | このモジュールの先頭に表示される文字列です。    |
 | `suffix`             | `")"`          | このモジュールの末尾に表示される文字列です。    |
 | `style`              | `"bold green"` | モジュールのスタイルです。             |
-| `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
-| `disabled`           | `false`        | `git_commit`モジュールを無効にします。 |
+| `disabled`           | `true`         | `git_commit`モジュールを無効にします。 |
 
 ### 設定例
 
@@ -480,6 +485,7 @@ truncation_symbol = ""
 # ~/.config/starship.toml
 
 [git_commit]
+disabled = false
 commit_hash_length = 4
 ```
 

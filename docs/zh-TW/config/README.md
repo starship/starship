@@ -463,6 +463,12 @@ truncation_symbol = ""
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
+::: tip
+
+這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+
+:::
+
 ### 選項
 
 | 變數                   | 預設             | 說明                                               |
@@ -471,8 +477,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 | `prefix`             | `"("`          | Prefix to display immediately before git commit. |
 | `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
 | `style`              | `"bold green"` | 這個模組的風格。                                         |
-| `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
-| `disabled`           | `false`        | Disables the `git_commit` module.                |
+| `disabled`           | `true`         | Disables the `git_commit` module.                |
 
 ### 範例
 
@@ -480,6 +485,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 # ~/.config/starship.toml
 
 [git_commit]
+disabled = false
 commit_hash_length = 4
 ```
 
