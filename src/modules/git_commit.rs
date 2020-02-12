@@ -9,9 +9,6 @@ use crate::configs::git_commit::GitCommitConfig;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_commit");
     let config = GitCommitConfig::try_load(module.config);
-    if config.disabled {
-        return None;
-    };
 
     module
         .get_prefix()
@@ -26,6 +23,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = context.get_repo().ok()?;
     let repo_root = repo.root.as_ref()?;
     let git_repo = Repository::open(repo_root).ok()?;
+
+    let is_detached = git_repo.head_detached().ok()?;
+    if config.only_detached && !is_detached {
+        return None;
+    };
 
     let git_head = git_repo.head().ok()?;
     let head_commit = git_head.peel_to_commit().ok()?;
