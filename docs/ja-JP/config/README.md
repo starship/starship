@@ -463,21 +463,16 @@ truncation_symbol = ""
 
 `git_commit`モジュールは、現在のディレクトリにあるリポジトリの現在のコミットハッシュを表示します。
 
-::: tip
-
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
-
-:::
-
 ### オプション
 
-| 変数                   | デフォルト          | 説明                        |
-| -------------------- | -------------- | ------------------------- |
-| `commit_hash_length` | `7`            | 表示されるgitコミットハッシュの長さです。    |
-| `prefix`             | `"("`          | このモジュールの先頭に表示される文字列です。    |
-| `suffix`             | `")"`          | このモジュールの末尾に表示される文字列です。    |
-| `style`              | `"bold green"` | モジュールのスタイルです。             |
-| `disabled`           | `true`         | `git_commit`モジュールを無効にします。 |
+| 変数                   | デフォルト          | 説明                                                    |
+| -------------------- | -------------- | ----------------------------------------------------- |
+| `commit_hash_length` | `7`            | 表示されるgitコミットハッシュの長さです。                                |
+| `prefix`             | `"("`          | このモジュールの先頭に表示される文字列です。                                |
+| `suffix`             | `")"`          | このモジュールの末尾に表示される文字列です。                                |
+| `style`              | `"bold green"` | モジュールのスタイルです。                                         |
+| `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
+| `disabled`           | `false`        | Disables the `git_commit` module.                     |
 
 ### 設定例
 
@@ -485,13 +480,12 @@ truncation_symbol = ""
 # ~/.config/starship.toml
 
 [git_commit]
-disabled = false
 commit_hash_length = 4
 ```
 
 ## Git の進行状態
 
-`git_state`モジュールはgitディレクトリの進行状態を表します。 (例: _REBASING_, _BISECTING_, その他) 進捗情報がある場合(例: REBASING 3/10)はその情報も表示されます。
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
 ### オプション
 
@@ -520,7 +514,7 @@ cherry_pick = "🍒 PICKING"
 
 ## Git の状態
 
-`git_status`モジュールは、現在のディレクトリのリポジトリの状態を表すシンボルを表示します。
+The `git_status` module shows symbols representing the state of the repo in your current directory.
 
 ### オプション
 
@@ -579,7 +573,7 @@ deleted = "🗑"
 
 ## Golang
 
-`golang`モジュールは、現在インストールされているGolangのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `golang` module shows the currently installed version of Golang. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`go.mod`ファイルが含まれている
 - カレントディレクトリに`go.sum`ファイルが含まれている
@@ -631,7 +625,7 @@ symbol = " "
 
 ## Mercurial ブランチ
 
-` hg_branch `モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを示します。
+The `hg_branch` module shows the active branch of the repo in your current directory.
 
 ### オプション
 
@@ -656,7 +650,7 @@ truncation_symbol = ""
 
 ## ホスト名
 
-`hostname`モジュールには、システムのホスト名が表示されます。
+The `hostname` module shows the system hostname.
 
 ### オプション
 
@@ -684,7 +678,7 @@ disabled = false
 
 ## ジョブ
 
-`jobs`モジュールには、実行中のジョブの現在の数が表示されます。 このモジュールは、実行中のバックグラウンドジョブがある場合にのみ表示されます。 1つ以上のジョブがある、または`threshold`に指定した値以上にジョブがある場合は実行中のジョブの数を表示します。
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
 ### オプション
 
@@ -707,11 +701,11 @@ threshold = 4
 
 ## Kubernetes
 
-現在のKubernetesコンテキスト名と、設定されている場合は、kubeconfigファイルに基づいてネームスペースを表示します。 ネームスペースはkubconfigで設定されている必要があります。それは `kubectl config set-context starship-cluster --namespace astronaut` のようなコマンドで設定することができます。 `$KUBECONFIG` 環境変数が設定されている場合、モジュールはそれを使用します `~/.kube/config` は使用しません。
+Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -736,7 +730,7 @@ disabled = false
 
 ## 改行
 
-`line_break`モジュールは、プロンプトを2行に分割します。
+The `line_break` module separates the prompt into two lines.
 
 ### オプション
 
@@ -755,7 +749,7 @@ disabled = true
 
 ## Nix-shell
 
-`nix_shell`モジュールは、nix-shell環境を示しています。 このモジュールは、nixシェル環境内にあるときに表示されます。
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### オプション
 
@@ -781,7 +775,7 @@ pure_msg = "pure shell"
 
 ## Java
 
-`java`モジュールは、現在インストールされているJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `java` module shows the currently installed version of Java. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`pom.xml`, `build.gradle.kts`,もしくは`build.sbt`が含まれている
 - カレントディレクトリに拡張子が`.java`, `.class`, `.gradle`, もしくは`.jar`のファイルが含まれている
@@ -805,13 +799,13 @@ symbol = "🌟 "
 
 ## メモリ使用量
 
-`memory_usage`モジュールは、現在のシステムメモリとスワップ使用量を示します。
+The `memory_usage` module shows current system memory and swap usage.
 
-デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -843,7 +837,7 @@ style = "bold dimmed green"
 
 ## Crystal
 
-`crystal`モジュールには、現在インストールされているCrystalのバージョンが表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `crystal` module shows the currently installed version of Crystal. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`shard.yml`ファイルが含まれている
 - カレントディレクトリに`.cr`の拡張子のファイルが含まれている
@@ -868,7 +862,7 @@ style = "bold blue"
 
 ## NodeJS
 
-`nodejs`モジュールは、現在インストールされているNodeJSのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `nodejs` module shows the currently installed version of NodeJS. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`package.json`ファイルが含まれている
 - カレントディレクトリに`node_modules`ディレクトリが含まれている
@@ -893,7 +887,7 @@ symbol = "🤖 "
 
 ## パッケージのバージョン
 
-`package`モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。 このモジュールは現在、 `npm` 、 `cargo` 、および`poetry`パッケージをサポートしています。
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
 
 - **npm** – `npm`パッケージバージョンは、現在のディレクトリにある`package.json`から抽出されます
 - **cargo** – `cargo`パッケージバージョンは、現在のディレクトリにある`Cargo.toml`から抽出されます。
@@ -921,7 +915,7 @@ symbol = "🎁 "
 
 ## PHP
 
-`php`モジュールは、現在インストールされているPHPのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `php` module shows the currently installed version of PHP. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`composer.json`ファイルが含まれている
 - カレントディレクトリに`.php`の拡張子のファイルが含まれている
@@ -945,11 +939,11 @@ symbol = "🔹 "
 
 ## Python
 
-`python`モジュールは、現在インストールされているPythonのバージョンを示します。
+The `python` module shows the currently installed version of Python.
 
-`pyenvversionname`が`true`に設定されている場合 、pyenvでのバージョン名が表示されます 。
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
 
-それ以外の場合は、 `python --version`バージョン番号が表示され、アクティブになっている場合は現在のPython仮想環境が表示されます。
+Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
 
 次の条件のいずれかが満たされると、モジュールが表示されます。
 
@@ -984,7 +978,7 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-`ruby`モジュールは、現在インストールされているRubyのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `ruby` module shows the currently installed version of Ruby. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Gemfile`ファイルが含まれている
 - カレントディレクトリに`.rb`の拡張子のファイルが含まれている
@@ -1008,7 +1002,7 @@ symbol = "🔺 "
 
 ## Rust
 
-`rust`モジュールには、現在インストールされているRustのバージョンが表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `rust` module shows the currently installed version of Rust. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Cargo.toml`ファイルが含まれている
 - カレントディレクトリに`.rs`の拡張子のファイルが含まれている
@@ -1032,7 +1026,7 @@ symbol = "⚙️ "
 
 ## Terraform
 
-`terraform`モジュールには、現在選択されているterraformワークスペースとバージョンが表示されます。 デフォルトでは、Terraformのバージョンは表示されません。これは、多くのプラグインが使用されている場合、Terraformの現在のバージョンでは遅いためです。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`.terraform`フォルダが含まれている
 - カレントディレクトリに`.tf`の拡張子のファイルが含まれている
@@ -1057,11 +1051,11 @@ symbol = "🏎💨 "
 
 ## 時刻
 
-`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1075,7 +1069,7 @@ symbol = "🏎💨 "
 | `utc_time_offset` | `local`        | 使用するUTCオフセットを設定します。 -24から24までの間で設定可能です。 フロートが30/45分のタイムゾーンオフセットに対応できるようにします。                      |
 | `disabled`        | `true`         | `time`モジュールを無効にします。                                                                               |
 
-`use_12hr` が `true` の場合、`format` のデフォルトは `"%r"` です。 それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、`use_12hr`の設定が上書きされます。
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
 ### 設定例
 
@@ -1090,7 +1084,7 @@ utc_time_offset = -5
 
 ## ユーザー名
 
-`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `username` module shows active user's username. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントユーザーがroot
 - カレントユーザーが、ログインしているユーザーとは異なる
