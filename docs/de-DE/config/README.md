@@ -463,21 +463,16 @@ truncation_symbol = ""
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
-::: tip
-
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
-
-:::
-
 ### Optionen
 
-| Variable             | Standardwert   | Beschreibung                                     |
-| -------------------- | -------------- | ------------------------------------------------ |
-| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
-| `prefix`             | `"("`          | Prefix to display immediately before git commit. |
-| `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
-| `style`              | `"bold green"` | Stil für dieses Modul.                           |
-| `disabled`           | `true`         | Disables the `git_commit` module.                |
+| Variable             | Standardwert   | Beschreibung                                          |
+| -------------------- | -------------- | ----------------------------------------------------- |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.          |
+| `prefix`             | `"("`          | Prefix to display immediately before git commit.      |
+| `suffix`             | `")"`          | Suffix to display immediately after git commit.       |
+| `style`              | `"bold green"` | Stil für dieses Modul.                                |
+| `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
+| `disabled`           | `false`        | Disables the `git_commit` module.                     |
 
 ### Beispiel
 
@@ -485,7 +480,6 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 # ~/.config/starship.toml
 
 [git_commit]
-disabled = false
 commit_hash_length = 4
 ```
 
@@ -579,7 +573,7 @@ deleted = "🗑"
 
 ## Golang
 
-Das `golang`-Modul zeigt die aktuell installierte Version von Golang. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `golang` module shows the currently installed version of Golang. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - Das aktuelle Verzeichnis enthält eine `go.mod`-Datei
 - Das aktuelle Verzeichnis enthält eine `go.sum`-Datei
@@ -656,7 +650,7 @@ truncation_symbol = ""
 
 ## Hostname
 
-Das `hostname`-Modul zeigt den Hostnamen des Systems an.
+The `hostname` module shows the system hostname.
 
 ### Optionen
 
@@ -711,7 +705,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -736,7 +730,7 @@ disabled = false
 
 ## Zeilenumbruch
 
-Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
+The `line_break` module separates the prompt into two lines.
 
 ### Optionen
 
@@ -755,7 +749,7 @@ disabled = true
 
 ## Nix-Shell
 
-Das `nix_shell`-Modul zeigt die nix-shell Umgebung an. Das Modul wird angezeigt, wenn es sich in einer nix-Shell-Umgebung befindet.
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### Optionen
 
@@ -781,7 +775,7 @@ pure_msg = "pure shell"
 
 ## Java
 
-Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `java` module shows the currently installed version of Java. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - Das aktuelle Verzeichnis enthält `pom.xml`, `build.gradle.kts` oder `build.sbt`
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
@@ -805,13 +799,13 @@ symbol = "🌟 "
 
 ## Speicherauslastung
 
-Das `memory_usage` Modul zeigt den aktuellen Systemspeicher und die swap-Nutzung an.
+The `memory_usage` module shows current system memory and swap usage.
 
-Standardmäßig wird die swap-Nutzung angezeigt, wenn der gesamte System-swap nicht Null ist.
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -867,7 +861,7 @@ style = "bold blue"
 
 ## NodeJS
 
-Das `nodejs` Modul zeigt die derzeit installierte Version von NodeJS. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `nodejs` module shows the currently installed version of NodeJS. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - Das aktuelle Verzeichnis enthält eine `package.json`-Datei
 - Das aktuelle Verzeichnis enthält ein `node_modules`-Verzeichnis
@@ -892,7 +886,7 @@ symbol = "🤖 "
 
 ## Paketversion
 
-Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository für ein Paket ist, und zeigt dessen aktuelle Version an. Das Modul unterstützt derzeit `npm`, `cargo`, und `poetry` Pakete.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
 
 - **npm** – Die `npm` Paketversion wird aus dem `package.json` gelesen, das sich im aktuellen Verzeichnis befindet
 - **Cargo** – Die `Cargo` Paketversion wird aus dem `Cargo.toml` gelesen, das sich im aktuellen Verzeichnis befindet
@@ -920,7 +914,7 @@ symbol = "🎁 "
 
 ## PHP
 
-Das `php`-Modul zeigt die aktuell installierte Version von PHP. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `php` module shows the currently installed version of PHP. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - Das aktuelle Verzeichnis enthält eine `composer.json`-Datei
 - Das aktuelle Verzeichnis enthält eine `.php`-Datei
@@ -944,11 +938,11 @@ symbol = "🔹 "
 
 ## Python
 
-Das `python`-Modul zeigt die aktuell installierte Version von Python.
+The `python` module shows the currently installed version of Python.
 
-Wenn `pyenv_version_name` auf `true` gesetzt ist, wird die version der pyenv angezeigt.
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
 
-Andernfalls wird die gleiche Versionsnummer angezeigt wie `python --version`, sowie der Name des aktuellen virtualenvs, wenn eines aktiv ist.
+Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
 
 Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
@@ -983,7 +977,7 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-Das `ruby` Modul zeigt die derzeit installierte Version von Ruby an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `ruby` module shows the currently installed version of Ruby. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - Das aktuelle Verzeichnis enthält eine `Gemfile`-Datei
 - Das aktuelle Verzeichnis enthält eine `.rb`-Datei
@@ -1007,7 +1001,7 @@ symbol = "🔺 "
 
 ## Rust
 
-Das `rust` Modul zeigt die derzeit installierte Version von Rust an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `rust` module shows the currently installed version of Rust. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - Das aktuelle Verzeichnis enthält eine `Cargo.toml`-Datei
 - Das aktuelle Verzeichnis enthält eine Datei mit der `.rs`-Erweiterung
@@ -1031,7 +1025,7 @@ symbol = "⚙️ "
 
 ## Terraform
 
-Das `Terraform` Modul zeigt den aktuell ausgewählten terraform Arbeitsbereich und die Version an. Standardmäßig wird die Terraform-Version nicht angezeigt, da dies bei aktuellen Versionen von Terraform langsam ist, wenn viele Plugins verwendet werden. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - Das aktuelle Verzeichnis enthält eine `.terraform`-Datei
 - Das aktuelle Verzeichnis enthält eine Datei mit der `.tf`-Erweiterung
@@ -1056,11 +1050,11 @@ symbol = "🏎💨 "
 
 ## Uhrzeit
 
-Das `time` Modul zeigt die aktuelle **lokale** Zeit an. Der `format` Wert wird von der crate [`chrono`](https://crates.io/crates/chrono) benutzt um die Zeit zu formatieren. Schau dir [die chrono strftime Dokumentation](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) an, um die möglichen Optionen zu sehen.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1074,7 +1068,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `utc_time_offset` | `lokal`       | Legt das UTC-Offset fest, das verwendet werden soll. Reicht von -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets. |
 | `disabled`        | `true`        | Deaktiviert das `time`-Modul.                                                                                                             |
 
-Wird `use_12hr` auf `true` gestellt, so wird `format` automatisch auf `"%r"` gesetzt. Ansonsten ist der Standardwert hierfür `"%T"`. Wird hingegen `format` gesetzt, so überschreibt dies die Einstellung `use_12hr`.
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
 ### Beispiel
 
@@ -1089,7 +1083,7 @@ utc_time_offset = -5
 
 ## Benutzername
 
-Das Modul `username` zeigt den Benutzernamen des aktiven Benutzers. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `username` module shows active user's username. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - Der aktuelle Benutzer ist root
 - Der aktuelle Benutzer ist nicht derjenige, der derzeit angemeldet ist
