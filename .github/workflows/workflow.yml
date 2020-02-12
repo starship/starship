@@ -116,11 +116,6 @@ jobs:
           toolchain: stable
           override: true
 
-      # Install Golang at a fixed version
-      - uses: actions/setup-go@v1
-        with:
-          go-version: "1.12.1"
-
       # Install Ruby at a fixed version
       - uses: eregon/use-ruby-action@v1
         with:

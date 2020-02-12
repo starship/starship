@@ -39,18 +39,6 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
         _ => format!("{} {}", cmd, args.join(" ")),
     };
     match command.as_str() {
-        "elm --version" => Some(CommandOutput {
-            stdout: String::from("0.19.1"),
-            stderr: String::default(),
-        }),
-        "stack ghc -- --numeric-version --no-install-ghc" => Some(CommandOutput {
-            stdout: String::from("8.6.5"),
-            stderr: String::default(),
-        }),
-        "node --version" => Some(CommandOutput {
-            stdout: String::from("v12.0.0"),
-            stderr: String::default(),
-        }),
         "crystal --version" => Some(CommandOutput {
             stdout: String::from("Crystal 0.32.1 (2019-12-18)"),
             stderr: String::default(),
@@ -58,6 +46,22 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
         "dummy_command" => Some(CommandOutput {
             stdout: String::from("stdout ok!"),
             stderr: String::from("stderr ok!"),
+        }),
+        "elm --version" => Some(CommandOutput {
+            stdout: String::from("0.19.1"),
+            stderr: String::default(),
+        }),
+        "go version" => Some(CommandOutput {
+            stdout: String::from("go version go1.12.1 linux/amd64"),
+            stderr: String::default(),
+        }),
+        "node --version" => Some(CommandOutput {
+            stdout: String::from("v12.0.0"),
+            stderr: String::default(),
+        }),
+        "stack ghc -- --numeric-version --no-install-ghc" => Some(CommandOutput {
+            stdout: String::from("8.6.5"),
+            stderr: String::default(),
         }),
         // If we don't have a mocked command fall back to executing the command
         _ => internal_exec_cmd(&cmd, &args),
