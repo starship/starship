@@ -23,10 +23,10 @@
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
       alt="Chat on Discord" /></a>
-  <a href="https://github.com/starship/starship/graphs/contributors"
+  <a href="https://twitter.com/StarshipPrompt"
     ><img
-      src="https://img.shields.io/github/contributors/starship/starship?style=flat-square"
-      alt="Contributors" /></a>
+      src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
+      alt="Follow @StarshipPrompt on Twitter" /></a>
 </p>
 
 <p align="center">
