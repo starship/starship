@@ -3,32 +3,32 @@ module.exports = {
     "/": {
       lang: "en-US",
       title: "Starship",
-      description: "The cross-shell prompt for astronauts"
+      description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
     },
     "/de-DE/": {
       lang: "de-DE",
       title: "Starship",
-      description: "The cross-shell prompt for astronauts"
+      description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
     },
     "/ru-RU/": {
       lang: "ru-RU",
       title: "Starship",
-      description: "The cross-shell prompt for astronauts"
+      description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
     },
     "/ja-JP/": {
       lang: "ja-JP",
       title: "Starship",
-      description: "The cross-shell prompt for astronauts"
+      description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
     },
     "/zh-CN/": {
       lang: "zh-CN",
       title: "Starship",
-      description: "The cross-shell prompt for astronauts"
+      description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
     },
     "/zh-TW/": {
       lang: "zh-TW",
       title: "Starship",
-      description: "The cross-shell prompt for astronauts"
+      description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
     }
   },
   // prettier-ignore
