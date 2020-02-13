@@ -54,10 +54,56 @@ fn format_php_version(php_version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::modules::utils::test::render_module;
+    use ansi_term::Color;
+    use std::fs::File;
+    use std::io;
+    use tempfile;
 
     #[test]
     fn test_format_php_version() {
         let input = "7.3.8";
         assert_eq!(format_php_version(input), Some("v7.3.8".to_string()));
+    }
+
+    #[test]
+    fn folder_without_php_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = render_module("php", dir.path());
+
+        let expected = None;
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn folder_with_composer_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("composer.json"))?.sync_all()?;
+
+        let actual = render_module("php", dir.path());
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(147).bold().paint("🐘 v7.3.8")
+        ));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn folder_with_php_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.php"))?.sync_all()?;
+
+        let actual = render_module("php", dir.path());
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(147).bold().paint("🐘 v7.3.8")
+        ));
+        assert_eq!(expected, actual);
+        Ok(())
     }
 }

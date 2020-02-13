@@ -97,7 +97,9 @@ mod tests {
             Some("v2.5.1".to_string())
         );
         assert_eq!(
-            format_ruby_version("ruby 2.7.0p0 (2019-12-25 revision 647ee6f091) [x86_64-linux-musl]"),
+            format_ruby_version(
+                "ruby 2.7.0p0 (2019-12-25 revision 647ee6f091) [x86_64-linux-musl]"
+            ),
             Some("v2.7.0".to_string())
         );
 
