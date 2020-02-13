@@ -4,8 +4,7 @@
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
     alt="Starship – Cross-shell prompt"
   />
-</p>
-<p align="center">
+  <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
@@ -27,10 +26,6 @@
       alt="Chat on Discord"
   /></a>
   <a><img src="https://img.shields.io/github/contributors/starship/starship?style=flat-square" alt="Contributors"/></a>
-</p>
-
-<p align="center">
-  <b>The minimal, blazing-fast, and infinitely customizable prompt for any shell!</b>
 </p>
 
 <p align="center">
@@ -75,9 +70,12 @@
   /></a>
 </p>
 
-## 🍬 Features
+<h1></h1>
 
 <img src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif" alt="Starship with iTerm2 and the Snazzy theme" width="50%" align="right"/>
+
+**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+
 
 - **Fast:** it's fast – _really really_ fast! 🚀
 - **Customizable:** configure every aspect of your prompt.
@@ -87,9 +85,8 @@
 - **Easy:** quick to install – start using it in minutes.
 
 <p align="center">
-<a href="https://starship.rs/"><strong>Explore the Starship docs »</strong></a>
+<a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
-<br>
 
 
 ## 🚀 Installation
@@ -167,8 +164,6 @@
    Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
 
    ```sh
-   # ~\Documents\PowerShell\Profile.ps1
-
    Invoke-Expression (&starship init powershell)
    ```
 
