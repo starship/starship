@@ -82,6 +82,24 @@ fetch() {
   fi
 }
 
+install() {
+ local sudo
+ local msg
+ if [ -w "$BIN_DIR" ]; then
+	 sudo=""
+	 msg="Installing Starship, please wait…"
+ else
+	 warn "Escalated permission are required to install to ${BIN_DIR}"
+	 sudo -v || (error "Aborting installation (Please provide root password)";exit 1)
+	 sudo="sudo"
+	 msg="Installing Starship as root, please wait…"
+ fi
+ info "$msg"
+ fetch "${URL}" \
+	| ${sudo} tar xzf${VERBOSE} - \
+	-C "${BIN_DIR}"
+}
+
 # Currently supporting:
 #   - win (Git Bash)
 #   - darwin
@@ -238,13 +256,9 @@ info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
 check_bin_dir "${BIN_DIR}"
 confirm "Install Starship ${GREEN}latest${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
 
-info "Installing Starship, please wait…"
-
-fetch "${URL}" \
-  | tar xzf${VERBOSE} - \
-    -C "${BIN_DIR}"
-
+install
 complete "Starship installed"
+
 echo
 info "Please follow the steps for your shell to complete the installation:
 
