@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText: null
-tagline: The cross-shell prompt for astronauts
+tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
 actionText: Get Started →
 actionLink: ./guide/
 features:
@@ -16,7 +16,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
 # Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell.
+description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and PowerShell.
 ---
 
 <div class="center">

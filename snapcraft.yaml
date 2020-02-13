@@ -1,7 +1,7 @@
 name: starship
 base: core18
 adopt-info: starship
-summary: The cross-shell prompt for astronauts
+summary: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
 description: |
   Starship is the minimal, blazing fast, and extremely customizable prompt 
   for any shell! The prompt shows information you need while you're working,
