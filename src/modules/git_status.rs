@@ -5,6 +5,7 @@ use super::{Context, Module, RootModuleConfig};
 use crate::config::SegmentConfig;
 use crate::configs::git_status::{CountConfig, GitStatusConfig};
 use std::borrow::BorrowMut;
+use std::collections::HashMap;
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -210,17 +211,39 @@ fn get_repo_status(repository: &mut Repository) -> Result<RepoStatus, git2::Erro
         return Err(git2::Error::from_str("Repo has no status"));
     }
 
+    let statuses_count = count_statuses(statuses);
+
     let repo_status: RepoStatus = RepoStatus {
-        conflicted: statuses.iter().filter(|s| is_conflicted(**s)).count(),
-        deleted: statuses.iter().filter(|s| is_deleted(**s)).count(),
-        renamed: statuses.iter().filter(|s| is_renamed(**s)).count(),
-        modified: statuses.iter().filter(|s| is_modified(**s)).count(),
-        staged: statuses.iter().filter(|s| is_staged(**s)).count(),
-        untracked: statuses.iter().filter(|s| is_untracked(**s)).count(),
+        conflicted: *statuses_count.get("conflicted").unwrap_or(&0),
+        deleted: *statuses_count.get("deleted").unwrap_or(&0),
+        renamed: *statuses_count.get("renamed").unwrap_or(&0),
+        modified: *statuses_count.get("modified").unwrap_or(&0),
+        staged: *statuses_count.get("staged").unwrap_or(&0),
+        untracked: *statuses_count.get("untracked").unwrap_or(&0),
         stashed: stashed_count(repository)?,
     };
 
     Ok(repo_status)
+}
+
+fn count_statuses(statuses: Vec<Status>) -> HashMap<&'static str, usize> {
+    let mut predicates: HashMap<&'static str, fn(git2::Status) -> bool> = HashMap::new();
+    predicates.insert("conflicted", is_conflicted);
+    predicates.insert("deleted", is_deleted);
+    predicates.insert("renamed", is_renamed);
+    predicates.insert("modified", is_modified);
+    predicates.insert("staged", is_staged);
+    predicates.insert("untracked", is_untracked);
+
+    statuses.iter().fold(HashMap::new(), |mut map, status| {
+        for (key, predicate) in predicates.iter() {
+            if predicate(*status) {
+                let entry = map.entry(key).or_insert(0);
+                *entry += 1;
+            }
+        }
+        map
+    })
 }
 
 fn is_conflicted(status: Status) -> bool {
