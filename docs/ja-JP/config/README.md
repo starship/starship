@@ -267,13 +267,13 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 
 ### オプション
 
-| 変数                  | デフォルト           | 説明                                                         |
-| ------------------- | --------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | コマンド実行時間の直前に表示する文字列です。                                     |
-| `style`             | `"bold yellow"` | モジュールのスタイルです。                                              |
-| `disabled`          | `false`         | `cmd_duration`モジュールを無効にします。                                |
+| 変数                  | デフォルト           | 説明                          |
+| ------------------- | --------------- | --------------------------- |
+| `min_time`          | `2_000`         | 実行時間を表示する最短期間（ミリ秒単位）です。     |
+| `show_milliseconds` | `false`         | 実行時間の秒に加えてミリ秒を表示します。        |
+| `prefix`            | `took`          | コマンド実行時間の直前に表示する文字列です。      |
+| `style`             | `"bold yellow"` | モジュールのスタイルです。               |
+| `disabled`          | `false`         | `cmd_duration`モジュールを無効にします。 |
 
 ### 設定例
 
@@ -465,14 +465,14 @@ truncation_symbol = ""
 
 ### オプション
 
-| 変数                   | デフォルト          | 説明                                                    |
-| -------------------- | -------------- | ----------------------------------------------------- |
-| `commit_hash_length` | `7`            | 表示されるgitコミットハッシュの長さです。                                |
-| `prefix`             | `"("`          | このモジュールの先頭に表示される文字列です。                                |
-| `suffix`             | `")"`          | このモジュールの末尾に表示される文字列です。                                |
-| `style`              | `"bold green"` | モジュールのスタイルです。                                         |
-| `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
-| `disabled`           | `false`        | Disables the `git_commit` module.                     |
+| 変数                   | デフォルト          | 説明                                     |
+| -------------------- | -------------- | -------------------------------------- |
+| `commit_hash_length` | `7`            | 表示されるgitコミットハッシュの長さです。                 |
+| `prefix`             | `"("`          | このモジュールの先頭に表示される文字列です。                 |
+| `suffix`             | `")"`          | このモジュールの末尾に表示される文字列です。                 |
+| `style`              | `"bold green"` | モジュールのスタイルです。                          |
+| `only_detached`      | `true`         | 切り離されたHEAD状態のときのみgit commit hashを表示します |
+| `disabled`           | `false`        | `git_commit`モジュールを無効にします。              |
 
 ### 設定例
 
@@ -480,7 +480,7 @@ truncation_symbol = ""
 # ~/.config/starship.toml
 
 [git_commit]
-commit_hash_length = 4
+truncation_length = 4
 ```
 
 ## Git の進行状態
