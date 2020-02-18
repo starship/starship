@@ -115,7 +115,7 @@
 <a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
 
-## 🚀 Installation
+## 🚀 インストール
 
 ### 必要なもの
 
@@ -214,7 +214,7 @@
    eval $(starship init ion)
    ```
 
-## 🤝 Contributing
+## 🤝 貢献
 
 We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
