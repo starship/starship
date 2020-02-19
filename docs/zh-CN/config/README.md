@@ -724,7 +724,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 [kubernetes]
 symbol = "⛵ "
-style = "dim green"
+style = "dimmed green"
 disabled = false
 ```
 
