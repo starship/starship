@@ -767,7 +767,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 [kubernetes]
 symbol = "⛵ "
-style = "dim green"
+style = "dimmed green"
 disabled = false
 ```
 
