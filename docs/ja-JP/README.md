@@ -1,28 +1,28 @@
 ---
 home: true
 heroImage: /logo.svg
+heroText:
+tagline: The cross-shell prompt for astronauts
 actionText: Get Started →
-actionLink: /ja-JP/guide/
+actionLink: ./guide/
+features:
+  - 
+    title: 互換性優先
+    details: 一般的なほとんどのOSの一般的なほとんどのシェル上で動作します。 あらゆるところで使用してください！
+  - 
+    title: Rust 製
+    details: Rust の最高レベルの速度と安全性を用いることで、可能な限り高速かつ信頼性を高くしています。
+  - 
+    title: カスタマイズ可能
+    details: それぞれの細かい点は好みにカスタマイズが出来るため、ミニマルにも多機能にも好きなようにプロンプトを設定することができます。
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+#Used for the description meta tag, for SEO
+metaTitle: "Starship: Cross-Shell Prompt"
+description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell.
 ---
 
-<div class="features">
-  <div class="feature">
-    <h2>互換性優先</h2>
-    <p>一般的なほとんどのOSの一般的なほとんどのシェル上で動作します。 あらゆるところで使用してください！</p>
-  </div>
-  <div class="feature">
-    <h2>Rust 製</h2>
-    <p>Rust の最高レベルの速度と安全性を用いることで、可能な限り高速かつ信頼性を高くしています。</p>
-  </div>
-  <div class="feature">
-    <h2>カスタマイズ可能</h2>
-    <p>それぞれの細かい点は好みにカスタマイズが出来るため、ミニマルにも多機能にも好きなようにプロンプトを設定することができます。</p>
-  </div>
-</div>
-
 <div class="center">
-  <video class="demo-video" autoplay muted loop>
+  <video class="demo-video" muted autoplay loop playsinline>
     <source src="/demo.webm" type="video/webm">
     <source src="/demo.mp4" type="video/mp4">
   </video>
@@ -32,43 +32,28 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
 1. **Starship** のバイナリをインストール
 
-   もし以下のプラットフォームを使用していない場合は **[コンパイル済みのバイナリファイルをダウンロード](https://github.com/starship/starship/releases)** してください。
 
+   #### 最新版のインストール
 
-   #### Homebrew
+   Shellを利用する
 
    ```sh
-   $ brew install starship
+   curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Rust (v1.38 もしくはそれ以上)
+   #### パッケージマネージャー経由でインストール
+
+   [ Homebrew ](https://brew.sh/)の場合：
 
    ```sh
-   $ cargo install starship
+   brew install starship
    ```
 
+   [ Scoop ](https://scoop.sh)の場合：
 
-   #### Arch Linux (AUR)
-
-   Starship は AUR 上の `starship` というパッケージ名で利用可能です。 `yay` またはお好きな AUR ヘルパーでインストールしてください。
-
-   ```sh
-   $ yay -S starship
-   ```
-
-
-   #### Nix (unstable)
-
-   ```sh
-   $ nix-env --install starship
-   ```
-
-
-   #### Termux
-
-   ```sh
-   $ pkg install starship
+   ```powershell
+   scoop install starship
    ```
 
 1. 初期化のためのスクリプトをシェルの設定ファイルに追加
@@ -113,5 +98,17 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
+
    Invoke-Expression (&starship init powershell)
+   ```
+
+
+   #### Ion
+
+   `~/.config/ion/initrc `の最後に次を追加してください
+
+   ```sh
+   # ~/.config/ion/initrc
+
+   eval $(starship init ion)
    ```

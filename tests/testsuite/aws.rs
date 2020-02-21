@@ -7,6 +7,7 @@ use tempfile;
 use crate::common::{self, TestCommand};
 
 #[test]
+#[ignore]
 fn no_region_set() -> io::Result<()> {
     let output = common::render_module("aws")
         .env("PATH", env!("PATH"))
@@ -23,6 +24,21 @@ fn region_set() -> io::Result<()> {
         .env("AWS_REGION", "ap-northeast-2")
         .output()?;
     let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  ap-northeast-2"));
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+fn region_set_with_alias() -> io::Result<()> {
+    let output = common::render_module("aws")
+        .env("AWS_REGION", "ap-southeast-2")
+        .use_config(toml::toml! {
+            [aws.region_aliases]
+            ap-southeast-2 = "au"
+        })
+        .output()?;
+    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  au"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
@@ -220,6 +236,7 @@ fn region_set_with_display_profile() -> io::Result<()> {
 }
 
 #[test]
+#[ignore]
 fn region_not_set_with_display_region() -> io::Result<()> {
     let output = common::render_module("aws")
         .use_config(toml::toml! {

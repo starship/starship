@@ -1,5 +1,7 @@
 use crate::config::SegmentConfig;
+use crate::context::Shell;
 use crate::segment::Segment;
+use crate::utils::wrap_colorseq_for_shell;
 use ansi_term::Style;
 use ansi_term::{ANSIString, ANSIStrings};
 use std::fmt;
@@ -16,11 +18,15 @@ pub const ALL_MODULES: &[&str] = &[
     "conda",
     "directory",
     "dotnet",
+    "elm",
     "env_var",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
     "golang",
+    "haskell",
+    "hg_branch",
     "hostname",
     "java",
     "jobs",
@@ -32,7 +38,10 @@ pub const ALL_MODULES: &[&str] = &[
     "package",
     "python",
     "ruby",
+    "crystal",
     "rust",
+    "php",
+    "terraform",
     "time",
     "username",
 ];
@@ -45,6 +54,9 @@ pub struct Module<'a> {
 
     /// The module's name, to be used in configuration and logging.
     _name: String,
+
+    /// The module's description
+    description: String,
 
     /// The styling to be inherited by all segments contained within this module.
     style: Style,
@@ -61,10 +73,11 @@ pub struct Module<'a> {
 
 impl<'a> Module<'a> {
     /// Creates a module with no segments.
-    pub fn new(name: &str, config: Option<&'a toml::Value>) -> Module<'a> {
+    pub fn new(name: &str, desc: &str, config: Option<&'a toml::Value>) -> Module<'a> {
         Module {
             config,
             _name: name.to_string(),
+            description: desc.to_string(),
             style: Style::default(),
             prefix: Affix::default_prefix(name),
             segments: Vec::new(),
@@ -87,9 +100,18 @@ impl<'a> Module<'a> {
         &self._name
     }
 
+    /// Get module's description
+    pub fn get_description(&self) -> &String {
+        &self.description
+    }
+
     /// Whether a module has non-empty segments
     pub fn is_empty(&self) -> bool {
         self.segments.iter().all(|segment| segment.is_empty())
+    }
+
+    pub fn get_segments(&self) -> Vec<&str> {
+        self.segments.iter().map(Segment::get_value).collect()
     }
 
     /// Get the module's prefix
@@ -116,27 +138,30 @@ impl<'a> Module<'a> {
     /// Returns a vector of colored ANSIString elements to be later used with
     /// `ANSIStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<ANSIString> {
-        let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
-        let ansi_strings = self
+        self.ansi_strings_for_shell(Shell::Unknown)
+    }
+
+    pub fn ansi_strings_for_shell(&self, shell: Shell) -> Vec<ANSIString> {
+        let mut ansi_strings = self
             .segments
             .iter()
             .map(Segment::ansi_string)
             .collect::<Vec<ANSIString>>();
 
-        let mut ansi_strings = match shell.as_str() {
-            "bash" => ansi_strings_modified(ansi_strings, shell),
-            "zsh" => ansi_strings_modified(ansi_strings, shell),
-            _ => ansi_strings,
-        };
-
         ansi_strings.insert(0, self.prefix.ansi_string());
         ansi_strings.push(self.suffix.ansi_string());
+
+        ansi_strings = match shell {
+            Shell::Bash => ansi_strings_modified(ansi_strings, shell),
+            Shell::Zsh => ansi_strings_modified(ansi_strings, shell),
+            _ => ansi_strings,
+        };
 
         ansi_strings
     }
 
-    pub fn to_string_without_prefix(&self) -> String {
-        ANSIStrings(&self.ansi_strings()[1..]).to_string()
+    pub fn to_string_without_prefix(&self, shell: Shell) -> String {
+        ANSIStrings(&self.ansi_strings_for_shell(shell)[1..]).to_string()
     }
 }
 
@@ -147,44 +172,12 @@ impl<'a> fmt::Display for Module<'a> {
     }
 }
 
-/// Many shells cannot deal with raw unprintable characters (like ANSI escape sequences) and
-/// miscompute the cursor position as a result, leading to strange visual bugs. Here, we wrap these
-/// characters in shell-specific escape codes to indicate to the shell that they are zero-length.
-fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: String) -> Vec<ANSIString> {
-    const ESCAPE_BEGIN: char = '\u{1b}';
-    const MAYBE_ESCAPE_END: char = 'm';
+fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: Shell) -> Vec<ANSIString> {
     ansi_strings
-        .iter()
+        .into_iter()
         .map(|ansi| {
-            let mut escaped = false;
-            let final_string: String = ansi
-                .to_string()
-                .chars()
-                .map(|x| match x {
-                    ESCAPE_BEGIN => {
-                        escaped = true;
-                        match shell.as_str() {
-                            "bash" => String::from("\u{5c}\u{5b}\u{1b}"), // => \[ESC
-                            "zsh" => String::from("\u{25}\u{7b}\u{1b}"),  // => %{ESC
-                            _ => x.to_string(),
-                        }
-                    }
-                    MAYBE_ESCAPE_END => {
-                        if escaped {
-                            escaped = false;
-                            match shell.as_str() {
-                                "bash" => String::from("m\u{5c}\u{5d}"), // => m\]
-                                "zsh" => String::from("m\u{25}\u{7d}"),  // => m%}
-                                _ => x.to_string(),
-                            }
-                        } else {
-                            x.to_string()
-                        }
-                    }
-                    _ => x.to_string(),
-                })
-                .collect();
-            ANSIString::from(final_string)
+            let wrapped = wrap_colorseq_for_shell(ansi.to_string(), shell);
+            ANSIString::from(wrapped)
         })
         .collect::<Vec<ANSIString>>()
 }
@@ -257,9 +250,11 @@ mod tests {
     #[test]
     fn test_module_is_empty_with_no_segments() {
         let name = "unit_test";
+        let desc = "This is a unit test";
         let module = Module {
             config: None,
             _name: name.to_string(),
+            description: desc.to_string(),
             style: Style::default(),
             prefix: Affix::default_prefix(name),
             segments: Vec::new(),
@@ -272,9 +267,11 @@ mod tests {
     #[test]
     fn test_module_is_empty_with_all_empty_segments() {
         let name = "unit_test";
+        let desc = "This is a unit test";
         let module = Module {
             config: None,
             _name: name.to_string(),
+            description: desc.to_string(),
             style: Style::default(),
             prefix: Affix::default_prefix(name),
             segments: vec![Segment::new("test_segment")],

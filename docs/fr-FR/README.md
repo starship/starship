@@ -1,28 +1,28 @@
 ---
 home: true
 heroImage: /logo.svg
+heroText:
+tagline: The cross-shell prompt for astronauts
 actionText: Commencez →
-actionLink: /guide/
+actionLink: ./guide/
+features:
+  - 
+    title: Compatibilité d'abord
+    details: Fonctionne sur tous les principaux shells et système d'exploitation. Utilisez-le partout !
+  - 
+    title: Propulsé par Rust
+    details: Profiter de toute la rapidité et la securité de Rust, pour rendre votre prompt le plus rapide et fiable possible.
+  - 
+    title: Personnalisable
+    details: Tous les petits détails sont personnalisable à votre goût, pour rendre votre prompt aussi léger ou complet que le vous souhaitez.
 footer: ISC licencié | Copyright © 2019-present Starship Contributors
+#Used for the description meta tag, for SEO
+metaTitle: "Starship: Cross-Shell Prompt"
+description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell.
 ---
 
-<div class="features">
-  <div class="feature">
-    <h2>Compatibilité d'abord</h2>
-    <p>Fonctionne sur tous les principaux shells et système d'exploitation. Utilisez-le partout !</p>
-  </div>
-  <div class="feature">
-    <h2>Propulsé par Rust</h2>
-    <p>Profiter de toute la rapidité et la securité de Rust, pour rendre votre prompt le plus rapide et fiable possible.</p>
-  </div>
-  <div class="feature">
-    <h2>Personnalisable</h2>
-    <p>Tous les petits détails sont personnalisable à votre goût, pour rendre votre prompt aussi léger ou complet que le vous souhaitez.</p>
-  </div>
-</div>
-
 <div class="center">
-  <video class="demo-video" autoplay muted loop>
+  <video class="demo-video" muted autoplay loop playsinline>
     <source src="/demo.webm" type="video/webm">
     <source src="/demo.mp4" type="video/mp4">
   </video>
@@ -32,51 +32,36 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 
 1. Installer le binaire **starship** :
 
-   **[Télécharger les archives des binaires précompilés](https://github.com/starship/starship/releases)** si vous n'utilisez pas une des plateformes citées ci-dessous.
 
+   #### Installer la dernière version
 
-   #### Homebrew
+   Avec Shell:
 
    ```sh
-   $ brew install starship
+   curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Rust (v1.38 ou plus)
+   #### Installer via le gestionnaire de paquets
+
+   Avec [Homebrew](https://brew.sh/):
 
    ```sh
-   $ cargo install starship
+   brew install starship
    ```
 
+   Avec [Scoop](https://scoop.sh):
 
-   #### Arch Linux (AUR)
-
-   Starship is disponible sur AUR sous le nom `starship`. Installer le avec `yay` ou votre client AUR favori.
-
-   ```sh
-   $ yay -S starship
+   ```powershell
+   scoop install starship
    ```
 
-
-   #### Nix (non stable)
-
-   ```sh
-   $ nix-env --install starship
-   ```
-
-
-   #### Termux
-
-   ```sh
-   $ pkg install starship
-   ```
-
-1. Add the init script to your shell's config file:
+1. Ajouter le script d'initialization à la fiche config de votre shell:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Ajouter ce qui suit à la fin de `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -87,7 +72,7 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Ajoute ce qui suit à la fin de `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -98,7 +83,7 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Ajouter ce qui suit à la fin de `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -109,9 +94,21 @@ footer: ISC licencié | Copyright © 2019-present Starship Contributors
 
    #### Powershell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   Ajouter ce qui suit à la fin de `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` sur -Nix):
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
+
    Invoke-Expression (&starship init powershell)
+   ```
+
+
+   #### Ion
+
+   Ajouter ce qui suit à la fin de `~/.config/ion/initrc`:
+
+   ```sh
+   # ~/.config/ion/initrc
+
+   eval $(starship init ion)
    ```

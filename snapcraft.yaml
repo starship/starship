@@ -1,0 +1,77 @@
+name: starship
+base: core18
+adopt-info: starship
+summary: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+description: |
+  Starship is the minimal, blazing fast, and extremely customizable prompt 
+  for any shell! The prompt shows information you need while you're working,
+  while staying sleek and out of the way.
+
+  ## Prerequisites
+
+  A Powerline font installed and enabled in your terminal (for example, try Fira Code).
+    * https://github.com/powerline/fonts
+    * https://github.com/tonsky/FiraCode
+
+  ## Getting Started
+
+  Add the init script to your shell's config file:
+  ### Bash
+
+  Add the following to the end of ~/.bashrc:
+
+  `eval "$(starship init bash)"`
+
+  ### Fish
+
+  Add the following to the end of ~/.config/fish/config.fish:
+
+  # ~/.config/fish/config.fish
+
+  starship init fish | source
+
+  ### Zsh
+
+  Add the following to the end of ~/.zshrc:
+
+  eval "$(starship init zsh)"
+
+  ### Powershell
+
+  Add the following to the end of ~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1 (or ~/.config/powershell/Microsoft.PowerShell_profile.ps1 on -Nix):
+
+  `Invoke-Expression (&starship init powershell)`
+
+grade: stable
+confinement: strict
+
+parts:
+  starship:
+    plugin: rust
+    source: https://github.com/starship/starship.git
+    #source-tag: v$SNAPCRAFT_PROJECT_VERSION
+    override-build: |
+      last_committed_tag="$(git describe --tags --abbrev=0)"
+      last_committed_tag_ver="$(echo ${last_committed_tag} | sed 's/v//')"
+      last_released_tag="$(snap info $SNAPCRAFT_PROJECT_NAME | awk '$1 == "beta:" { print $2 }')"
+      # If the latest tag from the upstream project has not been released to
+      # beta, build that tag instead of master.
+      if [ "${last_committed_tag_ver}" != "${last_released_tag}" ]; then
+        git fetch
+        git checkout "${last_committed_tag}"
+        cd ../src
+        git checkout "${last_committed_tag}"
+      fi
+      snapcraftctl build
+      snapcraftctl set-version $(git -C ../src describe --tags  | sed 's/v//')
+
+apps:
+  starship:
+    command: bin/starship
+    plugs:
+      - home
+      - removable-media
+
+architectures:
+  - build-on: i386
+  - build-on: amd64

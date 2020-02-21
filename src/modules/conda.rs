@@ -2,6 +2,7 @@ use std::env;
 
 use super::{Context, Module};
 
+use super::utils::directory::truncate;
 use crate::config::RootModuleConfig;
 use crate::configs::conda::CondaConfig;
 
@@ -17,6 +18,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("conda");
     let config = CondaConfig::try_load(module.config);
+
+    let conda_env = truncate(conda_env, config.truncation_length);
 
     module.set_style(config.style);
 

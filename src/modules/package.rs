@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use super::{Context, Module};
 use crate::utils;
 
@@ -12,7 +14,7 @@ use crate::configs::package::PackageConfig;
 ///
 /// Will display if a version is defined for your Node.js or Rust project (if one exists)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    match get_package_version() {
+    match get_package_version(&context.current_dir) {
         Some(package_version) => {
             let mut module = context.new_module("package");
             let config: PackageConfig = PackageConfig::try_load(module.config);
@@ -62,20 +64,33 @@ fn extract_poetry_version(file_contents: &str) -> Option<String> {
 
 fn extract_gradle_version(file_contents: &str) -> Option<String> {
     let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap();
-    let caps = re.captures(file_contents).unwrap();
+    let caps = re.captures(file_contents)?;
 
     let formatted_version = format_version(&caps["version"]);
     Some(formatted_version)
 }
 
-fn get_package_version() -> Option<String> {
-    if let Ok(cargo_toml) = utils::read_file("Cargo.toml") {
+fn extract_composer_version(file_contents: &str) -> Option<String> {
+    let composer_json: json::Value = json::from_str(file_contents).ok()?;
+    let raw_version = composer_json.get("version")?.as_str()?;
+    if raw_version == "null" {
+        return None;
+    };
+
+    let formatted_version = format_version(raw_version);
+    Some(formatted_version)
+}
+
+fn get_package_version(base_dir: &PathBuf) -> Option<String> {
+    if let Ok(cargo_toml) = utils::read_file(base_dir.join("Cargo.toml")) {
         extract_cargo_version(&cargo_toml)
-    } else if let Ok(package_json) = utils::read_file("package.json") {
+    } else if let Ok(package_json) = utils::read_file(base_dir.join("package.json")) {
         extract_package_version(&package_json)
-    } else if let Ok(poetry_toml) = utils::read_file("pyproject.toml") {
+    } else if let Ok(poetry_toml) = utils::read_file(base_dir.join("pyproject.toml")) {
         extract_poetry_version(&poetry_toml)
-    } else if let Ok(build_gradle) = utils::read_file("build.gradle") {
+    } else if let Ok(composer_json) = utils::read_file(base_dir.join("composer.json")) {
+        extract_composer_version(&composer_json)
+    } else if let Ok(build_gradle) = utils::read_file(base_dir.join("build.gradle")) {
         extract_gradle_version(&build_gradle)
     } else {
         None
@@ -251,6 +266,32 @@ java {
         let expected_version = None;
         assert_eq!(
             extract_gradle_version(&gradle_without_version),
+            expected_version
+        );
+    }
+
+    #[test]
+    fn test_extract_composer_version() {
+        let composer_with_version = json::json!({
+            "name": "spacefish",
+            "version": "0.1.0"
+        })
+        .to_string();
+
+        let expected_version = Some("v0.1.0".to_string());
+        assert_eq!(
+            extract_composer_version(&composer_with_version),
+            expected_version
+        );
+
+        let composer_without_version = json::json!({
+            "name": "spacefish"
+        })
+        .to_string();
+
+        let expected_version = None;
+        assert_eq!(
+            extract_composer_version(&composer_without_version),
             expected_version
         );
     }

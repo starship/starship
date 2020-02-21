@@ -9,8 +9,8 @@ Many new configuration options will be available in coming releases.
 
 To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
-```shell
-$ touch ~/.config/starship.toml
+```sh
+$ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
@@ -26,6 +26,11 @@ symbol = "➜"     # The "symbol" segment is being set to "➜"
 # Disable the package module, hiding it from the prompt completely
 [package]
 disabled = true
+```
+
+You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+```sh
+export STARSHIP_CONFIG=~/.starship
 ```
 
 ### Terminology
@@ -91,21 +96,28 @@ prompt_order = [
     "kubernetes",
     "directory",
     "git_branch",
+    "git_commit",
     "git_state",
     "git_status",
+    "hg_branch",
     "package",
     "dotnet",
+    "elm",
     "golang",
+    "haskell",
     "java",
     "nodejs",
+    "php",
     "python",
     "ruby",
     "rust",
+    "terraform",
     "nix_shell",
     "conda",
     "memory_usage",
     "aws",
     "env_var",
+    "crystal",
     "cmd_duration",
     "line_break",
     "jobs",
@@ -124,11 +136,12 @@ The `aws` module shows the current AWS region and profile. This is based on
 ### Options
 
 | Variable          | Default         | Description                                                                 |
-| ----------------- | --------------- | ----------------------------------------------------------------------------|
-| `symbol`          | `"☁️  "`        | The symbol used before displaying the current AWS profile.                  |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
 | `style`           | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`        | `false`         | Disables the `AWS` module.                                                  |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 
 ### Example
 
@@ -139,6 +152,9 @@ The `aws` module shows the current AWS region and profile. This is based on
 style = "bold blue"
 symbol = "🅰 "
 displayed_items = "region"
+[aws.region_aliases]
+ap-southeast-2 = "au"
+us-east-1 = "va"
 ```
 
 ## Battery
@@ -266,12 +282,13 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Variable   | Default         | Description                                                |
-| ---------- | --------------- | ---------------------------------------------------------- |
-| `min_time` | `2`             | Shortest duration to show time for.                        |
-| `prefix`   | `took`          | Prefix to display immediately before the command duration. |
-| `style`    | `"bold yellow"` | The style for the module.                                  |
-| `disabled` | `false`         | Disables the `cmd_duration` module.                        |
+| Variable            | Default         | Description                                                |
+| ------------------- | --------------- | ---------------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
+| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
+| `style`             | `"bold yellow"` | The style for the module.                                  |
+| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
 
 ### Example
 
@@ -279,22 +296,28 @@ running `eval $(starship init $0)`, and then proceed as normal.
 # ~/.config/starship.toml
 
 [cmd_duration]
-min_time = 4
+min_time = 500
 prefix = "underwent "
 ```
 
 ## Conda
 
 The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
-Note: This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`
+
+::: tip
+
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+
+:::
 
 ### Options
 
-| Variable   | Default        | Description                                  |
-| ---------- | -------------- | -------------------------------------------- |
-| `symbol`   | `"C "`         | The symbol used before the environment name. |
-| `style`    | `"bold green"` | The style for the module.                    |
-| `disabled` | `false`        | Disables the `conda` module.                 |
+| Variable            | Default        | Description                                                                                                                                                                                                 |
+| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
+| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
+| `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
 
 ### Example
 
@@ -325,6 +348,7 @@ it would have been `nixpkgs/pkgs`.
 | ------------------- | ------------- | -------------------------------------------------------------------------------- |
 | `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
 | `style`             | `"bold cyan"` | The style for the module.                                                        |
 | `disabled`          | `false`       | Disables the `directory` module.                                                 |
 
@@ -335,6 +359,12 @@ it would have been `nixpkgs/pkgs`.
 | --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
 | `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
 | `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+
+`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero,
+the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path
+`/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as
+`/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with
+a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -367,8 +397,8 @@ setting `heuristic = false` in the module options.
 | Variable    | Default       | Description                                              |
 | ----------- | ------------- | -------------------------------------------------------- |
 | `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
-| `style`     | `"bold blue"` | The style for the module.                                |
 | `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
+| `style`     | `"bold blue"` | The style for the module.                                |
 | `disabled`  | `false`       | Disables the `dotnet` module.                            |
 
 ### Example
@@ -380,6 +410,34 @@ setting `heuristic = false` in the module options.
 symbol = "🥅 "
 style = "green"
 heuristic = false
+```
+
+## Elm
+
+The `elm` module shows the currently installed version of Elm.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
+- The current directory contains a `elm-stuff` folder
+- The current directory contains a `*.elm` files
+
+### Options
+
+| Variable   | Default       | Description                                           |
+| ---------- | ------------- | ----------------------------------------------------- |
+| `symbol`   | `"🌳 "`       | The symbol used before displaying the version of Elm. |
+| `style`    | `"bold cyan"` | The style for the module.                             |
+| `disabled` | `false`       | Disables the `elm` module.                            |
+
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[elm]
+symbol = " "
 ```
 
 ## Environment Variable
@@ -437,6 +495,30 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
+## Git Commit
+
+The `git_commit` module shows the current commit hash of the repo in your current directory.
+
+### Options
+
+| Variable             | Default        | Description                                           |
+| -------------------- | -------------- | ----------------------------------------------------- |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.          |
+| `prefix`             | `"("`          | Prefix to display immediately before git commit.      |
+| `suffix`             | `")"`          | Suffix to display immediately after git commit.       |
+| `style`              | `"bold green"` | The style for the module.                             |
+| `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
+| `disabled`           | `false`        | Disables the `git_commit` module.                     |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+commit_hash_length = 4
+```
+
 ## Git State
 
 The `git_state` module will show in directories which are part of a git
@@ -476,37 +558,37 @@ current directory.
 
 ### Options
 
-| Variable            | Default                    | Description                                                     |
-| ------------------- | -------------------------- | --------------------------------------------------------------- |
-| `conflicted`        | `"="`                      | This branch has merge conflicts.                                |
-| `conflicted_count`  | [link](#git-status-counts) | Show and style the number of conflicts.                         |
-| `ahead`             | `"⇡"`                      | This branch is ahead of the branch being tracked.               |
-| `behind`            | `"⇣"`                      | This branch is behind of the branch being tracked.              |
-| `diverged`          | `"⇕"`                      | This branch has diverged from the branch being tracked.         |
-| `untracked`         | `"?"`                      | There are untracked files in the working directory.             |
-| `untracked_count`   | [link](#git-status-counts) | Show and style the number of untracked files.                   |
-| `stashed`           | `"$"`                      | A stash exists for the local repository.                        |
-| `modified`          | `"!"`                      | There are file modifications in the working directory.          |
-| `modified_count`    | [link](#git-status-counts) | Show and style the number of modified files.                    |
-| `staged`            | `"+"`                      | A new file has been added to the staging area.                  |
-| `staged_count`      | [link](#git-status-counts) | Show and style the number of files staged files.                |
-| `renamed`           | `"»"`                      | A renamed file has been added to the staging area.              |
-| `renamed_count`     | [link](#git-status-counts) | Show and style the number of renamed files.                     |
-| `deleted`           | `"✘"`                      | A file's deletion has been added to the staging area.           |
-| `deleted_count`     | [link](#git-status-counts) | Show and style the number of deleted files.                     |
-| `show_sync_count`   | `false`                    | Show ahead/behind count of the branch being tracked.            |
-| `prefix`            | `[`                        | Prefix to display immediately before git status.                |
-| `suffix`            | `]`                        | Suffix to display immediately after git status.                 |
-| `style`             | `"bold red"`               | The style for the module.                                       |
-| `disabled`          | `false`                    | Disables the `git_status` module.                               |
+| Variable           | Default                    | Description                                             |
+| ------------------ | -------------------------- | ------------------------------------------------------- |
+| `conflicted`       | `"="`                      | This branch has merge conflicts.                        |
+| `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
+| `ahead`            | `"⇡"`                      | This branch is ahead of the branch being tracked.       |
+| `behind`           | `"⇣"`                      | This branch is behind of the branch being tracked.      |
+| `diverged`         | `"⇕"`                      | This branch has diverged from the branch being tracked. |
+| `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
+| `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
+| `stashed`          | `"$"`                      | A stash exists for the local repository.                |
+| `stashed_count`    | [link](#git-status-counts) | Show and style the number of stashes.                   |
+| `modified`         | `"!"`                      | There are file modifications in the working directory.  |
+| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
+| `staged`           | `"+"`                      | A new file has been added to the staging area.          |
+| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files.        |
+| `renamed`          | `"»"`                      | A renamed file has been added to the staging area.      |
+| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.             |
+| `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.   |
+| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.             |
+| `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
+| `prefix`           | `[`                        | Prefix to display immediately before git status.        |
+| `suffix`           | `]`                        | Suffix to display immediately after git status.         |
+| `style`            | `"bold red"`               | The style for the module.                               |
+| `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
 #### Git Status Counts
 
-| Variable    | Default | Description                                            |
-| ----------- | ------- | ------------------------------------------------------ |
-| `enabled`   | `false` | Show the number of files                               |
-| `style`     |         | Optionally style the count differently than the module |
-
+| Variable  | Default | Description                                            |
+| --------- | ------- | ------------------------------------------------------ |
+| `enabled` | `false` | Show the number of files                               |
+| `style`   |         | Optionally style the count differently than the module |
 
 ### Example
 
@@ -557,6 +639,55 @@ The module will be shown if any of the following conditions are met:
 
 [golang]
 symbol = "🏎💨 "
+```
+## Haskell
+
+The `haskell` module shows the currently installed version of Haskell Stack version.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `stack.yaml` file
+
+### Options
+
+| Variable   | Default      | Description                                               |
+| ---------- | ------------ | --------------------------------------------------------- |
+| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
+| `style`    | `"bold red"` | The style for the module.                                 |
+| `disabled` | `false`      | Disables the `haskell` module.                            |
+
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[haskell]
+symbol = " "
+```
+
+## Mercurial Branch
+
+The `hg_branch` module shows the active branch of the repo in your current directory.
+
+### Options
+
+| Variable            | Default         | Description                                                                                  |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
+| `style`             | `"bold purple"` | The style for the module.                                                                    |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[hg_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
 ```
 
 ## Hostname
@@ -642,7 +773,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 [kubernetes]
 symbol = "⛵ "
-style = "dim green"
+style = "dimmed green"
 disabled = false
 ```
 
@@ -675,8 +806,8 @@ The module will be shown when inside a nix-shell environment.
 | Variable     | Default      | Description                        |
 | ------------ | ------------ | ---------------------------------- |
 | `use_name`   | `false`      | Display the name of the nix-shell. |
-| `impure_msg` | `impure`     | Customize the "impure" msg.        |
-| `pure_msg`   | `pure`       | Customize the "pure" msg.          |
+| `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
+| `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
 | `style`      | `"bold red"` | The style for the module.          |
 | `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
@@ -690,6 +821,31 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
+```
+
+## Java
+
+The `java` module shows the currently installed version of Java.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
+- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
+
+### Options
+
+| Variable   | Default        | Description                                            |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | The style for the module.                              |
+| `disabled` | `false`        | Disables the `java` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[java]
+symbol = "🌟 "
 ```
 
 ## Memory Usage
@@ -731,29 +887,30 @@ separator = "/"
 style = "bold dimmed green"
 ```
 
-## Java
+## Crystal
 
-The `java` module shows the currently installed version of Java.
+The `crystal` module shows the currently installed version of Crystal.
 The module will be shown if any of the following conditions are met:
 
-- The current directory contains a `pom.xml`, `build.gradle` or `build.sbt` file
-- The current directory contains a file with the `.java`, `.class` or `.jar` extension
+- The current directory contains a `shard.yml` file
+- The current directory contains a `.cr` file
 
 ### Options
 
-| Variable   | Default        | Description                                            |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`        | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | The style for the module.                              |
-| `disabled` | `false`        | Disables the `java` module.                            |
+| Variable   | Default      | Description                                               |
+| ---------- | ------------ | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`      | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"` | The style for the module.                                 |
+| `disabled` | `false`      | Disables the `crystal` module.                            |
 
 ### Example
 
 ```toml
 # ~/.config/starship.toml
 
-[java]
-symbol = "🌟 "
+[crystal]
+symbol = "✨ "
+style = "bold blue"
 ```
 
 ## NodeJS
@@ -786,7 +943,7 @@ symbol = "🤖 "
 
 The `package` module is shown when the current directory is the repository for a
 package, and shows its current version. The module currently supports `npm`, `cargo`,
-`poetry`, and `gradle` packages.
+`poetry`, `composer`, and `gradle` packages.
 
 - **npm** – The `npm` package version is extracted from the `package.json` present
   in the current directory
@@ -794,8 +951,9 @@ package, and shows its current version. The module currently supports `npm`, `ca
   in the current directory
 - **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present
   in the current directory
-- **gradle** – The `gradle` package version is extracted from the `build.gradle` present
+- **composer** – The `composer` package version is extracted from the `composer.json` present
   in the current directory
+- **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 
 > ⚠️ The version being shown is that of the package whose source code is in your
 > current directory, not your package manager.
@@ -815,6 +973,31 @@ package, and shows its current version. The module currently supports `npm`, `ca
 
 [package]
 symbol = "🎁 "
+```
+
+## PHP
+
+The `php` module shows the currently installed version of PHP.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `composer.json` file
+- The current directory contains a `.php` file
+
+### Options
+
+| Variable   | Default      | Description                                           |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`      | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold red"` | The style for the module.                             |
+| `disabled` | `false`      | Disables the `php` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[php]
+symbol = "🔹 "
 ```
 
 ## Python
@@ -908,6 +1091,33 @@ The module will be shown if any of the following conditions are met:
 symbol = "⚙️ "
 ```
 
+## Terraform
+
+The `terraform` module shows the currently selected terraform workspace and version.
+By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf` extension
+
+### Options
+
+| Variable       | Default      | Description                                                 |
+| -------------- | ------------ | ----------------------------------------------------------- |
+| `symbol`       | `"💠 "`      | The symbol used before displaying the terraform workspace.  |
+| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
+| `style`        | `"bold 105"` | The style for the module.                                   |
+| `disabled`     | `false`      | Disables the `terraform` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+symbol = "🏎💨 "
+```
+
 ## Time
 
 The `time` module shows the current **local** time.
@@ -927,8 +1137,8 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
 | `style`           | `bold yellow` | The style for the module time                                                                                       |
-| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
 | `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
+| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
 Manually setting `format` will override the `use_12hr` setting.

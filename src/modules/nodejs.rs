@@ -1,8 +1,7 @@
-use std::process::Command;
-
 use super::{Context, Module, RootModuleConfig, SegmentConfig};
 
 use crate::configs::nodejs::NodejsConfig;
+use crate::utils;
 
 /// Creates a module with the current Node.js version
 ///
@@ -22,26 +21,68 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    match get_node_version() {
-        Some(node_version) => {
-            let mut module = context.new_module("nodejs");
-            let config: NodejsConfig = NodejsConfig::try_load(module.config);
+    let node_version = utils::exec_cmd("node", &["--version"])?.stdout;
 
-            module.set_style(config.style);
+    let mut module = context.new_module("nodejs");
+    let config: NodejsConfig = NodejsConfig::try_load(module.config);
 
-            let formatted_version = node_version.trim();
-            module.create_segment("symbol", &config.symbol);
-            module.create_segment("version", &SegmentConfig::new(formatted_version));
+    module.set_style(config.style);
 
-            Some(module)
-        }
-        None => None,
-    }
+    let formatted_version = node_version.trim();
+    module.create_segment("symbol", &config.symbol);
+    module.create_segment("version", &SegmentConfig::new(formatted_version));
+
+    Some(module)
 }
 
-fn get_node_version() -> Option<String> {
-    match Command::new("node").arg("--version").output() {
-        Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
-        Err(_) => None,
+#[cfg(test)]
+mod tests {
+    use crate::modules::utils::test::render_module;
+    use ansi_term::Color;
+    use std::fs::{self, File};
+    use std::io;
+    use tempfile;
+
+    #[test]
+    fn folder_without_node_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let actual = render_module("nodejs", dir.path());
+        let expected = None;
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn folder_with_package_json() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("package.json"))?.sync_all()?;
+
+        let actual = render_module("nodejs", dir.path());
+        let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn folder_with_js_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("index.js"))?.sync_all()?;
+
+        let actual = render_module("nodejs", dir.path());
+        let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn folder_with_node_modules() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let node_modules = dir.path().join("node_modules");
+        fs::create_dir_all(&node_modules)?;
+
+        let actual = render_module("nodejs", dir.path());
+        let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
+        assert_eq!(expected, actual);
+        Ok(())
     }
 }

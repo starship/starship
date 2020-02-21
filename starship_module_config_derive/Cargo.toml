@@ -1,6 +1,6 @@
 [package]
 name = "starship_module_config_derive"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2018"
 authors = ["Matan Kushner <hello@matchai.me>"]
 homepage = "https://starship.rs"
@@ -11,7 +11,7 @@ license = "ISC"
 keywords = ["prompt", "shell", "bash", "fish", "zsh"]
 categories = ["command-line-utilities"]
 description = """
-The cross-shell prompt for astronauts. ☄🌌️
+The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
 exclude = ["docs/**/*"]
 

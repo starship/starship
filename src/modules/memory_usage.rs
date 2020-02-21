@@ -1,7 +1,7 @@
 use byte_unit::{Byte, ByteUnit};
 use sysinfo::{RefreshKind, SystemExt};
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, RootModuleConfig, Shell};
 
 use crate::configs::memory_usage::MemoryConfig;
 
@@ -19,10 +19,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // TODO: Update when v1.0 printing refactor is implemented to only
     // print escapes in a prompt context.
-    let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
-    let percent_sign = match shell.as_str() {
-        "zsh" => "%%", // % is an escape in zsh, see PROMPT in `man zshmisc`
-        "powershell" => "`%",
+    let percent_sign = match context.shell {
+        Shell::Zsh => "%%", // % is an escape in zsh, see PROMPT in `man zshmisc`
         _ => "%",
     };
 
@@ -33,7 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_style(config.style);
     module.create_segment("symbol", &config.symbol);
 
-    let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_system());
+    let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_memory());
 
     let used_memory_kib = system.get_used_memory();
     let total_memory_kib = system.get_total_memory();

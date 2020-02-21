@@ -1,28 +1,26 @@
 ---
-home: true
+layout: Home
 heroImage: /logo.svg
+heroText: null
+tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
 actionText: Get Started →
-actionLink: /guide/
+actionLink: ./guide/
+features:
+  - title: Compatibility First
+    details: Works on the most common shells on the most common operating systems. Use it everywhere!
+  - title: Rust-Powered
+    details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
+  - title: Customizable
+    details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+
+# Used for the description meta tag, for SEO
+metaTitle: "Starship: Cross-Shell Prompt"
+description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and PowerShell.
 ---
 
-<div class="features">
-  <div class="feature">
-    <h2>Compatibility First</h2>
-    <p>Works on the most common shells on the most common operating systems. Use it everywhere!</p>
-  </div>
-  <div class="feature">
-    <h2>Rust-Powered</h2>
-    <p>Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.</p>
-  </div>
-  <div class="feature">
-    <h2>Customizable</h2>
-    <p>Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.</p>
-  </div>
-</div>
-
 <div class="center">
-  <video class="demo-video" autoplay muted loop>
+  <video class="demo-video" muted autoplay loop playsinline>
     <source src="/demo.webm" type="video/webm">
     <source src="/demo.mp4" type="video/mp4">
   </video>
@@ -32,38 +30,26 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
 1. Install the **starship** binary:
 
-   **[Download archives of precompiled binaries](https://github.com/starship/starship/releases)** if you don't use the platforms below.
+   #### Install Latest Version
 
-   #### Homebrew
+   With Shell:
 
    ```sh
-   $ brew install starship
+   curl -fsSL https://starship.rs/install.sh | bash
    ```
 
-   #### Rust (v1.38 or higher)
+   #### Install via Package Manager
+
+   With [Homebrew](https://brew.sh/):
 
    ```sh
-   $ cargo install starship
+   brew install starship
    ```
 
-   #### Arch Linux (AUR)
+   With [Scoop](https://scoop.sh):
 
-   Starship is available on the AUR under the name `starship`. Install it with `yay` or your favorite AUR helper.
-
-   ```sh
-   $ yay -S starship
-   ```
-
-   #### Nix (unstable)
-
-   ```sh
-   $ nix-env --install starship
-   ```
-
-   #### Termux
-
-   ```sh
-   $ pkg install starship
+   ```powershell
+   scoop install starship
    ```
 
 1. Add the init script to your shell's config file:
@@ -104,5 +90,16 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
+
    Invoke-Expression (&starship init powershell)
+   ```
+
+   #### Ion
+
+   Add the following to the end of `~/.config/ion/initrc`:
+
+   ```sh
+   # ~/.config/ion/initrc
+
+   eval $(starship init ion)
    ```
