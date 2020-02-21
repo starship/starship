@@ -889,12 +889,13 @@ symbol = "🤖 "
 
 ## Версия пакета
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, and `gradle` packages.
 
 - **npm** – Версия пакета `npm` из файла `package.json` в текущем каталоге
 - **cargo** – Версия пакета `cargo` из файла `Cargo.toml` в текущем каталоге
 - **poetry** – Версия пакета `poetry` из файла `pyproject.toml` в текущем каталоге
 - **composer** – Версия пакета `composer` из `composer.json` в текущем каталоге
+- **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 
 > ⚠ Показана версия пакета, исходный код которого находится в текущем каталоге, а не в менеджере пакетов.
 
