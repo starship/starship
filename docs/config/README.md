@@ -360,6 +360,12 @@ it would have been `nixpkgs/pkgs`.
 | `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
 | `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
 
+`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero,
+the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path
+`/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as
+`/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with
+a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+
 </details>
 
 ### Example
@@ -418,11 +424,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default       | Description                                               |
-| ---------- | ------------- | --------------------------------------------------------- |
+| Variable   | Default       | Description                                           |
+| ---------- | ------------- | ----------------------------------------------------- |
 | `symbol`   | `"🌳 "`       | The symbol used before displaying the version of Elm. |
-| `style`    | `"bold cyan"` | The style for the module.                                 |
-| `disabled` | `false`       | Disables the `elm` module.                                |
+| `style`    | `"bold cyan"` | The style for the module.                             |
+| `disabled` | `false`       | Disables the `elm` module.                            |
 
 
 ### Example
@@ -562,7 +568,7 @@ current directory.
 | `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
 | `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
 | `stashed`          | `"$"`                      | A stash exists for the local repository.                |
-| `stashed_count`    | [link](#git-status-counts) | Show and style the number of stashes.                           |
+| `stashed_count`    | [link](#git-status-counts) | Show and style the number of stashes.                   |
 | `modified`         | `"!"`                      | There are file modifications in the working directory.  |
 | `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
 | `staged`           | `"+"`                      | A new file has been added to the staging area.          |
@@ -643,11 +649,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default       | Description                                               |
-| ---------- | ------------- | --------------------------------------------------------- |
-| `symbol`   | `"λ "`        | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold red"`  | The style for the module.                                 |
-| `disabled` | `false`       | Disables the `haskell` module.                            |
+| Variable   | Default      | Description                                               |
+| ---------- | ------------ | --------------------------------------------------------- |
+| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
+| `style`    | `"bold red"` | The style for the module.                                 |
+| `disabled` | `false`      | Disables the `haskell` module.                            |
 
 
 ### Example
@@ -829,7 +835,7 @@ The module will be shown if any of the following conditions are met:
 
 | Variable   | Default        | Description                                            |
 | ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`        | The symbol used before displaying the version of Java. |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
 | `style`    | `"dimmed red"` | The style for the module.                              |
 | `disabled` | `false`        | Disables the `java` module.                            |
 
@@ -891,11 +897,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default      | Description                                                  |
-| ---------- | ------------ | ------------------------------------------------------------ |
-| `symbol`   | `"🔮 "`      | The symbol used before displaying the version of crystal.    |
-| `style`    | `"bold red"` | The style for the module.                                    |
-| `disabled` | `false`      | Disables the `crystal` module.                               |
+| Variable   | Default      | Description                                               |
+| ---------- | ------------ | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`      | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"` | The style for the module.                                 |
+| `disabled` | `false`      | Disables the `crystal` module.                            |
 
 ### Example
 
