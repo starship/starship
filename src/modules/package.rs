@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use super::{Context, Module};
 use crate::utils;
 
+use regex::Regex;
 use serde_json as json;
 use toml;
 
@@ -61,6 +62,14 @@ fn extract_poetry_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
+fn extract_gradle_version(file_contents: &str) -> Option<String> {
+    let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap();
+    let caps = re.captures(file_contents)?;
+
+    let formatted_version = format_version(&caps["version"]);
+    Some(formatted_version)
+}
+
 fn extract_composer_version(file_contents: &str) -> Option<String> {
     let composer_json: json::Value = json::from_str(file_contents).ok()?;
     let raw_version = composer_json.get("version")?.as_str()?;
@@ -81,6 +90,8 @@ fn get_package_version(base_dir: &PathBuf) -> Option<String> {
         extract_poetry_version(&poetry_toml)
     } else if let Ok(composer_json) = utils::read_file(base_dir.join("composer.json")) {
         extract_composer_version(&composer_json)
+    } else if let Ok(build_gradle) = utils::read_file(base_dir.join("build.gradle")) {
+        extract_gradle_version(&build_gradle)
     } else {
         None
     }
@@ -189,6 +200,72 @@ mod tests {
         let expected_version = None;
         assert_eq!(
             extract_poetry_version(&poetry_without_version),
+            expected_version
+        );
+    }
+
+    #[test]
+    fn test_extract_gradle_version() {
+        let gradle_single_quotes = "plugins {
+    id 'java'
+    id 'test.plugin' version '0.2.0'
+}
+version '0.1.0'
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}";
+
+        let expected_version = Some("v0.1.0".to_string());
+        assert_eq!(
+            extract_gradle_version(&gradle_single_quotes),
+            expected_version
+        );
+
+        let gradle_double_quotes = "plugins {
+    id 'java'
+    id 'test.plugin' version '0.2.0'
+}
+version \"0.1.0\"
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}";
+
+        let expected_version = Some("v0.1.0".to_string());
+        assert_eq!(
+            extract_gradle_version(&gradle_double_quotes),
+            expected_version
+        );
+
+        let gradle_release_candidate = "plugins {
+    id 'java'
+    id 'test.plugin' version '0.2.0'
+}
+version '0.1.0-rc1'
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}";
+
+        let expected_version = Some("v0.1.0-rc1".to_string());
+        assert_eq!(
+            extract_gradle_version(&gradle_release_candidate),
+            expected_version
+        );
+
+        let gradle_without_version = "plugins {
+    id 'java'
+    id 'test.plugin' version '0.2.0'
+}
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}";
+
+        let expected_version = None;
+        assert_eq!(
+            extract_gradle_version(&gradle_without_version),
             expected_version
         );
     }
