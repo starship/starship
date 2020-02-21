@@ -339,6 +339,8 @@ style = "dimmed green"
 | `fish_style_pwd_dir_length` | `0`    | 使用 fish shell 当前目录路径逻辑时每个省略目录名使用的字符数。 |
 | `use_logical_path`          | `true` | 显示由 shell 提供的逻辑路径（`PWD`）而不是 OS 提供的路径。 |
 
+`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+
 </details>
 
 ### 示例
@@ -352,11 +354,11 @@ truncation_length = 8
 
 ## Dotnet
 
-`dotnet` 模块显示与当前目录下使用的 .NET Core SDK 相关联的版本。 如果当前目录已被绑定了一个版本的 SDK，则显示被帮定的版本。 否则此组件将显示最新安装的 SDK 版本。
+The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
 
-此组件只会在以下文件之一出现在当前目录中时显示：`global.json`，`project.json`，`*.sln`，`*.csproj`，`*.fsproj`，`*.xproj`。 为了正确使用此组件，您还需要安装 .NET Core 命令行工具。
+This module will only be shown in your prompt when one of the following files are present in the current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll also need the .NET Core command-line tools installed in order to use it correctly.
 
-在内部，此组件使用自己的版本检测机制。 一般来说此组件是直接执行 `dotnet --version` 的两倍快，但当你的 .NET 项目使用了不常见的目录布局时此组件可能显示一个错误的版本。 如果相比于速度您更需要正确的版本号，您可以在组件设置中设置 `heuristic = false` 来禁用该机制。
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
 ### 配置项
 
@@ -407,7 +409,7 @@ symbol = " "
 
 ## Environment Variable
 
-`env_var` 组件显示选定的环境变量的当前值。 此组件只有满足以下条件之一时才会被显示：
+The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
 - 设置的 `variable` 是一个已存在的环境变量
 - 未定义 `variable`，但定义了 `default`
@@ -436,7 +438,7 @@ default = "unknown shell"
 
 ## Git Branch
 
-`git_branch` 组件显示当前目录的 git 仓库的活动分支。
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### 配置项
 
@@ -461,7 +463,7 @@ truncation_symbol = ""
 
 ## Git Commit
 
-`git_commit` 组件显示当前目录的 git 仓库的当前提交的哈希值。
+The `git_commit` module shows the current commit hash of the repo in your current directory.
 
 ### 配置项
 
