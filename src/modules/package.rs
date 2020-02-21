@@ -250,7 +250,7 @@ java {
 
         let expected_version = None;
         assert_eq!(
-            extract_poetry_version(&gradle_without_version),
+            extract_gradle_version(&gradle_without_version),
             expected_version
         );
     }
