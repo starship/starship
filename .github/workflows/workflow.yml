@@ -116,11 +116,6 @@ jobs:
           toolchain: stable
           override: true
 
-      # Install Ruby at a fixed version
-      - uses: eregon/use-ruby-action@v1
-        with:
-          ruby-version: "2.6.3"
-
       # Install Python at a fixed version
       - uses: actions/setup-python@v1
         with:
@@ -130,11 +125,6 @@ jobs:
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: "2.2.402"
-
-      # Install PHP at a fixed version
-      - uses: shivammathur/setup-php@v1
-        with:
-          php-version: "7.3"
 
       # Install Mercurial (pre-installed on Linux and windows)
       - name: Install Mercurial (macos)

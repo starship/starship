@@ -18,7 +18,6 @@ mod line_break;
 mod modules;
 mod nix_shell;
 mod python;
-mod ruby;
 mod terraform;
 mod time;
 mod username;
