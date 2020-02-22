@@ -509,6 +509,8 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 | `style`              | `"bold green"` | The style for the module.                             |
 | `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
 | `disabled`           | `false`        | Disables the `git_commit` module.                     |
+| `tag_disabled`       | `false`        | Disables showing tag info in `git_commit` module.     |
+| `tag_symbol`         | `"🔖 "`         | Tag symbol prefixing the info shown                   |
 
 ### Example
 
@@ -517,6 +519,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 
 [git_commit]
 commit_hash_length = 4
+tag_symbol = "ŧ "
 ```
 
 ## Git State

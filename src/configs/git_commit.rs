@@ -12,6 +12,9 @@ pub struct GitCommitConfig<'a> {
     pub style: Style,
     pub only_detached: bool,
     pub disabled: bool,
+    pub tag: SegmentConfig<'a>,
+    pub tag_symbol: &'a str,
+    pub tag_disabled: bool,
 }
 
 impl<'a> RootModuleConfig<'a> for GitCommitConfig<'a> {
@@ -25,6 +28,9 @@ impl<'a> RootModuleConfig<'a> for GitCommitConfig<'a> {
             style: Color::Green.bold(),
             only_detached: true,
             disabled: false,
+            tag: SegmentConfig::default(),
+            tag_symbol: "🔖 ",
+            tag_disabled: false,
         }
     }
 }
