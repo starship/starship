@@ -1,5 +1,5 @@
 ---
-layout: Home
+home: true
 heroImage: /logo.svg
 heroText: null
 tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
