@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: Минимальная, быстрая и бесконечная настраиваемая командная строка для любой оболочки!
 actionText: Начало работы →
 actionLink: ./guide/
 features:
@@ -18,7 +18,7 @@ features:
 footer: Под лицензией ISC | Авторское право © 2019-настоящее Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and PowerShell.
+description: Starship - минимальная, быстрая и бесконечная настраиваемая командная строка для любой оболочки! Показывает нужную вам информацию, оставаясь красивой и минималистичной. Быстрая установка доступна для Bash, Fish, ZSH, Ion и PowerShell.
 ---
 
 <div class="center">
