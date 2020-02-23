@@ -30,11 +30,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs">Сайт</a>
   ·
-  <a href="#-installation">Installation</a>
+  <a href="#-installation">Установка</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs/config/">Конфигурация</a>
 </p>
 
 <p align="center">
@@ -101,12 +101,12 @@
   align="right" />
 
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**Минимальная, быстрая и бесконечная настраиваемая командная строка для любой оболочки!**
 
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
+- **Быстрая:** она быстрая – _очень-очень_ быстрая! 🚀
+- **Настраиваемая:** настройте каждый элемент вашей командной строки.
+- **Универсальная:** работает с любой оболочкой, на любой операционной системе.
 - **Intelligent:** shows relevant information at a glance.
 - **Feature rich:** support for all your favorite tools.
 - **Easy:** quick to install – start using it in minutes.
