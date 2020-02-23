@@ -226,15 +226,15 @@
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - командная строка ZSH для астронавтов.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - меж-оболочная тема robbyrussell, написаная на JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** - A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** - меж-оболочная настраиваемая командная строка с иконками.
 
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 License
+## 📝 Лицензия
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Авторское право © 2019-настоящее, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Этот проект лицензирован под лицензией [ISC](https://github.com/starship/starship/blob/master/LICENSE).
