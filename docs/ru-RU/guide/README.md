@@ -107,15 +107,15 @@
 - **Быстрая:** она быстрая – _очень-очень_ быстрая! 🚀
 - **Настраиваемая:** настройте каждый элемент вашей командной строки.
 - **Универсальная:** работает с любой оболочкой, на любой операционной системе.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **Умная:** сразу показывает соответствующую информацию.
+- **Богатая функциями:** поддержка всех ваших любимых инструментов.
+- **Легкая:** быстро установить - начните использовать ее в считанные минуты.
 
 <p align="center">
-<a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/"><strong>Изучите документацию Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
-## 🚀 Installation
+## 🚀 Установка
 
 ### Требования
 
@@ -214,17 +214,17 @@
    eval $(starship init ion)
    ```
 
-## 🤝 Contributing
+## 🤝 Помощь
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+Мы всегда ищем помощь людей **всех уровней навыков**! Если вы хотите облегчить свой путь к проекту, посмотрите хорошие первые ошибки ([first good issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Если вы хотите помочь в создании Starship, пожалуйста, ознакомьтесь с нашим [Руководством по содействию](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Кроме того, заходите на наш [Discord сервер](https://discord.gg/8Jzqu3T) и поздоровайтесь. 👋
 
-## 💭 Inspired By
+## 💭 Вдохновления
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Пожалуйста, ознакомьтесь с этими предыдущими работами, которые помогли вдохновить создание Starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - командная строка ZSH для астронавтов.
 
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme written in JavaScript.
 
