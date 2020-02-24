@@ -2,6 +2,7 @@ use ansi_term::ANSIStrings;
 use clap::ArgMatches;
 use rayon::prelude::*;
 use std::fmt::Write as FmtWrite;
+use std::fs::File;
 use std::io::{self, Write};
 use unicode_width::UnicodeWidthChar;
 
@@ -30,6 +31,13 @@ pub fn get_prompt(context: Context) -> String {
     // breaks things (see #808,#824,#834). Should only be printed in fish.
     if let Shell::Fish = context.shell {
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
+
+        // Toggle fish greeting (see #939)
+        if config.fish_disable_greeting {
+            let _create_file = File::create("/tmp/starship_disable_fish_greeting");
+        } else {
+            let _delete_file = std::fs::remove_file("/tmp/starship_disable_fish_greeting");
+        }
     }
 
     let modules = compute_modules(&context);

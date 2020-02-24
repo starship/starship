@@ -7,6 +7,7 @@ pub struct StarshipRootConfig<'a> {
     pub add_newline: bool,
     pub prompt_order: Vec<&'a str>,
     pub scan_timeout: u64,
+    pub fish_disable_greeting: bool,
 }
 
 impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
@@ -55,6 +56,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "character",
             ],
             scan_timeout: 30,
+            fish_disable_greeting: true,
         }
     }
 }

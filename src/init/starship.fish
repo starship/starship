@@ -14,5 +14,9 @@ end
 # disable virtualenv prompt, it breaks starship
 set VIRTUAL_ENV_DISABLE_PROMPT 1
 
+if test -e /tmp/starship_disable_fish_greeting
+    set fish_greeting
+end
+
 function fish_mode_prompt; end
 export STARSHIP_SHELL="fish"
