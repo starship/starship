@@ -796,12 +796,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "os_info"
-version = "2.0.0"
+version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "lazy_static 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "regex 1.3.4 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.104 (registry+https://github.com/rust-lang/crates.io-index)",
  "winapi 0.3.8 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -1223,7 +1221,7 @@ dependencies = [
  "nom 5.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "once_cell 1.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "open 1.3.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "os_info 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "os_info 2.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "path-slash 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "pretty_env_logger 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "rayon 1.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1785,7 +1783,7 @@ dependencies = [
 "checksum once_cell 1.3.1 (registry+https://github.com/rust-lang/crates.io-index)" = "b1c601810575c99596d4afc46f78a678c80105117c379eb3650cf99b8a21ce5b"
 "checksum open 1.3.4 (registry+https://github.com/rust-lang/crates.io-index)" = "e02989ecc31ed50c00e2b0edc25ab1f5e7bd81e8baa52b7c4a89180580b4ed08"
 "checksum openssl-probe 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "77af24da69f9d9341038eba93a073b1fdaaa1b788221b00a69bce9e762cb32de"
-"checksum os_info 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "4c44df6cf2c8efe99e1539a636c16af6e9e8bededa1d9b97aed47e9b63b659c2"
+"checksum os_info 2.0.1 (registry+https://github.com/rust-lang/crates.io-index)" = "cf0044ce3b28b09ffb3ef188c81dbc6592999366d153dccdc065045ee54717f7"
 "checksum path-slash 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "a0858af4d9136275541f4eac7be1af70add84cf356d901799b065ac1b8ff6e2f"
 "checksum percent-encoding 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "d4fd5641d01c8f18a23da7b6fe29298ff4b55afcccdf78973b24cf3175fee32e"
 "checksum pin-project 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)" = "7804a463a8d9572f13453c516a5faea534a2403d7ced2f0c7e100eeff072772c"
