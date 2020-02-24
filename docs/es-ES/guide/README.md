@@ -32,9 +32,9 @@
 <p align="center">
   <a href="https://starship.rs">Sitio</a>
   ·
-  <a href="#-installation">Instalación</a>
+<a href="#-installation">Instalación</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+<a href="https://starship.rs/config/">Configuration</a>
 </p>
 
 <p align="center">
@@ -218,9 +218,9 @@
 
 ¡Siempre estamos buscando por colaboradores de **cualquier nivel**! Si esta buscando una manera fácil de ayudar este proyecto, puede intentar a resolver una de las propuestas con la etiqueta "[good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)" (primera buena propuesta).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Si quiere ayudar a colaborar a starship, por favor mira a nuestra [Guía de Colaboradores](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) (Contributing Guide). Además, juntarse con nosotros en nuestro [servidor de Discord](https://discord.gg/8Jzqu3T) y di "¡hola!". 👋
 
-## 💭 Inspired By
+## 💭 Inspiracíon
 
 Please check out these previous works that helped inspire the creation of starship. 🙏
 
@@ -235,6 +235,6 @@ Please check out these previous works that helped inspire the creation of starsh
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 License
+## 📝 Licencia
 
 Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
