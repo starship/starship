@@ -73,6 +73,11 @@ pub fn create_fixture_repo() -> io::Result<PathBuf> {
         .current_dir(&repo_path)
         .output()?;
 
+    Command::new("git")
+        .args(&["tag", "tagOnHEAD", "-m", "Testing tags on this repo"])
+        .current_dir(&repo_path)
+        .output()?;
+
     Ok(repo_path)
 }
 
