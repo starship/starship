@@ -30,9 +30,9 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs">Sitio</a>
   ·
-  <a href="#-installation">Installation</a>
+  <a href="#-installation">Instalación</a>
   ·
   <a href="https://starship.rs/config/">Configuration</a>
 </p>
@@ -115,7 +115,7 @@
 <a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
 
-## 🚀 Installation
+## 🚀 Instalacíon
 
 ### Prerequisitos
 
@@ -214,9 +214,9 @@
    eval $(starship init ion)
    ```
 
-## 🤝 Contributing
+## 🤝 Colaborando
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+¡Siempre estamos buscando por colaboradores de **cualquier nivel**! Si esta buscando una manera fácil de ayudar este proyecto, puede intentar a resolver una de las propuestas con la etiqueta "[good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)" (primera buena propuesta).
 
 If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
