@@ -30,7 +30,7 @@ impl<'a> RootModuleConfig<'a> for GitCommitConfig<'a> {
             disabled: false,
             tag: SegmentConfig::default(),
             tag_symbol: "🔖 ",
-            tag_disabled: false,
+            tag_disabled: true,
         }
     }
 }
