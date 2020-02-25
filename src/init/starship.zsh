@@ -9,23 +9,30 @@
 
 zmodload zsh/parameter  # Needed to access jobstates variable for NUM_JOBS
 
+starship_render() {
+    # Use length of jobstates array as number of jobs. Expansion fails inside
+    # quotes so we set it here and then use the value later on.
+    NUM_JOBS=$#jobstates
+    PROMPT="$(::STARSHIP:: prompt --keymap="${KEYMAP-}" --status=$STATUS --cmd-duration=${STARSHIP_DURATION-} --jobs="$NUM_JOBS")"
+}
+
 # Will be run before every prompt draw
 starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
     STATUS=$?
 
-    # Use length of jobstates array as number of jobs. Expansion fails inside
-    # quotes so we set it here and then use the value later on.
-    NUM_JOBS=$#jobstates
-    # Compute cmd_duration, if we have a time to consume
+    # Compute cmd_duration, if we have a time to consume, otherwise clear the
+    # previous duration
     if [[ -n "${STARSHIP_START_TIME+1}" ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        PROMPT="$(::STARSHIP:: prompt --status=$STATUS --cmd-duration=$STARSHIP_DURATION --jobs="$NUM_JOBS")"
         unset STARSHIP_START_TIME
     else
-        PROMPT="$(::STARSHIP:: prompt --status=$STATUS --jobs="$NUM_JOBS")"
+        unset STARSHIP_DURATION
     fi
+
+    # Render the updated prompt
+    starship_render
 }
 starship_preexec() {
     STARSHIP_START_TIME=$(::STARSHIP:: time)
@@ -48,7 +55,7 @@ fi
 
 # Set up a function to redraw the prompt if the user switches vi modes
 zle-keymap-select() {
-    PROMPT=$(::STARSHIP:: prompt --keymap="$KEYMAP" --jobs="$(jobs | wc -l)")
+    starship_render
     zle reset-prompt
 }
 
