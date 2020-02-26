@@ -1027,6 +1027,32 @@ The `rust` module shows the currently installed version of Rust. 此组件只有
 symbol = "⚙️ "
 ```
 
+## Singularity
+
+The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
+
+:::
+
+### 配置项
+
+| 字段         | 默认值                  | 描述                                               |
+| ---------- | -------------------- | ------------------------------------------------ |
+| `label`    | `""`                 | Prefix before the image name display.            |
+| `prefix`   | `"["`                | Prefix to display immediately before image name. |
+| `suffix`   | `"]"`                | Suffix to display immediately after image name.  |
+| `symbol`   | `""`                 | The symbol used before the image name.           |
+| `style`    | `"bold dimmed blue"` | 此组件的样式。                                          |
+| `disabled` | `false`              | Disables the `singularity` module.               |
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[singularity]
+symbol = "📦 "
+```
+
 ## Terraform
 
 The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. 此组件只有满足以下条件之一时才会被显示：
@@ -1036,12 +1062,12 @@ The `terraform` module shows the currently selected terraform workspace and vers
 
 ### 配置项
 
-| 字段             | 默认值          | 描述                               |
-| -------------- | ------------ | -------------------------------- |
-| `symbol`       | `"💠 "`       | 这个字段的内容会显示在当前 terraform 工作区之前。   |
-| `show_version` | `false`      | 显示 terraform 版本信息。 在大型工作空间中非常缓慢。 |
-| `style`        | `"bold 105"` | 此组件的样式。                          |
-| `disabled`     | `false`      | 禁用 `terraform` 组件。               |
+| 字段             | 默认值          | 描述                                                          |
+| -------------- | ------------ | ----------------------------------------------------------- |
+| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
+| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
+| `style`        | `"bold 105"` | 此组件的样式。                                                     |
+| `disabled`     | `false`      | Disables the `terraform` module.                            |
 
 ### 示例
 
@@ -1064,13 +1090,13 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### 配置项
 
-| 字段                | 默认值           | 描述                                                                                        |
-| ----------------- | ------------- | ----------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`       | 启用 12 小时格式                                                                                |
-| `format`          | 见下文解释         | 用来格式化时间显示的 [chrono 格式字符串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) |
-| `style`           | `bold yellow` | 显示时间的样式。                                                                                  |
-| `utc_time_offset` | `local`       | 设置所用 UTC 偏移量。 范围是 -24 < x < 24。 允许使用浮点数来得到 30/45 分钟的时区偏移。                                 |
-| `disabled`        | `true`        | 禁用 `time` 组件。                                                                             |
+| 字段                | 默认值           | 描述                                                                                                                  |
+| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
+| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `bold yellow` | The style for the module time                                                                                       |
+| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
+| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
@@ -1096,12 +1122,12 @@ The `username` module shows active user's username. 此组件只有满足以下�
 
 ### 配置项
 
-| 字段            | 默认值             | 描述                  |
-| ------------- | --------------- | ------------------- |
-| `style_root`  | `"bold red"`    | 当前用户为 root 时使用的样式。  |
-| `style_user`  | `"bold yellow"` | 非 root 用户使用的样式。     |
-| `show_always` | `false`         | 总是显示 `username` 组件。 |
-| `disabled`    | `false`         | 禁用 `username` 组件。   |
+| 字段            | 默认值             | 描述                                    |
+| ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`    | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `show_always` | `false`         | Always shows the `username` module.   |
+| `disabled`    | `false`         | Disables the `username` module.       |
 
 ### 示例
 
