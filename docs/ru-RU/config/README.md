@@ -1027,6 +1027,32 @@ symbol = "🔺 "
 symbol = "⚙️ "
 ```
 
+## Singularity
+
+The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
+
+:::
+
+### Опции
+
+| Переменная | По умолчанию         | Описание                                         |
+| ---------- | -------------------- | ------------------------------------------------ |
+| `label`    | `""`                 | Prefix before the image name display.            |
+| `prefix`   | `"["`                | Prefix to display immediately before image name. |
+| `suffix`   | `"]"`                | Suffix to display immediately after image name.  |
+| `symbol`   | `""`                 | The symbol used before the image name.           |
+| `style`    | `"bold dimmed blue"` | Стиль модуля.                                    |
+| `disabled` | `false`              | Disables the `singularity` module.               |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[singularity]
+symbol = "📦 "
+```
+
 ## Terraform
 
 The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. Модуль будет показан, если любое из следующих условий соблюдено:
@@ -1036,12 +1062,12 @@ The `terraform` module shows the currently selected terraform workspace and vers
 
 ### Опции
 
-| Переменная     | По умолчанию | Описание                                                                    |
-| -------------- | ------------ | --------------------------------------------------------------------------- |
-| `symbol`       | `"💠 "`       | Символ, используемый перед отображением рабочего пространства terraform.    |
-| `show_version` | `false`      | Показать версию terraform. Очень медленно на больших рабочих пространствах. |
-| `style`        | `"bold 105"` | Стиль модуля.                                                               |
-| `disabled`     | `false`      | Отключает модуль `terraform`.                                               |
+| Переменная     | По умолчанию | Описание                                                    |
+| -------------- | ------------ | ----------------------------------------------------------- |
+| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
+| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
+| `style`        | `"bold 105"` | Стиль модуля.                                               |
+| `disabled`     | `false`      | Disables the `terraform` module.                            |
 
 ### Пример
 
@@ -1052,7 +1078,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 symbol = "🏎💨 "
 ```
 
-## Время
+## Time
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
@@ -1064,15 +1090,15 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Опции
 
-| Переменная        | По умолчанию  | Описание                                                                                                                                  |
-| ----------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`       | Включить 12-часовое форматирование                                                                                                        |
-| `format`          | см. ниже      | [Строка формата chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), используемая для форматирования времени.         |
-| `style`           | `bold yellow` | Стиль модуля времени                                                                                                                      |
-| `utc_time_offset` | `local`       | Устанавливает смещение UTC. Диапазон -24 < x < 24. Разрешает числам с плавающей точкой встраивать 30/45-минутное смещение временной зоны. |
-| `disabled`        | `true`        | Отключает модуль `time`.                                                                                                                  |
+| Переменная        | По умолчанию  | Описание                                                                                                            |
+| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
+| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `bold yellow` | The style for the module time                                                                                       |
+| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
+| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
 
-Если `use_12hr` равен `true`, то `format` по умолчанию принимает значение `"%r"`. Иначе, принимается значение `"%T"`. Установка `format` вручную переопределит параметр `use_12hr`.
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
 ### Пример
 
@@ -1085,9 +1111,9 @@ format = "🕙[ %T ]"
 utc_time_offset = -5
 ```
 
-## Имя пользователя
+## Username
 
-Модуль `username` показывает имя текущего пользователя. Модуль будет показан, если любое из следующих условий соблюдено:
+The `username` module shows active user's username. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий пользователь - root
 - Текущий пользователь отличается от залогиненного
@@ -1096,12 +1122,12 @@ utc_time_offset = -5
 
 ### Опции
 
-| Переменная    | По умолчанию    | Описание                                                |
-| ------------- | --------------- | ------------------------------------------------------- |
-| `style_root`  | `"bold red"`    | Стиль, используемый для пользователя root.              |
-| `style_user`  | `"bold yellow"` | Стиль, используемый для всех пользователей, кроме root. |
-| `show_always` | `false`         | Всегда показывать модуль `username`.                    |
-| `disabled`    | `false`         | Отключает модуль `username`.                            |
+| Переменная    | По умолчанию    | Описание                              |
+| ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`    | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `show_always` | `false`         | Always shows the `username` module.   |
+| `disabled`    | `false`         | Disables the `username` module.       |
 
 ### Пример
 
