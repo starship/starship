@@ -27,6 +27,7 @@ pub mod php;
 pub mod python;
 pub mod ruby;
 pub mod rust;
+pub mod singularity;
 mod starship_root;
 pub mod terraform;
 pub mod time;
