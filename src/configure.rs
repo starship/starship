@@ -1,4 +1,5 @@
 use std::env;
+use std::io::ErrorKind;
 use std::ffi::OsString;
 use std::process::Command;
 
@@ -16,11 +17,20 @@ pub fn edit_configuration() {
     let editor = cmd_iter.next().unwrap_or(STD_EDITOR);
     let args: Vec<_> = cmd_iter.collect();
 
-    Command::new(editor)
+    let command = Command::new(editor)
         .args(args)
         .arg(config_path)
-        .status()
-        .expect("failed to open file");
+        .status();
+
+    match command {
+        Ok(_) => (),
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => panic!("editor {:?} was not found. Did you set your $EDITOR \
+                                           or $VISUAL environment variables correctly? {:?}",
+                                          editor, error),
+            other_error => panic!("failed to open file: {:?}", other_error),
+        },
+    };
 }
 
 fn get_editor() -> OsString {
