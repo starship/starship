@@ -1027,6 +1027,32 @@ The `rust` module shows the currently installed version of Rust. 次の条件の
 symbol = "⚙️ "
 ```
 
+## Singularity
+
+The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
+
+:::
+
+### オプション
+
+| 変数         | デフォルト                | 説明                                               |
+| ---------- | -------------------- | ------------------------------------------------ |
+| `label`    | `""`                 | Prefix before the image name display.            |
+| `prefix`   | `"["`                | Prefix to display immediately before image name. |
+| `suffix`   | `"]"`                | Suffix to display immediately after image name.  |
+| `symbol`   | `""`                 | The symbol used before the image name.           |
+| `style`    | `"bold dimmed blue"` | モジュールのスタイルです。                                    |
+| `disabled` | `false`              | Disables the `singularity` module.               |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[singularity]
+symbol = "📦 "
+```
+
 ## Terraform
 
 The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. 次の条件のいずれかが満たされると、モジュールが表示されます。
@@ -1036,12 +1062,12 @@ The `terraform` module shows the currently selected terraform workspace and vers
 
 ### オプション
 
-| 変数             | デフォルト        | 説明                                            |
-| -------------- | ------------ | --------------------------------------------- |
-| `symbol`       | `"💠 "`       | Terraform ワークスペースを表示する前に使用される記号です。            |
-| `show_version` | `false`      | Terraformのバージョンを表示します。 大きなワークスペースでは非常に遅くなります。 |
-| `style`        | `"bold 105"` | モジュールのスタイルです。                                 |
-| `disabled`     | `false`      | `terraform`モジュールを無効にします。                      |
+| 変数             | デフォルト        | 説明                                                          |
+| -------------- | ------------ | ----------------------------------------------------------- |
+| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
+| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
+| `style`        | `"bold 105"` | モジュールのスタイルです。                                               |
+| `disabled`     | `false`      | Disables the `terraform` module.                            |
 
 ### 設定例
 
@@ -1052,7 +1078,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 symbol = "🏎💨 "
 ```
 
-## 時刻
+## Time
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
@@ -1064,13 +1090,13 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### オプション
 
-| 変数                | デフォルト          | 説明                                                                                                |
-| ----------------- | -------------- | ------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`        | 12時間のフォーマットを有効にします。                                                                               |
-| `format`          | この表の下を参照してください | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。 |
-| `style`           | `bold yellow`  | モジュールのスタイルです。                                                                                     |
-| `utc_time_offset` | `local`        | 使用するUTCオフセットを設定します。 -24から24までの間で設定可能です。 フロートが30/45分のタイムゾーンオフセットに対応できるようにします。                      |
-| `disabled`        | `true`         | `time`モジュールを無効にします。                                                                               |
+| 変数                | デフォルト         | 説明                                                                                                                  |
+| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
+| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `bold yellow` | The style for the module time                                                                                       |
+| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
+| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
@@ -1085,7 +1111,7 @@ format = "🕙[ %T ]"
 utc_time_offset = -5
 ```
 
-## ユーザー名
+## Username
 
 The `username` module shows active user's username. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
@@ -1096,12 +1122,12 @@ The `username` module shows active user's username. 次の条件のいずれか�
 
 ### オプション
 
-| 変数            | デフォルト           | 説明                        |
-| ------------- | --------------- | ------------------------- |
-| `style_root`  | `"bold red"`    | ユーザーがrootのときに使用されるスタイルです。 |
-| `style_user`  | `"bold yellow"` | 非rootユーザーに使用されるスタイルです。    |
-| `show_always` | `false`         | `username`モジュールを常に表示します。  |
-| `disabled`    | `false`         | `username`モジュールを無効にします。   |
+| 変数            | デフォルト           | 説明                                    |
+| ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`    | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `show_always` | `false`         | Always shows the `username` module.   |
+| `disabled`    | `false`         | Disables the `username` module.       |
 
 ### 設定例
 
