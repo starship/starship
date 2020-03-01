@@ -1,5 +1,4 @@
 use regex::Regex;
-use std::process::Command;
 
 use super::{Context, Module, RootModuleConfig};
 
@@ -40,11 +39,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_elixir_version() -> Option<(String, String)> {
-    let output = Command::new("elixir")
-        .arg("--version")
-        .output()
-        .ok()
-        .and_then(|output| String::from_utf8(output.stdout).ok())?;
+    use crate::utils;
+
+    let output = utils::exec_cmd("elixir", &["--version"])?.stdout;
 
     parse_elixir_version(&output)
 }
@@ -62,18 +59,51 @@ fn parse_elixir_version(version: &str) -> Option<(String, String)> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::modules::utils::test::render_module;
+    use ansi_term::Color;
+    use std::fs::File;
+    use std::io;
+    use tempfile;
 
     #[test]
     fn test_parse_elixir_version() {
         const OUTPUT: &str = "\
 Erlang/OTP 22 [erts-10.5] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1] [hipe]
 
-Elixir 1.9.0 (compiled with Erlang/OTP 22)
+Elixir 1.10 (compiled with Erlang/OTP 22)
 ";
 
         assert_eq!(
             parse_elixir_version(OUTPUT),
-            Some(("22".to_owned(), "1.9.0".to_owned()))
+            Some(("22".to_owned(), "1.10".to_owned()))
         );
+    }
+
+    #[test]
+    fn test_without_mix_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let expected = None;
+        let output = render_module("elixir", dir.path());
+
+        assert_eq!(output, expected);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_with_mix_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("mix.exs"))?.sync_all()?;
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Purple.bold().paint("💧 1.10 (OTP 22)")
+        ));
+        let output = render_module("elixir", dir.path());
+
+        assert_eq!(output, expected);
+
+        Ok(())
     }
 }
