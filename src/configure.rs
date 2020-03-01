@@ -22,11 +22,15 @@ pub fn edit_configuration() {
     match command {
         Ok(_) => (),
         Err(error) => match error.kind() {
-            ErrorKind::NotFound => panic!(
-                "editor {:?} was not found. Did you set your $EDITOR or $VISUAL environment \
-                 variables correctly? {:?}",
-                editor, error
-            ),
+            ErrorKind::NotFound => {
+                eprintln!(
+                    "Error: editor {:?} was not found. Did you set your $EDITOR or $VISUAL \
+                    environment variables correctly?",
+                    editor
+                );
+                eprintln!("Full error: {:?}", error);
+                std::process::exit(1)
+            }
             other_error => panic!("failed to open file: {:?}", other_error),
         },
     };
