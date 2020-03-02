@@ -6,6 +6,7 @@ mod conda;
 mod crystal;
 mod directory;
 mod dotnet;
+mod elixir;
 mod elm;
 mod env_var;
 mod git_branch;
@@ -53,6 +54,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "conda" => conda::module(context),
         "directory" => directory::module(context),
         "dotnet" => dotnet::module(context),
+        "elixir" => elixir::module(context),
         "elm" => elm::module(context),
         "env_var" => env_var::module(context),
         "git_branch" => git_branch::module(context),
