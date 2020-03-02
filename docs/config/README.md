@@ -102,6 +102,7 @@ prompt_order = [
     "hg_branch",
     "package",
     "dotnet",
+    "elixir",
     "elm",
     "golang",
     "haskell",
@@ -468,6 +469,29 @@ The module will be shown only if any of the following conditions are met:
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+## Elixir
+
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `mix.exs` file.
+
+### Options
+
+| Variable   | Default      | Description                                            |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `symbol`   | `"💧 "`      | The symbol used before displaying the version of Rust. |
+| `disabled` | `false`      | Disables the `elixir` module.                          |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[elixir]
+symbol = "🔮 "
 ```
 
 ## Git Branch
@@ -1094,6 +1118,33 @@ The module will be shown if any of the following conditions are met:
 symbol = "⚙️ "
 ```
 
+## Singularity
+
+The `singularity` module shows the current singularity image, if inside a container
+and `$SINGULARITY_NAME` is set.
+
+:::
+
+### Options
+
+| Variable   | Default              | Description                                      |
+| ---------- | -------------------- | ------------------------------------------------ |
+| `label`    | `""`                 | Prefix before the image name display.            |
+| `prefix`   | `"["`                | Prefix to display immediately before image name. |
+| `suffix`   | `"]"`                | Suffix to display immediately after image name.  |
+| `symbol`   | `""`                 | The symbol used before the image name.           |
+| `style`    | `"bold dimmed blue"` | The style for the module.                        |
+| `disabled` | `false`              | Disables the `singularity` module.               |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[singularity]
+symbol = "📦 "
+```
+
 ## Terraform
 
 The `terraform` module shows the currently selected terraform workspace and version.
@@ -1139,8 +1190,8 @@ To enable it, set `disabled` to `false` in your configuration file.
 | ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
 | `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`           | `bold yellow` | The style for the module time                                                                                       |
-| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
+| `style`           | `"bold yellow"` | The style for the module time                                                                                       |
+| `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
 | `disabled`        | `true`        | Disables the `time` module.                                                                                         |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
@@ -1154,7 +1205,7 @@ Manually setting `format` will override the `use_12hr` setting.
 [time]
 disabled = false
 format = "🕙[ %T ]"
-utc_time_offset = -5
+utc_time_offset = "-5"
 ```
 
 ## Username

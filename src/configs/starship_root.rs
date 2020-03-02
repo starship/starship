@@ -19,6 +19,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
             prompt_order: vec![
                 "username",
                 "hostname",
+                "singularity",
                 "kubernetes",
                 "directory",
                 "git_branch",
@@ -30,6 +31,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 // ↓ Toolchain version modules ↓
                 // (Let's keep these sorted alphabetically)
                 "dotnet",
+                "elixir",
                 "elm",
                 "golang",
                 "haskell",

@@ -73,6 +73,15 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             stdout: String::from("8.6.5"),
             stderr: String::default(),
         }),
+        "elixir --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+Erlang/OTP 22 [erts-10.6.4] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1] [hipe]
+
+Elixir 1.10 (compiled with Erlang/OTP 22)",
+            ),
+            stderr: String::default(),
+        }),
         // If we don't have a mocked command fall back to executing the command
         _ => internal_exec_cmd(&cmd, &args),
     }

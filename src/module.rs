@@ -18,6 +18,7 @@ pub const ALL_MODULES: &[&str] = &[
     "conda",
     "directory",
     "dotnet",
+    "elixir",
     "elm",
     "env_var",
     "git_branch",
@@ -42,6 +43,7 @@ pub const ALL_MODULES: &[&str] = &[
     "rust",
     "php",
     "terraform",
+    "singularity",
     "time",
     "username",
 ];

@@ -6,6 +6,7 @@ mod conda;
 mod crystal;
 mod directory;
 mod dotnet;
+mod elixir;
 mod elm;
 mod env_var;
 mod git_branch;
@@ -28,6 +29,7 @@ mod php;
 mod python;
 mod ruby;
 mod rust;
+mod singularity;
 mod terraform;
 mod time;
 mod username;
@@ -52,6 +54,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "conda" => conda::module(context),
         "directory" => directory::module(context),
         "dotnet" => dotnet::module(context),
+        "elixir" => elixir::module(context),
         "elm" => elm::module(context),
         "env_var" => env_var::module(context),
         "git_branch" => git_branch::module(context),
@@ -74,6 +77,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "python" => python::module(context),
         "ruby" => ruby::module(context),
         "rust" => rust::module(context),
+        "singularity" => singularity::module(context),
         "terraform" => terraform::module(context),
         "time" => time::module(context),
         "crystal" => crystal::module(context),
