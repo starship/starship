@@ -100,6 +100,7 @@ prompt_order = [
     "hg_branch",
     "package",
     "dotnet",
+    "elixir",
     "elm",
     "golang",
     "haskell",
@@ -434,6 +435,28 @@ The `env_var` module displays the current value of a selected environment variab
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+## Elixir
+
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `mix.exs` file.
+
+### Options
+
+| Variable   | Default | Description                                            |
+| ---------- | ------- | ------------------------------------------------------ |
+| `symbol`   | `"💧 "`  | The symbol used before displaying the version of Rust. |
+| `disabled` | `false` | Disables the `elixir` module.                          |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[elixir]
+symbol = "🔮 "
 ```
 
 ## Git Branch
