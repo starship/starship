@@ -22,7 +22,7 @@
   <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="Chat on Discord" /></a>
+      alt="在 Discord 上聊天" /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
@@ -30,11 +30,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs/zh-TW/">網站</a>
   ·
-  <a href="#-installation">Installation</a>
+  <a href="#-安裝">安裝</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs/zh-TW/config/">設定</a>
 </p>
 
 <p align="center">
@@ -115,7 +115,7 @@
 <a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
 
-## 🚀 Installation
+## 🚀 安裝
 
 ### 先決要求
 
@@ -214,27 +214,27 @@
    eval $(starship init ion)
    ```
 
-## 🤝 Contributing
+## 🤝 貢獻
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+我們歡迎具有**各式各樣能力**的貢獻者！ 如果你正在尋找容易加入的方法，試試看標註為「[good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)」的 issue。
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+如果你對貢獻 Starship 有興趣，請看我們的 [貢獻指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) 。 另外，請不用客氣加入我們的 [Discord 伺服器](https://discord.gg/8Jzqu3T) 並來問候一下。 👋
 
-## 💭 Inspired By
+## 💭 發想來自
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+請看之前這些幫助我們創造 Starship 的前任作品。 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - 給太空人的 ZSH 提示。
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - 使用 Javascript 撰寫的跨 shell robbyrussell 主題。
 
-- **[reujab/silver](https://github.com/reujab/silver)** - A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** - 一個跨 shell、可客製化、像 powerline 的圖案提示字元。
 
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 License
+## 📝 許可
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> 這個專案使用 [ISC](https://github.com/starship/starship/blob/master/LICENSE) 許可。
