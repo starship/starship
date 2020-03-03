@@ -445,10 +445,10 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 ### 選項
 
-| 變數         | 預設      | 說明                                                     |
-| ---------- | ------- | ------------------------------------------------------ |
-| `symbol`   | `"💧 "`  | The symbol used before displaying the version of Rust. |
-| `disabled` | `false` | Disables the `elixir` module.                          |
+| 變數         | 預設      | 說明                                                              |
+| ---------- | ------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`  | The symbol used before displaying the version of Elixir/Erlang. |
+| `disabled` | `false` | Disables the `elixir` module.                                   |
 
 ### 範例
 
