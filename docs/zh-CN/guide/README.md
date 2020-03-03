@@ -22,7 +22,7 @@
   <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="Chat on Discord" /></a>
+      alt="加入 Discord" /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
@@ -30,11 +30,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs">网站</a>
   ·
-  <a href="#-installation">Installation</a>
+  <a href="#-installation">安装</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs/config/">配置</a>
 </p>
 
 <p align="center">
@@ -96,7 +96,7 @@
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship with iTerm2 and the Snazzy theme"
+  alt="使用 iTerm 和 Snazz 主题的 Starship"
   width="50%"
   align="right" />
 
@@ -115,7 +115,7 @@
 <a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
 
-## 🚀 Installation
+## 🚀 安装
 
 ### 前置要求
 
@@ -214,15 +214,15 @@
    eval $(starship init ion)
    ```
 
-## 🤝 Contributing
+## 🤝 贡献
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+我们一直在寻找贡献者！你都可以参与贡献 ** 不论你的技能如何 **。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+如果您有兴趣贡献于 Starship，请查看我们的[贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 另外，你可以自由加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 。 👋
 
-## 💭 Inspired By
+## 💭该项目受以下项目启发
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+请参考这些曾经为 Starship 提供启发的工程。 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
 
