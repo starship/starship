@@ -726,6 +726,17 @@
       "contributions": [
         "translation"
       ]
+    },
+    {
+      "login": "KokaKiwi",
+      "name": "KokaKiwi",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/183116?v=4",
+      "profile": "https://kokakiwi.moe",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
