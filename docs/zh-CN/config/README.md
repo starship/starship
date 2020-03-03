@@ -355,11 +355,11 @@ truncation_length = 8
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+`dotnet` 模块显示与当前目录下使用的 .NET Core SDK 相关联的版本。 如果当前目录已被绑定了一个版本的 SDK，则显示被帮定的版本。 否则此组件将显示最新安装的 SDK 版本。
 
-This module will only be shown in your prompt when one of the following files are present in the current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll also need the .NET Core command-line tools installed in order to use it correctly.
+此组件只会在以下文件之一出现在当前目录中时显示：`global.json`，`project.json`，`*.sln`，`*.csproj`，`*.fsproj`，`*.xproj`。 为了正确使用此组件，您还需要安装 .NET Core 命令行工具。
 
-Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+在内部，此组件使用自己的版本检测机制。 一般来说此组件是直接执行 `dotnet --version` 的两倍快，但当你的 .NET 项目使用了不常见的目录布局时此组件可能显示一个错误的版本。 如果相比于速度您更需要正确的版本号，您可以在组件设置中设置 `heuristic = false` 来禁用该机制。
 
 ### 配置项
 
@@ -410,7 +410,7 @@ symbol = " "
 
 ## Environment Variable
 
-The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+`env_var` 组件显示选定的环境变量的当前值。 此组件只有满足以下条件之一时才会被显示：
 
 - 设置的 `variable` 是一个已存在的环境变量
 - 未定义 `variable`，但定义了 `default`
@@ -461,17 +461,17 @@ symbol = "🔮 "
 
 ## Git Branch
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+`git_branch` 组件显示当前目录的 git 仓库的活动分支。
 
 ### 配置项
 
-| 字段                  | 默认值             | 描述                                                                                    |
-| ------------------- | --------------- | ------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
-| `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
-| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
-| `style`             | `"bold purple"` | 此组件的样式。                                                                               |
-| `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
+| 字段                  | 默认值             | 描述                                    |
+| ------------------- | --------------- | ------------------------------------- |
+| `symbol`            | `" "`          | 该字段的内容显示于当前仓库活动分支名之前。                 |
+| `truncation_length` | `2^63 - 1`      | 将显示的分支名截断到该数量的字素（graphemes）           |
+| `truncation_symbol` | `"…"`           | 此字段的内容用来表示分支名称被截断。 您可以使用 "" 以不显示任何符号。 |
+| `style`             | `"bold purple"` | 此组件的样式。                               |
+| `disabled`          | `false`         | 禁用 `git_branch` 组件。                   |
 
 ### 示例
 
@@ -486,18 +486,18 @@ truncation_symbol = ""
 
 ## Git Commit
 
-The `git_commit` module shows the current commit hash of the repo in your current directory.
+`git_commit` 组件显示当前目录的 git 仓库的当前提交的哈希值。
 
 ### 配置项
 
 | 字段                   | 默认值            | 描述                                                    |
 | -------------------- | -------------- | ----------------------------------------------------- |
-| `commit_hash_length` | `7`            | The length of the displayed git commit hash.          |
-| `prefix`             | `"("`          | Prefix to display immediately before git commit.      |
-| `suffix`             | `")"`          | Suffix to display immediately after git commit.       |
+| `commit_hash_length` | `7`            | 显示的 git 提交哈希值的长度。                                     |
+| `prefix`             | `"("`          | 直接在 git 提交哈希值前显示的前缀。                                  |
+| `suffix`             | `")"`          | 直接在 git 提交哈希值后显示的后缀。                                  |
 | `style`              | `"bold green"` | 此组件的样式。                                               |
 | `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
-| `disabled`           | `false`        | Disables the `git_commit` module.                     |
+| `disabled`           | `false`        | 禁用 `git_commit` 组件。                                   |
 
 ### 示例
 
@@ -510,22 +510,22 @@ commit_hash_length = 4
 
 ## Git State
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+`git_state` 组件会显示当前目录在哪个 git 仓库中，以及正在进行的操作，例如：_REBASING_，_BISECTING_ 等。 进度信息（例如 REBASING 3/10）如果存在则也会被显示。
 
 ### 配置项
 
-| 字段                 | 默认值                | 描述                                                                                                               |
-| ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
-| `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
-| `revert`           | `"REVERTING"`      | The text displayed when a `revert` is in progress.                                                               |
-| `cherry_pick`      | `"CHERRY-PICKING"` | The text displayed when a `cherry-pick` is in progress.                                                          |
-| `bisect`           | `"BISECTING"`      | The text displayed when a `bisect` is in progress.                                                               |
-| `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
-| `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
-| `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
-| `style`            | `"bold yellow"`    | 此组件的样式。                                                                                                          |
-| `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
+| 字段                 | 默认值                | 描述                                                    |
+| ------------------ | ------------------ | ----------------------------------------------------- |
+| `rebase`           | `"REBASING"`       | `rebase` 时显示的文本。                                      |
+| `merge`            | `"MERGING"`        | `merge` 时显示的文本。                                       |
+| `revert`           | `"REVERTING"`      | `revert` 时显示的文本。                                      |
+| `cherry_pick`      | `"CHERRY-PICKING"` | `cherry-pick` 时显示的文本。                                 |
+| `bisect`           | `"BISECTING"`      | `bisect` 时显示的文本。                                      |
+| `am`               | `"AM"`             | 正在执行 `apply-mailbox`（`git am`）时显示的文本。                 |
+| `am_or_rebase`     | `"AM/REBASE"`      | 当无法分辨正在执行的是 `apply-mailbox` 还是 `rebase` 时显示的文本。       |
+| `progress_divider` | `"/"`              | 将当前进度与总进度分开的符号或文本。 （例如，设置为 `" of "` 时效果是 `"3 of 10"`） |
+| `style`            | `"bold yellow"`    | 此组件的样式。                                               |
+| `disabled`         | `false`            | 禁用 `git_state` 模块                                     |
 
 ### 示例
 
@@ -539,41 +539,41 @@ cherry_pick = "🍒 PICKING"
 
 ## Git Status
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+`git_status`组件通过相应的符号显示您当前目录中 git 仓库的状态。
 
 ### 配置项
 
-| 字段                 | 默认值                       | 描述                                                      |
-| ------------------ | ------------------------- | ------------------------------------------------------- |
-| `conflicted`       | `"="`                     | This branch has merge conflicts.                        |
-| `conflicted_count` | [见下文](#git-status-counts) | Show and style the number of conflicts.                 |
-| `ahead`            | `"⇡"`                     | This branch is ahead of the branch being tracked.       |
-| `behind`           | `"⇣"`                     | This branch is behind of the branch being tracked.      |
-| `diverged`         | `"⇕"`                     | This branch has diverged from the branch being tracked. |
-| `untracked`        | `"?"`                     | There are untracked files in the working directory.     |
-| `untracked_count`  | [见下文](#git-status-counts) | Show and style the number of untracked files.           |
-| `stashed`          | `"$"`                     | A stash exists for the local repository.                |
-| `stashed_count`    | [见下文](#git-status-counts) | Show and style the number of stashes.                   |
-| `modified`         | `"!"`                     | There are file modifications in the working directory.  |
-| `modified_count`   | [见下文](#git-status-counts) | Show and style the number of modified files.            |
-| `staged`           | `"+"`                     | A new file has been added to the staging area.          |
-| `staged_count`     | [见下文](#git-status-counts) | Show and style the number of files staged files.        |
-| `renamed`          | `"»"`                     | A renamed file has been added to the staging area.      |
-| `renamed_count`    | [见下文](#git-status-counts) | Show and style the number of renamed files.             |
-| `deleted`          | `"✘"`                     | A file's deletion has been added to the staging area.   |
-| `deleted_count`    | [见下文](#git-status-counts) | Show and style the number of deleted files.             |
-| `show_sync_count`  | `false`                   | Show ahead/behind count of the branch being tracked.    |
-| `prefix`           | `[`                       | Prefix to display immediately before git status.        |
-| `suffix`           | `]`                       | Suffix to display immediately after git status.         |
-| `style`            | `"bold red"`              | 此组件的样式。                                                 |
-| `disabled`         | `false`                   | Disables the `git_status` module.                       |
+| 字段                 | 默认值                       | 描述                           |
+| ------------------ | ------------------------- | ---------------------------- |
+| `conflicted`       | `"="`                     | 这个分支有合并冲突。                   |
+| `conflicted_count` | [见下文](#git-status-counts) | 显示冲突数量，设置冲突数量的显示样式。          |
+| `ahead`            | `"⇡"`                     | 这个分支领先于正在跟踪的分支。              |
+| `behind`           | `"⇣"`                     | 这个分支落后于正在跟踪的分支。              |
+| `diverged`         | `"⇕"`                     | 这个分支与正在跟踪的分支有分歧。             |
+| `untracked`        | `"?"`                     | 工作目录中有未跟踪的文件。                |
+| `untracked_count`  | [见下文](#git-status-counts) | 显示未跟踪文件的数量，设置该数量的显示样式。       |
+| `stashed`          | `"$"`                     | 本地 git 仓库中存在一个 stash 快照。     |
+| `stashed_count`    | [见下文](#git-status-counts) | 显示 stash 快照数量，设置快照数量的显示样式。   |
+| `modified`         | `"!"`                     | 工作目录中有文件修改。                  |
+| `modified_count`   | [见下文](#git-status-counts) | 显示修改文件的数量，设置该数量的显示样式。        |
+| `staged`           | `"+"`                     | 一个新文件被添加到了暂存区（staging area）。 |
+| `staged_count`     | [见下文](#git-status-counts) | 显示暂存区中文件数量，设置该数量的显示样式。       |
+| `renamed`          | `"»"`                     | 一个重命名的文件被添加到了暂存区。            |
+| `renamed_count`    | [见下文](#git-status-counts) | 显示重命名文件的数量，设置该数量的显示样式。       |
+| `deleted`          | `"✘"`                     | 一个文件的删除记录被添加到了暂存区。           |
+| `deleted_count`    | [见下文](#git-status-counts) | 显示文件删除记录的数量，设置该数量的显示样式。      |
+| `show_sync_count`  | `false`                   | 显示领先/落后正在跟踪的分支的提交数。          |
+| `prefix`           | `[`                       | 直接在 git 状态前显示的前缀。            |
+| `suffix`           | `]`                       | 直接在 git 状态后显示的后缀。            |
+| `style`            | `"bold red"`              | 此组件的样式。                      |
+| `disabled`         | `false`                   | 禁用 `git_status` 组件。          |
 
 #### Git Status 中的计数值
 
-| 字段        | 默认值     | 描述                                                     |
-| --------- | ------- | ------------------------------------------------------ |
-| `enabled` | `false` | Show the number of files                               |
-| `style`   |         | Optionally style the count differently than the module |
+| 字段        | 默认值     | 描述                              |
+| --------- | ------- | ------------------------------- |
+| `enabled` | `false` | 显示相应的文件数量                       |
+| `style`   |         | 可选字段，使计数值的显示风格不同于 git_status 组件 |
 
 ### 示例
 
@@ -598,23 +598,23 @@ deleted = "🗑"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. 此组件只有满足以下条件之一时才会被显示：
+`golang` 组件显示当前安装的 Golang 版本。 此组件只有满足以下条件之一时才会被显示：
 
-- The current directory contains a `go.mod` file
-- The current directory contains a `go.sum` file
-- The current directory contains a `glide.yaml` file
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- 当前目录包含 `go.mod` 文件
+- 当前目录包含 `go.sum` 文件
+- 当前目录包含 `glide.yaml` 文件
+- 当前目录包含 `Gopkg.yml` 文件
+- 当前目录包含 `Gopkg.lock` 文件
+- 当前目录包含 `Godeps` 目录
+- 当前目录包含一个使用 `.go` 扩展名的文件
 
 ### 配置项
 
-| 字段         | 默认值           | 描述                                                       |
-| ---------- | ------------- | -------------------------------------------------------- |
-| `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
-| `style`    | `"bold cyan"` | 此组件的样式。                                                  |
-| `disabled` | `false`       | Disables the `golang` module.                            |
+| 字段         | 默认值           | 描述                         |
+| ---------- | ------------- | -------------------------- |
+| `symbol`   | `"🐹 "`        | 这个字段的内容会显示在当前 Golang 版本之前。 |
+| `style`    | `"bold cyan"` | 此组件的样式。                    |
+| `disabled` | `false`       | 禁用 `golang` 组件。            |
 
 ### 示例
 
@@ -626,17 +626,17 @@ symbol = "🏎💨 "
 ```
 ## Haskell
 
-The `haskell` module shows the currently installed version of Haskell Stack version. 此组件只有满足以下条件之一时才会被显示：
+`haskell` 组件显示当前安装的 Haskell Stack 版本。 此组件只有满足以下条件之一时才会被显示：
 
-- The current directory contains a `stack.yaml` file
+- 当前目录包含 `stack.yaml` 文件
 
 ### 配置项
 
-| 字段         | 默认值          | 描述                                                        |
-| ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold red"` | 此组件的样式。                                                   |
-| `disabled` | `false`      | Disables the `haskell` module.                            |
+| 字段         | 默认值          | 描述                          |
+| ---------- | ------------ | --------------------------- |
+| `symbol`   | `"λ "`       | 这个字段的内容会显示在当前 Haskell 版本之前。 |
+| `style`    | `"bold red"` | 此组件的样式。                     |
+| `disabled` | `false`      | 禁用 `haskell` 组件。            |
 
 
 ### 示例
@@ -650,17 +650,17 @@ symbol = " "
 
 ## Mercurial Branch
 
-The `hg_branch` module shows the active branch of the repo in your current directory.
+`hg_branch` 组件显示当前目录的 hg 仓库的活动分支。
 
 ### 配置项
 
-| 字段                  | 默认值             | 描述                                                                                           |
-| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
-| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
-| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
-| `style`             | `"bold purple"` | 此组件的样式。                                                                                      |
-| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+| 字段                  | 默认值             | 描述                              |
+| ------------------- | --------------- | ------------------------------- |
+| `symbol`            | `" "`          | 该字段的内容显示于当前仓库的 hg 书签或活动分支名之前。   |
+| `truncation_length` | `2^63 - 1`      | 将显示的 hg 分支名截断到该数量的字素（graphemes） |
+| `truncation_symbol` | `"…"`           | 此字段的内容用来表示分支名称被截断。              |
+| `style`             | `"bold purple"` | 此组件的样式。                         |
+| `disabled`          | `true`          | 禁用 `hg_branch` 组件。              |
 
 ### 示例
 
@@ -675,18 +675,18 @@ truncation_symbol = ""
 
 ## Hostname
 
-The `hostname` module shows the system hostname.
+`hostname` 组件显示系统主机名。
 
 ### 配置项
 
-| 字段         | 默认值                   | 描述                                                                                                                                   |
-| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
-| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
-| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
-| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `style`    | `"bold dimmed green"` | 此组件的样式。                                                                                                                              |
-| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
+| 字段         | 默认值                   | 描述                                                                 |
+| ---------- | --------------------- | ------------------------------------------------------------------ |
+| `ssh_only` | `true`                | 仅在连接到 SSH 会话时显示主机名。                                                |
+| `prefix`   | `""`                  | 直接在主机名前显示的前缀。                                                      |
+| `suffix`   | `""`                  | 直接在主机名后显示的后缀。                                                      |
+| `trim_at`  | `"."`                 | 当主机名过长被截断时，会截断成第一次匹配该字符串之前的主机名。 `"."` 会让主机名截断到第一个点处。 `""` 会禁用任何截断。 |
+| `style`    | `"bold dimmed green"` | 此组件的样式。                                                            |
+| `disabled` | `false`               | 禁用 `hostname` 组件。                                                  |
 
 ### 示例
 
@@ -703,16 +703,16 @@ disabled = false
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
+`jobs` 组件显示当前正在运行的任务数量。 仅当有后台任务运行时，此组件才会显示。 如果有超过 1 个作业，模块将显示正在运行的作业数量，如果配置了 `threshold` 字段，则使用它作为显示作业数量的下限。
 
 ### 配置项
 
-| 字段          | 默认值           | 描述                                                    |
-| ----------- | ------------- | ----------------------------------------------------- |
-| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
-| `threshold` | `1`           | Show number of jobs if exceeded.                      |
-| `style`     | `"bold blue"` | 此组件的样式。                                               |
-| `disabled`  | `false`       | Disables the `jobs` module.                           |
+| 字段          | 默认值           | 描述                   |
+| ----------- | ------------- | -------------------- |
+| `symbol`    | `"✦"`         | 这个字段的内容会显示在当前作业数量之前。 |
+| `threshold` | `1`           | 如果超过此字段的值，显示任务数量。    |
+| `style`     | `"bold blue"` | 此组件的样式。              |
+| `disabled`  | `false`       | 禁用 `jobs` 组件。        |
 
 ### 示例
 
@@ -726,21 +726,21 @@ threshold = 4
 
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+显示当前的 Kubernetes 上下文名以及，如果有相关设置，则显示来自 kubeconig 文件的命名空间。 命名空间需要在 kubeconfig 文件中设置，这可以通过 `kubectl config set-context starship-cluster --namespace astronaut` 完成。 如果设置了环境变量 `$KUBECONFIG`，此组件将使用该值，否则会使用 `~/.kube/config`。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
 ### 配置项
 
-| 字段         | 默认值           | 描述                                                  |
-| ---------- | ------------- | --------------------------------------------------- |
-| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
-| `style`    | `"bold blue"` | 此组件的样式。                                             |
-| `disabled` | `true`        | Disables the `kubernetes` module                    |
+| 字段         | 默认值           | 描述                   |
+| ---------- | ------------- | -------------------- |
+| `symbol`   | `"☸ "`        | 这个字段的内容会显示在当前集群信息之前。 |
+| `style`    | `"bold blue"` | 此组件的样式。              |
+| `disabled` | `true`        | 禁用 `kubernetes` 组件。  |
 
 ### 示例
 
@@ -755,13 +755,13 @@ disabled = false
 
 ## Line Break
 
-The `line_break` module separates the prompt into two lines.
+`line_break` 组件将提示分隔为两行。
 
 ### 配置项
 
-| 字段         | 默认值     | 描述                                                                 |
-| ---------- | ------- | ------------------------------------------------------------------ |
-| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
+| 字段         | 默认值     | 描述                          |
+| ---------- | ------- | --------------------------- |
+| `disabled` | `false` | 禁用 `line_break` 组件，使提示成为单行。 |
 
 ### 示例
 
@@ -774,17 +774,17 @@ disabled = true
 
 ## Nix-shell
 
-The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
+`nix_shell` 组件显示 nix-shell 环境。 当处于一个 nix-shell 环境中时，此组件会被显示。
 
 ### 配置项
 
-| 字段           | 默认值          | 描述                                 |
-| ------------ | ------------ | ---------------------------------- |
-| `use_name`   | `false`      | Display the name of the nix-shell. |
-| `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
-| `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
-| `style`      | `"bold red"` | 此组件的样式。                            |
-| `disabled`   | `false`      | Disables the `nix_shell` module.   |
+| 字段           | 默认值          | 描述                 |
+| ------------ | ------------ | ------------------ |
+| `use_name`   | `false`      | 显示 nix-shell 的名称。  |
+| `impure_msg` | `"impure"`   | 自定义“impure”消息。     |
+| `pure_msg`   | `"pure"`     | 自定义“pure”消息。       |
+| `style`      | `"bold red"` | 此组件的样式。            |
+| `disabled`   | `false`      | 禁用 `nix_shell` 组件。 |
 
 ### 示例
 
@@ -800,18 +800,18 @@ pure_msg = "pure shell"
 
 ## Java
 
-The `java` module shows the currently installed version of Java. 此组件只有满足以下条件之一时才会被显示：
+`java` 组件显示当前安装的 Java 版本。 此组件将在符合以下条件之一时显示：
 
-- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
-- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
+- 当前目录包含 `pom.xml`，`build.gradle.kts` 或 `build.sbt` 文件
+- 当前目录包含一个扩展名为 `.java`，`.class`，`.gradle` 或 `.jar` 的文件
 
 ### 配置项
 
-| 字段         | 默认值            | 描述                                                     |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | 此组件的样式。                                                |
-| `disabled` | `false`        | Disables the `java` module.                            |
+| 字段         | 默认值            | 描述                       |
+| ---------- | -------------- | ------------------------ |
+| `symbol`   | `"☕ "`         | 这个字段的内容会显示在当前 Java 版本之前。 |
+| `style`    | `"dimmed red"` | 此组件的样式。                  |
+| `disabled` | `false`        | 禁用 `java` 组件。            |
 
 ### 示例
 
@@ -824,27 +824,27 @@ symbol = "🌟 "
 
 ## Memory Usage
 
-The `memory_usage` module shows current system memory and swap usage.
+`memory_usage` 组件显示当前系统内存和交换区使用情况。
 
-By default the swap usage is displayed if the total system swap is non-zero.
+默认情况下，如果系统交换区使用不为 0，则会显示交换区使用情况。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
 ### 配置项
 
-| 字段                | 默认值                   | 描述                                                            |
-| ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
-| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
-| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | 此组件的样式。                                                       |
-| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
+| 字段                | 默认值                   | 描述                         |
+| ----------------- | --------------------- | -------------------------- |
+| `show_percentage` | `false`               | 用可用内存的百分比来显示内存使用情况。        |
+| `show_swap`       | `true`                | 如果总交换区使用量为非零，则显示交换区使用情况。   |
+| `threshold`       | `75`                  | 隐藏内存使用情况，除非它超过这个百分比。       |
+| `symbol`          | `"🐏 "`                | 这个字段的内容会显示在当前内存使用情况之前。     |
+| `separator`       | `" | "`               | 此字段所设置的符号或文本会分隔内存和交换区使用情况。 |
+| `style`           | `"bold dimmed white"` | 此组件的样式。                    |
+| `disabled`        | `true`                | 禁用 `memory_usage` 模块       |
 
 ### 示例
 
@@ -864,7 +864,7 @@ style = "bold dimmed green"
 
 The `crystal` module shows the currently installed version of Crystal. 此组件只有满足以下条件之一时才会被显示：
 
-- The current directory contains a `shard.yml` file
+- 当前目录包含 `shard.yml` 文件
 - The current directory contains a `.cr` file
 
 ### 配置项
@@ -887,19 +887,19 @@ style = "bold blue"
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. 此组件只有满足以下条件之一时才会被显示：
+`nodejs` 组件显示当前安装的 NodeJS 版本。 此组件只有满足以下条件之一时才会被显示：
 
-- The current directory contains a `package.json` file
-- The current directory contains a `node_modules` directory
-- The current directory contains a file with the `.js` extension
+- 当前目录包含 `package.json` 文件
+- 当前目录包含 `node_modules` 目录
+- 当前目录包含一个使用 `.js` 扩展名的文件
 
 ### 配置项
 
-| 字段         | 默认值            | 描述                                                       |
-| ---------- | -------------- | -------------------------------------------------------- |
-| `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | 此组件的样式。                                                  |
-| `disabled` | `false`        | Disables the `nodejs` module.                            |
+| 字段         | 默认值            | 描述                         |
+| ---------- | -------------- | -------------------------- |
+| `symbol`   | `"⬢ "`         | 这个字段的内容会显示在当前 NodeJS 版本之前。 |
+| `style`    | `"bold green"` | 此组件的样式。                    |
+| `disabled` | `false`        | 禁用 `nodejs` 组件。            |
 
 ### 示例
 
@@ -912,23 +912,23 @@ symbol = "🤖 "
 
 ## Package Version
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, and `gradle` packages.
+当前目录是软件包的代码仓库时，将显示 `package` 组件，并显示软件包当前版本。 The module currently supports `npm`, `cargo`, `poetry`, `composer`, and `gradle` packages.
 
-- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
-- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
-- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
-- **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
+- **npm** —— `npm` 软件包版本从当前目录下的 `package.json` 中得到
+- **cargo** —— `cargo` 软件包的版本从当前目录下的 `Cargo.toml` 中得到
+- **poetry** —— `poetry` 软件包版本从当前目录下的 `pyproject.toml` 中得到
+- **composer** —— `composer` 软件包版本从当前目录下的 `composer.json` 中得到
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 
 > ⚠ 此组件显示的是源代码在当前目录中的软件包的版本，而不是包管理器的版本。
 
 ### 配置项
 
-| 字段         | 默认值          | 描述                                                         |
-| ---------- | ------------ | ---------------------------------------------------------- |
-| `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | 此组件的样式。                                                    |
-| `disabled` | `false`      | Disables the `package` module.                             |
+| 字段         | 默认值          | 描述                    |
+| ---------- | ------------ | --------------------- |
+| `symbol`   | `"📦 "`       | 这个字段的内容会显示在当前软件包版本之前。 |
+| `style`    | `"bold red"` | 此组件的样式。               |
+| `disabled` | `false`      | 禁用 `package` 组件。      |
 
 ### 示例
 
@@ -941,18 +941,18 @@ symbol = "🎁 "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. 此组件只有满足以下条件之一时才会被显示：
+`php` 组件显示当前安装的 PHP 版本。 此组件只有满足以下条件之一时才会被显示：
 
-- The current directory contains a `composer.json` file
-- The current directory contains a `.php` file
+- 当前目录包含一个 `composer.json` 文件
+- 当前目录包含一个 `.php` 文件
 
 ### 配置项
 
-| 字段         | 默认值          | 描述                                                    |
-| ---------- | ------------ | ----------------------------------------------------- |
-| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
-| `style`    | `"bold red"` | 此组件的样式。                                               |
-| `disabled` | `false`      | Disables the `php` module.                            |
+| 字段         | 默认值          | 描述                      |
+| ---------- | ------------ | ----------------------- |
+| `symbol`   | `"🐘 "`       | 这个字段的内容会显示在当前 PHP 版本之前。 |
+| `style`    | `"bold red"` | 此组件的样式。                 |
+| `disabled` | `false`      | 禁用 `php` 组件。            |
 
 ### 示例
 
@@ -965,31 +965,31 @@ symbol = "🔹 "
 
 ## Python
 
-The `python` module shows the currently installed version of Python.
+`python` 组件显示当前安装的 Python 版本。
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
+如果 `pyenv_version_name` 设置为 `true`，则将显示 pyenv 版本名称。
 
-Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
+否则，它将显示来自 `python --version` 的版本号，并显示当前的 Python 虚拟环境，如果激活了的话。
 
 此组件只有满足以下条件之一时才会被显示：
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a file with the `.py` extension
-- The current directory contains a `Pipfile` file
-- The current directory contains a `tox.ini` file
-- A virtual environment is currently activated
+- 当前目录包含 `.python-version` 文件
+- 当前目录包含 `requirements.txt` 文件
+- 当前目录包含 `pyproject.toml` 文件
+- 当前目录包含一个使用 `.py` 扩展名的文件
+- 当前目录包含 `Pipfile` 文件
+- 当前目录包含一个 `tox.ini` 文件
+- 当前处于一个活跃的 python 虚拟环境中
 
 ### 配置项
 
-| 字段                   | 默认值             | 描述                                                                          |
-| -------------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
-| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
-| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
-| `style`              | `"bold yellow"` | 此组件的样式。                                                                     |
-| `disabled`           | `false`         | Disables the `python` module.                                               |
+| 字段                   | 默认值             | 描述                                        |
+| -------------------- | --------------- | ----------------------------------------- |
+| `symbol`             | `"🐍 "`          | 这个字段的内容会显示在当前 Python 版本之前。                |
+| `pyenv_version_name` | `false`         | 使用 pyenv 获取 Python 版本                     |
+| `pyenv_prefix`       | `"pyenv "`      | 在 pyenv 版本前显示的前缀（默认显示 `pyenv MY_VERSION`） |
+| `style`              | `"bold yellow"` | 此组件的样式。                                   |
+| `disabled`           | `false`         | 禁用 `python` 组件。                           |
 
 ### 示例
 
@@ -1004,10 +1004,10 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. 此组件只有满足以下条件之一时才会被显示：
+`ruby` 组件显示当前安装的 Ruby 版本。 此组件只有满足以下条件之一时才会被显示：
 
-- The current directory contains a `Gemfile` file
-- The current directory contains a `.rb` file
+- 当前目录包含 `Gemfile` 文件
+- 当前目录包含 `.rb` 文件
 
 ### 配置项
 
@@ -1015,7 +1015,7 @@ The `ruby` module shows the currently installed version of Ruby. 此组件只有
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
 | `style`    | `"bold red"` | 此组件的样式。                                                |
-| `disabled` | `false`      | Disables the `ruby` module.                            |
+| `disabled` | `false`      | 禁用 `ruby` 组件。                                          |
 
 ### 示例
 
@@ -1028,18 +1028,18 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. 此组件只有满足以下条件之一时才会被显示：
+`rust` 组件显示当前安装的 Rust 版本。 此组件将在符合以下任意条件时显示：
 
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- 当前目录包含 `Cargo.toml` 文件
+- 当前目录包含一个使用 `.rs` 扩展名的文件
 
 ### 配置项
 
-| 字段         | 默认值          | 描述                                                     |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
-| `style`    | `"bold red"` | 此组件的样式。                                                |
-| `disabled` | `false`      | Disables the `rust` module.                            |
+| 字段         | 默认值          | 描述                       |
+| ---------- | ------------ | ------------------------ |
+| `symbol`   | `"🦀 "`       | 这个字段的内容会显示在当前 Rust 版本之前。 |
+| `style`    | `"bold red"` | 此组件的样式。                  |
+| `disabled` | `false`      | 禁用 `rust` 组件。            |
 
 ### 示例
 
@@ -1078,19 +1078,19 @@ symbol = "📦 "
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. 此组件只有满足以下条件之一时才会被显示：
+`terraform` 组件显示当前选定的 terraform 工作区和版本。 默认情况下不会显示 terraform 版本，因为当使用大量插件时，当前版本 terraform 查询版本号很慢。 此组件只有满足以下条件之一时才会被显示：
 
-- The current directory contains a `.terraform` folder
-- Current directory contains a file with the `.tf` extension
+- 当前目录包含 `.terraform` 目录
+- 当前目录包含一个使用 `.tf` 扩展名的文件
 
 ### 配置项
 
-| 字段             | 默认值          | 描述                                                          |
-| -------------- | ------------ | ----------------------------------------------------------- |
-| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
-| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
-| `style`        | `"bold 105"` | 此组件的样式。                                                     |
-| `disabled`     | `false`      | Disables the `terraform` module.                            |
+| 字段             | 默认值          | 描述                               |
+| -------------- | ------------ | -------------------------------- |
+| `symbol`       | `"💠 "`       | 这个字段的内容会显示在当前 terraform 工作区之前。   |
+| `show_version` | `false`      | 显示 terraform 版本信息。 在大型工作空间中非常缓慢。 |
+| `style`        | `"bold 105"` | 此组件的样式。                          |
+| `disabled`     | `false`      | 禁用 `terraform` 组件。               |
 
 ### 示例
 
@@ -1103,25 +1103,25 @@ symbol = "🏎💨 "
 
 ## Time
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time` 组件显示当前的 **本地** 时间。 `format` 字段值会提供给 [`chrono`](https://crates.io/crates/chrono) crate 用来控制时间显示方式。 请参阅 [chrono strftime 文档](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) 以了解可用格式选项。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
 ### 配置项
 
-| 字段                | 默认值             | 描述                                                                                                                  |
-| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | Enables 12 hour formatting                                                                                          |
-| `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`           | `"bold yellow"` | The style for the module time                                                                                       |
-| `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
-| `disabled`        | `true`          | Disables the `time` module.                                                                                         |
+| 字段                | 默认值             | 描述                                                                                        |
+| ----------------- | --------------- | ----------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`         | 启用 12 小时格式                                                                                |
+| `format`          | 见下文解释           | 用来格式化时间显示的 [chrono 格式字符串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) |
+| `style`           | `"bold yellow"` | 显示时间的样式。                                                                                  |
+| `utc_time_offset` | `"local"`       | 设置所用 UTC 偏移量。 范围是 -24 < x < 24。 允许使用浮点数来得到 30/45 分钟的时区偏移。                                 |
+| `disabled`        | `true`          | 禁用 `time` 组件。                                                                             |
 
-If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
+如果 `use_12hr` 为 `true`，则`format` 默认值为 `"%r"`。 否则，其默认值为 `"%T"`。 手动设置 `format` 将使 `use_12hr` 被忽略。
 
 ### 示例
 
@@ -1136,21 +1136,21 @@ utc_time_offset = "-5"
 
 ## Username
 
-The `username` module shows active user's username. 此组件只有满足以下条件之一时才会被显示：
+`username` 组件显示当前活跃的用户名。 此组件只有满足以下条件之一时才会被显示：
 
-- The current user is root
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- 当前用户是 root
+- 当前用户与登录用户不相同
+- 用户正通过 SSH 会话连接访问
+- 字段 `show_always` 被设置为 true
 
 ### 配置项
 
-| 字段            | 默认值             | 描述                                    |
-| ------------- | --------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`    | The style used when the user is root. |
-| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
-| `show_always` | `false`         | Always shows the `username` module.   |
-| `disabled`    | `false`         | Disables the `username` module.       |
+| 字段            | 默认值             | 描述                  |
+| ------------- | --------------- | ------------------- |
+| `style_root`  | `"bold red"`    | 当前用户为 root 时使用的样式。  |
+| `style_user`  | `"bold yellow"` | 非 root 用户使用的样式。     |
+| `show_always` | `false`         | 总是显示 `username` 组件。 |
+| `disabled`    | `false`         | 禁用 `username` 组件。   |
 
 ### 示例
 
