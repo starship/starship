@@ -168,7 +168,10 @@ mod tests {
             extract_package_version(&package_with_version),
             expected_version
         );
+    }
 
+    #[test]
+    fn test_extract_package_version_without_version() {
         let package_without_version = json::json!({
             "name": "spacefish"
         })
@@ -179,7 +182,10 @@ mod tests {
             extract_package_version(&package_without_version),
             expected_version
         );
+    }
 
+    #[test]
+    fn test_extract_package_version_with_null_version() {
         let package_with_null_version = json::json!({
             "name": "spacefish",
             "version": null
@@ -191,7 +197,10 @@ mod tests {
             extract_package_version(&package_with_null_version),
             expected_version
         );
+    }
 
+    #[test]
+    fn test_extract_package_version_with_null_string_version() {
         let package_with_null_string_version = json::json!({
             "name": "spacefish",
             "version": "null"
@@ -203,7 +212,10 @@ mod tests {
             extract_package_version(&package_with_null_string_version),
             expected_version
         );
+    }
 
+    #[test]
+    fn test_extract_private_package_version() {
         let private_package = json::json!({
             "name": "spacefish",
             "version": "0.1.0",
