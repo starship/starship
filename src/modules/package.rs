@@ -174,6 +174,30 @@ mod tests {
             extract_package_version(&package_without_version),
             expected_version
         );
+
+        let package_with_null_version = json::json!({
+            "name": "spacefish",
+            "version": null
+        })
+        .to_string();
+
+        let expected_version = None;
+        assert_eq!(
+            extract_package_version(&package_with_null_version),
+            expected_version
+        );
+
+        let package_with_null_string_version = json::json!({
+            "name": "spacefish",
+            "version": "null"
+        })
+        .to_string();
+
+        let expected_version = None;
+        assert_eq!(
+            extract_package_version(&package_with_null_string_version),
+            expected_version
+        );
     }
 
     #[test]
