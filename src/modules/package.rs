@@ -41,6 +41,11 @@ fn extract_cargo_version(file_contents: &str) -> Option<String> {
 
 fn extract_package_version(file_contents: &str) -> Option<String> {
     let package_json: json::Value = json::from_str(file_contents).ok()?;
+
+    if package_json.get("private").and_then(json::Value::as_bool) == Some(true) {
+        return None;
+    }
+
     let raw_version = package_json.get("version")?.as_str()?;
     if raw_version == "null" {
         return None;
@@ -198,6 +203,16 @@ mod tests {
             extract_package_version(&package_with_null_string_version),
             expected_version
         );
+
+        let private_package = json::json!({
+            "name": "spacefish",
+            "version": "0.1.0",
+            "private": true
+        })
+        .to_string();
+
+        let expected_version = None;
+        assert_eq!(extract_package_version(&private_package), expected_version);
     }
 
     #[test]
