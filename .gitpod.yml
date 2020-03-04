@@ -1,0 +1,10 @@
+tasks:
+  - init: > 
+      cargo build &&
+      cd docs &&
+      npm install
+  - command: cargo watch -x run
+  - command: cd docs && npm run dev
+ports: 
+  - port: 8080
+    onOpen: open-preview

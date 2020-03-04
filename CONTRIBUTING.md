@@ -80,6 +80,12 @@ Integration tests should test full modules or the entire prompt. All integration
 
 For tests that depend on having preexisting state, whatever needed state will have to be added to the project's GitHub Actions workflow file([`.github/workflows/workflow.yml`](.github/workflows/workflow.yml)).
 
+### Onine one-click Setup
+
+Contribute to Starship using a fully featured online development environment; cloned repo, pre-installed dependencies, running web server for docs and `cargo watch -x run` running.
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer/)
+
 ## Running the Documentation Website Locally
 
 If you are contributing to the design of Starship's website, the following section will help you get started.

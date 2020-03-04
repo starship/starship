@@ -22,6 +22,11 @@
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
       alt="Packaging status"/></a
   ><br />
+  <a href="https://gitpod.io/#https://github.com/starship/starship"
+    ><img
+      src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod"
+      alt="Gitpod Ready-to-Code"/></a
+  >
   <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
