@@ -155,7 +155,10 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
                 stderr: stderr_string,
             })
         }
-        Err(_) => None,
+        Err(error) => {
+            log::error!("Executing command {:?} failed by: {:?}", cmd, error);
+            None
+        }
     }
 }
 
