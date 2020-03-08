@@ -60,7 +60,7 @@ term_size = "0.3.1"
 
 [dev-dependencies]
 tempfile = "3.1.0"
-# More realiable than fs::std version on Windows
+# More realiable than std::fs version on Windows
 # For removing temporary directories manually when needed
 # This is what tempfile uses to delete temporary directories
 remove_dir_all = "0.5.2"
