@@ -15,10 +15,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    let (start_time, end_time) = parse_time_range(config.time_range);
-    if start_time > Local::now().time() || Local::now().time() > end_time {
-        return None;
+
+    // Split the config time_range string in display_start and display_end
+    let (display_start, display_end) = parse_time_range(config.time_range);
+    let time_now = Local::now().time();
+
+    // Hide module if current time is outside of the range
+    if let Some(i) = display_start {
+        if i > time_now { return None; }
     }
+    if let Some(i) = display_end {
+        if i < time_now { return None; }
+    }
+
 
     let default_format = if config.use_12hr { "%r" } else { "%T" };
     let time_format = config.format.unwrap_or(default_format);
@@ -93,20 +102,28 @@ fn format_time_fixed_offset(time_format: &str, utc_time: DateTime<FixedOffset>) 
 }
 
 
-/// Parses the config's time_range field and returns the starting time and ending time
-fn parse_time_range(time_range: &str) -> (NaiveTime, NaiveTime) {
+/// Parses the config's time_range field and returns the starting time and ending time.
+/// The range is in the format START_TIME-END_TIME, with START_TIME and END_TIME being optional.
+///
+/// If one of the ranges is invalid or not provided, then the corresponding field in the output
+/// tuple is None
+fn parse_time_range(time_range: &str) -> (Option<NaiveTime>, Option<NaiveTime>) {
     let value = String::from(time_range);
 
+    // Check if there is exactly one hyphen, and fail otherwise
     if value.matches("-").count() != 1 {
-        panic!("More that one - in time_range");
+        return (None, None);
     }
 
-    let (start, mut end) = value.split_at(value.find("-").unwrap());
-    end = &end[1..];
-    let start = NaiveTime::parse_from_str(start, "%H:%M:%S").unwrap();
-    let end = NaiveTime::parse_from_str(end, "%H:%M:%S").unwrap();
+    // Split time_range into the two ranges
+    let (start, end) = value.split_at(value.find("-").unwrap());
+    let end = &end[1..];
 
-    (start, end)
+    // Parse the ranges
+    let start_time = NaiveTime::parse_from_str(start, "%H:%M:%S").ok();
+    let end_time = NaiveTime::parse_from_str(end, "%H:%M:%S").ok();
+
+    (start_time, end_time)
 
 }
 
