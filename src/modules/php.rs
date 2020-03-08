@@ -74,7 +74,7 @@ mod tests {
 
         let expected = None;
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -89,7 +89,7 @@ mod tests {
             Color::Fixed(147).bold().paint("🐘 v7.3.8")
         ));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -104,6 +104,6 @@ mod tests {
             Color::Fixed(147).bold().paint("🐘 v7.3.8")
         ));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 }

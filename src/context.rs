@@ -350,6 +350,7 @@ mod tests {
             .is_match(),
             false
         );
+        empty.close()?;
 
         let rust = testdir(&["README.md", "Cargo.toml", "src/main.rs"])?;
         let rust_dc = DirContents::from_path(&PathBuf::from(rust.path()))?;
@@ -363,6 +364,7 @@ mod tests {
             .is_match(),
             false
         );
+        rust.close()?;
 
         let java = testdir(&["README.md", "src/com/test/Main.java", "pom.xml"])?;
         let java_dc = DirContents::from_path(&PathBuf::from(java.path()))?;
@@ -376,6 +378,7 @@ mod tests {
             .is_match(),
             false
         );
+        java.close()?;
 
         let node = testdir(&["README.md", "node_modules/lodash/main.js", "package.json"])?;
         let node_dc = DirContents::from_path(&PathBuf::from(node.path()))?;
@@ -389,6 +392,7 @@ mod tests {
             .is_match(),
             true
         );
+        node.close()?;
 
         Ok(())
     }

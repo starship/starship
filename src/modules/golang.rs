@@ -72,7 +72,7 @@ mod tests {
 
         let expected = None;
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -84,7 +84,7 @@ mod tests {
 
         let expected = Some(format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1")));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -96,7 +96,7 @@ mod tests {
 
         let expected = Some(format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1")));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -108,7 +108,7 @@ mod tests {
 
         let expected = Some(format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1")));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -121,7 +121,7 @@ mod tests {
 
         let expected = Some(format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1")));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -133,7 +133,7 @@ mod tests {
 
         let expected = Some(format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1")));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -145,7 +145,7 @@ mod tests {
 
         let expected = Some(format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1")));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
     #[test]
     fn folder_with_gopkg_lock() -> io::Result<()> {
@@ -155,7 +155,7 @@ mod tests {
         let actual = render_module("golang", dir.path());
         let expected = Some(format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1")));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]

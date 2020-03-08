@@ -59,7 +59,8 @@ mod tests {
         let actual = render_module("crystal", dir.path());
         let expected = None;
         assert_eq!(expected, actual);
-        Ok(())
+
+        dir.close()
     }
 
     #[test]
@@ -70,7 +71,8 @@ mod tests {
         let actual = render_module("crystal", dir.path());
         let expected = Some(format!("via {} ", Color::Red.bold().paint("🔮 v0.32.1")));
         assert_eq!(expected, actual);
-        Ok(())
+
+        dir.close()
     }
 
     #[test]
@@ -81,6 +83,7 @@ mod tests {
         let actual = render_module("crystal", dir.path());
         let expected = Some(format!("via {} ", Color::Red.bold().paint("🔮 v0.32.1")));
         assert_eq!(expected, actual);
-        Ok(())
+
+        dir.close()
     }
 }
