@@ -15,7 +15,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    parse_time_range(config.time_range);
+    let (start_time, end_time) = parse_time_range(config.time_range);
+    if start_time > Local::now().time() || Local::now().time() > end_time {
+        return None;
+    }
 
     let default_format = if config.use_12hr { "%r" } else { "%T" };
     let time_format = config.format.unwrap_or(default_format);
