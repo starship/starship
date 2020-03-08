@@ -4,7 +4,7 @@ use git2::Repository;
 use std::fs;
 use std::io;
 use std::path::Path;
-use tempfile::tempdir;
+use tempfile::TempDir;
 
 use crate::common::{self, TestCommand};
 
@@ -252,7 +252,10 @@ fn fish_directory_config_small() -> io::Result<()> {
 #[test]
 #[ignore]
 fn git_repo_root() -> io::Result<()> {
-    let tmp_dir = tempdir()?;
+    // TODO: Investigate why git repo related tests fail when the tempdir is within /tmp/...
+    // Temporarily making the tempdir within $HOME
+    // #[ignore] can be removed after this TODO is addressed
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
     fs::create_dir(&repo_dir)?;
     Repository::init(&repo_dir).unwrap();
@@ -271,7 +274,7 @@ fn git_repo_root() -> io::Result<()> {
 #[test]
 #[ignore]
 fn directory_in_git_repo() -> io::Result<()> {
-    let tmp_dir = tempdir()?;
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
     let dir = repo_dir.join("src");
     fs::create_dir_all(&dir)?;
@@ -291,7 +294,7 @@ fn directory_in_git_repo() -> io::Result<()> {
 #[test]
 #[ignore]
 fn truncated_directory_in_git_repo() -> io::Result<()> {
-    let tmp_dir = tempdir()?;
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
     let dir = repo_dir.join("src/meters/fuel-gauge");
     fs::create_dir_all(&dir)?;
@@ -311,7 +314,7 @@ fn truncated_directory_in_git_repo() -> io::Result<()> {
 #[test]
 #[ignore]
 fn directory_in_git_repo_truncate_to_repo_false() -> io::Result<()> {
-    let tmp_dir = tempdir()?;
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
     let dir = repo_dir.join("src/meters/fuel-gauge");
     fs::create_dir_all(&dir)?;
@@ -342,7 +345,7 @@ fn directory_in_git_repo_truncate_to_repo_false() -> io::Result<()> {
 #[test]
 #[ignore]
 fn fish_path_directory_in_git_repo_truncate_to_repo_false() -> io::Result<()> {
-    let tmp_dir = tempdir()?;
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
     let dir = repo_dir.join("src/meters/fuel-gauge");
     fs::create_dir_all(&dir)?;
@@ -374,7 +377,7 @@ fn fish_path_directory_in_git_repo_truncate_to_repo_false() -> io::Result<()> {
 #[test]
 #[ignore]
 fn fish_path_directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
-    let tmp_dir = tempdir()?;
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
     let dir = repo_dir.join("src/meters/fuel-gauge");
     fs::create_dir_all(&dir)?;
@@ -406,7 +409,7 @@ fn fish_path_directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
 #[test]
 #[ignore]
 fn directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
-    let tmp_dir = tempdir()?;
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
     let dir = repo_dir.join("src/meters/fuel-gauge");
     fs::create_dir_all(&dir)?;
@@ -438,7 +441,7 @@ fn directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
 #[ignore]
 #[cfg(not(target_os = "windows"))]
 fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
-    let tmp_dir = tempdir()?;
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let dir = tmp_dir.path().join("src/meters/fuel-gauge");
     fs::create_dir_all(&dir)?;
     Repository::init(&tmp_dir).unwrap();
