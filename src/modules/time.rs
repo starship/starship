@@ -1,4 +1,4 @@
-use chrono::{DateTime, FixedOffset, Local, Utc};
+use chrono::{DateTime, FixedOffset, Local, Utc, NaiveTime};
 
 use super::{Context, Module};
 
@@ -14,6 +14,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if config.disabled {
         return None;
     };
+
+    parse_time_range(config.time_range);
 
     let default_format = if config.use_12hr { "%r" } else { "%T" };
     let time_format = config.format.unwrap_or(default_format);
@@ -85,6 +87,24 @@ fn format_time(time_format: &str, local_time: DateTime<Local>) -> String {
 
 fn format_time_fixed_offset(time_format: &str, utc_time: DateTime<FixedOffset>) -> String {
     utc_time.format(time_format).to_string()
+}
+
+
+/// Parses the config's time_range field and returns the starting time and ending time
+fn parse_time_range(time_range: &str) -> (NaiveTime, NaiveTime) {
+    let value = String::from(time_range);
+
+    if value.matches("-").count() != 1 {
+        panic!("More that one - in time_range");
+    }
+
+    let (start, mut end) = value.split_at(value.find("-").unwrap());
+    end = &end[1..];
+    let start = NaiveTime::parse_from_str(start, "%H:%M:%S").unwrap();
+    let end = NaiveTime::parse_from_str(end, "%H:%M:%S").unwrap();
+
+    (start, end)
+
 }
 
 /* Because we cannot make acceptance tests for the time module, these unit
