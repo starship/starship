@@ -19,15 +19,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Split the config time_range string in display_start and display_end
     let (display_start, display_end) = parse_time_range(config.time_range);
     let time_now = Local::now().time();
-
-    // Hide module if current time is outside of the range
-    if let Some(i) = display_start {
-        if i > time_now { return None; }
+    if !is_inside_time_range(time_now, display_start, display_end) {
+        return None;
     }
-    if let Some(i) = display_end {
-        if i < time_now { return None; }
-    }
-
 
     let default_format = if config.use_12hr { "%r" } else { "%T" };
     let time_format = config.format.unwrap_or(default_format);
@@ -101,6 +95,20 @@ fn format_time_fixed_offset(time_format: &str, utc_time: DateTime<FixedOffset>) 
     utc_time.format(time_format).to_string()
 }
 
+fn is_inside_time_range(time_now: NaiveTime, time_start: Option<NaiveTime>, time_end: Option<NaiveTime>) -> bool {
+    match (time_start, time_end) {
+        (None, None)       => return true,
+        (Some(i), None)    => return time_now > i,
+        (None, Some(i))    => return time_now < i,
+        (Some(i), Some(j)) => {
+            if i < j {
+                return i < time_now && time_now < j;
+            } else {
+                return time_now > i || time_now < j;
+            }
+        },
+    }
+}
 
 /// Parses the config's time_range field and returns the starting time and ending time.
 /// The range is in the format START_TIME-END_TIME, with START_TIME and END_TIME being optional.
