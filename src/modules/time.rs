@@ -417,7 +417,7 @@ mod tests {
     fn test_is_inside_time_range_with_start_range() {
         let time_start = Some(NaiveTime::from_hms(10, 00, 00));
         let time_now = NaiveTime::from_hms(12, 00, 00);
-        let time_now2 = NaiveTime::from_hms(08, 00, 00);
+        let time_now2 = NaiveTime::from_hms(8, 00, 00);
 
         assert_eq!(is_inside_time_range(time_now, time_start, None), true);
         assert_eq!(is_inside_time_range(time_now2, time_start, None), false);
@@ -435,9 +435,9 @@ mod tests {
 
     #[test]
     fn test_is_inside_time_range_with_complete_range() {
-        let time_start = Some(NaiveTime::from_hms(09, 00, 00));
+        let time_start = Some(NaiveTime::from_hms(9, 00, 00));
         let time_end = Some(NaiveTime::from_hms(18, 00, 00));
-        let time_now = NaiveTime::from_hms(03, 00, 00);
+        let time_now = NaiveTime::from_hms(3, 00, 00);
         let time_now2 = NaiveTime::from_hms(13, 00, 00);
         let time_now3 = NaiveTime::from_hms(20, 00, 00);
 
@@ -450,7 +450,7 @@ mod tests {
     fn test_is_inside_time_range_with_complete_range_passing_midnight() {
         let time_start = Some(NaiveTime::from_hms(19, 00, 00));
         let time_end = Some(NaiveTime::from_hms(12, 00, 00));
-        let time_now = NaiveTime::from_hms(03, 00, 00);
+        let time_now = NaiveTime::from_hms(3, 00, 00);
         let time_now2 = NaiveTime::from_hms(13, 00, 00);
         let time_now3 = NaiveTime::from_hms(20, 00, 00);
 
