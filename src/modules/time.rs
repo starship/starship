@@ -1,4 +1,4 @@
-use chrono::{DateTime, FixedOffset, Local, Utc, NaiveTime};
+use chrono::{DateTime, FixedOffset, Local, NaiveTime, Utc};
 
 use super::{Context, Module};
 
@@ -15,8 +15,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-
-    // Split the config time_range string in display_start and display_end
+    // Hide prompt if current time is not inside time_range
     let (display_start, display_end) = parse_time_range(config.time_range);
     let time_now = Local::now().time();
     if !is_inside_time_range(time_now, display_start, display_end) {
@@ -95,18 +94,25 @@ fn format_time_fixed_offset(time_format: &str, utc_time: DateTime<FixedOffset>) 
     utc_time.format(time_format).to_string()
 }
 
-fn is_inside_time_range(time_now: NaiveTime, time_start: Option<NaiveTime>, time_end: Option<NaiveTime>) -> bool {
+/// Returns true if time_now is between time_start and time_end.
+/// If one of these values is not given, then it is ignored.
+/// It also handles cases where time_start and time_end have a midnight in between
+fn is_inside_time_range(
+    time_now: NaiveTime,
+    time_start: Option<NaiveTime>,
+    time_end: Option<NaiveTime>,
+) -> bool {
     match (time_start, time_end) {
-        (None, None)       => return true,
-        (Some(i), None)    => return time_now > i,
-        (None, Some(i))    => return time_now < i,
+        (None, None) => true,
+        (Some(i), None) => time_now > i,
+        (None, Some(i)) => time_now < i,
         (Some(i), Some(j)) => {
             if i < j {
-                return i < time_now && time_now < j;
+                i < time_now && time_now < j
             } else {
-                return time_now > i || time_now < j;
+                time_now > i || time_now < j
             }
-        },
+        }
     }
 }
 
@@ -119,12 +125,12 @@ fn parse_time_range(time_range: &str) -> (Option<NaiveTime>, Option<NaiveTime>) 
     let value = String::from(time_range);
 
     // Check if there is exactly one hyphen, and fail otherwise
-    if value.matches("-").count() != 1 {
+    if value.matches('-').count() != 1 {
         return (None, None);
     }
 
     // Split time_range into the two ranges
-    let (start, end) = value.split_at(value.find("-").unwrap());
+    let (start, end) = value.split_at(value.find('-').unwrap());
     let end = &end[1..];
 
     // Parse the ranges
@@ -132,7 +138,6 @@ fn parse_time_range(time_range: &str) -> (Option<NaiveTime>, Option<NaiveTime>) 
     let end_time = NaiveTime::parse_from_str(end, "%H:%M:%S").ok();
 
     (start_time, end_time)
-
 }
 
 /* Because we cannot make acceptance tests for the time module, these unit
@@ -355,5 +360,102 @@ mod tests {
         create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12)
             .err()
             .expect("Invalid timezone offset.");
+    }
+
+    #[test]
+    fn test_parse_invalid_time_range() {
+        let time_range = "10:00:00-12:00:00-13:00:00";
+        let time_range_2 = "10:00:00";
+
+        assert_eq!(parse_time_range(time_range), (None, None));
+        assert_eq!(parse_time_range(time_range_2), (None, None));
+    }
+
+    #[test]
+    fn test_parse_start_time_range() {
+        let time_range = "10:00:00-";
+
+        assert_eq!(
+            parse_time_range(time_range),
+            (Some(NaiveTime::from_hms(10, 00, 00)), None)
+        );
+    }
+
+    #[test]
+    fn test_parse_end_time_range() {
+        let time_range = "-22:00:00";
+
+        assert_eq!(
+            parse_time_range(time_range),
+            (None, Some(NaiveTime::from_hms(22, 00, 00)))
+        );
+    }
+
+    #[test]
+    fn test_parse_both_time_ranges() {
+        let time_range = "10:00:00-16:00:00";
+
+        assert_eq!(
+            parse_time_range(time_range),
+            (
+                Some(NaiveTime::from_hms(10, 00, 00)),
+                Some(NaiveTime::from_hms(16, 00, 00))
+            )
+        );
+    }
+
+    #[test]
+    fn test_is_inside_time_range_with_no_range() {
+        let time_start = None;
+        let time_end = None;
+        let time_now = NaiveTime::from_hms(10, 00, 00);
+
+        assert_eq!(is_inside_time_range(time_now, time_start, time_end), true);
+    }
+
+    #[test]
+    fn test_is_inside_time_range_with_start_range() {
+        let time_start = Some(NaiveTime::from_hms(10, 00, 00));
+        let time_now = NaiveTime::from_hms(12, 00, 00);
+        let time_now2 = NaiveTime::from_hms(08, 00, 00);
+
+        assert_eq!(is_inside_time_range(time_now, time_start, None), true);
+        assert_eq!(is_inside_time_range(time_now2, time_start, None), false);
+    }
+
+    #[test]
+    fn test_is_inside_time_range_with_end_range() {
+        let time_end = Some(NaiveTime::from_hms(16, 00, 00));
+        let time_now = NaiveTime::from_hms(15, 00, 00);
+        let time_now2 = NaiveTime::from_hms(19, 00, 00);
+
+        assert_eq!(is_inside_time_range(time_now, None, time_end), true);
+        assert_eq!(is_inside_time_range(time_now2, None, time_end), false);
+    }
+
+    #[test]
+    fn test_is_inside_time_range_with_complete_range() {
+        let time_start = Some(NaiveTime::from_hms(09, 00, 00));
+        let time_end = Some(NaiveTime::from_hms(18, 00, 00));
+        let time_now = NaiveTime::from_hms(03, 00, 00);
+        let time_now2 = NaiveTime::from_hms(13, 00, 00);
+        let time_now3 = NaiveTime::from_hms(20, 00, 00);
+
+        assert_eq!(is_inside_time_range(time_now, time_start, time_end), false);
+        assert_eq!(is_inside_time_range(time_now2, time_start, time_end), true);
+        assert_eq!(is_inside_time_range(time_now3, time_start, time_end), false);
+    }
+
+    #[test]
+    fn test_is_inside_time_range_with_complete_range_passing_midnight() {
+        let time_start = Some(NaiveTime::from_hms(19, 00, 00));
+        let time_end = Some(NaiveTime::from_hms(12, 00, 00));
+        let time_now = NaiveTime::from_hms(03, 00, 00);
+        let time_now2 = NaiveTime::from_hms(13, 00, 00);
+        let time_now3 = NaiveTime::from_hms(20, 00, 00);
+
+        assert_eq!(is_inside_time_range(time_now, time_start, time_end), true);
+        assert_eq!(is_inside_time_range(time_now2, time_start, time_end), false);
+        assert_eq!(is_inside_time_range(time_now3, time_start, time_end), true);
     }
 }
