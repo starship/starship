@@ -1190,7 +1190,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `style`           | `"bold yellow"` | The style for the module time.                                                                                      |
 | `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
 | `disabled`        | `true`          | Disables the `time` module.                                                                                         |
-| `time_range`      | `"-"`           | Sets the time range during which the module will be shown.                                                          |
+| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format               |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
 Manually setting `format` will override the `use_12hr` setting.
