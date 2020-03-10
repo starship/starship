@@ -443,7 +443,6 @@ Das `git_branch`-Modul zeigt den aktiven Git-Branch des Repositories im aktuelle
 | Variable            | Standardwert    | Beschreibung                                                                                           |
 | ------------------- | --------------- | ------------------------------------------------------------------------------------------------------ |
 | `symbol`            | `" "`          | Das Symbol, das vor dem Branchnamen des Git-Repositorys in Ihrem aktuellen Verzeichnis angezeigt wird. |
-| `prefix`            | `"on "`         | Präfix, welches direkt for dem Branchsymbol angezeigt wird.                                            |
 | `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                                  |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol                  |
 | `style`             | `"bold purple"` | Stil für dieses Modul.                                                                                 |
@@ -909,7 +908,6 @@ Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository
 | `symbol`   | `"📦 "`       | Symbol das vor der Paketversion angezeigt wird. |
 | `style`    | `"bold red"` | Stil für dieses Modul.                          |
 | `disabled` | `false`      | Deaktiviert das `package`-Modul.                |
-| `prefix`   | `"is "`      | Präfix, welches direkt for dem Paketsymbol angezeigt wird. |
 
 ### Beispiel
 
