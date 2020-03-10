@@ -444,6 +444,7 @@ default = "unknown shell"
 | ------------------- | --------------- | -------------------------------- |
 | `symbol`            | `" "`          | 在你現在資料夾之中的儲存庫的分支名稱前使用的符號。        |
 | `truncation_length` | `2^63 - 1`      | 裁減一個 git 分支到 X 字素 (grapheme)。    |
+| `prefix`            | `"on "`         | Prefix to display immediately before the git branch symbol. |
 | `truncation_symbol` | `"…"`           | 用來指示分支名稱被縮減的符號。 你可以用 "" 來表示不要顯示。 |
 | `style`             | `"bold purple"` | 這個模組的風格。                         |
 | `disabled`          | `false`         | 停用 `git_branch` 模組。              |
@@ -909,6 +910,7 @@ The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並
 | `symbol`   | `"📦 "`       | 顯示在套件的版本之前的符號。   |
 | `style`    | `"bold red"` | 這個模組的風格。         |
 | `disabled` | `false`      | 停用 `package` 模組。 |
+| `prefix`   | `"is "`      | Prefix to display immediately before package symbol. |
 
 ### 範例
 

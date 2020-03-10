@@ -444,6 +444,7 @@ default = "unknown shell"
 | ------------------- | --------------- | ------------------------------------- |
 | `symbol`            | `" "`          | 该字段的内容显示于当前仓库活动分支名之前。                 |
 | `truncation_length` | `2^63 - 1`      | 将显示的分支名截断到该数量的字素（graphemes）           |
+| `prefix`            | `"on "`         | Prefix to display immediately before the git branch symbol.           |
 | `truncation_symbol` | `"…"`           | 此字段的内容用来表示分支名称被截断。 您可以使用 "" 以不显示任何符号。 |
 | `style`             | `"bold purple"` | 此组件的样式。                               |
 | `disabled`          | `false`         | 禁用 `git_branch` 组件。                   |
@@ -909,6 +910,7 @@ symbol = "🤖 "
 | `symbol`   | `"📦 "`       | 这个字段的内容会显示在当前软件包版本之前。 |
 | `style`    | `"bold red"` | 此组件的样式。               |
 | `disabled` | `false`      | 禁用 `package` 组件。      |
+| `prefix`   | `"is "`      | Prefix to display immediately before package symbol. |
 
 ### 示例
 
