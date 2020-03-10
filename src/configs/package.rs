@@ -5,6 +5,7 @@ use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct PackageConfig<'a> {
+    pub prefix: &'a str,
     pub symbol: SegmentConfig<'a>,
     pub style: Style,
     pub disabled: bool,
@@ -13,6 +14,7 @@ pub struct PackageConfig<'a> {
 impl<'a> RootModuleConfig<'a> for PackageConfig<'a> {
     fn new() -> Self {
         PackageConfig {
+            prefix: "is ",
             symbol: SegmentConfig::new("📦 "),
             style: Color::Fixed(208).bold(),
             disabled: false,

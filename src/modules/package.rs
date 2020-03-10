@@ -20,7 +20,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let config: PackageConfig = PackageConfig::try_load(module.config);
 
             module.set_style(config.style);
-            module.get_prefix().set_value("is ");
+            module.get_prefix().set_value(config.prefix);
 
             module.create_segment("symbol", &config.symbol);
             module.create_segment("version", &SegmentConfig::new(&package_version));

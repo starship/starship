@@ -988,6 +988,7 @@ package, and shows its current version. The module currently supports `npm`, `ca
 | Variable   | Default      | Description                                                |
 | ---------- | ------------ | ---------------------------------------------------------- |
 | `symbol`   | `"📦 "`      | The symbol used before displaying the version the package. |
+| `prefix`   | `"is "`      | Prefix to display immediately before package symbol.       |
 | `style`    | `"bold red"` | The style for the module.                                  |
 | `disabled` | `false`      | Disables the `package` module.                             |
 
