@@ -44,6 +44,7 @@ pub fn render_module(module_name: &str) -> process::Command {
 }
 
 /// Create a repo from the fixture to be used in git module tests
+/// Please delete the returned directory manually after usage with `remove_dir_all::remove_dir_all`
 pub fn create_fixture_repo() -> io::Result<PathBuf> {
     let fixture_repo_path = tempfile::tempdir()?.into_path();
     let repo_path = tempfile::tempdir()?.into_path();
