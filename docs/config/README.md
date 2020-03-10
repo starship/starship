@@ -503,7 +503,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | Variable            | Default         | Description                                                                           |
 | ------------------- | --------------- | ------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
-| `prefix`            | `"on "`         | Prefix to display immediately before git commit.                                      |
+| `prefix`            | `"on "`         | Prefix to display immediately before the git branch symbol.                           |
 | `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
 | `style`             | `"bold purple"` | The style for the module.                                                             |
