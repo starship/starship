@@ -100,6 +100,7 @@ prompt_order = [
     "git_state",
     "git_status",
     "hg_branch",
+    "docker_context",
     "package",
     "dotnet",
     "elixir",
@@ -376,6 +377,29 @@ a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/
 
 [directory]
 truncation_length = 8
+```
+
+## Docker Context
+
+The `docker_context` module shows the currently active
+[Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to
+`default`.
+
+### Options
+
+| Variable   | Default       | Description                                            |
+| ---------- | ------------- | ------------------------------------------------------ |
+| `symbol`   | `"🐳 "`       | The symbol used before displaying the Docker context . |
+| `style`    | `"bold blue"` | The style for the module.                              |
+| `disabled` | `true`        | Disables the `docker_context` module.                  |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[docker_context]
+symbol = "🐋 "
 ```
 
 ## Dotnet

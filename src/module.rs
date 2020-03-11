@@ -17,6 +17,7 @@ pub const ALL_MODULES: &[&str] = &[
     "cmd_duration",
     "conda",
     "directory",
+    "docker_context",
     "dotnet",
     "elixir",
     "elm",
