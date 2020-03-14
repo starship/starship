@@ -23,6 +23,7 @@ maintenance = { status = "actively-developed" }
 [features]
 default = ["battery", "http"]
 http = ["attohttpc"]
+# Vendor OpenSSL, use this if you have trouble cross-compiling starship
 tls-vendored = ["native-tls/vendored"]
 
 
