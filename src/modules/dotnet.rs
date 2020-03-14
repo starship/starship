@@ -1,7 +1,7 @@
 use std::ffi::OsStr;
 use std::iter::Iterator;
 use std::ops::Deref;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::str;
 
 use super::{Context, Module, RootModuleConfig};
@@ -31,10 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Typically it is twice as fast as running `dotnet --version`.
     let enable_heuristic = config.heuristic;
     let version = if enable_heuristic {
-        let repo_root = context
-            .get_repo()
-            .ok()
-            .and_then(|r| r.root.as_ref().map(PathBuf::as_path));
+        let repo_root = context.get_repo().ok().and_then(|r| r.root.as_deref());
         estimate_dotnet_version(&dotnet_files, &context.current_dir, repo_root)?
     } else {
         get_version_from_cli()?
