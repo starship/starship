@@ -47,7 +47,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let kube_cfg = match env::var("KUBECONFIG") {
         Ok(paths) => env::split_paths(&paths)
             .filter_map(|filename| parse_kubectl_file(&filename))
-            .nth(0),
+            .next(),
         Err(_) => {
             let filename = dirs::home_dir()?.join(".kube").join("config");
             parse_kubectl_file(&filename)
