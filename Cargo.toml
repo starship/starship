@@ -22,7 +22,7 @@ maintenance = { status = "actively-developed" }
 
 [features]
 default = ["battery", "http"]
-http = ["attohttpc"]
+http = ["attohttpc", "native-tls"]
 
 [dependencies]
 clap = "2.33.0"
@@ -55,14 +55,10 @@ unicode-width = "0.1.7"
 textwrap = "0.11.0"
 term_size = "0.3.1"
 
-# OpenSSL causes problems when building a MUSL release.
-# see: https://github.com/richfelker/musl-cross-make/issues/65#issuecomment-509790889
-# Thus: only use native-tls when on macos/ios and windows or when the target cpu arch does not support rustls
-[target.'cfg(any(any(target_os = "macos", target_os = "ios", target_os = "windows"), not(any(target_arch = "x86", target_arch = "x86_64", target_arch = "arm", target_arch = "aarch64"))))'.dependencies]
+# Optional/http:
 attohttpc = { version = "0.12.0", optional = true, default-features = false, features = ["tls", "form"] }
-# Else use rustls
-[target.'cfg(not(any(any(target_os = "macos", target_os = "ios", target_os = "windows"), not(any(target_arch = "x86", target_arch = "x86_64", target_arch = "arm", target_arch = "aarch64")))))'.dependencies]
-attohttpc = { version = "0.12.0", optional = true, default-features = false, features = ["tls-rustls", "form"] }
+# Vendor OpenSSL for easier cross-compiling
+native-tls = { version = "0.2", optional = true, features = ["vendored"] }
 
 [dev-dependencies]
 tempfile = "3.1.0"
