@@ -1,4 +1,5 @@
 use once_cell::sync::Lazy;
+use remove_dir_all::remove_dir_all;
 use std::io::prelude::*;
 use std::io::{Error, ErrorKind};
 use std::path::{Path, PathBuf};
@@ -43,9 +44,10 @@ pub fn render_module(module_name: &str) -> process::Command {
 }
 
 /// Create a repo from the fixture to be used in git module tests
+/// Please delete the returned directory manually after usage with `remove_dir_all::remove_dir_all`
 pub fn create_fixture_repo() -> io::Result<PathBuf> {
-    let fixture_repo_path = tempfile::tempdir()?.path().join("fixture");
-    let repo_path = tempfile::tempdir()?.path().join("rocket");
+    let fixture_repo_path = tempfile::tempdir()?.into_path();
+    let repo_path = tempfile::tempdir()?.into_path();
     let fixture_path = env::current_dir()?.join("tests/fixtures/rocket.bundle");
 
     let fixture_repo_dir = path_str(&fixture_repo_path)?;
@@ -57,6 +59,7 @@ pub fn create_fixture_repo() -> io::Result<PathBuf> {
         .output()?;
 
     git2::Repository::clone(&fixture_repo_dir, &repo_dir).ok();
+    remove_dir_all(fixture_repo_path)?;
 
     Command::new("git")
         .args(&["config", "--local", "user.email", "starship@example.com"])

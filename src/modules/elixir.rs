@@ -88,7 +88,7 @@ Elixir 1.10 (compiled with Erlang/OTP 22)
 
         assert_eq!(output, expected);
 
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -104,6 +104,6 @@ Elixir 1.10 (compiled with Erlang/OTP 22)
 
         assert_eq!(output, expected);
 
-        Ok(())
+        dir.close()
     }
 }

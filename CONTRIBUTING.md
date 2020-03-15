@@ -80,6 +80,14 @@ Integration tests should test full modules or the entire prompt. All integration
 
 For tests that depend on having preexisting state, whatever needed state will have to be added to the project's GitHub Actions workflow file([`.github/workflows/workflow.yml`](.github/workflows/workflow.yml)).
 
+### Test Programming Guidelines
+
+Any tests that depend on File I/O should use [`sync_all()`](https://doc.rust-lang.org/std/fs/struct.File.html#method.sync_all) when creating files or after writing to files.
+
+Any tests that use `tempfile::tempdir` should take care to call `dir.close()` after usage to ensure the lifecycle of the directory can be reasoned about. 
+
+Any tests that use `create_fixture_repo()` should remove the returned directory after usage with  `remove_dir_all::remove_dir_all()`.
+
 ## Running the Documentation Website Locally
 
 If you are contributing to the design of Starship's website, the following section will help you get started.

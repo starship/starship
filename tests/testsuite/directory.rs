@@ -268,7 +268,7 @@ fn git_repo_root() -> io::Result<()> {
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("rocket-controls"));
     assert_eq!(expected, actual);
-    Ok(())
+    tmp_dir.close()
 }
 
 #[test]
@@ -288,7 +288,7 @@ fn directory_in_git_repo() -> io::Result<()> {
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("rocket-controls/src"));
     assert_eq!(expected, actual);
-    Ok(())
+    tmp_dir.close()
 }
 
 #[test]
@@ -308,7 +308,7 @@ fn truncated_directory_in_git_repo() -> io::Result<()> {
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("src/meters/fuel-gauge"));
     assert_eq!(expected, actual);
-    Ok(())
+    tmp_dir.close()
 }
 
 #[test]
@@ -339,7 +339,7 @@ fn directory_in_git_repo_truncate_to_repo_false() -> io::Result<()> {
             .paint("above-repo/rocket-controls/src/meters/fuel-gauge")
     );
     assert_eq!(expected, actual);
-    Ok(())
+    tmp_dir.close()
 }
 
 #[test]
@@ -371,7 +371,7 @@ fn fish_path_directory_in_git_repo_truncate_to_repo_false() -> io::Result<()> {
             .paint("~/.t/above-repo/rocket-controls/src/meters/fuel-gauge")
     );
     assert_eq!(expected, actual);
-    Ok(())
+    tmp_dir.close()
 }
 
 #[test]
@@ -403,7 +403,7 @@ fn fish_path_directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
             .paint("~/.t/a/rocket-controls/src/meters/fuel-gauge")
     );
     assert_eq!(expected, actual);
-    Ok(())
+    tmp_dir.close()
 }
 
 #[test]
@@ -434,7 +434,7 @@ fn directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
             .paint("rocket-controls/src/meters/fuel-gauge")
     );
     assert_eq!(expected, actual);
-    Ok(())
+    tmp_dir.close()
 }
 
 #[test]
@@ -465,5 +465,5 @@ fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
         Color::Cyan.bold().paint("~/src/meters/fuel-gauge")
     );
     assert_eq!(expected, actual);
-    Ok(())
+    tmp_dir.close()
 }

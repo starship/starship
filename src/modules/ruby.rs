@@ -63,7 +63,7 @@ mod tests {
 
         let expected = None;
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -75,7 +75,7 @@ mod tests {
 
         let expected = Some(format!("via {} ", Color::Red.bold().paint("💎 v2.5.1")));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -87,7 +87,7 @@ mod tests {
 
         let expected = Some(format!("via {} ", Color::Red.bold().paint("💎 v2.5.1")));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]

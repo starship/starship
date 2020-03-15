@@ -49,7 +49,7 @@ mod tests {
         let actual = render_module("nodejs", dir.path());
         let expected = None;
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -60,7 +60,7 @@ mod tests {
         let actual = render_module("nodejs", dir.path());
         let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -71,7 +71,7 @@ mod tests {
         let actual = render_module("nodejs", dir.path());
         let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -83,6 +83,6 @@ mod tests {
         let actual = render_module("nodejs", dir.path());
         let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 }

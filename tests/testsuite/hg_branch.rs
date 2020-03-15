@@ -30,14 +30,16 @@ fn test_hg_get_branch_fails() -> io::Result<()> {
         tempdir.path(),
         "",
         &[Expect::BranchName(&"default"), Expect::NoTruncation],
-    )
+    )?;
+    tempdir.close()
 }
 
 #[test]
 #[ignore]
 fn test_hg_get_branch_autodisabled() -> io::Result<()> {
     let tempdir = tempfile::tempdir()?;
-    expect_hg_branch_with_config(tempdir.path(), "", &[Expect::Empty])
+    expect_hg_branch_with_config(tempdir.path(), "", &[Expect::Empty])?;
+    tempdir.close()
 }
 
 #[test]
@@ -50,7 +52,8 @@ fn test_hg_bookmark() -> io::Result<()> {
         &repo_dir,
         "",
         &[Expect::BranchName(&"bookmark-101"), Expect::NoTruncation],
-    )
+    )?;
+    tempdir.close()
 }
 
 #[test]
@@ -73,7 +76,8 @@ fn test_default_truncation_symbol() -> io::Result<()> {
         &repo_dir,
         "truncation_length = 14",
         &[Expect::BranchName(&"branch-name-10")],
-    )
+    )?;
+    tempdir.close()
 }
 
 #[test]
@@ -104,7 +108,8 @@ fn test_configured_symbols() -> io::Result<()> {
             Expect::Symbol(&"B"),
             Expect::TruncationSymbol(&"%"),
         ],
-    )
+    )?;
+    tempdir.close()
 }
 
 #[test]
@@ -134,7 +139,8 @@ fn test_configured_style() -> io::Result<()> {
             Expect::Style(Color::Blue.underline()),
             Expect::TruncationSymbol(&""),
         ],
-    )
+    )?;
+    tempdir.close()
 }
 
 fn expect_hg_branch_with_config(
