@@ -349,16 +349,16 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 
 ### オプション
 
-| 変数                  | デフォルト         | 説明                                                  |
-| ------------------- | ------------- | --------------------------------------------------- |
-| `truncation_length` | `3`           | 現在のディレクトリを切り捨てる親フォルダーの数です。                          |
-| `truncate_to_repo`  | `true`        | 現在いるgitリポジトリのルートに切り捨てるかどうかです。                       |
-| `prefix`            | `"in "`       | Prefix to display immediately before the directory. |
-| `style`             | `"bold cyan"` | モジュールのスタイルです。                                       |
-| `disabled`          | `false`       | Disables the `directory` module.                    |
+| 変数                  | デフォルト         | 説明                            |
+| ------------------- | ------------- | ----------------------------- |
+| `truncation_length` | `3`           | 現在のディレクトリを切り捨てる親フォルダーの数です。    |
+| `truncate_to_repo`  | `true`        | 現在いるgitリポジトリのルートに切り捨てるかどうかです。 |
+| `prefix`            | `"in "`       | ディレクトリ名の直前に表示するprefixです。      |
+| `style`             | `"bold cyan"` | モジュールのスタイルです。                 |
+| `disabled`          | `false`       | `directory`モジュールを無効にします。      |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
 
 | 変数                          | デフォルト  | 説明                                                                                       |
 | --------------------------- | ------ | ---------------------------------------------------------------------------------------- |
