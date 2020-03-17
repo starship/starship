@@ -316,18 +316,18 @@ style = "dimmed green"
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`crystal`モジュールには、現在インストールされているCrystalのバージョンが表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `shard.yml` file
-- The current directory contains a `.cr` file
+- カレントディレクトリに`shard.yml`ファイルが含まれている
+- カレントディレクトリに`.cr`の拡張子のファイルが含まれている
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                                                        |
-| ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`       | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold red"` | モジュールのスタイルです。                                             |
-| `disabled` | `false`      | Disables the `crystal` module.                            |
+| 変数         | デフォルト        | 説明                             |
+| ---------- | ------------ | ------------------------------ |
+| `symbol`   | `"🔮 "`       | Crystalのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold red"` | モジュールのスタイルです。                  |
+| `disabled` | `false`      | `crystal`モジュールを無効にします。         |
 
 ### 設定例
 
@@ -339,23 +339,23 @@ symbol = "✨ "
 style = "bold blue"
 ```
 
-## Directory
+## ディレクトリ
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+`directory`モジュールには、現在のディレクトリへのパスが表示され、3つの親フォルダは切り捨てられます。 ディレクトリは、現在のgitリポジトリであるとルートとなります。
 
-When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+fishスタイルのpwdオプションを使用すると、切り捨てられたパスを非表示にする代わりに、オプションで有効にした番号に基づいて各ディレクトリの短縮名が表示されます。
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+例として、`~/Dev/Nix/nixpkgs/pkgs`で、`nixpkgs`がリポジトリルートであり、オプションが`1`に設定されている場合を挙げます。 以前は`nixpkgs/pkgs`でしたが、`~/D/N/nixpkgs/pkgs`が表示されます。
 
 ### オプション
 
-| 変数                  | デフォルト         | 説明                                                                               |
-| ------------------- | ------------- | -------------------------------------------------------------------------------- |
-| `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
-| `style`             | `"bold cyan"` | モジュールのスタイルです。                                                                    |
-| `disabled`          | `false`       | Disables the `directory` module.                                                 |
+| 変数                  | デフォルト         | 説明                                                  |
+| ------------------- | ------------- | --------------------------------------------------- |
+| `truncation_length` | `3`           | 現在のディレクトリを切り捨てる親フォルダーの数です。                          |
+| `truncate_to_repo`  | `true`        | 現在いるgitリポジトリのルートに切り捨てるかどうかです。                       |
+| `prefix`            | `"in "`       | Prefix to display immediately before the directory. |
+| `style`             | `"bold cyan"` | モジュールのスタイルです。                                       |
+| `disabled`          | `false`       | Disables the `directory` module.                    |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
