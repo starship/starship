@@ -101,18 +101,18 @@
   align="right" />
 
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**シェル用の最小限の、非常に高速で、無限にカスタマイズ可能なプロンプトです！**
 
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **高速: ** _本当に</ 1>高速です！ 🚀</li>
+- **カスタマイズ可能: **プロンプトのあらゆる側面を構成します。
+- **ユニバーサル: ** あらゆるシェル、あらゆるオペレーティングシステムで動作します。
+- **インテリジェント:** 関連情報を一目で示します。
+- **豊富な機能: ** お気に入りのツールをすべてサポートします。
+- **簡単: ** 迅速なインストールが可能であり、数分で使用開始可能です。</ul>
 
 <p align="center">
-<a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/"><strong>Starshipのドキュメントを見る&nbsp;&nbsp;▶</strong></a>
 </p>
 
 ## 🚀 インストール
