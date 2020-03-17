@@ -21,8 +21,10 @@ pub fn prompt(args: ArgMatches) {
     let mut handle = stdout.lock();
     if !context.character_only {
         write!(handle, "{}", get_prompt(context)).unwrap();
-    } else {
+    } else if context.shell != Shell::PowerShell {
         write!(handle, "{}", get_character_prompt(context)).unwrap();
+    } else {
+        write!(handle, "{}", get_prompt(context)).unwrap();
     }
 }
 
@@ -31,7 +33,7 @@ pub fn get_prompt(context: Context) -> String {
     let mut buf = String::new();
 
     // Write a new line before the prompt
-    if config.add_newline && !config.split_prompt {
+    if config.add_newline && (!config.split_prompt || context.shell == Shell::PowerShell) {
         writeln!(buf).unwrap();
     }
 
@@ -190,7 +192,7 @@ fn compute_modules<'a>(context: &'a Context, split_prompt: bool) -> ModuleOrder<
         if ALL_MODULES.contains(&module) {
             if !split_prompt {
                 prompt_order.push(module);
-            } else if (split_prompt && module == "line_break") || hit_line_break {
+            } else if ((split_prompt && module == "line_break") || hit_line_break) && context.shell != Shell::PowerShell {
                 if hit_line_break {
                     character_prompt_order.push(&module);
                 }
@@ -219,7 +221,7 @@ fn compute_modules<'a>(context: &'a Context, split_prompt: bool) -> ModuleOrder<
             
             character_prompt_order: None
         }
-    } else {
+    } else if context.shell != Shell::PowerShell {
         ModuleOrder {
             prompt_order:
                 prompt_order
@@ -238,6 +240,18 @@ fn compute_modules<'a>(context: &'a Context, split_prompt: bool) -> ModuleOrder<
                         .flatten() // Remove segments set to `None`
                         .collect::<Vec<Module<'a>>>(),
                 )
+        }
+    } else {
+        ModuleOrder {
+            prompt_order:
+                prompt_order
+                    .par_iter()
+                    .filter(|module| !context.is_module_disabled_in_config(module))
+                    .map(|module| modules::handle(module, &context)) // Compute modules
+                    .flatten() // Remove segments set to `None`
+                    .collect::<Vec<Module<'a>>>(),
+            
+            character_prompt_order: None
         }
     }
 }

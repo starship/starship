@@ -86,7 +86,7 @@ impl<'a> Context<'a> {
             dir_contents: OnceCell::new(),
             repo: OnceCell::new(),
             shell,
-            character_only: character_only,
+            character_only,
         }
     }
 

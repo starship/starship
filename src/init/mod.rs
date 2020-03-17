@@ -170,6 +170,32 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
     Ok(())
 }
 
+pub fn init_split(shell_name: &str) -> io::Result<()> {
+    let starship_path = path_to_starship()?.replace("\"", "\"'\"'\"");
+
+    let setup_script = match shell_name {
+        "bash" => Some(BASH_SPLIT),
+        "zsh" => Some(ZSH_SPLIT),
+        // "fish" => Some(FISH_SPLIT),
+        // "powershell" => Some(PWSH_INIT),
+        // "ion" => Some(ION_SPLIT),
+        _ => {
+            println!(
+                "printf \"Shell name detection failed on phase two init.\\n\
+                 This probably indicates a bug within starship: please open\\n\
+                 an issue at https://github.com/starship/starship/issues/new\\n\""
+            );
+            None
+        }
+    };
+    if let Some(script) = setup_script {
+        // Set up quoting for starship path in case it has spaces.
+        let starship_path_string = format!("\"{}\"", starship_path);
+        let script = script.replace("::STARSHIP::", &starship_path_string);
+        print!("{}", script);
+    };
+    Ok(())
+}
 /* GENERAL INIT SCRIPT NOTES
 
 Each init script will be passed as-is. Global notes for init scripts are in this
@@ -186,11 +212,15 @@ starship binary.
 */
 
 const BASH_INIT: &str = include_str!("starship.bash");
+const BASH_SPLIT: &str = include_str!("starship_split.bash");
 
 const ZSH_INIT: &str = include_str!("starship.zsh");
+const ZSH_SPLIT: &str = include_str!("starship_split.zsh");
 
 const FISH_INIT: &str = include_str!("starship.fish");
+// const FISH_SPLIT: &str = include_str!("starship_split.fish");
 
 const PWSH_INIT: &str = include_str!("starship.ps1");
 
 const ION_INIT: &str = include_str!("starship.ion");
+// const ION_SPLIT: &str = include_str!("starship_split.ion");

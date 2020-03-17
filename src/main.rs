@@ -17,6 +17,7 @@ mod segment;
 mod utils;
 
 use crate::module::ALL_MODULES;
+use crate::context::{Context, Shell};
 use clap::{App, AppSettings, Arg, SubCommand};
 
 fn main() {
@@ -137,8 +138,17 @@ fn main() {
     match matches.subcommand() {
         ("init", Some(sub_m)) => {
             let shell_name = sub_m.value_of("shell").expect("Shell name missing.");
+            let context = Context::new(sub_m.clone());
+            let config = context.config.get_root_config();
+
             if sub_m.is_present("print_full_init") {
-                init::init_main(shell_name).expect("can't init_main");
+                if !config.split_prompt {
+                    init::init_main(shell_name).expect("can't init_main");
+                } else if context.shell != Shell::PowerShell {
+                    init::init_split(shell_name).expect("can't init_main");
+                } else {
+                    init::init_main(shell_name).expect("can't init_main");
+                }
             } else {
                 init::init_stub(shell_name).expect("can't init_stub");
             }
