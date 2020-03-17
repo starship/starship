@@ -10,6 +10,11 @@ use crate::module::Module;
 use crate::module::ALL_MODULES;
 use crate::modules;
 
+struct ModuleOrder<'a> {
+    prompt_order: Vec<Module<'a>>,
+    character_prompt_order: Option<Vec<Module<'a>>>,
+}
+
 pub fn prompt(args: ArgMatches) {
     let context = Context::new(args);
     let stdout = io::stdout();
@@ -22,7 +27,7 @@ pub fn get_prompt(context: Context) -> String {
     let mut buf = String::new();
 
     // Write a new line before the prompt
-    if config.add_newline {
+    if config.add_newline && !config.split_prompt {
         writeln!(buf).unwrap();
     }
 
@@ -32,10 +37,48 @@ pub fn get_prompt(context: Context) -> String {
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
     }
 
-    let modules = compute_modules(&context);
+    let modules = compute_modules(&context, config.split_prompt);
 
     let mut print_without_prefix = true;
-    let printable = modules.iter();
+    let printable = modules.prompt_order.iter();
+
+    for module in printable {
+        // Skip printing the prefix of a module after the line_break
+        if print_without_prefix {
+            let module_without_prefix = module.to_string_without_prefix(context.shell.clone());
+            write!(buf, "{}", module_without_prefix).unwrap()
+        } else {
+            let module = module.ansi_strings_for_shell(context.shell.clone());
+            write!(buf, "{}", ANSIStrings(&module)).unwrap();
+        }
+
+        print_without_prefix = module.get_name() == "line_break"
+    }
+
+    buf
+}
+
+fn get_character_prompt(context: Context) -> String {
+    let config = context.config.get_root_config();
+    let mut buf = String::new();
+
+    // Write a new line before the prompt
+    if config.add_newline && !config.split_prompt {
+        writeln!(buf).unwrap();
+    }
+
+    // A workaround for a fish bug (see #739,#279). Applying it to all shells
+    // breaks things (see #808,#824,#834). Should only be printed in fish.
+    if let Shell::Fish = context.shell {
+        buf.push_str("\x1b[J"); // An ASCII control code to clear screen
+    }
+
+    let modules = compute_modules(&context, config.split_prompt);
+
+    let mut print_without_prefix = true;
+    let character_prompt_order = modules.character_prompt_order;
+    let chatacter_prompt_order_unwrapped = character_prompt_order.unwrap();
+    let printable = chatacter_prompt_order_unwrapped.iter();
 
     for module in printable {
         // Skip printing the prefix of a module after the line_break
@@ -74,7 +117,7 @@ pub fn explain(args: ArgMatches) {
 
     let dont_print = vec!["line_break", "character"];
 
-    let modules = compute_modules(&context)
+    let modules = compute_modules(&context, false).prompt_order
         .into_iter()
         .filter(|module| !dont_print.contains(&module.get_name().as_str()))
         .map(|module| {
@@ -131,13 +174,22 @@ pub fn explain(args: ArgMatches) {
     }
 }
 
-fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
+fn compute_modules<'a>(context: &'a Context, split_prompt: bool) -> ModuleOrder<'a> {
     let mut prompt_order: Vec<&str> = Vec::new();
+    let mut character_prompt_order: Vec<&str> = Vec::new();
+    let mut hit_line_break = false;
 
     // Write out a custom prompt order
     for module in context.config.get_root_config().prompt_order {
         if ALL_MODULES.contains(&module) {
-            prompt_order.push(module);
+            if !split_prompt {
+                prompt_order.push(module);
+            } else if (split_prompt && module == "line_break") || hit_line_break {
+                hit_line_break = true;
+                character_prompt_order.push(&module);
+            } else {
+                prompt_order.push(module);
+            }
         } else {
             log::debug!(
                 "Expected prompt_order to contain value from {:?}. Instead received {}",
@@ -147,12 +199,39 @@ fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
         }
     }
 
-    prompt_order
-        .par_iter()
-        .filter(|module| !context.is_module_disabled_in_config(module))
-        .map(|module| modules::handle(module, &context)) // Compute modules
-        .flatten() // Remove segments set to `None`
-        .collect::<Vec<Module<'a>>>()
+    if !split_prompt {
+        ModuleOrder {
+            prompt_order:
+                prompt_order
+                    .par_iter()
+                    .filter(|module| !context.is_module_disabled_in_config(module))
+                    .map(|module| modules::handle(module, &context)) // Compute modules
+                    .flatten() // Remove segments set to `None`
+                    .collect::<Vec<Module<'a>>>(),
+            
+            character_prompt_order: None
+        }
+    } else {
+        ModuleOrder {
+            prompt_order:
+                prompt_order
+                    .par_iter()
+                    .filter(|module| !context.is_module_disabled_in_config(module))
+                    .map(|module| modules::handle(module, &context)) // Compute modules
+                    .flatten() // Remove segments set to `None`
+                    .collect::<Vec<Module<'a>>>(),
+            
+            character_prompt_order: 
+                Some(
+                    character_prompt_order
+                        .par_iter()
+                        .filter(|module| !context.is_module_disabled_in_config(module))
+                        .map(|module| modules::handle(module, &context)) // Compute modules
+                        .flatten() // Remove segments set to `None`
+                        .collect::<Vec<Module<'a>>>(),
+                )
+        }
+    }
 }
 
 fn count_wide_chars(value: &str) -> usize {

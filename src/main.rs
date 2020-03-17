@@ -64,6 +64,12 @@ fn main() {
         .help("The number of currently running jobs")
         .takes_value(true);
 
+    let character_arg = Arg::with_name("character")
+        .long("character-only")
+        .value_name("BOOL")
+        .help("Only displays the character module of the prompt whilst also taking account for the newline config")
+        .takes_value(true);
+
     let init_scripts_arg = Arg::with_name("print_full_init")
         .long("print-full-init")
         .help("Print the main initialization script (as opposed to the init stub)");
@@ -90,7 +96,9 @@ fn main() {
                     .arg(&path_arg)
                     .arg(&cmd_duration_arg)
                     .arg(&keymap_arg)
-                    .arg(&jobs_arg),
+                    .arg(&jobs_arg)
+                    // For the split prompt
+                    .arg(&character_arg),
             )
             .subcommand(
                 SubCommand::with_name("module")
