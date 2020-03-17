@@ -58,7 +58,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "character",
             ],
             scan_timeout: 30,
-            split_prompt: true, // TODO: PLEASE CHANGE BEFORE UPLOADING
+            split_prompt: false, // TODO: PLEASE CHANGE BEFORE UPLOADING
         }
     }
 }

@@ -1,3 +1,4 @@
+// TODO: Propery fix the extra newline that is created when running `starship prompt --character-only`
 use std::time::SystemTime;
 
 #[macro_use]
@@ -66,9 +67,7 @@ fn main() {
 
     let character_arg = Arg::with_name("character")
         .long("character-only")
-        .value_name("BOOL")
-        .help("Only displays the character module of the prompt whilst also taking account for the newline config")
-        .takes_value(true);
+        .help("Only displays the character module of the prompt whilst also taking account for the newline config");
 
     let init_scripts_arg = Arg::with_name("print_full_init")
         .long("print-full-init")

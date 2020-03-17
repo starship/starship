@@ -19,7 +19,11 @@ pub fn prompt(args: ArgMatches) {
     let context = Context::new(args);
     let stdout = io::stdout();
     let mut handle = stdout.lock();
-    write!(handle, "{}", get_prompt(context)).unwrap();
+    if !context.character_only {
+        write!(handle, "{}", get_prompt(context)).unwrap();
+    } else {
+        write!(handle, "{}", get_character_prompt(context)).unwrap();
+    }
 }
 
 pub fn get_prompt(context: Context) -> String {
@@ -63,7 +67,7 @@ fn get_character_prompt(context: Context) -> String {
     let mut buf = String::new();
 
     // Write a new line before the prompt
-    if config.add_newline && !config.split_prompt {
+    if config.add_newline {
         writeln!(buf).unwrap();
     }
 
@@ -77,7 +81,9 @@ fn get_character_prompt(context: Context) -> String {
 
     let mut print_without_prefix = true;
     let character_prompt_order = modules.character_prompt_order;
-    let chatacter_prompt_order_unwrapped = character_prompt_order.unwrap();
+    let chatacter_prompt_order_unwrapped = character_prompt_order.expect(
+        "Please dont run this command while `split_prompt` is disabled."
+    );
     let printable = chatacter_prompt_order_unwrapped.iter();
 
     for module in printable {
@@ -185,8 +191,10 @@ fn compute_modules<'a>(context: &'a Context, split_prompt: bool) -> ModuleOrder<
             if !split_prompt {
                 prompt_order.push(module);
             } else if (split_prompt && module == "line_break") || hit_line_break {
+                if hit_line_break {
+                    character_prompt_order.push(&module);
+                }
                 hit_line_break = true;
-                character_prompt_order.push(&module);
             } else {
                 prompt_order.push(module);
             }

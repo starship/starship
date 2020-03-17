@@ -33,6 +33,8 @@ pub struct Context<'a> {
 
     /// The shell the user is assumed to be running
     pub shell: Shell,
+
+    pub character_only: bool,
 }
 
 impl<'a> Context<'a> {
@@ -75,6 +77,8 @@ impl<'a> Context<'a> {
 
         let shell = Context::get_shell();
 
+        let character_only = arguments.is_present("character");
+
         Context {
             config,
             properties,
@@ -82,6 +86,7 @@ impl<'a> Context<'a> {
             dir_contents: OnceCell::new(),
             repo: OnceCell::new(),
             shell,
+            character_only: character_only,
         }
     }
 

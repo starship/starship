@@ -1,3 +1,4 @@
+// TODO: Implement the proper init configs for the split prompt
 use std::ffi::OsStr;
 use std::path::Path;
 use std::{env, io};
