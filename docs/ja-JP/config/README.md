@@ -185,6 +185,7 @@ us-east-1 = "va"
 # ~/.config/starship.toml
 
 [battery]
+disabled = false
 full_symbol = "🔋"
 charging_symbol = "⚡️"
 discharging_symbol = "💀"

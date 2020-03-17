@@ -185,6 +185,7 @@ Note: Battery indicator will be hidden if the status is `unknown` or `empty` unl
 # ~/.config/starship.toml
 
 [battery]
+disabled = false
 full_symbol = "🔋"
 charging_symbol = "⚡️"
 discharging_symbol = "💀"
