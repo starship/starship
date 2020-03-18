@@ -21,7 +21,7 @@ pub fn prompt(args: ArgMatches) {
     let mut handle = stdout.lock();
     if !context.character_only {
         write!(handle, "{}", get_prompt(context)).unwrap();
-    } else if context.shell != Shell::PowerShell {
+    } else if !((context.shell == Shell::PowerShell) || (context.shell == Shell::Ion) || (context.shell == Shell::Bash)) {
         write!(handle, "{}", get_character_prompt(context)).unwrap();
     } else {
         write!(handle, "{}", get_prompt(context)).unwrap();
@@ -32,8 +32,9 @@ pub fn get_prompt(context: Context) -> String {
     let config = context.config.get_root_config();
     let mut buf = String::new();
 
-    // Write a new line before the prompt
-    if config.add_newline && (!config.split_prompt || context.shell == Shell::PowerShell) {
+    // Write a new line before the prompt and ignores the split prompt config if using 
+    // PowerShell, Ion, and Bash because right side prompt is not supported on those shells
+    if config.add_newline && (!config.split_prompt || (context.shell == Shell::PowerShell) || (context.shell == Shell::Ion) || (context.shell == Shell::Bash)) {
         writeln!(buf).unwrap();
     }
 
@@ -192,7 +193,7 @@ fn compute_modules<'a>(context: &'a Context, split_prompt: bool) -> ModuleOrder<
         if ALL_MODULES.contains(&module) {
             if !split_prompt {
                 prompt_order.push(module);
-            } else if ((split_prompt && module == "line_break") || hit_line_break) && context.shell != Shell::PowerShell {
+            } else if ((split_prompt && module == "line_break") || hit_line_break) && !((context.shell == Shell::PowerShell) || (context.shell == Shell::Ion) || (context.shell == Shell::Bash)) {
                 if hit_line_break {
                     character_prompt_order.push(&module);
                 }
@@ -221,7 +222,7 @@ fn compute_modules<'a>(context: &'a Context, split_prompt: bool) -> ModuleOrder<
             
             character_prompt_order: None
         }
-    } else if context.shell != Shell::PowerShell {
+    } else if !((context.shell == Shell::PowerShell) || (context.shell == Shell::Ion) || (context.shell == Shell::Bash)) {
         ModuleOrder {
             prompt_order:
                 prompt_order
