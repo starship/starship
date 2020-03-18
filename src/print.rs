@@ -21,7 +21,10 @@ pub fn prompt(args: ArgMatches) {
     let mut handle = stdout.lock();
     if !context.character_only {
         write!(handle, "{}", get_prompt(context)).unwrap();
-    } else if !((context.shell == Shell::PowerShell) || (context.shell == Shell::Ion) || (context.shell == Shell::Bash)) {
+    } else if !((context.shell == Shell::PowerShell)
+        || (context.shell == Shell::Ion)
+        || (context.shell == Shell::Bash))
+    {
         write!(handle, "{}", get_character_prompt(context)).unwrap();
     } else {
         write!(handle, "{}", get_prompt(context)).unwrap();
@@ -32,9 +35,14 @@ pub fn get_prompt(context: Context) -> String {
     let config = context.config.get_root_config();
     let mut buf = String::new();
 
-    // Write a new line before the prompt and ignores the split prompt config if using 
+    // Write a new line before the prompt and ignores the split prompt config if using
     // PowerShell, Ion, and Bash because right side prompt is not supported on those shells
-    if config.add_newline && (!config.split_prompt || (context.shell == Shell::PowerShell) || (context.shell == Shell::Ion) || (context.shell == Shell::Bash)) {
+    if config.add_newline
+        && (!config.split_prompt
+            || (context.shell == Shell::PowerShell)
+            || (context.shell == Shell::Ion)
+            || (context.shell == Shell::Bash))
+    {
         writeln!(buf).unwrap();
     }
 
@@ -84,9 +92,8 @@ fn get_character_prompt(context: Context) -> String {
 
     let mut print_without_prefix = true;
     let character_prompt_order = modules.character_prompt_order;
-    let chatacter_prompt_order_unwrapped = character_prompt_order.expect(
-        "Please dont run this command while `split_prompt` is disabled."
-    );
+    let chatacter_prompt_order_unwrapped = character_prompt_order
+        .expect("Please dont run this command while `split_prompt` is disabled.");
     let printable = chatacter_prompt_order_unwrapped.iter();
 
     for module in printable {
@@ -126,7 +133,8 @@ pub fn explain(args: ArgMatches) {
 
     let dont_print = vec!["line_break", "character"];
 
-    let modules = compute_modules(&context, false).prompt_order
+    let modules = compute_modules(&context, false)
+        .prompt_order
         .into_iter()
         .filter(|module| !dont_print.contains(&module.get_name().as_str()))
         .map(|module| {
@@ -193,7 +201,11 @@ fn compute_modules<'a>(context: &'a Context, split_prompt: bool) -> ModuleOrder<
         if ALL_MODULES.contains(&module) {
             if !split_prompt {
                 prompt_order.push(module);
-            } else if ((split_prompt && module == "line_break") || hit_line_break) && !((context.shell == Shell::PowerShell) || (context.shell == Shell::Ion) || (context.shell == Shell::Bash)) {
+            } else if ((split_prompt && module == "line_break") || hit_line_break)
+                && !((context.shell == Shell::PowerShell)
+                    || (context.shell == Shell::Ion)
+                    || (context.shell == Shell::Bash))
+            {
                 if hit_line_break {
                     character_prompt_order.push(&module);
                 }
@@ -212,47 +224,46 @@ fn compute_modules<'a>(context: &'a Context, split_prompt: bool) -> ModuleOrder<
 
     if !split_prompt {
         ModuleOrder {
-            prompt_order:
-                prompt_order
-                    .par_iter()
-                    .filter(|module| !context.is_module_disabled_in_config(module))
-                    .map(|module| modules::handle(module, &context)) // Compute modules
-                    .flatten() // Remove segments set to `None`
-                    .collect::<Vec<Module<'a>>>(),
-            
-            character_prompt_order: None
+            prompt_order: prompt_order
+                .par_iter()
+                .filter(|module| !context.is_module_disabled_in_config(module))
+                .map(|module| modules::handle(module, &context)) // Compute modules
+                .flatten() // Remove segments set to `None`
+                .collect::<Vec<Module<'a>>>(),
+
+            character_prompt_order: None,
         }
-    } else if !((context.shell == Shell::PowerShell) || (context.shell == Shell::Ion) || (context.shell == Shell::Bash)) {
+    } else if !((context.shell == Shell::PowerShell)
+        || (context.shell == Shell::Ion)
+        || (context.shell == Shell::Bash))
+    {
         ModuleOrder {
-            prompt_order:
-                prompt_order
+            prompt_order: prompt_order
+                .par_iter()
+                .filter(|module| !context.is_module_disabled_in_config(module))
+                .map(|module| modules::handle(module, &context)) // Compute modules
+                .flatten() // Remove segments set to `None`
+                .collect::<Vec<Module<'a>>>(),
+
+            character_prompt_order: Some(
+                character_prompt_order
                     .par_iter()
                     .filter(|module| !context.is_module_disabled_in_config(module))
                     .map(|module| modules::handle(module, &context)) // Compute modules
                     .flatten() // Remove segments set to `None`
                     .collect::<Vec<Module<'a>>>(),
-            
-            character_prompt_order: 
-                Some(
-                    character_prompt_order
-                        .par_iter()
-                        .filter(|module| !context.is_module_disabled_in_config(module))
-                        .map(|module| modules::handle(module, &context)) // Compute modules
-                        .flatten() // Remove segments set to `None`
-                        .collect::<Vec<Module<'a>>>(),
-                )
+            ),
         }
     } else {
         ModuleOrder {
-            prompt_order:
-                prompt_order
-                    .par_iter()
-                    .filter(|module| !context.is_module_disabled_in_config(module))
-                    .map(|module| modules::handle(module, &context)) // Compute modules
-                    .flatten() // Remove segments set to `None`
-                    .collect::<Vec<Module<'a>>>(),
-            
-            character_prompt_order: None
+            prompt_order: prompt_order
+                .par_iter()
+                .filter(|module| !context.is_module_disabled_in_config(module))
+                .map(|module| modules::handle(module, &context)) // Compute modules
+                .flatten() // Remove segments set to `None`
+                .collect::<Vec<Module<'a>>>(),
+
+            character_prompt_order: None,
         }
     }
 }

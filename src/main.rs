@@ -16,8 +16,8 @@ mod print;
 mod segment;
 mod utils;
 
-use crate::module::ALL_MODULES;
 use crate::context::{Context, Shell};
+use crate::module::ALL_MODULES;
 use clap::{App, AppSettings, Arg, SubCommand};
 
 fn main() {
@@ -144,7 +144,10 @@ fn main() {
             if sub_m.is_present("print_full_init") {
                 if !config.split_prompt {
                     init::init_main(shell_name).expect("can't init_main");
-                } else if !((context.shell == Shell::PowerShell) || (context.shell == Shell::Ion) || (context.shell == Shell::Bash)) {
+                } else if !((context.shell == Shell::PowerShell)
+                    || (context.shell == Shell::Ion)
+                    || (context.shell == Shell::Bash))
+                {
                     init::init_split(shell_name).expect("can't init_split");
                 } else {
                     init::init_main(shell_name).expect("can't init_main");
