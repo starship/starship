@@ -66,11 +66,12 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Variable       | Default                       | Description                                            |
-| -------------- | ----------------------------- | ------------------------------------------------------ |
-| `add_newline`  | `true`                        | Add a new line before the start of the prompt.         |
-| `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
-| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).  |
+| Variable       | Default                       | Description                                                                                           |
+| -------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `add_newline`  | `true`                        | Add a new line before the start of the prompt.                                                        |
+| `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs.                                                |
+| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).                                                 |
+| `split_prompt` | `false`                       | Moves everything before the `line_break` module to the right prompt (only functional on Zsh and Fish) |
 
 ### Example
 
@@ -83,6 +84,8 @@ add_newline = false
 prompt_order=["rust","line_break","package","line_break","character"]
 # Wait 10 milliseconds for starship to check files under the current directory.
 scan_timeout = 10
+# Enables the right prompt feature
+split_prompt = true
 ```
 
 ### Default Prompt Order
