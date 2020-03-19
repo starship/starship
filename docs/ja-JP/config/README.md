@@ -269,8 +269,8 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 
 | 変数                  | デフォルト           | 説明                                                         |
 | ------------------- | --------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
+| `min_time`          | `2_000`         | コマンド実行時間を表示する最短時間です。(ミリ秒単位)       |
+| `show_milliseconds` | `false`         | 秒単位に加えて、ミリ秒単位のコマンド実行時間を表示します。 |
 | `prefix`            | `took`          | コマンド実行時間の直前に表示する文字列です。                                     |
 | `style`             | `"bold yellow"` | モジュールのスタイルです。                                              |
 | `disabled`          | `false`         | `cmd_duration`モジュールを無効にします。                                |
@@ -299,7 +299,7 @@ Note: これはconda自身の プロンプト修飾子 を抑制しません。`
 
 | 変数                  | デフォルト          | 説明                                                                                                                                                                                                          |
 | ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `truncation_length` | `1`            | `conda create -p [path]` で環境を作成したときに、環境変数からトランケーションするディレクトリの数です。`0` を設定するとトランケーションされません. [`directory`](#directory) モジュールも参照してください。 |
 | `symbol`            | `"C "`         | 環境名の直前に使用されるシンボルです。                                                                                                                                                                                         |
 | `style`             | `"bold green"` | モジュールのスタイルです。                                                                                                                                                                                               |
 | `disabled`          | `false`        | `conda`モジュールを無効にします。                                                                                                                                                                                        |
@@ -607,7 +607,8 @@ symbol = "🏎💨 "
 ```
 ## Haskell
 
-The `haskell` module shows the currently installed version of Haskell Stack version. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`haskell`モジュールは、 現在インストールされているHaskell Stackのバージョンを示します。
+次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`stack.yaml`ファイルが含まれている
 
@@ -615,9 +616,9 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 
 | 変数         | デフォルト        | 説明                                                        |
 | ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
+| `symbol`   | `"λ "`       | Haskelのバージョンを表示する前に使用される記号です。      |
 | `style`    | `"bold red"` | モジュールのスタイルです。                                             |
-| `disabled` | `false`      | Disables the `haskell` module.                            |
+| `disabled` | `false`      | `haskell`モジュールを無効にします。                       |
 
 
 ### 設定例
@@ -641,7 +642,7 @@ symbol = " "
 | `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
 | `truncation_symbol` | `"…"`           | ブランチ名切り捨てられていることを示すための記号です。                                                                  |
 | `style`             | `"bold purple"` | モジュールのスタイルです。                                                                                |
-| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+| `disabled`          | `true`          | `hg_branch`モジュールを無効にします。                                                        |
 
 ### 設定例
 
