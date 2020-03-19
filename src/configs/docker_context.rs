@@ -8,6 +8,7 @@ pub struct DockerContextConfig<'a> {
     pub symbol: SegmentConfig<'a>,
     pub context: SegmentConfig<'a>,
     pub style: Style,
+    pub only_with_compose_yml: bool,
     pub disabled: bool,
 }
 
@@ -17,6 +18,7 @@ impl<'a> RootModuleConfig<'a> for DockerContextConfig<'a> {
             symbol: SegmentConfig::new("🐳 "),
             context: SegmentConfig::default(),
             style: Color::Blue.bold(),
+            only_with_compose_yml: false,
             disabled: true,
         }
     }

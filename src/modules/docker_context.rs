@@ -17,6 +17,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module(DOCKER_CONFIG_FILE);
     let config: DockerContextConfig = DockerContextConfig::try_load(module.config);
 
+    if config.only_with_compose_yml
+        && !context
+            .try_begin_scan()?
+            .set_files(&["docker-compose.yml"])
+            .is_match()
+    {
+        return None;
+    }
+
     let config_path = home_dir()?.join(".docker/config.json");
     let json = utils::read_file(config_path).ok()?;
     let parsed_json = serde_json::from_str(&json).ok()?;
