@@ -1,4 +1,5 @@
 use ansi_term::Color;
+use remove_dir_all::remove_dir_all;
 use std::process::Command;
 use std::{io, str};
 
@@ -22,7 +23,7 @@ fn test_render_commit_hash() -> io::Result<()> {
                 only_detached = false
         })
         .arg("--path")
-        .arg(repo_dir)
+        .arg(&repo_dir)
         .output()?;
 
     let actual = String::from_utf8(output.stdout).unwrap();
@@ -32,7 +33,7 @@ fn test_render_commit_hash() -> io::Result<()> {
         .to_string();
 
     assert_eq!(expected, actual);
-    Ok(())
+    remove_dir_all(repo_dir)
 }
 
 #[test]
@@ -96,7 +97,7 @@ fn test_render_commit_hash_len_override() -> io::Result<()> {
                 commit_hash_length = 14
         })
         .arg("--path")
-        .arg(repo_dir)
+        .arg(&repo_dir)
         .output()?;
 
     let actual = String::from_utf8(output.stdout).unwrap();
@@ -106,7 +107,7 @@ fn test_render_commit_hash_len_override() -> io::Result<()> {
         .to_string();
 
     assert_eq!(expected, actual);
-    Ok(())
+    remove_dir_all(repo_dir)
 }
 
 #[test]
@@ -115,13 +116,13 @@ fn test_render_commit_hash_only_detached_on_branch() -> io::Result<()> {
 
     let output = common::render_module("git_commit")
         .arg("--path")
-        .arg(repo_dir)
+        .arg(&repo_dir)
         .output()?;
 
     let actual = String::from_utf8(output.stdout).unwrap();
 
     assert_eq!("", actual);
-    Ok(())
+    remove_dir_all(repo_dir)
 }
 
 #[test]
@@ -143,7 +144,7 @@ fn test_render_commit_hash_only_detached_on_detached() -> io::Result<()> {
 
     let output = common::render_module("git_commit")
         .arg("--path")
-        .arg(repo_dir)
+        .arg(&repo_dir)
         .output()?;
 
     let actual = String::from_utf8(output.stdout).unwrap();
@@ -154,7 +155,7 @@ fn test_render_commit_hash_only_detached_on_detached() -> io::Result<()> {
         .to_string();
 
     assert_eq!(expected, actual);
-    Ok(())
+    remove_dir_all(repo_dir)
 }
 
 #[test]

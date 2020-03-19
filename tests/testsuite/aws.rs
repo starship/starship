@@ -104,7 +104,7 @@ region = us-east-2
     let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  us-east-1"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
-    Ok(())
+    dir.close()
 }
 
 #[test]
@@ -136,7 +136,7 @@ region = us-east-2
     );
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
-    Ok(())
+    dir.close()
 }
 
 #[test]

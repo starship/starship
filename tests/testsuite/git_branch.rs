@@ -1,4 +1,5 @@
 use ansi_term::Color;
+use remove_dir_all::remove_dir_all;
 use std::io;
 use std::process::Command;
 
@@ -124,7 +125,7 @@ fn test_truncate_length_with_config(
             .unwrap(),
         )
         .arg("--path")
-        .arg(repo_dir)
+        .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -135,5 +136,5 @@ fn test_truncate_length_with_config(
             .paint(format!("\u{e0a0} {}{}", expected_name, truncation_symbol)),
     );
     assert_eq!(expected, actual);
-    Ok(())
+    remove_dir_all(repo_dir)
 }

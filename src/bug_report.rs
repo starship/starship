@@ -1,8 +1,9 @@
 use crate::utils::exec_cmd;
-use reqwest;
+
 use std::fs;
 use std::path::PathBuf;
 
+#[cfg(feature = "http")]
 const GIT_IO_BASE_URL: &str = "https://git.io/";
 
 pub fn create() {
@@ -21,19 +22,27 @@ pub fn create() {
     if open::that(&link).is_ok() {
         print!("Take a look at your browser. A GitHub issue has been populated with your configuration")
     } else {
-        let link = reqwest::blocking::Client::new()
-            .post(&format!("{}{}", GIT_IO_BASE_URL, "create"))
-            .form(&[("url", &link)])
-            .send()
-            .and_then(|response| response.text())
-            .map(|slug| format!("{}{}", GIT_IO_BASE_URL, slug))
-            .unwrap_or(link);
-
+        let link = shorten_link(&link).unwrap_or(link);
         println!(
             "Click this link to create a GitHub issue populated with your configuration:\n\n  {}",
             link
         );
     }
+}
+
+#[cfg(feature = "http")]
+fn shorten_link(link: &str) -> Option<String> {
+    attohttpc::post(&format!("{}{}", GIT_IO_BASE_URL, "create"))
+        .form(&[("url", link)])
+        .ok()
+        .and_then(|r| r.send().ok())
+        .and_then(|r| r.text().ok())
+        .map(|slug| format!("{}{}", GIT_IO_BASE_URL, slug))
+}
+
+#[cfg(not(feature = "http"))]
+fn shorten_link(_url: &str) -> Option<String> {
+    None
 }
 
 const UNKNOWN_SHELL: &str = "<unknown shell>";

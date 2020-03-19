@@ -20,7 +20,7 @@ fn folder_with_python_version() -> io::Result<()> {
 
     let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6"));
     assert_eq!(expected, actual);
-    Ok(())
+    dir.close()
 }
 
 #[test]
@@ -37,7 +37,7 @@ fn folder_with_requirements_txt() -> io::Result<()> {
 
     let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6"));
     assert_eq!(expected, actual);
-    Ok(())
+    dir.close()
 }
 
 #[test]
@@ -54,7 +54,7 @@ fn folder_with_pyproject_toml() -> io::Result<()> {
 
     let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6"));
     assert_eq!(expected, actual);
-    Ok(())
+    dir.close()
 }
 
 #[test]
@@ -71,7 +71,7 @@ fn folder_with_pipfile() -> io::Result<()> {
 
     let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6"));
     assert_eq!(expected, actual);
-    Ok(())
+    dir.close()
 }
 
 #[test]
@@ -88,7 +88,7 @@ fn folder_with_tox() -> io::Result<()> {
 
     let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6"));
     assert_eq!(expected, actual);
-    Ok(())
+    dir.close()
 }
 
 #[test]
@@ -105,7 +105,7 @@ fn folder_with_py_file() -> io::Result<()> {
 
     let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6"));
     assert_eq!(expected, actual);
-    Ok(())
+    dir.close()
 }
 
 #[test]
@@ -122,7 +122,7 @@ fn with_virtual_env() -> io::Result<()> {
 
     let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6 (my_venv)"));
     assert_eq!(expected, actual);
-    Ok(())
+    dir.close()
 }
 
 #[test]
@@ -139,5 +139,5 @@ fn with_active_venv() -> io::Result<()> {
 
     let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6 (my_venv)"));
     assert_eq!(expected, actual);
-    Ok(())
+    dir.close()
 }

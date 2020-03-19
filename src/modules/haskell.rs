@@ -51,7 +51,7 @@ mod tests {
         let actual = render_module("haskell", dir.path());
         let expected = None;
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -61,7 +61,7 @@ mod tests {
         let actual = render_module("haskell", dir.path());
         let expected = Some(format!("via {} ", Color::Red.bold().paint("λ v8.6.5")));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
     #[test]
     fn folder_with_cabal_file() -> io::Result<()> {
@@ -70,7 +70,7 @@ mod tests {
         let actual = render_module("haskell", dir.path());
         let expected = Some(format!("via {} ", Color::Red.bold().paint("λ v8.6.5")));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -80,6 +80,6 @@ mod tests {
         let actual = render_module("haskell", dir.path());
         let expected = Some(format!("via {} ", Color::Red.bold().paint("λ v8.6.5")));
         assert_eq!(expected, actual);
-        Ok(())
+        dir.close()
     }
 }
