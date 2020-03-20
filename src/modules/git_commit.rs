@@ -42,23 +42,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     if !config.tag_disabled {
         // Let's get repo tags names
-        let tag_names = git_repo.tag_names(None).unwrap();
-
-        let tag_and_refs = tag_names.iter().flatten().flat_map(|name| {
-            let full_tag = format!("refs/tags/{}", name);
+        let tag_names = git_repo.tag_names(None).ok()?;
+        let tag_and_refs = tag_names.iter().flat_map(|name| {
+            let full_tag = format!("refs/tags/{}", name.unwrap());
             git_repo
                 .find_reference(&full_tag)
-                .map(|reference| (name, reference))
+                .map(|reference| (String::from(name.unwrap()), reference))
         });
 
-        // Let's get HEAD commit id
-        let git_head_ref = git_repo.refname_to_id("HEAD").unwrap();
         let mut tag_name = String::new();
-
         // Let's check if HEAD has some tag. If several, only gets first...
         for (name, reference) in tag_and_refs {
-            if git_head_ref == reference.peel_to_commit().unwrap().id() {
-                tag_name = name.to_string();
+            if commit_oid == reference.peel_to_commit().ok()?.id() {
+                tag_name = name;
                 break;
             }
         }
