@@ -11,13 +11,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("cmd_duration");
     let config: CmdDurationConfig = CmdDurationConfig::try_load(module.config);
 
-    let props = &context.properties;
-    let elapsed = props
-        .get("cmd_duration")
-        .unwrap_or(&"invalid_time".into())
-        .parse::<u128>()
-        .ok()?;
-
     /* TODO: Once error handling is implemented, warn the user if their config
     min time is nonsensical */
     if config.min_time < 0 {
@@ -28,7 +21,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    if elapsed < config.min_time as u128 {
+    let elapsed = context.get_cmd_duration()?;
+    let config_min = config.min_time as u128;
+
+    if elapsed < config_min {
         return None;
     }
 
@@ -53,7 +49,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     });
 
-    Some(module)
+    Some(undistract_me(module, &config, elapsed))
 }
 
 // Render the time into a nice human-readable string
@@ -84,6 +80,49 @@ fn render_time_component((component, suffix): (&u128, &&str)) -> String {
         0 => String::new(),
         n => format!("{}{}", n, suffix),
     }
+}
+
+#[cfg(not(feature = "notify-rust"))]
+fn undistract_me<'a, 'b>(
+    module: Module<'a>,
+    config: &'b CmdDurationConfig,
+    _elapsed: u128,
+) -> Module<'a> {
+    if config.show_notifications {
+        log::debug!("This version of starship was built without notification support.");
+    }
+
+    module
+}
+
+#[cfg(feature = "notify-rust")]
+fn undistract_me<'a, 'b>(
+    module: Module<'a>,
+    config: &'b CmdDurationConfig,
+    elapsed: u128,
+) -> Module<'a> {
+    use ansi_term::{unstyle, ANSIStrings};
+    use notify_rust::{Notification, Timeout};
+
+    if config.show_notifications && config.min_time_to_notify as u128 <= elapsed {
+        let body = format!(
+            "Command execution {}",
+            unstyle(&ANSIStrings(&module.ansi_strings()))
+        );
+
+        let mut notification = Notification::new();
+        notification
+            .summary("Command finished")
+            .body(&body)
+            .icon("utilities-terminal")
+            .timeout(Timeout::Milliseconds(750));
+
+        if let Err(err) = notification.show() {
+            log::trace!("Cannot show notification: {}", err);
+        }
+    }
+
+    module
 }
 
 #[cfg(test)]
