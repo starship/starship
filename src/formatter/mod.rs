@@ -3,26 +3,37 @@ use ansi_term::Style;
 use pest::{error::Error, iterators::Pair, Parser};
 use rayon::prelude::*;
 use std::borrow::Cow;
+use std::collections::BTreeMap;
+
+type VariableMapType<'a> = BTreeMap<&'a str, Option<String>>;
 
 #[derive(Parser)]
 #[grammar = "formatter/spec.pest"]
 struct IdentParser;
 
-pub struct StringFormatter<'a, M>
-where
-    M: Fn(&str) -> Option<String>,
-{
+pub struct StringFormatter<'a> {
     format: &'a str,
-    mapper: M,
+    variables: VariableMapType<'a>,
 }
 
-impl<'a, M> StringFormatter<'a, M>
-where
-    M: Fn(&str) -> Option<String>,
-{
+impl<'a> StringFormatter<'a> {
     /// Creates an instance of StringFormatter.
-    pub fn new(format: &'a str, mapper: M) -> Self {
-        Self { format, mapper }
+    pub fn new(format: &'a str) -> Self {
+        Self {
+            format,
+            variables: Default::default(),
+        }
+    }
+
+    pub fn map(
+        mut self,
+        mapper: impl Fn(&str) -> Option<String> + Sync,
+    ) -> Result<Self, Error<Rule>> {
+        self.cache_variables()?;
+        self.variables.par_iter_mut().for_each(|(key, value)| {
+            *value = mapper(key);
+        });
+        Ok(self)
     }
 
     fn _new_segment(&self, value: String, style: Option<Style>) -> SegmentConfig<'a> {
@@ -57,12 +68,54 @@ where
     }
 
     fn _parse_variable(&self, variable: Pair<Rule>) -> String {
-        (self.mapper)(variable.into_inner().next().unwrap().as_str())
+        let name = variable.into_inner().next().unwrap().as_str();
+        let value = self.variables.get(name).expect("Cached variable not found");
+        value
+            .as_ref()
+            .map(|value| value.clone())
             .unwrap_or_else(|| String::new())
     }
 
     fn _parse_text(&self, text: Pair<Rule>) -> String {
-        text.as_str().to_owned()
+        let mut result = String::new();
+        for pair in text.into_inner() {
+            result.push_str(pair.as_str());
+        }
+        result
+    }
+
+    fn cache_variables(&mut self) -> Result<(), Error<Rule>> {
+        let pairs = IdentParser::parse(Rule::expression, self.format)?;
+
+        fn _push_variables_from_textgroup<'a>(
+            variables: &mut VariableMapType<'a>,
+            textgroup: Pair<'a, Rule>,
+        ) {
+            let mut inner_rules = textgroup.into_inner();
+            let format = inner_rules.next().unwrap();
+            for pair in format.into_inner() {
+                match pair.as_rule() {
+                    Rule::variable => _push_variable(variables, pair),
+                    Rule::textgroup => _push_variables_from_textgroup(variables, pair),
+                    _ => {}
+                }
+            }
+        }
+
+        fn _push_variable<'a>(variables: &mut VariableMapType<'a>, pair: Pair<'a, Rule>) {
+            let variable_name = pair.into_inner().next().unwrap().as_str();
+            variables.insert(variable_name, None);
+        }
+
+        for pair in pairs {
+            match pair.as_rule() {
+                Rule::variable => _push_variable(&mut self.variables, pair),
+                Rule::textgroup => _push_variables_from_textgroup(&mut self.variables, pair),
+                _ => {}
+            }
+        }
+
+        Ok(())
     }
 
     /// Parse the format string.
@@ -114,7 +167,7 @@ mod tests {
         const FORMAT_STR: &str = "text";
         let style = Some(Color::Red.bold());
 
-        let formatter = StringFormatter::new(FORMAT_STR, empty_mapper);
+        let formatter = StringFormatter::new(FORMAT_STR).map(empty_mapper).unwrap();
         let result = formatter.parse(style).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "text", style);
@@ -123,7 +176,7 @@ mod tests {
     #[test]
     fn test_textgroup_text_only() {
         const FORMAT_STR: &str = "[text](red bold)";
-        let formatter = StringFormatter::new(FORMAT_STR, empty_mapper);
+        let formatter = StringFormatter::new(FORMAT_STR).map(empty_mapper).unwrap();
         let result = formatter.parse(None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "text", Some(Color::Red.bold()));
@@ -133,14 +186,12 @@ mod tests {
     fn test_variable_only() {
         const FORMAT_STR: &str = "$var1";
 
-        fn mapper(variable: &str) -> Option<String> {
-            match variable {
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .map(|variable| match variable {
                 "var1" => Some("text1".to_owned()),
                 _ => None,
-            }
-        }
-
-        let formatter = StringFormatter::new(FORMAT_STR, mapper);
+            })
+            .unwrap();
         let result = formatter.parse(None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "text1", None);
@@ -148,12 +199,12 @@ mod tests {
 
     #[test]
     fn test_escaped_chars() {
-        const FORMAT_STR: &str = r#"\[\$text\]\(red bold\)"#;
+        const FORMAT_STR: &str = r#"\\\[\$text\]\(red bold\)"#;
 
-        let formatter = StringFormatter::new(FORMAT_STR, empty_mapper);
+        let formatter = StringFormatter::new(FORMAT_STR).map(empty_mapper).unwrap();
         let result = formatter.parse(None).unwrap();
         let mut result_iter = result.iter();
-        match_next!(result_iter, r#"\[\$text\]\(red bold\)"#, None);
+        match_next!(result_iter, r#"\[$text](red bold)"#, None);
     }
 
     #[test]
@@ -163,7 +214,7 @@ mod tests {
         let middle_style = Some(Color::Red.bold());
         let inner_style = Some(Color::Blue.normal());
 
-        let formatter = StringFormatter::new(FORMAT_STR, empty_mapper);
+        let formatter = StringFormatter::new(FORMAT_STR).map(empty_mapper).unwrap();
         let result = formatter.parse(outer_style).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "outer ", outer_style);
@@ -176,16 +227,12 @@ mod tests {
         // brackets without escape
         {
             const FORMAT_STR: &str = "[";
-
-            let formatter = StringFormatter::new(FORMAT_STR, empty_mapper);
-            assert!(formatter.parse(None).is_err());
+            assert!(StringFormatter::new(FORMAT_STR).map(empty_mapper).is_err());
         }
         // Dollar without variable
         {
             const FORMAT_STR: &str = "$ ";
-
-            let formatter = StringFormatter::new(FORMAT_STR, empty_mapper);
-            assert!(formatter.parse(None).is_err());
+            assert!(StringFormatter::new(FORMAT_STR).map(empty_mapper).is_err());
         }
     }
 }
