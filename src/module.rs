@@ -91,7 +91,7 @@ impl<'a> Module<'a> {
     pub fn create_segment(&mut self, name: &str, segment_config: &SegmentConfig) -> &mut Segment {
         let mut segment = Segment::new(name);
         segment.set_style(segment_config.style.unwrap_or(self.style));
-        segment.set_value(segment_config.value);
+        segment.set_value(segment_config.value.as_ref());
         self.segments.push(segment);
 
         self.segments.last_mut().unwrap()

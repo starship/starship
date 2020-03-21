@@ -39,9 +39,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     if config.use_name {
         if let Ok(name) = env::var("name") {
+            let nix_shell_segment = format!("{} ({})", name, shell_type_segment.value);
             module.create_segment(
                 "nix_shell",
-                &shell_type_segment.with_value(&format!("{} ({})", name, shell_type_segment.value)),
+                &shell_type_segment.with_value(&nix_shell_segment),
             );
         } else {
             module.create_segment("nix_shell", &shell_type_segment);

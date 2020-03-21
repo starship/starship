@@ -2,6 +2,7 @@ use crate::configs::StarshipRootConfig;
 use crate::utils;
 use ansi_term::{Color, Style};
 
+use std::borrow::Cow;
 use std::clone::Clone;
 use std::collections::HashMap;
 use std::marker::Sized;
@@ -229,7 +230,7 @@ impl StarshipConfig {
 
 #[derive(Clone)]
 pub struct SegmentConfig<'a> {
-    pub value: &'a str,
+    pub value: Cow<'a, str>,
     pub style: Option<Style>,
 }
 
@@ -237,11 +238,11 @@ impl<'a> ModuleConfig<'a> for SegmentConfig<'a> {
     fn from_config(config: &'a Value) -> Option<Self> {
         match config {
             Value::String(ref config_str) => Some(Self {
-                value: config_str,
+                value: Cow::Borrowed(config_str),
                 style: None,
             }),
             Value::Table(ref config_table) => Some(Self {
-                value: config_table.get("value")?.as_str()?,
+                value: Cow::Borrowed(config_table.get("value")?.as_str()?),
                 style: config_table.get("style").and_then(<Style>::from_config),
             }),
             _ => None,
@@ -252,11 +253,11 @@ impl<'a> ModuleConfig<'a> for SegmentConfig<'a> {
         let mut new_config = self.clone();
         match config {
             Value::String(ref config_str) => {
-                new_config.value = config_str;
+                new_config.value = Cow::Borrowed(config_str);
             }
             Value::Table(ref config_table) => {
                 if let Some(Value::String(value)) = config_table.get("value") {
-                    new_config.value = value;
+                    new_config.value = Cow::Borrowed(value);
                 };
                 if let Some(style) = config_table.get("style") {
                     new_config.style = <Style>::from_config(style);
@@ -270,20 +271,23 @@ impl<'a> ModuleConfig<'a> for SegmentConfig<'a> {
 
 impl<'a> SegmentConfig<'a> {
     pub fn new(value: &'a str) -> Self {
-        Self { value, style: None }
+        Self {
+            value: Cow::Borrowed(value),
+            style: None,
+        }
     }
 
     /// Immutably set value
-    pub fn with_value(&self, value: &'a str) -> Self {
+    pub fn with_value(self, value: &'a str) -> Self {
         Self {
-            value,
+            value: Cow::Borrowed(value),
             style: self.style,
         }
     }
 
     /// Immutably set style
-    pub fn with_style(&self, style: Option<Style>) -> Self {
-        Self {
+    pub fn with_style(self, style: Option<Style>) -> Self {
+        SegmentConfig {
             value: self.value,
             style,
         }
@@ -305,7 +309,7 @@ impl Default for SegmentConfig<'static> {
  - 'italic'
  - '<color>'        (see the parse_color_string doc for valid color strings)
 */
-fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
+pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
     style_string
         .split_whitespace()
         .fold(Some(ansi_term::Style::new()), |maybe_style, token| {

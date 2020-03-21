@@ -1,0 +1,16 @@
+expression = _{ SOI ~ value* ~ EOI }
+value = _{ text | variable | textgroup }
+
+variable = { "$" ~ variable_name }
+variable_name = @{ char+ }
+char = _{ 'a'..'z' | 'A'..'Z' | '0'..'9' | "_" }
+
+text = { text_inner+ }
+text_inner = _{ text_inner_char | escape }
+text_inner_char = { !("[" | "]" | "(" | ")" | "$" | "\\") ~ ANY }
+escape = _{ "\\" ~ escaped_char }
+escaped_char = { "[" | "]" | "(" | ")" | "\\" | "$" }
+
+textgroup = { "[" ~ format ~ "]" ~ "(" ~ style ~ ")" }
+format = { (variable | text | textgroup)* }
+style = @{ text* }
