@@ -1,5 +1,4 @@
 use path_slash::PathExt;
-use std::borrow::Cow;
 use std::path::Path;
 use unicode_segmentation::UnicodeSegmentation;
 
@@ -77,7 +76,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         module.create_segment(
             "path",
             &SegmentConfig {
-                value: Cow::from(&fish_style_dir),
+                value: &fish_style_dir,
                 style: None,
             },
         );
@@ -86,7 +85,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.create_segment(
         "path",
         &SegmentConfig {
-            value: Cow::from(&truncated_dir_string),
+            value: &truncated_dir_string,
             style: None,
         },
     );

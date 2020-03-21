@@ -91,10 +91,15 @@ impl<'a> Module<'a> {
     pub fn create_segment(&mut self, name: &str, segment_config: &SegmentConfig) -> &mut Segment {
         let mut segment = Segment::new(name);
         segment.set_style(segment_config.style.unwrap_or(self.style));
-        segment.set_value(segment_config.value.as_ref());
+        segment.set_value(segment_config.value);
         self.segments.push(segment);
 
         self.segments.last_mut().unwrap()
+    }
+
+    /// Set segments in module
+    pub fn set_segment(&mut self, segments: Vec<Segment>) {
+        self.segments = segments;
     }
 
     /// Get module's name

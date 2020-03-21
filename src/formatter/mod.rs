@@ -1,9 +1,10 @@
-use crate::config::{parse_style_string, SegmentConfig};
 use ansi_term::Style;
 use pest::{error::Error, iterators::Pair, Parser};
 use rayon::prelude::*;
-use std::borrow::Cow;
 use std::collections::BTreeMap;
+
+use crate::config::parse_style_string;
+use crate::segment::Segment;
 
 type VariableMapType<'a> = BTreeMap<&'a str, Option<String>>;
 
@@ -36,29 +37,33 @@ impl<'a> StringFormatter<'a> {
         Ok(self)
     }
 
-    fn _new_segment(&self, value: String, style: Option<Style>) -> SegmentConfig<'a> {
-        SegmentConfig {
-            value: Cow::Owned(value),
+    fn _new_segment(&self, name: String, value: String, style: Option<Style>) -> Segment {
+        Segment {
+            _name: name,
+            value,
             style,
         }
     }
 
-    fn _parse_textgroup(
-        &self,
-        textgroup: Pair<Rule>,
-    ) -> Result<Vec<SegmentConfig<'a>>, Error<Rule>> {
+    fn _parse_textgroup(&self, textgroup: Pair<Rule>) -> Result<Vec<Segment>, Error<Rule>> {
         let mut inner_rules = textgroup.into_inner();
         let format = inner_rules.next().unwrap();
         let style_str = inner_rules.next().unwrap().as_str();
         let style = parse_style_string(style_str);
-        let mut results: Vec<SegmentConfig<'a>> = Vec::new();
+        let mut results: Vec<Segment> = Vec::new();
 
         for pair in format.into_inner() {
             match pair.as_rule() {
-                Rule::text => results.push(self._new_segment(self._parse_text(pair), style)),
-                Rule::variable => {
-                    results.push(self._new_segment(self._parse_variable(pair), style))
-                }
+                Rule::text => results.push(self._new_segment(
+                    "_text".to_owned(),
+                    self._parse_text(pair),
+                    style,
+                )),
+                Rule::variable => results.push(self._new_segment(
+                    format!("_var:{}", pair.as_str()),
+                    self._parse_variable(pair),
+                    style,
+                )),
                 Rule::textgroup => results.extend(self._parse_textgroup(pair)?),
                 _ => unreachable!(),
             }
@@ -116,22 +121,23 @@ impl<'a> StringFormatter<'a> {
     }
 
     /// Parse the format string.
-    pub fn parse(
-        &self,
-        default_style: Option<Style>,
-    ) -> Result<Vec<SegmentConfig<'a>>, Error<Rule>> {
+    pub fn parse(&self, default_style: Option<Style>) -> Result<Vec<Segment>, Error<Rule>> {
         let pairs = IdentParser::parse(Rule::expression, self.format)?;
-        let mut results: Vec<SegmentConfig<'a>> = Vec::new();
+        let mut results: Vec<Segment> = Vec::new();
 
-        // Lifetime of SegmentConfig is the same as self.format
+        // Lifetime of Segment is the same as self.format
         for pair in pairs.take_while(|pair| pair.as_rule() != Rule::EOI) {
             match pair.as_rule() {
-                Rule::text => {
-                    results.push(self._new_segment(self._parse_text(pair), default_style))
-                }
-                Rule::variable => {
-                    results.push(self._new_segment(self._parse_variable(pair), default_style))
-                }
+                Rule::text => results.push(self._new_segment(
+                    "_text".to_owned(),
+                    self._parse_text(pair),
+                    default_style,
+                )),
+                Rule::variable => results.push(self._new_segment(
+                    format!("_var:{}", pair.as_str()),
+                    self._parse_variable(pair),
+                    default_style,
+                )),
                 Rule::textgroup => results.extend(self._parse_textgroup(pair)?),
                 _ => unreachable!(),
             }
@@ -146,7 +152,7 @@ mod tests {
     use super::*;
     use ansi_term::Color;
 
-    // match_next(result: Iter<SegmentConfig>, value, style)
+    // match_next(result: Iter<Segment>, value, style)
     macro_rules! match_next {
         ($iter:ident, $value:literal, $($style:tt)+) => {
             let _next = $iter.next().unwrap();

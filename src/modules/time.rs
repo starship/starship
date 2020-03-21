@@ -1,5 +1,4 @@
 use chrono::{DateTime, FixedOffset, Local, Utc};
-use std::borrow::Cow;
 
 use super::{Context, Module};
 
@@ -45,7 +44,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.create_segment(
         "time",
         &SegmentConfig {
-            value: Cow::from(&formatted_time_string),
+            value: &formatted_time_string,
             style: None,
         },
     );
