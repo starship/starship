@@ -70,10 +70,7 @@ impl<'a> StringFormatter<'a> {
     fn _parse_variable(&self, variable: Pair<Rule>) -> String {
         let name = variable.into_inner().next().unwrap().as_str();
         let value = self.variables.get(name).expect("Cached variable not found");
-        value
-            .as_ref()
-            .map(|value| value.clone())
-            .unwrap_or_else(|| String::new())
+        value.as_ref().cloned().unwrap_or_default()
     }
 
     fn _parse_text(&self, text: Pair<Rule>) -> String {
