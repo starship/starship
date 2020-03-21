@@ -6,7 +6,7 @@ use std::collections::BTreeMap;
 use crate::config::parse_style_string;
 use crate::segment::Segment;
 
-type VariableMapType<'a> = BTreeMap<&'a str, Option<String>>;
+type VariableMapType<'a> = BTreeMap<&'a str, Option<Vec<Segment>>>;
 
 #[derive(Parser)]
 #[grammar = "formatter/spec.pest"]
@@ -26,9 +26,28 @@ impl<'a> StringFormatter<'a> {
         }
     }
 
+    /// Maps variable name to its value
     pub fn map(
         mut self,
         mapper: impl Fn(&str) -> Option<String> + Sync,
+    ) -> Result<Self, Error<Rule>> {
+        self.cache_variables()?;
+        self.variables.par_iter_mut().for_each(|(key, value)| {
+            *value = mapper(key).map(|value| {
+                vec![Segment {
+                    _name: key.to_string(),
+                    value,
+                    style: None,
+                }]
+            });
+        });
+        Ok(self)
+    }
+
+    /// Maps variable name to an array of segments
+    pub fn map_variables_to_segments(
+        mut self,
+        mapper: impl Fn(&str) -> Option<Vec<Segment>> + Sync,
     ) -> Result<Self, Error<Rule>> {
         self.cache_variables()?;
         self.variables.par_iter_mut().for_each(|(key, value)| {
@@ -59,11 +78,7 @@ impl<'a> StringFormatter<'a> {
                     self._parse_text(pair),
                     style,
                 )),
-                Rule::variable => results.push(self._new_segment(
-                    format!("_var:{}", pair.as_str()),
-                    self._parse_variable(pair),
-                    style,
-                )),
+                Rule::variable => results.extend(self._parse_variable(pair, style)),
                 Rule::textgroup => results.extend(self._parse_textgroup(pair)?),
                 _ => unreachable!(),
             }
@@ -72,10 +87,14 @@ impl<'a> StringFormatter<'a> {
         Ok(results)
     }
 
-    fn _parse_variable(&self, variable: Pair<Rule>) -> String {
+    fn _parse_variable(&self, variable: Pair<Rule>, style: Option<Style>) -> Vec<Segment> {
         let name = variable.into_inner().next().unwrap().as_str();
         let value = self.variables.get(name).expect("Cached variable not found");
-        value.as_ref().cloned().unwrap_or_default()
+        value.as_ref().map(|segments| segments.iter().map(|segment| Segment {
+            _name: segment._name.clone(),
+            value: segment.value.clone(),
+            style: segment.style.or(style),
+        }).collect::<Vec<Segment>>()).unwrap_or_else(|| vec![])
     }
 
     fn _parse_text(&self, text: Pair<Rule>) -> String {
@@ -133,11 +152,7 @@ impl<'a> StringFormatter<'a> {
                     self._parse_text(pair),
                     default_style,
                 )),
-                Rule::variable => results.push(self._new_segment(
-                    format!("_var:{}", pair.as_str()),
-                    self._parse_variable(pair),
-                    default_style,
-                )),
+                Rule::variable => results.extend(self._parse_variable(pair, default_style)),
                 Rule::textgroup => results.extend(self._parse_textgroup(pair)?),
                 _ => unreachable!(),
             }
