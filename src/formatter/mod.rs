@@ -40,18 +40,20 @@ where
         let format = inner_rules.next().unwrap();
         let style_str = inner_rules.next().unwrap().as_str();
         let style = parse_style_string(style_str);
-        let pairs: Vec<SegmentConfig<'a>> = format
-            .into_inner()
-            .flat_map(|pair: Pair<Rule>| match pair.as_rule() {
-                Rule::text => Ok(vec![self._new_segment(self._parse_text(pair), style)]),
-                Rule::variable => Ok(vec![self._new_segment(self._parse_variable(pair), style)]),
-                Rule::textgroup => self._parse_textgroup(pair),
-                _ => unreachable!(),
-            })
-            .flatten()
-            .collect();
+        let mut results: Vec<SegmentConfig<'a>> = Vec::new();
 
-        Ok(pairs)
+        for pair in format.into_inner() {
+            match pair.as_rule() {
+                Rule::text => results.push(self._new_segment(self._parse_text(pair), style)),
+                Rule::variable => {
+                    results.push(self._new_segment(self._parse_variable(pair), style))
+                }
+                Rule::textgroup => results.extend(self._parse_textgroup(pair)?),
+                _ => unreachable!(),
+            }
+        }
+
+        Ok(results)
     }
 
     fn _parse_variable(&self, variable: Pair<Rule>) -> String {
@@ -69,23 +71,23 @@ where
         default_style: Option<Style>,
     ) -> Result<Vec<SegmentConfig<'a>>, Error<Rule>> {
         let pairs = IdentParser::parse(Rule::expression, self.format)?;
+        let mut results: Vec<SegmentConfig<'a>> = Vec::new();
 
         // Lifetime of SegmentConfig is the same as self.format
-        let result: Vec<SegmentConfig<'a>> = pairs
-            .take_while(|pair| pair.as_rule() != Rule::EOI)
-            .flat_map(|pair| match pair.as_rule() {
-                Rule::text => Ok(vec![
-                    self._new_segment(self._parse_text(pair), default_style)
-                ]),
-                Rule::variable => Ok(vec![
-                    self._new_segment(self._parse_variable(pair), default_style)
-                ]),
-                Rule::textgroup => self._parse_textgroup(pair),
+        for pair in pairs.take_while(|pair| pair.as_rule() != Rule::EOI) {
+            match pair.as_rule() {
+                Rule::text => {
+                    results.push(self._new_segment(self._parse_text(pair), default_style))
+                }
+                Rule::variable => {
+                    results.push(self._new_segment(self._parse_variable(pair), default_style))
+                }
+                Rule::textgroup => results.extend(self._parse_textgroup(pair)?),
                 _ => unreachable!(),
-            })
-            .flatten()
-            .collect();
-        Ok(result)
+            }
+        }
+
+        Ok(results)
     }
 }
 
@@ -100,7 +102,6 @@ mod tests {
             let _next = $iter.next().unwrap();
             assert_eq!(_next.value, $value);
             assert_eq!(_next.style, $($style)+);
-            drop(_next);
         }
     }
 
@@ -175,13 +176,6 @@ mod tests {
         // brackets without escape
         {
             const FORMAT_STR: &str = "[";
-
-            let formatter = StringFormatter::new(FORMAT_STR, empty_mapper);
-            assert!(formatter.parse(None).is_err());
-        }
-        // Empty style string
-        {
-            const FORMAT_STR: &str = "[]()";
 
             let formatter = StringFormatter::new(FORMAT_STR, empty_mapper);
             assert!(formatter.parse(None).is_err());
