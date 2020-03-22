@@ -883,7 +883,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "starship"
-version = "0.38.0"
+version = "0.38.1"
 dependencies = [
  "ansi_term 0.12.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "attohttpc 0.12.0 (registry+https://github.com/rust-lang/crates.io-index)",
