@@ -826,6 +826,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 # ~/.config/starship.toml
 
 [memory_usage]
+disabled = false
 show_percentage = true
 show_swap = true
 threshold = -1
