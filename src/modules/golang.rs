@@ -18,12 +18,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_go_project = context
         .try_begin_scan()?
         .set_files(&[
-                   "go.mod",
-                   "go.sum",
-                   "glide.yaml",
-                   "Gopkg.yml",
-                   "Gopkg.lock",
-                   ".go-version",
+            "go.mod",
+            "go.sum",
+            "glide.yaml",
+            "Gopkg.yml",
+            "Gopkg.lock",
+            ".go-version",
         ])
         .set_extensions(&["go"])
         .set_folders(&["Godeps"])
