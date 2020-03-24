@@ -104,12 +104,12 @@
 **The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **Rapide** : il est rapide - _vraiment vraiment_ rapide ! 🚀
+- **Personnalisable:** configurer chaque élément de votre invite.
+- **Universel:** fonctionne avec n'importe quel shell, sur n'importe quel système d'exploitation.
+- **Intelligent:** affiche les informations utiles en un coup d'oeil.
+- **Riche en fonctionnalités:** supporte tous vos outils favoris.
+- **Facile:** rapide à installer - commencer à l'utiliser en quelques minutes.
 
 <p align="center">
 <a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
