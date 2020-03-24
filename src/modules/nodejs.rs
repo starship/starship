@@ -7,12 +7,12 @@ use crate::utils;
 ///
 /// Will display the Node.js version if any of the following criteria are met:
 ///     - Current directory contains a `.js` file
-///     - Current directory contains a `package.json` file
+///     - Current directory contains a `package.json` or `.node-version` file
 ///     - Current directory contains a `node_modules` directory
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_js_project = context
         .try_begin_scan()?
-        .set_files(&["package.json"])
+        .set_files(&["package.json", ".node-version"])
         .set_extensions(&["js"])
         .set_folders(&["node_modules"])
         .is_match();
