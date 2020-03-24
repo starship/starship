@@ -18,7 +18,7 @@ pub struct StringFormatter<'a> {
 
 impl<'a> StringFormatter<'a> {
     /// Creates an instance of StringFormatter from a format string
-    pub fn from_str(format: &'a str) -> Result<Self, Error<Rule>> {
+    pub fn new(format: &'a str) -> Result<Self, Error<Rule>> {
         parse(format)
             .map(|format| {
                 let variables = _get_variables(&format);
@@ -56,7 +56,7 @@ impl<'a> StringFormatter<'a> {
             _parse_format(textgroup.format, style, &variables)
         }
 
-        fn _parse_style<'a>(style: Vec<StyleElement<'a>>) -> Option<Style> {
+        fn _parse_style(style: Vec<StyleElement>) -> Option<Style> {
             let style_string = style
                 .iter()
                 .flat_map(|style| match style {
@@ -95,8 +95,8 @@ impl<'a> StringFormatter<'a> {
                     }
                     FormatElement::Variable(name) => variables
                         .get(name.as_ref())
-                        .map(|segments| segments.clone().unwrap_or_else(|| Vec::new()))
-                        .unwrap_or_else(|| Vec::new()),
+                        .map(|segments| segments.clone().unwrap_or_default())
+                        .unwrap_or_default(),
                 };
                 result.append(&mut segments);
             }
@@ -108,8 +108,8 @@ impl<'a> StringFormatter<'a> {
     }
 }
 
-/// Extract variable names from `Vec<FormatElement>` into a `BTreeMap`
-fn _get_variables<'a>(format: &'a Vec<FormatElement<'a>>) -> VariableMapType {
+/// Extract variable names from an array of `FormatElement` into a `BTreeMap`
+fn _get_variables<'a>(format: &[FormatElement<'a>]) -> VariableMapType {
     let mut variables: VariableMapType = Default::default();
 
     fn _push_variables_from_textgroup<'a>(
@@ -181,9 +181,7 @@ mod tests {
         const FORMAT_STR: &str = "text";
         let style = Some(Color::Red.bold());
 
-        let formatter = StringFormatter::from_str(FORMAT_STR)
-            .unwrap()
-            .map(empty_mapper);
+        let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
         let result = formatter.parse(style);
         let mut result_iter = result.iter();
         match_next!(result_iter, "text", style);
@@ -192,9 +190,7 @@ mod tests {
     #[test]
     fn test_textgroup_text_only() {
         const FORMAT_STR: &str = "[text](red bold)";
-        let formatter = StringFormatter::from_str(FORMAT_STR)
-            .unwrap()
-            .map(empty_mapper);
+        let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
         let result = formatter.parse(None);
         let mut result_iter = result.iter();
         match_next!(result_iter, "text", Some(Color::Red.bold()));
@@ -204,13 +200,12 @@ mod tests {
     fn test_variable_only() {
         const FORMAT_STR: &str = "$var1";
 
-        let formatter =
-            StringFormatter::from_str(FORMAT_STR)
-                .unwrap()
-                .map(|variable| match variable {
-                    "var1" => Some("text1".to_owned()),
-                    _ => None,
-                });
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map(|variable| match variable {
+                "var1" => Some("text1".to_owned()),
+                _ => None,
+            });
         let result = formatter.parse(None);
         let mut result_iter = result.iter();
         match_next!(result_iter, "text1", None);
@@ -220,9 +215,7 @@ mod tests {
     fn test_escaped_chars() {
         const FORMAT_STR: &str = r#"\\\[\$text\]\(red bold\)"#;
 
-        let formatter = StringFormatter::from_str(FORMAT_STR)
-            .unwrap()
-            .map(empty_mapper);
+        let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
         let result = formatter.parse(None);
         let mut result_iter = result.iter();
         match_next!(result_iter, r#"\[$text](red bold)"#, None);
@@ -235,9 +228,7 @@ mod tests {
         let middle_style = Some(Color::Red.bold());
         let inner_style = Some(Color::Blue.normal());
 
-        let formatter = StringFormatter::from_str(FORMAT_STR)
-            .unwrap()
-            .map(empty_mapper);
+        let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
         let result = formatter.parse(outer_style);
         let mut result_iter = result.iter();
         match_next!(result_iter, "outer ", outer_style);
@@ -250,12 +241,12 @@ mod tests {
         // brackets without escape
         {
             const FORMAT_STR: &str = "[";
-            assert!(StringFormatter::from_str(FORMAT_STR).is_err());
+            assert!(StringFormatter::new(FORMAT_STR).is_err());
         }
         // Dollar without variable
         {
             const FORMAT_STR: &str = "$ ";
-            assert!(StringFormatter::from_str(FORMAT_STR).is_err());
+            assert!(StringFormatter::new(FORMAT_STR).is_err());
         }
     }
 }
