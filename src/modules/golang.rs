@@ -11,12 +11,20 @@ use crate::utils;
 ///     - Current directory contains a `glide.yaml` file
 ///     - Current directory contains a `Gopkg.yml` file
 ///     - Current directory contains a `Gopkg.lock` file
+///     - Current directory contains a `.go-version` file
 ///     - Current directory contains a `Godeps` directory
 ///     - Current directory contains a file with the `.go` extension
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_go_project = context
         .try_begin_scan()?
-        .set_files(&["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock"])
+        .set_files(&[
+                   "go.mod",
+                   "go.sum",
+                   "glide.yaml",
+                   "Gopkg.yml",
+                   "Gopkg.lock",
+                   ".go-version",
+        ])
         .set_extensions(&["go"])
         .set_folders(&["Godeps"])
         .is_match();
