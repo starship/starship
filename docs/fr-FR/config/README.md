@@ -47,16 +47,16 @@ Voici la représentation du module node. Dans l'exemple suivant, "symbol" et "ve
 
 ### Chaînes de style
 
-La plupart des modules de Starship vous permettent de configurer leurs styles d'affichage. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+La plupart des modules de Starship vous permettent de configurer leurs styles d'affichage. Cela se fait avec une entrée (généralement appelée `style`) qui est une chaîne de caractères spécifiant la configuration. Voici quelques exemples de chaînes de style avec ce qu'elles font. Pour plus de détails sur la syntaxe complète, consultez le [guide de configuration avancé](/advanced-config/).
 
-- `"fg:green bg:blue"` sets green text on a blue background
-- `"bg:blue fg:bright-green"` sets bright green text on a blue background
-- `"bold fg:27"` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
-- `"underline bg:#bf5700"` sets underlined text on a burnt orange background
-- `"bold italic fg:purple"` sets bold italic purple text
-- `""` explicitly disables all styling
+- `"fg:green bg:blue"` définit un texte vert sur un fond bleu
+- `"bg:blue fg:bright-green"` définit un texte vert clair sur un fond bleu
+- `"bold fg:27"` définit le texte en gras avec la [couleur ANSI](https://i.stack.imgur.com/KTSQa.png) 27
+- `"underline bg:#bf5700"` définit le texte en souligné sur un fond orange foncé
+- `"bold italic fg:violet"` définit le texte en italique et gras sur un fond violet
+- `""` désactive explicitement tous les styles
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+Notez que ce style sera contrôlé par votre émulateur de terminal. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
 ## Prompt
 
@@ -1104,7 +1104,7 @@ symbol = "🏎💨 "
 
 ## Temps
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Le module `time` affiche l'heure actuelle **localement**. La valeur de `format` est utilisée par le package [`chrono`](https://crates.io/crates/chrono) pour contrôler la façon dont l'heure est affichée. Consultez la [doc de chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) pour découvrir les options disponibles.
 
 ::: tip
 
@@ -1117,7 +1117,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | Variable          | Défault         | Description                                                                                                                                         |
 | ----------------- | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `use_12hr`        | `false`         | Activer le format 12h                                                                                                                               |
-| `format`          | voir plus bas   | Le [format chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) utilisé pour formater le temps.                                  |
+| `format`          | voir plus bas   | Le [format chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) utilisé pour formater l'heure.                                   |
 | `style`           | `"bold yellow"` | Le style utilisé par le module                                                                                                                      |
 | `utc_time_offset` | `"local"`       | Définir le décalage horaire UTC à utiliser. Intervalle de -24 < x < 24. Accepte des nombres décimaux pour s'adapter aux décalages de 30/45 minutes. |
 | `disabled`        | `true`          | Désactiver le module `time`.                                                                                                                        |
