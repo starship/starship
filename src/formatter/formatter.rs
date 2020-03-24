@@ -17,7 +17,7 @@ pub struct StringFormatter<'a> {
 }
 
 impl<'a> StringFormatter<'a> {
-    /// Creates an instance of StringFormatter from a format string.
+    /// Creates an instance of StringFormatter from a format string
     pub fn from_str(format: &'a str) -> Result<Self, Error<Rule>> {
         parse(format)
             .map(|format| {
@@ -30,13 +30,7 @@ impl<'a> StringFormatter<'a> {
     /// Maps variable name to its value
     pub fn map(mut self, mapper: impl Fn(&str) -> Option<String> + Sync) -> Self {
         self.variables.par_iter_mut().for_each(|(key, value)| {
-            *value = mapper(key).map(|value| {
-                vec![Segment {
-                    _name: key.to_string(),
-                    value,
-                    style: None,
-                }]
-            });
+            *value = mapper(key).map(|value| vec![_new_segment(key.to_string(), value, None)]);
         });
         self
     }
@@ -101,8 +95,8 @@ impl<'a> StringFormatter<'a> {
                     }
                     FormatElement::Variable(name) => variables
                         .get(name.as_ref())
-                        .map(|segments| segments.clone().unwrap_or_else(|| vec![]))
-                        .unwrap_or_else(|| vec![]),
+                        .map(|segments| segments.clone().unwrap_or_else(|| Vec::new()))
+                        .unwrap_or_else(|| Vec::new()),
                 };
                 result.append(&mut segments);
             }
@@ -114,6 +108,7 @@ impl<'a> StringFormatter<'a> {
     }
 }
 
+/// Extract variable names from `Vec<FormatElement>` into a `BTreeMap`
 fn _get_variables<'a>(format: &'a Vec<FormatElement<'a>>) -> VariableMapType {
     let mut variables: VariableMapType = Default::default();
 
@@ -154,6 +149,7 @@ fn _get_variables<'a>(format: &'a Vec<FormatElement<'a>>) -> VariableMapType {
     variables
 }
 
+/// Helper function to create a new segment
 fn _new_segment(name: String, value: String, style: Option<Style>) -> Segment {
     Segment {
         _name: name,
