@@ -27,7 +27,7 @@ symbol = "➜"     # Le segment "symbol" est mis comme "➜"
 disabled = true
 ```
 
-You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+Vous pouvez changer l'emplacement du fichier de configuration `starship.toml` grâce à la variable d'environnement `STARSHIP_CONFIG`:
 ```sh
 export STARSHIP_CONFIG=~/.starship
 ```
@@ -754,7 +754,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
 
 :::
 
@@ -804,7 +804,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
 
 :::
 
@@ -1108,23 +1108,23 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
 
 :::
 
 ### Options
 
-| Variable          | Default         | Description                                                                                                         |
+| Variable          | Défault         | Description                                                                                                         |
 | ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | Enables 12 hour formatting                                                                                          |
-| `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`           | `"bold yellow"` | The style for the module time                                                                                       |
+| `use_12hr`        | `false`         | Activer le format 12h                                                                                               |
+| `format`          | voir plus bas   | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `"bold yellow"` | Le style utilisé par le module                                                                                      |
 | `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
-| `disabled`        | `true`          | Disables the `time` module.                                                                                         |
+| `disabled`        | `true`          | Désactiver le module `time`.                                                                                        |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -1135,25 +1135,25 @@ format = "🕙[ %T ]"
 utc_time_offset = "-5"
 ```
 
-## Username
+## Nom d'utilisateur
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le module est affiché si l'une des ces conditions est remplie :
 
-- The current user is root
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- L'utilisateur courant est root
+- L'utilisateur courant est différent de celui connecté
+- L'utilisateur est actuellement connecté à une session SSH
+- La variable `show_always` a comme valeur true
 
 ### Options
 
-| Variable      | Default         | Description                           |
-| ------------- | --------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`    | The style used when the user is root. |
-| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
-| `show_always` | `false`         | Always shows the `username` module.   |
-| `disabled`    | `false`         | Disables the `username` module.       |
+| Variable      | Défaut          | Description                                      |
+| ------------- | --------------- | ------------------------------------------------ |
+| `style_root`  | `"bold red"`    | Le style utilisé quand l'utilisateur est root.   |
+| `style_user`  | `"bold yellow"` | Le style utilisé pour les utilisateurs non-root. |
+| `show_always` | `false`         | Toujours afficher le module `username`.          |
+| `disabled`    | `false`         | Désactiver le module `username`.                 |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
