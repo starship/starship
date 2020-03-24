@@ -7,11 +7,11 @@ use crate::utils;
 ///
 /// Will display the PHP version if any of the following criteria are met:
 ///     - Current directory contains a `.php` file
-///     - Current directory contains a `composer.json` file
+///     - Current directory contains a `composer.json` or `.php-version` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_php_project = context
         .try_begin_scan()?
-        .set_files(&["composer.json"])
+        .set_files(&["composer.json", ".php-version"])
         .set_extensions(&["php"])
         .is_match();
 
