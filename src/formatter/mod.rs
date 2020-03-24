@@ -1,5 +1,5 @@
-pub mod formatter;
+pub mod string_formatter;
 pub mod model;
 mod parser;
 
-pub use formatter::StringFormatter;
+pub use string_formatter::StringFormatter;
