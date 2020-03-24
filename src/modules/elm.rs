@@ -8,12 +8,13 @@ use crate::utils;
 /// Will display the Elm version if any of the following criteria are met:
 ///     - The current directory contains a `elm.json` file
 ///     - The current directory contains a `elm-package.json` file
+///     - The current directory contains a `.elm-version` file
 ///     - The current directory contains a `elm-stuff` folder
 ///     - The current directory contains a `*.elm` files
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_elm_project = context
         .try_begin_scan()?
-        .set_files(&["elm.json", "elm-package.json"])
+        .set_files(&["elm.json", "elm-package.json", ".elm-version"])
         .set_extensions(&["elm"])
         .set_folders(&["elm-stuff"])
         .is_match();
