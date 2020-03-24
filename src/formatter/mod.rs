@@ -1,37 +1,52 @@
 use ansi_term::Style;
 use pest::{error::Error, iterators::Pair, Parser};
 use rayon::prelude::*;
+use std::borrow::Cow;
 use std::collections::BTreeMap;
 
 use crate::config::parse_style_string;
 use crate::segment::Segment;
 
-type VariableMapType<'a> = BTreeMap<&'a str, Option<Vec<Segment>>>;
+type VariableMapType = BTreeMap<String, Option<Vec<Segment>>>;
 
 #[derive(Parser)]
 #[grammar = "formatter/spec.pest"]
 struct IdentParser;
 
+struct TextGroup<'a> {
+    format: Vec<FormatElement<'a>>,
+    style: Vec<StyleElement<'a>>,
+}
+
+enum FormatElement<'a> {
+    Text(Cow<'a, str>),
+    Variable(Cow<'a, str>),
+    TextGroup(TextGroup<'a>),
+}
+
+enum StyleElement<'a> {
+    Text(Cow<'a, str>),
+    Variable(Cow<'a, str>),
+}
+
 pub struct StringFormatter<'a> {
-    format: &'a str,
-    variables: VariableMapType<'a>,
+    format: Vec<FormatElement<'a>>,
+    variables: VariableMapType,
 }
 
 impl<'a> StringFormatter<'a> {
-    /// Creates an instance of StringFormatter.
-    pub fn new(format: &'a str) -> Self {
-        Self {
-            format,
-            variables: Default::default(),
-        }
+    /// Creates an instance of StringFormatter from a format string.
+    pub fn from_str(format: &'a str) -> Result<Self, Error<Rule>> {
+        _parse(format)
+            .map(|format| {
+                let variables = _get_variables(&format);
+                (format, variables)
+            })
+            .map(|(format, variables)| Self { format, variables })
     }
 
     /// Maps variable name to its value
-    pub fn map(
-        mut self,
-        mapper: impl Fn(&str) -> Option<String> + Sync,
-    ) -> Result<Self, Error<Rule>> {
-        self.cache_variables()?;
+    pub fn map(mut self, mapper: impl Fn(&str) -> Option<String> + Sync) -> Self {
         self.variables.par_iter_mut().for_each(|(key, value)| {
             *value = mapper(key).map(|value| {
                 vec![Segment {
@@ -41,124 +56,196 @@ impl<'a> StringFormatter<'a> {
                 }]
             });
         });
-        Ok(self)
+        self
     }
 
     /// Maps variable name to an array of segments
     pub fn map_variables_to_segments(
         mut self,
         mapper: impl Fn(&str) -> Option<Vec<Segment>> + Sync,
-    ) -> Result<Self, Error<Rule>> {
-        self.cache_variables()?;
+    ) -> Self {
         self.variables.par_iter_mut().for_each(|(key, value)| {
             *value = mapper(key);
         });
-        Ok(self)
+        self
     }
 
-    fn _new_segment(&self, name: String, value: String, style: Option<Style>) -> Segment {
-        Segment {
-            _name: name,
-            value,
-            style,
+    /// Parse the format string and consume self.
+    pub fn parse(self, default_style: Option<Style>) -> Vec<Segment> {
+        fn _parse_textgroup<'a>(
+            textgroup: TextGroup<'a>,
+            variables: &'a VariableMapType,
+        ) -> Vec<Segment> {
+            let style = _parse_style(textgroup.style);
+            _parse_format(textgroup.format, style, &variables)
         }
-    }
 
-    fn _parse_textgroup(&self, textgroup: Pair<Rule>) -> Result<Vec<Segment>, Error<Rule>> {
-        let mut inner_rules = textgroup.into_inner();
-        let format = inner_rules.next().unwrap();
-        let style_str = inner_rules.next().unwrap().as_str();
-        let style = parse_style_string(style_str);
-        let mut results: Vec<Segment> = Vec::new();
+        fn _parse_style<'a>(style: Vec<StyleElement<'a>>) -> Option<Style> {
+            let style_string = style
+                .iter()
+                .flat_map(|style| match style {
+                    StyleElement::Text(text) => text.as_ref().chars(),
+                    StyleElement::Variable(variable) => {
+                        log::warn!(
+                            "Variable `{}` monitored in style string, which is not allowed",
+                            &variable
+                        );
+                        "".chars()
+                    }
+                })
+                .collect::<String>();
+            parse_style_string(&style_string)
+        }
 
-        for pair in format.into_inner() {
-            match pair.as_rule() {
-                Rule::text => results.push(self._new_segment(
-                    "_text".to_owned(),
-                    self._parse_text(pair),
-                    style,
-                )),
-                Rule::variable => results.extend(self._parse_variable(pair, style)),
-                Rule::textgroup => results.extend(self._parse_textgroup(pair)?),
-                _ => unreachable!(),
+        fn _parse_format<'a>(
+            mut format: Vec<FormatElement<'a>>,
+            style: Option<Style>,
+            variables: &'a VariableMapType,
+        ) -> Vec<Segment> {
+            let mut result: Vec<Segment> = Vec::new();
+
+            format.reverse();
+            while let Some(el) = format.pop() {
+                let mut segments = match el {
+                    FormatElement::Text(text) => {
+                        vec![_new_segment("_text".into(), text.into_owned(), style)]
+                    }
+                    FormatElement::TextGroup(textgroup) => {
+                        let textgroup = TextGroup {
+                            format: textgroup.format,
+                            style: textgroup.style,
+                        };
+                        _parse_textgroup(textgroup, &variables)
+                    }
+                    FormatElement::Variable(name) => variables
+                        .get(name.as_ref())
+                        .map(|segments| segments.clone().unwrap_or_else(|| vec![]))
+                        .unwrap_or_else(|| vec![]),
+                };
+                result.append(&mut segments);
             }
+
+            result
         }
 
-        Ok(results)
+        _parse_format(self.format, default_style, &self.variables)
     }
+}
 
-    fn _parse_variable(&self, variable: Pair<Rule>, style: Option<Style>) -> Vec<Segment> {
-        let name = variable.into_inner().next().unwrap().as_str();
-        let value = self.variables.get(name).expect("Cached variable not found");
-        value.as_ref().map(|segments| segments.iter().map(|segment| Segment {
-            _name: segment._name.clone(),
-            value: segment.value.clone(),
-            style: segment.style.or(style),
-        }).collect::<Vec<Segment>>()).unwrap_or_else(|| vec![])
+fn _parse_textgroup(textgroup: Pair<Rule>) -> TextGroup {
+    let mut inner_rules = textgroup.into_inner();
+    let format = inner_rules.next().unwrap();
+    let style = inner_rules.next().unwrap();
+
+    TextGroup {
+        format: _parse_format(format),
+        style: _parse_style(style),
     }
+}
 
-    fn _parse_text(&self, text: Pair<Rule>) -> String {
-        let mut result = String::new();
-        for pair in text.into_inner() {
-            result.push_str(pair.as_str());
+fn _parse_variable(variable: Pair<Rule>) -> &str {
+    variable.into_inner().next().unwrap().as_str()
+}
+
+fn _parse_text(text: Pair<Rule>) -> String {
+    let mut result = String::new();
+    for pair in text.into_inner() {
+        result.push_str(pair.as_str());
+    }
+    result
+}
+
+fn _parse_format(format: Pair<Rule>) -> Vec<FormatElement> {
+    let mut result: Vec<FormatElement> = Vec::new();
+
+    for pair in format.into_inner() {
+        match pair.as_rule() {
+            Rule::text => result.push(FormatElement::Text(_parse_text(pair).into())),
+            Rule::variable => result.push(FormatElement::Variable(_parse_variable(pair).into())),
+            Rule::textgroup => result.push(FormatElement::TextGroup(_parse_textgroup(pair))),
+            _ => unreachable!(),
         }
-        result
     }
 
-    fn cache_variables(&mut self) -> Result<(), Error<Rule>> {
-        let pairs = IdentParser::parse(Rule::expression, self.format)?;
+    result
+}
 
-        fn _push_variables_from_textgroup<'a>(
-            variables: &mut VariableMapType<'a>,
-            textgroup: Pair<'a, Rule>,
-        ) {
-            let mut inner_rules = textgroup.into_inner();
-            let format = inner_rules.next().unwrap();
-            for pair in format.into_inner() {
-                match pair.as_rule() {
-                    Rule::variable => _push_variable(variables, pair),
-                    Rule::textgroup => _push_variables_from_textgroup(variables, pair),
-                    _ => {}
+fn _parse_style(style: Pair<Rule>) -> Vec<StyleElement> {
+    let mut result: Vec<StyleElement> = Vec::new();
+
+    for pair in style.into_inner() {
+        match pair.as_rule() {
+            Rule::text => result.push(StyleElement::Text(_parse_text(pair).into())),
+            Rule::variable => result.push(StyleElement::Variable(_parse_variable(pair).into())),
+            _ => unreachable!(),
+        }
+    }
+
+    result
+}
+
+fn _parse(format: &str) -> Result<Vec<FormatElement>, Error<Rule>> {
+    let pairs = IdentParser::parse(Rule::expression, format)?;
+    let mut result: Vec<FormatElement> = Vec::new();
+
+    // Lifetime of Segment is the same as result
+    for pair in pairs.take_while(|pair| pair.as_rule() != Rule::EOI) {
+        match pair.as_rule() {
+            Rule::text => result.push(FormatElement::Text(_parse_text(pair).into())),
+            Rule::variable => result.push(FormatElement::Variable(_parse_variable(pair).into())),
+            Rule::textgroup => result.push(FormatElement::TextGroup(_parse_textgroup(pair))),
+            _ => unreachable!(),
+        }
+    }
+
+    Ok(result)
+}
+
+fn _get_variables<'a>(format: &'a Vec<FormatElement<'a>>) -> VariableMapType {
+    let mut variables: VariableMapType = Default::default();
+
+    fn _push_variables_from_textgroup<'a>(
+        variables: &mut VariableMapType,
+        textgroup: &'a TextGroup<'a>,
+    ) {
+        for el in &textgroup.format {
+            match el {
+                FormatElement::Variable(name) => _push_variable(variables, name.as_ref()),
+                FormatElement::TextGroup(textgroup) => {
+                    _push_variables_from_textgroup(variables, &textgroup)
                 }
-            }
-        }
-
-        fn _push_variable<'a>(variables: &mut VariableMapType<'a>, pair: Pair<'a, Rule>) {
-            let variable_name = pair.into_inner().next().unwrap().as_str();
-            variables.insert(variable_name, None);
-        }
-
-        for pair in pairs {
-            match pair.as_rule() {
-                Rule::variable => _push_variable(&mut self.variables, pair),
-                Rule::textgroup => _push_variables_from_textgroup(&mut self.variables, pair),
                 _ => {}
             }
         }
-
-        Ok(())
-    }
-
-    /// Parse the format string.
-    pub fn parse(&self, default_style: Option<Style>) -> Result<Vec<Segment>, Error<Rule>> {
-        let pairs = IdentParser::parse(Rule::expression, self.format)?;
-        let mut results: Vec<Segment> = Vec::new();
-
-        // Lifetime of Segment is the same as self.format
-        for pair in pairs.take_while(|pair| pair.as_rule() != Rule::EOI) {
-            match pair.as_rule() {
-                Rule::text => results.push(self._new_segment(
-                    "_text".to_owned(),
-                    self._parse_text(pair),
-                    default_style,
-                )),
-                Rule::variable => results.extend(self._parse_variable(pair, default_style)),
-                Rule::textgroup => results.extend(self._parse_textgroup(pair)?),
-                _ => unreachable!(),
+        for el in &textgroup.style {
+            if let StyleElement::Variable(name) = el {
+                _push_variable(variables, name.as_ref())
             }
         }
+    }
 
-        Ok(results)
+    fn _push_variable<'a>(variables: &mut VariableMapType, name: &'a str) {
+        variables.insert(name.to_owned(), None);
+    }
+
+    for el in format {
+        match el {
+            FormatElement::Variable(name) => _push_variable(&mut variables, name.as_ref()),
+            FormatElement::TextGroup(textgroup) => {
+                _push_variables_from_textgroup(&mut variables, &textgroup)
+            }
+            _ => {}
+        }
+    }
+
+    variables
+}
+
+fn _new_segment(name: String, value: String, style: Option<Style>) -> Segment {
+    Segment {
+        _name: name,
+        value,
+        style,
     }
 }
 
@@ -185,8 +272,10 @@ mod tests {
         const FORMAT_STR: &str = "text";
         let style = Some(Color::Red.bold());
 
-        let formatter = StringFormatter::new(FORMAT_STR).map(empty_mapper).unwrap();
-        let result = formatter.parse(style).unwrap();
+        let formatter = StringFormatter::from_str(FORMAT_STR)
+            .unwrap()
+            .map(empty_mapper);
+        let result = formatter.parse(style);
         let mut result_iter = result.iter();
         match_next!(result_iter, "text", style);
     }
@@ -194,8 +283,10 @@ mod tests {
     #[test]
     fn test_textgroup_text_only() {
         const FORMAT_STR: &str = "[text](red bold)";
-        let formatter = StringFormatter::new(FORMAT_STR).map(empty_mapper).unwrap();
-        let result = formatter.parse(None).unwrap();
+        let formatter = StringFormatter::from_str(FORMAT_STR)
+            .unwrap()
+            .map(empty_mapper);
+        let result = formatter.parse(None);
         let mut result_iter = result.iter();
         match_next!(result_iter, "text", Some(Color::Red.bold()));
     }
@@ -204,13 +295,14 @@ mod tests {
     fn test_variable_only() {
         const FORMAT_STR: &str = "$var1";
 
-        let formatter = StringFormatter::new(FORMAT_STR)
-            .map(|variable| match variable {
-                "var1" => Some("text1".to_owned()),
-                _ => None,
-            })
-            .unwrap();
-        let result = formatter.parse(None).unwrap();
+        let formatter =
+            StringFormatter::from_str(FORMAT_STR)
+                .unwrap()
+                .map(|variable| match variable {
+                    "var1" => Some("text1".to_owned()),
+                    _ => None,
+                });
+        let result = formatter.parse(None);
         let mut result_iter = result.iter();
         match_next!(result_iter, "text1", None);
     }
@@ -219,8 +311,10 @@ mod tests {
     fn test_escaped_chars() {
         const FORMAT_STR: &str = r#"\\\[\$text\]\(red bold\)"#;
 
-        let formatter = StringFormatter::new(FORMAT_STR).map(empty_mapper).unwrap();
-        let result = formatter.parse(None).unwrap();
+        let formatter = StringFormatter::from_str(FORMAT_STR)
+            .unwrap()
+            .map(empty_mapper);
+        let result = formatter.parse(None);
         let mut result_iter = result.iter();
         match_next!(result_iter, r#"\[$text](red bold)"#, None);
     }
@@ -232,8 +326,10 @@ mod tests {
         let middle_style = Some(Color::Red.bold());
         let inner_style = Some(Color::Blue.normal());
 
-        let formatter = StringFormatter::new(FORMAT_STR).map(empty_mapper).unwrap();
-        let result = formatter.parse(outer_style).unwrap();
+        let formatter = StringFormatter::from_str(FORMAT_STR)
+            .unwrap()
+            .map(empty_mapper);
+        let result = formatter.parse(outer_style);
         let mut result_iter = result.iter();
         match_next!(result_iter, "outer ", outer_style);
         match_next!(result_iter, "middle ", middle_style);
@@ -245,12 +341,12 @@ mod tests {
         // brackets without escape
         {
             const FORMAT_STR: &str = "[";
-            assert!(StringFormatter::new(FORMAT_STR).map(empty_mapper).is_err());
+            assert!(StringFormatter::from_str(FORMAT_STR).is_err());
         }
         // Dollar without variable
         {
             const FORMAT_STR: &str = "$ ";
-            assert!(StringFormatter::new(FORMAT_STR).map(empty_mapper).is_err());
+            assert!(StringFormatter::from_str(FORMAT_STR).is_err());
         }
     }
 }

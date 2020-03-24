@@ -13,4 +13,4 @@ escaped_char = { "[" | "]" | "(" | ")" | "\\" | "$" }
 
 textgroup = { "[" ~ format ~ "]" ~ "(" ~ style ~ ")" }
 format = { (variable | text | textgroup)* }
-style = @{ text* }
+style = { (variable | text)* }
