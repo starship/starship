@@ -7,11 +7,11 @@ use crate::utils;
 ///
 /// Will display the Ruby version if any of the following criteria are met:
 ///     - Current directory contains a `.rb` file
-///     - Current directory contains a `Gemfile` file
+///     - Current directory contains a `Gemfile` or `.ruby-version` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_rb_project = context
         .try_begin_scan()?
-        .set_files(&["Gemfile"])
+        .set_files(&["Gemfile", ".ruby-version"])
         .set_extensions(&["rb"])
         .is_match();
 
