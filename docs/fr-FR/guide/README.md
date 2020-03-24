@@ -26,7 +26,7 @@
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Follow @StarshipPrompt on Twitter" /></a>
+      alt="Suivez @StarshipPrompt sur Twitter" /></a>
 </p>
 
 <p align="center">
@@ -83,7 +83,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png"
-      alt="Español" /></a>
+      alt="Espagnol" /></a>
   &nbsp;
   <a href="https://translate.starship.rs/project/starship-prompt/fr"
     ><img
@@ -101,7 +101,7 @@
   align="right" />
 
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**L'invite minimaliste, ultra-rapide et personnalisable à l'infini pour n'importe quel shell !**
 
 
 - **Rapide** : il est rapide - _vraiment vraiment_ rapide ! 🚀
@@ -112,7 +112,7 @@
 - **Facile:** rapide à installer - commencer à l'utiliser en quelques minutes.
 
 <p align="center">
-<a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/"><strong>Consulter la documentation de Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 ## 🚀 Installation
@@ -129,14 +129,14 @@
    #### Installer la dernière version
 
 
-   ##### From prebuilt binary, with Shell:
+   ##### Depuis une version pré-compilée depuis le shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   ##### From source on [crates.io](https://crates.io/):
+   ##### Depuis la source sur [crates.io](https://crates.io/):
 
    ```sh
    cargo install starship
