@@ -56,21 +56,21 @@ La plupart des modules de Starship vous permettent de configurer leurs styles d'
 - `"bold italic fg:violet"` définit le texte en italique et gras sur un fond violet
 - `""` désactive explicitement tous les styles
 
-Notez que ce style sera contrôlé par votre émulateur de terminal. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+Notez que ce style sera contrôlé par votre émulateur de terminal. Par exemple, certains émulateurs de terminal éclairciront les couleurs au lieu de mettre le texte en gras, et certains thèmes de couleurs utilisent les mêmes valeurs pour les couleurs normales et claires. De plus, pour obtenir du texte italique, votre terminal doit prendre en charge l'italique.
 
-## Prompt
+## Invite
 
-This is the list of prompt-wide configuration options.
+Voici la liste des options de configuration de l'invite en lui-même.
 
 ### Options
 
-| Variable       | Default                       | Description                                            |
-| -------------- | ----------------------------- | ------------------------------------------------------ |
-| `add_newline`  | `true`                        | Add a new line before the start of the prompt.         |
-| `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
-| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).  |
+| Variable       | Default                       | Description                                                               |
+| -------------- | ----------------------------- | ------------------------------------------------------------------------- |
+| `add_newline`  | `true`                        | Ajouter une nouvelle ligne avant le début de l'invite de commande.        |
+| `prompt_order` | [lien](#default-prompt-order) | Configurer l'ordre dans lequel les modules s'affichent.                   |
+| `scan_timeout` | `30`                          | Délai d'attente pour que starship scanne les fichiers (en millisecondes). |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -83,9 +83,9 @@ prompt_order=["rust","line_break","package","line_break","character"]
 scan_timeout = 10
 ```
 
-### Default Prompt Order
+### Ordre par défaut des modules
 
-The default `prompt_order` is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. The default is as shown:
+La valeur par défaut `prompt_order` est utilisée pour définir l'ordre selon lequel les modules sont affichés dans l'invite si aucun `prompt_order` n'est fourni ou s'il est vide. La valeur par défaut est la suivante :
 
 ```toml
 prompt_order = [
@@ -140,7 +140,7 @@ The `aws` module shows the current AWS region and profile. This is based on `AWS
 | `style`           | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`        | `false`         | Disables the `AWS` module.                                                  |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -165,7 +165,7 @@ The `battery` module shows how charged the device's battery is and its current c
 | `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
 | `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
 | `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
-| `display`            | [link](#battery-display) | Display threshold and style for the module.       |
+| `display`            | [lien](#battery-display) | Display threshold and style for the module.       |
 | `disabled`           | `false`                  | Disables the `battery` module.                    |
 
 <details>
@@ -180,7 +180,7 @@ Note: Battery indicator will be hidden if the status is `unknown` or `empty` unl
 
 </details>
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -193,7 +193,7 @@ discharging_symbol = "💀"
 
 ### Battery Display
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. La valeur par défaut est la suivante :
 
 ```toml
 [[battery.display]]
@@ -210,7 +210,7 @@ The `display` option is an array of the following table.
 | `threshold` | The upper bound for the display option.         |
 | `style`     | The style used if the display option is in use. |
 
-#### Example
+#### Exemple
 
 ```toml
 [[battery.display]]  # "bold red" style when capacity is between 0% and 10%
@@ -243,7 +243,7 @@ The character will tell you whether the last command was successful or not. It c
 | `style_failure`         | `"bold red"`   | The style used if the last command failed.                                          |
 | `disabled`              | `false`        | Disables the `character` module.                                                    |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -276,7 +276,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 | `style`             | `"bold yellow"` | The style for the module.                                  |
 | `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -305,7 +305,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
 | `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -329,7 +329,7 @@ The `crystal` module shows the currently installed version of Crystal. The modul
 | `style`    | `"bold red"` | The style for the module.                                 |
 | `disabled` | `false`      | Disables the `crystal` module.                            |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -369,7 +369,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 </details>
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -395,7 +395,7 @@ Internally, this module uses its own mechanism for version detection. Typically 
 | `style`     | `"bold blue"` | The style for the module.                                |
 | `disabled`  | `false`       | Disables the `dotnet` module.                            |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -419,7 +419,7 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 | `symbol`   | `"💧 "`  | The symbol used before displaying the version of Elixir/Erlang. |
 | `disabled` | `false` | Disables the `elixir` module.                                   |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -446,7 +446,7 @@ The `elm` module shows the currently installed version of Elm. The module will b
 | `disabled` | `false`       | Disables the `elm` module.                            |
 
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -474,7 +474,7 @@ The `env_var` module displays the current value of a selected environment variab
 | `style`    | `"dimmed black"` | The style for the module.                                                    |
 | `disabled` | `false`          | Disables the `env_var` module.                                               |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -498,7 +498,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `style`             | `"bold purple"` | The style for the module.                                                             |
 | `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -524,7 +524,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 | `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
 | `disabled`           | `false`        | Disables the `git_commit` module.                     |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -552,7 +552,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
 | `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -571,22 +571,22 @@ The `git_status` module shows symbols representing the state of the repo in your
 | Variable           | Default                    | Description                                             |
 | ------------------ | -------------------------- | ------------------------------------------------------- |
 | `conflicted`       | `"="`                      | This branch has merge conflicts.                        |
-| `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
+| `conflicted_count` | [lien](#git-status-counts) | Show and style the number of conflicts.                 |
 | `ahead`            | `"⇡"`                      | This branch is ahead of the branch being tracked.       |
 | `behind`           | `"⇣"`                      | This branch is behind of the branch being tracked.      |
 | `diverged`         | `"⇕"`                      | This branch has diverged from the branch being tracked. |
 | `untracked`        | `"?"`                      | There are untracked files in the working directory.     |
-| `untracked_count`  | [link](#git-status-counts) | Show and style the number of untracked files.           |
+| `untracked_count`  | [lien](#git-status-counts) | Show and style the number of untracked files.           |
 | `stashed`          | `"$"`                      | A stash exists for the local repository.                |
-| `stashed_count`    | [link](#git-status-counts) | Show and style the number of stashes.                   |
+| `stashed_count`    | [lien](#git-status-counts) | Show and style the number of stashes.                   |
 | `modified`         | `"!"`                      | There are file modifications in the working directory.  |
-| `modified_count`   | [link](#git-status-counts) | Show and style the number of modified files.            |
+| `modified_count`   | [lien](#git-status-counts) | Show and style the number of modified files.            |
 | `staged`           | `"+"`                      | A new file has been added to the staging area.          |
-| `staged_count`     | [link](#git-status-counts) | Show and style the number of files staged files.        |
+| `staged_count`     | [lien](#git-status-counts) | Show and style the number of files staged files.        |
 | `renamed`          | `"»"`                      | A renamed file has been added to the staging area.      |
-| `renamed_count`    | [link](#git-status-counts) | Show and style the number of renamed files.             |
+| `renamed_count`    | [lien](#git-status-counts) | Show and style the number of renamed files.             |
 | `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.   |
-| `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.             |
+| `deleted_count`    | [lien](#git-status-counts) | Show and style the number of deleted files.             |
 | `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
 | `prefix`           | `[`                        | Prefix to display immediately before git status.        |
 | `suffix`           | `]`                        | Suffix to display immediately after git status.         |
@@ -600,7 +600,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `enabled` | `false` | Show the number of files                               |
 | `style`   |         | Optionally style the count differently than the module |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -641,7 +641,7 @@ The `golang` module shows the currently installed version of Golang. The module 
 | `style`    | `"bold cyan"` | The style for the module.                                |
 | `disabled` | `false`       | Disables the `golang` module.                            |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -664,7 +664,7 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 | `disabled` | `false`      | Disables the `haskell` module.                            |
 
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -688,7 +688,7 @@ The `hostname` module shows the system hostname.
 | `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
 | `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -716,7 +716,7 @@ The `java` module shows the currently installed version of Java. The module will
 | `style`    | `"dimmed red"` | The style for the module.                              |
 | `disabled` | `false`        | Disables the `java` module.                            |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -738,7 +738,7 @@ The `jobs` module shows the current number of jobs running. The module will be s
 | `style`     | `"bold blue"` | The style for the module.                             |
 | `disabled`  | `false`       | Disables the `jobs` module.                           |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -766,7 +766,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `style`    | `"bold blue"` | The style for the module.                           |
 | `disabled` | `true`        | Disables the `kubernetes` module                    |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -787,7 +787,7 @@ The `line_break` module separates the prompt into two lines.
 | ---------- | ------- | ------------------------------------------------------------------ |
 | `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -820,7 +820,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `style`           | `"bold dimmed white"` | The style for the module.                                     |
 | `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -849,7 +849,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `style`             | `"bold purple"` | The style for the module.                                                                    |
 | `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -874,7 +874,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 | `style`      | `"bold red"` | The style for the module.          |
 | `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -902,7 +902,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 | `style`    | `"bold green"` | The style for the module.                                |
 | `disabled` | `false`        | Disables the `nodejs` module.                            |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -931,7 +931,7 @@ The `package` module is shown when the current directory is the repository for a
 | `style`    | `"bold red"` | The style for the module.                                  |
 | `disabled` | `false`      | Disables the `package` module.                             |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -955,7 +955,7 @@ The `php` module shows the currently installed version of PHP. The module will b
 | `style`    | `"bold red"` | The style for the module.                             |
 | `disabled` | `false`      | Disables the `php` module.                            |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -992,7 +992,7 @@ The module will be shown if any of the following conditions are met:
 | `style`              | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -1018,7 +1018,7 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 | `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `ruby` module.                            |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -1042,7 +1042,7 @@ The `rust` module shows the currently installed version of Rust. The module will
 | `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `rust` module.                            |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -1068,7 +1068,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 | `style`    | `"bold dimmed blue"` | The style for the module.                        |
 | `disabled` | `false`              | Disables the `singularity` module.               |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
@@ -1093,7 +1093,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 | `style`        | `"bold 105"` | The style for the module.                                   |
 | `disabled`     | `false`      | Disables the `terraform` module.                            |
 
-### Example
+### Exemple
 
 ```toml
 # ~/.config/starship.toml
