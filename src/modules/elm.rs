@@ -74,6 +74,16 @@ mod tests {
     }
 
     #[test]
+    fn folder_with_elm_version() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join(".elm-version"))?.sync_all()?;
+        let actual = render_module("elm", dir.path());
+        let expected = Some(format!("via {} ", Color::Cyan.bold().paint("🌳 v0.19.1")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
     fn folder_with_elm_stuff_directory() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let elmstuff = dir.path().join("elm-stuff");

@@ -165,6 +165,16 @@ mod tests {
         assert_eq!(expected, actual);
         dir.close()
     }
+    #[test]
+    fn folder_with_go_version() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join(".go-version"))?.sync_all()?;
+
+        let actual = render_module("golang", dir.path());
+        let expected = Some(format!("via {} ", Color::Cyan.bold().paint("🐹 v1.12.1")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
 
     #[test]
     fn test_format_go_version() {

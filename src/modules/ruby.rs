@@ -79,6 +79,18 @@ mod tests {
     }
 
     #[test]
+    fn folder_with_ruby_version() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join(".ruby-version"))?.sync_all()?;
+
+        let actual = render_module("ruby", dir.path());
+
+        let expected = Some(format!("via {} ", Color::Red.bold().paint("💎 v2.5.1")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
     fn folder_with_rb_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.rb"))?.sync_all()?;

@@ -93,6 +93,21 @@ mod tests {
     }
 
     #[test]
+    fn folder_with_php_version() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join(".php-version"))?.sync_all()?;
+
+        let actual = render_module("php", dir.path());
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(147).bold().paint("🐘 v7.3.8")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
     fn folder_with_php_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.php"))?.sync_all()?;
