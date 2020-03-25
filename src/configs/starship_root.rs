@@ -36,6 +36,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "golang",
                 "haskell",
                 "java",
+                "julia",
                 "nodejs",
                 "php",
                 "python",
