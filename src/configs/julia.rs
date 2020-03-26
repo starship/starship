@@ -14,7 +14,7 @@ pub struct JuliaConfig<'a> {
 impl<'a> RootModuleConfig<'a> for JuliaConfig<'a> {
     fn new() -> Self {
         JuliaConfig {
-            symbol: SegmentConfig::new("👸 "),
+            symbol: SegmentConfig::new("∴ "),
             version: SegmentConfig::default(),
             style: Color::Purple.bold(),
             disabled: false,
