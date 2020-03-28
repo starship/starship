@@ -23,7 +23,10 @@ use std::collections::HashMap;
 ///   - `✘` — A file's deletion has been added to the staging area
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = context.get_repo().ok()?;
-    let branch_name = repo.branch.as_ref()?;
+    // bare repos don't have a branch name, so `repo.branch.as_ref` would return None,
+    // but git treats "master" as the default branch name
+    let default_branch = String::from("master");
+    let branch_name = repo.branch.as_ref().unwrap_or(&default_branch);
     let repo_root = repo.root.as_ref()?;
     let mut repository = Repository::open(repo_root).ok()?;
 

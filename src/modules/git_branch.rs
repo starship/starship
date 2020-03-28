@@ -30,7 +30,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let repo = context.get_repo().ok()?;
-    let branch_name = repo.branch.as_ref()?;
+    // bare repos don't have a branch name, so `repo.branch.as_ref` would return None,
+    // but git treats "master" as the default branch name
+    let default_branch = String::from("master");
+    let branch_name = repo.branch.as_ref().unwrap_or(&default_branch);
     let truncated_graphemes = get_graphemes(&branch_name, len);
     // The truncation symbol should only be added if we truncated
     let truncated_and_symbol = if len < graphemes_len(&branch_name) {
