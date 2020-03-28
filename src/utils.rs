@@ -156,7 +156,7 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             })
         }
         Err(error) => {
-            log::error!("Executing command {:?} failed by: {:?}", cmd, error);
+            log::trace!("Executing command {:?} failed by: {:?}", cmd, error);
             None
         }
     }
