@@ -26,7 +26,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let config_path = home_dir()?.join(".docker/config.json");
+    let config_path = home_dir()?.join(DOCKER_CONFIG_FILE);
     let json = utils::read_file(config_path).ok()?;
     let parsed_json = serde_json::from_str(&json).ok()?;
 
