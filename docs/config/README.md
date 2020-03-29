@@ -387,12 +387,12 @@ The `docker_context` module shows the currently active
 
 ### Options
 
-| Variable                | Default       | Description                                                                  |
-| ----------------------- | ------------- | ---------------------------------------------------------------------------- |
-| `symbol`                | `"🐳 "`       | The symbol used before displaying the Docker context .                       |
-| `style`                 | `"bold blue"` | The style for the module.                                                    |
-| `only_with_compose_yml` | `false`       | Only show when there's a `docker-compose.yml` file in the current directory. |
-| `disabled`              | `true`        | Disables the `docker_context` module.                                        |
+| Variable          | Default       | Description                                                                  |
+| ----------------- | ------------- | ---------------------------------------------------------------------------- |
+| `symbol`          | `"🐳 "`       | The symbol used before displaying the Docker context .                       |
+| `style`           | `"bold blue"` | The style for the module.                                                    |
+| `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` file in the current directory. |
+| `disabled`        | `true`        | Disables the `docker_context` module.                                        |
 
 ### Example
 

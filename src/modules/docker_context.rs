@@ -17,7 +17,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("docker_context");
     let config: DockerContextConfig = DockerContextConfig::try_load(module.config);
 
-    if config.only_with_compose_yml
+    if config.only_with_files
         && !context
             .try_begin_scan()?
             .set_files(&["docker-compose.yml"])
