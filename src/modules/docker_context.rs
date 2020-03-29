@@ -14,7 +14,7 @@ const DOCKER_CONFIG_FILE: &str = ".docker/config.json";
 ///     - The file is JSON and contains a field named `currentContext`
 ///     - The value of `currentContext` is not `default`
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module(DOCKER_CONFIG_FILE);
+    let mut module = context.new_module("docker_context");
     let config: DockerContextConfig = DockerContextConfig::try_load(module.config);
 
     if config.only_with_compose_yml
