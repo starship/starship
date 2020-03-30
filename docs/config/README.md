@@ -979,6 +979,7 @@ package, and shows its current version. The module currently supports `npm`, `ca
 - **composer** – The `composer` package version is extracted from the `composer.json` present
   in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
+- **julia** - The package version is extracted from the `Project.toml` present
 
 > ⚠️ The version being shown is that of the package whose source code is in your
 > current directory, not your package manager.
