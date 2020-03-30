@@ -147,14 +147,6 @@
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
-   
-   ##### From prebuilt binary, Linux `musl` build
-   
-   If you get an error like "*version 'GLIBC_2.18' not found (required by starship)*" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
-   
-   ```sh
-   curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
-   ```
 
    ##### From source on [crates.io](https://crates.io/):
 

@@ -43,3 +43,11 @@ starship prompt --help
 ```
 
 The prompt will use as much context as is provided, but no flags are "required".
+
+## How do I run Starship on Linux distributions with older versions of glibc?
+
+If you get an error like "*version 'GLIBC_2.18' not found (required by starship)*" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+
+```sh
+curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
+```
