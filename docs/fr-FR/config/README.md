@@ -240,7 +240,7 @@ The character will tell you whether the last command was successful or not. It c
 | `use_symbol_for_status` | `false`        | Indicate error status by changing the symbol.                                       |
 | `vicmd_symbol`          | `"❮"`          | The symbol used before the text input in the prompt if shell is in vim normal mode. |
 | `style_success`         | `"bold green"` | The style used if the last command was successful.                                  |
-| `style_failure`         | `"bold red"`   | The style used if the last command failed.                                          |
+| `style_failure`         | `"bold green"` | The style used if the last command failed.                                          |
 | `disabled`              | `false`        | Disables the `character` module.                                                    |
 
 ### Exemple
@@ -323,11 +323,11 @@ The `crystal` module shows the currently installed version of Crystal. The modul
 
 ### Options
 
-| Variable   | Default      | Description                                               |
-| ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`       | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold red"` | The style for the module.                                 |
-| `disabled` | `false`      | Disables the `crystal` module.                            |
+| Variable   | Default        | Description                                               |
+| ---------- | -------------- | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`         | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold green"` | The style for the module.                                 |
+| `disabled` | `false`        | Disables the `crystal` module.                            |
 
 ### Exemple
 
@@ -590,7 +590,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
 | `prefix`           | `[`                        | Prefix to display immediately before git status.        |
 | `suffix`           | `]`                        | Suffix to display immediately after git status.         |
-| `style`            | `"bold red"`               | The style for the module.                               |
+| `style`            | `"bold green"`             | The style for the module.                               |
 | `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
 #### Git Status Counts
@@ -657,11 +657,11 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 
 ### Options
 
-| Variable   | Default      | Description                                               |
-| ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold red"` | The style for the module.                                 |
-| `disabled` | `false`      | Disables the `haskell` module.                            |
+| Variable   | Default        | Description                                               |
+| ---------- | -------------- | --------------------------------------------------------- |
+| `symbol`   | `"λ "`         | The symbol used before displaying the version of Haskell. |
+| `style`    | `"bold green"` | The style for the module.                                 |
+| `disabled` | `false`        | Disables the `haskell` module.                            |
 
 
 ### Exemple
@@ -866,13 +866,13 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 
 ### Options
 
-| Variable     | Default      | Description                        |
-| ------------ | ------------ | ---------------------------------- |
-| `use_name`   | `false`      | Display the name of the nix-shell. |
-| `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
-| `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
-| `style`      | `"bold red"` | The style for the module.          |
-| `disabled`   | `false`      | Disables the `nix_shell` module.   |
+| Variable     | Default        | Description                        |
+| ------------ | -------------- | ---------------------------------- |
+| `use_name`   | `false`        | Display the name of the nix-shell. |
+| `impure_msg` | `"impure"`     | Customize the "impure" msg.        |
+| `pure_msg`   | `"pure"`       | Customize the "pure" msg.          |
+| `style`      | `"bold green"` | The style for the module.          |
+| `disabled`   | `false`        | Disables the `nix_shell` module.   |
 
 ### Exemple
 
@@ -925,11 +925,11 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Options
 
-| Variable   | Default      | Description                                                |
-| ---------- | ------------ | ---------------------------------------------------------- |
-| `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | The style for the module.                                  |
-| `disabled` | `false`      | Disables the `package` module.                             |
+| Variable   | Default        | Description                                                |
+| ---------- | -------------- | ---------------------------------------------------------- |
+| `symbol`   | `"📦 "`         | The symbol used before displaying the version the package. |
+| `style`    | `"bold green"` | The style for the module.                                  |
+| `disabled` | `false`        | Disables the `package` module.                             |
 
 ### Exemple
 
@@ -949,11 +949,11 @@ The `php` module shows the currently installed version of PHP. The module will b
 
 ### Options
 
-| Variable   | Default      | Description                                           |
-| ---------- | ------------ | ----------------------------------------------------- |
-| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
-| `style`    | `"bold red"` | The style for the module.                             |
-| `disabled` | `false`      | Disables the `php` module.                            |
+| Variable   | Default        | Description                                           |
+| ---------- | -------------- | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`         | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold green"` | The style for the module.                             |
+| `disabled` | `false`        | Disables the `php` module.                            |
 
 ### Exemple
 
@@ -1012,11 +1012,11 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 
 ### Options
 
-| Variable   | Default      | Description                                            |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
-| `style`    | `"bold red"` | The style for the module.                              |
-| `disabled` | `false`      | Disables the `ruby` module.                            |
+| Variable   | Default        | Description                                            |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"💎 "`         | The symbol used before displaying the version of Ruby. |
+| `style`    | `"bold green"` | The style for the module.                              |
+| `disabled` | `false`        | Disables the `ruby` module.                            |
 
 ### Exemple
 
@@ -1036,11 +1036,11 @@ The `rust` module shows the currently installed version of Rust. The module will
 
 ### Options
 
-| Variable   | Default      | Description                                            |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
-| `style`    | `"bold red"` | The style for the module.                              |
-| `disabled` | `false`      | Disables the `rust` module.                            |
+| Variable   | Default        | Description                                            |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"🦀 "`         | The symbol used before displaying the version of Rust. |
+| `style`    | `"bold green"` | The style for the module.                              |
+| `disabled` | `false`        | Disables the `rust` module.                            |
 
 ### Exemple
 
