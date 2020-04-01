@@ -130,6 +130,8 @@
 </p>
 
 
+<a name="🚀-installation"></a>
+
 ## 🚀 Installation
 
 ### Prerequisites
