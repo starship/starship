@@ -813,9 +813,9 @@ To enable it, set `disabled` to `false` in your configuration file.
 | Variable         | Default       | Description                                         |
 | ---------------- | ------------- | --------------------------------------------------- |
 | `symbol`         | `"☸ "`        | The symbol used before displaying the Cluster info. |
+| `context_aliases` |               | Table of context aliases to display                 |
 | `style`          | `"bold blue"` | The style for the module.                           |
 | `disabled`       | `true`        | Disables the `kubernetes` module                    |
-| `context_aliases` |               | Table of context aliases to display                 |
 
 ### Example
 
