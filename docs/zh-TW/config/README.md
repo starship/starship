@@ -435,6 +435,7 @@ The `elm` module shows the currently installed version of Elm. 這個模組在�
 
 - The current directory contains a `elm.json` file
 - The current directory contains a `elm-package.json` file
+- The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
 
@@ -631,6 +632,7 @@ The `golang` module shows the currently installed version of Golang. 這個模�
 - The current directory contains a `glide.yaml` file
 - The current directory contains a `Gopkg.yml` file
 - The current directory contains a `Gopkg.lock` file
+- The current directory contains a `.go-version` file
 - The current directory contains a `Godeps` directory
 - The current directory contains a file with the `.go` extension
 
@@ -706,7 +708,7 @@ disabled = false
 
 The `java` module shows the currently installed version of Java. 這個模組在下列其中一個條件達成時顯示：
 
-- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
 ### 選項
@@ -919,6 +921,7 @@ pure_msg = "pure shell"
 The `nodejs` module shows the currently installed version of NodeJS. 這個模組在下列其中一個條件達成時顯示：
 
 - The current directory contains a `package.json` file
+- The current directory contains a `.node-version` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js` extension
 
@@ -974,6 +977,7 @@ symbol = "🎁 "
 The `php` module shows the currently installed version of PHP. 這個模組在下列其中一個條件達成時顯示：
 
 - The current directory contains a `composer.json` file
+- The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
 ### 選項
@@ -1037,6 +1041,7 @@ pyenv_prefix = "foo "
 The `ruby` module shows the currently installed version of Ruby. 這個模組在下列其中一個條件達成時顯示：
 
 - The current directory contains a `Gemfile` file
+- The current directory contains a `.ruby-version` file
 - The current directory contains a `.rb` file
 
 ### 選項
