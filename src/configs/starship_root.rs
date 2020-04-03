@@ -22,6 +22,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "singularity",
                 "kubernetes",
                 "directory",
+                "zlua",
                 "git_branch",
                 "git_commit",
                 "git_state",

@@ -36,6 +36,7 @@ mod terraform;
 mod time;
 mod username;
 mod utils;
+mod zlua;
 
 #[cfg(feature = "battery")]
 mod battery;
@@ -86,6 +87,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "time" => time::module(context),
         "crystal" => crystal::module(context),
         "username" => username::module(context),
+        "zlua" => zlua::module(context),
         _ => {
             eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
             None

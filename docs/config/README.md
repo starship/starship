@@ -95,6 +95,7 @@ prompt_order = [
     "hostname",
     "kubernetes",
     "directory",
+    "z.lua",
     "git_branch",
     "git_commit",
     "git_state",
@@ -1297,4 +1298,36 @@ The module will be shown if any of the following conditions are met:
 
 [username]
 disabled = true
+```
+
+## z.lua
+
+The `z.lua` module shows the Z rank of the current directory for
+determining its [frecency](https://en.wikipedia.org/wiki/Frecency).
+The module will be shown if any of the following conditions are met:
+
+- The current user has the `z.lua` command detected via environment variables such as `ZLUA_LUAEXE` and `ZLUA_SCRIPT`
+- The configuration explicitly targets the Lua and Z script location
+
+### Options
+
+| Variable                | Default         | Description                             |
+| ----------------------- | --------------- | --------------------------------------- |
+| `prefix`                | `"[z"`          | The prompt prefix for z.lua module.     |
+| `suffix`                | `"] "`          | The prompt suffix for z.lua module.     |
+| `symbol`                | `""`            | The prompt symbol for z.lua module.     |
+| `style`                 | `"bold cyan"`   | The style for the module.               |
+| `disabled`              | `false`         | Disables the `z.lua` module.            |
+| `lua_exe_location`      | `""`            | Configures the Lua executable location. |
+| `zlua_script_location`  | `""`            | Configures the z.lua script location.   |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[zlua]
+disabled = false
+symbol = "🌊"
+prefix = "["
 ```

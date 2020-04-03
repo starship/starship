@@ -86,6 +86,15 @@ Elixir 1.10 (compiled with Erlang/OTP 22)",
             ),
             stderr: String::default(),
         }),
+        "z -l" => Some(CommandOutput {
+            stdout: String::from(
+                "21         /Projects
+76         /Projects/starship/docs
+78         /Projects/guides
+686        /Projects/starship",
+            ),
+            stderr: String::default(),
+        }),
         // If we don't have a mocked command fall back to executing the command
         _ => internal_exec_cmd(&cmd, &args),
     }

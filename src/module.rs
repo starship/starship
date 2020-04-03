@@ -48,6 +48,7 @@ pub const ALL_MODULES: &[&str] = &[
     "singularity",
     "time",
     "username",
+    "zlua",
 ];
 
 /// A module is a collection of segments showing data for a single integration
