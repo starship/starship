@@ -836,11 +836,12 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable   | Default       | Description                                         |
-| ---------- | ------------- | --------------------------------------------------- |
-| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
-| `style`    | `"bold blue"` | The style for the module.                           |
-| `disabled` | `true`        | Disables the `kubernetes` module                    |
+| Variable         | Default       | Description                                         |
+| ---------------- | ------------- | --------------------------------------------------- |
+| `symbol`         | `"☸ "`        | The symbol used before displaying the Cluster info. |
+| `context_aliases` |               | Table of context aliases to display                 |
+| `style`          | `"bold blue"` | The style for the module.                           |
+| `disabled`       | `true`        | Disables the `kubernetes` module                    |
 
 ### Example
 
@@ -851,6 +852,8 @@ To enable it, set `disabled` to `false` in your configuration file.
 symbol = "⛵ "
 style = "dimmed green"
 disabled = false
+[kubernetes.context_aliases]
+"dev.local.cluster.k8s" = "dev"
 ```
 
 ## Line Break

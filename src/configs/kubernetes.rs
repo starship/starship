@@ -2,6 +2,7 @@ use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
 
 use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
+use std::collections::HashMap;
 
 #[derive(Clone, ModuleConfig)]
 pub struct KubernetesConfig<'a> {
@@ -10,6 +11,7 @@ pub struct KubernetesConfig<'a> {
     pub namespace: SegmentConfig<'a>,
     pub style: Style,
     pub disabled: bool,
+    pub context_aliases: HashMap<String, &'a str>,
 }
 
 impl<'a> RootModuleConfig<'a> for KubernetesConfig<'a> {
@@ -20,6 +22,7 @@ impl<'a> RootModuleConfig<'a> for KubernetesConfig<'a> {
             namespace: SegmentConfig::default(),
             style: Color::Cyan.bold(),
             disabled: true,
+            context_aliases: HashMap::new(),
         }
     }
 }
