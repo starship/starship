@@ -100,6 +100,7 @@ prompt_order = [
     "hg_branch",
     "package",
     "dotnet",
+    "elixir",
     "elm",
     "golang",
     "haskell",
@@ -313,9 +314,34 @@ Hinweis: Dies unterdrückt nicht conda's eigenen Prompt-Modifikator, sie können
 style = "dimmed green"
 ```
 
-## Verzeichnis
+## Crystal
 
-Das `directory` -Modul zeigt den Pfad zu Ihrem aktuellen Verzeichnis an, abgeschnitten auf drei übergeordnete Ordner. Your directory will also be truncated to the root of the git repo that you're currently in.
+The `crystal` module shows the currently installed version of Crystal. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+
+- The current directory contains a `shard.yml` file
+- The current directory contains a `.cr` file
+
+### Optionen
+
+| Variable   | Standardwert | Beschreibung                                              |
+| ---------- | ------------ | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`       | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"` | Stil für dieses Modul.                                    |
+| `disabled` | `false`      | Disables the `crystal` module.                            |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[crystal]
+symbol = "✨ "
+style = "bold blue"
+```
+
+## Directory
+
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
 When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
@@ -325,19 +351,21 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 | Variable            | Standardwert  | Beschreibung                                                                     |
 | ------------------- | ------------- | -------------------------------------------------------------------------------- |
-| `truncation_length` | `3`           | Die Anzahl der übergeordneten Ordner, die angezeigt werden.                      |
+| `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `prefix`            | `"in "`       | Präfix der vor dem Verzeichnis angezeigt wird.                                   |
+| `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
 | `style`             | `"bold cyan"` | Stil für dieses Modul.                                                           |
-| `disabled`          | `false`       | Deaktiviert das `directory`-Modul.                                               |
+| `disabled`          | `false`       | Disables the `directory` module.                                                 |
 
 <details>
-<summary>Dieses Modul hat einige erweiterte Konfigurationsoptionen, welche die Darstellung von Verzeichnissen steuern.</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | Variable                    | Standardwert | Beschreibung                                                                             |
 | --------------------------- | ------------ | ---------------------------------------------------------------------------------------- |
 | `fish_style_pwd_dir_length` | `0`          | The number of characters to use when applying fish shell pwd path logic.                 |
 | `use_logical_path`          | `true`       | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+
+`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -360,12 +388,12 @@ Internally, this module uses its own mechanism for version detection. Typically 
 
 ### Optionen
 
-| Variable    | Standardwert  | Beschreibung                                                       |
-| ----------- | ------------- | ------------------------------------------------------------------ |
-| `symbol`    | `"•NET "`     | Symbol das vor der dotnet-Version angezeigt wird.                  |
-| `heuristic` | `true`        | Schnelle Versionserkennung nutzen um Starship bedienbar zu halten. |
-| `style`     | `"bold blue"` | Stil für dieses Modul.                                             |
-| `disabled`  | `false`       | Deaktiviert das `dotnet`-Modul.                                    |
+| Variable    | Standardwert  | Beschreibung                                             |
+| ----------- | ------------- | -------------------------------------------------------- |
+| `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
+| `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
+| `style`     | `"bold blue"` | Stil für dieses Modul.                                   |
+| `disabled`  | `false`       | Disables the `dotnet` module.                            |
 
 ### Beispiel
 
@@ -378,12 +406,34 @@ style = "green"
 heuristic = false
 ```
 
+## Elixir
+
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+
+- The current directory contains a `mix.exs` file.
+
+### Optionen
+
+| Variable   | Standardwert | Beschreibung                                                    |
+| ---------- | ------------ | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`       | The symbol used before displaying the version of Elixir/Erlang. |
+| `disabled` | `false`      | Disables the `elixir` module.                                   |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[elixir]
+symbol = "🔮 "
+```
+
 ## Elm
 
 The `elm` module shows the currently installed version of Elm. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
-- Das aktuelle Verzeichnis enthält eine `elm.json`-Datei
-- Das aktuelle Verzeichnis enthält eine `elm-package.json`-Datei
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
 
@@ -405,7 +455,7 @@ The `elm` module shows the currently installed version of Elm. Das Modul wird nu
 symbol = " "
 ```
 
-## Umgebungsvariablen
+## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
@@ -414,15 +464,15 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Optionen
 
-| Variable   | Standardwert     | Beschreibung                                                                             |
-| ---------- | ---------------- | ---------------------------------------------------------------------------------------- |
-| `symbol`   |                  | Das Symbol, das vor der Anzeige der Variable verwendet wird.                             |
-| `variable` |                  | Die anzuzeigende Umgebungsvariable.                                                      |
-| `default`  |                  | Der Standardwert, der angezeigt wird, wenn die ausgewählte Variable nicht definiert ist. |
-| `prefix`   | `""`             | Präfix der vor der Variable angezeigt wird.                                              |
-| `suffix`   | `""`             | Suffix der nach der Variable angezeigt wird.                                             |
-| `style`    | `"dimmed black"` | Stil für dieses Modul.                                                                   |
-| `disabled` | `false`          | Deaktiviert das `env_var`-Modul.                                                         |
+| Variable   | Standardwert     | Beschreibung                                                                 |
+| ---------- | ---------------- | ---------------------------------------------------------------------------- |
+| `symbol`   |                  | The symbol used before displaying the variable value.                        |
+| `variable` |                  | The environment variable to be displayed.                                    |
+| `default`  |                  | The default value to be displayed when the selected variable is not defined. |
+| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
+| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
+| `style`    | `"dimmed black"` | Stil für dieses Modul.                                                       |
+| `disabled` | `false`          | Disables the `env_var` module.                                               |
 
 ### Beispiel
 
@@ -434,19 +484,19 @@ variable = "SHELL"
 default = "unknown shell"
 ```
 
-## Git-Branch
+## Git Branch
 
-Das `git_branch`-Modul zeigt den aktiven Git-Branch des Repositories im aktuellen Verzeichnis an.
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### Optionen
 
-| Variable            | Standardwert    | Beschreibung                                                                                           |
-| ------------------- | --------------- | ------------------------------------------------------------------------------------------------------ |
-| `symbol`            | `" "`          | Das Symbol, das vor dem Branchnamen des Git-Repositorys in Ihrem aktuellen Verzeichnis angezeigt wird. |
-| `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                                  |
-| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol                  |
-| `style`             | `"bold purple"` | Stil für dieses Modul.                                                                                 |
-| `disabled`          | `false`         | Deaktiviert das `git_branch`-Modul.                                                                    |
+| Variable            | Standardwert    | Beschreibung                                                                          |
+| ------------------- | --------------- | ------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
+| `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
+| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
+| `style`             | `"bold purple"` | Stil für dieses Modul.                                                                |
+| `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
 
 ### Beispiel
 
@@ -463,21 +513,16 @@ truncation_symbol = ""
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
-::: tip
-
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
-
-:::
-
 ### Optionen
 
-| Variable             | Standardwert   | Beschreibung                                     |
-| -------------------- | -------------- | ------------------------------------------------ |
-| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
-| `prefix`             | `"("`          | Prefix to display immediately before git commit. |
-| `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
-| `style`              | `"bold green"` | Stil für dieses Modul.                           |
-| `disabled`           | `true`         | Disables the `git_commit` module.                |
+| Variable             | Standardwert   | Beschreibung                                          |
+| -------------------- | -------------- | ----------------------------------------------------- |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.          |
+| `prefix`             | `"("`          | Prefix to display immediately before git commit.      |
+| `suffix`             | `")"`          | Suffix to display immediately after git commit.       |
+| `style`              | `"bold green"` | Stil für dieses Modul.                                |
+| `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
+| `disabled`           | `false`        | Disables the `git_commit` module.                     |
 
 ### Beispiel
 
@@ -485,11 +530,10 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 # ~/.config/starship.toml
 
 [git_commit]
-disabled = false
 commit_hash_length = 4
 ```
 
-## Git-Zustand
+## Git State
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
@@ -506,7 +550,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
 | `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
 | `style`            | `"bold yellow"`    | Stil für dieses Modul.                                                                                           |
-| `disabled`         | `false`            | Deaktiviert das `git_state`-Modul.                                                                               |
+| `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
 ### Beispiel
 
@@ -518,7 +562,7 @@ progress_divider = " of "
 cherry_pick = "🍒 PICKING"
 ```
 
-## Git-Status
+## Git Status
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
@@ -547,7 +591,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `prefix`           | `[`                        | Prefix to display immediately before git status.        |
 | `suffix`           | `]`                        | Suffix to display immediately after git status.         |
 | `style`            | `"bold red"`               | Stil für dieses Modul.                                  |
-| `disabled`         | `false`                    | Deaktiviert das `git_status`-Modul.                     |
+| `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
 #### Git Status Counts
 
@@ -579,23 +623,23 @@ deleted = "🗑"
 
 ## Golang
 
-Das `golang`-Modul zeigt die aktuell installierte Version von Golang. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `golang` module shows the currently installed version of Golang. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
-- Das aktuelle Verzeichnis enthält eine `go.mod`-Datei
-- Das aktuelle Verzeichnis enthält eine `go.sum`-Datei
-- Das aktuelle Verzeichnis enthält eine `glide.yaml`-Datei
-- Das aktuelle Verzeichnis enthält eine `Gopkg.yml`-Datei
-- Das aktuelle Verzeichnis enthält eine `Gopkg.lock`-Datei
-- Das aktuelle Verzeichnis enthält ein `Godeps`-Verzeichnis
-- Das aktuelle Verzeichnis enthält eine Datei mit der `.go`-Erweiterung
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
 ### Optionen
 
-| Variable   | Standardwert  | Beschreibung                                      |
-| ---------- | ------------- | ------------------------------------------------- |
-| `symbol`   | `"🐹 "`        | Symbol das vor der Golang-Version angezeigt wird. |
-| `style`    | `"bold cyan"` | Stil für dieses Modul.                            |
-| `disabled` | `false`       | Deaktiviert das `golang`-Modul.                   |
+| Variable   | Standardwert  | Beschreibung                                             |
+| ---------- | ------------- | -------------------------------------------------------- |
+| `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
+| `style`    | `"bold cyan"` | Stil für dieses Modul.                                   |
+| `disabled` | `false`       | Disables the `golang` module.                            |
 
 ### Beispiel
 
@@ -609,7 +653,7 @@ symbol = "🏎💨 "
 
 The `haskell` module shows the currently installed version of Haskell Stack version. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
-- Das aktuelle Verzeichnis enthält eine `stack.yaml`-Datei
+- The current directory contains a `stack.yaml` file
 
 ### Optionen
 
@@ -627,31 +671,6 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 
 [haskell]
 symbol = " "
-```
-
-## Mercurial Branch
-
-The `hg_branch` module shows the active branch of the repo in your current directory.
-
-### Optionen
-
-| Variable            | Standardwert    | Beschreibung                                                                                 |
-| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
-| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
-| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
-| `style`             | `"bold purple"` | Stil für dieses Modul.                                                                       |
-| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
-
-### Beispiel
-
-```toml
-# ~/.config/starship.toml
-
-[hg_branch]
-symbol = "🌱 "
-truncation_length = 4
-truncation_symbol = ""
 ```
 
 ## Hostname
@@ -682,18 +701,42 @@ trim_at = ".companyname.com"
 disabled = false
 ```
 
+## Java
+
+The `java` module shows the currently installed version of Java. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+
+- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
+- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
+
+### Optionen
+
+| Variable   | Standardwert   | Beschreibung                                           |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | Stil für dieses Modul.                                 |
+| `disabled` | `false`        | Disables the `java` module.                            |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[java]
+symbol = "🌟 "
+```
+
 ## Jobs
 
 The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
 ### Optionen
 
-| Variable    | Standardwert  | Beschreibung                                                                     |
-| ----------- | ------------- | -------------------------------------------------------------------------------- |
-| `symbol`    | `"✦"`         | Symbol das vor der Anzahl der Jobs angezeigt wird.                               |
-| `threshold` | `1`           | Zeigt die Anzahl der Jobs wenn der angegebene Schwellenwert überschritten wurde. |
-| `style`     | `"bold blue"` | Stil für dieses Modul.                                                           |
-| `disabled`  | `false`       | Deaktiviert das `jobs`-Modul.                                                    |
+| Variable    | Standardwert  | Beschreibung                                          |
+| ----------- | ------------- | ----------------------------------------------------- |
+| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
+| `threshold` | `1`           | Show number of jobs if exceeded.                      |
+| `style`     | `"bold blue"` | Stil für dieses Modul.                                |
+| `disabled`  | `false`       | Disables the `jobs` module.                           |
 
 ### Beispiel
 
@@ -717,11 +760,11 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 ### Optionen
 
-| Variable   | Standardwert  | Beschreibung                                           |
-| ---------- | ------------- | ------------------------------------------------------ |
-| `symbol`   | `"☸ "`        | Symbol das vor der Cluster-Information angezeigt wird. |
-| `style`    | `"bold blue"` | Stil für dieses Modul.                                 |
-| `disabled` | `true`        | Deaktiviert das `kubernetes`-Modul                     |
+| Variable   | Standardwert  | Beschreibung                                        |
+| ---------- | ------------- | --------------------------------------------------- |
+| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
+| `style`    | `"bold blue"` | Stil für dieses Modul.                              |
+| `disabled` | `true`        | Disables the `kubernetes` module                    |
 
 ### Beispiel
 
@@ -730,19 +773,19 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 [kubernetes]
 symbol = "⛵ "
-style = "dim green"
+style = "dimmed green"
 disabled = false
 ```
 
-## Zeilenumbruch
+## Line Break
 
-Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
+The `line_break` module separates the prompt into two lines.
 
 ### Optionen
 
-| Variable   | Standardwert | Beschreibung                                                           |
-| ---------- | ------------ | ---------------------------------------------------------------------- |
-| `disabled` | `false`      | Deaktiviert das `line_break`-Modul, wodurch der Prompt einzeilig wird. |
+| Variable   | Standardwert | Beschreibung                                                       |
+| ---------- | ------------ | ------------------------------------------------------------------ |
+| `disabled` | `false`      | Disables the `line_break` module, making the prompt a single line. |
 
 ### Beispiel
 
@@ -753,19 +796,83 @@ Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
 disabled = true
 ```
 
-## Nix-Shell
+## Memory Usage
 
-Das `nix_shell`-Modul zeigt die nix-shell Umgebung an. Das Modul wird angezeigt, wenn es sich in einer nix-Shell-Umgebung befindet.
+The `memory_usage` module shows current system memory and swap usage.
+
+By default the swap usage is displayed if the total system swap is non-zero.
+
+::: tip
+
+Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+
+:::
+
+### Optionen
+
+| Variable          | Standardwert          | Beschreibung                                                  |
+| ----------------- | --------------------- | ------------------------------------------------------------- |
+| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
+| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
+| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
+| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
+| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
+| `style`           | `"bold dimmed white"` | Stil für dieses Modul.                                        |
+| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[memory_usage]
+disabled = false
+show_percentage = true
+show_swap = true
+threshold = -1
+symbol = " "
+separator = "/"
+style = "bold dimmed green"
+```
+
+## Mercurial Branch
+
+The `hg_branch` module shows the active branch of the repo in your current directory.
+
+### Optionen
+
+| Variable            | Standardwert    | Beschreibung                                                                                 |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
+| `style`             | `"bold purple"` | Stil für dieses Modul.                                                                       |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[hg_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
+```
+
+## Nix-shell
+
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### Optionen
 
 | Variable     | Standardwert | Beschreibung                       |
 | ------------ | ------------ | ---------------------------------- |
-| `use_name`   | `false`      | Namen der nix-Shell anzeigen.      |
-| `impure_msg` | `"impure"`   | Passt die "impure"-Nachricht an.   |
-| `pure_msg`   | `"pure"`     | Passt die "pure"-Nachricht an.     |
+| `use_name`   | `false`      | Display the name of the nix-shell. |
+| `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
+| `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
 | `style`      | `"bold red"` | Stil für dieses Modul.             |
-| `disabled`   | `false`      | Deaktiviert das `nix_shell`-Modul. |
+| `disabled`   | `false`      | Disables the `nix_shell` module.   |
 
 ### Beispiel
 
@@ -777,92 +884,6 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
-```
-
-## Java
-
-Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
-
-- Das aktuelle Verzeichnis enthält `pom.xml`, `build.gradle.kts` oder `build.sbt`
-- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
-
-### Optionen
-
-| Variable   | Standardwert   | Beschreibung                                    |
-| ---------- | -------------- | ----------------------------------------------- |
-| `symbol`   | `"☕ "`         | Symbol das vor der Java-Version angezeigt wird. |
-| `style`    | `"dimmed red"` | Stil für dieses Modul.                          |
-| `disabled` | `false`        | Deaktiviert das `Java`-Modul.                   |
-
-### Beispiel
-
-```toml
-# ~/.config/starship.toml
-
-[java]
-symbol = "🌟 "
-```
-
-## Speicherauslastung
-
-Das `memory_usage` Modul zeigt den aktuellen Systemspeicher und die swap-Nutzung an.
-
-Standardmäßig wird die swap-Nutzung angezeigt, wenn der gesamte System-swap nicht Null ist.
-
-::: tip
-
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
-
-:::
-
-### Optionen
-
-| Variable          | Standardwert          | Beschreibung                                                               |
-| ----------------- | --------------------- | -------------------------------------------------------------------------- |
-| `show_percentage` | `false`               | Zeigt die Speicherauslastung als Prozentsatz des verfügbaren Speichers an. |
-| `show_swap`       | `true`                | Swap-Nutzung anzeigen, wenn die Gesamtsumme des swaps nicht Null ist.      |
-| `threshold`       | `75`                  | Speicherauslastung ausblenden, wenn sie unter diesem Prozentsatz ist.      |
-| `symbol`          | `"🐏 "`                | Symbol das vor der Speicherauslastung angezeigt wird.                      |
-| `separator`       | `" | "`               | Symbol oder Text, der ram und swap-Nutzung trennt.                         |
-| `style`           | `"bold dimmed white"` | Stil für dieses Modul.                                                     |
-| `disabled`        | `true`                | Deaktiviert das `memory_usage`-Modul.                                      |
-
-### Beispiel
-
-```toml
-# ~/.config/starship.toml
-
-[memory_usage]
-show_percentage = true
-show_swap = true
-threshold = -1
-icon = " "
-style = "bold dimmed green"
-```
-
-## Crystal
-
-The `crystal` module shows the currently installed version of Crystal. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
-
-- Das aktuelle Verzeichnis enthält eine `shard.yml`-Datei
-- The current directory contains a `.cr` file
-
-### Optionen
-
-| Variable   | Standardwert | Beschreibung                                              |
-| ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`       | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold red"` | Stil für dieses Modul.                                    |
-| `disabled` | `false`      | Disables the `crystal` module.                            |
-
-### Beispiel
-
-```toml
-# ~/.config/starship.toml
-
-[crystal]
-symbol = "✨ "
-style = "bold blue"
 ```
 
 ## NodeJS
@@ -892,12 +913,13 @@ symbol = "🤖 "
 
 ## Paketversion
 
-Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository für ein Paket ist, und zeigt dessen aktuelle Version an. Das Modul unterstützt derzeit `npm`, `cargo`, und `poetry` Pakete.
+Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository für ein Paket ist, und zeigt dessen aktuelle Version an. The module currently supports `npm`, `cargo`, `poetry`, `composer`, and `gradle` packages.
 
 - **npm** – Die `npm` Paketversion wird aus dem `package.json` gelesen, das sich im aktuellen Verzeichnis befindet
 - **Cargo** – Die `Cargo` Paketversion wird aus dem `Cargo.toml` gelesen, das sich im aktuellen Verzeichnis befindet
 - **poetry** – Die `poetry` Paketversion wird aus der `pyproject.toml` gelesen, das sich im aktuellen Verzeichnis befindet
 - **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
+- **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 
 > ⚠️ Die angezeigte Version ist die des Pakets, dessen Quellcode im Verzeichnis liegt, nicht die des Paketmanagers.
 
@@ -990,7 +1012,7 @@ Das `ruby` Modul zeigt die derzeit installierte Version von Ruby an. Das Modul w
 
 ### Optionen
 
-| Variable   | Standardwert | Beschreibung                                    |
+| Variable   | Standartwert | Beschreibung                                    |
 | ---------- | ------------ | ----------------------------------------------- |
 | `symbol`   | `"💎 "`       | Symbol das vor der Ruby-Version angezeigt wird. |
 | `style`    | `"bold red"` | Stil für dieses Modul.                          |
@@ -1014,7 +1036,7 @@ Das `rust` Modul zeigt die derzeit installierte Version von Rust an. Das Modul w
 
 ### Optionen
 
-| Variable   | Standartwert | Beschreibung                                    |
+| Variable   | Standardwert | Beschreibung                                    |
 | ---------- | ------------ | ----------------------------------------------- |
 | `symbol`   | `"🦀 "`       | Symbol das vor der Rust-Version angezeigt wird. |
 | `style`    | `"bold red"` | Stil für dieses Modul.                          |
@@ -1027,6 +1049,32 @@ Das `rust` Modul zeigt die derzeit installierte Version von Rust an. Das Modul w
 
 [rust]
 symbol = "⚙️ "
+```
+
+## Singularity
+
+The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
+
+:::
+
+### Optionen
+
+| Variable   | Standardwert         | Beschreibung                                     |
+| ---------- | -------------------- | ------------------------------------------------ |
+| `label`    | `""`                 | Prefix before the image name display.            |
+| `prefix`   | `"["`                | Prefix to display immediately before image name. |
+| `suffix`   | `"]"`                | Suffix to display immediately after image name.  |
+| `symbol`   | `""`                 | The symbol used before the image name.           |
+| `style`    | `"bold dimmed blue"` | Stil für dieses Modul.                           |
+| `disabled` | `false`              | Disables the `singularity` module.               |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[singularity]
+symbol = "📦 "
 ```
 
 ## Terraform
@@ -1066,13 +1114,13 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 ### Optionen
 
-| Variable          | Standardwert  | Beschreibung                                                                                                                              |
-| ----------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`       | Aktiviert die Formatierung der Uhrzeit im 12-Stunden-Format.                                                                              |
-| `format`          | Siehe unten   | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html).             |
-| `style`           | `bold yellow` | Stil für dieses Modul.                                                                                                                    |
-| `utc_time_offset` | `lokal`       | Legt das UTC-Offset fest, das verwendet werden soll. Reicht von -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`        | Deaktiviert das `time`-Modul.                                                                                                             |
+| Variable          | Standardwert    | Beschreibung                                                                                                                              |
+| ----------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`         | Aktiviert die Formatierung der Uhrzeit im 12-Stunden-Format.                                                                              |
+| `format`          | Siehe unten     | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html).             |
+| `style`           | `"bold yellow"` | Stil für dieses Modul.                                                                                                                    |
+| `utc_time_offset` | `"local"`       | Legt das UTC-Offset fest, das verwendet werden soll. Reicht von -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`          | Deaktiviert das `time`-Modul.                                                                                                             |
 
 Wird `use_12hr` auf `true` gestellt, so wird `format` automatisch auf `"%r"` gesetzt. Ansonsten ist der Standardwert hierfür `"%T"`. Wird hingegen `format` gesetzt, so überschreibt dies die Einstellung `use_12hr`.
 
@@ -1084,7 +1132,7 @@ Wird `use_12hr` auf `true` gestellt, so wird `format` automatisch auf `"%r"` ges
 [time]
 disabled = false
 format = "🕙[ %T ]"
-utc_time_offset = -5
+utc_time_offset = "-5"
 ```
 
 ## Benutzername
