@@ -19,6 +19,7 @@ pub mod hg_branch;
 pub mod hostname;
 pub mod java;
 pub mod jobs;
+pub mod julia;
 pub mod kubernetes;
 pub mod memory_usage;
 pub mod nix_shell;

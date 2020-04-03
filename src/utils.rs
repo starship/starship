@@ -55,6 +55,10 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             stdout: String::from("go version go1.12.1 linux/amd64"),
             stderr: String::default(),
         }),
+        "julia --version" => Some(CommandOutput {
+            stdout: String::from("julia version 1.4.0"),
+            stderr: String::default(),
+        }),
         "node --version" => Some(CommandOutput {
             stdout: String::from("v12.0.0"),
             stderr: String::default(),

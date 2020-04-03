@@ -107,6 +107,7 @@ prompt_order = [
     "golang",
     "haskell",
     "java",
+    "julia",
     "nodejs",
     "php",
     "python",
@@ -794,6 +795,31 @@ symbol = "+ "
 threshold = 4
 ```
 
+## Julia
+
+The `julia` module shows the currently installed version of Julia.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `Project.toml` file
+- The current directory contains a `Manifest.toml` file
+- The current directory contains a file with the `.jl` extension
+
+### Options
+
+| Variable   | Default       | Description                                              |
+| ---------- | ------------- | -------------------------------------------------------- |
+| `symbol`   | `"∴ "`       | The symbol used before displaying the version of Julia. |
+| `style`    | `"bold purple"` | The style for the module.                                |
+| `disabled` | `false`       | Disables the `julia` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[julia]
+symbol = "👸 "
+```
 ## Kubernetes
 
 Displays the current Kubernetes context name and, if set, the namespace from
