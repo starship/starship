@@ -7,11 +7,11 @@ use crate::utils;
 ///
 /// Will display the PHP version if any of the following criteria are met:
 ///     - Current directory contains a `.php` file
-///     - Current directory contains a `composer.json` file
+///     - Current directory contains a `composer.json` or `.php-version` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_php_project = context
         .try_begin_scan()?
-        .set_files(&["composer.json"])
+        .set_files(&["composer.json", ".php-version"])
         .set_extensions(&["php"])
         .is_match();
 
@@ -81,6 +81,21 @@ mod tests {
     fn folder_with_composer_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("composer.json"))?.sync_all()?;
+
+        let actual = render_module("php", dir.path());
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(147).bold().paint("🐘 v7.3.8")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_php_version() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join(".php-version"))?.sync_all()?;
 
         let actual = render_module("php", dir.path());
 

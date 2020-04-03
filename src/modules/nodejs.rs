@@ -7,12 +7,12 @@ use crate::utils;
 ///
 /// Will display the Node.js version if any of the following criteria are met:
 ///     - Current directory contains a `.js` file
-///     - Current directory contains a `package.json` file
+///     - Current directory contains a `package.json` or `.node-version` file
 ///     - Current directory contains a `node_modules` directory
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_js_project = context
         .try_begin_scan()?
-        .set_files(&["package.json"])
+        .set_files(&["package.json", ".node-version"])
         .set_extensions(&["js"])
         .set_folders(&["node_modules"])
         .is_match();
@@ -56,6 +56,17 @@ mod tests {
     fn folder_with_package_json() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("package.json"))?.sync_all()?;
+
+        let actual = render_module("nodejs", dir.path());
+        let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_node_version() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join(".node-version"))?.sync_all()?;
 
         let actual = render_module("nodejs", dir.path());
         let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));

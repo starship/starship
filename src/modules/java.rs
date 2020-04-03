@@ -9,11 +9,11 @@ use crate::utils;
 ///
 /// Will display the Java version if any of the following criteria are met:
 ///     - Current directory contains a file with a `.java`, `.class`, `.gradle` or `.jar` extension
-///     - Current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
+///     - Current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_java_project = context
         .try_begin_scan()?
-        .set_files(&["pom.xml", "build.gradle.kts", "build.sbt"])
+        .set_files(&["pom.xml", "build.gradle.kts", "build.sbt", ".java-version"])
         .set_extensions(&["java", "class", "jar", "gradle"])
         .is_match();
 

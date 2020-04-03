@@ -470,6 +470,7 @@ The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `elm.json` file
 - The current directory contains a `elm-package.json` file
+- The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
 
@@ -672,6 +673,7 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `glide.yaml` file
 - The current directory contains a `Gopkg.yml` file
 - The current directory contains a `Gopkg.lock` file
+- The current directory contains a `.go-version` file
 - The current directory contains a `Godeps` directory
 - The current directory contains a file with the `.go` extension
 
@@ -749,7 +751,7 @@ disabled = false
 The `java` module shows the currently installed version of Java.
 The module will be shown if any of the following conditions are met:
 
-- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
 ### Options
@@ -973,6 +975,7 @@ The `nodejs` module shows the currently installed version of NodeJS.
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `package.json` file
+- The current directory contains a `.node-version` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js` extension
 
@@ -1036,6 +1039,7 @@ The `php` module shows the currently installed version of PHP.
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `composer.json` file
+- The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
 ### Options
@@ -1102,6 +1106,7 @@ The `ruby` module shows the currently installed version of Ruby.
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Gemfile` file
+- The current directory contains a `.ruby-version` file
 - The current directory contains a `.rb` file
 
 ### Options
