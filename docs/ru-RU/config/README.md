@@ -98,6 +98,7 @@ prompt_order = [
     "git_state",
     "git_status",
     "hg_branch",
+    "docker_context",
     "package",
     "dotnet",
     "elixir",
@@ -377,6 +378,28 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 [directory]
 truncation_length = 8
+```
+
+## Docker Context
+
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
+
+### Опции
+
+| Переменная        | По умолчанию  | Описание                                                                                |
+| ----------------- | ------------- | --------------------------------------------------------------------------------------- |
+| `symbol`          | `"🐳 "`        | The symbol used before displaying the Docker context .                                  |
+| `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
+| `style`           | `"bold blue"` | Стиль модуля.                                                                           |
+| `disabled`        | `true`        | Disables the `docker_context` module.                                                   |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[docker_context]
+symbol = "🐋 "
 ```
 
 ## Dotnet
@@ -676,20 +699,20 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 symbol = " "
 ```
 
-## Имя хоста
+## Hostname
 
-Модуль `hostname` отображает имя системы (хоста).
+The `hostname` module shows the system hostname.
 
 ### Опции
 
-| Переменная | По умолчанию          | Описание                                                                                                                                   |
-| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                | Показывать имя хоста только при подключении к SSH-сессии.                                                                                  |
-| `prefix`   | `""`                  | Префикс, отображаемый непосредственно перед именем хоста.                                                                                  |
-| `suffix`   | `""`                  | Суффикс, отображаемый непосредственно перед именем хоста.                                                                                  |
-| `trim_at`  | `"."`                 | Символы, по которую имя хоста будет сокращено после первого совпадения. `"."` остановится после первой точки. `""` отключит любое усечение |
-| `style`    | `"bold dimmed green"` | Стиль модуля.                                                                                                                              |
-| `disabled` | `false`               | Отключает модуль `hostname`.                                                                                                               |
+| Переменная | По умолчанию          | Описание                                                                                                                             |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
+| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `style`    | `"bold dimmed green"` | Стиль модуля.                                                                                                                        |
+| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### Пример
 
