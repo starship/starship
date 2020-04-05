@@ -18,8 +18,8 @@ impl<'a> RootModuleConfig<'a> for DockerContextConfig<'a> {
             symbol: SegmentConfig::new("🐳 "),
             context: SegmentConfig::default(),
             style: Color::Blue.bold(),
-            only_with_files: false,
-            disabled: true,
+            only_with_files: true,
+            disabled: false,
         }
     }
 }
