@@ -98,6 +98,7 @@ prompt_order = [
     "git_state",
     "git_status",
     "hg_branch",
+    "docker_context",
     "package",
     "dotnet",
     "elixir",
@@ -377,6 +378,28 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 [directory]
 truncation_length = 8
+```
+
+## Docker Context
+
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
+
+### Options
+
+| Variable          | Default       | Description                                                                             |
+| ----------------- | ------------- | --------------------------------------------------------------------------------------- |
+| `symbol`          | `"🐳 "`        | The symbol used before displaying the Docker context .                                  |
+| `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
+| `style`           | `"bold blue"` | The style for the module.                                                               |
+| `disabled`        | `true`        | Disables the `docker_context` module.                                                   |
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[docker_context]
+symbol = "🐋 "
 ```
 
 ## Dotnet
@@ -1093,7 +1116,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 
 ### Options
 
-| Variable   | Default              | Description                                      |
+| Variable   | Défault              | Description                                      |
 | ---------- | -------------------- | ------------------------------------------------ |
 | `label`    | `""`                 | Prefix before the image name display.            |
 | `prefix`   | `"["`                | Prefix to display immediately before image name. |
@@ -1120,7 +1143,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 
 ### Options
 
-| Variable       | Défault      | Description                                                 |
+| Variable       | Défaut       | Description                                                 |
 | -------------- | ------------ | ----------------------------------------------------------- |
 | `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
 | `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
@@ -1148,7 +1171,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Variable          | Défaut          | Description                                                                                                         |
+| Variable          | Default         | Description                                                                                                         |
 | ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `use_12hr`        | `false`         | Enables 12 hour formatting                                                                                          |
 | `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
