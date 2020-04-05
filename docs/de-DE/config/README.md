@@ -98,6 +98,7 @@ prompt_order = [
     "git_state",
     "git_status",
     "hg_branch",
+    "docker_context",
     "package",
     "dotnet",
     "elixir",
@@ -377,6 +378,28 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 [directory]
 truncation_length = 8
+```
+
+## Docker Context
+
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
+
+### Optionen
+
+| Variable          | Standardwert  | Beschreibung                                                                            |
+| ----------------- | ------------- | --------------------------------------------------------------------------------------- |
+| `symbol`          | `"🐳 "`        | The symbol used before displaying the Docker context .                                  |
+| `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
+| `style`           | `"bold blue"` | Stil für dieses Modul.                                                                  |
+| `disabled`        | `true`        | Disables the `docker_context` module.                                                   |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[docker_context]
+symbol = "🐋 "
 ```
 
 ## Dotnet
@@ -678,18 +701,18 @@ symbol = " "
 
 ## Hostname
 
-Das `hostname`-Modul zeigt den Hostnamen des Systems an.
+The `hostname` module shows the system hostname.
 
 ### Optionen
 
 | Variable   | Standardwert          | Beschreibung                                                                                                                         |
 | ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                | Zeigt den Hostnamen nur, wenn via SSH-Sitzung verbunden.                                                                             |
-| `prefix`   | `""`                  | Prefix der unmittelbar vor dem Hostnamen angezeigt wird.                                                                             |
-| `suffix`   | `""`                  | Suffix der unmittelbar nach dem Hostnamen angezeigt wird.                                                                            |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
 | `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
 | `style`    | `"bold dimmed green"` | Stil für dieses Modul.                                                                                                               |
-| `disabled` | `false`               | Deaktiviert das `hostname`-Modul.                                                                                                    |
+| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### Beispiel
 
@@ -698,8 +721,8 @@ Das `hostname`-Modul zeigt den Hostnamen des Systems an.
 
 [hostname]
 ssh_only = false
-prefix = "10218;"
-suffix = " 10219;"
+prefix = "⟪"
+suffix = "⟫"
 trim_at = ".companyname.com"
 disabled = false
 ```
@@ -982,7 +1005,7 @@ The `php` module shows the currently installed version of PHP. Das Modul wird nu
 
 ### Optionen
 
-| Variable   | Standardwert | Beschreibung                                          |
+| Variable   | Standartwert | Beschreibung                                          |
 | ---------- | ------------ | ----------------------------------------------------- |
 | `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
 | `style`    | `"bold red"` | Stil für dieses Modul.                                |
@@ -1017,7 +1040,7 @@ Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 ### Optionen
 
-| Variable             | Standartwert    | Beschreibung                                                                |
+| Variable             | Standardwert    | Beschreibung                                                                |
 | -------------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
 | `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
