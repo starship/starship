@@ -98,6 +98,7 @@ prompt_order = [
     "git_state",
     "git_status",
     "hg_branch",
+    "docker_context",
     "package",
     "dotnet",
     "elixir",
@@ -377,6 +378,28 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 [directory]
 truncation_length = 8
+```
+
+## Docker Context
+
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
+
+### 配置项
+
+| 字段                | 默认值           | 描述                                                                                      |
+| ----------------- | ------------- | --------------------------------------------------------------------------------------- |
+| `symbol`          | `"🐳 "`        | The symbol used before displaying the Docker context .                                  |
+| `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
+| `style`           | `"bold blue"` | 此组件的样式。                                                                                 |
+| `disabled`        | `true`        | Disables the `docker_context` module.                                                   |
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[docker_context]
+symbol = "🐋 "
 ```
 
 ## Dotnet
@@ -678,18 +701,18 @@ symbol = " "
 
 ## Hostname
 
-`hostname` 组件显示系统主机名。
+The `hostname` module shows the system hostname.
 
 ### 配置项
 
-| 字段         | 默认值                   | 描述                                                                 |
-| ---------- | --------------------- | ------------------------------------------------------------------ |
-| `ssh_only` | `true`                | 仅在连接到 SSH 会话时显示主机名。                                                |
-| `prefix`   | `""`                  | 直接在主机名前显示的前缀。                                                      |
-| `suffix`   | `""`                  | 直接在主机名后显示的后缀。                                                      |
-| `trim_at`  | `"."`                 | 当主机名过长被截断时，会截断成第一次匹配该字符串之前的主机名。 `"."` 会让主机名截断到第一个点处。 `""` 会禁用任何截断。 |
-| `style`    | `"bold dimmed green"` | 此组件的样式。                                                            |
-| `disabled` | `false`               | 禁用 `hostname` 组件。                                                  |
+| 字段         | 默认值                   | 描述                                                                                                                                   |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
+| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `style`    | `"bold dimmed green"` | 此组件的样式。                                                                                                                              |
+| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### 示例
 
@@ -1038,7 +1061,7 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. 此组件将在符合以下任意条件时显示：
+The `ruby` module shows the currently installed version of Ruby. 此组件只有满足以下条件之一时才会被显示：
 
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
