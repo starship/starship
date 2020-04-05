@@ -98,6 +98,7 @@ prompt_order = [
     "git_state",
     "git_status",
     "hg_branch",
+    "docker_context",
     "package",
     "dotnet",
     "elixir",
@@ -377,6 +378,28 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 
 [directory]
 truncation_length = 8
+```
+
+## Docker Context
+
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
+
+### オプション
+
+| 変数                | デフォルト         | 説明                                                                                      |
+| ----------------- | ------------- | --------------------------------------------------------------------------------------- |
+| `symbol`          | `"🐳 "`        | The symbol used before displaying the Docker context .                                  |
+| `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
+| `style`           | `"bold blue"` | モジュールのスタイルです。                                                                           |
+| `disabled`        | `true`        | Disables the `docker_context` module.                                                   |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[docker_context]
+symbol = "🐋 "
 ```
 
 ## Dotnet
@@ -676,20 +699,20 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 symbol = " "
 ```
 
-## ホスト名
+## Hostname
 
-`hostname`モジュールには、システムのホスト名が表示されます。
+The `hostname` module shows the system hostname.
 
 ### オプション
 
-| 変数         | デフォルト                 | 説明                                                                          |
-| ---------- | --------------------- | --------------------------------------------------------------------------- |
-| `ssh_only` | `true`                | SSHセッションに接続されている場合にのみホスト名を表示します。                                            |
-| `prefix`   | `""`                  | ホスト名の直前に表示するprefixです。                                                       |
-| `suffix`   | `""`                  | ホスト名の直後に表示するsuffixです。                                                       |
-| `trim_at`  | `"."`                 | この文字が最初にマッチするまでをホスト名と認識します。 `"."`は最初の. までをホスト名として認識します。 `""`を指定した場合トリムしません。 |
-| `style`    | `"bold dimmed green"` | モジュールのスタイルです。                                                               |
-| `disabled` | `false`               | `hostname`モジュールを無効にします。                                                     |
+| 変数         | デフォルト                 | 説明                                                                                                                                   |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
+| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `style`    | `"bold dimmed green"` | モジュールのスタイルです。                                                                                                                        |
+| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### 設定例
 
