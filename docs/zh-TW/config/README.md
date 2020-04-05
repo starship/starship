@@ -98,6 +98,7 @@ prompt_order = [
     "git_state",
     "git_status",
     "hg_branch",
+    "docker_context",
     "package",
     "dotnet",
     "elixir",
@@ -377,6 +378,28 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 [directory]
 truncation_length = 8
+```
+
+## Docker Context
+
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
+
+### 選項
+
+| 變數                | 預設            | 說明                                                                                      |
+| ----------------- | ------------- | --------------------------------------------------------------------------------------- |
+| `symbol`          | `"🐳 "`        | The symbol used before displaying the Docker context .                                  |
+| `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
+| `style`           | `"bold blue"` | 這個模組的風格。                                                                                |
+| `disabled`        | `true`        | Disables the `docker_context` module.                                                   |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[docker_context]
+symbol = "🐋 "
 ```
 
 ## Dotnet
@@ -676,20 +699,20 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 symbol = " "
 ```
 
-## 主機名稱
+## Hostname
 
-`hostname` 模組顯示系統的主機名稱。
+The `hostname` module shows the system hostname.
 
 ### 選項
 
-| 變數         | 預設                    | 說明                                                         |
-| ---------- | --------------------- | ---------------------------------------------------------- |
-| `ssh_only` | `true`                | 只在連接到一個 SSH session 時顯示主機名稱。                               |
-| `prefix`   | `""`                  | 在主機名稱正前方顯示的前綴。                                             |
-| `suffix`   | `""`                  | 在主機名稱正後方顯示的後綴。                                             |
-| `trim_at`  | `"."`                 | 擷取出主機名稱的斷點，以第一個符合的為準。 `"."` 會讓它停在第一個點的符號。 `""` 會停用任何的截斷功能。 |
-| `style`    | `"bold dimmed green"` | 這個模組的風格。                                                   |
-| `disabled` | `false`               | 停用 `hostname` 模組。                                          |
+| 變數         | 預設                    | 說明                                                                                                                                   |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
+| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `style`    | `"bold dimmed green"` | 這個模組的風格。                                                                                                                             |
+| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### 範例
 
