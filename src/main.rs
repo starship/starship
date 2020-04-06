@@ -2,12 +2,15 @@ use std::time::SystemTime;
 
 #[macro_use]
 extern crate clap;
+#[macro_use]
+extern crate pest_derive;
 
 mod bug_report;
 mod config;
 mod configs;
 mod configure;
 mod context;
+mod formatter;
 mod init;
 mod module;
 mod modules;

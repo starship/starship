@@ -4,15 +4,16 @@ use std::fmt;
 /// A segment is a single configurable element in a module. This will usually
 /// contain a data point to provide context for the prompt's user
 /// (e.g. The version that software is running).
+#[derive(Clone)]
 pub struct Segment {
     /// The segment's name, to be used in configuration and logging.
-    _name: String,
+    pub _name: String,
 
     /// The segment's style. If None, will inherit the style of the module containing it.
-    style: Option<Style>,
+    pub style: Option<Style>,
 
     /// The string value of the current segment.
-    value: String,
+    pub value: String,
 }
 
 impl Segment {

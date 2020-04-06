@@ -99,6 +99,11 @@ impl<'a> Module<'a> {
         self.segments.last_mut().unwrap()
     }
 
+    /// Set segments in module
+    pub fn set_segment(&mut self, segments: Vec<Segment>) {
+        self.segments = segments;
+    }
+
     /// Get module's name
     pub fn get_name(&self) -> &String {
         &self._name
