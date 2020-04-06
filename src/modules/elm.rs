@@ -8,12 +8,13 @@ use crate::utils;
 /// Will display the Elm version if any of the following criteria are met:
 ///     - The current directory contains a `elm.json` file
 ///     - The current directory contains a `elm-package.json` file
+///     - The current directory contains a `.elm-version` file
 ///     - The current directory contains a `elm-stuff` folder
 ///     - The current directory contains a `*.elm` files
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_elm_project = context
         .try_begin_scan()?
-        .set_files(&["elm.json", "elm-package.json"])
+        .set_files(&["elm.json", "elm-package.json", ".elm-version"])
         .set_extensions(&["elm"])
         .set_folders(&["elm-stuff"])
         .is_match();
@@ -66,6 +67,16 @@ mod tests {
     fn folder_with_elm_package_json() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("elm-package.json"))?.sync_all()?;
+        let actual = render_module("elm", dir.path());
+        let expected = Some(format!("via {} ", Color::Cyan.bold().paint("🌳 v0.19.1")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_elm_version() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join(".elm-version"))?.sync_all()?;
         let actual = render_module("elm", dir.path());
         let expected = Some(format!("via {} ", Color::Cyan.bold().paint("🌳 v0.19.1")));
         assert_eq!(expected, actual);

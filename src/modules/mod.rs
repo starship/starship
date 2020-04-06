@@ -5,6 +5,7 @@ mod cmd_duration;
 mod conda;
 mod crystal;
 mod directory;
+mod docker_context;
 mod dotnet;
 mod elixir;
 mod elm;
@@ -19,6 +20,7 @@ mod hg_branch;
 mod hostname;
 mod java;
 mod jobs;
+mod julia;
 mod kubernetes;
 mod line_break;
 mod memory_usage;
@@ -53,6 +55,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "cmd_duration" => cmd_duration::module(context),
         "conda" => conda::module(context),
         "directory" => directory::module(context),
+        "docker_context" => docker_context::module(context),
         "dotnet" => dotnet::module(context),
         "elixir" => elixir::module(context),
         "elm" => elm::module(context),
@@ -67,6 +70,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "hostname" => hostname::module(context),
         "java" => java::module(context),
         "jobs" => jobs::module(context),
+        "julia" => julia::module(context),
         "kubernetes" => kubernetes::module(context),
         "line_break" => line_break::module(context),
         "memory_usage" => memory_usage::module(context),
@@ -99,6 +103,7 @@ pub fn description(module: &str) -> &'static str {
         "cmd_duration" => "How long the last command took to execute",
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
         "directory" => "The current working directory",
+        "docker_context" => "The current docker context",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
         "env_var" => "Displays the current value of a selected environment variable",
         "git_branch" => "The active branch of the repo in your current directory",
@@ -110,6 +115,7 @@ pub fn description(module: &str) -> &'static str {
         "hostname" => "The system hostname",
         "java" => "The currently installed version of Java",
         "jobs" => "The current number of jobs running",
+        "julia" => "The currently installed version of Julia",
         "kubernetes" => "The current Kubernetes context name and, if set, the namespace",
         "line_break" => "Separates the prompt into two lines",
         "memory_usage" => "Current system memory and swap usage",

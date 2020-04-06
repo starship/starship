@@ -100,6 +100,7 @@ prompt_order = [
     "hg_branch",
     "package",
     "dotnet",
+    "elixir",
     "elm",
     "golang",
     "haskell",
@@ -313,6 +314,31 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 style = "dimmed green"
 ```
 
+## Crystal
+
+The `crystal` module shows the currently installed version of Crystal. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `shard.yml` file
+- The current directory contains a `.cr` file
+
+### Options
+
+| Variable   | Default      | Description                                               |
+| ---------- | ------------ | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`       | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"` | The style for the module.                                 |
+| `disabled` | `false`      | Disables the `crystal` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[crystal]
+symbol = "✨ "
+style = "bold blue"
+```
+
 ## Directory
 
 The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
@@ -338,6 +364,8 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
 | `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
 | `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+
+`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -376,6 +404,28 @@ Internally, this module uses its own mechanism for version detection. Typically 
 symbol = "🥅 "
 style = "green"
 heuristic = false
+```
+
+## Elixir
+
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `mix.exs` file.
+
+### Options
+
+| Variable   | Default | Description                                                     |
+| ---------- | ------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`  | The symbol used before displaying the version of Elixir/Erlang. |
+| `disabled` | `false` | Disables the `elixir` module.                                   |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[elixir]
+symbol = "🔮 "
 ```
 
 ## Elm
@@ -463,21 +513,16 @@ truncation_symbol = ""
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
-::: tip
-
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
-
-:::
-
 ### Options
 
-| Variable             | Default        | Description                                      |
-| -------------------- | -------------- | ------------------------------------------------ |
-| `commit_hash_length` | `7`            | The length of the displayed git commit hash.     |
-| `prefix`             | `"("`          | Prefix to display immediately before git commit. |
-| `suffix`             | `")"`          | Suffix to display immediately after git commit.  |
-| `style`              | `"bold green"` | The style for the module.                        |
-| `disabled`           | `true`         | Disables the `git_commit` module.                |
+| Variable             | Default        | Description                                           |
+| -------------------- | -------------- | ----------------------------------------------------- |
+| `commit_hash_length` | `7`            | The length of the displayed git commit hash.          |
+| `prefix`             | `"("`          | Prefix to display immediately before git commit.      |
+| `suffix`             | `")"`          | Suffix to display immediately after git commit.       |
+| `style`              | `"bold green"` | The style for the module.                             |
+| `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
+| `disabled`           | `false`        | Disables the `git_commit` module.                     |
 
 ### Example
 
@@ -485,7 +530,6 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 # ~/.config/starship.toml
 
 [git_commit]
-disabled = false
 commit_hash_length = 4
 ```
 
@@ -629,31 +673,6 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 symbol = " "
 ```
 
-## Mercurial Branch
-
-The `hg_branch` module shows the active branch of the repo in your current directory.
-
-### Options
-
-| Variable            | Default         | Description                                                                                  |
-| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
-| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
-| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
-| `style`             | `"bold purple"` | The style for the module.                                                                    |
-| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
-
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[hg_branch]
-symbol = "🌱 "
-truncation_length = 4
-truncation_symbol = ""
-```
-
 ## Hostname
 
 The `hostname` module shows the system hostname.
@@ -680,6 +699,30 @@ prefix = "⟪"
 suffix = "⟫"
 trim_at = ".companyname.com"
 disabled = false
+```
+
+## Java
+
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
+- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
+
+### Options
+
+| Variable   | Default        | Description                                            |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | The style for the module.                              |
+| `disabled` | `false`        | Disables the `java` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[java]
+symbol = "🌟 "
 ```
 
 ## Jobs
@@ -730,7 +773,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 [kubernetes]
 symbol = "⛵ "
-style = "dim green"
+style = "dimmed green"
 disabled = false
 ```
 
@@ -751,56 +794,6 @@ The `line_break` module separates the prompt into two lines.
 
 [line_break]
 disabled = true
-```
-
-## Nix-shell
-
-The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
-
-### Options
-
-| Variable     | Default      | Description                        |
-| ------------ | ------------ | ---------------------------------- |
-| `use_name`   | `false`      | Display the name of the nix-shell. |
-| `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
-| `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
-| `style`      | `"bold red"` | The style for the module.          |
-| `disabled`   | `false`      | Disables the `nix_shell` module.   |
-
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[nix_shell]
-disabled = true
-use_name = true
-impure_msg = "impure shell"
-pure_msg = "pure shell"
-```
-
-## Java
-
-The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
-- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
-
-### Options
-
-| Variable   | Default        | Description                                            |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | The style for the module.                              |
-| `disabled` | `false`        | Disables the `java` module.                            |
-
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[java]
-symbol = "🌟 "
 ```
 
 ## Memory Usage
@@ -833,6 +826,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 # ~/.config/starship.toml
 
 [memory_usage]
+disabled = false
 show_percentage = true
 show_swap = true
 threshold = -1
@@ -841,29 +835,55 @@ separator = "/"
 style = "bold dimmed green"
 ```
 
-## Crystal
+## Mercurial Branch
 
-The `crystal` module shows the currently installed version of Crystal. The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `shard.yml` file
-- The current directory contains a `.cr` file
+The `hg_branch` module shows the active branch of the repo in your current directory.
 
 ### Options
 
-| Variable   | Default      | Description                                               |
-| ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`       | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold red"` | The style for the module.                                 |
-| `disabled` | `false`      | Disables the `crystal` module.                            |
+| Variable            | Default         | Description                                                                                  |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
+| `style`             | `"bold purple"` | The style for the module.                                                                    |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
 
 ### Example
 
 ```toml
 # ~/.config/starship.toml
 
-[crystal]
-symbol = "✨ "
-style = "bold blue"
+[hg_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
+```
+
+## Nix-shell
+
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
+
+### Options
+
+| Variable     | Default      | Description                        |
+| ------------ | ------------ | ---------------------------------- |
+| `use_name`   | `false`      | Display the name of the nix-shell. |
+| `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
+| `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
+| `style`      | `"bold red"` | The style for the module.          |
+| `disabled`   | `false`      | Disables the `nix_shell` module.   |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[nix_shell]
+disabled = true
+use_name = true
+impure_msg = "impure shell"
+pure_msg = "pure shell"
 ```
 
 ## NodeJS
@@ -893,12 +913,13 @@ symbol = "🤖 "
 
 ## Package Version
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, and `poetry` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, and `gradle` packages.
 
 - **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
 - **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
 - **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
 - **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
+- **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
 
@@ -1030,6 +1051,32 @@ The `rust` module shows the currently installed version of Rust. The module will
 symbol = "⚙️ "
 ```
 
+## Singularity
+
+The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
+
+:::
+
+### Options
+
+| Variable   | Default              | Description                                      |
+| ---------- | -------------------- | ------------------------------------------------ |
+| `label`    | `""`                 | Prefix before the image name display.            |
+| `prefix`   | `"["`                | Prefix to display immediately before image name. |
+| `suffix`   | `"]"`                | Suffix to display immediately after image name.  |
+| `symbol`   | `""`                 | The symbol used before the image name.           |
+| `style`    | `"bold dimmed blue"` | The style for the module.                        |
+| `disabled` | `false`              | Disables the `singularity` module.               |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[singularity]
+symbol = "📦 "
+```
+
 ## Terraform
 
 The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. The module will be shown if any of the following conditions are met:
@@ -1067,13 +1114,13 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Variable          | Default       | Description                                                                                                         |
-| ----------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`       | Enables 12 hour formatting                                                                                          |
-| `format`          | see below     | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`           | `bold yellow` | The style for the module time                                                                                       |
-| `utc_time_offset` | `local`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
-| `disabled`        | `true`        | Disables the `time` module.                                                                                         |
+| Variable          | Default         | Description                                                                                                         |
+| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`         | Enables 12 hour formatting                                                                                          |
+| `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `"bold yellow"` | The style for the module time                                                                                       |
+| `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
+| `disabled`        | `true`          | Disables the `time` module.                                                                                         |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
@@ -1085,7 +1132,7 @@ If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it default
 [time]
 disabled = false
 format = "🕙[ %T ]"
-utc_time_offset = -5
+utc_time_offset = "-5"
 ```
 
 ## Username

@@ -100,6 +100,7 @@ prompt_order = [
     "git_state",
     "git_status",
     "hg_branch",
+    "docker_context",
     "package",
     "dotnet",
     "elixir",
@@ -107,6 +108,7 @@ prompt_order = [
     "golang",
     "haskell",
     "java",
+    "julia",
     "nodejs",
     "php",
     "python",
@@ -133,6 +135,9 @@ prompt_order = [
 The `aws` module shows the current AWS region and profile. This is based on
 `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with
 `~/.aws/config` file.
+
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile
+is read from the `AWS_VAULT` env var.
 
 ### Options
 
@@ -404,6 +409,30 @@ a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/
 truncation_length = 8
 ```
 
+## Docker Context
+
+The `docker_context` module shows the currently active
+[Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to
+`default`.
+
+### Options
+
+| Variable          | Default       | Description                                                                  |
+| ----------------- | ------------- | ---------------------------------------------------------------------------- |
+| `symbol`          | `"🐳 "`       | The symbol used before displaying the Docker context .                       |
+| `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
+| `style`           | `"bold blue"` | The style for the module.                                                    |
+| `disabled`        | `true`        | Disables the `docker_context` module.                                        |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[docker_context]
+symbol = "🐋 "
+```
+
 ## Dotnet
 
 The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If
@@ -469,6 +498,7 @@ The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `elm.json` file
 - The current directory contains a `elm-package.json` file
+- The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
 
@@ -674,6 +704,7 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `glide.yaml` file
 - The current directory contains a `Gopkg.yml` file
 - The current directory contains a `Gopkg.lock` file
+- The current directory contains a `.go-version` file
 - The current directory contains a `Godeps` directory
 - The current directory contains a file with the `.go` extension
 
@@ -751,7 +782,7 @@ disabled = false
 The `java` module shows the currently installed version of Java.
 The module will be shown if any of the following conditions are met:
 
-- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
 ### Options
@@ -797,6 +828,31 @@ symbol = "+ "
 threshold = 4
 ```
 
+## Julia
+
+The `julia` module shows the currently installed version of Julia.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `Project.toml` file
+- The current directory contains a `Manifest.toml` file
+- The current directory contains a file with the `.jl` extension
+
+### Options
+
+| Variable   | Default       | Description                                              |
+| ---------- | ------------- | -------------------------------------------------------- |
+| `symbol`   | `"∴ "`       | The symbol used before displaying the version of Julia. |
+| `style`    | `"bold purple"` | The style for the module.                                |
+| `disabled` | `false`       | Disables the `julia` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[julia]
+symbol = "👸 "
+```
 ## Kubernetes
 
 Displays the current Kubernetes context name and, if set, the namespace from
@@ -813,11 +869,12 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable   | Default       | Description                                         |
-| ---------- | ------------- | --------------------------------------------------- |
-| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
-| `style`    | `"bold blue"` | The style for the module.                           |
-| `disabled` | `true`        | Disables the `kubernetes` module                    |
+| Variable         | Default       | Description                                         |
+| ---------------- | ------------- | --------------------------------------------------- |
+| `symbol`         | `"☸ "`        | The symbol used before displaying the Cluster info. |
+| `context_aliases` |               | Table of context aliases to display                 |
+| `style`          | `"bold blue"` | The style for the module.                           |
+| `disabled`       | `true`        | Disables the `kubernetes` module                    |
 
 ### Example
 
@@ -828,6 +885,8 @@ To enable it, set `disabled` to `false` in your configuration file.
 symbol = "⛵ "
 style = "dimmed green"
 disabled = false
+[kubernetes.context_aliases]
+"dev.local.cluster.k8s" = "dev"
 ```
 
 ## Line Break
@@ -947,6 +1006,7 @@ The `nodejs` module shows the currently installed version of NodeJS.
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `package.json` file
+- The current directory contains a `.node-version` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js` extension
 
@@ -982,6 +1042,7 @@ package, and shows its current version. The module currently supports `npm`, `ca
 - **composer** – The `composer` package version is extracted from the `composer.json` present
   in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
+- **julia** - The package version is extracted from the `Project.toml` present
 
 > ⚠️ The version being shown is that of the package whose source code is in your
 > current directory, not your package manager.
@@ -1009,6 +1070,7 @@ The `php` module shows the currently installed version of PHP.
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `composer.json` file
+- The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
 ### Options
@@ -1075,6 +1137,7 @@ The `ruby` module shows the currently installed version of Ruby.
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Gemfile` file
+- The current directory contains a `.ruby-version` file
 - The current directory contains a `.rb` file
 
 ### Options

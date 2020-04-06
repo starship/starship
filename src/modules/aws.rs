@@ -50,7 +50,9 @@ fn get_aws_region_from_config(aws_profile: Option<&str>) -> Option<Region> {
 
 fn get_aws_profile_and_region() -> (Option<Profile>, Option<Region>) {
     match (
-        env::var("AWS_PROFILE").ok(),
+        env::var("AWS_VAULT")
+            .or_else(|_| env::var("AWS_PROFILE"))
+            .ok(),
         env::var("AWS_REGION").ok(),
         env::var("AWS_DEFAULT_REGION").ok(),
     ) {

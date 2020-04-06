@@ -86,6 +86,14 @@ fn extract_composer_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
+fn extract_project_version(file_contents: &str) -> Option<String> {
+    let project_toml: toml::Value = toml::from_str(file_contents).ok()?;
+    let raw_version = project_toml.get("version")?.as_str()?;
+
+    let formatted_version = format_version(raw_version);
+    Some(formatted_version)
+}
+
 fn get_package_version(base_dir: &PathBuf) -> Option<String> {
     if let Ok(cargo_toml) = utils::read_file(base_dir.join("Cargo.toml")) {
         extract_cargo_version(&cargo_toml)
@@ -97,6 +105,8 @@ fn get_package_version(base_dir: &PathBuf) -> Option<String> {
         extract_composer_version(&composer_json)
     } else if let Ok(build_gradle) = utils::read_file(base_dir.join("build.gradle")) {
         extract_gradle_version(&build_gradle)
+    } else if let Ok(project_toml) = utils::read_file(base_dir.join("Project.toml")) {
+        extract_project_version(&project_toml)
     } else {
         None
     }
@@ -343,6 +353,33 @@ java {
         let expected_version = None;
         assert_eq!(
             extract_composer_version(&composer_without_version),
+            expected_version
+        );
+    }
+
+    #[test]
+    fn test_extract_project_version() {
+        let project_with_version = toml::toml! {
+            name = "starship"
+            version = "0.1.0"
+        }
+        .to_string();
+
+        let expected_version = Some("v0.1.0".to_string());
+        assert_eq!(
+            extract_project_version(&project_with_version),
+            expected_version
+        );
+
+        let project_without_version = toml::toml! {
+            [package]
+            name = "starship"
+        }
+        .to_string();
+
+        let expected_version = None;
+        assert_eq!(
+            extract_project_version(&project_without_version),
             expected_version
         );
     }

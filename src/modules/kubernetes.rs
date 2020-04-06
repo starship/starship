@@ -68,7 +68,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             module.get_prefix().set_value(KUBERNETES_PREFIX);
 
             module.create_segment("symbol", &config.symbol);
-            module.create_segment("context", &config.context.with_value(&kube_ctx));
+
+            let displayed_context = match config.context_aliases.get(&kube_ctx) {
+                None => &kube_ctx,
+                Some(&alias) => alias,
+            };
+
+            module.create_segment("context", &config.context.with_value(&displayed_context));
             if kube_ns != "" {
                 module.create_segment(
                     "namespace",
