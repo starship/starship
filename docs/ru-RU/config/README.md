@@ -132,6 +132,8 @@ prompt_order = [
 
 Модуль `aws` показывает текущий регион и профиль AWS. Основано на `AWS_REGION`, `AWS_DEFAULT_REGION`, и `AWS_PROFILE` переменных окружения и файле`~/.aws/config`.
 
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
+
 ### Опции
 
 | Переменная        | По умолчанию    | Описание                                                         |
@@ -158,7 +160,7 @@ us-east-1 = "va"
 
 ## Батарея
 
-Модуль `battery` показывает насколько заряжена батарея девайса и статус зарядки на данный момент. Модуль виден только, если заряд батареи устройства меньше 10%.
+The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
 ### Опции
 
@@ -171,14 +173,14 @@ us-east-1 = "va"
 | `disabled`           | `false`                  | Отключает модуль `battery`.                     |
 
 <details>
-<summary>Также, есть опции для некоторых нетипичных состояний батареи.</summary>
+<summary>There are also options for some uncommon battery states.</summary>
 
 | Переменная       | Описание                                                |
 | ---------------- | ------------------------------------------------------- |
 | `unknown_symbol` | Символ, отображаемый при неизвестном состоянии батареи. |
 | `empty_symbol`   | Символ, отображаемый при пустом состоянии батареи.      |
 
-Примечание: Индикатор батареи будет скрыт при состоянии `unknown` или `empty`, если вы не указали параметр в настройках.
+Note: Battery indicator will be hidden if the status is `unknown` or `empty` unless you specify the option in the config.
 
 </details>
 
@@ -195,7 +197,7 @@ discharging_symbol = "💀"
 
 ### Отображение батареи
 
-Параметр `display` используется для определения того, когда индикатор батареи должен быть показан (threshhold) и как он выглядит (style). Если `display` не предоставлено. Значение по умолчанию:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. Значение по умолчанию:
 
 ```toml
 [[battery.display]]
@@ -205,7 +207,7 @@ style = "bold red"
 
 #### Опции
 
-Опция `display` представляет собой массив следующей таблицы.
+The `display` option is an array of the following table.
 
 | Переменная  | Описание                                                 |
 | ----------- | -------------------------------------------------------- |
@@ -229,9 +231,9 @@ style = "bold yellow"
 
 ## Символ
 
-Модуль `character` показывает символ (обычно, стрелка) рядом с вводимым текстом в терминале.
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-Символ показывает, была ли последняя команда успешной или нет. Это возможно двумя способами: меняя цвет (красный/зеленый) или изменяя его форму (❯/✖). Последнее будет исполняться только в том случае, если переменной `use_symbol_for_status` установлено значение `true`.
+The character will tell you whether the last command was successful or not. It can do this in two ways: by changing color (red/green) or by changing its shape (❯/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
 
 ### Опции
 
@@ -258,15 +260,15 @@ use_symbol_for_status = true
 
 ## Длительность команды
 
-Модуль `cmd_duration` показывает время исполнения последней команды. Модуль будет показан только, если команда заняла более двух секунд, или если задан параметр `min_time`.
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning Не подключайте ловушку DEBUG к Bash
+::: warning Do not hook the DEBUG trap in Bash
 
-Если вы испоьзуете Starship в `bash`, не подключайте ловушку `DEBUG` после запуска `eval $(starship init $0)`, иначе этот модуль сломается.
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-Пользователи Bash, которым нужна функциональность, подобная preexec, могут использовать [фреймворк bash_preexec от rcaloras](https://github.com/rcaloras/bash-preexec). Просто определите массивы `preexec_functions` и `precmd_functions` перед запуском `eval $(starship init $0)`, а затем продолжайте нормально.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Опции
 
@@ -290,11 +292,11 @@ prefix = "underwent "
 
 ## Конда
 
-Модуль `conda` показывает текущее окружение conda, если `$CONDA_DEFAULT_ENV` присвоено значение.
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip Подсказка
 
-Это не подавляет модификатор командной строки самой conda. Возможно, вы захотите запустить `conda config --set changeps1 False`.
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
