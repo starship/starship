@@ -132,6 +132,8 @@ prompt_order = [
 
 `aws` 组件显示当前 AWS 主机所在区域与配置信息。 各组件基于 `AWS_REGION`，`AWS_DEFAULT_REGION` 和 `AWS_PROFILE` 环境变量与 `~/.aws/config` 文件。
 
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
+
 ### 配置项
 
 | 字段                | 默认值             | 描述                                            |
@@ -158,7 +160,7 @@ us-east-1 = "va"
 
 ## Battery
 
-`battery` 组件显示电池充电情况和当前充电状态。 这个组件只会在当前电量低于 10% 时显示。
+The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
 ### 配置项
 
@@ -171,14 +173,14 @@ us-east-1 = "va"
 | `disabled`           | `false`                 | 禁用 `battery` 组件。 |
 
 <details>
-<summary>也有一些给不常见的电源状态设立的字段。</summary>
+<summary>There are also options for some uncommon battery states.</summary>
 
 | 字段               | 描述         |
 | ---------------- | ---------- |
 | `unknown_symbol` | 显示于电池状态未知时 |
 | `empty_symbol`   | 显示于电池状态为空时 |
 
-注意：如果状态为 `unknown` 或 `empty`，电池指示器将被隐藏，除非您在配置中指定相关选项。
+Note: Battery indicator will be hidden if the status is `unknown` or `empty` unless you specify the option in the config.
 
 </details>
 
@@ -195,7 +197,7 @@ discharging_symbol = "💀"
 
 ### Battery 组件的显示
 
-`display` 选项用于定义电池指示器的显示阈值（threshold）和显示效果（style）。 如果 `display` 没有设置， 默认配置如下所示：
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. 默认设置如下：
 
 ```toml
 [[battery.display]]
@@ -205,7 +207,7 @@ style = "bold red"
 
 #### 配置项
 
-`display` 字段的子字段如下：
+The `display` option is an array of the following table.
 
 | 字段          | 描述               |
 | ----------- | ---------------- |
@@ -229,9 +231,9 @@ style = "bold yellow"
 
 ## Character
 
-`character` 组件用于在您输入终端的文本旁显示一个字符（通常是一个箭头）。
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-这个字符可以告诉您最后一个命令是否执行成功。 它可以用两种方式完成这一功能：改变字符颜色（红色/绿色）或者改变其形状（❯/✖）。 后者仅在 `use_symbol_for_status` 设置为 `true` 时才能实现。
+The character will tell you whether the last command was successful or not. It can do this in two ways: by changing color (red/green) or by changing its shape (❯/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
 
 ### 配置项
 
@@ -258,15 +260,15 @@ use_symbol_for_status = true
 
 ## Command Duration
 
-`cmd_duration` 组件显示上一个命令执行的时间。 此组件只在命令执行时间长于两秒时显示，或者当其 `min_time` 字段被设置时，按此值为执行时间的显示下限。
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning 不要在 Bash 里捕获 DEBUG 信号
+::: warning Do not hook the DEBUG trap in Bash
 
-如果您正在 `bash` 上使用 Starship，在运行 `eval $(starship)` 后，不要捕获 `DEBUG` 信号，否则此组件**将会**坏掉。
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-需要在自动每一条命令前执行某些操作的 Bash 用户可以使用 [rcaloras 的 bash_preexec 框架](https://github.com/rcaloras/bash-preexec)。 只需要在执行 `eval $(starship init $0)` 前简单地定义 `preexec_functions` 和 `precmd_functions` 两个列表，就可以照常运行了。
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### 配置项
 
@@ -290,11 +292,11 @@ prefix = "underwent "
 
 ## Conda
 
-`conda` 组件在 `$CONDA_DEFAULT_ENV` 被设置时显示当前 conda 环境。
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
-此组件没有禁用 conda 自带的提示符修改，您可能需要执行 `conda config --set changeps1 False`。
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
