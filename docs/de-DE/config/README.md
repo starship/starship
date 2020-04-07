@@ -921,13 +921,14 @@ Das `nix_shell`-Modul zeigt die nix-shell Umgebung an. Das Modul wird angezeigt,
 
 ### Optionen
 
-| Variable     | Standardwert | Beschreibung                       |
-| ------------ | ------------ | ---------------------------------- |
-| `use_name`   | `false`      | Namen der nix-Shell anzeigen.      |
-| `impure_msg` | `"impure"`   | Passt die "impure"-Nachricht an.   |
-| `pure_msg`   | `"pure"`     | Passt die "pure"-Nachricht an.     |
-| `style`      | `"bold red"` | Stil für dieses Modul.             |
-| `disabled`   | `false`      | Deaktiviert das `nix_shell`-Modul. |
+| Variable     | Standardwert  | Beschreibung                                      |
+| ------------ | ------------- | ------------------------------------------------- |
+| `use_name`   | `false`       | Namen der nix-Shell anzeigen.                     |
+| `impure_msg` | `"impure"`    | Passt die "impure"-Nachricht an.                  |
+| `pure_msg`   | `"pure"`      | Passt die "pure"-Nachricht an.                    |
+| `symbol`     | `"❄️  "`      | The symbol used before displaying the shell name. |
+| `style`      | `"bold blue"` | Stil für dieses Modul.                            |
+| `disabled`   | `false`       | Disables the `nix_shell` module.                  |
 
 ### Beispiel
 
@@ -939,6 +940,7 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
+symbol = "☃️  "
 ```
 
 ## NodeJS
