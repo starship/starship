@@ -9,6 +9,7 @@ pub struct NixShellConfig<'a> {
     pub impure_msg: SegmentConfig<'a>,
     pub pure_msg: SegmentConfig<'a>,
     pub style: Style,
+    pub symbol: SegmentConfig<'a>,
     pub disabled: bool,
 }
 
@@ -19,6 +20,7 @@ impl<'a> RootModuleConfig<'a> for NixShellConfig<'a> {
             impure_msg: SegmentConfig::new("impure"),
             pure_msg: SegmentConfig::new("pure"),
             style: Color::Red.bold(),
+            symbol: SegmentConfig::new("❄️  "),
             disabled: false,
         }
     }

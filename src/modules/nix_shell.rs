@@ -27,6 +27,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: NixShellConfig = NixShellConfig::try_load(module.config);
 
     module.set_style(config.style);
+    module.create_segment("symbol", &config.symbol);
 
     let shell_type = env::var("IN_NIX_SHELL").ok()?;
     let shell_type_segment: SegmentConfig = match shell_type.as_ref() {
