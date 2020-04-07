@@ -100,7 +100,7 @@ impl<'a> Module<'a> {
     }
 
     /// Set segments in module
-    pub fn set_segment(&mut self, segments: Vec<Segment>) {
+    pub fn set_segments(&mut self, segments: Vec<Segment>) {
         self.segments = segments;
     }
 
