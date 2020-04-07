@@ -921,13 +921,14 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 
 ### Options
 
-| Variable     | Default        | Description                        |
-| ------------ | -------------- | ---------------------------------- |
-| `use_name`   | `false`        | Display the name of the nix-shell. |
-| `impure_msg` | `"impure"`     | Customize the "impure" msg.        |
-| `pure_msg`   | `"pure"`       | Customize the "pure" msg.          |
-| `style`      | `"bold green"` | The style for the module.          |
-| `disabled`   | `false`        | Disables the `nix_shell` module.   |
+| Variable     | Default       | Description                                       |
+| ------------ | ------------- | ------------------------------------------------- |
+| `use_name`   | `false`       | Display the name of the nix-shell.                |
+| `impure_msg` | `"impure"`    | Customize the "impure" msg.                       |
+| `pure_msg`   | `"pure"`      | Customize the "pure" msg.                         |
+| `symbol`     | `"❄️  "`      | The symbol used before displaying the shell name. |
+| `style`      | `"bold blue"` | The style for the module.                         |
+| `disabled`   | `false`       | Disables the `nix_shell` module.                  |
 
 ### Exemple
 
@@ -939,6 +940,7 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
+symbol = "☃️  "
 ```
 
 ## NodeJS
