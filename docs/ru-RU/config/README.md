@@ -788,7 +788,7 @@ The `julia` module shows the currently installed version of Julia. Модуль 
 
 | Переменная | По умолчанию    | Описание                                                |
 | ---------- | --------------- | ------------------------------------------------------- |
-| `symbol`   | `"∴ "`          | The symbol used before displaying the version of Julia. |
+| `symbol`   | `"ஃ "`          | The symbol used before displaying the version of Julia. |
 | `style`    | `"bold purple"` | Стиль модуля.                                           |
 | `disabled` | `false`         | Disables the `julia` module.                            |
 
@@ -798,7 +798,7 @@ The `julia` module shows the currently installed version of Julia. Модуль 
 # ~/.config/starship.toml
 
 [julia]
-symbol = "👸 "
+symbol = "∴ "
 ```
 ## Kubernetes
 
