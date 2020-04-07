@@ -921,13 +921,14 @@ truncation_symbol = ""
 
 ### Опции
 
-| Переменная   | По умолчанию | Описание                      |
-| ------------ | ------------ | ----------------------------- |
-| `use_name`   | `false`      | Отображать имя nix-shell.     |
-| `impure_msg` | `"impure"`   | Настройте сообщение "impure". |
-| `pure_msg`   | `"pure"`     | Настройте сообщение "pure".   |
-| `style`      | `"bold red"` | Стиль модуля.                 |
-| `disabled`   | `false`      | Отключает модуль `nix_shell`. |
+| Переменная   | По умолчанию  | Описание                                          |
+| ------------ | ------------- | ------------------------------------------------- |
+| `use_name`   | `false`       | Отображать имя nix-shell.                         |
+| `impure_msg` | `"impure"`    | Настройте сообщение "impure".                     |
+| `pure_msg`   | `"pure"`      | Настройте сообщение "pure".                       |
+| `symbol`     | `"❄️  "`      | The symbol used before displaying the shell name. |
+| `style`      | `"bold blue"` | Стиль модуля.                                     |
+| `disabled`   | `false`       | Disables the `nix_shell` module.                  |
 
 ### Пример
 
@@ -939,6 +940,7 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
+symbol = "☃️  "
 ```
 
 ## NodeJS
