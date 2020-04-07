@@ -26,7 +26,7 @@
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Follow @StarshipPrompt on Twitter" /></a>
+      alt="Sigue a @StarshipPrompt en Twitter" /></a>
 </p>
 
 <p align="center">
