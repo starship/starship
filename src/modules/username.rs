@@ -29,6 +29,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         };
 
         module.set_style(module_style);
+        module.get_prefix().set_value(config.prefix);
+        module.get_suffix().set_value(config.suffix);
         module.create_segment("username", &SegmentConfig::new(&user?));
 
         Some(module)
