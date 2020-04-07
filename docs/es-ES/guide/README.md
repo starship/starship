@@ -101,13 +101,13 @@
   align="right" />
 
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**El símbolo del sistema minimalista, ultrarápido e infinitamente customizable para cualquier intérprete de comandos!**
 
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
+- **Rápido:** es rápido – _muy muy_ rápido! 🚀
+- **Customizable:** configura cada parte de tu intérprete de comandos.
+- **Universal:** funciona en cualquier símbolo del sistema, en cualquier sistema operativo.
+- **Inteligente:** muestra información relevante de un vistazo.
 - **Feature rich:** support for all your favorite tools.
 - **Easy:** quick to install – start using it in minutes.
 
