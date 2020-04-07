@@ -69,7 +69,7 @@ pub struct Module<'a> {
     prefix: Affix,
 
     /// The collection of segments that compose this module.
-    segments: Vec<Segment>,
+    pub segments: Vec<Segment>,
 
     /// The suffix used to separate the current module from the next one.
     suffix: Affix,
@@ -119,6 +119,7 @@ impl<'a> Module<'a> {
         self.segments.iter().all(|segment| segment.is_empty())
     }
 
+    /// Get values of the module's segments
     pub fn get_segments(&self) -> Vec<&str> {
         self.segments.iter().map(Segment::get_value).collect()
     }
@@ -167,10 +168,6 @@ impl<'a> Module<'a> {
         };
 
         ansi_strings
-    }
-
-    pub fn to_string_without_prefix(&self, shell: Shell) -> String {
-        ANSIStrings(&self.ansi_strings_for_shell(shell)[1..]).to_string()
     }
 }
 

@@ -6,6 +6,7 @@ use std::io::{self, Write};
 use unicode_width::UnicodeWidthChar;
 
 use crate::context::{Context, Shell};
+use crate::formatter::StringFormatter;
 use crate::module::Module;
 use crate::module::ALL_MODULES;
 use crate::modules;
@@ -21,34 +22,33 @@ pub fn get_prompt(context: Context) -> String {
     let config = context.config.get_root_config();
     let mut buf = String::new();
 
-    // Write a new line before the prompt
-    if config.add_newline {
-        writeln!(buf).unwrap();
-    }
-
     // A workaround for a fish bug (see #739,#279). Applying it to all shells
     // breaks things (see #808,#824,#834). Should only be printed in fish.
     if let Shell::Fish = context.shell {
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
     }
 
-    let modules = compute_modules(&context);
-
-    let mut print_without_prefix = true;
-    let printable = modules.iter();
-
-    for module in printable {
-        // Skip printing the prefix of a module after the line_break
-        if print_without_prefix {
-            let module_without_prefix = module.to_string_without_prefix(context.shell.clone());
-            write!(buf, "{}", module_without_prefix).unwrap()
+    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
+        formatter
+    } else {
+        log::error!("Error parsing `format`");
+        buf.push_str(">");
+        return buf;
+    };
+    let formatter = formatter.map_variables_to_segments(|module| {
+        if context.is_module_disabled_in_config(&module) {
+            None
         } else {
-            let module = module.ansi_strings_for_shell(context.shell.clone());
-            write!(buf, "{}", ANSIStrings(&module)).unwrap();
+            modules::handle(module, &context).map(|module| module.segments)
         }
+    });
 
-        print_without_prefix = module.get_name() == "line_break"
-    }
+    // Creates a root module and prints it.
+    let mut root_module = Module::new("Starship Root", "The root module", None);
+    root_module.set_segments(formatter.parse(None));
+
+    let module_strings = root_module.ansi_strings_for_shell(context.shell.clone());
+    write!(buf, "{}", ANSIStrings(&module_strings)).unwrap();
 
     buf
 }
@@ -134,8 +134,17 @@ pub fn explain(args: ArgMatches) {
 fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
     let mut prompt_order: Vec<&str> = Vec::new();
 
+    let config = context.config.get_root_config();
+    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
+        formatter
+    } else {
+        log::error!("Error parsing `format`");
+        return Vec::new();
+    };
+    let modules = formatter.get_variables();
+
     // Write out a custom prompt order
-    for module in context.config.get_root_config().prompt_order {
+    for module in modules {
         if ALL_MODULES.contains(&module) {
             prompt_order.push(module);
         } else {

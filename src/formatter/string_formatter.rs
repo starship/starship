@@ -27,6 +27,11 @@ impl<'a> StringFormatter<'a> {
             .map(|(format, variables)| Self { format, variables })
     }
 
+    /// Get variable names extracted from the format string
+    pub fn get_variables(&self) -> Vec<&str> {
+        self.variables.keys().map(|key| key.as_ref()).collect()
+    }
+
     /// Maps variable name to its value
     pub fn map(mut self, mapper: impl Fn(&str) -> Option<String> + Sync) -> Self {
         self.variables.par_iter_mut().for_each(|(key, value)| {
