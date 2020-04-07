@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: El símbolo del sistema minimalista, ultrarápido e infinitamente customizable para cualquier intérprete de comandos!
 actionText: Empezar →
 actionLink: ./guide/
 features:
