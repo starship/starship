@@ -28,7 +28,7 @@ fn pure_shell() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Red.bold().paint("❄️  pure"));
+    let expected = format!("via {} ", Color::Blue.bold().paint("❄️  pure"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -40,7 +40,7 @@ fn impure_shell() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Red.bold().paint("❄️  impure"));
+    let expected = format!("via {} ", Color::Blue.bold().paint("❄️  impure"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -52,7 +52,7 @@ fn lorri_shell() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Red.bold().paint("❄️  impure"));
+    let expected = format!("via {} ", Color::Blue.bold().paint("❄️  impure"));
     assert_eq!(expected, actual);
     Ok(())
 }
