@@ -43,9 +43,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     module.set_style(config.style);
-    let hostname_stacked = format!("{}{}{}", config.prefix, host, config.suffix);
-    module.create_segment("hostname", &SegmentConfig::new(&hostname_stacked));
-    module.get_prefix().set_value("on ");
+
+    module.get_prefix().set_value(config.prefix);
+    module.get_suffix().set_value(config.suffix);
+
+    module.create_segment("hostname", &SegmentConfig::new(&host));
 
     Some(module)
 }
