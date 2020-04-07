@@ -921,13 +921,14 @@ truncation_symbol = ""
 
 ### 選項
 
-| 變數           | 預設           | 說明                 |
-| ------------ | ------------ | ------------------ |
-| `use_name`   | `false`      | 顯示 nix-shell 的名稱。  |
-| `impure_msg` | `"impure"`   | 自定義「impure」訊息。     |
-| `pure_msg`   | `"pure"`     | 自定義「pure」訊息。       |
-| `style`      | `"bold red"` | 這個模組的風格。           |
-| `disabled`   | `false`      | 停用 `nix_shell` 模組。 |
+| 變數           | 預設            | 說明                                                |
+| ------------ | ------------- | ------------------------------------------------- |
+| `use_name`   | `false`       | 顯示 nix-shell 的名稱。                                 |
+| `impure_msg` | `"impure"`    | 自定義「impure」訊息。                                    |
+| `pure_msg`   | `"pure"`      | 自定義「pure」訊息。                                      |
+| `symbol`     | `"❄️  "`      | The symbol used before displaying the shell name. |
+| `style`      | `"bold blue"` | 這個模組的風格。                                          |
+| `disabled`   | `false`       | Disables the `nix_shell` module.                  |
 
 ### 範例
 
@@ -939,6 +940,7 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
+symbol = "☃️  "
 ```
 
 ## NodeJS
