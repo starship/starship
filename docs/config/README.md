@@ -838,7 +838,7 @@ The module will be shown if any of the following conditions are met:
 
 | Variable   | Default       | Description                                              |
 | ---------- | ------------- | -------------------------------------------------------- |
-| `symbol`   | `"∴ "`       | The symbol used before displaying the version of Julia. |
+| `symbol`   | `"ஃ "`       | The symbol used before displaying the version of Julia. |
 | `style`    | `"bold purple"` | The style for the module.                                |
 | `disabled` | `false`       | Disables the `julia` module.                            |
 
@@ -848,7 +848,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [julia]
-symbol = "👸 "
+symbol = "∴ "
 ```
 ## Kubernetes
 

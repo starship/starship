@@ -75,7 +75,7 @@ mod tests {
 
         let actual = render_module("julia", dir.path());
 
-        let expected = Some(format!("via {} ", Color::Purple.bold().paint("∴ v1.4.0")));
+        let expected = Some(format!("via {} ", Color::Purple.bold().paint("ஃ v1.4.0")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -87,7 +87,7 @@ mod tests {
 
         let actual = render_module("julia", dir.path());
 
-        let expected = Some(format!("via {} ", Color::Purple.bold().paint("∴ v1.4.0")));
+        let expected = Some(format!("via {} ", Color::Purple.bold().paint("ஃ v1.4.0")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -99,7 +99,7 @@ mod tests {
 
         let actual = render_module("julia", dir.path());
 
-        let expected = Some(format!("via {} ", Color::Purple.bold().paint("∴ v1.4.0")));
+        let expected = Some(format!("via {} ", Color::Purple.bold().paint("ஃ v1.4.0")));
         assert_eq!(expected, actual);
         dir.close()
     }
