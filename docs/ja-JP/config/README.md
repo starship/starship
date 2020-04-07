@@ -921,13 +921,14 @@ truncation_symbol = ""
 
 ### オプション
 
-| 変数           | デフォルト        | 説明                       |
-| ------------ | ------------ | ------------------------ |
-| `use_name`   | `false`      | nix-shellの名前を表示します。      |
-| `impure_msg` | `"impure"`   | impureメッセージをカスタマイズします。   |
-| `pure_msg`   | `"pure"`     | pureメッセージをカスタマイズします。     |
-| `style`      | `"bold red"` | モジュールのスタイルです。            |
-| `disabled`   | `false`      | `nix_shell`モジュールを無効にします。 |
+| 変数           | デフォルト         | 説明                                                |
+| ------------ | ------------- | ------------------------------------------------- |
+| `use_name`   | `false`       | nix-shellの名前を表示します。                               |
+| `impure_msg` | `"impure"`    | impureメッセージをカスタマイズします。                            |
+| `pure_msg`   | `"pure"`      | pureメッセージをカスタマイズします。                              |
+| `symbol`     | `"❄️  "`      | The symbol used before displaying the shell name. |
+| `style`      | `"bold blue"` | モジュールのスタイルです。                                     |
+| `disabled`   | `false`       | Disables the `nix_shell` module.                  |
 
 ### 設定例
 
@@ -939,6 +940,7 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
+symbol = "☃️  "
 ```
 
 ## NodeJS
