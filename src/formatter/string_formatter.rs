@@ -110,7 +110,15 @@ impl<'a> StringFormatter<'a> {
                         .map(|segments| {
                             let value = segments.clone().unwrap_or_default();
                             match value {
-                                VariableValue::Styled(segments) => segments,
+                                VariableValue::Styled(segments) => segments
+                                    .into_iter()
+                                    .map(|mut segment| {
+                                        if !segment.has_style() && style.is_some() {
+                                            segment.set_style(style.unwrap());
+                                        }
+                                        segment
+                                    })
+                                    .collect(),
                                 VariableValue::Plain(text) => {
                                     vec![_new_segment(name.to_string(), text, style)]
                                 }
@@ -257,7 +265,7 @@ mod tests {
     }
 
     #[test]
-    fn test_styled_variable() {
+    fn test_styled_variable_as_text() {
         const FORMAT_STR: &str = "[$var](red bold)";
         let var_style = Some(Color::Red.bold());
 
@@ -270,6 +278,34 @@ mod tests {
         let result = formatter.parse(None);
         let mut result_iter = result.iter();
         match_next!(result_iter, "text", var_style);
+    }
+
+    #[test]
+    fn test_styled_variable_as_segments() {
+        const FORMAT_STR: &str = "[$var](red bold)";
+        let var_style = Some(Color::Red.bold());
+        let styled_style = Some(Color::Green.italic());
+        let styled_no_modifier_style = Some(Color::Green.normal());
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map_variables_to_segments(|variable| match variable {
+                "var" => Some(vec![
+                    _new_segment("_1".to_owned(), "styless".to_owned(), None),
+                    _new_segment("_2".to_owned(), "styled".to_owned(), styled_style),
+                    _new_segment(
+                        "_3".to_owned(),
+                        "styled_no_modifier".to_owned(),
+                        styled_no_modifier_style,
+                    ),
+                ]),
+                _ => None,
+            });
+        let result = formatter.parse(None);
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "styless", var_style);
+        match_next!(result_iter, "styled", styled_style);
+        match_next!(result_iter, "styled_no_modifier", styled_no_modifier_style);
     }
 
     #[test]
