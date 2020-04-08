@@ -9,7 +9,19 @@ use crate::segment::Segment;
 use super::model::*;
 use super::parser::{parse, Rule};
 
-type VariableMapType = BTreeMap<String, Option<Vec<Segment>>>;
+#[derive(Clone)]
+enum VariableValue {
+    Plain(String),
+    Styled(Vec<Segment>),
+}
+
+impl Default for VariableValue {
+    fn default() -> Self {
+        VariableValue::Plain(String::new())
+    }
+}
+
+type VariableMapType = BTreeMap<String, Option<VariableValue>>;
 
 pub struct StringFormatter<'a> {
     format: Vec<FormatElement<'a>>,
@@ -30,7 +42,7 @@ impl<'a> StringFormatter<'a> {
     /// Maps variable name to its value
     pub fn map(mut self, mapper: impl Fn(&str) -> Option<String> + Sync) -> Self {
         self.variables.par_iter_mut().for_each(|(key, value)| {
-            *value = mapper(key).map(|value| vec![_new_segment(key.to_string(), value, None)]);
+            *value = mapper(key).map(|value| VariableValue::Plain(value));
         });
         self
     }
@@ -41,7 +53,7 @@ impl<'a> StringFormatter<'a> {
         mapper: impl Fn(&str) -> Option<Vec<Segment>> + Sync,
     ) -> Self {
         self.variables.par_iter_mut().for_each(|(key, value)| {
-            *value = mapper(key);
+            *value = mapper(key).map(|segments| VariableValue::Styled(segments));
         });
         self
     }
@@ -95,7 +107,15 @@ impl<'a> StringFormatter<'a> {
                     }
                     FormatElement::Variable(name) => variables
                         .get(name.as_ref())
-                        .map(|segments| segments.clone().unwrap_or_default())
+                        .map(|segments| {
+                            let value = segments.clone().unwrap_or_default();
+                            match value {
+                                VariableValue::Styled(segments) => segments,
+                                VariableValue::Plain(text) => {
+                                    vec![_new_segment(name.to_string(), text, style)]
+                                }
+                            }
+                        })
                         .unwrap_or_default(),
                 };
                 result.append(&mut segments);
@@ -234,6 +254,22 @@ mod tests {
         match_next!(result_iter, "outer ", outer_style);
         match_next!(result_iter, "middle ", middle_style);
         match_next!(result_iter, "inner", inner_style);
+    }
+
+    #[test]
+    fn test_styled_variable() {
+        const FORMAT_STR: &str = "[$var](red bold)";
+        let var_style = Some(Color::Red.bold());
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map(|variable| match variable {
+                "var" => Some("text".to_owned()),
+                _ => None,
+            });
+        let result = formatter.parse(None);
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "text", var_style);
     }
 
     #[test]
