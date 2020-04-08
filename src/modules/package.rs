@@ -1,15 +1,13 @@
 use std::path::PathBuf;
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
+use crate::configs::package::PackageConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 use regex::Regex;
 use serde_json as json;
 use toml;
-
-use super::{RootModuleConfig, SegmentConfig};
-use crate::configs::package::PackageConfig;
-use crate::formatter::StringFormatter;
 
 /// Creates a module with the current package version
 ///
