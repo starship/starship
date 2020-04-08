@@ -9,26 +9,32 @@ use toml;
 
 use super::{RootModuleConfig, SegmentConfig};
 use crate::configs::package::PackageConfig;
+use crate::formatter::StringFormatter;
 
 /// Creates a module with the current package version
 ///
 /// Will display if a version is defined for your Node.js or Rust project (if one exists)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    match get_package_version(&context.current_dir) {
-        Some(package_version) => {
-            let mut module = context.new_module("package");
-            let config: PackageConfig = PackageConfig::try_load(module.config);
+    let module_version = get_package_version(&context.current_dir)?;
 
-            module.set_style(config.style);
-            module.get_prefix().set_value("is ");
+    let mut module = context.new_module("package");
+    let config: PackageConfig = PackageConfig::try_load(module.config);
+    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
+        formatter.map(|variable| match variable {
+            "version" => Some(module_version.clone()),
+            _ => None,
+        })
+    } else {
+        log::warn!("Error parsing format string in `package.format`");
+        return None;
+    };
 
-            module.create_segment("symbol", &config.symbol);
-            module.create_segment("version", &SegmentConfig::new(&package_version));
+    module.set_segments(formatter.parse(None));
 
-            Some(module)
-        }
-        None => None,
-    }
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
+
+    Some(module)
 }
 
 fn extract_cargo_version(file_contents: &str) -> Option<String> {
