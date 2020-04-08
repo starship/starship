@@ -1,6 +1,7 @@
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::julia::JuliaConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 /// Creates a module with the current Julia version
@@ -20,15 +21,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let module_version =
+        format_julia_version(&utils::exec_cmd("julia", &["--version"])?.stdout.as_str())?;
+
     let mut module = context.new_module("julia");
     let config: JuliaConfig = JuliaConfig::try_load(module.config);
+    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
+        formatter.map(|variable| match variable {
+            "version" => Some(module_version.clone()),
+            _ => None,
+        })
+    } else {
+        log::warn!("Error parsing format string in `julia.format`");
+        return None;
+    };
 
-    module.set_style(config.style);
-    module.create_segment("symbol", &config.symbol);
+    module.set_segments(formatter.parse(None));
 
-    let formatted_version =
-        format_julia_version(&utils::exec_cmd("julia", &["--version"])?.stdout.as_str())?;
-    module.create_segment("version", &config.version.with_value(&formatted_version));
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
 }
