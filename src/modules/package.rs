@@ -98,6 +98,14 @@ fn extract_project_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
+fn extract_mix_version(file_contents: &str) -> Option<String> {
+    let re = Regex::new(r#"(?m)version: "(?P<version>[^"]+)""#).unwrap();
+    let caps = re.captures(file_contents)?;
+
+    let formatted_version = format_version(&caps["version"]);
+    Some(formatted_version)
+}
+
 fn get_package_version(base_dir: &PathBuf) -> Option<String> {
     if let Ok(cargo_toml) = utils::read_file(base_dir.join("Cargo.toml")) {
         extract_cargo_version(&cargo_toml)
@@ -111,6 +119,8 @@ fn get_package_version(base_dir: &PathBuf) -> Option<String> {
         extract_gradle_version(&build_gradle)
     } else if let Ok(project_toml) = utils::read_file(base_dir.join("Project.toml")) {
         extract_project_version(&project_toml)
+    } else if let Ok(mix_file) = utils::read_file(base_dir.join("mix.exs")) {
+        extract_mix_version(&mix_file)
     } else {
         None
     }
@@ -331,6 +341,67 @@ java {
         let expected_version = None;
         assert_eq!(
             extract_gradle_version(&gradle_without_version),
+            expected_version
+        );
+    }
+
+    #[test]
+    fn test_extract_mix_version() {
+        let mix_complete = "defmodule MyApp.MixProject do
+  use Mix.Project
+
+  def project do
+    [
+      app: :my_app,
+      version: \"1.2.3\",
+      elixir: \"~> 1.10\",
+      start_permanent: Mix.env() == :prod,
+      deps: deps()
+    ]
+  end
+
+  # Run \"mix help compile.app\" to learn about applications.
+  def application do
+    [extra_applications: [:logger]]
+  end
+
+  # Run \"mix help deps\" to learn about dependencies.
+  defp deps do
+    []
+  end
+end";
+
+        let expected_version = Some("v1.2.3".to_string());
+        assert_eq!(extract_mix_version(&mix_complete), expected_version);
+
+        let mix_partial_oneline = "  def project, do: [app: :my_app,version: \"3.2.1\"]";
+
+        let expected_version = Some("v3.2.1".to_string());
+        assert_eq!(extract_mix_version(&mix_partial_oneline), expected_version);
+
+        let mix_partial_prerelease = "  def project do
+    [
+      app: :my_app,
+      version: \"1.0.0-alpha.3\"
+    ]
+  end";
+
+        let expected_version = Some("v1.0.0-alpha.3".to_string());
+        assert_eq!(
+            extract_mix_version(&mix_partial_prerelease),
+            expected_version
+        );
+
+        let mix_partial_prerelease_and_build_info = "  def project do
+    [
+      app: :my_app,
+      version: \"0.9.9-dev+20130417140000.amd64\"
+    ]
+  end";
+
+        let expected_version = Some("v0.9.9-dev+20130417140000.amd64".to_string());
+        assert_eq!(
+            extract_mix_version(&mix_partial_prerelease_and_build_info),
             expected_version
         );
     }
