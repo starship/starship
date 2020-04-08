@@ -113,8 +113,10 @@ impl<'a> StringFormatter<'a> {
                                 VariableValue::Styled(segments) => segments
                                     .into_iter()
                                     .map(|mut segment| {
-                                        if !segment.has_style() && style.is_some() {
-                                            segment.set_style(style.unwrap());
+                                        if !segment.has_style() {
+                                            if let Some(style) = style {
+                                                segment.set_style(style);
+                                            }
                                         }
                                         segment
                                     })
