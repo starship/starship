@@ -45,7 +45,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
         formatter.map(|variable| match variable {
-            "hostname" => Some(host.to_string().clone()),
+            "hostname" => Some(host.to_string()),
             _ => None,
         })
     } else {
