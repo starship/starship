@@ -1,6 +1,7 @@
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::ruby::RubyConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 /// Creates a module with the current Ruby version
@@ -20,14 +21,24 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let ruby_version = utils::exec_cmd("ruby", &["-v"])?.stdout;
-    let formatted_version = format_ruby_version(&ruby_version)?;
+    let module_version = format_ruby_version(&ruby_version)?;
 
     let mut module = context.new_module("ruby");
     let config: RubyConfig = RubyConfig::try_load(module.config);
-    module.set_style(config.style);
+    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
+        formatter.map(|variable| match variable {
+            "version" => Some(module_version.clone()),
+            _ => None,
+        })
+    } else {
+        log::warn!("Error parsing format string in `ruby.format`");
+        return None;
+    };
 
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &SegmentConfig::new(&formatted_version));
+    module.set_segments(formatter.parse(None));
+
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
 }
