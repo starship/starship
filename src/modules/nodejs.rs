@@ -1,6 +1,7 @@
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::nodejs::NodejsConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 /// Creates a module with the current Node.js version
@@ -21,16 +22,24 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let node_version = utils::exec_cmd("node", &["--version"])?.stdout;
+    let module_version = utils::exec_cmd("node", &["--version"])?.stdout;
 
     let mut module = context.new_module("nodejs");
     let config: NodejsConfig = NodejsConfig::try_load(module.config);
+    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
+        formatter.map(|variable| match variable {
+            "version" => Some(module_version.clone()),
+            _ => None,
+        })
+    } else {
+        log::warn!("Error parsing format string in `nodejs.format`");
+        return None;
+    };
 
-    module.set_style(config.style);
+    module.set_segments(formatter.parse(None));
 
-    let formatted_version = node_version.trim();
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &SegmentConfig::new(formatted_version));
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
 }
