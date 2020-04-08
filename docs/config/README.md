@@ -1028,7 +1028,7 @@ symbol = "🤖 "
 
 The `package` module is shown when the current directory is the repository for a
 package, and shows its current version. The module currently supports `npm`, `cargo`,
-`poetry`, `composer`, and `gradle` packages.
+`poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
 - **npm** – The `npm` package version is extracted from the `package.json` present
   in the current directory
@@ -1040,6 +1040,7 @@ package, and shows its current version. The module currently supports `npm`, `ca
   in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 - **julia** - The package version is extracted from the `Project.toml` present
+- **mix** - The `mix` package version is extracted from the `mix.exs` present
 
 > ⚠️ The version being shown is that of the package whose source code is in your
 > current directory, not your package manager.
