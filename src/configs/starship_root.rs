@@ -49,6 +49,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "conda",
                 "memory_usage",
                 "aws",
+                "azure",
                 "env_var",
                 "cmd_duration",
                 "custom",

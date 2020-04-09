@@ -1,4 +1,5 @@
 pub mod aws;
+pub mod azure;
 pub mod battery;
 pub mod character;
 pub mod cmd_duration;

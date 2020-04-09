@@ -1,4 +1,5 @@
 mod aws;
+mod azure;
 mod character;
 mod cmd_duration;
 mod common;
