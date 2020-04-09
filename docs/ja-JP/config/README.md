@@ -778,19 +778,19 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`julia`モジュールは、現在インストールされているJuliaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `Project.toml` file
-- The current directory contains a `Manifest.toml` file
-- The current directory contains a file with the `.jl` extension
+- カレントディレクトリに`Project.toml`ファイルが含まれている
+- カレントディレクトリに`Manifest.toml`ファイルが含まれている
+- カレントディレクトリに`.jl`の拡張子のファイルが含まれている
 
 ### オプション
 
-| 変数         | デフォルト           | 説明                                                      |
-| ---------- | --------------- | ------------------------------------------------------- |
-| `symbol`   | `"ஃ "`          | The symbol used before displaying the version of Julia. |
-| `style`    | `"bold purple"` | モジュールのスタイルです。                                           |
-| `disabled` | `false`         | Disables the `julia` module.                            |
+| 変数         | デフォルト           | 説明                           |
+| ---------- | --------------- | ---------------------------- |
+| `symbol`   | `"ஃ "`          | Juliaのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold purple"` | モジュールのスタイルです。                |
+| `disabled` | `false`         | `julia`モジュールを無効にします。         |
 
 ### 設定例
 
