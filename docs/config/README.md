@@ -290,6 +290,27 @@ style = "bold blue"
 symbol = "🅰 "
 ```
 
+## AZURE
+
+The `azure` module shows the current Azure Subscription. This is based on 
+`~/.azure/clouds.config` and `~/.azure/azureProfile.json` files.
+
+### Options
+
+| Variable          | Default         | Description                                                                 |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `format`          | `"on ☁️ [$subscription](blue bold) "`         | The format for the Azure module to render in                  |
+| `disabled`        | `false`         | Disables the `Azure` module.                                                  |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[azure]
+format= "on 🅰️ [$subscription](blue bold) "
+```
+
 ## Battery
 
 The `battery` module shows how charged the device's battery is and its current charging status.

@@ -9,6 +9,7 @@ use std::fmt;
 // Default ordering is handled in configs/mod.rs
 pub const ALL_MODULES: &[&str] = &[
     "aws",
+    "azure",
     #[cfg(feature = "battery")]
     "battery",
     "character",

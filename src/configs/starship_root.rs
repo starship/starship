@@ -56,6 +56,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "memory_usage",
     "aws",
     "gcloud",
+    "azure",
     "env_var",
     "crystal",
     "cmd_duration",
