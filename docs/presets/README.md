@@ -28,11 +28,23 @@ discharging_symbol = ""
 [conda]
 symbol = " "
 
+[docker]
+symbol = " "
+
+[elixir]
+symbol = " "
+
+[elm]
+symbol = " "
+
 [git_branch]
 symbol = " "
 
 [golang]
 symbol = " "
+
+[haskell]
+symbol = " "
 
 [hg_branch]
 symbol = " "
@@ -40,8 +52,14 @@ symbol = " "
 [java]
 symbol = " "
 
+[julia]
+symbol = " "
+
 [memory_usage]
 symbol = " "
+
+[nix_shell]
+symbol = " "
 
 [nodejs]
 symbol = " "
