@@ -1049,11 +1049,16 @@ package, and shows its current version. The module currently supports `npm`, `ca
 
 ### Options
 
-| Variable   | Default      | Description                                                |
-| ---------- | ------------ | ---------------------------------------------------------- |
-| `symbol`   | `"📦 "`      | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | The style for the module.                                  |
-| `disabled` | `false`      | Disables the `package` module.                             |
+| Variable   | Default      | Description                                        |
+| ---------- | ------------ | -------------------------------------------------- |
+| `format`   | `"via [📦 $version](208 bold) "` | The format for the module.     |
+| `disabled` | `false`                          | Disables the `package` module. |
+
+### Variables
+
+| Variable | Example  | Description                 |
+| -------- | -------- | --------------------------- |
+| version  | `v1.0.0` | The version of your package |
 
 ### Example
 
@@ -1061,7 +1066,7 @@ package, and shows its current version. The module currently supports `npm`, `ca
 # ~/.config/starship.toml
 
 [package]
-symbol = "🎁 "
+format = "via [🎁 $version](208 bold) "
 ```
 
 ## PHP
