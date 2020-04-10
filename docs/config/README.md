@@ -707,10 +707,10 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default       | Description                                      |
-| ---------- | ------------- | ------------------------------------------------ |
-| `format`   | `"via [🐹 $version](cyan bold) "` | The format for the module.   |
-| `disabled` | `false`                           | Disables the `golang` module.|
+| Option     | Default                           | Description                   |
+| ---------- | --------------------------------- | ----------------------------- |
+| `format`   | `"via [🐹 $version](cyan bold) "` | The format for the module.    |
+| `disabled` | `false`                           | Disables the `golang` module. |
 
 ### Variables
 
@@ -726,6 +726,7 @@ The module will be shown if any of the following conditions are met:
 [golang]
 format = "via [🏎💨 $version](cyan bold) "
 ```
+
 ## Haskell
 
 The `haskell` module shows the currently installed version of Haskell Stack version.
