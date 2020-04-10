@@ -167,14 +167,14 @@ impl From<&Value> for SegmentConfigValue {
 impl SegmentConfigValue {
     /// Convert value of `SegmentConfig` to format string.
     #[allow(dead_code)]
-    fn to_format(self, name: &str) -> String {
+    fn to_format(&self, name: &str) -> String {
         let Self { value, style } = self;
         match style {
             Some(style) => match value {
                 Some(value) => format!("[{}]({})", value, style),
                 None => format!("[${}]({})", name, style),
             },
-            None => value.unwrap_or(String::new()),
+            None => value.clone().unwrap_or_default(),
         }
     }
 }
