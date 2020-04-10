@@ -34,7 +34,6 @@ pub const ALL_MODULES: &[&str] = &[
     "jobs",
     "julia",
     "kubernetes",
-    "line_break",
     "memory_usage",
     "nix_shell",
     "nodejs",

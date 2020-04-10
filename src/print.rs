@@ -5,11 +5,13 @@ use std::fmt::Write as FmtWrite;
 use std::io::{self, Write};
 use unicode_width::UnicodeWidthChar;
 
+use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Shell};
 use crate::formatter::StringFormatter;
 use crate::module::Module;
 use crate::module::ALL_MODULES;
 use crate::modules;
+use crate::segment::Segment;
 
 pub fn prompt(args: ArgMatches) {
     let context = Context::new(args);
@@ -36,9 +38,32 @@ pub fn get_prompt(context: Context) -> String {
         return buf;
     };
     let formatter = formatter.map_variables_to_segments(|module| {
-        if context.is_module_disabled_in_config(&module) {
+        // Make $all display all modules
+        if module == "all" {
+            Some(
+                PROMPT_ORDER
+                    .par_iter()
+                    .flat_map(|module| match module {
+                        &"\n" => {
+                            let mut line_break = Segment::new("line_break");
+                            line_break.set_value("\n");
+                            Some(vec![line_break])
+                        }
+                        _ => {
+                            if context.is_module_disabled_in_config(&module) {
+                                None
+                            } else {
+                                modules::handle(module, &context).map(|module| module.segments)
+                            }
+                        }
+                    })
+                    .flatten()
+                    .collect::<Vec<_>>(),
+            )
+        } else if context.is_module_disabled_in_config(&module) {
             None
         } else {
+            // Get segments from module
             modules::handle(module, &context).map(|module| module.segments)
         }
     });
@@ -74,7 +99,7 @@ pub fn explain(args: ArgMatches) {
         desc: String,
     }
 
-    let dont_print = vec!["line_break", "character"];
+    let dont_print = vec!["character"];
 
     let modules = compute_modules(&context)
         .into_iter()
