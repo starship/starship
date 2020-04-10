@@ -80,7 +80,7 @@ fn migrate_starship_root_config(root_config: &mut Value) {
         let prompt_order: Vec<&str> = table
             .get("prompt_order")
             .and_then(Vec::from_config)
-            .unwrap_or(vec!["all"]);
+            .unwrap_or_else(|| vec!["all"]);
 
         let newline_format = if add_newline { "\n" } else { "" };
         let prompt_format_list: Vec<String> = prompt_order
