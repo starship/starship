@@ -838,7 +838,7 @@ The module will be shown if any of the following conditions are met:
 
 | Variable   | Default       | Description                                              |
 | ---------- | ------------- | -------------------------------------------------------- |
-| `symbol`   | `"∴ "`       | The symbol used before displaying the version of Julia. |
+| `symbol`   | `"ஃ "`       | The symbol used before displaying the version of Julia. |
 | `style`    | `"bold purple"` | The style for the module.                                |
 | `disabled` | `false`       | Disables the `julia` module.                            |
 
@@ -848,7 +848,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [julia]
-symbol = "👸 "
+symbol = "∴ "
 ```
 ## Kubernetes
 
@@ -977,13 +977,14 @@ The module will be shown when inside a nix-shell environment.
 
 ### Options
 
-| Variable     | Default      | Description                        |
-| ------------ | ------------ | ---------------------------------- |
-| `use_name`   | `false`      | Display the name of the nix-shell. |
-| `impure_msg` | `"impure"`   | Customize the "impure" msg.        |
-| `pure_msg`   | `"pure"`     | Customize the "pure" msg.          |
-| `style`      | `"bold red"` | The style for the module.          |
-| `disabled`   | `false`      | Disables the `nix_shell` module.   |
+| Variable     | Default       | Description                                       |
+| ------------ | ------------- | ------------------------------------------------- |
+| `use_name`   | `false`       | Display the name of the nix-shell.                |
+| `impure_msg` | `"impure"`    | Customize the "impure" msg.                       |
+| `pure_msg`   | `"pure"`      | Customize the "pure" msg.                         |
+| `symbol`     | `"❄️  "`       | The symbol used before displaying the shell name. |
+| `style`      | `"bold blue"` | The style for the module.                         |
+| `disabled`   | `false`       | Disables the `nix_shell` module.                  |
 
 ### Example
 
@@ -995,6 +996,7 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
+symbol = "☃️  "
 ```
 
 ## NodeJS
