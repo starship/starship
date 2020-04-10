@@ -1049,8 +1049,8 @@ package, and shows its current version. The module currently supports `npm`, `ca
 
 ### Options
 
-| Variable   | Default      | Description                                        |
-| ---------- | ------------ | -------------------------------------------------- |
+| Option     | Default                          | Description                    |
+| ---------- | -------------------------------- | ------------------------------ |
 | `format`   | `"via [📦 $version](208 bold) "` | The format for the module.     |
 | `disabled` | `false`                          | Disables the `package` module. |
 
