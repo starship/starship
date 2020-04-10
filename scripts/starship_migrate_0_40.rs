@@ -66,48 +66,6 @@ fn update_starship_config(config: &mut Value) {
 }
 
 fn migrate_starship_root_config(root_config: &mut Value) {
-    let default_prompt_order = vec![
-        "username",
-        "hostname",
-        "singularity",
-        "kubernetes",
-        "directory",
-        "git_branch",
-        "git_commit",
-        "git_state",
-        "git_status",
-        "hg_branch",
-        "docker_context",
-        "package",
-        // ↓ Toolchain version modules ↓
-        // (Let's keep these sorted alphabetically)
-        "dotnet",
-        "elixir",
-        "elm",
-        "golang",
-        "haskell",
-        "java",
-        "julia",
-        "nodejs",
-        "php",
-        "python",
-        "ruby",
-        "rust",
-        "terraform",
-        // ↑ Toolchain version modules ↑
-        "nix_shell",
-        "conda",
-        "memory_usage",
-        "aws",
-        "env_var",
-        "cmd_duration",
-        "line_break",
-        "jobs",
-        "battery",
-        "time",
-        "character",
-    ];
-
     if let Some(table) = root_config.as_table_mut() {
         // Don't do anything in case there is a `format` key
         if table.contains_key("format") {
@@ -122,7 +80,7 @@ fn migrate_starship_root_config(root_config: &mut Value) {
         let prompt_order: Vec<&str> = table
             .get("prompt_order")
             .and_then(Vec::from_config)
-            .unwrap_or(default_prompt_order);
+            .unwrap_or(vec!["all"]);
 
         let newline_format = if add_newline { "\n" } else { "" };
         let prompt_format_list: Vec<String> = prompt_order
