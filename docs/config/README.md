@@ -836,11 +836,16 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default       | Description                                              |
-| ---------- | ------------- | -------------------------------------------------------- |
-| `symbol`   | `"ஃ "`       | The symbol used before displaying the version of Julia. |
-| `style`    | `"bold purple"` | The style for the module.                                |
-| `disabled` | `false`       | Disables the `julia` module.                            |
+| Option     | Default                            | Description                  |
+| ---------- | ---------------------------------- | ---------------------------- |
+| `format`   | `"via [ஃ $version](purple bold) "` | The format for the module.   |
+| `disabled` | `false`                            | Disables the `julia` module. |
+
+### Variables
+
+| Variable | Example  | Description            |
+| -------- | -------- | ---------------------- |
+| version  | `v1.4.0` | The version of `julia` |
 
 ### Example
 
@@ -848,8 +853,9 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [julia]
-symbol = "∴ "
+format = "via [∴ $version](purple bold) "
 ```
+
 ## Kubernetes
 
 Displays the current Kubernetes context name and, if set, the namespace from
