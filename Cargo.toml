@@ -78,3 +78,7 @@ lto = true
 [[bin]]
 name = "starship"
 path = "src/main.rs"
+
+[[bin]]
+name = "starship_migrate_0_40"
+path = "scripts/starship_migrate_0_40.rs"
