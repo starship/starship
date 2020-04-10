@@ -43,8 +43,8 @@ pub fn get_prompt(context: Context) -> String {
             Some(
                 PROMPT_ORDER
                     .par_iter()
-                    .flat_map(|module| match module {
-                        &"\n" => {
+                    .flat_map(|module| match *module {
+                        "\n" => {
                             let mut line_break = Segment::new("line_break");
                             line_break.set_value("\n");
                             Some(vec![line_break])
