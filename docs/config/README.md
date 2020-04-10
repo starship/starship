@@ -707,11 +707,16 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default       | Description                                              |
-| ---------- | ------------- | -------------------------------------------------------- |
-| `symbol`   | `"🐹 "`       | The symbol used before displaying the version of Golang. |
-| `style`    | `"bold cyan"` | The style for the module.                                |
-| `disabled` | `false`       | Disables the `golang` module.                            |
+| Variable   | Default       | Description                                      |
+| ---------- | ------------- | ------------------------------------------------ |
+| `format`   | `"via [🐹 $version](cyan bold) "` | The format for the module.   |
+| `disabled` | `false`                           | Disables the `golang` module.|
+
+### Variables
+
+| Variable | Example   | Description         |
+| -------- | --------- | ------------------- |
+| version  | `v1.12.1` | The version of `go` |
 
 ### Example
 
@@ -719,7 +724,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [golang]
-symbol = "🏎💨 "
+format = "via [🏎💨 $version](cyan bold) "
 ```
 ## Haskell
 
