@@ -12,7 +12,7 @@
 
 ## ¿`prompt_order` y `<module>.disabled` hacen lo mismo?
 
-Sí, se pueden usar ambos para desactivar los módulos en el símbolo del sistema. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
+Sí, se pueden usar ambos para desactivar los módulos en el símbolo del sistema. Si todo lo que planeas es desactivar módulos, `<module>.disabled` es el método preferido por las siguientes razones:
 
 - Disabling modules is more explicit than omitting them from the prompt_order
 - Newly created modules will be added to the prompt as Starship is updated
