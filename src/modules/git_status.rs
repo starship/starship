@@ -6,7 +6,6 @@ use crate::configs::git_status::GitStatusConfig;
 use crate::context::Repo;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
-use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 
 const ALL_STATUS_VARIABLES: [&str; 7] = [
@@ -128,6 +127,7 @@ struct GitStatusInfo<'a> {
     repo: &'a Repo,
     ahead_behind: RwLock<Option<Result<(usize, usize), git2::Error>>>,
     repo_status: RwLock<Option<Result<RepoStatus, git2::Error>>>,
+    stashed_count: RwLock<Option<Result<usize, git2::Error>>>,
 }
 
 impl<'a> GitStatusInfo<'a> {
@@ -136,6 +136,7 @@ impl<'a> GitStatusInfo<'a> {
             repo,
             ahead_behind: RwLock::new(None),
             repo_status: RwLock::new(None),
+            stashed_count: RwLock::new(None),
         }
     }
 
@@ -210,6 +211,34 @@ impl<'a> GitStatusInfo<'a> {
         }
     }
 
+    pub fn get_stashed(&self) -> Option<usize> {
+        {
+            let data = self.stashed_count.read().unwrap();
+            if let Some(result) = data.as_ref() {
+                return match result.as_ref() {
+                    Ok(stashed_count) => Some(*stashed_count),
+                    Err(error) => {
+                        log::warn!("Warn: get_stashed_count: {}", error);
+                        None
+                    }
+                };
+            };
+        }
+
+        {
+            let mut repo = self.get_repository()?;
+            let mut data = self.stashed_count.write().unwrap();
+            *data = Some(get_stashed_count(&mut repo));
+            match data.as_ref().unwrap() {
+                Ok(stashed_count) => Some(*stashed_count),
+                Err(error) => {
+                    log::warn!("Warn: get_stashed_count: {}", error);
+                    None
+                }
+            }
+        }
+    }
+
     pub fn get_conflicted(&self) -> Option<usize> {
         self.get_repo_status().map(|data| data.conflicted)
     }
@@ -233,15 +262,13 @@ impl<'a> GitStatusInfo<'a> {
     pub fn get_untracked(&self) -> Option<usize> {
         self.get_repo_status().map(|data| data.untracked)
     }
-
-    pub fn get_stashed(&self) -> Option<usize> {
-        self.get_repo_status().map(|data| data.stashed)
-    }
 }
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
 fn get_repo_status(repository: &mut Repository) -> Result<RepoStatus, git2::Error> {
     let mut status_options = git2::StatusOptions::new();
+
+    let mut repo_status = RepoStatus::default();
 
     match repository.config()?.get_entry("status.showUntrackedFiles") {
         Ok(entry) => status_options.include_untracked(entry.value() != Some("no")),
@@ -253,76 +280,21 @@ fn get_repo_status(repository: &mut Repository) -> Result<RepoStatus, git2::Erro
         .renames_index_to_workdir(true)
         .include_unmodified(true);
 
-    let statuses: Vec<Status> = repository
-        .statuses(Some(&mut status_options))?
-        .iter()
-        .map(|s| s.status())
-        .collect();
+    let statuses = repository.statuses(Some(&mut status_options))?;
 
     if statuses.is_empty() {
         return Err(git2::Error::from_str("Repo has no status"));
     }
 
-    let statuses_count = count_statuses(statuses);
-
-    let repo_status: RepoStatus = RepoStatus {
-        conflicted: *statuses_count.get("conflicted").unwrap_or(&0),
-        deleted: *statuses_count.get("deleted").unwrap_or(&0),
-        renamed: *statuses_count.get("renamed").unwrap_or(&0),
-        modified: *statuses_count.get("modified").unwrap_or(&0),
-        staged: *statuses_count.get("staged").unwrap_or(&0),
-        untracked: *statuses_count.get("untracked").unwrap_or(&0),
-        stashed: stashed_count(repository)?,
-    };
+    statuses
+        .iter()
+        .map(|s| s.status())
+        .for_each(|status| repo_status.add(status));
 
     Ok(repo_status)
 }
 
-fn count_statuses(statuses: Vec<Status>) -> HashMap<&'static str, usize> {
-    let mut predicates: HashMap<&'static str, fn(git2::Status) -> bool> = HashMap::new();
-    predicates.insert("conflicted", is_conflicted);
-    predicates.insert("deleted", is_deleted);
-    predicates.insert("renamed", is_renamed);
-    predicates.insert("modified", is_modified);
-    predicates.insert("staged", is_staged);
-    predicates.insert("untracked", is_untracked);
-
-    statuses.iter().fold(HashMap::new(), |mut map, status| {
-        for (key, predicate) in predicates.iter() {
-            if predicate(*status) {
-                let entry = map.entry(key).or_insert(0);
-                *entry += 1;
-            }
-        }
-        map
-    })
-}
-
-fn is_conflicted(status: Status) -> bool {
-    status.is_conflicted()
-}
-
-fn is_deleted(status: Status) -> bool {
-    status.is_wt_deleted() || status.is_index_deleted()
-}
-
-fn is_renamed(status: Status) -> bool {
-    status.is_wt_renamed() || status.is_index_renamed()
-}
-
-fn is_modified(status: Status) -> bool {
-    status.is_wt_modified()
-}
-
-fn is_staged(status: Status) -> bool {
-    status.is_index_modified() || status.is_index_new()
-}
-
-fn is_untracked(status: Status) -> bool {
-    status.is_wt_new()
-}
-
-fn stashed_count(repository: &mut Repository) -> Result<usize, git2::Error> {
+fn get_stashed_count(repository: &mut Repository) -> Result<usize, git2::Error> {
     let mut count = 0;
     repository.stash_foreach(|_, _, _| {
         count += 1;
@@ -355,7 +327,41 @@ struct RepoStatus {
     modified: usize,
     staged: usize,
     untracked: usize,
-    stashed: usize,
+}
+
+impl RepoStatus {
+    fn is_conflicted(status: Status) -> bool {
+        status.is_conflicted()
+    }
+
+    fn is_deleted(status: Status) -> bool {
+        status.is_wt_deleted() || status.is_index_deleted()
+    }
+
+    fn is_renamed(status: Status) -> bool {
+        status.is_wt_renamed() || status.is_index_renamed()
+    }
+
+    fn is_modified(status: Status) -> bool {
+        status.is_wt_modified()
+    }
+
+    fn is_staged(status: Status) -> bool {
+        status.is_index_modified() || status.is_index_new()
+    }
+
+    fn is_untracked(status: Status) -> bool {
+        status.is_wt_new()
+    }
+
+    fn add(&mut self, s: Status) {
+        self.conflicted += RepoStatus::is_conflicted(s) as usize;
+        self.deleted += RepoStatus::is_deleted(s) as usize;
+        self.renamed += RepoStatus::is_renamed(s) as usize;
+        self.modified += RepoStatus::is_modified(s) as usize;
+        self.staged += RepoStatus::is_staged(s) as usize;
+        self.untracked += RepoStatus::is_untracked(s) as usize;
+    }
 }
 
 fn format_segments<F>(format_str: &str, config_path: &str, mapper: F) -> Option<Vec<Segment>>
