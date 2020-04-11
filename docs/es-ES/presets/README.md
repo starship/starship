@@ -6,7 +6,7 @@ Aqui tienes una colección de preajustes creados por la comunidad de Starship. S
 
 Este ajuste predefinido no modifica nada excepto los símbolos usados para cada módulo. Si los emojis no son lo tuyo, ¡presta atención!
 
-![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
+![Capturas de pantalla obtenidas de Nerd Font](/presets/nerd-font-symbols.png)
 
 ### Prerequisitos
 
