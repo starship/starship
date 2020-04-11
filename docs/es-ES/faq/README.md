@@ -10,9 +10,9 @@
   - **Configuración**: [archivos de configuración de matchai](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
-## Do `prompt_order` and `<module>.disabled` do the same thing?
+## ¿`prompt_order` y `<module>.disabled` hacen lo mismo?
 
-Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
+Sí, se pueden usar ambos para desactivar los módulos en el símbolo del sistema. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
 
 - Disabling modules is more explicit than omitting them from the prompt_order
 - Newly created modules will be added to the prompt as Starship is updated
