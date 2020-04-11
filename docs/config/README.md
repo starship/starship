@@ -808,12 +808,17 @@ more than the `threshold` config value, if it exists.
 
 ### Options
 
-| Variable    | Default       | Description                                           |
-| ----------- | ------------- | ----------------------------------------------------- |
-| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
-| `threshold` | `1`           | Show number of jobs if exceeded.                      |
-| `style`     | `"bold blue"` | The style for the module.                             |
-| `disabled`  | `false`       | Disables the `jobs` module.                           |
+| Option      | Default                    | Description                      |
+| ----------- | -------------------------- | -------------------------------- |
+| `threshold` | `1`                        | Show number of jobs if exceeded. |
+| `format`    | `"[✦$number](blue bold) "` | The format for the module.       |
+| `disabled`  | `false`                    | Disables the `jobs` module.      |
+
+### Variables
+
+| Variable | Example  | Description            |
+| -------- | -------- | ---------------------- |
+| number   | `1`      | The number of jobs     |
 
 ### Example
 
@@ -821,8 +826,8 @@ more than the `threshold` config value, if it exists.
 # ~/.config/starship.toml
 
 [jobs]
-symbol = "+ "
 threshold = 4
+format = "[+$number](blue bold) "
 ```
 
 ## Julia
