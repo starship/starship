@@ -37,6 +37,11 @@ impl Segment {
         self
     }
 
+    /// Check if the segment has a style
+    pub fn has_style(&self) -> bool {
+        self.style.is_some()
+    }
+
     /// Sets the value of the segment.
     pub fn set_value<T>(&mut self, value: T) -> &mut Self
     where
