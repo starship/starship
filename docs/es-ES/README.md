@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: El indicador minimalista, ultrarápido e infinitamente customizable para cualquier intérprete de comandos
+tagline: El símbolo de sistema minimalista, ultrarápido e infinitamente customizable para cualquier intérprete de comandos.
 actionText: Empezar →
 actionLink: ./guide/
 features:
@@ -18,7 +18,7 @@ features:
 footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores de Starship
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: el indicador de comando multi-intérprete"
-description: Starship es un inductor minimalista, ultrarápido e infinitamente customizable para cualquier intérprete de comandos Muestra la información que necesitas, mientras es elegante y minimalista. Instalación rápida disponible para Bash, Fish, ZSH, Ion y PowerShell.
+description: Starship es el símbolo de sistema minimalista, ultrarápido e infinitamente customizable para cualquier intérprete de comandos. Muestra la información que necesitas, a la par que es elegante y minimalista. Instalación rápida disponible para Bash, Fish, ZSH, Ion y PowerShell.
 ---
 
 <div class="center">
