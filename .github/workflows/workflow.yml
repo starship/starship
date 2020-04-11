@@ -164,24 +164,15 @@ jobs:
 
   update_brew_formula:
     if: startsWith(github.ref, 'refs/tags/v')
-    name: Update Brew Formula
-    runs-on: macos-latest
+    name: Update Homebrew Formula
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          echo "https://matchai:$HOMEBREW_GITHUB_API_TOKEN@github.com" > ~/.git-credentials
-          git config --global credential.helper store
-          git config --global user.name "Matan Kushner"
-          git config --global user.email "hello@matchai.dev"
-
-          cd $(brew --repo homebrew/core)	
-          git fetch origin
-          sudo git reset --hard origin/master	
-          cd -
-
-          brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
-        env:
-          HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
+      - name: Update Homebrew formula
+        uses: dawidd6/action-homebrew-bump-formula@v2
+        with:
+          token: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
+          formula: starship
+          force: true
 
   # Build sources for every OS
   github_build:
