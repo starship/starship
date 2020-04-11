@@ -85,7 +85,7 @@ scan_timeout = 10
 
 ### Ordenación por defecto
 
-The default `prompt_order` is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. The default is as shown:
+El `prompt_order` por defecto se usa para definir el orden en el que los módulos se muestran en la línea de comandos, en caso de que esté vacío o no existe `prompt_order`. El valor por defecto es el siguiente:
 
 ```toml
 prompt_order = [
@@ -145,7 +145,7 @@ When using [aws-vault](https://github.com/99designs/aws-vault) the profile is re
 | `style`           | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`        | `false`         | Disables the `AWS` module.                                                  |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -171,10 +171,10 @@ The `battery` module shows how charged the device's battery is and its current c
 | `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
 | `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
 | `display`            | [link](#battery-display) | Display threshold and style for the module.       |
-| `disabled`           | `false`                  | Disables the `battery` module.                    |
+| `disabled`           | `false`                  | Desactiva el módulo `battery`.                    |
 
 <details>
-<summary>There are also options for some uncommon battery states.</summary>
+<summary>Hay otras opciones para algunos estados de la batería menos comunes.</summary>
 
 | Variable         | Descripción                                         |
 | ---------------- | --------------------------------------------------- |
@@ -185,7 +185,7 @@ Note: Battery indicator will be hidden if the status is `unknown` or `empty` unl
 
 </details>
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -196,9 +196,9 @@ charging_symbol = "⚡️"
 discharging_symbol = "💀"
 ```
 
-### Battery Display
+### Indicador de batería
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
+La configuración de la opción `display` es usada para definir cuándo se debe mostrar el indicador de batería y cómo debe mostrarse. Si no se provee ningún valor para `display`  el valor por defecto es el siguiente:
 
 ```toml
 [[battery.display]]
@@ -215,7 +215,7 @@ The `display` option is an array of the following table.
 | `threshold` | The upper bound for the display option.         |
 | `style`     | The style used if the display option is in use. |
 
-#### Example
+#### Ejemplo
 
 ```toml
 [[battery.display]]  # "bold red" style when capacity is between 0% and 10%
@@ -230,11 +230,11 @@ style = "bold yellow"
 
 ```
 
-## Character
+## Carácter
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+El módulo `character` muestra un carater (normalmente una flecha) tras el texto que introduces en el terminal.
 
-The character will tell you whether the last command was successful or not. It can do this in two ways: by changing color (red/green) or by changing its shape (❯/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
+El carácter te dirá si el último comando funcionó o no. Se puede hacer de dos formas: cambiando el color (rojo/verde) o cambiando su forma (❯/✖). Esto último solo se puede hacer si `use_symbol_for_status` tiene como valor `true`.
 
 ### Opciones
 
@@ -248,7 +248,7 @@ The character will tell you whether the last command was successful or not. It c
 | `style_failure`         | `"bold red"`   | The style used if the last command failed.                                          |
 | `disabled`              | `false`        | Disables the `character` module.                                                    |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -259,7 +259,7 @@ error_symbol = "✗"
 use_symbol_for_status = true
 ```
 
-## Command Duration
+## Duración del comando
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
@@ -334,7 +334,7 @@ The `crystal` module shows the currently installed version of Crystal. The modul
 | `style`    | `"bold red"` | The style for the module.                                 |
 | `disabled` | `false`      | Disables the `crystal` module.                            |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -344,7 +344,7 @@ symbol = "✨ "
 style = "bold blue"
 ```
 
-## Directory
+## Directorio
 
 The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
@@ -374,7 +374,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 </details>
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -383,7 +383,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 truncation_length = 8
 ```
 
-## Docker Context
+## Docker context
 
 The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
 
@@ -396,7 +396,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | `style`           | `"bold blue"` | The style for the module.                                                               |
 | `disabled`        | `true`        | Disables the `docker_context` module.                                                   |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -422,7 +422,7 @@ Internally, this module uses its own mechanism for version detection. Typically 
 | `style`     | `"bold blue"` | The style for the module.                                |
 | `disabled`  | `false`       | Disables the `dotnet` module.                            |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -446,7 +446,7 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 | `symbol`   | `"💧 "`      | The symbol used before displaying the version of Elixir/Erlang. |
 | `disabled` | `false`     | Disables the `elixir` module.                                   |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
