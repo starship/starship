@@ -474,7 +474,7 @@ The `elm` module shows the currently installed version of Elm. The module will b
 | `disabled` | `false`       | Disables the `elm` module.                            |
 
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -483,7 +483,7 @@ The `elm` module shows the currently installed version of Elm. The module will b
 symbol = " "
 ```
 
-## Environment Variable
+## Variable de entorno
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
@@ -502,7 +502,7 @@ The `env_var` module displays the current value of a selected environment variab
 | `style`    | `"dimmed black"` | The style for the module.                                                    |
 | `disabled` | `false`          | Disables the `env_var` module.                                               |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -526,7 +526,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `style`             | `"bold purple"` | The style for the module.                                                             |
 | `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -537,7 +537,7 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git Commit
+## Git commit
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
@@ -552,7 +552,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 | `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
 | `disabled`           | `false`        | Disables the `git_commit` module.                     |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -561,7 +561,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 commit_hash_length = 4
 ```
 
-## Git State
+## Git state
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
@@ -580,7 +580,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
 | `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -590,7 +590,7 @@ progress_divider = " of "
 cherry_pick = "🍒 PICKING"
 ```
 
-## Git Status
+## Git status
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
@@ -621,14 +621,14 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `style`            | `"bold red"`               | The style for the module.                               |
 | `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
-#### Git Status Counts
+#### Contadores de git status
 
 | Variable  | Por defecto | Descripción                                            |
 | --------- | ----------- | ------------------------------------------------------ |
 | `enabled` | `false`     | Show the number of files                               |
 | `style`   |             | Optionally style the count differently than the module |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -670,7 +670,7 @@ The `golang` module shows the currently installed version of Golang. The module 
 | `style`    | `"bold cyan"` | The style for the module.                                |
 | `disabled` | `false`       | Disables the `golang` module.                            |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -693,7 +693,7 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 | `disabled` | `false`      | Disables the `haskell` module.                            |
 
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -717,7 +717,7 @@ The `hostname` module shows the system hostname.
 | `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
 | `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -745,7 +745,7 @@ The `java` module shows the currently installed version of Java. The module will
 | `style`    | `"dimmed red"` | The style for the module.                              |
 | `disabled` | `false`        | Disables the `java` module.                            |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -767,7 +767,7 @@ The `jobs` module shows the current number of jobs running. The module will be s
 | `style`     | `"bold blue"` | The style for the module.                             |
 | `disabled`  | `false`       | Disables the `jobs` module.                           |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -793,7 +793,7 @@ The `julia` module shows the currently installed version of Julia. The module wi
 | `style`    | `"bold purple"` | The style for the module.                               |
 | `disabled` | `false`         | Disables the `julia` module.                            |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -820,7 +820,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `style`           | `"bold blue"` | The style for the module.                           |
 | `disabled`        | `true`        | Disables the `kubernetes` module                    |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -833,7 +833,7 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ```
 
-## Line Break
+## Salto de línea
 
 The `line_break` module separates the prompt into two lines.
 
@@ -852,7 +852,7 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
-## Memory Usage
+## Memoria utilizada
 
 The `memory_usage` module shows current system memory and swap usage.
 
@@ -876,7 +876,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `style`           | `"bold dimmed white"` | The style for the module.                                     |
 | `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -905,7 +905,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `style`             | `"bold purple"` | The style for the module.                                                                    |
 | `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -931,7 +931,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 | `style`      | `"bold blue"` | The style for the module.                         |
 | `disabled`   | `false`       | Disables the `nix_shell` module.                  |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -961,7 +961,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 | `style`    | `"bold green"` | The style for the module.                                |
 | `disabled` | `false`        | Disables the `nodejs` module.                            |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -970,7 +970,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 symbol = "🤖 "
 ```
 
-## Package Version
+## Versión del paquete
 
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
@@ -992,7 +992,7 @@ The `package` module is shown when the current directory is the repository for a
 | `style`    | `"bold red"` | The style for the module.                                  |
 | `disabled` | `false`      | Disables the `package` module.                             |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -1017,7 +1017,7 @@ The `php` module shows the currently installed version of PHP. The module will b
 | `style`    | `"bold red"` | The style for the module.                             |
 | `disabled` | `false`      | Disables the `php` module.                            |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -1054,7 +1054,7 @@ The module will be shown if any of the following conditions are met:
 | `style`              | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -1081,7 +1081,7 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 | `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `ruby` module.                            |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -1105,7 +1105,7 @@ The `rust` module shows the currently installed version of Rust. The module will
 | `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `rust` module.                            |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -1131,7 +1131,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 | `style`    | `"bold dimmed blue"` | The style for the module.                        |
 | `disabled` | `false`              | Disables the `singularity` module.               |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -1156,7 +1156,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 | `style`        | `"bold 105"` | The style for the module.                                   |
 | `disabled`     | `false`      | Disables the `terraform` module.                            |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -1165,7 +1165,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 symbol = "🏎💨 "
 ```
 
-## Time
+## Hora
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
@@ -1187,7 +1187,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -1198,7 +1198,7 @@ format = "🕙[ %T ]"
 utc_time_offset = "-5"
 ```
 
-## Username
+## Nombre de usuario
 
 The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
@@ -1216,7 +1216,7 @@ The `username` module shows active user's username. The module will be shown if 
 | `show_always` | `false`         | Always shows the `username` module.   |
 | `disabled`    | `false`         | Disables the `username` module.       |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -1225,7 +1225,7 @@ The `username` module shows active user's username. The module will be shown if 
 disabled = true
 ```
 
-## Custom commands
+## Comandos personalizados
 
 The `custom` modules show the output of some arbitrary commands.
 
@@ -1264,7 +1264,7 @@ The order in which custom modules are shown can be individually set by setting `
 | `suffix`      | `""`                      | Suffix to display immediately after the command output.                                                                    |
 | `disabled`    | `false`                   | Disables this `custom` module.                                                                                             |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
