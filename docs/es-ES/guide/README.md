@@ -248,7 +248,7 @@ Apoya este proyecto con tu organización. Vuestro logo se mostrará aquí con un
 <a href="https://opencollective.com/starship/organization/8/website"><img src="https://opencollective.com/starship/organization/8/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/9/website"><img src="https://opencollective.com/starship/organization/9/avatar.svg"></a>
 
-## 💭 Inspiracíon
+## 💭 Inspiración
 
 Aquí tienes algunos de los trabajos previos que ayudaron a crear starship. 🙏
 
