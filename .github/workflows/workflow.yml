@@ -142,6 +142,7 @@ jobs:
       - uses: jwlawson/actions-setup-cmake@v1.0
         with:
           cmake-version: "3.17.1"
+          github-api-token: ${{ secrets.GITHUB_TOKEN }}
 
       # Run the ignored tests that expect the above setup
       - name: Run all tests
