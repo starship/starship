@@ -98,6 +98,7 @@ prompt_order = [
     "git_state",
     "git_status",
     "hg_branch",
+    "docker_context",
     "package",
     "dotnet",
     "elixir",
@@ -105,6 +106,7 @@ prompt_order = [
     "golang",
     "haskell",
     "java",
+    "julia",
     "nodejs",
     "php",
     "python",
@@ -129,6 +131,8 @@ prompt_order = [
 ## AWS
 
 The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
+
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
 
 ### Options
 
@@ -316,7 +320,7 @@ style = "dimmed green"
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. The module will be shown if any of the following conditions are met:
+The `crystal` module shows the currently installed version of Crystal. Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `shard.yml` file
 - The current directory contains a `.cr` file
@@ -378,6 +382,28 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 truncation_length = 8
 ```
 
+## Docker Context
+
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
+
+### Options
+
+| Variable          | Default       | Description                                                                             |
+| ----------------- | ------------- | --------------------------------------------------------------------------------------- |
+| `symbol`          | `"🐳 "`        | The symbol used before displaying the Docker context .                                  |
+| `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
+| `style`           | `"bold blue"` | The style for the module.                                                               |
+| `disabled`        | `true`        | Disables the `docker_context` module.                                                   |
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[docker_context]
+symbol = "🐋 "
+```
+
 ## Dotnet
 
 The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
@@ -408,7 +434,7 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. The module will be shown if any of the following conditions are met:
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `mix.exs` file.
 
@@ -430,10 +456,11 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. The module will be shown if any of the following conditions are met:
+The `elm` module shows the currently installed version of Elm. Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `elm.json` file
 - The current directory contains a `elm-package.json` file
+- The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
 
@@ -623,13 +650,14 @@ deleted = "🗑"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
+The `golang` module shows the currently installed version of Golang. Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `go.mod` file
 - The current directory contains a `go.sum` file
 - The current directory contains a `glide.yaml` file
 - The current directory contains a `Gopkg.yml` file
 - The current directory contains a `Gopkg.lock` file
+- The current directory contains a `.go-version` file
 - The current directory contains a `Godeps` directory
 - The current directory contains a file with the `.go` extension
 
@@ -651,7 +679,7 @@ symbol = "🏎💨 "
 ```
 ## Haskell
 
-The `haskell` module shows the currently installed version of Haskell Stack version. The module will be shown if any of the following conditions are met:
+The `haskell` module shows the currently installed version of Haskell Stack version. Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `stack.yaml` file
 
@@ -703,9 +731,9 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
+The `java` module shows the currently installed version of Java. Le module est affiché si l'une des ces conditions est remplie :
 
-- The current directory contains a `pom.xml`, `build.gradle.kts` or `build.sbt` file
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
 ### Options
@@ -748,6 +776,30 @@ symbol = "+ "
 threshold = 4
 ```
 
+## Julia
+
+The `julia` module shows the currently installed version of Julia. Le module est affiché si l'une des ces conditions est remplie :
+
+- The current directory contains a `Project.toml` file
+- The current directory contains a `Manifest.toml` file
+- The current directory contains a file with the `.jl` extension
+
+### Options
+
+| Variable   | Default         | Description                                             |
+| ---------- | --------------- | ------------------------------------------------------- |
+| `symbol`   | `"∴ "`          | The symbol used before displaying the version of Julia. |
+| `style`    | `"bold purple"` | The style for the module.                               |
+| `disabled` | `false`         | Disables the `julia` module.                            |
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[julia]
+symbol = "👸 "
+```
 ## Kubernetes
 
 Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
@@ -760,11 +812,12 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Options
 
-| Variable   | Default       | Description                                         |
-| ---------- | ------------- | --------------------------------------------------- |
-| `symbol`   | `"☸ "`        | The symbol used before displaying the Cluster info. |
-| `style`    | `"bold blue"` | The style for the module.                           |
-| `disabled` | `true`        | Disables the `kubernetes` module                    |
+| Variable          | Default       | Description                                         |
+| ----------------- | ------------- | --------------------------------------------------- |
+| `symbol`          | `"☸ "`        | The symbol used before displaying the Cluster info. |
+| `context_aliases` |               | Table of context aliases to display                 |
+| `style`           | `"bold blue"` | The style for the module.                           |
+| `disabled`        | `true`        | Disables the `kubernetes` module                    |
 
 ### Exemple
 
@@ -775,6 +828,8 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 symbol = "⛵ "
 style = "dimmed green"
 disabled = false
+[kubernetes.context_aliases]
+"dev.local.cluster.k8s" = "dev"
 ```
 
 ## Line Break
@@ -888,9 +943,10 @@ pure_msg = "pure shell"
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
+The `nodejs` module shows the currently installed version of NodeJS. Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `package.json` file
+- The current directory contains a `.node-version` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js` extension
 
@@ -920,6 +976,7 @@ The `package` module is shown when the current directory is the repository for a
 - **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
 - **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
+- **julia** - The package version is extracted from the `Project.toml` present
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
 
@@ -942,9 +999,10 @@ symbol = "🎁 "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
+The `php` module shows the currently installed version of PHP. Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `composer.json` file
+- The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
 ### Options
@@ -972,7 +1030,7 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
 
-The module will be shown if any of the following conditions are met:
+Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `.python-version` file
 - The current directory contains a `requirements.txt` file
@@ -1005,9 +1063,10 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
+The `ruby` module shows the currently installed version of Ruby. Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `Gemfile` file
+- The current directory contains a `.ruby-version` file
 - The current directory contains a `.rb` file
 
 ### Options
@@ -1029,7 +1088,7 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
+The `rust` module shows the currently installed version of Rust. Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
@@ -1059,7 +1118,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 
 ### Options
 
-| Variable   | Default              | Description                                      |
+| Variable   | Défault              | Description                                      |
 | ---------- | -------------------- | ------------------------------------------------ |
 | `label`    | `""`                 | Prefix before the image name display.            |
 | `prefix`   | `"["`                | Prefix to display immediately before image name. |
@@ -1079,14 +1138,14 @@ symbol = "📦 "
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. The module will be shown if any of the following conditions are met:
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` extension
 
 ### Options
 
-| Variable       | Default      | Description                                                 |
+| Variable       | Défaut       | Description                                                 |
 | -------------- | ------------ | ----------------------------------------------------------- |
 | `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
 | `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
@@ -1114,7 +1173,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Options
 
-| Variable          | Défault         | Description                                                                                                                                         |
+| Variable          | Default         | Description                                                                                                                                         |
 | ----------------- | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `use_12hr`        | `false`         | Activer le format 12h                                                                                                                               |
 | `format`          | voir plus bas   | Le [format chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) utilisé pour formater l'heure.                                   |
@@ -1146,9 +1205,9 @@ Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le mod
 
 ### Options
 
-| Variable      | Défaut          | Description                                      |
+| Variable      | Default         | Description                                      |
 | ------------- | --------------- | ------------------------------------------------ |
-| `style_root`  | `"bold red"`    | Le style utilisé quand l'utilisateur est root.   |
+| `style_root`  | `"bold green"`  | Le style utilisé quand l'utilisateur est root.   |
 | `style_user`  | `"bold yellow"` | Le style utilisé pour les utilisateurs non-root. |
 | `show_always` | `false`         | Toujours afficher le module `username`.          |
 | `disabled`    | `false`         | Désactiver le module `username`.                 |

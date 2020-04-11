@@ -218,6 +218,26 @@ impl StarshipConfig {
         module_config
     }
 
+    /// Get the subset of the table for a custom module by its name
+    pub fn get_custom_module_config(&self, module_name: &str) -> Option<&Value> {
+        let module_config = self.get_custom_modules()?.get(module_name);
+        if module_config.is_some() {
+            log::debug!(
+                "Custom config found for \"{}\": \n{:?}",
+                &module_name,
+                &module_config
+            );
+        } else {
+            log::trace!("No custom config found for \"{}\"", &module_name);
+        }
+        module_config
+    }
+
+    /// Get the table of all the registered custom modules, if any
+    pub fn get_custom_modules(&self) -> Option<&toml::value::Table> {
+        self.config.as_ref()?.as_table()?.get("custom")?.as_table()
+    }
+
     pub fn get_root_config(&self) -> StarshipRootConfig {
         if let Some(root_config) = &self.config {
             StarshipRootConfig::load(root_config)
@@ -305,7 +325,7 @@ impl Default for SegmentConfig<'static> {
  - 'italic'
  - '<color>'        (see the parse_color_string doc for valid color strings)
 */
-fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
+pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
     style_string
         .split_whitespace()
         .fold(Some(ansi_term::Style::new()), |maybe_style, token| {
