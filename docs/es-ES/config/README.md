@@ -64,26 +64,26 @@ Esta es la lista de opciones de configuración.
 
 ### Opciones
 
-| Variable       | Por defecto                   | Descripción                                            |
-| -------------- | ----------------------------- | ------------------------------------------------------ |
-| `add_newline`  | `true`                        | Añade una nueva línea antes del símbolo de sistema.    |
-| `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
-| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).  |
+| Variable       | Por defecto                   | Descripción                                                                     |
+| -------------- | ----------------------------- | ------------------------------------------------------------------------------- |
+| `add_newline`  | `true`                        | Añade una nueva línea antes del símbolo de sistema.                             |
+| `prompt_order` | [link](#default-prompt-order) | Configura el orden en el que se muestran los módulos en el símbolo del sistema. |
+| `scan_timeout` | `30`                          | Tiempo de espera tras el que starship escanea archivos (en milisegundos).       |
 
 ### Example
 
 ```toml
 # ~/.config/starship.toml
 
-# Disable the newline at the start of the prompt
+# Desactiva el salto de línea al comienzo del símbolo de sistema
 add_newline = false
-# Overwrite a default_prompt_order and  use custom prompt_order
+# Sobrescribe el orden por defecto de los módulos
 prompt_order=["rust","line_break","package","line_break","character"]
-# Wait 10 milliseconds for starship to check files under the current directory.
+# Starship espera 10 ms para comprobar los archivos del directorio actual.
 scan_timeout = 10
 ```
 
-### Default Prompt Order
+### Ordenación por defecto
 
 The default `prompt_order` is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. The default is as shown:
 
