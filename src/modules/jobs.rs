@@ -18,10 +18,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if num_of_jobs == 0 {
         return None;
     }
-    let mut module_number = "".to_string();
-    if num_of_jobs > config.threshold {
-        module_number = num_of_jobs.to_string();
-    }
+    let module_number = if num_of_jobs > config.threshold { num_of_jobs.to_string() } else { "".to_string() };
 
     let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
         formatter.map(|variable| match variable {
