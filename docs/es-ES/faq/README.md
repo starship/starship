@@ -14,20 +14,20 @@
 
 Sí, se pueden usar ambos para desactivar los módulos en el símbolo del sistema. Si todo lo que planeas es desactivar módulos, `<module>.disabled` es el método preferido por las siguientes razones:
 
-- Disabling modules is more explicit than omitting them from the prompt_order
-- Newly created modules will be added to the prompt as Starship is updated
+- Es más evidente desactivar módulos que omitirlos usando prompt_order
+- Los nuevos módulos se añadirán al símbolo del sistema en cuanto Starship se actualice
 
-## The docs say Starship is cross-shell, but it doesn't support X shell. Why?
+## La documentación dice que Starship es compatible con cualquier intérprete de comandos pero no soporta X Shell. ¿Por qué?
 
-The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
+Por la forma en que Starshp está construído, debería ser posible añadir soporte para prácticamente cualquier intérprete de comandos. El binario de Starship es sin estado y agnóstico, por lo que mientras que tu intérprete de comandos se pueda ampliar y soporte la personalización del símbolo del sistema, puede utilizar Starship.
 
-Here's a small example getting Starship working with bash:
+Aquí tienes un pequeño ejemplo haciendo que Starship funcione con bash:
 
 ```sh
 # Get the status code from the last command executed
 STATUS=$?
 
-# Get the number of jobs running.
+# Calcula el número de tareas ejecutándose.
 NUM_JOBS=$(jobs -p | wc -l)
 
 # Set the prompt to the output of `starship prompt`
