@@ -56,17 +56,17 @@ La mayoría de los módulos de starship permiten configurar los estilos de su ca
 - `"bold italic fg:purple"` pone texto color morado, en negrita y cursiva
 - `""` desactiva explícitamente cualquier estilo
 
-Nótese que el estilo es similar a como se controlaría por el emulador de su terminal. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+Nótese que el estilo es similar a como se controlaría por el emulador de su terminal. Por ejemplo, algunos emuladores de terminal harán los colores más brillantes en lugar de más gruesos, y algunos temas usan los mismos valores para texto normal y colores brillantes. Además, para mostrar textos en cursiva tu terminal debe tener soporte para hacerlo.
 
-## Prompt
+## Símbolo del sistema
 
-This is the list of prompt-wide configuration options.
+Esta es la lista de opciones de configuración.
 
-### Options
+### Opciones
 
-| Variable       | Default                       | Description                                            |
+| Variable       | Por defecto                   | Descripción                                            |
 | -------------- | ----------------------------- | ------------------------------------------------------ |
-| `add_newline`  | `true`                        | Add a new line before the start of the prompt.         |
+| `add_newline`  | `true`                        | Añade una nueva línea antes del símbolo de sistema.    |
 | `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
 | `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).  |
 
@@ -135,9 +135,9 @@ The `aws` module shows the current AWS region and profile. This is based on `AWS
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
 
-### Options
+### Opciones
 
-| Variable          | Default         | Description                                                                 |
+| Variable          | Por defecto     | Descripción                                                                 |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
@@ -163,9 +163,9 @@ us-east-1 = "va"
 
 The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
-### Options
+### Opciones
 
-| Variable             | Default                  | Description                                       |
+| Variable             | Por defecto              | Descripción                                       |
 | -------------------- | ------------------------ | ------------------------------------------------- |
 | `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
 | `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
@@ -176,7 +176,7 @@ The `battery` module shows how charged the device's battery is and its current c
 <details>
 <summary>There are also options for some uncommon battery states.</summary>
 
-| Variable         | Description                                         |
+| Variable         | Descripción                                         |
 | ---------------- | --------------------------------------------------- |
 | `unknown_symbol` | The symbol shown when the battery state is unknown. |
 | `empty_symbol`   | The symbol shown when the battery state is empty.   |
@@ -206,11 +206,11 @@ threshold = 10
 style = "bold red"
 ```
 
-#### Options
+#### Opciones
 
 The `display` option is an array of the following table.
 
-| Variable    | Description                                     |
+| Variable    | Descripción                                     |
 | ----------- | ----------------------------------------------- |
 | `threshold` | The upper bound for the display option.         |
 | `style`     | The style used if the display option is in use. |
@@ -236,9 +236,9 @@ The `character` module shows a character (usually an arrow) beside where the tex
 
 The character will tell you whether the last command was successful or not. It can do this in two ways: by changing color (red/green) or by changing its shape (❯/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
 
-### Options
+### Opciones
 
-| Variable                | Default        | Description                                                                         |
+| Variable                | Por defecto    | Descripción                                                                         |
 | ----------------------- | -------------- | ----------------------------------------------------------------------------------- |
 | `symbol`                | `"❯"`          | The symbol used before the text input in the prompt.                                |
 | `error_symbol`          | `"✖"`          | The symbol used before text input if the previous command failed.                   |
@@ -271,9 +271,9 @@ If you are running Starship in `bash`, do not hook the `DEBUG` trap after runnin
 
 Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
-### Options
+### Opciones
 
-| Variable            | Default         | Description                                                |
+| Variable            | Por defecto     | Descripción                                                |
 | ------------------- | --------------- | ---------------------------------------------------------- |
 | `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
 | `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
@@ -301,9 +301,9 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 :::
 
-### Options
+### Opciones
 
-| Variable            | Default        | Description                                                                                                                                                                                                 |
+| Variable            | Por defecto    | Descripción                                                                                                                                                                                                 |
 | ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
 | `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
@@ -326,9 +326,9 @@ The `crystal` module shows the currently installed version of Crystal. The modul
 - The current directory contains a `shard.yml` file
 - The current directory contains a `.cr` file
 
-### Options
+### Opciones
 
-| Variable   | Default      | Description                                               |
+| Variable   | Por defecto  | Descripción                                               |
 | ---------- | ------------ | --------------------------------------------------------- |
 | `symbol`   | `"🔮 "`       | The symbol used before displaying the version of crystal. |
 | `style`    | `"bold red"` | The style for the module.                                 |
@@ -352,9 +352,9 @@ When using the fish style pwd option, instead of hiding the path that is truncat
 
 For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
-### Options
+### Opciones
 
-| Variable            | Default       | Description                                                                      |
+| Variable            | Por defecto   | Descripción                                                                      |
 | ------------------- | ------------- | -------------------------------------------------------------------------------- |
 | `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
@@ -365,10 +365,10 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Variable                    | Default | Description                                                                              |
-| --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
-| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
-| `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+| Variable                    | Por defecto | Descripción                                                                              |
+| --------------------------- | ----------- | ---------------------------------------------------------------------------------------- |
+| `fish_style_pwd_dir_length` | `0`         | The number of characters to use when applying fish shell pwd path logic.                 |
+| `use_logical_path`          | `true`      | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
 
 `fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
@@ -387,9 +387,9 @@ truncation_length = 8
 
 The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
 
-### Options
+### Opciones
 
-| Variable          | Default       | Description                                                                             |
+| Variable          | Por defecto   | Descripción                                                                             |
 | ----------------- | ------------- | --------------------------------------------------------------------------------------- |
 | `symbol`          | `"🐳 "`        | The symbol used before displaying the Docker context .                                  |
 | `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
@@ -413,9 +413,9 @@ This module will only be shown in your prompt when one of the following files ar
 
 Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
-### Options
+### Opciones
 
-| Variable    | Default       | Description                                              |
+| Variable    | Por defecto   | Descripción                                              |
 | ----------- | ------------- | -------------------------------------------------------- |
 | `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
 | `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
@@ -439,12 +439,12 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 - The current directory contains a `mix.exs` file.
 
-### Options
+### Opciones
 
-| Variable   | Default | Description                                                     |
-| ---------- | ------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`  | The symbol used before displaying the version of Elixir/Erlang. |
-| `disabled` | `false` | Disables the `elixir` module.                                   |
+| Variable   | Por defecto | Descripción                                                     |
+| ---------- | ----------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`      | The symbol used before displaying the version of Elixir/Erlang. |
+| `disabled` | `false`     | Disables the `elixir` module.                                   |
 
 ### Example
 
@@ -465,9 +465,9 @@ The `elm` module shows the currently installed version of Elm. The module will b
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
 
-### Options
+### Opciones
 
-| Variable   | Default       | Description                                           |
+| Variable   | Por defecto   | Descripción                                           |
 | ---------- | ------------- | ----------------------------------------------------- |
 | `symbol`   | `"🌳 "`        | The symbol used before displaying the version of Elm. |
 | `style`    | `"bold cyan"` | The style for the module.                             |
@@ -490,9 +490,9 @@ The `env_var` module displays the current value of a selected environment variab
 - The `variable` configuration option matches an existing environment variable
 - The `variable` configuration option is not defined, but the `default` configuration option is
 
-### Options
+### Opciones
 
-| Variable   | Default          | Description                                                                  |
+| Variable   | Por defecto      | Descripción                                                                  |
 | ---------- | ---------------- | ---------------------------------------------------------------------------- |
 | `symbol`   |                  | The symbol used before displaying the variable value.                        |
 | `variable` |                  | The environment variable to be displayed.                                    |
@@ -516,9 +516,9 @@ default = "unknown shell"
 
 The `git_branch` module shows the active branch of the repo in your current directory.
 
-### Options
+### Opciones
 
-| Variable            | Default         | Description                                                                           |
+| Variable            | Por defecto     | Descripción                                                                           |
 | ------------------- | --------------- | ------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
 | `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
@@ -541,9 +541,9 @@ truncation_symbol = ""
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
-### Options
+### Opciones
 
-| Variable             | Default        | Description                                           |
+| Variable             | Por defecto    | Descripción                                           |
 | -------------------- | -------------- | ----------------------------------------------------- |
 | `commit_hash_length` | `7`            | The length of the displayed git commit hash.          |
 | `prefix`             | `"("`          | Prefix to display immediately before git commit.      |
@@ -565,9 +565,9 @@ commit_hash_length = 4
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
-### Options
+### Opciones
 
-| Variable           | Default            | Description                                                                                                      |
+| Variable           | Por defecto        | Descripción                                                                                                      |
 | ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
 | `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
 | `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
@@ -594,9 +594,9 @@ cherry_pick = "🍒 PICKING"
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
-### Options
+### Opciones
 
-| Variable           | Default                    | Description                                             |
+| Variable           | Por defecto                | Descripción                                             |
 | ------------------ | -------------------------- | ------------------------------------------------------- |
 | `conflicted`       | `"="`                      | This branch has merge conflicts.                        |
 | `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
@@ -623,10 +623,10 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 #### Git Status Counts
 
-| Variable  | Default | Description                                            |
-| --------- | ------- | ------------------------------------------------------ |
-| `enabled` | `false` | Show the number of files                               |
-| `style`   |         | Optionally style the count differently than the module |
+| Variable  | Por defecto | Descripción                                            |
+| --------- | ----------- | ------------------------------------------------------ |
+| `enabled` | `false`     | Show the number of files                               |
+| `style`   |             | Optionally style the count differently than the module |
 
 ### Example
 
@@ -662,9 +662,9 @@ The `golang` module shows the currently installed version of Golang. The module 
 - The current directory contains a `Godeps` directory
 - The current directory contains a file with the `.go` extension
 
-### Options
+### Opciones
 
-| Variable   | Default       | Description                                              |
+| Variable   | Por defecto   | Descripción                                              |
 | ---------- | ------------- | -------------------------------------------------------- |
 | `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
 | `style`    | `"bold cyan"` | The style for the module.                                |
@@ -684,9 +684,9 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 
 - The current directory contains a `stack.yaml` file
 
-### Options
+### Opciones
 
-| Variable   | Default      | Description                                               |
+| Variable   | Por defecto  | Descripción                                               |
 | ---------- | ------------ | --------------------------------------------------------- |
 | `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
 | `style`    | `"bold red"` | The style for the module.                                 |
@@ -706,9 +706,9 @@ symbol = " "
 
 The `hostname` module shows the system hostname.
 
-### Options
+### Opciones
 
-| Variable   | Default               | Description                                                                                                                          |
+| Variable   | Por defecto           | Descripción                                                                                                                          |
 | ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
 | `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
@@ -737,9 +737,9 @@ The `java` module shows the currently installed version of Java. The module will
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
-### Options
+### Opciones
 
-| Variable   | Default        | Description                                            |
+| Variable   | Por defecto    | Descripción                                            |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
 | `style`    | `"dimmed red"` | The style for the module.                              |
@@ -758,9 +758,9 @@ symbol = "🌟 "
 
 The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
-### Options
+### Opciones
 
-| Variable    | Default       | Description                                           |
+| Variable    | Por defecto   | Descripción                                           |
 | ----------- | ------------- | ----------------------------------------------------- |
 | `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
 | `threshold` | `1`           | Show number of jobs if exceeded.                      |
@@ -785,9 +785,9 @@ The `julia` module shows the currently installed version of Julia. The module wi
 - The current directory contains a `Manifest.toml` file
 - The current directory contains a file with the `.jl` extension
 
-### Options
+### Opciones
 
-| Variable   | Default         | Description                                             |
+| Variable   | Por defecto     | Descripción                                             |
 | ---------- | --------------- | ------------------------------------------------------- |
 | `symbol`   | `"ஃ "`          | The symbol used before displaying the version of Julia. |
 | `style`    | `"bold purple"` | The style for the module.                               |
@@ -811,9 +811,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Options
+### Opciones
 
-| Variable          | Default       | Description                                         |
+| Variable          | Por defecto   | Descripción                                         |
 | ----------------- | ------------- | --------------------------------------------------- |
 | `symbol`          | `"☸ "`        | The symbol used before displaying the Cluster info. |
 | `context_aliases` |               | Table of context aliases to display                 |
@@ -837,11 +837,11 @@ disabled = false
 
 The `line_break` module separates the prompt into two lines.
 
-### Options
+### Opciones
 
-| Variable   | Default | Description                                                        |
-| ---------- | ------- | ------------------------------------------------------------------ |
-| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
+| Variable   | Por defecto | Descripción                                                        |
+| ---------- | ----------- | ------------------------------------------------------------------ |
+| `disabled` | `false`     | Disables the `line_break` module, making the prompt a single line. |
 
 ### Example
 
@@ -864,9 +864,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Options
+### Opciones
 
-| Variable          | Default               | Description                                                   |
+| Variable          | Por defecto           | Descripción                                                   |
 | ----------------- | --------------------- | ------------------------------------------------------------- |
 | `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
 | `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
@@ -895,9 +895,9 @@ style = "bold dimmed green"
 
 The `hg_branch` module shows the active branch of the repo in your current directory.
 
-### Options
+### Opciones
 
-| Variable            | Default         | Description                                                                                  |
+| Variable            | Por defecto     | Descripción                                                                                  |
 | ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
@@ -920,9 +920,9 @@ truncation_symbol = ""
 
 The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
-### Options
+### Opciones
 
-| Variable     | Default       | Description                                       |
+| Variable     | Por defecto   | Descripción                                       |
 | ------------ | ------------- | ------------------------------------------------- |
 | `use_name`   | `false`       | Display the name of the nix-shell.                |
 | `impure_msg` | `"impure"`    | Customize the "impure" msg.                       |
@@ -953,9 +953,9 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js` extension
 
-### Options
+### Opciones
 
-| Variable   | Default        | Description                                              |
+| Variable   | Por defecto    | Descripción                                              |
 | ---------- | -------------- | -------------------------------------------------------- |
 | `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
 | `style`    | `"bold green"` | The style for the module.                                |
@@ -984,9 +984,9 @@ The `package` module is shown when the current directory is the repository for a
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
 
-### Options
+### Opciones
 
-| Variable   | Default      | Description                                                |
+| Variable   | Por defecto  | Descripción                                                |
 | ---------- | ------------ | ---------------------------------------------------------- |
 | `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
 | `style`    | `"bold red"` | The style for the module.                                  |
@@ -1009,9 +1009,9 @@ The `php` module shows the currently installed version of PHP. The module will b
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
-### Options
+### Opciones
 
-| Variable   | Default      | Description                                           |
+| Variable   | Por defecto  | Descripción                                           |
 | ---------- | ------------ | ----------------------------------------------------- |
 | `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
 | `style`    | `"bold red"` | The style for the module.                             |
@@ -1044,9 +1044,9 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `tox.ini` file
 - A virtual environment is currently activated
 
-### Options
+### Opciones
 
-| Variable             | Default         | Description                                                                 |
+| Variable             | Por defecto     | Descripción                                                                 |
 | -------------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
 | `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
@@ -1073,9 +1073,9 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 - The current directory contains a `.ruby-version` file
 - The current directory contains a `.rb` file
 
-### Options
+### Opciones
 
-| Variable   | Default      | Description                                            |
+| Variable   | Por defecto  | Descripción                                            |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
 | `style`    | `"bold red"` | The style for the module.                              |
@@ -1097,9 +1097,9 @@ The `rust` module shows the currently installed version of Rust. The module will
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
 
-### Options
+### Opciones
 
-| Variable   | Default      | Description                                            |
+| Variable   | Por defecto  | Descripción                                            |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
 | `style`    | `"bold red"` | The style for the module.                              |
@@ -1120,9 +1120,9 @@ The `singularity` module shows the current singularity image, if inside a contai
 
 :::
 
-### Options
+### Opciones
 
-| Variable   | Default              | Description                                      |
+| Variable   | Por defecto          | Descripción                                      |
 | ---------- | -------------------- | ------------------------------------------------ |
 | `label`    | `""`                 | Prefix before the image name display.            |
 | `prefix`   | `"["`                | Prefix to display immediately before image name. |
@@ -1147,9 +1147,9 @@ The `terraform` module shows the currently selected terraform workspace and vers
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` extension
 
-### Options
+### Opciones
 
-| Variable       | Default      | Description                                                 |
+| Variable       | Por defecto  | Descripción                                                 |
 | -------------- | ------------ | ----------------------------------------------------------- |
 | `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
 | `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
@@ -1175,9 +1175,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Options
+### Opciones
 
-| Variable          | Default         | Description                                                                                                         |
+| Variable          | Por defecto     | Descripción                                                                                                         |
 | ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `use_12hr`        | `false`         | Enables 12 hour formatting                                                                                          |
 | `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
@@ -1207,9 +1207,9 @@ The `username` module shows active user's username. The module will be shown if 
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
 
-### Options
+### Opciones
 
-| Variable      | Default         | Description                           |
+| Variable      | Por defecto     | Descripción                           |
 | ------------- | --------------- | ------------------------------------- |
 | `style_root`  | `"bold red"`    | The style used when the user is root. |
 | `style_user`  | `"bold yellow"` | The style used for non-root users.    |
@@ -1247,9 +1247,9 @@ The order in which custom modules are shown can be individually set by setting `
 
 :::
 
-### Options
+### Opciones
 
-| Variable      | Default                   | Description                                                                                                                |
+| Variable      | Por defecto               | Descripción                                                                                                                |
 | ------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `command`     |                           | The command whose output should be printed.                                                                                |
 | `when`        |                           | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
