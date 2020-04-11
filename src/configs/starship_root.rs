@@ -31,6 +31,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "package",
                 // ↓ Toolchain version modules ↓
                 // (Let's keep these sorted alphabetically)
+                "cmake",
                 "dotnet",
                 "elixir",
                 "elm",

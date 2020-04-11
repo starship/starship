@@ -1,6 +1,7 @@
 pub mod aws;
 pub mod battery;
 pub mod character;
+pub mod cmake;
 pub mod cmd_duration;
 pub mod conda;
 pub mod crystal;

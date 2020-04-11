@@ -138,6 +138,11 @@ jobs:
         with:
           version: "0.12.14"
 
+      # Install CMake at a fixed version
+      - uses: jwlawson/actions-setup-cmake@v1.0
+        with:
+          cmake-version: "3.17.1"
+
       # Run the ignored tests that expect the above setup
       - name: Run all tests
         uses: actions-rs/cargo@v1
@@ -174,9 +179,9 @@ jobs:
           git config --global user.name "Matan Kushner"
           git config --global user.email "hello@matchai.dev"
 
-          cd $(brew --repo homebrew/core)	
+          cd $(brew --repo homebrew/core)
           git fetch origin
-          sudo git reset --hard origin/master	
+          sudo git reset --hard origin/master
           cd -
 
           brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
@@ -230,7 +235,7 @@ jobs:
         with:
           command: build
           args: --release --target ${{ matrix.target }}
-    
+
       - name: Build target (musl)
         if: matrix.target == 'x86_64-unknown-linux-musl'
         uses: actions-rs/cargo@v1
