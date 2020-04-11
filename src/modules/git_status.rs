@@ -158,9 +158,9 @@ impl<'a> GitStatusInfo<'a> {
             let data = self.ahead_behind.read().unwrap();
             if let Some(result) = data.as_ref() {
                 return match result.as_ref() {
-                    Ok(ahead_behind) => Some(ahead_behind.clone()),
+                    Ok(ahead_behind) => Some(*ahead_behind),
                     Err(error) => {
-                        log::error!("Error: {}", error);
+                        log::warn!("Warn: get_ahead_behind: {}", error);
                         None
                     }
                 };
@@ -173,9 +173,9 @@ impl<'a> GitStatusInfo<'a> {
             let mut data = self.ahead_behind.write().unwrap();
             *data = Some(get_ahead_behind(&repo, &branch_name));
             match data.as_ref().unwrap() {
-                Ok(ahead_behind) => Some(ahead_behind.clone()),
+                Ok(ahead_behind) => Some(*ahead_behind),
                 Err(error) => {
-                    log::error!("Error: {}", error);
+                    log::warn!("Warn: get_ahead_behind: {}", error);
                     None
                 }
             }
@@ -187,9 +187,9 @@ impl<'a> GitStatusInfo<'a> {
             let data = self.repo_status.read().unwrap();
             if let Some(result) = data.as_ref() {
                 return match result.as_ref() {
-                    Ok(repo_status) => Some(repo_status.clone()),
+                    Ok(repo_status) => Some(*repo_status),
                     Err(error) => {
-                        log::error!("Error: {}", error);
+                        log::warn!("Warn: get_repo_status: {}", error);
                         None
                     }
                 };
@@ -201,9 +201,9 @@ impl<'a> GitStatusInfo<'a> {
             let mut data = self.repo_status.write().unwrap();
             *data = Some(get_repo_status(&mut repo));
             match data.as_ref().unwrap() {
-                Ok(repo_status) => Some(repo_status.clone()),
+                Ok(repo_status) => Some(*repo_status),
                 Err(error) => {
-                    log::error!("Error: {}", error);
+                    log::warn!("Warn: get_repo_status: {}", error);
                     None
                 }
             }
