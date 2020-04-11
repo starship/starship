@@ -48,7 +48,7 @@ fn shows_behind_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            show_sync_count = true
+            behind_format = "⇣$count"
         })
         .arg("--path")
         .arg(&repo_dir)
@@ -92,7 +92,7 @@ fn shows_ahead_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            show_sync_count = true
+            ahead_format="↑$count"
         })
         .arg("--path")
         .arg(&repo_dir)
@@ -134,7 +134,7 @@ fn shows_diverged_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            show_sync_count = true
+            diverged_format=r"⇕↑$ahead_count↓$behind_count"
         })
         .arg("--path")
         .arg(&repo_dir)
@@ -179,7 +179,7 @@ fn shows_conflicted_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            conflicted_count.enabled = true
+            conflicted_format = "=$count"
         })
         .arg("--path")
         .arg(&repo_dir)
@@ -221,7 +221,7 @@ fn shows_untracked_file_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            untracked_count.enabled = true
+            untracked_format = "?$count"
         })
         .arg("--path")
         .arg(&repo_dir)
@@ -302,7 +302,7 @@ fn shows_stashed_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            stashed_count.enabled = true
+            stashed_format = r"\$$count"
         })
         .arg("--path")
         .arg(&repo_dir)
@@ -342,7 +342,7 @@ fn shows_modified_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            modified_count.enabled = true
+            modified_format = "!$count"
         })
         .arg("--path")
         .arg(&repo_dir)
@@ -384,8 +384,7 @@ fn shows_staged_file_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            staged_count.enabled = true
-            staged_count.style = "green"
+            staged_format = "+[$count](green)"
         })
         .arg("--path")
         .arg(&repo_dir)
@@ -434,7 +433,7 @@ fn shows_renamed_file_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            renamed_count.enabled = true
+            renamed_format = "»$count"
         })
         .arg("--path")
         .arg(&repo_dir)
@@ -476,7 +475,7 @@ fn shows_deleted_file_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            deleted_count.enabled = true
+            deleted_format = "✘$count"
         })
         .arg("--path")
         .arg(&repo_dir)
@@ -486,48 +485,6 @@ fn shows_deleted_file_with_count() -> io::Result<()> {
 
     assert_eq!(expected, actual);
 
-    remove_dir_all(repo_dir)
-}
-
-#[test]
-#[ignore]
-fn prefix() -> io::Result<()> {
-    let repo_dir = common::create_fixture_repo()?;
-    File::create(repo_dir.join("prefix"))?.sync_all()?;
-    let output = common::render_module("git_status")
-        .arg("--path")
-        .arg(&repo_dir)
-        .env_clear()
-        .use_config(toml::toml! {
-            [git_status]
-            prefix = "("
-            style = ""
-        })
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = "(";
-    assert!(actual.starts_with(&expected));
-    remove_dir_all(repo_dir)
-}
-
-#[test]
-#[ignore]
-fn suffix() -> io::Result<()> {
-    let repo_dir = common::create_fixture_repo()?;
-    File::create(repo_dir.join("suffix"))?.sync_all()?;
-    let output = common::render_module("git_status")
-        .arg("--path")
-        .arg(&repo_dir)
-        .env_clear()
-        .use_config(toml::toml! {
-            [git_status]
-            suffix = ")"
-            style = ""
-        })
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = ")";
-    assert!(actual.ends_with(&expected));
     remove_dir_all(repo_dir)
 }
 
