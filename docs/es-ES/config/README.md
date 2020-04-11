@@ -38,25 +38,25 @@ export STARSHIP_CONFIG=~/.starship
 
 **Segmento**: sub-componentes más pequeños que forman un módulo. Por ejemplo, el segmento "symbol" en el módulo "nodejs" contiene el carácter que se muestra antes del número de versión (⬢ por defecto).
 
-A continuación mostramos la representación del módulo "node". En el siguiente ejemplo, "symbol" y "version" son segmentos que lo contienen. Every module also has a prefix and suffix that are the default terminal color.
+A continuación mostramos la representación del módulo "node". En el siguiente ejemplo, "symbol" y "version" son segmentos que lo contienen. Cada módulo tiene además un prefijo y un sufijo que indican el color por defecto en el terminal.
 
 ```
 [prefix]      [symbol]     [version]    [suffix]
  "via "         "⬢"        "v10.4.1"       ""
 ```
 
-### Style Strings
+### Dar estilo a cadenas de texto
 
-Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+La mayoría de los módulos de starship permiten configurar los estilos de su cadenas texto. Esto se consigue con una entrada (normalmente llamada `style` - estilo) que no es más que un texto donde se especifica la configuración. A continuación mostramos algunos ejemplos de textos estilados junto con su funcionalidad. Para más detalles sobre la sintaxis completa, consulta [la guía de configuración avanzada](/advanced-config/).
 
-- `"fg:green bg:blue"` sets green text on a blue background
-- `"bg:blue fg:bright-green"` sets bright green text on a blue background
-- `"bold fg:27"` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
-- `"underline bg:#bf5700"` sets underlined text on a burnt orange background
-- `"bold italic fg:purple"` sets bold italic purple text
-- `""` explicitly disables all styling
+- `"fg:green bg:blue"` pone texto verde sobre un fondo azul
+- `"bg:blue fg:bright-green"` pone texto verde claro sobre un fondo azul
+- `"bold fg:27"` pone texto en negrita con [color ANSI](https://i.stack.imgur.com/KTSQa.png) 27
+- `"underline bg:#bf5700"` subraya el texto sobre un fondo naranja oscuro
+- `"bold italic fg:purple"` pone texto color morado, en negrita y cursiva
+- `""` desactiva explícitamente cualquier estilo
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+Nótese que el estilo es similar a como se controlaría por el emulador de su terminal. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
 ## Prompt
 
