@@ -1,8 +1,8 @@
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::cmake::CMakeConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
-use regex::Regex;
 
 /// Creates a module with the current CMake version
 ///
@@ -19,25 +19,34 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let cmake_version = utils::exec_cmd("cmake", &["--version"])?.stdout;
-    let formatted_version = Some(format!(
-        "v{}",
-        Regex::new(r"[0-9]+\.[0-9]+\.[0-9]+")
-            .unwrap()
-            .captures(&cmake_version)
-            .unwrap()
-            .get(0)
-            .unwrap()
-            .as_str()
-    ))?;
+    let module_version = format_cmake_version(&cmake_version)?;
 
     let mut module = context.new_module("cmake");
     let config: CMakeConfig = CMakeConfig::try_load(module.config);
-    module.set_style(config.style);
+    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
+        formatter.map(|variable| match variable {
+            "version" => Some(module_version.clone()),
+            _ => None,
+        })
+    } else {
+        log::warn!("Error parsing format string in `cmake.format`");
+        return None;
+    };
 
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &SegmentConfig::new(&formatted_version));
+    module.set_segments(formatter.parse(None));
+
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
+}
+
+fn format_cmake_version(cmake_version: &str) -> Option<String> {
+    let version = cmake_version.split_whitespace().nth(2)?;
+    let mut formatted_version = String::with_capacity(version.len() + 1);
+    formatted_version.push('v');
+    formatted_version.push_str(version);
+    Some(formatted_version)
 }
 
 #[cfg(test)]

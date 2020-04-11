@@ -316,11 +316,16 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default       | Description                                             |
-| ---------- | ------------- | ------------------------------------------------------- |
-| `symbol`   | `"🛆 "`        | The symbol used before displaying the version of cmake. |
-| `style`    | `"bold blue"` | The style for the module.                               |
-| `disabled` | `false`       | Disables the `cmake` module.                            |
+| Variable   | Default                         | Description                                             |
+| ---------- | ------------------------------- | ------------------------------------------------------- |
+| `format`   | `"via [🛆 $version](bold blue)"` | The symbol used before displaying the version of cmake. |
+| `disabled` | `false`                         | Disables the `cmake` module.                            |
+
+### Variables
+
+| Variable | Example   | Description            |
+| -------- | --------- | ---------------------- |
+| version  | `v3.17.1` | The version of `cmake` |
 
 ### Example
 
@@ -328,8 +333,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [cmake]
-symbol = "🔺 "
-style = "bold red"
+format = "via [🔺 $version](bold red)"
 ```
 
 ## Conda
