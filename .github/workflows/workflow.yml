@@ -1,3 +1,4 @@
+---
 name: Main workflow
 on:
   push:
@@ -22,7 +23,6 @@ jobs:
           toolchain: stable
           components: rustfmt
           override: true
-      - run: rustup component add rustfmt
       - uses: actions-rs/cargo@v1
         with:
           command: fmt
@@ -174,9 +174,9 @@ jobs:
           git config --global user.name "Matan Kushner"
           git config --global user.email "hello@matchai.dev"
 
-          cd $(brew --repo homebrew/core)	
+          cd $(brew --repo homebrew/core)
           git fetch origin
-          sudo git reset --hard origin/master	
+          sudo git reset --hard origin/master
           cd -
 
           brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
@@ -230,7 +230,7 @@ jobs:
         with:
           command: build
           args: --release --target ${{ matrix.target }}
-    
+
       - name: Build target (musl)
         if: matrix.target == 'x86_64-unknown-linux-musl'
         uses: actions-rs/cargo@v1
