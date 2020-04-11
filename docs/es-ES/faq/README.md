@@ -24,29 +24,29 @@ Por la forma en que Starshp está construído, debería ser posible añadir sopo
 Aquí tienes un pequeño ejemplo haciendo que Starship funcione con bash:
 
 ```sh
-# Get the status code from the last command executed
+# Obtener el código de estado del último comando ejecutado
 STATUS=$?
 
 # Calcula el número de tareas ejecutándose.
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Set the prompt to the output of `starship prompt`
+# Actualiza el símbolo del sistema para mostrar la salida de `starship prompt`
 PS1="$(starship prompt --status=$STATUS --jobs=NUM_JOBS)"
 ```
 
-The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#Command-Duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
+La [implementación de Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) en Starship es sensíblemente is ligeramente más compleja para permitir características avanzadas como [el módulo de duración de comando](https://starship.rs/config/#Command-Duration) y para asegurar que Starship es compatible con las configuraciones preinstaladas de Bash.
 
-For a list of all flags accepted by `starship prompt`, use the following command:
+Para obtener una lista de todos los parámetros aceptados por `el símbolo del sistema starship`, usa el siguiente comando:
 
 ```sh
 starship prompt --help
 ```
 
-The prompt will use as much context as is provided, but no flags are "required".
+El símbolo de sistema usará tanto contexto como le proveas, pero no hay parámetros "obligatorios".
 
-## How do I run Starship on Linux distributions with older versions of glibc?
+## ¿Cómo lanzo Starship en distribuciones Linux con versiones antiguas de glibc?
 
-If you get an error like "*version 'GLIBC_2.18' not found (required by starship)*" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+Si obtienes un error como "*version 'GLIBC_2.18' not found (required by starship)*" al usar el binario precompilado (por ejemplo, en CentOS 6 o 7), puedes usar el binario compilado con `musl` en vez de `glibc`:
 
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
