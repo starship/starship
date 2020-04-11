@@ -35,7 +35,7 @@ fn shows_behind() -> io::Result<()> {
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = format_output("↓");
+    let expected = format_output("⇣");
 
     assert_eq!(expected, actual);
 
@@ -58,7 +58,7 @@ fn shows_behind_with_count() -> io::Result<()> {
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = format_output("↓1");
+    let expected = format_output("⇣1");
 
     assert_eq!(expected, actual);
 
@@ -96,7 +96,7 @@ fn shows_ahead_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            ahead_format="↑$count"
+            ahead_format="⇡$count"
         })
         .arg("--path")
         .arg(&repo_dir)
@@ -138,7 +138,7 @@ fn shows_diverged_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            diverged_format=r"⇕↑$ahead_count↓$behind_count"
+            diverged_format=r"⇕⇡$ahead_count⇣$behind_count"
         })
         .arg("--path")
         .arg(&repo_dir)
@@ -391,7 +391,7 @@ fn shows_staged_file_with_count() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     let expected = format!(
-        "{}",
+        "{} ",
         ANSIStrings(&[
             Color::Red.bold().paint("[+"),
             Color::Green.paint("1"),
