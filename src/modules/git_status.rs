@@ -97,10 +97,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     };
 
-    let segments = format_segments(
-        config.format,
-        "git_status.format",
-        |variable| match variable {
+    if let Ok(formatter) = StringFormatter::new(config.format) {
+        let formatter = formatter.map_variables_to_segments(|variable| match variable {
             "all_status" => {
                 let segments = ALL_STATUS_VARIABLES
                     .iter()
@@ -115,12 +113,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 }
             }
             _ => variable_mapper(variable),
-        },
-    )?;
+        });
 
-    module.set_segments(segments);
-
-    Some(module)
+        if formatter.filled_variables() {
+            let segments = formatter.parse(None);
+            module.set_segments(segments);
+            Some(module)
+        } else {
+            None
+        }
+    } else {
+        log::error!("Error parsing format string `git_status.format`");
+        None
+    }
 }
 
 struct GitStatusInfo<'a> {
@@ -361,18 +366,6 @@ impl RepoStatus {
         self.modified += RepoStatus::is_modified(s) as usize;
         self.staged += RepoStatus::is_staged(s) as usize;
         self.untracked += RepoStatus::is_untracked(s) as usize;
-    }
-}
-
-fn format_segments<F>(format_str: &str, config_path: &str, mapper: F) -> Option<Vec<Segment>>
-where
-    F: Fn(&str) -> Option<Vec<Segment>> + Send + Sync,
-{
-    if let Ok(formatter) = StringFormatter::new(format_str) {
-        Some(formatter.map_variables_to_segments(mapper).parse(None))
-    } else {
-        log::error!("Error parsing format string `{}`", &config_path);
-        None
     }
 }
 
