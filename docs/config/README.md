@@ -784,11 +784,10 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default        | Description                                            |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | The style for the module.                              |
-| `disabled` | `false`        | Disables the `java` module.                            |
+| Variable   | Default                           | Description                 |
+| ---------- | --------------------------------- | --------------------------- |
+| `format`   | `"via [☕ $version](red dimmed) "` | The format for the module.  |
+| `disabled` | `false`                           | Disables the `java` module. |
 
 ### Example
 
