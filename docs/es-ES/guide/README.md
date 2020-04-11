@@ -30,7 +30,7 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Sitio</a>
+  <a href="https://starship.rs">Web</a>
   ·
 <a href="#-installation">Instalación</a>
   ·
@@ -108,11 +108,11 @@
 - **Customizable:** configura cada parte de tu intérprete de comandos.
 - **Universal:** funciona en cualquier símbolo del sistema, en cualquier sistema operativo.
 - **Inteligente:** muestra información relevante de un vistazo.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **Repleto de funciones**: con soporte para tus herramientas favoritas.
+- **Fácil de instalar**: empieza a usarlo en pocos minutos.
 
 <p align="center">
-<a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/"><strong>Explora la documentación de Starship&nbsp;&nbsp;</strong></a>
 </p>
 
 ## 🚀 Instalacíon
@@ -129,14 +129,14 @@
    #### Instalar la última versión
 
 
-   ##### From prebuilt binary, with Shell:
+   ##### Desde un binario, con Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   ##### From source on [crates.io](https://crates.io/):
+   ##### Con [crates.io](https://crates.io/):
 
    ```sh
    cargo install starship
@@ -220,7 +220,7 @@
 
 Si quiere ayudar a colaborar a starship, por favor mira a nuestra [Guía de Colaboradores](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) (Contributing Guide). Además, juntarse con nosotros en nuestro [servidor de Discord](https://discord.gg/8Jzqu3T) y di "¡hola!". 👋
 
-### Code Contributors
+### Desarrolladores
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
