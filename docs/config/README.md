@@ -122,6 +122,7 @@ prompt_order = [
     "env_var",
     "crystal",
     "cmd_duration",
+    "custom",
     "line_break",
     "jobs",
     "battery",
@@ -1298,4 +1299,57 @@ The module will be shown if any of the following conditions are met:
 
 [username]
 disabled = true
+```
+
+## Custom commands
+
+The `custom` modules show the output of some arbitrary commands.
+
+These modules will be shown if any of the following conditions are met:
+- The current directory contains a file whose name is in `files`
+- The current directory contains a directory whose name is in `directories`
+- The current directory contains a file whose extension is in `extensions`
+- The `when` command returns 0
+
+::: tip
+
+Multiple custom modules can be defined by using a `.`.
+
+:::
+
+::: tip
+
+The order in which custom modules are shown can be individually set
+by setting `custom.foo` in `prompt_order`. By default, the `custom` module
+will simply show all custom modules in the order they were defined.
+
+:::
+
+### Options
+
+| Variable      | Default             | Description                                                                  |
+| ------------- | ------------------- | ---------------------------------------------------------------------------- |
+| `command`     |                     | The command whose output should be printed.                                  |
+| `when`        |                     | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                     | The path to the shell to use to execute the command. If unset, it will fallback to STARSHIP_SHELL and then to "sh". |
+| `description` | `"<custom module>"` | The description of the module that is shown when running `starship explain`. |
+| `files`       | `[]`                | The files that will be searched in the working directory for a match.        |
+| `directories` | `[]`                | The directories that will be searched in the working directory for a match.  |
+| `extensions`  | `[]`                | The extensions that will be searched in the working directory for a match.   |
+| `symbol`      | `""`                | The symbol used before displaying the command output.                        |
+| `style`       | `"bold green"`      | The style for the module.                                                    |
+| `prefix`      | `""`                | Prefix to display immediately before the command output.                     |
+| `suffix`      | `""`                | Suffix to display immediately after the command output.                      |
+| `disabled`    | `false`             | Disables this `custom` module.                                               |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[custom.foo]
+command = "echo foo"  # shows output of command
+files = ["foo"]       # can specify filters
+when = """ test "$HOME" == "$PWD" """
+prefix = " transcending "
 ```
