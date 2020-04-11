@@ -7,7 +7,7 @@ use crate::context::Repo;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex, RwLock};
+use std::sync::{Arc, RwLock};
 
 const ALL_STATUS_VARIABLES: [&str; 7] = [
     "conflicted",
@@ -35,7 +35,7 @@ const ALL_STATUS_VARIABLES: [&str; 7] = [
 ///   - `✘` — A file's deletion has been added to the staging area
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = context.get_repo().ok()?;
-    let info = Arc::new(GitStatusInfo::load(repo)?);
+    let info = Arc::new(GitStatusInfo::load(repo));
 
     let mut module = context.new_module("git_status");
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
@@ -124,28 +124,33 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-struct GitStatusInfo {
-    repo: Mutex<Repository>,
-    branch_name: String,
+struct GitStatusInfo<'a> {
+    repo: &'a Repo,
     ahead_behind: RwLock<Option<Result<(usize, usize), git2::Error>>>,
     repo_status: RwLock<Option<Result<RepoStatus, git2::Error>>>,
 }
 
-impl GitStatusInfo {
-    pub fn load(repo: &Repo) -> Option<Self> {
-        // bare repos don't have a branch name, so `repo.branch.as_ref` would return None,
-        // but git treats "master" as the default branch name
-        let default_branch = String::from("master");
-        let branch_name = repo.branch.clone().unwrap_or(default_branch);
-        let repo_root = repo.root.as_ref()?;
-        let repository = Repository::open(repo_root).ok()?;
-
-        Some(Self {
-            repo: Mutex::new(repository),
-            branch_name,
+impl<'a> GitStatusInfo<'a> {
+    pub fn load(repo: &'a Repo) -> Self {
+        Self {
+            repo,
             ahead_behind: RwLock::new(None),
             repo_status: RwLock::new(None),
-        })
+        }
+    }
+
+    fn get_branch_name(&self) -> String {
+        self.repo
+            .branch
+            .clone()
+            .unwrap_or_else(|| String::from("master"))
+    }
+
+    fn get_repository(&self) -> Option<Repository> {
+        // bare repos don't have a branch name, so `repo.branch.as_ref` would return None,
+        // but git treats "master" as the default branch name
+        let repo_root = self.repo.root.as_ref()?;
+        Repository::open(repo_root).ok()
     }
 
     pub fn get_ahead_behind(&self) -> Option<(usize, usize)> {
@@ -163,9 +168,10 @@ impl GitStatusInfo {
         }
 
         {
-            let repo = self.repo.lock().unwrap();
+            let repo = self.get_repository()?;
+            let branch_name = self.get_branch_name();
             let mut data = self.ahead_behind.write().unwrap();
-            *data = Some(get_ahead_behind(&repo, &self.branch_name));
+            *data = Some(get_ahead_behind(&repo, &branch_name));
             match data.as_ref().unwrap() {
                 Ok(ahead_behind) => Some(ahead_behind.clone()),
                 Err(error) => {
@@ -191,7 +197,7 @@ impl GitStatusInfo {
         }
 
         {
-            let mut repo = self.repo.lock().unwrap();
+            let mut repo = self.get_repository()?;
             let mut data = self.repo_status.write().unwrap();
             *data = Some(get_repo_status(&mut repo));
             match data.as_ref().unwrap() {
@@ -377,6 +383,10 @@ where
 }
 
 fn format_count(format_str: &str, config_path: &str, count: usize) -> Option<Vec<Segment>> {
+    if count == 0 {
+        return None;
+    }
+
     format_text(format_str, config_path, |variable| match variable {
         "count" => Some(count.to_string()),
         _ => None,
