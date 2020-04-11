@@ -39,6 +39,11 @@ impl<'a> StringFormatter<'a> {
             .map(|(format, variables)| Self { format, variables })
     }
 
+    /// Check if self has non-empty variables.
+    pub fn filled_variables(&self) -> bool {
+        self.variables.values().any(|v| v.is_some())
+    }
+
     /// Maps variable name to its value
     pub fn map(mut self, mapper: impl Fn(&str) -> Option<String> + Sync) -> Self {
         self.variables.par_iter_mut().for_each(|(key, value)| {
