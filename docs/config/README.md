@@ -102,6 +102,7 @@ prompt_order = [
     "hg_branch",
     "docker_context",
     "package",
+    "cmake",
     "dotnet",
     "elixir",
     "elm",
@@ -304,6 +305,31 @@ running `eval $(starship init $0)`, and then proceed as normal.
 [cmd_duration]
 min_time = 500
 prefix = "underwent "
+```
+
+## CMake
+
+The `cmake` module shows the currently installed version of CMake.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `CMakeLists.txt` file
+
+### Options
+
+| Variable   | Default       | Description                                             |
+| ---------- | ------------- | ------------------------------------------------------- |
+| `symbol`   | `"🛆 "`        | The symbol used before displaying the version of cmake. |
+| `style`    | `"bold blue"` | The style for the module.                               |
+| `disabled` | `false`       | Disables the `cmake` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[cmake]
+symbol = "🔺 "
+style = "bold red"
 ```
 
 ## Conda
