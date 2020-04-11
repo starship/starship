@@ -2,10 +2,22 @@ use git2::{Repository, Status};
 
 use super::{Context, Module, RootModuleConfig};
 
-use crate::config::SegmentConfig;
-use crate::configs::git_status::{CountConfig, GitStatusConfig};
-use std::borrow::BorrowMut;
+use crate::configs::git_status::GitStatusConfig;
+use crate::context::Repo;
+use crate::formatter::StringFormatter;
+use crate::segment::Segment;
 use std::collections::HashMap;
+use std::sync::{Arc, Mutex, RwLock};
+
+const ALL_STATUS_VARIABLES: [&str; 7] = [
+    "conflicted",
+    "stashed",
+    "deleted",
+    "renamed",
+    "modified",
+    "staged",
+    "untracked",
+];
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -23,170 +35,201 @@ use std::collections::HashMap;
 ///   - `✘` — A file's deletion has been added to the staging area
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = context.get_repo().ok()?;
-    // bare repos don't have a branch name, so `repo.branch.as_ref` would return None,
-    // but git treats "master" as the default branch name
-    let default_branch = String::from("master");
-    let branch_name = repo.branch.as_ref().unwrap_or(&default_branch);
-    let repo_root = repo.root.as_ref()?;
-    let mut repository = Repository::open(repo_root).ok()?;
+    let info = Arc::new(GitStatusInfo::load(repo)?);
 
     let mut module = context.new_module("git_status");
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
 
-    module
-        .get_prefix()
-        .set_value(config.prefix)
-        .set_style(config.style);
-    module
-        .get_suffix()
-        .set_value(config.suffix)
-        .set_style(config.style);
-    module.set_style(config.style);
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
-    let repo_status = get_repo_status(repository.borrow_mut());
-    log::debug!("Repo status: {:?}", repo_status);
+    let variable_mapper = |variable: &str| -> Option<Vec<Segment>> {
+        let info = Arc::clone(&info);
+        match variable {
+            "stashed" => info.get_stashed().and_then(|count| {
+                format_count(config.stashed_format, "git_status.stashed_format", count)
+            }),
+            "ahead_behind" => info.get_ahead_behind().and_then(|(ahead, behind)| {
+                if ahead > 0 && behind > 0 {
+                    format_text(
+                        config.diverged_format,
+                        "git_status.diverged_format",
+                        |variable| match variable {
+                            "ahead_count" => Some(ahead.to_string()),
+                            "behind_count" => Some(behind.to_string()),
+                            _ => None,
+                        },
+                    )
+                } else if ahead > 0 && behind == 0 {
+                    format_count(config.ahead_format, "git_status.ahead_format", ahead)
+                } else if behind > 0 && ahead == 0 {
+                    format_count(config.behind_format, "git_status.behind_format", behind)
+                } else {
+                    None
+                }
+            }),
+            "conflicted" => info.get_conflicted().and_then(|count| {
+                format_count(
+                    config.conflicted_format,
+                    "git_status.conflicted_format",
+                    count,
+                )
+            }),
+            "deleted" => info.get_deleted().and_then(|count| {
+                format_count(config.deleted_format, "git_status.deleted_format", count)
+            }),
+            "renamed" => info.get_renamed().and_then(|count| {
+                format_count(config.renamed_format, "git_status.renamed_format", count)
+            }),
+            "modified" => info.get_modified().and_then(|count| {
+                format_count(config.modified_format, "git_status.modified_format", count)
+            }),
+            "staged" => info.get_staged().and_then(|count| {
+                format_count(config.staged_format, "git_status.staged_format", count)
+            }),
+            "untracked" => info.get_untracked().and_then(|count| {
+                format_count(
+                    config.untracked_format,
+                    "git_status.untracked_format",
+                    count,
+                )
+            }),
+            _ => None,
+        }
+    };
 
-    let ahead_behind = get_ahead_behind(&repository, branch_name);
-    if ahead_behind == Ok((0, 0)) {
-        log::trace!("No ahead/behind found");
-    } else {
-        log::debug!("Repo ahead/behind: {:?}", ahead_behind);
-    }
+    let segments = format_segments(
+        config.format,
+        "git_status.format",
+        |variable| match variable {
+            "all_status" => {
+                let segments = ALL_STATUS_VARIABLES
+                    .iter()
+                    .flat_map(|variable| variable_mapper(variable))
+                    .flatten()
+                    .collect::<Vec<Segment>>();
 
-    // Add the conflicted segment
-    if let Ok(repo_status) = repo_status {
-        create_segment_with_count(
-            &mut module,
-            "conflicted",
-            repo_status.conflicted,
-            &config.conflicted,
-            config.conflicted_count,
-        );
-    }
-
-    // Add the ahead/behind segment
-    if let Ok((ahead, behind)) = ahead_behind {
-        let add_ahead = |m: &mut Module<'a>| {
-            create_segment_with_count(
-                m,
-                "ahead",
-                ahead,
-                &config.ahead,
-                CountConfig {
-                    enabled: config.show_sync_count,
-                    style: None,
-                },
-            );
-        };
-
-        let add_behind = |m: &mut Module<'a>| {
-            create_segment_with_count(
-                m,
-                "behind",
-                behind,
-                &config.behind,
-                CountConfig {
-                    enabled: config.show_sync_count,
-                    style: None,
-                },
-            );
-        };
-
-        if ahead > 0 && behind > 0 {
-            module.create_segment("diverged", &config.diverged);
-
-            if config.show_sync_count {
-                add_ahead(&mut module);
-                add_behind(&mut module);
+                if segments.is_empty() {
+                    None
+                } else {
+                    Some(segments)
+                }
             }
-        }
+            _ => variable_mapper(variable),
+        },
+    )?;
 
-        if ahead > 0 && behind == 0 {
-            add_ahead(&mut module);
-        }
-
-        if behind > 0 && ahead == 0 {
-            add_behind(&mut module);
-        }
-    }
-
-    // Add the stashed segment
-    if let Ok(repo_status) = repo_status {
-        create_segment_with_count(
-            &mut module,
-            "stashed",
-            repo_status.stashed,
-            &config.stashed,
-            config.stashed_count,
-        );
-    }
-
-    // Add all remaining status segments
-    if let Ok(repo_status) = repo_status {
-        create_segment_with_count(
-            &mut module,
-            "deleted",
-            repo_status.deleted,
-            &config.deleted,
-            config.deleted_count,
-        );
-
-        create_segment_with_count(
-            &mut module,
-            "renamed",
-            repo_status.renamed,
-            &config.renamed,
-            config.renamed_count,
-        );
-
-        create_segment_with_count(
-            &mut module,
-            "modified",
-            repo_status.modified,
-            &config.modified,
-            config.modified_count,
-        );
-
-        create_segment_with_count(
-            &mut module,
-            "staged",
-            repo_status.staged,
-            &config.staged,
-            config.staged_count,
-        );
-
-        create_segment_with_count(
-            &mut module,
-            "untracked",
-            repo_status.untracked,
-            &config.untracked,
-            config.untracked_count,
-        );
-    }
-
-    if module.is_empty() {
-        return None;
-    }
+    module.set_segments(segments);
 
     Some(module)
 }
 
-fn create_segment_with_count<'a>(
-    module: &mut Module<'a>,
-    name: &str,
-    count: usize,
-    config: &SegmentConfig<'a>,
-    count_config: CountConfig,
-) {
-    if count > 0 {
-        module.create_segment(name, &config);
+struct GitStatusInfo {
+    repo: Mutex<Repository>,
+    branch_name: String,
+    ahead_behind: RwLock<Option<Result<(usize, usize), git2::Error>>>,
+    repo_status: RwLock<Option<Result<RepoStatus, git2::Error>>>,
+}
 
-        if count_config.enabled {
-            module.create_segment(
-                &format!("{}_count", name),
-                &SegmentConfig::new(&count.to_string()).with_style(count_config.style),
-            );
+impl GitStatusInfo {
+    pub fn load(repo: &Repo) -> Option<Self> {
+        // bare repos don't have a branch name, so `repo.branch.as_ref` would return None,
+        // but git treats "master" as the default branch name
+        let default_branch = String::from("master");
+        let branch_name = repo.branch.clone().unwrap_or(default_branch);
+        let repo_root = repo.root.as_ref()?;
+        let repository = Repository::open(repo_root).ok()?;
+
+        Some(Self {
+            repo: Mutex::new(repository),
+            branch_name,
+            ahead_behind: RwLock::new(None),
+            repo_status: RwLock::new(None),
+        })
+    }
+
+    pub fn get_ahead_behind(&self) -> Option<(usize, usize)> {
+        {
+            let data = self.ahead_behind.read().unwrap();
+            if let Some(result) = data.as_ref() {
+                return match result.as_ref() {
+                    Ok(ahead_behind) => Some(ahead_behind.clone()),
+                    Err(error) => {
+                        log::error!("Error: {}", error);
+                        None
+                    }
+                };
+            };
         }
+
+        {
+            let repo = self.repo.lock().unwrap();
+            let mut data = self.ahead_behind.write().unwrap();
+            *data = Some(get_ahead_behind(&repo, &self.branch_name));
+            match data.as_ref().unwrap() {
+                Ok(ahead_behind) => Some(ahead_behind.clone()),
+                Err(error) => {
+                    log::error!("Error: {}", error);
+                    None
+                }
+            }
+        }
+    }
+
+    pub fn get_repo_status(&self) -> Option<RepoStatus> {
+        {
+            let data = self.repo_status.read().unwrap();
+            if let Some(result) = data.as_ref() {
+                return match result.as_ref() {
+                    Ok(repo_status) => Some(repo_status.clone()),
+                    Err(error) => {
+                        log::error!("Error: {}", error);
+                        None
+                    }
+                };
+            };
+        }
+
+        {
+            let mut repo = self.repo.lock().unwrap();
+            let mut data = self.repo_status.write().unwrap();
+            *data = Some(get_repo_status(&mut repo));
+            match data.as_ref().unwrap() {
+                Ok(repo_status) => Some(repo_status.clone()),
+                Err(error) => {
+                    log::error!("Error: {}", error);
+                    None
+                }
+            }
+        }
+    }
+
+    pub fn get_conflicted(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.conflicted)
+    }
+
+    pub fn get_deleted(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.deleted)
+    }
+
+    pub fn get_renamed(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.renamed)
+    }
+
+    pub fn get_modified(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.modified)
+    }
+
+    pub fn get_staged(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.staged)
+    }
+
+    pub fn get_untracked(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.untracked)
+    }
+
+    pub fn get_stashed(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.stashed)
     }
 }
 
@@ -307,4 +350,35 @@ struct RepoStatus {
     staged: usize,
     untracked: usize,
     stashed: usize,
+}
+
+fn format_segments<F>(format_str: &str, config_path: &str, mapper: F) -> Option<Vec<Segment>>
+where
+    F: Fn(&str) -> Option<Vec<Segment>> + Send + Sync,
+{
+    if let Ok(formatter) = StringFormatter::new(format_str) {
+        Some(formatter.map_variables_to_segments(mapper).parse(None))
+    } else {
+        log::error!("Error parsing format string `{}`", &config_path);
+        None
+    }
+}
+
+fn format_text<F>(format_str: &str, config_path: &str, mapper: F) -> Option<Vec<Segment>>
+where
+    F: Fn(&str) -> Option<String> + Send + Sync,
+{
+    if let Ok(formatter) = StringFormatter::new(format_str) {
+        Some(formatter.map(mapper).parse(None))
+    } else {
+        log::error!("Error parsing format string `{}`", &config_path);
+        None
+    }
+}
+
+fn format_count(format_str: &str, config_path: &str, count: usize) -> Option<Vec<Segment>> {
+    format_text(format_str, config_path, |variable| match variable {
+        "count" => Some(count.to_string()),
+        _ => None,
+    })
 }
