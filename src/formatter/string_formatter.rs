@@ -9,7 +9,19 @@ use crate::segment::Segment;
 use super::model::*;
 use super::parser::{parse, Rule};
 
-type VariableMapType = BTreeMap<String, Option<Vec<Segment>>>;
+#[derive(Clone)]
+enum VariableValue {
+    Plain(String),
+    Styled(Vec<Segment>),
+}
+
+impl Default for VariableValue {
+    fn default() -> Self {
+        VariableValue::Plain(String::new())
+    }
+}
+
+type VariableMapType = BTreeMap<String, Option<VariableValue>>;
 
 pub struct StringFormatter<'a> {
     format: Vec<FormatElement<'a>>,
@@ -30,7 +42,7 @@ impl<'a> StringFormatter<'a> {
     /// Maps variable name to its value
     pub fn map(mut self, mapper: impl Fn(&str) -> Option<String> + Sync) -> Self {
         self.variables.par_iter_mut().for_each(|(key, value)| {
-            *value = mapper(key).map(|value| vec![_new_segment(key.to_string(), value, None)]);
+            *value = mapper(key).map(VariableValue::Plain);
         });
         self
     }
@@ -41,7 +53,7 @@ impl<'a> StringFormatter<'a> {
         mapper: impl Fn(&str) -> Option<Vec<Segment>> + Sync,
     ) -> Self {
         self.variables.par_iter_mut().for_each(|(key, value)| {
-            *value = mapper(key);
+            *value = mapper(key).map(VariableValue::Styled);
         });
         self
     }
@@ -95,7 +107,25 @@ impl<'a> StringFormatter<'a> {
                     }
                     FormatElement::Variable(name) => variables
                         .get(name.as_ref())
-                        .map(|segments| segments.clone().unwrap_or_default())
+                        .map(|segments| {
+                            let value = segments.clone().unwrap_or_default();
+                            match value {
+                                VariableValue::Styled(segments) => segments
+                                    .into_iter()
+                                    .map(|mut segment| {
+                                        if !segment.has_style() {
+                                            if let Some(style) = style {
+                                                segment.set_style(style);
+                                            }
+                                        }
+                                        segment
+                                    })
+                                    .collect(),
+                                VariableValue::Plain(text) => {
+                                    vec![_new_segment(name.to_string(), text, style)]
+                                }
+                            }
+                        })
                         .unwrap_or_default(),
                 };
                 result.append(&mut segments);
@@ -234,6 +264,50 @@ mod tests {
         match_next!(result_iter, "outer ", outer_style);
         match_next!(result_iter, "middle ", middle_style);
         match_next!(result_iter, "inner", inner_style);
+    }
+
+    #[test]
+    fn test_styled_variable_as_text() {
+        const FORMAT_STR: &str = "[$var](red bold)";
+        let var_style = Some(Color::Red.bold());
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map(|variable| match variable {
+                "var" => Some("text".to_owned()),
+                _ => None,
+            });
+        let result = formatter.parse(None);
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "text", var_style);
+    }
+
+    #[test]
+    fn test_styled_variable_as_segments() {
+        const FORMAT_STR: &str = "[$var](red bold)";
+        let var_style = Some(Color::Red.bold());
+        let styled_style = Some(Color::Green.italic());
+        let styled_no_modifier_style = Some(Color::Green.normal());
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map_variables_to_segments(|variable| match variable {
+                "var" => Some(vec![
+                    _new_segment("_1".to_owned(), "styless".to_owned(), None),
+                    _new_segment("_2".to_owned(), "styled".to_owned(), styled_style),
+                    _new_segment(
+                        "_3".to_owned(),
+                        "styled_no_modifier".to_owned(),
+                        styled_no_modifier_style,
+                    ),
+                ]),
+                _ => None,
+            });
+        let result = formatter.parse(None);
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "styless", var_style);
+        match_next!(result_iter, "styled", styled_style);
+        match_next!(result_iter, "styled_no_modifier", styled_no_modifier_style);
     }
 
     #[test]
