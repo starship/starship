@@ -222,20 +222,20 @@ Si quiere ayudar a colaborar a starship, por favor mira a nuestra [Guía de Cola
 
 ### Desarrolladores
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+Este proyecto existe gracias a todas las personas que han ayudado. [[Contribuir](CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
-### Financial Contributors
+### Financiadores
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+Invierte y ayúdanos a mantener nuestra comunidad. [[Contribuir](https://opencollective.com/starship/contribute)]
 
-#### Individuals
+#### Personas
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
-#### Organizations
+#### Organizaciones
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+Apoya este proyecto con tu organización. Vuestro logo se mostrará aquí con un enlace a vuestra web. [[Contribuir](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -250,7 +250,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 ## 💭 Inspiracíon
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Aquí tienes algunos de los trabajos previos que ayudaron a crear starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Una prompt Zsh para astronautas.
 
@@ -260,9 +260,9 @@ Please check out these previous works that helped inspire the creation of starsh
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Icono de Starship">
 </p>
 
 ## 📝 Licencia
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-actualidad, [Creadores de Starship](https://github.com/starship/starship/graphs/contributors).<br /> Este proyecto está bajo una licencia [ISC](https://github.com/starship/starship/blob/master/LICENSE).
