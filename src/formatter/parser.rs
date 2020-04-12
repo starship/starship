@@ -49,7 +49,7 @@ fn _parse_style(style: Pair<Rule>) -> Vec<StyleElement> {
 
     for pair in style.into_inner() {
         match pair.as_rule() {
-            Rule::text => result.push(StyleElement::Text(_parse_text(pair).into())),
+            Rule::string => result.push(StyleElement::Text(pair.as_str().into())),
             Rule::variable => result.push(StyleElement::Variable(_parse_variable(pair).into())),
             _ => unreachable!(),
         }

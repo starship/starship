@@ -242,6 +242,18 @@ mod tests {
     }
 
     #[test]
+    fn test_scoped_variable() {
+        const FORMAT_STR: &str = "${env:PWD}";
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map(|variable| Some(format!("${{{}}}", variable)));
+        let result = formatter.parse(None);
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "${env:PWD}", None);
+    }
+
+    #[test]
     fn test_escaped_chars() {
         const FORMAT_STR: &str = r#"\\\[\$text\]\(red bold\)"#;
 
