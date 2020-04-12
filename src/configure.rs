@@ -16,7 +16,7 @@ const STD_EDITOR: &str = "vi";
 pub fn update_configuration(name: &str, value: &str) {
     let file_path = get_file_path().expect("Fail to determine the path of the config file.");
 
-    let keys: Vec<&str> = name.split(".").collect();
+    let keys: Vec<&str> = name.split('.').collect();
 
     let starship_config = StarshipConfig::initialize();
     let mut config = starship_config
