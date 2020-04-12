@@ -118,6 +118,7 @@ fn main() {
             )
             .subcommand(
                 SubCommand::with_name("config")
+                    .alias("configure")
                     .about("Edit the starship configuration")
                     .arg(
                         Arg::with_name("name")
