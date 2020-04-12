@@ -3,7 +3,54 @@ use std::ffi::OsString;
 use std::io::ErrorKind;
 use std::process::Command;
 
+use dirs::home_dir;
+use starship::config::StarshipConfig;
+use std::fs::File;
+use std::io::Write;
+use std::path::PathBuf;
+use toml::map::Map;
+use toml::Value;
+
 const STD_EDITOR: &str = "vi";
+
+pub fn update_configuration(name: &str, value: &str) {
+    let file_path = get_file_path().expect("Fail to determine the path of the config file.");
+
+    let keys: Vec<&str> = name.split(".").collect();
+
+    let starship_config = StarshipConfig::initialize();
+    let mut config = starship_config
+        .config
+        .expect("Failed to load starship config");
+
+    if let Some(table) = config.as_table_mut() {
+        if !table.contains_key(keys[0]) {
+            table.insert(keys[0].to_string(), Value::Table(Map::new()));
+        }
+
+        if let Some(values) = table.get(keys[0]).unwrap().as_table() {
+            let mut updated_values = values.clone();
+            updated_values.insert(keys[1].to_string(), Value::String(value.to_string()));
+            table.insert(keys[0].to_string(), Value::Table(updated_values));
+        }
+
+        let config_str =
+            toml::to_string_pretty(&table).expect("Failed to serialize the config to string");
+        File::create(&file_path)
+            .and_then(|mut file| file.write_all(config_str.as_ref()))
+            .expect("Error writing starship config");
+    }
+}
+
+fn get_file_path() -> Option<PathBuf> {
+    if let Ok(path) = env::var("STARSHIP_CONFIG") {
+        // Use $STARSHIP_CONFIG as the config path if available
+        Some(PathBuf::from(path))
+    } else {
+        // Default to using ~/.config/starship.toml
+        home_dir().map(|path| path.join(".config/starship.toml"))
+    }
+}
 
 pub fn edit_configuration() {
     let config_path = get_config_path();
