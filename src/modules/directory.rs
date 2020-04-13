@@ -5,8 +5,9 @@ use unicode_segmentation::UnicodeSegmentation;
 use super::{Context, Module};
 
 use super::utils::directory::truncate;
-use crate::config::{RootModuleConfig, SegmentConfig};
+use crate::config::RootModuleConfig;
 use crate::configs::directory::DirectoryConfig;
+use crate::formatter::StringFormatter;
 
 /// Creates a module with the current directory
 ///
@@ -23,8 +24,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
-
-    module.set_style(config.style);
 
     // Using environment PWD is the standard approach for determining logical path
     // If this is None for any reason, we fall back to reading the os-provided path
@@ -64,33 +63,33 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Truncate the dir string to the maximum number of path components
     let truncated_dir_string = truncate(dir_string, config.truncation_length as usize);
 
-    if config.fish_style_pwd_dir_length > 0 {
+    let fish_prefix = if config.fish_style_pwd_dir_length > 0 {
         // If user is using fish style path, we need to add the segment first
         let contracted_home_dir = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
-        let fish_style_dir = to_fish_style(
+        to_fish_style(
             config.fish_style_pwd_dir_length as usize,
             contracted_home_dir,
             &truncated_dir_string,
-        );
+        )
+    } else {
+        String::from("")
+    };
 
-        module.create_segment(
-            "path",
-            &SegmentConfig {
-                value: &fish_style_dir,
-                style: None,
-            },
-        );
-    }
+    let final_dir_string = format!("{}{}", fish_prefix, truncated_dir_string);
 
-    module.create_segment(
-        "path",
-        &SegmentConfig {
-            value: &truncated_dir_string,
-            style: None,
-        },
-    );
+    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
+        formatter.map(|variable| match variable {
+            "path" => Some(final_dir_string.clone()),
+            _ => None,
+        })
+    } else {
+        log::warn!("Error parsing format string in `directory.format`");
+        return None;
+    };
 
-    module.get_prefix().set_value(config.prefix);
+    module.set_segments(formatter.parse(None));
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
 }
