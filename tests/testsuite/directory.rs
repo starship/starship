@@ -107,7 +107,7 @@ fn test_prefix() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    // The prefix has been disabled with the latest formatter changes. 
+    // The prefix has been disabled with the latest formatter changes.
     // Hence we don't expect to see it in the output even if set.
     let expected = format!("{} ", Color::Cyan.bold().paint("/"));
     assert_eq!(expected, actual);
@@ -152,10 +152,7 @@ fn truncated_directory_in_root() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!(
-        "{} ",
-        Color::Cyan.bold().paint("starship/thrusters/rocket")
-    );
+    let expected = format!("{} ", Color::Cyan.bold().paint("starship/thrusters/rocket"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -463,10 +460,7 @@ fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!(
-        "{} ",
-        Color::Cyan.bold().paint("~/src/meters/fuel-gauge")
-    );
+    let expected = format!("{} ", Color::Cyan.bold().paint("~/src/meters/fuel-gauge"));
     assert_eq!(expected, actual);
     tmp_dir.close()
 }
