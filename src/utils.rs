@@ -141,16 +141,17 @@ pub fn wrap_seq_for_shell(
 }
 
 fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
-    log::trace!("Executing command '{:?}' with args '{:?}'", cmd, args);
+    log::trace!("Executing command {:?} with args {:?}", cmd, args);
     match Command::new(cmd).args(args).output() {
         Ok(output) => {
             let stdout_string = String::from_utf8(output.stdout).unwrap();
             let stderr_string = String::from_utf8(output.stderr).unwrap();
 
+            log::trace!("stdout: {:?}", stdout_string);
+            log::trace!("stderr: {:?}", stderr_string);
+            log::trace!("exit code: \"{:?}\"", output.status.code());
+
             if !output.status.success() {
-                log::trace!("Non-zero exit code '{:?}'", output.status.code());
-                log::trace!("stdout: {}", stdout_string);
-                log::trace!("stderr: {}", stderr_string);
                 return None;
             }
 
