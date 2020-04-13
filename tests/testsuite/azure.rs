@@ -2,8 +2,6 @@ use ansi_term::Color;
 use std::fs::File;
 use std::io::{self, Write};
 
-use tempfile;
-
 use crate::common::{self};
 use tempfile::TempDir;
 

@@ -4,7 +4,6 @@ use std::env;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Read};
 use std::path::PathBuf;
-use std::str::FromStr;
 
 use super::{Context, Module, RootModuleConfig};
 
@@ -40,7 +39,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn get_azure_config_file_location() -> Option<PathBuf> {
     env::var("AZURE_CONFIG_DIR")
         .ok()
-        .and_then(|path| PathBuf::from_str(&path).ok())
+        .map(PathBuf::from)
         .or_else(|| {
             let mut home = home_dir()?;
             home.push(".azure");
@@ -57,15 +56,13 @@ fn get_azure_subscription_name() -> Option<String> {
 
     let file = File::open(&cloud_config).ok()?;
     let reader = BufReader::new(file);
-    let lines = reader.lines().filter_map(Result::ok);
+    let cloud_config_lines = reader.lines().filter_map(Result::ok);
 
-    let region_line = lines
+    let subscription_line = cloud_config_lines
         .skip_while(|line| line != "[AzureCloud]")
-        .find(|line| line.starts_with("subscription"))
-        .unwrap();
+        .find(|line| line.starts_with("subscription"))?;
 
-    let region = region_line.split('=').nth(1)?;
-    let region = region.trim();
+    let current_subscription_id = subscription_line.split('=').nth(1)?.trim();
 
     let file = File::open(&azure_profile_json).ok()?;
     let mut buffer: Vec<u8> = Vec::new();
@@ -78,12 +75,16 @@ fn get_azure_subscription_name() -> Option<String> {
 
     let subscriptions = parsed_json["subscriptions"].as_array()?;
 
-    for sub in subscriptions {
-        let subscription_id = sub["id"].as_str()?;
-        if subscription_id == region {
-            let subscription_name = sub["name"].as_str()?;
-            return Some(subscription_name.to_string());
-        }
+    subscriptions
+        .iter()
+        .find_map(|s| find_subscription(s, current_subscription_id))
+}
+
+fn find_subscription(subscription: &JValue, current_subscription_id: &str) -> Option<String> {
+    let subscription_id = subscription["id"].as_str()?;
+    if subscription_id == current_subscription_id {
+        let subscription_name = subscription["name"].as_str()?;
+        return Some(subscription_name.to_string());
     }
     None
 }
