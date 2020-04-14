@@ -1039,9 +1039,11 @@ Le module est affiché si l'une des ces conditions est remplie :
 - The current directory contains a `.python-version` file
 - The current directory contains a `requirements.txt` file
 - The current directory contains a `pyproject.toml` file
-- The current directory contains a file with the `.py` extension
+- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - The current directory contains a `Pipfile` file
 - The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `__init__.py` file
 - A virtual environment is currently activated
 
 ### Options
@@ -1051,6 +1053,7 @@ Le module est affiché si l'une des ces conditions est remplie :
 | `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
 | `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
 | `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
+| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.  |
 | `style`              | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
 
