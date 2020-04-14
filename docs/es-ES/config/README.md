@@ -269,17 +269,17 @@ Si estás usando Starship con `bash`, no uses `DEBUG` después de ejecutar `eval
 
 :::
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+Los usuarios de bash que necesiten la funcionalidad preexec-like pueden usar el framework rcaloras's bash_preexec. Simplemente define los arrays preexec_functions y precmd_functions antes de ejecutar eval $(starship init $0), y continúa con normalidad. Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Opciones
 
-| Variable            | Por defecto     | Descripción                                                |
-| ------------------- | --------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
-| `style`             | `"bold yellow"` | The style for the module.                                  |
-| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
+| Variable            | Por defecto     | Descripción                                                           |
+| ------------------- | --------------- | --------------------------------------------------------------------- |
+| `min_time`          | `2_000`         | Duración mínima para mostrar el tiempo de ejecución (en milisegundos) |
+| `show_milliseconds` | `false`         | Muestra la duración con precisión en milisegundos.                    |
+| `prefix`            | `took`          | Prefijo que se muestra antes del tiempo de ejecución.                 |
+| `style`             | `"bold yellow"` | El estilo del módulo.                                                 |
+| `disabled`          | `false`         | Desactiva el módulo `cmd_duration`.                                   |
 
 ### Ejemplo
 
@@ -293,22 +293,22 @@ prefix = "underwent "
 
 ## Conda
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+El módulo `conda` muestra el actual entorno conda, si la variable `$CONDA_DEFAULT_ENV` existe.
 
 ::: tip
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+Esto no modifica el propio símbolo de sistema de conda. En caso de querer suprimirlo, ejecuta `conda config --set changeps1 False`.
 
 :::
 
 ### Opciones
 
-| Variable            | Por defecto    | Descripción                                                                                                                                                                                                 |
-| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
-| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
-| `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
+| Variable            | Por defecto    | Descripción                                                                                                                                                                                                         |
+| ------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`            | El número de directorios a los que se debe truncar la variable de entorno, si el entorno fue creado usando `conda create -p [path]`. `0` significa sin truncamiento. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                        |
+| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                           |
+| `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                        |
 
 ### Ejemplo
 
