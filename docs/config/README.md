@@ -589,7 +589,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | `suffix`             | `")"`          | Suffix to display immediately after git commit.       |
 | `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
 | `tag_disabled`       | `true`         | Disables showing tag info in `git_commit` module.     |
-| `tag_symbol`         | `"🔖 "`         | Tag symbol prefixing the info shown                   |
+| `tag_symbol`         | `"🏷 "`         | Tag symbol prefixing the info shown                   |
 | `style`              | `"bold green"` | The style for the module.                             |
 | `disabled`           | `false`        | Disables the `git_commit` module.                     |
 
