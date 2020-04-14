@@ -6,6 +6,21 @@ use std::process::{Command, Stdio};
 use tempfile;
 
 #[test]
+fn show_nothing_on_empty_dir() -> io::Result<()> {
+    let repo_dir = tempfile::tempdir()?;
+
+    let output = common::render_module("git_state")
+        .arg("--path")
+        .arg(repo_dir.path())
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = "";
+    assert_eq!(expected, actual);
+    repo_dir.close()
+}
+
+#[test]
 #[ignore]
 fn shows_rebasing() -> io::Result<()> {
     let repo_dir = create_repo_with_conflict()?;
