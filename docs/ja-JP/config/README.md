@@ -1039,20 +1039,23 @@ symbol = "🔹 "
 - カレントディレクトリに`.python-version`ファイルが含まれている
 - カレントディレクトリに`requirements.txt`ファイルが含まれている
 - カレントディレクトリに`pyproject.toml`ファイルが含まれている
-- カレントディレクトリに`.py`の拡張子のファイルが含まれている
+- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - カレントディレクトリに`Pipfile`ファイルが含まれている
 - カレントディレクトリに`tox.ini`ファイルが含まれている
-- 仮想環境がアクティブである
+- The current directory contains a `setup.py` file
+- The current directory contains a `__init__.py` file
+- A virtual environment is currently activated
 
 ### オプション
 
-| 変数                   | デフォルト           | 説明                                                   |
-| -------------------- | --------------- | ---------------------------------------------------- |
-| `symbol`             | `"🐍 "`          | Pythonのバージョンを表示する前に使用される記号です。                        |
-| `pyenv_version_name` | `false`         | pyenvを使用してPythonバージョンを取得します                          |
-| `pyenv_prefix`       | `"pyenv "`      | pyenvバージョン表示の前のprefix（デフォルトの表示は`pyenv MY_VERSION`）です |
-| `style`              | `"bold yellow"` | モジュールのスタイルです。                                        |
-| `disabled`           | `false`         | `python`モジュールを無効にします。                                |
+| 変数                   | デフォルト           | 説明                                                                         |
+| -------------------- | --------------- | -------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`          | Pythonのバージョンを表示する前に使用される記号です。                                              |
+| `pyenv_version_name` | `false`         | pyenvを使用してPythonバージョンを取得します                                                |
+| `pyenv_prefix`       | `"pyenv "`      | pyenvバージョン表示の前のprefix（デフォルトの表示は`pyenv MY_VERSION`）です                       |
+| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module. |
+| `style`              | `"bold yellow"` | モジュールのスタイルです。                                                              |
+| `disabled`           | `false`         | Disables the `python` module.                                              |
 
 ### 設定例
 
