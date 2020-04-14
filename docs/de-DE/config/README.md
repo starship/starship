@@ -1039,20 +1039,23 @@ Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 - Das aktuelle Verzeichnis enthält eine `.python-version`-Datei
 - Das aktuelle Verzeichnis enthält eine `requirements.txt`-Datei
 - Das aktuelle Verzeichnis enthält eine `pyproject.toml`-Datei
-- Das aktuelle Verzeichnis enthält eine Datei mit der `.py`-Erweiterung
+- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - Das aktuelle Verzeichnis enthält eine `Pipfile`-Datei
 - Das aktuelle Verzeichnis enthält eine `tox.ini`-Datei
-- Ein virtualenv ist momentan aktiv
+- The current directory contains a `setup.py` file
+- The current directory contains a `__init__.py` file
+- A virtual environment is currently activated
 
 ### Optionen
 
-| Variable             | Standardwert    | Beschreibung                                                        |
-| -------------------- | --------------- | ------------------------------------------------------------------- |
-| `symbol`             | `"🐍 "`          | Symbol das vor der Python-Version angezeigt wird.                   |
-| `pyenv_version_name` | `false`         | Verwende `pyenv` um die Python-Versionzu beziehen.                  |
-| `pyenv_prefix`       | `"pyenv "`      | Prefix zur Anzeige der pyenv-Version (Standard: `pyenv MY_VERSION`) |
-| `style`              | `"bold yellow"` | Stil für dieses Modul.                                              |
-| `disabled`           | `false`         | Deaktiviert das `python`-Modul.                                     |
+| Variable             | Standardwert    | Beschreibung                                                               |
+| -------------------- | --------------- | -------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`          | Symbol das vor der Python-Version angezeigt wird.                          |
+| `pyenv_version_name` | `false`         | Verwende `pyenv` um die Python-Versionzu beziehen.                         |
+| `pyenv_prefix`       | `"pyenv "`      | Prefix zur Anzeige der pyenv-Version (Standard: `pyenv MY_VERSION`)        |
+| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module. |
+| `style`              | `"bold yellow"` | Stil für dieses Modul.                                                     |
+| `disabled`           | `false`         | Disables the `python` module.                                              |
 
 ### Beispiel
 
