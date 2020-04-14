@@ -133,7 +133,7 @@ prompt_order = [
 
 El módulo `aws` muestra la región actual de AWS y el perfil. Éste se basa en las variables de entorno `AWS_REGION`, `AWS_DEFAULT_REGION`, y `AWS_PROFILE` del fichero `~/.aws/config`.
 
-When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
+Cuando uses [aws-vault](https://github.com/99designs/aws-vault) el perfil se obtiene de la variable de entorno `AWS_VAULT`.
 
 ### Opciones
 
@@ -238,15 +238,15 @@ El carácter te dirá si el último comando funcionó o no. Se puede hacer de do
 
 ### Opciones
 
-| Variable                | Por defecto    | Descripción                                                                         |
-| ----------------------- | -------------- | ----------------------------------------------------------------------------------- |
-| `symbol`                | `"❯"`          | El símbolo usado antes de la entrada de texto en el símbolo del sistema.            |
-| `error_symbol`          | `"✖"`          | El símbolo usado antes de la entrada de texto si el comando anterior falló.         |
-| `use_symbol_for_status` | `false`        | Indica el estado del error usando un símbolo.                                       |
-| `vicmd_symbol`          | `"❮"`          | The symbol used before the text input in the prompt if shell is in vim normal mode. |
-| `style_success`         | `"bold green"` | The style used if the last command was successful.                                  |
-| `style_failure`         | `"bold red"`   | The style used if the last command failed.                                          |
-| `disabled`              | `false`        | Disables the `character` module.                                                    |
+| Variable                | Por defecto    | Descripción                                                                                                                   |
+| ----------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`                | `"❯"`          | El símbolo usado antes de la entrada de texto en el símbolo del sistema.                                                      |
+| `error_symbol`          | `"✖"`          | El símbolo usado antes de la entrada de texto si el comando anterior falló.                                                   |
+| `use_symbol_for_status` | `false`        | Indica el estado del error usando un símbolo.                                                                                 |
+| `vicmd_symbol`          | `"❮"`          | El símbolo usado antes de la entrada de texto en el símbolo del sistema si el intérprete de comandos está en modo vim normal. |
+| `style_success`         | `"bold green"` | Estilo usado si el último comando se ejecutó con éxito.                                                                       |
+| `style_failure`         | `"bold red"`   | Estilo usado si el último comando falló.                                                                                      |
+| `disabled`              | `false`        | Desactiva el módulo `character`.                                                                                              |
 
 ### Ejemplo
 
@@ -269,7 +269,7 @@ Si estás usando Starship con `bash`, no uses `DEBUG` después de ejecutar `eval
 
 :::
 
-Los usuarios de bash que necesiten la funcionalidad preexec-like pueden usar el framework rcaloras's bash_preexec. Simplemente define los arrays preexec_functions y precmd_functions antes de ejecutar eval $(starship init $0), y continúa con normalidad. Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+Los usuarios de bash que necesiten la funcionalidad preexec-like pueden usar el framework rcaloras's bash_preexec. Simplemente define los arrays preexec_functions y precmd_functions antes de ejecutar eval $(starship init $0), y continúa con normalidad. Basta con definir los arrays `preexec_functions` y `precmd_functions` antes de ejecutar `eval $(starship init $0)`, y luego proceder como siempre.
 
 ### Opciones
 
@@ -350,20 +350,20 @@ El módulo `directory` muestra la ruta hasta el directorio actual, mostrando tre
 
 Cuando usas el estilo fish de la opción pwd, en lugar de ocultar la ruta truncada, verás una versión acortada del nombre de cada directorio basada en el número que activa la opción.
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repositorio y el valor de la opción es `1`. En ese caso, verás `~/D/N/nixpkgs/pkgs`, cuando antes hubiera sido `nixpkgs/pkgs`.
 
 ### Opciones
 
-| Variable            | Por defecto   | Descripción                                                                      |
-| ------------------- | ------------- | -------------------------------------------------------------------------------- |
-| `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
-| `style`             | `"bold cyan"` | El estilo del módulo.                                                            |
-| `disabled`          | `false`       | Disables the `directory` module.                                                 |
+| Variable            | Por defecto   | Descripción                                                                    |
+| ------------------- | ------------- | ------------------------------------------------------------------------------ |
+| `truncation_length` | `3`           | El número de directorios padre a los que se debe truncar el directorio actual. |
+| `truncate_to_repo`  | `true`        | Trunca o no hasta la raíz del repositorio git en el que estés.                 |
+| `prefix`            | `"in "`       | Prefijo que se muestra inmediatamente antes del directorio.                    |
+| `style`             | `"bold cyan"` | El estilo del módulo.                                                          |
+| `disabled`          | `false`       | Desactiva el módulo `directory`.                                               |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
 
 | Variable                    | Por defecto | Descripción                                                                              |
 | --------------------------- | ----------- | ---------------------------------------------------------------------------------------- |
@@ -385,16 +385,16 @@ truncation_length = 8
 
 ## Docker context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
+El módulo `docker_context` muestra el [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) activo si no está a `default`.
 
 ### Opciones
 
-| Variable          | Por defecto   | Descripción                                                                             |
-| ----------------- | ------------- | --------------------------------------------------------------------------------------- |
-| `symbol`          | `"🐳 "`        | The symbol used before displaying the Docker context .                                  |
-| `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
-| `style`           | `"bold blue"` | El estilo del módulo.                                                                   |
-| `disabled`        | `true`        | Disables the `docker_context` module.                                                   |
+| Variable          | Por defecto   | Descripción                                                                                        |
+| ----------------- | ------------- | -------------------------------------------------------------------------------------------------- |
+| `symbol`          | `"🐳 "`        | Símbolo usado antes de mostrar el Docker context.                                                  |
+| `only_with_files` | `false`       | Solo lo muestra cuando hay un archivo `docker-compose.yml` o `Dockerfile` en el directorio actual. |
+| `style`           | `"bold blue"` | El estilo del módulo.                                                                              |
+| `disabled`        | `true`        | Desactiva el módulo `docker_context`.                                                              |
 
 ### Ejemplo
 
