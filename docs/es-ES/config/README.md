@@ -161,15 +161,15 @@ us-east-1 = "va"
 
 ## Battery
 
-The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
+El módulo `battery` muestra la cantidad de batería y si está cargando o no. The module is only visible when the device's battery is below 10%.
 
 ### Opciones
 
 | Variable             | Por defecto              | Descripción                                       |
 | -------------------- | ------------------------ | ------------------------------------------------- |
-| `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
-| `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
+| `full_symbol`        | `"•"`                    | Se muestra cuando la batería está cargada.        |
+| `charging_symbol`    | `"⇡"`                    | Se muestra cuando la batería está cargando.       |
+| `discharging_symbol` | `"⇣"`                    | Se muestra cuando la batería se está descargando. |
 | `display`            | [link](#battery-display) | Display threshold and style for the module.       |
 | `disabled`           | `false`                  | Desactiva el módulo `battery`.                    |
 
