@@ -1039,20 +1039,23 @@ symbol = "🔹 "
 - 目前資料夾中有一個 `.python-version` 檔案
 - 目前資料夾中有一個 `requirements.txt` 檔案
 - 目前資料夾中有一個 `pyproject.toml` 檔案
-- 目前資料夾中有一個 `.py` 副檔名的檔案
+- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - 目前資料夾中有一個 `Pipfile` 檔案
 - 目前資料夾中有一個 `tox.ini` 檔案
+- The current directory contains a `setup.py` file
+- The current directory contains a `__init__.py` file
 - A virtual environment is currently activated
 
 ### 選項
 
-| 變數                   | 預設              | 說明                                            |
-| -------------------- | --------------- | --------------------------------------------- |
-| `symbol`             | `"🐍 "`          | 顯示在 Python 版本之前的符號。                           |
-| `pyenv_version_name` | `false`         | 使用 pyenv 取得 Python 的版本。                       |
-| `pyenv_prefix`       | `"pyenv "`      | 顯示在 pyenv 版本之前的前綴 (預設顯示是 `pyenv MY_VERSION`)。 |
-| `style`              | `"bold yellow"` | 這個模組的風格。                                      |
-| `disabled`           | `false`         | 停用 `python` 模組。                               |
+| 變數                   | 預設              | 說明                                                                         |
+| -------------------- | --------------- | -------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`          | 顯示在 Python 版本之前的符號。                                                        |
+| `pyenv_version_name` | `false`         | 使用 pyenv 取得 Python 的版本。                                                    |
+| `pyenv_prefix`       | `"pyenv "`      | 顯示在 pyenv 版本之前的前綴 (預設顯示是 `pyenv MY_VERSION`)。                              |
+| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module. |
+| `style`              | `"bold yellow"` | 這個模組的風格。                                                                   |
+| `disabled`           | `false`         | Disables the `python` module.                                              |
 
 ### 範例
 
