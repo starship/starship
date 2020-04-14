@@ -47,13 +47,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let python_version = get_python_version()?;
         let formatted_version = format_python_version(&python_version);
         module.create_segment("version", &SegmentConfig::new(&formatted_version));
+    };
 
-        if let Some(virtual_env) = get_python_virtual_env() {
-            module.create_segment(
-                "virtualenv",
-                &SegmentConfig::new(&format!(" ({})", virtual_env)),
-            );
-        };
+    if let Some(virtual_env) = get_python_virtual_env() {
+        module.create_segment(
+            "virtualenv",
+            &SegmentConfig::new(&format!(" ({})", virtual_env)),
+        );
     };
 
     Some(module)
