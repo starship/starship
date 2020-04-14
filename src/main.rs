@@ -12,6 +12,7 @@ mod configure;
 mod context;
 mod formatter;
 mod init;
+mod messages;
 mod module;
 mod modules;
 mod print;

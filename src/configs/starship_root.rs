@@ -1,4 +1,6 @@
 use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::messages::LogLevel;
+use std::fmt;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -6,6 +8,7 @@ use starship_module_config_derive::ModuleConfig;
 pub struct StarshipRootConfig<'a> {
     pub format: &'a str,
     pub scan_timeout: u64,
+    pub messages: MessagesConfig,
 }
 
 pub const PROMPT_ORDER: [&str; 37] = [
@@ -60,6 +63,34 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
             // prompt heading of config docs needs to be updated according to changes made here.
             format: "\n$all",
             scan_timeout: 30,
+            messages: MessagesConfig::new(),
+        }
+    }
+}
+
+#[derive(Clone, ModuleConfig)]
+pub struct MessagesConfig<'a> {
+    pub format: &'a str,
+    pub level: LogLevel,
+}
+
+impl<'a> RootModuleConfig<'a> for MessagesConfig<'a> {
+    fn new() -> Self {
+        MessagesConfig {
+            format: "[$level]: $message",
+            level: LogLevel::Warning,
+        }
+    }
+}
+
+impl<'a> ModuleConfig<'a> for LogLevel {
+    fn from_config(config: &'a Value) -> Option<Self> {
+        match config.to_str().to_lowercase() {
+            "debug" => Some(LogLevel::Debug),
+            "info" => Some(LogLevel::Info),
+            "warning" => Some(LogLevel::Warning),
+            "error" => Some(LogLevel::Error),
+            _ => None,
         }
     }
 }

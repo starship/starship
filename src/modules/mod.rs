@@ -24,6 +24,7 @@ mod jobs;
 mod julia;
 mod kubernetes;
 mod memory_usage;
+mod messages;
 mod nix_shell;
 mod nodejs;
 mod package;
