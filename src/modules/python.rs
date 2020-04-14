@@ -15,26 +15,31 @@ use crate::utils;
 ///     - Current directory contains a `Pipfile` file
 ///     - Current directory contains a `tox.ini` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let is_py_project = context
-        .try_begin_scan()?
-        .set_files(&[
+    let mut module = context.new_module("python");
+    let config: PythonConfig = PythonConfig::try_load(module.config);
+
+    let is_py_project = {
+        let base = context.try_begin_scan()?.set_files(&[
             "requirements.txt",
             ".python-version",
             "pyproject.toml",
             "Pipfile",
             "tox.ini",
-        ])
-        .set_extensions(&["py"])
-        .is_match();
+            "setup.py",
+            "__init__.py",
+        ]);
+        if config.scan_for_pyfiles {
+            base.set_extensions(&["py"]).is_match()
+        } else {
+            base.is_match()
+        }
+    };
 
     let is_venv = env::var("VIRTUAL_ENV").ok().is_some();
 
     if !is_py_project && !is_venv {
         return None;
     }
-
-    let mut module = context.new_module("python");
-    let config: PythonConfig = PythonConfig::try_load(module.config);
 
     module.set_style(config.style);
     module.create_segment("symbol", &config.symbol);
