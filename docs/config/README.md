@@ -600,7 +600,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 [git_commit]
 commit_hash_length = 4
-tag_symbol = "ŧ "
+tag_symbol = "🔖 "
 ```
 
 ## Git State
