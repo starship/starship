@@ -70,7 +70,7 @@ Esta es la lista de opciones de configuración.
 | `prompt_order` | [link](#default-prompt-order) | Configura el orden en el que se muestran los módulos en el símbolo del sistema. |
 | `scan_timeout` | `30`                          | Tiempo de espera tras el que starship escanea archivos (en milisegundos).       |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -131,19 +131,19 @@ prompt_order = [
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
+El módulo `aws` muestra la región actual de AWS y el perfil. Éste se basa en las variables de entorno `AWS_REGION`, `AWS_DEFAULT_REGION`, y `AWS_PROFILE` del fichero `~/.aws/config`.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
 
 ### Opciones
 
-| Variable          | Por defecto     | Descripción                                                                 |
-| ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
-| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
-| `style`           | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
+| Variable          | Por defecto     | Descripción                                                   |
+| ----------------- | --------------- | ------------------------------------------------------------- |
+| `symbol`          | `"☁️ "`         | El símbolo que se muestra antes del perfil de AWS.            |
+| `displayed_items` | `all`           | Elige qué item mostrar. Valores: [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | Tabla de alias de región para mostrar además del nombre AWS.  |
+| `style`           | `"bold yellow"` | El estilo del módulo.                                         |
+| `disabled`        | `false`         | Desactiva el módulo AWS.                                      |
 
 ### Ejemplo
 
@@ -161,7 +161,7 @@ us-east-1 = "va"
 
 ## Battery
 
-El módulo `battery` muestra la cantidad de batería y si está cargando o no. The module is only visible when the device's battery is below 10%.
+El módulo `battery` muestra la cantidad de batería y si está cargando o no. El módulo es solo visible cuando la batería está por debajo del 10%.
 
 ### Opciones
 
@@ -170,7 +170,7 @@ El módulo `battery` muestra la cantidad de batería y si está cargando o no. T
 | `full_symbol`        | `"•"`                    | Se muestra cuando la batería está cargada.        |
 | `charging_symbol`    | `"⇡"`                    | Se muestra cuando la batería está cargando.       |
 | `discharging_symbol` | `"⇣"`                    | Se muestra cuando la batería se está descargando. |
-| `display`            | [link](#battery-display) | Display threshold and style for the module.       |
+| `display`            | [link](#battery-display) | Define cuándo mostrar el indicador y el estilo.   |
 | `disabled`           | `false`                  | Desactiva el módulo `battery`.                    |
 
 <details>
@@ -208,29 +208,29 @@ style = "bold red"
 
 #### Opciones
 
-The `display` option is an array of the following table.
+La opción `display` es un array de la siguiente tabla.
 
-| Variable    | Descripción                                     |
-| ----------- | ----------------------------------------------- |
-| `threshold` | The upper bound for the display option.         |
-| `style`     | The style used if the display option is in use. |
+| Variable    | Descripción                                                     |
+| ----------- | --------------------------------------------------------------- |
+| `threshold` | El umbral para la opción de visualización.                      |
+| `style`     | El estilo usado cuando si la opción <0>display</0> está activa. |
 
 #### Ejemplo
 
 ```toml
-[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
+[[battery.display]]  # "bold red" cuando la carga está entre 0% y 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
+[[battery.display]]  # "bold yellow" cuando la carga está entre 10% y 30%
 threshold = 30
 style = "bold yellow"
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# cuando la carga está por encima del 30% el indicador no se mostrará
 
 ```
 
-## Carácter
+## Character
 
 El módulo `character` muestra un carater (normalmente una flecha) tras el texto que introduces en el terminal.
 
@@ -259,9 +259,9 @@ error_symbol = "✗"
 use_symbol_for_status = true
 ```
 
-## Duración del comando
+## Tiempo de ejecución
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+El módulo `cmd_duration` muestra cuánto tiempo tardó el último comando en ejecutarse. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
 ::: warning Do not hook the DEBUG trap in Bash
 
@@ -281,7 +281,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 | `style`             | `"bold yellow"` | The style for the module.                                  |
 | `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -310,7 +310,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
 | `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -843,7 +843,7 @@ The `line_break` module separates the prompt into two lines.
 | ---------- | ----------- | ------------------------------------------------------------------ |
 | `disabled` | `false`     | Disables the `line_break` module, making the prompt a single line. |
 
-### Example
+### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
