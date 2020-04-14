@@ -8,6 +8,7 @@ use unicode_width::UnicodeWidthChar;
 use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Shell};
 use crate::formatter::StringFormatter;
+use crate::messages;
 use crate::module::Module;
 use crate::module::ALL_MODULES;
 use crate::modules;
@@ -77,11 +78,28 @@ pub fn get_prompt(context: Context) -> String {
         }
     });
 
+    // Adds messages if `prompt_order` and `add_newline` found in the config
+    if let Some(config) = &context.config.config {
+        let table = config.as_table().unwrap();
+        if table.contains_key("prompt_order") || table.contains_key("add_newline") {
+            messages::add(messages::messages::DEPRECATED_USE_FORMAT);
+        }
+    };
+
+    // Inserts messages before all segments if there are some messages
+    let mut segments = messages::get_segments(&config.messages);
+    segments.extend(formatter.parse(None));
+
+    // Update viewed messages
+    if let Err(error) = messages::update_viewed_hash() {
+        log::warn!("Error updating viewed messages: {}", error);
+    };
+
     // Creates a root module and prints it.
     let mut root_module = Module::new("Starship Root", "The root module", None);
     root_module.get_prefix().set_value("");
     root_module.get_suffix().set_value("");
-    root_module.set_segments(formatter.parse(None));
+    root_module.set_segments(segments);
 
     let module_strings = root_module.ansi_strings_for_shell(context.shell.clone());
     write!(buf, "{}", ANSIStrings(&module_strings)).unwrap();

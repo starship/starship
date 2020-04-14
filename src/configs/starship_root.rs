@@ -1,6 +1,6 @@
 use crate::config::{ModuleConfig, RootModuleConfig};
 use crate::messages::LogLevel;
-use std::fmt;
+use toml::Value;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -8,7 +8,7 @@ use starship_module_config_derive::ModuleConfig;
 pub struct StarshipRootConfig<'a> {
     pub format: &'a str,
     pub scan_timeout: u64,
-    pub messages: MessagesConfig,
+    pub messages: MessagesConfig<'a>,
 }
 
 pub const PROMPT_ORDER: [&str; 37] = [
@@ -74,10 +74,10 @@ pub struct MessagesConfig<'a> {
     pub level: LogLevel,
 }
 
-impl<'a> RootModuleConfig<'a> for MessagesConfig<'a> {
+impl<'a> MessagesConfig<'a> {
     fn new() -> Self {
         MessagesConfig {
-            format: "[$level]: $message",
+            format: "\\[$level\\]: $message\n",
             level: LogLevel::Warning,
         }
     }
@@ -85,7 +85,8 @@ impl<'a> RootModuleConfig<'a> for MessagesConfig<'a> {
 
 impl<'a> ModuleConfig<'a> for LogLevel {
     fn from_config(config: &'a Value) -> Option<Self> {
-        match config.to_str().to_lowercase() {
+        let level_string = config.as_str()?.to_lowercase();
+        match level_string.as_str() {
             "debug" => Some(LogLevel::Debug),
             "info" => Some(LogLevel::Info),
             "warning" => Some(LogLevel::Warning),
