@@ -1039,10 +1039,12 @@ symbol = "🔹 "
 - Текущий каталог содержит файл `.python-version`
 - Текущий каталог содержит файл `requirements.txt`
 - Текущий каталог содержит файл `pyproject.toml`
-- Текущий каталог содержит файл с расширением `.py`
+- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - Текущий каталог содержит файл `Pipfile`
 - Текущий каталог содержит файл `tox.ini`
-- Виртуальная среда в данный момент активирована
+- The current directory contains a `setup.py` file
+- The current directory contains a `__init__.py` file
+- A virtual environment is currently activated
 
 ### Опции
 
@@ -1051,6 +1053,7 @@ symbol = "🔹 "
 | `symbol`             | `"🐍 "`          | Символ перед отображением текущей версии Python.                                      |
 | `pyenv_version_name` | `false`         | Использовать pyenv для получения версии Python                                        |
 | `pyenv_prefix`       | `"pyenv "`      | Префикс перед отображением версии pyenv (отображение по умолчанию `pyenv MY_VERSION`) |
+| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.            |
 | `style`              | `"bold yellow"` | Стиль модуля.                                                                         |
 | `disabled`           | `false`         | Disables the `python` module.                                                         |
 
