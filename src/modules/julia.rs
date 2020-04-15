@@ -60,7 +60,7 @@ mod tests {
     fn folder_without_julia_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = render_module("julia", dir.path());
+        let actual = render_module("julia", dir.path(), None);
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -72,7 +72,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("hello.jl"))?.sync_all()?;
 
-        let actual = render_module("julia", dir.path());
+        let actual = render_module("julia", dir.path(), None);
 
         let expected = Some(format!("via {} ", Color::Purple.bold().paint("ஃ v1.4.0")));
         assert_eq!(expected, actual);
@@ -84,7 +84,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Project.toml"))?.sync_all()?;
 
-        let actual = render_module("julia", dir.path());
+        let actual = render_module("julia", dir.path(), None);
 
         let expected = Some(format!("via {} ", Color::Purple.bold().paint("ஃ v1.4.0")));
         assert_eq!(expected, actual);
@@ -96,7 +96,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Manifest.toml"))?.sync_all()?;
 
-        let actual = render_module("julia", dir.path());
+        let actual = render_module("julia", dir.path(), None);
 
         let expected = Some(format!("via {} ", Color::Purple.bold().paint("ஃ v1.4.0")));
         assert_eq!(expected, actual);
