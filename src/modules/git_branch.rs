@@ -3,6 +3,7 @@ use unicode_segmentation::UnicodeSegmentation;
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::git_branch::GitBranchConfig;
+use crate::formatter::StringFormatter;
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -10,15 +11,14 @@ use crate::configs::git_branch::GitBranchConfig;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_branch");
     let config = GitBranchConfig::try_load(module.config);
-    module.set_style(config.style);
 
-    module.get_prefix().set_value("on ");
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
-    let truncation_symbol = get_graphemes(config.truncation_symbol, 1);
-    module.create_segment("symbol", &config.symbol);
+    let truncation_symbol = get_first_grapheme(config.truncation_symbol);
 
     // TODO: Once error handling is implemented, warn the user if their config
-    // truncation length is nonsensical
+    //       truncation length is nonsensical
     let len = if config.truncation_length <= 0 {
         log::warn!(
             "\"truncation_length\" should be a positive value, found {}",
@@ -31,29 +31,37 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let repo = context.get_repo().ok()?;
     let branch_name = repo.branch.as_ref()?;
-    let truncated_graphemes = get_graphemes(&branch_name, len);
-    // The truncation symbol should only be added if we truncated
-    let truncated_and_symbol = if len < graphemes_len(&branch_name) {
-        truncated_graphemes + &truncation_symbol
+
+    let mut graphemes = get_graphemes(&branch_name);
+    let trunc_len = len.min(graphemes.len());
+
+    if trunc_len < graphemes.len() {
+        // The truncation symbol should only be added if we truncate
+        graphemes[trunc_len] = truncation_symbol;
+        graphemes.truncate(trunc_len + 1)
+    }
+
+    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
+        formatter.map(|variable| match variable {
+            "branch" => Some(graphemes.concat()),
+            _ => None,
+        })
     } else {
-        truncated_graphemes
+        log::error!("Error parsing format string in `git_branch.format`");
+        return None;
     };
 
-    module.create_segment(
-        "name",
-        &config.branch_name.with_value(&truncated_and_symbol),
-    );
+    module.set_segments(formatter.parse(None));
 
     Some(module)
 }
 
-fn get_graphemes(text: &str, length: usize) -> String {
+fn get_first_grapheme(text: &str) -> &str {
     UnicodeSegmentation::graphemes(text, true)
-        .take(length)
-        .collect::<Vec<&str>>()
-        .concat()
+        .next()
+        .unwrap_or("")
 }
 
-fn graphemes_len(text: &str) -> usize {
-    UnicodeSegmentation::graphemes(&text[..], true).count()
+fn get_graphemes(text: &str) -> Vec<&str> {
+    UnicodeSegmentation::graphemes(text, true).collect()
 }
