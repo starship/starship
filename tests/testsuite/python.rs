@@ -7,6 +7,21 @@ use tempfile;
 use crate::common::{self, TestCommand};
 
 #[test]
+fn show_nothing_on_empty_dir() -> io::Result<()> {
+    let dir = tempfile::tempdir()?;
+
+    let output = common::render_module("python")
+        .arg("--path")
+        .arg(dir.path())
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = "";
+    assert_eq!(expected, actual);
+    dir.close()
+}
+
+#[test]
 #[ignore]
 fn folder_with_python_version() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
