@@ -679,7 +679,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | ------------------- | -------------------------------- | ------------------------------------------------------------------------------------- |
 | `truncation_length` | `2^63 - 1`                       | Truncates a git branch to X graphemes                                                 |
 | `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
-| `format`            | `"on [ $branch](purple) "`      | The format for the module.  Use `"$branch"` to refer to the current branch name.      |
+| `format`            | `"on [ $branch](bold purple) "` | The format for the module.  Use `"$branch"` to refer to the current branch name.      |
 | `disabled`          | `false`                          | Disables the `git_branch` module.                                                     |
 
 ### Example
