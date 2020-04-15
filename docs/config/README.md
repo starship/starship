@@ -722,21 +722,21 @@ The module will be shown if any of the following conditions are met:
 [golang]
 symbol = "🏎💨 "
 ```
+
 ## Haskell
 
 The `haskell` module shows the currently installed version of Haskell Stack version.
 The module will be shown if any of the following conditions are met:
 
-- The current directory contains a `stack.yaml` file
+- The current directory contains a `stack.yaml` or `stack.yml` file
+- The current directory contains a `package.yaml` or `package.yml` file
 
 ### Options
 
-| Variable   | Default      | Description                                               |
-| ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold red"` | The style for the module.                                 |
-| `disabled` | `false`      | Disables the `haskell` module.                            |
-
+| Variable   | Default                         | Description                    |
+| ---------- | ------------------------------- | ------------------------------ |
+| `format`   | `"via [λ $version](red bold) "` | The format for the module.     |
+| `disabled` | `false`                         | Disables the `haskell` module. |
 
 ### Example
 

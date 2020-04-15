@@ -1,6 +1,7 @@
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::haskell::HaskellConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 /// Creates a module with the current Haskell Stack version
@@ -20,20 +21,28 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let mut module = context.new_module("haskell");
+    let config: HaskellConfig = HaskellConfig::try_load(module.config);
+
     let haskell_version = utils::exec_cmd(
         "stack",
-        &["ghc", "--", "--numeric-version", "--no-install-ghc"],
+        &["ghc", "--no-install-ghc", "--", "--numeric-version"],
     )?
     .stdout;
     let formatted_version = Some(format!("v{}", haskell_version.trim()))?;
 
-    let mut module = context.new_module("haskell");
-    let config: HaskellConfig = HaskellConfig::try_load(module.config);
-    module.set_style(config.style);
-
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &SegmentConfig::new(&formatted_version));
-
+    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
+        formatter.map(|variable| match variable {
+            "version" => Some(formatted_version.clone()),
+            _ => None,
+        })
+    } else {
+        log::warn!("Error parsing format string in `haskell.format`");
+        return None;
+    };
+    module.set_segments(formatter.parse(None));
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
     Some(module)
 }
 
