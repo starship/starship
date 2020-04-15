@@ -39,6 +39,15 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
         _ => format!("{} {}", cmd, args.join(" ")),
     };
     match command.as_str() {
+        "cmake --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+cmake version 3.17.1
+
+CMake suite maintained and supported by Kitware (kitware.com/cmake).",
+            ),
+            stderr: String::default(),
+        }),
         "crystal --version" => Some(CommandOutput {
             stdout: String::from("Crystal 0.32.1 (2019-12-18)"),
             stderr: String::default(),
