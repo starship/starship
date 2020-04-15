@@ -43,7 +43,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
         formatter.map(|variable| match variable {
-            "branch" => Some(graphemes.concat()),
+            "branch" => Some(graphemes.concat()).map(Ok),
             _ => None,
         })
     } else {
@@ -51,7 +51,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    module.set_segments(formatter.parse(None));
+    let parsed = formatter.parse(None);
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `git_branch`: \n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }
