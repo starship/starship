@@ -77,7 +77,7 @@ pub struct MessagesConfig<'a> {
 impl<'a> MessagesConfig<'a> {
     fn new() -> Self {
         MessagesConfig {
-            format: "\\[$level\\]: $message\n",
+            format: "\\[[$level](red bold)\\]: $message\n",
             level: LogLevel::Warning,
         }
     }

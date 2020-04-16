@@ -101,11 +101,17 @@ pub fn get_segments(config: &MessagesConfig) -> Vec<Segment> {
 
 /// Update viewed messages
 pub fn update_viewed_hash() -> Result<(), std::io::Error> {
+    let mut prev: Vec<String> = get_viewed_hash()
+        .iter()
+        .map(|hash| hash.to_string())
+        .collect();
+
     File::create(store_path()).and_then(|mut file| {
-        let messages_hash: Vec<String> = get()
+        let mut messages_hash: Vec<String> = get()
             .iter()
             .map(|message| message.get_hash().to_string())
             .collect();
+        messages_hash.append(&mut prev);
         let text = messages_hash.join(" ");
         file.write(&text.into_bytes())?;
         Ok(())
