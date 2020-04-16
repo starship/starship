@@ -1,55 +1,13 @@
 use crate::configs::MessagesConfig;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
-use std::collections::hash_map::DefaultHasher;
 use std::collections::BTreeSet;
 use std::fs::File;
-use std::hash::{Hash, Hasher};
 use std::io::{Read, Write};
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 
-#[derive(Clone, Hash, PartialOrd, PartialEq, Ord, Eq)]
-pub enum LogLevel {
-    Debug,
-    Info,
-    Warning,
-    Error,
-}
-
-impl LogLevel {
-    fn to_str(&self) -> &'static str {
-        match self {
-            LogLevel::Error => "Error",
-            LogLevel::Warning => "Warning",
-            LogLevel::Info => "Info",
-            LogLevel::Debug => "Debug",
-        }
-    }
-}
-
-#[derive(Clone, Hash, PartialOrd, PartialEq, Ord, Eq)]
-pub struct Message {
-    message: &'static str,
-    level: LogLevel,
-}
-
-impl Message {
-    fn get_hash(&self) -> u64 {
-        let mut s = DefaultHasher::new();
-        s.write(&self.message.to_string().into_bytes());
-        s.finish()
-    }
-}
-
-pub mod messages {
-    use super::{LogLevel, Message};
-    pub const DEPRECATED_USE_FORMAT: Message = Message {
-        message: "Starship uses `format` key to customize the appearance of modules from v0.41.0,\
-                  Check https://starship.rs for more info on updating your config.",
-        level: LogLevel::Warning,
-    };
-}
+use super::core::Message;
 
 lazy_static! {
     static ref MESSAGES: Arc<Mutex<BTreeSet<Message>>> = Default::default();

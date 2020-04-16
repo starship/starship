@@ -8,7 +8,7 @@ use unicode_width::UnicodeWidthChar;
 use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Shell};
 use crate::formatter::StringFormatter;
-use crate::messages;
+use crate::messages::{msg, store as msg_store};
 use crate::module::Module;
 use crate::module::ALL_MODULES;
 use crate::modules;
@@ -82,16 +82,16 @@ pub fn get_prompt(context: Context) -> String {
     if let Some(config) = &context.config.config {
         let table = config.as_table().unwrap();
         if table.contains_key("prompt_order") || table.contains_key("add_newline") {
-            messages::add(messages::messages::DEPRECATED_USE_FORMAT);
+            msg_store::add(msg::DEPRECATED_USE_FORMAT);
         }
     };
 
     // Inserts messages before all segments if there are some messages
-    let mut segments = messages::get_segments(&config.messages);
+    let mut segments = msg_store::get_segments(&config.messages);
     segments.extend(formatter.parse(None));
 
     // Update viewed messages
-    if let Err(error) = messages::update_viewed_hash() {
+    if let Err(error) = msg_store::update_viewed_hash() {
         log::warn!("Error updating viewed messages: {}", error);
     };
 
