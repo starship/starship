@@ -1,3 +1,5 @@
+use quick_xml::events::Event;
+use quick_xml::Reader;
 use std::ffi::OsStr;
 use std::iter::Iterator;
 use std::ops::Deref;
@@ -6,6 +8,7 @@ use std::str;
 
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::dotnet::DotnetConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 type JValue = serde_json::Value;
@@ -46,11 +49,87 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         get_version_from_cli()?
     };
 
-    module.set_style(config.style);
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &config.version.with_value(&version.0));
+    let current_tfm = find_current_tfm(&dotnet_files);
+
+    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(config.style.to_string()),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "symbol" => Some(config.symbol.to_string()),
+                "version" => Some(version.0.to_string()),
+                "tfm" => {
+                    if current_tfm.is_some() {
+                        Some(current_tfm.as_ref().unwrap().to_string())
+                    } else {
+                        None
+                    }
+                }
+                _ => None,
+            })
+    } else {
+        log::warn!("Error parsing format string in `dotnet.format`");
+        return None;
+    };
+
+    module.set_segments(formatter.parse(None));
+
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
+}
+
+fn find_current_tfm<'a>(files: &[DotNetFile<'a>]) -> Option<String> {
+    let get_file_of_type = |t: FileType| files.iter().find(|f| f.file_type == t);
+
+    let relevant_file = get_file_of_type(FileType::ProjectFile).or_else(|| files.iter().next())?;
+
+    match relevant_file.file_type {
+        FileType::ProjectFile => get_tfm_from_project_file(relevant_file.path),
+        _ => None,
+    }
+}
+
+fn get_tfm_from_project_file(path: &Path) -> Option<String> {
+    let project_file = utils::read_file(path).ok()?;
+    let mut reader = Reader::from_str(&project_file);
+    reader.trim_text(true);
+
+    let mut in_tfm = false;
+    let mut tfm = Option::None;
+    let mut buf = Vec::new();
+
+    loop {
+        match reader.read_event(&mut buf) {
+            // for triggering namespaced events, use this instead:
+            // match reader.read_namespaced_event(&mut buf) {
+            Ok(Event::Start(ref e)) => {
+                // for namespaced:
+                // Ok((ref namespace_value, Event::Start(ref e)))
+                match e.name() {
+                    b"TargetFrameworks" => in_tfm = true,
+                    b"TargetFramework" => in_tfm = true,
+                    _ => in_tfm = false,
+                }
+            }
+            // unescape and decode the text event using the reader encoding
+            Ok(Event::Text(e)) => {
+                if in_tfm {
+                    tfm = Some(e.unescape_and_decode(&reader).unwrap())
+                }
+            }
+            Ok(Event::Eof) => break, // exits the loop when reaching end of file
+            Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
+            _ => (), // There are several other `Event`s we do not consider here
+        }
+
+        // if we don't keep a borrow elsewhere, we can clear the buffer to keep memory usage low
+        buf.clear();
+    }
+    tfm
 }
 
 fn estimate_dotnet_version<'a>(

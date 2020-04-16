@@ -449,14 +449,30 @@ as running `dotnet --version`, but it may show an incorrect version if your .NET
 unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by
 setting `heuristic = false` in the module options.
 
+The module will also show the Target Framework Moniker 
+(https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions)
+when there is a csproj file in the current directory. 
+
 ### Options
 
 | Variable    | Default       | Description                                              |
 | ----------- | ------------- | -------------------------------------------------------- |
+| `format`   | `"v[$symbol$version]($style)( 🎯 $tfm)($style) "` | The format for the module.                             |
 | `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
 | `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
 | `style`     | `"bold blue"` | The style for the module.                                |
 | `disabled`  | `false`       | Disables the `dotnet` module.                            |
+
+### Variables
+
+| Variable | Example           | Description                          |
+| -------- | ----------------- | ------------------------------------ |
+| version  | `v3.1.201` | The version of `dotnet` sdk               |
+| tfm  | `netstandard2.0` | The Target Framework Moniker that the current project is targeting  |
+| symbol   |                   | Mirrors the value of option `symbol` |
+| style\*  |                   | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
