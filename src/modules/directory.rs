@@ -101,41 +101,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 /// `top_level_replacement`.
 fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement: &str) -> String {
     if !full_path.starts_with(top_level_path) {
-        return replace_c_dir(full_path.to_slash().unwrap());
+        return full_path.to_slash().unwrap();
     }
 
     if full_path == top_level_path {
-        return replace_c_dir(top_level_replacement.to_string());
+        return top_level_replacement.to_string();
     }
 
     format!(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
         separator = "/",
-        path = replace_c_dir(
-            full_path
+        path = full_path
                 .strip_prefix(top_level_path)
                 .unwrap()
                 .to_slash()
                 .unwrap()
-        )
     )
-}
-
-/// Replaces "C://" with "/c/" within a Windows path
-///
-/// On non-Windows OS, does nothing
-#[cfg(target_os = "windows")]
-fn replace_c_dir(path: String) -> String {
-    path.replace("C:/", "/c")
-}
-
-/// Replaces "C://" with "/c/" within a Windows path
-///
-/// On non-Windows OS, does nothing
-#[cfg(not(target_os = "windows"))]
-const fn replace_c_dir(path: String) -> String {
-    path
 }
 
 /// Takes part before contracted path and replaces it with fish style path
@@ -222,7 +204,7 @@ mod tests {
         let top_level_path = Path::new("C:\\Users\\astronaut");
 
         let output = contract_path(full_path, top_level_path, "~");
-        assert_eq!(output, "/c/Some/Other/Path");
+        assert_eq!(output, "C://Some/Other/Path");
     }
 
     #[test]
@@ -232,7 +214,7 @@ mod tests {
         let top_level_path = Path::new("C:\\Users\\astronaut");
 
         let output = contract_path(full_path, top_level_path, "~");
-        assert_eq!(output, "/c");
+        assert_eq!(output, "C:/");
     }
 
     #[test]
