@@ -86,15 +86,13 @@ impl<'a> StringFormatter<'a> {
         }
 
         fn _parse_format<'a>(
-            mut format: Vec<FormatElement<'a>>,
+            format: Vec<FormatElement<'a>>,
             style: Option<Style>,
             variables: &'a VariableMapType,
         ) -> Vec<Segment> {
-            let mut result: Vec<Segment> = Vec::new();
-
-            format.reverse();
-            while let Some(el) = format.pop() {
-                let mut segments = match el {
+            format
+                .into_iter()
+                .flat_map(|el| match el {
                     FormatElement::Text(text) => {
                         vec![_new_segment("_text".into(), text.into_owned(), style)]
                     }
@@ -127,11 +125,8 @@ impl<'a> StringFormatter<'a> {
                             }
                         })
                         .unwrap_or_default(),
-                };
-                result.append(&mut segments);
-            }
-
-            result
+                })
+                .collect()
         }
 
         _parse_format(self.format, default_style, &self.variables)
@@ -239,6 +234,18 @@ mod tests {
         let result = formatter.parse(None);
         let mut result_iter = result.iter();
         match_next!(result_iter, "text1", None);
+    }
+
+    #[test]
+    fn test_scoped_variable() {
+        const FORMAT_STR: &str = "${env:PWD}";
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map(|variable| Some(format!("${{{}}}", variable)));
+        let result = formatter.parse(None);
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "${env:PWD}", None);
     }
 
     #[test]
