@@ -1,5 +1,5 @@
 use path_slash::PathExt;
-use std::path::Path;
+use std::path::{Path,PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module};
@@ -29,7 +29,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Using environment PWD is the standard approach for determining logical path
     // If this is None for any reason, we fall back to reading the os-provided path
     let physical_current_dir = if config.use_logical_path {
-        None
+        match std::env::var("PWD") {
+            Ok(x) => {
+                Some(PathBuf::from(x))
+            },
+            Err(e) => {
+                log::debug!("Error getting PWD environment variable: {}", e);
+                None
+            }
+        }
     } else {
         match std::env::current_dir() {
             Ok(x) => Some(x),

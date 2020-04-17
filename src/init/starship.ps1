@@ -7,6 +7,7 @@ function global:prompt {
     # @ makes sure the result is an array even if single or no values are returned
     $jobs = @(Get-Job | Where-Object { $_.State -eq 'Running' }).Count
 
+    $env:PWD = $PWD
     $current_directory = (Convert-Path $PWD)
 
     if ($lastCmd = Get-History -Count 1) {
