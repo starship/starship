@@ -505,12 +505,16 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default       | Description                                           |
-| ---------- | ------------- | ----------------------------------------------------- |
-| `symbol`   | `"🌳 "`       | The symbol used before displaying the version of Elm. |
-| `style`    | `"bold cyan"` | The style for the module.                             |
-| `disabled` | `false`       | Disables the `elm` module.                            |
+| Option     | Default                           | Description                |
+| ---------- | --------------------------------- | -------------------------- |
+| `format`   | `"via [🌳 $version](cyan bold) "` | The format for the module. |
+| `disabled` | `false`                           | Disables the `elm` module. |
 
+### Variables
+
+| Variable | Example   | Description          |
+| -------- | --------- | -------------------- |
+| version  | `v0.19.1` | The version of `elm` |
 
 ### Example
 
@@ -518,7 +522,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [elm]
-symbol = " "
+format = "via [ $version](cyan bold) "
 ```
 
 ## Environment Variable
