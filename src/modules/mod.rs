@@ -11,6 +11,7 @@ mod dotnet;
 mod elixir;
 mod elm;
 mod env_var;
+mod erlang;
 mod git_branch;
 mod git_commit;
 mod git_state;
@@ -60,6 +61,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "dotnet" => dotnet::module(context),
         "elixir" => elixir::module(context),
         "elm" => elm::module(context),
+        "erlang" => erlang::module(context),
         "env_var" => env_var::module(context),
         "git_branch" => git_branch::module(context),
         "git_commit" => git_commit::module(context),
@@ -108,6 +110,7 @@ pub fn description(module: &str) -> &'static str {
         "docker_context" => "The current docker context",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
         "env_var" => "Displays the current value of a selected environment variable",
+        "erlang" => "Current OTP version",
         "git_branch" => "The active branch of the repo in your current directory",
         "git_commit" => "The active commit of the repo in your current directory",
         "git_state" => "The current git operation, and it's progress",

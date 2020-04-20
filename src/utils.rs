@@ -86,6 +86,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)",
             ),
             stderr: String::default(),
         }),
+        s if s.starts_with("erl") => Some(CommandOutput {
+            stdout: String::from("22.1.3"),
+            stderr: String::default(),
+        }),
         // If we don't have a mocked command fall back to executing the command
         _ => internal_exec_cmd(&cmd, &args),
     }

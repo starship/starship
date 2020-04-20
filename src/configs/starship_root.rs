@@ -34,6 +34,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "dotnet",
                 "elixir",
                 "elm",
+                "erlang",
                 "golang",
                 "haskell",
                 "java",
