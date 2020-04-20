@@ -17,27 +17,17 @@ const R_VERSION_PATTERN: &str = r" (?P<rversion>\d+\.\d+\.\d+) ";
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_r_project = context.try_begin_scan()?.set_extensions(&["R"]).is_match();
     if !is_r_project {
-        log::debug!("r: Not a R project; getting out!");
         return None;
     }
 
-    log::debug!("r: This is a R project; getting in...");
-
     let r_version = utils::exec_cmd("r", &["--version"])?.stderr;
-    log::debug!("r: r_version={}", r_version);
-
     let formatted_version = parse_version(&r_version)?;
-    log::debug!("r: formatted_version={}", formatted_version);
-
     let mut module = context.new_module("r");
     let config: RConfig = RConfig::try_load(module.config);
     let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
         formatter.map(|variable| match variable {
             "version" => Some(formatted_version.clone()),
-            _ => {
-                log::debug!("r: No version for R has been detected.");
-                None
-            }
+            _ => None,
         })
     } else {
         log::warn!("Error parsing format string in `r.format`");
@@ -55,7 +45,6 @@ fn parse_version(version: &str) -> Option<String> {
     let captures = version_regex.captures(version)?;
     let r_version = captures["rversion"].to_owned();
     let r_formatted = format!("{}{}", "v", r_version);
-    log::debug!("r: r_version = {}", r_version);
     Some(r_formatted.trim().to_owned())
 }
 
