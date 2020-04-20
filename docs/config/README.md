@@ -112,6 +112,7 @@ prompt_order = [
     "nodejs",
     "php",
     "python",
+    "virtualenv",
     "ruby",
     "rust",
     "terraform",
@@ -1115,14 +1116,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable             | Default         | Description                                                                 |
-| -------------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`             | `"🐍 "`         | The symbol used before displaying the version of Python.                    |
-| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
-| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
-| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.  |
-| `style`              | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`           | `false`         | Disables the `python` module.                                               |
+| Variable             | Default                            | Description                                                                |
+| -------------------- | ---------------------------------- | -------------------------------------------------------------------------- |
+| `pyenv_version_name` | `false`                            | Use pyenv to get Python version                                            |
+| `scan_for_pyfiles`   | `true`                             | If false, Python files in the current directory will not show this module. |
+| `format`             | `"via [🐍 $version](yellow bold) "` | The format for the module.                                                 |
+| `disabled`           | `false`                            | Disables the `python` module.                                              |
 
 ### Example
 
@@ -1133,6 +1132,32 @@ The module will be shown if any of the following conditions are met:
 symbol = "👾 "
 pyenv_version_name = true
 pyenv_prefix = "foo "
+```
+
+## virtualenv
+
+The `virtualenv` module shows the currently active Python's virtual environment
+if one is enabled.
+
+The module will be shown if all of the following conditions are met:
+
+- The current directory contains a file with the `.py` extension
+- A virtual environment is currently activated (found in the `VIRTUAL_ENV` environment variable)
+
+### Options
+
+| Variable   | Default                               | Description                       |
+| ---------- | ------------------------------------- | --------------------------------- |
+| `format`   | `"[\\($virtualenv\\)](yellow bold) "` | The format for the module.        |
+| `disabled` | `false`                               | Disables the `virtualenv` module. |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[virtualenv]
+format = "venv[ $virtualenv ] "
 ```
 
 ## Ruby

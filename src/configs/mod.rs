@@ -36,5 +36,6 @@ mod starship_root;
 pub mod terraform;
 pub mod time;
 pub mod username;
+pub mod virtualenv;
 
 pub use starship_root::*;

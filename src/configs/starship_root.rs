@@ -41,6 +41,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "nodejs",
                 "php",
                 "python",
+                "virtualenv",
                 "ruby",
                 "rust",
                 "terraform",

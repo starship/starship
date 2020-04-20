@@ -1,8 +1,6 @@
-use std::env;
-use std::path::Path;
-
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 use crate::configs::python::PythonConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 /// Creates a module with the current Python version
@@ -35,31 +33,29 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     };
 
-    let is_venv = env::var("VIRTUAL_ENV").ok().is_some();
-
-    if !is_py_project && !is_venv {
+    if !is_py_project {
         return None;
     }
 
-    module.set_style(config.style);
-    module.create_segment("symbol", &config.symbol);
-
-    if config.pyenv_version_name {
-        let python_version = utils::exec_cmd("pyenv", &["version-name"])?.stdout;
-        module.create_segment("pyenv_prefix", &config.pyenv_prefix);
-        module.create_segment("version", &SegmentConfig::new(&python_version.trim()));
+    let formatted_version = if config.pyenv_version_name {
+        utils::exec_cmd("pyenv", &["version-name"])?.stdout
     } else {
         let python_version = get_python_version()?;
-        let formatted_version = format_python_version(&python_version);
-        module.create_segment("version", &SegmentConfig::new(&formatted_version));
+        format_python_version(&python_version)
     };
 
-    if let Some(virtual_env) = get_python_virtual_env() {
-        module.create_segment(
-            "virtualenv",
-            &SegmentConfig::new(&format!(" ({})", virtual_env)),
-        );
+    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
+        formatter.map(|variable| match variable {
+            "version" => Some(formatted_version.clone()),
+            _ => None,
+        })
+    } else {
+        log::warn!("Error parsing format string in `python.format`");
+        return None;
     };
+    module.set_segments(formatter.parse(None));
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
 }
@@ -85,14 +81,6 @@ fn format_python_version(python_stdout: &str) -> String {
             .trim_end_matches(":: Anaconda, Inc.")
             .trim()
     )
-}
-
-fn get_python_virtual_env() -> Option<String> {
-    env::var("VIRTUAL_ENV").ok().and_then(|venv| {
-        Path::new(&venv)
-            .file_name()
-            .map(|filename| String::from(filename.to_str().unwrap_or("")))
-    })
 }
 
 #[cfg(test)]

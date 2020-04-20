@@ -37,6 +37,7 @@ mod terraform;
 mod time;
 mod username;
 mod utils;
+mod virtualenv;
 
 #[cfg(feature = "battery")]
 mod battery;
@@ -87,6 +88,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "time" => time::module(context),
         "crystal" => crystal::module(context),
         "username" => username::module(context),
+        "virtualenv" => virtualenv::module(context),
         _ => {
             eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
             None
@@ -130,6 +132,7 @@ pub fn description(module: &str) -> &'static str {
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "username" => "The active user's username",
+        "virtualenv" => "The current active Python's virtual environment.",
         _ => "<no description>",
     }
 }
