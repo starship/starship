@@ -30,11 +30,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/zh-TW/">網站</a>
+  <a href="https://starship.rs">Website</a>
   ·
-  <a href="#-安裝">安裝</a>
+  <a href="#🚀-installation">Installation</a>
   ·
-  <a href="https://starship.rs/zh-TW/config/">設定</a>
+  <a href="https://starship.rs/config/">Configuration</a>
 </p>
 
 <p align="center">
@@ -114,6 +114,8 @@
 <p align="center">
 <a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
+
+<a name="🚀-installation"></a>
 
 ## 🚀 安裝
 
