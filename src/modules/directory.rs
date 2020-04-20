@@ -1,5 +1,5 @@
 use path_slash::PathExt;
-use std::path::{Path,PathBuf};
+use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module};
@@ -30,9 +30,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // If this is None for any reason, we fall back to reading the os-provided path
     let physical_current_dir = if config.use_logical_path {
         match std::env::var("PWD") {
-            Ok(x) => {
-                Some(PathBuf::from(x))
-            },
+            Ok(x) => Some(PathBuf::from(x)),
             Err(e) => {
                 log::debug!("Error getting PWD environment variable: {}", e);
                 None
@@ -121,10 +119,10 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
         replacement = top_level_replacement,
         separator = "/",
         path = full_path
-                .strip_prefix(top_level_path)
-                .unwrap()
-                .to_slash()
-                .unwrap()
+            .strip_prefix(top_level_path)
+            .unwrap()
+            .to_slash()
+            .unwrap()
     )
 }
 
