@@ -1121,8 +1121,6 @@ symbol = "⚙️ "
 
 The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
 
-:::
-
 ### 配置项
 
 | 字段         | 默认值                  | 描述                                               |
@@ -1145,7 +1143,7 @@ symbol = "📦 "
 
 ## Terraform
 
-`terraform` 组件显示当前选定的 terraform 工作区和版本。 默认情况下不会显示 terraform 版本，因为当使用大量插件时，当前版本 terraform 查询版本号很慢。 此组件将在符合以下任意条件时显示：
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. 此组件只有满足以下条件之一时才会被显示：
 
 - 当前目录包含 `.terraform` 目录
 - 当前目录包含一个使用 `.tf` 扩展名的文件
@@ -1170,7 +1168,7 @@ symbol = "🏎💨 "
 
 ## Time
 
-`time` 组件显示当前的 **本地** 时间。 `format` 字段值会提供给 [`chrono`](https://crates.io/crates/chrono) crate 用来控制时间显示方式。 请参阅 [chrono strftime 文档](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) 以了解可用格式选项。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -1188,7 +1186,7 @@ symbol = "🏎💨 "
 | `utc_time_offset` | `"local"`       | 设置所用 UTC 偏移量。 范围是 -24 < x < 24。 允许使用浮点数来得到 30/45 分钟的时区偏移。                                 |
 | `disabled`        | `true`          | 禁用 `time` 组件。                                                                             |
 
-如果 `use_12hr` 为 `true`，则`format` 默认值为 `"%r"`。 否则，其默认值为 `"%T"`。 手动设置 `format` 将使 `use_12hr` 被忽略。
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
 ### 示例
 
@@ -1203,7 +1201,7 @@ utc_time_offset = "-5"
 
 ## Username
 
-`username` 组件显示当前活跃的用户名。 此组件将在符合以下任意条件之一时显示：
+The `username` module shows active user's username. 此组件只有满足以下条件之一时才会被显示：
 
 - 当前用户是 root
 - 当前用户与登录用户不相同
