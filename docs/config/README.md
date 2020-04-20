@@ -1135,6 +1135,29 @@ pyenv_version_name = true
 pyenv_prefix = "foo "
 ```
 
+## R
+
+The `r` module shows the currently installed version of R.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `.R` file
+
+### Options
+
+| Variable   | Default                          | Description                |
+| ---------- | -------------------------------- | -------------------------- |
+| `format`   | `"via [R $version](blue bold) "` | The format for the module. |
+| `disabled` | `false`                          | Disables the `r` module.   |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[r]
+format = "with [® $version](blue bold) "
+```
+
 ## Ruby
 
 The `ruby` module shows the currently installed version of Ruby.

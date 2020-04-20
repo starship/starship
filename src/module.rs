@@ -40,6 +40,7 @@ pub const ALL_MODULES: &[&str] = &[
     "nodejs",
     "package",
     "python",
+    "r",
     "ruby",
     "crystal",
     "rust",

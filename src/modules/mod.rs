@@ -30,6 +30,7 @@ mod nodejs;
 mod package;
 mod php;
 mod python;
+mod r;
 mod ruby;
 mod rust;
 mod singularity;
@@ -80,6 +81,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "package" => package::module(context),
         "php" => php::module(context),
         "python" => python::module(context),
+        "r" => r::module(context),
         "ruby" => ruby::module(context),
         "rust" => rust::module(context),
         "singularity" => singularity::module(context),
@@ -125,6 +127,7 @@ pub fn description(module: &str) -> &'static str {
         "package" => "The package version of the current directory's project",
         "php" => "The currently installed version of PHP",
         "python" => "The currently installed version of Python",
+        "r" => "The currently installed version of R",
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
         "terraform" => "The currently selected terraform workspace and version",

@@ -29,6 +29,7 @@ pub mod nodejs;
 pub mod package;
 pub mod php;
 pub mod python;
+pub mod r;
 pub mod ruby;
 pub mod rust;
 pub mod singularity;
