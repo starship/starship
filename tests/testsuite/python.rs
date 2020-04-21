@@ -162,7 +162,7 @@ fn folder_with_py_file() -> io::Result<()> {
 fn with_virtual_env() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
     File::create(dir.path().join("main.py"))?.sync_all()?;
-    let output = common::render_module("python")
+    let output = common::render_module("virtualenv")
         .env("VIRTUAL_ENV", "/foo/bar/my_venv")
         .arg("--path")
         .arg(dir.path())
@@ -179,7 +179,7 @@ fn with_virtual_env() -> io::Result<()> {
 fn with_active_venv() -> io::Result<()> {
     let dir = tempfile::tempdir()?;
 
-    let output = common::render_module("python")
+    let output = common::render_module("virtualenv")
         .env("VIRTUAL_ENV", "/foo/bar/my_venv")
         .arg("--path")
         .arg(dir.path())
