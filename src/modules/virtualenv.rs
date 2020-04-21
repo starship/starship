@@ -34,6 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(formatter.parse(None));
     module.get_prefix().set_value("");
     module.get_suffix().set_value("");
+
     Some(module)
 }
 
