@@ -169,7 +169,7 @@ fn with_virtual_env() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6 (my_venv)"));
+    let expected = format!("{} ", Color::Yellow.bold().paint("(my_venv)"));
     assert_eq!(expected, actual);
     dir.close()
 }
@@ -186,7 +186,7 @@ fn with_active_venv() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("🐍 v3.7.6 (my_venv)"));
+    let expected = format!("{} ", Color::Yellow.bold().paint("(my_venv)"));
     assert_eq!(expected, actual);
     dir.close()
 }

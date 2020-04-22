@@ -11,7 +11,7 @@ pub struct VirtualEnvConfig<'a> {
 impl<'a> RootModuleConfig<'a> for VirtualEnvConfig<'a> {
     fn new() -> Self {
         VirtualEnvConfig {
-            format: "via [🐍 $version](yellow bold) ",
+            format: "[($virtualenv)](yellow bold) ",
             disabled: false,
         }
     }
