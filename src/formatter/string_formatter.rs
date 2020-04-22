@@ -94,9 +94,7 @@ impl<'a> StringFormatter<'a> {
                 .flat_map(|style| match style {
                     StyleElement::Text(text) => text.as_ref().chars(),
                     StyleElement::Variable(name) => {
-                        let variable = variables
-                            .get(name.as_ref())
-                            .expect(&format!("Style variable {} not found in cache", &name));
+                        let variable = variables.get(name.as_ref()).unwrap_or(&None);
                         match variable {
                             Some(style_string) => style_string.chars(),
                             None => "".chars(),
