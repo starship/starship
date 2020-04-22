@@ -22,10 +22,12 @@ impl Default for VariableValue {
 }
 
 type VariableMapType = BTreeMap<String, Option<VariableValue>>;
+type StyleVariableMapType = BTreeMap<String, Option<String>>;
 
 pub struct StringFormatter<'a> {
     format: Vec<FormatElement<'a>>,
     variables: VariableMapType,
+    style_variables: StyleVariableMapType,
 }
 
 impl<'a> StringFormatter<'a> {
@@ -33,10 +35,14 @@ impl<'a> StringFormatter<'a> {
     pub fn new(format: &'a str) -> Result<Self, Error<Rule>> {
         parse(format)
             .map(|format| {
-                let variables = _get_variables(&format);
-                (format, variables)
+                let (variables, style_variables) = _get_variables(&format);
+                (format, variables, style_variables)
             })
-            .map(|(format, variables)| Self { format, variables })
+            .map(|(format, variables, style_variables)| Self {
+                format,
+                variables,
+                style_variables,
+            })
     }
 
     /// Maps variable name to its value
@@ -58,27 +64,43 @@ impl<'a> StringFormatter<'a> {
         self
     }
 
+    /// Maps variable name in a style string to its value
+    pub fn map_style(mut self, mapper: impl Fn(&str) -> Option<String> + Sync) -> Self {
+        self.style_variables
+            .par_iter_mut()
+            .for_each(|(key, value)| {
+                *value = mapper(key);
+            });
+        self
+    }
+
     /// Parse the format string and consume self.
     pub fn parse(self, default_style: Option<Style>) -> Vec<Segment> {
         fn _parse_textgroup<'a>(
             textgroup: TextGroup<'a>,
             variables: &'a VariableMapType,
+            style_variables: &'a StyleVariableMapType,
         ) -> Vec<Segment> {
-            let style = _parse_style(textgroup.style);
-            _parse_format(textgroup.format, style, &variables)
+            let style = _parse_style(textgroup.style, style_variables);
+            _parse_format(textgroup.format, style, &variables, &style_variables)
         }
 
-        fn _parse_style(style: Vec<StyleElement>) -> Option<Style> {
+        fn _parse_style<'a>(
+            style: Vec<StyleElement>,
+            variables: &'a StyleVariableMapType,
+        ) -> Option<Style> {
             let style_string = style
                 .iter()
                 .flat_map(|style| match style {
                     StyleElement::Text(text) => text.as_ref().chars(),
-                    StyleElement::Variable(variable) => {
-                        log::warn!(
-                            "Variable `{}` monitored in style string, which is not allowed",
-                            &variable
-                        );
-                        "".chars()
+                    StyleElement::Variable(name) => {
+                        let variable = variables
+                            .get(name.as_ref())
+                            .expect(&format!("Style variable {} not found in cache", &name));
+                        match variable {
+                            Some(style_string) => style_string.chars(),
+                            None => "".chars(),
+                        }
                     }
                 })
                 .collect::<String>();
@@ -89,6 +111,7 @@ impl<'a> StringFormatter<'a> {
             format: Vec<FormatElement<'a>>,
             style: Option<Style>,
             variables: &'a VariableMapType,
+            style_variables: &'a StyleVariableMapType,
         ) -> Vec<Segment> {
             format
                 .into_iter()
@@ -101,7 +124,7 @@ impl<'a> StringFormatter<'a> {
                             format: textgroup.format,
                             style: textgroup.style,
                         };
-                        _parse_textgroup(textgroup, &variables)
+                        _parse_textgroup(textgroup, &variables, &style_variables)
                     }
                     FormatElement::Variable(name) => variables
                         .get(name.as_ref())
@@ -129,30 +152,37 @@ impl<'a> StringFormatter<'a> {
                 .collect()
         }
 
-        _parse_format(self.format, default_style, &self.variables)
+        _parse_format(
+            self.format,
+            default_style,
+            &self.variables,
+            &self.style_variables,
+        )
     }
 }
 
 /// Extract variable names from an array of `FormatElement` into a `BTreeMap`
-fn _get_variables<'a>(format: &[FormatElement<'a>]) -> VariableMapType {
+fn _get_variables<'a>(format: &[FormatElement<'a>]) -> (VariableMapType, StyleVariableMapType) {
     let mut variables: VariableMapType = Default::default();
+    let mut style_variables: StyleVariableMapType = Default::default();
 
     fn _push_variables_from_textgroup<'a>(
         variables: &mut VariableMapType,
+        style_variables: &mut StyleVariableMapType,
         textgroup: &'a TextGroup<'a>,
     ) {
         for el in &textgroup.format {
             match el {
                 FormatElement::Variable(name) => _push_variable(variables, name.as_ref()),
                 FormatElement::TextGroup(textgroup) => {
-                    _push_variables_from_textgroup(variables, &textgroup)
+                    _push_variables_from_textgroup(variables, style_variables, &textgroup)
                 }
                 _ => {}
             }
         }
         for el in &textgroup.style {
             if let StyleElement::Variable(name) = el {
-                _push_variable(variables, name.as_ref())
+                _push_style_variable(style_variables, name.as_ref())
             }
         }
     }
@@ -161,17 +191,21 @@ fn _get_variables<'a>(format: &[FormatElement<'a>]) -> VariableMapType {
         variables.insert(name.to_owned(), None);
     }
 
+    fn _push_style_variable<'a>(style_variables: &mut StyleVariableMapType, name: &'a str) {
+        style_variables.insert(name.to_owned(), None);
+    }
+
     for el in format {
         match el {
             FormatElement::Variable(name) => _push_variable(&mut variables, name.as_ref()),
             FormatElement::TextGroup(textgroup) => {
-                _push_variables_from_textgroup(&mut variables, &textgroup)
+                _push_variables_from_textgroup(&mut variables, &mut style_variables, &textgroup)
             }
             _ => {}
         }
     }
 
-    variables
+    (variables, style_variables)
 }
 
 /// Helper function to create a new segment
@@ -234,6 +268,22 @@ mod tests {
         let result = formatter.parse(None);
         let mut result_iter = result.iter();
         match_next!(result_iter, "text1", None);
+    }
+
+    #[test]
+    fn test_variable_in_style() {
+        const FORMAT_STR: &str = "[root]($style)";
+        let root_style = Some(Color::Red.bold());
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map_style(|variable| match variable {
+                "style" => Some("red bold".to_owned()),
+                _ => None,
+            });
+        let result = formatter.parse(None);
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "root", root_style);
     }
 
     #[test]
