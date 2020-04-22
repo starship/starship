@@ -2,8 +2,10 @@ use crate::configs::MessagesConfig;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
 use std::collections::BTreeSet;
+use std::env;
+use std::fs::create_dir_all;
 use std::fs::File;
-use std::io::{Read, Write};
+use std::io::{self, Read, Write};
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 
@@ -28,30 +30,45 @@ fn get() -> Vec<Message> {
 }
 
 /// Get temporary directory
-fn temp_dir() -> &'static str {
-    if cfg!(windows) {
-        r"C:\Windows\Temp"
+fn temp_dir() -> Result<PathBuf, io::Error> {
+    let dir = if cfg!(windows) {
+        r"C:\Windows\Temp\starship-messages"
     } else {
-        "/tmp"
+        "/tmp/starship-messages"
+    };
+    let dir = PathBuf::from(dir);
+
+    if !dir.exists() {
+        create_dir_all(&dir).map(move |_| dir)
+    } else {
+        Ok(dir)
     }
 }
 
 /// Get path to the store
-fn store_path() -> PathBuf {
-    // There is no way to check if starship has run in the current session.
-    // Instead, this will get a path to a temporary directory, which will make
-    // the message displays per boot.
-    const STORAGE_FILE: &str = "starship_messages";
+fn store_path() -> Result<PathBuf, io::Error> {
+    let session_key = env::var("STARSHIP_SESSION_KEY").unwrap_or("default".to_owned());
 
-    let mut store_path = PathBuf::from(temp_dir());
-    store_path.push(STORAGE_FILE);
+    let mut store_path = temp_dir()?;
+    store_path.push(session_key);
 
-    store_path
+    Ok(store_path)
 }
 
 /// Get hash of viewed messages
 fn get_viewed_hash() -> Vec<u64> {
-    File::open(store_path())
+    let store_path = match store_path() {
+        Ok(store_path) => store_path,
+        Err(error) => {
+            log::warn!(
+                "Unable to get the location of current starship session: {}",
+                error
+            );
+            return Vec::new();
+        }
+    };
+
+    File::open(store_path)
         .and_then(|mut file| {
             let mut text = String::new();
             file.read_to_string(&mut text)?;
@@ -106,7 +123,7 @@ pub fn update_viewed_hash() -> Result<(), std::io::Error> {
         .map(|hash| hash.to_string())
         .collect();
 
-    File::create(store_path()).and_then(|mut file| {
+    File::create(store_path()?).and_then(|mut file| {
         let mut messages_hash: Vec<String> = get()
             .iter()
             .map(|message| message.get_hash().to_string())

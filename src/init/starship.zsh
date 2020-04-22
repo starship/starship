@@ -56,3 +56,8 @@ function zle-keymap-select
 STARSHIP_START_TIME=$(::STARSHIP:: time)
 zle -N zle-keymap-select
 export STARSHIP_SHELL="zsh"
+
+# Set up the session key that will be used to store messages
+if [ -x "$(command -v sha256sum)" -a -c /dev/urandom ]; then
+    export STARSHIP_SESSION_KEY=$(head -c 20 /dev/urandom | sha256sum | head -c 16)
+fi

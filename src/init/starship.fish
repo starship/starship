@@ -16,3 +16,8 @@ set VIRTUAL_ENV_DISABLE_PROMPT 1
 
 function fish_mode_prompt; end
 export STARSHIP_SHELL="fish"
+
+# Set up the session key that will be used to store messages
+if [ -x "$(command -v sha256sum)" -a -c /dev/urandom ]; then
+    export STARSHIP_SESSION_KEY=$(head -c 20 /dev/urandom | sha256sum | head -c 16)
+fi
