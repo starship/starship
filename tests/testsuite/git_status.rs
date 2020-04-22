@@ -4,6 +4,7 @@ use std::fs::{self, File};
 use std::io;
 use std::path::PathBuf;
 use std::process::Command;
+use tempfile;
 
 use crate::common::{self, TestCommand};
 
@@ -17,6 +18,21 @@ fn barrier() {}
 #[cfg(windows)]
 fn barrier() {
     std::thread::sleep(std::time::Duration::from_millis(500));
+}
+
+#[test]
+fn show_nothing_on_empty_dir() -> io::Result<()> {
+    let repo_dir = tempfile::tempdir()?;
+
+    let output = common::render_module("git_status")
+        .arg("--path")
+        .arg(repo_dir.path())
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = "";
+    assert_eq!(expected, actual);
+    repo_dir.close()
 }
 
 #[test]

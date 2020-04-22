@@ -17,6 +17,21 @@ enum Expect<'a> {
 }
 
 #[test]
+fn show_nothing_on_empty_dir() -> io::Result<()> {
+    let repo_dir = tempfile::tempdir()?;
+
+    let output = common::render_module("hg_branch")
+        .arg("--path")
+        .arg(repo_dir.path())
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = "";
+    assert_eq!(expected, actual);
+    repo_dir.close()
+}
+
+#[test]
 #[ignore]
 fn test_hg_get_branch_fails() -> io::Result<()> {
     let tempdir = tempfile::tempdir()?;

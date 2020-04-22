@@ -2,8 +2,24 @@ use ansi_term::Color;
 use remove_dir_all::remove_dir_all;
 use std::io;
 use std::process::Command;
+use tempfile;
 
 use crate::common::{self, TestCommand};
+
+#[test]
+fn show_nothing_on_empty_dir() -> io::Result<()> {
+    let repo_dir = tempfile::tempdir()?;
+
+    let output = common::render_module("git_branch")
+        .arg("--path")
+        .arg(repo_dir.path())
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = "";
+    assert_eq!(expected, actual);
+    repo_dir.close()
+}
 
 #[test]
 fn test_changed_truncation_symbol() -> io::Result<()> {

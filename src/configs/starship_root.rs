@@ -43,6 +43,7 @@ pub const PROMPT_ORDER: [&str; 36] = [
     "aws",
     "env_var",
     "cmd_duration",
+    "custom",
     "\n",
     "jobs",
     #[cfg(feature = "battery")]
