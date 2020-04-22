@@ -47,7 +47,7 @@ fn temp_dir() -> Result<PathBuf, io::Error> {
 
 /// Get path to the store
 fn store_path() -> Result<PathBuf, io::Error> {
-    let session_key = env::var("STARSHIP_SESSION_KEY").unwrap_or("default".to_owned());
+    let session_key = env::var("STARSHIP_SESSION_KEY").unwrap_or_else(|_| "default".to_owned());
 
     let mut store_path = temp_dir()?;
     store_path.push(session_key);
@@ -80,7 +80,7 @@ fn get_viewed_hash() -> Vec<u64> {
                 .flatten()
                 .collect()
         })
-        .unwrap_or(Vec::new())
+        .unwrap_or_default()
 }
 
 /// Get messages not viewed
@@ -130,7 +130,7 @@ pub fn update_viewed_hash() -> Result<(), std::io::Error> {
             .collect();
         messages_hash.append(&mut prev);
         let text = messages_hash.join(" ");
-        file.write(&text.into_bytes())?;
+        file.write_all(&text.into_bytes())?;
         Ok(())
     })
 }
