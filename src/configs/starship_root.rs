@@ -8,7 +8,7 @@ pub struct StarshipRootConfig<'a> {
     pub scan_timeout: u64,
 }
 
-pub const PROMPT_ORDER: [&str; 36] = [
+pub const PROMPT_ORDER: [&str; 37] = [
     "username",
     "hostname",
     "singularity",

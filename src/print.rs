@@ -37,6 +37,11 @@ pub fn get_prompt(context: Context) -> String {
         buf.push_str(">");
         return buf;
     };
+    let modules: Vec<String> = formatter
+        .get_variables()
+        .iter()
+        .map(|var| var.to_string())
+        .collect();
     let formatter = formatter.map_variables_to_segments(|module| {
         // Make $all display all modules
         if module == "all" {
@@ -49,13 +54,12 @@ pub fn get_prompt(context: Context) -> String {
                             line_break.set_value("\n");
                             Some(vec![line_break])
                         }
-                        _ => {
-                            if context.is_module_disabled_in_config(&module) {
-                                None
-                            } else {
-                                modules::handle(module, &context).map(|module| module.segments)
-                            }
-                        }
+                        _ => Some(
+                            handle_module(module, &context, &modules)
+                                .into_iter()
+                                .flat_map(|module| module.segments)
+                                .collect::<Vec<Segment>>(),
+                        ),
                     })
                     .flatten()
                     .collect::<Vec<_>>(),
@@ -64,7 +68,12 @@ pub fn get_prompt(context: Context) -> String {
             None
         } else {
             // Get segments from module
-            modules::handle(module, &context).map(|module| module.segments)
+            Some(
+                handle_module(module, &context, &modules)
+                    .into_iter()
+                    .flat_map(|module| module.segments)
+                    .collect::<Vec<Segment>>(),
+            )
         }
     });
 
@@ -159,20 +168,7 @@ pub fn explain(args: ArgMatches) {
 }
 
 fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
-    enum Mod<'a> {
-        Builtin(&'a str),
-        Custom(&'a str),
-    }
-
-    struct DebugCustomModules<'tmp>(&'tmp toml::value::Table);
-
-    impl Debug for DebugCustomModules<'_> {
-        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-            f.debug_list().entries(self.0.keys()).finish()
-        }
-    }
-
-    let mut prompt_order: Vec<Mod> = Vec::new();
+    let mut prompt_order: Vec<Module<'a>> = Vec::new();
 
     let config = context.config.get_root_config();
     let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
@@ -181,72 +177,88 @@ fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
         log::error!("Error parsing `format`");
         return Vec::new();
     };
-    let modules = formatter.get_variables();
+    let modules = formatter.get_variables().clone();
 
-    // Write out a custom prompt order
-    let config_prompt_order = context.config.get_root_config().prompt_order;
-
-    for module in modules {
-        if ALL_MODULES.contains(module) {
-            // Write out a module if it isn't disabled
-            if !context.is_module_disabled_in_config(*module) {
-                prompt_order.push(Mod::Builtin(module));
-            }
-        } else if *module == "custom" {
-            // Write out all custom modules, except for those that are explicitly set
-            if let Some(custom_modules) = context.config.get_custom_modules() {
-                for (custom_module, config) in custom_modules {
-                    if should_add_implicit_custom_module(
-                        custom_module,
-                        config,
-                        &config_prompt_order,
-                    ) {
-                        prompt_order.push(Mod::Custom(custom_module));
-                    }
-                }
-            }
-        } else if module.starts_with("custom.") {
-            // Write out a custom module if it isn't disabled (and it exists...)
-            match context.is_custom_module_disabled_in_config(&module[7..]) {
-                Some(true) => (), // Module is disabled, we don't add it to the prompt
-                Some(false) => prompt_order.push(Mod::Custom(&module[7..])),
-                None => match context.config.get_custom_modules() {
-                    Some(modules) => log::debug!(
-                        "prompt_order contains custom module \"{}\", but no configuration was provided. Configuration for the following modules were provided: {:?}",
-                        module,
-                        DebugCustomModules(modules),
-                    ),
-                    None => log::debug!(
-                        "prompt_order contains custom module \"{}\", but no configuration was provided.",
-                        module,
-                    ),
-                },
-            }
-        } else {
-            log::debug!(
-                "Expected prompt_order to contain value from {:?}. Instead received {}",
-                ALL_MODULES,
-                module,
-            );
-        }
+    for module in &modules {
+        let modules = handle_module(module, &context, &modules);
+        prompt_order.extend(modules.into_iter());
     }
 
     prompt_order
-        .par_iter()
-        .map(|module| match module {
-            Mod::Builtin(builtin) => modules::handle(builtin, context),
-            Mod::Custom(custom) => modules::custom::module(custom, context),
-        }) // Compute segments
-        .flatten() // Remove segments set to `None`
-        .collect::<Vec<Module<'a>>>()
 }
 
-fn should_add_implicit_custom_module(
+fn handle_module<'a, T>(module: &str, context: &'a Context, module_list: &[T]) -> Vec<Module<'a>>
+where
+    T: AsRef<str>,
+{
+    struct DebugCustomModules<'tmp>(&'tmp toml::value::Table);
+
+    impl Debug for DebugCustomModules<'_> {
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            f.debug_list().entries(self.0.keys()).finish()
+        }
+    }
+
+    let mut modules: Vec<Option<Module>> = Vec::new();
+
+    if ALL_MODULES.contains(&module) {
+        // Write out a module if it isn't disabled
+        if !context.is_module_disabled_in_config(module) {
+            modules.push(modules::handle(module, &context));
+        }
+    } else if module == "custom" {
+        // Write out all custom modules, except for those that are explicitly set
+        if let Some(custom_modules) = context.config.get_custom_modules() {
+            let custom_modules = custom_modules
+                .iter()
+                .map(|(custom_module, config)| {
+                    if should_add_implicit_custom_module(custom_module, config, &module_list) {
+                        modules::custom::module(custom_module, &context)
+                    } else {
+                        None
+                    }
+                })
+                .collect::<Vec<Option<Module<'a>>>>();
+            modules.extend(custom_modules)
+        }
+    } else if module.starts_with("custom.") {
+        // Write out a custom module if it isn't disabled (and it exists...)
+        match context.is_custom_module_disabled_in_config(&module[7..]) {
+            Some(true) => (), // Module is disabled, we don't add it to the prompt
+            Some(false) => modules.push(modules::custom::module(&module[7..], &context)),
+            None => match context.config.get_custom_modules() {
+                Some(modules) => log::debug!(
+                    "prompt_order contains custom module \"{}\", but no configuration was provided. Configuration for the following modules were provided: {:?}",
+                    module,
+                    DebugCustomModules(modules),
+                    ),
+                None => log::debug!(
+                    "prompt_order contains custom module \"{}\", but no configuration was provided.",
+                    module,
+                    ),
+            },
+        }
+    } else {
+        log::debug!(
+            "Expected prompt_order to contain value from {:?}. Instead received {}",
+            ALL_MODULES,
+            module,
+        );
+    }
+
+    modules.into_iter().flatten().collect()
+}
+
+fn should_add_implicit_custom_module<T>(
     custom_module: &str,
     config: &toml::Value,
-    config_prompt_order: &[&str],
-) -> bool {
+    config_prompt_order: &[T],
+) -> bool
+where
+    T: AsRef<str>,
+{
     let is_explicitly_specified = config_prompt_order.iter().any(|x| {
+        let x: &str = x.as_ref();
         x.len() == 7 + custom_module.len() && &x[..7] == "custom." && &x[7..] == custom_module
     });
 

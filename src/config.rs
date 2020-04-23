@@ -205,37 +205,84 @@ impl StarshipConfig {
 
     /// Get the subset of the table for a module by its name
     pub fn get_module_config(&self, module_name: &str) -> Option<&Value> {
-        let module_config = self.config.as_ref()?.as_table()?.get(module_name);
+        let module_config = self.get_config(&[module_name]);
         if module_config.is_some() {
             log::debug!(
                 "Config found for \"{}\": \n{:?}",
                 &module_name,
                 &module_config
             );
-        } else {
-            log::trace!("No config found for \"{}\"", &module_name);
         }
         module_config
     }
 
+    /// Get the value of the config in a specific path
+    pub fn get_config(&self, path: &[&str]) -> Option<&Value> {
+        let mut prev_table = self.config.as_ref()?.as_table()?;
+
+        assert_ne!(
+            path.len(),
+            0,
+            "Starship::get_config called with an empty path"
+        );
+
+        let (table_options, _) = path.split_at(path.len() - 1);
+
+        // Assumes all keys except the last in path has a table
+        for option in table_options {
+            match prev_table.get(*option) {
+                Some(value) => match value.as_table() {
+                    Some(value) => {
+                        prev_table = value;
+                    }
+                    None => {
+                        log::trace!(
+                            "No config found for \"{}\": \"{}\" is not a table",
+                            path.join("."),
+                            &option
+                        );
+                        return None;
+                    }
+                },
+                None => {
+                    log::trace!(
+                        "No config found for \"{}\": Option \"{}\" not found",
+                        path.join("."),
+                        &option
+                    );
+                    return None;
+                }
+            }
+        }
+
+        let last_option = path.last().unwrap();
+        let value = prev_table.get(*last_option);
+        if value.is_none() {
+            log::trace!(
+                "No config found for \"{}\": Option \"{}\" not found",
+                path.join("."),
+                &last_option
+            );
+        };
+        value
+    }
+
     /// Get the subset of the table for a custom module by its name
     pub fn get_custom_module_config(&self, module_name: &str) -> Option<&Value> {
-        let module_config = self.get_custom_modules()?.get(module_name);
+        let module_config = self.get_config(&["custom", module_name]);
         if module_config.is_some() {
             log::debug!(
                 "Custom config found for \"{}\": \n{:?}",
                 &module_name,
                 &module_config
             );
-        } else {
-            log::trace!("No custom config found for \"{}\"", &module_name);
         }
         module_config
     }
 
     /// Get the table of all the registered custom modules, if any
     pub fn get_custom_modules(&self) -> Option<&toml::value::Table> {
-        self.config.as_ref()?.as_table()?.get("custom")?.as_table()
+        self.get_config(&["custom"])?.as_table()
     }
 
     pub fn get_root_config(&self) -> StarshipRootConfig {
