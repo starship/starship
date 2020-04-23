@@ -20,7 +20,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let r_version = utils::exec_cmd("r", &["--version"])?.stderr;
+    let r_version = utils::exec_cmd("R", &["--version"])?.stderr;
     let formatted_version = parse_version(&r_version)?;
     let mut module = context.new_module("r");
     let config: RConfig = RConfig::try_load(module.config);
