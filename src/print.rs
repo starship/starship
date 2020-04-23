@@ -39,7 +39,7 @@ pub fn get_prompt(context: Context) -> String {
     };
     let modules: Vec<String> = formatter
         .get_variables()
-        .iter()
+        .into_iter()
         .map(|var| var.to_string())
         .collect();
     let formatter = formatter.map_variables_to_segments(|module| {
