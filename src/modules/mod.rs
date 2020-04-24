@@ -103,6 +103,7 @@ pub fn description(module: &str) -> &'static str {
         }
         "cmd_duration" => "How long the last command took to execute",
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
+        "crystal" => "The currently installed version of Crystal",
         "directory" => "The current working directory",
         "docker_context" => "The current docker context",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",

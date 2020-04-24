@@ -50,6 +50,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "memory_usage",
                 "aws",
                 "env_var",
+                "crystal",
                 "cmd_duration",
                 "custom",
                 "line_break",
