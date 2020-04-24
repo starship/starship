@@ -14,7 +14,7 @@ use toml::Value;
 const STD_EDITOR: &str = "vi";
 
 pub fn update_configuration(name: &str, value: &str) {
-    let file_path = get_file_path().expect("Fail to determine the path of the config file.");
+    let config_path = get_config_path();
 
     let keys: Vec<&str> = name.split('.').collect();
 
@@ -36,19 +36,9 @@ pub fn update_configuration(name: &str, value: &str) {
 
         let config_str =
             toml::to_string_pretty(&table).expect("Failed to serialize the config to string");
-        File::create(&file_path)
+        File::create(&config_path)
             .and_then(|mut file| file.write_all(config_str.as_ref()))
             .expect("Error writing starship config");
-    }
-}
-
-fn get_file_path() -> Option<PathBuf> {
-    if let Ok(path) = env::var("STARSHIP_CONFIG") {
-        // Use $STARSHIP_CONFIG as the config path if available
-        Some(PathBuf::from(path))
-    } else {
-        // Default to using ~/.config/starship.toml
-        home_dir().map(|path| path.join(".config/starship.toml"))
     }
 }
 
