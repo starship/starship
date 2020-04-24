@@ -1,6 +1,7 @@
 use std::env;
 use std::ffi::OsString;
 use std::io::ErrorKind;
+use std::process;
 use std::process::Command;
 
 use dirs::home_dir;
@@ -17,6 +18,10 @@ pub fn update_configuration(name: &str, value: &str) {
     let config_path = get_config_path();
 
     let keys: Vec<&str> = name.split('.').collect();
+    if keys.len() != 2 {
+        log::error!("Please pass in a config key with a '.'");
+        process::abort();
+    }
 
     let starship_config = StarshipConfig::initialize();
     let mut config = starship_config
@@ -31,6 +36,7 @@ pub fn update_configuration(name: &str, value: &str) {
         if let Some(values) = table.get(keys[0]).unwrap().as_table() {
             let mut updated_values = values.clone();
             updated_values.insert(keys[1].to_string(), Value::String(value.to_string()));
+            // updated_values.insert(keys[1].to_string(), Value::try_from(value.parse::<bool>().or_else(value.to_string())).unwrap());
             table.insert(keys[0].to_string(), Value::Table(updated_values));
         }
 
