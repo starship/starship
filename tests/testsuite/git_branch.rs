@@ -2,7 +2,6 @@ use ansi_term::Color;
 use remove_dir_all::remove_dir_all;
 use std::io;
 use std::process::Command;
-use tempfile;
 
 use crate::common::{self, TestCommand};
 
