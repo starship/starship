@@ -50,7 +50,7 @@ You can use texts, variables and text groups in a format string.
 #### Variable
 
 A variable contains a `$` symbol followed by the name of the variable.
-The name of a variable only contains alphabetics, numerics and `_`.
+The name of a variable only contains letters, numbers and `_`.
 
 For example:
 
@@ -60,12 +60,12 @@ For example:
 
 #### Text Group
 
-A text group is combined with two different parts.
+A text group is made up of two different parts.
 
 The first part, which is enclosed in a `[]`, is a [format string](#format-strings).
 You can add texts, variables, or even nested text groups in it.
 
-In the second part, a [style string](#style-strings) should be provided to paint the first part with.
+In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
 
 For example:
 
@@ -102,7 +102,7 @@ Note that `toml` has [its own escape syntax](https://github.com/toml-lang/toml#u
 It is recommended to use a literal string (`''`) in your config.
 If you want to use a basic string (`""`), pay attention to escape the backslash `\`.
 
-For example, when you want to print a `$` symbol in a new line, the following configs for `format` are equivalent:
+For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
 
 ```toml
 # with basic string
