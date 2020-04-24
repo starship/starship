@@ -3,7 +3,6 @@ use std::ffi::OsStr;
 use std::fs::OpenOptions;
 use std::io::{self, Error, ErrorKind, Write};
 use std::process::{Command, Stdio};
-use tempfile;
 
 #[test]
 fn show_nothing_on_empty_dir() -> io::Result<()> {

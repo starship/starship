@@ -423,7 +423,6 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
 mod tests {
     use super::*;
     use starship_module_config_derive::ModuleConfig;
-    use toml;
 
     #[test]
     fn test_load_config() {
