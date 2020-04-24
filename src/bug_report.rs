@@ -204,7 +204,6 @@ fn get_starship_config() -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use os_info;
     use std::env;
 
     #[test]

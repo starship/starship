@@ -5,7 +5,6 @@ use crate::utils;
 
 use regex::Regex;
 use serde_json as json;
-use toml;
 
 use super::{RootModuleConfig, SegmentConfig};
 use crate::configs::package::PackageConfig;

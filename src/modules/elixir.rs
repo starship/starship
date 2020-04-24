@@ -62,7 +62,6 @@ mod tests {
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
-    use tempfile;
 
     #[test]
     fn test_without_mix_file() -> io::Result<()> {
