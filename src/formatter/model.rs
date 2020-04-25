@@ -81,6 +81,10 @@ impl<'a> StyleVariableHolder<Cow<'a, str>> for Vec<FormatElement<'a>> {
                 acc.extend(textgroup.style.get_style_variables());
                 acc
             }
+            FormatElement::Positional(format) => {
+                acc.extend(format.get_style_variables());
+                acc
+            }
             _ => acc,
         })
     }
