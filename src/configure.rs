@@ -34,12 +34,16 @@ pub fn update_configuration(name: &str, value: &str) {
         if let Some(values) = table.get(keys[0]).unwrap().as_table() {
             let mut updated_values = values.clone();
 
-            let bool_value = value.parse::<bool>();
-            let int_value = value.parse::<i64>();
-            if bool_value.is_ok() {
-                updated_values.insert(keys[1].to_string(), Value::Boolean(bool_value.unwrap()));
-            } else if int_value.is_ok() {
-                updated_values.insert(keys[1].to_string(), Value::Integer(int_value.unwrap()));
+            if value.parse::<bool>().is_ok() {
+                updated_values.insert(
+                    keys[1].to_string(),
+                    Value::Boolean(value.parse::<bool>().unwrap()),
+                );
+            } else if value.parse::<i64>().is_ok() {
+                updated_values.insert(
+                    keys[1].to_string(),
+                    Value::Integer(value.parse::<i64>().unwrap()),
+                );
             } else {
                 updated_values.insert(keys[1].to_string(), Value::String(value.to_string()));
             }
