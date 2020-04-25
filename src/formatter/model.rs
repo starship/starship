@@ -6,6 +6,11 @@ pub trait VariableHolder<T> {
     fn get_variables(&self) -> BTreeSet<T>;
 }
 
+/// Type that holds a number of style variables of type `T`
+pub trait StyleVariableHolder<T> {
+    fn get_style_variables(&self) -> BTreeSet<T>;
+}
+
 pub struct TextGroup<'a> {
     pub format: Vec<FormatElement<'a>>,
     pub style: Vec<StyleElement<'a>>,
@@ -47,8 +52,8 @@ impl<'a> VariableHolder<Cow<'a, str>> for Vec<FormatElement<'a>> {
     }
 }
 
-impl<'a> VariableHolder<Cow<'a, str>> for StyleElement<'a> {
-    fn get_variables(&self) -> BTreeSet<Cow<'a, str>> {
+impl<'a> StyleVariableHolder<Cow<'a, str>> for StyleElement<'a> {
+    fn get_style_variables(&self) -> BTreeSet<Cow<'a, str>> {
         match self {
             StyleElement::Variable(var) => {
                 let mut variables = BTreeSet::new();
@@ -60,11 +65,23 @@ impl<'a> VariableHolder<Cow<'a, str>> for StyleElement<'a> {
     }
 }
 
-impl<'a> VariableHolder<Cow<'a, str>> for Vec<&StyleElement<'a>> {
-    fn get_variables(&self) -> BTreeSet<Cow<'a, str>> {
+impl<'a> StyleVariableHolder<Cow<'a, str>> for Vec<StyleElement<'a>> {
+    fn get_style_variables(&self) -> BTreeSet<Cow<'a, str>> {
         self.iter().fold(BTreeSet::new(), |mut acc, el| {
-            acc.extend(el.get_variables());
+            acc.extend(el.get_style_variables());
             acc
+        })
+    }
+}
+
+impl<'a> StyleVariableHolder<Cow<'a, str>> for Vec<FormatElement<'a>> {
+    fn get_style_variables(&self) -> BTreeSet<Cow<'a, str>> {
+        self.iter().fold(BTreeSet::new(), |mut acc, el| match el {
+            FormatElement::TextGroup(textgroup) => {
+                acc.extend(textgroup.style.get_style_variables());
+                acc
+            }
+            _ => acc,
         })
     }
 }

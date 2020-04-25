@@ -44,17 +44,9 @@ impl<'a> StringFormatter<'a> {
                         .map(|key| (key.to_string(), None))
                         .collect::<Vec<(String, Option<_>)>>(),
                 );
-                let style_elements = format
-                    .iter()
-                    .flat_map(|el| match el {
-                        FormatElement::TextGroup(textgroup) => Some(&textgroup.style),
-                        _ => None,
-                    })
-                    .flatten()
-                    .collect::<Vec<&StyleElement>>();
                 let style_variables = StyleVariableMapType::from_iter(
-                    style_elements
-                        .get_variables()
+                    format
+                        .get_style_variables()
                         .into_iter()
                         .map(|key| (key.to_string(), None))
                         .collect::<Vec<(String, Option<_>)>>(),
@@ -201,6 +193,12 @@ impl<'a> StringFormatter<'a> {
 impl<'a> VariableHolder<String> for StringFormatter<'a> {
     fn get_variables(&self) -> BTreeSet<String> {
         BTreeSet::from_iter(self.variables.keys().cloned())
+    }
+}
+
+impl<'a> StyleVariableHolder<String> for StringFormatter<'a> {
+    fn get_style_variables(&self) -> BTreeSet<String> {
+        BTreeSet::from_iter(self.style_variables.keys().cloned())
     }
 }
 
