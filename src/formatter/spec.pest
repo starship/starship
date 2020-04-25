@@ -36,7 +36,7 @@ escape = _{ "\\" ~ escaped_char }
 escaped_char = { "[" | "]" | "(" | ")" | "\\" | "$" }
 
 // TextGroup
-// 
+//
 // A textgroup is a pair of `format` and `style` (`[format](style)`)
 //
 // - `format`: A format string, can contain any number of variables, texts or textgroups.

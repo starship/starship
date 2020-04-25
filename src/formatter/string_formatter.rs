@@ -1,7 +1,7 @@
 use ansi_term::Style;
 use pest::error::Error;
 use rayon::prelude::*;
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::iter::FromIterator;
 
 use crate::config::parse_style_string;
@@ -34,6 +34,7 @@ impl<'a> StringFormatter<'a> {
     pub fn new(format: &'a str) -> Result<Self, Error<Rule>> {
         parse(format)
             .map(|format| {
+                // Cache all variables
                 let variables = VariableMapType::from_iter(
                     format
                         .get_variables()
@@ -113,11 +114,11 @@ impl<'a> StringFormatter<'a> {
                     FormatElement::Variable(name) => variables
                         .get(name.as_ref())
                         .and_then(|segments| {
-                            let value = segments.clone()?;
-                            Some(match value {
+                            Some(match segments.clone()? {
                                 VariableValue::Styled(segments) => segments
                                     .into_iter()
                                     .map(|mut segment| {
+                                        // Derive upper style if the style of segments are none.
                                         if !segment.has_style() {
                                             if let Some(style) = style {
                                                 segment.set_style(style);
@@ -133,6 +134,8 @@ impl<'a> StringFormatter<'a> {
                         })
                         .unwrap_or_default(),
                     FormatElement::Positional(format) => {
+                        // Show the positional format string if all the variables inside are not
+                        // none.
                         let should_show: bool = format.get_variables().iter().any(|var| {
                             variables
                                 .get(var.as_ref())
@@ -151,6 +154,12 @@ impl<'a> StringFormatter<'a> {
         }
 
         _parse_format(self.format, default_style, &self.variables)
+    }
+}
+
+impl<'a> VariableHolder<String> for StringFormatter<'a> {
+    fn get_variables(&self) -> BTreeSet<String> {
+        BTreeSet::from_iter(self.variables.keys().cloned())
     }
 }
 

@@ -1,6 +1,7 @@
 use std::borrow::Cow;
 use std::collections::BTreeSet;
 
+/// Type that holds a number of variables of type `T`
 pub trait VariableHolder<T> {
     fn get_variables(&self) -> BTreeSet<T>;
 }
