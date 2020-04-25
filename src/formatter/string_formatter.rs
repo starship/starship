@@ -216,7 +216,7 @@ mod tests {
     use super::*;
     use ansi_term::Color;
 
-    // match_next(result: Iter<Segment>, value, style)
+    // match_next(result: IterMut<Segment>, value, style)
     macro_rules! match_next {
         ($iter:ident, $value:literal, $($style:tt)+) => {
             let _next = $iter.next().unwrap();
@@ -395,6 +395,17 @@ mod tests {
         match_next!(result_iter, " and ", None);
         match_next!(result_iter, " ", None);
         match_next!(result_iter, "$some", None);
+    }
+
+    #[test]
+    fn test_variable_holder() {
+        const FORMAT_STR: &str = "($a [($b) $c](none $s)) $d [t]($t)";
+        let expected_variables =
+            BTreeSet::from_iter(vec!["a", "b", "c", "d"].into_iter().map(String::from));
+
+        let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
+        let variables = formatter.get_variables();
+        assert_eq!(variables, expected_variables);
     }
 
     #[test]
