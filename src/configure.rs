@@ -4,11 +4,9 @@ use std::io::ErrorKind;
 use std::process;
 use std::process::Command;
 
-use dirs::home_dir;
 use starship::config::StarshipConfig;
 use std::fs::File;
 use std::io::Write;
-use std::path::PathBuf;
 use toml::map::Map;
 use toml::Value;
 
@@ -35,8 +33,17 @@ pub fn update_configuration(name: &str, value: &str) {
 
         if let Some(values) = table.get(keys[0]).unwrap().as_table() {
             let mut updated_values = values.clone();
-            updated_values.insert(keys[1].to_string(), Value::String(value.to_string()));
-            // updated_values.insert(keys[1].to_string(), Value::try_from(value.parse::<bool>().or_else(value.to_string())).unwrap());
+
+            let bool_value = value.parse::<bool>();
+            let int_value = value.parse::<i64>();
+            if bool_value.is_ok() {
+                updated_values.insert(keys[1].to_string(), Value::Boolean(bool_value.unwrap()));
+            } else if int_value.is_ok() {
+                updated_values.insert(keys[1].to_string(), Value::Integer(int_value.unwrap()));
+            } else {
+                updated_values.insert(keys[1].to_string(), Value::String(value.to_string()));
+            }
+
             table.insert(keys[0].to_string(), Value::Table(updated_values));
         }
 
