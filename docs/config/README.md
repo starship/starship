@@ -86,6 +86,15 @@ Most modules in starship allow you to configure their display styles. This is do
 
 Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
+#### Positional Format Strings
+
+A positional format string wrapped in `(` and `)` will not render if all the variables inside are empty.
+
+For example:
+
+- `(@$region)` will show nothing if the variable `region` is `None`, otherwise `@` followed by the value of region.
+- `(some text)` will always show nothing since there are no variables wrapped in the braces.
+
 #### Escapable characters
 
 The following symbols have special usage in a format string.
