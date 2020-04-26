@@ -62,11 +62,12 @@ impl<'a> StringFormatter<'a> {
 
     /// Maps variable name to its value
     pub fn map<T: Into<String>>(mut self, mapper: impl Fn(&str) -> Option<T> + Sync) -> Self {
-        self.variables.par_iter_mut().for_each(|(key, value)| {
-            if let Some(v) = mapper(key) {
-                *value = Some(VariableValue::Plain(v.into()));
-            };
-        });
+        self.variables
+            .par_iter_mut()
+            .filter(|(_, value)| value.is_none())
+            .for_each(|(key, value)| {
+                *value = mapper(key).map(|var| var.into()).map(VariableValue::Plain);
+            });
         self
     }
 
@@ -75,11 +76,12 @@ impl<'a> StringFormatter<'a> {
         mut self,
         mapper: impl Fn(&str) -> Option<Vec<Segment>> + Sync,
     ) -> Self {
-        self.variables.par_iter_mut().for_each(|(key, value)| {
-            if let Some(v) = mapper(key) {
-                *value = Some(VariableValue::Styled(v));
-            };
-        });
+        self.variables
+            .par_iter_mut()
+            .filter(|(_, value)| value.is_none())
+            .for_each(|(key, value)| {
+                *value = mapper(key).map(VariableValue::Styled);
+            });
         self
     }
 
@@ -87,10 +89,9 @@ impl<'a> StringFormatter<'a> {
     pub fn map_style<T: Into<String>>(mut self, mapper: impl Fn(&str) -> Option<T> + Sync) -> Self {
         self.style_variables
             .par_iter_mut()
+            .filter(|(_, value)| value.is_none())
             .for_each(|(key, value)| {
-                if let Some(v) = mapper(key) {
-                    *value = Some(v.into());
-                }
+                *value = mapper(key).map(|var| var.into());
             });
         self
     }
@@ -386,10 +387,11 @@ mod tests {
         let result = formatter.parse(None);
         let mut result_iter = result.iter();
         match_next!(result_iter, "$a", None);
-        match_next!(result_iter, "$B", None);
+        match_next!(result_iter, "$b", None);
         match_next!(result_iter, "$c", None);
     }
 
+    #[test]
     fn test_positional() {
         const FORMAT_STR: &str = "($some) should render but ($none) shouldn't";
 
