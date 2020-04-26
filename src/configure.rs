@@ -18,7 +18,7 @@ pub fn update_configuration(name: &str, value: &str) {
     let keys: Vec<&str> = name.split('.').collect();
     if keys.len() != 2 {
         log::error!("Please pass in a config key with a '.'");
-        process::abort();
+        process::exit(1);
     }
 
     let starship_config = StarshipConfig::initialize();
