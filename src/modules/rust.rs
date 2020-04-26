@@ -5,6 +5,7 @@ use std::{env, fs};
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::rust::RustConfig;
+use crate::formatter::StringFormatter;
 
 /// Creates a module with the current Rust version
 ///
@@ -22,6 +23,47 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let mut module = context.new_module("rust");
+    let config = RustConfig::try_load(module.config);
+    let formatter = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
+            .map_style(|variable| match variable {
+                "style" => Some(config.style),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                // This may result in multiple calls to `get_module_version` when a user have
+                // multiple `$version` variables defined in `format`.
+                "version" => get_module_version(context),
+                _ => None,
+            })
+            .map_variables_to_segments(|variable| match variable {
+                "symbol" => match StringFormatter::new(config.symbol) {
+                    Ok(formatter) => Some(formatter.parse(None)),
+                    Err(error) => {
+                        log::warn!("Error parsing format string in `rust.symbol`:\n{}", error);
+                        None
+                    }
+                },
+                _ => None,
+            }),
+        Err(error) => {
+            log::warn!("Error parsing format string in `rust.format`:\n{}", error);
+            return None;
+        }
+    };
+
+    // TODO Returns `None` if formatter has a version variable and its value is `None`
+
+    module.set_segments(formatter.parse(None));
+
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
+
+    Some(module)
+}
+
+fn get_module_version(context: &Context) -> Option<String> {
     // `$CARGO_HOME/bin/rustc(.exe) --version` may attempt installing a rustup toolchain.
     // https://github.com/starship/starship/issues/417
     //
@@ -56,14 +98,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         format_rustc_version(execute_rustc_version()?)
     };
 
-    let mut module = context.new_module("rust");
-    let config = RustConfig::try_load(module.config);
-    module.set_style(config.style);
-
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &config.version.with_value(&module_version));
-
-    Some(module)
+    Some(module_version)
 }
 
 fn env_rustup_toolchain() -> Option<String> {
