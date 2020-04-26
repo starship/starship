@@ -374,13 +374,13 @@ mod tests {
         let formatter = StringFormatter::new(FORMAT_STR)
             .unwrap()
             .map(|var| match var {
-                "a" => Some("$a".to_owned()),
-                "b" => Some("$b".to_owned()),
+                "a" => Some("$a"),
+                "b" => Some("$b"),
                 _ => None,
             })
             .map(|var| match var {
-                "b" => Some("$B".to_owned()),
-                "c" => Some("$c".to_owned()),
+                "b" => Some("$B"),
+                "c" => Some("$c"),
                 _ => None,
             });
         let result = formatter.parse(None);
