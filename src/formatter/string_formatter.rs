@@ -64,7 +64,7 @@ impl<'a> StringFormatter<'a> {
     pub fn map<T: Into<String>>(mut self, mapper: impl Fn(&str) -> Option<T> + Sync) -> Self {
         self.variables.par_iter_mut().for_each(|(key, value)| {
             if let Some(v) = mapper(key) {
-                *value = Some(VariableValue::Plain(v));
+                *value = Some(VariableValue::Plain(v.into()));
             };
         });
         self
@@ -84,11 +84,13 @@ impl<'a> StringFormatter<'a> {
     }
 
     /// Maps variable name in a style string to its value
-    pub fn map_style(mut self, mapper: impl Fn(&str) -> Option<String> + Sync) -> Self {
+    pub fn map_style<T: Into<String>>(mut self, mapper: impl Fn(&str) -> Option<T> + Sync) -> Self {
         self.style_variables
             .par_iter_mut()
             .for_each(|(key, value)| {
-                *value = mapper(key);
+                if let Some(v) = mapper(key) {
+                    *value = Some(v.into());
+                }
             });
         self
     }
