@@ -23,10 +23,12 @@ impl Default for VariableValue {
 }
 
 type VariableMapType = BTreeMap<String, Option<VariableValue>>;
+type StyleVariableMapType = BTreeMap<String, Option<String>>;
 
 pub struct StringFormatter<'a> {
     format: Vec<FormatElement<'a>>,
     variables: VariableMapType,
+    style_variables: StyleVariableMapType,
 }
 
 impl<'a> StringFormatter<'a> {
@@ -42,9 +44,20 @@ impl<'a> StringFormatter<'a> {
                         .map(|key| (key.to_string(), None))
                         .collect::<Vec<(String, Option<_>)>>(),
                 );
-                (format, variables)
+                let style_variables = StyleVariableMapType::from_iter(
+                    format
+                        .get_style_variables()
+                        .into_iter()
+                        .map(|key| (key.to_string(), None))
+                        .collect::<Vec<(String, Option<_>)>>(),
+                );
+                (format, variables, style_variables)
             })
-            .map(|(format, variables)| Self { format, variables })
+            .map(|(format, variables, style_variables)| Self {
+                format,
+                variables,
+                style_variables,
+            })
     }
 
     /// Maps variable name to its value
@@ -66,27 +79,41 @@ impl<'a> StringFormatter<'a> {
         self
     }
 
+    /// Maps variable name in a style string to its value
+    pub fn map_style(mut self, mapper: impl Fn(&str) -> Option<String> + Sync) -> Self {
+        self.style_variables
+            .par_iter_mut()
+            .for_each(|(key, value)| {
+                *value = mapper(key);
+            });
+        self
+    }
+
     /// Parse the format string and consume self.
     pub fn parse(self, default_style: Option<Style>) -> Vec<Segment> {
         fn _parse_textgroup<'a>(
             textgroup: TextGroup<'a>,
             variables: &'a VariableMapType,
+            style_variables: &'a StyleVariableMapType,
         ) -> Vec<Segment> {
-            let style = _parse_style(textgroup.style);
-            _parse_format(textgroup.format, style, &variables)
+            let style = _parse_style(textgroup.style, style_variables);
+            _parse_format(textgroup.format, style, &variables, &style_variables)
         }
 
-        fn _parse_style(style: Vec<StyleElement>) -> Option<Style> {
+        fn _parse_style<'a>(
+            style: Vec<StyleElement>,
+            variables: &'a StyleVariableMapType,
+        ) -> Option<Style> {
             let style_string = style
                 .iter()
                 .flat_map(|style| match style {
                     StyleElement::Text(text) => text.as_ref().chars(),
-                    StyleElement::Variable(variable) => {
-                        log::warn!(
-                            "Variable `{}` monitored in style string, which is not allowed",
-                            &variable
-                        );
-                        "".chars()
+                    StyleElement::Variable(name) => {
+                        let variable = variables.get(name.as_ref()).unwrap_or(&None);
+                        match variable {
+                            Some(style_string) => style_string.chars(),
+                            None => "".chars(),
+                        }
                     }
                 })
                 .collect::<String>();
@@ -97,6 +124,7 @@ impl<'a> StringFormatter<'a> {
             format: Vec<FormatElement<'a>>,
             style: Option<Style>,
             variables: &'a VariableMapType,
+            style_variables: &'a StyleVariableMapType,
         ) -> Vec<Segment> {
             format
                 .into_iter()
@@ -109,7 +137,7 @@ impl<'a> StringFormatter<'a> {
                             format: textgroup.format,
                             style: textgroup.style,
                         };
-                        _parse_textgroup(textgroup, &variables)
+                        _parse_textgroup(textgroup, &variables, &style_variables)
                     }
                     FormatElement::Variable(name) => variables
                         .get(name.as_ref())
@@ -144,7 +172,7 @@ impl<'a> StringFormatter<'a> {
                         });
 
                         if should_show {
-                            _parse_format(format, style, variables)
+                            _parse_format(format, style, variables, style_variables)
                         } else {
                             Vec::new()
                         }
@@ -153,13 +181,24 @@ impl<'a> StringFormatter<'a> {
                 .collect()
         }
 
-        _parse_format(self.format, default_style, &self.variables)
+        _parse_format(
+            self.format,
+            default_style,
+            &self.variables,
+            &self.style_variables,
+        )
     }
 }
 
 impl<'a> VariableHolder<String> for StringFormatter<'a> {
     fn get_variables(&self) -> BTreeSet<String> {
         BTreeSet::from_iter(self.variables.keys().cloned())
+    }
+}
+
+impl<'a> StyleVariableHolder<String> for StringFormatter<'a> {
+    fn get_style_variables(&self) -> BTreeSet<String> {
+        BTreeSet::from_iter(self.style_variables.keys().cloned())
     }
 }
 
@@ -223,6 +262,22 @@ mod tests {
         let result = formatter.parse(None);
         let mut result_iter = result.iter();
         match_next!(result_iter, "text1", None);
+    }
+
+    #[test]
+    fn test_variable_in_style() {
+        const FORMAT_STR: &str = "[root]($style)";
+        let root_style = Some(Color::Red.bold());
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map_style(|variable| match variable {
+                "style" => Some("red bold".to_owned()),
+                _ => None,
+            });
+        let result = formatter.parse(None);
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "root", root_style);
     }
 
     #[test]
@@ -350,6 +405,16 @@ mod tests {
 
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
         let variables = formatter.get_variables();
+        assert_eq!(variables, expected_variables);
+    }
+
+    #[test]
+    fn test_style_variable_holder() {
+        const FORMAT_STR: &str = "($a [($b) $c](none $s)) $d [t]($t)";
+        let expected_variables = BTreeSet::from_iter(vec!["s", "t"].into_iter().map(String::from));
+
+        let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
+        let variables = formatter.get_style_variables();
         assert_eq!(variables, expected_variables);
     }
 
