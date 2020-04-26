@@ -322,6 +322,29 @@ mod tests {
     }
 
     #[test]
+    fn test_multiple_mapper() {
+        const FORMAT_STR: &str = "$a$b$c";
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map(|var| match var {
+                "a" => Some("$a".to_owned()),
+                "b" => Some("$b".to_owned()),
+                _ => None,
+            })
+            .map(|var| match var {
+                "b" => Some("$B".to_owned()),
+                "c" => Some("$c".to_owned()),
+                _ => None,
+            });
+        let result = formatter.parse(None);
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "$a", None);
+        match_next!(result_iter, "$B", None);
+        match_next!(result_iter, "$c", None);
+    }
+
+    #[test]
     fn test_parse_error() {
         // brackets without escape
         {
