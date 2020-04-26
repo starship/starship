@@ -1,7 +1,8 @@
 use ansi_term::Style;
 use pest::error::Error;
 use rayon::prelude::*;
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
+use std::iter::FromIterator;
 
 use crate::config::parse_style_string;
 use crate::segment::Segment;
@@ -33,16 +34,23 @@ impl<'a> StringFormatter<'a> {
     pub fn new(format: &'a str) -> Result<Self, Error<Rule>> {
         parse(format)
             .map(|format| {
-                let variables = _get_variables(&format);
+                // Cache all variables
+                let variables = VariableMapType::from_iter(
+                    format
+                        .get_variables()
+                        .into_iter()
+                        .map(|key| (key.to_string(), None))
+                        .collect::<Vec<(String, Option<_>)>>(),
+                );
                 (format, variables)
             })
             .map(|(format, variables)| Self { format, variables })
     }
 
     /// Maps variable name to its value
-    pub fn map(mut self, mapper: impl Fn(&str) -> Option<String> + Sync) -> Self {
+    pub fn map<T: Into<String>>(mut self, mapper: impl Fn(&str) -> Option<T> + Sync) -> Self {
         self.variables.par_iter_mut().for_each(|(key, value)| {
-            *value = mapper(key).map(VariableValue::Plain);
+            *value = mapper(key).map(|var| var.into()).map(VariableValue::Plain);
         });
         self
     }
@@ -105,12 +113,12 @@ impl<'a> StringFormatter<'a> {
                     }
                     FormatElement::Variable(name) => variables
                         .get(name.as_ref())
-                        .map(|segments| {
-                            let value = segments.clone().unwrap_or_default();
-                            match value {
+                        .and_then(|segments| {
+                            Some(match segments.clone()? {
                                 VariableValue::Styled(segments) => segments
                                     .into_iter()
                                     .map(|mut segment| {
+                                        // Derive upper style if the style of segments are none.
                                         if !segment.has_style() {
                                             if let Some(style) = style {
                                                 segment.set_style(style);
@@ -122,9 +130,25 @@ impl<'a> StringFormatter<'a> {
                                 VariableValue::Plain(text) => {
                                     vec![_new_segment(name.to_string(), text, style)]
                                 }
-                            }
+                            })
                         })
                         .unwrap_or_default(),
+                    FormatElement::Positional(format) => {
+                        // Show the positional format string if all the variables inside are not
+                        // none.
+                        let should_show: bool = format.get_variables().iter().any(|var| {
+                            variables
+                                .get(var.as_ref())
+                                .map(|segments| segments.is_some())
+                                .unwrap_or(false)
+                        });
+
+                        if should_show {
+                            _parse_format(format, style, variables)
+                        } else {
+                            Vec::new()
+                        }
+                    }
                 })
                 .collect()
         }
@@ -133,45 +157,10 @@ impl<'a> StringFormatter<'a> {
     }
 }
 
-/// Extract variable names from an array of `FormatElement` into a `BTreeMap`
-fn _get_variables<'a>(format: &[FormatElement<'a>]) -> VariableMapType {
-    let mut variables: VariableMapType = Default::default();
-
-    fn _push_variables_from_textgroup<'a>(
-        variables: &mut VariableMapType,
-        textgroup: &'a TextGroup<'a>,
-    ) {
-        for el in &textgroup.format {
-            match el {
-                FormatElement::Variable(name) => _push_variable(variables, name.as_ref()),
-                FormatElement::TextGroup(textgroup) => {
-                    _push_variables_from_textgroup(variables, &textgroup)
-                }
-                _ => {}
-            }
-        }
-        for el in &textgroup.style {
-            if let StyleElement::Variable(name) = el {
-                _push_variable(variables, name.as_ref())
-            }
-        }
+impl<'a> VariableHolder<String> for StringFormatter<'a> {
+    fn get_variables(&self) -> BTreeSet<String> {
+        BTreeSet::from_iter(self.variables.keys().cloned())
     }
-
-    fn _push_variable<'a>(variables: &mut VariableMapType, name: &'a str) {
-        variables.insert(name.to_owned(), None);
-    }
-
-    for el in format {
-        match el {
-            FormatElement::Variable(name) => _push_variable(&mut variables, name.as_ref()),
-            FormatElement::TextGroup(textgroup) => {
-                _push_variables_from_textgroup(&mut variables, &textgroup)
-            }
-            _ => {}
-        }
-    }
-
-    variables
 }
 
 /// Helper function to create a new segment
@@ -188,7 +177,7 @@ mod tests {
     use super::*;
     use ansi_term::Color;
 
-    // match_next(result: Iter<Segment>, value, style)
+    // match_next(result: IterMut<Segment>, value, style)
     macro_rules! match_next {
         ($iter:ident, $value:literal, $($style:tt)+) => {
             let _next = $iter.next().unwrap();
@@ -315,6 +304,53 @@ mod tests {
         match_next!(result_iter, "styless", var_style);
         match_next!(result_iter, "styled", styled_style);
         match_next!(result_iter, "styled_no_modifier", styled_no_modifier_style);
+    }
+
+    #[test]
+    fn test_positional() {
+        const FORMAT_STR: &str = "($some) should render but ($none) shouldn't";
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map(|var| match var {
+                "some" => Some("$some"),
+                _ => None,
+            });
+        let result = formatter.parse(None);
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "$some", None);
+        match_next!(result_iter, " should render but ", None);
+        match_next!(result_iter, " shouldn't", None);
+    }
+
+    #[test]
+    fn test_nested_positional() {
+        const FORMAT_STR: &str = "($some ($none)) and ($none ($some))";
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map(|var| match var {
+                "some" => Some("$some"),
+                _ => None,
+            });
+        let result = formatter.parse(None);
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "$some", None);
+        match_next!(result_iter, " ", None);
+        match_next!(result_iter, " and ", None);
+        match_next!(result_iter, " ", None);
+        match_next!(result_iter, "$some", None);
+    }
+
+    #[test]
+    fn test_variable_holder() {
+        const FORMAT_STR: &str = "($a [($b) $c](none $s)) $d [t]($t)";
+        let expected_variables =
+            BTreeSet::from_iter(vec!["a", "b", "c", "d"].into_iter().map(String::from));
+
+        let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
+        let variables = formatter.get_variables();
+        assert_eq!(variables, expected_variables);
     }
 
     #[test]
