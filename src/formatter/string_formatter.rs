@@ -62,9 +62,12 @@ impl<'a> StringFormatter<'a> {
 
     /// Maps variable name to its value
     pub fn map<T: Into<String>>(mut self, mapper: impl Fn(&str) -> Option<T> + Sync) -> Self {
-        self.variables.par_iter_mut().for_each(|(key, value)| {
-            *value = mapper(key).map(|var| var.into()).map(VariableValue::Plain);
-        });
+        self.variables
+            .par_iter_mut()
+            .filter(|(_, value)| value.is_none())
+            .for_each(|(key, value)| {
+                *value = mapper(key).map(|var| var.into()).map(VariableValue::Plain);
+            });
         self
     }
 
@@ -73,18 +76,22 @@ impl<'a> StringFormatter<'a> {
         mut self,
         mapper: impl Fn(&str) -> Option<Vec<Segment>> + Sync,
     ) -> Self {
-        self.variables.par_iter_mut().for_each(|(key, value)| {
-            *value = mapper(key).map(VariableValue::Styled);
-        });
+        self.variables
+            .par_iter_mut()
+            .filter(|(_, value)| value.is_none())
+            .for_each(|(key, value)| {
+                *value = mapper(key).map(VariableValue::Styled);
+            });
         self
     }
 
     /// Maps variable name in a style string to its value
-    pub fn map_style(mut self, mapper: impl Fn(&str) -> Option<String> + Sync) -> Self {
+    pub fn map_style<T: Into<String>>(mut self, mapper: impl Fn(&str) -> Option<T> + Sync) -> Self {
         self.style_variables
             .par_iter_mut()
+            .filter(|(_, value)| value.is_none())
             .for_each(|(key, value)| {
-                *value = mapper(key);
+                *value = mapper(key).map(|var| var.into());
             });
         self
     }
@@ -359,6 +366,29 @@ mod tests {
         match_next!(result_iter, "styless", var_style);
         match_next!(result_iter, "styled", styled_style);
         match_next!(result_iter, "styled_no_modifier", styled_no_modifier_style);
+    }
+
+    #[test]
+    fn test_multiple_mapper() {
+        const FORMAT_STR: &str = "$a$b$c";
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map(|var| match var {
+                "a" => Some("$a"),
+                "b" => Some("$b"),
+                _ => None,
+            })
+            .map(|var| match var {
+                "b" => Some("$B"),
+                "c" => Some("$c"),
+                _ => None,
+            });
+        let result = formatter.parse(None);
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "$a", None);
+        match_next!(result_iter, "$b", None);
+        match_next!(result_iter, "$c", None);
     }
 
     #[test]
