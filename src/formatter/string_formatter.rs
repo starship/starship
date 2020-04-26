@@ -42,9 +42,9 @@ impl<'a> StringFormatter<'a> {
     /// Maps variable name to its value
     pub fn map(mut self, mapper: impl Fn(&str) -> Option<String> + Sync) -> Self {
         self.variables.par_iter_mut().for_each(|(key, value)| {
-            mapper(key).map(|v| {
+            if let Some(v) = mapper(key) {
                 *value = Some(VariableValue::Plain(v));
-            });
+            };
         });
         self
     }
@@ -55,9 +55,9 @@ impl<'a> StringFormatter<'a> {
         mapper: impl Fn(&str) -> Option<Vec<Segment>> + Sync,
     ) -> Self {
         self.variables.par_iter_mut().for_each(|(key, value)| {
-            mapper(key).map(|v| {
+            if let Some(v) = mapper(key) {
                 *value = Some(VariableValue::Styled(v));
-            });
+            };
         });
         self
     }
