@@ -122,20 +122,19 @@ impl<'a> StringFormatter<'a> {
                 (VariableMapType::new(), StyleVariableMapType::new()),
                 |(mut v, mut sv), (key, value)| {
                     *value = mapper(key, &variables).map(|format| {
-                        StringFormatter::new(format)
-                            .map(|formatter| {
-                                let StringFormatter {
-                                    format,
-                                    mut variables,
-                                    mut style_variables,
-                                } = formatter;
+                        StringFormatter::new(format).map(|formatter| {
+                            let StringFormatter {
+                                format,
+                                mut variables,
+                                mut style_variables,
+                            } = formatter;
 
-                                // Add variables in meta variables to self
-                                v.append(&mut variables);
-                                sv.append(&mut style_variables);
+                            // Add variables in meta variables to self
+                            v.append(&mut variables);
+                            sv.append(&mut style_variables);
 
-                                VariableValue::Meta(format)
-                            })
+                            VariableValue::Meta(format)
+                        })
                     });
 
                     (v, sv)
