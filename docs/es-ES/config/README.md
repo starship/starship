@@ -103,6 +103,7 @@ prompt_order = [
     "dotnet",
     "elixir",
     "elm",
+    "erlang",
     "golang",
     "haskell",
     "java",
@@ -483,7 +484,29 @@ The `elm` module shows the currently installed version of Elm. The module will b
 symbol = " "
 ```
 
-## Variable de entorno
+## Erlang
+
+The `erlang` module shows the currently installed version of Erlang/OTP. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
+
+### Opciones
+
+| Variable   | Por defecto | Descripción                                              |
+| ---------- | ----------- | -------------------------------------------------------- |
+| `symbol`   | `"🖧 "`      | The symbol used before displaying the version of Erlang. |
+| `disabled` | `false`     | Disables the `erlang` module.                            |
+
+### Ejemplo
+
+```toml
+# ~/.config/starship.toml
+
+[erlang]
+symbol = "e "
+```
+## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
@@ -537,7 +560,7 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git commit
+## Git Commit
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
@@ -561,7 +584,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 commit_hash_length = 4
 ```
 
-## Git state
+## Git State
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
@@ -590,7 +613,7 @@ progress_divider = " of "
 cherry_pick = "🍒 PICKING"
 ```
 
-## Git status
+## Git Status
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
@@ -833,7 +856,7 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ```
 
-## Salto de línea
+## Line Break
 
 The `line_break` module separates the prompt into two lines.
 
@@ -852,7 +875,7 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
-## Memoria utilizada
+## Memory Usage
 
 The `memory_usage` module shows current system memory and swap usage.
 
@@ -970,7 +993,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 symbol = "🤖 "
 ```
 
-## Versión del paquete
+## Package Version
 
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
@@ -1166,7 +1189,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 symbol = "🏎💨 "
 ```
 
-## Hora
+## Time
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
@@ -1199,7 +1222,7 @@ format = "🕙[ %T ]"
 utc_time_offset = "-5"
 ```
 
-## Nombre de usuario
+## Username
 
 The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
@@ -1226,7 +1249,7 @@ The `username` module shows active user's username. The module will be shown if 
 disabled = true
 ```
 
-## Comandos personalizados
+## Custom commands
 
 The `custom` modules show the output of some arbitrary commands.
 
