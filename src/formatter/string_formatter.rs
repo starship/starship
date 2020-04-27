@@ -601,4 +601,21 @@ mod tests {
             assert!(StringFormatter::new(FORMAT_STR).is_err());
         }
     }
+
+    #[test]
+    fn test_variable_error() {
+        const FORMAT_STR: &str = "$never$some";
+        let never_error = StringFormatterError::Custom("NEVER".to_owned());
+
+        let segments = StringFormatter::new(FORMAT_STR).and_then(|formatter| {
+            formatter
+                .map(|var| match var {
+                    "some" => Some(Ok("some")),
+                    "never" => Some(Err(never_error.clone())),
+                    _ => None,
+                })
+                .parse(None)
+        });
+        assert!(segments.is_err());
+    }
 }
