@@ -44,7 +44,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "attohttpc"
-version = "0.12.0"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "http 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1005,7 +1005,7 @@ name = "starship"
 version = "0.40.1"
 dependencies = [
  "ansi_term 0.12.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "attohttpc 0.12.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "attohttpc 0.13.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "battery 0.7.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "byte-unit 3.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "chrono 0.4.11 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1290,7 +1290,7 @@ dependencies = [
 "checksum arrayref 0.3.6 (registry+https://github.com/rust-lang/crates.io-index)" = "a4c527152e37cf757a3f78aae5a06fbeefdb07ccc535c980a3208ee3060dd544"
 "checksum arrayvec 0.4.12 (registry+https://github.com/rust-lang/crates.io-index)" = "cd9fd44efafa8690358b7408d253adf110036b88f55672a933f01d616ad9b1b9"
 "checksum arrayvec 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)" = "cff77d8686867eceff3105329d4698d96c2391c176d5d03adc90c7389162b5b8"
-"checksum attohttpc 0.12.0 (registry+https://github.com/rust-lang/crates.io-index)" = "de33d017f0add8b019c6d98c3132c82c8815ca96bbed8e8006e7402c840562b3"
+"checksum attohttpc 0.13.0 (registry+https://github.com/rust-lang/crates.io-index)" = "d5db1932a9d70d5091139d6b0e04ec6a4d9f9184041c15d71a5ef954cb3c5312"
 "checksum atty 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)" = "d9b39be18770d11421cdb1b9947a45dd3f37e93092cbf377614828a319d5fee8"
 "checksum autocfg 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "f8aac770f1885fd7e387acedd76065302551364496e46b3dd00860b2f8359b9d"
 "checksum base64 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)" = "b41b7ea54a0c9d92199de89e20e58d49f02f8e699814ef3fdf266f6f748d15c7"
