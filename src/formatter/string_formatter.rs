@@ -62,7 +62,7 @@ pub struct StringFormatter<'a> {
 
 impl<'a> StringFormatter<'a> {
     /// Creates an instance of StringFormatter from a format string
-    pub fn new(format: &'a str) -> Result<Self, PestError<Rule>> {
+    pub fn new(format: &'a str) -> Result<Self, StringFormatterError> {
         parse(format)
             .map(|format| {
                 // Cache all variables
@@ -87,6 +87,7 @@ impl<'a> StringFormatter<'a> {
                 variables,
                 style_variables,
             })
+            .map_err(StringFormatterError::Parse)
     }
 
     /// Maps variable name to its value
@@ -135,7 +136,6 @@ impl<'a> StringFormatter<'a> {
 
                                 VariableValue::Meta(format)
                             })
-                            .map_err(StringFormatterError::Parse)
                     });
 
                     (v, sv)
