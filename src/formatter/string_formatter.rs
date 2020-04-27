@@ -62,6 +62,8 @@ pub struct StringFormatter<'a> {
 
 impl<'a> StringFormatter<'a> {
     /// Creates an instance of StringFormatter from a format string
+    ///
+    /// This method will throw an Error when the given format string fails to parse.
     pub fn new(format: &'a str) -> Result<Self, StringFormatterError> {
         parse(format)
             .map(|format| {
@@ -91,6 +93,19 @@ impl<'a> StringFormatter<'a> {
     }
 
     /// Maps variable name to its value
+    ///
+    /// You should provide a function or closure that accepts the variable name `name: &str` as a
+    /// parameter and returns the one of the following values:
+    ///
+    /// - `None`: This variable will be reserved for further mappers. If it is `None` when
+    /// `self.parse()` is called, it will be dropped.
+    ///
+    /// - `Some(Err(StringFormatterError))`: This variable will throws `StringFormatterError` when
+    /// `self.parse()` is called. Return this if some fatal error occurred and the format string
+    /// should not be rendered.
+    ///
+    /// - `Some(Ok(_))`: The value of this variable will be displayed in the format string.
+    ///
     pub fn map<T, M>(mut self, mapper: M) -> Self
     where
         T: Into<Cow<'a, str>>,
@@ -107,8 +122,10 @@ impl<'a> StringFormatter<'a> {
 
     /// Maps a meta-variable to a format string containing other variables.
     ///
-    /// This function should be called **before** other map methods so that variables can be cached
-    /// properly.
+    /// This function should be called **before** other map methods so that variables found in
+    /// the format strings of meta-variables can be cached properly.
+    ///
+    /// See `StringFormatter::map` for description on the parameters.
     pub fn map_meta<M>(mut self, mapper: M) -> Self
     where
         M: Fn(&str, &BTreeSet<String>) -> Option<&'a str> + Sync,
@@ -148,6 +165,8 @@ impl<'a> StringFormatter<'a> {
     }
 
     /// Maps variable name to an array of segments
+    ///
+    /// See `StringFormatter::map` for description on the parameters.
     pub fn map_variables_to_segments<M>(mut self, mapper: M) -> Self
     where
         M: Fn(&str) -> Option<Result<Vec<Segment>, StringFormatterError>> + Sync,
@@ -162,6 +181,8 @@ impl<'a> StringFormatter<'a> {
     }
 
     /// Maps variable name in a style string to its value
+    ///
+    /// See `StringFormatter::map` for description on the parameters.
     pub fn map_style<T, M>(mut self, mapper: M) -> Self
     where
         T: Into<Cow<'a, str>>,
@@ -177,6 +198,11 @@ impl<'a> StringFormatter<'a> {
     }
 
     /// Parse the format string and consume self.
+    ///
+    /// This method will throw an Error in the following conditions:
+    ///
+    /// - Format string in meta variables fails to parse
+    /// - Variable mapper returns an error.
     pub fn parse(self, default_style: Option<Style>) -> Result<Vec<Segment>, StringFormatterError> {
         fn _parse_textgroup<'a>(
             textgroup: TextGroup<'a>,
