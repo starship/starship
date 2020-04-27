@@ -58,11 +58,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "symbol" => Some(config.symbol.to_string()),
-                "version" => Some(version.0.to_string()),
+                "symbol" => Some(config.symbol),
+                "version" => Some(&version.0),
                 "tfm" => {
                     if current_tfm.is_some() {
-                        Some(current_tfm.as_ref().unwrap().to_string())
+                        Some(current_tfm.as_ref().unwrap())
                     } else {
                         None
                     }
@@ -85,12 +85,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn find_current_tfm<'a>(files: &[DotNetFile<'a>]) -> Option<String> {
     let get_file_of_type = |t: FileType| files.iter().find(|f| f.file_type == t);
 
-    let relevant_file = get_file_of_type(FileType::ProjectFile).or_else(|| files.iter().next())?;
+    let relevant_file = get_file_of_type(FileType::ProjectFile)?;
 
-    match relevant_file.file_type {
-        FileType::ProjectFile => get_tfm_from_project_file(relevant_file.path),
-        _ => None,
-    }
+    get_tfm_from_project_file(relevant_file.path)
 }
 
 fn get_tfm_from_project_file(path: &Path) -> Option<String> {
@@ -99,7 +96,6 @@ fn get_tfm_from_project_file(path: &Path) -> Option<String> {
     reader.trim_text(true);
 
     let mut in_tfm = false;
-    let mut tfm = Option::None;
     let mut buf = Vec::new();
 
     loop {
@@ -118,7 +114,7 @@ fn get_tfm_from_project_file(path: &Path) -> Option<String> {
             // unescape and decode the text event using the reader encoding
             Ok(Event::Text(e)) => {
                 if in_tfm {
-                    tfm = Some(e.unescape_and_decode(&reader).unwrap())
+                    return e.unescape_and_decode(&reader).ok();
                 }
             }
             Ok(Event::Eof) => break, // exits the loop when reaching end of file
@@ -129,7 +125,7 @@ fn get_tfm_from_project_file(path: &Path) -> Option<String> {
         // if we don't keep a borrow elsewhere, we can clear the buffer to keep memory usage low
         buf.clear();
     }
-    tfm
+    None
 }
 
 fn estimate_dotnet_version<'a>(
