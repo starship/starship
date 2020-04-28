@@ -60,11 +60,6 @@ impl<'a> StringFormatter<'a> {
             })
     }
 
-    /// Get variable names extracted from the format string
-    pub fn get_variables(&self) -> Vec<&str> {
-        self.variables.keys().map(|key| key.as_ref()).collect()
-    }
-
     /// Maps variable name to its value
     pub fn map<T: Into<String>>(mut self, mapper: impl Fn(&str) -> Option<T> + Sync) -> Self {
         self.variables

@@ -1,13 +1,14 @@
 use ansi_term::ANSIStrings;
 use clap::ArgMatches;
 use rayon::prelude::*;
+use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
 use std::io::{self, Write};
 use unicode_width::UnicodeWidthChar;
 
 use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Shell};
-use crate::formatter::StringFormatter;
+use crate::formatter::{StringFormatter, VariableHolder};
 use crate::module::Module;
 use crate::module::ALL_MODULES;
 use crate::modules;
@@ -37,11 +38,7 @@ pub fn get_prompt(context: Context) -> String {
         buf.push_str(">");
         return buf;
     };
-    let modules: Vec<String> = formatter
-        .get_variables()
-        .into_iter()
-        .map(|var| var.to_string())
-        .collect();
+    let modules = formatter.get_variables();
     let formatter = formatter.map_variables_to_segments(|module| {
         // Make $all display all modules
         if module == "all" {
@@ -187,10 +184,11 @@ fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
     prompt_order
 }
 
-fn handle_module<'a, T>(module: &str, context: &'a Context, module_list: &[T]) -> Vec<Module<'a>>
-where
-    T: AsRef<str>,
-{
+fn handle_module<'a>(
+    module: &str,
+    context: &'a Context,
+    module_list: &BTreeSet<String>,
+) -> Vec<Module<'a>> {
     struct DebugCustomModules<'tmp>(&'tmp toml::value::Table);
 
     impl Debug for DebugCustomModules<'_> {
@@ -249,18 +247,13 @@ where
     modules.into_iter().flatten().collect()
 }
 
-fn should_add_implicit_custom_module<T>(
+fn should_add_implicit_custom_module(
     custom_module: &str,
     config: &toml::Value,
-    config_prompt_order: &[T],
-) -> bool
-where
-    T: AsRef<str>,
-{
-    let is_explicitly_specified = config_prompt_order.iter().any(|x| {
-        let x: &str = x.as_ref();
-        x.len() == 7 + custom_module.len() && &x[..7] == "custom." && &x[7..] == custom_module
-    });
+    module_list: &BTreeSet<String>,
+) -> bool {
+    let explicit_module_name = format!("custom.{}", custom_module);
+    let is_explicitly_specified = module_list.contains(&explicit_module_name);
 
     if is_explicitly_specified {
         // The module is already specified explicitly, so we skip it
