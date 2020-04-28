@@ -219,21 +219,27 @@ where
 
     let mut modules: Vec<Option<Module>> = Vec::new();
 
-    if ALL_MODULES.contains(&module) {
-        // Write out a module if it isn't disabled
-        if !context.is_module_disabled_in_config(module) {
-            modules.push(modules::handle(module, &context));
-        }
-    } else if module == "custom" {
-        // Write out all custom modules, except for those that are explicitly set
-        if let Some(custom_modules) = context.config.get_custom_modules() {
-            let custom_modules = custom_modules
-                .iter()
-                .map(|(custom_module, config)| {
-                    if should_add_implicit_custom_module(custom_module, config, &module_list) {
-                        modules::custom::module(custom_module, &context)
-                    } else {
-                        None
+    let config = context.config.get_root_config();
+    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
+        formatter
+    } else {
+        log::error!("Error parsing `format`");
+        return Vec::new();
+    };
+    let modules = formatter.get_variables();
+
+    for module in modules {
+        if ALL_MODULES.contains(&module) {
+            // Write out a module if it isn't disabled
+            if !context.is_module_disabled_in_config(module) {
+                prompt_order.push(Mod::Builtin(module));
+            }
+        } else if module == "custom" {
+            // Write out all custom modules, except for those that are explicitly set
+            if let Some(custom_modules) = context.config.get_custom_modules() {
+                for (custom_module, config) in custom_modules {
+                    if should_add_implicit_custom_module(custom_module, config, &modules) {
+                        prompt_order.push(Mod::Custom(custom_module));
                     }
                 })
                 .collect::<Vec<Option<Module<'a>>>>();
