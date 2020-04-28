@@ -146,7 +146,7 @@ is read from the `AWS_VAULT` env var.
 | Variable          | Default         | Description                                                                 |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
+| `displayed_items` | [`all`]         | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 | `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
 | `style`           | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`        | `false`         | Disables the `AWS` module.                                                  |
@@ -159,7 +159,7 @@ is read from the `AWS_VAULT` env var.
 [aws]
 style = "bold blue"
 symbol = "🅰 "
-displayed_items = "region"
+displayed_items = ["region"]
 [aws.region_aliases]
 ap-southeast-2 = "au"
 us-east-1 = "va"
