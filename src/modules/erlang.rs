@@ -57,7 +57,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
 
         let expected = None;
-        let output = render_module("erlang", dir.path());
+        let output = render_module("erlang", dir.path(), None);
 
         assert_eq!(output, expected);
 
@@ -70,7 +70,7 @@ mod tests {
         File::create(dir.path().join("rebar.config"))?.sync_all()?;
 
         let expected = Some(format!("via {} ", Color::Red.bold().paint("🖧 22.1.3")));
-        let output = render_module("erlang", dir.path());
+        let output = render_module("erlang", dir.path(), None);
 
         assert_eq!(output, expected);
 

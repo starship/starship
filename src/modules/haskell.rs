@@ -54,7 +54,7 @@ mod tests {
     #[test]
     fn folder_without_stack_yaml() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = render_module("haskell", dir.path());
+        let actual = render_module("haskell", dir.path(), None);
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -64,7 +64,7 @@ mod tests {
     fn folder_with_hpack_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("package.yaml"))?.sync_all()?;
-        let actual = render_module("haskell", dir.path());
+        let actual = render_module("haskell", dir.path(), None);
         let expected = Some(format!("via {} ", Color::Red.bold().paint("λ v8.6.5")));
         assert_eq!(expected, actual);
         dir.close()
@@ -73,7 +73,7 @@ mod tests {
     fn folder_with_cabal_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("test.cabal"))?.sync_all()?;
-        let actual = render_module("haskell", dir.path());
+        let actual = render_module("haskell", dir.path(), None);
         let expected = Some(format!("via {} ", Color::Red.bold().paint("λ v8.6.5")));
         assert_eq!(expected, actual);
         dir.close()
@@ -83,7 +83,7 @@ mod tests {
     fn folder_with_stack_yaml() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("stack.yaml"))?.sync_all()?;
-        let actual = render_module("haskell", dir.path());
+        let actual = render_module("haskell", dir.path(), None);
         let expected = Some(format!("via {} ", Color::Red.bold().paint("λ v8.6.5")));
         assert_eq!(expected, actual);
         dir.close()
