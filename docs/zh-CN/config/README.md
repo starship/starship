@@ -1009,11 +1009,12 @@ The `package` module is shown when the current directory is the repository for a
 
 ### 配置项
 
-| 字段         | 默认值          | 描述                                                         |
-| ---------- | ------------ | ---------------------------------------------------------- |
-| `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | 此组件的样式。                                                    |
-| `disabled` | `false`      | Disables the `package` module.                             |
+| 字段                | 默认值          | 描述                                                         |
+| ----------------- | ------------ | ---------------------------------------------------------- |
+| `symbol`          | `"📦 "`       | The symbol used before displaying the version the package. |
+| `style`           | `"bold red"` | 此组件的样式。                                                    |
+| `display_private` | `false`      | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`      | Disables the `package` module.                             |
 
 ### 示例
 
