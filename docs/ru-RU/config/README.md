@@ -1009,11 +1009,12 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Опции
 
-| Переменная | По умолчанию | Описание                                                   |
-| ---------- | ------------ | ---------------------------------------------------------- |
-| `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | Стиль модуля.                                              |
-| `disabled` | `false`      | Disables the `package` module.                             |
+| Переменная        | По умолчанию | Описание                                                   |
+| ----------------- | ------------ | ---------------------------------------------------------- |
+| `symbol`          | `"📦 "`       | The symbol used before displaying the version the package. |
+| `style`           | `"bold red"` | Стиль модуля.                                              |
+| `display_private` | `false`      | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`      | Disables the `package` module.                             |
 
 ### Пример
 
