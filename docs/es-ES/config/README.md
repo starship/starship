@@ -1009,11 +1009,12 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Opciones
 
-| Variable   | Por defecto  | Descripción                                                |
-| ---------- | ------------ | ---------------------------------------------------------- |
-| `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | El estilo del módulo.                                      |
-| `disabled` | `false`      | Disables the `package` module.                             |
+| Variable          | Por defecto  | Descripción                                                |
+| ----------------- | ------------ | ---------------------------------------------------------- |
+| `symbol`          | `"📦 "`       | The symbol used before displaying the version the package. |
+| `style`           | `"bold red"` | El estilo del módulo.                                      |
+| `display_private` | `false`      | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`      | Disables the `package` module.                             |
 
 ### Ejemplo
 
