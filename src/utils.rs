@@ -73,10 +73,12 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             stdout: String::from("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]"),
             stderr: String::default(),
         }),
-        "stack ghc -- --numeric-version --no-install-ghc" => Some(CommandOutput {
-            stdout: String::from("8.6.5"),
-            stderr: String::default(),
-        }),
+        "stack --no-install-ghc --lock-file read-only ghc -- --numeric-version" => {
+            Some(CommandOutput {
+                stdout: String::from("8.6.5"),
+                stderr: String::default(),
+            })
+        }
         "elixir --version" => Some(CommandOutput {
             stdout: String::from(
                 "\
