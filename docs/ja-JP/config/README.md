@@ -1009,11 +1009,12 @@ The `package` module is shown when the current directory is the repository for a
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                                                         |
-| ---------- | ------------ | ---------------------------------------------------------- |
-| `symbol`   | `"📦 "`       | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | モジュールのスタイルです。                                              |
-| `disabled` | `false`      | Disables the `package` module.                             |
+| 変数                | デフォルト        | 説明                                                         |
+| ----------------- | ------------ | ---------------------------------------------------------- |
+| `symbol`          | `"📦 "`       | The symbol used before displaying the version the package. |
+| `style`           | `"bold red"` | モジュールのスタイルです。                                              |
+| `display_private` | `false`      | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`      | Disables the `package` module.                             |
 
 ### 設定例
 
