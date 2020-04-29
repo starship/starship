@@ -41,12 +41,11 @@ mod tests {
     use ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
-    use tempfile;
 
     #[test]
     fn folder_without_node_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = render_module("nodejs", dir.path());
+        let actual = render_module("nodejs", dir.path(), None);
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -57,7 +56,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("package.json"))?.sync_all()?;
 
-        let actual = render_module("nodejs", dir.path());
+        let actual = render_module("nodejs", dir.path(), None);
         let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
         assert_eq!(expected, actual);
         dir.close()
@@ -68,7 +67,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".node-version"))?.sync_all()?;
 
-        let actual = render_module("nodejs", dir.path());
+        let actual = render_module("nodejs", dir.path(), None);
         let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
         assert_eq!(expected, actual);
         dir.close()
@@ -79,7 +78,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("index.js"))?.sync_all()?;
 
-        let actual = render_module("nodejs", dir.path());
+        let actual = render_module("nodejs", dir.path(), None);
         let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
         assert_eq!(expected, actual);
         dir.close()
@@ -91,7 +90,7 @@ mod tests {
         let node_modules = dir.path().join("node_modules");
         fs::create_dir_all(&node_modules)?;
 
-        let actual = render_module("nodejs", dir.path());
+        let actual = render_module("nodejs", dir.path(), None);
         let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
         assert_eq!(expected, actual);
         dir.close()

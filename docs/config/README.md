@@ -105,6 +105,7 @@ prompt_order = [
     "dotnet",
     "elixir",
     "elm",
+    "erlang",
     "golang",
     "haskell",
     "java",
@@ -521,6 +522,29 @@ The module will be shown if any of the following conditions are met:
 symbol = " "
 ```
 
+## Erlang
+
+The `erlang` module shows the currently installed version of Erlang/OTP.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
+
+### Options
+
+| Variable   | Default | Description                                                     |
+| ---------- | ------- | --------------------------------------------------------------- |
+| `symbol`   | `"🖧 "` | The symbol used before displaying the version of Erlang. |
+| `disabled` | `false` | Disables the `erlang` module.                                   |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[erlang]
+symbol = "e "
+```
 ## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable.
@@ -1053,11 +1077,12 @@ package, and shows its current version. The module currently supports `npm`, `ca
 
 ### Options
 
-| Variable   | Default      | Description                                                |
-| ---------- | ------------ | ---------------------------------------------------------- |
-| `symbol`   | `"📦 "`      | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | The style for the module.                                  |
-| `disabled` | `false`      | Disables the `package` module.                             |
+| Variable          | Default      | Description                                                |
+| ----------------- | ------------ | ---------------------------------------------------------- |
+| `symbol`          | `"📦 "`      | The symbol used before displaying the version the package. |
+| `style`           | `"bold red"` | The style for the module.                                  |
+| `display_private` | `false`      | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`      | Disables the `package` module.                             |
 
 ### Example
 
@@ -1109,9 +1134,11 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `.python-version` file
 - The current directory contains a `requirements.txt` file
 - The current directory contains a `pyproject.toml` file
-- The current directory contains a file with the `.py` extension
+- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - The current directory contains a `Pipfile` file
 - The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `__init__.py` file
 - A virtual environment is currently activated
 
 ### Options
@@ -1121,6 +1148,7 @@ The module will be shown if any of the following conditions are met:
 | `symbol`             | `"🐍 "`         | The symbol used before displaying the version of Python.                    |
 | `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
 | `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
+| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.  |
 | `style`              | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
 
@@ -1190,8 +1218,6 @@ symbol = "⚙️ "
 
 The `singularity` module shows the current singularity image, if inside a container
 and `$SINGULARITY_NAME` is set.
-
-:::
 
 ### Options
 

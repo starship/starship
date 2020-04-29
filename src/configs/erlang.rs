@@ -4,19 +4,19 @@ use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
-pub struct PackageConfig<'a> {
+pub struct ErlangConfig<'a> {
     pub symbol: SegmentConfig<'a>,
+    pub version: SegmentConfig<'a>,
     pub style: Style,
-    pub display_private: bool,
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for PackageConfig<'a> {
+impl<'a> RootModuleConfig<'a> for ErlangConfig<'a> {
     fn new() -> Self {
-        PackageConfig {
-            symbol: SegmentConfig::new("📦 "),
-            style: Color::Fixed(208).bold(),
-            display_private: false,
+        ErlangConfig {
+            symbol: SegmentConfig::new("🖧 "),
+            version: SegmentConfig::default(),
+            style: Color::Red.bold(),
             disabled: false,
         }
     }

@@ -73,10 +73,12 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             stdout: String::from("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]"),
             stderr: String::default(),
         }),
-        "stack ghc -- --numeric-version --no-install-ghc" => Some(CommandOutput {
-            stdout: String::from("8.6.5"),
-            stderr: String::default(),
-        }),
+        "stack --no-install-ghc --lock-file read-only ghc -- --numeric-version" => {
+            Some(CommandOutput {
+                stdout: String::from("8.6.5"),
+                stderr: String::default(),
+            })
+        }
         "elixir --version" => Some(CommandOutput {
             stdout: String::from(
                 "\
@@ -84,6 +86,10 @@ Erlang/OTP 22 [erts-10.6.4] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threa
 
 Elixir 1.10 (compiled with Erlang/OTP 22)",
             ),
+            stderr: String::default(),
+        }),
+        s if s.starts_with("erl") => Some(CommandOutput {
+            stdout: String::from("22.1.3"),
             stderr: String::default(),
         }),
         // If we don't have a mocked command fall back to executing the command
@@ -141,16 +147,17 @@ pub fn wrap_seq_for_shell(
 }
 
 fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
-    log::trace!("Executing command '{:?}' with args '{:?}'", cmd, args);
+    log::trace!("Executing command {:?} with args {:?}", cmd, args);
     match Command::new(cmd).args(args).output() {
         Ok(output) => {
             let stdout_string = String::from_utf8(output.stdout).unwrap();
             let stderr_string = String::from_utf8(output.stderr).unwrap();
 
+            log::trace!("stdout: {:?}", stdout_string);
+            log::trace!("stderr: {:?}", stderr_string);
+            log::trace!("exit code: \"{:?}\"", output.status.code());
+
             if !output.status.success() {
-                log::trace!("Non-zero exit code '{:?}'", output.status.code());
-                log::trace!("stdout: {}", stdout_string);
-                log::trace!("stderr: {}", stderr_string);
                 return None;
             }
 

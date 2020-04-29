@@ -11,6 +11,7 @@ mod dotnet;
 mod elixir;
 mod elm;
 mod env_var;
+mod erlang;
 mod git_branch;
 mod git_commit;
 mod git_state;
@@ -60,6 +61,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "dotnet" => dotnet::module(context),
         "elixir" => elixir::module(context),
         "elm" => elm::module(context),
+        "erlang" => erlang::module(context),
         "env_var" => env_var::module(context),
         "git_branch" => git_branch::module(context),
         "git_commit" => git_commit::module(context),
@@ -103,15 +105,18 @@ pub fn description(module: &str) -> &'static str {
         }
         "cmd_duration" => "How long the last command took to execute",
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
+        "crystal" => "The currently installed version of Crystal",
         "directory" => "The current working directory",
         "docker_context" => "The current docker context",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
         "env_var" => "Displays the current value of a selected environment variable",
+        "erlang" => "Current OTP version",
         "git_branch" => "The active branch of the repo in your current directory",
         "git_commit" => "The active commit (and tag if any) of the repo in your current directory",
         "git_state" => "The current git operation, and it's progress",
         "git_status" => "Symbol representing the state of the repo",
         "golang" => "The currently installed version of Golang",
+        "haskell" => "The currently used version of Haskell",
         "hg_branch" => "The active branch of the repo in your current directory",
         "hostname" => "The system hostname",
         "java" => "The currently installed version of Java",
