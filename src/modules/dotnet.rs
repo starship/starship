@@ -42,14 +42,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Internally, this module uses its own mechanism for version detection.
     // Typically it is twice as fast as running `dotnet --version`.
     let enable_heuristic = config.heuristic;
-    let version = if enable_heuristic {
-        let repo_root = context.get_repo().ok().and_then(|r| r.root.as_deref());
-        estimate_dotnet_version(&dotnet_files, &context.current_dir, repo_root)?
-    } else {
-        get_version_from_cli()?
-    };
-
-    let current_tfm = find_current_tfm(&dotnet_files);
 
     let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
         formatter
@@ -59,14 +51,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "symbol" => Some(config.symbol),
-                "version" => Some(&version.0),
-                "tfm" => {
-                    if current_tfm.is_some() {
-                        Some(current_tfm.as_ref().unwrap())
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => {
+                    let version = if enable_heuristic {
+                        let repo_root = context.get_repo().ok().and_then(|r| r.root.as_deref());
+                        estimate_dotnet_version(&dotnet_files, &context.current_dir, repo_root)?
                     } else {
-                        None
-                    }
+                        get_version_from_cli()?
+                    };
+                    Some(version.0)
                 }
+                "tfm" => find_current_tfm(&dotnet_files),
                 _ => None,
             })
     } else {
