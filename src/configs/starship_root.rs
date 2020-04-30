@@ -47,7 +47,7 @@ pub const PROMPT_ORDER: [&str; 37] = [
     "env_var",
     "cmd_duration",
     "custom",
-    "\n",
+    "line_break",
     "jobs",
     #[cfg(feature = "battery")]
     "battery",

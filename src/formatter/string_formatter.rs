@@ -92,11 +92,6 @@ impl<'a> StringFormatter<'a> {
             .map_err(StringFormatterError::Parse)
     }
 
-    /// Get variable names extracted from the format string
-    pub fn get_variables(&self) -> Vec<&str> {
-        self.variables.keys().map(|key| key.as_ref()).collect()
-    }
-
     /// Maps variable name to its value
     ///
     /// You should provide a function or closure that accepts the variable name `name: &str` as a

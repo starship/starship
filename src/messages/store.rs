@@ -101,11 +101,12 @@ pub fn get_segments(config: &MessagesConfig) -> Vec<Segment> {
             Ok(formatter) => Some(
                 formatter
                     .map(|variable| match variable {
-                        "level" => Some(message.level.to_str().to_owned()),
-                        "message" => Some(message.message.to_string()),
+                        "level" => Some(Ok(message.level.to_str())),
+                        "message" => Some(Ok(message.message)),
                         _ => None,
                     })
-                    .parse(None),
+                    .parse(None)
+                    .unwrap(),
             ),
             Err(error) => {
                 log::error!("Error parsing `messages.format`:\n{}", error);

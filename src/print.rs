@@ -1,13 +1,14 @@
 use ansi_term::ANSIStrings;
 use clap::ArgMatches;
 use rayon::prelude::*;
+use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
 use std::io::{self, Write};
 use unicode_width::UnicodeWidthChar;
 
 use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Shell};
-use crate::formatter::StringFormatter;
+use crate::formatter::{StringFormatter, VariableHolder};
 use crate::messages::{msg, store as msg_store};
 use crate::module::Module;
 use crate::module::ALL_MODULES;
@@ -38,43 +39,27 @@ pub fn get_prompt(context: Context) -> String {
         buf.push_str(">");
         return buf;
     };
-    let modules: Vec<String> = formatter
-        .get_variables()
-        .into_iter()
-        .map(|var| var.to_string())
-        .collect();
+    let modules = formatter.get_variables();
     let formatter = formatter.map_variables_to_segments(|module| {
         // Make $all display all modules
         if module == "all" {
-            Some(
-                PROMPT_ORDER
-                    .par_iter()
-                    .flat_map(|module| match *module {
-                        "\n" => {
-                            let mut line_break = Segment::new("line_break");
-                            line_break.set_value("\n");
-                            Some(vec![line_break])
-                        }
-                        _ => Some(
-                            handle_module(module, &context, &modules)
-                                .into_iter()
-                                .flat_map(|module| module.segments)
-                                .collect::<Vec<Segment>>(),
-                        ),
-                    })
-                    .flatten()
-                    .collect::<Vec<_>>(),
-            )
+            Some(Ok(PROMPT_ORDER
+                .par_iter()
+                .flat_map(|module| {
+                    handle_module(module, &context, &modules)
+                        .into_iter()
+                        .flat_map(|module| module.segments)
+                        .collect::<Vec<Segment>>()
+                })
+                .collect::<Vec<_>>()))
         } else if context.is_module_disabled_in_config(&module) {
             None
         } else {
             // Get segments from module
-            Some(
-                handle_module(module, &context, &modules)
-                    .into_iter()
-                    .flat_map(|module| module.segments)
-                    .collect::<Vec<Segment>>(),
-            )
+            Some(Ok(handle_module(module, &context, &modules)
+                .into_iter()
+                .flat_map(|module| module.segments)
+                .collect::<Vec<Segment>>()))
         }
     });
 
@@ -88,7 +73,11 @@ pub fn get_prompt(context: Context) -> String {
 
     // Inserts messages before all segments if there are some messages
     let mut segments = msg_store::get_segments(&config.messages);
-    segments.extend(formatter.parse(None));
+    segments.extend(
+        formatter
+            .parse(None)
+            .expect("Unexpected error returned in root format variables"),
+    );
 
     // Update viewed messages
     if let Err(error) = msg_store::update_viewed_hash() {
@@ -195,20 +184,29 @@ fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
         log::error!("Error parsing `format`");
         return Vec::new();
     };
-    let modules = formatter.get_variables().clone();
+    let modules = formatter.get_variables();
 
     for module in &modules {
-        let modules = handle_module(module, &context, &modules);
-        prompt_order.extend(modules.into_iter());
+        // Manually add all modules if `$all` is encountered
+        if module == "all" {
+            for module in PROMPT_ORDER.iter() {
+                let modules = handle_module(module, &context, &modules);
+                prompt_order.extend(modules.into_iter());
+            }
+        } else {
+            let modules = handle_module(module, &context, &modules);
+            prompt_order.extend(modules.into_iter());
+        }
     }
 
     prompt_order
 }
 
-fn handle_module<'a, T>(module: &str, context: &'a Context, module_list: &[T]) -> Vec<Module<'a>>
-where
-    T: AsRef<str>,
-{
+fn handle_module<'a>(
+    module: &str,
+    context: &'a Context,
+    module_list: &BTreeSet<String>,
+) -> Vec<Module<'a>> {
     struct DebugCustomModules<'tmp>(&'tmp toml::value::Table);
 
     impl Debug for DebugCustomModules<'_> {
@@ -219,27 +217,21 @@ where
 
     let mut modules: Vec<Option<Module>> = Vec::new();
 
-    let config = context.config.get_root_config();
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-        formatter
-    } else {
-        log::error!("Error parsing `format`");
-        return Vec::new();
-    };
-    let modules = formatter.get_variables();
-
-    for module in modules {
-        if ALL_MODULES.contains(&module) {
-            // Write out a module if it isn't disabled
-            if !context.is_module_disabled_in_config(module) {
-                prompt_order.push(Mod::Builtin(module));
-            }
-        } else if module == "custom" {
-            // Write out all custom modules, except for those that are explicitly set
-            if let Some(custom_modules) = context.config.get_custom_modules() {
-                for (custom_module, config) in custom_modules {
-                    if should_add_implicit_custom_module(custom_module, config, &modules) {
-                        prompt_order.push(Mod::Custom(custom_module));
+    if ALL_MODULES.contains(&module) {
+        // Write out a module if it isn't disabled
+        if !context.is_module_disabled_in_config(module) {
+            modules.push(modules::handle(module, &context));
+        }
+    } else if module == "custom" {
+        // Write out all custom modules, except for those that are explicitly set
+        if let Some(custom_modules) = context.config.get_custom_modules() {
+            let custom_modules = custom_modules
+                .iter()
+                .map(|(custom_module, config)| {
+                    if should_add_implicit_custom_module(custom_module, config, &module_list) {
+                        modules::custom::module(custom_module, &context)
+                    } else {
+                        None
                     }
                 })
                 .collect::<Vec<Option<Module<'a>>>>();
@@ -273,18 +265,13 @@ where
     modules.into_iter().flatten().collect()
 }
 
-fn should_add_implicit_custom_module<T>(
+fn should_add_implicit_custom_module(
     custom_module: &str,
     config: &toml::Value,
-    config_prompt_order: &[T],
-) -> bool
-where
-    T: AsRef<str>,
-{
-    let is_explicitly_specified = config_prompt_order.iter().any(|x| {
-        let x: &str = x.as_ref();
-        x.len() == 7 + custom_module.len() && &x[..7] == "custom." && &x[7..] == custom_module
-    });
+    module_list: &BTreeSet<String>,
+) -> bool {
+    let explicit_module_name = format!("custom.{}", custom_module);
+    let is_explicitly_specified = module_list.contains(&explicit_module_name);
 
     if is_explicitly_specified {
         // The module is already specified explicitly, so we skip it
