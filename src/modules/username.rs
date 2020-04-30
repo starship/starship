@@ -1,13 +1,15 @@
 use std::env;
-use std::mem;
 
 use super::{Context, Module, RootModuleConfig, SegmentConfig};
 use crate::configs::username::UsernameConfig;
 
 #[cfg(target_os = "windows")]
 use std::ptr::null_mut;
+#[cfg(target_os = "windows")]
 use winapi::shared::minwindef::{BOOL, DWORD, FALSE, PBOOL, PDWORD, TRUE};
+#[cfg(target_os = "windows")]
 use winapi::um::errhandlingapi::GetLastError;
+#[cfg(target_os = "windows")]
 use winapi::um::winnt::PVOID;
 
 /// Creates a module with the current user's username
@@ -68,8 +70,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(not(target_os = "windows"))]
 fn is_admin() -> bool {
-    use libc;
-
     const ROOT_UID: u32 = 0u32;
     unsafe {
         match libc::geteuid() {
@@ -89,7 +89,7 @@ fn is_admin() -> bool {
     unsafe {
         let mut admin_sid = vec![0u8; SECURITY_MAX_SID_SIZE];
         let admin_sid_ptr = admin_sid.as_mut_ptr() as PVOID;
-        let mut sid_size = (mem::size_of::<u8>() * SECURITY_MAX_SID_SIZE) as DWORD;
+        let mut sid_size = (std::mem::size_of::<u8>() * SECURITY_MAX_SID_SIZE) as DWORD;
 
         if CreateWellKnownSid(
             WinBuiltinAdministratorsSid,
@@ -188,7 +188,7 @@ fn get_username() -> Option<String> {
 /// Get the user name on non-Windows OS
 ///
 #[cfg(not(target_os = "windows"))]
-const fn get_username() -> Option<String> {
+fn get_username() -> Option<String> {
     match env::var("USER") {
         Ok(username) => Some(username),
         Err(ref e) => {
