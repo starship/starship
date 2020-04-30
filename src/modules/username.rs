@@ -23,9 +23,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: UsernameConfig = UsernameConfig::try_load(module.config);
 
     let user = get_username();
-    if user.is_none() {
-        return None;
-    }
+    user.as_ref()?;
 
     let domain = get_userdomain();
 
@@ -39,9 +37,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     log::debug!("user is admin: {}", user_is_admin);
 
     if user != logname || ssh_connection.is_some() || user_is_admin || config.show_always {
-        let module_style = match user_is_admin {
-            true => config.style_root,
-            false => config.style_user,
+        let module_style = if user_is_admin {
+            config.style_root
+        } else {
+            config.style_user
         };
 
         module.set_style(module_style);
