@@ -42,35 +42,23 @@ pub fn get_prompt(context: Context) -> String {
     let formatter = formatter.map_variables_to_segments(|module| {
         // Make $all display all modules
         if module == "all" {
-            Some(
-                PROMPT_ORDER
-                    .par_iter()
-                    .flat_map(|module| match *module {
-                        "\n" => {
-                            let mut line_break = Segment::new("line_break");
-                            line_break.set_value("\n");
-                            Some(vec![line_break])
-                        }
-                        _ => Some(
-                            handle_module(module, &context, &modules)
-                                .into_iter()
-                                .flat_map(|module| module.segments)
-                                .collect::<Vec<Segment>>(),
-                        ),
-                    })
-                    .flatten()
-                    .collect::<Vec<_>>(),
-            )
+            Some(Ok(PROMPT_ORDER
+                .par_iter()
+                .flat_map(|module| {
+                    handle_module(module, &context, &modules)
+                        .into_iter()
+                        .flat_map(|module| module.segments)
+                        .collect::<Vec<Segment>>()
+                })
+                .collect::<Vec<_>>()))
         } else if context.is_module_disabled_in_config(&module) {
             None
         } else {
             // Get segments from module
-            Some(
-                handle_module(module, &context, &modules)
-                    .into_iter()
-                    .flat_map(|module| module.segments)
-                    .collect::<Vec<Segment>>(),
-            )
+            Some(Ok(handle_module(module, &context, &modules)
+                .into_iter()
+                .flat_map(|module| module.segments)
+                .collect::<Vec<Segment>>()))
         }
     });
 
@@ -78,7 +66,11 @@ pub fn get_prompt(context: Context) -> String {
     let mut root_module = Module::new("Starship Root", "The root module", None);
     root_module.get_prefix().set_value("");
     root_module.get_suffix().set_value("");
-    root_module.set_segments(formatter.parse(None));
+    root_module.set_segments(
+        formatter
+            .parse(None)
+            .expect("Unexpected error returned in root format variables"),
+    );
 
     let module_strings = root_module.ansi_strings_for_shell(context.shell.clone());
     write!(buf, "{}", ANSIStrings(&module_strings)).unwrap();
@@ -174,11 +166,19 @@ fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
         log::error!("Error parsing `format`");
         return Vec::new();
     };
-    let modules = formatter.get_variables().clone();
+    let modules = formatter.get_variables();
 
     for module in &modules {
-        let modules = handle_module(module, &context, &modules);
-        prompt_order.extend(modules.into_iter());
+        // Manually add all modules if `$all` is encountered
+        if module == "all" {
+            for module in PROMPT_ORDER.iter() {
+                let modules = handle_module(module, &context, &modules);
+                prompt_order.extend(modules.into_iter());
+            }
+        } else {
+            let modules = handle_module(module, &context, &modules);
+            prompt_order.extend(modules.into_iter());
+        }
     }
 
     prompt_order
