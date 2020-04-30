@@ -64,6 +64,12 @@ term_size = "0.3.1"
 attohttpc = { version = "0.13.0", optional = true, default-features = false, features = ["tls", "form"] }
 native-tls = { version = "0.2", optional = true }
 
+[target.'cfg(windows)'.dependencies]
+winapi = "0.3.8"
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2.69"
+
 [dev-dependencies]
 tempfile = "3.1.0"
 # More realiable than std::fs version on Windows
