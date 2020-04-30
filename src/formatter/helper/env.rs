@@ -1,23 +1,24 @@
-use std::borrow::Cow;
 use std::env;
+
+use crate::formatter::StringFormatterError;
 
 /// Helper function compatible to specification of `ini` files
 ///
 /// - `${env:VAR}`: Displays value of environment variable `VAR`. None if `VAR` does not exist.
 /// - `${env:VAR:fallback value}`: Displays value of environment variable `VAR`. Returns
 /// "fallback value" if `VAR` is not found.
-pub fn env_helper(variable: &str) -> Option<Cow<str>> {
+pub fn env_helper(variable: &str) -> Option<Result<String, StringFormatterError>> {
     if variable.starts_with("env:") {
         let expression: &str = &variable[4..];
         if let Some(index) = expression.find(':') {
             let name: &str = &expression[..index];
-            get_env_value(name).map(Cow::Owned).or_else(|| {
+            get_env_value(name).map(Ok).or_else(|| {
                 let fallback_value: &str = &expression[index + 1..];
-                Some(Cow::Borrowed(fallback_value))
+                Some(Ok(fallback_value.to_owned()))
             })
         } else {
             let name: &str = expression;
-            get_env_value(name).map(Cow::Owned)
+            get_env_value(name).map(Ok)
         }
     } else {
         None
@@ -59,7 +60,7 @@ mod tests {
         const FORMAT_STR: &str = "${env:_ENV_TEST}";
 
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(env_helper);
-        let result = formatter.parse(None);
+        let result = formatter.parse(None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "SOME_VAR", None);
     }
@@ -69,7 +70,7 @@ mod tests {
         const FORMAT_STR: &str = "${env:_ENV_NOTFOUND}";
 
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(env_helper);
-        let result = formatter.parse(None);
+        let result = formatter.parse(None).unwrap();
         assert_eq!(result.len(), 0);
     }
 
@@ -78,7 +79,7 @@ mod tests {
         const FORMAT_STR: &str = "${env:_ENV_NOTFOUND:fallback}";
 
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(env_helper);
-        let result = formatter.parse(None);
+        let result = formatter.parse(None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "fallback", None);
     }
