@@ -171,13 +171,14 @@ The module is only visible when the device's battery is below 10%.
 
 ### Options
 
-| Variable             | Default                  | Description                                       |
-| -------------------- | ------------------------ | ------------------------------------------------- |
-| `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
-| `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
-| `display`            | [link](#battery-display) | Display threshold and style for the module.       |
-| `disabled`           | `false`                  | Disables the `battery` module.                    |
+| Variable             | Default                            | Description                                       |
+| -------------------- | ---------------------------------- | ------------------------------------------------- |
+| `full_symbol`        | `"•"`                              | The symbol shown when the battery is full.        |
+| `charging_symbol`    | `"⇡"`                              | The symbol shown when the battery is charging.    |
+| `discharging_symbol` | `"⇣"`                              | The symbol shown when the battery is discharging. |
+| `format`             | `"[$symbol $percentage]($style) "` | The format for the module.                        | 
+| `display`            | [link](#battery-display)           | Display threshold and style for the module.       |
+| `disabled`           | `false`                            | Disables the `battery` module.                    |
 
 <details>
 <summary>There are also options for some uncommon battery states.</summary>
