@@ -1,10 +1,24 @@
+use std::borrow::Cow;
 use std::env;
 
-/// Helper function that maps `env:ENV` to the corresponding environment variable `$ENV`
-pub fn env_helper(variable: &str) -> Option<String> {
+/// Helper function compatible to specification of `ini` files
+///
+/// - `${env:VAR}`: Displays value of environment variable `VAR`. None if `VAR` does not exist.
+/// - `${env:VAR:fallback value}`: Displays value of environment variable `VAR`. Returns
+/// "fallback value" if `VAR` is not found.
+pub fn env_helper(variable: &str) -> Option<Cow<str>> {
     if variable.starts_with("env:") {
-        let name: &str = &variable[4..];
-        get_env_value(name)
+        let expression: &str = &variable[4..];
+        if let Some(index) = expression.find(':') {
+            let name: &str = &expression[..index];
+            get_env_value(name).map(Cow::Owned).or_else(|| {
+                let fallback_value: &str = &expression[index + 1..];
+                Some(Cow::Borrowed(fallback_value))
+            })
+        } else {
+            let name: &str = expression;
+            get_env_value(name).map(Cow::Owned)
+        }
     } else {
         None
     }
@@ -39,7 +53,7 @@ mod tests {
     }
 
     #[test]
-    fn test_format() {
+    fn test_default() {
         env::set_var("_ENV_TEST", "SOME_VAR");
 
         const FORMAT_STR: &str = "${env:_ENV_TEST}";
@@ -48,5 +62,24 @@ mod tests {
         let result = formatter.parse(None);
         let mut result_iter = result.iter();
         match_next!(result_iter, "SOME_VAR", None);
+    }
+
+    #[test]
+    fn test_notfound() {
+        const FORMAT_STR: &str = "${env:_ENV_NOTFOUND}";
+
+        let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(env_helper);
+        let result = formatter.parse(None);
+        assert_eq!(result.len(), 0);
+    }
+
+    #[test]
+    fn test_fallback() {
+        const FORMAT_STR: &str = "${env:_ENV_NOTFOUND:fallback}";
+
+        let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(env_helper);
+        let result = formatter.parse(None);
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "fallback", None);
     }
 }
