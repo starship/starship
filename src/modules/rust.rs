@@ -25,37 +25,32 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("rust");
     let config = RustConfig::try_load(module.config);
-    let formatter = match StringFormatter::new(config.format) {
-        Ok(formatter) => formatter
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
             .map_style(|variable| match variable {
-                "style" => Some(config.style),
+                "style" => Some(Ok(config.style)),
                 _ => None,
             })
             .map(|variable| match variable {
                 // This may result in multiple calls to `get_module_version` when a user have
                 // multiple `$version` variables defined in `format`.
-                "version" => get_module_version(context),
+                "version" => get_module_version(context).map(Ok),
                 _ => None,
             })
-            .map_variables_to_segments(|variable| match variable {
-                "symbol" => match StringFormatter::new(config.symbol) {
-                    Ok(formatter) => Some(formatter.parse(None)),
-                    Err(error) => {
-                        log::warn!("Error parsing format string in `rust.symbol`:\n{}", error);
-                        None
-                    }
-                },
-                _ => None,
-            }),
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error parsing format string in `rust.format`:\n{}", error);
+            log::warn!("Error in module `rust`:\n{}", error);
             return None;
         }
-    };
-
-    // TODO Returns `None` if formatter has a version variable and its value is `None`
-
-    module.set_segments(formatter.parse(None));
+    });
 
     module.get_prefix().set_value("");
     module.get_suffix().set_value("");
