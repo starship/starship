@@ -18,23 +18,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("battery");
     let config: BatteryConfig = BatteryConfig::try_load(module.config);
 
-    // Parse config under `display`
+    // Parse config under `display`.
+    // Select the first style that match the threshold,
+    // if all thresholds are lower do not display battery module.
     let display_style = config
         .display
         .iter()
-        .find(|display_style| percentage <= display_style.threshold as f32);
+        .find(|display_style| percentage <= display_style.threshold as f32)?;
 
-    // if all thresholds are lower do not display battery module
-    if display_style.is_none() {
-        return None;
-    }
-
-    // parse the format string and build the module
+    // Parse the format string and build the module
     match StringFormatter::new(config.format) {
         Ok(formatter) => {
             let formatter = formatter
                 .map_style(|style| match style {
-                    "style" => Some(Ok(display_style.unwrap().style)),
+                    "style" => Some(Ok(display_style.style)),
                     _ => None,
                 })
                 .map(|variable| match variable {
