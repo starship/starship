@@ -30,41 +30,49 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // parse the format string and build the module
-    if let Ok(formatter) = StringFormatter::new(config.format) {
-        let formatter = formatter
-            .map_style(|style| match style {
-                "style" => Some(display_style.unwrap().style),
-                _ => None,
-            })
-            .map(|variable| match variable {
-                "percentage" => Some(format!("{}{}", percentage.round(), percentage_char)),
-                _ => None,
-            })
-            .map(|variable| match variable {
-                "symbol" => match state {
-                    battery::State::Full => Some(config.full_symbol),
-                    battery::State::Charging => Some(config.charging_symbol),
-                    battery::State::Discharging => Some(config.discharging_symbol),
-                    battery::State::Unknown => {
-                        log::debug!("Unknown detected");
-                        Some(config.unknown_symbol)
-                    }
-                    battery::State::Empty => Some(config.empty_symbol),
-                    _ => {
-                        log::debug!("Unhandled battery state `{}`", state);
-                        None
-                    }
-                },
-                _ => None,
-            });
+    match StringFormatter::new(config.format) {
+        Ok(formatter) => {
+            let formatter = formatter
+                .map_style(|style| match style {
+                    "style" => Some(Ok(display_style.unwrap().style)),
+                    _ => None,
+                })
+                .map(|variable| match variable {
+                    "percentage" => Some(Ok(format!("{}{}", percentage.round(), percentage_char))),
+                    _ => None,
+                })
+                .map(|variable| match variable {
+                    "symbol" => match state {
+                        battery::State::Full => Some(Ok(config.full_symbol)),
+                        battery::State::Charging => Some(Ok(config.charging_symbol)),
+                        battery::State::Discharging => Some(Ok(config.discharging_symbol)),
+                        battery::State::Unknown => Some(Ok(config.unknown_symbol)),
+                        battery::State::Empty => Some(Ok(config.empty_symbol)),
+                        _ => {
+                            log::debug!("Unhandled battery state `{}`", state);
+                            None
+                        }
+                    },
+                    _ => None,
+                });
 
-        module.set_segments(formatter.parse(None));
-        module.get_prefix().set_value("");
-        module.get_suffix().set_value("");
-        Some(module)
-    } else {
-        log::warn!("Error parsing format string in `battery.format`");
-        None
+            match formatter.parse(None) {
+                Ok(format_string) => {
+                    module.set_segments(format_string);
+                    module.get_prefix().set_value("");
+                    module.get_suffix().set_value("");
+                    Some(module)
+                }
+                Err(e) => {
+                    log::warn!("Cannot parse `battery.format`: {}", e);
+                    None
+                }
+            }
+        }
+        Err(e) => {
+            log::warn!("Cannot load `battery.format`: {}", e);
+            None
+        }
     }
 }
 
