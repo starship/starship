@@ -15,6 +15,7 @@ fn no_env_variables() -> io::Result<()> {
 }
 
 #[test]
+#[cfg(not(target_os = "windows"))]
 fn logname_equals_user() -> io::Result<()> {
     let output = common::render_module("username")
         .env("LOGNAME", "astronaut")
@@ -26,6 +27,7 @@ fn logname_equals_user() -> io::Result<()> {
 }
 
 #[test]
+#[cfg(not(target_os = "windows"))]
 fn ssh_wo_username() -> io::Result<()> {
     // SSH connection w/o username
     let output = common::render_module("username")
@@ -37,6 +39,7 @@ fn ssh_wo_username() -> io::Result<()> {
 }
 
 #[test]
+#[cfg(not(target_os = "windows"))]
 fn current_user_not_logname() -> io::Result<()> {
     let output = common::render_module("username")
         .env("LOGNAME", "astronaut")
@@ -50,6 +53,7 @@ fn current_user_not_logname() -> io::Result<()> {
 }
 
 #[test]
+#[cfg(not(target_os = "windows"))]
 fn ssh_connection() -> io::Result<()> {
     let output = common::render_module("username")
         .env("USER", "astronaut")
@@ -63,6 +67,21 @@ fn ssh_connection() -> io::Result<()> {
 }
 
 #[test]
+#[cfg(target_os = "windows")]
+fn ssh_connection() -> io::Result<()> {
+    let output = common::render_module("username")
+        .env("USERNAME", "astronaut")
+        .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("via {} ", Color::Yellow.bold().paint("astronaut"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[cfg(not(target_os = "windows"))]
 fn show_always() -> io::Result<()> {
     let output = common::render_module("username")
         .env("USER", "astronaut")
@@ -74,6 +93,59 @@ fn show_always() -> io::Result<()> {
 
     let expected = format!("via {} ", Color::Yellow.bold().paint("astronaut"));
 
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[cfg(target_os = "windows")]
+fn show_always() -> io::Result<()> {
+    let output = common::render_module("username")
+        .env("USERNAME", "astronaut")
+        .use_config(toml::toml! {
+        [username]
+        show_always = true})
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("via {} ", Color::Yellow.bold().paint("astronaut"));
+
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[cfg(target_os = "windows")]
+fn current_user_local_account() -> io::Result<()> {
+    let output = common::render_module("username")
+        .env("USERNAME", "astronaut")
+        .env("USERDOMAIN", "myhost")
+        .env("COMPUTERNAME", "myhost")
+        .use_config(toml::toml! {
+        [username]
+        show_always = true})
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("via {} ", Color::Yellow.bold().paint("astronaut"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[cfg(target_os = "windows")]
+fn current_user_domain_account() -> io::Result<()> {
+    let output = common::render_module("username")
+        .env("USERNAME", "astronaut")
+        .env("USERDOMAIN", "nasa")
+        .env("COMPUTERNAME", "myhost")
+        .use_config(toml::toml! {
+        [username]
+        show_always = true})
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("via {} ", Color::Yellow.bold().paint("nasa\\astronaut"));
     assert_eq!(expected, actual);
     Ok(())
 }
