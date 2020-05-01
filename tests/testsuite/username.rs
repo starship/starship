@@ -72,6 +72,10 @@ fn ssh_connection() -> io::Result<()> {
     let output = common::render_module("username")
         .env("USERNAME", "astronaut")
         .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
+        .use_config(toml::toml! {
+        [username]
+        style_root	= "bold yellow"
+        style_user	= "bold yellow"})
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -104,7 +108,9 @@ fn show_always() -> io::Result<()> {
         .env("USERNAME", "astronaut")
         .use_config(toml::toml! {
         [username]
-        show_always = true})
+        show_always = true
+        style_root	= "bold yellow"
+        style_user	= "bold yellow"})
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -123,7 +129,9 @@ fn current_user_local_account() -> io::Result<()> {
         .env("COMPUTERNAME", "myhost")
         .use_config(toml::toml! {
         [username]
-        show_always = true})
+        show_always = true
+        style_root	= "bold yellow"
+        style_user	= "bold yellow"})
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -141,7 +149,9 @@ fn current_user_domain_account() -> io::Result<()> {
         .env("COMPUTERNAME", "myhost")
         .use_config(toml::toml! {
         [username]
-        show_always = true})
+        show_always = true
+        style_root	= "bold yellow"
+        style_user	= "bold yellow"})
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
