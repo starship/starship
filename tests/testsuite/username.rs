@@ -74,9 +74,9 @@ fn ssh_connection() -> io::Result<()> {
         .env("USERNAME", "astronaut")
         .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
         .use_config(toml::toml! {
-            [username]
-            style_root	= "bold red"
-            style_user	= "bold red"})
+        [username]
+        style_root	= "bold red"
+        style_user	= "bold red"})
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
