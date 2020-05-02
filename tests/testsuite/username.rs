@@ -7,6 +7,7 @@ use crate::common::{self, TestCommand};
 // Requires mocking
 
 #[test]
+#[cfg(not(target_os = "windows"))]
 fn no_env_variables() -> io::Result<()> {
     let output = common::render_module("username").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
@@ -73,13 +74,13 @@ fn ssh_connection() -> io::Result<()> {
         .env("USERNAME", "astronaut")
         .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
         .use_config(toml::toml! {
-        [username]
-        style_root	= "bold yellow"
-        style_user	= "bold yellow"})
+            [username]
+            style_root	= "bold red"
+            style_user	= "bold red"})
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("astronaut"));
+    let expected = format!("via {} ", Color::Red.bold().paint("astronaut"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -109,12 +110,12 @@ fn show_always() -> io::Result<()> {
         .use_config(toml::toml! {
         [username]
         show_always = true
-        style_root	= "bold yellow"
-        style_user	= "bold yellow"})
+        style_root	= "bold red"
+        style_user	= "bold red"})
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("astronaut"));
+    let expected = format!("via {} ", Color::Red.bold().paint("astronaut"));
 
     assert_eq!(expected, actual);
     Ok(())
@@ -130,12 +131,12 @@ fn current_user_local_account() -> io::Result<()> {
         .use_config(toml::toml! {
         [username]
         show_always = true
-        style_root	= "bold yellow"
-        style_user	= "bold yellow"})
+        style_root	= "bold red"
+        style_user	= "bold red"})
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("astronaut"));
+    let expected = format!("via {} ", Color::Red.bold().paint("astronaut"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -150,12 +151,12 @@ fn current_user_domain_account() -> io::Result<()> {
         .use_config(toml::toml! {
         [username]
         show_always = true
-        style_root	= "bold yellow"
-        style_user	= "bold yellow"})
+        style_root	= "bold red"
+        style_user	= "bold red"})
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("via {} ", Color::Yellow.bold().paint("nasa\\astronaut"));
+    let expected = format!("via {} ", Color::Red.bold().paint("nasa\\astronaut"));
     assert_eq!(expected, actual);
     Ok(())
 }
