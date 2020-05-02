@@ -383,6 +383,8 @@ it would have been `nixpkgs/pkgs`.
 | `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
 | `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
+| `separator`         | `"/"`         | Separator used between each element of the directory path                        |
+| `home`              | `"~"`         | Symbol representing the user's home directory     |
 | `style`             | `"bold cyan"` | The style for the module.                                                        |
 | `disabled`          | `false`       | Disables the `directory` module.                                                 |
 

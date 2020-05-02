@@ -3,7 +3,7 @@ use crate::module::Module;
 
 use crate::modules;
 use clap::ArgMatches;
-use git2::{Repository, RepositoryState};
+use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
 use once_cell::sync::OnceCell;
 use std::collections::{HashMap, HashSet};
 use std::env;
@@ -21,6 +21,7 @@ pub struct Context<'a> {
 
     /// The current working directory that starship is being called in.
     pub current_dir: PathBuf,
+    pub logical_dir: Option<PathBuf>,
 
     /// A struct containing directory contents in a lookup-optimised format.
     dir_contents: OnceCell<DirContents>,
@@ -50,11 +51,13 @@ impl<'a> Context<'a> {
                 })
             });
 
-        Context::new_with_dir(arguments, path)
+        let logical_path: Option<PathBuf> = arguments.value_of("logical-path").map(From::from);
+
+        Context::new_with_dir(arguments, path, logical_path)
     }
 
     /// Create a new instance of Context for the provided directory
-    pub fn new_with_dir<T>(arguments: ArgMatches, dir: T) -> Context
+    pub fn new_with_dir<T>(arguments: ArgMatches, path: T, logical_path: Option<PathBuf>) -> Context
     where
         T: Into<PathBuf>,
     {
@@ -70,15 +73,15 @@ impl<'a> Context<'a> {
             .map(|(a, b)| (*a, b.vals.first().cloned().unwrap().into_string().unwrap()))
             .collect();
 
-        // TODO: Currently gets the physical directory. Get the logical directory.
-        let current_dir = Context::expand_tilde(dir.into());
-
+        let current_dir = Context::expand_tilde(path.into());
+        let logical_dir = logical_path;
         let shell = Context::get_shell();
 
         Context {
             config,
             properties,
             current_dir,
+            logical_dir,
             dir_contents: OnceCell::new(),
             repo: OnceCell::new(),
             shell,
@@ -312,7 +315,19 @@ impl<'a> ScanDir<'a> {
 }
 
 fn get_current_branch(repository: &Repository) -> Option<String> {
-    let head = repository.head().ok()?;
+    let head = match repository.head() {
+        Ok(reference) => reference,
+        Err(e) => {
+            return if e.code() == UnbornBranch {
+                // HEAD should only be an unborn branch if the repository is fresh,
+                // in that case assume "master"
+                Some(String::from("master"))
+            } else {
+                None
+            };
+        }
+    };
+
     let shorthand = head.shorthand();
 
     shorthand.map(std::string::ToString::to_string)

@@ -1,91 +1,91 @@
-# Configuración
+# Configuration
 
 ::: tip
 
-🔥 Este apartado está bajo construcción. Habrá nuevas opciones de configuración disponibles en próximas versiones.
+🔥 Configuration is currently being worked on. Many new configuration options will be available in coming releases.
 
 :::
 
-Para iniciar la configuración de starship, crea el siguiente fichero: `~/.config.toml`.
+To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
 ```sh
 $ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-Toda la configuración de starship se incluye en este fichero [TOML](https://github.com/toml-lang/toml):
+All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 
 ```toml
-# Evita imprimir una nueva linea al comiendo del símbolo del sistema
+# Don't print a new line at the start of the prompt
 add_newline = false
 
-# Reemplaza en el símbolo del sistema el carácter "❯" por "➜"
-[character]       # El nombre del módulo que estamos configurando es "character"
-symbol = "➜"     # El segmento "symbol" se actualiza por "➜"
+# Replace the "❯" symbol in the prompt with "➜"
+[character]      # The name of the module we are configuring is "character"
+symbol = "➜"     # The "symbol" segment is being set to "➜"
 
-# Desactiva el gestor de paquetes, ocultándolo del símbolo de sistema por completo
+# Disable the package module, hiding it from the prompt completely
 [package]
 disabled = true
 ```
 
-Puedes modificar la ubicación por defecto del fichero `starship.toml` con la variable de entorno `STARSHIP_CONFIG`:
+You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
 ```sh
 export STARSHIP_CONFIG=~/.starship
 ```
 
 ### Terminology
 
-**Módulo**: un componente en el símbolo de sistema que provee de información basada en información contextual de tu sistema operativo. Por ejemplo, el módulo "nodejs" muestra la versión de NodeJS que tienes actualmente instalada en tu ordenador, si el directorio actual es un proyecto NodeJS.
+**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
-**Segmento**: sub-componentes más pequeños que forman un módulo. Por ejemplo, el segmento "symbol" en el módulo "nodejs" contiene el carácter que se muestra antes del número de versión (⬢ por defecto).
+**Segment**: Smaller sub-components that compose a module. For example, the "symbol" segment in the "nodejs" module contains the character that is shown before the version number (⬢ by default).
 
-A continuación mostramos la representación del módulo "node". En el siguiente ejemplo, "symbol" y "version" son segmentos que lo contienen. Cada módulo tiene además un prefijo y un sufijo que indican el color por defecto en el terminal.
+Here is the representation of the node module. In the following example, "symbol" and "version" are segments within it. Every module also has a prefix and suffix that are the default terminal color.
 
 ```
 [prefix]      [symbol]     [version]    [suffix]
  "via "         "⬢"        "v10.4.1"       ""
 ```
 
-### Dar estilo a cadenas de texto
+### Style Strings
 
-La mayoría de los módulos de starship permiten configurar los estilos de su cadenas texto. Esto se consigue con una entrada (normalmente llamada `style` - estilo) que no es más que un texto donde se especifica la configuración. A continuación mostramos algunos ejemplos de textos estilados junto con su funcionalidad. Para más detalles sobre la sintaxis completa, consulta [la guía de configuración avanzada](/advanced-config/).
+Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
-- `"fg:green bg:blue"` pone texto verde sobre un fondo azul
-- `"bg:blue fg:bright-green"` pone texto verde claro sobre un fondo azul
-- `"bold fg:27"` pone texto en negrita con [color ANSI](https://i.stack.imgur.com/KTSQa.png) 27
-- `"underline bg:#bf5700"` subraya el texto sobre un fondo naranja oscuro
-- `"bold italic fg:purple"` pone texto color morado, en negrita y cursiva
-- `""` desactiva explícitamente cualquier estilo
+- `"fg:green bg:blue"` sets green text on a blue background
+- `"bg:blue fg:bright-green"` sets bright green text on a blue background
+- `"bold fg:27"` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
+- `"underline bg:#bf5700"` sets underlined text on a burnt orange background
+- `"bold italic fg:purple"` sets bold italic purple text
+- `""` explicitly disables all styling
 
-Nótese que el estilo es similar a como se controlaría por el emulador de su terminal. Por ejemplo, algunos emuladores de terminal harán los colores más brillantes en lugar de más gruesos, y algunos temas usan los mismos valores para texto normal y colores brillantes. Además, para mostrar textos en cursiva tu terminal debe tener soporte para hacerlo.
+Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
-## Símbolo del sistema
+## Prompt
 
-Esta es la lista de opciones de configuración.
+This is the list of prompt-wide configuration options.
 
-### Opciones
+### Options
 
-| Variable       | Por defecto                   | Descripción                                                                     |
-| -------------- | ----------------------------- | ------------------------------------------------------------------------------- |
-| `add_newline`  | `true`                        | Añade una nueva línea antes del símbolo de sistema.                             |
-| `prompt_order` | [link](#default-prompt-order) | Configura el orden en el que se muestran los módulos en el símbolo del sistema. |
-| `scan_timeout` | `30`                          | Tiempo de espera tras el que starship escanea archivos (en milisegundos).       |
+| Variable       | Default                       | Description                                            |
+| -------------- | ----------------------------- | ------------------------------------------------------ |
+| `add_newline`  | `true`                        | Add a new line before the start of the prompt.         |
+| `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
+| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).  |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
 
-# Desactiva el salto de línea al comienzo del símbolo de sistema
+# Disable the newline at the start of the prompt
 add_newline = false
-# Sobrescribe el orden por defecto de los módulos
+# Overwrite a default_prompt_order and  use custom prompt_order
 prompt_order=["rust","line_break","package","line_break","character"]
-# Starship espera 10 ms para comprobar los archivos del directorio actual.
+# Wait 10 milliseconds for starship to check files under the current directory.
 scan_timeout = 10
 ```
 
-### Ordenación por defecto
+### Default Prompt Order
 
-El `prompt_order` por defecto se usa para definir el orden en el que los módulos se muestran en la línea de comandos, en caso de que esté vacío o no existe `prompt_order`. El valor por defecto es el siguiente:
+The default `prompt_order` is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. The default is as shown:
 
 ```toml
 prompt_order = [
@@ -132,21 +132,21 @@ prompt_order = [
 
 ## AWS
 
-El módulo `aws` muestra la región actual de AWS y el perfil. Éste se basa en las variables de entorno `AWS_REGION`, `AWS_DEFAULT_REGION`, y `AWS_PROFILE` del fichero `~/.aws/config`.
+The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
 
-Cuando uses [aws-vault](https://github.com/99designs/aws-vault) el perfil se obtiene de la variable de entorno `AWS_VAULT`.
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
 
-### Opciones
+### Options
 
-| Variable          | Por defecto     | Descripción                                                   |
-| ----------------- | --------------- | ------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | El símbolo que se muestra antes del perfil de AWS.            |
-| `displayed_items` | `all`           | Elige qué item mostrar. Valores: [`all`, `profile`, `region`] |
-| `region_aliases`  |                 | Tabla de alias de región para mostrar además del nombre AWS.  |
-| `style`           | `"bold yellow"` | El estilo del módulo.                                         |
-| `disabled`        | `false`         | Desactiva el módulo AWS.                                      |
+| Variable          | Default         | Description                                                                 |
+| ----------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
+| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
+| `style`           | `"bold yellow"` | The style for the module.                                                   |
+| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -162,22 +162,22 @@ us-east-1 = "va"
 
 ## Battery
 
-El módulo `battery` muestra la cantidad de batería y si está cargando o no. El módulo es solo visible cuando la batería está por debajo del 10%.
+The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
-### Opciones
+### Options
 
-| Variable             | Por defecto              | Descripción                                       |
+| Variable             | Default                  | Description                                       |
 | -------------------- | ------------------------ | ------------------------------------------------- |
-| `full_symbol`        | `"•"`                    | Se muestra cuando la batería está cargada.        |
-| `charging_symbol`    | `"⇡"`                    | Se muestra cuando la batería está cargando.       |
-| `discharging_symbol` | `"⇣"`                    | Se muestra cuando la batería se está descargando. |
-| `display`            | [link](#battery-display) | Define cuándo mostrar el indicador y el estilo.   |
-| `disabled`           | `false`                  | Desactiva el módulo `battery`.                    |
+| `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
+| `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
+| `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
+| `display`            | [link](#battery-display) | Display threshold and style for the module.       |
+| `disabled`           | `false`                  | Disables the `battery` module.                    |
 
 <details>
-<summary>Hay otras opciones para algunos estados de la batería menos comunes.</summary>
+<summary>There are also options for some uncommon battery states.</summary>
 
-| Variable         | Descripción                                         |
+| Variable         | Description                                         |
 | ---------------- | --------------------------------------------------- |
 | `unknown_symbol` | The symbol shown when the battery state is unknown. |
 | `empty_symbol`   | The symbol shown when the battery state is empty.   |
@@ -186,7 +186,7 @@ Note: Battery indicator will be hidden if the status is `unknown` or `empty` unl
 
 </details>
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -197,9 +197,9 @@ charging_symbol = "⚡️"
 discharging_symbol = "💀"
 ```
 
-### Indicador de batería
+### Battery Display
 
-La configuración de la opción `display` es usada para definir cuándo se debe mostrar el indicador de batería y cómo debe mostrarse. Si no se provee ningún valor para `display`  el valor por defecto es el siguiente:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
 
 ```toml
 [[battery.display]]
@@ -207,49 +207,49 @@ threshold = 10
 style = "bold red"
 ```
 
-#### Opciones
+#### Options
 
-La opción `display` es un array de la siguiente tabla.
+The `display` option is an array of the following table.
 
-| Variable    | Descripción                                                     |
-| ----------- | --------------------------------------------------------------- |
-| `threshold` | El umbral para la opción de visualización.                      |
-| `style`     | El estilo usado cuando si la opción <0>display</0> está activa. |
+| Variable    | Description                                     |
+| ----------- | ----------------------------------------------- |
+| `threshold` | The upper bound for the display option.         |
+| `style`     | The style used if the display option is in use. |
 
-#### Ejemplo
+#### Example
 
 ```toml
-[[battery.display]]  # "bold red" cuando la carga está entre 0% y 10%
+[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" cuando la carga está entre 10% y 30%
+[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
 
-# cuando la carga está por encima del 30% el indicador no se mostrará
+# when capacity is over 30%, the battery indicator will not be displayed
 
 ```
 
 ## Character
 
-El módulo `character` muestra un carater (normalmente una flecha) tras el texto que introduces en el terminal.
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-El carácter te dirá si el último comando funcionó o no. Se puede hacer de dos formas: cambiando el color (rojo/verde) o cambiando su forma (❯/✖). Esto último solo se puede hacer si `use_symbol_for_status` tiene como valor `true`.
+The character will tell you whether the last command was successful or not. It can do this in two ways: by changing color (red/green) or by changing its shape (❯/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
 
-### Opciones
+### Options
 
-| Variable                | Por defecto    | Descripción                                                                                                                   |
-| ----------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `symbol`                | `"❯"`          | El símbolo usado antes de la entrada de texto en el símbolo del sistema.                                                      |
-| `error_symbol`          | `"✖"`          | El símbolo usado antes de la entrada de texto si el comando anterior falló.                                                   |
-| `use_symbol_for_status` | `false`        | Indica el estado del error usando un símbolo.                                                                                 |
-| `vicmd_symbol`          | `"❮"`          | El símbolo usado antes de la entrada de texto en el símbolo del sistema si el intérprete de comandos está en modo vim normal. |
-| `style_success`         | `"bold green"` | Estilo usado si el último comando se ejecutó con éxito.                                                                       |
-| `style_failure`         | `"bold red"`   | Estilo usado si el último comando falló.                                                                                      |
-| `disabled`              | `false`        | Desactiva el módulo `character`.                                                                                              |
+| Variable                | Default        | Description                                                                         |
+| ----------------------- | -------------- | ----------------------------------------------------------------------------------- |
+| `symbol`                | `"❯"`          | The symbol used before the text input in the prompt.                                |
+| `error_symbol`          | `"✖"`          | The symbol used before text input if the previous command failed.                   |
+| `use_symbol_for_status` | `false`        | Indicate error status by changing the symbol.                                       |
+| `vicmd_symbol`          | `"❮"`          | The symbol used before the text input in the prompt if shell is in vim normal mode. |
+| `style_success`         | `"bold green"` | The style used if the last command was successful.                                  |
+| `style_failure`         | `"bold red"`   | The style used if the last command failed.                                          |
+| `disabled`              | `false`        | Disables the `character` module.                                                    |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -260,29 +260,29 @@ error_symbol = "✗"
 use_symbol_for_status = true
 ```
 
-## Tiempo de ejecución
+## Command Duration
 
-El módulo `cmd_duration` muestra cuánto tiempo tardó el último comando en ejecutarse. El módulo se mostrará solo si el comando llevó dos segundos o más, o el valor de `min_time`, si existe.
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning No utilizar DEBUG en Bash
+::: warning Do not hook the DEBUG trap in Bash
 
-Si estás usando Starship con `bash`, no uses `DEBUG` después de ejecutar `eval $(starship init $0)`, o el módulo **se romperá**.
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-Los usuarios de bash que necesiten la funcionalidad preexec-like pueden usar el framework rcaloras's bash_preexec. Simplemente define los arrays preexec_functions y precmd_functions antes de ejecutar eval $(starship init $0), y continúa con normalidad. Basta con definir los arrays `preexec_functions` y `precmd_functions` antes de ejecutar `eval $(starship init $0)`, y luego proceder como siempre.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
-### Opciones
+### Options
 
-| Variable            | Por defecto     | Descripción                                                           |
-| ------------------- | --------------- | --------------------------------------------------------------------- |
-| `min_time`          | `2_000`         | Duración mínima para mostrar el tiempo de ejecución (en milisegundos) |
-| `show_milliseconds` | `false`         | Muestra la duración con precisión en milisegundos.                    |
-| `prefix`            | `took`          | Prefijo que se muestra antes del tiempo de ejecución.                 |
-| `style`             | `"bold yellow"` | El estilo del módulo.                                                 |
-| `disabled`          | `false`         | Desactiva el módulo `cmd_duration`.                                   |
+| Variable            | Default         | Description                                                |
+| ------------------- | --------------- | ---------------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
+| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
+| `style`             | `"bold yellow"` | The style for the module.                                  |
+| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -294,24 +294,24 @@ prefix = "underwent "
 
 ## Conda
 
-El módulo `conda` muestra el actual entorno conda, si la variable `$CONDA_DEFAULT_ENV` existe.
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
-Esto no modifica el propio símbolo de sistema de conda. En caso de querer suprimirlo, ejecuta `conda config --set changeps1 False`.
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
-### Opciones
+### Options
 
-| Variable            | Por defecto    | Descripción                                                                                                                                                                                                             |
-| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`            | El número de directorios a los que se debe truncar la variable de entorno, si el entorno fue creado usando `conda create -p [path]`. `0` significa sin truncamiento. Mirar también el módulo [`directory`](#directory). |
-| `symbol`            | `"C "`         | El símbolo usado antes del nombre del entorno.                                                                                                                                                                          |
-| `style`             | `"bold green"` | El estilo del módulo.                                                                                                                                                                                                   |
-| `disabled`          | `false`        | Desactiva el módulo `conda`.                                                                                                                                                                                            |
+| Variable            | Default        | Description                                                                                                                                                                                                 |
+| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
+| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
+| `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -322,20 +322,20 @@ style = "dimmed green"
 
 ## Crystal
 
-El módulo `crystal` muestra la versión actual de Crystal. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `crystal` module shows the currently installed version of Crystal. The module will be shown if any of the following conditions are met:
 
-- El directorio actual contiene un fichero `shard.yml`
-- El directorio actual contiene un fichero `.cr`
+- The current directory contains a `shard.yml` file
+- The current directory contains a `.cr` file
 
-### Opciones
+### Options
 
-| Variable   | Por defecto  | Descripción                                   |
-| ---------- | ------------ | --------------------------------------------- |
-| `symbol`   | `"🔮 "`       | Símbolo usado antes de la versión de Crystal. |
-| `style`    | `"bold red"` | El estilo del módulo.                         |
-| `disabled` | `false`      | Desactiva el módulo `crystal`.                |
+| Variable   | Default      | Description                                               |
+| ---------- | ------------ | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`       | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"` | The style for the module.                                 |
+| `disabled` | `false`      | Disables the `crystal` module.                            |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -347,37 +347,35 @@ style = "bold blue"
 
 ## Directory
 
-El módulo `directory` muestra la ruta hasta el directorio actual, mostrando tres directorios padre como máximo. Tu directorio se truncará a la raíz del repositorio git en el que estés.
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
-Cuando usas el estilo fish de la opción pwd, en lugar de ocultar la ruta truncada, verás una versión acortada del nombre de cada directorio basada en el número que activa la opción.
+When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repositorio y el valor de la opción es `1`. En ese caso, verás `~/D/N/nixpkgs/pkgs`, cuando antes hubiera sido `nixpkgs/pkgs`.
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
-### Opciones
+### Options
 
-| Variable            | Por defecto   | Descripción                                                                    |
-| ------------------- | ------------- | ------------------------------------------------------------------------------ |
-| `truncation_length` | `3`           | El número de directorios padre a los que se debe truncar el directorio actual. |
-| `truncate_to_repo`  | `true`        | Trunca o no hasta la raíz del repositorio git en el que estés.                 |
-| `prefix`            | `"in "`       | Prefijo que se muestra inmediatamente antes del directorio.                    |
-| `separator`         | `"/"`         | Separator used between each element of the directory path                      |
-| `home`              | `"~"`         | Symbol representing the user's home directory     |
-| `style`             | `"bold cyan"` | El estilo del módulo.                                                          |
-| `disabled`          | `false`       | Desactiva el módulo `directory`.                                               |
+| Variable            | Default       | Description                                                                      |
+| ------------------- | ------------- | -------------------------------------------------------------------------------- |
+| `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
+| `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
+| `style`             | `"bold cyan"` | The style for the module.                                                        |
+| `disabled`          | `false`       | Disables the `directory` module.                                                 |
 
 <details>
-<summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Variable                    | Por defecto | Descripción                                                                              |
-| --------------------------- | ----------- | ---------------------------------------------------------------------------------------- |
-| `fish_style_pwd_dir_length` | `0`         | The number of characters to use when applying fish shell pwd path logic.                 |
-| `use_logical_path`          | `true`      | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+| Variable                    | Default | Description                                                                              |
+| --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
+| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
+| `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
 
 `fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -386,20 +384,20 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 truncation_length = 8
 ```
 
-## Docker context
+## Docker Context
 
-El módulo `docker_context` muestra el [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) activo si no está a `default`.
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
 
-### Opciones
+### Options
 
-| Variable          | Por defecto   | Descripción                                                                                        |
-| ----------------- | ------------- | -------------------------------------------------------------------------------------------------- |
-| `symbol`          | `"🐳 "`        | Símbolo usado antes de mostrar el Docker context.                                                  |
-| `only_with_files` | `false`       | Solo lo muestra cuando hay un archivo `docker-compose.yml` o `Dockerfile` en el directorio actual. |
-| `style`           | `"bold blue"` | El estilo del módulo.                                                                              |
-| `disabled`        | `true`        | Desactiva el módulo `docker_context`.                                                              |
+| Variable          | Default       | Description                                                                             |
+| ----------------- | ------------- | --------------------------------------------------------------------------------------- |
+| `symbol`          | `"🐳 "`        | The symbol used before displaying the Docker context .                                  |
+| `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
+| `style`           | `"bold blue"` | The style for the module.                                                               |
+| `disabled`        | `true`        | Disables the `docker_context` module.                                                   |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -416,16 +414,16 @@ This module will only be shown in your prompt when one of the following files ar
 
 Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
-### Opciones
+### Options
 
-| Variable    | Por defecto   | Descripción                                              |
+| Variable    | Default       | Description                                              |
 | ----------- | ------------- | -------------------------------------------------------- |
 | `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
 | `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
-| `style`     | `"bold blue"` | El estilo del módulo.                                    |
+| `style`     | `"bold blue"` | The style for the module.                                |
 | `disabled`  | `false`       | Disables the `dotnet` module.                            |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -438,18 +436,18 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. The module will be shown if any of the following conditions are met:
 
-- El directorio actual contiene un fichero `mix.exs`.
+- The current directory contains a `mix.exs` file.
 
-### Opciones
+### Options
 
-| Variable   | Por defecto | Descripción                                                     |
-| ---------- | ----------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`      | The symbol used before displaying the version of Elixir/Erlang. |
-| `disabled` | `false`     | Disables the `elixir` module.                                   |
+| Variable   | Default | Description                                                     |
+| ---------- | ------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`  | The symbol used before displaying the version of Elixir/Erlang. |
+| `disabled` | `false` | Disables the `elixir` module.                                   |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -460,24 +458,24 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `elm` module shows the currently installed version of Elm. The module will be shown if any of the following conditions are met:
 
-- El directorio actual contiene un fichero `elm.json`
-- El directorio actual contiene un fichero `elm-package.json`
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
 - The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
 
-### Opciones
+### Options
 
-| Variable   | Por defecto   | Descripción                                           |
+| Variable   | Default       | Description                                           |
 | ---------- | ------------- | ----------------------------------------------------- |
 | `symbol`   | `"🌳 "`        | The symbol used before displaying the version of Elm. |
-| `style`    | `"bold cyan"` | El estilo del módulo.                                 |
+| `style`    | `"bold cyan"` | The style for the module.                             |
 | `disabled` | `false`       | Disables the `elm` module.                            |
 
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -488,19 +486,19 @@ symbol = " "
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `erlang` module shows the currently installed version of Erlang/OTP. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `rebar.config` file.
 - The current directory contains a `erlang.mk` file.
 
-### Opciones
+### Options
 
-| Variable   | Por defecto | Descripción                                              |
-| ---------- | ----------- | -------------------------------------------------------- |
-| `symbol`   | `"🖧 "`      | The symbol used before displaying the version of Erlang. |
-| `disabled` | `false`     | Disables the `erlang` module.                            |
+| Variable   | Default | Description                                              |
+| ---------- | ------- | -------------------------------------------------------- |
+| `symbol`   | `"🖧 "`  | The symbol used before displaying the version of Erlang. |
+| `disabled` | `false` | Disables the `erlang` module.                            |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -508,26 +506,26 @@ The `erlang` module shows the currently installed version of Erlang/OTP. El mód
 [erlang]
 symbol = "e "
 ```
-## Variable de entorno
+## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
 - The `variable` configuration option matches an existing environment variable
 - The `variable` configuration option is not defined, but the `default` configuration option is
 
-### Opciones
+### Options
 
-| Variable      | Por defecto      | Descripción                                                                  |
-| ------------- | ---------------- | ---------------------------------------------------------------------------- |
-| `symbol`      |                  | The symbol used before displaying the variable value.                        |
-| `variable`    |                  | The environment variable to be displayed.                                    |
-| `por defecto` |                  | The default value to be displayed when the selected variable is not defined. |
-| `prefix`      | `""`             | Prefix to display immediately before the variable value.                     |
-| `suffix`      | `""`             | Suffix to display immediately after the variable value.                      |
-| `style`       | `"dimmed black"` | El estilo del módulo.                                                        |
-| `disabled`    | `false`          | Disables the `env_var` module.                                               |
+| Variable   | Default          | Description                                                                  |
+| ---------- | ---------------- | ---------------------------------------------------------------------------- |
+| `symbol`   |                  | The symbol used before displaying the variable value.                        |
+| `variable` |                  | The environment variable to be displayed.                                    |
+| `default`  |                  | The default value to be displayed when the selected variable is not defined. |
+| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
+| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
+| `style`    | `"dimmed black"` | The style for the module.                                                    |
+| `disabled` | `false`          | Disables the `env_var` module.                                               |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -541,17 +539,17 @@ default = "unknown shell"
 
 The `git_branch` module shows the active branch of the repo in your current directory.
 
-### Opciones
+### Options
 
-| Variable            | Por defecto     | Descripción                                                                           |
+| Variable            | Default         | Description                                                                           |
 | ------------------- | --------------- | ------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
 | `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
-| `style`             | `"bold purple"` | El estilo del módulo.                                                                 |
+| `style`             | `"bold purple"` | The style for the module.                                                             |
 | `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -562,22 +560,22 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git commit
+## Git Commit
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
-### Opciones
+### Options
 
-| Variable             | Por defecto    | Descripción                                           |
+| Variable             | Default        | Description                                           |
 | -------------------- | -------------- | ----------------------------------------------------- |
 | `commit_hash_length` | `7`            | The length of the displayed git commit hash.          |
 | `prefix`             | `"("`          | Prefix to display immediately before git commit.      |
 | `suffix`             | `")"`          | Suffix to display immediately after git commit.       |
-| `style`              | `"bold green"` | El estilo del módulo.                                 |
+| `style`              | `"bold green"` | The style for the module.                             |
 | `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
 | `disabled`           | `false`        | Disables the `git_commit` module.                     |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -586,13 +584,13 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 commit_hash_length = 4
 ```
 
-## Git state
+## Git State
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
-### Opciones
+### Options
 
-| Variable           | Por defecto        | Descripción                                                                                                      |
+| Variable           | Default            | Description                                                                                                      |
 | ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
 | `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
 | `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
@@ -602,10 +600,10 @@ The `git_state` module will show in directories which are part of a git reposito
 | `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
 | `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
 | `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
-| `style`            | `"bold yellow"`    | El estilo del módulo.                                                                                            |
+| `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
 | `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -615,13 +613,13 @@ progress_divider = " of "
 cherry_pick = "🍒 PICKING"
 ```
 
-## Git status
+## Git Status
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
-### Opciones
+### Options
 
-| Variable           | Por defecto                | Descripción                                             |
+| Variable           | Default                    | Description                                             |
 | ------------------ | -------------------------- | ------------------------------------------------------- |
 | `conflicted`       | `"="`                      | This branch has merge conflicts.                        |
 | `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
@@ -643,17 +641,17 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
 | `prefix`           | `[`                        | Prefix to display immediately before git status.        |
 | `suffix`           | `]`                        | Suffix to display immediately after git status.         |
-| `style`            | `"bold red"`               | El estilo del módulo.                                   |
+| `style`            | `"bold red"`               | The style for the module.                               |
 | `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
-#### Contadores de git status
+#### Git Status Counts
 
-| Variable  | Por defecto | Descripción                                            |
-| --------- | ----------- | ------------------------------------------------------ |
-| `enabled` | `false`     | Show the number of files                               |
-| `style`   |             | Optionally style the count differently than the module |
+| Variable  | Default | Description                                            |
+| --------- | ------- | ------------------------------------------------------ |
+| `enabled` | `false` | Show the number of files                               |
+| `style`   |         | Optionally style the count differently than the module |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -676,26 +674,26 @@ deleted = "🗑"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
 
-- El directorio actual contiene un fichero `go.mod`
-- El directorio actual contiene un fichero `go.sum`
-- El directorio actual contiene un fichero `glide.yaml`
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
 - The current directory contains a `Gopkg.yml` file
 - The current directory contains a `Gopkg.lock` file
 - The current directory contains a `.go-version` file
 - The current directory contains a `Godeps` directory
 - The current directory contains a file with the `.go` extension
 
-### Opciones
+### Options
 
-| Variable   | Por defecto   | Descripción                                              |
+| Variable   | Default       | Description                                              |
 | ---------- | ------------- | -------------------------------------------------------- |
 | `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
-| `style`    | `"bold cyan"` | El estilo del módulo.                                    |
+| `style`    | `"bold cyan"` | The style for the module.                                |
 | `disabled` | `false`       | Disables the `golang` module.                            |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -705,20 +703,20 @@ symbol = "🏎💨 "
 ```
 ## Haskell
 
-The `haskell` module shows the currently installed version of Haskell Stack version. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `haskell` module shows the currently installed version of Haskell Stack version. The module will be shown if any of the following conditions are met:
 
-- El directorio actual contiene un fichero `stack.yaml`
+- The current directory contains a `stack.yaml` file
 
-### Opciones
+### Options
 
-| Variable   | Por defecto  | Descripción                                               |
+| Variable   | Default      | Description                                               |
 | ---------- | ------------ | --------------------------------------------------------- |
 | `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold red"` | El estilo del módulo.                                     |
+| `style`    | `"bold red"` | The style for the module.                                 |
 | `disabled` | `false`      | Disables the `haskell` module.                            |
 
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -731,18 +729,18 @@ symbol = " "
 
 The `hostname` module shows the system hostname.
 
-### Opciones
+### Options
 
-| Variable   | Por defecto           | Descripción                                                                                                                          |
+| Variable   | Default               | Description                                                                                                                          |
 | ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
 | `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
 | `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
 | `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `style`    | `"bold dimmed green"` | El estilo del módulo.                                                                                                                |
+| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
 | `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -757,20 +755,20 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of Java. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
-### Opciones
+### Options
 
-| Variable   | Por defecto    | Descripción                                            |
+| Variable   | Default        | Description                                            |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | El estilo del módulo.                                  |
+| `style`    | `"dimmed red"` | The style for the module.                              |
 | `disabled` | `false`        | Disables the `java` module.                            |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -783,16 +781,16 @@ symbol = "🌟 "
 
 The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
-### Opciones
+### Options
 
-| Variable    | Por defecto   | Descripción                                           |
+| Variable    | Default       | Description                                           |
 | ----------- | ------------- | ----------------------------------------------------- |
 | `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
 | `threshold` | `1`           | Show number of jobs if exceeded.                      |
-| `style`     | `"bold blue"` | El estilo del módulo.                                 |
+| `style`     | `"bold blue"` | The style for the module.                             |
 | `disabled`  | `false`       | Disables the `jobs` module.                           |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -804,21 +802,21 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `julia` module shows the currently installed version of Julia. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Project.toml` file
 - The current directory contains a `Manifest.toml` file
 - The current directory contains a file with the `.jl` extension
 
-### Opciones
+### Options
 
-| Variable   | Por defecto     | Descripción                                             |
+| Variable   | Default         | Description                                             |
 | ---------- | --------------- | ------------------------------------------------------- |
 | `symbol`   | `"ஃ "`          | The symbol used before displaying the version of Julia. |
-| `style`    | `"bold purple"` | El estilo del módulo.                                   |
+| `style`    | `"bold purple"` | The style for the module.                               |
 | `disabled` | `false`         | Disables the `julia` module.                            |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -836,16 +834,16 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Opciones
+### Options
 
-| Variable          | Por defecto   | Descripción                                         |
+| Variable          | Default       | Description                                         |
 | ----------------- | ------------- | --------------------------------------------------- |
 | `symbol`          | `"☸ "`        | The symbol used before displaying the Cluster info. |
 | `context_aliases` |               | Table of context aliases to display                 |
-| `style`           | `"bold blue"` | El estilo del módulo.                               |
+| `style`           | `"bold blue"` | The style for the module.                           |
 | `disabled`        | `true`        | Disables the `kubernetes` module                    |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -858,17 +856,17 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ```
 
-## Salto de línea
+## Line Break
 
 The `line_break` module separates the prompt into two lines.
 
-### Opciones
+### Options
 
-| Variable   | Por defecto | Descripción                                                        |
-| ---------- | ----------- | ------------------------------------------------------------------ |
-| `disabled` | `false`     | Disables the `line_break` module, making the prompt a single line. |
+| Variable   | Default | Description                                                        |
+| ---------- | ------- | ------------------------------------------------------------------ |
+| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -877,7 +875,7 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
-## Memoria utilizada
+## Memory Usage
 
 The `memory_usage` module shows current system memory and swap usage.
 
@@ -889,19 +887,20 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Opciones
+### Options
 
-| Variable          | Por defecto           | Descripción                                                   |
+| Variable          | Default               | Description                                                   |
 | ----------------- | --------------------- | ------------------------------------------------------------- |
 | `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
 | `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
 | `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
+| `symbol`          | `"🐏 "`               | The symbol used before displaying the memory usage.           |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | El estilo del módulo.                                         |
+| `home`            | `"~"`                 | Symbol representing the user's home directory     |
+| `style`           | `"bold dimmed white"` | The style for the module.                                     |
 | `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -920,17 +919,17 @@ style = "bold dimmed green"
 
 The `hg_branch` module shows the active branch of the repo in your current directory.
 
-### Opciones
+### Options
 
-| Variable            | Por defecto     | Descripción                                                                                  |
+| Variable            | Default         | Description                                                                                  |
 | ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
-| `style`             | `"bold purple"` | El estilo del módulo.                                                                        |
+| `style`             | `"bold purple"` | The style for the module.                                                                    |
 | `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -945,18 +944,18 @@ truncation_symbol = ""
 
 The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
-### Opciones
+### Options
 
-| Variable     | Por defecto   | Descripción                                       |
+| Variable     | Default       | Description                                       |
 | ------------ | ------------- | ------------------------------------------------- |
 | `use_name`   | `false`       | Display the name of the nix-shell.                |
 | `impure_msg` | `"impure"`    | Customize the "impure" msg.                       |
 | `pure_msg`   | `"pure"`      | Customize the "pure" msg.                         |
 | `symbol`     | `"❄️  "`      | The symbol used before displaying the shell name. |
-| `style`      | `"bold blue"` | El estilo del módulo.                             |
+| `style`      | `"bold blue"` | The style for the module.                         |
 | `disabled`   | `false`       | Disables the `nix_shell` module.                  |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -971,22 +970,22 @@ symbol = "☃️  "
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
 
-- El directorio actual contiene un fichero `package.json`
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js` extension
 
-### Opciones
+### Options
 
-| Variable   | Por defecto    | Descripción                                              |
+| Variable   | Default        | Description                                              |
 | ---------- | -------------- | -------------------------------------------------------- |
 | `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | El estilo del módulo.                                    |
+| `style`    | `"bold green"` | The style for the module.                                |
 | `disabled` | `false`        | Disables the `nodejs` module.                            |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -995,7 +994,7 @@ The `nodejs` module shows the currently installed version of NodeJS. El módulo 
 symbol = "🤖 "
 ```
 
-## Versión del paquete
+## Package Version
 
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
@@ -1009,16 +1008,16 @@ The `package` module is shown when the current directory is the repository for a
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
 
-### Opciones
+### Options
 
-| Variable          | Por defecto  | Descripción                                                |
+| Variable          | Default      | Description                                                |
 | ----------------- | ------------ | ---------------------------------------------------------- |
 | `symbol`          | `"📦 "`       | The symbol used before displaying the version the package. |
-| `style`           | `"bold red"` | El estilo del módulo.                                      |
+| `style`           | `"bold red"` | The style for the module.                                  |
 | `display_private` | `false`      | Enable displaying version for packages marked as private.  |
 | `disabled`        | `false`      | Disables the `package` module.                             |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -1029,21 +1028,21 @@ symbol = "🎁 "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
 
-- El directorio actual contiene un fichero `composer.json`
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
-### Opciones
+### Options
 
-| Variable   | Por defecto  | Descripción                                           |
+| Variable   | Default      | Description                                           |
 | ---------- | ------------ | ----------------------------------------------------- |
 | `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
-| `style`    | `"bold red"` | El estilo del módulo.                                 |
+| `style`    | `"bold red"` | The style for the module.                             |
 | `disabled` | `false`      | Disables the `php` module.                            |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -1060,30 +1059,30 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
 
-El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.python-version` file
-- El directorio actual contiene un fichero `requirements.txt`
-- El directorio actual contiene un fichero `pyproject.toml`
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `pyproject.toml` file
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - The current directory contains a `Pipfile` file
-- El directorio actual contiene un fichero `tox.ini`
-- El directorio actual contiene un fichero `setup.py`
+- The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
 - The current directory contains a `__init__.py` file
 - A virtual environment is currently activated
 
-### Opciones
+### Options
 
-| Variable             | Por defecto     | Descripción                                                                 |
+| Variable             | Default         | Description                                                                 |
 | -------------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
 | `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
 | `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
 | `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.  |
-| `style`              | `"bold yellow"` | El estilo del módulo.                                                       |
+| `style`              | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -1096,21 +1095,21 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
 - The current directory contains a `.rb` file
 
-### Opciones
+### Options
 
-| Variable   | Por defecto  | Descripción                                            |
+| Variable   | Default      | Description                                            |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
-| `style`    | `"bold red"` | El estilo del módulo.                                  |
+| `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `ruby` module.                            |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -1121,20 +1120,20 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
 
-### Opciones
+### Options
 
-| Variable   | Por defecto  | Descripción                                            |
+| Variable   | Default      | Description                                            |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
-| `style`    | `"bold red"` | El estilo del módulo.                                  |
+| `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `rust` module.                            |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -1147,18 +1146,18 @@ symbol = "⚙️ "
 
 The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
 
-### Opciones
+### Options
 
-| Variable   | Por defecto          | Descripción                                      |
+| Variable   | Default              | Description                                      |
 | ---------- | -------------------- | ------------------------------------------------ |
 | `label`    | `""`                 | Prefix before the image name display.            |
 | `prefix`   | `"["`                | Prefix to display immediately before image name. |
 | `suffix`   | `"]"`                | Suffix to display immediately after image name.  |
 | `symbol`   | `""`                 | The symbol used before the image name.           |
-| `style`    | `"bold dimmed blue"` | El estilo del módulo.                            |
+| `style`    | `"bold dimmed blue"` | The style for the module.                        |
 | `disabled` | `false`              | Disables the `singularity` module.               |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -1169,21 +1168,21 @@ symbol = "📦 "
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` extension
 
-### Opciones
+### Options
 
-| Variable       | Por defecto  | Descripción                                                 |
+| Variable       | Default      | Description                                                 |
 | -------------- | ------------ | ----------------------------------------------------------- |
 | `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
 | `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
-| `style`        | `"bold 105"` | El estilo del módulo.                                       |
+| `style`        | `"bold 105"` | The style for the module.                                   |
 | `disabled`     | `false`      | Disables the `terraform` module.                            |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -1192,7 +1191,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 symbol = "🏎💨 "
 ```
 
-## Hora
+## Time
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
@@ -1202,9 +1201,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Opciones
+### Options
 
-| Variable          | Por defecto     | Descripción                                                                                                         |
+| Variable          | Default         | Description                                                                                                         |
 | ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `use_12hr`        | `false`         | Enables 12 hour formatting                                                                                          |
 | `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
@@ -1214,7 +1213,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -1225,25 +1224,25 @@ format = "🕙[ %T ]"
 utc_time_offset = "-5"
 ```
 
-## Nombre de usuario
+## Username
 
-The `username` module shows active user's username. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
 - The current user is root
 - The current user isn't the same as the one that is logged in
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
 
-### Opciones
+### Options
 
-| Variable      | Por defecto     | Descripción                           |
+| Variable      | Default         | Description                           |
 | ------------- | --------------- | ------------------------------------- |
 | `style_root`  | `"bold red"`    | The style used when the user is root. |
 | `style_user`  | `"bold yellow"` | The style used for non-root users.    |
 | `show_always` | `false`         | Always shows the `username` module.   |
 | `disabled`    | `false`         | Disables the `username` module.       |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
@@ -1252,7 +1251,7 @@ The `username` module shows active user's username. El módulo se muestra si alg
 disabled = true
 ```
 
-## Comandos personalizados
+## Custom commands
 
 The `custom` modules show the output of some arbitrary commands.
 
@@ -1274,24 +1273,24 @@ The order in which custom modules are shown can be individually set by setting `
 
 :::
 
-### Opciones
+### Options
 
-| Variable      | Por defecto               | Descripción                                                                                                                |
+| Variable      | Default                   | Description                                                                                                                |
 | ------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `command`     |                           | The command whose output should be printed.                                                                                |
 | `when`        |                           | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                           | The path to the shell to use to execute the command. If unset, it will fallback to STARSHIP_SHELL and then to "sh".        |
-| `descripción` | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
+| `description` | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                      | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                      | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                      | The extensions that will be searched in the working directory for a match.                                                 |
 | `symbol`      | `""`                      | The symbol used before displaying the command output.                                                                      |
-| `style`       | `"bold green"`            | El estilo del módulo.                                                                                                      |
+| `style`       | `"bold green"`            | The style for the module.                                                                                                  |
 | `prefix`      | `""`                      | Prefix to display immediately before the command output.                                                                   |
 | `suffix`      | `""`                      | Suffix to display immediately after the command output.                                                                    |
 | `disabled`    | `false`                   | Disables this `custom` module.                                                                                             |
 
-### Ejemplo
+### Example
 
 ```toml
 # ~/.config/starship.toml
