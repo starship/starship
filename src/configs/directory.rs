@@ -10,6 +10,7 @@ pub struct DirectoryConfig<'a> {
     pub fish_style_pwd_dir_length: i64,
     pub use_logical_path: bool,
     pub prefix: &'a str,
+    pub separator: &'a str,
     pub style: Style,
     pub disabled: bool,
 }
@@ -22,6 +23,7 @@ impl<'a> RootModuleConfig<'a> for DirectoryConfig<'a> {
             fish_style_pwd_dir_length: 0,
             use_logical_path: true,
             prefix: "in ",
+            separator: "/",
             style: Color::Cyan.bold(),
             disabled: false,
         }

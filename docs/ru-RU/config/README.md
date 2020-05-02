@@ -358,6 +358,7 @@ style = "bold blue"
 | `truncation_length` | `3`           | Количество родительских папок, к которым должен быть усечен текущий каталог. |
 | `truncate_to_repo`  | `true`        | Следует или нет обрезать до корня репозитория git, в котором вы находитесь.  |
 | `prefix`            | `"in "`       | Префикс, отображаемый перед папкой.                                          |
+| `separator`         | `"/"`         | Separator used between each element of the directory path                    |
 | `style`             | `"bold cyan"` | Стиль модуля.                                                                |
 | `disabled`          | `false`       | Отключает модуль `directory`.                                                |
 

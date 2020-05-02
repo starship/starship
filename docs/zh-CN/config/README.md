@@ -358,6 +358,7 @@ style = "bold blue"
 | `truncation_length` | `3`           | 当前目录路径被截断后最多保留的父目录数量。    |
 | `truncate_to_repo`  | `true`        | 是否只截断到您当前处于的 git 仓库根目录下。 |
 | `prefix`            | `"in "`       | 直接在显示路径前显示的前缀。           |
+| `separator`         | `"/"`         | Separator used between each element of the directory path   |
 | `style`             | `"bold cyan"` | 此组件的样式。                  |
 | `disabled`          | `false`       | 禁用 `directory` 组件。       |
 
