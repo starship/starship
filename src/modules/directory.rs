@@ -1,5 +1,5 @@
-use path_slash::PathExt;
 use std::path::{Path, PathBuf};
+
 use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module};
@@ -61,10 +61,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
 
             // Contract the path to the git repo root
-            contract_path(current_dir, repo_root, repo_folder_name)
+            contract_path(current_dir, repo_root, repo_folder_name, config.separator)
         }
         // Contract the path to the home directory
-        _ => contract_path(current_dir, &home_dir, HOME_SYMBOL),
+        _ => contract_path(current_dir, &home_dir, HOME_SYMBOL, config.separator),
     };
 
     // Truncate the dir string to the maximum number of path components
@@ -72,7 +72,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     if config.fish_style_pwd_dir_length > 0 {
         // If user is using fish style path, we need to add the segment first
-        let contracted_home_dir = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
+        let contracted_home_dir =
+            contract_path(&current_dir, &home_dir, HOME_SYMBOL, config.separator);
         let fish_style_dir = to_fish_style(
             config.fish_style_pwd_dir_length as usize,
             contracted_home_dir,
@@ -105,9 +106,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 ///
 /// Replaces the `top_level_path` in a given `full_path` with the provided
 /// `top_level_replacement`.
-fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement: &str) -> String {
+fn contract_path(
+    full_path: &Path,
+    top_level_path: &Path,
+    top_level_replacement: &str,
+    separator: &str,
+) -> String {
     if !full_path.starts_with(top_level_path) {
-        return full_path.to_slash().unwrap();
+        return to_separator(full_path, separator).unwrap();
     }
 
     if full_path == top_level_path {
@@ -117,12 +123,8 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
     format!(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
-        separator = "/",
-        path = full_path
-            .strip_prefix(top_level_path)
-            .unwrap()
-            .to_slash()
-            .unwrap()
+        separator = separator,
+        path = to_separator(full_path.strip_prefix(top_level_path).unwrap(), separator).unwrap()
     )
 }
 
@@ -161,6 +163,50 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
         .join("/")
 }
 
+#[cfg(target_os = "windows")]
+fn to_separator(path: &Path, separator: &str) -> Option<String> {
+    let path_str = path.as_os_str().to_string_lossy();
+
+    let mut out = String::with_capacity((*path_str).len());
+
+    let mut iter = path.iter().filter(|x| x.to_string_lossy() != "\\");
+    let first = iter.next();
+    if let Some(first_component) = first {
+        out.push_str(&first_component.to_string_lossy());
+        for component in iter {
+            out.push_str(separator);
+            out.push_str(&component.to_string_lossy());
+        }
+    }
+
+    if path_str.ends_with('\\') {
+        out.push_str(separator);
+    }
+
+    Some(out)
+}
+
+#[cfg(not(target_os = "windows"))]
+fn to_separator(path: &Path, separator: &str) -> Option<String> {
+    assert!(path.is_absolute());
+
+    let canon = path.canonicalize().unwrap();
+
+    let size = canon.as_os_str().len();
+    let mut out = String::with_capacity(size);
+
+    for component in canon.iter() {
+        let path_item = component.to_string_lossy();
+        out.push_str(if path_item == "/" {
+            separator
+        } else {
+            path_item
+        });
+    }
+
+    Some(out)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -170,7 +216,7 @@ mod tests {
         let full_path = Path::new("/Users/astronaut/schematics/rocket");
         let home = Path::new("/Users/astronaut");
 
-        let output = contract_path(full_path, home, "~");
+        let output = contract_path(full_path, home, "~", "/");
         assert_eq!(output, "~/schematics/rocket");
     }
 
@@ -179,7 +225,7 @@ mod tests {
         let full_path = Path::new("/Users/astronaut/dev/rocket-controls/src");
         let repo_root = Path::new("/Users/astronaut/dev/rocket-controls");
 
-        let output = contract_path(full_path, repo_root, "rocket-controls");
+        let output = contract_path(full_path, repo_root, "rocket-controls", "/");
         assert_eq!(output, "rocket-controls/src");
     }
 
@@ -189,7 +235,7 @@ mod tests {
         let full_path = Path::new("C:\\Users\\astronaut\\schematics\\rocket");
         let home = Path::new("C:\\Users\\astronaut");
 
-        let output = contract_path(full_path, home, "~");
+        let output = contract_path(full_path, home, "~", "/");
         assert_eq!(output, "~/schematics/rocket");
     }
 
@@ -199,7 +245,7 @@ mod tests {
         let full_path = Path::new("C:\\Users\\astronaut\\dev\\rocket-controls\\src");
         let repo_root = Path::new("C:\\Users\\astronaut\\dev\\rocket-controls");
 
-        let output = contract_path(full_path, repo_root, "rocket-controls");
+        let output = contract_path(full_path, repo_root, "rocket-controls", "/");
         assert_eq!(output, "rocket-controls/src");
     }
 
@@ -209,8 +255,8 @@ mod tests {
         let full_path = Path::new("C:\\Some\\Other\\Path");
         let top_level_path = Path::new("C:\\Users\\astronaut");
 
-        let output = contract_path(full_path, top_level_path, "~");
-        assert_eq!(output, "C://Some/Other/Path");
+        let output = contract_path(full_path, top_level_path, "~", "/");
+        assert_eq!(output, "C:/Some/Other/Path");
     }
 
     #[test]
@@ -219,7 +265,7 @@ mod tests {
         let full_path = Path::new("C:\\");
         let top_level_path = Path::new("C:\\Users\\astronaut");
 
-        let output = contract_path(full_path, top_level_path, "~");
+        let output = contract_path(full_path, top_level_path, "~", "/");
         assert_eq!(output, "C:/");
     }
 
@@ -265,5 +311,32 @@ mod tests {
         let path = "~/starship/tmp/目录/a̐éö̲/目录";
         let output = to_fish_style(1, path.to_string(), "目录");
         assert_eq!(output, "~/s/t/目/a̐/");
+    }
+
+    #[test]
+    fn prefered_separator() {
+        let full_path = Path::new("/Users/astronaut/schematics/rocket");
+        let home = Path::new("/Users/astronaut");
+
+        let output = contract_path(full_path, home, "~", "**");
+        assert_eq!(output, "~**schematics**rocket");
+    }
+
+    #[test]
+    fn prefered_separator_backslash_windows_style() {
+        let full_path = Path::new("C:\\Users\\astronaut\\schematics\\rocket");
+        let home = Path::new("C:\\Users\\astronaut");
+
+        let output = contract_path(full_path, home, "~", "\\");
+        assert_eq!(output, "~\\schematics\\rocket");
+    }
+
+    #[test]
+    fn prefered_separator_emoji() {
+        let full_path = Path::new("/Users/astronaut/schematics/rocket");
+        let home = Path::new("/Users/astronaut");
+
+        let output = contract_path(full_path, home, "~", "➡");
+        assert_eq!(output, "~➡schematics➡rocket");
     }
 }
