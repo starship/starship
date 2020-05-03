@@ -23,6 +23,7 @@ pub const ALL_MODULES: &[&str] = &[
     "elm",
     "erlang",
     "env_var",
+    "exit_code",
     "git_branch",
     "git_commit",
     "git_state",
