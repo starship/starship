@@ -17,7 +17,7 @@ impl<'a> RootModuleConfig<'a> for HostnameConfig<'a> {
     fn new() -> Self {
         HostnameConfig {
             ssh_only: true,
-            prefix: "",
+            prefix: "on ",
             suffix: "",
             trim_at: ".",
             style: Color::Green.bold().dimmed(),

@@ -23,7 +23,7 @@ impl<'a> RootModuleConfig<'a> for GitBranchConfig<'a> {
             branch_name: SegmentConfig::default(),
             style: Color::Purple.bold(),
             disabled: false,
-            prefix: "on "
+            prefix: "on ",
         }
     }
 }

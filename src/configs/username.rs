@@ -19,7 +19,7 @@ impl<'a> RootModuleConfig<'a> for UsernameConfig<'a> {
             style_user: Color::Yellow.bold(),
             show_always: false,
             disabled: false,
-            prefix: "as ",
+            prefix: "via ",
         }
     }
 }

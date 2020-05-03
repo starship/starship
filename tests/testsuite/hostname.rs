@@ -75,7 +75,7 @@ fn prefix() -> io::Result<()> {
         })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = format!("on {} ", style().paint(format!("<{}", hostname)));
+    let expected = format!("<{} ", style().paint(hostname));
     assert_eq!(actual, expected);
     Ok(())
 }
