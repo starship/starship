@@ -174,13 +174,13 @@ fn to_separator(path: &Path, separator: &str) -> Option<String> {
     if let Some(first_component) = first {
         out.push_str(&first_component.to_string_lossy());
         for component in iter {
-            out.push_str(separator);
+            out.push_str(&separator);
             out.push_str(&component.to_string_lossy());
         }
     }
 
     if path_str.ends_with('\\') {
-        out.push_str(separator);
+        out.push_str(&separator);
     }
 
     Some(out)
@@ -188,22 +188,27 @@ fn to_separator(path: &Path, separator: &str) -> Option<String> {
 
 #[cfg(not(target_os = "windows"))]
 fn to_separator(path: &Path, separator: &str) -> Option<String> {
-    assert!(path.is_absolute());
+    let path_str = path.as_os_str().to_string_lossy();
 
-    let canon = path.canonicalize().unwrap();
-
-    let size = canon.as_os_str().len();
-    let mut out = String::with_capacity(size);
-
-    for component in canon.iter() {
-        let path_item = component.to_string_lossy();
-        out.push_str(if path_item == "/" {
-            separator
-        } else {
-            path_item
-        });
+    if path_str == "/" {
+        return Some(separator.to_string());
     }
 
+    let mut out = String::with_capacity((*path_str).len());
+
+    let mut iter = path.iter();
+    let first = iter.next();
+    if let Some(first_component) = first {
+        log::debug!("first: {:?}", first_component);
+        if first_component != "/" {
+            out.push_str(&first_component.to_string_lossy());
+        }
+        for component in iter {
+            log::debug!("component: {:?}", component);
+            out.push_str(&separator);
+            out.push_str(&component.to_string_lossy());
+        }
+    }
     Some(out)
 }
 
@@ -270,6 +275,16 @@ mod tests {
     }
 
     #[test]
+    #[cfg(target_os = "windows")]
+    fn prefered_separator_backslash_windows_style() {
+        let full_path = Path::new("C:\\Users\\astronaut\\schematics\\rocket");
+        let home = Path::new("C:\\Users\\astronaut");
+
+        let output = contract_path(full_path, home, "~", "\\");
+        assert_eq!(output, "~\\schematics\\rocket");
+    }
+
+    #[test]
     fn fish_style_with_user_home_contracted_path() {
         let path = "~/starship/engines/booster/rocket";
         let output = to_fish_style(1, path.to_string(), "engines/booster/rocket");
@@ -320,15 +335,6 @@ mod tests {
 
         let output = contract_path(full_path, home, "~", "**");
         assert_eq!(output, "~**schematics**rocket");
-    }
-
-    #[test]
-    fn prefered_separator_backslash_windows_style() {
-        let full_path = Path::new("C:\\Users\\astronaut\\schematics\\rocket");
-        let home = Path::new("C:\\Users\\astronaut");
-
-        let output = contract_path(full_path, home, "~", "\\");
-        assert_eq!(output, "~\\schematics\\rocket");
     }
 
     #[test]
