@@ -12,6 +12,7 @@ pub struct PythonConfig<'a> {
     pub scan_for_pyfiles: bool,
     pub style: Style,
     pub disabled: bool,
+    pub prefix: &'a str,
 }
 
 impl<'a> RootModuleConfig<'a> for PythonConfig<'a> {
@@ -24,6 +25,7 @@ impl<'a> RootModuleConfig<'a> for PythonConfig<'a> {
             scan_for_pyfiles: true,
             style: Color::Yellow.bold(),
             disabled: false,
+            prefix: "with ",
         }
     }
 }

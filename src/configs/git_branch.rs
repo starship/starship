@@ -11,6 +11,7 @@ pub struct GitBranchConfig<'a> {
     pub branch_name: SegmentConfig<'a>,
     pub style: Style,
     pub disabled: bool,
+    pub prefix: &'a str,
 }
 
 impl<'a> RootModuleConfig<'a> for GitBranchConfig<'a> {
@@ -22,6 +23,7 @@ impl<'a> RootModuleConfig<'a> for GitBranchConfig<'a> {
             branch_name: SegmentConfig::default(),
             style: Color::Purple.bold(),
             disabled: false,
+            prefix: "on "
         }
     }
 }
