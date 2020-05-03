@@ -28,7 +28,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Using environment PWD is the standard approach for determining logical path
     // If this is None for any reason, we fall back to reading the os-provided path
-    let physical_current_dir = if config.use_logical_path {
+    let logical_current_dir = if config.use_logical_path {
         match std::env::var("PWD") {
             Ok(x) => Some(PathBuf::from(x)),
             Err(e) => {
@@ -37,22 +37,26 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             }
         }
     } else {
-        match std::env::current_dir() {
-            Ok(x) => Some(x),
-            Err(e) => {
-                log::debug!("Error getting physical current directory: {}", e);
-                None
-            }
+        None
+    };
+
+    let physical_current_dir = match std::env::current_dir() {
+        Ok(x) => Some(x),
+        Err(e) => {
+            log::debug!("Error getting physical current directory: {}", e);
+            None
         }
     };
-    let current_dir = Path::new(
+
+    let current_dir = Path::new(logical_current_dir.as_ref().unwrap_or_else(|| {
         physical_current_dir
             .as_ref()
-            .unwrap_or_else(|| &context.current_dir),
-    );
+            .unwrap_or_else(|| &context.current_dir)
+    }));
+
+    log::debug!("Current directory: {:?}", current_dir);
 
     let home_dir = dirs::home_dir().unwrap();
-    log::debug!("Current directory: {:?}", current_dir);
 
     let repo = &context.get_repo().ok()?;
 
@@ -60,7 +64,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Some(repo_root) if config.truncate_to_repo && (repo_root != &home_dir) => {
             let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
 
-            // Contract the path to the git repo root
+            // Contract the path to the git repo root, using the physical drive (as git.get_repo() contains also the physical)
+            let current_dir = Path::new(
+                physical_current_dir
+                    .as_ref()
+                    .unwrap_or_else(|| &context.current_dir),
+            );
             contract_path(current_dir, repo_root, repo_folder_name, config.separator)
         }
         // Contract the path to the home directory
