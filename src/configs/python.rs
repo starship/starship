@@ -25,7 +25,7 @@ impl<'a> RootModuleConfig<'a> for PythonConfig<'a> {
             scan_for_pyfiles: true,
             style: Color::Yellow.bold(),
             disabled: false,
-            prefix: "with ",
+            prefix: "via ",
         }
     }
 }
