@@ -583,6 +583,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 | Variable            | Default         | Description                                                                           |
 | ------------------- | --------------- | ------------------------------------------------------------------------------------- |
+| `prefix`            | `"on "`         | Prefix to display immediately before the Git branch.                                  |
 | `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
 | `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
@@ -780,7 +781,7 @@ The `hostname` module shows the system hostname.
 | Variable   | Default               | Description                                                                                                                          |
 | ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
-| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
+| `prefix`   | `"on "`               | Prefix to display immediately before the hostname.                                                                                   |
 | `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
 | `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
 | `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
@@ -1142,6 +1143,7 @@ The module will be shown if any of the following conditions are met:
 
 | Variable             | Default         | Description                                                                 |
 | -------------------- | --------------- | --------------------------------------------------------------------------- |
+| `prefix`             | `"via "`        | Prefix to display before the Python version.                                |
 | `symbol`             | `"🐍 "`         | The symbol used before displaying the version of Python.                    |
 | `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
 | `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
@@ -1313,6 +1315,7 @@ The module will be shown if any of the following conditions are met:
 
 | Variable      | Default         | Description                           |
 | ------------- | --------------- | ------------------------------------- |
+| `prefix`      | `"via "`        | Prefix to display before the username.|
 | `style_root`  | `"bold red"`    | The style used when the user is root. |
 | `style_user`  | `"bold yellow"` | The style used for non-root users.    |
 | `show_always` | `false`         | Always shows the `username` module.   |
