@@ -12,7 +12,6 @@ use crate::common::{self, TestCommand};
 fn home_directory() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path=~")
-        .env("PWD", "~")
         .use_config(toml::toml! { // Necessary if homedir is a git repo
             [directory]
             truncate_to_repo = false
@@ -34,7 +33,6 @@ fn directory_in_home() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path")
         .arg(&dir)
-        .env("PWD", &dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -52,7 +50,6 @@ fn truncated_directory_in_home() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path")
         .arg(&dir)
-        .env("PWD", &dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -90,7 +87,6 @@ fn fish_directory_in_home() -> io::Result<()> {
 fn root_directory() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path=/")
-        .env("PWD", "/")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -103,7 +99,6 @@ fn root_directory() -> io::Result<()> {
 fn test_prefix() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path=/")
-        .env("PWD", "/")
         .use_config(toml::toml! {
             [directory]
             prefix = "sample "
@@ -121,7 +116,6 @@ fn test_prefix() -> io::Result<()> {
 fn directory_in_root() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path=/etc")
-        .env("PWD", "/etc")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 

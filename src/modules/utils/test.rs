@@ -8,7 +8,7 @@ pub fn render_module(
     path: &Path,
     config: Option<toml::Value>,
 ) -> Option<String> {
-    let mut context = Context::new_with_dir(clap::ArgMatches::default(), path);
+    let mut context = Context::new_with_dir(clap::ArgMatches::default(), path, None);
     context.config = StarshipConfig { config };
     context.shell = Shell::Unknown;
 

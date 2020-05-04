@@ -7,15 +7,15 @@ function global:prompt {
     # @ makes sure the result is an array even if single or no values are returned
     $jobs = @(Get-Job | Where-Object { $_.State -eq 'Running' }).Count
 
-    $env:PWD = $PWD
-    $current_directory = (Convert-Path $PWD)
+    $lwd = (Get-Location)
+    $cwd = (Convert-Path $lwd)
 
     if ($lastCmd = Get-History -Count 1) {
         $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalMilliseconds)
         # & ensures the path is interpreted as something to execute
-        $out = @(&::STARSHIP:: prompt "--path=$current_directory" --status=$lastexitcode --jobs=$jobs --cmd-duration=$duration)
+        $out = @(&::STARSHIP:: prompt "--path=$cwd" "--logical-path=$lwd" --status=$lastexitcode --jobs=$jobs --cmd-duration=$duration)
     } else {
-        $out = @(&::STARSHIP:: prompt "--path=$current_directory" --status=$lastexitcode --jobs=$jobs)
+        $out = @(&::STARSHIP:: prompt "--path=$cwd" "--logical-path=$lwd" --status=$lastexitcode --jobs=$jobs)
     }
 
     # Convert stdout (array of lines) to expected return type string

@@ -1,4 +1,4 @@
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use unicode_segmentation::UnicodeSegmentation;
 
@@ -28,33 +28,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Using environment PWD is the standard approach for determining logical path
     // If this is None for any reason, we fall back to reading the os-provided path
-    let logical_current_dir = if config.use_logical_path {
-        match std::env::var("PWD") {
-            Ok(x) => Some(PathBuf::from(x)),
-            Err(e) => {
-                log::debug!("Error getting PWD environment variable: {}", e);
-                None
-            }
-        }
+    let current_dir = if config.use_logical_path && context.logical_dir.is_some() {
+        &context.logical_dir.as_ref().unwrap()
     } else {
-        None
+        &context.current_dir
     };
 
-    let physical_current_dir = match std::env::current_dir() {
-        Ok(x) => Some(x),
-        Err(e) => {
-            log::debug!("Error getting physical current directory: {}", e);
-            None
-        }
-    };
-
-    let current_dir = Path::new(logical_current_dir.as_ref().unwrap_or_else(|| {
-        physical_current_dir
-            .as_ref()
-            .unwrap_or_else(|| &context.current_dir)
-    }));
-
-    log::debug!("Current directory: {:?}", current_dir);
+    log::debug!("Current directory: {:?}", &current_dir);
 
     let home_dir = dirs::home_dir().unwrap();
 
@@ -65,15 +45,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
 
             // Contract the path to the git repo root, using the physical drive (as git.get_repo() contains also the physical)
-            let current_dir = Path::new(
-                physical_current_dir
-                    .as_ref()
-                    .unwrap_or_else(|| &context.current_dir),
-            );
-            contract_path(current_dir, repo_root, repo_folder_name, config.separator)
+            contract_path(
+                &context.current_dir,
+                repo_root,
+                repo_folder_name,
+                config.separator,
+            )
         }
         // Contract the path to the home directory
-        _ => contract_path(current_dir, &home_dir, HOME_SYMBOL, config.separator),
+        _ => contract_path(&current_dir, &home_dir, HOME_SYMBOL, config.separator),
     };
 
     // Truncate the dir string to the maximum number of path components
