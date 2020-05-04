@@ -86,9 +86,9 @@ Most modules in starship allow you to configure their display styles. This is do
 
 Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
-#### Positional Format Strings
+#### Conditional Format Strings
 
-A positional format string wrapped in `(` and `)` will not render if all the variables inside are empty.
+A conditional format string wrapped in `(` and `)` will not render if all the variables inside are empty.
 
 For example:
 
