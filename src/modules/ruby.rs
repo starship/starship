@@ -38,7 +38,10 @@ fn format_ruby_version(ruby_version: &str) -> Option<String> {
         .split_whitespace()
         // return "2.6.0p0"
         .nth(1)?
-        .get(0..5)?;
+        // split into ["2.6.0", "0"]
+        .split('p')
+        // return "2.6.0"
+        .next()?;
 
     let mut formatted_version = String::with_capacity(version.len() + 1);
     formatted_version.push('v');
@@ -53,7 +56,6 @@ mod tests {
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
-    use tempfile;
 
     #[test]
     fn folder_without_ruby_files() -> io::Result<()> {
@@ -104,6 +106,10 @@ mod tests {
 
     #[test]
     fn test_format_ruby_version() -> io::Result<()> {
+        assert_eq!(
+            format_ruby_version("ruby 2.1.10p492 (2016-04-01 revision 54464) [x86_64-darwin19.0]"),
+            Some("v2.1.10".to_string())
+        );
         assert_eq!(
             format_ruby_version("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]"),
             Some("v2.5.1".to_string())

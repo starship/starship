@@ -190,6 +190,7 @@ prompt_order = [
     "env_var",
     "crystal",
     "cmd_duration",
+    "custom",
     "line_break",
     "jobs",
     "battery",
@@ -1098,7 +1099,7 @@ symbol = "🤖 "
 
 The `package` module is shown when the current directory is the repository for a
 package, and shows its current version. The module currently supports `npm`, `cargo`,
-`poetry`, `composer`, and `gradle` packages.
+`poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
 - **npm** – The `npm` package version is extracted from the `package.json` present
   in the current directory
@@ -1110,6 +1111,7 @@ package, and shows its current version. The module currently supports `npm`, `ca
   in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 - **julia** - The package version is extracted from the `Project.toml` present
+- **mix** - The `mix` package version is extracted from the `mix.exs` present
 
 > ⚠️ The version being shown is that of the package whose source code is in your
 > current directory, not your package manager.
@@ -1172,9 +1174,11 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `.python-version` file
 - The current directory contains a `requirements.txt` file
 - The current directory contains a `pyproject.toml` file
-- The current directory contains a file with the `.py` extension
+- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - The current directory contains a `Pipfile` file
 - The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `__init__.py` file
 - A virtual environment is currently activated
 
 ### Options
@@ -1184,6 +1188,7 @@ The module will be shown if any of the following conditions are met:
 | `symbol`             | `"🐍 "`         | The symbol used before displaying the version of Python.                    |
 | `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
 | `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
+| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.  |
 | `style`              | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
 
@@ -1253,8 +1258,6 @@ symbol = "⚙️ "
 
 The `singularity` module shows the current singularity image, if inside a container
 and `$SINGULARITY_NAME` is set.
-
-:::
 
 ### Options
 
@@ -1365,4 +1368,57 @@ The module will be shown if any of the following conditions are met:
 
 [username]
 disabled = true
+```
+
+## Custom commands
+
+The `custom` modules show the output of some arbitrary commands.
+
+These modules will be shown if any of the following conditions are met:
+- The current directory contains a file whose name is in `files`
+- The current directory contains a directory whose name is in `directories`
+- The current directory contains a file whose extension is in `extensions`
+- The `when` command returns 0
+
+::: tip
+
+Multiple custom modules can be defined by using a `.`.
+
+:::
+
+::: tip
+
+The order in which custom modules are shown can be individually set
+by setting `custom.foo` in `prompt_order`. By default, the `custom` module
+will simply show all custom modules in the order they were defined.
+
+:::
+
+### Options
+
+| Variable      | Default             | Description                                                                  |
+| ------------- | ------------------- | ---------------------------------------------------------------------------- |
+| `command`     |                     | The command whose output should be printed.                                  |
+| `when`        |                     | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                     | The path to the shell to use to execute the command. If unset, it will fallback to STARSHIP_SHELL and then to "sh". |
+| `description` | `"<custom module>"` | The description of the module that is shown when running `starship explain`. |
+| `files`       | `[]`                | The files that will be searched in the working directory for a match.        |
+| `directories` | `[]`                | The directories that will be searched in the working directory for a match.  |
+| `extensions`  | `[]`                | The extensions that will be searched in the working directory for a match.   |
+| `symbol`      | `""`                | The symbol used before displaying the command output.                        |
+| `style`       | `"bold green"`      | The style for the module.                                                    |
+| `prefix`      | `""`                | Prefix to display immediately before the command output.                     |
+| `suffix`      | `""`                | Suffix to display immediately after the command output.                      |
+| `disabled`    | `false`             | Disables this `custom` module.                                               |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[custom.foo]
+command = "echo foo"  # shows output of command
+files = ["foo"]       # can specify filters
+when = """ test "$HOME" == "$PWD" """
+prefix = " transcending "
 ```

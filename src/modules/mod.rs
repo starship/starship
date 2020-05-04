@@ -4,6 +4,7 @@ mod character;
 mod cmd_duration;
 mod conda;
 mod crystal;
+pub(crate) mod custom;
 mod directory;
 mod docker_context;
 mod dotnet;

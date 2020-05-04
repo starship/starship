@@ -4,6 +4,7 @@ pub mod character;
 pub mod cmd_duration;
 pub mod conda;
 pub mod crystal;
+pub mod custom;
 pub mod directory;
 pub mod docker_context;
 pub mod dotnet;
