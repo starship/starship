@@ -30,11 +30,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs">Site</a>
   ·
-  <a href="#🚀-installation">Installation</a>
+  <a href="#🚀-installation">Instalação</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs/config/">Configuração</a>
 </p>
 
 <p align="center">
