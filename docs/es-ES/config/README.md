@@ -436,9 +436,9 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. The module will be shown if any of the following conditions are met:
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `mix.exs` file.
+- El directorio actual contiene un fichero `mix.exs`.
 
 ### Opciones
 
@@ -458,10 +458,10 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. The module will be shown if any of the following conditions are met:
+The `elm` module shows the currently installed version of Elm. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `elm.json` file
-- The current directory contains a `elm-package.json` file
+- El directorio actual contiene un fichero `elm.json`
+- El directorio actual contiene un fichero `elm-package.json`
 - The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
@@ -486,7 +486,7 @@ symbol = " "
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. The module will be shown if any of the following conditions are met:
+The `erlang` module shows the currently installed version of Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `rebar.config` file.
 - The current directory contains a `erlang.mk` file.
@@ -506,7 +506,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. The mod
 [erlang]
 symbol = "e "
 ```
-## Environment Variable
+## Variable de entorno
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
@@ -515,15 +515,15 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Opciones
 
-| Variable   | Por defecto      | Descripción                                                                  |
-| ---------- | ---------------- | ---------------------------------------------------------------------------- |
-| `symbol`   |                  | The symbol used before displaying the variable value.                        |
-| `variable` |                  | The environment variable to be displayed.                                    |
-| `default`  |                  | The default value to be displayed when the selected variable is not defined. |
-| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
-| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed black"` | El estilo del módulo.                                                        |
-| `disabled` | `false`          | Disables the `env_var` module.                                               |
+| Variable      | Por defecto      | Descripción                                                                  |
+| ------------- | ---------------- | ---------------------------------------------------------------------------- |
+| `symbol`      |                  | The symbol used before displaying the variable value.                        |
+| `variable`    |                  | The environment variable to be displayed.                                    |
+| `por defecto` |                  | The default value to be displayed when the selected variable is not defined. |
+| `prefix`      | `""`             | Prefix to display immediately before the variable value.                     |
+| `suffix`      | `""`             | Suffix to display immediately after the variable value.                      |
+| `style`       | `"dimmed black"` | El estilo del módulo.                                                        |
+| `disabled`    | `false`          | Disables the `env_var` module.                                               |
 
 ### Ejemplo
 
@@ -560,7 +560,7 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git Commit
+## Git commit
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
@@ -584,7 +584,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 commit_hash_length = 4
 ```
 
-## Git State
+## Git state
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
@@ -613,7 +613,7 @@ progress_divider = " of "
 cherry_pick = "🍒 PICKING"
 ```
 
-## Git Status
+## Git status
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
@@ -674,11 +674,11 @@ deleted = "🗑"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
+The `golang` module shows the currently installed version of Golang. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `go.mod` file
-- The current directory contains a `go.sum` file
-- The current directory contains a `glide.yaml` file
+- El directorio actual contiene un fichero `go.mod`
+- El directorio actual contiene un fichero `go.sum`
+- El directorio actual contiene un fichero `glide.yaml`
 - The current directory contains a `Gopkg.yml` file
 - The current directory contains a `Gopkg.lock` file
 - The current directory contains a `.go-version` file
@@ -703,9 +703,9 @@ symbol = "🏎💨 "
 ```
 ## Haskell
 
-The `haskell` module shows the currently installed version of Haskell Stack version. The module will be shown if any of the following conditions are met:
+The `haskell` module shows the currently installed version of Haskell Stack version. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `stack.yaml` file
+- El directorio actual contiene un fichero `stack.yaml`
 
 ### Opciones
 
@@ -755,7 +755,7 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
+The `java` module shows the currently installed version of Java. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
@@ -802,7 +802,7 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. The module will be shown if any of the following conditions are met:
+The `julia` module shows the currently installed version of Julia. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `Project.toml` file
 - The current directory contains a `Manifest.toml` file
@@ -856,7 +856,7 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ```
 
-## Line Break
+## Salto de línea
 
 The `line_break` module separates the prompt into two lines.
 
@@ -875,7 +875,7 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
-## Memory Usage
+## Memoria utilizada
 
 The `memory_usage` module shows current system memory and swap usage.
 
@@ -969,9 +969,9 @@ symbol = "☃️  "
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
+The `nodejs` module shows the currently installed version of NodeJS. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `package.json` file
+- El directorio actual contiene un fichero `package.json`
 - The current directory contains a `.node-version` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js` extension
@@ -993,7 +993,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 symbol = "🤖 "
 ```
 
-## Package Version
+## Versión del paquete
 
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
@@ -1027,9 +1027,9 @@ symbol = "🎁 "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
+The `php` module shows the currently installed version of PHP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `composer.json` file
+- El directorio actual contiene un fichero `composer.json`
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
@@ -1058,15 +1058,15 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
 
-The module will be shown if any of the following conditions are met:
+El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `.python-version` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `pyproject.toml` file
+- El directorio actual contiene un fichero `requirements.txt`
+- El directorio actual contiene un fichero `pyproject.toml`
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - The current directory contains a `Pipfile` file
-- The current directory contains a `tox.ini` file
-- The current directory contains a `setup.py` file
+- El directorio actual contiene un fichero `tox.ini`
+- El directorio actual contiene un fichero `setup.py`
 - The current directory contains a `__init__.py` file
 - A virtual environment is currently activated
 
@@ -1094,7 +1094,7 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
+The `ruby` module shows the currently installed version of Ruby. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
@@ -1119,7 +1119,7 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
+The `rust` module shows the currently installed version of Rust. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
@@ -1167,7 +1167,7 @@ symbol = "📦 "
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. The module will be shown if any of the following conditions are met:
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` extension
@@ -1190,7 +1190,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 symbol = "🏎💨 "
 ```
 
-## Time
+## Hora
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
@@ -1223,9 +1223,9 @@ format = "🕙[ %T ]"
 utc_time_offset = "-5"
 ```
 
-## Username
+## Nombre de usuario
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+The `username` module shows active user's username. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current user is root
 - The current user isn't the same as the one that is logged in
@@ -1250,7 +1250,7 @@ The `username` module shows active user's username. The module will be shown if 
 disabled = true
 ```
 
-## Custom commands
+## Comandos personalizados
 
 The `custom` modules show the output of some arbitrary commands.
 
@@ -1279,7 +1279,7 @@ The order in which custom modules are shown can be individually set by setting `
 | `command`     |                           | The command whose output should be printed.                                                                                |
 | `when`        |                           | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                           | The path to the shell to use to execute the command. If unset, it will fallback to STARSHIP_SHELL and then to "sh".        |
-| `description` | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
+| `descripción` | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                      | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                      | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                      | The extensions that will be searched in the working directory for a match.                                                 |
