@@ -7,8 +7,7 @@ function fish_prompt
     end
     set -l exit_code $status
     # Account for changes in variable name between v2.7 and v3.0
-    set -l CMD_DURATION "$CMD_DURATION$cmd_duration"
-    set -l starship_duration (math --scale=0 "$CMD_DURATION / 1000")
+    set -l starship_duration "$CMD_DURATION$cmd_duration"
     ::STARSHIP:: prompt --status=$exit_code --keymap=$keymap --cmd-duration=$starship_duration --jobs=(count (jobs -p))
 end
 

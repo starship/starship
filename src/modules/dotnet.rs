@@ -1,12 +1,12 @@
 use std::ffi::OsStr;
 use std::iter::Iterator;
 use std::ops::Deref;
-use std::path::{Path, PathBuf};
-use std::process::{Command, Stdio};
+use std::path::Path;
 use std::str;
 
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::dotnet::DotnetConfig;
+use crate::utils;
 
 type JValue = serde_json::Value;
 
@@ -19,10 +19,19 @@ const PROJECT_JSON_FILE: &str = "project.json";
 /// the current directory:
 /// global.json, project.json, *.sln, *.csproj, *.fsproj, *.xproj
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let dotnet_files = get_local_dotnet_files(context).ok()?;
-    if dotnet_files.is_empty() {
+    // First check if this is a DotNet Project before doing the O(n)
+    // check for the version using the JSON files
+    let is_dotnet_project = context
+        .try_begin_scan()?
+        .set_files(&[GLOBAL_JSON_FILE, PROJECT_JSON_FILE])
+        .set_extensions(&["sln", "csproj", "fsproj", "xproj"])
+        .is_match();
+
+    if !is_dotnet_project {
         return None;
     }
+
+    let dotnet_files = get_local_dotnet_files(context).ok()?;
 
     let mut module = context.new_module("dotnet");
     let config = DotnetConfig::try_load(module.config);
@@ -31,10 +40,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Typically it is twice as fast as running `dotnet --version`.
     let enable_heuristic = config.heuristic;
     let version = if enable_heuristic {
-        let repo_root = context
-            .get_repo()
-            .ok()
-            .and_then(|r| r.root.as_ref().map(PathBuf::as_path));
+        let repo_root = context.get_repo().ok().and_then(|r| r.root.as_deref());
         estimate_dotnet_version(&dotnet_files, &context.current_dir, repo_root)?
     } else {
         get_version_from_cli()?
@@ -165,8 +171,8 @@ fn get_pinned_sdk_version(json: &str) -> Option<Version> {
 
 fn get_local_dotnet_files<'a>(context: &'a Context) -> Result<Vec<DotNetFile<'a>>, std::io::Error> {
     Ok(context
-        .get_dir_files()?
-        .iter()
+        .dir_contents()?
+        .files()
         .filter_map(|p| {
             get_dotnet_file_type(p).map(|t| DotNetFile {
                 path: p.as_ref(),
@@ -201,70 +207,44 @@ fn map_str_to_lower(value: Option<&OsStr>) -> Option<String> {
 }
 
 fn get_version_from_cli() -> Option<Version> {
-    let version_output = match Command::new("dotnet").arg("--version").output() {
-        Ok(output) => output,
-        Err(e) => {
-            log::warn!("Failed to execute `dotnet --version`. {}", e);
-            return None;
-        }
-    };
-    let version = str::from_utf8(version_output.stdout.as_slice())
-        .ok()?
-        .trim();
-
-    let mut buffer = String::with_capacity(version.len() + 1);
-    buffer.push('v');
-    buffer.push_str(version);
-
-    Some(Version(buffer))
+    let version_output = utils::exec_cmd("dotnet", &["--version"])?;
+    Some(Version(format!("v{}", version_output.stdout.trim())))
 }
 
 fn get_latest_sdk_from_cli() -> Option<Version> {
-    let mut cmd = Command::new("dotnet");
-    cmd.arg("--list-sdks")
-        .stdout(Stdio::piped())
-        .stderr(Stdio::null())
-        .stdin(Stdio::null());
-
-    let exit_code = match cmd.status() {
-        Ok(status) => status,
-        Err(e) => {
-            log::warn!("Failed to execute `dotnet --list-sdks`. {}", e);
-            return None;
+    match utils::exec_cmd("dotnet", &["--list-sdks"]) {
+        Some(sdks_output) => {
+            fn parse_failed<T>() -> Option<T> {
+                log::warn!("Unable to parse the output from `dotnet --list-sdks`.");
+                None
+            };
+            let latest_sdk = sdks_output
+                .stdout
+                .lines()
+                .map(str::trim)
+                .filter(|l| !l.is_empty())
+                .last()
+                .or_else(parse_failed)?;
+            let take_until = latest_sdk.find('[').or_else(parse_failed)? - 1;
+            if take_until > 1 {
+                let version = &latest_sdk[..take_until];
+                let mut buffer = String::with_capacity(version.len() + 1);
+                buffer.push('v');
+                buffer.push_str(version);
+                Some(Version(buffer))
+            } else {
+                parse_failed()
+            }
         }
-    };
-
-    if exit_code.success() {
-        let sdks_output = cmd.output().ok()?;
-        fn parse_failed<T>() -> Option<T> {
-            log::warn!("Unable to parse the output from `dotnet --list-sdks`.");
-            None
-        };
-        let latest_sdk = str::from_utf8(sdks_output.stdout.as_slice())
-            .ok()?
-            .lines()
-            .map(str::trim)
-            .filter(|l| !l.is_empty())
-            .last()
-            .or_else(parse_failed)?;
-        let take_until = latest_sdk.find('[').or_else(parse_failed)? - 1;
-        if take_until > 1 {
-            let version = &latest_sdk[..take_until];
-            let mut buffer = String::with_capacity(version.len() + 1);
-            buffer.push('v');
-            buffer.push_str(version);
-            Some(Version(buffer))
-        } else {
-            parse_failed()
+        None => {
+            // Older versions of the dotnet cli do not support the --list-sdks command
+            // So, if the status code indicates failure, fall back to `dotnet --version`
+            log::warn!(
+                "Received a non-success exit code from `dotnet --list-sdks`. \
+                 Falling back to `dotnet --version`.",
+            );
+            get_version_from_cli()
         }
-    } else {
-        // Older versions of the dotnet cli do not support the --list-sdks command
-        // So, if the status code indicates failure, fall back to `dotnet --version`
-        log::warn!(
-            "Received a non-success exit code from `dotnet --list-sdks`. \
-             Falling back to `dotnet --version`.",
-        );
-        get_version_from_cli()
     }
 }
 

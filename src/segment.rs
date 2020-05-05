@@ -4,15 +4,16 @@ use std::fmt;
 /// A segment is a single configurable element in a module. This will usually
 /// contain a data point to provide context for the prompt's user
 /// (e.g. The version that software is running).
+#[derive(Clone)]
 pub struct Segment {
     /// The segment's name, to be used in configuration and logging.
-    _name: String,
+    pub _name: String,
 
     /// The segment's style. If None, will inherit the style of the module containing it.
-    style: Option<Style>,
+    pub style: Option<Style>,
 
     /// The string value of the current segment.
-    value: String,
+    pub value: String,
 }
 
 impl Segment {
@@ -36,6 +37,11 @@ impl Segment {
         self
     }
 
+    /// Check if the segment has a style
+    pub fn has_style(&self) -> bool {
+        self.style.is_some()
+    }
+
     /// Sets the value of the segment.
     pub fn set_value<T>(&mut self, value: T) -> &mut Self
     where
@@ -43,6 +49,11 @@ impl Segment {
     {
         self.value = value.into();
         self
+    }
+
+    /// Gets the value of the segment.
+    pub fn get_value(&self) -> &str {
+        &self.value
     }
 
     // Returns the ANSIString of the segment value, not including its prefix and suffix

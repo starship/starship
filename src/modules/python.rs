@@ -15,26 +15,31 @@ use crate::utils;
 ///     - Current directory contains a `Pipfile` file
 ///     - Current directory contains a `tox.ini` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let is_py_project = context
-        .try_begin_scan()?
-        .set_files(&[
+    let mut module = context.new_module("python");
+    let config: PythonConfig = PythonConfig::try_load(module.config);
+
+    let is_py_project = {
+        let base = context.try_begin_scan()?.set_files(&[
             "requirements.txt",
             ".python-version",
             "pyproject.toml",
             "Pipfile",
             "tox.ini",
-        ])
-        .set_extensions(&["py"])
-        .is_match();
+            "setup.py",
+            "__init__.py",
+        ]);
+        if config.scan_for_pyfiles {
+            base.set_extensions(&["py"]).is_match()
+        } else {
+            base.is_match()
+        }
+    };
 
     let is_venv = env::var("VIRTUAL_ENV").ok().is_some();
 
     if !is_py_project && !is_venv {
         return None;
     }
-
-    let mut module = context.new_module("python");
-    let config: PythonConfig = PythonConfig::try_load(module.config);
 
     module.set_style(config.style);
     module.create_segment("symbol", &config.symbol);
@@ -47,13 +52,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let python_version = get_python_version()?;
         let formatted_version = format_python_version(&python_version);
         module.create_segment("version", &SegmentConfig::new(&formatted_version));
+    };
 
-        if let Some(virtual_env) = get_python_virtual_env() {
-            module.create_segment(
-                "virtualenv",
-                &SegmentConfig::new(&format!(" ({})", virtual_env)),
-            );
-        };
+    if let Some(virtual_env) = get_python_virtual_env() {
+        module.create_segment(
+            "virtualenv",
+            &SegmentConfig::new(&format!(" ({})", virtual_env)),
+        );
     };
 
     Some(module)
@@ -73,7 +78,13 @@ fn get_python_version() -> Option<String> {
 }
 
 fn format_python_version(python_stdout: &str) -> String {
-    format!("v{}", python_stdout.trim_start_matches("Python ").trim())
+    format!(
+        "v{}",
+        python_stdout
+            .trim_start_matches("Python ")
+            .trim_end_matches(":: Anaconda, Inc.")
+            .trim()
+    )
 }
 
 fn get_python_virtual_env() -> Option<String> {
@@ -92,5 +103,11 @@ mod tests {
     fn test_format_python_version() {
         let input = "Python 3.7.2";
         assert_eq!(format_python_version(input), "v3.7.2");
+    }
+
+    #[test]
+    fn test_format_python_version_anaconda() {
+        let input = "Python 3.6.10 :: Anaconda, Inc.";
+        assert_eq!(format_python_version(input), "v3.6.10");
     }
 }

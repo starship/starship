@@ -3,7 +3,6 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::{env, io};
-use tempfile;
 
 use crate::common::{self, TestCommand};
 
@@ -14,6 +13,21 @@ enum Expect<'a> {
     Symbol(&'a str),
     Style(Style),
     TruncationSymbol(&'a str),
+}
+
+#[test]
+fn show_nothing_on_empty_dir() -> io::Result<()> {
+    let repo_dir = tempfile::tempdir()?;
+
+    let output = common::render_module("hg_branch")
+        .arg("--path")
+        .arg(repo_dir.path())
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = "";
+    assert_eq!(expected, actual);
+    repo_dir.close()
 }
 
 #[test]
@@ -29,15 +43,17 @@ fn test_hg_get_branch_fails() -> io::Result<()> {
     expect_hg_branch_with_config(
         tempdir.path(),
         "",
-        &[Expect::BranchName(&"(no branch)"), Expect::NoTruncation],
-    )
+        &[Expect::BranchName(&"default"), Expect::NoTruncation],
+    )?;
+    tempdir.close()
 }
 
 #[test]
 #[ignore]
 fn test_hg_get_branch_autodisabled() -> io::Result<()> {
     let tempdir = tempfile::tempdir()?;
-    expect_hg_branch_with_config(tempdir.path(), "", &[Expect::Empty])
+    expect_hg_branch_with_config(tempdir.path(), "", &[Expect::Empty])?;
+    tempdir.close()
 }
 
 #[test]
@@ -50,7 +66,8 @@ fn test_hg_bookmark() -> io::Result<()> {
         &repo_dir,
         "",
         &[Expect::BranchName(&"bookmark-101"), Expect::NoTruncation],
-    )
+    )?;
+    tempdir.close()
 }
 
 #[test]
@@ -73,7 +90,8 @@ fn test_default_truncation_symbol() -> io::Result<()> {
         &repo_dir,
         "truncation_length = 14",
         &[Expect::BranchName(&"branch-name-10")],
-    )
+    )?;
+    tempdir.close()
 }
 
 #[test]
@@ -104,7 +122,8 @@ fn test_configured_symbols() -> io::Result<()> {
             Expect::Symbol(&"B"),
             Expect::TruncationSymbol(&"%"),
         ],
-    )
+    )?;
+    tempdir.close()
 }
 
 #[test]
@@ -134,7 +153,8 @@ fn test_configured_style() -> io::Result<()> {
             Expect::Style(Color::Blue.underline()),
             Expect::TruncationSymbol(&""),
         ],
-    )
+    )?;
+    tempdir.close()
 }
 
 fn expect_hg_branch_with_config(
@@ -156,7 +176,7 @@ fn expect_hg_branch_with_config(
 
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let mut expect_branch_name = "(no branch)";
+    let mut expect_branch_name = "default";
     let mut expect_style = Color::Purple.bold();
     let mut expect_symbol = "\u{e0a0}";
     let mut expect_truncation_symbol = "…";

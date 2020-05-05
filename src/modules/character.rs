@@ -1,5 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
-
+use super::{Context, Module, RootModuleConfig, Shell};
 use crate::configs::character::CharacterConfig;
 
 /// Creates a module for the prompt character
@@ -25,7 +24,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let props = &context.properties;
     let exit_code_default = std::string::String::from("0");
     let exit_code = props.get("status_code").unwrap_or(&exit_code_default);
-    let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
     let keymap_default = std::string::String::from("viins");
     let keymap = props.get("keymap").unwrap_or(&keymap_default);
     let exit_success = exit_code == "0";
@@ -35,8 +33,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Unfortunately, this is also the name of the non-vi default mode.
     // We do some environment detection in src/init.rs to translate.
     // The result: in non-vi fish, keymap is always reported as "insert"
-    let mode = match (shell.as_str(), keymap.as_str()) {
-        ("fish", "default") | ("zsh", "vicmd") => ShellEditMode::Normal,
+    let mode = match (&context.shell, keymap.as_str()) {
+        (Shell::Fish, "default") | (Shell::Zsh, "vicmd") => ShellEditMode::Normal,
         _ => ASSUMED_MODE,
     };
 

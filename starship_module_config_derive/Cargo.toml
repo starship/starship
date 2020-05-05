@@ -11,7 +11,7 @@ license = "ISC"
 keywords = ["prompt", "shell", "bash", "fish", "zsh"]
 categories = ["command-line-utilities"]
 description = """
-The cross-shell prompt for astronauts. ☄🌌️
+The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
 exclude = ["docs/**/*"]
 

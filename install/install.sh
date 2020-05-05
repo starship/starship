@@ -31,7 +31,6 @@ GREEN="$(tput setaf 2 2>/dev/null || echo '')"
 YELLOW="$(tput setaf 3 2>/dev/null || echo '')"
 BLUE="$(tput setaf 4 2>/dev/null || echo '')"
 MAGENTA="$(tput setaf 5 2>/dev/null || echo '')"
-CYAN="$(tput setaf 6 2>/dev/null || echo '')"
 NO_COLOR="$(tput sgr0 2>/dev/null || echo '')"
 
 info() {
@@ -83,13 +82,32 @@ fetch() {
   fi
 }
 
+install() {
+ local sudo
+ local msg
+ if [ -w "$BIN_DIR" ]; then
+	 sudo=""
+	 msg="Installing Starship, please wait…"
+ else
+	 warn "Escalated permission are required to install to ${BIN_DIR}"
+	 sudo -v || (error "Aborting installation (Please provide root password)";exit 1)
+	 sudo="sudo"
+	 msg="Installing Starship as root, please wait…"
+ fi
+ info "$msg"
+ fetch "${URL}" \
+	| ${sudo} tar xzf${VERBOSE} - \
+	-C "${BIN_DIR}"
+}
+
 # Currently supporting:
 #   - win (Git Bash)
 #   - darwin
 #   - linux
 #   - linux_musl (Alpine)
 detect_platform() {
-  local platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
+  local platform
+  platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
 
   # check for MUSL
   if [ "${platform}" = "linux" ]; then
@@ -118,7 +136,8 @@ detect_platform() {
 #   - x86_64
 #   - i386
 detect_arch() {
-  local arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
+  local arch
+  arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
   # `uname -m` in some cases mis-reports 32-bit OS as 64-bit, so double check
   if [ "${arch}" = "x64" ] && [ "$(getconf LONG_BIT)" -eq 32 ]; then
@@ -132,7 +151,7 @@ confirm() {
   if [ -z "${FORCE-}" ]; then
     printf "${MAGENTA}?${NO_COLOR} $@ ${BOLD}[y/N]${NO_COLOR} "
     set +e
-    read yn < /dev/tty
+    read -r yn < /dev/tty
     rc=$?
     set -e
     if [ $rc -ne 0 ]; then
@@ -150,7 +169,8 @@ check_bin_dir() {
   local bin_dir="$1"
 
   # https://stackoverflow.com/a/11655875
-  local good=$( IFS=:
+  local good
+  good=$( IFS=:
     for path in $PATH; do
       if [ "${path}" = "${bin_dir}" ]; then
         echo 1
@@ -217,7 +237,7 @@ info "${BOLD}Platform${NO_COLOR}:      ${GREEN}${PLATFORM}${NO_COLOR}"
 info "${BOLD}Arch${NO_COLOR}:          ${GREEN}${ARCH}${NO_COLOR}"
 
 # non-empty VERBOSE enables verbose untarring
-if [ ! -z "${VERBOSE-}" ]; then
+if [ -n "${VERBOSE-}" ]; then
   VERBOSE=v
   info "${BOLD}Verbose${NO_COLOR}: yes"
 else
@@ -236,13 +256,9 @@ info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
 check_bin_dir "${BIN_DIR}"
 confirm "Install Starship ${GREEN}latest${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
 
-info "Installing Starship, please wait…"
-
-fetch "${URL}" \
-  | tar xzf${VERBOSE} - \
-    -C "${BIN_DIR}"
-
+install
 complete "Starship installed"
+
 echo
 info "Please follow the steps for your shell to complete the installation:
 

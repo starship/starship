@@ -1,7 +1,6 @@
 use ansi_term::Color;
 use std::fs::{self, File};
 use std::io::{self, Write};
-use tempfile;
 
 use crate::common;
 use crate::common::TestCommand;
@@ -18,7 +17,7 @@ fn folder_without_dotterraform() -> io::Result<()> {
 
     let expected = "";
     assert_eq!(expected, actual);
-    Ok(())
+    dir.close()
 }
 
 #[test]
@@ -35,7 +34,7 @@ fn folder_with_tf_file() -> io::Result<()> {
 
     let expected = format!("via {} ", Color::Fixed(105).bold().paint("💠 default"));
     assert_eq!(expected, actual);
-    Ok(())
+    dir.close()
 }
 
 #[test]
@@ -54,7 +53,7 @@ fn folder_with_workspace_override() -> io::Result<()> {
 
     let expected = format!("via {} ", Color::Fixed(105).bold().paint("💠 development"));
     assert_eq!(expected, actual);
-    Ok(())
+    dir.close()
 }
 
 #[test]
@@ -78,7 +77,8 @@ fn folder_with_datadir_override() -> io::Result<()> {
 
     let expected = format!("via {} ", Color::Fixed(105).bold().paint("💠 development"));
     assert_eq!(expected, actual);
-    Ok(())
+    dir.close()?;
+    datadir.close()
 }
 
 #[test]

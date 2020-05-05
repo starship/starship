@@ -14,7 +14,7 @@ impl<'a> RootModuleConfig<'a> for PhpConfig<'a> {
     fn new() -> Self {
         PhpConfig {
             symbol: SegmentConfig::new("🐘 "),
-            style: Color::Red.bold(),
+            style: Color::Fixed(147).bold(),
             disabled: false,
         }
     }

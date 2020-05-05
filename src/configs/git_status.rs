@@ -6,6 +6,7 @@ use starship_module_config_derive::ModuleConfig;
 #[derive(Clone, ModuleConfig)]
 pub struct GitStatusConfig<'a> {
     pub stashed: SegmentConfig<'a>,
+    pub stashed_count: CountConfig,
     pub ahead: SegmentConfig<'a>,
     pub behind: SegmentConfig<'a>,
     pub diverged: SegmentConfig<'a>,
@@ -32,6 +33,7 @@ impl<'a> RootModuleConfig<'a> for GitStatusConfig<'a> {
     fn new() -> Self {
         GitStatusConfig {
             stashed: SegmentConfig::new("$"),
+            stashed_count: CountConfig::default(),
             ahead: SegmentConfig::new("⇡"),
             behind: SegmentConfig::new("⇣"),
             diverged: SegmentConfig::new("⇕"),

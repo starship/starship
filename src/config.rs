@@ -3,6 +3,7 @@ use crate::utils;
 use ansi_term::{Color, Style};
 
 use std::clone::Clone;
+use std::collections::HashMap;
 use std::marker::Sized;
 
 use dirs::home_dir;
@@ -127,6 +128,22 @@ where
     }
 }
 
+impl<'a, T, S: ::std::hash::BuildHasher + Default> ModuleConfig<'a> for HashMap<String, T, S>
+where
+    T: ModuleConfig<'a>,
+    S: Clone,
+{
+    fn from_config(config: &'a Value) -> Option<Self> {
+        let mut hm = HashMap::default();
+
+        for (x, y) in config.as_table()?.iter() {
+            hm.insert(x.clone(), T::from_config(y)?);
+        }
+
+        Some(hm)
+    }
+}
+
 impl<'a, T> ModuleConfig<'a> for Option<T>
 where
     T: ModuleConfig<'a> + Sized,
@@ -199,6 +216,26 @@ impl StarshipConfig {
             log::trace!("No config found for \"{}\"", &module_name);
         }
         module_config
+    }
+
+    /// Get the subset of the table for a custom module by its name
+    pub fn get_custom_module_config(&self, module_name: &str) -> Option<&Value> {
+        let module_config = self.get_custom_modules()?.get(module_name);
+        if module_config.is_some() {
+            log::debug!(
+                "Custom config found for \"{}\": \n{:?}",
+                &module_name,
+                &module_config
+            );
+        } else {
+            log::trace!("No custom config found for \"{}\"", &module_name);
+        }
+        module_config
+    }
+
+    /// Get the table of all the registered custom modules, if any
+    pub fn get_custom_modules(&self) -> Option<&toml::value::Table> {
+        self.config.as_ref()?.as_table()?.get("custom")?.as_table()
     }
 
     pub fn get_root_config(&self) -> StarshipRootConfig {
@@ -288,7 +325,7 @@ impl Default for SegmentConfig<'static> {
  - 'italic'
  - '<color>'        (see the parse_color_string doc for valid color strings)
 */
-fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
+pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
     style_string
         .split_whitespace()
         .fold(Some(ansi_term::Style::new()), |maybe_style, token| {
@@ -386,7 +423,6 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
 mod tests {
     use super::*;
     use starship_module_config_derive::ModuleConfig;
-    use toml;
 
     #[test]
     fn test_load_config() {

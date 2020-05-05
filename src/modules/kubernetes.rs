@@ -1,4 +1,3 @@
-use dirs;
 use yaml_rust::YamlLoader;
 
 use std::env;
@@ -47,7 +46,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let kube_cfg = match env::var("KUBECONFIG") {
         Ok(paths) => env::split_paths(&paths)
             .filter_map(|filename| parse_kubectl_file(&filename))
-            .nth(0),
+            .next(),
         Err(_) => {
             let filename = dirs::home_dir()?.join(".kube").join("config");
             parse_kubectl_file(&filename)
@@ -68,7 +67,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             module.get_prefix().set_value(KUBERNETES_PREFIX);
 
             module.create_segment("symbol", &config.symbol);
-            module.create_segment("context", &config.context.with_value(&kube_ctx));
+
+            let displayed_context = match config.context_aliases.get(&kube_ctx) {
+                None => &kube_ctx,
+                Some(&alias) => alias,
+            };
+
+            module.create_segment("context", &config.context.with_value(&displayed_context));
             if kube_ns != "" {
                 module.create_segment(
                     "namespace",

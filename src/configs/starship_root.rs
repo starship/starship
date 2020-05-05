@@ -19,6 +19,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
             prompt_order: vec![
                 "username",
                 "hostname",
+                "singularity",
                 "kubernetes",
                 "directory",
                 "git_branch",
@@ -26,12 +27,18 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "git_state",
                 "git_status",
                 "hg_branch",
+                "docker_context",
                 "package",
                 // ↓ Toolchain version modules ↓
                 // (Let's keep these sorted alphabetically)
                 "dotnet",
+                "elixir",
+                "elm",
+                "erlang",
                 "golang",
+                "haskell",
                 "java",
+                "julia",
                 "nodejs",
                 "php",
                 "python",
@@ -44,7 +51,9 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "memory_usage",
                 "aws",
                 "env_var",
+                "crystal",
                 "cmd_duration",
+                "custom",
                 "line_break",
                 "jobs",
                 #[cfg(feature = "battery")]

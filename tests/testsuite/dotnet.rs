@@ -8,7 +8,8 @@ use tempfile::{self, TempDir};
 #[ignore]
 fn shows_nothing_in_directory_with_zero_relevant_files() -> io::Result<()> {
     let workspace = create_workspace(false)?;
-    expect_output(&workspace, ".", None)
+    expect_output(&workspace, ".", None)?;
+    workspace.close()
 }
 
 #[test]
@@ -16,7 +17,8 @@ fn shows_nothing_in_directory_with_zero_relevant_files() -> io::Result<()> {
 fn shows_latest_in_directory_with_solution() -> io::Result<()> {
     let workspace = create_workspace(false)?;
     touch_path(&workspace, "solution.sln", None)?;
-    expect_output(&workspace, ".", Some("•NET v2.2.402"))
+    expect_output(&workspace, ".", Some("•NET v2.2.402"))?;
+    workspace.close()
 }
 
 #[test]
@@ -24,7 +26,8 @@ fn shows_latest_in_directory_with_solution() -> io::Result<()> {
 fn shows_latest_in_directory_with_csproj() -> io::Result<()> {
     let workspace = create_workspace(false)?;
     touch_path(&workspace, "project.csproj", None)?;
-    expect_output(&workspace, ".", Some("•NET v2.2.402"))
+    expect_output(&workspace, ".", Some("•NET v2.2.402"))?;
+    workspace.close()
 }
 
 #[test]
@@ -32,7 +35,8 @@ fn shows_latest_in_directory_with_csproj() -> io::Result<()> {
 fn shows_latest_in_directory_with_fsproj() -> io::Result<()> {
     let workspace = create_workspace(false)?;
     touch_path(&workspace, "project.fsproj", None)?;
-    expect_output(&workspace, ".", Some("•NET v2.2.402"))
+    expect_output(&workspace, ".", Some("•NET v2.2.402"))?;
+    workspace.close()
 }
 
 #[test]
@@ -40,7 +44,8 @@ fn shows_latest_in_directory_with_fsproj() -> io::Result<()> {
 fn shows_latest_in_directory_with_xproj() -> io::Result<()> {
     let workspace = create_workspace(false)?;
     touch_path(&workspace, "project.xproj", None)?;
-    expect_output(&workspace, ".", Some("•NET v2.2.402"))
+    expect_output(&workspace, ".", Some("•NET v2.2.402"))?;
+    workspace.close()
 }
 
 #[test]
@@ -48,7 +53,8 @@ fn shows_latest_in_directory_with_xproj() -> io::Result<()> {
 fn shows_latest_in_directory_with_project_json() -> io::Result<()> {
     let workspace = create_workspace(false)?;
     touch_path(&workspace, "project.json", None)?;
-    expect_output(&workspace, ".", Some("•NET v2.2.402"))
+    expect_output(&workspace, ".", Some("•NET v2.2.402"))?;
+    workspace.close()
 }
 
 #[test]
@@ -57,7 +63,8 @@ fn shows_pinned_in_directory_with_global_json() -> io::Result<()> {
     let workspace = create_workspace(false)?;
     let global_json = make_pinned_sdk_json("1.2.3");
     touch_path(&workspace, "global.json", Some(&global_json))?;
-    expect_output(&workspace, ".", Some("•NET v1.2.3"))
+    expect_output(&workspace, ".", Some("•NET v1.2.3"))?;
+    workspace.close()
 }
 
 #[test]
@@ -67,7 +74,8 @@ fn shows_pinned_in_project_below_root_with_global_json() -> io::Result<()> {
     let global_json = make_pinned_sdk_json("1.2.3");
     touch_path(&workspace, "global.json", Some(&global_json))?;
     touch_path(&workspace, "project/project.csproj", None)?;
-    expect_output(&workspace, "project", Some("•NET v1.2.3"))
+    expect_output(&workspace, "project", Some("•NET v1.2.3"))?;
+    workspace.close()
 }
 
 #[test]
@@ -77,7 +85,8 @@ fn shows_pinned_in_deeply_nested_project_within_repository() -> io::Result<()> {
     let global_json = make_pinned_sdk_json("1.2.3");
     touch_path(&workspace, "global.json", Some(&global_json))?;
     touch_path(&workspace, "deep/path/to/project/project.csproj", None)?;
-    expect_output(&workspace, "deep/path/to/project", Some("•NET v1.2.3"))
+    expect_output(&workspace, "deep/path/to/project", Some("•NET v1.2.3"))?;
+    workspace.close()
 }
 
 fn create_workspace(is_repo: bool) -> io::Result<TempDir> {

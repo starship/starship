@@ -1,10 +1,16 @@
+use std::time::SystemTime;
+
 #[macro_use]
 extern crate clap;
+#[macro_use]
+extern crate pest_derive;
 
 mod bug_report;
 mod config;
 mod configs;
+mod configure;
 mod context;
+mod formatter;
 mod init;
 mod module;
 mod modules;
@@ -49,7 +55,7 @@ fn main() {
         .short("d")
         .long("cmd-duration")
         .value_name("CMD_DURATION")
-        .help("The execution duration of the last command, in seconds")
+        .help("The execution duration of the last command, in milliseconds")
         .takes_value(true);
 
     let keymap_arg = Arg::with_name("keymap")
@@ -118,9 +124,29 @@ fn main() {
                     .arg(&jobs_arg)
                     .arg(&pipestatus_arg),
             )
+            .subcommand(
+                SubCommand::with_name("config")
+                    .alias("configure")
+                    .about("Edit the starship configuration")
+                    .arg(
+                        Arg::with_name("name")
+                            .help("Configuration key to edit")
+                            .required(false)
+                            .requires("value"),
+                    )
+                    .arg(Arg::with_name("value").help("Value to place into that key")),
+            )
             .subcommand(SubCommand::with_name("bug-report").about(
                 "Create a pre-populated GitHub issue with information about your configuration",
             ))
+            .subcommand(
+                SubCommand::with_name("time")
+                    .about("Prints time in milliseconds")
+                    .settings(&[AppSettings::Hidden]),
+            )
+            .subcommand(
+                SubCommand::with_name("explain").about("Explains the currently showing modules"),
+            )
             .get_matches();
 
     match matches.subcommand() {
@@ -145,7 +171,26 @@ fn main() {
                 print::module(module_name, sub_m.clone());
             }
         }
+        ("config", Some(sub_m)) => {
+            if let Some(name) = sub_m.value_of("name") {
+                if let Some(value) = sub_m.value_of("value") {
+                    configure::update_configuration(name, value)
+                }
+            } else {
+                configure::edit_configuration()
+            }
+        }
         ("bug-report", Some(_)) => bug_report::create(),
+        ("time", _) => {
+            match SystemTime::now()
+                .duration_since(SystemTime::UNIX_EPOCH)
+                .ok()
+            {
+                Some(time) => println!("{}", time.as_millis()),
+                None => println!("{}", -1),
+            }
+        }
+        ("explain", Some(sub_m)) => print::explain(sub_m.clone()),
         _ => {}
     }
 }
