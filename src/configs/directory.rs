@@ -23,10 +23,13 @@ impl<'a> RootModuleConfig<'a> for DirectoryConfig<'a> {
             fish_style_pwd_dir_length: 0,
             use_logical_path: true,
             prefix: "in ",
-            separator: if std::path::MAIN_SEPARATOR == '\\' {
-                "\\"
-            } else {
-                "/"
+            separator: match std::path::MAIN_SEPARATOR {
+                '/' => "/",
+                '\\' => "\\",
+                '.' => ".",
+                ':' => ":",
+                '>' => ">",
+                _ => panic!("Unknown Seperator"),
             },
             style: Color::Cyan.bold(),
             disabled: false,
