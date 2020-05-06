@@ -3,7 +3,7 @@ use crate::module::Module;
 
 use crate::modules;
 use clap::ArgMatches;
-use git2::{Repository, RepositoryState};
+use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
 use once_cell::sync::OnceCell;
 use std::collections::{HashMap, HashSet};
 use std::env;
@@ -312,7 +312,19 @@ impl<'a> ScanDir<'a> {
 }
 
 fn get_current_branch(repository: &Repository) -> Option<String> {
-    let head = repository.head().ok()?;
+    let head = match repository.head() {
+        Ok(reference) => reference,
+        Err(e) => {
+            return if e.code() == UnbornBranch {
+                // HEAD should only be an unborn branch if the repository is fresh,
+                // in that case assume "master"
+                Some(String::from("master"))
+            } else {
+                None
+            };
+        }
+    };
+
     let shorthand = head.shorthand();
 
     shorthand.map(std::string::ToString::to_string)
