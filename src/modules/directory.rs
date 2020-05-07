@@ -1,4 +1,5 @@
 use path_slash::PathExt;
+use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
 
@@ -10,11 +11,14 @@ use crate::configs::directory::DirectoryConfig;
 
 /// Creates a module with the current directory
 ///
-/// Will perform path contraction and truncation.
+/// Will perform path contraction, substitution, and truncation.
 /// **Contraction**
 ///     - Paths beginning with the home directory or with a git repo right
 /// inside the home directory will be contracted to `~`
 ///     - Paths containing a git repo will contract to begin at the repo root
+///
+/// **Substitution**
+/// Paths will undergo user-provided substitutions of substrings
 ///
 /// **Truncation**
 /// Paths will be limited in length to `3` path components by default.
@@ -67,10 +71,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         _ => contract_path(current_dir, &home_dir, HOME_SYMBOL),
     };
 
-    // Truncate the dir string to the maximum number of path components
-    let truncated_dir_string = truncate(dir_string, config.truncation_length as usize);
+    let substituted_dir = substitute_path(dir_string, &config.substitutions);
 
-    if config.fish_style_pwd_dir_length > 0 {
+    // Truncate the dir string to the maximum number of path components
+    let truncated_dir_string = truncate(substituted_dir, config.truncation_length as usize);
+
+    // Substitutions could have changed the prefix, so don't allow them and
+    // fish-style path contraction together
+    if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
         // If user is using fish style path, we need to add the segment first
         let contracted_home_dir = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
         let fish_style_dir = to_fish_style(
@@ -124,6 +132,18 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
             .to_slash()
             .unwrap()
     )
+}
+
+/// Perform a list of string substitutions on the path
+///
+/// Given a list of (from, to) pairs, this will perform the string
+/// substitutions, in order, on the path. Any non-pair of strings is ignored.
+fn substitute_path(dir_string: String, substitutions: &HashMap<String, &str>) -> String {
+    let mut substituted_dir = dir_string;
+    for substitution_pair in substitutions.iter() {
+        substituted_dir = substituted_dir.replace(substitution_pair.0, substitution_pair.1);
+    }
+    substituted_dir
 }
 
 /// Takes part before contracted path and replaces it with fish style path
@@ -221,6 +241,17 @@ mod tests {
 
         let output = contract_path(full_path, top_level_path, "~");
         assert_eq!(output, "C:/");
+    }
+
+    #[test]
+    fn substitute_prefix_and_middle() {
+        let full_path = "/absolute/path/foo/bar/baz";
+        let mut substitutions = HashMap::new();
+        substitutions.insert("/absolute/path".to_string(), "");
+        substitutions.insert("/bar/".to_string(), "/");
+
+        let output = substitute_path(full_path.to_string(), &substitutions);
+        assert_eq!(output, "/foo/baz");
     }
 
     #[test]
