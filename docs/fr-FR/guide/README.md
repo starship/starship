@@ -32,7 +32,7 @@
 <p align="center">
   <a href="https://starship.rs">Site web</a>
   ·
-  <a href="#-installation">Installation</a>
+  <a href="#🚀-installation">Installation</a>
   ·
   <a href="https://starship.rs/config/">Configuration</a>
 </p>
@@ -114,6 +114,8 @@
 <p align="center">
 <a href="https://starship.rs/"><strong>Consulter la documentation de Starship&nbsp;&nbsp;▶</strong></a>
 </p>
+
+<a name="🚀-installation"></a>
 
 ## 🚀 Installation
 
@@ -250,7 +252,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 ## 💭Inspiré par
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Voyez ces travaux précédents qui ont contribué à inspirer la création de vaisseau. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Un ZSH prompt pour les astronautes.
 
@@ -260,9 +262,9 @@ Please check out these previous works that helped inspire the creation of starsh
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Icône de fusée de Starship">
 </p>
 
 ## 📝 License
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-présent, [Contributeurs Starship](https://github.com/starship/starship/graphs/contributors).<br /> Ce projet est sous licence[ISC](https://github.com/starship/starship/blob/master/LICENSE).

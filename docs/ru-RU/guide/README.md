@@ -32,7 +32,7 @@
 <p align="center">
   <a href="https://starship.rs">Сайт</a>
   ·
-  <a href="#-installation">Установка</a>
+  <a href="#🚀-installation">Установка</a>
   ·
   <a href="https://starship.rs/config/">Конфигурация</a>
 </p>
@@ -114,6 +114,8 @@
 <p align="center">
 <a href="https://starship.rs/"><strong>Изучите документацию Starship&nbsp;&nbsp;▶</strong></a>
 </p>
+
+<a name="🚀-installation"></a>
 
 ## 🚀 Установка
 
@@ -220,22 +222,22 @@
 
 Если вы хотите помочь в создании Starship, пожалуйста, ознакомьтесь с нашим [Руководством по содействию](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Кроме того, заходите на наш [Discord сервер](https://discord.gg/8Jzqu3T) и поздоровайтесь. 👋
 
-### Code Contributors
+### Соавторы кода
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+Этот проект существует благодаря всем тем, кто внес свой вклад. [[Внести вклад](CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
-### Financial Contributors
+### Финансовые спонсоры
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+Станьте финансовым спонсором и помогайте нам поддерживать наше сообщество. [[Внести вклад](https://opencollective.com/starship/contribute)]
 
-#### Individuals
+#### Частные лица
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
-#### Organizations
+#### Организации
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+Поддержите этот проект вашей организацией. Ваш логотип будет отображаться здесь со ссылкой на ваш сайт. [[Внести вклад](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -250,7 +252,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 ## 💭 Вдохновления
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Пожалуйста, ознакомьтесь с этими предыдущими работами, которые помогли вдохновить создание Starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - командная строка ZSH для астронавтов.
 
@@ -260,9 +262,9 @@ Please check out these previous works that helped inspire the creation of starsh
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Иконка ракеты Starship">
 </p>
 
 ## 📝 Лицензия
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Авторское право © 2019-настоящее, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Этот проект [ISC](https://github.com/starship/starship/blob/master/LICENSE) лицензирован.
