@@ -33,6 +33,10 @@ fn directory_in_home() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path")
         .arg(&dir)
+        .use_config(toml::toml! {
+            [directory]
+            separator = "/"
+        })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -50,6 +54,10 @@ fn truncated_directory_in_home() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path")
         .arg(&dir)
+        .use_config(toml::toml! {
+            [directory]
+            separator = "/"
+        })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -72,6 +80,7 @@ fn fish_directory_in_home() -> io::Result<()> {
             [directory]
             truncation_length = 1
             fish_style_pwd_dir_length = 2
+            separator = "/"
         })
         .arg("--path")
         .arg(dir)
@@ -84,13 +93,36 @@ fn fish_directory_in_home() -> io::Result<()> {
 }
 
 #[test]
+#[cfg(not(target_os = "windows"))]
 fn root_directory() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path=/")
+        .use_config(toml::toml! {
+            [directory]
+            separator = "/"
+        })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("/"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+
+#[test]
+#[cfg(target_os = "windows")]
+fn root_directory() -> io::Result<()> {
+    let output = common::render_module("directory")
+        .arg("--path=C:\\")
+        .use_config(toml::toml! {
+            [directory]
+            separator = "/"
+        })
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("in {} ", Color::Cyan.bold().paint("C:/"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -102,6 +134,7 @@ fn test_prefix() -> io::Result<()> {
         .use_config(toml::toml! {
             [directory]
             prefix = "sample "
+            separator = "/"
         })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
@@ -129,6 +162,10 @@ fn directory_in_root() -> io::Result<()> {
 fn directory_in_root() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path=C:\\")
+        .use_config(toml::toml! {
+            [directory]
+            separator = "/"
+        })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -139,6 +176,7 @@ fn directory_in_root() -> io::Result<()> {
 
 #[test]
 #[ignore]
+#[cfg(not(target_os = "windows"))]
 fn truncated_directory_in_root() -> io::Result<()> {
     let dir = Path::new("/tmp/starship/thrusters/rocket");
     fs::create_dir_all(&dir)?;
@@ -146,6 +184,36 @@ fn truncated_directory_in_root() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path")
         .arg(dir)
+        .use_config(toml::toml! {
+            [directory]
+            separator = "/"
+        })
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!(
+        "in {} ",
+        Color::Cyan.bold().paint("starship/thrusters/rocket")
+    );
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+
+#[test]
+#[ignore]
+#[cfg(target_os = "windows")]
+fn truncated_directory_in_root() -> io::Result<()> {
+    let dir = Path::new("c:\\tmp\\starship\\thrusters\\rocket");
+    fs::create_dir_all(&dir)?;
+
+    let output = common::render_module("directory")
+        .arg("--path")
+        .arg(dir)
+        .use_config(toml::toml! {
+            [directory]
+            separator = "/"
+        })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -159,6 +227,7 @@ fn truncated_directory_in_root() -> io::Result<()> {
 
 #[test]
 #[ignore]
+#[cfg(not(target_os = "windows"))]
 fn truncated_directory_config_large() -> io::Result<()> {
     let dir = Path::new("/tmp/starship/thrusters/rocket");
     fs::create_dir_all(&dir)?;
@@ -167,6 +236,7 @@ fn truncated_directory_config_large() -> io::Result<()> {
         .use_config(toml::toml! {
             [directory]
             truncation_length = 100
+            separator = "/"
         })
         .arg("--path")
         .arg(dir)
@@ -183,6 +253,33 @@ fn truncated_directory_config_large() -> io::Result<()> {
 
 #[test]
 #[ignore]
+#[cfg(target_os = "windows")]
+fn truncated_directory_config_large() -> io::Result<()> {
+    let dir = Path::new("c:\\tmp\\starship\\thrusters\\rocket");
+    fs::create_dir_all(&dir)?;
+
+    let output = common::render_module("directory")
+        .use_config(toml::toml! {
+            [directory]
+            truncation_length = 100
+            separator = "/"
+        })
+        .arg("--path")
+        .arg(dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!(
+        "in {} ",
+        Color::Cyan.bold().paint("c:/tmp/starship/thrusters/rocket")
+    );
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[ignore]
+#[cfg(not(target_os = "windows"))]
 fn fish_style_directory_config_large() -> io::Result<()> {
     let dir = Path::new("/tmp/starship/thrusters/rocket");
     fs::create_dir_all(&dir)?;
@@ -192,6 +289,7 @@ fn fish_style_directory_config_large() -> io::Result<()> {
             [directory]
             truncation_length = 1
             fish_style_pwd_dir_length = 100
+            separator = "/"
         })
         .arg("--path")
         .arg(dir)
@@ -208,6 +306,33 @@ fn fish_style_directory_config_large() -> io::Result<()> {
 
 #[test]
 #[ignore]
+#[cfg(target_os = "windows")]
+fn fish_style_directory_config_large() -> io::Result<()> {
+    let dir = Path::new("c:\\tmp\\starship\\thrusters\\rocket");
+    fs::create_dir_all(&dir)?;
+
+    let output = common::render_module("directory")
+        .use_config(toml::toml! {
+            [directory]
+            truncation_length = 1
+            fish_style_pwd_dir_length = 100
+            separator = "/"
+        })
+        .arg("--path")
+        .arg(dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!(
+        "in {} ",
+        Color::Cyan.bold().paint("c:/tmp/starship/thrusters/rocket")
+    );
+    assert_eq!(expected, actual);
+    Ok(())
+}
+#[test]
+#[ignore]
+#[cfg(not(target_os = "windows"))]
 fn truncated_directory_config_small() -> io::Result<()> {
     let dir = Path::new("/tmp/starship/thrusters/rocket");
     fs::create_dir_all(&dir)?;
@@ -229,6 +354,29 @@ fn truncated_directory_config_small() -> io::Result<()> {
 
 #[test]
 #[ignore]
+#[cfg(target_os = "windows")]
+fn truncated_directory_config_small() -> io::Result<()> {
+    let dir = Path::new("c:\\tmp\\starship\\thrusters\\rocket");
+    fs::create_dir_all(&dir)?;
+
+    let output = common::render_module("directory")
+        .use_config(toml::toml! {
+            [directory]
+            truncation_length = 2
+            separator = "/"
+        })
+        .arg("--path")
+        .arg(dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("in {} ", Color::Cyan.bold().paint("thrusters/rocket"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
+#[test]
+#[ignore]
+#[cfg(not(target_os = "windows"))]
 fn fish_directory_config_small() -> io::Result<()> {
     let dir = Path::new("/tmp/starship/thrusters/rocket");
     fs::create_dir_all(&dir)?;
@@ -238,6 +386,7 @@ fn fish_directory_config_small() -> io::Result<()> {
             [directory]
             truncation_length = 2
             fish_style_pwd_dir_length = 1
+            separator = "/"
         })
         .arg("--path")
         .arg(dir)
@@ -245,6 +394,30 @@ fn fish_directory_config_small() -> io::Result<()> {
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!("in {} ", Color::Cyan.bold().paint("/t/s/thrusters/rocket"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+#[ignore]
+#[cfg(target_os = "windows")]
+fn fish_directory_config_small() -> io::Result<()> {
+    let dir = Path::new("c:\\tmp\\starship\\thrusters\\rocket");
+    fs::create_dir_all(&dir)?;
+
+    let output = common::render_module("directory")
+        .use_config(toml::toml! {
+            [directory]
+            truncation_length = 2
+            fish_style_pwd_dir_length = 1
+            separator = "/"
+        })
+        .arg("--path")
+        .arg(dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("in {} ", Color::Cyan.bold().paint("c/t/s/thrusters/rocket"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -283,6 +456,10 @@ fn directory_in_git_repo() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path")
         .arg(dir)
+        .use_config(toml::toml! {
+            [directory]
+            separator = "/"
+        })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -303,6 +480,10 @@ fn truncated_directory_in_git_repo() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path")
         .arg(dir)
+        .use_config(toml::toml! {
+            [directory]
+            separator = "/"
+        })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -326,6 +507,7 @@ fn directory_in_git_repo_truncate_to_repo_false() -> io::Result<()> {
             // Don't truncate the path at all.
             truncation_length = 5
             truncate_to_repo = false
+            separator = "/"
         })
         .arg("--path")
         .arg(dir)
@@ -358,6 +540,7 @@ fn fish_path_directory_in_git_repo_truncate_to_repo_false() -> io::Result<()> {
             truncation_length = 5
             truncate_to_repo = false
             fish_style_pwd_dir_length = 1
+            separator = "/"
         })
         .arg("--path")
         .arg(dir)
@@ -390,6 +573,7 @@ fn fish_path_directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
             truncation_length = 5
             truncate_to_repo = true
             fish_style_pwd_dir_length = 1
+            separator = "/"
         })
         .arg("--path")
         .arg(dir)
@@ -421,6 +605,7 @@ fn directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
             // `truncate_to_repo = true` should display the truncated path
             truncation_length = 5
             truncate_to_repo = true
+            separator = "/"
         })
         .arg("--path")
         .arg(dir)
