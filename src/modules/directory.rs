@@ -158,7 +158,9 @@ fn to_separator(path: &Path, separator: &str) -> Option<String> {
 
     let mut out = String::with_capacity((*path_str).len());
 
-    let mut iter = path.iter().filter(|x| x.to_string_lossy() != "\\" && x.to_string_lossy() != "/");
+    let mut iter = path
+        .iter()
+        .filter(|x| x.to_string_lossy() != "\\" && x.to_string_lossy() != "/");
     let first = iter.next();
     if let Some(first_component) = first {
         out.push_str(&first_component.to_string_lossy());

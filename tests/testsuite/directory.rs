@@ -109,7 +109,6 @@ fn root_directory() -> io::Result<()> {
     Ok(())
 }
 
-
 #[test]
 #[cfg(target_os = "windows")]
 fn root_directory() -> io::Result<()> {
@@ -198,7 +197,6 @@ fn truncated_directory_in_root() -> io::Result<()> {
     assert_eq!(expected, actual);
     Ok(())
 }
-
 
 #[test]
 #[ignore]
