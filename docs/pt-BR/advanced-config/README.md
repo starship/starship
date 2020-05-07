@@ -1,10 +1,10 @@
-# Configuración Avanzada
+# Advanced Configuration
 
-Mientras que Starship es un versátil intérprete de comandos, a veces necesitas más que editar `starhip.toml` para que haga ciertas cosas. Esta página detalla algunas de las técnicas de configuración más avanzadas en starship.
+While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
 
-::: aviso
+::: warning
 
-Las configuraciones de esta sección pueden sufrir cambios en futuras versiones de Starship.
+The configurations in this section are subject to change in future releases of Starship.
 
 :::
 
@@ -59,7 +59,7 @@ precmd_functions+=(set_win_title)
 
 If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zsrhc`) to make it permanent.
 
-## Dar estilo a cadenas de texto
+## Style Strings
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
