@@ -2,7 +2,6 @@ use ansi_term::Color;
 use remove_dir_all::remove_dir_all;
 use std::io;
 use std::process::Command;
-use tempfile;
 
 use crate::common::{self, TestCommand};
 
@@ -97,6 +96,30 @@ fn test_hindi_truncation2() -> io::Result<()> {
 #[test]
 fn test_japanese_truncation() -> io::Result<()> {
     test_truncate_length("がんばってね", 4, "がんばっ", "…")
+}
+
+#[test]
+fn test_works_with_unborn_master() -> io::Result<()> {
+    let repo_dir = tempfile::tempdir()?.into_path();
+
+    Command::new("git")
+        .args(&["init"])
+        .current_dir(&repo_dir)
+        .output()?;
+
+    let output = common::render_module("git_branch")
+        .arg("--path")
+        .arg(&repo_dir)
+        .output()
+        .unwrap();
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!(
+        "on {} ",
+        Color::Purple.bold().paint(format!("\u{e0a0} {}", "master")),
+    );
+    assert_eq!(expected, actual);
+    remove_dir_all(repo_dir)
 }
 
 fn test_truncate_length(

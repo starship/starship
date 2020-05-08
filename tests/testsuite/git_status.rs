@@ -4,7 +4,6 @@ use std::fs::{self, File};
 use std::io;
 use std::path::PathBuf;
 use std::process::Command;
-use tempfile;
 
 use crate::common::{self, TestCommand};
 
