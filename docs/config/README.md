@@ -733,10 +733,20 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default                         | Description                    |
-| ---------- | ------------------------------- | ------------------------------ |
-| `format`   | `"via [λ $version](red bold) "` | The format for the module.     |
-| `disabled` | `false`                         | Disables the `haskell` module. |
+| Variable   | Default                             | Description                                        |
+| ---------- | ----------------------------------- | -------------------------------------------------- |
+| `format`   | `"via [$symbol $version]($style) "` | The format for the module.                         |
+| `symbol`   | `"λ"`                               | A format string representing the symbol of Haskell |
+| `style`    | `"bold red"`                        | The style for the module.                          |
+| `disabled` | `false`                             | Disables the `haskell` module.                     |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v8.8.3` | The version of `ghc`                 |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style    |          | Mirrors the value of option `style`  |
 
 ### Example
 
