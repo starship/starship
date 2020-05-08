@@ -877,10 +877,20 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default                           | Description                 |
-| ---------- | --------------------------------- | --------------------------- |
-| `format`   | `"via [☕ $version](red dimmed) "` | The format for the module.  |
-| `disabled` | `false`                           | Disables the `java` module. |
+| Variable   | Default                             | Description                                     |
+| ---------- | ----------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol $version]($style) "` | The format for the module.                      |
+| `symbol`   | `"☕"`                               | A format string representing the symbol of Java |
+| `style`    | `"red dimmed"`                      | The style for the module.                       |
+| `disabled` | `false`                             | Disables the `java` module.                     |
+
+### Variables
+
+| Variable | Example      | Description                          |
+| -------- | ------------ | ------------------------------------ |
+| version  | "v14"        | The version of `java`                |
+| symbol   | "☕"          | Mirrors the value of option `symbol` |
+| style    | "red dimmed" | Mirrors the value of option `style`  |
 
 ### Example
 
