@@ -1237,10 +1237,20 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default                          | Description                |
-| ---------- | -------------------------------- | -------------------------- |
-| `format`   | `"via [R $version](blue bold) "` | The format for the module. |
-| `disabled` | `false`                          | Disables the `r` module.   |
+| Variable   | Default                       | Description                                   |
+| ---------- | ----------------------------- | --------------------------------------------- |
+| `format`   | `"via [R $version]($style) "` | The format for the module.                    |
+| `symbol`   | `""`                          | A format string representing the symbol of R. |
+| `style`    | `"blue bold"`                 | The style for the module.                     |
+| `disabled` | `false`                       | Disables the `r` module.                      |
+
+### Variables
+
+| Variable | Example       | Description                          |
+| -------- | ------------- | ------------------------------------ |
+| version  | `v4.0.0`      | The version of `R`                   |
+| symbol   |               | Mirrors the value of option `symbol` |
+| style    | `"blue bold"` | Mirrors the value of option `style`  |
 
 ### Example
 
