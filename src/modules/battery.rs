@@ -32,9 +32,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let formatter = formatter
                 .map_meta(|variable, _| match variable {
                     "symbol" => match state {
-                        battery::State::Full => config.full_symbol,
-                        battery::State::Charging => config.charging_symbol,
-                        battery::State::Discharging => config.discharging_symbol,
+                        battery::State::Full => Some(config.full_symbol),
+                        battery::State::Charging => Some(config.charging_symbol),
+                        battery::State::Discharging => Some(config.discharging_symbol),
                         battery::State::Unknown => config.unknown_symbol,
                         battery::State::Empty => config.empty_symbol,
                         _ => {

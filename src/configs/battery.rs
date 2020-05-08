@@ -4,9 +4,9 @@ use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct BatteryConfig<'a> {
-    pub full_symbol: Option<&'a str>,
-    pub charging_symbol: Option<&'a str>,
-    pub discharging_symbol: Option<&'a str>,
+    pub full_symbol: &'a str,
+    pub charging_symbol: &'a str,
+    pub discharging_symbol: &'a str,
     pub unknown_symbol: Option<&'a str>,
     pub empty_symbol: Option<&'a str>,
     pub display: Vec<BatteryDisplayConfig<'a>>,
@@ -17,12 +17,12 @@ pub struct BatteryConfig<'a> {
 impl<'a> RootModuleConfig<'a> for BatteryConfig<'a> {
     fn new() -> Self {
         BatteryConfig {
-            full_symbol: Some("•"),
-            charging_symbol: Some("↑"),
-            discharging_symbol: Some("↓"),
+            full_symbol: "•",
+            charging_symbol: "↑",
+            discharging_symbol: "↓",
             unknown_symbol: None,
             empty_symbol: None,
-            format: "[$symbol $percentage]($style) ",
+            format: "[$symbol$percentage]($style) ",
             display: vec![BatteryDisplayConfig {
                 threshold: 10,
                 style: "red bold",
