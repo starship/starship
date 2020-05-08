@@ -171,7 +171,7 @@ The module is only visible when the device's battery is below 10%.
 
 ### Options
 
-| Variable             | Default                            | Description                                       |
+| Option               | Default                            | Description                                       |
 | -------------------- | ---------------------------------- | ------------------------------------------------- |
 | `full_symbol`        | `"•"`                              | The symbol shown when the battery is full.        |
 | `charging_symbol`    | `"⇡"`                              | The symbol shown when the battery is charging.    |
