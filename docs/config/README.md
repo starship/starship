@@ -800,16 +800,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                           | Description                   |
-| ---------- | --------------------------------- | ----------------------------- |
-| `format`   | `"via [🐹 $version](cyan bold) "` | The format for the module.    |
-| `disabled` | `false`                           | Disables the `golang` module. |
+| Option     | Default                            | Description                                     |
+| ---------- | ---------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
+| `symbol`   | `"🐹 "`                            | A format string representing the symbol of Go.  |
+| `style`    | `"bold cyan"`                      | The style for the module.                       |
+| `disabled` | `false`                            | Disables the `golang` module.                   |
 
 ### Variables
 
-| Variable | Example   | Description         |
-| -------- | --------- | ------------------- |
-| version  | `v1.12.1` | The version of `go` |
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v1.12.1` | The version of `go`                  |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -817,7 +823,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [golang]
-format = "via [🏎💨 $version](cyan bold) "
+format = "via [🏎💨 $version](bold cyan) "
 ```
 
 ## Haskell
