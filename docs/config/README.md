@@ -37,7 +37,7 @@ export STARSHIP_CONFIG=~/.starship
 
 **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
-**Variable**: Smaller sub-components that contains information provided by the module. For example, the "version" segment in the "nodejs" module contains the current version of NodeJS.
+**Variable**: Smaller sub-components that contains information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
 
 By convention, most modules have a prefix of default terminal color (e.g. `via ` in "nodejs") and an empty space as a suffix.
 
@@ -88,7 +88,7 @@ Note that what styling looks like will be controlled by your terminal emulator. 
 
 #### Conditional Format Strings
 
-A conditional format string wrapped in `(` and `)` will not render if all the variables inside are empty.
+A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
 For example:
 
