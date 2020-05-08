@@ -95,25 +95,6 @@ fn root_directory() -> io::Result<()> {
     Ok(())
 }
 
-// TODO: Remove this test once formatter support is fully implemented and prefix support has been removed.
-#[test]
-fn test_prefix() -> io::Result<()> {
-    let output = common::render_module("directory")
-        .arg("--path=/")
-        .use_config(toml::toml! {
-            [directory]
-            prefix = "sample "
-        })
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-
-    // The prefix has been disabled with the latest formatter changes.
-    // Hence we don't expect to see it in the output even if set.
-    let expected = format!("{} ", Color::Cyan.bold().paint("/"));
-    assert_eq!(expected, actual);
-    Ok(())
-}
-
 #[test]
 #[cfg(not(target_os = "windows"))]
 fn directory_in_root() -> io::Result<()> {
