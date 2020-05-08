@@ -1,5 +1,5 @@
 use path_slash::PathExt;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module};
@@ -28,7 +28,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Using environment PWD is the standard approach for determining logical path
     // If this is None for any reason, we fall back to reading the os-provided path
     let physical_current_dir = if config.use_logical_path {
-        None
+        match std::env::var("PWD") {
+            Ok(x) => Some(PathBuf::from(x)),
+            Err(e) => {
+                log::debug!("Error getting PWD environment variable: {}", e);
+                None
+            }
+        }
     } else {
         match std::env::current_dir() {
             Ok(x) => Some(x),
@@ -100,41 +106,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 /// `top_level_replacement`.
 fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement: &str) -> String {
     if !full_path.starts_with(top_level_path) {
-        return replace_c_dir(full_path.to_slash().unwrap());
+        return full_path.to_slash().unwrap();
     }
 
     if full_path == top_level_path {
-        return replace_c_dir(top_level_replacement.to_string());
+        return top_level_replacement.to_string();
     }
 
     format!(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
         separator = "/",
-        path = replace_c_dir(
-            full_path
-                .strip_prefix(top_level_path)
-                .unwrap()
-                .to_slash()
-                .unwrap()
-        )
+        path = full_path
+            .strip_prefix(top_level_path)
+            .unwrap()
+            .to_slash()
+            .unwrap()
     )
-}
-
-/// Replaces "C://" with "/c/" within a Windows path
-///
-/// On non-Windows OS, does nothing
-#[cfg(target_os = "windows")]
-fn replace_c_dir(path: String) -> String {
-    path.replace("C:/", "/c")
-}
-
-/// Replaces "C://" with "/c/" within a Windows path
-///
-/// On non-Windows OS, does nothing
-#[cfg(not(target_os = "windows"))]
-const fn replace_c_dir(path: String) -> String {
-    path
 }
 
 /// Takes part before contracted path and replaces it with fish style path
@@ -221,7 +209,7 @@ mod tests {
         let top_level_path = Path::new("C:\\Users\\astronaut");
 
         let output = contract_path(full_path, top_level_path, "~");
-        assert_eq!(output, "/c/Some/Other/Path");
+        assert_eq!(output, "C://Some/Other/Path");
     }
 
     #[test]
@@ -231,7 +219,7 @@ mod tests {
         let top_level_path = Path::new("C:\\Users\\astronaut");
 
         let output = contract_path(full_path, top_level_path, "~");
-        assert_eq!(output, "/c");
+        assert_eq!(output, "C:/");
     }
 
     #[test]

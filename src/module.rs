@@ -21,6 +21,7 @@ pub const ALL_MODULES: &[&str] = &[
     "dotnet",
     "elixir",
     "elm",
+    "erlang",
     "env_var",
     "git_branch",
     "git_commit",

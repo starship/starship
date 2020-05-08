@@ -50,6 +50,9 @@ parts:
     plugin: rust
     source: https://github.com/starship/starship.git
     #source-tag: v$SNAPCRAFT_PROJECT_VERSION
+    build-packages:
+      - libssl-dev
+      - pkg-config
     override-build: |
       last_committed_tag="$(git describe --tags --abbrev=0)"
       last_committed_tag_ver="$(echo ${last_committed_tag} | sed 's/v//')"
