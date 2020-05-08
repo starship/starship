@@ -19,21 +19,33 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let cmake_version = utils::exec_cmd("cmake", &["--version"])?.stdout;
-    let module_version = format_cmake_version(&cmake_version)?;
 
     let mut module = context.new_module("cmake");
-    let config: CMakeConfig = CMakeConfig::try_load(module.config);
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-        formatter.map(|variable| match variable {
-            "version" => Some(module_version.clone()),
-            _ => None,
-        })
-    } else {
-        log::warn!("Error parsing format string in `cmake.format`");
-        return None;
-    };
+    let config = CMakeConfig::try_load(module.config);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => format_cmake_version(&cmake_version).map(Ok),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.set_segments(formatter.parse(None));
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `cmake`: \n{}", error);
+            return None;
+        }
+    });
 
     module.get_prefix().set_value("");
     module.get_suffix().set_value("");
@@ -41,7 +53,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_cmake_version(cmake_version: &str) -> Option<String> {
+fn format_cmake_version(cmake_version: &String) -> Option<String> {
     let version = cmake_version.split_whitespace().nth(2)?;
     let mut formatted_version = String::with_capacity(version.len() + 1);
     formatted_version.push('v');
@@ -60,7 +72,7 @@ mod tests {
     #[test]
     fn folder_without_cmake_lists() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = render_module("cmake", dir.path());
+        let actual = render_module("cmake", dir.path(), None);
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -70,7 +82,7 @@ mod tests {
     fn folder_with_cmake_lists() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("CMakeLists.txt"))?.sync_all()?;
-        let actual = render_module("cmake", dir.path());
+        let actual = render_module("cmake", dir.path(), None);
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🛆 v3.17.1")));
         assert_eq!(expected, actual);
         dir.close()

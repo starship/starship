@@ -386,16 +386,20 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default                         | Description                                             |
-| ---------- | ------------------------------- | ------------------------------------------------------- |
-| `format`   | `"via [🛆 $version](bold blue)"` | The symbol used before displaying the version of cmake. |
-| `disabled` | `false`                         | Disables the `cmake` module.                            |
+| Option     | Default                              | Description                                       |
+| ---------- | ------------------------------------ | ------------------------------------------------- |
+| `format`   | `"via [$symbol$version](bold blue)"` | The format of the module                          |
+| `symbol`   | `"🛆 "`                              | A format string representing the symbol of CMake. |
+| `style`    | `"bold blue"`                        | The style for the module.                         |
+| `disabled` | `false`                              | Disables the `cmake` module.                      |
 
 ### Variables
 
-| Variable | Example   | Description            |
-| -------- | --------- | ---------------------- |
-| version  | `v3.17.1` | The version of `cmake` |
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v3.17.1` | The version of `cmake`               |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
 
 ### Example
 
