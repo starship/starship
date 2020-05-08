@@ -103,6 +103,7 @@ prompt_order = [
     "dotnet",
     "elixir",
     "elm",
+    "erlang",
     "golang",
     "haskell",
     "java",
@@ -120,6 +121,7 @@ prompt_order = [
     "env_var",
     "crystal",
     "cmd_duration",
+    "custom",
     "line_break",
     "jobs",
     "battery",
@@ -482,6 +484,28 @@ symbol = "🔮 "
 symbol = " "
 ```
 
+## Erlang
+
+The `erlang` module shows the currently installed version of Erlang/OTP. 次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
+
+### オプション
+
+| 変数         | デフォルト   | 説明                                                       |
+| ---------- | ------- | -------------------------------------------------------- |
+| `symbol`   | `"🖧 "`  | The symbol used before displaying the version of Erlang. |
+| `disabled` | `false` | Disables the `erlang` module.                            |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[erlang]
+symbol = "e "
+```
 ## 環境変数
 
 `env_var`モジュールは、選択された環境変数の現在の値を表示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
@@ -742,7 +766,7 @@ disabled = false
 | ---------- | -------------- | --------------------------- |
 | `symbol`   | `"☕ "`         | Javaのバージョンを表示する前に使用される記号です。 |
 | `style`    | `"dimmed red"` | モジュールのスタイルです。               |
-| `disabled` | `false`        | `Java`モジュールを無効にします。         |
+| `disabled` | `false`        | `java`モジュールを無効にします。         |
 
 ### 設定例
 
@@ -778,19 +802,19 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`julia`モジュールは、現在インストールされているJuliaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `Project.toml` file
-- The current directory contains a `Manifest.toml` file
-- The current directory contains a file with the `.jl` extension
+- カレントディレクトリに`Project.toml`ファイルが含まれている
+- カレントディレクトリに`Manifest.toml`ファイルが含まれている
+- カレントディレクトリに`.jl`の拡張子のファイルが含まれている
 
 ### オプション
 
-| 変数         | デフォルト           | 説明                                                      |
-| ---------- | --------------- | ------------------------------------------------------- |
-| `symbol`   | `"∴ "`          | The symbol used before displaying the version of Julia. |
-| `style`    | `"bold purple"` | モジュールのスタイルです。                                           |
-| `disabled` | `false`         | Disables the `julia` module.                            |
+| 変数         | デフォルト           | 説明                           |
+| ---------- | --------------- | ---------------------------- |
+| `symbol`   | `"ஃ "`          | Juliaのバージョンを表示する前に使用される記号です。 |
+| `style`    | `"bold purple"` | モジュールのスタイルです。                |
+| `disabled` | `false`         | `julia`モジュールを無効にします。         |
 
 ### 設定例
 
@@ -798,7 +822,7 @@ The `julia` module shows the currently installed version of Julia. 次の条件�
 # ~/.config/starship.toml
 
 [julia]
-symbol = "👸 "
+symbol = "∴ "
 ```
 ## Kubernetes
 
@@ -853,13 +877,14 @@ disabled = true
 
 ## メモリ使用量
 
-`memory_usage`モジュールは、現在のシステムメモリとスワップ使用量を示します。
+`memory_usage</ 0>モジュールは、現在のシステムメモリとスワップ使用量を示します。</p>
 
-デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。
+<p spaces-before="0">デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。</p>
 
-::: tip
+<p spaces-before="0">::: tip</p>
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+<p spaces-before="0">このモジュールはデフォルトで無効になっています。
+有効にするには、設定ファイルで<code>disabled`を`false`に設定します。
 
 :::
 
@@ -921,13 +946,14 @@ truncation_symbol = ""
 
 ### オプション
 
-| 変数           | デフォルト        | 説明                       |
-| ------------ | ------------ | ------------------------ |
-| `use_name`   | `false`      | nix-shellの名前を表示します。      |
-| `impure_msg` | `"impure"`   | impureメッセージをカスタマイズします。   |
-| `pure_msg`   | `"pure"`     | pureメッセージをカスタマイズします。     |
-| `style`      | `"bold red"` | モジュールのスタイルです。            |
-| `disabled`   | `false`      | `nix_shell`モジュールを無効にします。 |
+| 変数           | デフォルト         | 説明                                                |
+| ------------ | ------------- | ------------------------------------------------- |
+| `use_name`   | `false`       | nix-shellの名前を表示します。                               |
+| `impure_msg` | `"impure"`    | impureメッセージをカスタマイズします。                            |
+| `pure_msg`   | `"pure"`      | pureメッセージをカスタマイズします。                              |
+| `symbol`     | `"❄️  "`      | The symbol used before displaying the shell name. |
+| `style`      | `"bold blue"` | モジュールのスタイルです。                                     |
+| `disabled`   | `false`       | `nix_shell`モジュールを無効にします。                          |
 
 ### 設定例
 
@@ -939,6 +965,7 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
+symbol = "☃️  "
 ```
 
 ## NodeJS
@@ -969,7 +996,7 @@ symbol = "🤖 "
 
 ## パッケージのバージョン
 
-`package`モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。 The module currently supports `npm`, `cargo`, `poetry`, `composer`, and `gradle` packages.
+`package`モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。 The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
 - **npm** – `npm`パッケージバージョンは、現在のディレクトリにある`package.json`から抽出されます
 - **cargo** – `cargo`パッケージバージョンは、現在のディレクトリにある`Cargo.toml`から抽出されます。
@@ -977,16 +1004,18 @@ symbol = "🤖 "
 - **composer** – `composer`パッケージバージョンは、現在のディレクトリにある`composer.json`から抽出されます
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 - **julia** - The package version is extracted from the `Project.toml` present
+- **mix** - The `mix` package version is extracted from the `mix.exs` present
 
 > ⚠️ 表示されるバージョンは、パッケージマネージャーではなく、ソースコードが現在のディレクトリにあるパッケージのバージョンです。
 
 ### オプション
 
-| 変数         | デフォルト        | 説明                           |
-| ---------- | ------------ | ---------------------------- |
-| `symbol`   | `"📦 "`       | パッケージのバージョンを表示する前に使用される記号です。 |
-| `style`    | `"bold red"` | モジュールのスタイルです。                |
-| `disabled` | `false`      | `package`モジュールを無効にします。       |
+| 変数                | デフォルト        | 説明                                                        |
+| ----------------- | ------------ | --------------------------------------------------------- |
+| `symbol`          | `"📦 "`       | パッケージのバージョンを表示する前に使用される記号です。                              |
+| `style`           | `"bold red"` | モジュールのスタイルです。                                             |
+| `display_private` | `false`      | Enable displaying version for packages marked as private. |
+| `disabled`        | `false`      | `package` モジュールを無効にします。                                   |
 
 ### 設定例
 
@@ -1035,20 +1064,23 @@ symbol = "🔹 "
 - カレントディレクトリに`.python-version`ファイルが含まれている
 - カレントディレクトリに`requirements.txt`ファイルが含まれている
 - カレントディレクトリに`pyproject.toml`ファイルが含まれている
-- カレントディレクトリに`.py`の拡張子のファイルが含まれている
+- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - カレントディレクトリに`Pipfile`ファイルが含まれている
 - カレントディレクトリに`tox.ini`ファイルが含まれている
+- カレントディレクトリに`setup.py`ファイルが含まれている
+- The current directory contains a `__init__.py` file
 - 仮想環境がアクティブである
 
 ### オプション
 
-| 変数                   | デフォルト           | 説明                                                   |
-| -------------------- | --------------- | ---------------------------------------------------- |
-| `symbol`             | `"🐍 "`          | Pythonのバージョンを表示する前に使用される記号です。                        |
-| `pyenv_version_name` | `false`         | pyenvを使用してPythonバージョンを取得します                          |
-| `pyenv_prefix`       | `"pyenv "`      | pyenvバージョン表示の前のprefix（デフォルトの表示は`pyenv MY_VERSION`）です |
-| `style`              | `"bold yellow"` | モジュールのスタイルです。                                        |
-| `disabled`           | `false`         | `python`モジュールを無効にします。                                |
+| 変数                   | デフォルト           | 説明                                                                         |
+| -------------------- | --------------- | -------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`          | Pythonのバージョンを表示する前に使用される記号です。                                              |
+| `pyenv_version_name` | `false`         | pyenvを使用してPythonバージョンを取得します                                                |
+| `pyenv_prefix`       | `"pyenv "`      | pyenvバージョン表示の前のprefix (デフォルトの表示は`pyenv MY_VERSION`) です                     |
+| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module. |
+| `style`              | `"bold yellow"` | モジュールのスタイルです。                                                              |
+| `disabled`           | `false`         | `python`モジュールを無効にします。                                                      |
 
 ### 設定例
 
@@ -1113,8 +1145,6 @@ symbol = "⚙️ "
 ## Singularity
 
 The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
-
-:::
 
 ### オプション
 
@@ -1209,8 +1239,8 @@ utc_time_offset = "-5"
 | ------------- | --------------- | ------------------------- |
 | `style_root`  | `"bold red"`    | ユーザーがrootのときに使用されるスタイルです。 |
 | `style_user`  | `"bold yellow"` | 非rootユーザーに使用されるスタイルです。    |
-| `show_always` | `false`         | `username`モジュールを常に表示します。  |
-| `disabled`    | `false`         | `username`モジュールを無効にします。   |
+| `show_always` | `false`         | `username` モジュールを常に表示します。 |
+| `disabled`    | `false`         | `username` モジュールを無効にします。  |
 
 ### 設定例
 
@@ -1219,4 +1249,55 @@ utc_time_offset = "-5"
 
 [username]
 disabled = true
+```
+
+## Custom commands
+
+The `custom` modules show the output of some arbitrary commands.
+
+These modules will be shown if any of the following conditions are met:
+- The current directory contains a file whose name is in `files`
+- The current directory contains a directory whose name is in `directories`
+- The current directory contains a file whose extension is in `extensions`
+- The `when` command returns 0
+
+::: tip
+
+Multiple custom modules can be defined by using a `.`.
+
+:::
+
+::: tip
+
+The order in which custom modules are shown can be individually set by setting `custom.foo` in `prompt_order`. By default, the `custom` module will simply show all custom modules in the order they were defined.
+
+:::
+
+### オプション
+
+| 変数            | デフォルト                     | 説明                                                                                                                         |
+| ------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                           | The command whose output should be printed.                                                                                |
+| `when`        |                           | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                           | The path to the shell to use to execute the command. If unset, it will fallback to STARSHIP_SHELL and then to "sh".        |
+| `説明`          | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
+| `files`       | `[]`                      | The files that will be searched in the working directory for a match.                                                      |
+| `directories` | `[]`                      | The directories that will be searched in the working directory for a match.                                                |
+| `extensions`  | `[]`                      | The extensions that will be searched in the working directory for a match.                                                 |
+| `symbol`      | `""`                      | The symbol used before displaying the command output.                                                                      |
+| `style`       | `"bold green"`            | モジュールのスタイルです。                                                                                                              |
+| `prefix`      | `""`                      | Prefix to display immediately before the command output.                                                                   |
+| `suffix`      | `""`                      | Suffix to display immediately after the command output.                                                                    |
+| `disabled`    | `false`                   | Disables this `custom` module.                                                                                             |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[custom.foo]
+command = "echo foo"  # shows output of command
+files = ["foo"]       # can specify filters
+when = """ test "$HOME" == "$PWD" """
+prefix = " transcending "
 ```
