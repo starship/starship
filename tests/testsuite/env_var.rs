@@ -125,11 +125,11 @@ fn suffix() -> io::Result<()> {
         .use_config(toml::toml! {
             [env_var]
             variable = "TEST_VAR"
-            format = "with [$env_value _](black bold dimmed) "
+            format = "with [${env_value}_](black bold dimmed) "
         })
         .env("TEST_VAR", TEST_VAR_VALUE)
         .output()?;
-    let expected = format!("with {} ", style().paint(format!("{} _", TEST_VAR_VALUE)));
+    let expected = format!("with {} ", style().paint(format!("{}_", TEST_VAR_VALUE)));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
