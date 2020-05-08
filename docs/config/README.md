@@ -1191,8 +1191,6 @@ symbol = "⚙️ "
 The `singularity` module shows the current singularity image, if inside a container
 and `$SINGULARITY_NAME` is set.
 
-:::
-
 ### Options
 
 | Variable   | Default              | Description                                      |

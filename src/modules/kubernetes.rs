@@ -1,4 +1,3 @@
-use dirs;
 use yaml_rust::YamlLoader;
 
 use std::env;

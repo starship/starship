@@ -42,7 +42,6 @@ mod tests {
     use ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
-    use tempfile;
 
     #[test]
     fn folder_without_elm() -> io::Result<()> {
