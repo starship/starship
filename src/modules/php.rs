@@ -69,7 +69,7 @@ mod tests {
     fn folder_without_php_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = render_module("php", dir.path());
+        let actual = render_module("php", dir.path(), None);
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -81,7 +81,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("composer.json"))?.sync_all()?;
 
-        let actual = render_module("php", dir.path());
+        let actual = render_module("php", dir.path(), None);
 
         let expected = Some(format!(
             "via {} ",
@@ -96,7 +96,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".php-version"))?.sync_all()?;
 
-        let actual = render_module("php", dir.path());
+        let actual = render_module("php", dir.path(), None);
 
         let expected = Some(format!(
             "via {} ",
@@ -111,7 +111,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.php"))?.sync_all()?;
 
-        let actual = render_module("php", dir.path());
+        let actual = render_module("php", dir.path(), None);
 
         let expected = Some(format!(
             "via {} ",
