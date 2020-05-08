@@ -292,8 +292,8 @@ impl<'a> StringFormatter<'a> {
                                 }
                             })
                             .unwrap_or_else(|| Ok(Vec::new())),
-                        FormatElement::Positional(format) => {
-                            // Show the positional format string if all the variables inside are not
+                        FormatElement::Conditional(format) => {
+                            // Show the conditional format string if all the variables inside are not
                             // none.
                             let should_show: bool = format.get_variables().iter().any(|var| {
                                 variables
@@ -558,7 +558,7 @@ mod tests {
     }
 
     #[test]
-    fn test_positional() {
+    fn test_conditional() {
         const FORMAT_STR: &str = "($some) should render but ($none) shouldn't";
 
         let formatter = StringFormatter::new(FORMAT_STR)
@@ -575,7 +575,7 @@ mod tests {
     }
 
     #[test]
-    fn test_nested_positional() {
+    fn test_nested_conditional() {
         const FORMAT_STR: &str = "($some ($none)) and ($none ($some))";
 
         let formatter = StringFormatter::new(FORMAT_STR)
