@@ -1,16 +1,51 @@
+// Expression
+//
+// The expression of the format string.
+//
+// Should be started with SOI and ended with EOI, with a format string in it.
 expression = _{ SOI ~ value* ~ EOI }
-value = _{ text | variable | textgroup }
+value = _{ text | variable | textgroup | conditional }
 
-variable = { "$" ~ variable_name }
-variable_name = @{ char+ }
+// Variable
+//
+// A variable is defined as one of the following:
+//
+// - A valid variable name followed by a `$` character (`$[a-zA-Z_][a-zA-Z0-9_]*`),
+//   e.g. `$variable`.
+//
+// - Some texts wrapped in a curly bracket (`${[^\(\)\[\]\\\${}]+}`),
+//   e.g. `${env:HOST}`.
+variable = { "$" ~ (variable_name | variable_scope) }
+variable_name = @{ ('a'..'z' | 'A'..'Z' | "_") ~ char* }
 char = _{ 'a'..'z' | 'A'..'Z' | '0'..'9' | "_" }
 
-text = { text_inner+ }
-text_inner = _{ text_inner_char | escape }
-text_inner_char = { !("[" | "]" | "(" | ")" | "$" | "\\") ~ ANY }
+variable_scope = _{ "{" ~ variable_scoped_name ~ "}" }
+variable_scoped_name = { scoped_char+ }
+scoped_char = _{ !(escaped_char | "{" | "}") ~ ANY }
+
+// Text
+//
+// Texts can be one of `string` or `escaped_char`, where string is one or more of
+// unescapable chars.
+//
+// This is implemented so as to ensure all functional characters are escaped.
+text = { (string | escape)+ }
+string = @{ text_inner_char+ }
+text_inner_char = { !escaped_char ~ ANY }
 escape = _{ "\\" ~ escaped_char }
 escaped_char = { "[" | "]" | "(" | ")" | "\\" | "$" }
 
+// TextGroup
+//
+// A textgroup is a pair of `format` and `style` (`[format](style)`)
+//
+// - `format`: A format string, can contain any number of variables, texts or textgroups.
+// - `style`: A style string, can contain any number of variables or texts.
 textgroup = { "[" ~ format ~ "]" ~ "(" ~ style ~ ")" }
-format = { (variable | text | textgroup)* }
-style = { (variable | text)* }
+format = { value* }
+style = { (variable | string)* }
+
+// Conditional
+//
+// A conditional format string that won't render if all the containing variables are empty.
+conditional = { "(" ~ format ~ ")" }
