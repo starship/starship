@@ -1,32 +1,23 @@
-use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
+use crate::config::{ModuleConfig, RootModuleConfig};
 
-use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct MemoryConfig<'a> {
-    pub show_percentage: bool,
-    pub show_swap: bool,
     pub threshold: i64,
-    pub symbol: SegmentConfig<'a>,
-    pub separator: SegmentConfig<'a>,
-    pub ram: SegmentConfig<'a>,
-    pub swap: SegmentConfig<'a>,
-    pub style: Style,
+    pub format: &'a str,
+    pub style: &'a str,
+    pub symbol: &'a str,
     pub disabled: bool,
 }
 
 impl<'a> RootModuleConfig<'a> for MemoryConfig<'a> {
     fn new() -> Self {
         MemoryConfig {
-            show_percentage: false,
-            show_swap: true,
             threshold: 75,
-            symbol: SegmentConfig::new("🐏 "),
-            separator: SegmentConfig::new(" | "),
-            ram: SegmentConfig::default(),
-            swap: SegmentConfig::default(),
-            style: Color::White.bold().dimmed(),
+            format: "via $symbol [${ram}( | ${swap})]($style) ",
+            style: "white bold dimmed",
+            symbol: "🐏",
             disabled: true,
         }
     }

@@ -4,12 +4,21 @@ use sysinfo::{RefreshKind, SystemExt};
 use super::{Context, Module, RootModuleConfig, Shell};
 
 use crate::configs::memory_usage::MemoryConfig;
+use crate::formatter::StringFormatter;
 
 fn format_kib(n_kib: u64) -> String {
     let byte = Byte::from_unit(n_kib as f64, ByteUnit::KiB).unwrap_or_else(|_| Byte::from_bytes(0));
     let mut display_bytes = byte.get_appropriate_unit(true).format(0);
     display_bytes.retain(|c| c != ' ');
     display_bytes
+}
+
+fn format_pct(pct_number: f64, pct_sign: &str) -> String {
+    format!("{:.0}{}", pct_number, pct_sign)
+}
+
+fn format_usage_total(usage: u64, total: u64) -> String {
+    format!("{}/{}", format_kib(usage), format_kib(total))
 }
 
 /// Creates a module with system memory usage information
@@ -19,7 +28,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // TODO: Update when v1.0 printing refactor is implemented to only
     // print escapes in a prompt context.
-    let percent_sign = match context.shell {
+    let pct_sign = match context.shell {
         Shell::Zsh => "%%", // % is an escape in zsh, see PROMPT in `man zshmisc`
         _ => "%",
     };
@@ -28,54 +37,55 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    module.set_style(config.style);
-    module.create_segment("symbol", &config.symbol);
-
     let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_memory());
-
     let used_memory_kib = system.get_used_memory();
     let total_memory_kib = system.get_total_memory();
-
-    let percent_mem_used = (used_memory_kib as f64 / total_memory_kib as f64) * 100.;
+    let ram_used = (used_memory_kib as f64 / total_memory_kib as f64) * 100.;
+    let ram_pct = format_pct(ram_used, pct_sign);
 
     let threshold = config.threshold;
-
-    if percent_mem_used.round() < threshold as f64 {
+    if ram_used.round() < threshold as f64 {
         return None;
     }
 
-    let show_percentage = config.show_percentage;
-
-    let ram = if show_percentage {
-        format!("{:.0}{}", percent_mem_used, percent_sign)
-    } else {
-        format!(
-            "{}/{}",
-            format_kib(used_memory_kib),
-            format_kib(total_memory_kib)
-        )
-    };
-    module.create_segment("ram", &config.ram.with_value(&ram));
-
-    // swap only shown if enabled and there is swap on the system
+    let ram = format_usage_total(used_memory_kib, total_memory_kib);
     let total_swap_kib = system.get_total_swap();
-    if config.show_swap && total_swap_kib > 0 {
-        let used_swap_kib = system.get_used_swap();
-        let percent_swap_used = (used_swap_kib as f64 / total_swap_kib as f64) * 100.;
+    let used_swap_kib = system.get_used_swap();
+    let percent_swap_used = (used_swap_kib as f64 / total_swap_kib as f64) * 100.;
+    let swap_pct = format_pct(percent_swap_used, pct_sign);
+    let swap = format_usage_total(used_swap_kib, total_swap_kib);
 
-        let swap = if show_percentage {
-            format!("{:.0}{}", percent_swap_used, percent_sign)
-        } else {
-            format!(
-                "{}/{}",
-                format_kib(used_swap_kib),
-                format_kib(total_swap_kib)
-            )
-        };
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "ram" => Some(Ok(ram.clone())),
+                "ram_pct" => Some(Ok(ram_pct.clone())),
+                // swap only shown if there is swap on the system
+                "swap" if total_swap_kib > 0 => Some(Ok(swap.clone())),
+                "swap_pct" if total_swap_kib > 0 => Some(Ok(swap_pct.clone())),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-        module.create_segment("separator", &config.separator);
-        module.create_segment("swap", &config.swap.with_value(&swap));
-    }
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `memory_usage`:\n{}", error);
+            return None;
+        }
+    });
+
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
 }
