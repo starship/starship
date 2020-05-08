@@ -30,26 +30,26 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     match StringFormatter::new(config.format) {
         Ok(formatter) => {
             let formatter = formatter
+                .map_meta(|variable, _| match variable {
+                    "symbol" => match state {
+                        battery::State::Full => config.full_symbol,
+                        battery::State::Charging => config.charging_symbol,
+                        battery::State::Discharging => config.discharging_symbol,
+                        battery::State::Unknown => config.unknown_symbol,
+                        battery::State::Empty => config.empty_symbol,
+                        _ => {
+                            log::debug!("Unhandled battery state `{}`", state);
+                            None
+                        }
+                    },
+                    _ => None,
+                })
                 .map_style(|style| match style {
                     "style" => Some(Ok(display_style.style)),
                     _ => None,
                 })
                 .map(|variable| match variable {
                     "percentage" => Some(Ok(format!("{}{}", percentage.round(), percentage_char))),
-                    _ => None,
-                })
-                .map(|variable| match variable {
-                    "symbol" => match state {
-                        battery::State::Full => Some(Ok(config.full_symbol)),
-                        battery::State::Charging => Some(Ok(config.charging_symbol)),
-                        battery::State::Discharging => Some(Ok(config.discharging_symbol)),
-                        battery::State::Unknown => Some(Ok(config.unknown_symbol)),
-                        battery::State::Empty => Some(Ok(config.empty_symbol)),
-                        _ => {
-                            log::debug!("Unhandled battery state `{}`", state);
-                            None
-                        }
-                    },
                     _ => None,
                 });
 
