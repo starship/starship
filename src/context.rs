@@ -3,7 +3,7 @@ use crate::module::Module;
 
 use crate::modules;
 use clap::ArgMatches;
-use git2::{Repository, RepositoryState};
+use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
 use once_cell::sync::OnceCell;
 use std::collections::{HashMap, HashSet};
 use std::env;
@@ -110,6 +110,15 @@ impl<'a> Context<'a> {
         let disabled = config.and_then(|table| table.as_table()?.get("disabled")?.as_bool());
 
         disabled == Some(true)
+    }
+
+    /// Return whether the specified custom module has a `disabled` option set to true.
+    /// If it doesn't exist, `None` is returned.
+    pub fn is_custom_module_disabled_in_config(&self, name: &str) -> Option<bool> {
+        let config = self.config.get_custom_module_config(name)?;
+        let disabled = Some(config).and_then(|table| table.as_table()?.get("disabled")?.as_bool());
+
+        Some(disabled == Some(true))
     }
 
     // returns a new ScanDir struct with reference to current dir_files of context
@@ -303,7 +312,19 @@ impl<'a> ScanDir<'a> {
 }
 
 fn get_current_branch(repository: &Repository) -> Option<String> {
-    let head = repository.head().ok()?;
+    let head = match repository.head() {
+        Ok(reference) => reference,
+        Err(e) => {
+            return if e.code() == UnbornBranch {
+                // HEAD should only be an unborn branch if the repository is fresh,
+                // in that case assume "master"
+                Some(String::from("master"))
+            } else {
+                None
+            };
+        }
+    };
+
     let shorthand = head.shorthand();
 
     shorthand.map(std::string::ToString::to_string)

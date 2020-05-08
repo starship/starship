@@ -5,7 +5,6 @@ use crate::utils;
 
 use regex::Regex;
 use serde_json as json;
-use toml;
 
 use super::{RootModuleConfig, SegmentConfig};
 use crate::configs::package::PackageConfig;
@@ -14,11 +13,11 @@ use crate::configs::package::PackageConfig;
 ///
 /// Will display if a version is defined for your Node.js or Rust project (if one exists)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    match get_package_version(&context.current_dir) {
-        Some(package_version) => {
-            let mut module = context.new_module("package");
-            let config: PackageConfig = PackageConfig::try_load(module.config);
+    let mut module = context.new_module("package");
+    let config: PackageConfig = PackageConfig::try_load(module.config);
 
+    match get_package_version(&context.current_dir, &config) {
+        Some(package_version) => {
             module.set_style(config.style);
             module.get_prefix().set_value("is ");
 
@@ -39,10 +38,11 @@ fn extract_cargo_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
-fn extract_package_version(file_contents: &str) -> Option<String> {
+fn extract_package_version(file_contents: &str, display_private: bool) -> Option<String> {
     let package_json: json::Value = json::from_str(file_contents).ok()?;
 
-    if package_json.get("private").and_then(json::Value::as_bool) == Some(true) {
+    if !display_private && package_json.get("private").and_then(json::Value::as_bool) == Some(true)
+    {
         return None;
     }
 
@@ -102,11 +102,11 @@ fn extract_mix_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
-fn get_package_version(base_dir: &PathBuf) -> Option<String> {
+fn get_package_version(base_dir: &PathBuf, config: &PackageConfig) -> Option<String> {
     if let Ok(cargo_toml) = utils::read_file(base_dir.join("Cargo.toml")) {
         extract_cargo_version(&cargo_toml)
     } else if let Ok(package_json) = utils::read_file(base_dir.join("package.json")) {
-        extract_package_version(&package_json)
+        extract_package_version(&package_json, config.display_private)
     } else if let Ok(poetry_toml) = utils::read_file(base_dir.join("pyproject.toml")) {
         extract_poetry_version(&poetry_toml)
     } else if let Ok(composer_json) = utils::read_file(base_dir.join("composer.json")) {
@@ -134,6 +134,12 @@ fn format_version(version: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::modules::utils::test::render_module;
+    use ansi_term::Color;
+    use std::fs::File;
+    use std::io;
+    use std::io::Write;
+    use tempfile::TempDir;
 
     #[test]
     fn test_format_version() {
@@ -151,133 +157,151 @@ mod tests {
     }
 
     #[test]
-    fn test_extract_cargo_version() {
-        let cargo_with_version = toml::toml! {
+    fn test_extract_cargo_version() -> io::Result<()> {
+        let config_name = "Cargo.toml";
+        let config_content = toml::toml! {
             [package]
             name = "starship"
             version = "0.1.0"
         }
         .to_string();
 
-        let expected_version = Some("v0.1.0".to_string());
-        assert_eq!(extract_cargo_version(&cargo_with_version), expected_version);
-
-        let cargo_without_version = toml::toml! {
-            [package]
-            name = "starship"
-        }
-        .to_string();
-
-        let expected_version = None;
-        assert_eq!(
-            extract_cargo_version(&cargo_without_version),
-            expected_version
-        );
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        project_dir.close()
     }
 
     #[test]
-    fn test_extract_package_version() {
-        let package_with_version = json::json!({
-            "name": "spacefish",
+    fn test_extract_package_version() -> io::Result<()> {
+        let config_name = "package.json";
+        let config_content = json::json!({
+            "name": "starship",
             "version": "0.1.0"
         })
         .to_string();
 
-        let expected_version = Some("v0.1.0".to_string());
-        assert_eq!(
-            extract_package_version(&package_with_version),
-            expected_version
-        );
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        project_dir.close()
     }
 
     #[test]
-    fn test_extract_package_version_without_version() {
-        let package_without_version = json::json!({
-            "name": "spacefish"
+    fn test_extract_package_version_without_version() -> io::Result<()> {
+        let config_name = "package.json";
+        let config_content = json::json!({
+            "name": "starship"
         })
         .to_string();
 
-        let expected_version = None;
-        assert_eq!(
-            extract_package_version(&package_without_version),
-            expected_version
-        );
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, None, None)?;
+        project_dir.close()
     }
 
     #[test]
-    fn test_extract_package_version_with_null_version() {
-        let package_with_null_version = json::json!({
-            "name": "spacefish",
+    fn test_extract_package_version_with_null_version() -> io::Result<()> {
+        let config_name = "package.json";
+        let config_content = json::json!({
+            "name": "starship",
             "version": null
         })
         .to_string();
 
-        let expected_version = None;
-        assert_eq!(
-            extract_package_version(&package_with_null_version),
-            expected_version
-        );
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, None, None)?;
+        project_dir.close()
     }
 
     #[test]
-    fn test_extract_package_version_with_null_string_version() {
-        let package_with_null_string_version = json::json!({
-            "name": "spacefish",
+    fn test_extract_package_version_with_null_string_version() -> io::Result<()> {
+        let config_name = "package.json";
+        let config_content = json::json!({
+            "name": "starship",
             "version": "null"
         })
         .to_string();
 
-        let expected_version = None;
-        assert_eq!(
-            extract_package_version(&package_with_null_string_version),
-            expected_version
-        );
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, None, None)?;
+        project_dir.close()
     }
 
     #[test]
-    fn test_extract_private_package_version() {
-        let private_package = json::json!({
-            "name": "spacefish",
+    fn test_extract_private_package_version_with_default_config() -> io::Result<()> {
+        let config_name = "package.json";
+        let config_content = json::json!({
+            "name": "starship",
             "version": "0.1.0",
             "private": true
         })
         .to_string();
 
-        let expected_version = None;
-        assert_eq!(extract_package_version(&private_package), expected_version);
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, None, None)?;
+        project_dir.close()
     }
 
     #[test]
-    fn test_extract_poetry_version() {
-        let poetry_with_version = toml::toml! {
+    fn test_extract_private_package_version_with_display_private() -> io::Result<()> {
+        let config_name = "package.json";
+        let config_content = json::json!({
+            "name": "starship",
+            "version": "0.1.0",
+            "private": true
+        })
+        .to_string();
+        let starship_config = toml::toml! {
+            [package]
+            display_private = true
+        };
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), Some(starship_config))?;
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_poetry_version() -> io::Result<()> {
+        let config_name = "pyproject.toml";
+        let config_content = toml::toml! {
             [tool.poetry]
             name = "starship"
             version = "0.1.0"
         }
         .to_string();
 
-        let expected_version = Some("v0.1.0".to_string());
-        assert_eq!(
-            extract_poetry_version(&poetry_with_version),
-            expected_version
-        );
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        project_dir.close()
+    }
 
-        let poetry_without_version = toml::toml! {
+    #[test]
+    fn test_extract_poetry_version_without_version() -> io::Result<()> {
+        let config_name = "pyproject.toml";
+        let config_content = toml::toml! {
             [tool.poetry]
             name = "starship"
         }
         .to_string();
 
-        let expected_version = None;
-        assert_eq!(
-            extract_poetry_version(&poetry_without_version),
-            expected_version
-        );
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, None, None)?;
+        project_dir.close()
     }
 
     #[test]
-    fn test_extract_gradle_version() {
-        let gradle_single_quotes = "plugins {
+    fn test_extract_gradle_version_single_quote() -> io::Result<()> {
+        let config_name = "build.gradle";
+        let config_content = "plugins {
     id 'java'
     id 'test.plugin' version '0.2.0'
 }
@@ -287,13 +311,16 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }";
 
-        let expected_version = Some("v0.1.0".to_string());
-        assert_eq!(
-            extract_gradle_version(&gradle_single_quotes),
-            expected_version
-        );
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        project_dir.close()
+    }
 
-        let gradle_double_quotes = "plugins {
+    #[test]
+    fn test_extract_gradle_version_double_quote() -> io::Result<()> {
+        let config_name = "build.gradle";
+        let config_content = "plugins {
     id 'java'
     id 'test.plugin' version '0.2.0'
 }
@@ -303,13 +330,16 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }";
 
-        let expected_version = Some("v0.1.0".to_string());
-        assert_eq!(
-            extract_gradle_version(&gradle_double_quotes),
-            expected_version
-        );
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        project_dir.close()
+    }
 
-        let gradle_release_candidate = "plugins {
+    #[test]
+    fn test_extract_gradle_version_rc_version() -> io::Result<()> {
+        let config_name = "build.gradle";
+        let config_content = "plugins {
     id 'java'
     id 'test.plugin' version '0.2.0'
 }
@@ -319,13 +349,16 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }";
 
-        let expected_version = Some("v0.1.0-rc1".to_string());
-        assert_eq!(
-            extract_gradle_version(&gradle_release_candidate),
-            expected_version
-        );
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0-rc1"), None)?;
+        project_dir.close()
+    }
 
-        let gradle_without_version = "plugins {
+    #[test]
+    fn test_extract_gradle_version_without_version() -> io::Result<()> {
+        let config_name = "build.gradle";
+        let config_content = "plugins {
     id 'java'
     id 'test.plugin' version '0.2.0'
 }
@@ -334,16 +367,16 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }";
 
-        let expected_version = None;
-        assert_eq!(
-            extract_gradle_version(&gradle_without_version),
-            expected_version
-        );
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, None, None)?;
+        project_dir.close()
     }
 
     #[test]
-    fn test_extract_mix_version() {
-        let mix_complete = "defmodule MyApp.MixProject do
+    fn test_extract_mix_version() -> io::Result<()> {
+        let config_name = "mix.exs";
+        let config_content = "defmodule MyApp.MixProject do
   use Mix.Project
 
   def project do
@@ -367,91 +400,150 @@ java {
   end
 end";
 
-        let expected_version = Some("v1.2.3".to_string());
-        assert_eq!(extract_mix_version(&mix_complete), expected_version);
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v1.2.3"), None)?;
+        project_dir.close()
+    }
 
-        let mix_partial_oneline = "  def project, do: [app: :my_app,version: \"3.2.1\"]";
+    #[test]
+    fn test_extract_mix_version_partial_online() -> io::Result<()> {
+        let config_name = "mix.exs";
+        let config_content = "  def project, do: [app: :my_app,version: \"3.2.1\"]";
 
-        let expected_version = Some("v3.2.1".to_string());
-        assert_eq!(extract_mix_version(&mix_partial_oneline), expected_version);
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v3.2.1"), None)?;
+        project_dir.close()
+    }
 
-        let mix_partial_prerelease = "  def project do
+    #[test]
+    fn test_extract_mix_version_rc_version() -> io::Result<()> {
+        let config_name = "mix.exs";
+        let config_content = "  def project do
     [
       app: :my_app,
       version: \"1.0.0-alpha.3\"
     ]
   end";
 
-        let expected_version = Some("v1.0.0-alpha.3".to_string());
-        assert_eq!(
-            extract_mix_version(&mix_partial_prerelease),
-            expected_version
-        );
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v1.0.0-alpha.3"), None)?;
+        project_dir.close()
+    }
 
-        let mix_partial_prerelease_and_build_info = "  def project do
+    #[test]
+    fn test_extract_mix_version_rc_with_build_version() -> io::Result<()> {
+        let config_name = "mix.exs";
+        let config_content = "  def project do
     [
       app: :my_app,
       version: \"0.9.9-dev+20130417140000.amd64\"
     ]
   end";
 
-        let expected_version = Some("v0.9.9-dev+20130417140000.amd64".to_string());
-        assert_eq!(
-            extract_mix_version(&mix_partial_prerelease_and_build_info),
-            expected_version
-        );
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.9.9-dev+20130417140000.amd64"), None)?;
+        project_dir.close()
     }
 
     #[test]
-    fn test_extract_composer_version() {
-        let composer_with_version = json::json!({
-            "name": "spacefish",
+    fn test_extract_composer_version() -> io::Result<()> {
+        let config_name = "composer.json";
+        let config_content = json::json!({
+            "name": "starship",
             "version": "0.1.0"
         })
         .to_string();
 
-        let expected_version = Some("v0.1.0".to_string());
-        assert_eq!(
-            extract_composer_version(&composer_with_version),
-            expected_version
-        );
-
-        let composer_without_version = json::json!({
-            "name": "spacefish"
-        })
-        .to_string();
-
-        let expected_version = None;
-        assert_eq!(
-            extract_composer_version(&composer_without_version),
-            expected_version
-        );
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        project_dir.close()
     }
 
     #[test]
-    fn test_extract_project_version() {
-        let project_with_version = toml::toml! {
+    fn test_extract_composer_version_without_version() -> io::Result<()> {
+        let config_name = "composer.json";
+        let config_content = json::json!({
+            "name": "starship"
+        })
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, None, None)?;
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_project_version() -> io::Result<()> {
+        let config_name = "Project.toml";
+        let config_content = toml::toml! {
             name = "starship"
             version = "0.1.0"
         }
         .to_string();
 
-        let expected_version = Some("v0.1.0".to_string());
-        assert_eq!(
-            extract_project_version(&project_with_version),
-            expected_version
-        );
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        project_dir.close()
+    }
 
-        let project_without_version = toml::toml! {
-            [package]
+    #[test]
+    fn test_extract_project_version_without_version() -> io::Result<()> {
+        let config_name = "Project.toml";
+        let config_content = toml::toml! {
             name = "starship"
         }
         .to_string();
 
-        let expected_version = None;
-        assert_eq!(
-            extract_project_version(&project_without_version),
-            expected_version
-        );
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, None, None)?;
+        project_dir.close()
+    }
+
+    fn create_project_dir() -> io::Result<TempDir> {
+        Ok(tempfile::tempdir()?)
+    }
+
+    fn fill_config(
+        project_dir: &TempDir,
+        file_name: &str,
+        contents: Option<&str>,
+    ) -> io::Result<()> {
+        let mut file = File::create(project_dir.path().join(file_name))?;
+        file.write_all(contents.unwrap_or("").as_bytes())?;
+        file.sync_all()
+    }
+
+    fn expect_output(
+        project_dir: &TempDir,
+        contains: Option<&str>,
+        config: Option<toml::Value>,
+    ) -> io::Result<()> {
+        let starship_config = Some(config.unwrap_or(toml::toml! {
+            [package]
+            disabled = false
+        }));
+
+        let actual = render_module("package", project_dir.path(), starship_config);
+        let text = String::from(contains.unwrap_or(""));
+        let expected = Some(format!(
+            "is {} ",
+            Color::Fixed(208).bold().paint(format!("📦 {}", text))
+        ));
+
+        if contains.is_some() {
+            assert_eq!(actual, expected);
+        } else {
+            assert_eq!(actual, None);
+        }
+
+        Ok(())
     }
 }

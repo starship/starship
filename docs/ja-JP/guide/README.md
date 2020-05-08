@@ -30,11 +30,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/ja/">ウェブサイト</a>
+  <a href="https://starship.rs">Website</a>
   ·
-  <a href="#-インストール">インストール</a>
+  <a href="#🚀-installation">Installation</a>
   ·
-  <a href="https://starship.rs/ja/config/">設定</a>
+  <a href="https://starship.rs/config/">Configuration</a>
 </p>
 
 <p align="center">
@@ -114,6 +114,8 @@
 <p align="center">
 <a href="https://starship.rs/"><strong>Starshipのドキュメントを見る&nbsp;&nbsp;▶</strong></a>
 </p>
+
+<a name="🚀-installation"></a>
 
 ## 🚀 インストール
 
@@ -250,7 +252,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 ## 💭影響を受けたプロダクト
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+よければStarship の作成に影響を与えた、これまでのプロジェクトをチェックしてください 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - 宇宙飛行士のための ZSH プロンプト。
 
@@ -265,4 +267,4 @@ Please check out these previous works that helped inspire the creation of starsh
 
 ## 📝 ライセンス
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> このプロジェクトは [ISC](https://github.com/starship/starship/blob/master/LICENSE) でライセンスされています。
