@@ -560,8 +560,16 @@ The module will be shown only if any of the following conditions are met:
 | `symbol`   |                                        | The symbol used before displaying the variable value.                        |
 | `variable` |                                        | The environment variable to be displayed.                                    |
 | `default`  |                                        | The default value to be displayed when the selected variable is not defined. |
-| `format`   | `"with [$env_value](black bold dimmed) "` | The format for the module.                                                   |
+| `format`   | `"with [${env_value}]($style) "` | The format for the module.                                                   |
 | `disabled` | `false`                                | Disables the `env_var` module.                                               |
+
+### Variables
+
+| Variable  | Example             | Description                             |
+| --------- | ------------------- | --------------------------------------- |
+| env_value | `Windows NT`        | The environment value of $OS on Windows |
+| symbol    |                     | Mirrors the value of option `symbol`    |
+| style     | `black bold dimmed` | Mirrors the value of option `style`     |
 
 ### Example
 
