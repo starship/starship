@@ -80,20 +80,31 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else {
         String::from("")
     };
-
     let final_dir_string = format!("{}{}", fish_prefix, truncated_dir_string);
 
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-        formatter.map(|variable| match variable {
-            "path" => Some(final_dir_string.clone()),
-            _ => None,
-        })
-    } else {
-        log::warn!("Error parsing format string in `directory.format`");
-        return None;
-    };
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                // This may result in multiple calls to `get_module_version` when a user have
+                // multiple `$version` variables defined in `format`.
+                "path" => Some(Ok(final_dir_string.clone())),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.set_segments(formatter.parse(None));
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `directory`:\n{}", error);
+            return None;
+        }
+    });
+
     module.get_prefix().set_value("");
     module.get_suffix().set_value("");
 

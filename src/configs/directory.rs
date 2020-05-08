@@ -9,6 +9,7 @@ pub struct DirectoryConfig<'a> {
     pub fish_style_pwd_dir_length: i64,
     pub use_logical_path: bool,
     pub format: &'a str,
+    pub style: &'a str,
     pub disabled: bool,
 }
 
@@ -19,7 +20,8 @@ impl<'a> RootModuleConfig<'a> for DirectoryConfig<'a> {
             truncate_to_repo: true,
             fish_style_pwd_dir_length: 0,
             use_logical_path: true,
-            format: "[$path](cyan bold) ",
+            format: "[$path]($style) ",
+            style: "cyan bold",
             disabled: false,
         }
     }

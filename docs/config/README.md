@@ -450,7 +450,7 @@ it would have been `nixpkgs/pkgs`.
 | --------------------------- | -------------------------- | -------------------------------------------------------------------------------- |
 | `truncation_length`         | `3`                        | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`          | `true`                     | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `format`                    | `"[$path](cyan bold) "` | The format for the module.                                                       |
+| `format`                    | `"[$path]($style) "` | The format for the module.                                                       |
 | `disabled`                  | `false`                    | Disables the `directory` module.                                                 |
 
 <details>
@@ -460,6 +460,7 @@ it would have been `nixpkgs/pkgs`.
 | --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
 | `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
 | `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+| style                       |         | Mirrors the value of option `style`                                                      |
 
 `fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero,
 the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path
