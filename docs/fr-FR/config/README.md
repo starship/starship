@@ -103,6 +103,7 @@ prompt_order = [
     "dotnet",
     "elixir",
     "elm",
+    "erlang",
     "golang",
     "haskell",
     "java",
@@ -120,6 +121,7 @@ prompt_order = [
     "env_var",
     "crystal",
     "cmd_duration",
+    "custom",
     "line_break",
     "jobs",
     "battery",
@@ -482,6 +484,28 @@ The `elm` module shows the currently installed version of Elm. Le module est aff
 symbol = " "
 ```
 
+## Erlang
+
+The `erlang` module shows the currently installed version of Erlang/OTP. Le module est affiché si l'une des ces conditions est remplie :
+
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
+
+### Options
+
+| Variable   | Default | Description                                              |
+| ---------- | ------- | -------------------------------------------------------- |
+| `symbol`   | `"🖧 "`  | The symbol used before displaying the version of Erlang. |
+| `disabled` | `false` | Disables the `erlang` module.                            |
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[erlang]
+symbol = "e "
+```
 ## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
@@ -788,7 +812,7 @@ The `julia` module shows the currently installed version of Julia. Le module est
 
 | Variable   | Default         | Description                                             |
 | ---------- | --------------- | ------------------------------------------------------- |
-| `symbol`   | `"∴ "`          | The symbol used before displaying the version of Julia. |
+| `symbol`   | `"ஃ "`          | The symbol used before displaying the version of Julia. |
 | `style`    | `"bold purple"` | The style for the module.                               |
 | `disabled` | `false`         | Disables the `julia` module.                            |
 
@@ -798,7 +822,7 @@ The `julia` module shows the currently installed version of Julia. Le module est
 # ~/.config/starship.toml
 
 [julia]
-symbol = "👸 "
+symbol = "∴ "
 ```
 ## Kubernetes
 
@@ -921,13 +945,14 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 
 ### Options
 
-| Variable     | Default        | Description                        |
-| ------------ | -------------- | ---------------------------------- |
-| `use_name`   | `false`        | Display the name of the nix-shell. |
-| `impure_msg` | `"impure"`     | Customize the "impure" msg.        |
-| `pure_msg`   | `"pure"`       | Customize the "pure" msg.          |
-| `style`      | `"bold green"` | The style for the module.          |
-| `disabled`   | `false`        | Disables the `nix_shell` module.   |
+| Variable     | Default       | Description                                       |
+| ------------ | ------------- | ------------------------------------------------- |
+| `use_name`   | `false`       | Display the name of the nix-shell.                |
+| `impure_msg` | `"impure"`    | Customize the "impure" msg.                       |
+| `pure_msg`   | `"pure"`      | Customize the "pure" msg.                         |
+| `symbol`     | `"❄️  "`      | The symbol used before displaying the shell name. |
+| `style`      | `"bold blue"` | The style for the module.                         |
+| `disabled`   | `false`       | Disables the `nix_shell` module.                  |
 
 ### Exemple
 
@@ -939,6 +964,7 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
+symbol = "☃️  "
 ```
 
 ## NodeJS
@@ -969,7 +995,7 @@ symbol = "🤖 "
 
 ## Package Version
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, and `gradle` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
 - **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
 - **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -977,16 +1003,18 @@ The `package` module is shown when the current directory is the repository for a
 - **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 - **julia** - The package version is extracted from the `Project.toml` present
+- **mix** - The `mix` package version is extracted from the `mix.exs` present
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
 
 ### Options
 
-| Variable   | Default        | Description                                                |
-| ---------- | -------------- | ---------------------------------------------------------- |
-| `symbol`   | `"📦 "`         | The symbol used before displaying the version the package. |
-| `style`    | `"bold green"` | The style for the module.                                  |
-| `disabled` | `false`        | Disables the `package` module.                             |
+| Variable          | Default        | Description                                                |
+| ----------------- | -------------- | ---------------------------------------------------------- |
+| `symbol`          | `"📦 "`         | The symbol used before displaying the version the package. |
+| `style`           | `"bold green"` | The style for the module.                                  |
+| `display_private` | `false`        | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`        | Disables the `package` module.                             |
 
 ### Exemple
 
@@ -1035,9 +1063,11 @@ Le module est affiché si l'une des ces conditions est remplie :
 - The current directory contains a `.python-version` file
 - The current directory contains a `requirements.txt` file
 - The current directory contains a `pyproject.toml` file
-- The current directory contains a file with the `.py` extension
+- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - The current directory contains a `Pipfile` file
 - The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `__init__.py` file
 - A virtual environment is currently activated
 
 ### Options
@@ -1047,6 +1077,7 @@ Le module est affiché si l'une des ces conditions est remplie :
 | `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
 | `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
 | `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
+| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.  |
 | `style`              | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
 
@@ -1095,7 +1126,7 @@ The `rust` module shows the currently installed version of Rust. Le module est a
 
 ### Options
 
-| Variable   | Default        | Description                                            |
+| Variable   | Défault        | Description                                            |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`         | The symbol used before displaying the version of Rust. |
 | `style`    | `"bold green"` | The style for the module.                              |
@@ -1114,11 +1145,9 @@ symbol = "⚙️ "
 
 The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
 
-:::
-
 ### Options
 
-| Variable   | Défault              | Description                                      |
+| Variable   | Défaut               | Description                                      |
 | ---------- | -------------------- | ------------------------------------------------ |
 | `label`    | `""`                 | Prefix before the image name display.            |
 | `prefix`   | `"["`                | Prefix to display immediately before image name. |
@@ -1145,7 +1174,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 
 ### Options
 
-| Variable       | Défaut       | Description                                                 |
+| Variable       | Default      | Description                                                 |
 | -------------- | ------------ | ----------------------------------------------------------- |
 | `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
 | `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
@@ -1219,4 +1248,55 @@ Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le mod
 
 [username]
 disabled = true
+```
+
+## Custom commands
+
+The `custom` modules show the output of some arbitrary commands.
+
+These modules will be shown if any of the following conditions are met:
+- The current directory contains a file whose name is in `files`
+- The current directory contains a directory whose name is in `directories`
+- The current directory contains a file whose extension is in `extensions`
+- The `when` command returns 0
+
+::: tip
+
+Multiple custom modules can be defined by using a `.`.
+
+:::
+
+::: tip
+
+The order in which custom modules are shown can be individually set by setting `custom.foo` in `prompt_order`. By default, the `custom` module will simply show all custom modules in the order they were defined.
+
+:::
+
+### Options
+
+| Variable      | Default                   | Description                                                                                                                |
+| ------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                           | The command whose output should be printed.                                                                                |
+| `when`        |                           | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                           | The path to the shell to use to execute the command. If unset, it will fallback to STARSHIP_SHELL and then to "sh".        |
+| `description` | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
+| `files`       | `[]`                      | The files that will be searched in the working directory for a match.                                                      |
+| `directories` | `[]`                      | The directories that will be searched in the working directory for a match.                                                |
+| `extensions`  | `[]`                      | The extensions that will be searched in the working directory for a match.                                                 |
+| `symbol`      | `""`                      | The symbol used before displaying the command output.                                                                      |
+| `style`       | `"bold green"`            | The style for the module.                                                                                                  |
+| `prefix`      | `""`                      | Prefix to display immediately before the command output.                                                                   |
+| `suffix`      | `""`                      | Suffix to display immediately after the command output.                                                                    |
+| `disabled`    | `false`                   | Disables this `custom` module.                                                                                             |
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[custom.foo]
+command = "echo foo"  # shows output of command
+files = ["foo"]       # can specify filters
+when = """ test "$HOME" == "$PWD" """
+prefix = " transcending "
 ```

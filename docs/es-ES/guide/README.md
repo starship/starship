@@ -26,13 +26,13 @@
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Follow @StarshipPrompt on Twitter" /></a>
+      alt="Sigue a @StarshipPrompt en Twitter" /></a>
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Sitio</a>
+  <a href="https://starship.rs">Web</a>
   ·
-<a href="#-installation">Instalación</a>
+<a href="#🚀-installation">Instalación</a>
   ·
 <a href="https://starship.rs/config/">Configuration</a>
 </p>
@@ -101,19 +101,21 @@
   align="right" />
 
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**El símbolo del sistema minimalista, ultrarápido e infinitamente customizable para cualquier intérprete de comandos!**
 
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **Rápido:** es rápido – _muy muy_ rápido! 🚀
+- **Customizable:** configura cada parte de tu intérprete de comandos.
+- **Universal:** funciona en cualquier símbolo del sistema, en cualquier sistema operativo.
+- **Inteligente:** muestra información relevante de un vistazo.
+- **Repleto de funciones**: con soporte para tus herramientas favoritas.
+- **Fácil de instalar**: empieza a usarlo en pocos minutos.
 
 <p align="center">
-<a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/"><strong>Explora la documentación de Starship&nbsp;&nbsp;</strong></a>
 </p>
+
+<a name="🚀-installation"></a>
 
 ## 🚀 Instalacíon
 
@@ -129,14 +131,14 @@
    #### Instalar la última versión
 
 
-   ##### From prebuilt binary, with Shell:
+   ##### Desde un binario, con Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   ##### From source on [crates.io](https://crates.io/):
+   ##### Con [crates.io](https://crates.io/):
 
    ```sh
    cargo install starship
@@ -220,22 +222,22 @@
 
 Si quiere ayudar a colaborar a starship, por favor mira a nuestra [Guía de Colaboradores](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) (Contributing Guide). Además, juntarse con nosotros en nuestro [servidor de Discord](https://discord.gg/8Jzqu3T) y di "¡hola!". 👋
 
-### Code Contributors
+### Desarrolladores
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+Este proyecto existe gracias a todas las personas que han ayudado. [[Contribuir](CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
-### Financial Contributors
+### Financiadores
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+Invierte y ayúdanos a mantener nuestra comunidad. [[Contribuir](https://opencollective.com/starship/contribute)]
 
-#### Individuals
+#### Personas
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
-#### Organizations
+#### Organizaciones
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+Apoya este proyecto con tu organización. Vuestro logo se mostrará aquí con un enlace a vuestra web. [[Contribuir](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -248,9 +250,9 @@ Support this project with your organization. Your logo will show up here with a 
 <a href="https://opencollective.com/starship/organization/8/website"><img src="https://opencollective.com/starship/organization/8/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/9/website"><img src="https://opencollective.com/starship/organization/9/avatar.svg"></a>
 
-## 💭 Inspiracíon
+## 💭 Inspiración
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Aquí tienes algunos de los trabajos previos que ayudaron a crear starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Una prompt Zsh para astronautas.
 
@@ -260,9 +262,9 @@ Please check out these previous works that helped inspire the creation of starsh
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Icono de Starship">
 </p>
 
 ## 📝 Licencia
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-actualidad, [Creadores de Starship](https://github.com/starship/starship/graphs/contributors).<br /> Este proyecto está bajo una licencia [ISC](https://github.com/starship/starship/blob/master/LICENSE).
