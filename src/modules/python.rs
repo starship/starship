@@ -44,16 +44,33 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         format_python_version(&python_version)
     };
 
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-        formatter.map(|variable| match variable {
-            "version" => Some(formatted_version.clone()),
-            _ => None,
-        })
-    } else {
-        log::warn!("Error parsing format string in `python.format`");
-        return None;
-    };
-    module.set_segments(formatter.parse(None));
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                // This may result in multiple calls to `get_module_version` when a user have
+                // multiple `$version` variables defined in `format`.
+                "version" => Some(Ok(formatted_version.clone())),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `python`:\n{}", error);
+            return None;
+        }
+    });
+
     module.get_prefix().set_value("");
     module.get_suffix().set_value("");
 

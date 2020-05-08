@@ -7,6 +7,8 @@ pub struct PythonConfig<'a> {
     pub pyenv_version_name: bool,
     pub scan_for_pyfiles: bool,
     pub format: &'a str,
+    pub style: &'a str,
+    pub symbol: &'a str,
     pub disabled: bool,
 }
 
@@ -15,7 +17,9 @@ impl<'a> RootModuleConfig<'a> for PythonConfig<'a> {
         PythonConfig {
             pyenv_version_name: false,
             scan_for_pyfiles: true,
-            format: "via [🐍 $version](yellow bold) ",
+            format: "via [$symbol $version]($style) ",
+            style: "yellow bold",
+            symbol: "🐍",
             disabled: false,
         }
     }
