@@ -103,6 +103,7 @@ prompt_order = [
     "dotnet",
     "elixir",
     "elm",
+    "erlang",
     "golang",
     "haskell",
     "java",
@@ -120,6 +121,7 @@ prompt_order = [
     "env_var",
     "crystal",
     "cmd_duration",
+    "custom",
     "line_break",
     "jobs",
     "battery",
@@ -482,6 +484,28 @@ The `elm` module shows the currently installed version of Elm. 這個模組在�
 symbol = " "
 ```
 
+## Erlang
+
+The `erlang` module shows the currently installed version of Erlang/OTP. 這個模組在下列其中一個條件達成時顯示：
+
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
+
+### 選項
+
+| 變數         | 預設      | 說明                                                       |
+| ---------- | ------- | -------------------------------------------------------- |
+| `symbol`   | `"🖧 "`  | The symbol used before displaying the version of Erlang. |
+| `disabled` | `false` | Disables the `erlang` module.                            |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[erlang]
+symbol = "e "
+```
 ## 環境變數
 
 `env_var`模組顯示一個選擇的環境變數的現在數值。 這個模組只在下列條件其中之一達到時顯示：
@@ -681,7 +705,7 @@ symbol = "🏎💨 "
 
 The `haskell` module shows the currently installed version of Haskell Stack version. 這個模組在下列其中一個條件達成時顯示：
 
-- 現在資料夾中包含一個 `stack.yaml` 檔案
+- 現在資料夾中含有一個 `stack.yaml` 檔案
 
 ### 選項
 
@@ -788,7 +812,7 @@ The `julia` module shows the currently installed version of Julia. 這個模組�
 
 | 變數         | 預設              | 說明                                                      |
 | ---------- | --------------- | ------------------------------------------------------- |
-| `symbol`   | `"∴ "`          | The symbol used before displaying the version of Julia. |
+| `symbol`   | `"ஃ "`          | The symbol used before displaying the version of Julia. |
 | `style`    | `"bold purple"` | 這個模組的風格。                                                |
 | `disabled` | `false`         | Disables the `julia` module.                            |
 
@@ -798,7 +822,7 @@ The `julia` module shows the currently installed version of Julia. 這個模組�
 # ~/.config/starship.toml
 
 [julia]
-symbol = "👸 "
+symbol = "∴ "
 ```
 ## Kubernetes
 
@@ -921,13 +945,14 @@ truncation_symbol = ""
 
 ### 選項
 
-| 變數           | 預設           | 說明                 |
-| ------------ | ------------ | ------------------ |
-| `use_name`   | `false`      | 顯示 nix-shell 的名稱。  |
-| `impure_msg` | `"impure"`   | 自定義「impure」訊息。     |
-| `pure_msg`   | `"pure"`     | 自定義「pure」訊息。       |
-| `style`      | `"bold red"` | 這個模組的風格。           |
-| `disabled`   | `false`      | 停用 `nix_shell` 模組。 |
+| 變數           | 預設            | 說明                                                |
+| ------------ | ------------- | ------------------------------------------------- |
+| `use_name`   | `false`       | 顯示 nix-shell 的名稱。                                 |
+| `impure_msg` | `"impure"`    | 自定義「impure」訊息。                                    |
+| `pure_msg`   | `"pure"`      | 自定義「pure」訊息。                                      |
+| `symbol`     | `"❄️  "`      | The symbol used before displaying the shell name. |
+| `style`      | `"bold blue"` | 這個模組的風格。                                          |
+| `disabled`   | `false`       | 停用 `nix_shell` 模組。                                |
 
 ### 範例
 
@@ -939,6 +964,7 @@ disabled = true
 use_name = true
 impure_msg = "impure shell"
 pure_msg = "pure shell"
+symbol = "☃️  "
 ```
 
 ## NodeJS
@@ -969,7 +995,7 @@ symbol = "🤖 "
 
 ## 套件版本
 
-The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並顯示他的現在版本。 The module currently supports `npm`, `cargo`, `poetry`, `composer`, and `gradle` packages.
+The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並顯示他的現在版本。 The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
 - **npm** – `npm` 套件的版本是從現在資料夾中的 `package.json` 之中擷取出來的
 - **cargo** – `cargo` 套件的版本是從現在資料夾中的 `Cargo.toml` 之中擷取出來的
@@ -977,16 +1003,18 @@ The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並
 - **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 - **julia** - The package version is extracted from the `Project.toml` present
+- **mix** - The `mix` package version is extracted from the `mix.exs` present
 
 > ⚠️ 顯示出來的版本是從你的現在資料夾之中擷取出來的，並非從套件管理員取得。
 
 ### 選項
 
-| 變數         | 預設           | 說明               |
-| ---------- | ------------ | ---------------- |
-| `symbol`   | `"📦 "`       | 顯示在套件的版本之前的符號。   |
-| `style`    | `"bold red"` | 這個模組的風格。         |
-| `disabled` | `false`      | 停用 `package` 模組。 |
+| 變數                | 預設           | 說明                                                        |
+| ----------------- | ------------ | --------------------------------------------------------- |
+| `symbol`          | `"📦 "`       | 顯示在套件的版本之前的符號。                                            |
+| `style`           | `"bold red"` | 這個模組的風格。                                                  |
+| `display_private` | `false`      | Enable displaying version for packages marked as private. |
+| `disabled`        | `false`      | 停用 `package` 模組。                                          |
 
 ### 範例
 
@@ -1001,7 +1029,7 @@ symbol = "🎁 "
 
 The `php` module shows the currently installed version of PHP. 這個模組在下列其中一個條件達成時顯示：
 
-- 現在資料夾中含有一個 `composer.json` 檔案
+- 現在資料夾中包含一個 `composer.json` 檔案
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
@@ -1035,20 +1063,23 @@ symbol = "🔹 "
 - 目前資料夾中有一個 `.python-version` 檔案
 - 目前資料夾中有一個 `requirements.txt` 檔案
 - 目前資料夾中有一個 `pyproject.toml` 檔案
-- 目前資料夾中有一個 `.py` 副檔名的檔案
+- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - 目前資料夾中有一個 `Pipfile` 檔案
 - 目前資料夾中有一個 `tox.ini` 檔案
+- 現在資料夾中包含一個 `setup.py` 檔案
+- The current directory contains a `__init__.py` file
 - A virtual environment is currently activated
 
 ### 選項
 
-| 變數                   | 預設              | 說明                                            |
-| -------------------- | --------------- | --------------------------------------------- |
-| `symbol`             | `"🐍 "`          | 顯示在 Python 版本之前的符號。                           |
-| `pyenv_version_name` | `false`         | 使用 pyenv 取得 Python 的版本。                       |
-| `pyenv_prefix`       | `"pyenv "`      | 顯示在 pyenv 版本之前的前綴 (預設顯示是 `pyenv MY_VERSION`)。 |
-| `style`              | `"bold yellow"` | 這個模組的風格。                                      |
-| `disabled`           | `false`         | 停用 `python` 模組。                               |
+| 變數                   | 預設              | 說明                                                                         |
+| -------------------- | --------------- | -------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`          | 顯示在 Python 版本之前的符號。                                                        |
+| `pyenv_version_name` | `false`         | 使用 pyenv 取得 Python 的版本。                                                    |
+| `pyenv_prefix`       | `"pyenv "`      | 顯示在 pyenv 版本之前的前綴 (預設顯示是 `pyenv MY_VERSION`)。                              |
+| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module. |
+| `style`              | `"bold yellow"` | 這個模組的風格。                                                                   |
+| `disabled`           | `false`         | 停用 `python` 模組。                                                            |
 
 ### 範例
 
@@ -1113,8 +1144,6 @@ symbol = "⚙️ "
 ## Singularity
 
 The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
-
-:::
 
 ### 選項
 
@@ -1219,4 +1248,55 @@ utc_time_offset = "-5"
 
 [username]
 disabled = true
+```
+
+## Custom commands
+
+The `custom` modules show the output of some arbitrary commands.
+
+These modules will be shown if any of the following conditions are met:
+- The current directory contains a file whose name is in `files`
+- The current directory contains a directory whose name is in `directories`
+- The current directory contains a file whose extension is in `extensions`
+- The `when` command returns 0
+
+::: tip
+
+Multiple custom modules can be defined by using a `.`.
+
+:::
+
+::: tip
+
+The order in which custom modules are shown can be individually set by setting `custom.foo` in `prompt_order`. By default, the `custom` module will simply show all custom modules in the order they were defined.
+
+:::
+
+### 選項
+
+| 變數            | 預設                        | 說明                                                                                                                         |
+| ------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                           | The command whose output should be printed.                                                                                |
+| `when`        |                           | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                           | The path to the shell to use to execute the command. If unset, it will fallback to STARSHIP_SHELL and then to "sh".        |
+| `說明`          | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
+| `files`       | `[]`                      | The files that will be searched in the working directory for a match.                                                      |
+| `directories` | `[]`                      | The directories that will be searched in the working directory for a match.                                                |
+| `extensions`  | `[]`                      | The extensions that will be searched in the working directory for a match.                                                 |
+| `symbol`      | `""`                      | The symbol used before displaying the command output.                                                                      |
+| `style`       | `"bold green"`            | 這個模組的風格。                                                                                                                   |
+| `prefix`      | `""`                      | Prefix to display immediately before the command output.                                                                   |
+| `suffix`      | `""`                      | Suffix to display immediately after the command output.                                                                    |
+| `disabled`    | `false`                   | Disables this `custom` module.                                                                                             |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[custom.foo]
+command = "echo foo"  # shows output of command
+files = ["foo"]       # can specify filters
+when = """ test "$HOME" == "$PWD" """
+prefix = " transcending "
 ```

@@ -11,6 +11,7 @@ pub mod dotnet;
 pub mod elixir;
 pub mod elm;
 pub mod env_var;
+pub mod erlang;
 pub mod git_branch;
 pub mod git_commit;
 pub mod git_state;
