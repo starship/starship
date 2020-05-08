@@ -67,6 +67,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             config.fish_style_pwd_dir_length as usize,
             contracted_home_dir,
             &truncated_dir_string,
+            config.separator,
         );
 
         module.create_segment(
@@ -102,7 +103,7 @@ fn contract_path(
     separator: &str,
 ) -> String {
     if !full_path.starts_with(top_level_path) {
-        return to_separator(full_path, separator).unwrap();
+        return to_separator(full_path, separator);
     }
 
     if full_path == top_level_path {
@@ -113,7 +114,7 @@ fn contract_path(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
         separator = separator,
-        path = to_separator(full_path.strip_prefix(top_level_path).unwrap(), separator).unwrap()
+        path = to_separator(full_path.strip_prefix(top_level_path).unwrap(), separator,)
     )
 }
 
@@ -129,9 +130,17 @@ fn contract_path(
 /// Absolute Path: `/some/Path/not/in_a/repo/but_nested`
 /// Contracted Path: `in_a/repo/but_nested`
 /// With Fish Style: `/s/P/n/in_a/repo/but_nested`
-fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string: &str) -> String {
+fn to_fish_style(
+    pwd_dir_length: usize,
+    dir_string: String,
+    truncated_dir_string: &str,
+    separator: &str,
+) -> String {
+    let main_separator: std::string::String = std::path::MAIN_SEPARATOR.to_string();
     let replaced_dir_string = dir_string.trim_end_matches(truncated_dir_string).to_owned();
-    let components = replaced_dir_string.split('/').collect::<Vec<&str>>();
+    let components = replaced_dir_string
+        .split(&main_separator)
+        .collect::<Vec<&str>>();
 
     if components.is_empty() {
         return replaced_dir_string;
@@ -149,18 +158,19 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
             }
         })
         .collect::<Vec<_>>()
-        .join("/")
+        .join(&separator)
 }
 
 #[cfg(target_os = "windows")]
-fn to_separator(path: &Path, separator: &str) -> Option<String> {
+fn to_separator(path: &Path, separator: &str) -> String {
+    let main_separator: std::string::String = std::path::MAIN_SEPARATOR.to_string();
     let path_str = path.as_os_str().to_string_lossy();
 
     let mut out = String::with_capacity((*path_str).len());
 
     let mut iter = path
         .iter()
-        .filter(|x| x.to_string_lossy() != "\\" && x.to_string_lossy() != "/");
+        .filter(|x| x.to_string_lossy().as_ref() != main_separator);
     let first = iter.next();
     if let Some(first_component) = first {
         out.push_str(&first_component.to_string_lossy());
@@ -170,37 +180,37 @@ fn to_separator(path: &Path, separator: &str) -> Option<String> {
         }
     }
 
-    if path_str.ends_with('\\') || path_str.ends_with('/') {
+    if path_str.ends_with(std::path::MAIN_SEPARATOR) {
         out.push_str(&separator);
     }
 
-    Some(out)
+    out
 }
 
 #[cfg(not(target_os = "windows"))]
-fn to_separator(path: &Path, separator: &str) -> Option<String> {
+fn to_separator(path: &Path, separator: &str) -> String {
+    let main_separator: std::string::String = std::path::MAIN_SEPARATOR.to_string();
     let path_str = path.as_os_str().to_string_lossy();
 
-    if path_str == "/" {
-        return Some(separator.to_string());
+    if path_str.as_ref() == main_separator {
+        return separator.to_string();
     }
 
     let mut out = String::with_capacity((*path_str).len());
 
     let mut iter = path.iter();
     let first = iter.next();
-    if let Some(first_component) = first {
-        log::debug!("first: {:?}", first_component);
-        if first_component != "/" {
-            out.push_str(&first_component.to_string_lossy());
+    if let Some(first_component_osstr) = first {
+        let first_component = first_component_osstr.to_string_lossy();
+        if first_component.as_ref() != main_separator {
+            out.push_str(&first_component);
         }
         for component in iter {
-            log::debug!("component: {:?}", component);
             out.push_str(&separator);
             out.push_str(&component.to_string_lossy());
         }
     }
-    Some(out)
+    out
 }
 
 #[cfg(test)]
@@ -276,50 +286,104 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(target_os = "windows"))]
     fn fish_style_with_user_home_contracted_path() {
         let path = "~/starship/engines/booster/rocket";
-        let output = to_fish_style(1, path.to_string(), "engines/booster/rocket");
+        let output = to_fish_style(1, path.to_string(), "engines/booster/rocket", "/");
         assert_eq!(output, "~/s/");
+    }
+    #[test]
+    #[cfg(target_os = "windows")]
+    fn fish_style_with_user_home_contracted_path() {
+        let path = "~\\starship\\engines\\booster\\rocket";
+        let output = to_fish_style(1, path.to_string(), "engines\\booster\\rocket", "\\");
+        assert_eq!(output, "~\\s\\");
     }
 
     #[test]
+    #[cfg(not(target_os = "windows"))]
     fn fish_style_with_user_home_contracted_path_and_dot_dir() {
         let path = "~/.starship/engines/booster/rocket";
-        let output = to_fish_style(1, path.to_string(), "engines/booster/rocket");
+        let output = to_fish_style(1, path.to_string(), "engines/booster/rocket", "/");
         assert_eq!(output, "~/.s/");
     }
 
     #[test]
+    #[cfg(target_os = "windows")]
+
+    fn fish_style_with_user_home_contracted_path_and_dot_dir() {
+        let path = "~\\.starship\\engines\\booster\\rocket";
+        let output = to_fish_style(1, path.to_string(), "engines\\booster\\rocket", "\\");
+        assert_eq!(output, "~\\.s\\");
+    }
+
+    #[test]
+    #[cfg(not(target_os = "windows"))]
     fn fish_style_with_no_contracted_path() {
         // `truncatation_length = 2`
         let path = "/absolute/Path/not/in_a/repo/but_nested";
-        let output = to_fish_style(1, path.to_string(), "repo/but_nested");
+        let output = to_fish_style(1, path.to_string(), "repo/but_nested", "/");
         assert_eq!(output, "/a/P/n/i/");
+    }
+    #[test]
+    #[cfg(target_os = "windows")]
+    fn fish_style_with_no_contracted_path() {
+        // `truncatation_length = 2`
+        let path = "C:\\absolute\\Path\\not\\in_a\\repo\\but_nested";
+        let output = to_fish_style(1, path.to_string(), "repo\\but_nested", "\\");
+        assert_eq!(output, "C\\a\\P\\n\\i\\");
     }
 
     #[test]
+    #[cfg(not(target_os = "windows"))]
     fn fish_style_with_pwd_dir_len_no_contracted_path() {
         // `truncatation_length = 2`
         let path = "/absolute/Path/not/in_a/repo/but_nested";
-        let output = to_fish_style(2, path.to_string(), "repo/but_nested");
+        let output = to_fish_style(2, path.to_string(), "repo/but_nested", "/");
         assert_eq!(output, "/ab/Pa/no/in/");
     }
-
     #[test]
-    fn fish_style_with_duplicate_directories() {
-        let path = "~/starship/tmp/C++/C++/C++";
-        let output = to_fish_style(1, path.to_string(), "C++");
-        assert_eq!(output, "~/s/t/C/C/");
+    #[cfg(target_os = "windows")]
+    fn fish_style_with_pwd_dir_len_no_contracted_path() {
+        // `truncatation_length = 2`
+        let path = "C:\\absolute\\Path\\not\\in_a\\repo\\but_nested";
+        let output = to_fish_style(2, path.to_string(), "repo\\but_nested", "\\");
+        assert_eq!(output, "C:\\ab\\Pa\\no\\in\\");
     }
 
     #[test]
+    #[cfg(not(target_os = "windows"))]
+    fn fish_style_with_duplicate_directories() {
+        let path = "~/starship/tmp/C++/C++/C++";
+        let output = to_fish_style(1, path.to_string(), "C++", "/");
+        assert_eq!(output, "~/s/t/C/C/");
+    }
+    #[test]
+    #[cfg(target_os = "windows")]
+    fn fish_style_with_duplicate_directories() {
+        let path = "~\\starship\\tmp\\C++\\C++\\C++";
+        let output = to_fish_style(1, path.to_string(), "C++", "\\");
+        assert_eq!(output, "~\\s\\t\\C\\C\\");
+    }
+
+    #[test]
+    #[cfg(not(target_os = "windows"))]
     fn fish_style_with_unicode() {
         let path = "~/starship/tmp/目录/a̐éö̲/目录";
-        let output = to_fish_style(1, path.to_string(), "目录");
+        let output = to_fish_style(1, path.to_string(), "目录", "/");
         assert_eq!(output, "~/s/t/目/a̐/");
     }
 
     #[test]
+    #[cfg(target_os = "windows")]
+    fn fish_style_with_unicode() {
+        let path = "~\\starship\\tmp\\目录\\a̐éö̲\\目录";
+        let output = to_fish_style(1, path.to_string(), "目录", "\\");
+        assert_eq!(output, "~\\s\\t\\目\\a̐\\");
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
     fn prefered_separator() {
         let full_path = Path::new("/Users/astronaut/schematics/rocket");
         let home = Path::new("/Users/astronaut");
