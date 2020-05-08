@@ -32,7 +32,7 @@
 <p align="center">
   <a href="https://starship.rs">网站</a>
   ·
-  <a href="#-installation">安装</a>
+  <a href="#🚀-installation">安装</a>
   ·
   <a href="https://starship.rs/config/">配置</a>
 </p>
@@ -114,6 +114,8 @@
 <p align="center">
 <a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
+
+<a name="🚀-installation"></a>
 
 ## 🚀 安装
 
@@ -250,7 +252,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 ## 💭该项目受以下项目启发
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+请参考这些曾经为 Starship 提供启发的工程。 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
 
