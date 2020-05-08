@@ -132,7 +132,7 @@ fn directory_in_root() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("in {} ", Color::Cyan.bold().paint("/c"));
+    let expected = format!("in {} ", Color::Cyan.bold().paint("C:/"));
     assert_eq!(expected, actual);
     Ok(())
 }
