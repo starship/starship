@@ -53,7 +53,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_cmake_version(cmake_version: &String) -> Option<String> {
+fn format_cmake_version(cmake_version: &str) -> Option<String> {
     let version = cmake_version.split_whitespace().nth(2)?;
     let mut formatted_version = String::with_capacity(version.len() + 1);
     formatted_version.push('v');
@@ -67,7 +67,6 @@ mod tests {
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
-    use tempfile;
 
     #[test]
     fn folder_without_cmake_lists() -> io::Result<()> {
