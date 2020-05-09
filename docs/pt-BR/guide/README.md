@@ -101,15 +101,15 @@
   align="right" />
 
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**O prompt minimalista, extremamente rápido e infinitamente personalizável para qualquer shell!**
 
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **Rápido:** É rápido – _muito muito_ rápido! 🚀
+- **Personalizável:** Configure todos os detalhes do seu prompt.
+- **Universal:** Funciona em qualquer shell, em qualquer sistema operacional.
+- **Inteligente:** Mostra informações relevantes rapidamente.
+- **Muitos recursos:** Suporte para todas as suas ferramentas favoritas.
+- **Fácil:**Instalação rápida – comece a usar em minutos.
 
 <p align="center">
 <a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
