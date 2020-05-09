@@ -119,7 +119,7 @@ jobs:
       # Install Python at a fixed version
       - uses: actions/setup-python@v1
         with:
-          python-version: "3.7.6"
+          python-version: "3.8.2"
 
       # Install dotnet at a fixed version
       - uses: actions/setup-dotnet@v1
@@ -269,27 +269,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # These can be squashed when https://github.com/actions/download-artifact/issues/6 is closed
-      - name: Download releases from github_build
-        uses: actions/download-artifact@v1
-        with:
-          name: starship-x86_64-unknown-linux-gnu.tar.gz
-          path: .
-      - name: Download releases from github_build
-        uses: actions/download-artifact@v1
-        with:
-          name: starship-x86_64-unknown-linux-musl.tar.gz
-          path: .
-      - name: Download releases from github_build
-        uses: actions/download-artifact@v1
-        with:
-          name: starship-x86_64-apple-darwin.tar.gz
-          path: .
-      - name: Download releases from github_build
-        uses: actions/download-artifact@v1
-        with:
-          name: starship-x86_64-pc-windows-msvc.zip
-          path: .
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
 
       - name: Generate checksums
         run: for file in starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
