@@ -128,7 +128,7 @@ prompt_order = [
     "jobs",
     "battery",
     "time",
-    "exit_code",
+    "status",
     "character",
 ]
 ```
@@ -574,28 +574,6 @@ The module will be shown only if any of the following conditions are met:
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
-```
-
-## Exit Code
-
-The `exit_code` module displays the exit code of the previous command.
-The module will be shown only if the exit code is not `0`.
-
-### Options
-
-| Variable   | Default               | Description                      |
-| ---------- | --------------------- | -------------------------------- |
-| `format`   | `[✖$code](red bold) ` | The format of the module         |
-| `disabled` | `true`                | Disables the `exit_code` module. |
-
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[exit_code]
-format = "[\\[💣 $code\\]](bg:blue) "
-disabled = false
 ```
 
 ## Git Branch
@@ -1257,6 +1235,28 @@ and `$SINGULARITY_NAME` is set.
 
 [singularity]
 symbol = "📦 "
+```
+
+## Status
+
+The `status` module displays the exit code of the previous command.
+The module will be shown only if the exit code is not `0`.
+
+### Options
+
+| Variable   | Default                 | Description                   |
+| ---------- | ----------------------- | ----------------------------- |
+| `format`   | `[✖$status](red bold) ` | The format of the module      |
+| `disabled` | `true`                  | Disables the `status` module. |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[status]
+format = "[\\[💣 $status\\]](bg:blue) "
+disabled = false
 ```
 
 ## Terraform

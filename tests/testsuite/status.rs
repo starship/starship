@@ -1,21 +1,19 @@
 use ansi_term::Color;
 use std::io;
 
-use crate::common::{self, TestCommand};
+use crate::common::render_module;
 
 #[test]
 fn success_status() -> io::Result<()> {
     let expected = "";
 
     // Status code 0
-    let output = common::render_module("exit_code")
-        .arg("--status=0")
-        .output()?;
+    let output = render_module("status").arg("--status=0").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
 
     // No status code
-    let output = common::render_module("exit_code").output()?;
+    let output = render_module("status").output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
 
@@ -29,7 +27,7 @@ fn failure_status() -> io::Result<()> {
     for status in exit_values.iter() {
         let expected = format!("{} ", Color::Red.bold().paint(format!("✖{}", status)));
         let arg = format!("--status={}", status);
-        let output = common::render_module("exit_code").arg(arg).output()?;
+        let output = render_module("status").arg(arg).output()?;
         let actual = String::from_utf8(output.stdout).unwrap();
         assert_eq!(expected, actual);
     }

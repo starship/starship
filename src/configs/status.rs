@@ -3,15 +3,15 @@ use crate::config::{ModuleConfig, RootModuleConfig};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
-pub struct ExitCodeConfig<'a> {
+pub struct StatusConfig<'a> {
     pub format: &'a str,
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for ExitCodeConfig<'a> {
+impl<'a> RootModuleConfig<'a> for StatusConfig<'a> {
     fn new() -> Self {
-        ExitCodeConfig {
-            format: "[✖$code](red bold) ",
+        StatusConfig {
+            format: "[✖$status](red bold) ",
             disabled: true,
         }
     }

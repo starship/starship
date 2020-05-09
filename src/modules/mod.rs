@@ -12,7 +12,6 @@ mod elixir;
 mod elm;
 mod env_var;
 mod erlang;
-mod exit_code;
 mod git_branch;
 mod git_commit;
 mod git_state;
@@ -35,6 +34,7 @@ mod python;
 mod ruby;
 mod rust;
 mod singularity;
+mod status;
 mod terraform;
 mod time;
 mod username;
@@ -64,7 +64,6 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "elm" => elm::module(context),
         "erlang" => erlang::module(context),
         "env_var" => env_var::module(context),
-        "exit_code" => exit_code::module(context),
         "git_branch" => git_branch::module(context),
         "git_commit" => git_commit::module(context),
         "git_state" => git_state::module(context),
@@ -87,6 +86,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "ruby" => ruby::module(context),
         "rust" => rust::module(context),
         "singularity" => singularity::module(context),
+        "status" => status::module(context),
         "terraform" => terraform::module(context),
         "time" => time::module(context),
         "crystal" => crystal::module(context),
@@ -113,7 +113,6 @@ pub fn description(module: &str) -> &'static str {
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
         "env_var" => "Displays the current value of a selected environment variable",
         "erlang" => "Current OTP version",
-        "exit_code" => "The exit code of the last command",
         "git_branch" => "The active branch of the repo in your current directory",
         "git_commit" => "The active commit of the repo in your current directory",
         "git_state" => "The current git operation, and it's progress",
@@ -135,6 +134,7 @@ pub fn description(module: &str) -> &'static str {
         "python" => "The currently installed version of Python",
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
+        "status" => "The status of the last command",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "username" => "The active user's username",
