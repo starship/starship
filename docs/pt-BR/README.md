@@ -18,7 +18,7 @@ features:
 footer: Licenciado por ISC | Todos os direitos reservados © 2019-Atual | Contribuidores Starship
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Multi Shell Prompt"
-description: O Starship é o prompt mínimo, extremamente rápido e extremamente personalizável para qualquer shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and PowerShell.
+description: O Starship é o prompt mínimo, extremamente rápido e extremamente personalizável para qualquer shell! Mostra as informações que você precisa, mantendo-se elegante e minimalista. Instalação rápida disponível para Bash, Fish, ZSH, Ion e Powershell.
 ---
 
 <div class="center">
@@ -28,40 +28,40 @@ description: O Starship é o prompt mínimo, extremamente rápido e extremamente
   </video>
 </div>
 
-### Quick Install
+### Instalação rápida
 
-1. Install the **starship** binary:
+1. Instale o binário do **starship**:
 
 
-   #### Install Latest Version
+   #### Instalar a última versão
 
-   With Shell:
+   Com o Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Install via Package Manager
+   #### Instalar via Gerenciador de Pacotes
 
-   With [Homebrew](https://brew.sh/):
+   Com o [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
-   With [Scoop](https://scoop.sh):
+   Com o [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Adicione o script de inicialização ao arquivo de configuração do shell:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Adicione o seguinte comando no final do arquivo `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -72,7 +72,7 @@ description: O Starship é o prompt mínimo, extremamente rápido e extremamente
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Adicione o seguinte comando no final do arquivo `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -83,7 +83,7 @@ description: O Starship é o prompt mínimo, extremamente rápido e extremamente
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Adicione o seguinte comando no final do arquivo `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -94,7 +94,7 @@ description: O Starship é o prompt mínimo, extremamente rápido e extremamente
 
    #### Powershell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   Adicione o seguinte comando no final do arquivo `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` em -Nix):
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
@@ -105,7 +105,7 @@ description: O Starship é o prompt mínimo, extremamente rápido e extremamente
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Adicione o seguinte comando no final do arquivo `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
