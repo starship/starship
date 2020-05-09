@@ -148,14 +148,14 @@
    #### Install via Package Manager
 
 
-   ##### With [Homebrew](https://brew.sh/):
+   ##### Com o [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### Com o [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
@@ -199,7 +199,7 @@
 
    #### PowerShell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   Adicione o seguinte comando no final do arquivo `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` em -Nix):
 
    ```sh
    Invoke-Expression (&starship init powershell)
