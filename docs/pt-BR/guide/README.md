@@ -258,13 +258,13 @@ Por favor, confira estes projetos anteriores que ajudaram a inspirar a criação
 
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Tema robbyrussell multi shell escrito em JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** - A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** - Um prompt multi shell personalizável com ícones como o powerline.
 
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 License
+## 📝 Licença
 
 Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
