@@ -128,7 +128,7 @@
 1. Instale o binário do **starship**:
 
 
-   #### Instalando a última versão
+   #### Instalar a última versão
 
 
    ##### Binário pré-compilado, utilizando o shell:
@@ -145,7 +145,7 @@
    ```
 
 
-   #### Instalando via gerenciador de pacotes
+   #### Instalar via gerenciador de pacotes
 
 
    ##### Com o [Homebrew](https://brew.sh/):
@@ -188,7 +188,7 @@
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Adicione o seguinte comando no final do arquivo `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -256,9 +256,9 @@ Por favor, confira estes projetos anteriores que ajudaram a inspirar a criação
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Um prompt ZSH para astronautas.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Tema robbyrussell multi shell escrito em JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Tema robbyrussell multi-shell escrito em JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** - Um prompt multi shell personalizável com ícones como o powerline.
+- **[reujab/silver](https://github.com/reujab/silver)** - Um prompt multi-shell personalizável com ícones como o powerline.
 
 <p align="center">
     <br>
