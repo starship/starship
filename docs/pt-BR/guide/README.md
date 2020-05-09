@@ -112,40 +112,40 @@
 - **Fácil:**Instalação rápida – comece a usar em minutos.
 
 <p align="center">
-<a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/"><strong>Consulte a documentação&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
 
-## 🚀 Installation
+## 🚀 Instalação
 
-### Prerequisites
+### Pré-requisitos
 
-- A [Powerline font](https://github.com/powerline/fonts) installed and enabled in your terminal (for example, try [Fira Code](https://github.com/tonsky/FiraCode)).
+- Uma das fontes [Powerline font](https://github.com/powerline/fonts) instalada e configurada no seu terminal (por exemplo, experimente a [Fira Code](https://github.com/tonsky/FiraCode)).
 
-### Getting Started
+### Primeiros passos
 
-1. Install the **starship** binary:
-
-
-   #### Install Latest Version
+1. Instale o binário do **starship**:
 
 
-   ##### From prebuilt binary, with Shell:
+   #### Instalando a última versão
+
+
+   ##### Binário pré-compilado, utilizando o shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   ##### From source on [crates.io](https://crates.io/):
+   ##### Código fonte via [crates.io](https://crates.io/):
 
    ```sh
    cargo install starship
    ```
 
 
-   #### Install via Package Manager
+   #### Instalando via gerenciador de pacotes
 
 
    ##### Com o [Homebrew](https://brew.sh/):
@@ -161,12 +161,12 @@
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Adicione o script de inicialização no arquivo de configuração do seu shell:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Adicione o seguinte comando no final do arquivo `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -177,7 +177,7 @@
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Adicione o seguinte comando no final do arquivo `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -208,7 +208,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Adicione o seguinte comando no final do arquivo `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -216,11 +216,11 @@
    eval $(starship init ion)
    ```
 
-## 🤝 Contributing
+## 🤝 Contribuindo
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+Nós estamos sempre procurando contribuidores de **todos os níveis de conhecimento**! Se você está buscando um caminho mais fácil para começar no projeto, veja essas [boas issues para começar](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Se você está interessado em ajudar contribuindo com o projeto, dê uma olhada no nosso [Guia de Contribuição](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Além disso, sinta-se à vontade para entrar no nosso [servidor no Discord](https://discord.gg/8Jzqu3T) e dizer oi. 👋
 
 ### Code Contributors
 
