@@ -3,7 +3,7 @@ home: true
 heroImage: /logo.svg
 heroText:
 tagline: O prompt minimalista, extremamente rápido e infinitamente personalizável para qualquer shell!
-actionText: Começar →
+actionText: Primeiros passos →
 actionLink: ./guide/
 features:
   - 
@@ -15,9 +15,9 @@ features:
   - 
     title: Personalizável
     details: Cada pequeno detalhe é personalizável ao seu gosto, para tornar esse prompt o mínimo possível ou rico em recursos, como você preferir.
-footer: Licenciado por ISC | Todos os direitos reservados © 2019-Atual | Contribuidores Starship
+footer: Licenciado pelo ISC | Todos os direitos reservados © 2019-Presente | Contribuidores Starship
 #Used for the description meta tag, for SEO
-metaTitle: "Starship: Multi Shell Prompt"
+metaTitle: "Starship: Cross-Shell Prompt"
 description: O Starship é o prompt minimalista, extremamente rápido e extremamente personalizável para qualquer shell! Mostra as informações que você precisa, mantendo-se elegante e minimalista. Instalação rápida disponível para Bash, Fish, ZSH, Ion e Powershell.
 ---
 
