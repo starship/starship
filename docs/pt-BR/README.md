@@ -2,8 +2,8 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
-actionText: Get Started →
+tagline: O prompt mínimo, super rápido e infinitamente personalizável para qualquer shell!
+actionText: Começar →
 actionLink: ./guide/
 features:
   - 
