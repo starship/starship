@@ -7,11 +7,11 @@ actionText: Começar →
 actionLink: ./guide/
 features:
   - 
-    title: Compatibility First
-    details: Works on the most common shells on the most common operating systems. Use it everywhere!
+    title: Compatibilidade primeiro
+    details: Funciona nos principais shells nos principais sistemas operacionais. Use em qualquer lugar!
   - 
-    title: Rust-Powered
-    details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
+    title: Poder do Rust
+    details: Tenha o melhor da velocidade e segurança do Rust, para tornar seu prompt o mais rápido e confiável possível.
   - 
     title: Customizable
     details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
