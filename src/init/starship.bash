@@ -22,7 +22,7 @@ starship_preexec() {
         PREEXEC_READY=false
         STARSHIP_START_TIME=$(::STARSHIP:: time)
     fi
-    
+
     : "$PREV_LAST_ARG"
 }
 
@@ -64,14 +64,14 @@ else
         }
         trap 'starship_preexec_all "$_"' DEBUG
     fi
- 
-    # Finally, prepare the precmd function and set up the start time. We will avoid to 
+
+    # Finally, prepare the precmd function and set up the start time. We will avoid to
     # add multiple instances of the starship function and keep other user functions if any.
     if [[ -z "$PROMPT_COMMAND" ]]; then
         PROMPT_COMMAND="starship_precmd"
     elif [[ "$PROMPT_COMMAND" != *"starship_precmd" ]]; then
-        # Remove any trailing semicolon before appending (PR #784)
-        PROMPT_COMMAND="${PROMPT_COMMAND%;};starship_precmd;"
+        # prepending starship_precmd (appending it breaks $? status checking)
+        PROMPT_COMMAND="starship_precmd;${PROMPT_COMMAND}"
     fi
 fi
 
