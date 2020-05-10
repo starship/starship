@@ -15,14 +15,14 @@ $ mkdir -p ~/.config && touch ~/.config/starship.toml
 Todas as configurações do starship são feitas neste arquivo [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Don't print a new line at the start of the prompt
+# Não imprime uma nova linha no início do prompt
 add_newline = false
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]      # The name of the module we are configuring is "character"
-symbol = "➜"     # The "symbol" segment is being set to "➜"
+# Substitui o símbolo "❯" por "➜" no prompt.
+[character]       # O nome do módulo que estamos configurando é "character"
+symbol = "➜"     # O "symbol" está sendo configurado para "➜"
 
-# Disable the package module, hiding it from the prompt completely
+# Desabilita o módulo de pacotes, ocultando completamente do prompt.
 [package]
 disabled = true
 ```
