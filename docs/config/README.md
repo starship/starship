@@ -801,11 +801,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default       | Description                                              |
-| ---------- | ------------- | -------------------------------------------------------- |
-| `symbol`   | `"🐹 "`       | The symbol used before displaying the version of Golang. |
-| `style`    | `"bold cyan"` | The style for the module.                                |
-| `disabled` | `false`       | Disables the `golang` module.                            |
+| Option     | Default                            | Description                                     |
+| ---------- | ---------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
+| `symbol`   | `"🐹 "`                            | A format string representing the symbol of Go.  |
+| `style`    | `"bold cyan"`                      | The style for the module.                       |
+| `disabled` | `false`                            | Disables the `golang` module.                   |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v1.12.1` | The version of `go`                  |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -813,8 +824,9 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [golang]
-symbol = "🏎💨 "
+format = "via [🏎💨 $version](bold cyan) "
 ```
+
 ## Haskell
 
 The `haskell` module shows the currently installed version of Haskell Stack version.
