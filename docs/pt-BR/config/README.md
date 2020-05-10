@@ -20,7 +20,7 @@ add_newline = false
 
 # Substitui o símbolo "❯" por "➜" no prompt.
 [character]       # O nome do módulo que estamos configurando é "character"
-symbol = "➜"     # O "symbol" está sendo configurado para "➜"
+symbol = "➜"     # O segmento "symbol" está sendo configurado para "➜"
 
 # Desabilita o módulo de pacotes, ocultando completamente do prompt.
 [package]
@@ -34,7 +34,7 @@ export STARSHIP_CONFIG=~/.starship
 
 ### Terminologia
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
+**Módulo**: Um componente no prompt que fornece informações baseado no contexto do seu SO. Por exemplo, o módulo "nodejs" mostra a versão do NodeJS instalado no seu computador, se o diretório atual for um projeto NodeJS.
 
 **Segment**: Smaller sub-components that compose a module. For example, the "symbol" segment in the "nodejs" module contains the character that is shown before the version number (⬢ by default).
 
