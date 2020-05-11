@@ -38,7 +38,7 @@ export STARSHIP_CONFIG=~/.starship
 
 **Segmento**: Configurações que compõem um módulo. Por exemplo, o segmento "symbol" do módulo "nodejs" contém o caractere que é exibido antes da versão (⬢ por padrão).
 
-Aqui está a representação do módulo Node. In the following example, "symbol" and "version" are segments within it. Every module also has a prefix and suffix that are the default terminal color.
+Aqui está a representação do módulo Node. No exemplo a seguir, "symbol" e "version" são segmentos dentro dele. Todos os módulos também tem um prefixo e um sufixo que são da cor do terminal padrão.
 
 ```
 [prefix]      [symbol]     [version]    [suffix]
