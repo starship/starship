@@ -36,9 +36,9 @@ export STARSHIP_CONFIG=~/.starship
 
 **Módulo**: Um componente no prompt que fornece informações baseado no contexto do seu SO. Por exemplo, o módulo "nodejs" mostra a versão do NodeJS instalado no seu computador, se o diretório atual for um projeto NodeJS.
 
-**Segmento**: Configurações que compõem um módulo. For example, the "symbol" segment in the "nodejs" module contains the character that is shown before the version number (⬢ by default).
+**Segmento**: Configurações que compõem um módulo. Por exemplo, o segmento "symbol" do módulo "nodejs" contém o caractere que é exibido antes da versão (⬢ por padrão).
 
-Here is the representation of the node module. In the following example, "symbol" and "version" are segments within it. Every module also has a prefix and suffix that are the default terminal color.
+Aqui está a representação do módulo Node. In the following example, "symbol" and "version" are segments within it. Every module also has a prefix and suffix that are the default terminal color.
 
 ```
 [prefix]      [symbol]     [version]    [suffix]
