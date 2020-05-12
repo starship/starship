@@ -14,9 +14,9 @@ pub struct NimConfig<'a> {
 impl<'a> RootModuleConfig<'a> for NimConfig<'a> {
     fn new() -> Self {
         NimConfig {
-            symbol: SegmentConfig::new("👑 v"),
+            symbol: SegmentConfig::new("👑 "),
             version: SegmentConfig::default(),
-            style: Color::Yellow.bold(),
+            style: Color::Green.bold(),
             disabled: false,
         }
     }
