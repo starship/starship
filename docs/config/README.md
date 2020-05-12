@@ -1016,6 +1016,33 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
+## Nim
+
+The `nim` module shows the currently installed version of Nim.
+The module will be shown if any of the following conditions are met:
+- The current directory contains a `nim.cfg` file
+- The current directory contains a file with the `.nim` extension
+- The current directory contains a file with the `.nims` extension
+- The current directory contains a file with the `.nimble` extension
+
+### Options
+
+| Variable   | Default        | Description                                            |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"👑 "`        | The symbol used before displaying the version of Nim.  |
+| `style`    | `"bold green"` | The style for the module.                              |
+| `disabled` | `false`        | Disables the `nim` module.                             |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[nim]
+style = "yellow"
+symbol = "🎣 "
+```
+
 ## Nix-shell
 
 The `nix_shell` module shows the nix-shell environment.
