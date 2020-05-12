@@ -1027,11 +1027,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default        | Description                                            |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"👑 "`        | The symbol used before displaying the version of Nim.  |
-| `style`    | `"bold yellow"` | The style for the module.                              |
-| `disabled` | `false`        | Disables the `nim` module.                             |
+| Variable   | Default         | Description                                            |
+| ---------- | --------------- | ------------------------------------------------------ |
+| `symbol`   | `"👑 "`         | The symbol used before displaying the version of Nim.  |
+| `style`    | `"bold yellow"` | The style for the module.                             |
+| `disabled` | `false`         | Disables the `nim` module.                             |
 
 ### Example
 
