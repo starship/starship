@@ -1026,7 +1026,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable    | Default                                       | Description                                              |
+| Option      | Default                                       | Description                                              |
 | ----------- | --------------------------------------------- | -------------------------------------------------------- |
 | `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
 | `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module.                               |
