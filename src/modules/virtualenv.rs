@@ -33,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "virtualenv" => Some(Ok(virtual_env.clone())),
+                "virtualenv" => Some(Ok(&virtual_env)),
                 _ => None,
             })
             .parse(None)
