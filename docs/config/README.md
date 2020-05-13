@@ -614,6 +614,7 @@ The module will be shown if any of the following conditions are met:
 [erlang]
 symbol = "e "
 ```
+
 ## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable.
@@ -624,7 +625,7 @@ The module will be shown only if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default                                | Description                                                                  |
+| Option     | Default                                | Description                                                                  |
 | ---------- | -------------------------------------- | ---------------------------------------------------------------------------- |
 | `symbol`   |                                        | The symbol used before displaying the variable value.                        |
 | `variable` |                                        | The environment variable to be displayed.                                    |
