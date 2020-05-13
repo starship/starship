@@ -89,9 +89,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                // This may result in multiple calls to `get_module_version` when a user have
-                // multiple `$version` variables defined in `format`.
-                "path" => Some(Ok(final_dir_string.clone())),
+                "path" => Some(Ok(&final_dir_string)),
                 _ => None,
             })
             .parse(None)

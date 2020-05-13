@@ -447,12 +447,13 @@ it would have been `nixpkgs/pkgs`.
 
 ### Options
 
-| Variable                    | Default                    | Description                                                                      |
-| --------------------------- | -------------------------- | -------------------------------------------------------------------------------- |
-| `truncation_length`         | `3`                        | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`          | `true`                     | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `format`                    | `"[$path]($style) "` | The format for the module.                                                       |
-| `disabled`                  | `false`                    | Disables the `directory` module.                                                 |
+| Option              | Default              | Description                                                                      |
+| ------------------- | -------------------- | -------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                  | The number of parent folders that the current directory should be truncated to.  |
+| `truncate_to_repo`  | `true`               | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `format`            | `"[$path]($style) "` | The format for the module.                                                       |
+| `style`             | `"bold red"`         | The style for the module.                                                        |
+| `disabled`          | `false`              | Disables the `directory` module.                                                 |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
