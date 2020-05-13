@@ -1,40 +1,39 @@
-use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
+use crate::config::{ModuleConfig, RootModuleConfig};
 
-use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct BatteryConfig<'a> {
-    pub full_symbol: SegmentConfig<'a>,
-    pub charging_symbol: SegmentConfig<'a>,
-    pub discharging_symbol: SegmentConfig<'a>,
-    pub unknown_symbol: Option<SegmentConfig<'a>>,
-    pub empty_symbol: Option<SegmentConfig<'a>>,
-    pub display: Vec<BatteryDisplayConfig>,
+    pub full_symbol: &'a str,
+    pub charging_symbol: &'a str,
+    pub discharging_symbol: &'a str,
+    pub unknown_symbol: Option<&'a str>,
+    pub empty_symbol: Option<&'a str>,
+    pub display: Vec<BatteryDisplayConfig<'a>>,
     pub disabled: bool,
-    pub percentage: SegmentConfig<'a>,
+    pub format: &'a str,
 }
 
 impl<'a> RootModuleConfig<'a> for BatteryConfig<'a> {
     fn new() -> Self {
         BatteryConfig {
-            full_symbol: SegmentConfig::new("•"),
-            charging_symbol: SegmentConfig::new("↑"),
-            discharging_symbol: SegmentConfig::new("↓"),
+            full_symbol: "•",
+            charging_symbol: "↑",
+            discharging_symbol: "↓",
             unknown_symbol: None,
             empty_symbol: None,
+            format: "[$symbol$percentage]($style) ",
             display: vec![BatteryDisplayConfig {
                 threshold: 10,
-                style: Color::Red.bold(),
+                style: "red bold",
             }],
             disabled: false,
-            percentage: SegmentConfig::default(),
         }
     }
 }
 
 #[derive(Clone, ModuleConfig)]
-pub struct BatteryDisplayConfig {
+pub struct BatteryDisplayConfig<'a> {
     pub threshold: i64,
-    pub style: Style,
+    pub style: &'a str,
 }
