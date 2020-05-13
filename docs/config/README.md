@@ -1222,21 +1222,21 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable             | Default                       | Description                                                                |
-| -------------------- | ----------------------------- | -------------------------------------------------------------------------- |
-| `pyenv_version_name` | `false`                       | Use pyenv to get Python version                                            |
-| `scan_for_pyfiles`   | `true`                        | If false, Python files in the current directory will not show this module. |
-| `format`             | `"via [🐍 $version]($style) "` | The format for the module.                                                 |
-| `symbol`             | `"🐍"`                         | A format string representing the symbol of Python                          |
-| `style`              | `"yellow bold"`               | The style for the module.                                                  |
-| `disabled`           | `false`                       | Disables the `python` module.                                              |
+| Option               | Default                                | Description                                                                |
+| -------------------- | -------------------------------------- | -------------------------------------------------------------------------- |
+| `pyenv_version_name` | `false`                                | Use pyenv to get Python version                                            |
+| `scan_for_pyfiles`   | `true`                                 | If false, Python files in the current directory will not show this module. |
+| `format`             | `"via [${symbol}${version}]($style) "` | The format for the module.                                                 |
+| `symbol`             | `"🐍 "`                                 | A format string representing the symbol of Python                          |
+| `style`              | `"yellow bold"`                        | The style for the module.                                                  |
+| `disabled`           | `false`                                | Disables the `python` module.                                              |
 
 ### Variables
 
 | Variable | Example         | Description                          |
 | -------- | --------------- | ------------------------------------ |
 | version  | `"v3.8.1"`      | The version of `python`              |
-| symbol   | `"🐍"`           | Mirrors the value of option `symbol` |
+| symbol   | `"🐍 "`         | Mirrors the value of option `symbol` |
 | style    | `"yellow bold"` | Mirrors the value of option `style`  |
 
 ### Example
@@ -1262,7 +1262,7 @@ The module will be shown if all of the following conditions are met:
 
 ### Options
 
-| Variable   | Default                          | Description                                           |
+| Option     | Default                          | Description                                           |
 | ---------- | -------------------------------- | ----------------------------------------------------- |
 | `format`   | `"[\\($virtualenv\\)]($style) "` | The format for the module.                            |
 | `symbol`   | `""`                             | A format string representing the symbol of virtualenv |

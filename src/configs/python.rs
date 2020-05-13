@@ -17,9 +17,9 @@ impl<'a> RootModuleConfig<'a> for PythonConfig<'a> {
         PythonConfig {
             pyenv_version_name: false,
             scan_for_pyfiles: true,
-            format: "via [$symbol $version]($style) ",
+            format: "via [${symbol}${version}]($style) ",
             style: "yellow bold",
-            symbol: "🐍",
+            symbol: "🐍 ",
             disabled: false,
         }
     }
