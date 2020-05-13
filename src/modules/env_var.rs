@@ -28,7 +28,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "env_value" => Some(Ok(env_value.clone())),
+                "env_value" => Some(Ok(&env_value)),
                 _ => None,
             })
             .parse(None)
