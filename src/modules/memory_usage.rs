@@ -66,11 +66,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "ram" => Some(Ok(ram.clone())),
-                "ram_pct" => Some(Ok(ram_pct.clone())),
+                "ram" => Some(Ok(&ram)),
+                "ram_pct" => Some(Ok(&ram_pct)),
                 // swap only shown if there is swap on the system
-                "swap" if total_swap_kib > 0 => Some(Ok(swap.clone())),
-                "swap_pct" if total_swap_kib > 0 => Some(Ok(swap_pct.clone())),
+                "swap" if total_swap_kib > 0 => Some(Ok(&swap)),
+                "swap_pct" if total_swap_kib > 0 => Some(Ok(&swap_pct)),
                 _ => None,
             })
             .parse(None)
