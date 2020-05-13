@@ -1237,7 +1237,7 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default                       | Description                                   |
+| Option     | Default                       | Description                                   |
 | ---------- | ----------------------------- | --------------------------------------------- |
 | `format`   | `"via [R $version]($style) "` | The format for the module.                    |
 | `symbol`   | `""`                          | A format string representing the symbol of R. |
