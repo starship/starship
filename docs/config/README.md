@@ -892,14 +892,14 @@ The module will be shown if any of the following conditions are met:
 
 | Variable   | Default                             | Description                                     |
 | ---------- | ----------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol $version]($style) "` | The format for the module.                      |
-| `symbol`   | `"☕"`                               | A format string representing the symbol of Java |
+| `format`   | `"via [${symbol}${version}]($style) "` | The format for the module.                      |
+| `symbol`   | `"☕ "`                               | A format string representing the symbol of Java |
 | `style`    | `"red dimmed"`                      | The style for the module.                       |
 | `disabled` | `false`                             | Disables the `java` module.                     |
 
 ### Variables
 
-| Variable | Example      | Description                          |
+| Option   | Example      | Description                          |
 | -------- | ------------ | ------------------------------------ |
 | version  | "v14"        | The version of `java`                |
 | symbol   | "☕"          | Mirrors the value of option `symbol` |
