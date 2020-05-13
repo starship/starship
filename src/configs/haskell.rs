@@ -14,8 +14,8 @@ impl<'a> RootModuleConfig<'a> for HaskellConfig<'a> {
     fn new() -> Self {
         HaskellConfig {
             disabled: false,
-            format: "via [$symbol $version]($style) ",
-            symbol: "λ",
+            format: "via [${symbol}${version}](${style}) ",
+            symbol: "λ ",
             style: "bold red",
         }
     }

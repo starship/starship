@@ -837,10 +837,10 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default                             | Description                                        |
+| Option     | Default                             | Description                                        |
 | ---------- | ----------------------------------- | -------------------------------------------------- |
-| `format`   | `"via [$symbol $version]($style) "` | The format for the module.                         |
-| `symbol`   | `"λ"`                               | A format string representing the symbol of Haskell |
+| `format`   | `"via [${symbol}${version}](${style}) "` | The format for the module.                         |
+| `symbol`   | `"λ "`                               | A format string representing the symbol of Haskell |
 | `style`    | `"bold red"`                        | The style for the module.                          |
 | `disabled` | `false`                             | Disables the `haskell` module.                     |
 
