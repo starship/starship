@@ -446,7 +446,7 @@ heuristic = false
 | ---------- | --------------- | ------------------------------------------------------------- |
 | `symbol`   | `"💧 "`          | Символ, используемый перед отображением версии Elixir/Erlang. |
 | `style`    | `"bold purple"` | Стиль модуля.                                                 |
-| `disabled` | `false`         | Disables the `elixir` module.                                 |
+| `disabled` | `false`         | Отключает модуль `elixir`.                                    |
 
 ### Пример
 
@@ -485,24 +485,24 @@ symbol = "🔮 "
 symbol = " "
 ```
 
-## Environment Variable
+## Переменная Окружения
 
-The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+Модуль `env_var` отображает текущее значение выбранной переменной окружения. Модуль будет показан только в том случае, если любое из следующих условий соблюдено:
 
-- The `variable` configuration option matches an existing environment variable
-- The `variable` configuration option is not defined, but the `default` configuration option is
+- Опция `variable` соответствует существующей переменной среды
+- Опция `variable` не определена, но определена опция `default`
 
 ### Опции
 
-| Переменная | По умолчанию          | Описание                                                                     |
-| ---------- | --------------------- | ---------------------------------------------------------------------------- |
-| `symbol`   |                       | The symbol used before displaying the variable value.                        |
-| `variable` |                       | The environment variable to be displayed.                                    |
-| `default`  |                       | The default value to be displayed when the selected variable is not defined. |
-| `prefix`   | `""`                  | Prefix to display immediately before the variable value.                     |
-| `suffix`   | `""`                  | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed bold black"` | Стиль модуля.                                                                |
-| `disabled` | `false`               | Disables the `env_var` module.                                               |
+| Переменная | По умолчанию          | Описание                                                           |
+| ---------- | --------------------- | ------------------------------------------------------------------ |
+| `symbol`   |                       | Символ, используемый перед отображением значения переменной.       |
+| `variable` |                       | Отображаемая переменная окружения.                                 |
+| `default`  |                       | Значение отображаемое, когда выбранная переменная не определена.   |
+| `prefix`   | `""`                  | Префикс, отображаемый, непосредственно перед значением переменной. |
+| `suffix`   | `""`                  | Префикс, отображаемый, непосредственно после значением переменной. |
+| `style`    | `"dimmed bold black"` | Стиль модуля.                                                      |
+| `disabled` | `false`               | Отключает модуль `env_var`.                                        |
 
 ### Пример
 
@@ -518,8 +518,8 @@ default = "unknown shell"
 
 The `erlang` module shows the currently installed version of Erlang/OTP. Модуль будет показан, если любое из следующих условий соблюдено:
 
-- The current directory contains a `rebar.config` file.
-- The current directory contains a `erlang.mk` file.
+- Текущий каталог содержит файл `rebar.config`.
+- Текущий каталог содержит файл `erlang.mk`.
 
 ### Опции
 
@@ -1095,7 +1095,7 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `ruby` показывает установленную версию Ruby. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит файл `Gemfile`
 - Текущий каталог содержит файл `.ruby-version`
@@ -1120,7 +1120,7 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `rust` показывает установленную версию Rust. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит файл `Cargo.toml`
 - Текущий каталог содержит файл с расширением `.rs`
@@ -1144,7 +1144,7 @@ symbol = "⚙️ "
 
 ## Singularity
 
-The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
+Модуль `singularity` показывает текущий образ singularity, если внутри контейнера и `$SINGULARITY_NAME` установлена.
 
 ### Опции
 
@@ -1168,7 +1168,7 @@ symbol = "📦 "
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `terraform` показывает выбранную рабочую область и версию terraform. По умолчанию, версия terraform не показана, так как это медленно на текущих версиях terraform, при использовании большого количества плагинов. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит папку `.terraform`
 - Текущий каталог содержит файл с расширением `.tf`
@@ -1193,9 +1193,9 @@ symbol = "🏎💨 "
 
 ## Время
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Модуль `time` показывает текущее **локальное** время. Значение конфигурации `format` используется пакетом [`chrono`](https://crates.io/crates/chrono) для контроля того, как отображается время. Ознакомьтесь с [документацией chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), чтобы увидеть доступные параметры.
 
-::: tip Подсказка
+::: tip
 
 По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
@@ -1211,7 +1211,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 | `utc_time_offset` | `"local"`       | Устанавливает смещение UTC. Диапазон -24 < x < 24. Разрешает числам с плавающей точкой встраивать 30/45-минутное смещение временной зоны. |
 | `disabled`        | `true`          | Отключает модуль `time`.                                                                                                                  |
 
-If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
+Если `use_12hr` равно `true`, то `format` по умолчанию равно `"%r"`. Иначе по умолчанию используется `"%T"`. Установка `format` вручную переопределит параметр `use_12hr`.
 
 ### Пример
 
@@ -1226,7 +1226,7 @@ utc_time_offset = "-5"
 
 ## Имя пользователя
 
-The `username` module shows active user's username. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `username` показывает имя текущего пользователя. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий пользователь - root
 - Текущий пользователь отличается от залогиненного
@@ -1261,13 +1261,13 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a file whose extension is in `extensions`
 - The `when` command returns 0
 
-::: tip Подсказка
+::: tip
 
 Multiple custom modules can be defined by using a `.`.
 
 :::
 
-::: tip Подсказка
+::: tip
 
 The order in which custom modules are shown can be individually set by setting `custom.foo` in `prompt_order`. By default, the `custom` module will simply show all custom modules in the order they were defined.
 
