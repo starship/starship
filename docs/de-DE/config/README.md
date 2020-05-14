@@ -485,7 +485,7 @@ The `elm` module shows the currently installed version of Elm. Das Modul wird nu
 symbol = " "
 ```
 
-## Environment Variable
+## Umgebungsvariablen
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
@@ -494,15 +494,15 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Optionen
 
-| Variable   | Standardwert          | Beschreibung                                                                 |
-| ---------- | --------------------- | ---------------------------------------------------------------------------- |
-| `symbol`   |                       | The symbol used before displaying the variable value.                        |
-| `variable` |                       | The environment variable to be displayed.                                    |
-| `default`  |                       | The default value to be displayed when the selected variable is not defined. |
-| `prefix`   | `""`                  | Prefix to display immediately before the variable value.                     |
-| `suffix`   | `""`                  | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed bold black"` | Stil für dieses Modul.                                                       |
-| `disabled` | `false`               | Disables the `env_var` module.                                               |
+| Variable   | Standardwert          | Beschreibung                                                                             |
+| ---------- | --------------------- | ---------------------------------------------------------------------------------------- |
+| `symbol`   |                       | Das Symbol, das vor der Anzeige der Variable verwendet wird.                             |
+| `variable` |                       | Die anzuzeigende Umgebungsvariable.                                                      |
+| `default`  |                       | Der Standardwert, der angezeigt wird, wenn die ausgewählte Variable nicht definiert ist. |
+| `prefix`   | `""`                  | Präfix der vor der Variable angezeigt wird.                                              |
+| `suffix`   | `""`                  | Suffix der nach der Variable angezeigt wird.                                             |
+| `style`    | `"dimmed bold black"` | Stil für dieses Modul.                                                                   |
+| `disabled` | `false`               | Deaktiviert das `env_var`-Modul.                                                         |
 
 ### Beispiel
 
@@ -516,10 +516,10 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `erlang` module shows the currently installed version of Erlang/OTP. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- The current directory contains a `rebar.config` file.
-- The current directory contains a `erlang.mk` file.
+- Das aktuelle Verzeichnis enthält eine `rebar.config`-Datei.
+- Das aktuelle Verzeichnis enthält eine `erlang.mk`-Datei.
 
 ### Optionen
 
@@ -1059,7 +1059,7 @@ The `python` module shows the currently installed version of Python and the curr
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
-Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Das aktuelle Verzeichnis enthält eine `.python-version`-Datei
 - Das aktuelle Verzeichnis enthält eine `requirements.txt`-Datei
@@ -1095,7 +1095,7 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+Das `ruby` Modul zeigt die derzeit installierte Version von Ruby an. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Das aktuelle Verzeichnis enthält eine `Gemfile`-Datei
 - The current directory contains a `.ruby-version` file
@@ -1120,7 +1120,7 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+Das `rust` Modul zeigt die derzeit installierte Version von Rust an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - Das aktuelle Verzeichnis enthält eine `Cargo.toml`-Datei
 - Das aktuelle Verzeichnis enthält eine Datei mit der `.rs`-Erweiterung
@@ -1168,7 +1168,7 @@ symbol = "📦 "
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+Das `Terraform` Modul zeigt den aktuell ausgewählten terraform Arbeitsbereich und die Version an. Standardmäßig wird die Terraform-Version nicht angezeigt, da dies bei aktuellen Versionen von Terraform langsam ist, wenn viele Plugins verwendet werden. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Das aktuelle Verzeichnis enthält eine `.terraform`-Datei
 - Das aktuelle Verzeichnis enthält eine Datei mit der `.tf`-Erweiterung
@@ -1193,9 +1193,9 @@ symbol = "🏎💨 "
 
 ## Zeit
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Das `time` Modul zeigt die aktuelle **lokale** Zeit an. Der `format` Wert wird von der crate [`chrono`](https://crates.io/crates/chrono) benutzt um die Zeit zu formatieren. Schau dir [die chrono strftime Dokumentation](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) an, um die möglichen Optionen zu sehen.
 
-::: tip
+::: Tipp
 
 Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
 
@@ -1211,7 +1211,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `utc_time_offset` | `"local"`       | Verwendetes Zeitzonen-Offset. Liegt zwischen -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.        |
 | `disabled`        | `true`          | Deaktiviert das `time`-Modul.                                                                                                 |
 
-If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
+Wird `use_12hr` auf `true` gestellt, nimmt `format` automatisch den Wert `"%r"` an. Andernfalls ist es standardmäßig `"%T"`. Wird hingegen `format` gesetzt, so überschreibt dies die Einstellung `use_12hr`.
 
 ### Beispiel
 
@@ -1226,7 +1226,7 @@ utc_time_offset = "-5"
 
 ## Username
 
-The `username` module shows active user's username. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+Das `username` Modul zeigt den Namen des aktiven Benutzers. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Der aktuelle Benutzer ist root
 - Der aktuelle Benutzer ist nicht der eingeloggte Benutzer
@@ -1261,13 +1261,13 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a file whose extension is in `extensions`
 - The `when` command returns 0
 
-::: tip
+::: Tipp
 
 Multiple custom modules can be defined by using a `.`.
 
 :::
 
-::: tip
+::: Tipp
 
 The order in which custom modules are shown can be individually set by setting `custom.foo` in `prompt_order`. By default, the `custom` module will simply show all custom modules in the order they were defined.
 
