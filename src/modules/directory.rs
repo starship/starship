@@ -96,7 +96,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         _ => {
             if config.fish_style_pwd_dir_length > 0 {
                 // If user is using fish style path,
-                current_dir.fish_style(config.fish_style_pwd_dir_length as usize, config.truncation_length as usize);
+                current_dir.fish_style(
+                    config.fish_style_pwd_dir_length as usize,
+                    config.truncation_length as usize,
+                );
             } else {
                 // Truncate the dir string to the maximum number of path components, does not occur for fish style
                 current_dir.truncate(config.truncation_length as usize);
