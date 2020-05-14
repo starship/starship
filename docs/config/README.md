@@ -832,16 +832,25 @@ format = "via [🏎💨 $version](bold cyan) "
 The `haskell` module shows the currently installed version of Haskell Stack version.
 The module will be shown if any of the following conditions are met:
 
-- The current directory contains a `stack.yaml` file
+- The current directory contains a `stack.yaml` or `stack.yml` file
+- The current directory contains a `package.yaml` or `package.yml` file
 
 ### Options
 
-| Variable   | Default      | Description                                               |
-| ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold red"` | The style for the module.                                 |
-| `disabled` | `false`      | Disables the `haskell` module.                            |
+| Option     | Default                             | Description                                        |
+| ---------- | ----------------------------------- | -------------------------------------------------- |
+| `format`   | `"via [${symbol}${version}](${style}) "` | The format for the module.                         |
+| `symbol`   | `"λ "`                               | A format string representing the symbol of Haskell |
+| `style`    | `"bold red"`                        | The style for the module.                          |
+| `disabled` | `false`                             | Disables the `haskell` module.                     |
 
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v8.8.3` | The version of `ghc`                 |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style    |          | Mirrors the value of option `style`  |
 
 ### Example
 
