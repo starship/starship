@@ -13,9 +13,9 @@ pub struct RConfig<'a> {
 impl<'a> RootModuleConfig<'a> for RConfig<'a> {
     fn new() -> Self {
         RConfig {
-            format: "via [R $version]($style) ",
+            format: "via [$symbol$version]($style) ",
             style: "blue bold",
-            symbol: "",
+            symbol: "R ",
             disabled: false,
         }
     }
