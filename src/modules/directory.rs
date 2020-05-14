@@ -66,40 +66,37 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     log::debug!("Repo folder: {:?}", &repo_folder_name);
 
     let dir = match &mut repo_dir {
-        Some(repo_root) => {
-            if config.truncate_to_repo && (repo_root != &home_dir) {
-                if config.fish_style_pwd_dir_length > 0 {
-                    // If user is using fish style path,
-                    // Contract the path to the git repo root, using the physical drive (as git.get_repo() contains also the physical)
-                    let mut preserved_elements = current_fileystem_dir.components.len();
-                    let removed_elts = current_fileystem_dir.contract(
-                        &repo_root,
-                        &Directory::from(repo_folder_name.unwrap().as_str()),
-                    );
-                    preserved_elements -= removed_elts.len();
-                    current_fileystem_dir.components =
-                        [removed_elts, current_fileystem_dir.components].concat();
-                    current_fileystem_dir.fish_style(
-                        config.fish_style_pwd_dir_length as usize,
-                        preserved_elements,
-                    );
-                } else {
-                    // Contract the path to the git repo root, using the physical drive (as git.get_repo() contains also the physical)
-                    current_fileystem_dir.contract(
-                        &repo_root,
-                        &Directory::from(repo_folder_name.unwrap().as_str()),
-                    );
-                    // Truncate the dir string to the maximum number of path components, does not occur for fish style
-                    current_fileystem_dir.truncate(config.truncation_length as usize);
-                }
+        Some(repo_root) if config.truncate_to_repo && (repo_root != &home_dir) => {
+            if config.fish_style_pwd_dir_length > 0 {
+                // If user is using fish style path,
+                // Contract the path to the git repo root, using the physical drive (as git.get_repo() contains also the physical)
+                let mut preserved_elements = current_fileystem_dir.components.len();
+                let removed_elts = current_fileystem_dir.contract(
+                    &repo_root,
+                    &Directory::from(repo_folder_name.unwrap().as_str()),
+                );
+                preserved_elements -= removed_elts.len();
+                current_fileystem_dir.components =
+                    [removed_elts, current_fileystem_dir.components].concat();
+                current_fileystem_dir.fish_style(
+                    config.fish_style_pwd_dir_length as usize,
+                    preserved_elements,
+                );
+            } else {
+                // Contract the path to the git repo root, using the physical drive (as git.get_repo() contains also the physical)
+                current_fileystem_dir.contract(
+                    &repo_root,
+                    &Directory::from(repo_folder_name.unwrap().as_str()),
+                );
+                // Truncate the dir string to the maximum number of path components, does not occur for fish style
+                current_fileystem_dir.truncate(config.truncation_length as usize);
             }
             current_fileystem_dir
         }
-        // Contract the path to the home directory
         _ => {
             if config.fish_style_pwd_dir_length > 0 {
                 // If user is using fish style path,
-                current_dir.fish_style(config.fish_style_pwd_dir_length as usize, 1);
+                current_dir.fish_style(config.fish_style_pwd_dir_length as usize, config.truncation_length as usize);
             } else {
                 // Truncate the dir string to the maximum number of path components, does not occur for fish style
                 current_dir.truncate(config.truncation_length as usize);
