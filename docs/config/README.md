@@ -614,6 +614,7 @@ The module will be shown if any of the following conditions are met:
 [erlang]
 symbol = "e "
 ```
+
 ## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable.
@@ -624,15 +625,21 @@ The module will be shown only if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default          | Description                                                                  |
-| ---------- | ---------------- | ---------------------------------------------------------------------------- |
-| `symbol`   |                  | The symbol used before displaying the variable value.                        |
-| `variable` |                  | The environment variable to be displayed.                                    |
-| `default`  |                  | The default value to be displayed when the selected variable is not defined. |
-| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
-| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed black"` | The style for the module.                                                    |
-| `disabled` | `false`          | Disables the `env_var` module.                                               |
+| Option     | Default                                | Description                                                                  |
+| ---------- | -------------------------------------- | ---------------------------------------------------------------------------- |
+| `symbol`   |                                        | The symbol used before displaying the variable value.                        |
+| `variable` |                                        | The environment variable to be displayed.                                    |
+| `default`  |                                        | The default value to be displayed when the selected variable is not defined. |
+| `format`   | `"with [${env_value}]($style) "` | The format for the module.                                                   |
+| `disabled` | `false`                                | Disables the `env_var` module.                                               |
+
+### Variables
+
+| Variable  | Example                                     | Description                                |
+| --------- | ------------------------------------------- | ------------------------------------------ |
+| env_value | `Windows NT` (if *variable* would be `$OS`) | The environment value of option `variable` |
+| symbol    |                                             | Mirrors the value of option `symbol`       |
+| style     | `black bold dimmed`                         | Mirrors the value of option `style`        |
 
 ### Example
 
