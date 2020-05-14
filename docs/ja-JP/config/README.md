@@ -485,24 +485,24 @@ symbol = "🔮 "
 symbol = " "
 ```
 
-## Environment Variable
+## 環境変数
 
-The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+`env_var`モジュールは、選択された環境変数の現在の値を表示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The `variable` configuration option matches an existing environment variable
-- The `variable` configuration option is not defined, but the `default` configuration option is
+- `variable`オプションが、既存の環境変数と一致する
+- `variable`オプションが定義されておらず、`default`オプションが定義されている
 
 ### オプション
 
-| 変数         | デフォルト                 | 説明                                                                           |
-| ---------- | --------------------- | ---------------------------------------------------------------------------- |
-| `symbol`   |                       | The symbol used before displaying the variable value.                        |
-| `variable` |                       | The environment variable to be displayed.                                    |
-| `default`  |                       | The default value to be displayed when the selected variable is not defined. |
-| `prefix`   | `""`                  | Prefix to display immediately before the variable value.                     |
-| `suffix`   | `""`                  | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed bold black"` | モジュールのスタイルです。                                                                |
-| `disabled` | `false`               | Disables the `env_var` module.                                               |
+| 変数         | デフォルト                 | 説明                                    |
+| ---------- | --------------------- | ------------------------------------- |
+| `symbol`   |                       | 環境変数を表示する前に使用される記号です。                 |
+| `variable` |                       | 表示される環境変数です。                          |
+| `default`  |                       | 上のvariableが定義されていない場合に表示されるデフォルトの値です。 |
+| `prefix`   | `""`                  | 変数の直前に表示するprefixです。                   |
+| `suffix`   | `""`                  | 変数の直後に表示するsuffixです。                   |
+| `style`    | `"dimmed bold black"` | モジュールのスタイルです。                         |
+| `disabled` | `false`               | `env_var`モジュールを無効にします。                |
 
 ### 設定例
 
@@ -518,8 +518,8 @@ default = "unknown shell"
 
 The `erlang` module shows the currently installed version of Erlang/OTP. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `rebar.config` file.
-- The current directory contains a `erlang.mk` file.
+- カレントディレクトリに`rebar.config`ファイルが含まれている.
+- カレントディレクトリに`erlang.mk`ファイルが含まれている.
 
 ### オプション
 
@@ -1096,7 +1096,7 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`ruby`モジュールは、現在インストールされているRubyのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Gemfile`ファイルが含まれている
 - The current directory contains a `.ruby-version` file
@@ -1121,7 +1121,7 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`rust`モジュールには、現在インストールされているRustのバージョンが表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Cargo.toml`ファイルが含まれている
 - カレントディレクトリに`.rs`の拡張子のファイルが含まれている
@@ -1169,7 +1169,7 @@ symbol = "📦 "
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`terraform`モジュールには、現在選択されているterraformワークスペースとバージョンが表示されます。 デフォルトでは、Terraformのバージョンは表示されません。これは、多くのプラグインが使用されている場合、Terraformの現在のバージョンでは遅いためです。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`.terraform`フォルダが含まれている
 - カレントディレクトリに`.tf`の拡張子のファイルが含まれている
@@ -1194,7 +1194,7 @@ symbol = "🏎💨 "
 
 ## 時刻
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
 
 ::: tip
 
@@ -1212,7 +1212,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 | `utc_time_offset` | `"local"`       | 使用するUTCオフセットを設定します。 -24から24までの間で設定可能です。 フロートが30/45分のタイムゾーンオフセットに対応できるようにします。                      |
 | `disabled`        | `true`          | `time`モジュールを無効にします。                                                                               |
 
-If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
+`use_12hr` が `true` の場合、`format` のデフォルトは `"%r"` です。 それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、`use_12hr`の設定が上書きされます。
 
 ### 設定例
 
@@ -1227,7 +1227,7 @@ utc_time_offset = "-5"
 
 ## ユーザー名
 
-The `username` module shows active user's username. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントユーザーがroot
 - カレントユーザーが、ログインしているユーザーとは異なる
