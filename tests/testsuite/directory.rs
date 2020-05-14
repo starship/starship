@@ -179,6 +179,7 @@ fn directory_in_root_non_windows() -> io::Result<()> {
 }
 
 #[test]
+#[cfg(target_os = "windows")]
 fn directory_in_root_windows() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path=C:\\")
