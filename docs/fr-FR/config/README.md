@@ -523,11 +523,11 @@ The `erlang` module shows the currently installed version of Erlang/OTP. Le modu
 
 ### Options
 
-| Variable   | Default    | Description                                              |
-| ---------- | ---------- | -------------------------------------------------------- |
-| `symbol`   | `"🖧 "`     | The symbol used before displaying the version of Erlang. |
-| `style`    | `bold red` | The style for this module.                               |
-| `disabled` | `false`    | Disables the `erlang` module.                            |
+| Variable   | Default      | Description                                              |
+| ---------- | ------------ | -------------------------------------------------------- |
+| `symbol`   | `"🖧 "`       | The symbol used before displaying the version of Erlang. |
+| `style`    | `bold green` | The style for this module.                               |
+| `disabled` | `false`      | Disables the `erlang` module.                            |
 
 ### Exemple
 
@@ -1193,7 +1193,7 @@ symbol = "🏎💨 "
 
 ## Temps
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Le module `time` affiche l'heure actuelle **localement**. La valeur de `format` est utilisée par le package [`chrono`](https://crates.io/crates/chrono) pour contrôler la façon dont l'heure est affichée. Consultez la [doc de chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) pour découvrir les options disponibles.
 
 ::: tip
 
@@ -1211,7 +1211,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `utc_time_offset` | `"local"`       | Définir le décalage horaire UTC à utiliser. Intervalle de -24 < x < 24. Accepte des nombres décimaux pour s'adapter aux décalages de 30/45 minutes. |
 | `disabled`        | `true`          | Désactiver le module `time`.                                                                                                                        |
 
-If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
+Si `use_12hr` a pour valeur `true`, le `format` par défaut est `"%r"`. Sinon, il est défini comme `"%T"`. Définir manuellement le `format` passera outre la valeur de `user_12hr`.
 
 ### Exemple
 
@@ -1226,7 +1226,7 @@ utc_time_offset = "-5"
 
 ## Nom d'utilisateur
 
-The `username` module shows active user's username. Le module est affiché si l'une des ces conditions est remplie :
+Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le module est affiché si l'une des ces conditions est remplie :
 
 - L'utilisateur courant est root
 - L'utilisateur courant est différent de celui connecté
