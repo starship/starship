@@ -1,8 +1,9 @@
 use std::env;
 use std::path::Path;
 
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 use crate::configs::python::PythonConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 /// Creates a module with the current Python version
@@ -41,25 +42,43 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    module.set_style(config.style);
-    module.create_segment("symbol", &config.symbol);
-
-    if config.pyenv_version_name {
-        let python_version = utils::exec_cmd("pyenv", &["version-name"])?.stdout;
-        module.create_segment("pyenv_prefix", &config.pyenv_prefix);
-        module.create_segment("version", &SegmentConfig::new(&python_version.trim()));
+    let python_version = if config.pyenv_version_name {
+        let version = utils::exec_cmd("pyenv", &["version-name"])?.stdout;
+        version
     } else {
-        let python_version = get_python_version()?;
-        let formatted_version = format_python_version(&python_version);
-        module.create_segment("version", &SegmentConfig::new(&formatted_version));
+        let version = get_python_version()?;
+        format_python_version(&version)
     };
+    let virtual_env = get_python_virtual_env();
 
-    if let Some(virtual_env) = get_python_virtual_env() {
-        module.create_segment(
-            "virtualenv",
-            &SegmentConfig::new(&format!(" ({})", virtual_env)),
-        );
-    };
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => Some(Ok(python_version.trim())),
+                "virtualenv" => virtual_env.as_ref().map(|e| Ok(e.trim())),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `python`:\n{}", error);
+            return None;
+        }
+    });
+
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
 }
