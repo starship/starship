@@ -973,14 +973,14 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Option                  | Default                                            | Description                                      |
-| ----------------------- | -------------------------------------------------- | ------------------------------------------------ |
-| `symbol`                | `"☸ "`                                             | A format string representing the symbol of Rust. |
-| `format`                | `"on [$symbol$context \\($namespace\\)]($style) "` | The format for the module.                       |
-| `style`                 | `"bold blue"`                                      | The style for the module.                        |
-| `namespace_spaceholder` | `none`                                             | The value to display if no namespace was found.  |
-| `context_aliases`       |                                                    | Table of context aliases to display.             |
-| `disabled`              | `true`                                             | Disables the `kubernetes` module.                |
+| Option                  | Default                                            | Description                                                           |
+| ----------------------- | -------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`                | `"☸ "`                                             | A format string representing the symbol displayed before the Cluster. |
+| `format`                | `"on [$symbol$context \\($namespace\\)]($style) "` | The format for the module.                                            |
+| `style`                 | `"bold blue"`                                      | The style for the module.                                             |
+| `namespace_spaceholder` | `none`                                             | The value to display if no namespace was found.                       |
+| `context_aliases`       |                                                    | Table of context aliases to display.                                  |
+| `disabled`              | `true`                                             | Disables the `kubernetes` module.                                     |
 
 ### Variables
 
