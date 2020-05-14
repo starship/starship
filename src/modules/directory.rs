@@ -875,7 +875,7 @@ mod tests {
     }
 
     #[test]
-    #[cfg(not(target_os = "windows"))]
+    #[cfg(target_os = "windows")]
     fn contract_windows_style_no_top_level_directory() {
         let mut dir = Directory::from(r"C:\Some\Other\Path");
         let top_level = PathBuf::from("C:/Users/astronaut");

@@ -166,6 +166,10 @@ fn test_prefix() -> io::Result<()> {
 fn directory_in_root_non_windows() -> io::Result<()> {
     let output = common::render_module("directory")
         .arg("--path=/etc")
+        .use_config(toml::toml! {
+            [directory]
+            separator = "/"
+        })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
