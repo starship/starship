@@ -1250,12 +1250,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                       | Description                                   |
-| ---------- | ----------------------------- | --------------------------------------------- |
-| `format`   | `"via [R $version]($style) "` | The format for the module.                    |
-| `symbol`   | `""`                          | A format string representing the symbol of R. |
-| `style`    | `"blue bold"`                 | The style for the module.                     |
-| `disabled` | `false`                       | Disables the `r` module.                      |
+| Option     | Default                            | Description                                   |
+| ---------- | ---------------------------------- | --------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                    |
+| `symbol`   | `"R "`                             | A format string representing the symbol of R. |
+| `style`    | `"blue bold"`                      | The style for the module.                     |
+| `disabled` | `false`                            | Disables the `r` module.                      |
 
 ### Variables
 
