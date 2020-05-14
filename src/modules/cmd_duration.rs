@@ -28,17 +28,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let config_min = config.min_time as u128;
-
-    let module_color = match elapsed {
-        time if time < config_min => return None,
-        _ => config.style,
-    };
+    if elapsed < config.min_time as u128 {
+        return None;
+    }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
-                "style" => Some(Ok(module_color)),
+                "style" => Some(Ok(config.style)),
                 _ => None,
             })
             .map(|variable| match variable {
