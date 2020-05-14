@@ -27,7 +27,7 @@ symbol = "➜"     #  設定 "symbol" 區段為 "➜"
 disabled = true
 ```
 
-You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+你可以用`STARSHIP_CONFIG`環境變數來修改預設`starship.toml`的檔案位置︰
 ```sh
 export STARSHIP_CONFIG=~/.starship
 ```
@@ -68,18 +68,18 @@ Starship 內大多數的模組允許你設定他們的顯示風格。 這要透�
 | -------------- | --------------------------- | ----------------------------------------------------- |
 | `add_newline`  | `true`                      | 在提示字元前面加上換行字元。                                        |
 | `prompt_order` | [連結](#default-prompt-order) | 調整各個提示字元模組的顯示順序。                                      |
-| `scan_timeout` | `30`                        | Timeout for starship to scan files (in milliseconds). |
+| `scan_timeout` | `30`                        | starship掃描檔案的超時設定（毫秒）|
 
 ### 範例
 
 ```toml
 # ~/.config/starship.toml
 
-# Disable the newline at the start of the prompt
+# 取消在提示字符的開頭換行
 add_newline = false
-# Overwrite a default_prompt_order and  use custom prompt_order
+# 修改預設提示字符的順序，並客製化
 prompt_order=["rust","line_break","package","line_break","character"]
-# Wait 10 milliseconds for starship to check files under the current directory.
+# 等10毫秒，讓starship檢查現在資料夾下的文件
 scan_timeout = 10
 ```
 
@@ -134,15 +134,15 @@ prompt_order = [
 
 `aws` 模組顯示現在 AWS 的區域與概況。 這是根據 `AWS_REGION`、`AWS_DEFAULT_REGION` 與 `AWS_PROFILE` 環境變數及 `~/.aws/config` 檔案。
 
-When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
+當在設定檔中使用[aws-vault](https://github.com/99designs/aws-vault)會讀取`AWS_VAULT`這個環境變數。
 
 ### 選項
 
 | 變數                | 預設              | 說明                                                                          |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`          | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。                                                          |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
-| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
+| `displayed_items` | `all`           | 選擇想展示的項目。可能選項為︰ [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | 根據AWS名稱查表顯示地區             |
 | `style`           | `"bold yellow"` | 這個模組的風格。                                                                    |
 | `disabled`        | `false`         | 停用 `AWS` 模組。                                                                |
 
@@ -306,7 +306,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 | 變數                  | 預設             | 說明                                                                                                                                                                                                          |
 | ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `truncation_length` | `1`            | 依據`conda create -p [path]`來刪減資料夾的數目，`0`為不刪減。亦請參[`directory`](#directory) 模組 |
 | `symbol`            | `"C "`         | 環境名稱前使用的符號。                                                                                                                                                                                                 |
 | `style`             | `"bold green"` | 這個模組的風格。                                                                                                                                                                                                    |
 | `disabled`          | `false`        | 停用 `conda` 模組。                                                                                                                                                                                              |
@@ -322,18 +322,18 @@ style = "dimmed green"
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. 這個模組在下列其中一個條件達成時顯示：
+顯示當前`crystal`模組的版本。這個模組在下列其中一個條件達成時顯示：
 
 - 現在資料夾中含有一個 `shard.yml` 檔案
-- The current directory contains a `.cr` file
+- 現在資料夾中含有`.cr`檔案
 
 ### 選項
 
 | 變數         | 預設           | 說明                                                        |
 | ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`       | The symbol used before displaying the version of crystal. |
+| `symbol`   | `"🔮 "`       | 在顯示crystal版本前顯示的符號 |
 | `style`    | `"bold red"` | 這個模組的風格。                                                  |
-| `disabled` | `false`      | Disables the `crystal` module.                            |
+| `disabled` | `false`      | 關閉`crystal`模組|
 
 ### 範例
 
@@ -392,10 +392,10 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 | 變數                | 預設            | 說明                                                                                      |
 | ----------------- | ------------- | --------------------------------------------------------------------------------------- |
-| `symbol`          | `"🐳 "`        | The symbol used before displaying the Docker context .                                  |
-| `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
+| `symbol`          | `"🐳 "`        | 在顯示 Docker 內容之前用的符號。                                  |
+| `only_with_files` | `false`       | 在現在資料夾下有`docker-compose.yml`或`Dockerfile`才顯示 |
 | `style`           | `"bold blue"` | 這個模組的風格。                                                                                |
-| `disabled`        | `true`        | Disables the `docker_context` module.                                                   |
+| `disabled`        | `true`        | 關閉`docker_context`模組                                                   |
 
 ### 範例
 
@@ -1077,7 +1077,7 @@ symbol = "🔹 "
 | `symbol`             | `"🐍 "`          | 顯示在 Python 版本之前的符號。                                                        |
 | `pyenv_version_name` | `false`         | 使用 pyenv 取得 Python 的版本。                                                    |
 | `pyenv_prefix`       | `"pyenv "`      | 顯示在 pyenv 版本之前的前綴 (預設顯示是 `pyenv MY_VERSION`)。                              |
-| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module. |
+| `scan_for_pyfiles`   | `true`          | 設置為false時，python檔案在此目錄下不會進行掃描 |
 | `style`              | `"bold yellow"` | 這個模組的風格。                                                                   |
 | `disabled`           | `false`         | 停用 `python` 模組。                                                            |
 

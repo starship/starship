@@ -1,52 +1,51 @@
 # FAQ
 
-## What is the configuration used in the demo GIF?
-
+## GIF樣品是用了哪個設定檔？
 - **Terminal Emulator**: [iTerm2](https://iterm2.com/)
-  - **Theme**: Minimal
-  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [Fira Code](https://github.com/tonsky/FiraCode)
+  - 主題**︰ Minimal
+  - **色彩主題︰[Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+  - **安型︰[Fira Code](https://github.com/tonsky/FiraCode)
 - **Shell**: [Fish Shell](https://fishshell.com/)
-  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
-  - **Prompt**: [Starship](https://starship.rs/)
+  - **設定檔︰[matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
+  - 提示字符︰[Starship](https://starship.rs/)
 
-## Do `prompt_order` and `<module>.disabled` do the same thing?
+## `prompt_order`與`<module>.disabled`是相同的東西嗎？
 
-Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
+是的，它們皆為取消提示字符模組的方法。如果你打算去關閉模組`<module>.disabled`是比較建議的方法，原因是︰
 
-- Disabling modules is more explicit than omitting them from the prompt_order
-- Newly created modules will be added to the prompt as Starship is updated
+- 從`prompt_order`中明確地關閉模組
+- Starship更新時，新加入的模組可以自動加入提示字符中
 
-## The docs say Starship is cross-shell, but it doesn't support X shell. Why?
+## 文件中說Starship是跨shell的，但為什麼不支持X shell？
 
-The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
+建造Starship的方式應該幾乎可以支持任何Shell。 Starship二進製文件是無狀態的，並且與Shell無關，因此，只要您的Shell支持快速自定義和Shell擴展，就可以使用Starship。
 
-Here's a small example getting Starship working with bash:
+此為一個Starship支技bash的範例設定
 
 ```sh
-# Get the status code from the last command executed
+# 從最後一個命令中拿到狀態碼
 STATUS=$?
 
-# Get the number of jobs running.
+# 從在執行的工作數目
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Set the prompt to the output of `starship prompt`
+# 在提示字符中設定為`starship prompt`的輸出結果
 PS1="$(starship prompt --status=$STATUS --jobs=NUM_JOBS)"
 ```
 
-The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#Command-Duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
+這個內建在starship的[Bash設定檔](https://github.com/starship/starship/blob/master/src/init/starship.bash)是稍微有些複雜的，並且使用了[Command Duration module](https://starship.rs/config/#Command-Duration)來確保跟原生Bash設定相容。
 
-For a list of all flags accepted by `starship prompt`, use the following command:
+用下列命令列出所有`starship prompt`可接受的標誌
 
 ```sh
 starship prompt --help
 ```
 
-The prompt will use as much context as is provided, but no flags are "required".
+這個命令提示符將使用更多的上下文，但不需要標誌
 
-## How do I run Starship on Linux distributions with older versions of glibc?
+## 我如何在使用舊版glibc的Linux發行版上使用Starship？
 
-If you get an error like "*version 'GLIBC_2.18' not found (required by starship)*" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+如果你使用預編譯的執行檔中（例如，在CentOS 6或7中），碰到了類似"*version 'GLIBC_2.18' not found (required by starship)*"錯誤︰
 
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl

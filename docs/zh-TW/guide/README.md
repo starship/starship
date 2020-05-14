@@ -101,15 +101,15 @@
   align="right" />
 
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+短小精幹，而且對任何shell皆可高度客製化的提示字符
 
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- 快速：真的飛快**！ 🚀
+- 可客製化︰可設定關於你的提示字符的任何面向
+- 通用︰任何作業系統上的任何shell皆可使用
+- 智能︰一目瞭然所有相關資訊
+- 豐富的功能︰支持所有你喜歡的工具
+- 簡易︰快速案裝，並在幾分鐘後使用它
 
 <p align="center">
 <a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>

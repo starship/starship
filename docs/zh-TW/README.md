@@ -33,18 +33,18 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 1. 安裝 **starship** 執行檔：
 
 
-   #### Install Latest Version
+   #### 安裝最新版
 
-   With Shell:
+   從Shell安裝：
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Install via Package Manager
+   #### 由套件管理程式安裝
 
-   With [Homebrew](https://brew.sh/):
+   從[Homebrew](https://brew.sh/)安裝：
 
    ```sh
    brew install starship
@@ -105,7 +105,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   將以下內容放到 `~/.config/ion/initrc` 的結尾：
 
    ```sh
    # ~/.config/ion/initrc
