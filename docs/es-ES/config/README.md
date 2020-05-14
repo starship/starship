@@ -485,7 +485,7 @@ The `elm` module shows the currently installed version of Elm. El módulo se mue
 symbol = " "
 ```
 
-## Environment Variable
+## Variable de entorno
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
@@ -494,15 +494,15 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Opciones
 
-| Variable   | Por defecto           | Descripción                                                                  |
-| ---------- | --------------------- | ---------------------------------------------------------------------------- |
-| `symbol`   |                       | The symbol used before displaying the variable value.                        |
-| `variable` |                       | The environment variable to be displayed.                                    |
-| `default`  |                       | The default value to be displayed when the selected variable is not defined. |
-| `prefix`   | `""`                  | Prefix to display immediately before the variable value.                     |
-| `suffix`   | `""`                  | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed bold black"` | El estilo del módulo.                                                        |
-| `disabled` | `false`               | Disables the `env_var` module.                                               |
+| Variable      | Por defecto           | Descripción                                                                  |
+| ------------- | --------------------- | ---------------------------------------------------------------------------- |
+| `symbol`      |                       | The symbol used before displaying the variable value.                        |
+| `variable`    |                       | The environment variable to be displayed.                                    |
+| `por defecto` |                       | The default value to be displayed when the selected variable is not defined. |
+| `prefix`      | `""`                  | Prefix to display immediately before the variable value.                     |
+| `suffix`      | `""`                  | Suffix to display immediately after the variable value.                      |
+| `style`       | `"dimmed bold black"` | El estilo del módulo.                                                        |
+| `disabled`    | `false`               | Disables the `env_var` module.                                               |
 
 ### Ejemplo
 
@@ -518,8 +518,8 @@ default = "unknown shell"
 
 The `erlang` module shows the currently installed version of Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `rebar.config` file.
-- The current directory contains a `erlang.mk` file.
+- El directorio actual contiene un fichero `rebar.config`.
+- El directorio actual contiene un fichero `erlang.mk`.
 
 ### Opciones
 
