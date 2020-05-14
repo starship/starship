@@ -485,24 +485,24 @@ The `elm` module shows the currently installed version of Elm. 這個模組在�
 symbol = " "
 ```
 
-## Environment Variable
+## 環境變數
 
-The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+`env_var`模組顯示一個選擇的環境變數的現在數值。 這個模組只在下列條件其中之一達到時顯示：
 
-- The `variable` configuration option matches an existing environment variable
-- The `variable` configuration option is not defined, but the `default` configuration option is
+- `variable` 設定選項符合一個存在的環境變數。
+- 沒有設定 `variable` 選項，但是有設定 `default` 選項。
 
 ### 選項
 
-| 變數         | 預設                    | 說明                                                                           |
-| ---------- | --------------------- | ---------------------------------------------------------------------------- |
-| `symbol`   |                       | The symbol used before displaying the variable value.                        |
-| `variable` |                       | The environment variable to be displayed.                                    |
-| `default`  |                       | The default value to be displayed when the selected variable is not defined. |
-| `prefix`   | `""`                  | Prefix to display immediately before the variable value.                     |
-| `suffix`   | `""`                  | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed bold black"` | 這個模組的風格。                                                                     |
-| `disabled` | `false`               | Disables the `env_var` module.                                               |
+| 變數         | 預設                    | 說明                   |
+| ---------- | --------------------- | -------------------- |
+| `symbol`   |                       | 顯示在變數數值之前的符號。        |
+| `variable` |                       | 要顯示的環境變數。            |
+| `default`  |                       | 在選擇的變數值沒有定義時，顯示的預設值。 |
+| `prefix`   | `""`                  | 在變數值正前方顯示的前綴。        |
+| `suffix`   | `""`                  | 在變數值正後方顯示的後綴。        |
+| `style`    | `"dimmed bold black"` | 這個模組的風格。             |
+| `disabled` | `false`               | 停用 `env_var` 模組。     |
 
 ### 範例
 
@@ -518,8 +518,8 @@ default = "unknown shell"
 
 The `erlang` module shows the currently installed version of Erlang/OTP. 這個模組在下列其中一個條件達成時顯示：
 
-- The current directory contains a `rebar.config` file.
-- The current directory contains a `erlang.mk` file.
+- 現在資料夾中包含一個 `rebar.config` 檔案.
+- 現在資料夾中包含一個 `erlang.mk` 檔案.
 
 ### 選項
 
@@ -1095,7 +1095,7 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. 這個模組在下列其中一個條件達成時顯示：
+`ruby` 模組顯示現在安裝的 Ruby 版本。 這個模組在下列其中一個條件達成時顯示：
 
 - 目前資料夾中有一個 `Gemfile` 檔案
 - The current directory contains a `.ruby-version` file
@@ -1120,7 +1120,7 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. 這個模組在下列其中一個條件達成時顯示：
+`rust` 模組顯示現在安裝的 Rust 版本。 這個模組在下列其中一個條件達成時顯示：
 
 - 目前資料夾中有一個 `Cargo.toml` 檔案
 - 現在資料夾中包含一個檔案具有 `.rs` 副檔名
@@ -1193,7 +1193,7 @@ symbol = "🏎💨 "
 
 ## 時間
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time` 模組顯示目前的**當地**時間. `format` 設定值被 [`chrono`](https://crates.io/crates/chrono) crate 用來控制時間如何顯示。 請看 [chrono 的 strftime 文件](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)來了解有那些選項可以使用。
 
 ::: tip
 
@@ -1211,7 +1211,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 | `utc_time_offset` | `"local"`       | 設定相對於 UTC 的時差。 範圍 -24 < x < 24。 允許使用浮點數來表示 30/45 分鐘時差的時區。                              |
 | `disabled`        | `true`          | 停用 `time` 模組。                                                                          |
 
-If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
+如果 `use_12hr` 是 `true` 的話，`format` 會被預設為 `"%r"`。 不然的話，它會被預設為 `"%T"`。 手動設定 `format` 的設定值會覆寫 `use_12hr` 的設定。
 
 ### 範例
 
@@ -1226,7 +1226,7 @@ utc_time_offset = "-5"
 
 ## 使用者名稱
 
-The `username` module shows active user's username. 這個模組在下列其中一個條件達成時顯示：
+`username` 模組顯示現在使用中的使用者名稱。 這個模組在下列其中一個條件達成時顯示：
 
 - 目前使用者為 root
 - 目前使用者並非登入時的使用者
