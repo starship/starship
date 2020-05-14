@@ -635,11 +635,11 @@ The module will be shown only if any of the following conditions are met:
 
 ### Variables
 
-| Variable  | Example             | Description                             |
-| --------- | ------------------- | --------------------------------------- |
-| env_value | `Windows NT`        | The environment value of $OS on Windows |
-| symbol    |                     | Mirrors the value of option `symbol`    |
-| style     | `black bold dimmed` | Mirrors the value of option `style`     |
+| Variable  | Example                                     | Description                                |
+| --------- | ------------------------------------------- | ------------------------------------------ |
+| env_value | `Windows NT` (if *variable* would be `$OS`) | The environment value of option `variable` |
+| symbol    |                                             | Mirrors the value of option `symbol`       |
+| style     | `black bold dimmed`                         | Mirrors the value of option `style`        |
 
 ### Example
 
