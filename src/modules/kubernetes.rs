@@ -80,10 +80,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         _ => None,
                     })
                     .map(|variable| match variable {
-                        "namespace" => match kube_ns.as_str() {
-                            "" => Some(Ok(config.namespace_spaceholder)),
-                            _ => Some(Ok(kube_ns.as_str())),
-                        },
+                        "namespace" => {
+                            if kube_ns != "" {
+                                Some(Ok(kube_ns.as_str()))
+                            } else {
+                                None
+                            }
+                        }
                         _ => None,
                     })
                     .parse(None)

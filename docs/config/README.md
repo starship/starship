@@ -959,9 +959,9 @@ symbol = "∴ "
 
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file
-otherwise it displays the `namespace_spaceholder` variable. The namespace needs to be set in the
-kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`.
+Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file.
+The namespace needs to be set in the kubeconfig file, this can be done via
+`kubectl config set-context starship-cluster --namespace astronaut`.
 If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
@@ -973,23 +973,23 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Option                  | Default                                            | Description                                                           |
-| ----------------------- | -------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`                | `"☸ "`                                             | A format string representing the symbol displayed before the Cluster. |
-| `format`                | `"on [$symbol$context \\($namespace\\)]($style) "` | The format for the module.                                            |
-| `style`                 | `"bold blue"`                                      | The style for the module.                                             |
-| `namespace_spaceholder` | `none`                                             | The value to display if no namespace was found.                       |
-| `context_aliases`       |                                                    | Table of context aliases to display.                                  |
-| `disabled`              | `true`                                             | Disables the `kubernetes` module.                                     |
+| Option                  | Default                                             | Description                                                           |
+| ----------------------- | --------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`                | `"☸ "`                                              | A format string representing the symbol displayed before the Cluster. |
+| `format`                | `"on [$symbol$context( \\($namespace\\))]($style) "` | The format for the module.                                            |
+| `style`                 | `"bold blue"`                                       | The style for the module.                                             |
+| `namespace_spaceholder` | `none`                                              | The value to display if no namespace was found.                       |
+| `context_aliases`       |                                                     | Table of context aliases to display.                                  |
+| `disabled`              | `true`                                              | Disables the `kubernetes` module.                                     |
 
 ### Variables
 
-| Variable  | Example              | Description                                                                              |
-| --------- | -------------------- | ---------------------------------------------------------------------------------------- |
-| context   | `starship-cluster`   | The current kubernetes context                                                           |
-| namespace | `starship-namespace` | If set, the current kubernetes namespace, otherwise the `namespace_spaceholder` variable |
-| symbol    |                      | Mirrors the value of option `symbol`                                                     |
-| style\*   |                      | Mirrors the value of option `style`                                                      |
+| Variable  | Example              | Description                              |
+| --------- | -------------------- | ---------------------------------------- |
+| context   | `starship-cluster`   | The current kubernetes context           |
+| namespace | `starship-namespace` | If set, the current kubernetes namespace |
+| symbol    |                      | Mirrors the value of option `symbol`     |
+| style\*   |                      | Mirrors the value of option `style`      |
 
 \*: This variable can only be used as a part of a style string
 
