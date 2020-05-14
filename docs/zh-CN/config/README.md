@@ -487,22 +487,22 @@ symbol = " "
 
 ## Environment Variable
 
-The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+`env_var` 组件显示选定的环境变量的当前值。 此组件只有满足以下条件之一时才会被显示：
 
-- The `variable` configuration option matches an existing environment variable
-- The `variable` configuration option is not defined, but the `default` configuration option is
+- 设置的 `variable` 是一个已存在的环境变量
+- 未定义 `variable`，但定义了 `default`
 
 ### 配置项
 
-| 字段         | 默认值                   | 描述                                                                           |
-| ---------- | --------------------- | ---------------------------------------------------------------------------- |
-| `symbol`   |                       | The symbol used before displaying the variable value.                        |
-| `variable` |                       | The environment variable to be displayed.                                    |
-| `default`  |                       | The default value to be displayed when the selected variable is not defined. |
-| `prefix`   | `""`                  | Prefix to display immediately before the variable value.                     |
-| `suffix`   | `""`                  | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed bold black"` | 此组件的样式。                                                                      |
-| `disabled` | `false`               | Disables the `env_var` module.                                               |
+| 字段         | 默认值                   | 描述                  |
+| ---------- | --------------------- | ------------------- |
+| `symbol`   |                       | 这个字段的内容会显示在环境变量值之前。 |
+| `variable` |                       | 要显示的环境变量。           |
+| `default`  |                       | 所选变量未定义时显示的默认值。     |
+| `prefix`   | `""`                  | 直接在显示环境变量值前显示的前缀。   |
+| `suffix`   | `""`                  | 直接在显示环境变量值后显示的后缀。   |
+| `style`    | `"dimmed bold black"` | 此组件的样式。             |
+| `disabled` | `false`               | 禁用 `env_var` 组件。    |
 
 ### 示例
 
@@ -516,10 +516,10 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. 此组件只有满足以下条件之一时才会被显示：
+The `erlang` module shows the currently installed version of Erlang/OTP. 此组件将在符合以下任意条件之一时显示：
 
-- The current directory contains a `rebar.config` file.
-- The current directory contains a `erlang.mk` file.
+- 当前目录包含一个 `rebar.config` 文件.
+- 当前目录包含一个 `erlang.mk` 文件.
 
 ### 配置项
 
@@ -1059,7 +1059,7 @@ The `python` module shows the currently installed version of Python and the curr
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
-此组件只有满足以下条件之一时才会被显示：
+此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含 `.python-version` 文件
 - 当前目录包含 `requirements.txt` 文件
@@ -1095,7 +1095,7 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. 此组件只有满足以下条件之一时才会被显示：
+`ruby` 组件显示当前安装的 Ruby 版本。 此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含 `Gemfile` 文件
 - The current directory contains a `.ruby-version` file
@@ -1120,7 +1120,7 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. 此组件将在符合以下任意条件之一时显示：
+`rust` 组件显示当前安装的 Rust 版本。 此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含 `Cargo.toml` 文件
 - 当前目录包含一个使用 `.rs` 扩展名的文件
@@ -1168,7 +1168,7 @@ symbol = "📦 "
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. 此组件只有满足以下条件之一时才会被显示：
+`terraform` 组件显示当前选定的 terraform 工作区和版本。 默认情况下不会显示 terraform 版本，因为当使用大量插件时，当前版本 terraform 查询版本号很慢。 此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含 `.terraform` 目录
 - 当前目录包含一个使用 `.tf` 扩展名的文件
@@ -1193,7 +1193,7 @@ symbol = "🏎💨 "
 
 ## Time
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time` 组件显示当前的 **本地** 时间。 `format` 字段值会提供给 [`chrono`](https://crates.io/crates/chrono) crate 用来控制时间显示方式。 请参阅 [chrono strftime 文档](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) 以了解可用格式选项。
 
 ::: tip
 
@@ -1211,7 +1211,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 | `utc_time_offset` | `"local"`       | 设置所用 UTC 偏移量。 范围是 -24 < x < 24。 允许使用浮点数来得到 30/45 分钟的时区偏移。                                 |
 | `disabled`        | `true`          | 禁用 `time` 组件。                                                                             |
 
-If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
+如果 `use_12hr` 为 `true`，则`format` 默认值为 `"%r"`。 否则，其默认值为 `"%T"`。 手动设置 `format` 将使 `use_12hr` 被忽略。
 
 ### 示例
 
@@ -1226,7 +1226,7 @@ utc_time_offset = "-5"
 
 ## Username
 
-The `username` module shows active user's username. 此组件只有满足以下条件之一时才会被显示：
+`username` 组件显示当前活跃的用户名。 此组件将在符合以下任意条件之一时显示：
 
 - 当前用户是 root
 - 当前用户与登录用户不相同
