@@ -894,7 +894,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
 | `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
 | `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`               | The symbol used before displaying the memory usage.           |
+| `symbol`          | `"🐏 "`              | The symbol used before displaying the memory usage.           |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
 | `home`            | `"~"`                 | Symbol representing the user's home directory     |
 | `style`           | `"bold dimmed white"` | The style for the module.                                     |
