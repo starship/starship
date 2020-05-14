@@ -406,12 +406,36 @@ mod tests {
         assert_eq!(dir.to_separator(None, None), "~");
     }
     #[test]
-    fn parse_directory_windows() {
-        let dir = Directory::from(r"c:\home\users\astronaut\starship");
+    fn parse_directory_windows_forward_slash() {
+        let dir = Directory::from(r"C:/home/users/astronaut/starship");
         assert_eq!(dir.components.len(), 6);
-        assert_eq!(dir.to_string(), r"c:\home\users\astronaut\starship");
+        assert_eq!(
+            dir.to_separator(Some(r"\"), None),
+            r"C:\home\users\astronaut\starship"
+        );
     }
     #[test]
+    #[cfg(target_os = "windows")]
+    fn parse_directory_windows() {
+        let dir = Directory::from(r"C:\home\users\astronaut\starship");
+        assert_eq!(dir.components.len(), 6);
+        assert_eq!(
+            dir.to_separator(Some(r"\"), None),
+            r"C:\home\users\astronaut\starship"
+        );
+    }
+    #[test]
+    fn parse_directory_windows_with_separator_forward_slash() {
+        let dir = Directory::from(r"c:/home/users/astronaut/starship");
+        assert_eq!(dir.components.len(), 6);
+        assert_eq!(
+            dir.to_separator(Some("|"), None),
+            r"c:|home|users|astronaut|starship"
+        );
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
     fn parse_directory_windows_with_separator() {
         let dir = Directory::from(r"c:\home\users\astronaut\starship");
         assert_eq!(dir.components.len(), 6);
@@ -421,8 +445,8 @@ mod tests {
         );
     }
     #[test]
-    fn parse_directory_windows_with_long_separator() {
-        let dir = Directory::from(r"c:\home\users\astronaut\starship");
+    fn parse_directory_windows_with_long_separator_forward_slash() {
+        let dir = Directory::from(r"c:/home/users/astronaut/starship");
         assert_eq!(dir.components.len(), 6);
         assert_eq!(
             dir.to_separator(Some("-=-=->"), None),
@@ -431,7 +455,8 @@ mod tests {
     }
 
     #[test]
-    fn parse_directory_windows_with_emoji_separator() {
+    #[cfg(target_os = "windows")]
+    fn parse_directory_windows_with_long_separator() {
         let dir = Directory::from(r"c:\home\users\astronaut\starship");
         assert_eq!(dir.components.len(), 6);
         assert_eq!(
@@ -440,6 +465,32 @@ mod tests {
         );
     }
     #[test]
+    fn parse_directory_windows_with_emoji_separator_forward_slash() {
+        let dir = Directory::from(r"c:/home/users/astronaut/starship");
+        assert_eq!(dir.components.len(), 6);
+        assert_eq!(
+            dir.to_separator(Some("🚀"), None),
+            r"c:🚀home🚀users🚀astronaut🚀starship"
+        );
+    }
+    #[test]
+    #[cfg(target_os = "windows")]
+    fn parse_directory_windows_with_emoji_separator() {
+        let dir = Directory::from(r"c:\home\users\astronaut\starship");
+        assert_eq!(dir.components.len(), 6);
+        assert_eq!(
+            dir.to_separator(Some("🚀"), None),
+            r"c:🚀home🚀users🚀astronaut🚀starship"
+        );
+    }
+    #[test]
+    fn parse_directory_powershell_forward_slash() {
+        let dir = Directory::from(r"proj:/starship/src");
+        assert_eq!(dir.components.len(), 4);
+        assert_eq!(dir.to_separator(Some("/"), None), r"proj:/starship/src");
+    }
+    #[test]
+    #[cfg(target_os = "windows")]
     fn parse_directory_powershell() {
         let dir = Directory::from(r"proj:\starship\src");
         assert_eq!(dir.components.len(), 4);
@@ -487,10 +538,24 @@ mod tests {
     }
 
     #[test]
+    fn truncate_same_path_as_provided_length_from_root_windows_forward_slash() {
+        let mut dir = Directory::from(r"C:/starship/engines/booster");
+        dir.truncate(3);
+        assert_eq!(
+            dir.to_separator(Some(r"\"), None),
+            r"C:\starship\engines\booster"
+        );
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
     fn truncate_same_path_as_provided_length_from_root_windows() {
         let mut dir = Directory::from(r"C:\starship\engines\booster");
         dir.truncate(3);
-        assert_eq!(dir.to_string(), r"C:\starship\engines\booster");
+        assert_eq!(
+            dir.to_separator(Some(r"\"), None),
+            r"C:\starship\engines\booster"
+        );
     }
 
     #[test]
@@ -500,13 +565,38 @@ mod tests {
         assert_eq!(dir.to_separator(Some("/"), None), "engines/booster/rocket");
     }
     #[test]
-    fn truncate_larger_path_than_provided_length_from_root_windows() {
-        let mut dir = Directory::from(r"C:\starship\engines\booster\rocket");
+    fn truncate_larger_path_than_provided_length_from_root_windows_forward_slash() {
+        let mut dir = Directory::from(r"C:/starship/engines/booster/rocket");
         dir.truncate(3);
-        assert_eq!(dir.to_string(), r"engines\booster\rocket");
+        assert_eq!(
+            dir.to_separator(Some(r"\"), None),
+            r"engines\booster\rocket"
+        );
     }
 
     #[test]
+    #[cfg(target_os = "windows")]
+    fn truncate_larger_path_than_provided_length_from_root_windows() {
+        let mut dir = Directory::from(r"C:\starship\engines\booster\rocket");
+        dir.truncate(3);
+        assert_eq!(
+            dir.to_separator(Some(r"\"), None),
+            r"engines\booster\rocket"
+        );
+    }
+
+    #[test]
+    fn contract_path_simple_forward_slash() {
+        let mut dir = Directory::from(r"C:/starship/engines/booster/rocket");
+        let top_level = PathBuf::from(r"C:/starship/engines");
+        let replacement = PathBuf::from("engie");
+
+        dir.contract_path(&top_level, &replacement);
+        assert_eq!(dir.to_separator(Some("/"), None), r"engie/booster/rocket");
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
     fn contract_path_simple() {
         let mut dir = Directory::from(r"C:\starship\engines\booster\rocket");
         let top_level = PathBuf::from(r"C:\starship\engines");
@@ -517,6 +607,20 @@ mod tests {
     }
 
     #[test]
+    fn contract_path_no_match_forward_slash() {
+        let mut dir = Directory::from(r"C:/starship/engines/booster/rocket");
+        let top_level = PathBuf::from(r"C:/starsip/engines");
+        let replacement = PathBuf::from("engie");
+
+        dir.contract_path(&top_level, &replacement);
+        assert_eq!(
+            dir.to_separator(Some("/"), None),
+            r"C:/starship/engines/booster/rocket"
+        );
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
     fn contract_path_no_match() {
         let mut dir = Directory::from(r"C:\starship\engines\booster\rocket");
         let top_level = PathBuf::from(r"C:\starsip\engines");
@@ -530,6 +634,19 @@ mod tests {
     }
 
     #[test]
+    fn contract_path_longer_top_level_forward_slash() {
+        let mut dir = Directory::from(r"C:/starship/engines/booster/rocket");
+        let top_level = PathBuf::from(r"C:/starship/engines/booster/rocket/ignition/start");
+        let replacement = PathBuf::from("engie");
+
+        dir.contract_path(&top_level, &replacement);
+        assert_eq!(
+            dir.to_separator(Some("/"), None),
+            r"C:/starship/engines/booster/rocket"
+        );
+    }
+    #[test]
+    #[cfg(target_os = "windows")]
     fn contract_path_longer_top_level() {
         let mut dir = Directory::from(r"C:\starship\engines\booster\rocket");
         let top_level = PathBuf::from(r"C:\starship\engines\booster\rocket\ignition\start");
@@ -543,6 +660,19 @@ mod tests {
     }
 
     #[test]
+    fn contract_path_longer_partial_forward_slash() {
+        let mut dir = Directory::from(r"C:/starship/engines/booster/rocket");
+        let top_level = PathBuf::from(r"starship/engines/booster");
+        let replacement = PathBuf::from("engie");
+
+        dir.contract_path(&top_level, &replacement);
+        assert_eq!(
+            dir.to_separator(Some("/"), None),
+            r"C:/starship/engines/booster/rocket"
+        );
+    }
+    #[test]
+    #[cfg(target_os = "windows")]
     fn contract_path_longer_partial() {
         let mut dir = Directory::from(r"C:\starship\engines\booster\rocket");
         let top_level = PathBuf::from(r"starship\engines\booster");
@@ -555,6 +685,20 @@ mod tests {
         );
     }
     #[test]
+    fn contract_path_longer_last_only_difference_forward_slash() {
+        let mut dir = Directory::from(r"C:/starship/engines/booster/rocket");
+        let top_level = PathBuf::from(r"C:/starship/engine");
+        let replacement = PathBuf::from("engie");
+
+        dir.contract_path(&top_level, &replacement);
+        assert_eq!(
+            dir.to_separator(Some("/"), None),
+            r"C:/starship/engines/booster/rocket"
+        );
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
     fn contract_path_longer_last_only_difference() {
         let mut dir = Directory::from(r"C:\starship\engines\booster\rocket");
         let top_level = PathBuf::from(r"C:\starship\engine");
@@ -580,6 +724,19 @@ mod tests {
         );
     }
     #[test]
+    fn contract_path_home_windows_forward_slash() {
+        let mut dir = Directory::from(r"C:/Users/astronaut/starship/engines/booster/rocket");
+        let top_level = PathBuf::from(r"C:/Users/astronaut");
+        let replacement = PathBuf::from("~");
+
+        dir.contract_path(&top_level, &replacement);
+        assert_eq!(
+            dir.to_separator(Some(r"\"), None),
+            r"~\starship\engines\booster\rocket"
+        );
+    }
+    #[test]
+    #[cfg(target_os = "windows")]
     fn contract_path_home_windows() {
         let mut dir = Directory::from(r"C:\Users\astronaut\starship\engines\booster\rocket");
         let top_level = PathBuf::from(r"C:\Users\astronaut");
@@ -593,6 +750,18 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(target_os = "windows"))]
+    fn separator_emoji() {
+        let dir = Directory::from(r"C:/Users/astronaut/starship/engines/booster/rocket");
+
+        assert_eq!(
+            dir.to_separator(Some(r"↗"), None),
+            r"C:↗Users↗astronaut↗starship↗engines↗booster↗rocket"
+        );
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
     fn separator_emoji() {
         let dir = Directory::from(r"C:\Users\astronaut\starship\engines\booster\rocket");
 
@@ -602,6 +771,18 @@ mod tests {
         );
     }
     #[test]
+    #[cfg(not(target_os = "windows"))]
+    fn home_emoji() {
+        let dir = Directory::from(r"~/starship/engines/booster/rocket");
+
+        assert_eq!(
+            dir.to_separator(Some(r"/"), Some("🏠")),
+            r"🏠/starship/engines/booster/rocket"
+        );
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
     fn home_emoji() {
         let dir = Directory::from(r"~\starship\engines\booster\rocket");
 
@@ -611,6 +792,18 @@ mod tests {
         );
     }
     #[test]
+    #[cfg(not(target_os = "windows"))]
+    fn home_and_separator_emoji() {
+        let dir = Directory::from(r"~/starship/engines/booster/rocket");
+
+        assert_eq!(
+            dir.to_separator(Some(r"↗"), Some("🏠")),
+            r"🏠↗starship↗engines↗booster↗rocket"
+        );
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
     fn home_and_separator_emoji() {
         let dir = Directory::from(r"~\starship\engines\booster\rocket");
 
@@ -669,8 +862,9 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(target_os = "windows"))]
     fn contract_windows_style_no_top_level_directory() {
-        let mut dir = Directory::from(r"C:\Some\Other\Path");
+        let mut dir = Directory::from(r"C:/Some/Other/Path");
         let top_level = PathBuf::from("C:/Users/astronaut");
 
         dir.contract_path(&top_level, &PathBuf::from("~"));
@@ -681,6 +875,28 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(target_os = "windows"))]
+    fn contract_windows_style_no_top_level_directory() {
+        let mut dir = Directory::from(r"C:\Some\Other\Path");
+        let top_level = PathBuf::from("C:/Users/astronaut");
+
+        dir.contract_path(&top_level, &PathBuf::from("~"));
+        assert_eq!(
+            dir.to_separator(Some(r"\"), Some("~")),
+            r"C:\Some\Other\Path"
+        );
+    }
+    #[test]
+    #[cfg(not(target_os = "windows"))]
+    fn contract_windows_style_root_directory() {
+        let mut dir = Directory::from(r"C:/");
+        let top_level = PathBuf::from(r"C:/Users/astronaut");
+
+        dir.contract_path(&top_level, &PathBuf::from("~"));
+        assert_eq!(dir.to_separator(Some(r"\"), Some("~")), r"C:\");
+    }
+    #[test]
+    #[cfg(target_os = "windows")]
     fn contract_windows_style_root_directory() {
         let mut dir = Directory::from(r"C:\");
         let top_level = PathBuf::from(r"C:\Users\astronaut");
@@ -688,7 +904,6 @@ mod tests {
         dir.contract_path(&top_level, &PathBuf::from("~"));
         assert_eq!(dir.to_separator(Some(r"\"), Some("~")), r"C:\");
     }
-
     #[test]
     fn prefered_separator_backslash_windows_style() {
         let mut dir = Directory::from(r"C:/Users/astronaut/schematics/rocket");
@@ -730,8 +945,20 @@ mod tests {
     }
 
     #[test]
+    #[cfg(target_os = "windows")]
     fn fish_style_with_pwd_dir_len_no_contracted_path() {
         let mut dir = Directory::from(r"C:\absolute\Path\not\in_a\repo\but_nested");
+        dir.fish_style(2, 2);
+        assert_eq!(
+            dir.to_separator(Some(r"\"), None),
+            r"C:\ab\Pa\no\in\repo\but_nested"
+        );
+    }
+
+    #[test]
+    #[cfg(not(target_os = "windows"))]
+    fn fish_style_with_pwd_dir_len_no_contracted_path() {
+        let mut dir = Directory::from(r"C:/absolute/Path/not/in_a/repo/but_nested");
         dir.fish_style(2, 2);
         assert_eq!(
             dir.to_separator(Some(r"\"), None),
