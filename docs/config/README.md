@@ -1051,15 +1051,27 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable          | Default               | Description                                                   |
-| ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
-| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`               | The symbol used before displaying the memory usage.           |
-| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | The style for the module.                                     |
-| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
+| Option      | Default                                       | Description                                              |
+| ----------- | --------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module.                               |
+| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
+| `style`     | `"bold dimmed white"`                         | The style for the module.                                |
+| `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
+
+### Variables
+
+| Variable    | Example       | Description                                                        |
+| ----------- | ------------- | ------------------------------------------------------------------ |
+| ram         | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
+| ram_pct     | `48%`         | The percentage of the current system memory.                       |
+| swap\**     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
+| swap_pct\** | `77%`         | The swap memory percentage of the current system swap memory file. |
+| symbol      | `🐏`           | Mirrors the value of option `symbol`                               |
+| style\*     |               | Mirrors the value of option `style`                                |
+
+\*: This variable can only be used as a part of a style string
+\**: The SWAP file information is only displayed if detected on the current system
 
 ### Example
 
