@@ -274,13 +274,13 @@ use_symbol_for_status = true
 
 ### 選項
 
-| 變數                  | 預設              | 說明                                                         |
-| ------------------- | --------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | 在指令持續時間正前方顯示的前綴。                                           |
-| `style`             | `"bold yellow"` | 這個模組的風格。                                                   |
-| `disabled`          | `false`         | 停用 `cmd_duration` 模組。                                      |
+| 變數                  | 預設              | 說明                                                    |
+| ------------------- | --------------- | ----------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds). |
+| `show_milliseconds` | `false`         | 顯示時間除了以秒為單位外，亦以毫秒顯示                                   |
+| `prefix`            | `took`          | 在指令持續時間正前方顯示的前綴。                                      |
+| `style`             | `"bold yellow"` | 這個模組的風格。                                              |
+| `disabled`          | `false`         | 停用 `cmd_duration` 模組。                                 |
 
 ### 範例
 
@@ -304,12 +304,12 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### 選項
 
-| 變數                  | 預設             | 說明                                                                                                                                                                                                          |
-| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"C "`         | 環境名稱前使用的符號。                                                                                                                                                                                                 |
-| `style`             | `"bold green"` | 這個模組的風格。                                                                                                                                                                                                    |
-| `disabled`          | `false`        | 停用 `conda` 模組。                                                                                                                                                                                              |
+| 變數                  | 預設             | 說明                                                                                              |
+| ------------------- | -------------- | ----------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`            | 如果環境變數由所`conda create -p [path]`產生時，環境變數的資料夾需要截斷的數目。 `0` 表示不截斷 也請參考 [`directory`](#directory)模組 |
+| `symbol`            | `"C "`         | 環境名稱前使用的符號。                                                                                     |
+| `style`             | `"bold green"` | 這個模組的風格。                                                                                        |
+| `disabled`          | `false`        | 停用 `conda` 模組。                                                                                  |
 
 ### 範例
 
@@ -322,7 +322,7 @@ style = "dimmed green"
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. 這個模組在下列其中一個條件達成時顯示：
+`crystal` 模組顯示現在所安裝的Crystal版本 這個模組在下列其中一個條件達成時顯示：
 
 - 現在資料夾中含有一個 `shard.yml` 檔案
 - The current directory contains a `.cr` file
