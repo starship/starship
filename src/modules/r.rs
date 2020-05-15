@@ -58,7 +58,7 @@ fn parse_version(version: &str) -> Option<String> {
     let version_regex = Regex::new(R_VERSION_PATTERN).ok()?;
     let captures = version_regex.captures(version)?;
     let r_version = captures["rversion"].to_owned();
-    let r_formatted = format!("v{}",  r_version);
+    let r_formatted = format!("v{}", r_version);
     Some(r_formatted.trim().to_owned())
 }
 
