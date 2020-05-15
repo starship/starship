@@ -240,13 +240,14 @@ The module is only visible when the device's battery is below 10%.
 
 ### Options
 
-| Variable             | Default                  | Description                                       |
-| -------------------- | ------------------------ | ------------------------------------------------- |
-| `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
-| `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
-| `display`            | [link](#battery-display) | Display threshold and style for the module.       |
-| `disabled`           | `false`                  | Disables the `battery` module.                    |
+| Option               | Default                            | Description                                       |
+| -------------------- | ---------------------------------- | ------------------------------------------------- |
+| `full_symbol`        | `"•"`                              | The symbol shown when the battery is full.        |
+| `charging_symbol`    | `"⇡"`                              | The symbol shown when the battery is charging.    |
+| `discharging_symbol` | `"⇣"`                              | The symbol shown when the battery is discharging. |
+| `format`             | `"[$symbol$percentage]($style) "`  | The format for the module.                        | 
+| `display`            | [link](#battery-display)           | Display threshold and style for the module.       |
+| `disabled`           | `false`                            | Disables the `battery` module.                    |
 
 <details>
 <summary>There are also options for some uncommon battery states.</summary>
@@ -358,13 +359,20 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Variable            | Default         | Description                                                |
-| ------------------- | --------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
-| `style`             | `"bold yellow"` | The style for the module.                                  |
-| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
+| Option              | Default                       | Description                                                |
+| ------------------- | ----------------------------- | ---------------------------------------------------------- |
+| `min_time`          | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds` | `false`                       | Show milliseconds in addition to seconds for the duration. |
+| `format`            | `"took [$duration]($style) "` | The format for the module.                                 |
+| `style`             | `"bold yellow"`               | The style for the module.                                  |
+| `disabled`          | `false`                       | Disables the `cmd_duration` module.                        |
+
+### Variables
+
+| Variable | Example  | Description                             |
+| -------- | -------- | --------------------------------------- |
+| duration | `16m40s` | The time it took to execute the command |
+| style\*  |          | Mirrors the value of option `style`     |
 
 ### Example
 
@@ -373,7 +381,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 [cmd_duration]
 min_time = 500
-prefix = "underwent "
+format = "underwent [$duration](bold yellow)"
 ```
 
 ## Conda
@@ -613,6 +621,7 @@ The module will be shown if any of the following conditions are met:
 [erlang]
 symbol = "e "
 ```
+
 ## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable.
@@ -623,15 +632,21 @@ The module will be shown only if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default          | Description                                                                  |
-| ---------- | ---------------- | ---------------------------------------------------------------------------- |
-| `symbol`   |                  | The symbol used before displaying the variable value.                        |
-| `variable` |                  | The environment variable to be displayed.                                    |
-| `default`  |                  | The default value to be displayed when the selected variable is not defined. |
-| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
-| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed black"` | The style for the module.                                                    |
-| `disabled` | `false`          | Disables the `env_var` module.                                               |
+| Option     | Default                                | Description                                                                  |
+| ---------- | -------------------------------------- | ---------------------------------------------------------------------------- |
+| `symbol`   |                                        | The symbol used before displaying the variable value.                        |
+| `variable` |                                        | The environment variable to be displayed.                                    |
+| `default`  |                                        | The default value to be displayed when the selected variable is not defined. |
+| `format`   | `"with [${env_value}]($style) "` | The format for the module.                                                   |
+| `disabled` | `false`                                | Disables the `env_var` module.                                               |
+
+### Variables
+
+| Variable  | Example                                     | Description                                |
+| --------- | ------------------------------------------- | ------------------------------------------ |
+| env_value | `Windows NT` (if *variable* would be `$OS`) | The environment value of option `variable` |
+| symbol    |                                             | Mirrors the value of option `symbol`       |
+| style     | `black bold dimmed`                         | Mirrors the value of option `style`        |
 
 ### Example
 
@@ -800,11 +815,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default       | Description                                              |
-| ---------- | ------------- | -------------------------------------------------------- |
-| `symbol`   | `"🐹 "`       | The symbol used before displaying the version of Golang. |
-| `style`    | `"bold cyan"` | The style for the module.                                |
-| `disabled` | `false`       | Disables the `golang` module.                            |
+| Option     | Default                            | Description                                     |
+| ---------- | ---------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
+| `symbol`   | `"🐹 "`                            | A format string representing the symbol of Go.  |
+| `style`    | `"bold cyan"`                      | The style for the module.                       |
+| `disabled` | `false`                            | Disables the `golang` module.                   |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v1.12.1` | The version of `go`                  |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -812,23 +838,33 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [golang]
-symbol = "🏎💨 "
+format = "via [🏎💨 $version](bold cyan) "
 ```
+
 ## Haskell
 
 The `haskell` module shows the currently installed version of Haskell Stack version.
 The module will be shown if any of the following conditions are met:
 
-- The current directory contains a `stack.yaml` file
+- The current directory contains a `stack.yaml` or `stack.yml` file
+- The current directory contains a `package.yaml` or `package.yml` file
 
 ### Options
 
-| Variable   | Default      | Description                                               |
-| ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold red"` | The style for the module.                                 |
-| `disabled` | `false`      | Disables the `haskell` module.                            |
+| Option     | Default                             | Description                                        |
+| ---------- | ----------------------------------- | -------------------------------------------------- |
+| `format`   | `"via [${symbol}${version}](${style}) "` | The format for the module.                         |
+| `symbol`   | `"λ "`                               | A format string representing the symbol of Haskell |
+| `style`    | `"bold red"`                        | The style for the module.                          |
+| `disabled` | `false`                             | Disables the `haskell` module.                     |
 
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v8.8.3` | The version of `ghc`                 |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style    |          | Mirrors the value of option `style`  |
 
 ### Example
 
@@ -877,11 +913,20 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default        | Description                                            |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | The style for the module.                              |
-| `disabled` | `false`        | Disables the `java` module.                            |
+| Option     | Default                             | Description                                     |
+| ---------- | ----------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [${symbol}${version}]($style) "` | The format for the module.                      |
+| `symbol`   | `"☕ "`                               | A format string representing the symbol of Java |
+| `style`    | `"red dimmed"`                      | The style for the module.                       |
+| `disabled` | `false`                             | Disables the `java` module.                     |
+
+### Variables
+
+| Variable | Example      | Description                          |
+| -------- | ------------ | ------------------------------------ |
+| version  | "v14"        | The version of `java`                |
+| symbol   | "☕"          | Mirrors the value of option `symbol` |
+| style    | "red dimmed" | Mirrors the value of option `style`  |
 
 ### Example
 
@@ -1013,15 +1058,27 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable          | Default               | Description                                                   |
-| ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
-| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`               | The symbol used before displaying the memory usage.           |
-| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | The style for the module.                                     |
-| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
+| Option      | Default                                       | Description                                              |
+| ----------- | --------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module.                               |
+| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
+| `style`     | `"bold dimmed white"`                         | The style for the module.                                |
+| `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
+
+### Variables
+
+| Variable    | Example       | Description                                                        |
+| ----------- | ------------- | ------------------------------------------------------------------ |
+| ram         | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
+| ram_pct     | `48%`         | The percentage of the current system memory.                       |
+| swap\**     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
+| swap_pct\** | `77%`         | The swap memory percentage of the current system swap memory file. |
+| symbol      | `🐏`           | Mirrors the value of option `symbol`                               |
+| style\*     |               | Mirrors the value of option `style`                                |
+
+\*: This variable can only be used as a part of a style string
+\**: The SWAP file information is only displayed if detected on the current system
 
 ### Example
 
