@@ -668,10 +668,7 @@ fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!(
-        "in {} ",
-        Color::Cyan.bold().paint("fuel-gauge")
-    );
+    let expected = format!("in {} ", Color::Cyan.bold().paint("fuel-gauge"));
     assert_eq!(expected, actual);
     tmp_dir.close()
 }
