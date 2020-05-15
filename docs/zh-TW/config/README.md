@@ -27,7 +27,7 @@ symbol = "➜"     #  設定 "symbol" 區段為 "➜"
 disabled = true
 ```
 
-You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+你可以藉由修改 `STARSHIP_CONFIG`環境變數而改變預設的`starship.toml` 檔案位置
 ```sh
 export STARSHIP_CONFIG=~/.starship
 ```
@@ -134,17 +134,17 @@ prompt_order = [
 
 `aws` 模組顯示現在 AWS 的區域與概況。 這是根據 `AWS_REGION`、`AWS_DEFAULT_REGION` 與 `AWS_PROFILE` 環境變數及 `~/.aws/config` 檔案。
 
-When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
+從 `AWS_VAULT`讀取而使用 [aws-vault](https://github.com/99designs/aws-vault) 這個設定檔
 
 ### 選項
 
-| 變數                | 預設              | 說明                                                                          |
-| ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。                                                          |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
-| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
-| `style`           | `"bold yellow"` | 這個模組的風格。                                                                    |
-| `disabled`        | `false`         | 停用 `AWS` 模組。                                                                |
+| 變數                | 預設              | 說明                                                     |
+| ----------------- | --------------- | ------------------------------------------------------ |
+| `symbol`          | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。                                     |
+| `displayed_items` | `all`           | 選擇預顯示的項目 Possible values: [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | 除了AWS名稱外，顯示區域別名表                                       |
+| `style`           | `"bold yellow"` | 這個模組的風格。                                               |
+| `disabled`        | `false`         | 停用 `AWS` 模組。                                           |
 
 ### 範例
 
