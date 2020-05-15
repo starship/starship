@@ -33,14 +33,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn parse_nim_version(version_cmd_output: &str) -> Option<&str> {
-    Some(
-        version_cmd_output
-            .lines()
-            // First line has the version
-            .next()?
-            .split(' ')
-            .find(|&s| s.chars().all(|c| c >= '0' && c <= '9' || c == '.'))?,
-    )
+    version_cmd_output
+        .lines()
+        // First line has the version
+        .next()?
+        .split(' ')
+        .find(|&s| s.chars().all(|c| c >= '0' && c <= '9' || c == '.'))
 }
 
 #[cfg(test)]

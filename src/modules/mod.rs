@@ -133,6 +133,7 @@ pub fn description(module: &str) -> &'static str {
         "kubernetes" => "The current Kubernetes context name and, if set, the namespace",
         "line_break" => "Separates the prompt into two lines",
         "memory_usage" => "Current system memory and swap usage",
+        "nim" => "The currently installed version of Nim",
         "nix_shell" => "The nix-shell environment",
         "nodejs" => "The currently installed version of NodeJS",
         "ocaml" => "The currently installed version of OCaml",
