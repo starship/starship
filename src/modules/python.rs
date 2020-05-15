@@ -43,8 +43,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let python_version = if config.pyenv_version_name {
-        let version = utils::exec_cmd("pyenv", &["version-name"])?.stdout;
-        version
+        utils::exec_cmd("pyenv", &["version-name"])?.stdout
     } else {
         let version = get_python_version()?;
         format_python_version(&version)
