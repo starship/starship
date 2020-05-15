@@ -458,11 +458,10 @@ it would have been `nixpkgs/pkgs`.
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Variable                    | Default | Description                                                                              |
+| Advanced Option             | Default | Description                                                                              |
 | --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
 | `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
 | `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
-| style                       |         | Mirrors the value of option `style`                                                      |
 
 `fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero,
 the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path
@@ -471,6 +470,13 @@ the components of the path that would normally be truncated are instead displaye
 a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
 </details>
+
+### Variables
+
+| Variable | Example               | Description                         |
+| -------- | --------------------- | ----------------------------------- |
+| path     | `"D:/Projects"`       | The current directory path          |
+| style    | `"black bold dimmed"` | Mirrors the value of option `style` |
 
 ### Example
 
