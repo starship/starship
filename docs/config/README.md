@@ -977,7 +977,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | ----------------------- | --------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`                | `"☸ "`                                              | A format string representing the symbol displayed before the Cluster. |
 | `format`                | `"on [$symbol$context( \\($namespace\\))]($style) "` | The format for the module.                                            |
-| `style`                 | `"bold blue"`                                       | The style for the module.                                             |
+| `style`                 | `"cyan bold"`                                       | The style for the module.                                             |
 | `namespace_spaceholder` | `none`                                              | The value to display if no namespace was found.                       |
 | `context_aliases`       |                                                     | Table of context aliases to display.                                  |
 | `disabled`              | `true`                                              | Disables the `kubernetes` module.                                     |
