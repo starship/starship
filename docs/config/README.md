@@ -1100,9 +1100,9 @@ The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `dune` file
 - The current directory contains a `dune-project` file
-- The current directory contains a file with `ml` extension 
-- The current directory contains a file with `mli` extension 
-- The current directory contains a file with `opam` extension 
+- The current directory contains a file with `.ml` extension 
+- The current directory contains a file with `.mli` extension 
+- The current directory contains a file with `.opam` extension 
 
 ### Options
 
