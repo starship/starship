@@ -28,6 +28,7 @@ mod line_break;
 mod memory_usage;
 mod nix_shell;
 mod nodejs;
+mod ocaml;
 mod package;
 mod php;
 mod python;
@@ -79,6 +80,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "memory_usage" => memory_usage::module(context),
         "nix_shell" => nix_shell::module(context),
         "nodejs" => nodejs::module(context),
+        "ocaml" => ocaml::module(context),
         "package" => package::module(context),
         "php" => php::module(context),
         "python" => python::module(context),
@@ -127,6 +129,7 @@ pub fn description(module: &str) -> &'static str {
         "memory_usage" => "Current system memory and swap usage",
         "nix_shell" => "The nix-shell environment",
         "nodejs" => "The currently installed version of NodeJS",
+        "ocaml" => "The currently installed version of OCaml",
         "package" => "The package version of the current directory's project",
         "php" => "The currently installed version of PHP",
         "python" => "The currently installed version of Python",

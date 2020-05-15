@@ -27,6 +27,7 @@ pub mod kubernetes;
 pub mod memory_usage;
 pub mod nix_shell;
 pub mod nodejs;
+pub mod ocaml;
 pub mod package;
 pub mod php;
 pub mod python;
