@@ -488,12 +488,23 @@ The `docker_context` module shows the currently active
 
 ### Options
 
-| Variable          | Default       | Description                                                                  |
-| ----------------- | ------------- | ---------------------------------------------------------------------------- |
-| `symbol`          | `"🐳 "`       | The symbol used before displaying the Docker context .                       |
-| `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
-| `style`           | `"bold blue"` | The style for the module.                                                    |
-| `disabled`        | `true`        | Disables the `docker_context` module.                                        |
+| Option            | Default                            | Description                                                                             |
+| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`          | `"via [$symbol$context]($style) "` | The format for the module.                                                              |
+| `symbol`          | `"🐳 "`                            | The symbol used before displaying the Docker context.                                   |
+| `style`           | `"blue bold"`                      | The style for the module.                                                               |
+| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
+| `disabled`        | `true`                             | Disables the `docker_context` module.                                                   |
+
+### Variables
+
+| Variable | Example        | Description                          |
+| -------- | -------------- | ------------------------------------ |
+| context  | `test_context` | The current docker context           |
+| symbol   |                | Mirrors the value of option `symbol` |
+| style\*  |                | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -501,7 +512,7 @@ The `docker_context` module shows the currently active
 # ~/.config/starship.toml
 
 [docker_context]
-symbol = "🐋 "
+format = "via [🐋 $context](blue bold)"
 ```
 
 ## Dotnet
