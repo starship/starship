@@ -322,10 +322,10 @@ style = "dimmed green"
 
 ## Crystal
 
-`crystal` 模組顯示現在所安裝的Crystal版本 這個模組在下列其中一個條件達成時顯示：
+`crystal` 模組顯示現在所安裝的Crystal版本 這個模組將在下列其中一個條件滿足時顯示：
 
 - 現在資料夾中含有一個 `shard.yml` 檔案
-- The current directory contains a `.cr` file
+- 現在資料夾中含有一個`.cr`檔案
 
 ### 選項
 
