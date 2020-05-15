@@ -296,17 +296,18 @@ impl Directory {
         let separator = separator_option.unwrap_or(&default_separator);
         let home = home_options.unwrap_or(HOME_SYMBOL);
 
-        let mut size = self
+        let mut size: usize = self
             .components
             .iter()
-            .fold(0u32 as usize, |count, comp| match comp {
-                DirectoryComponent::Prefix(prefix) => count + prefix.len(),
-                DirectoryComponent::Home => count + home.len(),
-                DirectoryComponent::Current => count + CURRENT_DIR.len(),
-                DirectoryComponent::Parent => count + PARENT_DIR.len(),
-                DirectoryComponent::Root => count + separator.len(),
-                DirectoryComponent::Normal(element) => count + element.len(),
-            }) as usize;
+            .map(|comp| match comp {
+                DirectoryComponent::Prefix(prefix) => prefix.len(),
+                DirectoryComponent::Home => home.len(),
+                DirectoryComponent::Current => CURRENT_DIR.len(),
+                DirectoryComponent::Parent => PARENT_DIR.len(),
+                DirectoryComponent::Root => separator.len(),
+                DirectoryComponent::Normal(element) => element.len(),
+            })
+            .sum();
 
         size += self.components.len() * separator.len();
 
