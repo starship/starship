@@ -1115,7 +1115,7 @@ checksum = "c7cb5678e1615754284ec264d9bb5b4c27d2018577fd90ac0ceb578591ed5ee4"
 
 [[package]]
 name = "starship"
-version = "0.41.1"
+version = "0.41.2"
 dependencies = [
  "ansi_term 0.12.1",
  "attohttpc",
