@@ -358,7 +358,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Variable            | Default                       | Description                                                |
+| Option              | Default                       | Description                                                |
 | ------------------- | ----------------------------- | ---------------------------------------------------------- |
 | `min_time`          | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
 | `show_milliseconds` | `false`                       | Show milliseconds in addition to seconds for the duration. |
