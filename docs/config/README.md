@@ -1093,6 +1093,34 @@ package, and shows its current version. The module currently supports `npm`, `ca
 symbol = "🎁 "
 ```
 
+## OCaml
+
+The `ocaml` module shows the currently installed version of OCaml.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `dune` file
+- The current directory contains a `dune-project` file
+- The current directory contains a file with `ml` extension 
+- The current directory contains a file with `mli` extension 
+- The current directory contains a file with `opam` extension 
+
+### Options
+
+| Variable   | Default         | Description                                             |
+| ---------- | --------------- | ------------------------------------------------------- |
+| `symbol`   | `"🐫 "`         | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"` | The style for the module.                               |
+| `disabled` | `false`         | Disables the `ocaml` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[ocaml]
+symbol = "🐪 "
+```
+
 ## PHP
 
 The `php` module shows the currently installed version of PHP.
