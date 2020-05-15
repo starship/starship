@@ -670,7 +670,7 @@ fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
 
     let expected = format!(
         "in {} ",
-        Color::Cyan.bold().paint("~/src/meters/fuel-gauge")
+        Color::Cyan.bold().paint("fuel-gauge")
     );
     assert_eq!(expected, actual);
     tmp_dir.close()
