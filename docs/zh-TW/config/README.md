@@ -27,7 +27,7 @@ symbol = "➜"     #  設定 "symbol" 區段為 "➜"
 disabled = true
 ```
 
-You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+你可以藉由修改 `STARSHIP_CONFIG`環境變數而改變預設的`starship.toml` 檔案位置
 ```sh
 export STARSHIP_CONFIG=~/.starship
 ```
@@ -134,17 +134,17 @@ prompt_order = [
 
 `aws` 模組顯示現在 AWS 的區域與概況。 這是根據 `AWS_REGION`、`AWS_DEFAULT_REGION` 與 `AWS_PROFILE` 環境變數及 `~/.aws/config` 檔案。
 
-When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
+從 `AWS_VAULT`讀取而使用 [aws-vault](https://github.com/99designs/aws-vault) 這個設定檔
 
 ### 選項
 
-| 變數                | 預設              | 說明                                                                          |
-| ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。                                                          |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
-| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
-| `style`           | `"bold yellow"` | 這個模組的風格。                                                                    |
-| `disabled`        | `false`         | 停用 `AWS` 模組。                                                                |
+| 變數                | 預設              | 說明                                                     |
+| ----------------- | --------------- | ------------------------------------------------------ |
+| `symbol`          | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。                                     |
+| `displayed_items` | `all`           | 選擇預顯示的項目 Possible values: [`all`, `profile`, `region`] |
+| `region_aliases`  |                 | 除了AWS名稱外，顯示區域別名表                                       |
+| `style`           | `"bold yellow"` | 這個模組的風格。                                               |
+| `disabled`        | `false`         | 停用 `AWS` 模組。                                           |
 
 ### 範例
 
@@ -274,13 +274,13 @@ use_symbol_for_status = true
 
 ### 選項
 
-| 變數                  | 預設              | 說明                                                         |
-| ------------------- | --------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | 在指令持續時間正前方顯示的前綴。                                           |
-| `style`             | `"bold yellow"` | 這個模組的風格。                                                   |
-| `disabled`          | `false`         | 停用 `cmd_duration` 模組。                                      |
+| 變數                  | 預設              | 說明                                                    |
+| ------------------- | --------------- | ----------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds). |
+| `show_milliseconds` | `false`         | 顯示時間除了以秒為單位外，亦以毫秒顯示                                   |
+| `prefix`            | `took`          | 在指令持續時間正前方顯示的前綴。                                      |
+| `style`             | `"bold yellow"` | 這個模組的風格。                                              |
+| `disabled`          | `false`         | 停用 `cmd_duration` 模組。                                 |
 
 ### 範例
 
@@ -304,12 +304,12 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### 選項
 
-| 變數                  | 預設             | 說明                                                                                                                                                                                                          |
-| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"C "`         | 環境名稱前使用的符號。                                                                                                                                                                                                 |
-| `style`             | `"bold green"` | 這個模組的風格。                                                                                                                                                                                                    |
-| `disabled`          | `false`        | 停用 `conda` 模組。                                                                                                                                                                                              |
+| 變數                  | 預設             | 說明                                                                                              |
+| ------------------- | -------------- | ----------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`            | 如果環境變數由所`conda create -p [path]`產生時，環境變數的資料夾需要截斷的數目。 `0` 表示不截斷 也請參考 [`directory`](#directory)模組 |
+| `symbol`            | `"C "`         | 環境名稱前使用的符號。                                                                                     |
+| `style`             | `"bold green"` | 這個模組的風格。                                                                                        |
+| `disabled`          | `false`        | 停用 `conda` 模組。                                                                                  |
 
 ### 範例
 
@@ -322,10 +322,10 @@ style = "dimmed green"
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. 這個模組在下列其中一個條件達成時顯示：
+`crystal` 模組顯示現在所安裝的Crystal版本 這個模組將在下列其中一個條件滿足時顯示：
 
 - 現在資料夾中含有一個 `shard.yml` 檔案
-- The current directory contains a `.cr` file
+- 現在資料夾中含有一個`.cr`檔案
 
 ### 選項
 
@@ -442,10 +442,11 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 ### 選項
 
-| 變數         | 預設      | 說明                                                              |
-| ---------- | ------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`  | The symbol used before displaying the version of Elixir/Erlang. |
-| `disabled` | `false` | Disables the `elixir` module.                                   |
+| 變數         | 預設              | 說明                                                              |
+| ---------- | --------------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`          | The symbol used before displaying the version of Elixir/Erlang. |
+| `style`    | `"bold purple"` | 這個模組的風格。                                                        |
+| `disabled` | `false`         | Disables the `elixir` module.                                   |
 
 ### 範例
 
@@ -484,28 +485,6 @@ The `elm` module shows the currently installed version of Elm. 這個模組在�
 symbol = " "
 ```
 
-## Erlang
-
-The `erlang` module shows the currently installed version of Erlang/OTP. 這個模組在下列其中一個條件達成時顯示：
-
-- The current directory contains a `rebar.config` file.
-- The current directory contains a `erlang.mk` file.
-
-### 選項
-
-| 變數         | 預設      | 說明                                                       |
-| ---------- | ------- | -------------------------------------------------------- |
-| `symbol`   | `"🖧 "`  | The symbol used before displaying the version of Erlang. |
-| `disabled` | `false` | Disables the `erlang` module.                            |
-
-### 範例
-
-```toml
-# ~/.config/starship.toml
-
-[erlang]
-symbol = "e "
-```
 ## 環境變數
 
 `env_var`模組顯示一個選擇的環境變數的現在數值。 這個模組只在下列條件其中之一達到時顯示：
@@ -515,15 +494,15 @@ symbol = "e "
 
 ### 選項
 
-| 變數         | 預設               | 說明                   |
-| ---------- | ---------------- | -------------------- |
-| `symbol`   |                  | 顯示在變數數值之前的符號。        |
-| `variable` |                  | 要顯示的環境變數。            |
-| `default`  |                  | 在選擇的變數值沒有定義時，顯示的預設值。 |
-| `prefix`   | `""`             | 在變數值正前方顯示的前綴。        |
-| `suffix`   | `""`             | 在變數值正後方顯示的後綴。        |
-| `style`    | `"dimmed black"` | 這個模組的風格。             |
-| `disabled` | `false`          | 停用 `env_var` 模組。     |
+| 變數         | 預設                    | 說明                   |
+| ---------- | --------------------- | -------------------- |
+| `symbol`   |                       | 顯示在變數數值之前的符號。        |
+| `variable` |                       | 要顯示的環境變數。            |
+| `default`  |                       | 在選擇的變數值沒有定義時，顯示的預設值。 |
+| `prefix`   | `""`                  | 在變數值正前方顯示的前綴。        |
+| `suffix`   | `""`                  | 在變數值正後方顯示的後綴。        |
+| `style`    | `"dimmed bold black"` | 這個模組的風格。             |
+| `disabled` | `false`               | 停用 `env_var` 模組。     |
 
 ### 範例
 
@@ -533,6 +512,30 @@ symbol = "e "
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+## Erlang
+
+The `erlang` module shows the currently installed version of Erlang/OTP. 這個模組在下列其中一個條件達成時顯示：
+
+- 現在資料夾中包含一個 `rebar.config` 檔案.
+- 現在資料夾中包含一個 `erlang.mk` 檔案.
+
+### 選項
+
+| 變數         | 預設         | 說明                                                       |
+| ---------- | ---------- | -------------------------------------------------------- |
+| `symbol`   | `"🖧 "`     | The symbol used before displaying the version of Erlang. |
+| `style`    | `bold red` | The style for this module.                               |
+| `disabled` | `false`    | Disables the `erlang` module.                            |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[erlang]
+symbol = "e "
 ```
 
 ## Git 分支
@@ -1012,7 +1015,7 @@ The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並
 | 變數                | 預設           | 說明                                                        |
 | ----------------- | ------------ | --------------------------------------------------------- |
 | `symbol`          | `"📦 "`       | 顯示在套件的版本之前的符號。                                            |
-| `style`           | `"bold red"` | 這個模組的風格。                                                  |
+| `style`           | `"bold 208"` | 這個模組的風格。                                                  |
 | `display_private` | `false`      | Enable displaying version for packages marked as private. |
 | `disabled`        | `false`      | 停用 `package` 模組。                                          |
 
@@ -1038,7 +1041,7 @@ The `php` module shows the currently installed version of PHP. 這個模組在�
 | 變數         | 預設           | 說明                                                    |
 | ---------- | ------------ | ----------------------------------------------------- |
 | `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
-| `style`    | `"bold red"` | 這個模組的風格。                                              |
+| `style`    | `"bold 147"` | 這個模組的風格。                                              |
 | `disabled` | `false`      | Disables the `php` module.                            |
 
 ### 範例
@@ -1052,11 +1055,9 @@ symbol = "🔹 "
 
 ## Python
 
-`python` 模組顯示現在安裝的 Python 版本
+The `python` module shows the currently installed version of Python and the current Python virtual environment if one is activated.
 
-如果 `pyenv_version_name` 的值為 `true`, 會顯示 pyenv 內的版本名稱
-
-要不然就會顯示 `python -version` 的版本和有啟用的 Python 虛擬環境版本
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
 這個模組在下列其中一個條件達成時顯示：
 

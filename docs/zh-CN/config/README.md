@@ -442,10 +442,11 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 ### 配置项
 
-| 字段         | 默认值     | 描述                                                              |
-| ---------- | ------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`  | The symbol used before displaying the version of Elixir/Erlang. |
-| `disabled` | `false` | Disables the `elixir` module.                                   |
+| 字段         | 默认值             | 描述                                                              |
+| ---------- | --------------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`          | The symbol used before displaying the version of Elixir/Erlang. |
+| `style`    | `"bold purple"` | 此组件的样式。                                                         |
+| `disabled` | `false`         | Disables the `elixir` module.                                   |
 
 ### 示例
 
@@ -484,28 +485,6 @@ The `elm` module shows the currently installed version of Elm. 此组件将在�
 symbol = " "
 ```
 
-## Erlang
-
-The `erlang` module shows the currently installed version of Erlang/OTP. 此组件只有满足以下条件之一时才会被显示：
-
-- 当前目录包含一个 `rebar.config` 文件.
-- 当前目录包含一个 `erlang.mk` 文件.
-
-### 配置项
-
-| 字段         | 默认值     | 描述                                                       |
-| ---------- | ------- | -------------------------------------------------------- |
-| `symbol`   | `"🖧 "`  | The symbol used before displaying the version of Erlang. |
-| `disabled` | `false` | Disables the `erlang` module.                            |
-
-### 示例
-
-```toml
-# ~/.config/starship.toml
-
-[erlang]
-symbol = "e "
-```
 ## Environment Variable
 
 `env_var` 组件显示选定的环境变量的当前值。 此组件只有满足以下条件之一时才会被显示：
@@ -515,15 +494,15 @@ symbol = "e "
 
 ### 配置项
 
-| 字段         | 默认值              | 描述                  |
-| ---------- | ---------------- | ------------------- |
-| `symbol`   |                  | 这个字段的内容会显示在环境变量值之前。 |
-| `variable` |                  | 要显示的环境变量。           |
-| `default`  |                  | 所选变量未定义时显示的默认值。     |
-| `prefix`   | `""`             | 直接在显示环境变量值前显示的前缀。   |
-| `suffix`   | `""`             | 直接在显示环境变量值后显示的后缀。   |
-| `style`    | `"dimmed black"` | 此组件的样式。             |
-| `disabled` | `false`          | 禁用 `env_var` 组件。    |
+| 字段         | 默认值                   | 描述                  |
+| ---------- | --------------------- | ------------------- |
+| `symbol`   |                       | 这个字段的内容会显示在环境变量值之前。 |
+| `variable` |                       | 要显示的环境变量。           |
+| `default`  |                       | 所选变量未定义时显示的默认值。     |
+| `prefix`   | `""`                  | 直接在显示环境变量值前显示的前缀。   |
+| `suffix`   | `""`                  | 直接在显示环境变量值后显示的后缀。   |
+| `style`    | `"dimmed bold black"` | 此组件的样式。             |
+| `disabled` | `false`               | 禁用 `env_var` 组件。    |
 
 ### 示例
 
@@ -533,6 +512,30 @@ symbol = "e "
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+## Erlang
+
+The `erlang` module shows the currently installed version of Erlang/OTP. 此组件将在符合以下任意条件之一时显示：
+
+- 当前目录包含一个 `rebar.config` 文件.
+- 当前目录包含一个 `erlang.mk` 文件.
+
+### 配置项
+
+| 字段         | 默认值        | 描述                                                       |
+| ---------- | ---------- | -------------------------------------------------------- |
+| `symbol`   | `"🖧 "`     | The symbol used before displaying the version of Erlang. |
+| `style`    | `bold red` | The style for this module.                               |
+| `disabled` | `false`    | Disables the `erlang` module.                            |
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[erlang]
+symbol = "e "
 ```
 
 ## Git Branch
@@ -1012,7 +1015,7 @@ symbol = "🤖 "
 | 字段                | 默认值          | 描述                                                        |
 | ----------------- | ------------ | --------------------------------------------------------- |
 | `symbol`          | `"📦 "`       | 这个字段的内容会显示在当前软件包版本之前。                                     |
-| `style`           | `"bold red"` | 此组件的样式。                                                   |
+| `style`           | `"bold 208"` | 此组件的样式。                                                   |
 | `display_private` | `false`      | Enable displaying version for packages marked as private. |
 | `disabled`        | `false`      | 禁用 `package` 组件。                                          |
 
@@ -1038,7 +1041,7 @@ symbol = "🎁 "
 | 字段         | 默认值          | 描述                      |
 | ---------- | ------------ | ----------------------- |
 | `symbol`   | `"🐘 "`       | 这个字段的内容会显示在当前 PHP 版本之前。 |
-| `style`    | `"bold red"` | 此组件的样式。                 |
+| `style`    | `"bold 147"` | 此组件的样式。                 |
 | `disabled` | `false`      | 禁用 `php` 组件。            |
 
 ### 示例
@@ -1052,11 +1055,9 @@ symbol = "🔹 "
 
 ## Python
 
-`python` 组件显示当前安装的 Python 版本。
+The `python` module shows the currently installed version of Python and the current Python virtual environment if one is activated.
 
-如果 `pyenv_version_name` 设置为 `true`，则将显示 pyenv 版本名称。
-
-否则，它将显示来自 `python --version` 的版本号，并显示当前的 Python 虚拟环境，如果激活了的话。
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
 此组件将在符合以下任意条件之一时显示：
 
