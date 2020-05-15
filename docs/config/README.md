@@ -359,13 +359,20 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Variable            | Default         | Description                                                |
-| ------------------- | --------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
-| `style`             | `"bold yellow"` | The style for the module.                                  |
-| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
+| Option              | Default                       | Description                                                |
+| ------------------- | ----------------------------- | ---------------------------------------------------------- |
+| `min_time`          | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds` | `false`                       | Show milliseconds in addition to seconds for the duration. |
+| `format`            | `"took [$duration]($style) "` | The format for the module.                                 |
+| `style`             | `"bold yellow"`               | The style for the module.                                  |
+| `disabled`          | `false`                       | Disables the `cmd_duration` module.                        |
+
+### Variables
+
+| Variable | Example  | Description                             |
+| -------- | -------- | --------------------------------------- |
+| duration | `16m40s` | The time it took to execute the command |
+| style\*  |          | Mirrors the value of option `style`     |
 
 ### Example
 
@@ -374,7 +381,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 [cmd_duration]
 min_time = 500
-prefix = "underwent "
+format = "underwent [$duration](bold yellow)"
 ```
 
 ## Conda
