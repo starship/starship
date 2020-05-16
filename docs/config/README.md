@@ -240,14 +240,14 @@ The module is only visible when the device's battery is below 10%.
 
 ### Options
 
-| Option               | Default                            | Description                                       |
-| -------------------- | ---------------------------------- | ------------------------------------------------- |
-| `full_symbol`        | `"•"`                              | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`                              | The symbol shown when the battery is charging.    |
-| `discharging_symbol` | `"⇣"`                              | The symbol shown when the battery is discharging. |
-| `format`             | `"[$symbol$percentage]($style) "`  | The format for the module.                        | 
-| `display`            | [link](#battery-display)           | Display threshold and style for the module.       |
-| `disabled`           | `false`                            | Disables the `battery` module.                    |
+| Option               | Default                           | Description                                       |
+| -------------------- | --------------------------------- | ------------------------------------------------- |
+| `full_symbol`        | `"•"`                             | The symbol shown when the battery is full.        |
+| `charging_symbol`    | `"⇡"`                             | The symbol shown when the battery is charging.    |
+| `discharging_symbol` | `"⇣"`                             | The symbol shown when the battery is discharging. |
+| `format`             | `"[$symbol$percentage]($style) "` | The format for the module.                        |
+| `display`            | [link](#battery-display)          | Display threshold and style for the module.       |
+| `disabled`           | `false`                           | Disables the `battery` module.                    |
 
 <details>
 <summary>There are also options for some uncommon battery states.</summary>
@@ -566,10 +566,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default | Description                                                     |
-| ---------- | ------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "` | The symbol used before displaying the version of Elixir/Erlang. |
-| `disabled` | `false` | Disables the `elixir` module.                                   |
+| Variable   | Default         | Description                                                     |
+| ---------- | --------------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`         | The symbol used before displaying the version of Elixir/Erlang. |
+| `style`    | `"bold purple"` | The style for the module.                                       |
+| `disabled` | `false`         | Disables the `elixir` module.                                   |
 
 ### Example
 
@@ -609,30 +610,6 @@ The module will be shown if any of the following conditions are met:
 symbol = " "
 ```
 
-## Erlang
-
-The `erlang` module shows the currently installed version of Erlang/OTP.
-The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `rebar.config` file.
-- The current directory contains a `erlang.mk` file.
-
-### Options
-
-| Variable   | Default | Description                                                     |
-| ---------- | ------- | --------------------------------------------------------------- |
-| `symbol`   | `"🖧 "` | The symbol used before displaying the version of Erlang. |
-| `disabled` | `false` | Disables the `erlang` module.                                   |
-
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[erlang]
-symbol = "e "
-```
-
 ## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable.
@@ -643,13 +620,43 @@ The module will be shown only if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                                | Description                                                                  |
-| ---------- | -------------------------------------- | ---------------------------------------------------------------------------- |
-| `symbol`   |                                        | The symbol used before displaying the variable value.                        |
-| `variable` |                                        | The environment variable to be displayed.                                    |
-| `default`  |                                        | The default value to be displayed when the selected variable is not defined. |
+| Variable   | Default               | Description                                                                  |
+| ---------- | --------------------- | ---------------------------------------------------------------------------- |
+| `symbol`   |                       | The symbol used before displaying the variable value.                        |
+| `variable` |                       | The environment variable to be displayed.                                    |
+| `default`  |                       | The default value to be displayed when the selected variable is not defined. |
+| `prefix`   | `""`                  | Prefix to display immediately before the variable value.                     |
+| `suffix`   | `""`                  | Suffix to display immediately after the variable value.                      |
+| `style`    | `"dimmed bold black"` | The style for the module.                                                    |
+| `disabled` | `false`               | Disables the `env_var` module.                                               |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[env_var]
+variable = "SHELL"
+default = "unknown shell"
+```
+
+## Erlang
+
+The `erlang` module shows the currently installed version of Erlang/OTP.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
+
+### Options
+
+| Option     | Default                          | Description                                                                  |
+| ---------- | -------------------------------- | ---------------------------------------------------------------------------- |
+| `symbol`   |                                  | The symbol used before displaying the variable value.                        |
+| `variable` |                                  | The environment variable to be displayed.                                    |
+| `default`  |                                  | The default value to be displayed when the selected variable is not defined. |
 | `format`   | `"with [${env_value}]($style) "` | The format for the module.                                                   |
-| `disabled` | `false`                                | Disables the `env_var` module.                                               |
+| `disabled` | `false`                          | Disables the `env_var` module.                                               |
 
 ### Variables
 
@@ -664,9 +671,8 @@ The module will be shown only if any of the following conditions are met:
 ```toml
 # ~/.config/starship.toml
 
-[env_var]
-variable = "SHELL"
-default = "unknown shell"
+[erlang]
+symbol = "e "
 ```
 
 ## Git Branch
@@ -1234,7 +1240,7 @@ package, and shows its current version. The module currently supports `npm`, `ca
 | Variable          | Default      | Description                                                |
 | ----------------- | ------------ | ---------------------------------------------------------- |
 | `symbol`          | `"📦 "`      | The symbol used before displaying the version the package. |
-| `style`           | `"bold red"` | The style for the module.                                  |
+| `style`           | `"bold 208"` | The style for the module.                                  |
 | `display_private` | `false`      | Enable displaying version for packages marked as private.  |
 | `disabled`        | `false`      | Disables the `package` module.                             |
 
@@ -1286,13 +1292,11 @@ format = "via [🔹 $version](147 bold) "
 
 ## Python
 
-The `python` module shows the currently installed version of Python.
+The `python` module shows the currently installed version of Python and the
+current Python virtual environment if one is activated.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
-
-Otherwise, it will display the version number from `python --version`
-and show the current Python virtual environment if one is
-activated.
+If `pyenv_version_name` is set to `true`, it will display the pyenv version
+name. Otherwise, it will display the version number from `python --version`.
 
 The module will be shown if any of the following conditions are met:
 
@@ -1473,13 +1477,13 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable          | Default         | Description                                                                                                         |
-| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | Enables 12 hour formatting                                                                                          |
-| `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`           | `"bold yellow"` | The style for the module time                                                                                       |
-| `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
-| `disabled`        | `true`          | Disables the `time` module.                                                                                         |
+| Variable          | Default         | Description                                                                                                            |
+| ----------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`         | Enables 12 hour formatting                                                                                             |
+| `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.    |
+| `style`           | `"bold yellow"` | The style for the module time                                                                                          |
+| `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`          | Disables the `time` module.                                                                                            |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
 Manually setting `format` will override the `use_12hr` setting.
