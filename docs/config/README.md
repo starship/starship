@@ -1250,11 +1250,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default      | Description                                           |
-| ---------- | ------------ | ----------------------------------------------------- |
-| `symbol`   | `"🐘 "`      | The symbol used before displaying the version of PHP. |
-| `style`    | `"bold red"` | The style for the module.                             |
-| `disabled` | `false`      | Disables the `php` module.                            |
+| Option     | Default                            | Description                                           |
+| ---------- | ---------------------------------- | ----------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                            |
+| `symbol`   | `"🐘 "`                            | The symbol used before displaying the version of PHP. |
+| `style`    | `"147 bold"`                       | The style for the module.                             |
+| `disabled` | `false`                            | Disables the `php` module.                            |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v7.3.8` | The version of `php`                 |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1262,7 +1273,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [php]
-symbol = "🔹 "
+format = "via [🔹 $version](147 bold) "
 ```
 
 ## Python
