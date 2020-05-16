@@ -2,7 +2,6 @@ use std::fs::File;
 use std::io::{self, Write};
 
 use ansi_term::Color;
-use tempfile;
 
 use crate::common::{self, TestCommand};
 
