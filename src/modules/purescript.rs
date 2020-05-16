@@ -7,6 +7,7 @@ use crate::utils;
 ///
 /// Will display the PureScript version if any of the following criteria are met:
 ///     - Current directory contains a `spago.dhall` file
+///     - Current directory contains a `*.purs` files
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_purs_project = context
         .try_begin_scan()?
@@ -29,4 +30,43 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.create_segment("version", &SegmentConfig::new(&formatted_version));
 
     Some(module)
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::modules::utils::test::render_module;
+    use ansi_term::Color;
+    use std::fs::File;
+    use std::io;
+
+    #[test]
+    fn folder_without_purscript_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let actual = render_module("purescript", dir.path(), None);
+        let expected = None;
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_purescript_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("Main.purs"))?.sync_all()?;
+
+        let actual = render_module("purescript", dir.path(), None);
+        let expected = Some(format!("via {} ", Color::Black.bold().paint("<=> v0.13.5")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_spago_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("spago.dhall"))?.sync_all()?;
+
+        let actual = render_module("purescript", dir.path(), None);
+        let expected = Some(format!("via {} ", Color::Black.bold().paint("<=> v0.13.5")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
 }
