@@ -31,9 +31,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "progress_current" => state_description.current.as_ref().map(Ok),
-                _ => None,
-            })
-            .map(|variable| match variable {
                 "progress_total" => state_description.total.as_ref().map(Ok),
                 _ => None,
             })
