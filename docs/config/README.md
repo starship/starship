@@ -684,6 +684,14 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use "" for no symbol. |
 | `disabled`          | `false`                          | Disables the `git_branch` module.                                                      |
 
+### Variables
+
+| Variable | Example  | Description                                                                                          |
+| -------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| branch   | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
+| symbol   |          | Mirrors the value of option `symbol`                                                                 |
+| style    |          | Mirrors the value of option `style`                                                                  |
+
 ### Example
 
 ```toml
