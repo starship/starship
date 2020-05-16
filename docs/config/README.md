@@ -675,12 +675,14 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Options
 
-| Variable            | Default                          | Description                                                                           |
-| ------------------- | -------------------------------- | ------------------------------------------------------------------------------------- |
-| `truncation_length` | `2^63 - 1`                       | Truncates a git branch to X graphemes                                                 |
-| `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
-| `format`            | `"on [ $branch](bold purple) "` | The format for the module.  Use `"$branch"` to refer to the current branch name.      |
-| `disabled`          | `false`                          | Disables the `git_branch` module.                                                     |
+| Variable            | Default                          | Description                                                                            |
+| ------------------- | -------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`            | `"on [$symbol$branch]($style) "` | The format for the module.  Use `"$branch"` to refer to the current branch name.       |
+| `symbol`            | `" "`                           | A format string representing the symbol of git branch.                                 |
+| `style`             | `"bold purple"`                  | The style for the module.                                                              |
+| `truncation_length` | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                 |
+| `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use "" for no symbol. |
+| `disabled`          | `false`                          | Disables the `git_branch` module.                                                      |
 
 ### Example
 

@@ -41,17 +41,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         graphemes.truncate(trunc_len + 1)
     }
 
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-        formatter.map(|variable| match variable {
-            "branch" => Some(graphemes.concat()).map(Ok),
-            _ => None,
-        })
-    } else {
-        log::error!("Error parsing format string in `git_branch.format`");
-        return None;
-    };
-
-    let parsed = formatter.parse(None);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "branch" => Some(Ok(graphemes.concat())),
+                _ => None,
+            })
+            .parse(None)
+    });
 
     module.set_segments(match parsed {
         Ok(segments) => segments,

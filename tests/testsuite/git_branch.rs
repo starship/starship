@@ -98,13 +98,14 @@ fn test_japanese_truncation() -> io::Result<()> {
     test_truncate_length("がんばってね", 4, "がんばっ", "…")
 }
 
+#[test]
 fn test_format_no_branch() -> io::Result<()> {
-    test_format("1337_hello_world", "no_branch", "no_branch")
+    test_format("1337_hello_world", "no_branch", "", "no_branch")
 }
 
 #[test]
 fn test_format_just_branch_name() -> io::Result<()> {
-    test_format("1337_hello_world", "$branch", "1337_hello_world")
+    test_format("1337_hello_world", "$branch", "","1337_hello_world")
 }
 
 #[test]
@@ -112,6 +113,7 @@ fn test_format_just_branch_name_color() -> io::Result<()> {
     test_format(
         "1337_hello_world",
         "[$branch](bold blue)",
+        "",
         Color::Blue.bold().paint("1337_hello_world").to_string(),
     )
 }
@@ -121,10 +123,27 @@ fn test_format_mixed_colors() -> io::Result<()> {
     test_format(
         "1337_hello_world",
         "branch: [$branch](bold blue) [THE COLORS](red) ",
+        "",
         format!(
             "branch: {} {} ",
             Color::Blue.bold().paint("1337_hello_world").to_string(),
             Color::Red.paint("THE COLORS").to_string()
+        ),
+    )
+}
+
+#[test]
+fn test_format_symbol_style() -> io::Result<()> {
+    test_format(
+        "1337_hello_world",
+        "$symbol[$branch]($style)",
+        r#"
+            symbol = "git: "
+            style = "green"
+        "#,
+        format!(
+            "git: {}",
+            Color::Green.paint("1337_hello_world").to_string(),
         ),
     )
 }
@@ -209,7 +228,12 @@ fn test_truncate_length_with_config(
     remove_dir_all(repo_dir)
 }
 
-fn test_format<T: AsRef<str>>(branch_name: &str, format: &str, expected: T) -> io::Result<()> {
+fn test_format<T: AsRef<str>>(
+    branch_name: &str,
+    format: &str,
+    config_options: &str,
+    expected: T,
+) -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
     Command::new("git")
@@ -223,8 +247,9 @@ fn test_format<T: AsRef<str>>(branch_name: &str, format: &str, expected: T) -> i
                 r#"
                     [git_branch]
                         format = "{}"
+                        {}
                 "#,
-                format,
+                format, config_options
             ))
             .unwrap(),
         )
