@@ -601,10 +601,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default | Description                                                     |
-| ---------- | ------- | --------------------------------------------------------------- |
-| `symbol`   | `"🖧 "` | The symbol used before displaying the version of Erlang. |
-| `disabled` | `false` | Disables the `erlang` module.                                   |
+| Option     | Default                            | Description                                              |
+| ---------- | ---------------------------------- | -------------------------------------------------------- |
+| `symbol`   | `"🖧 "`                            | The symbol used before displaying the version of erlang. |
+| `style`    | `"bold red"`                       | The style for the module.                                |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                               |
+| `disabled` | `false`                            | Disables the `erlang` module.                            |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v22.1.3` | The version of `erlang`              |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -612,8 +624,9 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [erlang]
-symbol = "e "
+format = "via [e $version](bold red) "
 ```
+
 ## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable.
