@@ -702,18 +702,29 @@ that information will be shown too.
 
 ### Options
 
-| Variable           | Default            | Description                                                                                                      |
-| ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
-| `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
-| `revert`           | `"REVERTING"`      | The text displayed when a `revert` is in progress.                                                               |
-| `cherry_pick`      | `"CHERRY-PICKING"` | The text displayed when a `cherry-pick` is in progress.                                                          |
-| `bisect`           | `"BISECTING"`      | The text displayed when a `bisect` is in progress.                                                               |
-| `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
-| `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
-| `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
-| `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
-| `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
+| Option         | Default                                                         | Description                                                                      |
+| -------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `rebase`       | `"REBASING"`                                                    | The text displayed when a `rebase` is in progress.                               |
+| `merge`        | `"MERGING"`                                                     | The text displayed when a `merge` is in progress.                                |
+| `revert`       | `"REVERTING"`                                                   | The text displayed when a `revert` is in progress.                               |
+| `cherry_pick`  | `"CHERRY-PICKING"`                                              | The text displayed when a `cherry-pick` is in progress.                          |
+| `bisect`       | `"BISECTING"`                                                   | The text displayed when a `bisect` is in progress.                               |
+| `am`           | `"AM"`                                                          | The text displayed when an `apply-mailbox` (`git am`) is in progress.            |
+| `am_or_rebase` | `"AM/REBASE"`                                                   | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
+| `style`        | `"bold yellow"`                                                 | The style for the module.                                                        |
+| `format`       | `"[\\($state( $progress_current/$progress_total)\\)]($style) "` | The format for the module.                                                       |
+| `disabled`     | `false`                                                         | Disables the `git_state` module.                                                 |
+
+### Variables
+
+| Variable         | Example    | Description                         |
+| ---------------- | ---------- | ----------------------------------- |
+| state            | `REBASING` | The current state of the repo       |
+| progress_current | `1`        | The current operation progress      |
+| progress_total   | `2`        | The total operation progress        |
+| style\*          |            | Mirrors the value of option `style` |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -721,7 +732,7 @@ that information will be shown too.
 # ~/.config/starship.toml
 
 [git_state]
-progress_divider = " of "
+format = "[\\($state( $progress_current of $progress_total)\\)]($style) "
 cherry_pick = "🍒 PICKING"
 ```
 
