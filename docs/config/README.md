@@ -389,12 +389,23 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### Options
 
-| Variable            | Default        | Description                                                                                                                                                                                                 |
-| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
-| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
-| `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
+| Option              | Default                            | Description                                                                                                                                                                                                 |
+| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"🅒 "`                             | The symbol used before the environment name.                                                                                                                                                                |
+| `style`             | `"bold green"`                     | The style for the module.                                                                                                                                                                                   |
+| `format`            | `"[$symbol$environment]($style) "` | The format for the module.                                                                                                                                                                                   |
+| `disabled`          | `false`                            | Disables the `conda` module.                                                                                                                                                                                |
+
+### Variables
+
+| Variable    | Example      | Description                          |
+| ----------- | ------------ | ------------------------------------ |
+| environment | `astronauts` | The current conda environment        |
+| symbol      |              | Mirrors the value of option `symbol` |
+| style\*     |              | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -402,7 +413,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 # ~/.config/starship.toml
 
 [conda]
-style = "dimmed green"
+format = "[$symbol$environment](dimmed green) "
 ```
 
 ## Crystal
