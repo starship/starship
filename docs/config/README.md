@@ -1354,14 +1354,22 @@ and `$SINGULARITY_NAME` is set.
 
 ### Options
 
-| Variable   | Default              | Description                                      |
-| ---------- | -------------------- | ------------------------------------------------ |
-| `label`    | `""`                 | Prefix before the image name display.            |
-| `prefix`   | `"["`                | Prefix to display immediately before image name. |
-| `suffix`   | `"]"`                | Suffix to display immediately after image name.  |
-| `symbol`   | `""`                 | The symbol used before the image name.           |
-| `style`    | `"bold dimmed blue"` | The style for the module.                        |
-| `disabled` | `false`              | Disables the `singularity` module.               |
+| Variable   | Default                          | Description                                      |
+| ---------- | -------------------------------- | ------------------------------------------------ |
+| `format`   | `"[$symbol\\[$env\\]]($style) "` | The format for the module.                       |
+| `symbol`   | `""`                             | A format string displayed before the image name. |
+| `style`    | `"bold dimmed blue"`             | The style for the module.                        |
+| `disabled` | `false`                          | Disables the `singularity` module.               |
+
+### Variables
+
+| Variable | Example      | Description                          |
+| -------- | ------------ | ------------------------------------ |
+| env      | `centos.img` | The current singularity image        |
+| symbol   |              | Mirrors the value of option `symbol` |
+| style\*  |              | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1369,7 +1377,7 @@ and `$SINGULARITY_NAME` is set.
 # ~/.config/starship.toml
 
 [singularity]
-symbol = "📦 "
+format = "[📦 \\[$env\\]]($style) "
 ```
 
 ## Terraform
