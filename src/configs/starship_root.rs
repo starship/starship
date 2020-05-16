@@ -41,6 +41,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "julia",
                 "nodejs",
                 "php",
+                "purescript",
                 "python",
                 "ruby",
                 "rust",

@@ -30,6 +30,7 @@ mod nix_shell;
 mod nodejs;
 mod package;
 mod php;
+mod purescript;
 mod python;
 mod ruby;
 mod rust;
@@ -81,6 +82,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "nodejs" => nodejs::module(context),
         "package" => package::module(context),
         "php" => php::module(context),
+        "purescript" => purescript::module(context),
         "python" => python::module(context),
         "ruby" => ruby::module(context),
         "rust" => rust::module(context),

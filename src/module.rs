@@ -40,6 +40,7 @@ pub const ALL_MODULES: &[&str] = &[
     "nix_shell",
     "nodejs",
     "package",
+    "purescript",
     "python",
     "ruby",
     "crystal",
