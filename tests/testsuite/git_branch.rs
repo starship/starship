@@ -105,7 +105,7 @@ fn test_format_no_branch() -> io::Result<()> {
 
 #[test]
 fn test_format_just_branch_name() -> io::Result<()> {
-    test_format("1337_hello_world", "$branch", "","1337_hello_world")
+    test_format("1337_hello_world", "$branch", "", "1337_hello_world")
 }
 
 #[test]
