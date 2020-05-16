@@ -2,23 +2,23 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
-actionText: Get Started →
+tagline: O prompt minimalista, extremamente rápido e infinitamente personalizável para qualquer shell!
+actionText: Primeiros passos →
 actionLink: ./guide/
 features:
   - 
-    title: Compatibility First
-    details: Works on the most common shells on the most common operating systems. Use it everywhere!
+    title: Compatibilidade primeiro
+    details: Funciona nos principais shells nos principais sistemas operacionais. Use em qualquer lugar!
   - 
-    title: Rust-Powered
-    details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
+    title: Poder do Rust
+    details: Tenha o melhor da velocidade e segurança do Rust, para tornar seu prompt o mais rápido e confiável possível.
   - 
-    title: Customizable
-    details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
-footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+    title: Personalizável
+    details: Cada pequeno detalhe é personalizável ao seu gosto, para tornar esse prompt o mínimo possível ou rico em recursos, como você preferir.
+footer: Licenciado pelo ISC | Todos os direitos reservados © 2019-Presente | Contribuidores Starship
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and PowerShell.
+description: O Starship é o prompt minimalista, extremamente rápido e extremamente personalizável para qualquer shell! Mostra as informações que você precisa, mantendo-se elegante e minimalista. Instalação rápida disponível para Bash, Fish, ZSH, Ion e Powershell.
 ---
 
 <div class="center">
@@ -28,40 +28,40 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
   </video>
 </div>
 
-### Quick Install
+### Instalação
 
-1. Install the **starship** binary:
+1. Instale o binário do **starship**:
 
 
-   #### Install Latest Version
+   #### Instalar a última versão
 
-   With Shell:
+   Com o Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Install via Package Manager
+   #### Instalar via Gerenciador de Pacotes
 
-   With [Homebrew](https://brew.sh/):
+   Com o [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
-   With [Scoop](https://scoop.sh):
+   Com o [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Adicione o script de inicialização ao arquivo de configuração do shell:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Adicione o seguinte comando no final do arquivo `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -72,7 +72,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Adicione o seguinte comando no final do arquivo `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -83,7 +83,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Adicione o seguinte comando no final do arquivo `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -94,7 +94,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   Adicione o seguinte comando no final do arquivo `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` em -Nix):
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
@@ -105,7 +105,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Adicione o seguinte comando no final do arquivo `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc

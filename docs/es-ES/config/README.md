@@ -442,10 +442,11 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 ### Opciones
 
-| Variable   | Por defecto | Descripción                                                     |
-| ---------- | ----------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`      | The symbol used before displaying the version of Elixir/Erlang. |
-| `disabled` | `false`     | Disables the `elixir` module.                                   |
+| Variable   | Por defecto     | Descripción                                                     |
+| ---------- | --------------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`          | The symbol used before displaying the version of Elixir/Erlang. |
+| `style`    | `"bold purple"` | El estilo del módulo.                                           |
+| `disabled` | `false`         | Disables the `elixir` module.                                   |
 
 ### Ejemplo
 
@@ -484,28 +485,6 @@ The `elm` module shows the currently installed version of Elm. El módulo se mue
 symbol = " "
 ```
 
-## Erlang
-
-The `erlang` module shows the currently installed version of Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
-
-- The current directory contains a `rebar.config` file.
-- The current directory contains a `erlang.mk` file.
-
-### Opciones
-
-| Variable   | Por defecto | Descripción                                              |
-| ---------- | ----------- | -------------------------------------------------------- |
-| `symbol`   | `"🖧 "`      | The symbol used before displaying the version of Erlang. |
-| `disabled` | `false`     | Disables the `erlang` module.                            |
-
-### Ejemplo
-
-```toml
-# ~/.config/starship.toml
-
-[erlang]
-symbol = "e "
-```
 ## Variable de entorno
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
@@ -515,15 +494,15 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Opciones
 
-| Variable      | Por defecto      | Descripción                                                                  |
-| ------------- | ---------------- | ---------------------------------------------------------------------------- |
-| `symbol`      |                  | The symbol used before displaying the variable value.                        |
-| `variable`    |                  | The environment variable to be displayed.                                    |
-| `por defecto` |                  | The default value to be displayed when the selected variable is not defined. |
-| `prefix`      | `""`             | Prefix to display immediately before the variable value.                     |
-| `suffix`      | `""`             | Suffix to display immediately after the variable value.                      |
-| `style`       | `"dimmed black"` | El estilo del módulo.                                                        |
-| `disabled`    | `false`          | Disables the `env_var` module.                                               |
+| Variable      | Por defecto           | Descripción                                                                  |
+| ------------- | --------------------- | ---------------------------------------------------------------------------- |
+| `symbol`      |                       | The symbol used before displaying the variable value.                        |
+| `variable`    |                       | The environment variable to be displayed.                                    |
+| `por defecto` |                       | The default value to be displayed when the selected variable is not defined. |
+| `prefix`      | `""`                  | Prefix to display immediately before the variable value.                     |
+| `suffix`      | `""`                  | Suffix to display immediately after the variable value.                      |
+| `style`       | `"dimmed bold black"` | El estilo del módulo.                                                        |
+| `disabled`    | `false`               | Disables the `env_var` module.                                               |
 
 ### Ejemplo
 
@@ -533,6 +512,30 @@ The `env_var` module displays the current value of a selected environment variab
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+## Erlang
+
+The `erlang` module shows the currently installed version of Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+
+- El directorio actual contiene un fichero `rebar.config`.
+- El directorio actual contiene un fichero `erlang.mk`.
+
+### Opciones
+
+| Variable   | Por defecto | Descripción                                              |
+| ---------- | ----------- | -------------------------------------------------------- |
+| `symbol`   | `"🖧 "`      | The symbol used before displaying the version of Erlang. |
+| `style`    | `bold red`  | The style for this module.                               |
+| `disabled` | `false`     | Disables the `erlang` module.                            |
+
+### Ejemplo
+
+```toml
+# ~/.config/starship.toml
+
+[erlang]
+symbol = "e "
 ```
 
 ## Git Branch
@@ -1012,7 +1015,7 @@ The `package` module is shown when the current directory is the repository for a
 | Variable          | Por defecto  | Descripción                                                |
 | ----------------- | ------------ | ---------------------------------------------------------- |
 | `symbol`          | `"📦 "`       | The symbol used before displaying the version the package. |
-| `style`           | `"bold red"` | El estilo del módulo.                                      |
+| `style`           | `"bold 208"` | El estilo del módulo.                                      |
 | `display_private` | `false`      | Enable displaying version for packages marked as private.  |
 | `disabled`        | `false`      | Disables the `package` module.                             |
 
@@ -1038,7 +1041,7 @@ The `php` module shows the currently installed version of PHP. El módulo se mue
 | Variable   | Por defecto  | Descripción                                           |
 | ---------- | ------------ | ----------------------------------------------------- |
 | `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
-| `style`    | `"bold red"` | El estilo del módulo.                                 |
+| `style`    | `"bold 147"` | El estilo del módulo.                                 |
 | `disabled` | `false`      | Disables the `php` module.                            |
 
 ### Ejemplo
@@ -1052,11 +1055,9 @@ symbol = "🔹 "
 
 ## Python
 
-The `python` module shows the currently installed version of Python.
+The `python` module shows the currently installed version of Python and the current Python virtual environment if one is activated.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
-
-Otherwise, it will display the version number from `python --version` and show the current Python virtual environment if one is activated.
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
 El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
