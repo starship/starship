@@ -1,13 +1,12 @@
-use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
+use crate::config::{ModuleConfig, RootModuleConfig};
 
-use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct DockerContextConfig<'a> {
-    pub symbol: SegmentConfig<'a>,
-    pub context: SegmentConfig<'a>,
-    pub style: Style,
+    pub symbol: &'a str,
+    pub style: &'a str,
+    pub format: &'a str,
     pub only_with_files: bool,
     pub disabled: bool,
 }
@@ -15,9 +14,9 @@ pub struct DockerContextConfig<'a> {
 impl<'a> RootModuleConfig<'a> for DockerContextConfig<'a> {
     fn new() -> Self {
         DockerContextConfig {
-            symbol: SegmentConfig::new("🐳 "),
-            context: SegmentConfig::default(),
-            style: Color::Blue.bold(),
+            symbol: "🐳 ",
+            style: "blue bold",
+            format: "via [$symbol$context]($style) ",
             only_with_files: true,
             disabled: false,
         }
