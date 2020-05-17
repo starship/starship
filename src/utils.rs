@@ -63,8 +63,8 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             stdout: String::from("v12.0.0"),
             stderr: String::default(),
         }),
-        "ocaml --version" => Some(CommandOutput {
-            stdout: String::from("The OCaml toplevel, version 4.10.0"),
+        "ocaml -vnum" => Some(CommandOutput {
+            stdout: String::from("4.10.0"),
             stderr: String::default(),
         }),
         "php -r echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION;" => {
