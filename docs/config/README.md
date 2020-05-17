@@ -1442,12 +1442,23 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable       | Default      | Description                                                 |
-| -------------- | ------------ | ----------------------------------------------------------- |
-| `symbol`       | `"💠 "`      | The symbol used before displaying the terraform workspace.  |
-| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
-| `style`        | `"bold 105"` | The style for the module.                                   |
-| `disabled`     | `false`      | Disables the `terraform` module.                            |
+| Variable       | Default                              | Description                                           |
+| -------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`       | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
+| `symbol`       | `"💠 "`                              | A format string shown before the terraform workspace. |
+| `style`        | `"bold 105"`                         | The style for the module.                             |
+| `disabled`     | `false`                              | Disables the `terraform` module.                      |
+
+### Variables
+
+| Variable  | Example    | Description                          |
+| --------- | ---------- | ------------------------------------ |
+| version   | `v0.12.24` | The version of `terraform`           |
+| workspace | `default`  | The current terraform workspace      |
+| symbol    |            | Mirrors the value of option `symbol` |
+| style\*   |            | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1455,7 +1466,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [terraform]
-symbol = "🏎💨 "
+format = "[🏎💨 $workspace]($style) "
 ```
 
 ## Time

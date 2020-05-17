@@ -132,7 +132,7 @@ fn folder_with_dotterraform_with_version_no_environment() -> io::Result<()> {
         .arg(dir.path())
         .use_config(toml::toml! {
             [terraform]
-            show_version = true
+            format = "via [$symbol$version$workspace]($style)"
         })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
@@ -160,7 +160,7 @@ fn folder_with_dotterraform_with_version_with_environment() -> io::Result<()> {
         .arg(dir.path())
         .use_config(toml::toml! {
             [terraform]
-            show_version = true
+            format = "via [$symbol$version$workspace]($style)"
         })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
