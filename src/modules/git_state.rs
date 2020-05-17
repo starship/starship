@@ -21,12 +21,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
-            .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
+            .map_meta(|variable, _| match variable {
+                "state" => Some(state_description.label),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "state" => Some(Ok(state_description.label)),
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
                 _ => None,
             })
             .map(|variable| match variable {

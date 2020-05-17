@@ -702,18 +702,18 @@ that information will be shown too.
 
 ### Options
 
-| Option         | Default                                                         | Description                                                                      |
-| -------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `rebase`       | `"REBASING"`                                                    | The text displayed when a `rebase` is in progress.                               |
-| `merge`        | `"MERGING"`                                                     | The text displayed when a `merge` is in progress.                                |
-| `revert`       | `"REVERTING"`                                                   | The text displayed when a `revert` is in progress.                               |
-| `cherry_pick`  | `"CHERRY-PICKING"`                                              | The text displayed when a `cherry-pick` is in progress.                          |
-| `bisect`       | `"BISECTING"`                                                   | The text displayed when a `bisect` is in progress.                               |
-| `am`           | `"AM"`                                                          | The text displayed when an `apply-mailbox` (`git am`) is in progress.            |
-| `am_or_rebase` | `"AM/REBASE"`                                                   | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
-| `style`        | `"bold yellow"`                                                 | The style for the module.                                                        |
-| `format`       | `"[\\($state( $progress_current/$progress_total)\\)]($style) "` | The format for the module.                                                       |
-| `disabled`     | `false`                                                         | Disables the `git_state` module.                                                 |
+| Option         | Default                                                         | Description                                                                             |
+| -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `rebase`       | `"REBASING"`                                                    | A format string displayed when a `rebase` is in progress.                               |
+| `merge`        | `"MERGING"`                                                     | A format string displayed when a `merge` is in progress.                                |
+| `revert`       | `"REVERTING"`                                                   | A format string displayed when a `revert` is in progress.                               |
+| `cherry_pick`  | `"CHERRY-PICKING"`                                              | A format string displayed when a `cherry-pick` is in progress.                          |
+| `bisect`       | `"BISECTING"`                                                   | A format string displayed when a `bisect` is in progress.                               |
+| `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
+| `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
+| `style`        | `"bold yellow"`                                                 | The style for the module.                                                               |
+| `format`       | `"[\\($state( $progress_current/$progress_total)\\)]($style) "` | The format for the module.                                                              |
+| `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
 
 ### Variables
 
@@ -733,7 +733,7 @@ that information will be shown too.
 
 [git_state]
 format = "[\\($state( $progress_current of $progress_total)\\)]($style) "
-cherry_pick = "🍒 PICKING"
+cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
 ## Git Status
