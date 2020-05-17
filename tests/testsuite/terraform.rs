@@ -46,7 +46,6 @@ fn folder_with_workspace_override() -> io::Result<()> {
     let output = common::render_module("terraform")
         .arg("--path")
         .arg(dir.path())
-        .env_clear()
         .env("TF_WORKSPACE", "development")
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
@@ -70,7 +69,6 @@ fn folder_with_datadir_override() -> io::Result<()> {
     let output = common::render_module("terraform")
         .arg("--path")
         .arg(dir.path())
-        .env_clear()
         .env("TF_DATA_DIR", datadir.path())
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
@@ -132,7 +130,7 @@ fn folder_with_dotterraform_with_version_no_environment() -> io::Result<()> {
         .arg(dir.path())
         .use_config(toml::toml! {
             [terraform]
-            format = "via [$symbol$version$workspace]($style)"
+            format = "via [$symbol$version$workspace]($style) "
         })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
@@ -160,7 +158,7 @@ fn folder_with_dotterraform_with_version_with_environment() -> io::Result<()> {
         .arg(dir.path())
         .use_config(toml::toml! {
             [terraform]
-            format = "via [$symbol$version$workspace]($style)"
+            format = "via [$symbol$version$workspace]($style) "
         })
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
