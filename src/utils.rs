@@ -102,11 +102,12 @@ Elixir 1.10 (compiled with Erlang/OTP 22)",
         }),
         "nim --version" => Some(CommandOutput {
             stdout: String::from(
-"Nim Compiler Version 1.2.0 [Linux: amd64]
+                "\
+Nim Compiler Version 1.2.0 [Linux: amd64]
 Compiled at 2020-04-03
 Copyright (c) 2006-2020 by Andreas Rumpf
 git hash: 7e83adff84be5d0c401a213eccb61e321a3fb1ff
-active boot switches: -d:release\n"
+active boot switches: -d:release\n",
             ),
             stderr: String::default(),
         }),
