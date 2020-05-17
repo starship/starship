@@ -1160,14 +1160,25 @@ The module will be shown when inside a nix-shell environment.
 
 ### Options
 
-| Variable     | Default       | Description                                       |
-| ------------ | ------------- | ------------------------------------------------- |
-| `use_name`   | `false`       | Display the name of the nix-shell.                |
-| `impure_msg` | `"impure"`    | Customize the "impure" msg.                       |
-| `pure_msg`   | `"pure"`      | Customize the "pure" msg.                         |
-| `symbol`     | `"❄️  "`       | The symbol used before displaying the shell name. |
-| `style`      | `"bold blue"` | The style for the module.                         |
-| `disabled`   | `false`       | Disables the `nix_shell` module.                  |
+| Option       | Default                                        | Description                                           |
+| ------------ | ---------------------------------------------- | ----------------------------------------------------- |
+| `format`     | `"via [$symbol$state( \\($name\\))]($style) "` | The format for the module.                            |
+| `symbol`     | `"❄️  "`                                       | A format string representing the symbol of nix-shell. |
+| `style`      | `"bold blue"`                                  | The style for the module.                             |
+| `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
+| `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
+| `disabled`   | `false`                                        | Disables the `nix_shell` module.                      |
+
+### Variables
+
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| state    | `pure`  | The state of the nix-shell           |
+| name     | `lorri` | The name of the nix-shell            |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1176,10 +1187,9 @@ The module will be shown when inside a nix-shell environment.
 
 [nix_shell]
 disabled = true
-use_name = true
-impure_msg = "impure shell"
-pure_msg = "pure shell"
-symbol = "☃️  "
+impure_msg = "[impure shell](bold red)"
+pure_msg = "[pure shell](bold green)"
+format = "via [☃️ $state( \\($name\\))](bold blue) "
 ```
 
 ## NodeJS
