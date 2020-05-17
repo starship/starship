@@ -18,6 +18,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if !is_nim_project {
         return None;
     }
+
     let nim_version_output = utils::exec_cmd("nim", &["--version"])?.stdout;
     let nim_version = parse_nim_version(&nim_version_output)?;
 
