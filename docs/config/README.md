@@ -610,42 +610,6 @@ The module will be shown if any of the following conditions are met:
 symbol = " "
 ```
 
-## Erlang
-
-The `erlang` module shows the currently installed version of Erlang/OTP.
-The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `rebar.config` file.
-- The current directory contains a `erlang.mk` file.
-
-### Options
-
-| Option     | Default                            | Description                                              |
-| ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `symbol`   | `"🖧 "`                            | The symbol used before displaying the version of erlang. |
-| `style`    | `"bold red"`                       | The style for the module.                                |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                               |
-| `disabled` | `false`                            | Disables the `erlang` module.                            |
-
-### Variables
-
-| Variable | Example   | Description                          |
-| -------- | --------- | ------------------------------------ |
-| version  | `v22.1.3` | The version of `erlang`              |
-| symbol   |           | Mirrors the value of option `symbol` |
-| style\*  |           | Mirrors the value of option `style`  |
-
-\*: This variable can only be used as a part of a style string
-
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[erlang]
-format = "via [e $version](bold red) "
-```
-
 ## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable.
@@ -680,6 +644,42 @@ The module will be shown only if any of the following conditions are met:
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+## Erlang
+
+The `erlang` module shows the currently installed version of Erlang/OTP.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
+
+### Options
+
+| Option     | Default                            | Description                                              |
+| ---------- | ---------------------------------- | -------------------------------------------------------- |
+| `symbol`   | `"🖧 "`                            | The symbol used before displaying the version of erlang. |
+| `style`    | `"bold red"`                       | The style for the module.                                |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                               |
+| `disabled` | `false`                            | Disables the `erlang` module.                            |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v22.1.3` | The version of `erlang`              |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[erlang]
+format = "via [e $version](bold red) "
 ```
 
 ## Git Branch
