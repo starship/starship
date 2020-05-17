@@ -54,7 +54,7 @@ mod tests {
         File::create(dir.path().join("Main.purs"))?.sync_all()?;
 
         let actual = render_module("purescript", dir.path(), None);
-        let expected = Some(format!("via {} ", Color::Black.bold().paint("<=> v0.13.5")));
+        let expected = Some(format!("via {} ", Color::White.bold().paint("<=> v0.13.5")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -65,7 +65,7 @@ mod tests {
         File::create(dir.path().join("spago.dhall"))?.sync_all()?;
 
         let actual = render_module("purescript", dir.path(), None);
-        let expected = Some(format!("via {} ", Color::Black.bold().paint("<=> v0.13.5")));
+        let expected = Some(format!("via {} ", Color::White.bold().paint("<=> v0.13.5")));
         assert_eq!(expected, actual);
         dir.close()
     }

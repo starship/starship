@@ -16,7 +16,7 @@ impl<'a> RootModuleConfig<'a> for PureScriptConfig<'a> {
         PureScriptConfig {
             symbol: SegmentConfig::new("<=> "),
             version: SegmentConfig::default(),
-            style: Color::Black.bold(),
+            style: Color::White.bold(),
             disabled: false,
         }
     }
