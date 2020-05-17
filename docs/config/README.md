@@ -1030,7 +1030,7 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default        | Description                                            |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"👑 "`        | The symbol used before displaying the version of Nim.  |
-| `style`    | `"bold green"` | The style for the module.                              |
+| `style`    | `"bold yellow"` | The style for the module.                              |
 | `disabled` | `false`        | Disables the `nim` module.                             |
 
 ### Example
