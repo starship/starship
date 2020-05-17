@@ -1435,6 +1435,7 @@ format = "[📦 \\[$env\\]]($style) "
 
 The `terraform` module shows the currently selected terraform workspace and version.
 By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use.
+I you still want to enable it, [follow the example shown below](#with-version).
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.terraform` folder
@@ -1442,12 +1443,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable       | Default                              | Description                                           |
-| -------------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`       | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
-| `symbol`       | `"💠 "`                              | A format string shown before the terraform workspace. |
-| `style`        | `"bold 105"`                         | The style for the module.                             |
-| `disabled`     | `false`                              | Disables the `terraform` module.                      |
+| Variable   | Default                              | Description                                           |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
+| `symbol`   | `"💠 "`                              | A format string shown before the terraform workspace. |
+| `style`    | `"bold 105"`                         | The style for the module.                             |
+| `disabled` | `false`                              | Disables the `terraform` module.                      |
 
 ### Variables
 
@@ -1461,6 +1462,17 @@ The module will be shown if any of the following conditions are met:
 \*: This variable can only be used as a part of a style string
 
 ### Example
+
+#### With Version
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+format = "[🏎💨 $version$workspace]($style) "
+```
+
+#### Without version
 
 ```toml
 # ~/.config/starship.toml

@@ -27,14 +27,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("terraform");
     let config: TerraformConfig = TerraformConfig::try_load(module.config);
 
-    let terraform_version =
-        format_terraform_version(&utils::exec_cmd("terraform", &["version"])?.stdout.as_str());
-    let terraform_workspace = get_terraform_workspace(&context.current_dir);
-
-    if terraform_version.is_none() && terraform_workspace.is_none() {
-        return None;
-    }
-
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
@@ -46,8 +38,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => terraform_version.as_ref().map(Ok),
-                "workspace" => terraform_workspace.as_ref().map(Ok),
+                "version" => format_terraform_version(
+                    &utils::exec_cmd("terraform", &["version"])?.stdout.as_str(),
+                )
+                .map(Ok),
+                "workspace" => get_terraform_workspace(&context.current_dir).map(Ok),
                 _ => None,
             })
             .parse(None)
