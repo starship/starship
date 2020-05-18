@@ -23,7 +23,7 @@ pub struct Context<'a> {
     pub current_dir: PathBuf,
 
     /// Optional logical_path is used when the shell's current directory is not a valid file system 
-    /// directory. Modules must use current_dir when they need a valid file system current working directory
+    /// directory. Modules must use current_dir when they need a vacargo  lid file system current working directory
     pub logical_dir: Option<PathBuf>,
 
     /// A struct containing directory contents in a lookup-optimised format.
@@ -60,13 +60,8 @@ impl<'a> Context<'a> {
         Context::new_with_dir(arguments, path, logical_path)
     }
 
-<<<<<<< HEAD
-    /// Create a new instance of Context for the provided directory and optional logical path
-    pub fn new_with_dir<T>(arguments: ArgMatches, path: T, logical_path: Option<PathBuf>) -> Context
-=======
     /// Create a new instance of Context for the provided directory
     pub fn new_with_dir<T>(arguments: ArgMatches, path: T, logical_path: Option<T>) -> Context
->>>>>>> b490e2985cca0e96d2cc575950c420128b39fd7c
     where
         T: Into<PathBuf>,
     {
