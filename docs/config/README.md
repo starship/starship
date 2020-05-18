@@ -438,7 +438,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [crystal]
-format = "[✨ $version](bold blue)"
+format = "via [✨ $version](bold blue) "
 ```
 
 ## Directory
