@@ -57,7 +57,7 @@ impl<'a> Context<'a> {
     }
 
     /// Create a new instance of Context for the provided directory
-    pub fn new_with_dir<T>(arguments: ArgMatches, path: T, logical_path: Option<PathBuf>) -> Context
+    pub fn new_with_dir<T>(arguments: ArgMatches, path: T, logical_path: Option<T>) -> Context
     where
         T: Into<PathBuf>,
     {
