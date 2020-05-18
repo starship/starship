@@ -74,7 +74,7 @@ impl<'a> Context<'a> {
             .collect();
 
         let current_dir = Context::expand_tilde(path.into());
-        let logical_dir = logical_path;
+        let logical_dir = logical_path.map(Into::into);
         let shell = Context::get_shell();
 
         Context {
