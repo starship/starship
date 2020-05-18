@@ -42,7 +42,7 @@ fn main() {
         .short("P")
         .long("logical-path")
         .value_name("LOGICALPATH")
-        .help("The shell path that the prompt should render for")
+        .help("Optional: The shell dependent path that the prompt should render for (may or may _not_ be a file system path)")
         .takes_value(true);
 
     let shell_arg = Arg::with_name("shell")

@@ -60,8 +60,13 @@ impl<'a> Context<'a> {
         Context::new_with_dir(arguments, path, logical_path)
     }
 
+<<<<<<< HEAD
     /// Create a new instance of Context for the provided directory and optional logical path
     pub fn new_with_dir<T>(arguments: ArgMatches, path: T, logical_path: Option<PathBuf>) -> Context
+=======
+    /// Create a new instance of Context for the provided directory
+    pub fn new_with_dir<T>(arguments: ArgMatches, path: T, logical_path: Option<T>) -> Context
+>>>>>>> b490e2985cca0e96d2cc575950c420128b39fd7c
     where
         T: Into<PathBuf>,
     {
@@ -78,7 +83,7 @@ impl<'a> Context<'a> {
             .collect();
 
         let current_dir = Context::expand_tilde(path.into());
-        let logical_dir = logical_path;
+        let logical_dir = logical_path.map(Into::into);
         let shell = Context::get_shell();
 
         Context {
