@@ -21,6 +21,9 @@ pub struct Context<'a> {
 
     /// The current working directory that starship is being called in.
     pub current_dir: PathBuf,
+
+    /// Optional logical_path is used when the shell's current directory is not a valid file system 
+    /// directory. Modules must use current_dir when they need a valid file system current working directory
     pub logical_dir: Option<PathBuf>,
 
     /// A struct containing directory contents in a lookup-optimised format.
@@ -38,7 +41,8 @@ pub struct Context<'a> {
 
 impl<'a> Context<'a> {
     /// Identify the current working directory and create an instance of Context
-    /// for it.
+    /// for it. "logical-path" is used when a shell allows the current working directory
+    /// to be an invalid file system path (like powershell provider specific paths)
     pub fn new(arguments: ArgMatches) -> Context {
         // Retrieve the "path" flag. If unavailable, use the current directory instead.
         let path = arguments
@@ -56,7 +60,7 @@ impl<'a> Context<'a> {
         Context::new_with_dir(arguments, path, logical_path)
     }
 
-    /// Create a new instance of Context for the provided directory
+    /// Create a new instance of Context for the provided directory and optional logical path
     pub fn new_with_dir<T>(arguments: ArgMatches, path: T, logical_path: Option<PathBuf>) -> Context
     where
         T: Into<PathBuf>,
