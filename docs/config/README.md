@@ -111,6 +111,7 @@ prompt_order = [
     "java",
     "julia",
     "nodejs",
+    "ocaml",
     "php",
     "python",
     "ruby",
