@@ -15,9 +15,18 @@ const STD_EDITOR: &str = "vi";
 pub fn update_configuration(name: &str, value: &str) {
     let config_path = get_config_path();
 
-    let keys: Vec<&str> = name.split('.').collect();
-    if keys.len() != 2 {
-        log::error!("Please pass in a config key with a '.'");
+    let keys_delimited: Vec<&str> = name.split('.').collect();
+
+    let key: &str;
+    let key_table: Option<&str>;
+    if keys_delimited.len() == 1 {
+        key = keys_delimited[0];
+        key_table = None;
+    } else if keys_delimited.len() == 2 {
+        key = keys_delimited[1];
+        key_table = Some(keys_delimited[0]);
+    } else {
+        log::error!("Incorrect amount of '.'s");
         process::exit(1);
     }
 
@@ -26,37 +35,63 @@ pub fn update_configuration(name: &str, value: &str) {
         .config
         .expect("Failed to load starship config");
 
-    if let Some(table) = config.as_table_mut() {
-        if !table.contains_key(keys[0]) {
-            table.insert(keys[0].to_string(), Value::Table(Map::new()));
+    let mut config_str = String::new();
+    if let Some(key_table) = key_table {
+        if let Some(table) = config.as_table_mut() {
+            if !table.contains_key(key_table) {
+                table.insert(key_table.to_string(), Value::Table(Map::new()));
+            }
+
+            if let Some(values) = table.get(key_table).unwrap().as_table() {
+                let mut updated_values = values.clone();
+
+                if value.parse::<bool>().is_ok() {
+                    updated_values.insert(
+                        key.to_string(),
+                        Value::Boolean(value.parse::<bool>().unwrap()),
+                    );
+                } else if value.parse::<i64>().is_ok() {
+                    updated_values.insert(
+                        key.to_string(),
+                        Value::Integer(value.parse::<i64>().unwrap()),
+                    );
+                } else {
+                    updated_values.insert(key.to_string(), Value::String(value.to_string()));
+                }
+
+                table.insert(key_table.to_string(), Value::Table(updated_values));
+            }
+
+            config_str = 
+                toml::to_string_pretty(&table).expect("Failed to serialize the config to string");
         }
-
-        if let Some(values) = table.get(keys[0]).unwrap().as_table() {
-            let mut updated_values = values.clone();
-
+    } else {
+        if let Some(table) = config.as_table_mut() {
             if value.parse::<bool>().is_ok() {
-                updated_values.insert(
-                    keys[1].to_string(),
+                table.insert(
+                    key.to_string(),
                     Value::Boolean(value.parse::<bool>().unwrap()),
                 );
             } else if value.parse::<i64>().is_ok() {
-                updated_values.insert(
-                    keys[1].to_string(),
+                table.insert(
+                    key.to_string(),
                     Value::Integer(value.parse::<i64>().unwrap()),
                 );
             } else {
-                updated_values.insert(keys[1].to_string(), Value::String(value.to_string()));
+                table.insert(
+                    key.to_string(),
+                    Value::String(value.to_string()),
+                );
             }
 
-            table.insert(keys[0].to_string(), Value::Table(updated_values));
+            config_str = 
+                toml::to_string_pretty(&table).expect("Failed to serialize the config to string");
         }
-
-        let config_str =
-            toml::to_string_pretty(&table).expect("Failed to serialize the config to string");
-        File::create(&config_path)
-            .and_then(|mut file| file.write_all(config_str.as_ref()))
-            .expect("Error writing starship config");
     }
+
+    File::create(&config_path)
+        .and_then(|mut file| file.write_all(config_str.as_ref()))
+        .expect("Error writing starship config");
 }
 
 pub fn edit_configuration() {
