@@ -40,7 +40,7 @@ mod tests {
     use std::io;
 
     #[test]
-    fn folder_without_purscript_files() -> io::Result<()> {
+    fn folder_without_purescript_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let actual = render_module("purescript", dir.path(), None);
         let expected = None;
