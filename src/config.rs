@@ -153,6 +153,30 @@ where
     }
 }
 
+/// A wrapper around `Vec<T>` that implements `ModuleConfig`, and either
+/// accepts a value of type `T` or a list of values of type `T`.
+#[derive(Clone, Default)]
+pub struct VecOr<T>(pub Vec<T>);
+
+impl<'a, T> ModuleConfig<'a> for VecOr<T>
+where
+    T: ModuleConfig<'a> + Sized,
+{
+    fn from_config(config: &'a Value) -> Option<Self> {
+        if let Some(item) = T::from_config(config) {
+            return Some(VecOr(vec![item]));
+        }
+
+        let vec = config
+            .as_array()?
+            .iter()
+            .map(|value| T::from_config(value))
+            .collect::<Option<Vec<T>>>()?;
+
+        Some(VecOr(vec))
+    }
+}
+
 /// Root config of starship.
 pub struct StarshipConfig {
     pub config: Option<Value>,

@@ -1358,7 +1358,7 @@ will simply show all custom modules in the order they were defined.
 | ------------- | ------------------- | ---------------------------------------------------------------------------- |
 | `command`     |                     | The command whose output should be printed.                                  |
 | `when`        |                     | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                     | The path to the shell to use to execute the command. If unset, it will fallback to STARSHIP_SHELL and then to "sh". |
+| `shell`       |                     | [See below](#custom-command-shell)                                           |
 | `description` | `"<custom module>"` | The description of the module that is shown when running `starship explain`. |
 | `files`       | `[]`                | The files that will be searched in the working directory for a match.        |
 | `directories` | `[]`                | The directories that will be searched in the working directory for a match.  |
@@ -1368,6 +1368,22 @@ will simply show all custom modules in the order they were defined.
 | `prefix`      | `""`                | Prefix to display immediately before the command output.                     |
 | `suffix`      | `""`                | Suffix to display immediately after the command output.                      |
 | `disabled`    | `false`             | Disables this `custom` module.                                               |
+
+#### Custom command shell
+
+`shell` accepts a non-empty list of strings, where:
+- The first string is the path to the shell to use to execute the command.
+- Other following arguments are passed to the shell.
+
+If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
+
+If `shell` is not given or only contains one element and Starship detects PowerShell will be used,
+the following arguments will automatically be added: `-NoProfile -Command -`.  
+This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+
+```toml
+shell = ["pwsh", "-Command", "-"]
+```
 
 ### Example
 
