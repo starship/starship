@@ -1358,7 +1358,7 @@ will simply show all custom modules in the order they were defined.
 | ------------- | ------------------- | ---------------------------------------------------------------------------- |
 | `command`     |                     | The command whose output should be printed.                                  |
 | `when`        |                     | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                     | The path to the shell to use to execute the command. If unset, it will fallback to STARSHIP_SHELL and then to "sh". |
+| `shell`       |                     | The path to the shell to use to execute the command. If unset, it will fallback to STARSHIP_SHELL and then to "sh". Heed the warning below about setting a custom shell: there is a risk of misconfiguration that might freeze your terminal. |
 | `description` | `"<custom module>"` | The description of the module that is shown when running `starship explain`. |
 | `files`       | `[]`                | The files that will be searched in the working directory for a match.        |
 | `directories` | `[]`                | The directories that will be searched in the working directory for a match.  |
@@ -1368,6 +1368,29 @@ will simply show all custom modules in the order they were defined.
 | `prefix`      | `""`                | Prefix to display immediately before the command output.                     |
 | `suffix`      | `""`                | Suffix to display immediately after the command output.                      |
 | `disabled`    | `false`             | Disables this `custom` module.                                               |
+
+::: warning Make sure your custom shell configuration exits gracefully
+
+If you set a custom command, make sure that the default Shell used by starship
+will properly execute the command with a graceful exit (via the `shell`
+option).
+
+For example, PowerShell requires the `-Command` parameter to execute a one
+liner. Omitting this parameter might throw starship into a recursive loop
+where the shell might try to load a full profile environment with starship
+itself again and hence re-execute the custom command, getting into a never
+ending loop.
+
+Parameters similar to `-NoProfile` in PowerShell are recommended for other
+shells as well to avoid extra loading time of a custom profile on every
+starship invocation.
+
+Automatic detection of shells and proper parameters addition are currently
+implemented, but it's possible that not all shells are covered.
+[Please open an issue](https://github.com/starship/starship/issues/new/choose)
+with shell details and starship configuration if you hit such scenario.
+
+:::
 
 ### Example
 
@@ -1379,4 +1402,10 @@ command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 prefix = " transcending "
+
+[custom.time]
+command = "time /T"
+files = ["*.pst"]
+prefix = "transcending "
+shell = "pwsh.exe -NoProfile -Command"
 ```
