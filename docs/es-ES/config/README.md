@@ -32,7 +32,7 @@ Puedes modificar la ubicación por defecto del fichero `starship.toml` con la va
 export STARSHIP_CONFIG=~/.starship
 ```
 
-### Terminology
+### Terminología
 
 **Módulo**: un componente en el símbolo de sistema que provee de información basada en información contextual de tu sistema operativo. Por ejemplo, el módulo "nodejs" muestra la versión de NodeJS que tienes actualmente instalada en tu ordenador, si el directorio actual es un proyecto NodeJS.
 
@@ -416,12 +416,12 @@ Internally, this module uses its own mechanism for version detection. Typically 
 
 ### Opciones
 
-| Variable    | Por defecto   | Descripción                                              |
-| ----------- | ------------- | -------------------------------------------------------- |
-| `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
-| `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
-| `style`     | `"bold blue"` | El estilo del módulo.                                    |
-| `disabled`  | `false`       | Disables the `dotnet` module.                            |
+| Variable    | Por defecto   | Descripción                                           |
+| ----------- | ------------- | ----------------------------------------------------- |
+| `symbol`    | `"•NET "`     | Símbolo usado antes de mostrar la versión de .NET     |
+| `heuristic` | `true`        | Use faster version detection to keep starship snappy. |
+| `style`     | `"bold blue"` | El estilo del módulo.                                 |
+| `disabled`  | `false`       | Deshabilita el módulo `dotnet`.                       |
 
 ### Ejemplo
 
