@@ -39,6 +39,7 @@ mod terraform;
 mod time;
 mod username;
 mod utils;
+mod zig;
 
 #[cfg(feature = "battery")]
 mod battery;
@@ -91,6 +92,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "time" => time::module(context),
         "crystal" => crystal::module(context),
         "username" => username::module(context),
+        "zig" => zig::module(context),
         _ => {
             eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
             None
@@ -138,6 +140,7 @@ pub fn description(module: &str) -> &'static str {
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "username" => "The active user's username",
+        "zig" => "The currently installed version of Zig",
         _ => "<no description>",
     }
 }

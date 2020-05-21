@@ -38,5 +38,6 @@ mod starship_root;
 pub mod terraform;
 pub mod time;
 pub mod username;
+pub mod zig;
 
 pub use starship_root::*;

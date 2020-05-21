@@ -122,6 +122,7 @@ prompt_order = [
     "ruby",
     "rust",
     "terraform",
+    "zig",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -1361,6 +1362,31 @@ The module will be shown if any of the following conditions are met:
 
 [username]
 disabled = true
+```
+
+
+## Zig
+
+The `zig` module shows the currently installed version of Zig.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `.zig` file
+
+### Options
+
+| Variable   | Default      | Description                                            |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `symbol`   | `"↯ "`      | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"` | The style for the module.                              |
+| `disabled` | `false`      | Disables the `zig` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[zig]
+symbol = "⚡️ "
 ```
 
 ## Custom commands
