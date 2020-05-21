@@ -114,6 +114,7 @@ prompt_order = [
     "java",
     "julia",
     "nodejs",
+    "ocaml",
     "php",
     "python",
     "ruby",
@@ -1033,21 +1034,49 @@ The `package` module is shown when the current directory is the repository for a
 symbol = "🎁 "
 ```
 
+## OCaml
+
+The `ocaml` module shows the currently installed version of OCaml. 此组件将在符合以下任意条件时显示：
+
+- The current directory contains a file with `.opam` extension or `_opam` directory
+- The current directory contains a `esy.lock` directory
+- The current directory contains a `dune` or `dune-project` file
+- The current directory contains a `jbuild` or `jbuild-ignore` file
+- The current directory contains a `.merlin` file
+- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+
+### 配置项
+
+| 字段         | 默认值             | 描述                                                      |
+| ---------- | --------------- | ------------------------------------------------------- |
+| `symbol`   | `"🐫 "`          | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"` | 此组件的样式。                                                 |
+| `disabled` | `false`         | Disables the `ocaml` module.                            |
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[ocaml]
+symbol = "🐪 "
+```
+
 ## PHP
 
 The `php` module shows the currently installed version of PHP. 此组件将在符合以下任意条件时显示：
 
-- 当前目录包含一个 `composer.json` 文件
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
-- 当前目录包含一个 `.php` 文件
+- The current directory contains a `.php` file
 
 ### 配置项
 
-| 字段         | 默认值          | 描述                      |
-| ---------- | ------------ | ----------------------- |
-| `symbol`   | `"🐘 "`       | 这个字段的内容会显示在当前 PHP 版本之前。 |
-| `style`    | `"bold 147"` | 此组件的样式。                 |
-| `disabled` | `false`      | 禁用 `php` 组件。            |
+| 字段         | 默认值          | 描述                                                    |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold 147"` | 此组件的样式。                                               |
+| `disabled` | `false`      | Disables the `php` module.                            |
 
 ### 示例
 
@@ -1066,26 +1095,26 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 此组件将在符合以下任意条件时显示：
 
-- 当前目录包含 `.python-version` 文件
-- 当前目录包含 `requirements.txt` 文件
-- 当前目录包含 `pyproject.toml` 文件
+- The current directory contains a `.python-version` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `pyproject.toml` file
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
-- 当前目录包含 `Pipfile` 文件
-- 当前目录包含一个 `tox.ini` 文件
-- 当前目录包含一个 `setup.py` 文件
+- The current directory contains a `Pipfile` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
 - The current directory contains a `__init__.py` file
-- 当前处于一个活跃的 python 虚拟环境中
+- A virtual environment is currently activated
 
 ### 配置项
 
-| 字段                   | 默认值             | 描述                                                                         |
-| -------------------- | --------------- | -------------------------------------------------------------------------- |
-| `symbol`             | `"🐍 "`          | 这个字段的内容会显示在当前 Python 版本之前。                                                 |
-| `pyenv_version_name` | `false`         | 使用 pyenv 获取 Python 版本                                                      |
-| `pyenv_prefix`       | `"pyenv "`      | 在 pyenv 版本前显示的前缀（默认显示 `pyenv MY_VERSION`）                                  |
-| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module. |
-| `style`              | `"bold yellow"` | 此组件的样式。                                                                    |
-| `disabled`           | `false`         | 禁用 `python` 组件。                                                            |
+| 字段                   | 默认值             | 描述                                                                          |
+| -------------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
+| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
+| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
+| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.  |
+| `style`              | `"bold yellow"` | 此组件的样式。                                                                     |
+| `disabled`           | `false`         | Disables the `python` module.                                               |
 
 ### 示例
 
@@ -1100,11 +1129,11 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. 此组件将在符合以下任意条件之一时显示：
+The `ruby` module shows the currently installed version of Ruby. 此组件将在符合以下任意条件时显示：
 
-- 当前目录包含 `Gemfile` 文件
+- The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
-- 当前目录包含 `.rb` 文件
+- The current directory contains a `.rb` file
 
 ### 配置项
 
@@ -1112,7 +1141,7 @@ The `ruby` module shows the currently installed version of Ruby. 此组件将在
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
 | `style`    | `"bold red"` | 此组件的样式。                                                |
-| `disabled` | `false`      | 禁用 `ruby` 组件。                                          |
+| `disabled` | `false`      | Disables the `ruby` module.                            |
 
 ### 示例
 
@@ -1127,16 +1156,16 @@ symbol = "🔺 "
 
 The `rust` module shows the currently installed version of Rust. 此组件将在符合以下任意条件时显示：
 
-- 当前目录包含 `Cargo.toml` 文件
-- 当前目录包含一个使用 `.rs` 扩展名的文件
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### 配置项
 
-| 字段         | 默认值          | 描述                       |
-| ---------- | ------------ | ------------------------ |
-| `symbol`   | `"🦀 "`       | 这个字段的内容会显示在当前 Rust 版本之前。 |
-| `style`    | `"bold red"` | 此组件的样式。                  |
-| `disabled` | `false`      | 禁用 `rust` 组件。            |
+| 字段         | 默认值          | 描述                                                     |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
+| `style`    | `"bold red"` | 此组件的样式。                                                |
+| `disabled` | `false`      | Disables the `rust` module.                            |
 
 ### 示例
 
@@ -1175,17 +1204,17 @@ symbol = "📦 "
 
 The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. 此组件将在符合以下任意条件时显示：
 
-- 当前目录包含 `.terraform` 目录
-- 当前目录包含一个使用 `.tf` 扩展名的文件
+- The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf` extension
 
 ### 配置项
 
-| 字段             | 默认值          | 描述                               |
-| -------------- | ------------ | -------------------------------- |
-| `symbol`       | `"💠 "`       | 这个字段的内容会显示在当前 terraform 工作区之前。   |
-| `show_version` | `false`      | 显示 terraform 版本信息。 在大型工作空间中非常缓慢。 |
-| `style`        | `"bold 105"` | 此组件的样式。                          |
-| `disabled`     | `false`      | 禁用 `terraform` 组件。               |
+| 字段             | 默认值          | 描述                                                          |
+| -------------- | ------------ | ----------------------------------------------------------- |
+| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
+| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
+| `style`        | `"bold 105"` | 此组件的样式。                                                     |
+| `disabled`     | `false`      | Disables the `terraform` module.                            |
 
 ### 示例
 
@@ -1208,13 +1237,13 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### 配置项
 
-| 字段                | 默认值             | 描述                                                                                        |
-| ----------------- | --------------- | ----------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | 启用 12 小时格式                                                                                |
-| `format`          | 见下文解释           | 用来格式化时间显示的 [chrono 格式字符串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) |
-| `style`           | `"bold yellow"` | 显示时间的样式。                                                                                  |
-| `utc_time_offset` | `"local"`       | 设置所用 UTC 偏移量。 范围是 -24 < x < 24。 允许使用浮点数来得到 30/45 分钟的时区偏移。                                 |
-| `disabled`        | `true`          | 禁用 `time` 组件。                                                                             |
+| 字段                | 默认值             | 描述                                                                                                                  |
+| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`         | Enables 12 hour formatting                                                                                          |
+| `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `"bold yellow"` | The style for the module time                                                                                       |
+| `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
+| `disabled`        | `true`          | Disables the `time` module.                                                                                         |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
@@ -1233,19 +1262,19 @@ utc_time_offset = "-5"
 
 The `username` module shows active user's username. 此组件将在符合以下任意条件时显示：
 
-- 当前用户是 root
-- 当前用户与登录用户不相同
-- 用户正通过 SSH 会话连接访问
-- 字段 `show_always` 被设置为 true
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ### 配置项
 
-| 字段            | 默认值             | 描述                  |
-| ------------- | --------------- | ------------------- |
-| `style_root`  | `"bold red"`    | 当前用户为 root 时使用的样式。  |
-| `style_user`  | `"bold yellow"` | 非 root 用户使用的样式。     |
-| `show_always` | `false`         | 总是显示 `username` 组件。 |
-| `disabled`    | `false`         | 禁用 `username` 组件。   |
+| 字段            | 默认值             | 描述                                    |
+| ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`    | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `show_always` | `false`         | Always shows the `username` module.   |
+| `disabled`    | `false`         | Disables the `username` module.       |
 
 ### 示例
 
@@ -1285,7 +1314,7 @@ The order in which custom modules are shown can be individually set by setting `
 | `command`     |                           | The command whose output should be printed.                                                                                |
 | `when`        |                           | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                           | The path to the shell to use to execute the command. If unset, it will fallback to STARSHIP_SHELL and then to "sh".        |
-| `描述`          | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
+| `description` | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                      | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                      | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                      | The extensions that will be searched in the working directory for a match.                                                 |
