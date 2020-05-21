@@ -120,6 +120,7 @@ prompt_order = [
     "ruby",
     "rust",
     "terraform",
+    "zig",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -1283,6 +1284,30 @@ The `username` module shows active user's username. 次の条件のいずれか�
 
 [username]
 disabled = true
+```
+
+
+## Zig
+
+The `zig` module shows the currently installed version of Zig. 次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- The current directory contains a `.zig` file
+
+### オプション
+
+| 変数         | デフォルト           | 説明                                                    |
+| ---------- | --------------- | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`          | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"` | モジュールのスタイルです。                                         |
+| `disabled` | `false`         | Disables the `zig` module.                            |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[zig]
+symbol = "⚡️ "
 ```
 
 ## Custom commands
