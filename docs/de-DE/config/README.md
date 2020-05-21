@@ -120,6 +120,7 @@ prompt_order = [
     "ruby",
     "rust",
     "terraform",
+    "zig",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -1283,6 +1284,30 @@ The `username` module shows active user's username. Das Modul wird nur dann ange
 
 [username]
 disabled = true
+```
+
+
+## Zig
+
+The `zig` module shows the currently installed version of Zig. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+
+- The current directory contains a `.zig` file
+
+### Optionen
+
+| Variable   | Standardwert    | Beschreibung                                          |
+| ---------- | --------------- | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`          | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"` | Stil für dieses Modul.                                |
+| `disabled` | `false`         | Disables the `zig` module.                            |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[zig]
+symbol = "⚡️ "
 ```
 
 ## Custom commands
