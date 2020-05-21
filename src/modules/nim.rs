@@ -20,7 +20,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let nim_version_output = utils::exec_cmd("nim", &["--version"])?.stdout;
-    let nim_version = parse_nim_version(&nim_version_output)?;
+    let formatted_nim_version = format!("v{}", parse_nim_version(&nim_version_output)?);
 
     let mut module = context.new_module("nim");
     let config = NimConfig::try_load(module.config);
@@ -28,7 +28,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_style(config.style);
 
     module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &SegmentConfig::new(nim_version));
+    module.create_segment("version", &SegmentConfig::new(&formatted_nim_version));
 
     Some(module)
 }
