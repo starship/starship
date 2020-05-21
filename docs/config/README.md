@@ -116,6 +116,7 @@ prompt_order = [
     "java",
     "julia",
     "nodejs",
+    "ocaml",
     "php",
     "python",
     "ruby",
@@ -1096,6 +1097,35 @@ package, and shows its current version. The module currently supports `npm`, `ca
 
 [package]
 symbol = "🎁 "
+```
+
+## OCaml
+
+The `ocaml` module shows the currently installed version of OCaml.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with `.opam` extension or `_opam` directory
+- The current directory contains a `esy.lock` directory
+- The current directory contains a `dune` or `dune-project` file
+- The current directory contains a `jbuild` or `jbuild-ignore` file
+- The current directory contains a `.merlin` file
+- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+
+### Options
+
+| Variable   | Default         | Description                                             |
+| ---------- | --------------- | ------------------------------------------------------- |
+| `symbol`   | `"🐫 "`         | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"` | The style for the module.                               |
+| `disabled` | `false`         | Disables the `ocaml` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[ocaml]
+symbol = "🐪 "
 ```
 
 ## PHP
