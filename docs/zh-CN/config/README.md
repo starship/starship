@@ -120,6 +120,7 @@ prompt_order = [
     "ruby",
     "rust",
     "terraform",
+    "zig",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -1283,6 +1284,30 @@ The `username` module shows active user's username. 此组件将在符合以下�
 
 [username]
 disabled = true
+```
+
+
+## Zig
+
+The `zig` module shows the currently installed version of Zig. 此组件将在符合以下任意条件时显示：
+
+- The current directory contains a `.zig` file
+
+### 配置项
+
+| 字段         | 默认值             | 描述                                                    |
+| ---------- | --------------- | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`          | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"` | 此组件的样式。                                               |
+| `disabled` | `false`         | Disables the `zig` module.                            |
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[zig]
+symbol = "⚡️ "
 ```
 
 ## Custom commands
