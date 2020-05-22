@@ -116,6 +116,7 @@ prompt_order = [
     "nodejs",
     "ocaml",
     "php",
+    "purescript",
     "python",
     "ruby",
     "rust",
@@ -1359,4 +1360,28 @@ command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 prefix = " transcending "
+```
+
+## PureScript
+
+The `purescript` module shows the currently installed version of PureScript version. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+
+- The current directory contains a `spago.dhall` file
+- The current directory contains a \*.purs files
+
+### Optionen
+
+| Variable   | Standardwert   | Beschreibung                                                 |
+| ---------- | -------------- | ------------------------------------------------------------ |
+| `symbol`   | `"<=> "` | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"` | Stil für dieses Modul.                                       |
+| `disabled` | `false`        | Disables the `purescript` module.                            |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[purescript]
+symbol = "<=> "
 ```
