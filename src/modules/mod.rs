@@ -131,6 +131,7 @@ pub fn description(module: &str) -> &'static str {
         "nodejs" => "The currently installed version of NodeJS",
         "package" => "The package version of the current directory's project",
         "php" => "The currently installed version of PHP",
+        "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",

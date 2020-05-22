@@ -1395,7 +1395,7 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default        | Description                                                  |
 | ---------- | -------------- | ------------------------------------------------------------ |
 | `symbol`   | `"<=> "`       | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold black"` | The style for the module.                                    |
+| `style`    | `"bold white"` | The style for the module.                                    |
 | `disabled` | `false`        | Disables the `purescript` module.                            |
 
 ### Example
