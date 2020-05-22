@@ -31,6 +31,7 @@ mod nodejs;
 mod ocaml;
 mod package;
 mod php;
+mod purescript;
 mod python;
 mod ruby;
 mod rust;
@@ -84,6 +85,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "ocaml" => ocaml::module(context),
         "package" => package::module(context),
         "php" => php::module(context),
+        "purescript" => purescript::module(context),
         "python" => python::module(context),
         "ruby" => ruby::module(context),
         "rust" => rust::module(context),
@@ -134,6 +136,7 @@ pub fn description(module: &str) -> &'static str {
         "ocaml" => "The currently installed version of OCaml",
         "package" => "The package version of the current directory's project",
         "php" => "The currently installed version of PHP",
+        "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",

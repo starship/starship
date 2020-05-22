@@ -73,6 +73,10 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
                 stderr: String::default(),
             })
         }
+        "purs --version" => Some(CommandOutput {
+            stdout: String::from("0.13.5"),
+            stderr: String::default(),
+        }),
         "ruby -v" => Some(CommandOutput {
             stdout: String::from("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]"),
             stderr: String::default(),

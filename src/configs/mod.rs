@@ -30,6 +30,7 @@ pub mod nodejs;
 pub mod ocaml;
 pub mod package;
 pub mod php;
+pub mod purescript;
 pub mod python;
 pub mod ruby;
 pub mod rust;
