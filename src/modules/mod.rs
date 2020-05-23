@@ -28,8 +28,10 @@ mod line_break;
 mod memory_usage;
 mod nix_shell;
 mod nodejs;
+mod ocaml;
 mod package;
 mod php;
+mod purescript;
 mod python;
 mod ruby;
 mod rust;
@@ -38,6 +40,7 @@ mod terraform;
 mod time;
 mod username;
 mod utils;
+mod zig;
 
 #[cfg(feature = "battery")]
 mod battery;
@@ -79,8 +82,10 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "memory_usage" => memory_usage::module(context),
         "nix_shell" => nix_shell::module(context),
         "nodejs" => nodejs::module(context),
+        "ocaml" => ocaml::module(context),
         "package" => package::module(context),
         "php" => php::module(context),
+        "purescript" => purescript::module(context),
         "python" => python::module(context),
         "ruby" => ruby::module(context),
         "rust" => rust::module(context),
@@ -89,6 +94,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "time" => time::module(context),
         "crystal" => crystal::module(context),
         "username" => username::module(context),
+        "zig" => zig::module(context),
         _ => {
             eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
             None
@@ -127,14 +133,17 @@ pub fn description(module: &str) -> &'static str {
         "memory_usage" => "Current system memory and swap usage",
         "nix_shell" => "The nix-shell environment",
         "nodejs" => "The currently installed version of NodeJS",
+        "ocaml" => "The currently installed version of OCaml",
         "package" => "The package version of the current directory's project",
         "php" => "The currently installed version of PHP",
+        "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "username" => "The active user's username",
+        "zig" => "The currently installed version of Zig",
         _ => "<no description>",
     }
 }
