@@ -45,22 +45,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --all-targets --all-features -- -D clippy::all
 
-  # Run a security audit on dependencies
-  cargo_audit:
-    name: Cargo Audit [Security]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-      - run: cargo install --force cargo-audit
-      - run: cargo generate-lockfile
-      - uses: actions-rs/cargo@v1
-        with:
-          command: audit
-
   # Ensure that the project could be successfully compiled
   cargo_check:
     name: Compile
