@@ -1657,11 +1657,20 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default      | Description                                            |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"↯ "`      | The symbol used before displaying the version of Zig. |
-| `style`    | `"bold yellow"` | The style for the module.                              |
-| `disabled` | `false`      | Disables the `zig` module.                            |
+| Variable   | Default                            | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| `symbol`   | `"↯ "`                             | The symbol used before displaying the version of Zig.  |
+| `style`    | `"bold yellow"`                    | The style for the module.                              |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                             |
+| `disabled` | `false`                            | Disables the `zig` module.                             |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v0.6.0` | The version of `zig`                 |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
 
 ### Example
 
