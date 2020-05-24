@@ -1,0 +1,24 @@
+# Number of days of inactivity before an issue becomes stale
+daysUntilStale: 90
+# Number of days of inactivity before a stale issue is closed
+daysUntilClose: 14
+# Issues with these labels will never be considered stale
+exemptLabels:
+  - security
+# Label to use when marking an issue as stale
+staleLabel: wontfix
+# Comment to post when marking an issue as stale. Set to `false` to disable
+markComment: >
+  As we are undergoing refactoring of Starship, we have started marking issues as stale
+  in order to prepare for the new architecture changes. 
+  
+  This issue has been automatically marked as stale to because it has not had
+  recent activity. This acts as a reminder to the maintainers to address it. 
+  Due to the refactor, it may be closed if no further activity occurs with the option
+  of being reopened at any time. Thank you for your contributions!
+  
+# Comment to post when closing a stale issue. Set to `false` to disable
+closeComment: >
+  This issue has been automatically closed because it has not had
+  recent activity. If you feel that it should remain open, leave us
+  a comment and we will reopen it. Thank you for contributing this issue!
