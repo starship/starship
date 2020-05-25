@@ -1407,5 +1407,5 @@ prefix = " transcending "
 command = "time /T"
 files = ["*.pst"]
 prefix = "transcending "
-shell = "pwsh.exe -NoProfile -Command"
+shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 ```
