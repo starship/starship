@@ -13,7 +13,7 @@ pub struct ZigConfig<'a> {
 impl<'a> RootModuleConfig<'a> for ZigConfig<'a> {
     fn new() -> Self {
         ZigConfig {
-            format: "via [$symbol$version]($style)",
+            format: "via [$symbol$version]($style) ",
             symbol: "↯ ",
             style: "bold yellow",
             disabled: false,
