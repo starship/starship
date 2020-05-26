@@ -64,27 +64,25 @@ pub fn update_configuration(name: &str, value: &str) {
 
             config_str = toml::to_string_pretty(&table).expect("Failed to serialize the config to string");
         }
-    } else {
-        if let Some(table) = config.as_table_mut() {
-            if value.parse::<bool>().is_ok() {
-                table.insert(
-                    key.to_string(),
-                    Value::Boolean(value.parse::<bool>().unwrap()),
-                );
-            } else if value.parse::<i64>().is_ok() {
-                table.insert(
-                    key.to_string(),
-                    Value::Integer(value.parse::<i64>().unwrap()),
-                );
-            } else {
-                table.insert(
-                    key.to_string(),
-                    Value::String(value.to_string()),
-                );
-            }
-
-            config_str = toml::to_string_pretty(&table).expect("Failed to serialize the config to string");
+    } else if let Some(table) = config.as_table_mut() {
+        if value.parse::<bool>().is_ok() {
+            table.insert(
+                key.to_string(),
+                Value::Boolean(value.parse::<bool>().unwrap()),
+            );
+        } else if value.parse::<i64>().is_ok() {
+            table.insert(
+                key.to_string(),
+                Value::Integer(value.parse::<i64>().unwrap()),
+            );
+        } else {
+            table.insert(
+                key.to_string(),
+                Value::String(value.to_string()),
+            );
         }
+
+        config_str = toml::to_string_pretty(&table).expect("Failed to serialize the config to string");
     }
 
     File::create(&config_path)
