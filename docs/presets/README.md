@@ -81,4 +81,7 @@ symbol = " "
 
 [rust]
 symbol = " "
+
+[swift]
+symbol = "ﯣ "
 ```

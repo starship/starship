@@ -47,6 +47,7 @@ pub const ALL_MODULES: &[&str] = &[
     "crystal",
     "rust",
     "php",
+    "swift",
     "terraform",
     "singularity",
     "time",

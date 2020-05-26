@@ -43,6 +43,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "python",
     "ruby",
     "rust",
+    "swift",
     "terraform",
     "zig",
     // ↑ Toolchain version modules ↑

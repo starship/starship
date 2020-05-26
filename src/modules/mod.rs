@@ -38,6 +38,7 @@ mod python;
 mod ruby;
 mod rust;
 mod singularity;
+mod swift;
 mod terraform;
 mod time;
 mod username;
@@ -94,6 +95,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "ruby" => ruby::module(context),
         "rust" => rust::module(context),
         "singularity" => singularity::module(context),
+        "swift" => swift::module(context),
         "terraform" => terraform::module(context),
         "time" => time::module(context),
         "crystal" => crystal::module(context),
@@ -146,6 +148,7 @@ pub fn description(module: &str) -> &'static str {
         "python" => "The currently installed version of Python",
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
+        "swift" => "The currently installed version of Swift",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "username" => "The active user's username",

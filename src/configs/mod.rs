@@ -38,6 +38,7 @@ pub mod ruby;
 pub mod rust;
 pub mod singularity;
 mod starship_root;
+pub mod swift;
 pub mod terraform;
 pub mod time;
 pub mod username;
