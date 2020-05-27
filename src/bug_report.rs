@@ -180,6 +180,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
                     Some(".config/powershell/Microsoft.PowerShell_profile.ps1")
                 }
             }
+            "xonsh" => Some(".xonshrc"),
             "zsh" => Some(".zshrc"),
             _ => None,
         }

@@ -167,6 +167,7 @@ impl<'a> Context<'a> {
             "fish" => Shell::Fish,
             "ion" => Shell::Ion,
             "powershell" => Shell::PowerShell,
+            "xonsh" => Shell::Xonsh,
             "zsh" => Shell::Zsh,
             _ => Shell::Unknown,
         }
@@ -336,6 +337,7 @@ pub enum Shell {
     Fish,
     Ion,
     PowerShell,
+    Xonsh,
     Zsh,
     Unknown,
 }
