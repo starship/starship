@@ -1631,12 +1631,20 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable      | Default         | Description                           |
+| Option        | Default         | Description                           |
 | ------------- | --------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`    | The style used when the user is root. |
-| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `format`            | `"via [$user]($style) "` | The format for the module.                                                       |
+| `style`  | (variable based on user or root)    | The style for the module. |
 | `show_always` | `false`         | Always shows the `username` module.   |
 | `disabled`    | `false`         | Disables the `username` module.       |
+
+### Variables
+
+| Variable     | Example         | Description                                                         |
+| ------------ | --------------- | ------------------------------------------------------------------- |
+| `style_root` | `"red bold"`    | Mirrors the value of option `style` when root is logged in.         |
+| `style_user` | `"yellow bold"` | Mirrors the value of option `style` when regular user is logged in. |
+| `user`       | `"matchai"`     | The currently logged-in user ID.                                    |
 
 ### Example
 
@@ -1644,9 +1652,12 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [username]
-disabled = true
+style_user = "white bold"
+style_root = "black bold"
+format = "user: [$user]($style) "
+disabled = false
+show_always = true
 ```
-
 
 ## Zig
 
