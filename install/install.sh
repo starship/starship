@@ -282,4 +282,9 @@ info "Please follow the steps for your shell to complete the installation:
 
       eval $(starship init ion)
 
+  ${BOLD}${UNDERLINE}Xonsh${NO_COLOR}
+  Add the following to the end of ${BOLD}~/.xonshrc${NO_COLOR}:
+
+      execx($(starship init xonsh))
+
 "
