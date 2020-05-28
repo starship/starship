@@ -63,7 +63,6 @@ mod tests {
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
-    use tempfile;
 
     #[test]
     fn test_parse_elixir_version() {
@@ -84,7 +83,7 @@ Elixir 1.10 (compiled with Erlang/OTP 22)
         let dir = tempfile::tempdir()?;
 
         let expected = None;
-        let output = render_module("elixir", dir.path());
+        let output = render_module("elixir", dir.path(), None);
 
         assert_eq!(output, expected);
 
@@ -100,7 +99,7 @@ Elixir 1.10 (compiled with Erlang/OTP 22)
             "via {} ",
             Color::Purple.bold().paint("💧 1.10 (OTP 22)")
         ));
-        let output = render_module("elixir", dir.path());
+        let output = render_module("elixir", dir.path(), None);
 
         assert_eq!(output, expected);
 

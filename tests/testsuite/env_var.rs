@@ -90,8 +90,8 @@ fn symbol() -> io::Result<()> {
         .env_clear()
         .use_config(toml::toml! {
             [env_var]
-            symbol = "■ "
             variable = "TEST_VAR"
+            format = "with [■ $env_value](black bold dimmed) "
         })
         .env("TEST_VAR", TEST_VAR_VALUE)
         .output()?;
@@ -108,7 +108,7 @@ fn prefix() -> io::Result<()> {
         .use_config(toml::toml! {
             [env_var]
             variable = "TEST_VAR"
-            prefix = "_"
+            format = "with [_$env_value](black bold dimmed) "
         })
         .env("TEST_VAR", TEST_VAR_VALUE)
         .output()?;
@@ -125,7 +125,7 @@ fn suffix() -> io::Result<()> {
         .use_config(toml::toml! {
             [env_var]
             variable = "TEST_VAR"
-            suffix = "_"
+            format = "with [${env_value}_](black bold dimmed) "
         })
         .env("TEST_VAR", TEST_VAR_VALUE)
         .output()?;

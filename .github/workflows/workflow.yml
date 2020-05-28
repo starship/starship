@@ -119,7 +119,7 @@ jobs:
       # Install Python at a fixed version
       - uses: actions/setup-python@v1
         with:
-          python-version: "3.7.6"
+          python-version: "3.7.7"
 
       # Install dotnet at a fixed version
       - uses: actions/setup-dotnet@v1

@@ -1,12 +1,13 @@
 use path_slash::PathExt;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module};
 
 use super::utils::directory::truncate;
-use crate::config::{RootModuleConfig, SegmentConfig};
+use crate::config::RootModuleConfig;
 use crate::configs::directory::DirectoryConfig;
+use crate::formatter::StringFormatter;
 
 /// Creates a module with the current directory
 ///
@@ -24,12 +25,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
 
-    module.set_style(config.style);
-
     // Using environment PWD is the standard approach for determining logical path
     // If this is None for any reason, we fall back to reading the os-provided path
     let physical_current_dir = if config.use_logical_path {
-        None
+        match std::env::var("PWD") {
+            Ok(x) => Some(PathBuf::from(x)),
+            Err(e) => {
+                log::debug!("Error getting PWD environment variable: {}", e);
+                None
+            }
+        }
     } else {
         match std::env::current_dir() {
             Ok(x) => Some(x),
@@ -64,33 +69,42 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Truncate the dir string to the maximum number of path components
     let truncated_dir_string = truncate(dir_string, config.truncation_length as usize);
 
-    if config.fish_style_pwd_dir_length > 0 {
+    let fish_prefix = if config.fish_style_pwd_dir_length > 0 {
         // If user is using fish style path, we need to add the segment first
         let contracted_home_dir = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
-        let fish_style_dir = to_fish_style(
+        to_fish_style(
             config.fish_style_pwd_dir_length as usize,
             contracted_home_dir,
             &truncated_dir_string,
-        );
+        )
+    } else {
+        String::from("")
+    };
+    let final_dir_string = format!("{}{}", fish_prefix, truncated_dir_string);
 
-        module.create_segment(
-            "path",
-            &SegmentConfig {
-                value: &fish_style_dir,
-                style: None,
-            },
-        );
-    }
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "path" => Some(Ok(&final_dir_string)),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.create_segment(
-        "path",
-        &SegmentConfig {
-            value: &truncated_dir_string,
-            style: None,
-        },
-    );
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `directory`:\n{}", error);
+            return None;
+        }
+    });
 
-    module.get_prefix().set_value(config.prefix);
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
 }
@@ -101,41 +115,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 /// `top_level_replacement`.
 fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement: &str) -> String {
     if !full_path.starts_with(top_level_path) {
-        return replace_c_dir(full_path.to_slash().unwrap());
+        return full_path.to_slash().unwrap();
     }
 
     if full_path == top_level_path {
-        return replace_c_dir(top_level_replacement.to_string());
+        return top_level_replacement.to_string();
     }
 
     format!(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
         separator = "/",
-        path = replace_c_dir(
-            full_path
-                .strip_prefix(top_level_path)
-                .unwrap()
-                .to_slash()
-                .unwrap()
-        )
+        path = full_path
+            .strip_prefix(top_level_path)
+            .unwrap()
+            .to_slash()
+            .unwrap()
     )
-}
-
-/// Replaces "C://" with "/c/" within a Windows path
-///
-/// On non-Windows OS, does nothing
-#[cfg(target_os = "windows")]
-fn replace_c_dir(path: String) -> String {
-    path.replace("C:/", "/c")
-}
-
-/// Replaces "C://" with "/c/" within a Windows path
-///
-/// On non-Windows OS, does nothing
-#[cfg(not(target_os = "windows"))]
-const fn replace_c_dir(path: String) -> String {
-    path
 }
 
 /// Takes part before contracted path and replaces it with fish style path
@@ -222,7 +218,7 @@ mod tests {
         let top_level_path = Path::new("C:\\Users\\astronaut");
 
         let output = contract_path(full_path, top_level_path, "~");
-        assert_eq!(output, "/c/Some/Other/Path");
+        assert_eq!(output, "C://Some/Other/Path");
     }
 
     #[test]
@@ -232,7 +228,7 @@ mod tests {
         let top_level_path = Path::new("C:\\Users\\astronaut");
 
         let output = contract_path(full_path, top_level_path, "~");
-        assert_eq!(output, "/c");
+        assert_eq!(output, "C:/");
     }
 
     #[test]
