@@ -16,7 +16,7 @@ starship_precmd() {
 
     # Use length of jobstates array as number of jobs. Expansion fails inside
     # quotes so we set it here and then use the value later on.
-    NUM_JOBS=$#jobstates  
+    NUM_JOBS=$#jobstates
     # Compute cmd_duration, if we have a time to consume
     if [[ ! -z "${STARSHIP_START_TIME+1}" ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
@@ -27,7 +27,7 @@ starship_precmd() {
         PROMPT="$(::STARSHIP:: prompt --status=$STATUS --jobs="$NUM_JOBS")"
     fi
 }
-starship_preexec(){
+starship_preexec() {
     STARSHIP_START_TIME=$(::STARSHIP:: time)
 }
 

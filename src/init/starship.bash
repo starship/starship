@@ -22,7 +22,7 @@ starship_preexec() {
         PREEXEC_READY=false
         STARSHIP_START_TIME=$(::STARSHIP:: time)
     fi
-    
+
     : "$PREV_LAST_ARG"
 }
 
@@ -52,9 +52,9 @@ if [[ $preexec_functions ]]; then
     preexec_functions+=('starship_preexec "$_"')
     precmd_functions+=(starship_precmd)
 else
-# We want to avoid destroying an existing DEBUG hook. If we detect one, create
-# a new function that runs both the existing function AND our function, then
-# re-trap DEBUG to use this new function. This prevents a trap clobber.
+    # We want to avoid destroying an existing DEBUG hook. If we detect one, create
+    # a new function that runs both the existing function AND our function, then
+    # re-trap DEBUG to use this new function. This prevents a trap clobber.
     dbg_trap="$(trap -p DEBUG | cut -d' ' -f3 | tr -d \')"
     if [[ -z "$dbg_trap" ]]; then
         trap 'starship_preexec "$_"' DEBUG
@@ -64,8 +64,8 @@ else
         }
         trap 'starship_preexec_all "$_"' DEBUG
     fi
- 
-    # Finally, prepare the precmd function and set up the start time. We will avoid to 
+
+    # Finally, prepare the precmd function and set up the start time. We will avoid to
     # add multiple instances of the starship function and keep other user functions if any.
     if [[ -z "$PROMPT_COMMAND" ]]; then
         PROMPT_COMMAND="starship_precmd"
