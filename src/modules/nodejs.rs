@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(utils::exec_cmd("node", &["--version"])?.stdout.clone())),
+                "version" => Some(Ok(utils::exec_cmd("node", &["--version"])?.stdout)),
                 _ => None,
             })
             .parse(None)
