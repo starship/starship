@@ -47,9 +47,8 @@ if [[ ${preexec_functions[(ie)starship_preexec]} -gt ${#preexec_functions} ]]; t
 fi
 
 # Set up a function to redraw the prompt if the user switches vi modes
-function zle-keymap-select
-{
-    PROMPT=$(::STARSHIP:: prompt --keymap=$KEYMAP --jobs="$(jobs | wc -l)")
+zle-keymap-select() {
+    PROMPT=$(::STARSHIP:: prompt --keymap="$KEYMAP" --jobs="$(jobs | wc -l)")
     zle reset-prompt
 }
 

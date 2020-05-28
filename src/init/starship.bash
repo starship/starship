@@ -59,7 +59,7 @@ else
     if [[ -z "$dbg_trap" ]]; then
         trap 'starship_preexec "$_"' DEBUG
     elif [[ "$dbg_trap" != 'starship_preexec "$_"' && "$dbg_trap" != 'starship_preexec_all "$_"' ]]; then
-        function starship_preexec_all(){
+        starship_preexec_all() {
             local PREV_LAST_ARG=$1 ; $dbg_trap; starship_preexec; : "$PREV_LAST_ARG";
         }
         trap 'starship_preexec_all "$_"' DEBUG
