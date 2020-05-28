@@ -1447,6 +1447,29 @@ This behavior can be avoided by explicitly passing arguments to the shell, e.g.
 shell = ["pwsh", "-Command", "-"]
 ```
 
+::: warning Make sure your custom shell configuration exits gracefully
+
+If you set a custom command, make sure that the default Shell used by starship
+will properly execute the command with a graceful exit (via the `shell`
+option).
+
+For example, PowerShell requires the `-Command` parameter to execute a one
+liner. Omitting this parameter might throw starship into a recursive loop
+where the shell might try to load a full profile environment with starship
+itself again and hence re-execute the custom command, getting into a never
+ending loop.
+
+Parameters similar to `-NoProfile` in PowerShell are recommended for other
+shells as well to avoid extra loading time of a custom profile on every
+starship invocation.
+
+Automatic detection of shells and proper parameters addition are currently
+implemented, but it's possible that not all shells are covered.
+[Please open an issue](https://github.com/starship/starship/issues/new/choose)
+with shell details and starship configuration if you hit such scenario.
+
+:::
+
 ### Example
 
 ```toml
@@ -1457,6 +1480,12 @@ command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 prefix = " transcending "
+
+[custom.time]
+command = "time /T"
+files = ["*.pst"]
+prefix = "transcending "
+shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 ```
 
 ## PureScript
