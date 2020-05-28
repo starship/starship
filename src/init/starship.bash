@@ -43,7 +43,7 @@ starship_precmd() {
     else
         PS1="$(::STARSHIP:: prompt --status=$STATUS --jobs="$(jobs -p | wc -l)")"
     fi
-    PREEXEC_READY=true;  # Signal that we can safely restart the timer
+    PREEXEC_READY=true  # Signal that we can safely restart the timer
 }
 
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
