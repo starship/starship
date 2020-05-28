@@ -6,7 +6,7 @@ def starship_prompt():
     status = last_cmd.rtn if last_cmd else 0
     jobs = max(get_next_job_number(), 1) - 1
     duration = round((last_cmd.ts[1] - last_cmd.ts[0]) * 1000) if last_cmd else 0
-    return $(::STARSHIP:: prompt --status @(status) --jobs @(jobs) --cmd-duration @(duration))
+    return $(::STARSHIP:: prompt --status=@(status) --jobs=@(jobs) --cmd-duration=@(duration))
 
 
 $PROMPT = starship_prompt
