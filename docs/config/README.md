@@ -1342,11 +1342,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default         | Description                                             |
-| ---------- | --------------- | ------------------------------------------------------- |
-| `symbol`   | `"🐫 "`         | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"` | The style for the module.                               |
-| `disabled` | `false`         | Disables the `ocaml` module.                            |
+| Option     | Default                            | Description                                             |
+| ---------- | ---------------------------------- | ------------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                       |
+| `symbol`   | `"🐫 "`                            | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"`                    | The style for the module.                               |
+| `disabled` | `false`                            | Disables the `ocaml` module.                            |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v4.10.0` | The version of `ocaml`               |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1354,7 +1365,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [ocaml]
-symbol = "🐪 "
+format = "via [🐪 $version]($style) "
 ```
 
 ## PHP
