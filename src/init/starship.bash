@@ -34,6 +34,8 @@ starship_precmd() {
     # Run the bash precmd function, if it's set. If not set, evaluates to no-op
     "${starship_precmd_user_func-:}"
 
+    eval "$_PRESERVED_PROMPT_COMMAND"
+
     # Prepare the timer data, if needed.
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
@@ -70,8 +72,12 @@ else
     if [[ -z "$PROMPT_COMMAND" ]]; then
         PROMPT_COMMAND="starship_precmd"
     elif [[ "$PROMPT_COMMAND" != *"starship_precmd" ]]; then
-        # prepending starship_precmd (appending it breaks $? status checking)
-        PROMPT_COMMAND="starship_precmd;${PROMPT_COMMAND}"
+        # Appending to PROMPT_COMMAND breaks exit status ($?) checking.
+        # Prepending to PROMPT_COMMAND breaks "command duration" module.
+        # So, we are preserving the existing PROMPT_COMMAND
+        # which will be executed later in the starship_precmd function
+        _PRESERVED_PROMPT_COMMAND="$PROMPT_COMMAND"
+        PROMPT_COMMAND="starship_precmd"
     fi
 fi
 
