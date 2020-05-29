@@ -1751,11 +1751,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default        | Description                                                  |
-| ---------- | -------------- | ------------------------------------------------------------ |
-| `symbol`   | `"<=> "`       | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"` | The style for the module.                                    |
-| `disabled` | `false`        | Disables the `purescript` module.                            |
+| Option     | Default                            | Description                                                  |
+| ---------- | ---------------------------------- | ------------------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                                   |
+| `symbol`   | `"<=> "`                           | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"`                     | The style for the module.                                    |
+| `disabled` | `false`                            | Disables the `purescript` module.                            |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `0.13.5` | The version of `purescript`          |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1763,5 +1774,5 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [purescript]
-symbol = "<=> "
+format = "via [$symbol$version](bold white)"
 ```
