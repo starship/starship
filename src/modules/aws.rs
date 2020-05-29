@@ -77,6 +77,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: AwsConfig = AwsConfig::try_load(module.config);
 
     let (aws_profile, aws_region) = get_aws_profile_and_region();
+    if aws_profile.is_none() && aws_region.is_none() {
+        return None;
+    }
 
     let mapped_region = if let Some(aws_region) = aws_region {
         Some(alias_region(aws_region, &config.region_aliases))
