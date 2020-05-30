@@ -32,6 +32,11 @@ disabled = true
 export STARSHIP_CONFIG=~/.starship
 ```
 
+Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+```ps1
+$ENV:STARSHIP_CONFIG = "$HOME\.starship"
+```
+
 ### 术语
 
 **组件（Module）**：提示符的组成部分，通过来自系统的上下文信息向用户显示各种信息。 比如“nodejs”组件会在当前目录是一个 NodeJS 项目时显示您当前安装的 NodeJS 版本。
@@ -109,11 +114,14 @@ prompt_order = [
     "java",
     "julia",
     "nodejs",
+    "ocaml",
     "php",
+    "purescript",
     "python",
     "ruby",
     "rust",
     "terraform",
+    "zig",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -322,7 +330,7 @@ style = "dimmed green"
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. 此组件将在符合以下任意条件时显示：
+The `crystal` module shows the currently installed version of Crystal. 此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含一个 `shard.yml` 文件
 - The current directory contains a `.cr` file
@@ -436,16 +444,17 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. 此组件只有满足以下条件之一时才会被显示：
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. 此组件将在符合以下任意条件时显示：
 
 - 当前目录包含一个 `mix.exs` 文件.
 
 ### 配置项
 
-| 字段         | 默认值     | 描述                                                              |
-| ---------- | ------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`  | The symbol used before displaying the version of Elixir/Erlang. |
-| `disabled` | `false` | Disables the `elixir` module.                                   |
+| 字段         | 默认值             | 描述                                                              |
+| ---------- | --------------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`          | The symbol used before displaying the version of Elixir/Erlang. |
+| `style`    | `"bold purple"` | 此组件的样式。                                                         |
+| `disabled` | `false`         | Disables the `elixir` module.                                   |
 
 ### 示例
 
@@ -458,7 +467,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. 此组件将在符合以下任意条件时显示：
+The `elm` module shows the currently installed version of Elm. 此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含一个 `elm.json` 文件
 - 当前目录包含 `elm-package.json` 文件
@@ -484,28 +493,6 @@ The `elm` module shows the currently installed version of Elm. 此组件将在�
 symbol = " "
 ```
 
-## Erlang
-
-The `erlang` module shows the currently installed version of Erlang/OTP. 此组件只有满足以下条件之一时才会被显示：
-
-- 当前目录包含一个 `rebar.config` 文件.
-- 当前目录包含一个 `erlang.mk` 文件.
-
-### 配置项
-
-| 字段         | 默认值     | 描述                                                       |
-| ---------- | ------- | -------------------------------------------------------- |
-| `symbol`   | `"🖧 "`  | The symbol used before displaying the version of Erlang. |
-| `disabled` | `false` | Disables the `erlang` module.                            |
-
-### 示例
-
-```toml
-# ~/.config/starship.toml
-
-[erlang]
-symbol = "e "
-```
 ## Environment Variable
 
 `env_var` 组件显示选定的环境变量的当前值。 此组件只有满足以下条件之一时才会被显示：
@@ -515,15 +502,15 @@ symbol = "e "
 
 ### 配置项
 
-| 字段         | 默认值              | 描述                  |
-| ---------- | ---------------- | ------------------- |
-| `symbol`   |                  | 这个字段的内容会显示在环境变量值之前。 |
-| `variable` |                  | 要显示的环境变量。           |
-| `default`  |                  | 所选变量未定义时显示的默认值。     |
-| `prefix`   | `""`             | 直接在显示环境变量值前显示的前缀。   |
-| `suffix`   | `""`             | 直接在显示环境变量值后显示的后缀。   |
-| `style`    | `"dimmed black"` | 此组件的样式。             |
-| `disabled` | `false`          | 禁用 `env_var` 组件。    |
+| 字段         | 默认值                   | 描述                  |
+| ---------- | --------------------- | ------------------- |
+| `symbol`   |                       | 这个字段的内容会显示在环境变量值之前。 |
+| `variable` |                       | 要显示的环境变量。           |
+| `default`  |                       | 所选变量未定义时显示的默认值。     |
+| `prefix`   | `""`                  | 直接在显示环境变量值前显示的前缀。   |
+| `suffix`   | `""`                  | 直接在显示环境变量值后显示的后缀。   |
+| `style`    | `"dimmed bold black"` | 此组件的样式。             |
+| `disabled` | `false`               | 禁用 `env_var` 组件。    |
 
 ### 示例
 
@@ -533,6 +520,30 @@ symbol = "e "
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+## Erlang
+
+The `erlang` module shows the currently installed version of Erlang/OTP. 此组件将在符合以下任意条件之一时显示：
+
+- 当前目录包含一个 `rebar.config` 文件.
+- 当前目录包含一个 `erlang.mk` 文件.
+
+### 配置项
+
+| 字段         | 默认值        | 描述                                                       |
+| ---------- | ---------- | -------------------------------------------------------- |
+| `symbol`   | `"🖧 "`     | The symbol used before displaying the version of Erlang. |
+| `style`    | `bold red` | The style for this module.                               |
+| `disabled` | `false`    | Disables the `erlang` module.                            |
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[erlang]
+symbol = "e "
 ```
 
 ## Git Branch
@@ -1012,7 +1023,7 @@ symbol = "🤖 "
 | 字段                | 默认值          | 描述                                                        |
 | ----------------- | ------------ | --------------------------------------------------------- |
 | `symbol`          | `"📦 "`       | 这个字段的内容会显示在当前软件包版本之前。                                     |
-| `style`           | `"bold red"` | 此组件的样式。                                                   |
+| `style`           | `"bold 208"` | 此组件的样式。                                                   |
 | `display_private` | `false`      | Enable displaying version for packages marked as private. |
 | `disabled`        | `false`      | 禁用 `package` 组件。                                          |
 
@@ -1025,9 +1036,37 @@ symbol = "🤖 "
 symbol = "🎁 "
 ```
 
+## OCaml
+
+The `ocaml` module shows the currently installed version of OCaml. 此组件将在符合以下任意条件之一时显示：
+
+- The current directory contains a file with `.opam` extension or `_opam` directory
+- The current directory contains a `esy.lock` directory
+- The current directory contains a `dune` or `dune-project` file
+- The current directory contains a `jbuild` or `jbuild-ignore` file
+- The current directory contains a `.merlin` file
+- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+
+### 配置项
+
+| 字段         | 默认值             | 描述                                                      |
+| ---------- | --------------- | ------------------------------------------------------- |
+| `symbol`   | `"🐫 "`          | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"` | 此组件的样式。                                                 |
+| `disabled` | `false`         | Disables the `ocaml` module.                            |
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[ocaml]
+symbol = "🐪 "
+```
+
 ## PHP
 
-`php` 组件显示当前安装的 PHP 版本。 此组件将在符合以下任意条件之一时显示：
+`php` 组件显示当前安装的 PHP 版本。 此组件将在符合以下任意条件时显示：
 
 - 当前目录包含一个 `composer.json` 文件
 - The current directory contains a `.php-version` file
@@ -1038,7 +1077,7 @@ symbol = "🎁 "
 | 字段         | 默认值          | 描述                      |
 | ---------- | ------------ | ----------------------- |
 | `symbol`   | `"🐘 "`       | 这个字段的内容会显示在当前 PHP 版本之前。 |
-| `style`    | `"bold red"` | 此组件的样式。                 |
+| `style`    | `"bold 147"` | 此组件的样式。                 |
 | `disabled` | `false`      | 禁用 `php` 组件。            |
 
 ### 示例
@@ -1052,11 +1091,9 @@ symbol = "🔹 "
 
 ## Python
 
-`python` 组件显示当前安装的 Python 版本。
+The `python` module shows the currently installed version of Python and the current Python virtual environment if one is activated.
 
-如果 `pyenv_version_name` 设置为 `true`，则将显示 pyenv 版本名称。
-
-否则，它将显示来自 `python --version` 的版本号，并显示当前的 Python 虚拟环境，如果激活了的话。
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
 此组件将在符合以下任意条件之一时显示：
 
@@ -1250,6 +1287,30 @@ utc_time_offset = "-5"
 disabled = true
 ```
 
+
+## Zig
+
+The `zig` module shows the currently installed version of Zig. 此组件将在符合以下任意条件之一时显示：
+
+- The current directory contains a `.zig` file
+
+### 配置项
+
+| 字段         | 默认值             | 描述                                                    |
+| ---------- | --------------- | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`          | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"` | 此组件的样式。                                               |
+| `disabled` | `false`         | Disables the `zig` module.                            |
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[zig]
+symbol = "⚡️ "
+```
+
 ## Custom commands
 
 The `custom` modules show the output of some arbitrary commands.
@@ -1299,4 +1360,28 @@ command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 prefix = " transcending "
+```
+
+## PureScript
+
+The `purescript` module shows the currently installed version of PureScript version. 此组件只有满足以下条件之一时才会被显示：
+
+- The current directory contains a `spago.dhall` file
+- The current directory contains a \*.purs files
+
+### 配置项
+
+| 字段         | 默认值            | 描述                                                           |
+| ---------- | -------------- | ------------------------------------------------------------ |
+| `symbol`   | `"<=> "` | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"` | 此组件的样式。                                                      |
+| `disabled` | `false`        | Disables the `purescript` module.                            |
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[purescript]
+symbol = "<=> "
 ```

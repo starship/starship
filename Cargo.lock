@@ -149,9 +149,9 @@ checksum = "e3b5ca7a04898ad4bcd41c90c5285445ff5b791899bb1b0abdd2a2aa791211d7"
 
 [[package]]
 name = "byte-unit"
-version = "3.0.3"
+version = "3.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6894a79550807490d9f19a138a6da0f8830e70c83e83402dd23f16fd6c479056"
+checksum = "55390dbbf21ce70683f3e926dace00a21da373e35e44a60cafd232e3e9bf2041"
 
 [[package]]
 name = "byteorder"
@@ -412,9 +412,9 @@ dependencies = [
 
 [[package]]
 name = "git2"
-version = "0.13.5"
+version = "0.13.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e1e02a51cd90229028c9bd8be0a0364f85b6b3199cccaa0ef39005ddbd5ac165"
+checksum = "11e4b2082980e751c4bf4273e9cbb4a02c655729c8ee8a79f66cad03c8f4d31e"
 dependencies = [
  "bitflags",
  "libc",
@@ -521,9 +521,9 @@ checksum = "3baa92041a6fec78c687fa0cc2b3fae8884f743d672cf551bed1d6dac6988d0f"
 
 [[package]]
 name = "libgit2-sys"
-version = "0.12.5+1.0.0"
+version = "0.12.6+1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3eadeec65514971355bf7134967a543f71372f35b53ac6c7143e7bd157f07535"
+checksum = "bf81b43f9b45ab07897a780c9b7b26b1504497e469c7a78162fc29e3b8b1c1b3"
 dependencies = [
  "cc",
  "libc",
@@ -752,9 +752,9 @@ dependencies = [
 
 [[package]]
 name = "os_info"
-version = "2.0.5"
+version = "2.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ae61f9dcacbe39e64641baaff75d97d61a0e7409a60dc6c7fc83691511afb3fe"
+checksum = "67cc1fe7b45f7e51f755195fd86b0483dbae30fdcf831a3254438d29118d12c4"
 dependencies = [
  "log",
  "serde",
@@ -940,9 +940,9 @@ dependencies = [
 
 [[package]]
 name = "regex"
-version = "1.3.7"
+version = "1.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a6020f034922e3194c711b82a627453881bc4682166cabb07134a10c26ba7692"
+checksum = "9c3780fcf44b193bc4d09f36d2a3c87b251da4a046c87795a0d35f4f927ad8e6"
 dependencies = [
  "aho-corasick",
  "memchr",
@@ -952,9 +952,9 @@ dependencies = [
 
 [[package]]
 name = "regex-syntax"
-version = "0.6.17"
+version = "0.6.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7fe5bd57d1d7414c6b5ed48563a2c855d995ff777729dcd91c369ec7fea395ae"
+checksum = "26412eb97c6b088a6997e05f69403a802a92d520de2f8e63c2b65f9e0f47c4e8"
 
 [[package]]
 name = "remove_dir_all"
@@ -1109,7 +1109,7 @@ checksum = "c7cb5678e1615754284ec264d9bb5b4c27d2018577fd90ac0ceb578591ed5ee4"
 
 [[package]]
 name = "starship"
-version = "0.41.1"
+version = "0.41.3"
 dependencies = [
  "ansi_term 0.12.1",
  "attohttpc",
@@ -1180,9 +1180,9 @@ dependencies = [
 
 [[package]]
 name = "sysinfo"
-version = "0.14.1"
+version = "0.14.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d070254b7172eee9eb3990bea8f72aeabfe1226c40bf71a52e4fe75777812e9a"
+checksum = "4cf74492539712b190e4b3234cf6a4a026812e880fe45e8001807cc0044a7f21"
 dependencies = [
  "cfg-if",
  "doc-comment",

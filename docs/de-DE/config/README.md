@@ -32,6 +32,11 @@ Sie können den Pfad zur `starship.toml` mit der `STARSHIP_CONFIG` Umgebungsvari
 export STARSHIP_CONFIG=~/.starship
 ```
 
+Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+```ps1
+$ENV:STARSHIP_CONFIG = "$HOME\.starship"
+```
+
 ### Terminologie
 
 **Module**: Eine Komponente in der Konsole, die auf kontextualisierte Informationen des OS basiert. Zum Beispiel zeigt das Modul "nodejs" die Version von NodeJS, die derzeit auf Ihrem Computer installiert ist, wenn Ihr aktuelles Verzeichnis ein NodeJS-Projekt ist.
@@ -109,11 +114,14 @@ prompt_order = [
     "java",
     "julia",
     "nodejs",
+    "ocaml",
     "php",
+    "purescript",
     "python",
     "ruby",
     "rust",
     "terraform",
+    "zig",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -296,7 +304,7 @@ prefix = "underwent "
 
 Das `conda`-Modul zeigt dessen aktuelle Umgebung an, sofern `$CONDA_DEFAULT_ENV` gesetzt ist.
 
-::: tip
+::: Tipp
 
 Hinweis: Dies unterdrückt nicht conda's eigenen Prompt-Modifikator, sie können jedoch conda mit `conda config --set changeps1 False` konfigurieren, um die Ausgabe von conda selbst auszuschalten.
 
@@ -322,7 +330,7 @@ style = "dimmed green"
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `crystal` module shows the currently installed version of Crystal. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Das aktuelle Verzeichnis enthält eine `shard.yml`-Datei
 - The current directory contains a `.cr` file
@@ -442,10 +450,11 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 ### Optionen
 
-| Variable   | Standardwert | Beschreibung                                                    |
-| ---------- | ------------ | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`       | The symbol used before displaying the version of Elixir/Erlang. |
-| `disabled` | `false`      | Disables the `elixir` module.                                   |
+| Variable   | Standardwert    | Beschreibung                                                    |
+| ---------- | --------------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`          | The symbol used before displaying the version of Elixir/Erlang. |
+| `style`    | `"bold purple"` | Stil für dieses Modul.                                          |
+| `disabled` | `false`         | Disables the `elixir` module.                                   |
 
 ### Beispiel
 
@@ -458,7 +467,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `elm` module shows the currently installed version of Elm. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Das aktuelle Verzeichnis enthält eine `elm.json`-Datei
 - Das aktuelle Verzeichnis enthält eine `elm-package.json`-Datei
@@ -484,28 +493,6 @@ The `elm` module shows the currently installed version of Elm. Das Modul wird nu
 symbol = " "
 ```
 
-## Erlang
-
-The `erlang` module shows the currently installed version of Erlang/OTP. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
-
-- The current directory contains a `rebar.config` file.
-- The current directory contains a `erlang.mk` file.
-
-### Optionen
-
-| Variable   | Standardwert | Beschreibung                                             |
-| ---------- | ------------ | -------------------------------------------------------- |
-| `symbol`   | `"🖧 "`       | The symbol used before displaying the version of Erlang. |
-| `disabled` | `false`      | Disables the `erlang` module.                            |
-
-### Beispiel
-
-```toml
-# ~/.config/starship.toml
-
-[erlang]
-symbol = "e "
-```
 ## Umgebungsvariablen
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
@@ -515,15 +502,15 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Optionen
 
-| Variable   | Standardwert     | Beschreibung                                                                             |
-| ---------- | ---------------- | ---------------------------------------------------------------------------------------- |
-| `symbol`   |                  | Das Symbol, das vor der Anzeige der Variable verwendet wird.                             |
-| `variable` |                  | Die anzuzeigende Umgebungsvariable.                                                      |
-| `default`  |                  | Der Standardwert, der angezeigt wird, wenn die ausgewählte Variable nicht definiert ist. |
-| `prefix`   | `""`             | Präfix der vor der Variable angezeigt wird.                                              |
-| `suffix`   | `""`             | Suffix der nach der Variable angezeigt wird.                                             |
-| `style`    | `"dimmed black"` | Stil für dieses Modul.                                                                   |
-| `disabled` | `false`          | Deaktiviert das `env_var`-Modul.                                                         |
+| Variable   | Standardwert          | Beschreibung                                                                             |
+| ---------- | --------------------- | ---------------------------------------------------------------------------------------- |
+| `symbol`   |                       | Das Symbol, das vor der Anzeige der Variable verwendet wird.                             |
+| `variable` |                       | Die anzuzeigende Umgebungsvariable.                                                      |
+| `default`  |                       | Der Standardwert, der angezeigt wird, wenn die ausgewählte Variable nicht definiert ist. |
+| `prefix`   | `""`                  | Präfix der vor der Variable angezeigt wird.                                              |
+| `suffix`   | `""`                  | Suffix der nach der Variable angezeigt wird.                                             |
+| `style`    | `"dimmed bold black"` | Stil für dieses Modul.                                                                   |
+| `disabled` | `false`               | Deaktiviert das `env_var`-Modul.                                                         |
 
 ### Beispiel
 
@@ -533,6 +520,30 @@ The `env_var` module displays the current value of a selected environment variab
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+## Erlang
+
+The `erlang` module shows the currently installed version of Erlang/OTP. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+
+- Das aktuelle Verzeichnis enthält eine `rebar.config`-Datei.
+- Das aktuelle Verzeichnis enthält eine `erlang.mk`-Datei.
+
+### Optionen
+
+| Variable   | Standardwert | Beschreibung                                             |
+| ---------- | ------------ | -------------------------------------------------------- |
+| `symbol`   | `"🖧 "`       | The symbol used before displaying the version of Erlang. |
+| `style`    | `bold red`   | The style for this module.                               |
+| `disabled` | `false`      | Disables the `erlang` module.                            |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[erlang]
+symbol = "e "
 ```
 
 ## Git-Branch
@@ -674,7 +685,7 @@ deleted = "🗑"
 
 ## Golang
 
-Das `golang`-Modul zeigt die aktuell installierte Version von Golang. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+Das `golang`-Modul zeigt die aktuell installierte Version von Golang. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Das aktuelle Verzeichnis enthält eine `go.mod`-Datei
 - Das aktuelle Verzeichnis enthält eine `go.sum`-Datei
@@ -1012,7 +1023,7 @@ Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository
 | Variable          | Standartwert | Beschreibung                                              |
 | ----------------- | ------------ | --------------------------------------------------------- |
 | `symbol`          | `"📦 "`       | Symbol das vor der Paketversion angezeigt wird.           |
-| `style`           | `"bold red"` | Stil für dieses Modul.                                    |
+| `style`           | `"bold 208"` | Stil für dieses Modul.                                    |
 | `display_private` | `false`      | Enable displaying version for packages marked as private. |
 | `disabled`        | `false`      | Deaktiviert das `package`-Modul.                          |
 
@@ -1023,6 +1034,34 @@ Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository
 
 [package]
 symbol = "🎁 "
+```
+
+## OCaml
+
+The `ocaml` module shows the currently installed version of OCaml. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+
+- The current directory contains a file with `.opam` extension or `_opam` directory
+- The current directory contains a `esy.lock` directory
+- The current directory contains a `dune` or `dune-project` file
+- The current directory contains a `jbuild` or `jbuild-ignore` file
+- The current directory contains a `.merlin` file
+- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+
+### Optionen
+
+| Variable   | Standardwert    | Beschreibung                                            |
+| ---------- | --------------- | ------------------------------------------------------- |
+| `symbol`   | `"🐫 "`          | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"` | Stil für dieses Modul.                                  |
+| `disabled` | `false`         | Disables the `ocaml` module.                            |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[ocaml]
+symbol = "🐪 "
 ```
 
 ## PHP
@@ -1038,7 +1077,7 @@ Das `php`-Modul zeigt die aktuell installierte Version von PHP. Das Modul wird g
 | Variable   | Standardwert | Beschreibung                                   |
 | ---------- | ------------ | ---------------------------------------------- |
 | `symbol`   | `"🐘 "`       | Symbol das vor der PHP-Version angezeigt wird. |
-| `style`    | `"bold red"` | Stil für dieses Modul.                         |
+| `style`    | `"bold 147"` | Stil für dieses Modul.                         |
 | `disabled` | `false`      | Deaktiviert das `php`-Modul.                   |
 
 ### Beispiel
@@ -1052,11 +1091,9 @@ symbol = "🔹 "
 
 ## Python
 
-Das `python`-Modul zeigt die aktuell installierte Version von Python.
+The `python` module shows the currently installed version of Python and the current Python virtual environment if one is activated.
 
-Wenn `pyenv_version_name` auf `true` gesetzt ist, wird die version der pyenv angezeigt.
-
-Andernfalls wird die gleiche Versionsnummer angezeigt wie `python --version`, sowie der Name des aktuellen virtualenvs, wenn eines aktiv ist.
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
 Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
@@ -1094,7 +1131,7 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-Das `ruby` Modul zeigt die derzeit installierte Version von Ruby an. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+Das `ruby` Modul zeigt die derzeit installierte Version von Ruby an. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Das aktuelle Verzeichnis enthält eine `Gemfile`-Datei
 - The current directory contains a `.ruby-version` file
@@ -1202,7 +1239,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 ### Optionen
 
-| Variable          | Standardwert    | Beschreibung                                                                                                                  |
+| Variable          | Standartwert    | Beschreibung                                                                                                                  |
 | ----------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | `use_12hr`        | `false`         | Aktiviert 12-Stunden-Format                                                                                                   |
 | `format`          | siehe unten     | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html). |
@@ -1248,6 +1285,30 @@ Das `username` Modul zeigt den Namen des aktiven Benutzers. Das Modul wird gezei
 
 [username]
 disabled = true
+```
+
+
+## Zig
+
+The `zig` module shows the currently installed version of Zig. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+
+- The current directory contains a `.zig` file
+
+### Optionen
+
+| Variable   | Standartwert    | Beschreibung                                          |
+| ---------- | --------------- | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`          | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"` | Stil für dieses Modul.                                |
+| `disabled` | `false`         | Disables the `zig` module.                            |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[zig]
+symbol = "⚡️ "
 ```
 
 ## Custom commands
@@ -1299,4 +1360,28 @@ command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 prefix = " transcending "
+```
+
+## PureScript
+
+The `purescript` module shows the currently installed version of PureScript version. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+
+- The current directory contains a `spago.dhall` file
+- The current directory contains a \*.purs files
+
+### Optionen
+
+| Variable   | Standartwert   | Beschreibung                                                 |
+| ---------- | -------------- | ------------------------------------------------------------ |
+| `symbol`   | `"<=> "` | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"` | Stil für dieses Modul.                                       |
+| `disabled` | `false`        | Disables the `purescript` module.                            |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[purescript]
+symbol = "<=> "
 ```

@@ -27,8 +27,10 @@ pub mod kubernetes;
 pub mod memory_usage;
 pub mod nix_shell;
 pub mod nodejs;
+pub mod ocaml;
 pub mod package;
 pub mod php;
+pub mod purescript;
 pub mod python;
 pub mod ruby;
 pub mod rust;
@@ -37,5 +39,6 @@ mod starship_root;
 pub mod terraform;
 pub mod time;
 pub mod username;
+pub mod zig;
 
 pub use starship_root::*;

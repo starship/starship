@@ -1,4 +1,4 @@
-# Advanced Configuration
+# Configuração avançada
 
 While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
 
@@ -59,7 +59,7 @@ precmd_functions+=(set_win_title)
 
 If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zsrhc`) to make it permanent.
 
-## Style Strings
+## Estilo dos textos
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 

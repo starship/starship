@@ -9,32 +9,32 @@
   <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
-      alt="GitHub Actions workflow status" /></a>
+      alt="Status do workflow Actions do GitHub" /></a>
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
-      alt="Crates.io version" /></a>
+      alt="Versão no Crates.io" /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
-      alt="Packaging status" /></a
+      alt="Status do pacote" /></a
 ><br />
   <a href="https://discord.gg/8Jzqu3T"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="Chat on Discord" /></a>
+      alt="Chat no Discord" /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Follow @StarshipPrompt on Twitter" /></a>
+      alt="Siga o @StarshipPrompt no Twitter" /></a>
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs">Site</a>
   ·
-  <a href="#🚀-installation">Installation</a>
+  <a href="#🚀-installation">Instalação</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs/config/">Configuração</a>
 </p>
 
 <p align="center">
@@ -96,77 +96,77 @@
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship with iTerm2 and the Snazzy theme"
+  alt="Starship com iTerm2 e o tema Snazzy"
   width="50%"
   align="right" />
 
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**O prompt minimalista, extremamente rápido e infinitamente personalizável para qualquer shell!**
 
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **Rápido:** É rápido – _muito muito_ rápido! 🚀
+- **Personalizável:** Configure todos os detalhes do seu prompt.
+- **Universal:** Funciona em qualquer shell, em qualquer sistema operacional.
+- **Inteligente:** Mostra informações relevantes rapidamente.
+- **Muitos recursos:** Suporte para todas as suas ferramentas favoritas.
+- **Fácil:**Instalação rápida – comece a usar em minutos.
 
 <p align="center">
-<a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/"><strong>Consulte a documentação&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
 
-## 🚀 Installation
+## 🚀 Instalação
 
-### Prerequisites
+### Pré-requisitos
 
-- A [Powerline font](https://github.com/powerline/fonts) installed and enabled in your terminal (for example, try [Fira Code](https://github.com/tonsky/FiraCode)).
+- Uma das fontes [Powerline font](https://github.com/powerline/fonts) instalada e configurada no seu terminal (por exemplo, experimente a [Fira Code](https://github.com/tonsky/FiraCode)).
 
-### Getting Started
+### Primeiros passos
 
-1. Install the **starship** binary:
-
-
-   #### Install Latest Version
+1. Instale o binário do **starship**:
 
 
-   ##### From prebuilt binary, with Shell:
+   #### Instalar a última versão
+
+
+   ##### Binário pré-compilado, utilizando o shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   ##### From source on [crates.io](https://crates.io/):
+   ##### Código fonte via [crates.io](https://crates.io/):
 
    ```sh
    cargo install starship
    ```
 
 
-   #### Install via Package Manager
+   #### Instalar via gerenciador de pacotes
 
 
-   ##### With [Homebrew](https://brew.sh/):
+   ##### Com o [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### Com o [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Adicione o script de inicialização no arquivo de configuração do seu shell:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Adicione o seguinte comando no final do arquivo `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -177,7 +177,7 @@
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Adicione o seguinte comando no final do arquivo `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -188,7 +188,7 @@
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Adicione o seguinte comando no final do arquivo `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -199,7 +199,7 @@
 
    #### PowerShell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   Adicione o seguinte comando no final do arquivo `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` em -Nix):
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -208,7 +208,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Adicione o seguinte comando no final do arquivo `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -216,28 +216,28 @@
    eval $(starship init ion)
    ```
 
-## 🤝 Contributing
+## 🤝 Contribuindo
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+Nós estamos sempre procurando contribuidores de **todos os níveis de conhecimento**! Se você está buscando um caminho mais fácil para começar no projeto, veja essas [boas issues para começar](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Se você está interessado em ajudar contribuindo com o projeto, dê uma olhada no nosso [Guia de Contribuição](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Além disso, sinta-se à vontade para entrar no nosso [servidor no Discord](https://discord.gg/8Jzqu3T) e dizer oi. 👋
 
-### Code Contributors
+### Contribuidores de código
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+Este projeto existe graças a todas as pessoas que contribuem. [[Contribuir](CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
-### Financial Contributors
+### Contribuidores Financeiros
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+Torne-se um contribuidor financeiro e nos ajude a sustentar a nossa comunidade. [[Contribuir](https://opencollective.com/starship/contribute)]
 
-#### Individuals
+#### Pessoas
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
-#### Organizations
+#### Organizações
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+Apoie este projeto com sua organização. Seu logotipo aparecerá aqui com um link para o seu site. [[Contribuir](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -250,21 +250,21 @@ Support this project with your organization. Your logo will show up here with a 
 <a href="https://opencollective.com/starship/organization/8/website"><img src="https://opencollective.com/starship/organization/8/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/9/website"><img src="https://opencollective.com/starship/organization/9/avatar.svg"></a>
 
-## 💭 Inspired By
+## 💭 Inspirado por
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Por favor, confira estes projetos anteriores que ajudaram a inspirar a criação do startship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Um prompt ZSH para astronautas.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Tema robbyrussell multi-shell escrito em JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** - A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** - Um prompt multi-shell personalizável com ícones como o powerline.
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Ícone de foguete do Starship">
 </p>
 
-## 📝 License
+## 📝 Licença
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Todos os direitos reservados © 2019-Presente, [Contribuidores Starship](https://github.com/starship/starship/graphs/contributors).<br /> Este projeto está licenciado pelo [ISC](https://github.com/starship/starship/blob/master/LICENSE).
