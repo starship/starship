@@ -1,12 +1,26 @@
 use super::common;
+use ansi_term::Color;
 use std::ffi::OsStr;
 use std::fs::OpenOptions;
 use std::io::{self, Error, ErrorKind, Write};
 use std::process::{Command, Stdio};
-use tempfile;
 
 #[test]
-#[ignore]
+fn show_nothing_on_empty_dir() -> io::Result<()> {
+    let repo_dir = tempfile::tempdir()?;
+
+    let output = common::render_module("git_state")
+        .arg("--path")
+        .arg(repo_dir.path())
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = "";
+    assert_eq!(expected, actual);
+    repo_dir.close()
+}
+
+#[test]
 fn shows_rebasing() -> io::Result<()> {
     let repo_dir = create_repo_with_conflict()?;
     let path = path_str(&repo_dir)?;
@@ -14,16 +28,21 @@ fn shows_rebasing() -> io::Result<()> {
     run_git_cmd(&["rebase", "other-branch"], Some(path), false)?;
 
     let output = common::render_module("git_state")
-        .current_dir(path)
+        .arg("--path")
+        .arg(&path)
         .output()?;
-    let text = String::from_utf8(output.stdout).unwrap();
-    assert!(text.contains("REBASING 1/1"));
+
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let mut expected = Color::Yellow.bold().paint("(REBASING 1/1)").to_string();
+    expected.push(' ');
+
+    assert_eq!(expected, actual);
 
     Ok(())
 }
 
 #[test]
-#[ignore]
 fn shows_merging() -> io::Result<()> {
     let repo_dir = create_repo_with_conflict()?;
     let path = path_str(&repo_dir)?;
@@ -31,16 +50,21 @@ fn shows_merging() -> io::Result<()> {
     run_git_cmd(&["merge", "other-branch"], Some(path), false)?;
 
     let output = common::render_module("git_state")
-        .current_dir(path)
+        .arg("--path")
+        .arg(&path)
         .output()?;
-    let text = String::from_utf8(output.stdout).unwrap();
-    assert!(text.contains("MERGING"));
+
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let mut expected = Color::Yellow.bold().paint("(MERGING)").to_string();
+    expected.push(' ');
+
+    assert_eq!(expected, actual);
 
     Ok(())
 }
 
 #[test]
-#[ignore]
 fn shows_cherry_picking() -> io::Result<()> {
     let repo_dir = create_repo_with_conflict()?;
     let path = path_str(&repo_dir)?;
@@ -48,16 +72,21 @@ fn shows_cherry_picking() -> io::Result<()> {
     run_git_cmd(&["cherry-pick", "other-branch"], Some(path), false)?;
 
     let output = common::render_module("git_state")
-        .current_dir(path)
+        .arg("--path")
+        .arg(&path)
         .output()?;
-    let text = String::from_utf8(output.stdout).unwrap();
-    assert!(text.contains("CHERRY-PICKING"));
+
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let mut expected = Color::Yellow.bold().paint("(CHERRY-PICKING)").to_string();
+    expected.push(' ');
+
+    assert_eq!(expected, actual);
 
     Ok(())
 }
 
 #[test]
-#[ignore]
 fn shows_bisecting() -> io::Result<()> {
     let repo_dir = create_repo_with_conflict()?;
     let path = path_str(&repo_dir)?;
@@ -65,16 +94,21 @@ fn shows_bisecting() -> io::Result<()> {
     run_git_cmd(&["bisect", "start"], Some(path), false)?;
 
     let output = common::render_module("git_state")
-        .current_dir(path)
+        .arg("--path")
+        .arg(&path)
         .output()?;
-    let text = String::from_utf8(output.stdout).unwrap();
-    assert!(text.contains("BISECTING"));
+
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let mut expected = Color::Yellow.bold().paint("(BISECTING)").to_string();
+    expected.push(' ');
+
+    assert_eq!(expected, actual);
 
     Ok(())
 }
 
 #[test]
-#[ignore]
 fn shows_reverting() -> io::Result<()> {
     let repo_dir = create_repo_with_conflict()?;
     let path = path_str(&repo_dir)?;
@@ -82,11 +116,16 @@ fn shows_reverting() -> io::Result<()> {
     run_git_cmd(&["revert", "--no-commit", "HEAD~1"], Some(path), false)?;
 
     let output = common::render_module("git_state")
-        .current_dir(path)
+        .arg("--path")
+        .arg(&path)
         .output()?;
-    let text = String::from_utf8(output.stdout).unwrap();
-    assert!(text.contains("REVERTING"));
 
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let mut expected = Color::Yellow.bold().paint("(REVERTING)").to_string();
+    expected.push(' ');
+
+    assert_eq!(expected, actual);
     Ok(())
 }
 
@@ -129,7 +168,7 @@ fn create_repo_with_conflict() -> io::Result<tempfile::TempDir> {
         write!(file, "{}", text)
     };
 
-    // Initialise a new git repo
+    // Initialize a new git repo
     run_git_cmd(&["init", "--quiet", path], None, true)?;
 
     // Set local author info

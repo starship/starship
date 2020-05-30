@@ -1,6 +1,7 @@
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::crystal::CrystalConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 /// Creates a module with the current Crystal version
@@ -20,14 +21,37 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let crystal_version = utils::exec_cmd("crystal", &["--version"])?.stdout;
-    let formatted_version = format_crystal_version(&crystal_version)?;
 
     let mut module = context.new_module("crystal");
     let config: CrystalConfig = CrystalConfig::try_load(module.config);
-    module.set_style(config.style);
 
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &SegmentConfig::new(&formatted_version));
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => format_crystal_version(&crystal_version).map(Ok),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `rust`:\n{}", error);
+            return None;
+        }
+    });
+
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
 }
@@ -51,12 +75,11 @@ mod tests {
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
-    use tempfile;
 
     #[test]
     fn folder_without_crystal_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = render_module("crystal", dir.path());
+        let actual = render_module("crystal", dir.path(), None);
         let expected = None;
         assert_eq!(expected, actual);
 
@@ -68,7 +91,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("shard.yml"))?.sync_all()?;
 
-        let actual = render_module("crystal", dir.path());
+        let actual = render_module("crystal", dir.path(), None);
         let expected = Some(format!("via {} ", Color::Red.bold().paint("🔮 v0.32.1")));
         assert_eq!(expected, actual);
 
@@ -80,7 +103,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.cr"))?.sync_all()?;
 
-        let actual = render_module("crystal", dir.path());
+        let actual = render_module("crystal", dir.path(), None);
         let expected = Some(format!("via {} ", Color::Red.bold().paint("🔮 v0.32.1")));
         assert_eq!(expected, actual);
 

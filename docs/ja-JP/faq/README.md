@@ -31,7 +31,7 @@ STATUS=$?
 NUM_JOBS=$(jobs -p | wc -l)
 
 # Set the prompt to the output of `starship prompt`
-PS1="$(starship prompt --status=$STATUS --jobs=NUM_JOBS)"
+PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
 Starshipに組み込まれた[Bashの実装](https://github.com/starship/starship/blob/master/src/init/starship.bash)は、[ Command Durationモジュール](https://starship.rs/config/#Command-Duration)などの高度な機能を可能にし、Starshipが事前にインストールされたBash構成と互換性があるようにするため、少し複雑です。
@@ -43,3 +43,11 @@ starship prompt --help
 ```
 
 プロンプトは提供されているコンテキストを使用しますが、フラグは「必須」ではありません。
+
+## How do I run Starship on Linux distributions with older versions of glibc?
+
+If you get an error like "*version 'GLIBC_2.18' not found (required by starship)*" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+
+```sh
+curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
+```
