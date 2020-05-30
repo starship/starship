@@ -277,9 +277,6 @@ us-east-1 = "va"
 format = "on [$symbol$profile]($style) "
 style = "bold blue"
 symbol = "🅰 "
-[aws.region_aliases]
-ap-southeast-2 = "au"
-us-east-1 = "va"
 ```
 
 ## Battery
