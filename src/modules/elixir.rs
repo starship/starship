@@ -67,7 +67,10 @@ mod tests {
     fn test_without_mix_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = render_module("elixir", dir.path());
+        let expected = None;
+        let output = render_module("elixir", dir.path(), None);
+
+        assert_eq!(output, expected);
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -85,7 +88,10 @@ mod tests {
             "via {} ",
             Color::Purple.bold().paint("💧 1.10 (OTP 22)")
         ));
-        assert_eq!(expected, actual);
+        let output = render_module("elixir", dir.path(), None);
+
+        assert_eq!(output, expected);
+
         dir.close()
     }
 }

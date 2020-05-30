@@ -11,6 +11,7 @@ mod dotnet;
 mod elixir;
 mod elm;
 mod env_var;
+mod erlang;
 mod git_branch;
 mod git_commit;
 mod git_state;
@@ -27,8 +28,10 @@ mod line_break;
 mod memory_usage;
 mod nix_shell;
 mod nodejs;
+mod ocaml;
 mod package;
 mod php;
+mod purescript;
 mod python;
 mod ruby;
 mod rust;
@@ -37,6 +40,7 @@ mod terraform;
 mod time;
 mod username;
 mod utils;
+mod zig;
 
 #[cfg(feature = "battery")]
 mod battery;
@@ -60,6 +64,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "dotnet" => dotnet::module(context),
         "elixir" => elixir::module(context),
         "elm" => elm::module(context),
+        "erlang" => erlang::module(context),
         "env_var" => env_var::module(context),
         "git_branch" => git_branch::module(context),
         "git_commit" => git_commit::module(context),
@@ -77,8 +82,10 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "memory_usage" => memory_usage::module(context),
         "nix_shell" => nix_shell::module(context),
         "nodejs" => nodejs::module(context),
+        "ocaml" => ocaml::module(context),
         "package" => package::module(context),
         "php" => php::module(context),
+        "purescript" => purescript::module(context),
         "python" => python::module(context),
         "ruby" => ruby::module(context),
         "rust" => rust::module(context),
@@ -87,6 +94,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "time" => time::module(context),
         "crystal" => crystal::module(context),
         "username" => username::module(context),
+        "zig" => zig::module(context),
         _ => {
             eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
             None
@@ -103,15 +111,18 @@ pub fn description(module: &str) -> &'static str {
         }
         "cmd_duration" => "How long the last command took to execute",
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
+        "crystal" => "The currently installed version of Crystal",
         "directory" => "The current working directory",
         "docker_context" => "The current docker context",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
         "env_var" => "Displays the current value of a selected environment variable",
+        "erlang" => "Current OTP version",
         "git_branch" => "The active branch of the repo in your current directory",
         "git_commit" => "The active commit of the repo in your current directory",
         "git_state" => "The current git operation, and it's progress",
         "git_status" => "Symbol representing the state of the repo",
         "golang" => "The currently installed version of Golang",
+        "haskell" => "The currently used version of Haskell",
         "hg_branch" => "The active branch of the repo in your current directory",
         "hostname" => "The system hostname",
         "java" => "The currently installed version of Java",
@@ -122,14 +133,17 @@ pub fn description(module: &str) -> &'static str {
         "memory_usage" => "Current system memory and swap usage",
         "nix_shell" => "The nix-shell environment",
         "nodejs" => "The currently installed version of NodeJS",
+        "ocaml" => "The currently installed version of OCaml",
         "package" => "The package version of the current directory's project",
         "php" => "The currently installed version of PHP",
+        "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "username" => "The active user's username",
+        "zig" => "The currently installed version of Zig",
         _ => "<no description>",
     }
 }

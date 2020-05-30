@@ -116,7 +116,18 @@ fn main() {
                     .arg(&keymap_arg)
                     .arg(&jobs_arg),
             )
-            .subcommand(SubCommand::with_name("configure").about("Edit the starship configuration"))
+            .subcommand(
+                SubCommand::with_name("config")
+                    .alias("configure")
+                    .about("Edit the starship configuration")
+                    .arg(
+                        Arg::with_name("name")
+                            .help("Configuration key to edit")
+                            .required(false)
+                            .requires("value"),
+                    )
+                    .arg(Arg::with_name("value").help("Value to place into that key")),
+            )
             .subcommand(SubCommand::with_name("bug-report").about(
                 "Create a pre-populated GitHub issue with information about your configuration",
             ))
@@ -152,7 +163,15 @@ fn main() {
                 print::module(module_name, sub_m.clone());
             }
         }
-        ("configure", Some(_)) => configure::edit_configuration(),
+        ("config", Some(sub_m)) => {
+            if let Some(name) = sub_m.value_of("name") {
+                if let Some(value) = sub_m.value_of("value") {
+                    configure::update_configuration(name, value)
+                }
+            } else {
+                configure::edit_configuration()
+            }
+        }
         ("bug-report", Some(_)) => bug_report::create(),
         ("time", _) => {
             match SystemTime::now()
