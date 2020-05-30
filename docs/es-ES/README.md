@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: El símbolo de sistema minimalista, ultrarápido e infinitamente customizable para cualquier intérprete de comandos.
 actionText: Empezar →
 actionLink: ./guide/
 features:
@@ -17,8 +17,8 @@ features:
     details: Puedes personalizar cada pequeño detalle a tu gusto, de manera que puedes tener una interfaz minimalista o rica en funcionalidades.
 footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores de Starship
 #Used for the description meta tag, for SEO
-metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and PowerShell.
+metaTitle: "Starship: el indicador de comando multi-intérprete"
+description: Starship es el símbolo de sistema minimalista, ultrarápido e infinitamente customizable para cualquier intérprete de comandos. Muestra la información que necesitas, a la par que es elegante y minimalista. Instalación rápida disponible para Bash, Fish, ZSH, Ion y PowerShell.
 ---
 
 <div class="center">

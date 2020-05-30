@@ -30,8 +30,8 @@ STATUS=$?
 # Gibt die Anzahl der laufenden Jobs an.
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Formatiere den prompt mit der Ausgabe von `starship prompt`
-PS1="$(starship prompt --status=$STATUS --jobs=NUM_JOBS)"
+# Set the prompt to the output of `starship prompt`
+PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
 Die [Bash Implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) ist etwas komplexer, um erweiterte Funktionen wie das [Befehlsdauer-Modul](https://starship.rs/config/#Command-Duration) zu ermöglichen und um sicherzustellen, dass Starship mit vorinstallierten Bash Konfigurationen kompatibel ist.
@@ -43,3 +43,11 @@ starship prompt --help
 ```
 
 Die Eingabeaufforderung verwendet so viel Kontext wie möglich, aber keine Flagge ist "notwendig".
+
+## How do I run Starship on Linux distributions with older versions of glibc?
+
+If you get an error like "*version 'GLIBC_2.18' not found (required by starship)*" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+
+```sh
+curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
+```

@@ -7,6 +7,7 @@ use starship_module_config_derive::ModuleConfig;
 pub struct PackageConfig<'a> {
     pub symbol: SegmentConfig<'a>,
     pub style: Style,
+    pub display_private: bool,
     pub disabled: bool,
 }
 
@@ -15,6 +16,7 @@ impl<'a> RootModuleConfig<'a> for PackageConfig<'a> {
         PackageConfig {
             symbol: SegmentConfig::new("📦 "),
             style: Color::Fixed(208).bold(),
+            display_private: false,
             disabled: false,
         }
     }
