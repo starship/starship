@@ -52,16 +52,16 @@ Aqui está a representação do módulo Node. No exemplo a seguir, "symbol" e "v
 
 ### Estilo dos textos
 
-A maioria dos módulos do starship permite que você configure o estilo de exibição dos textos. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+A maioria dos módulos do starship permite que você configure o estilo de exibição dos textos. Isso é feito através de um parâmetro (geralmente chamado `style`) que é uma string especificando a configuração. Aqui estão alguns exemplos de strings de estilo e o que elas fazem. Para detalhes sobre a sintaxe completa, consulte o [guia de configurações avançadas](/advanced-config/).
 
-- `"fg:green bg:blue"` sets green text on a blue background
-- `"bg:blue fg:bright-green"` sets bright green text on a blue background
-- `"bold fg:27"` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
-- `"underline bg:#bf5700"` sets underlined text on a burnt orange background
-- `"bold italic fg:purple"` sets bold italic purple text
-- `""` explicitly disables all styling
+- `"fg:green bg:blue"` deixa o texto verde com o fundo azul
+- `"bg:blue fg:bright-green"` deixa o texto verde brilhante com o fundo azul
+- `"bold fg:27"` deixa o texto em negrito com a cor 27 [da tabela ANSI](https://i.stack.imgur.com/KTSQa.png)
+- `"underline bg:#bf5700"` deixa o texto sublinhado com o fundo laranja escuro
+- `"bold italic fg:purple"` deixa o texto em negrito e itálico com a cor roxa
+- `""` desabilita explicitamente todos os estilos
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+Note que a aparência do estilo será controlado pelo seu terminal. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
 ## Prompt
 
