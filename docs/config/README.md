@@ -1465,6 +1465,8 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `.ruby-version` file
 - The current directory contains a `.rb` file
 
+### Options
+
 | Option     | Default                            | Description                                     |
 | ---------- | ---------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
