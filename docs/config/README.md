@@ -1025,17 +1025,23 @@ more than the `threshold` config value, if it exists.
 
 ### Options
 
-| Option      | Default                    | Description                      |
-| ----------- | -------------------------- | -------------------------------- |
-| `threshold` | `1`                        | Show number of jobs if exceeded. |
-| `format`    | `"[✦$number](blue bold) "` | The format for the module.       |
-| `disabled`  | `false`                    | Disables the `jobs` module.      |
+| Option      | Default                       | Description                                      |
+| ----------  | ----------------------------- | ------------------------------------------------ |
+| `threshold` | `1`                           | Show number of jobs if exceeded.                 |
+| `format`    | `"[$symbol$number]($style) "` | The format for the module.                       |
+| `symbol`    | `"✦"`                         | A format string representing the number of jobs. |
+| `style`     | `"bold blue"`                 | The style for the module.                        |
+| `disabled`  | `false`                       | Disables the `jobs` module.                      |
 
 ### Variables
 
-| Variable | Example  | Description            |
-| -------- | -------- | ---------------------- |
-| number   | `1`      | The number of jobs     |
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| number   | `1`     | The number of jobs                   |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1043,8 +1049,8 @@ more than the `threshold` config value, if it exists.
 # ~/.config/starship.toml
 
 [jobs]
+symbol = "+ "
 threshold = 4
-format = "[+$number](blue bold) "
 ```
 
 ## Julia
