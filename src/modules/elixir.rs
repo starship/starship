@@ -26,18 +26,34 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("elixir");
     let config = ElixirConfig::try_load(module.config);
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-        formatter.map(|variable| match variable {
-            "version" => Some(elixir_version.clone()),
-            "otp_version" => Some(otp_version.clone()),
-            _ => None,
-        })
-    } else {
-        log::warn!("Error parsing format string in `elixir.format`");
-        return None;
-    };
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => Some(Ok(elixir_version.clone())),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "otp_version" => Some(Ok(otp_version.clone())),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.set_segments(formatter.parse(None));
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `elixir`:\n{}", error);
+            return None;
+        }
+    });
 
     module.get_prefix().set_value("");
     module.get_suffix().set_value("");
@@ -57,23 +73,33 @@ fn parse_elixir_version(version: &str) -> Option<(String, String)> {
 
 #[cfg(test)]
 mod tests {
-    // use super::*;
+    use super::*;
     use crate::modules::utils::test::render_module;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
 
     #[test]
+    fn test_parse_elixir_version() {
+        const OUTPUT: &str = "\
+Erlang/OTP 22 [erts-10.5] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1] [hipe]
+Elixir 1.10 (compiled with Erlang/OTP 22)
+";
+
+        assert_eq!(
+            parse_elixir_version(OUTPUT),
+            Some(("22".to_owned(), "1.10".to_owned()))
+        );
+    }
+
+    #[test]
     fn test_without_mix_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let expected = None;
-        let output = render_module("elixir", dir.path(), None);
-
-        assert_eq!(output, expected);
+        let actual = render_module("elixir", dir.path(), None);
 
         let expected = None;
-        assert_eq!(expected, actual);
+        assert_eq!(actual, expected);
         dir.close()
     }
 
@@ -81,8 +107,6 @@ mod tests {
     fn test_with_mix_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("mix.exs"))?.sync_all()?;
-
-        let actual = render_module("elixir", dir.path());
 
         let expected = Some(format!(
             "via {} ",
