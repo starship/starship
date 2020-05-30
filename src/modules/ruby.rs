@@ -20,22 +20,34 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let ruby_version = utils::exec_cmd("ruby", &["-v"])?.stdout;
-    let module_version = format_ruby_version(&ruby_version)?;
-
     let mut module = context.new_module("ruby");
-    let config: RubyConfig = RubyConfig::try_load(module.config);
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-        formatter.map(|variable| match variable {
-            "version" => Some(module_version.clone()),
-            _ => None,
-        })
-    } else {
-        log::warn!("Error parsing format string in `ruby.format`");
-        return None;
-    };
+    let config = RubyConfig::try_load(module.config);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => {
+                    format_ruby_version(&utils::exec_cmd("ruby", &["-v"])?.stdout.as_str()).map(Ok)
+                }
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.set_segments(formatter.parse(None));
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `ruby`:\n{}", error);
+            return None;
+        }
+    });
 
     module.get_prefix().set_value("");
     module.get_suffix().set_value("");
