@@ -1053,16 +1053,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                  |
-| ---------- | ---------------------------------- | ---------------------------- |
-| `format`   | `"via [ஃ $version](purple bold) "` | The format for the module.   |
-| `disabled` | `false`                            | Disables the `julia` module. |
+| Option     | Default                            | Description                                       |
+| ---------- | ---------------------------------- | ------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                        |
+| `symbol`   | `"ஃ "`                             | A format string representing the symbol of Julia. |
+| `style`    | `"bold purple"`                    | The style for the module.                         |
+| `disabled` | `false`                            | Disables the `julia` module.                      |
 
 ### Variables
 
-| Variable | Example  | Description            |
-| -------- | -------- | ---------------------- |
-| version  | `v1.4.0` | The version of `julia` |
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v1.4.0` | The version of `julia`               |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1070,7 +1076,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [julia]
-format = "via [∴ $version](purple bold) "
+symbol = "∴ "
 ```
 
 ## Kubernetes
