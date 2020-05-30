@@ -6,7 +6,7 @@ use crate::formatter::StringFormatter;
 /// Creates a segment to show if there are any active jobs running
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("jobs");
-    let config: JobsConfig = JobsConfig::try_load(module.config);
+    let config = JobsConfig::try_load(module.config);
 
     let props = &context.properties;
     let num_of_jobs = props
@@ -25,17 +25,30 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         "".to_string()
     };
 
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-        formatter.map(|variable| match variable {
-            "number" => Some(module_number.to_string()),
-            _ => None,
-        })
-    } else {
-        log::warn!("Error parsing format string in `jobs.format`");
-        return None;
-    };
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "number" => Some(Ok(module_number.clone())),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.set_segments(formatter.parse(None));
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `jobs`:\n{}", error);
+            return None;
+        }
+    });
 
     module.get_prefix().set_value("");
     module.get_suffix().set_value("");
