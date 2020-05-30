@@ -1,22 +1,21 @@
-use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
+use crate::config::{ModuleConfig, RootModuleConfig};
 
-use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct RustConfig<'a> {
-    pub symbol: SegmentConfig<'a>,
-    pub version: SegmentConfig<'a>,
-    pub style: Style,
+    pub format: &'a str,
+    pub symbol: &'a str,
+    pub style: &'a str,
     pub disabled: bool,
 }
 
 impl<'a> RootModuleConfig<'a> for RustConfig<'a> {
     fn new() -> Self {
         RustConfig {
-            symbol: SegmentConfig::new("🦀 "),
-            version: SegmentConfig::default(),
-            style: Color::Red.bold(),
+            format: "via [$symbol$version]($style) ",
+            symbol: "🦀 ",
+            style: "bold red",
             disabled: false,
         }
     }

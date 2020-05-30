@@ -6,6 +6,21 @@ use std::{io, str};
 use crate::common::{self, TestCommand};
 
 #[test]
+fn show_nothing_on_empty_dir() -> io::Result<()> {
+    let repo_dir = tempfile::tempdir()?;
+
+    let output = common::render_module("git_commit")
+        .arg("--path")
+        .arg(repo_dir.path())
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = "";
+    assert_eq!(expected, actual);
+    repo_dir.close()
+}
+
+#[test]
 fn test_render_commit_hash() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
 
@@ -27,10 +42,11 @@ fn test_render_commit_hash() -> io::Result<()> {
         .output()?;
 
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Green
+    let mut expected = Color::Green
         .bold()
-        .paint(format!("({}) ", expected_hash))
+        .paint(format!("({})", expected_hash))
         .to_string();
+    expected.push(' ');
 
     assert_eq!(expected, actual);
     remove_dir_all(repo_dir)
@@ -59,10 +75,11 @@ fn test_render_commit_hash_len_override() -> io::Result<()> {
         .output()?;
 
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Green
+    let mut expected = Color::Green
         .bold()
-        .paint(format!("({}) ", expected_hash))
+        .paint(format!("({})", expected_hash))
         .to_string();
+    expected.push(' ');
 
     assert_eq!(expected, actual);
     remove_dir_all(repo_dir)
@@ -107,10 +124,11 @@ fn test_render_commit_hash_only_detached_on_detached() -> io::Result<()> {
 
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = Color::Green
+    let mut expected = Color::Green
         .bold()
-        .paint(format!("({}) ", expected_hash))
+        .paint(format!("({})", expected_hash))
         .to_string();
+    expected.push(' ');
 
     assert_eq!(expected, actual);
     remove_dir_all(repo_dir)

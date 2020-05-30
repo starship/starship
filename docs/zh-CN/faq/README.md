@@ -31,7 +31,7 @@ STATUS=$?
 NUM_JOBS=$(jobs -p | wc -l)
 
 # Set the prompt to the output of `starship prompt`
-PS1="$(starship prompt --status=$STATUS --jobs=NUM_JOBS)"
+PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
 内置于 Starship 的 [Bash 适配](https://github.com/starship/starship/blob/master/src/init/starship.bash) 稍微复杂一些，实现了像 [命令用时统计组件](https://starship.rs/config/#Command-Duration) 这样的功能，还确保 Starship 能与之前设置的 Bash 配置相兼容。
@@ -43,3 +43,11 @@ starship prompt --help
 ```
 
 Starship 会处理所提供的全部上下文参数并在提示符中显示，但没有参数是“必需”的。
+
+## How do I run Starship on Linux distributions with older versions of glibc?
+
+If you get an error like "*version 'GLIBC_2.18' not found (required by starship)*" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+
+```sh
+curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
+```

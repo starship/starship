@@ -30,8 +30,8 @@ STATUS=$?
 # Récupère le nombre de tâches en cours d'exécution.
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Définit l'invite de commande `starship prompt`
-PS1="$(starship prompt --status=$STATUS --jobs=NUM_JOBS)"
+# Set the prompt to the output of `starship prompt`
+PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
 [L'implémentation Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) intégrée dans Starship est légèrement plus complexe pour permettre des fonctionnalités avancées comme le [module Durée de commande](https://starship.rs/config/#Command-Duration) et pour s'assurer que Starship est compatible avec les configurations Bash préinstallées.
@@ -43,3 +43,11 @@ starship prompt --help
 ```
 
 L'invite de commande utilisera toutes les données contextuelles fournies, mais aucun indicateur n'est "requis".
+
+## How do I run Starship on Linux distributions with older versions of glibc?
+
+If you get an error like "*version 'GLIBC_2.18' not found (required by starship)*" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+
+```sh
+curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
+```
