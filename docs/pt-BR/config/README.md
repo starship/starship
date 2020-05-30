@@ -32,7 +32,7 @@ Você pode alterar o caminho padrão do arquivo `starship.toml` com a variável 
 export STARSHIP_CONFIG=~/.starship
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+No PowerShell (Windows) você pode adicionar a seguinte linha no seu `$PROFILE`:
 ```ps1
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
@@ -52,7 +52,7 @@ Aqui está a representação do módulo Node. No exemplo a seguir, "symbol" e "v
 
 ### Estilo dos textos
 
-Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+A maioria dos módulos do starship permite que você configure o estilo de exibição dos textos. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
 - `"fg:green bg:blue"` sets green text on a blue background
 - `"bg:blue fg:bright-green"` sets bright green text on a blue background
