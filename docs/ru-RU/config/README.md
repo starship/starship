@@ -1250,11 +1250,12 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | Переменная        | По умолчанию    | Описание                                                                                                                                  |
 | ----------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | Включить 12-часовое форматирование                                                                                                        |
+| `use_12hr`        | `false`         | Enables 12 hour formatting.                                                                                                               |
 | `format`          | см. ниже        | [Строка формата chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), используемая для форматирования времени.         |
-| `style`           | `"bold yellow"` | Стиль модуля времени                                                                                                                      |
+| `style`           | `"bold yellow"` | The style for the module time.                                                                                                            |
 | `utc_time_offset` | `"local"`       | Устанавливает смещение UTC. Диапазон -24 < x < 24. Разрешает числам с плавающей точкой встраивать 30/45-минутное смещение временной зоны. |
 | `disabled`        | `true`          | Отключает модуль `time`.                                                                                                                  |
+| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                     |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
@@ -1267,6 +1268,7 @@ If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it default
 disabled = false
 format = "🕙[ %T ]"
 utc_time_offset = "-5"
+time_range = "10:00:00-14:00:00"
 ```
 
 ## Имя пользователя
