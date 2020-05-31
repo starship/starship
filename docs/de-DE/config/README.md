@@ -1250,11 +1250,12 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | Variable          | Standartwert    | Beschreibung                                                                                                                  |
 | ----------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | Aktiviert 12-Stunden-Format                                                                                                   |
+| `use_12hr`        | `false`         | Enables 12 hour formatting.                                                                                                   |
 | `format`          | siehe unten     | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html). |
-| `style`           | `"bold yellow"` | Stil für dieses Modul                                                                                                         |
+| `style`           | `"bold yellow"` | The style for the module time.                                                                                                |
 | `utc_time_offset` | `"local"`       | Verwendetes Zeitzonen-Offset. Liegt zwischen -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.        |
 | `disabled`        | `true`          | Deaktiviert das `time`-Modul.                                                                                                 |
+| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                         |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
@@ -1267,6 +1268,7 @@ If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it default
 disabled = false
 format = "🕙[ %T ]"
 utc_time_offset = "-5"
+time_range = "10:00:00-14:00:00"
 ```
 
 ## Username
