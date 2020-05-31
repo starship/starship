@@ -1248,13 +1248,14 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### オプション
 
-| 変数                | デフォルト           | 説明                                                                                                |
-| ----------------- | --------------- | ------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | 12時間のフォーマットを有効にします。                                                                               |
-| `format`          | この表の下を参照してください  | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。 |
-| `style`           | `"bold yellow"` | モジュールのスタイルです。                                                                                     |
-| `utc_time_offset` | `"local"`       | 使用するUTCオフセットを設定します。 -24から24までの間で設定可能です。 フロートが30/45分のタイムゾーンオフセットに対応できるようにします。                      |
-| `disabled`        | `true`          | `time`モジュールを無効にします。                                                                               |
+| 変数                | デフォルト           | 説明                                                                                                    |
+| ----------------- | --------------- | ----------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`         | Enables 12 hour formatting.                                                                           |
+| `format`          | この表の下を参照してください  | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。     |
+| `style`           | `"bold yellow"` | The style for the module time.                                                                        |
+| `utc_time_offset` | `"local"`       | 使用するUTCオフセットを設定します。 -24から24までの間で設定可能です。 フロートが30/45分のタイムゾーンオフセットに対応できるようにします。                          |
+| `disabled`        | `true`          | `time`モジュールを無効にします。                                                                                   |
+| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
@@ -1267,6 +1268,7 @@ If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it default
 disabled = false
 format = "🕙[ %T ]"
 utc_time_offset = "-5"
+time_range = "10:00:00-14:00:00"
 ```
 
 ## ユーザー名
