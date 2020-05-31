@@ -374,12 +374,21 @@ style = "bold blue"
 <details>
 <summary>Этот модуль имеет несколько расширенных опций конфигурации, которые контролируют отображение каталога.</summary>
 
-| Переменная                  | По умолчанию | Описание                                                                          |
-| --------------------------- | ------------ | --------------------------------------------------------------------------------- |
-| `fish_style_pwd_dir_length` | `0`          | Количество символов, используемых при использовании логики создания пути из fish. |
-| `use_logical_path`          | `true`       | Отображает логический путь от оболочки (`PWD`) вместо пути от ОС.                 |
+| Переменная                  | По умолчанию | Описание                                                                                 |
+| --------------------------- | ------------ | ---------------------------------------------------------------------------------------- |
+| `substitutions`             |              | A table of substitutions to be made to the path.                                         |
+| `fish_style_pwd_dir_length` | `0`          | The number of characters to use when applying fish shell pwd path logic.                 |
+| `use_logical_path`          | `true`       | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
 
-`fish_style_pwd_dir_length` взаимодействует со стандартными параметрами усечения, которые могут сначала показаться странными: если он не равен нулю, элементы пути, который обычно усекается, вместо этого отображаются с указанным количеством символов. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+
+```toml
+[directory.substitutions]
+"/Volumes/network/path" = "/net"
+"src/com/long/java/path" = "mypath"
+```
+
+`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -394,7 +403,7 @@ truncation_length = 8
 
 ## Контекст Docker
 
-Модуль `docker_context` показывает текущий активный [контекст Docker](https://docs.docker.com/engine/context/working-with-contexts/), если он не установлен как `default`.
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
 
 ### Опции
 
@@ -416,11 +425,11 @@ symbol = "🐋 "
 
 ## Dotnet
 
-Модуль `dotnet` показывает соответствующую версию .NET Core SDK для текущего каталога. Если SDK был закреплен в текущей директории, будет показана закрепленная версия. В противном случае модуль отображает последнюю установленную версию SDK.
+The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
 
-Этот модуль будет показан только, когда один из следующих файлов присутствует в текущей директории: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. Также, для правильного использования, нужны инструменты командной строки .NET Core.
+This module will only be shown in your prompt when one of the following files are present in the current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll also need the .NET Core command-line tools installed in order to use it correctly.
 
-Внутренне этот модуль использует свой собственный механизм определения версий. Обычно он в два раза быстрее, чем `dotnet --version`, но он может показывать неправильную версию, если ваш .NET проект имеет необычный формат каталога. Если точность важнее, чем скорость, вы можете отключить механизм опцией `heuristic = false` в настройках модуля.
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
 ### Опции
 
@@ -444,7 +453,7 @@ heuristic = false
 
 ## Elixir
 
-Модуль `elixir` показывает установленную версию Elixir и Erlang/OTP. Модуль будет показан, если любое из следующих условий соблюдено:
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит файл `mix.exs`.
 
@@ -467,7 +476,7 @@ symbol = "🔮 "
 
 ## Elm
 
-Модуль `elm` показывает установленную версию Elm. Модуль будет показан, если любое из следующих условий соблюдено:
+The `elm` module shows the currently installed version of Elm. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит файл `elm.json`
 - Текущий каталог содержит файл `elm-package.json`
@@ -495,7 +504,7 @@ symbol = " "
 
 ## Переменная Окружения
 
-Модуль `env_var` отображает текущее значение выбранной переменной окружения. Модуль будет показан только в том случае, если любое из следующих условий соблюдено:
+The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
 - Опция `variable` соответствует существующей переменной среды
 - Опция `variable` не определена, но определена опция `default`
@@ -548,7 +557,7 @@ symbol = "e "
 
 ## Ветвь Git
 
-Модуль `git_branch` показывает активную ветку репозитория в вашем текущей директории.
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### Опции
 
@@ -573,7 +582,7 @@ truncation_symbol = ""
 
 ## Коммит Git
 
-Модуль `git_commit` показывает хэш текущего коммита репозитория в вашем текущем каталоге.
+The `git_commit` module shows the current commit hash of the repo in your current directory.
 
 ### Опции
 
@@ -597,7 +606,7 @@ commit_hash_length = 4
 
 ## Состояние Git
 
-Модуль `git_state` будет отображаться в директориях, являющимися частью репозитория git, и там, где выполняется операция, такие как: _REBASING_, _BISECTING_, и т. д. Если есть информация о прогрессе (например, REBASING 3/10), эта информация также будет показана.
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
 ### Опции
 
@@ -626,7 +635,7 @@ cherry_pick = "🍒 PICKING"
 
 ## Статус Git
 
-Модуль `git_status` отображает символы, представляющие состояние репозитория в вашей текущей директории.
+The `git_status` module shows symbols representing the state of the repo in your current directory.
 
 ### Опции
 
@@ -685,7 +694,7 @@ deleted = "🗑"
 
 ## Golang
 
-Модуль `golang` показывает установленную версию Golang. Модуль будет показан, если любое из следующих условий соблюдено:
+The `golang` module shows the currently installed version of Golang. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит файл `go.mod`
 - Текущий каталог содержит файл `go.sum`
@@ -714,7 +723,7 @@ symbol = "🏎💨 "
 ```
 ## Haskell
 
-Модуль `haskell` показывает установленную версию Haskell Stack. Модуль будет показан, если любое из следующих условий соблюдено:
+The `haskell` module shows the currently installed version of Haskell Stack version. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит файл `stack.yaml`
 
@@ -738,7 +747,7 @@ symbol = " "
 
 ## Имя хоста
 
-Модуль `hostname` отображает имя системы (хоста).
+The `hostname` module shows the system hostname.
 
 ### Опции
 
@@ -766,7 +775,7 @@ disabled = false
 
 ## Java
 
-Модуль `java` показывает установленную версию Java. Модуль будет показан, если любое из следующих условий соблюдено:
+The `java` module shows the currently installed version of Java. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
@@ -790,7 +799,7 @@ symbol = "🌟 "
 
 ## Задачи
 
-Модуль `jobs` отображает текущее количество запущенных работ. Модуль будет показан только если работы выполняются в фоне. Модуль покажет количество запущенных задач при наличии более чем 1 задачи, или больше, чем значение конфигурации `threshold`, если оно существует.
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
 ### Опции
 
@@ -837,11 +846,11 @@ symbol = "∴ "
 ```
 ## Kubernetes
 
-Отображает текущее контекстное имя Kubernetes и, если применено, пространство имён из файла kubeconfig. Пространство имен дожно быть задано в файле kubeconfig, это делается через `kubectl config set-context starship-cluster --namespace astronaut`. Если переменная окружения `$KUBECONFIG` задана, модуль будет использовать его значение, в противном случае будет использовать `~/.kube/config`.
+Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-::: tip
+::: tip Подсказка
 
-По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -869,7 +878,7 @@ disabled = false
 
 ## Перевод Строки
 
-Модуль `line_break` разделяет командную строку на две строки.
+The `line_break` module separates the prompt into two lines.
 
 ### Опции
 
@@ -888,13 +897,13 @@ disabled = true
 
 ## Использование памяти
 
-Модуль `memory_usage` отображает текущую системную память и использование подкачки.
+The `memory_usage` module shows current system memory and swap usage.
 
-По умолчанию использование подкачки отображается, если общая сумма подкачки системы не равна нулю.
+By default the swap usage is displayed if the total system swap is non-zero.
 
-::: tip
+::: tip Подсказка
 
-По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -927,7 +936,7 @@ style = "bold dimmed green"
 
 ## Ветка Mercurial
 
-Модуль `hg_branch` показывает активную ветку репозитория в вашем текущем каталоге.
+The `hg_branch` module shows the active branch of the repo in your current directory.
 
 ### Опции
 
@@ -952,7 +961,7 @@ truncation_symbol = ""
 
 ## Nix-shell
 
-Модуль `nix_shell` показывает окружение nix-shell. Модуль будет показываться внутри среды nix-shell.
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### Опции
 
@@ -980,7 +989,7 @@ symbol = "☃️  "
 
 ## NodeJS
 
-Модуль `nodejs` показывает установленную версию NodeJS. Модуль будет показан, если любое из следующих условий соблюдено:
+The `nodejs` module shows the currently installed version of NodeJS. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит файл `package.json`
 - The current directory contains a `.node-version` file
@@ -1006,7 +1015,7 @@ symbol = "🤖 "
 
 ## Версия пакета
 
-Модуль `package` отображается, когда текущий каталог является репозиторием для пакета и показывает его текущую версию. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
 - **npm** – Версия пакета `npm` из файла `package.json` в текущем каталоге
 - **cargo** – Версия пакета `cargo` из файла `Cargo.toml` в текущем каталоге
@@ -1066,7 +1075,7 @@ symbol = "🐪 "
 
 ## PHP
 
-Модуль `php` показывает установленную версию PHP. Модуль будет показан, если любое из следующих условий соблюдено:
+The `php` module shows the currently installed version of PHP. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит файл `composer.json`
 - Текущий каталог содержит файл `.php-version`
@@ -1131,7 +1140,7 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-Модуль `ruby` показывает установленную версию Ruby. Модуль будет показан, если любое из следующих условий соблюдено:
+The `ruby` module shows the currently installed version of Ruby. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит файл `Gemfile`
 - Текущий каталог содержит файл `.ruby-version`
@@ -1156,7 +1165,7 @@ symbol = "🔺 "
 
 ## Rust
 
-Модуль `rust` показывает установленную версию Rust. Модуль будет показан, если любое из следующих условий соблюдено:
+The `rust` module shows the currently installed version of Rust. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит файл `Cargo.toml`
 - Текущий каталог содержит файл с расширением `.rs`
@@ -1180,7 +1189,7 @@ symbol = "⚙️ "
 
 ## Singularity
 
-Модуль `singularity` показывает текущий образ singularity, если внутри контейнера и `$SINGULARITY_NAME` установлена.
+The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
 
 ### Опции
 
@@ -1204,7 +1213,7 @@ symbol = "📦 "
 
 ## Terraform
 
-Модуль `terraform` показывает выбранную рабочую область и версию terraform. По умолчанию, версия terraform не показана, так как это медленно на текущих версиях terraform, при использовании большого количества плагинов. Модуль будет показан, если любое из следующих условий соблюдено:
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит папку `.terraform`
 - Текущий каталог содержит файл с расширением `.tf`
@@ -1229,11 +1238,11 @@ symbol = "🏎💨 "
 
 ## Время
 
-Модуль `time` показывает текущее **локальное** время. Значение конфигурации `format` используется пакетом [`chrono`](https://crates.io/crates/chrono) для контроля того, как отображается время. Ознакомьтесь с [документацией chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), чтобы увидеть доступные параметры.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
-::: tip
+::: tip Подсказка
 
-По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1247,7 +1256,7 @@ symbol = "🏎💨 "
 | `utc_time_offset` | `"local"`       | Устанавливает смещение UTC. Диапазон -24 < x < 24. Разрешает числам с плавающей точкой встраивать 30/45-минутное смещение временной зоны. |
 | `disabled`        | `true`          | Отключает модуль `time`.                                                                                                                  |
 
-Если `use_12hr` равно `true`, то `format` по умолчанию равно `"%r"`. Иначе по умолчанию используется `"%T"`. Установка `format` вручную переопределит параметр `use_12hr`.
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
 ### Пример
 
@@ -1262,7 +1271,7 @@ utc_time_offset = "-5"
 
 ## Имя пользователя
 
-Модуль `username` показывает имя текущего пользователя. Модуль будет показан, если любое из следующих условий соблюдено:
+The `username` module shows active user's username. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий пользователь - root
 - Текущий пользователь отличается от залогиненного
@@ -1321,13 +1330,13 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a file whose extension is in `extensions`
 - The `when` command returns 0
 
-::: tip
+::: tip Подсказка
 
 Multiple custom modules can be defined by using a `.`.
 
 :::
 
-::: tip
+::: tip Подсказка
 
 The order in which custom modules are shown can be individually set by setting `custom.foo` in `prompt_order`. By default, the `custom` module will simply show all custom modules in the order they were defined.
 
