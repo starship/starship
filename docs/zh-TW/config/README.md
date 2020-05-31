@@ -374,10 +374,19 @@ style = "bold blue"
 <details>
 <summary>這個模組有些進階設定選項可以控制顯示資料夾。</summary>
 
-| 變數                          | 預設     | 說明                                   |
-| --------------------------- | ------ | ------------------------------------ |
-| `fish_style_pwd_dir_length` | `0`    | 當使用 fish shell 的 pwd 路徑邏輯時使用的字元數量。   |
-| `use_logical_path`          | `true` | 顯示 shell (`PWD`) 提供的邏輯路徑，而不是 OS 的路徑。 |
+| 變數                          | 預設     | 說明                                                                                       |
+| --------------------------- | ------ | ---------------------------------------------------------------------------------------- |
+| `substitutions`             |        | A table of substitutions to be made to the path.                                         |
+| `fish_style_pwd_dir_length` | `0`    | The number of characters to use when applying fish shell pwd path logic.                 |
+| `use_logical_path`          | `true` | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+
+```toml
+[directory.substitutions]
+"/Volumes/network/path" = "/net"
+"src/com/long/java/path" = "mypath"
+```
 
 `fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
@@ -416,11 +425,11 @@ symbol = "🐋 "
 
 ## Dotnet
 
-`dotnet` 模組顯示現在資料夾使用的 .NET Core SDK 的版本。 如果這個資料夾已經選定一個 SDK，則顯示這個 SDK 的版本。 如果沒有的話，則顯示最新安裝的 SDK 版本。
+The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
 
-這個模組只會在下列檔案出現在你的現在資料夾中時，顯示在你的提示字元：`global.json`、`project.json`、`*.sln`、`*.csproj`、`*.fsproj`、`*.xproj`。 你也會需要安裝 .NET Core 文字命令工具來正確使用這個模組。
+This module will only be shown in your prompt when one of the following files are present in the current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll also need the .NET Core command-line tools installed in order to use it correctly.
 
-這個模組內部是使用它自己的機制來偵測版本。 一般來說這個模組有 `dotnet --version` 的兩倍快，但是它可能會在你的 .NET 專案有不尋常的資料夾結構時顯示不正確的版本。 如果精確度比速度更重要的話，你可以藉由設定模組中的 `heuristic = false` 選項來停用這個功能。
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
 ### 選項
 
@@ -495,7 +504,7 @@ symbol = " "
 
 ## 環境變數
 
-`env_var`模組顯示一個選擇的環境變數的現在數值。 這個模組只在下列條件其中之一達到時顯示：
+The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
 - `variable` 設定選項符合一個存在的環境變數。
 - 沒有設定 `variable` 選項，但是有設定 `default` 選項。
@@ -548,7 +557,7 @@ symbol = "e "
 
 ## Git 分支
 
-`git_branch` 模組顯示現在的資料夾中使用中的儲存庫的分支。
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### 選項
 
@@ -597,7 +606,7 @@ commit_hash_length = 4
 
 ## Git State
 
-`git_state` 模組會顯示在 git 儲存庫中的資料夾內，以及會在有作業正在進行時顯示，像是：_REBASING_、_BISECTING_ 等等。 如果有進展的資訊 (像是 REBASING 3/10)，也會一併顯示出來。
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
 ### 選項
 
@@ -626,7 +635,7 @@ cherry_pick = "🍒 PICKING"
 
 ## Git Status
 
-`git_status` 模組顯示用來表示現在資料夾之中儲存庫狀態的符號。
+The `git_status` module shows symbols representing the state of the repo in your current directory.
 
 ### 選項
 
@@ -685,7 +694,7 @@ deleted = "🗑"
 
 ## Golang
 
-`golang` 模組顯示現在安裝的 Golang 版本。 這個模組在下列其中一個條件達成時顯示：
+The `golang` module shows the currently installed version of Golang. 這個模組在下列其中一個條件達成時顯示：
 
 - 現在資料夾中含有一個 `go.mod` 檔案
 - 現在資料夾中含有一個 `go.sum` 檔案
@@ -738,7 +747,7 @@ symbol = " "
 
 ## 主機名稱
 
-`hostname` 模組顯示系統的主機名稱。
+The `hostname` module shows the system hostname.
 
 ### 選項
 
@@ -766,7 +775,7 @@ disabled = false
 
 ## Java
 
-`java` 模組顯示現在安裝的 Java 版本。 這個模組在下列其中一個條件達成時顯示：
+The `java` module shows the currently installed version of Java. 這個模組在下列其中一個條件達成時顯示：
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
@@ -790,7 +799,7 @@ symbol = "🌟 "
 
 ## 工作
 
-`jobs` 模組顯示現在正在執行中的工作。 這個模組只會在有背景工作正在執行時顯示。 這個模組會在工作數量超過一個，或者有設定 `threshold` 時且數量超過設定值時，顯示工作的數量。
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
 ### 選項
 
@@ -837,11 +846,11 @@ symbol = "∴ "
 ```
 ## Kubernetes
 
-顯示現在 Kubernetes 主體名稱以及從 kubeconfig 檔案來的名稱空間 (如果有設定的話)。 The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. 如果有設定 `$KUBECONFIG` 環境變數，這個模組就會使用設定值；如果沒有，它就會使用 `~/.kube/config`。
+Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -869,7 +878,7 @@ disabled = false
 
 ## 換行
 
-`line_break` 模組將提示字元分成兩行。
+The `line_break` module separates the prompt into two lines.
 
 ### 選項
 
@@ -888,13 +897,13 @@ disabled = true
 
 ## 記憶體使用量
 
-`memory_usage` 模組顯示現在系統記憶體與 swap 的使用量。
+The `memory_usage` module shows current system memory and swap usage.
 
-預設 swap 使用量會在系統總 swap 使用量不為 0 時顯示出來。
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -952,7 +961,7 @@ truncation_symbol = ""
 
 ## Nix-shell
 
-`nix_shell` 模組顯示 nix-shell 環境。 這個模組會在 nix-shell 環境中顯示。
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### 選項
 
@@ -980,7 +989,7 @@ symbol = "☃️  "
 
 ## NodeJS
 
-`nodejs` 模組顯示現在安裝的 NodeJS 版本。 這個模組在下列其中一個條件達成時顯示：
+The `nodejs` module shows the currently installed version of NodeJS. 這個模組在下列其中一個條件達成時顯示：
 
 - 現在資料夾中包含一個 `package.json` 檔案
 - The current directory contains a `.node-version` file
@@ -1006,7 +1015,7 @@ symbol = "🤖 "
 
 ## 套件版本
 
-The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並顯示他的現在版本。 The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
 - **npm** – `npm` 套件的版本是從現在資料夾中的 `package.json` 之中擷取出來的
 - **cargo** – `cargo` 套件的版本是從現在資料夾中的 `Cargo.toml` 之中擷取出來的
@@ -1131,7 +1140,7 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-`ruby` 模組顯示現在安裝的 Ruby 版本。 這個模組在下列其中一個條件達成時顯示：
+The `ruby` module shows the currently installed version of Ruby. 這個模組在下列其中一個條件達成時顯示：
 
 - 目前資料夾中有一個 `Gemfile` 檔案
 - The current directory contains a `.ruby-version` file
@@ -1156,7 +1165,7 @@ symbol = "🔺 "
 
 ## Rust
 
-`rust` 模組顯示現在安裝的 Rust 版本。 這個模組在下列其中一個條件達成時顯示：
+The `rust` module shows the currently installed version of Rust. 這個模組在下列其中一個條件達成時顯示：
 
 - 目前資料夾中有一個 `Cargo.toml` 檔案
 - 現在資料夾中包含一個檔案具有 `.rs` 副檔名
@@ -1229,11 +1238,11 @@ symbol = "🏎💨 "
 
 ## 時間
 
-`time` 模組顯示目前的**當地**時間. `format` 設定值被 [`chrono`](https://crates.io/crates/chrono) crate 用來控制時間如何顯示。 請看 [chrono 的 strftime 文件](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)來了解有那些選項可以使用。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1247,7 +1256,7 @@ symbol = "🏎💨 "
 | `utc_time_offset` | `"local"`       | 設定相對於 UTC 的時差。 範圍 -24 < x < 24。 允許使用浮點數來表示 30/45 分鐘時差的時區。                              |
 | `disabled`        | `true`          | 停用 `time` 模組。                                                                          |
 
-如果 `use_12hr` 是 `true` 的話，`format` 會被預設為 `"%r"`。 不然的話，它會被預設為 `"%T"`。 手動設定 `format` 的設定值會覆寫 `use_12hr` 的設定。
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
 ### 範例
 
@@ -1262,7 +1271,7 @@ utc_time_offset = "-5"
 
 ## 使用者名稱
 
-`username` 模組顯示現在使用中的使用者名稱。 這個模組在下列其中一個條件達成時顯示：
+The `username` module shows active user's username. 這個模組在下列其中一個條件達成時顯示：
 
 - 目前使用者為 root
 - 目前使用者並非登入時的使用者
