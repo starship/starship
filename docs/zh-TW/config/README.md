@@ -1248,13 +1248,14 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### 選項
 
-| 變數                | 預設              | 說明                                                                                     |
-| ----------------- | --------------- | -------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | 啟用 12 小時格式。                                                                            |
-| `format`          | 請看下列            | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。 |
-| `style`           | `"bold yellow"` | 這個模組的時間的風格。                                                                            |
-| `utc_time_offset` | `"local"`       | 設定相對於 UTC 的時差。 範圍 -24 < x < 24。 允許使用浮點數來表示 30/45 分鐘時差的時區。                              |
-| `disabled`        | `true`          | 停用 `time` 模組。                                                                          |
+| 變數                | 預設              | 說明                                                                                                    |
+| ----------------- | --------------- | ----------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`         | Enables 12 hour formatting.                                                                           |
+| `format`          | 請看下列            | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。                |
+| `style`           | `"bold yellow"` | The style for the module time.                                                                        |
+| `utc_time_offset` | `"local"`       | 設定相對於 UTC 的時差。 範圍 -24 < x < 24。 允許使用浮點數來表示 30/45 分鐘時差的時區。                                             |
+| `disabled`        | `true`          | 停用 `time` 模組。                                                                                         |
+| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
@@ -1267,6 +1268,7 @@ If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it default
 disabled = false
 format = "🕙[ %T ]"
 utc_time_offset = "-5"
+time_range = "10:00:00-14:00:00"
 ```
 
 ## 使用者名稱
