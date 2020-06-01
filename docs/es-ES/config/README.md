@@ -1248,14 +1248,14 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opciones
 
-| Variable          | Por defecto     | Descripción                                                                                                         |
-| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | Activa el formato de 12 horas.                                                                                      |
-| `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`           | `"bold yellow"` | El estilo del módulo de la hora.                                                                                    |
-| `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
-| `disabled`        | `true`          | Disables the `time` module.                                                                                         |
-| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format               |
+| Variable          | Por defecto     | Descripción                                                                                                                  |
+| ----------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`         | Activa el formato de 12 horas.                                                                                               |
+| `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.          |
+| `style`           | `"bold yellow"` | El estilo del módulo de la hora.                                                                                             |
+| `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.             |
+| `disabled`        | `true`          | Disables the `time` module.                                                                                                  |
+| `time_range`      | `-`             | Establece el intervalo de tiempo durante el cual el módulo se mostrará. La hora debe ser especificada en formato de 24 horas |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
