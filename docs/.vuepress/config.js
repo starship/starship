@@ -2,32 +2,32 @@ module.exports = {
   locales: {
     "/": {
       lang: "en-US",
-      title: "Starship",
+      title: "Black Lives Matter",
       description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
     },
     "/de-DE/": {
       lang: "de-DE",
-      title: "Starship",
+      title: "Black Lives Matter",
       description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
     },
     "/ru-RU/": {
       lang: "ru-RU",
-      title: "Starship",
+      title: "Black Lives Matter",
       description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
     },
     "/ja-JP/": {
       lang: "ja-JP",
-      title: "Starship",
+      title: "Black Lives Matter",
       description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
     },
     "/zh-CN/": {
       lang: "zh-CN",
-      title: "Starship",
+      title: "Black Lives Matter",
       description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
     },
     "/zh-TW/": {
       lang: "zh-TW",
-      title: "Starship",
+      title: "Black Lives Matter",
       description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
     }
   },
