@@ -1,5 +1,4 @@
 use std::io;
-use std::str::FromStr;
 use std::time::SystemTime;
 
 #[macro_use]
@@ -178,8 +177,11 @@ fn main() {
         }
         ("explain", Some(sub_m)) => print::explain(sub_m.clone()),
         ("completions", Some(sub_m)) => {
-            let shell_name = sub_m.value_of("shell").expect("Shell name missing.");
-            let shell = Shell::from_str(shell_name).expect("Invalid shell");
+            let shell: Shell = sub_m
+                .value_of("shell")
+                .expect("Shell name missing.")
+                .parse()
+                .expect("Invalid shell");
 
             app.gen_completions_to("starship", shell, &mut io::stdout().lock());
         }
