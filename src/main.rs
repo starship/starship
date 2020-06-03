@@ -1,3 +1,4 @@
+use std::io;
 use std::time::SystemTime;
 
 #[macro_use]
@@ -19,7 +20,7 @@ mod segment;
 mod utils;
 
 use crate::module::ALL_MODULES;
-use clap::{App, AppSettings, Arg, SubCommand};
+use clap::{App, AppSettings, Arg, Shell, SubCommand};
 
 fn main() {
     pretty_env_logger::init();
@@ -71,7 +72,7 @@ fn main() {
         .long("print-full-init")
         .help("Print the main initialization script (as opposed to the init stub)");
 
-    let matches =
+    let mut app =
         App::new("starship")
             .about("The cross-shell prompt for astronauts. ☄🌌️")
             // pull the version number from Cargo.toml
@@ -139,7 +140,21 @@ fn main() {
             .subcommand(
                 SubCommand::with_name("explain").about("Explains the currently showing modules"),
             )
-            .get_matches();
+            .subcommand(
+                SubCommand::with_name("completions")
+                    .about("Generate starship shell completions for your shell to stdout")
+                    .arg(
+                        Arg::with_name("shell")
+                            .takes_value(true)
+                            .possible_values(&Shell::variants())
+                            .help("the shell to generate completions for")
+                            .value_name("SHELL")
+                            .required(true)
+                            .env("STARSHIP_SHELL"),
+                    ),
+            );
+
+    let matches = app.clone().get_matches();
 
     match matches.subcommand() {
         ("init", Some(sub_m)) => {
@@ -183,6 +198,15 @@ fn main() {
             }
         }
         ("explain", Some(sub_m)) => print::explain(sub_m.clone()),
-        _ => {}
+        ("completions", Some(sub_m)) => {
+            let shell: Shell = sub_m
+                .value_of("shell")
+                .expect("Shell name missing.")
+                .parse()
+                .expect("Invalid shell");
+
+            app.gen_completions_to("starship", shell, &mut io::stdout().lock());
+        }
+        (command, _) => unreachable!("Invalid subcommand: {}", command),
     }
 }
