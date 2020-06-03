@@ -182,6 +182,6 @@ fn main() {
 
             app.gen_completions_to("starship", shell, &mut io::stdout().lock());
         }
-        (command, _) => panic!("Invalid subcommand: {}", command),
+        (command, _) => unreachable!("Invalid subcommand: {}", command),
     }
 }
