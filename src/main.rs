@@ -136,7 +136,8 @@ fn main() {
                             .possible_values(&Shell::variants())
                             .help("the shell to generate completions for")
                             .value_name("SHELL")
-                            .required(true),
+                            .required(true)
+                            .env("STARSHIP_SHELL"),
                     ),
             );
 
