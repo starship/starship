@@ -1,3 +1,7 @@
+#[cfg(not(target_os = "windows"))]
+use super::utils::directory_nix as directory_utils;
+#[cfg(target_os = "windows")]
+use super::utils::directory_win as directory_utils;
 use path_slash::PathExt;
 use std::collections::HashMap;
 use std::iter::FromIterator;
@@ -96,10 +100,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         formatter
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
+                "read_only_style" => Some(Ok(config.read_only_symbol_style)),
                 _ => None,
             })
             .map(|variable| match variable {
                 "path" => Some(Ok(&final_dir_string)),
+                "read_only" => {
+                    if is_readonly_dir(current_dir.to_str()?) {
+                        Some(Ok(config.read_only_symbol))
+                    } else {
+                        None
+                    }
+                }
                 _ => None,
             })
             .parse(None)
@@ -114,6 +126,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+fn is_readonly_dir(path: &str) -> bool {
+    match directory_utils::is_write_allowed(path) {
+        Ok(res) => !res,
+        Err(e) => {
+            log::debug!(
+                "Failed to detemine read only status of directory '{}': {}",
+                path,
+                e
+            );
+            false
+        }
+    }
 }
 
 /// Contract the root component of a path
