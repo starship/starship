@@ -66,7 +66,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             log::debug!("Repo root: {:?}", repo_root);
             // Contract the path to the git repo root
             contract_repo_path(current_dir, repo_root)
-                .unwrap_or_else(|| current_dir.to_slash().unwrap())
+                .unwrap_or_else(|| contract_path(current_dir, &home_dir, HOME_SYMBOL))
         }
         // Contract the path to the home directory
         _ => contract_path(current_dir, &home_dir, HOME_SYMBOL),
