@@ -62,6 +62,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let dir_string = match &repo.root {
         Some(repo_root) if config.truncate_to_repo && (repo_root != &home_dir) => {
+            log::debug!("Repo root: {:?}", repo_root);
             let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
 
             // Contract the path to the git repo root
@@ -70,6 +71,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         // Contract the path to the home directory
         _ => contract_path(current_dir, &home_dir, HOME_SYMBOL),
     };
+    log::debug!("Dir string: {}", dir_string);
 
     let substituted_dir = substitute_path(dir_string, &config.substitutions);
 
