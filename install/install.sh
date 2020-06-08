@@ -53,8 +53,8 @@ complete() {
 get_tmpfile(){
   local suffix
   suffix="$1"
-  if ! hash mktemp; then
-    printf "$(mktemp).%s" "${suffix}"
+  if hash mktemp; then
+    printf "$(mktemp).${suffix}"
   else
     # No really good options here--let's pick a default + hope
     printf "/tmp/starship.%s" "${suffix}"
