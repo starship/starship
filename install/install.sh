@@ -54,10 +54,10 @@ get_tmpfile(){
   local suffix
   suffix="$1"
   if ! hash mktemp; then
-    printf "$(mktemp).${suffix}"
+    printf "$(mktemp).%s" "${suffix}"
   else
     # No really good options here--let's pick a default + hope
-    printf "/tmp/starship.${suffix}"
+    printf "/tmp/starship.%s" "${suffix}"
   fi
 }
 
