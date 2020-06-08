@@ -82,15 +82,30 @@ fetch() {
   fi
 }
 
+# Elevating privileges in the middle of the script is platform-dependent. Use
+# sudo for now with the understanding that it may not be the only way.
+elevate_priv(){
+  if ! hash sudo 2>/dev/null; then
+    error "Could not find the command \"sudo\", needed to get permissions for install."
+    info "If you are on Windows, please run your shell as an administrator, then"
+    info "rerun this script. Otherwise, please run this script as root, or install"
+    info "sudo."
+    exit 1
+  fi
+  if ! sudo -v; then
+    error "Superuser not granted, aborting installation"
+    exit 1
+  fi
+}
+
 install() {
- local sudo
  local msg
  if [ -w "$BIN_DIR" ]; then
 	 sudo=""
 	 msg="Installing Starship, please wait…"
  else
 	 warn "Escalated permission are required to install to ${BIN_DIR}"
-	 sudo -v || (error "Aborting installation (Please provide root password)";exit 1)
+   elevate_priv
 	 sudo="sudo"
 	 msg="Installing Starship as root, please wait…"
  fi
