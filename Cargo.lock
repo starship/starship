@@ -50,9 +50,9 @@ checksum = "cff77d8686867eceff3105329d4698d96c2391c176d5d03adc90c7389162b5b8"
 
 [[package]]
 name = "attohttpc"
-version = "0.13.0"
+version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d5db1932a9d70d5091139d6b0e04ec6a4d9f9184041c15d71a5ef954cb3c5312"
+checksum = "93610ce1c035e8a273fe56a19852e42798f3c019ca2726e52d2971197f116525"
 dependencies = [
  "http",
  "log",
