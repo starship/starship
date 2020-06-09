@@ -49,6 +49,31 @@ complete() {
   printf "${GREEN}✓${NO_COLOR} $@\n"
 }
 
+# Gets path to a temporary file, even if 
+get_tmpfile(){
+  local suffix
+  suffix="$1"
+  if hash mktemp; then
+    printf "$(mktemp).${suffix}"
+  else
+    # No really good options here--let's pick a default + hope
+    printf "/tmp/starship.%s" "${suffix}"
+  fi
+}
+
+# Test if a location is writeable by trying to write to it. Windows does not let
+# you test writeability other than by writing: https://stackoverflow.com/q/1999988
+test_writeable(){
+  local path
+  path="${1:-}/test.txt"
+  if touch "${path}" 2> /dev/null; then
+    rm "${path}"
+    return 0
+  else
+    return 1
+  fi
+}
+
 fetch() {
   local command
   if hash curl 2>/dev/null; then
@@ -82,22 +107,58 @@ fetch() {
   fi
 }
 
+fetch_and_unpack(){
+  local sudo
+  local tmpfile
+  sudo="$1"
+  # I'd like to separate this into a fetch() and unpack() function, but I can't
+  # figure out how to get bash functions to read STDIN/STDOUT from pipes
+  if [ "${EXT}" = "tar.gz" ]; then
+    fetch "${URL}" | ${sudo} tar xzf${VERBOSE} - -C "${BIN_DIR}"
+  elif [ "${EXT}" = "zip" ]; then
+    # According to https://unix.stackexchange.com/q/2690, zip files cannot be read
+    # through a pipe. We'll have to do our own file-based setup.
+    tmpfile="$(get_tmpfile "${EXT}")"
+    fetch "${URL}" > "${tmpfile}"
+    ${sudo} unzip "${tmpfile}" -d "${BIN_DIR}"
+    rm "${tmpfile}"
+  else
+    error "Unknown package extension."
+    info "This almost certainly results from a bug in this script--please file a"
+    info "bug report at https://github.com/starship/starship/issues"
+    exit 1
+  fi
+}
+
+elevate_priv(){
+  if ! hash sudo 2>/dev/null; then
+    error "Could not find the command \"sudo\", needed to get permissions for install."
+    info "If you are on Windows, please run your shell as an administrator, then"
+    info "rerun this script. Otherwise, please run this script as root, or install"
+    info "sudo."
+    exit 1
+  fi
+  if ! sudo -v; then
+    error "Superuser not granted, aborting installation"
+    exit 1
+  fi
+}
+
 install() {
- local sudo
  local msg
- if [ -w "$BIN_DIR" ]; then
-	 sudo=""
-	 msg="Installing Starship, please wait…"
- else
-	 warn "Escalated permission are required to install to ${BIN_DIR}"
-	 sudo -v || (error "Aborting installation (Please provide root password)";exit 1)
-	 sudo="sudo"
-	 msg="Installing Starship as root, please wait…"
- fi
- info "$msg"
- fetch "${URL}" \
-	| ${sudo} tar xzf${VERBOSE} - \
-	-C "${BIN_DIR}"
+ local sudo
+
+  if test_writeable "${BIN_DIR}" ; then
+    sudo=""
+    msg="Installing Starship, please wait…"
+  else
+    warn "Escalated permission are required to install to ${BIN_DIR}"
+    elevate_priv
+    sudo="sudo"
+    msg="Installing Starship as root, please wait…"
+  fi
+  info "$msg"
+  fetch_and_unpack "${sudo}"
 }
 
 # Currently supporting:
@@ -167,6 +228,12 @@ confirm() {
 
 check_bin_dir() {
   local bin_dir="$1"
+
+  if [ ! -d "$BIN_DIR" ]; then
+   error "Installation location $BIN_DIR does not appear to be a directory"
+   info "Make sure the location exists and is a directory, then try again."
+   exit 1
+  fi
 
   # https://stackoverflow.com/a/11655875
   local good
@@ -247,14 +314,14 @@ fi
 echo
 
 EXT=tar.gz
-if [ "${PLATFORM}" = win ]; then
+if [ "${PLATFORM}" = "pc-windows-msvc" ]; then
   EXT=zip
 fi
 
 URL="${BASE_URL}/latest/download/starship-${ARCH}-${PLATFORM}.${EXT}"
 info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
-check_bin_dir "${BIN_DIR}"
 confirm "Install Starship ${GREEN}latest${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
+check_bin_dir "${BIN_DIR}"
 
 install
 complete "Starship installed"
@@ -280,6 +347,5 @@ info "Please follow the steps for your shell to complete the installation:
   ${BOLD}${UNDERLINE}Ion${NO_COLOR}
   Add the following to the end of ${BOLD}~/.config/ion/initrc${NO_COLOR}:
 
-      eval $(starship init ion)
-
+      eval \$(starship init ion)
 "
