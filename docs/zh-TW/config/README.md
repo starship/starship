@@ -113,6 +113,7 @@ prompt_order = [
     "haskell",
     "java",
     "julia",
+    "nim",
     "nodejs",
     "ocaml",
     "php",
@@ -959,6 +960,32 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
+## Nim
+
+The `nim` module shows the currently installed version of Nim. 這個模組在下列其中一個條件達成時顯示：
+- The current directory contains a `nim.cfg` file
+- The current directory contains a file with the `.nim` extension
+- The current directory contains a file with the `.nims` extension
+- The current directory contains a file with the `.nimble` extension
+
+### 選項
+
+| 變數         | 預設              | 說明                                                    |
+| ---------- | --------------- | ----------------------------------------------------- |
+| `symbol`   | `"👑 "`          | The symbol used before displaying the version of Nim. |
+| `style`    | `"bold yellow"` | 這個模組的風格。                                              |
+| `disabled` | `false`         | Disables the `nim` module.                            |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[nim]
+style = "yellow"
+symbol = "🎣 "
+```
+
 ## Nix-shell
 
 The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
@@ -967,12 +994,12 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 
 | 變數           | 預設            | 說明                                                |
 | ------------ | ------------- | ------------------------------------------------- |
-| `use_name`   | `false`       | 顯示 nix-shell 的名稱。                                 |
-| `impure_msg` | `"impure"`    | 自定義「impure」訊息。                                    |
-| `pure_msg`   | `"pure"`      | 自定義「pure」訊息。                                      |
+| `use_name`   | `false`       | Display the name of the nix-shell.                |
+| `impure_msg` | `"impure"`    | Customize the "impure" msg.                       |
+| `pure_msg`   | `"pure"`      | Customize the "pure" msg.                         |
 | `symbol`     | `"❄️  "`      | The symbol used before displaying the shell name. |
 | `style`      | `"bold blue"` | 這個模組的風格。                                          |
-| `disabled`   | `false`       | 停用 `nix_shell` 模組。                                |
+| `disabled`   | `false`       | Disables the `nix_shell` module.                  |
 
 ### 範例
 
@@ -991,18 +1018,18 @@ symbol = "☃️  "
 
 The `nodejs` module shows the currently installed version of NodeJS. 這個模組在下列其中一個條件達成時顯示：
 
-- 現在資料夾中包含一個 `package.json` 檔案
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
-- 現在資料夾中包含一個 `node_modules` 資料夾
-- 現在資料夾中包含一個檔案具有 `.js` 副檔名
+- The current directory contains a `node_modules` directory
+- The current directory contains a file with the `.js` extension
 
 ### 選項
 
-| 變數         | 預設             | 說明                   |
-| ---------- | -------------- | -------------------- |
-| `symbol`   | `"⬢ "`         | 在顯示 NodeJS 版本之前用的符號。 |
-| `style`    | `"bold green"` | 這個模組的風格。             |
-| `disabled` | `false`        | 停用 `nodejs` 模組。      |
+| 變數         | 預設             | 說明                                                       |
+| ---------- | -------------- | -------------------------------------------------------- |
+| `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
+| `style`    | `"bold green"` | 這個模組的風格。                                                 |
+| `disabled` | `false`        | Disables the `nodejs` module.                            |
 
 ### 範例
 
@@ -1013,13 +1040,13 @@ The `nodejs` module shows the currently installed version of NodeJS. 這個模�
 symbol = "🤖 "
 ```
 
-## 套件版本
+## Package Version
 
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
-- **npm** – `npm` 套件的版本是從現在資料夾中的 `package.json` 之中擷取出來的
-- **cargo** – `cargo` 套件的版本是從現在資料夾中的 `Cargo.toml` 之中擷取出來的
-- **poetry** – `poetry` 套件的版本是從現在資料夾中的 `pyproject.toml` 之中擷取出來的
+- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
+- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
 - **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 - **julia** - The package version is extracted from the `Project.toml` present
@@ -1029,12 +1056,12 @@ The `package` module is shown when the current directory is the repository for a
 
 ### 選項
 
-| 變數                | 預設           | 說明                                                        |
-| ----------------- | ------------ | --------------------------------------------------------- |
-| `symbol`          | `"📦 "`       | 顯示在套件的版本之前的符號。                                            |
-| `style`           | `"bold 208"` | 這個模組的風格。                                                  |
-| `display_private` | `false`      | Enable displaying version for packages marked as private. |
-| `disabled`        | `false`      | 停用 `package` 模組。                                          |
+| 變數                | 預設           | 說明                                                         |
+| ----------------- | ------------ | ---------------------------------------------------------- |
+| `symbol`          | `"📦 "`       | The symbol used before displaying the version the package. |
+| `style`           | `"bold 208"` | 這個模組的風格。                                                   |
+| `display_private` | `false`      | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`      | Disables the `package` module.                             |
 
 ### 範例
 
@@ -1077,7 +1104,7 @@ symbol = "🐪 "
 
 The `php` module shows the currently installed version of PHP. 這個模組在下列其中一個條件達成時顯示：
 
-- 現在資料夾中包含一個 `composer.json` 檔案
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
@@ -1106,26 +1133,26 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 這個模組在下列其中一個條件達成時顯示：
 
-- 目前資料夾中有一個 `.python-version` 檔案
-- 目前資料夾中有一個 `requirements.txt` 檔案
-- 目前資料夾中有一個 `pyproject.toml` 檔案
+- The current directory contains a `.python-version` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `pyproject.toml` file
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
-- 目前資料夾中有一個 `Pipfile` 檔案
-- 目前資料夾中有一個 `tox.ini` 檔案
-- 現在資料夾中包含一個 `setup.py` 檔案
+- The current directory contains a `Pipfile` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
 - The current directory contains a `__init__.py` file
 - A virtual environment is currently activated
 
 ### 選項
 
-| 變數                   | 預設              | 說明                                                                         |
-| -------------------- | --------------- | -------------------------------------------------------------------------- |
-| `symbol`             | `"🐍 "`          | 顯示在 Python 版本之前的符號。                                                        |
-| `pyenv_version_name` | `false`         | 使用 pyenv 取得 Python 的版本。                                                    |
-| `pyenv_prefix`       | `"pyenv "`      | 顯示在 pyenv 版本之前的前綴 (預設顯示是 `pyenv MY_VERSION`)。                              |
-| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module. |
-| `style`              | `"bold yellow"` | 這個模組的風格。                                                                   |
-| `disabled`           | `false`         | 停用 `python` 模組。                                                            |
+| 變數                   | 預設              | 說明                                                                          |
+| -------------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
+| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
+| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
+| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.  |
+| `style`              | `"bold yellow"` | 這個模組的風格。                                                                    |
+| `disabled`           | `false`         | Disables the `python` module.                                               |
 
 ### 範例
 
@@ -1142,17 +1169,17 @@ pyenv_prefix = "foo "
 
 The `ruby` module shows the currently installed version of Ruby. 這個模組在下列其中一個條件達成時顯示：
 
-- 目前資料夾中有一個 `Gemfile` 檔案
+- The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
-- 目前資料夾中有一個 `.rb` 檔案
+- The current directory contains a `.rb` file
 
 ### 選項
 
-| 變數         | 預設           | 說明                |
-| ---------- | ------------ | ----------------- |
-| `symbol`   | `"💎 "`       | 顯示在 Ruby 版本之前的符號。 |
-| `style`    | `"bold red"` | 這個模組的風格。          |
-| `disabled` | `false`      | 停用 `ruby` 模組。     |
+| 變數         | 預設           | 說明                                                     |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
+| `style`    | `"bold red"` | 這個模組的風格。                                               |
+| `disabled` | `false`      | Disables the `ruby` module.                            |
 
 ### 範例
 
@@ -1167,16 +1194,16 @@ symbol = "🔺 "
 
 The `rust` module shows the currently installed version of Rust. 這個模組在下列其中一個條件達成時顯示：
 
-- 目前資料夾中有一個 `Cargo.toml` 檔案
-- 現在資料夾中包含一個檔案具有 `.rs` 副檔名
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### 選項
 
-| 變數         | 預設           | 說明                |
-| ---------- | ------------ | ----------------- |
-| `symbol`   | `"🦀 "`       | 顯示在 Rust 版本之前的符號。 |
-| `style`    | `"bold red"` | 這個模組的風格。          |
-| `disabled` | `false`      | 停用 `rust` 模組。     |
+| 變數         | 預設           | 說明                                                     |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
+| `style`    | `"bold red"` | 這個模組的風格。                                               |
+| `disabled` | `false`      | Disables the `rust` module.                            |
 
 ### 範例
 
@@ -1236,7 +1263,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 symbol = "🏎💨 "
 ```
 
-## 時間
+## Time
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
@@ -1248,14 +1275,14 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### 選項
 
-| 變數                | 預設              | 說明                                                                                                    |
-| ----------------- | --------------- | ----------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | Enables 12 hour formatting.                                                                           |
-| `format`          | 請看下列            | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。                |
-| `style`           | `"bold yellow"` | The style for the module time.                                                                        |
-| `utc_time_offset` | `"local"`       | 設定相對於 UTC 的時差。 範圍 -24 < x < 24。 允許使用浮點數來表示 30/45 分鐘時差的時區。                                             |
-| `disabled`        | `true`          | 停用 `time` 模組。                                                                                         |
-| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
+| 變數                | 預設              | 說明                                                                                                                  |
+| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`         | Enables 12 hour formatting.                                                                                         |
+| `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `"bold yellow"` | The style for the module time.                                                                                      |
+| `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
+| `disabled`        | `true`          | Disables the `time` module.                                                                                         |
+| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format               |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
@@ -1271,23 +1298,23 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## 使用者名稱
+## Username
 
 The `username` module shows active user's username. 這個模組在下列其中一個條件達成時顯示：
 
-- 目前使用者為 root
-- 目前使用者並非登入時的使用者
-- 使用者透過 SSH session 進行連線
-- 變數 `show_always` 被設為 true
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ### 選項
 
-| 變數            | 預設              | 說明                  |
-| ------------- | --------------- | ------------------- |
-| `style_root`  | `"bold red"`    | 使用者為 root 時使用的風格。   |
-| `style_user`  | `"bold yellow"` | 非 root 使用者時使用的風格。   |
-| `show_always` | `false`         | 總是顯示 `username` 模組。 |
-| `disabled`    | `false`         | 停用 `username` 模組。   |
+| 變數            | 預設              | 說明                                    |
+| ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`    | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `show_always` | `false`         | Always shows the `username` module.   |
+| `disabled`    | `false`         | Disables the `username` module.       |
 
 ### 範例
 
@@ -1351,7 +1378,7 @@ The order in which custom modules are shown can be individually set by setting `
 | `command`     |                           | The command whose output should be printed.                                                                                |
 | `when`        |                           | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                           | [See below](#custom-command-shell)                                                                                         |
-| `說明`          | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
+| `description` | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                      | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                      | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                      | The extensions that will be searched in the working directory for a match.                                                 |
