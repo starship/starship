@@ -92,7 +92,7 @@ active boot switches: -d:release\n",
                 stdout: String::from("7.3.8"),
                 stderr: String::default(),
             })
-        },
+        }
         "purs --version" => Some(CommandOutput {
             stdout: String::from("0.13.5"),
             stderr: String::default(),
@@ -106,7 +106,7 @@ active boot switches: -d:release\n",
                 stdout: String::from("8.6.5"),
                 stderr: String::default(),
             })
-        },
+        }
         "zig version" => Some(CommandOutput {
             stdout: String::from("0.6.0"),
             stderr: String::default(),
