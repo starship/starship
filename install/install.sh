@@ -65,13 +65,9 @@ get_tmpfile(){
 # you test writeability other than by writing: https://stackoverflow.com/q/1999988
 test_writeable(){
   local path
-  path="${1:-}"
-  set +e
-  touch "${path}/test.txt" 2> /dev/null
-  rc=$?
-  set -e
-  if [ $rc -eq 0 ]; then
-    rm "${path}/test.txt"
+  path="${1:-}/test.txt"
+  if touch "${path}" 2> /dev/null; then
+    rm "${path}"
     return 0
   else
     return 1
@@ -152,17 +148,17 @@ install() {
  local msg
  local sudo
 
- if test_writeable "${BIN_DIR}" ; then
-	 sudo=""
-	 msg="Installing Starship, please wait…"
- else
-	 warn "Escalated permission are required to install to ${BIN_DIR}"
-   elevate_priv
-	 sudo="sudo"
-	 msg="Installing Starship as root, please wait…"
- fi
- info "$msg"
- fetch_and_unpack "${sudo}"
+  if test_writeable "${BIN_DIR}" ; then
+    sudo=""
+    msg="Installing Starship, please wait…"
+  else
+    warn "Escalated permission are required to install to ${BIN_DIR}"
+    elevate_priv
+    sudo="sudo"
+    msg="Installing Starship as root, please wait…"
+  fi
+  info "$msg"
+  fetch_and_unpack "${sudo}"
 }
 
 # Currently supporting:
