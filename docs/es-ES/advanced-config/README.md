@@ -8,7 +8,7 @@ Las configuraciones de esta sección pueden sufrir cambios en futuras versiones 
 
 :::
 
-## Custom pre-prompt and pre-execution Commands in Bash
+## Comandos pre-prompt y pre-ejecucucióne personalizados en Bash
 
 Bash no posee un framework oficial de preexec/precmd como la mayoría de las demás shells. Por lo tanto, es complicado proveer una personalización completa en `bash`. Sin embargo, Starship te da la posibilidad de insertar de forma limitada tus propias funciones en el proceso de renderizado del prompt:
 
