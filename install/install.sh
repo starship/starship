@@ -42,15 +42,15 @@ warn() {
 }
 
 error() {
-  printf "%s\n" >&2 "${RED}x $*${NO_COLOR}"
+  printf "%s\n" "${RED}x $*${NO_COLOR}" >&2
 }
 
 complete() {
   printf "%s\n" "${GREEN}✓${NO_COLOR} $*"
 }
 
-# Gets path to a temporary file, even if 
-get_tmpfile(){
+# Gets path to a temporary file, even if
+get_tmpfile() {
   local suffix
   suffix="$1"
   if hash mktemp; then
@@ -63,10 +63,10 @@ get_tmpfile(){
 
 # Test if a location is writeable by trying to write to it. Windows does not let
 # you test writeability other than by writing: https://stackoverflow.com/q/1999988
-test_writeable(){
+test_writeable() {
   local path
   path="${1:-}/test.txt"
-  if touch "${path}" 2> /dev/null; then
+  if touch "${path}" 2>/dev/null; then
     rm "${path}"
     return 0
   else
@@ -107,7 +107,7 @@ fetch() {
   fi
 }
 
-fetch_and_unpack(){
+fetch_and_unpack() {
   local sudo
   local tmpfile
   sudo="$1"
@@ -119,7 +119,7 @@ fetch_and_unpack(){
     # According to https://unix.stackexchange.com/q/2690, zip files cannot be read
     # through a pipe. We'll have to do our own file-based setup.
     tmpfile="$(get_tmpfile "${EXT}")"
-    fetch "${URL}" > "${tmpfile}"
+    fetch "${URL}" >"${tmpfile}"
     ${sudo} unzip "${tmpfile}" -d "${BIN_DIR}"
     rm "${tmpfile}"
   else
@@ -130,9 +130,9 @@ fetch_and_unpack(){
   fi
 }
 
-elevate_priv(){
+elevate_priv() {
   if ! hash sudo 2>/dev/null; then
-    error "Could not find the command \"sudo\", needed to get permissions for install."
+    error 'Could not find the command "sudo", needed to get permissions for install.'
     info "If you are on Windows, please run your shell as an administrator, then"
     info "rerun this script. Otherwise, please run this script as root, or install"
     info "sudo."
@@ -145,10 +145,10 @@ elevate_priv(){
 }
 
 install() {
- local msg
- local sudo
+  local msg
+  local sudo
 
-  if test_writeable "${BIN_DIR}" ; then
+  if test_writeable "${BIN_DIR}"; then
     sudo=""
     msg="Installing Starship, please wait…"
   else
@@ -212,15 +212,15 @@ confirm() {
   if [ -z "${FORCE-}" ]; then
     printf "%s " "${MAGENTA}?${NO_COLOR} $* ${BOLD}[y/N]${NO_COLOR}"
     set +e
-    read -r yn < /dev/tty
+    read -r yn </dev/tty
     rc=$?
     set -e
     if [ $rc -ne 0 ]; then
-      error "Error reading from prompt (please re-run with the \`--yes\` option)"
+      error 'Error reading from prompt (please re-run with the `--yes` option)'
       exit 1
     fi
     if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
-      error "Aborting (please answer \"yes\" to continue)"
+      error 'Aborting (please answer "yes" to continue)'
       exit 1
     fi
   fi
@@ -230,14 +230,15 @@ check_bin_dir() {
   local bin_dir="$1"
 
   if [ ! -d "$BIN_DIR" ]; then
-   error "Installation location $BIN_DIR does not appear to be a directory"
-   info "Make sure the location exists and is a directory, then try again."
-   exit 1
+    error "Installation location $BIN_DIR does not appear to be a directory"
+    info "Make sure the location exists and is a directory, then try again."
+    exit 1
   fi
 
   # https://stackoverflow.com/a/11655875
   local good
-  good=$( IFS=:
+  good=$(
+    IFS=:
     for path in $PATH; do
       if [ "${path}" = "${bin_dir}" ]; then
         echo 1
@@ -271,22 +272,61 @@ fi
 # parse argv variables
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    -p|--platform) PLATFORM="$2"; shift 2;;
-    -b|--bin-dir) BIN_DIR="$2"; shift 2;;
-    -a|--arch) ARCH="$2"; shift 2;;
-    -B|--base-url) BASE_URL="$2"; shift 2;;
+  -p | --platform)
+    PLATFORM="$2"
+    shift 2
+    ;;
+  -b | --bin-dir)
+    BIN_DIR="$2"
+    shift 2
+    ;;
+  -a | --arch)
+    ARCH="$2"
+    shift 2
+    ;;
+  -B | --base-url)
+    BASE_URL="$2"
+    shift 2
+    ;;
 
-    -V|--verbose) VERBOSE=1; shift 1;;
-    -f|-y|--force|--yes) FORCE=1; shift 1;;
+  -V | --verbose)
+    VERBOSE=1
+    shift 1
+    ;;
+  -f | -y | --force | --yes)
+    FORCE=1
+    shift 1
+    ;;
 
-    -p=*|--platform=*) PLATFORM="${1#*=}"; shift 1;;
-    -b=*|--bin-dir=*) BIN_DIR="${1#*=}"; shift 1;;
-    -a=*|--arch=*) ARCH="${1#*=}"; shift 1;;
-    -B=*|--base-url=*) BASE_URL="${1#*=}"; shift 1;;
-    -V=*|--verbose=*) VERBOSE="${1#*=}"; shift 1;;
-    -f=*|-y=*|--force=*|--yes=*) FORCE="${1#*=}"; shift 1;;
+  -p=* | --platform=*)
+    PLATFORM="${1#*=}"
+    shift 1
+    ;;
+  -b=* | --bin-dir=*)
+    BIN_DIR="${1#*=}"
+    shift 1
+    ;;
+  -a=* | --arch=*)
+    ARCH="${1#*=}"
+    shift 1
+    ;;
+  -B=* | --base-url=*)
+    BASE_URL="${1#*=}"
+    shift 1
+    ;;
+  -V=* | --verbose=*)
+    VERBOSE="${1#*=}"
+    shift 1
+    ;;
+  -f=* | -y=* | --force=* | --yes=*)
+    FORCE="${1#*=}"
+    shift 1
+    ;;
 
-    *) error "Unknown option: $1"; exit 1;;
+  *)
+    error "Unknown option: $1"
+    exit 1
+    ;;
   esac
 done
 
