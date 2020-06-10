@@ -34,19 +34,19 @@ MAGENTA="$(tput setaf 5 2>/dev/null || echo '')"
 NO_COLOR="$(tput sgr0 2>/dev/null || echo '')"
 
 info() {
-  printf "${BOLD}${GREY}>${NO_COLOR} $@\n"
+  printf "%s\n" "${BOLD}${GREY}>${NO_COLOR} $*"
 }
 
 warn() {
-  printf "${YELLOW}! $@${NO_COLOR}\n"
+  printf "%s\n" "${YELLOW}! $*${NO_COLOR}"
 }
 
 error() {
-  printf "${RED}x $@${NO_COLOR}\n" >&2
+  printf "%s\n" >&2 "${RED}x $*${NO_COLOR}"
 }
 
 complete() {
-  printf "${GREEN}✓${NO_COLOR} $@\n"
+  printf "%s\n" "${GREEN}✓${NO_COLOR} $*"
 }
 
 # Gets path to a temporary file, even if 
@@ -54,7 +54,7 @@ get_tmpfile(){
   local suffix
   suffix="$1"
   if hash mktemp; then
-    printf "$(mktemp).${suffix}"
+    printf "%s.%s" "$(mktemp)" "${suffix}"
   else
     # No really good options here--let's pick a default + hope
     printf "/tmp/starship.%s" "${suffix}"
@@ -114,7 +114,7 @@ fetch_and_unpack(){
   # I'd like to separate this into a fetch() and unpack() function, but I can't
   # figure out how to get bash functions to read STDIN/STDOUT from pipes
   if [ "${EXT}" = "tar.gz" ]; then
-    fetch "${URL}" | ${sudo} tar xzf${VERBOSE} - -C "${BIN_DIR}"
+    fetch "${URL}" | ${sudo} tar xzf "${VERBOSE}" - -C "${BIN_DIR}"
   elif [ "${EXT}" = "zip" ]; then
     # According to https://unix.stackexchange.com/q/2690, zip files cannot be read
     # through a pipe. We'll have to do our own file-based setup.
@@ -210,7 +210,7 @@ detect_arch() {
 
 confirm() {
   if [ -z "${FORCE-}" ]; then
-    printf "${MAGENTA}?${NO_COLOR} $@ ${BOLD}[y/N]${NO_COLOR} "
+    printf "%s " "${MAGENTA}?${NO_COLOR} $* ${BOLD}[y/N]${NO_COLOR}"
     set +e
     read -r yn < /dev/tty
     rc=$?
@@ -298,7 +298,7 @@ if [ "${ARCH}" = "i386" ]; then
   exit 1
 fi
 
-printf "  ${UNDERLINE}Configuration${NO_COLOR}\n"
+printf "  %s\n" "${UNDERLINE}Configuration${NO_COLOR}"
 info "${BOLD}Bin directory${NO_COLOR}: ${GREEN}${BIN_DIR}${NO_COLOR}"
 info "${BOLD}Platform${NO_COLOR}:      ${GREEN}${PLATFORM}${NO_COLOR}"
 info "${BOLD}Arch${NO_COLOR}:          ${GREEN}${ARCH}${NO_COLOR}"
