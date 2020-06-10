@@ -32,6 +32,11 @@ Vous pouvez changer l'emplacement du fichier de configuration `starship.toml` gr
 export STARSHIP_CONFIG=~/.starship
 ```
 
+Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+```ps1
+$ENV:STARSHIP_CONFIG = "$HOME\.starship"
+```
+
 ### Terminologie
 
 **Module**: Un composant dans l'invite donnant des informations basées sur des informations contextuelles à propos de votre Système d'Exploitation. Par exemple, le module "nodejs" montre la version de NodeJS qui est actuellement installée sur votre ordinateur, si votre répertoire actuel est un projet NodeJS.
@@ -109,11 +114,14 @@ prompt_order = [
     "java",
     "julia",
     "nodejs",
+    "ocaml",
     "php",
+    "purescript",
     "python",
     "ruby",
     "rust",
     "terraform",
+    "zig",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -1028,6 +1036,34 @@ The `package` module is shown when the current directory is the repository for a
 symbol = "🎁 "
 ```
 
+## OCaml
+
+The `ocaml` module shows the currently installed version of OCaml. Le module est affiché si l'une des ces conditions est remplie :
+
+- The current directory contains a file with `.opam` extension or `_opam` directory
+- The current directory contains a `esy.lock` directory
+- The current directory contains a `dune` or `dune-project` file
+- The current directory contains a `jbuild` or `jbuild-ignore` file
+- The current directory contains a `.merlin` file
+- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+
+### Options
+
+| Variable   | Default         | Description                                             |
+| ---------- | --------------- | ------------------------------------------------------- |
+| `symbol`   | `"🐫 "`          | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"` | The style for the module.                               |
+| `disabled` | `false`         | Disables the `ocaml` module.                            |
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[ocaml]
+symbol = "🐪 "
+```
+
 ## PHP
 
 The `php` module shows the currently installed version of PHP. Le module est affiché si l'une des ces conditions est remplie :
@@ -1103,7 +1139,7 @@ The `ruby` module shows the currently installed version of Ruby. Le module est a
 
 ### Options
 
-| Variable   | Default        | Description                                            |
+| Variable   | Défault        | Description                                            |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`         | The symbol used before displaying the version of Ruby. |
 | `style`    | `"bold green"` | The style for the module.                              |
@@ -1127,7 +1163,7 @@ The `rust` module shows the currently installed version of Rust. Le module est a
 
 ### Options
 
-| Variable   | Défault        | Description                                            |
+| Variable   | Défaut         | Description                                            |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`         | The symbol used before displaying the version of Rust. |
 | `style`    | `"bold green"` | The style for the module.                              |
@@ -1148,7 +1184,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 
 ### Options
 
-| Variable   | Défaut               | Description                                      |
+| Variable   | Default              | Description                                      |
 | ---------- | -------------------- | ------------------------------------------------ |
 | `label`    | `""`                 | Prefix before the image name display.            |
 | `prefix`   | `"["`                | Prefix to display immediately before image name. |
@@ -1251,6 +1287,30 @@ Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le mod
 disabled = true
 ```
 
+
+## Zig
+
+The `zig` module shows the currently installed version of Zig. Le module est affiché si l'une des ces conditions est remplie :
+
+- The current directory contains a `.zig` file
+
+### Options
+
+| Variable   | Default         | Description                                           |
+| ---------- | --------------- | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`          | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"` | The style for the module.                             |
+| `disabled` | `false`         | Disables the `zig` module.                            |
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[zig]
+symbol = "⚡️ "
+```
+
 ## Custom commands
 
 The `custom` modules show the output of some arbitrary commands.
@@ -1300,4 +1360,28 @@ command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 prefix = " transcending "
+```
+
+## PureScript
+
+The `purescript` module shows the currently installed version of PureScript version. Le module est affiché si l'une des ces conditions est remplie :
+
+- The current directory contains a `spago.dhall` file
+- The current directory contains a \*.purs files
+
+### Options
+
+| Variable   | Default        | Description                                                  |
+| ---------- | -------------- | ------------------------------------------------------------ |
+| `symbol`   | `"<=> "` | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"` | The style for the module.                                    |
+| `disabled` | `false`        | Disables the `purescript` module.                            |
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[purescript]
+symbol = "<=> "
 ```

@@ -30,8 +30,8 @@ STATUS=$?
 # Calcula el número de tareas ejecutándose.
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Actualiza el símbolo del sistema para mostrar la salida de `starship prompt`
-PS1="$(starship prompt --status=$STATUS --jobs=NUM_JOBS)"
+# Set the prompt to the output of `starship prompt`
+PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
 La [implementación de Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) en Starship es sensíblemente is ligeramente más compleja para permitir características avanzadas como [el módulo de duración de comando](https://starship.rs/config/#Command-Duration) y para asegurar que Starship es compatible con las configuraciones preinstaladas de Bash.

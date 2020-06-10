@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
+use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig, VecOr};
 
 use ansi_term::Style;
 use starship_module_config_derive::ModuleConfig;
@@ -17,7 +17,7 @@ pub struct CustomConfig<'a> {
     pub symbol: Option<SegmentConfig<'a>>,
     pub command: &'a str,
     pub when: Option<&'a str>,
-    pub shell: Option<&'a str>,
+    pub shell: VecOr<&'a str>,
     pub description: &'a str,
     pub style: Option<Style>,
     pub disabled: bool,
@@ -34,7 +34,7 @@ impl<'a> RootModuleConfig<'a> for CustomConfig<'a> {
             symbol: None,
             command: "",
             when: None,
-            shell: None,
+            shell: VecOr::default(),
             description: "<custom config>",
             style: None,
             disabled: false,

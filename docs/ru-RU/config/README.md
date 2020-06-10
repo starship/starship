@@ -32,6 +32,11 @@ disabled = true
 export STARSHIP_CONFIG=~/.starship
 ```
 
+Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+```ps1
+$ENV:STARSHIP_CONFIG = "$HOME\.starship"
+```
+
 ### Терминология
 
 **Модуль**: Компонент строки, дающий информацию на основе контекстной информации вашей ОС. Например, модуль "nodejs" показывает установленную версию NodeJS на вашем компьютере, если вы находитесь в директории проекта NodeJS.
@@ -109,11 +114,14 @@ prompt_order = [
     "java",
     "julia",
     "nodejs",
+    "ocaml",
     "php",
+    "purescript",
     "python",
     "ruby",
     "rust",
     "terraform",
+    "zig",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -296,7 +304,7 @@ prefix = "underwent "
 
 Модуль `conda` показывает текущее окружение conda, если `$CONDA_DEFAULT_ENV` присвоено значение.
 
-::: tip Подсказка
+::: tip
 
 Это не подавляет модификатор командной строки самой conda. Возможно, вы захотите запустить `conda config --set changeps1 False`.
 
@@ -730,7 +738,7 @@ symbol = " "
 
 ## Имя хоста
 
-Модуль `hostname` отображает имя системного хоста.
+Модуль `hostname` отображает имя системы (хоста).
 
 ### Опции
 
@@ -829,7 +837,7 @@ symbol = "∴ "
 ```
 ## Kubernetes
 
-Отображает текущее контекстное имя Kubernetes и, если применено, пространство имён из файла kubeconfig. Пространство имен дожно быть задано в файле kubeconfig, это делается через `kubectl config set-context starship-cluster --namespace astronaut`. Если переменная окружения `$KUBECONFIG` установлена, модуль будет использовать это, в противном случае будет использовать `~/.kube/config`.
+Отображает текущее контекстное имя Kubernetes и, если применено, пространство имён из файла kubeconfig. Пространство имен дожно быть задано в файле kubeconfig, это делается через `kubectl config set-context starship-cluster --namespace astronaut`. Если переменная окружения `$KUBECONFIG` задана, модуль будет использовать его значение, в противном случае будет использовать `~/.kube/config`.
 
 ::: tip
 
@@ -1026,6 +1034,34 @@ symbol = "🤖 "
 
 [package]
 symbol = "🎁 "
+```
+
+## OCaml
+
+The `ocaml` module shows the currently installed version of OCaml. Модуль будет показан, если любое из следующих условий соблюдено:
+
+- The current directory contains a file with `.opam` extension or `_opam` directory
+- The current directory contains a `esy.lock` directory
+- The current directory contains a `dune` or `dune-project` file
+- The current directory contains a `jbuild` or `jbuild-ignore` file
+- The current directory contains a `.merlin` file
+- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+
+### Опции
+
+| Переменная | По умолчанию    | Описание                                                |
+| ---------- | --------------- | ------------------------------------------------------- |
+| `symbol`   | `"🐫 "`          | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"` | Стиль модуля.                                           |
+| `disabled` | `false`         | Disables the `ocaml` module.                            |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[ocaml]
+symbol = "🐪 "
 ```
 
 ## PHP
@@ -1251,6 +1287,30 @@ utc_time_offset = "-5"
 disabled = true
 ```
 
+
+## Zig
+
+The `zig` module shows the currently installed version of Zig. Модуль будет показан, если любое из следующих условий соблюдено:
+
+- The current directory contains a `.zig` file
+
+### Опции
+
+| Переменная | По умолчанию    | Описание                                              |
+| ---------- | --------------- | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`          | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"` | Стиль модуля.                                         |
+| `disabled` | `false`         | Disables the `zig` module.                            |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[zig]
+symbol = "⚡️ "
+```
+
 ## Custom commands
 
 The `custom` modules show the output of some arbitrary commands.
@@ -1300,4 +1360,28 @@ command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 prefix = " transcending "
+```
+
+## PureScript
+
+The `purescript` module shows the currently installed version of PureScript version. Модуль будет показан, если любое из следующих условий соблюдено:
+
+- The current directory contains a `spago.dhall` file
+- The current directory contains a \*.purs files
+
+### Опции
+
+| Переменная | По умолчанию   | Описание                                                     |
+| ---------- | -------------- | ------------------------------------------------------------ |
+| `symbol`   | `"<=> "` | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"` | Стиль модуля.                                                |
+| `disabled` | `false`        | Disables the `purescript` module.                            |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[purescript]
+symbol = "<=> "
 ```

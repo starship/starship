@@ -32,6 +32,11 @@ disabled = true
 export STARSHIP_CONFIG=~/.starship
 ```
 
+Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+```ps1
+$ENV:STARSHIP_CONFIG = "$HOME\.starship"
+```
+
 ### 术语
 
 **组件（Module）**：提示符的组成部分，通过来自系统的上下文信息向用户显示各种信息。 比如“nodejs”组件会在当前目录是一个 NodeJS 项目时显示您当前安装的 NodeJS 版本。
@@ -109,11 +114,14 @@ prompt_order = [
     "java",
     "julia",
     "nodejs",
+    "ocaml",
     "php",
+    "purescript",
     "python",
     "ruby",
     "rust",
     "terraform",
+    "zig",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -322,7 +330,7 @@ style = "dimmed green"
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. 此组件将在符合以下任意条件时显示：
+The `crystal` module shows the currently installed version of Crystal. 此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含一个 `shard.yml` 文件
 - The current directory contains a `.cr` file
@@ -436,7 +444,7 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. 此组件只有满足以下条件之一时才会被显示：
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. 此组件将在符合以下任意条件时显示：
 
 - 当前目录包含一个 `mix.exs` 文件.
 
@@ -459,7 +467,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. 此组件将在符合以下任意条件时显示：
+The `elm` module shows the currently installed version of Elm. 此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含一个 `elm.json` 文件
 - 当前目录包含 `elm-package.json` 文件
@@ -1028,9 +1036,37 @@ symbol = "🤖 "
 symbol = "🎁 "
 ```
 
+## OCaml
+
+The `ocaml` module shows the currently installed version of OCaml. 此组件将在符合以下任意条件之一时显示：
+
+- The current directory contains a file with `.opam` extension or `_opam` directory
+- The current directory contains a `esy.lock` directory
+- The current directory contains a `dune` or `dune-project` file
+- The current directory contains a `jbuild` or `jbuild-ignore` file
+- The current directory contains a `.merlin` file
+- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+
+### 配置项
+
+| 字段         | 默认值             | 描述                                                      |
+| ---------- | --------------- | ------------------------------------------------------- |
+| `symbol`   | `"🐫 "`          | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"` | 此组件的样式。                                                 |
+| `disabled` | `false`         | Disables the `ocaml` module.                            |
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[ocaml]
+symbol = "🐪 "
+```
+
 ## PHP
 
-`php` 组件显示当前安装的 PHP 版本。 此组件将在符合以下任意条件之一时显示：
+`php` 组件显示当前安装的 PHP 版本。 此组件将在符合以下任意条件时显示：
 
 - 当前目录包含一个 `composer.json` 文件
 - The current directory contains a `.php-version` file
@@ -1251,6 +1287,30 @@ utc_time_offset = "-5"
 disabled = true
 ```
 
+
+## Zig
+
+The `zig` module shows the currently installed version of Zig. 此组件将在符合以下任意条件之一时显示：
+
+- The current directory contains a `.zig` file
+
+### 配置项
+
+| 字段         | 默认值             | 描述                                                    |
+| ---------- | --------------- | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`          | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"` | 此组件的样式。                                               |
+| `disabled` | `false`         | Disables the `zig` module.                            |
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[zig]
+symbol = "⚡️ "
+```
+
 ## Custom commands
 
 The `custom` modules show the output of some arbitrary commands.
@@ -1300,4 +1360,28 @@ command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 prefix = " transcending "
+```
+
+## PureScript
+
+The `purescript` module shows the currently installed version of PureScript version. 此组件只有满足以下条件之一时才会被显示：
+
+- The current directory contains a `spago.dhall` file
+- The current directory contains a \*.purs files
+
+### 配置项
+
+| 字段         | 默认值            | 描述                                                           |
+| ---------- | -------------- | ------------------------------------------------------------ |
+| `symbol`   | `"<=> "` | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"` | 此组件的样式。                                                      |
+| `disabled` | `false`        | Disables the `purescript` module.                            |
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[purescript]
+symbol = "<=> "
 ```

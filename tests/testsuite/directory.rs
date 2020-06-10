@@ -25,6 +25,50 @@ fn home_directory() -> io::Result<()> {
 }
 
 #[test]
+fn substituted_truncated_path() -> io::Result<()> {
+    let output = common::render_module("directory")
+        .arg("--path=/some/long/network/path/workspace/a/b/c/dev")
+        .use_config(toml::toml! {
+            [directory]
+            truncation_length = 4
+            [directory.substitutions]
+            "/some/long/network/path" = "/some/net"
+            "a/b/c" = "d"
+        })
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("in {} ", Color::Cyan.bold().paint("net/workspace/d/dev"));
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+fn strange_substitution() -> io::Result<()> {
+    let strange_sub = "/\\/;,!";
+    let output = common::render_module("directory")
+        .arg("--path=/foo/bar/regular/path")
+        .use_config(toml::toml! {
+            [directory]
+            truncation_length = 0
+            fish_style_pwd_dir_length = 2 // Overridden by substitutions
+            [directory.substitutions]
+            "regular" = strange_sub
+        })
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!(
+        "in {} ",
+        Color::Cyan
+            .bold()
+            .paint(format!("/foo/bar/{}/path", strange_sub))
+    );
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
 #[ignore]
 fn directory_in_home() -> io::Result<()> {
     let dir = home_dir().unwrap().join("starship/engine");
