@@ -313,12 +313,12 @@ Note: これはconda自身の プロンプト修飾子 を抑制しません。`
 
 ### オプション
 
-| 変数                  | デフォルト          | 説明                                                                                                                                                                                                          |
-| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"C "`         | 環境名の直前に使用されるシンボルです。                                                                                                                                                                                         |
-| `style`             | `"bold green"` | モジュールのスタイルです。                                                                                                                                                                                               |
-| `disabled`          | `false`        | `conda`モジュールを無効にします。                                                                                                                                                                                        |
+| 変数                  | デフォルト          | 説明                                                                                                               |
+| ------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`            | 環境が`conda create -p [path]`で作成された場合、環境パスが切り捨てられるディレクトリ数。 `0`は切り捨てがないことを意味します。  [`directory`](#directory)もご覧ください。 |
+| `symbol`            | `"C "`         | 環境名の直前に使用されるシンボルです。                                                                                              |
+| `style`             | `"bold green"` | モジュールのスタイルです。                                                                                                    |
+| `disabled`          | `false`        | `conda`モジュールを無効にします。                                                                                             |
 
 ### 設定例
 
@@ -404,7 +404,7 @@ truncation_length = 8
 
 ## Docker Context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
+`docker_context`モジュールは、 [Dockerコンテキスト](https://docs.docker.com/engine/context/working-with-contexts/)が`デフォルト`に設定されていない場合、現在アクティブな <1>Dockerコンテキストを表示します。
 
 ### オプション
 
@@ -413,7 +413,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | `symbol`          | `"🐳 "`        | The symbol used before displaying the Docker context .                                  |
 | `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
 | `style`           | `"bold blue"` | モジュールのスタイルです。                                                                           |
-| `disabled`        | `true`        | Disables the `docker_context` module.                                                   |
+| `disabled`        | `true`        | `docker_context`モジュールを無効にします。                                                           |
 
 ### 設定例
 
@@ -426,11 +426,11 @@ symbol = "🐋 "
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+`dotnet` モジュールはカレントディレクトリに関係する.NET Core SDKのバージョンを表示します。 もし SDKは現在のディレクトリに固定されているのであれば、その固定されたバージョンが表示されます。 それ以外の場合、モジュール SDKの最新のインストールバージョンを示します。
 
-This module will only be shown in your prompt when one of the following files are present in the current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll also need the .NET Core command-line tools installed in order to use it correctly.
+このモジュールは、カレントディレクトリに次のファイルのいずれかが存在する場合にのみプロンプトに表示されます。: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj` 正しく使用するには、.NET Coreコマンドラインツールもインストールする必要があります。
 
-Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+内部的に、このモジュールは自身のバージョン検知のメカニズムを利用します。 `dotnet --version` を実行するより2倍速く実行できますが、.NET project一般的でないディレクトリlayoutの場合は間違ったバージョンが示されてしまうことがあります。 速度よりも精度が重要な場合は、次の方法でメカニズムを無効にできます。 モジュールオプションで`heuristic = false `を設定します。
 
 ### オプション
 
@@ -477,11 +477,11 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`elm`モジュールは、現在インストールされているElmのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`elm.json`ファイルが含まれている
 - カレントディレクトリに`elm-package.json`ファイルが含まれている
-- The current directory contains a `.elm-version` file
+- カレントディレクトリに`.elm-version`ファイルが含まれている
 - カレントディレクトリに`elm-stuff`フォルダが含まれている
 - カレントディレクトリに`*.elm`ファイルが含まれている
 
@@ -505,7 +505,7 @@ symbol = " "
 
 ## 環境変数
 
-The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+`env_var`モジュールは、選択された環境変数の現在の値を表示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - `variable`オプションが、既存の環境変数と一致する
 - `variable`オプションが定義されておらず、`default`オプションが定義されている
@@ -558,7 +558,7 @@ symbol = "e "
 
 ## Git ブランチ
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+`git_branch`モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを表示します。
 
 ### オプション
 
@@ -583,7 +583,7 @@ truncation_symbol = ""
 
 ## Git コミット
 
-The `git_commit` module shows the current commit hash of the repo in your current directory.
+`git_commit`モジュールは、現在のディレクトリにあるリポジトリの現在のコミットハッシュを表示します。
 
 ### オプション
 
@@ -602,12 +602,12 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 # ~/.config/starship.toml
 
 [git_commit]
-commit_hash_length = 4
+truncation_length = 4
 ```
 
 ## Git の進行状態
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+`git_state`モジュールはgitディレクトリの進行状態を表します。 (例: _REBASING_, _BISECTING_, その他) 進捗情報がある場合(例: REBASING 3/10)はその情報も表示されます。
 
 ### オプション
 
@@ -636,7 +636,7 @@ cherry_pick = "🍒 PICKING"
 
 ## Git の状態
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+`git_status`モジュールは、現在のディレクトリのリポジトリの状態を表すシンボルを表示します。
 
 ### オプション
 
@@ -695,14 +695,14 @@ deleted = "🗑"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`golang`モジュールは、現在インストールされているGolangのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`go.mod`ファイルが含まれている
 - カレントディレクトリに`go.sum`ファイルが含まれている
 - カレントディレクトリに`glide.yaml`ファイルが含まれている
 - カレントディレクトリに`Gopkg.yml`ファイルが含まれている
 - カレントディレクトリに`Gopkg.lock`ファイルが含まれている
-- The current directory contains a `.go-version` file
+- カレントディレクトリに`.go-version`ファイルが含まれている
 - カレントディレクトリに`Godeps`ファイルが含まれている
 - カレントディレクトリに`.go`の拡張子のファイルが含まれている
 
@@ -748,7 +748,7 @@ symbol = " "
 
 ## ホスト名
 
-The `hostname` module shows the system hostname.
+`hostname`モジュールには、システムのホスト名が表示されます。
 
 ### オプション
 
@@ -776,9 +776,9 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of Java. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`java`モジュールは、現在インストールされているJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
+- カレントディレクトリに `pom.xml`, `build.gradle.kts`, `build.sbt` ,もしくは`.java-version`が含まれている
 - カレントディレクトリに拡張子が`.java`, `.class`, `.gradle`, もしくは`.jar`のファイルが含まれている
 
 ### オプション
@@ -800,7 +800,7 @@ symbol = "🌟 "
 
 ## ジョブ
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
+`jobs`モジュールには、実行中のジョブの現在の数が表示されます。 このモジュールは、実行中のバックグラウンドジョブがある場合にのみ表示されます。 1つ以上のジョブがある、または`threshold`に指定した値以上にジョブがある場合は実行中のジョブの数を表示します。
 
 ### オプション
 
@@ -823,7 +823,7 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`julia`モジュールは、現在インストールされているJuliaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Project.toml`ファイルが含まれている
 - カレントディレクトリに`Manifest.toml`ファイルが含まれている
@@ -847,11 +847,11 @@ symbol = "∴ "
 ```
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+現在のKubernetesコンテキスト名と、設定されている場合は、kubeconfigファイルに基づいてネームスペースを表示します。 ネームスペースはkubconfigで設定されている必要があります。それは `kubectl config set-context starship-cluster --namespace astronaut` のようなコマンドで設定することができます。 `$KUBECONFIG` 環境変数が設定されている場合、モジュールはそれを使用します `~/.kube/config` は使用しません。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
@@ -904,7 +904,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
@@ -1269,7 +1269,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
