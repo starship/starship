@@ -3,6 +3,8 @@ use dirs::home_dir;
 use git2::Repository;
 use std::fs;
 use std::io;
+#[cfg(not(target_os = "windows"))]
+use std::os::unix::fs::symlink;
 use std::path::Path;
 use tempfile::TempDir;
 
@@ -508,6 +510,286 @@ fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
         "in {} ",
         Color::Cyan.bold().paint("~/src/meters/fuel-gauge")
     );
+    assert_eq!(expected, actual);
+    tmp_dir.close()
+}
+
+#[test]
+#[ignore]
+#[cfg(not(target_os = "windows"))]
+fn symlinked_git_repo_root() -> io::Result<()> {
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
+    let repo_dir = tmp_dir.path().join("rocket-controls");
+    fs::create_dir(&repo_dir)?;
+    Repository::init(&repo_dir).unwrap();
+    let symlink_dir = tmp_dir.path().join("rocket-controls-symlink");
+    symlink(&repo_dir, &symlink_dir)?;
+
+    let output = common::render_module("directory")
+        .arg("--path")
+        .arg(symlink_dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!(
+        "in {} ",
+        Color::Cyan.bold().paint("rocket-controls-symlink")
+    );
+    assert_eq!(expected, actual);
+    tmp_dir.close()
+}
+
+#[test]
+#[ignore]
+#[cfg(not(target_os = "windows"))]
+fn directory_in_symlinked_git_repo() -> io::Result<()> {
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
+    let repo_dir = tmp_dir.path().join("rocket-controls");
+    Repository::init(&repo_dir).unwrap();
+    let symlink_dir = tmp_dir.path().join("rocket-controls-symlink");
+    symlink(&repo_dir, &symlink_dir)?;
+    let dir = symlink_dir.join("src");
+    fs::create_dir_all(&dir)?;
+
+    let output = common::render_module("directory")
+        .arg("--path")
+        .arg(dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!(
+        "in {} ",
+        Color::Cyan.bold().paint("rocket-controls-symlink/src")
+    );
+    assert_eq!(expected, actual);
+    tmp_dir.close()
+}
+
+#[test]
+#[ignore]
+#[cfg(not(target_os = "windows"))]
+fn truncated_directory_in_symlinked_git_repo() -> io::Result<()> {
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
+    let repo_dir = tmp_dir.path().join("rocket-controls");
+    Repository::init(&repo_dir).unwrap();
+    let symlink_dir = tmp_dir.path().join("rocket-controls-symlink");
+    symlink(&repo_dir, &symlink_dir)?;
+    let dir = symlink_dir.join("src/meters/fuel-gauge");
+    fs::create_dir_all(&dir)?;
+
+    let output = common::render_module("directory")
+        .arg("--path")
+        .arg(dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("in {} ", Color::Cyan.bold().paint("src/meters/fuel-gauge"));
+    assert_eq!(expected, actual);
+    tmp_dir.close()
+}
+
+#[test]
+#[ignore]
+#[cfg(not(target_os = "windows"))]
+fn directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
+    let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
+    Repository::init(&repo_dir).unwrap();
+    let symlink_dir = tmp_dir
+        .path()
+        .join("above-repo")
+        .join("rocket-controls-symlink");
+    symlink(&repo_dir, &symlink_dir)?;
+    let dir = symlink_dir.join("src/meters/fuel-gauge");
+    fs::create_dir_all(&dir)?;
+
+    let output = common::render_module("directory")
+        .use_config(toml::toml! {
+            [directory]
+            // Don't truncate the path at all.
+            truncation_length = 5
+            truncate_to_repo = false
+        })
+        .arg("--path")
+        .arg(dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!(
+        "in {} ",
+        Color::Cyan
+            .bold()
+            .paint("above-repo/rocket-controls-symlink/src/meters/fuel-gauge")
+    );
+    assert_eq!(expected, actual);
+    tmp_dir.close()
+}
+
+#[test]
+#[ignore]
+#[cfg(not(target_os = "windows"))]
+fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
+    let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
+    Repository::init(&repo_dir).unwrap();
+    let symlink_dir = tmp_dir
+        .path()
+        .join("above-repo")
+        .join("rocket-controls-symlink");
+    symlink(&repo_dir, &symlink_dir)?;
+    let dir = symlink_dir.join("src/meters/fuel-gauge");
+    fs::create_dir_all(&dir)?;
+
+    let output = common::render_module("directory")
+        .use_config(toml::toml! {
+            [directory]
+            // Don't truncate the path at all.
+            truncation_length = 5
+            truncate_to_repo = false
+            fish_style_pwd_dir_length = 1
+        })
+        .arg("--path")
+        .arg(dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!(
+        "in {} ",
+        Color::Cyan
+            .bold()
+            .paint("~/.t/above-repo/rocket-controls-symlink/src/meters/fuel-gauge")
+    );
+    assert_eq!(expected, actual);
+    tmp_dir.close()
+}
+
+#[test]
+#[ignore]
+#[cfg(not(target_os = "windows"))]
+fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
+    let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
+    Repository::init(&repo_dir).unwrap();
+    let symlink_dir = tmp_dir
+        .path()
+        .join("above-repo")
+        .join("rocket-controls-symlink");
+    symlink(&repo_dir, &symlink_dir)?;
+    let dir = symlink_dir.join("src/meters/fuel-gauge");
+    fs::create_dir_all(&dir)?;
+
+    let output = common::render_module("directory")
+        .use_config(toml::toml! {
+            [directory]
+            // `truncate_to_repo = true` should display the truncated path
+            truncation_length = 5
+            truncate_to_repo = true
+            fish_style_pwd_dir_length = 1
+        })
+        .arg("--path")
+        .arg(dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!(
+        "in {} ",
+        Color::Cyan
+            .bold()
+            .paint("~/.t/a/rocket-controls-symlink/src/meters/fuel-gauge")
+    );
+    assert_eq!(expected, actual);
+    tmp_dir.close()
+}
+
+#[test]
+#[ignore]
+#[cfg(not(target_os = "windows"))]
+fn directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
+    let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
+    Repository::init(&repo_dir).unwrap();
+    let symlink_dir = tmp_dir
+        .path()
+        .join("above-repo")
+        .join("rocket-controls-symlink");
+    symlink(&repo_dir, &symlink_dir)?;
+    let dir = symlink_dir.join("src/meters/fuel-gauge");
+    fs::create_dir_all(&dir)?;
+
+    let output = common::render_module("directory")
+        .use_config(toml::toml! {
+            [directory]
+            // `truncate_to_repo = true` should display the truncated path
+            truncation_length = 5
+            truncate_to_repo = true
+        })
+        .arg("--path")
+        .arg(dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!(
+        "in {} ",
+        Color::Cyan
+            .bold()
+            .paint("rocket-controls-symlink/src/meters/fuel-gauge")
+    );
+    assert_eq!(expected, actual);
+    tmp_dir.close()
+}
+
+#[test]
+#[ignore]
+#[cfg(not(target_os = "windows"))]
+fn symlinked_directory_in_git_repo() -> io::Result<()> {
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
+    let repo_dir = tmp_dir.path().join("rocket-controls");
+    let dir = repo_dir.join("src");
+    fs::create_dir_all(&dir)?;
+    Repository::init(&repo_dir).unwrap();
+    symlink(&dir, repo_dir.join("src/loop"))?;
+
+    let output = common::render_module("directory")
+        .use_config(toml::toml! {
+            [directory]
+            // `truncate_to_repo = true` should display the truncated path
+            truncation_length = 5
+            truncate_to_repo = true
+        })
+        .arg("--path")
+        .arg(repo_dir.join("src/loop/loop"))
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!(
+        "in {} ",
+        Color::Cyan.bold().paint("rocket-controls/src/loop/loop")
+    );
+    assert_eq!(expected, actual);
+    tmp_dir.close()
+}
+
+#[test]
+#[ignore]
+#[cfg(not(target_os = "windows"))]
+fn symlinked_subdirectory_git_repo_out_of_tree() -> io::Result<()> {
+    let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
+    let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
+    let dir = repo_dir.join("src/meters/fuel-gauge");
+    fs::create_dir_all(&dir)?;
+    Repository::init(&repo_dir).unwrap();
+    let symlink_dir = tmp_dir.path().join("fuel-gauge");
+    symlink(&dir, &symlink_dir)?;
+
+    let output = common::render_module("directory")
+        // Set home directory to the temp repository
+        .env("HOME", tmp_dir.path())
+        .arg("--path")
+        .arg(symlink_dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = format!("in {} ", Color::Cyan.bold().paint("~/fuel-gauge"));
     assert_eq!(expected, actual);
     tmp_dir.close()
 }
