@@ -6,14 +6,15 @@ use crate::utils;
 /// Creates a module with the current Node.js version
 ///
 /// Will display the Node.js version if any of the following criteria are met:
-///     - Current directory contains a `.js` file
+///     - Current directory contains a `.js`, `.mjs` or `.cjs` file
+///     - Current directory contains a `.ts` file
 ///     - Current directory contains a `package.json` or `.node-version` file
 ///     - Current directory contains a `node_modules` directory
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_js_project = context
         .try_begin_scan()?
         .set_files(&["package.json", ".node-version"])
-        .set_extensions(&["js"])
+        .set_extensions(&["js", "mjs", "cjs", "ts"])
         .set_folders(&["node_modules"])
         .is_match();
 
@@ -77,6 +78,37 @@ mod tests {
     fn folder_with_js_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("index.js"))?.sync_all()?;
+
+        let actual = render_module("nodejs", dir.path(), None);
+        let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_mjs_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("index.mjs"))?.sync_all()?;
+
+        let actual = render_module("nodejs", dir.path(), None);
+        let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    fn folder_with_cjs_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("index.cjs"))?.sync_all()?;
+
+        let actual = render_module("nodejs", dir.path(), None);
+        let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    fn folder_with_ts_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("index.ts"))?.sync_all()?;
 
         let actual = render_module("nodejs", dir.path(), None);
         let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
