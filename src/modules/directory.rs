@@ -152,10 +152,7 @@ fn contract_repo_path(full_path: &Path, top_level_path: &Path) -> Option<String>
         }
 
         let components: Vec<_> = full_path.components().collect();
-        let repo_name = components[components.len() - i - 1]
-            .as_os_str()
-            .to_str()
-            .unwrap();
+        let repo_name = components[components.len() - i - 1].as_os_str().to_str()?;
 
         if i == 0 {
             return Some(repo_name.to_string());
@@ -166,7 +163,7 @@ fn contract_repo_path(full_path: &Path, top_level_path: &Path) -> Option<String>
             "{repo_name}{separator}{path}",
             repo_name = repo_name,
             separator = "/",
-            path = path.to_slash().unwrap()
+            path = path.to_slash()?
         ));
     }
     None
