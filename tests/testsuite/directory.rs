@@ -520,9 +520,9 @@ fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
 fn symlinked_git_repo_root() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
+    let symlink_dir = tmp_dir.path().join("rocket-controls-symlink");
     fs::create_dir(&repo_dir)?;
     Repository::init(&repo_dir).unwrap();
-    let symlink_dir = tmp_dir.path().join("rocket-controls-symlink");
     symlink(&repo_dir, &symlink_dir)?;
 
     let output = common::render_module("directory")
@@ -545,15 +545,16 @@ fn symlinked_git_repo_root() -> io::Result<()> {
 fn directory_in_symlinked_git_repo() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
-    Repository::init(&repo_dir).unwrap();
+    let src_dir = repo_dir.join("src");
     let symlink_dir = tmp_dir.path().join("rocket-controls-symlink");
+    let symlink_src_dir = symlink_dir.join("src");
+    fs::create_dir_all(&src_dir)?;
+    Repository::init(&repo_dir).unwrap();
     symlink(&repo_dir, &symlink_dir)?;
-    let dir = symlink_dir.join("src");
-    fs::create_dir_all(&dir)?;
 
     let output = common::render_module("directory")
         .arg("--path")
-        .arg(dir)
+        .arg(symlink_src_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -571,15 +572,16 @@ fn directory_in_symlinked_git_repo() -> io::Result<()> {
 fn truncated_directory_in_symlinked_git_repo() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
-    Repository::init(&repo_dir).unwrap();
+    let src_dir = repo_dir.join("src/meters/fuel-gauge");
     let symlink_dir = tmp_dir.path().join("rocket-controls-symlink");
+    let symlink_src_dir = symlink_dir.join("src/meters/fuel-gauge");
+    fs::create_dir_all(&src_dir)?;
+    Repository::init(&repo_dir).unwrap();
     symlink(&repo_dir, &symlink_dir)?;
-    let dir = symlink_dir.join("src/meters/fuel-gauge");
-    fs::create_dir_all(&dir)?;
 
     let output = common::render_module("directory")
         .arg("--path")
-        .arg(dir)
+        .arg(symlink_src_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -594,14 +596,15 @@ fn truncated_directory_in_symlinked_git_repo() -> io::Result<()> {
 fn directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
-    Repository::init(&repo_dir).unwrap();
+    let src_dir = repo_dir.join("src/meters/fuel-gauge");
     let symlink_dir = tmp_dir
         .path()
         .join("above-repo")
         .join("rocket-controls-symlink");
+    let symlink_src_dir = symlink_dir.join("src/meters/fuel-gauge");
+    fs::create_dir_all(&src_dir)?;
+    Repository::init(&repo_dir).unwrap();
     symlink(&repo_dir, &symlink_dir)?;
-    let dir = symlink_dir.join("src/meters/fuel-gauge");
-    fs::create_dir_all(&dir)?;
 
     let output = common::render_module("directory")
         .use_config(toml::toml! {
@@ -611,7 +614,7 @@ fn directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
             truncate_to_repo = false
         })
         .arg("--path")
-        .arg(dir)
+        .arg(symlink_src_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -631,14 +634,15 @@ fn directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
 fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
-    Repository::init(&repo_dir).unwrap();
+    let src_dir = repo_dir.join("src/meters/fuel-gauge");
     let symlink_dir = tmp_dir
         .path()
         .join("above-repo")
         .join("rocket-controls-symlink");
+    let symlink_src_dir = symlink_dir.join("src/meters/fuel-gauge");
+    fs::create_dir_all(&src_dir)?;
+    Repository::init(&repo_dir).unwrap();
     symlink(&repo_dir, &symlink_dir)?;
-    let dir = symlink_dir.join("src/meters/fuel-gauge");
-    fs::create_dir_all(&dir)?;
 
     let output = common::render_module("directory")
         .use_config(toml::toml! {
@@ -649,7 +653,7 @@ fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Res
             fish_style_pwd_dir_length = 1
         })
         .arg("--path")
-        .arg(dir)
+        .arg(symlink_src_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -669,14 +673,15 @@ fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Res
 fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
-    Repository::init(&repo_dir).unwrap();
+    let src_dir = repo_dir.join("src/meters/fuel-gauge");
     let symlink_dir = tmp_dir
         .path()
         .join("above-repo")
         .join("rocket-controls-symlink");
+    let symlink_src_dir = symlink_dir.join("src/meters/fuel-gauge");
+    fs::create_dir_all(&src_dir)?;
+    Repository::init(&repo_dir).unwrap();
     symlink(&repo_dir, &symlink_dir)?;
-    let dir = symlink_dir.join("src/meters/fuel-gauge");
-    fs::create_dir_all(&dir)?;
 
     let output = common::render_module("directory")
         .use_config(toml::toml! {
@@ -687,7 +692,7 @@ fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Resu
             fish_style_pwd_dir_length = 1
         })
         .arg("--path")
-        .arg(dir)
+        .arg(symlink_src_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -707,14 +712,15 @@ fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Resu
 fn directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
-    Repository::init(&repo_dir).unwrap();
+    let src_dir = repo_dir.join("src/meters/fuel-gauge");
     let symlink_dir = tmp_dir
         .path()
         .join("above-repo")
         .join("rocket-controls-symlink");
+    let symlink_src_dir = symlink_dir.join("src/meters/fuel-gauge");
+    fs::create_dir_all(&src_dir)?;
+    Repository::init(&repo_dir).unwrap();
     symlink(&repo_dir, &symlink_dir)?;
-    let dir = symlink_dir.join("src/meters/fuel-gauge");
-    fs::create_dir_all(&dir)?;
 
     let output = common::render_module("directory")
         .use_config(toml::toml! {
@@ -724,7 +730,7 @@ fn directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
             truncate_to_repo = true
         })
         .arg("--path")
-        .arg(dir)
+        .arg(symlink_src_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
@@ -775,11 +781,11 @@ fn symlinked_directory_in_git_repo() -> io::Result<()> {
 fn symlinked_subdirectory_git_repo_out_of_tree() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
-    let dir = repo_dir.join("src/meters/fuel-gauge");
-    fs::create_dir_all(&dir)?;
-    Repository::init(&repo_dir).unwrap();
+    let src_dir = repo_dir.join("src/meters/fuel-gauge");
     let symlink_dir = tmp_dir.path().join("fuel-gauge");
-    symlink(&dir, &symlink_dir)?;
+    fs::create_dir_all(&src_dir)?;
+    Repository::init(&repo_dir).unwrap();
+    symlink(&src_dir, &symlink_dir)?;
 
     let output = common::render_module("directory")
         // Set home directory to the temp repository
