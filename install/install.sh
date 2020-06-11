@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Options
 #
@@ -20,7 +20,7 @@
 #   -B, --base-url
 #     Override the base URL used for downloading releases
 
-set -euo pipefail
+set -eu
 printf "\n"
 
 BOLD="$(tput bold 2>/dev/null || echo '')"
@@ -45,328 +45,362 @@ error() {
   printf "%s\n" "${RED}x $*${NO_COLOR}" >&2
 }
 
-complete() {
+success() {
   printf "%s\n" "${GREEN}✓${NO_COLOR} $*"
 }
 
-# Gets path to a temporary file, even if
-get_tmpfile() {
-  local suffix
-  suffix="$1"
-  if hash mktemp; then
-    printf "%s.%s" "$(mktemp)" "${suffix}"
-  else
-    # No really good options here--let's pick a default + hope
-    printf "/tmp/starship.%s" "${suffix}"
-  fi
+has() {
+  command -v "$1" >/dev/null 2>&1
 }
 
-# Test if a location is writeable by trying to write to it. Windows does not let
-# you test writeability other than by writing: https://stackoverflow.com/q/1999988
-test_writeable() {
-  local path
-  path="${1:-}/test.txt"
-  if touch "${path}" 2>/dev/null; then
-    rm "${path}"
-    return 0
-  else
+mktmpdir() {
+  tmpdir=$(mktemp -dqt "$1") || {
+    error "Can't create temp file, exiting…"
     return 1
-  fi
+  }
+  echo "$tmpdir"
 }
 
 fetch() {
-  local command
-  if hash curl 2>/dev/null; then
-    set +e
-    command="curl --silent --fail --location $1"
-    curl --silent --fail --location "$1"
-    rc=$?
-    set -e
-  else
-    if hash wget 2>/dev/null; then
-      set +e
-      command="wget -O- -q $1"
-      wget -O- -q "$1"
-      rc=$?
-      set -e
+  file="$1"
+  url="$2"
+
+  if has curl; then
+    cmd="curl -w '%{http_code}' -sL -o $file $url"
+    code=$($cmd)
+    if [ "$code" == "200" ]; then
+      rc=0
     else
-      error "No HTTP download program (curl, wget) found…"
-      exit 1
+      rc=$code
     fi
+  elif has wget; then
+    cmd="wget -q -O $file $url"
+    {
+      wget -q -O "$file" "$url"
+      rc=$?
+    } || true
+  elif has fetch; then
+    cmd="fetch -qo $file $url"
+    {
+      fetch -qo "$file" "$url"
+      rc=$?
+    } || true
+  else
+    error "No HTTP download program (curl, wget, fetch) found, exiting…"
+    return 1
   fi
 
-  if [ $rc -ne 0 ]; then
-    printf "\n" >&2
-    error "Command failed (exit code $rc): ${BLUE}${command}${NO_COLOR}"
-    printf "\n" >&2
-    info "This is likely due to Starship not yet supporting your configuration." >&2
-    info "If you would like to see a build for your configuration," >&2
-    info "please create an issue requesting a build for ${MAGENTA}${ARCH}-${PLATFORM}${NO_COLOR}:" >&2
-    info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}\n" >&2
-    exit $rc
+  if [ $rc = 0 ]; then
+    return 0
   fi
+
+  error "Command failed (exit code $rc): ${BLUE}${cmd}${NO_COLOR}"
+  printf "\n" >&2
+  info "This is likely due to Starship not yet supporting your configuration."
+  info "If you would like to see a build for your configuration,"
+  info "please create an issue requesting a build for ${MAGENTA}${arch}-${platform}${NO_COLOR}:"
+  info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}"
+  return 1
 }
 
-fetch_and_unpack() {
-  local sudo
-  local tmpfile
-  sudo="$1"
-  # I'd like to separate this into a fetch() and unpack() function, but I can't
-  # figure out how to get bash functions to read STDIN/STDOUT from pipes
-  if [ "${EXT}" = "tar.gz" ]; then
-    fetch "${URL}" | ${sudo} tar xz"${VERBOSE}"f - -C "${BIN_DIR}"
-  elif [ "${EXT}" = "zip" ]; then
-    # According to https://unix.stackexchange.com/q/2690, zip files cannot be read
-    # through a pipe. We'll have to do our own file-based setup.
-    tmpfile="$(get_tmpfile "${EXT}")"
-    fetch "${URL}" >"${tmpfile}"
-    ${sudo} unzip "${tmpfile}" -d "${BIN_DIR}"
-    rm "${tmpfile}"
-  else
-    error "Unknown package extension."
-    info "This almost certainly results from a bug in this script--please file a"
-    info "bug report at https://github.com/starship/starship/issues"
-    exit 1
-  fi
+unpack() {
+  archive="$1"
+  dir=$(dirname "$1")
+
+  case "$archive" in
+    *.tar.gz)
+      if [ -n "$verbose" ]; then
+        flags="-v"
+      else
+        flags=
+      fi
+      tar "$flags" -xzf "$archive" -C "$dir"
+      return 0
+      ;;
+    *.zip)
+      if [ -z "$verbose" ]; then
+        flags="-qq"
+      else
+        flags=
+      fi
+      UNZIP="$flags" unzip "$archive" -d "$dir"
+      return 0
+      ;;
+  esac
+
+  error "Unknown package extension."
+  printf "\n" >&2
+  info "This almost certainly results from a bug in this script--please file a"
+  info "bug report at https://github.com/starship/starship/issues"
+  return 1
 }
 
 elevate_priv() {
-  if ! hash sudo 2>/dev/null; then
+  if ! has sudo; then
     error 'Could not find the command "sudo", needed to get permissions for install.'
+    printf "\n" >&2
     info "If you are on Windows, please run your shell as an administrator, then"
     info "rerun this script. Otherwise, please run this script as root, or install"
     info "sudo."
-    exit 1
+    return 1
   fi
+
   if ! sudo -v; then
     error "Superuser not granted, aborting installation"
-    exit 1
+    return 1
   fi
+
+  return 0
 }
 
-install() {
-  local msg
-  local sudo
-
-  if test_writeable "${BIN_DIR}"; then
-    sudo=""
-    msg="Installing Starship, please wait…"
-  else
-    warn "Escalated permission are required to install to ${BIN_DIR}"
-    elevate_priv
-    sudo="sudo"
-    msg="Installing Starship as root, please wait…"
-  fi
-  info "$msg"
-  fetch_and_unpack "${sudo}"
-}
-
-# Currently supporting:
-#   - win (Git Bash)
-#   - darwin
-#   - linux
-#   - linux_musl (Alpine)
-detect_platform() {
-  local platform
-  platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
+uname_platform() {
+  platform=$(uname -s | tr '[:upper:]' '[:lower:]')
 
   # check for MUSL
-  if [ "${platform}" = "linux" ]; then
+  if [ "$platform" = "linux" ]; then
     if ldd /bin/sh | grep -i musl >/dev/null; then
-      platform=unknown-linux-musl
+      platform="unknown-linux-musl"
+    else
+      platform="unknown-linux-gnu"
     fi
   fi
 
   # mingw is Git-Bash
-  if echo "${platform}" | grep -i mingw >/dev/null; then
-    platform=pc-windows-msvc
+  if echo "$platform" | grep -i mingw >/dev/null; then
+    platform="pc-windows-msvc"
   fi
 
-  if [ "${platform}" = "linux" ]; then
-    platform=unknown-linux-gnu
+  if [ "$platform" = "darwin" ]; then
+    platform="apple-darwin"
   fi
 
-  if [ "${platform}" = "darwin" ]; then
-    platform=apple-darwin
-  fi
-
-  echo "${platform}"
+  echo $platform
 }
 
-# Currently supporting:
-#   - x86_64
-#   - i386
-detect_arch() {
-  local arch
-  arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
+platform_check() {
+  platform=${platform:-"$(uname_platform)"}
+  case "$platform" in
+    apple-darwin) return 0 ;;
+    pc-windows-msvc) return 0 ;;
+    unknown-linux-musl) return 0 ;;
+    unknown-linux-gnu) return 0 ;;
+  esac
+
+  arch=$(uname_arch)
+
+  error "Builds for $platform are not yet available for Starship"
+  printf "\n" >&2
+  info "If you would like to see a build for your configuration,"
+  info "please create an issue requesting a build for ${MAGENTA}${arch}-${platform}${NO_COLOR}:"
+  info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}"
+  return 1
+}
+
+uname_arch() {
+  arch=$(uname -m | tr '[:upper:]' '[:lower:]')
 
   # `uname -m` in some cases mis-reports 32-bit OS as 64-bit, so double check
-  if [ "${arch}" = "x64" ] && [ "$(getconf LONG_BIT)" -eq 32 ]; then
+  if [ "$arch" = "x64" ] && [ "$(getconf LONG_BIT)" = "32" ]; then
     arch=i386
   fi
 
-  echo "${arch}"
+  case $arch in
+    x86) arch="i386" ;;
+    i686) arch="i386" ;;
+    i386) arch="i386" ;;
+    aarch64) arch="arm64" ;;
+    armv5*) arch="armv5" ;;
+    armv6*) arch="armv6" ;;
+    armv7*) arch="armv7" ;;
+  esac
+
+  echo $arch
+}
+
+arch_check() {
+  arch=${arch:-"$(uname_arch)"}
+  case $arch in
+    x86_64) return 0 ;;
+  esac
+
+  platform=$(uname_platform)
+
+  error "$arch builds are not yet available for Starship"
+  printf "\n" >&2
+  info "If you would like to see a build for your configuration,"
+  info "please create an issue requesting a build for ${MAGENTA}${arch}-${platform}${NO_COLOR}:"
+  info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}"
+  return 1
+}
+
+bin_dir_check() {
+  if [ ! -d "$BIN_DIR" ]; then
+    error "Installation location $BIN_DIR does not appear to be a directory"
+    printf "\n" >&2
+    info "Make sure the location exists and is a directory, then try again."
+    return 1
+  fi
+
+  return 0
+}
+
+path_check() {
+  # https://stackoverflow.com/a/9663359
+  case :$PATH: in
+    *:$BIN_DIR:*) return 0 ;;
+  esac
+
+  warn "Bin directory $BIN_DIR is not in your \$PATH"
+  printf "\n"
+
+  return 0
 }
 
 confirm() {
-  if [ -z "${FORCE-}" ]; then
-    printf "%s " "${MAGENTA}?${NO_COLOR} $* ${BOLD}[y/N]${NO_COLOR}"
-    set +e
+  printf "%s " "${MAGENTA}?${NO_COLOR} $* ${BOLD}[y/N]${NO_COLOR}"
+  {
     read -r yn </dev/tty
     rc=$?
-    set -e
-    if [ $rc -ne 0 ]; then
-      error 'Error reading from prompt (please re-run with the `--yes` option)'
-      exit 1
-    fi
-    if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
-      error 'Aborting (please answer "yes" to continue)'
-      exit 1
-    fi
-  fi
-}
+  } || true
 
-check_bin_dir() {
-  local bin_dir="$1"
-
-  if [ ! -d "$BIN_DIR" ]; then
-    error "Installation location $BIN_DIR does not appear to be a directory"
-    info "Make sure the location exists and is a directory, then try again."
-    exit 1
+  if [ $rc != 0 ]; then
+    error "Error reading from prompt (please re-run with the \`--yes\` option)"
+    return 1
+  elif [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
+    error 'Aborting (please answer "yes" to continue)'
+    return 1
   fi
 
-  # https://stackoverflow.com/a/11655875
-  local good
-  good=$(
-    IFS=:
-    for path in $PATH; do
-      if [ "${path}" = "${bin_dir}" ]; then
-        echo 1
-        break
-      fi
-    done
-  )
-
-  if [ "${good}" != "1" ]; then
-    warn "Bin directory ${bin_dir} is not in your \$PATH"
-  fi
+  return 0
 }
 
 # defaults
-if [ -z "${PLATFORM-}" ]; then
-  PLATFORM="$(detect_platform)"
-fi
+PREFIX=${PREFIX:-"/usr/local"}
+BIN_DIR=${BIN_DIR:-"$PREFIX/bin"}
 
-if [ -z "${BIN_DIR-}" ]; then
-  BIN_DIR=/usr/local/bin
-fi
-
-if [ -z "${ARCH-}" ]; then
-  ARCH="$(detect_arch)"
-fi
-
-if [ -z "${BASE_URL-}" ]; then
-  BASE_URL="https://github.com/starship/starship/releases"
-fi
+elevated=
+force=
+verbose=
 
 # parse argv variables
 while [ "$#" -gt 0 ]; do
   case "$1" in
-  -p | --platform)
-    PLATFORM="$2"
-    shift 2
-    ;;
-  -b | --bin-dir)
-    BIN_DIR="$2"
-    shift 2
-    ;;
-  -a | --arch)
-    ARCH="$2"
-    shift 2
-    ;;
-  -B | --base-url)
-    BASE_URL="$2"
-    shift 2
-    ;;
+    -p | --platform)
+      platform="$2"
+      shift 2
+      ;;
+    -b | --bin-dir)
+      BIN_DIR="$2"
+      shift 2
+      ;;
+    -a | --arch)
+      arch="$2"
+      shift 2
+      ;;
+    -B | --base-url)
+      base_url="$2"
+      shift 2
+      ;;
 
-  -V | --verbose)
-    VERBOSE=1
-    shift 1
-    ;;
-  -f | -y | --force | --yes)
-    FORCE=1
-    shift 1
-    ;;
+    -V | --verbose)
+      verbose=1
+      shift 1
+      ;;
+    -f | -y | --force | --yes)
+      force=1
+      shift 1
+      ;;
 
-  -p=* | --platform=*)
-    PLATFORM="${1#*=}"
-    shift 1
-    ;;
-  -b=* | --bin-dir=*)
-    BIN_DIR="${1#*=}"
-    shift 1
-    ;;
-  -a=* | --arch=*)
-    ARCH="${1#*=}"
-    shift 1
-    ;;
-  -B=* | --base-url=*)
-    BASE_URL="${1#*=}"
-    shift 1
-    ;;
-  -V=* | --verbose=*)
-    VERBOSE="${1#*=}"
-    shift 1
-    ;;
-  -f=* | -y=* | --force=* | --yes=*)
-    FORCE="${1#*=}"
-    shift 1
-    ;;
+    -p=* | --platform=*)
+      platform="${1#*=}"
+      shift 1
+      ;;
+    -b=* | --bin-dir=*)
+      BIN_DIR="${1#*=}"
+      shift 1
+      ;;
+    -a=* | --arch=*)
+      arch="${1#*=}"
+      shift 1
+      ;;
+    -B=* | --base-url=*)
+      base_url="${1#*=}"
+      shift 1
+      ;;
+    -V=* | --verbose=*)
+      verbose="${1#*=}"
+      shift 1
+      ;;
+    -f=* | -y=* | --force=* | --yes=*)
+      force="${1#*=}"
+      shift 1
+      ;;
 
-  *)
-    error "Unknown option: $1"
-    exit 1
-    ;;
+    *)
+      error "Unknown option: $1"
+      exit 1
+      ;;
   esac
 done
 
-if [ "${ARCH}" = "i386" ]; then
-  error "i386 builds are not yet available for Starship\n"
-  info "If you would like to see a build for your configuration,"
-  info "please create an issue requesting a build for ${MAGENTA}${ARCH}-${PLATFORM}${NO_COLOR}:"
-  info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}\n"
-  exit 1
-fi
+arch_check
+platform_check
+bin_dir_check
 
 printf "  %s\n" "${UNDERLINE}Configuration${NO_COLOR}"
 info "${BOLD}Bin directory${NO_COLOR}: ${GREEN}${BIN_DIR}${NO_COLOR}"
-info "${BOLD}Platform${NO_COLOR}:      ${GREEN}${PLATFORM}${NO_COLOR}"
-info "${BOLD}Arch${NO_COLOR}:          ${GREEN}${ARCH}${NO_COLOR}"
+info "${BOLD}Platform${NO_COLOR}:      ${GREEN}${platform}${NO_COLOR}"
+info "${BOLD}Arch${NO_COLOR}:          ${GREEN}${arch}${NO_COLOR}"
+printf "\n"
 
-# non-empty VERBOSE enables verbose untarring
-if [ -n "${VERBOSE-}" ]; then
-  VERBOSE=v
+# non-empty `verbose` enables verbose untarring
+if [ -n "$verbose" ]; then
   info "${BOLD}Verbose${NO_COLOR}: yes"
+  printf "\n"
+fi
+
+tmp=$(mktmpdir "starship")
+case $platform in
+  pc-windows-msvc)
+    bin="$tmp/starship.exe"
+    ext="zip"
+    ;;
+  *)
+    bin="$tmp/starship"
+    ext="tar.gz"
+    ;;
+esac
+archive="$tmp/starship.$ext"
+
+base_url=${base_url:-"https://github.com/starship/starship/releases"}
+url="$base_url/latest/download/starship-$arch-$platform.$ext"
+
+info "Tarball URL: ${UNDERLINE}${BLUE}${url}${NO_COLOR}"
+if [ -z "$force" ]; then
+  confirm "Install Starship ${GREEN}latest${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
+fi
+path_check
+
+if [ -w "$BIN_DIR" ]; then
+  info "Installing Starship, please wait…"
 else
-  VERBOSE=
+  warn "Escalated permission are required to install to $BIN_DIR"
+  elevate_priv
+  info "Installing Starship as root, please wait…"
+  elevated=1
 fi
 
-echo
-
-EXT=tar.gz
-if [ "${PLATFORM}" = "pc-windows-msvc" ]; then
-  EXT=zip
+fetch "$archive" "$url"
+unpack "$archive"
+if [ -n "$elevated" ]; then
+  sudo install "$bin" "$BIN_DIR"
+else
+  install "$bin" "$BIN_DIR"
 fi
 
-URL="${BASE_URL}/latest/download/starship-${ARCH}-${PLATFORM}.${EXT}"
-info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
-confirm "Install Starship ${GREEN}latest${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
-check_bin_dir "${BIN_DIR}"
+success "Starship installed"
+printf "\n"
 
-install
-complete "Starship installed"
-
-echo
 info "Please follow the steps for your shell to complete the installation:
 
   ${BOLD}${UNDERLINE}Bash${NO_COLOR}
