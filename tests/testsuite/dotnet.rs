@@ -14,10 +14,37 @@ fn shows_nothing_in_directory_with_zero_relevant_files() -> io::Result<()> {
 
 #[test]
 #[ignore]
+fn shows_latest_in_directory_with_directory_build_props_file() -> io::Result<()> {
+    let workspace = create_workspace(false)?;
+    touch_path(&workspace, "Directory.Build.props", None)?;
+    expect_output(&workspace, ".", Some("•NET v"))?;
+    workspace.close()
+}
+
+#[test]
+#[ignore]
+fn shows_latest_in_directory_with_directory_build_targets_file() -> io::Result<()> {
+    let workspace = create_workspace(false)?;
+    touch_path(&workspace, "Directory.Build.targets", None)?;
+    expect_output(&workspace, ".", Some("•NET v"))?;
+    workspace.close()
+}
+
+#[test]
+#[ignore]
+fn shows_latest_in_directory_with_packages_props_file() -> io::Result<()> {
+    let workspace = create_workspace(false)?;
+    touch_path(&workspace, "Packages.props", None)?;
+    expect_output(&workspace, ".", Some("•NET v"))?;
+    workspace.close()
+}
+
+#[test]
+#[ignore]
 fn shows_latest_in_directory_with_solution() -> io::Result<()> {
     let workspace = create_workspace(false)?;
     touch_path(&workspace, "solution.sln", None)?;
-    expect_output(&workspace, ".", Some("•NET v2.2.402"))?;
+    expect_output(&workspace, ".", Some("•NET v"))?;
     workspace.close()
 }
 
@@ -26,7 +53,7 @@ fn shows_latest_in_directory_with_solution() -> io::Result<()> {
 fn shows_latest_in_directory_with_csproj() -> io::Result<()> {
     let workspace = create_workspace(false)?;
     touch_path(&workspace, "project.csproj", None)?;
-    expect_output(&workspace, ".", Some("•NET v2.2.402"))?;
+    expect_output(&workspace, ".", Some("•NET v"))?;
     workspace.close()
 }
 
@@ -35,7 +62,7 @@ fn shows_latest_in_directory_with_csproj() -> io::Result<()> {
 fn shows_latest_in_directory_with_fsproj() -> io::Result<()> {
     let workspace = create_workspace(false)?;
     touch_path(&workspace, "project.fsproj", None)?;
-    expect_output(&workspace, ".", Some("•NET v2.2.402"))?;
+    expect_output(&workspace, ".", Some("•NET v"))?;
     workspace.close()
 }
 
@@ -44,7 +71,7 @@ fn shows_latest_in_directory_with_fsproj() -> io::Result<()> {
 fn shows_latest_in_directory_with_xproj() -> io::Result<()> {
     let workspace = create_workspace(false)?;
     touch_path(&workspace, "project.xproj", None)?;
-    expect_output(&workspace, ".", Some("•NET v2.2.402"))?;
+    expect_output(&workspace, ".", Some("•NET v"))?;
     workspace.close()
 }
 
@@ -53,7 +80,7 @@ fn shows_latest_in_directory_with_xproj() -> io::Result<()> {
 fn shows_latest_in_directory_with_project_json() -> io::Result<()> {
     let workspace = create_workspace(false)?;
     touch_path(&workspace, "project.json", None)?;
-    expect_output(&workspace, ".", Some("•NET v2.2.402"))?;
+    expect_output(&workspace, ".", Some("•NET v"))?;
     workspace.close()
 }
 
