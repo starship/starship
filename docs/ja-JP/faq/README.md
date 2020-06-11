@@ -27,10 +27,10 @@ Starshipをbashで動作させる小さな例を次に示します。
 # Get the status code from the last command executed
 STATUS=$?
 
-# Get the number of jobs running.
+# 実行中のジョブの数を取得します。
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Set the prompt to the output of `starship prompt`
+# プロンプトを `starship prompt`に設定
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
@@ -44,10 +44,10 @@ starship prompt --help
 
 プロンプトは提供されているコンテキストを使用しますが、フラグは「必須」ではありません。
 
-## How do I run Starship on Linux distributions with older versions of glibc?
+## 古いバージョンの glibc を使用する Linux ディストリビューションで Starship を実行するにはどうすればよいですか?
 
-If you get an error like "*version 'GLIBC_2.18' not found (required by starship)*" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+"*version 'GLIBC_2のようなエラーが表示された場合。 8' が見つかりません (starshipで要求されます)*" プリビルドバイナリを使用しています（例えば、 CentOS 6 または 7 では、`glibc`の代わりに`musl`でコンパイルされたバイナリを使用できます。
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
+curl -fsSL https://starship.rs/install.sh | bash -s --- -platform unknown-linux-musl
 ```

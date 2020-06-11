@@ -32,7 +32,7 @@ Você pode alterar o caminho padrão do arquivo `starship.toml` com a variável 
 export STARSHIP_CONFIG=~/.starship
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+No PowerShell (Windows) você pode adicionar a seguinte linha no seu `$PROFILE`:
 ```ps1
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
@@ -52,16 +52,16 @@ Aqui está a representação do módulo Node. No exemplo a seguir, "symbol" e "v
 
 ### Estilo dos textos
 
-Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+A maioria dos módulos do starship permite que você configure o estilo de exibição dos textos. Isso é feito através de um parâmetro (geralmente chamado `style`) que é uma string especificando a configuração. Aqui estão alguns exemplos de strings de estilo e o que elas fazem. Para detalhes sobre a sintaxe completa, consulte o [guia de configurações avançadas](/advanced-config/).
 
-- `"fg:green bg:blue"` sets green text on a blue background
-- `"bg:blue fg:bright-green"` sets bright green text on a blue background
-- `"bold fg:27"` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
-- `"underline bg:#bf5700"` sets underlined text on a burnt orange background
-- `"bold italic fg:purple"` sets bold italic purple text
-- `""` explicitly disables all styling
+- `"fg:green bg:blue"` deixa o texto verde com o fundo azul
+- `"bg:blue fg:bright-green"` deixa o texto verde brilhante com o fundo azul
+- `"bold fg:27"` deixa o texto em negrito com a cor 27 [da tabela ANSI](https://i.stack.imgur.com/KTSQa.png)
+- `"underline bg:#bf5700"` deixa o texto sublinhado com o fundo laranja escuro
+- `"bold italic fg:purple"` deixa o texto em negrito e itálico com a cor roxa
+- `""` desabilita explicitamente todos os estilos
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+Note que a aparência do estilo será controlado pelo seu terminal. Por exemplo, alguns terminais deixarão as cores mais brilhantes ao invés de deixar o texto em negrito, ou alguns temas podem usar as mesmas cores para cores brilhantes e normais. Além disso, para textos em itálico, o terminal precisa ter suporte.
 
 ## Prompt
 
@@ -113,6 +113,7 @@ prompt_order = [
     "haskell",
     "java",
     "julia",
+    "nim",
     "nodejs",
     "ocaml",
     "php",
@@ -376,8 +377,17 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 | Variable                    | Default | Description                                                                              |
 | --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
+| `substitutions`             |         | A table of substitutions to be made to the path.                                         |
 | `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
 | `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+
+```toml
+[directory.substitutions]
+"/Volumes/network/path" = "/net"
+"src/com/long/java/path" = "mypath"
+```
 
 `fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
@@ -950,6 +960,32 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
+## Nim
+
+The `nim` module shows the currently installed version of Nim. The module will be shown if any of the following conditions are met:
+- The current directory contains a `nim.cfg` file
+- The current directory contains a file with the `.nim` extension
+- The current directory contains a file with the `.nims` extension
+- The current directory contains a file with the `.nimble` extension
+
+### Options
+
+| Variable   | Default         | Description                                           |
+| ---------- | --------------- | ----------------------------------------------------- |
+| `symbol`   | `"👑 "`          | The symbol used before displaying the version of Nim. |
+| `style`    | `"bold yellow"` | The style for the module.                             |
+| `disabled` | `false`         | Disables the `nim` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[nim]
+style = "yellow"
+symbol = "🎣 "
+```
+
 ## Nix-shell
 
 The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
@@ -1241,11 +1277,12 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | Variable          | Default         | Description                                                                                                         |
 | ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | Enables 12 hour formatting                                                                                          |
+| `use_12hr`        | `false`         | Enables 12 hour formatting.                                                                                         |
 | `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`           | `"bold yellow"` | The style for the module time                                                                                       |
+| `style`           | `"bold yellow"` | The style for the module time.                                                                                      |
 | `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
 | `disabled`        | `true`          | Disables the `time` module.                                                                                         |
+| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format               |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
@@ -1258,6 +1295,7 @@ If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it default
 disabled = false
 format = "🕙[ %T ]"
 utc_time_offset = "-5"
+time_range = "10:00:00-14:00:00"
 ```
 
 ## Username
@@ -1339,7 +1377,7 @@ The order in which custom modules are shown can be individually set by setting `
 | ------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `command`     |                           | The command whose output should be printed.                                                                                |
 | `when`        |                           | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                           | The path to the shell to use to execute the command. If unset, it will fallback to STARSHIP_SHELL and then to "sh".        |
+| `shell`       |                           | [See below](#custom-command-shell)                                                                                         |
 | `description` | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                      | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                      | The directories that will be searched in the working directory for a match.                                                |
@@ -1349,6 +1387,32 @@ The order in which custom modules are shown can be individually set by setting `
 | `prefix`      | `""`                      | Prefix to display immediately before the command output.                                                                   |
 | `suffix`      | `""`                      | Suffix to display immediately after the command output.                                                                    |
 | `disabled`    | `false`                   | Disables this `custom` module.                                                                                             |
+
+#### Custom command shell
+
+`shell` accepts a non-empty list of strings, where:
+- The first string is the path to the shell to use to execute the command.
+- Other following arguments are passed to the shell.
+
+If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
+
+If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+
+```toml
+shell = ["pwsh", "-Command", "-"]
+```
+
+::: warning Make sure your custom shell configuration exits gracefully
+
+If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+
+For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+
+Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+
+Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
+
+:::
 
 ### Example
 
@@ -1360,6 +1424,12 @@ command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 prefix = " transcending "
+
+[custom.time]
+command = "time /T"
+files = ["*.pst"]
+prefix = "transcending "
+shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 ```
 
 ## PureScript

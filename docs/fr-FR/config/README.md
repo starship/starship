@@ -113,6 +113,7 @@ prompt_order = [
     "haskell",
     "java",
     "julia",
+    "nim",
     "nodejs",
     "ocaml",
     "php",
@@ -376,8 +377,17 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 | Variable                    | Default | Description                                                                              |
 | --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
+| `substitutions`             |         | A table of substitutions to be made to the path.                                         |
 | `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
 | `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+
+```toml
+[directory.substitutions]
+"/Volumes/network/path" = "/net"
+"src/com/long/java/path" = "mypath"
+```
 
 `fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
@@ -841,7 +851,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: tip
 
-Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -894,7 +904,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -948,6 +958,32 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 symbol = "🌱 "
 truncation_length = 4
 truncation_symbol = ""
+```
+
+## Nim
+
+The `nim` module shows the currently installed version of Nim. Le module est affiché si l'une des ces conditions est remplie :
+- The current directory contains a `nim.cfg` file
+- The current directory contains a file with the `.nim` extension
+- The current directory contains a file with the `.nims` extension
+- The current directory contains a file with the `.nimble` extension
+
+### Options
+
+| Variable   | Default         | Description                                           |
+| ---------- | --------------- | ----------------------------------------------------- |
+| `symbol`   | `"👑 "`          | The symbol used before displaying the version of Nim. |
+| `style`    | `"bold yellow"` | The style for the module.                             |
+| `disabled` | `false`         | Disables the `nim` module.                            |
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[nim]
+style = "yellow"
+symbol = "🎣 "
 ```
 
 ## Nix-shell
@@ -1109,7 +1145,7 @@ Le module est affiché si l'une des ces conditions est remplie :
 
 ### Options
 
-| Variable             | Default         | Description                                                                 |
+| Variable             | Défault         | Description                                                                 |
 | -------------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
 | `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
@@ -1139,7 +1175,7 @@ The `ruby` module shows the currently installed version of Ruby. Le module est a
 
 ### Options
 
-| Variable   | Défault        | Description                                            |
+| Variable   | Défaut         | Description                                            |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`         | The symbol used before displaying the version of Ruby. |
 | `style`    | `"bold green"` | The style for the module.                              |
@@ -1163,7 +1199,7 @@ The `rust` module shows the currently installed version of Rust. Le module est a
 
 ### Options
 
-| Variable   | Défaut         | Description                                            |
+| Variable   | Default        | Description                                            |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`         | The symbol used before displaying the version of Rust. |
 | `style`    | `"bold green"` | The style for the module.                              |
@@ -1227,27 +1263,28 @@ The `terraform` module shows the currently selected terraform workspace and vers
 symbol = "🏎💨 "
 ```
 
-## Temps
+## Time
 
-Le module `time` affiche l'heure actuelle **localement**. La valeur de `format` est utilisée par le package [`chrono`](https://crates.io/crates/chrono) pour contrôler la façon dont l'heure est affichée. Consultez la [doc de chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) pour découvrir les options disponibles.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
-Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
 ### Options
 
-| Variable          | Default         | Description                                                                                                                                         |
-| ----------------- | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | Activer le format 12h                                                                                                                               |
-| `format`          | voir plus bas   | Le [format chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) utilisé pour formater l'heure.                                   |
-| `style`           | `"bold yellow"` | Le style utilisé par le module                                                                                                                      |
-| `utc_time_offset` | `"local"`       | Définir le décalage horaire UTC à utiliser. Intervalle de -24 < x < 24. Accepte des nombres décimaux pour s'adapter aux décalages de 30/45 minutes. |
-| `disabled`        | `true`          | Désactiver le module `time`.                                                                                                                        |
+| Variable          | Default         | Description                                                                                                         |
+| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`         | Enables 12 hour formatting.                                                                                         |
+| `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `"bold yellow"` | The style for the module time.                                                                                      |
+| `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
+| `disabled`        | `true`          | Disables the `time` module.                                                                                         |
+| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format               |
 
-Si `use_12hr` a pour valeur `true`, le `format` par défaut est `"%r"`. Sinon, il est défini comme `"%T"`. Définir manuellement le `format` passera outre la valeur de `user_12hr`.
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
 ### Exemple
 
@@ -1258,25 +1295,26 @@ Si `use_12hr` a pour valeur `true`, le `format` par défaut est `"%r"`. Sinon, i
 disabled = false
 format = "🕙[ %T ]"
 utc_time_offset = "-5"
+time_range = "10:00:00-14:00:00"
 ```
 
-## Nom d'utilisateur
+## Username
 
-Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le module est affiché si l'une des ces conditions est remplie :
+The `username` module shows active user's username. Le module est affiché si l'une des ces conditions est remplie :
 
-- L'utilisateur courant est root
-- L'utilisateur courant est différent de celui connecté
-- L'utilisateur est actuellement connecté à une session SSH
-- La variable `show_always` a comme valeur true
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ### Options
 
-| Variable      | Default         | Description                                      |
-| ------------- | --------------- | ------------------------------------------------ |
-| `style_root`  | `"bold green"`  | Le style utilisé quand l'utilisateur est root.   |
-| `style_user`  | `"bold yellow"` | Le style utilisé pour les utilisateurs non-root. |
-| `show_always` | `false`         | Toujours afficher le module `username`.          |
-| `disabled`    | `false`         | Désactiver le module `username`.                 |
+| Variable      | Default         | Description                           |
+| ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold green"`  | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `show_always` | `false`         | Always shows the `username` module.   |
+| `disabled`    | `false`         | Disables the `username` module.       |
 
 ### Exemple
 
@@ -1339,7 +1377,7 @@ The order in which custom modules are shown can be individually set by setting `
 | ------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `command`     |                           | The command whose output should be printed.                                                                                |
 | `when`        |                           | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                           | The path to the shell to use to execute the command. If unset, it will fallback to STARSHIP_SHELL and then to "sh".        |
+| `shell`       |                           | [See below](#custom-command-shell)                                                                                         |
 | `description` | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                      | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                      | The directories that will be searched in the working directory for a match.                                                |
@@ -1349,6 +1387,32 @@ The order in which custom modules are shown can be individually set by setting `
 | `prefix`      | `""`                      | Prefix to display immediately before the command output.                                                                   |
 | `suffix`      | `""`                      | Suffix to display immediately after the command output.                                                                    |
 | `disabled`    | `false`                   | Disables this `custom` module.                                                                                             |
+
+#### Custom command shell
+
+`shell` accepts a non-empty list of strings, where:
+- The first string is the path to the shell to use to execute the command.
+- Other following arguments are passed to the shell.
+
+If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
+
+If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+
+```toml
+shell = ["pwsh", "-Command", "-"]
+```
+
+::: warning Make sure your custom shell configuration exits gracefully
+
+If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+
+For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+
+Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+
+Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
+
+:::
 
 ### Exemple
 
@@ -1360,6 +1424,12 @@ command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 prefix = " transcending "
+
+[custom.time]
+command = "time /T"
+files = ["*.pst"]
+prefix = "transcending "
+shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 ```
 
 ## PureScript
