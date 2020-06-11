@@ -5,6 +5,8 @@ use std::fs;
 use std::io;
 #[cfg(not(target_os = "windows"))]
 use std::os::unix::fs::symlink;
+#[cfg(target_os = "windows")]
+use std::os::windows::fs::symlink_dir as symlink;
 use std::path::Path;
 use tempfile::TempDir;
 
@@ -516,7 +518,6 @@ fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
 
 #[test]
 #[ignore]
-#[cfg(not(target_os = "windows"))]
 fn symlinked_git_repo_root() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -541,7 +542,6 @@ fn symlinked_git_repo_root() -> io::Result<()> {
 
 #[test]
 #[ignore]
-#[cfg(not(target_os = "windows"))]
 fn directory_in_symlinked_git_repo() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -568,7 +568,6 @@ fn directory_in_symlinked_git_repo() -> io::Result<()> {
 
 #[test]
 #[ignore]
-#[cfg(not(target_os = "windows"))]
 fn truncated_directory_in_symlinked_git_repo() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -592,7 +591,6 @@ fn truncated_directory_in_symlinked_git_repo() -> io::Result<()> {
 
 #[test]
 #[ignore]
-#[cfg(not(target_os = "windows"))]
 fn directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -630,7 +628,6 @@ fn directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
 
 #[test]
 #[ignore]
-#[cfg(not(target_os = "windows"))]
 fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -669,7 +666,6 @@ fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Res
 
 #[test]
 #[ignore]
-#[cfg(not(target_os = "windows"))]
 fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -708,7 +704,6 @@ fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Resu
 
 #[test]
 #[ignore]
-#[cfg(not(target_os = "windows"))]
 fn directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -746,7 +741,6 @@ fn directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
 
 #[test]
 #[ignore]
-#[cfg(not(target_os = "windows"))]
 fn symlinked_directory_in_git_repo() -> io::Result<()> {
     let tmp_dir = TempDir::new_in(dirs::home_dir().unwrap())?;
     let repo_dir = tmp_dir.path().join("rocket-controls");
