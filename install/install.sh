@@ -114,7 +114,7 @@ fetch_and_unpack() {
   # I'd like to separate this into a fetch() and unpack() function, but I can't
   # figure out how to get bash functions to read STDIN/STDOUT from pipes
   if [ "${EXT}" = "tar.gz" ]; then
-    fetch "${URL}" | ${sudo} tar xzf "${VERBOSE}" - -C "${BIN_DIR}"
+    fetch "${URL}" | ${sudo} tar xz"${VERBOSE}"f - -C "${BIN_DIR}"
   elif [ "${EXT}" = "zip" ]; then
     # According to https://unix.stackexchange.com/q/2690, zip files cannot be read
     # through a pipe. We'll have to do our own file-based setup.
