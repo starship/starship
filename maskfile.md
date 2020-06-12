@@ -37,14 +37,20 @@ fi
 ```sh
 # lint zsh scripts as bash
 case "$script" in
-  *.sh | *.bash | *.ksh) shellcheck "$script" ;;
-  *.zsh) shellcheck --shell=bash "$script" ;;
+  *.sh) shell="sh" ;;
+  *.bash) shell="bash" ;;
+  *.ksh) shell="ksh" ;;
+  *.zsh) shell="bash" ;;
 
   *)
     printf "error: Unsupported file: %s\n" "$script" >&2
     exit 1
     ;;
 esac
+
+cmd="shellcheck --shell=$shell $script"
+printf "\n%s: %s\n" "$script" "$cmd"
+$cmd
 ```
 
 ### script format (script)
@@ -55,7 +61,7 @@ esac
 # Flags:
 #   -i 2 - indent using 2 spaces
 #   -ci  - indent `case` blocks
-#   -w   - owerwrite
+#   -w   - overwrite
 flags="-i 2 -ci -w"
 
 case "$script" in
