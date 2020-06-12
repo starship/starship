@@ -1,4 +1,36 @@
-## lint (script)
+# Starship tasks
+
+## lint
+
+> Lint the project with `clippy`
+
+```sh
+cargo clippy
+```
+
+## format
+
+> Format all source files using `rustfmt`
+
+**OPTIONS**
+
+- check
+  - flags: -c --check
+  - desc: Show which files are not formatted correctly
+
+```sh
+if [ "$check" = "true" ]; then
+  cargo fmt --all -- --check
+else
+  cargo fmt
+fi
+```
+
+## script
+
+> Commands related to shell scripts
+
+### script lint (script)
 
 > Lint shell script using `shellcheck`.
 
@@ -15,7 +47,7 @@ case "$script" in
 esac
 ```
 
-## format (script)
+### script format (script)
 
 > Format shell script using `shfmt`.
 
