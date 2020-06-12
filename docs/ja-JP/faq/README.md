@@ -49,5 +49,5 @@ starship prompt --help
 "*version 'GLIBC_2のようなエラーが表示された場合。 8' が見つかりません (starshipで要求されます)*" プリビルドバイナリを使用しています（例えば、 CentOS 6 または 7 では、`glibc`の代わりに`musl`でコンパイルされたバイナリを使用できます。
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s --- -platform unknown-linux-musl
+curl -fsSL https://starship.rs/install.sh | sh -s --- -platform unknown-linux-musl
 ```

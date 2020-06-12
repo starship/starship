@@ -49,5 +49,5 @@ starship prompt --help
 Если вы получаете ошибку типа "*version 'GLIBC_2.18' not found (required by starship)*" при использовании заранее собранного бинарного файла (например, на CentOS 6 или 7), вы можете использовать бинарный файл, скомпилированый с `musl` вместо `glibc`:
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
+curl -fsSL https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 ```

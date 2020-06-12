@@ -38,7 +38,7 @@ description: Starship es el símbolo de sistema minimalista, ultrarápido e infi
    Con la interfaz de línea de comandos:
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | bash
+   curl -fsSL https://starship.rs/install.sh | sh
    ```
 
 

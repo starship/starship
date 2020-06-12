@@ -134,7 +134,7 @@
    ##### Из прекомпилированного двоичного файла, с Shell:
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | bash
+   curl -fsSL https://starship.rs/install.sh | sh
    ```
 
 

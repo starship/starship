@@ -67,8 +67,8 @@ fetch() {
 
   if has curl; then
     cmd="curl -w '%{http_code}' -sL -o $file $url"
-    code=$($cmd)
-    if [ "$code" == "200" ]; then
+    code=$(curl -w '%{http_code}' -sL -o "$file" "$url")
+    if [ "$code" = "200" ]; then
       rc=0
     else
       rc=$code

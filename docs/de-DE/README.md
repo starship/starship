@@ -38,7 +38,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    With Shell:
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | bash
+   curl -fsSL https://starship.rs/install.sh | sh
    ```
 
 
