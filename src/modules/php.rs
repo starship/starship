@@ -22,7 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     match utils::exec_cmd(
         "php",
         &[
-            "-r",
+            "-nr",
             "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION;",
         ],
     ) {
