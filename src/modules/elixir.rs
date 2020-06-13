@@ -24,9 +24,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("elixir");
     let config = ElixirConfig::try_load(module.config);
-    module.set_style(config.style);
 
+    module.set_style(config.style);
+    module.get_prefix().set_value(config.prefix);
+    module.get_suffix().set_value(config.suffix);
     module.create_segment("symbol", &config.symbol);
+
     module.create_segment("version", &config.version.with_value(&elixir_version));
     module.create_segment(
         "otp_version",

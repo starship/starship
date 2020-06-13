@@ -4,16 +4,20 @@ use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
-pub struct UsernameConfig {
+pub struct UsernameConfig<'a> {
+    pub prefix: &'a str,
+    pub suffix: &'a str,
     pub style_root: Style,
     pub style_user: Style,
     pub show_always: bool,
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for UsernameConfig {
+impl<'a> RootModuleConfig<'a> for UsernameConfig<'a> {
     fn new() -> Self {
         UsernameConfig {
+            prefix: "via ",
+            suffix: " ",
             style_root: Color::Red.bold(),
             style_user: Color::Yellow.bold(),
             show_always: false,

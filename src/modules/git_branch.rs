@@ -10,12 +10,13 @@ use crate::configs::git_branch::GitBranchConfig;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_branch");
     let config = GitBranchConfig::try_load(module.config);
-    module.set_style(config.style);
 
-    module.get_prefix().set_value("on ");
+    module.set_style(config.style);
+    module.get_prefix().set_value(config.prefix);
+    module.get_suffix().set_value(config.suffix);
+    module.create_segment("symbol", &config.symbol);
 
     let truncation_symbol = get_graphemes(config.truncation_symbol, 1);
-    module.create_segment("symbol", &config.symbol);
 
     // TODO: Once error handling is implemented, warn the user if their config
     // truncation length is nonsensical

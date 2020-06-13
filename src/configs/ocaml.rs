@@ -7,6 +7,8 @@ use starship_module_config_derive::ModuleConfig;
 pub struct OCamlConfig<'a> {
     pub symbol: SegmentConfig<'a>,
     pub version: SegmentConfig<'a>,
+    pub prefix: &'a str,
+    pub suffix: &'a str,
     pub style: Style,
     pub disabled: bool,
 }
@@ -16,6 +18,8 @@ impl<'a> RootModuleConfig<'a> for OCamlConfig<'a> {
         OCamlConfig {
             symbol: SegmentConfig::new("🐫 "),
             version: SegmentConfig::default(),
+            prefix: "via ",
+            suffix: " ",
             style: Color::Yellow.bold(),
             disabled: false,
         }

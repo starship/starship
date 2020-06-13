@@ -19,9 +19,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     match get_package_version(&context.current_dir, &config) {
         Some(package_version) => {
             module.set_style(config.style);
-            module.get_prefix().set_value("is ");
-
+            module.get_prefix().set_value(config.prefix);
+            module.get_suffix().set_value(config.suffix);
             module.create_segment("symbol", &config.symbol);
+
             module.create_segment("version", &SegmentConfig::new(&package_version));
 
             Some(module)

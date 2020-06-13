@@ -8,8 +8,6 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::kubernetes::KubernetesConfig;
 use crate::utils;
 
-const KUBERNETES_PREFIX: &str = "on ";
-
 fn get_kube_context(contents: &str) -> Option<(String, String)> {
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
     if yaml_docs.is_empty() {
@@ -64,8 +62,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             };
 
             module.set_style(config.style);
-            module.get_prefix().set_value(KUBERNETES_PREFIX);
-
+            module.get_prefix().set_value(config.prefix);
+            module.get_suffix().set_value(config.suffix);
             module.create_segment("symbol", &config.symbol);
 
             let displayed_context = match config.context_aliases.get(&kube_ctx) {

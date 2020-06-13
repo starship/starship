@@ -7,8 +7,6 @@ use crate::configs::time::TimeConfig;
 
 /// Outputs the current time
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    const TIME_PREFIX: &str = "at ";
-
     let mut module = context.new_module("time");
     let config: TimeConfig = TimeConfig::try_load(module.config);
     if config.disabled {
@@ -45,8 +43,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     module.set_style(config.style);
-
-    module.get_prefix().set_value(TIME_PREFIX);
+    module.get_prefix().set_value(config.prefix);
+    module.get_suffix().set_value(config.suffix);
 
     module.create_segment(
         "time",

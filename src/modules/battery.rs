@@ -25,7 +25,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if let Some(display_style) = display_style {
         // Set style based on percentage
         module.set_style(display_style.style);
-        module.get_prefix().set_value("");
+        module.get_prefix().set_value(battery_config.prefix);
+        module.get_suffix().set_value(battery_config.suffix);
 
         match state {
             battery::State::Full => {

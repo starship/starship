@@ -7,6 +7,8 @@ use starship_module_config_derive::ModuleConfig;
 pub struct DockerContextConfig<'a> {
     pub symbol: SegmentConfig<'a>,
     pub context: SegmentConfig<'a>,
+    pub prefix: &'a str,
+    pub suffix: &'a str,
     pub style: Style,
     pub only_with_files: bool,
     pub disabled: bool,
@@ -17,6 +19,8 @@ impl<'a> RootModuleConfig<'a> for DockerContextConfig<'a> {
         DockerContextConfig {
             symbol: SegmentConfig::new("🐳 "),
             context: SegmentConfig::default(),
+            prefix: "via ",
+            suffix: " ",
             style: Color::Blue.bold(),
             only_with_files: true,
             disabled: false,

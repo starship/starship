@@ -87,16 +87,14 @@ fn alias_region(region: &str, aliases: &HashMap<String, &str>) -> String {
 }
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    const AWS_PREFIX: &str = "on ";
-
     let mut module = context.new_module("aws");
     let config: AwsConfig = AwsConfig::try_load(module.config);
 
     module.set_style(config.style);
-
-    module.get_prefix().set_value(AWS_PREFIX);
-
+    module.get_prefix().set_value(config.prefix);
+    module.get_suffix().set_value(config.suffix);
     module.create_segment("symbol", &config.symbol);
+
     match config.displayed_items {
         AwsItems::All => {
             let (aws_profile, aws_region) = get_aws_profile_and_region();

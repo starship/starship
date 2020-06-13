@@ -12,6 +12,8 @@ pub struct MemoryConfig<'a> {
     pub separator: SegmentConfig<'a>,
     pub ram: SegmentConfig<'a>,
     pub swap: SegmentConfig<'a>,
+    pub prefix: &'a str,
+    pub suffix: &'a str,
     pub style: Style,
     pub disabled: bool,
 }
@@ -26,6 +28,8 @@ impl<'a> RootModuleConfig<'a> for MemoryConfig<'a> {
             separator: SegmentConfig::new(" | "),
             ram: SegmentConfig::default(),
             swap: SegmentConfig::default(),
+            prefix: "via ",
+            suffix: " ",
             style: Color::White.bold().dimmed(),
             disabled: true,
         }

@@ -29,6 +29,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     module.set_style(config.style);
+    module.get_prefix().set_value(config.prefix);
+    module.get_suffix().set_value(config.suffix);
     module.create_segment("symbol", &config.symbol);
 
     let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_memory());

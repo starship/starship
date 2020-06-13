@@ -9,6 +9,8 @@ pub struct TerraformConfig<'a> {
     pub workspace: SegmentConfig<'a>,
     pub version: SegmentConfig<'a>,
     pub show_version: bool,
+    pub prefix: &'a str,
+    pub suffix: &'a str,
     pub style: Style,
     pub disabled: bool,
 }
@@ -20,6 +22,8 @@ impl<'a> RootModuleConfig<'a> for TerraformConfig<'a> {
             workspace: SegmentConfig::default(),
             version: SegmentConfig::default(),
             show_version: false,
+            prefix: "via ",
+            suffix: " ",
             style: Color::Fixed(105).bold(),
             disabled: false,
         }

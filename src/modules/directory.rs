@@ -29,6 +29,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
 
     module.set_style(config.style);
+    module.get_prefix().set_value(config.prefix);
+    module.get_suffix().set_value(config.suffix);
 
     // Using environment PWD is the standard approach for determining logical path
     // If this is None for any reason, we fall back to reading the os-provided path
@@ -103,8 +105,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             style: None,
         },
     );
-
-    module.get_prefix().set_value(config.prefix);
 
     Some(module)
 }

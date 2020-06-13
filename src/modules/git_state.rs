@@ -13,8 +13,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: GitStateConfig = GitStateConfig::try_load(module.config);
 
     module.set_style(config.style);
-    module.get_prefix().set_value("(");
-    module.get_suffix().set_value(") ");
+    module.get_prefix().set_value(config.prefix);
+    module.get_suffix().set_value(config.suffix);
 
     let repo = context.get_repo().ok()?;
     let repo_root = repo.root.as_ref()?;

@@ -10,6 +10,8 @@ pub struct PythonConfig<'a> {
     pub pyenv_prefix: SegmentConfig<'a>,
     pub pyenv_version_name: bool,
     pub scan_for_pyfiles: bool,
+    pub prefix: &'a str,
+    pub suffix: &'a str,
     pub style: Style,
     pub disabled: bool,
 }
@@ -22,6 +24,8 @@ impl<'a> RootModuleConfig<'a> for PythonConfig<'a> {
             pyenv_prefix: SegmentConfig::new("pyenv "),
             pyenv_version_name: false,
             scan_for_pyfiles: true,
+            prefix: "via ",
+            suffix: " ",
             style: Color::Yellow.bold(),
             disabled: false,
         }

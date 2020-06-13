@@ -13,6 +13,8 @@ pub struct GitStateConfig<'a> {
     pub am: SegmentConfig<'a>,
     pub am_or_rebase: SegmentConfig<'a>,
     pub progress_divider: SegmentConfig<'a>,
+    pub prefix: &'a str,
+    pub suffix: &'a str,
     pub style: Style,
     pub disabled: bool,
 }
@@ -28,6 +30,8 @@ impl<'a> RootModuleConfig<'a> for GitStateConfig<'a> {
             am: SegmentConfig::new("AM"),
             am_or_rebase: SegmentConfig::new("AM/REBASE"),
             progress_divider: SegmentConfig::new("/"),
+            prefix: "(",
+            suffix: ") ",
             style: Color::Yellow.bold(),
             disabled: false,
         }

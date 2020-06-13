@@ -8,6 +8,8 @@ pub struct ElixirConfig<'a> {
     pub symbol: SegmentConfig<'a>,
     pub version: SegmentConfig<'a>,
     pub otp_version: SegmentConfig<'a>,
+    pub prefix: &'a str,
+    pub suffix: &'a str,
     pub style: Style,
     pub disabled: bool,
 }
@@ -18,6 +20,8 @@ impl<'a> RootModuleConfig<'a> for ElixirConfig<'a> {
             symbol: SegmentConfig::new("💧 "),
             version: SegmentConfig::default(),
             otp_version: SegmentConfig::default(),
+            prefix: "via ",
+            suffix: " ",
             style: Color::Purple.bold(),
             disabled: false,
         }

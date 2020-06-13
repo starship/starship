@@ -19,7 +19,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("character");
     let config: CharacterConfig = CharacterConfig::try_load(module.config);
-    module.get_prefix().set_value("");
 
     let props = &context.properties;
     let exit_code_default = std::string::String::from("0");
@@ -43,6 +42,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else {
         module.set_style(config.style_failure);
     };
+    module.get_prefix().set_value(config.prefix);
+    module.get_suffix().set_value(config.suffix);
 
     /* If an error symbol is set in the config, use symbols to indicate
     success/failure, in addition to color */

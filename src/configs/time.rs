@@ -7,6 +7,8 @@ use starship_module_config_derive::ModuleConfig;
 pub struct TimeConfig<'a> {
     pub use_12hr: bool,
     pub format: Option<&'a str>,
+    pub prefix: &'a str,
+    pub suffix: &'a str,
     pub style: Style,
     pub disabled: bool,
     pub utc_time_offset: &'a str,
@@ -18,6 +20,8 @@ impl<'a> RootModuleConfig<'a> for TimeConfig<'a> {
         TimeConfig {
             use_12hr: false,
             format: None,
+            prefix: "at ",
+            suffix: " ",
             style: Color::Yellow.bold(),
             disabled: true,
             utc_time_offset: "local",

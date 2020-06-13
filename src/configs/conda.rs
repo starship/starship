@@ -8,6 +8,8 @@ pub struct CondaConfig<'a> {
     pub truncation_length: usize,
     pub symbol: SegmentConfig<'a>,
     pub environment: SegmentConfig<'a>,
+    pub prefix: &'a str,
+    pub suffix: &'a str,
     pub style: Style,
     pub disabled: bool,
 }
@@ -24,6 +26,8 @@ impl<'a> RootModuleConfig<'a> for CondaConfig<'a> {
                 value: "",
                 style: None,
             },
+            prefix: "via ",
+            suffix: " ",
             style: Color::Green.bold(),
             disabled: false,
         }

@@ -47,7 +47,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     module.set_style(config.style);
+    module.get_prefix().set_value(config.prefix);
+    module.get_suffix().set_value(config.suffix);
     module.create_segment("symbol", &config.symbol);
+
     module.create_segment("version", &config.version.with_value(&version.0));
 
     Some(module)

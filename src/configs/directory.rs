@@ -12,6 +12,7 @@ pub struct DirectoryConfig<'a> {
     pub fish_style_pwd_dir_length: i64,
     pub use_logical_path: bool,
     pub prefix: &'a str,
+    pub suffix: &'a str,
     pub style: Style,
     pub disabled: bool,
 }
@@ -25,6 +26,7 @@ impl<'a> RootModuleConfig<'a> for DirectoryConfig<'a> {
             substitutions: HashMap::new(),
             use_logical_path: true,
             prefix: "in ",
+            suffix: " ",
             style: Color::Cyan.bold(),
             disabled: false,
         }

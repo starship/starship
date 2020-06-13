@@ -5,6 +5,8 @@ use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct BatteryConfig<'a> {
+    pub prefix: &'a str,
+    pub suffix: &'a str,
     pub full_symbol: SegmentConfig<'a>,
     pub charging_symbol: SegmentConfig<'a>,
     pub discharging_symbol: SegmentConfig<'a>,
@@ -18,6 +20,8 @@ pub struct BatteryConfig<'a> {
 impl<'a> RootModuleConfig<'a> for BatteryConfig<'a> {
     fn new() -> Self {
         BatteryConfig {
+            prefix: "",
+            suffix: " ",
             full_symbol: SegmentConfig::new("•"),
             charging_symbol: SegmentConfig::new("↑"),
             discharging_symbol: SegmentConfig::new("↓"),
