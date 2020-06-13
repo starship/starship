@@ -5,11 +5,6 @@ use crate::configs::jobs::JobsConfig;
 
 /// Creates a segment to show if there are any active jobs running
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module("jobs");
-    let config: JobsConfig = JobsConfig::try_load(module.config);
-
-    module.set_style(config.style);
-
     let props = &context.properties;
     let num_of_jobs = props
         .get("jobs")
@@ -20,11 +15,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if num_of_jobs == 0 {
         return None;
     }
+
+    let mut module = context.new_module("jobs");
+    let config: JobsConfig = JobsConfig::try_load(module.config);
+
+    module.set_style(config.style);
+    module.get_prefix().set_value(config.prefix);
+    module.get_suffix().set_value(config.suffix);
+
     module.create_segment("symbol", &config.symbol);
     if num_of_jobs > config.threshold {
         module.create_segment("number", &SegmentConfig::new(&num_of_jobs.to_string()));
     }
-    module.get_prefix().set_value("");
 
     Some(module)
 }
