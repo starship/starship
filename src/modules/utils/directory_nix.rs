@@ -6,19 +6,18 @@ use std::ffi::CString;
 pub fn is_write_allowed(folder_path: &str) -> std::result::Result<bool, &'static str> {
     let c_string = CString::new(folder_path).unwrap();
     unsafe {
-        let mut buf: Vec<u8> = Vec::with_capacity(std::mem::size_of::<libc::stat>());
-        let res = libc::stat(c_string.as_ptr(), buf.as_mut_ptr() as *mut libc::stat);
+        let mut stat: libc::stat = std::mem::zeroed();
+        let res = libc::stat(c_string.as_ptr(), &mut stat);
 
         if res != 0 {
             return Err("Unable to stat() directory");
         }
 
-        let stat_struct: *const libc::stat = buf.as_ptr() as *const libc::stat;
-        let mode = (*stat_struct).st_mode;
-        if (*stat_struct).st_uid == libc::geteuid() {
+        let mode = stat.st_mode;
+        if stat.st_uid == libc::geteuid() {
             return Ok(mode & libc::S_IWUSR != 0);
         }
-        if (*stat_struct).st_gid == libc::getgid() {
+        if stat.st_gid == libc::getgid() {
             return Ok(mode & libc::S_IWGRP != 0);
         }
 
@@ -36,7 +35,7 @@ pub fn is_write_allowed(folder_path: &str) -> std::result::Result<bool, &'static
         }
 
         for i in 0..num_groups {
-            if groups[i as usize] == (*stat_struct).st_gid {
+            if groups[i as usize] == stat.st_gid {
                 return Ok(mode & libc::S_IWGRP != 0);
             }
         }
