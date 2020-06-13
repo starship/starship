@@ -154,9 +154,11 @@ is read from the `AWS_VAULT` env var.
 
 | Variable          | Default         | Description                                                                 |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
+| `symbol`          | `"☁️ "`          | The symbol used before displaying the current AWS profile.                  |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 | `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
+| `prefix`          | `"on "`         | Prefix to display immediately before AWS.                                   |
+| `suffix`          | `" "`           | Suffix to display immediately after AWS.                                    |
 | `style`           | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`        | `false`         | Disables the `AWS` module.                                                  |
 
@@ -183,6 +185,8 @@ The module is only visible when the device's battery is below 10%.
 
 | Variable             | Default                  | Description                                       |
 | -------------------- | ------------------------ | ------------------------------------------------- |
+| `prefix`             | `""`                     | Prefix to display immediately before Battery.     |
+| `suffix`             | `" "`                    | Suffix to display immediately after Battery.      |
 | `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
 | `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
 | `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
@@ -264,6 +268,8 @@ can do this in two ways: by changing color (red/green) or by changing its shape
 | `error_symbol`          | `"✖"`          | The symbol used before text input if the previous command failed.                   |
 | `use_symbol_for_status` | `false`        | Indicate error status by changing the symbol.                                       |
 | `vicmd_symbol`          | `"❮"`          | The symbol used before the text input in the prompt if shell is in vim normal mode. |
+| `prefix`                | `""`           | Prefix to display immediately before Character.                                     |
+| `suffix`                | `" "`          | Suffix to display immediately after Character.                                      |
 | `style_success`         | `"bold green"` | The style used if the last command was successful.                                  |
 | `style_failure`         | `"bold red"`   | The style used if the last command failed.                                          |
 | `disabled`              | `false`        | Disables the `character` module.                                                    |
@@ -303,7 +309,8 @@ running `eval $(starship init $0)`, and then proceed as normal.
 | ------------------- | --------------- | ---------------------------------------------------------- |
 | `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
 | `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
+| `prefix`            | `"took "`       | Prefix to display immediately before the command duration. |
+| `suffix`            | `" "`           | Suffix to display immediately after the command duration.  |
 | `style`             | `"bold yellow"` | The style for the module.                                  |
 | `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
 
@@ -333,6 +340,8 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
 | `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
+| `prefix`            | `"via "`       | Prefix to display immediately before Conda.                                                                                                                                                                 |
+| `suffix`            | `" "`          | Suffix to display immediately after Conda.                                                                                                                                                                  |
 | `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
 | `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
 
@@ -358,6 +367,8 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default      | Description                                               |
 | ---------- | ------------ | --------------------------------------------------------- |
 | `symbol`   | `"🔮 "`      | The symbol used before displaying the version of crystal. |
+| `prefix`   | `"via "`     | Prefix to display immediately before Crystal.             |
+| `suffix`   | `" "`        | Suffix to display immediately after Crystal.              |
 | `style`    | `"bold red"` | The style for the module.                                 |
 | `disabled` | `false`      | Disables the `crystal` module.                            |
 
@@ -392,6 +403,7 @@ it would have been `nixpkgs/pkgs`.
 | `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
 | `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
+| `suffix`            | `" "`         | Suffix to display immediately after the directory.                               |
 | `style`             | `"bold cyan"` | The style for the module.                                                        |
 | `disabled`          | `false`       | Disables the `directory` module.                                                 |
 
@@ -438,12 +450,14 @@ The `docker_context` module shows the currently active
 
 ### Options
 
-| Variable          | Default       | Description                                                                  |
-| ----------------- | ------------- | ---------------------------------------------------------------------------- |
-| `symbol`          | `"🐳 "`       | The symbol used before displaying the Docker context .                       |
+| Variable          | Default       | Description                                                                             |
+| ----------------- | ------------- | --------------------------------------------------------------------------------------- |
+| `symbol`          | `"🐳 "`       | The symbol used before displaying the Docker context .                                  |
 | `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
-| `style`           | `"bold blue"` | The style for the module.                                                    |
-| `disabled`        | `true`        | Disables the `docker_context` module.                                        |
+| `prefix`          | `"via "`      | Prefix to display immediately before the Docker context.                                |
+| `suffix`          | `" "`         | Suffix to display immediately after the Docker context.                                 |
+| `style`           | `"bold blue"` | The style for the module.                                                               |
+| `disabled`        | `true`        | Disables the `docker_context` module.                                                   |
 
 ### Example
 
@@ -475,6 +489,8 @@ setting `heuristic = false` in the module options.
 | ----------- | ------------- | -------------------------------------------------------- |
 | `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
 | `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
+| `prefix`    | `"via "`      | Prefix to display immediately before Dotnet.             |
+| `suffix`    | `" "`         | Suffix to display immediately after Dotnet.              |
 | `style`     | `"bold blue"` | The style for the module.                                |
 | `disabled`  | `false`       | Disables the `dotnet` module.                            |
 
@@ -501,6 +517,8 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default         | Description                                                     |
 | ---------- | --------------- | --------------------------------------------------------------- |
 | `symbol`   | `"💧 "`         | The symbol used before displaying the version of Elixir/Erlang. |
+| `prefix`   | `"via "`        | Prefix to display immediately before Elixir.                    |
+| `suffix`   | `" "`           | Suffix to display immediately after Elixir.                     |
 | `style`    | `"bold purple"` | The style for the module.                                       |
 | `disabled` | `false`         | Disables the `elixir` module.                                   |
 
@@ -529,6 +547,8 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default       | Description                                           |
 | ---------- | ------------- | ----------------------------------------------------- |
 | `symbol`   | `"🌳 "`       | The symbol used before displaying the version of Elm. |
+| `prefix`   | `"via "`      | Prefix to display immediately before Elm.             |
+| `suffix`   | `" "`         | Suffix to display immediately after Elm.              |
 | `style`    | `"bold cyan"` | The style for the module.                             |
 | `disabled` | `false`       | Disables the `elm` module.                            |
 
@@ -584,7 +604,9 @@ The module will be shown if any of the following conditions are met:
 
 | Variable   | Default    | Description                                                     |
 | ---------- | ---------- | --------------------------------------------------------------- |
-| `symbol`   | `"🖧 "`    | The symbol used before displaying the version of Erlang.        |
+| `symbol`   | `"🖧 "`     | The symbol used before displaying the version of Erlang.        |
+| `prefix`   | `"via "`   | Prefix to display immediately before Erlang.                    |
+| `suffix`   | `" "`      | Suffix to display immediately after Erlang.                     |
 | `style`    | `bold red` | The style for this module.                                      |
 | `disabled` | `false`    | Disables the `erlang` module.                                   |
 
@@ -608,6 +630,8 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
 | `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
+| `prefix`            | `"on "`        | Prefix to display immediately before Git Branch.                                       |
+| `suffix`            | `" "`           | Suffix to display immediately after Git Branch.                                       |
 | `style`             | `"bold purple"` | The style for the module.                                                             |
 | `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
 
@@ -632,7 +656,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 | -------------------- | -------------- | ----------------------------------------------------- |
 | `commit_hash_length` | `7`            | The length of the displayed git commit hash.          |
 | `prefix`             | `"("`          | Prefix to display immediately before git commit.      |
-| `suffix`             | `")"`          | Suffix to display immediately after git commit.       |
+| `suffix`             | `") "`         | Suffix to display immediately after git commit.       |
 | `style`              | `"bold green"` | The style for the module.                             |
 | `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
 | `disabled`           | `false`        | Disables the `git_commit` module.                     |
@@ -665,6 +689,8 @@ that information will be shown too.
 | `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
 | `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
 | `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
+| `prefix`           | `"("`              | Prefix to display immediately before the Git State.                                                              |
+| `suffix`           | `") "`             | Suffix to display immediately after the Git State.                                                               |
 | `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
 | `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
@@ -705,8 +731,8 @@ current directory.
 | `deleted`          | `"✘"`                      | A file's deletion has been added to the staging area.   |
 | `deleted_count`    | [link](#git-status-counts) | Show and style the number of deleted files.             |
 | `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
-| `prefix`           | `[`                        | Prefix to display immediately before git status.        |
-| `suffix`           | `]`                        | Suffix to display immediately after git status.         |
+| `prefix`           | `"["`                      | Prefix to display immediately before git status.        |
+| `suffix`           | `"] "`                     | Suffix to display immediately after git status.         |
 | `style`            | `"bold red"`               | The style for the module.                               |
 | `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
@@ -757,6 +783,8 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default       | Description                                              |
 | ---------- | ------------- | -------------------------------------------------------- |
 | `symbol`   | `"🐹 "`       | The symbol used before displaying the version of Golang. |
+| `prefix`   | `"via "`      | Prefix to display immediately before Golang.             |
+| `suffix`   | `" "`         | Suffix to display immediately after Golang.              |
 | `style`    | `"bold cyan"` | The style for the module.                                |
 | `disabled` | `false`       | Disables the `golang` module.                            |
 
@@ -780,6 +808,8 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default      | Description                                               |
 | ---------- | ------------ | --------------------------------------------------------- |
 | `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
+| `prefix`   | `"via "`     | Prefix to display immediately before Haskell.             |
+| `suffix`   | `" "`        | Suffix to display immediately after Haskell.              |
 | `style`    | `"bold red"` | The style for the module.                                 |
 | `disabled` | `false`      | Disables the `haskell` module.                            |
 
@@ -834,6 +864,8 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default        | Description                                            |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `prefix`   | `"via "`       | Prefix to display immediately before Java.             |
+| `suffix`   | `" "`          | Suffix to display immediately after Java.              |
 | `style`    | `"dimmed red"` | The style for the module.                              |
 | `disabled` | `false`        | Disables the `java` module.                            |
 
@@ -859,6 +891,8 @@ more than the `threshold` config value, if it exists.
 | ----------- | ------------- | ----------------------------------------------------- |
 | `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
 | `threshold` | `1`           | Show number of jobs if exceeded.                      |
+| `prefix`    | `""`          | Prefix to display immediately before Jobs.            |
+| `suffix`    | `" "`         | Suffix to display immediately after Jobs.             |
 | `style`     | `"bold blue"` | The style for the module.                             |
 | `disabled`  | `false`       | Disables the `jobs` module.                           |
 
@@ -886,8 +920,10 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default       | Description                                              |
 | ---------- | ------------- | -------------------------------------------------------- |
 | `symbol`   | `"ஃ "`       | The symbol used before displaying the version of Julia. |
-| `style`    | `"bold purple"` | The style for the module.                                |
-| `disabled` | `false`       | Disables the `julia` module.                            |
+| `prefix`   | `"via "`      | Prefix to display immediately before Julia.              |
+| `suffix`   | `" "`         | Suffix to display immediately after Julia.               |
+| `style`    | `"bold purple"` | The style for the module.                              |
+| `disabled` | `false`       | Disables the `julia` module.                             |
 
 ### Example
 
@@ -913,12 +949,14 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable         | Default       | Description                                         |
-| ---------------- | ------------- | --------------------------------------------------- |
-| `symbol`         | `"☸ "`        | The symbol used before displaying the Cluster info. |
+| Variable          | Default       | Description                                         |
+| ----------------- | ------------- | --------------------------------------------------- |
+| `symbol`          | `"☸ "`        | The symbol used before displaying the Cluster info. |
 | `context_aliases` |               | Table of context aliases to display                 |
-| `style`          | `"bold blue"` | The style for the module.                           |
-| `disabled`       | `true`        | Disables the `kubernetes` module                    |
+| `prefix`          | `"on "`       | Prefix to display immediately before Kubernetes.    |
+| `suffix`          | `" "`         | Suffix to display immediately after Kubernetes.     |
+| `style`           | `"bold blue"` | The style for the module.                           |
+| `disabled`        | `true`        | Disables the `kubernetes` module                    |
 
 ### Example
 
@@ -974,6 +1012,8 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
 | `symbol`          | `"🐏 "`               | The symbol used before displaying the memory usage.           |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
+| `prefix`          | `"via "`              | Prefix to display immediately before Memory Usage.            |
+| `suffix`          | `" "`                 | Suffix to display immediately after Memory Usage.             |
 | `style`           | `"bold dimmed white"` | The style for the module.                                     |
 | `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
@@ -1003,6 +1043,8 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
+| `prefix`            | `"on "`         | Prefix to display immediately before Mercurial Branch.                                       |
+| `suffix`            | `" "`           | Suffix to display immediately after Mercurial Branch.                                        |
 | `style`             | `"bold purple"` | The style for the module.                                                                    |
 | `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
 
@@ -1031,6 +1073,8 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default         | Description                                            |
 | ---------- | --------------- | ------------------------------------------------------ |
 | `symbol`   | `"👑 "`         | The symbol used before displaying the version of Nim.  |
+| `prefix`   | `"via "`        | Prefix to display immediately before Nim.              |
+| `suffix`   | `" "`           | Suffix to display immediately after Nim.               |
 | `style`    | `"bold yellow"` | The style for the module.                              |
 | `disabled` | `false`         | Disables the `nim` module.                             |
 
@@ -1057,6 +1101,8 @@ The module will be shown when inside a nix-shell environment.
 | `impure_msg` | `"impure"`    | Customize the "impure" msg.                       |
 | `pure_msg`   | `"pure"`      | Customize the "pure" msg.                         |
 | `symbol`     | `"❄️  "`       | The symbol used before displaying the shell name. |
+| `prefix`     | `"via "`      | Prefix to display immediately before Nix-shell.   |
+| `suffix`     | `" "`         | Suffix to display immediately after Nix-shell.    |
 | `style`      | `"bold blue"` | The style for the module.                         |
 | `disabled`   | `false`       | Disables the `nix_shell` module.                  |
 
@@ -1088,6 +1134,8 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default        | Description                                              |
 | ---------- | -------------- | -------------------------------------------------------- |
 | `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
+| `prefix`   | `"via "`       | Prefix to display immediately before NodeJS.             |
+| `suffix`   | `" "`          | Suffix to display immediately after NodeJS.              |
 | `style`    | `"bold green"` | The style for the module.                                |
 | `disabled` | `false`        | Disables the `nodejs` module.                            |
 
@@ -1126,6 +1174,8 @@ package, and shows its current version. The module currently supports `npm`, `ca
 | Variable          | Default      | Description                                                |
 | ----------------- | ------------ | ---------------------------------------------------------- |
 | `symbol`          | `"📦 "`      | The symbol used before displaying the version the package. |
+| `prefix`          | `"is "`      | Prefix to display immediately before the package.          |
+| `suffix`          | `" "`        | Suffix to display immediately after the package.           |
 | `style`           | `"bold 208"` | The style for the module.                                  |
 | `display_private` | `false`      | Enable displaying version for packages marked as private.  |
 | `disabled`        | `false`      | Disables the `package` module.                             |
@@ -1156,6 +1206,8 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default         | Description                                             |
 | ---------- | --------------- | ------------------------------------------------------- |
 | `symbol`   | `"🐫 "`         | The symbol used before displaying the version of OCaml. |
+| `prefix`   | `"via "`        | Prefix to display immediately before OCaml.             |
+| `suffix`   | `" "`           | Suffix to display immediately after OCaml.              |
 | `style`    | `"bold yellow"` | The style for the module.                               |
 | `disabled` | `false`         | Disables the `ocaml` module.                            |
 
@@ -1182,6 +1234,8 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default      | Description                                           |
 | ---------- | ------------ | ----------------------------------------------------- |
 | `symbol`   | `"🐘 "`      | The symbol used before displaying the version of PHP. |
+| `prefix`   | `"via "`     | Prefix to display immediately before PHP.             |
+| `suffix`   | `" "`        | Suffix to display immediately after PHP.              |
 | `style`    | `"bold 147"` | The style for the module.                             |
 | `disabled` | `false`      | Disables the `php` module.                            |
 
@@ -1222,6 +1276,8 @@ The module will be shown if any of the following conditions are met:
 | `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
 | `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
 | `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.  |
+| `prefix`             | `"via "`        | Prefix to display immediately before Python.                                |
+| `suffix`             | `" "`           | Suffix to display immediately after Python.                                 |
 | `style`              | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
 
@@ -1250,6 +1306,8 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default      | Description                                            |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`      | The symbol used before displaying the version of Ruby. |
+| `prefix`   | `"via "`     | Prefix to display immediately before Ruby.             |
+| `suffix`   | `" "`        | Suffix to display immediately after Ruby.              |
 | `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `ruby` module.                            |
 
@@ -1275,6 +1333,8 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default      | Description                                            |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`      | The symbol used before displaying the version of Rust. |
+| `prefix`   | `"via "`     | Prefix to display immediately before Rust.             |
+| `suffix`   | `" "`        | Suffix to display immediately after Rust.              |
 | `style`    | `"bold red"` | The style for the module.                              |
 | `disabled` | `false`      | Disables the `rust` module.                            |
 
@@ -1327,6 +1387,8 @@ The module will be shown if any of the following conditions are met:
 | -------------- | ------------ | ----------------------------------------------------------- |
 | `symbol`       | `"💠 "`      | The symbol used before displaying the terraform workspace.  |
 | `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
+| `prefix`       | `"via "`     | Prefix to display immediately before Terraform.             |
+| `suffix`       | `" "`        | Suffix to display immediately after Terraform.              |
 | `style`        | `"bold 105"` | The style for the module.                                   |
 | `disabled`     | `false`      | Disables the `terraform` module.                            |
 
@@ -1357,6 +1419,8 @@ To enable it, set `disabled` to `false` in your configuration file.
 | ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `use_12hr`        | `false`         | Enables 12 hour formatting.                                                                                         |
 | `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `prefix`          | `"at "`         | Prefix to display immediately before the time.                                                                      |
+| `suffix`          | `" "`          | Suffix to display immediately after the time.                                                                        |
 | `style`           | `"bold yellow"` | The style for the module time.                                                                                      |
 | `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
 | `disabled`        | `true`          | Disables the `time` module.                                                                                         |
@@ -1389,12 +1453,14 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable      | Default         | Description                           |
-| ------------- | --------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`    | The style used when the user is root. |
-| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
-| `show_always` | `false`         | Always shows the `username` module.   |
-| `disabled`    | `false`         | Disables the `username` module.       |
+| Variable      | Default         | Description                                         |
+| ------------- | --------------- | --------------------------------------------------- |
+| `prefix`      | `"via "`        | Prefix to display immediately before your username. |
+| `suffix`      | `" "`           | Suffix to display immediately after your username.  |
+| `style_root`  | `"bold red"`    | The style used when the user is root.               |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.                  |
+| `show_always` | `false`         | Always shows the `username` module.                 |
+| `disabled`    | `false`         | Disables the `username` module.                     |
 
 ### Example
 
@@ -1415,11 +1481,13 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default      | Description                                            |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"↯ "`      | The symbol used before displaying the version of Zig. |
+| Variable   | Default         | Description                                            |
+| ---------- | --------------- | ------------------------------------------------------ |
+| `symbol`   | `"↯ "`          | The symbol used before displaying the version of Zig.  |
+| `prefix`   | `"via "`        | Prefix to display immediately before Zig.              |
+| `suffix`   | `" "`           | Suffix to display immediately after Zig.               |
 | `style`    | `"bold yellow"` | The style for the module.                              |
-| `disabled` | `false`      | Disables the `zig` module.                            |
+| `disabled` | `false`         | Disables the `zig` module.                             |
 
 ### Example
 
@@ -1541,6 +1609,8 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Default        | Description                                                  |
 | ---------- | -------------- | ------------------------------------------------------------ |
 | `symbol`   | `"<=> "`       | The symbol used before displaying the version of PureScript. |
+| `prefix`   | `"via "`       | Prefix to display immediately before PureScript.             |
+| `suffix`   | `" "`          | Suffix to display immediately after PureScript.              |
 | `style`    | `"bold white"` | The style for the module.                                    |
 | `disabled` | `false`        | Disables the `purescript` module.                            |
 
