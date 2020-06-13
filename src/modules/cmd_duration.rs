@@ -36,11 +36,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     module.set_style(module_color);
+    module.get_prefix().set_value(config.prefix);
+    module.get_suffix().set_value(config.suffix);
+
+    if let Some(symbol) = config.symbol {
+        module.create_segment("symbol", &symbol);
+    }
+
     module.create_segment(
         "cmd_duration",
         &SegmentConfig::new(&render_time(elapsed, config.show_milliseconds)),
     );
-    module.get_prefix().set_value(config.prefix);
 
     Some(module)
 }
