@@ -105,20 +105,3 @@ pub fn is_write_allowed(folder_path: &str) -> std::result::Result<bool, &'static
         Ok(result != 0)
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn read_only_test() {
-        assert_eq!(
-            is_write_allowed(&std::env::var("windir").unwrap()),
-            Ok(false)
-        );
-        assert_eq!(
-            is_write_allowed(&std::env::var("USERPROFILE").unwrap()),
-            Ok(true)
-        );
-    }
-}
