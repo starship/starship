@@ -1154,6 +1154,24 @@ Le module est affiché si l'une des ces conditions est remplie :
 | `style`              | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
 
+<details>
+<summary>This module has some advanced configuration options.</summary>
+
+| Variable        | Défaut   | Description                                                                  |
+| --------------- | -------- | ---------------------------------------------------------------------------- |
+| `python_binary` | `python` | Confgures the python binary that Starship executes when getting the version. |
+
+The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+python_binary = "python3"
+```
+
+</details>
+
 ### Exemple
 
 ```toml
@@ -1175,7 +1193,7 @@ The `ruby` module shows the currently installed version of Ruby. Le module est a
 
 ### Options
 
-| Variable   | Défaut         | Description                                            |
+| Variable   | Default        | Description                                            |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`         | The symbol used before displaying the version of Ruby. |
 | `style`    | `"bold green"` | The style for the module.                              |
@@ -1434,18 +1452,18 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 ## PureScript
 
-Le module `purescript` affiche la version courante de Purescript installée. Le module est affiché si l'une des ces conditions est remplie :
+The `purescript` module shows the currently installed version of PureScript version. Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
 
 ### Options
 
-| Variable   | Default        | Description                                                   |
-| ---------- | -------------- | ------------------------------------------------------------- |
-| `symbol`   | `"<=> "` | Le symbole utilisé avant d'afficher la version de PureScript. |
-| `style`    | `"bold white"` | Le style pour le module.                                      |
-| `disabled` | `false`        | Désactive le module `purescript`.                             |
+| Variable   | Default        | Description                                                  |
+| ---------- | -------------- | ------------------------------------------------------------ |
+| `symbol`   | `"<=> "` | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"` | The style for the module.                                    |
+| `disabled` | `false`        | Disables the `purescript` module.                            |
 
 ### Exemple
 
