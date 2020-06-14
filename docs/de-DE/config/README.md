@@ -1154,6 +1154,24 @@ Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 | `style`              | `"bold yellow"` | Stil für dieses Modul.                                                      |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
 
+<details>
+<summary>This module has some advanced configuration options.</summary>
+
+| Variable        | Standardwert | Beschreibung                                                                 |
+| --------------- | ------------ | ---------------------------------------------------------------------------- |
+| `python_binary` | `python`     | Confgures the python binary that Starship executes when getting the version. |
+
+The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+python_binary = "python3"
+```
+
+</details>
+
 ### Beispiel
 
 ```toml
@@ -1220,7 +1238,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 
 ### Optionen
 
-| Variable   | Standardwert         | Beschreibung                                     |
+| Variable   | Standartwert         | Beschreibung                                     |
 | ---------- | -------------------- | ------------------------------------------------ |
 | `label`    | `""`                 | Prefix before the image name display.            |
 | `prefix`   | `"["`                | Prefix to display immediately before image name. |
@@ -1373,7 +1391,7 @@ The order in which custom modules are shown can be individually set by setting `
 
 ### Optionen
 
-| Variable      | Standartwert              | Beschreibung                                                                                                               |
+| Variable      | Standardwert              | Beschreibung                                                                                                               |
 | ------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `command`     |                           | The command whose output should be printed.                                                                                |
 | `when`        |                           | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
