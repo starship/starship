@@ -27,15 +27,15 @@ Any styling that is applied to a module is inherited by its segments. Module pre
 ## Logging
 
 Debug logging in starship is done with [pretty_env_logger](https://crates.io/crates/pretty_env_logger).
-To run starship with debug logs, set the `RUST_LOG` environment variable to the log level needed.
+To run starship with debug logs, set the `STARSHIP_LOG` environment variable to the log level needed.
 For example, to enable the trace logs, run the following:
 
 ```sh
 # Run installed starship
-RUST_LOG=starship=trace starship
+STARSHIP_LOG=starship=trace starship
 
 # Run with cargo
-RUST_LOG=starship=trace cargo run
+STARSHIP_LOG=starship=trace cargo run
 ```
 
 ## Linting

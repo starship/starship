@@ -23,7 +23,7 @@ use crate::module::ALL_MODULES;
 use clap::{App, AppSettings, Arg, Shell, SubCommand};
 
 fn main() {
-    pretty_env_logger::init();
+    pretty_env_logger::init_custom_env("STARSHIP_LOG");
 
     let status_code_arg = Arg::with_name("status_code")
         .short("s")
