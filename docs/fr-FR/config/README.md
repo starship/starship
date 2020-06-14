@@ -32,7 +32,7 @@ Vous pouvez changer l'emplacement du fichier de configuration `starship.toml` gr
 export STARSHIP_CONFIG=~/.starship
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+De manière équivalente, pour Powershell (Windows), ajoutez la ligne suivante à votre `$PROFILE`:
 ```ps1
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
@@ -141,9 +141,9 @@ prompt_order = [
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
+Le module `aws` affiche la région et le profil AWS courant. Ces informations sont basées sur les variables d'environnement `AWS_REGION`, `AWS_DEFAULT_REGION`, et `AWS_PROFILE` ainsi que le fichier `~/.aws/config`.
 
-When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
+Quand [aws-vault](https://github.com/99designs/aws-vault) est utilisé, la valeur du profil est lu dans la variable d'environnement: `AWS_VAULT`.
 
 ### Options
 
@@ -152,8 +152,8 @@ When using [aws-vault](https://github.com/99designs/aws-vault) the profile is re
 | `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 | `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
-| `style`           | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
+| `style`           | `"bold yellow"` | Le style du module.                                                         |
+| `disabled`        | `false`         | Désactive le module `AWS`.                                                  |
 
 ### Exemple
 
@@ -175,13 +175,13 @@ The `battery` module shows how charged the device's battery is and its current c
 
 ### Options
 
-| Variable             | Default                  | Description                                       |
-| -------------------- | ------------------------ | ------------------------------------------------- |
-| `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
-| `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
-| `display`            | [lien](#battery-display) | Display threshold and style for the module.       |
-| `disabled`           | `false`                  | Disables the `battery` module.                    |
+| Variable             | Default                  | Description                                                        |
+| -------------------- | ------------------------ | ------------------------------------------------------------------ |
+| `full_symbol`        | `"•"`                    | Le symbole affiché lorsque la batterie est pleine.                 |
+| `charging_symbol`    | `"⇡"`                    | Le symbole affiché lorsque la batterie est en cours de chargement. |
+| `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging.                  |
+| `display`            | [lien](#battery-display) | Display threshold and style for the module.                        |
+| `disabled`           | `false`                  | Disables the `battery` module.                                     |
 
 <details>
 <summary>There are also options for some uncommon battery states.</summary>
