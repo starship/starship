@@ -1154,6 +1154,24 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 | `style`              | `"bold yellow"` | 這個模組的風格。                                                                    |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
 
+<details>
+<summary>This module has some advanced configuration options.</summary>
+
+| 變數              | 預設       | 說明                                                                           |
+| --------------- | -------- | ---------------------------------------------------------------------------- |
+| `python_binary` | `python` | Confgures the python binary that Starship executes when getting the version. |
+
+The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+python_binary = "python3"
+```
+
+</details>
+
 ### 範例
 
 ```toml
