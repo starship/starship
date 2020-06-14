@@ -175,13 +175,13 @@ The `battery` module shows how charged the device's battery is and its current c
 
 ### Options
 
-| Variable             | Default                  | Description                                                        |
-| -------------------- | ------------------------ | ------------------------------------------------------------------ |
-| `full_symbol`        | `"•"`                    | Le symbole affiché lorsque la batterie est pleine.                 |
-| `charging_symbol`    | `"⇡"`                    | Le symbole affiché lorsque la batterie est en cours de chargement. |
-| `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging.                  |
-| `display`            | [lien](#battery-display) | Display threshold and style for the module.                        |
-| `disabled`           | `false`                  | Disables the `battery` module.                                     |
+| Variable             | Default                  | Description                                         |
+| -------------------- | ------------------------ | --------------------------------------------------- |
+| `full_symbol`        | `"•"`                    | Le symbole affiché lorsque la batterie est pleine.  |
+| `charging_symbol`    | `"⇡"`                    | Le symbole affiché lorsque la batterie se charge.   |
+| `discharging_symbol` | `"⇣"`                    | Le symbole affiché lorsque la batterie se décharge. |
+| `display`            | [lien](#battery-display) | Affiche le seuil et le style du module.             |
+| `disabled`           | `false`                  | Désactive le module `battery`.                      |
 
 <details>
 <summary>There are also options for some uncommon battery states.</summary>
@@ -1434,18 +1434,18 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of PureScript version. Le module est affiché si l'une des ces conditions est remplie :
+Le module `purescript` affiche la version courante de Purescript installée. Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
 
 ### Options
 
-| Variable   | Default        | Description                                                  |
-| ---------- | -------------- | ------------------------------------------------------------ |
-| `symbol`   | `"<=> "` | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"` | The style for the module.                                    |
-| `disabled` | `false`        | Disables the `purescript` module.                            |
+| Variable   | Default        | Description                                                   |
+| ---------- | -------------- | ------------------------------------------------------------- |
+| `symbol`   | `"<=> "` | Le symbole utilisé avant d'afficher la version de PureScript. |
+| `style`    | `"bold white"` | Le style pour le module.                                      |
+| `disabled` | `false`        | Désactive le module `purescript`.                             |
 
 ### Exemple
 
