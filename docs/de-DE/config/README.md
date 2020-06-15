@@ -1157,9 +1157,9 @@ Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 <details>
 <summary>This module has some advanced configuration options.</summary>
 
-| Variable        | Standardwert | Beschreibung                                                                 |
-| --------------- | ------------ | ---------------------------------------------------------------------------- |
-| `python_binary` | `python`     | Confgures the python binary that Starship executes when getting the version. |
+| Variable        | Standardwert | Beschreibung                                                                  |
+| --------------- | ------------ | ----------------------------------------------------------------------------- |
+| `python_binary` | `python`     | Configures the python binary that Starship executes when getting the version. |
 
 The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
 
