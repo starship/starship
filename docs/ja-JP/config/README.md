@@ -1157,9 +1157,9 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 <details>
 <summary>This module has some advanced configuration options.</summary>
 
-| 変数              | デフォルト    | 説明                                                                           |
-| --------------- | -------- | ---------------------------------------------------------------------------- |
-| `python_binary` | `python` | Confgures the python binary that Starship executes when getting the version. |
+| 変数              | デフォルト    | 説明                                                                            |
+| --------------- | -------- | ----------------------------------------------------------------------------- |
+| `python_binary` | `python` | Configures the python binary that Starship executes when getting the version. |
 
 The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
 
