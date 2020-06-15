@@ -1230,7 +1230,7 @@ The module will be shown if any of the following conditions are met:
 
 | Variable        | Default  | Description                                                                  |
 | --------------- | -------- | ---------------------------------------------------------------------------- |
-| `python_binary` | `python` | Confgures the python binary that Starship executes when getting the version. |
+| `python_binary` | `python` | Configures the python binary that Starship executes when getting the version. |
 
 The `python_binary` variable changes the binary that Starship executes to get
 the version of Python, it doesn't change the arguments that are used.
