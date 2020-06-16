@@ -258,15 +258,12 @@ path_check() {
 
 confirm() {
   printf "%s " "${MAGENTA}?${NO_COLOR} $* ${BOLD}[y/N]${NO_COLOR}"
-  {
-    read -r yn </dev/tty
-    rc=$?
-  } || true
-
-  if [ $rc != 0 ]; then
+  if ! read -r yn </dev/tty; then
     error "Error reading from prompt (please re-run with the \`--yes\` option)"
     return 1
-  elif [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
+  fi
+
+  if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
     error 'Aborting (please answer "yes" to continue)'
     return 1
   fi
