@@ -322,7 +322,8 @@ fn get_current_branch(repository: &Repository) -> Option<String> {
                 head_path.push("HEAD");
 
                 // get first line, then last path segment
-                fs::read_to_string(&head_path).ok()?
+                fs::read_to_string(&head_path)
+                    .ok()?
                     .lines()
                     .next()?
                     .trim()
