@@ -63,7 +63,7 @@ mktmpdir() {
   return 1
 }
 
-fetch() {
+download() {
   file="$1"
   url="$2"
 
@@ -387,7 +387,7 @@ else
   elevated=1
 fi
 
-fetch "$archive" "$url"
+download "$archive" "$url"
 unpack "$archive"
 if [ -n "$elevated" ]; then
   sudo install "$bin" "$BIN_DIR"
