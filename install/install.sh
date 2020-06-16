@@ -245,14 +245,12 @@ bin_dir_check() {
 }
 
 path_check() {
-  # https://stackoverflow.com/a/9663359
-  case :$PATH: in
-    *:$BIN_DIR:*) return 0 ;;
-  esac
+  echo "$PATH" | tr ':' '\0' | xargs -0 -I"{}" [ "{}" != "$BIN_DIR" ] || return 0
 
   warn "Bin directory $BIN_DIR is not in your \$PATH"
   printf "\n"
 
+  # return success since this is just a warning
   return 0
 }
 
