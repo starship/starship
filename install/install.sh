@@ -95,20 +95,12 @@ unpack() {
 
   case "$archive" in
     *.tar.gz)
-      if [ -n "$verbose" ]; then
-        flags="-v"
-      else
-        flags=
-      fi
+      flags=$(test -n "$verbose" && echo "-v" || echo "")
       tar "$flags" -xzf "$archive" -C "$dir"
       return 0
       ;;
     *.zip)
-      if [ -z "$verbose" ]; then
-        flags="-qq"
-      else
-        flags=
-      fi
+      flags=$(test -z "$verbose" && echo "-qq" || echo "")
       UNZIP="$flags" unzip "$archive" -d "$dir"
       return 0
       ;;
