@@ -234,14 +234,14 @@ arch_check() {
 }
 
 bin_dir_check() {
-  if [ ! -d "$BIN_DIR" ]; then
-    error "Installation location $BIN_DIR does not appear to be a directory"
-    printf "\n" >&2
-    info "Make sure the location exists and is a directory, then try again."
-    return 1
+  if [ -d "$BIN_DIR" ]; then
+    return 0
   fi
 
-  return 0
+  error "Installation location $BIN_DIR does not appear to be a directory"
+  printf "\n" >&2
+  info "Make sure the location exists and is a directory, then try again."
+  return 1
 }
 
 path_check() {
