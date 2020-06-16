@@ -54,11 +54,13 @@ has() {
 }
 
 mktmpdir() {
-  tmpdir=$(mktemp -dqt "$1") || {
-    error "Can't create temp file, exiting…"
-    return 1
-  }
-  echo "$tmpdir"
+  if tmpdir=$(mktemp -dqt "$1"); then
+    echo "$tmpdir"
+    return 0
+  fi
+
+  error "Can't create temp file, exiting…"
+  return 1
 }
 
 fetch() {
