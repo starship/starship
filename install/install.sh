@@ -206,7 +206,7 @@ uname_arch() {
     arch=i386
   fi
 
-  case $arch in
+  case "$arch" in
     x86) arch="i386" ;;
     i686) arch="i386" ;;
     i386) arch="i386" ;;
@@ -221,7 +221,7 @@ uname_arch() {
 
 arch_check() {
   arch=${arch:-"$(uname_arch)"}
-  case $arch in
+  case "$arch" in
     x86_64) return 0 ;;
   esac
 
@@ -357,7 +357,7 @@ if [ -n "$verbose" ]; then
 fi
 
 tmp=$(mktmpdir "starship")
-case $platform in
+case "$platform" in
   pc-windows-msvc)
     bin="$tmp/starship.exe"
     ext="zip"
