@@ -68,33 +68,17 @@ download() {
   url="$2"
 
   if has curl; then
-    cmd="curl -w '%{http_code}' -sL -o $file $url"
-    code=$(curl -w '%{http_code}' -sL -o "$file" "$url")
-    if [ "$code" = "200" ]; then
-      rc=0
-    else
-      rc=$code
-    fi
+    cmd="curl --fail --silent --location --output $file $url"
   elif has wget; then
-    cmd="wget -q -O $file $url"
-    {
-      wget -q -O "$file" "$url"
-      rc=$?
-    } || true
+    cmd="wget --quiet --output-document=$file $url"
   elif has fetch; then
-    cmd="fetch -qo $file $url"
-    {
-      fetch -qo "$file" "$url"
-      rc=$?
-    } || true
+    cmd="fetch --quiet --output=$file $url"
   else
     error "No HTTP download program (curl, wget, fetch) found, exiting…"
     return 1
   fi
 
-  if [ $rc = 0 ]; then
-    return 0
-  fi
+  $cmd && return 0 || rc=$?
 
   error "Command failed (exit code $rc): ${BLUE}${cmd}${NO_COLOR}"
   printf "\n" >&2
