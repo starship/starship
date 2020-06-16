@@ -38,7 +38,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
    Com o Shell:
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | sh
+   curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 

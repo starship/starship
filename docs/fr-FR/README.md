@@ -38,7 +38,7 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
    Avec Shell:
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | sh
+   curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 

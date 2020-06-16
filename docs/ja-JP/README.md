@@ -38,7 +38,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    Shellを利用する
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | sh
+   curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 

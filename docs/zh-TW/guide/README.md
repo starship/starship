@@ -134,7 +134,7 @@
    ##### From prebuilt binary, with Shell:
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | sh
+   curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 

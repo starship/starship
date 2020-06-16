@@ -38,7 +38,7 @@ description: Starship - минимальная, быстрая и бесконе
    Через Bash:
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | sh
+   curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 

@@ -49,5 +49,5 @@ El símbolo de sistema usará tanto contexto como le proveas, pero no hay parám
 Si obtienes un error como "*version 'GLIBC_2.18' not found (required by starship)*" al usar el binario precompilado (por ejemplo, en CentOS 6 o 7), puedes usar el binario compilado con `musl` en vez de `glibc`:
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
+curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
 ```

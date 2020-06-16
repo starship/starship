@@ -134,7 +134,7 @@
    ##### 下载预构建的二进制文件，使用 Shell 命令：
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | sh
+   curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
