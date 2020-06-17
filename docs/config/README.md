@@ -1697,7 +1697,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable          | Default                 | Description                                                                                                            |
+| Option            | Default                 | Description                                                                                                            |
 | ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                      |
 | `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                             |
