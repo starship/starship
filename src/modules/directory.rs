@@ -1,5 +1,6 @@
 use path_slash::PathExt;
 use std::collections::HashMap;
+use std::iter::FromIterator;
 use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
 
@@ -62,14 +63,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let dir_string = match &repo.root {
         Some(repo_root) if config.truncate_to_repo && (repo_root != &home_dir) => {
-            let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
-
+            log::debug!("Repo root: {:?}", repo_root);
             // Contract the path to the git repo root
-            contract_path(current_dir, repo_root, repo_folder_name)
+            contract_repo_path(current_dir, repo_root)
+                .unwrap_or_else(|| contract_path(current_dir, &home_dir, HOME_SYMBOL))
         }
         // Contract the path to the home directory
         _ => contract_path(current_dir, &home_dir, HOME_SYMBOL),
     };
+    log::debug!("Dir string: {}", dir_string);
 
     let substituted_dir = substitute_path(dir_string, &config.substitutions);
 
@@ -132,6 +134,57 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
             .to_slash()
             .unwrap()
     )
+}
+
+/// Contract the root component of a path based on the real path
+///
+/// Replaces the `top_level_path` in a given `full_path` with the provided
+/// `top_level_replacement` by walking ancestors and comparing its real path.
+fn contract_repo_path(full_path: &Path, top_level_path: &Path) -> Option<String> {
+    let top_level_real_path = real_path(top_level_path);
+    // Walk ancestors to preserve logical path in `full_path`.
+    // If we'd just `full_real_path.strip_prefix(top_level_real_path)`,
+    // then it wouldn't preserve logical path. It would've returned physical path.
+    for (i, ancestor) in full_path.ancestors().enumerate() {
+        let ancestor_real_path = real_path(ancestor);
+        if ancestor_real_path != top_level_real_path {
+            continue;
+        }
+
+        let components: Vec<_> = full_path.components().collect();
+        let repo_name = components[components.len() - i - 1].as_os_str().to_str()?;
+
+        if i == 0 {
+            return Some(repo_name.to_string());
+        }
+
+        let path = PathBuf::from_iter(&components[components.len() - i..]);
+        return Some(format!(
+            "{repo_name}{separator}{path}",
+            repo_name = repo_name,
+            separator = "/",
+            path = path.to_slash()?
+        ));
+    }
+    None
+}
+
+fn real_path<P: AsRef<Path>>(path: P) -> PathBuf {
+    let path = path.as_ref();
+    let mut buf = PathBuf::new();
+    for component in path.components() {
+        let next = buf.join(component);
+        if let Ok(realpath) = next.read_link() {
+            if realpath.is_absolute() {
+                buf = realpath;
+            } else {
+                buf.push(realpath);
+            }
+        } else {
+            buf = next;
+        }
+    }
+    buf.canonicalize().unwrap_or_else(|_| path.into())
 }
 
 /// Perform a list of string substitutions on the path
