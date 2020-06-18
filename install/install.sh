@@ -143,14 +143,14 @@ uname_platform() {
     fi
   fi
 
-  # mingw is Git-Bash
-  if echo "$platform" | grep -i mingw >/dev/null; then
-    platform="pc-windows-msvc"
-  fi
-
   if [ "$platform" = "darwin" ]; then
     platform="apple-darwin"
   fi
+
+  case "$platform" in
+    msys_nt*) platform="pc-windows-msvc" ;;
+    mingw*) platform="pc-windows-msvc" ;;
+  esac
 
   echo $platform
 }
