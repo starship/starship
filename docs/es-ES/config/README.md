@@ -9,7 +9,7 @@
 Para iniciar la configuración de starship, crea el siguiente fichero: `~/.config.toml`.
 
 ```sh
-$ mkdir -p ~/.config && touch ~/.config/starship.toml
+mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 Toda la configuración de starship se incluye en este fichero [TOML](https://github.com/toml-lang/toml):
@@ -404,7 +404,7 @@ truncation_length = 8
 
 ## Docker context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
+El módulo `docker_context` muestra el [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) activo si no está a `default`.
 
 ### Opciones
 
@@ -426,7 +426,7 @@ symbol = "🐋 "
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+El módulo `dotnet` muestra la versión usada de .NET Core SDK para el directorio actual. Si el SDK ha sido anclado en el directorio actual, se mostrará la versión fijada. De lo contrario, el módulo muestra la última versión instalada del SDK.
 
 This module will only be shown in your prompt when one of the following files are present in the current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll also need the .NET Core command-line tools installed in order to use it correctly.
 
@@ -1040,7 +1040,7 @@ The `nodejs` module shows the currently installed version of NodeJS. El módulo 
 symbol = "🤖 "
 ```
 
-## Package Version
+## Versión del paquete
 
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
@@ -1134,12 +1134,12 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `.python-version` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `pyproject.toml` file
+- El directorio actual contiene un fichero `requirements.txt`
+- El directorio actual contiene un fichero `pyproject.toml`
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - The current directory contains a `Pipfile` file
-- The current directory contains a `tox.ini` file
-- The current directory contains a `setup.py` file
+- El directorio actual contiene un fichero `tox.ini`
+- El directorio actual contiene un fichero `setup.py`
 - The current directory contains a `__init__.py` file
 - A virtual environment is currently activated
 
@@ -1153,6 +1153,24 @@ El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 | `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.  |
 | `style`              | `"bold yellow"` | El estilo del módulo.                                                       |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
+
+<details>
+<summary>This module has some advanced configuration options.</summary>
+
+| Variable        | Por defecto | Descripción                                                                   |
+| --------------- | ----------- | ----------------------------------------------------------------------------- |
+| `python_binary` | `python`    | Configures the python binary that Starship executes when getting the version. |
+
+The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+python_binary = "python3"
+```
+
+</details>
 
 ### Ejemplo
 
@@ -1263,7 +1281,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 symbol = "🏎💨 "
 ```
 
-## Time
+## Hora
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
@@ -1275,14 +1293,14 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opciones
 
-| Variable          | Por defecto     | Descripción                                                                                                         |
-| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | Enables 12 hour formatting.                                                                                         |
-| `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`           | `"bold yellow"` | The style for the module time.                                                                                      |
-| `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
-| `disabled`        | `true`          | Disables the `time` module.                                                                                         |
-| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format               |
+| Variable          | Por defecto     | Descripción                                                                                                                  |
+| ----------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`         | Activa el formato de 12 horas.                                                                                               |
+| `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.          |
+| `style`           | `"bold yellow"` | El estilo del módulo de la hora.                                                                                             |
+| `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.             |
+| `disabled`        | `true`          | Disables the `time` module.                                                                                                  |
+| `time_range`      | `"-"`           | Establece el intervalo de tiempo durante el cual el módulo se mostrará. La hora debe ser especificada en formato de 24 horas |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
@@ -1298,7 +1316,7 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Username
+## Nombre de usuario
 
 The `username` module shows active user's username. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
@@ -1349,7 +1367,7 @@ The `zig` module shows the currently installed version of Zig. El módulo se mue
 symbol = "⚡️ "
 ```
 
-## Custom commands
+## Comandos personalizados
 
 The `custom` modules show the output of some arbitrary commands.
 
@@ -1378,7 +1396,7 @@ The order in which custom modules are shown can be individually set by setting `
 | `command`     |                           | The command whose output should be printed.                                                                                |
 | `when`        |                           | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                           | [See below](#custom-command-shell)                                                                                         |
-| `description` | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
+| `descripción` | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                      | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                      | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                      | The extensions that will be searched in the working directory for a match.                                                 |
@@ -1436,7 +1454,7 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 The `purescript` module shows the currently installed version of PureScript version. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `spago.dhall` file
+- El directorio actual contiene un fichero `spago.dhall`
 - The current directory contains a \*.purs files
 
 ### Opciones

@@ -9,7 +9,7 @@
 Pour commencer à configurer starship, créez le fichier suivant : `~/.config/starship.toml`.
 
 ```sh
-$ mkdir -p ~/.config && touch ~/.config/starship.toml
+mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 Toute la configuration de starship est effectuée dans ce fichier [TOML](https://github.com/toml-lang/toml) :
@@ -32,7 +32,7 @@ Vous pouvez changer l'emplacement du fichier de configuration `starship.toml` gr
 export STARSHIP_CONFIG=~/.starship
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+De manière équivalente, pour Powershell (Windows), ajoutez la ligne suivante à votre `$PROFILE`:
 ```ps1
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
@@ -141,9 +141,9 @@ prompt_order = [
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
+Le module `aws` affiche la région et le profil AWS courant. Ces informations sont basées sur les variables d'environnement `AWS_REGION`, `AWS_DEFAULT_REGION`, et `AWS_PROFILE` ainsi que le fichier `~/.aws/config`.
 
-When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
+Quand [aws-vault](https://github.com/99designs/aws-vault) est utilisé, la valeur du profil est lu dans la variable d'environnement: `AWS_VAULT`.
 
 ### Options
 
@@ -152,8 +152,8 @@ When using [aws-vault](https://github.com/99designs/aws-vault) the profile is re
 | `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
 | `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
-| `style`           | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
+| `style`           | `"bold yellow"` | Le style du module.                                                         |
+| `disabled`        | `false`         | Désactive le module `AWS`.                                                  |
 
 ### Exemple
 
@@ -175,13 +175,13 @@ The `battery` module shows how charged the device's battery is and its current c
 
 ### Options
 
-| Variable             | Default                  | Description                                       |
-| -------------------- | ------------------------ | ------------------------------------------------- |
-| `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
-| `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
-| `display`            | [lien](#battery-display) | Display threshold and style for the module.       |
-| `disabled`           | `false`                  | Disables the `battery` module.                    |
+| Variable             | Default                  | Description                                         |
+| -------------------- | ------------------------ | --------------------------------------------------- |
+| `full_symbol`        | `"•"`                    | Le symbole affiché lorsque la batterie est pleine.  |
+| `charging_symbol`    | `"⇡"`                    | Le symbole affiché lorsque la batterie se charge.   |
+| `discharging_symbol` | `"⇣"`                    | Le symbole affiché lorsque la batterie se décharge. |
+| `display`            | [lien](#battery-display) | Affiche le seuil et le style du module.             |
+| `disabled`           | `false`                  | Désactive le module `battery`.                      |
 
 <details>
 <summary>There are also options for some uncommon battery states.</summary>
@@ -288,7 +288,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 | `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
 | `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
 | `prefix`            | `took`          | Prefix to display immediately before the command duration. |
-| `style`             | `"bold yellow"` | The style for the module.                                  |
+| `style`             | `"bold yellow"` | Le style du module.                                        |
 | `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
 
 ### Exemple
@@ -317,7 +317,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
 | `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
-| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
+| `style`             | `"bold green"` | Le style du module.                                                                                                                                                                                         |
 | `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
 
 ### Exemple
@@ -341,7 +341,7 @@ The `crystal` module shows the currently installed version of Crystal. Le module
 | Variable   | Default        | Description                                               |
 | ---------- | -------------- | --------------------------------------------------------- |
 | `symbol`   | `"🔮 "`         | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold green"` | The style for the module.                                 |
+| `style`    | `"bold green"` | Le style du module.                                       |
 | `disabled` | `false`        | Disables the `crystal` module.                            |
 
 ### Exemple
@@ -369,7 +369,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
 | `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
-| `style`             | `"bold cyan"` | The style for the module.                                                        |
+| `style`             | `"bold cyan"` | Le style du module.                                                              |
 | `disabled`          | `false`       | Disables the `directory` module.                                                 |
 
 <details>
@@ -412,7 +412,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | ----------------- | ------------- | --------------------------------------------------------------------------------------- |
 | `symbol`          | `"🐳 "`        | The symbol used before displaying the Docker context .                                  |
 | `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
-| `style`           | `"bold blue"` | The style for the module.                                                               |
+| `style`           | `"bold blue"` | Le style du module.                                                                     |
 | `disabled`        | `true`        | Disables the `docker_context` module.                                                   |
 
 ### Exemple
@@ -438,7 +438,7 @@ Internally, this module uses its own mechanism for version detection. Typically 
 | ----------- | ------------- | -------------------------------------------------------- |
 | `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
 | `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
-| `style`     | `"bold blue"` | The style for the module.                                |
+| `style`     | `"bold blue"` | Le style du module.                                      |
 | `disabled`  | `false`       | Disables the `dotnet` module.                            |
 
 ### Exemple
@@ -463,7 +463,7 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 | Variable   | Default         | Description                                                     |
 | ---------- | --------------- | --------------------------------------------------------------- |
 | `symbol`   | `"💧 "`          | The symbol used before displaying the version of Elixir/Erlang. |
-| `style`    | `"bold purple"` | The style for the module.                                       |
+| `style`    | `"bold purple"` | Le style du module.                                             |
 | `disabled` | `false`         | Disables the `elixir` module.                                   |
 
 ### Exemple
@@ -490,7 +490,7 @@ The `elm` module shows the currently installed version of Elm. Le module est aff
 | Variable   | Default       | Description                                           |
 | ---------- | ------------- | ----------------------------------------------------- |
 | `symbol`   | `"🌳 "`        | The symbol used before displaying the version of Elm. |
-| `style`    | `"bold cyan"` | The style for the module.                             |
+| `style`    | `"bold cyan"` | Le style du module.                                   |
 | `disabled` | `false`       | Disables the `elm` module.                            |
 
 
@@ -519,7 +519,7 @@ The `env_var` module displays the current value of a selected environment variab
 | `default`  |                       | The default value to be displayed when the selected variable is not defined. |
 | `prefix`   | `""`                  | Prefix to display immediately before the variable value.                     |
 | `suffix`   | `""`                  | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed bold black"` | The style for the module.                                                    |
+| `style`    | `"dimmed bold black"` | Le style du module.                                                          |
 | `disabled` | `false`               | Disables the `env_var` module.                                               |
 
 ### Exemple
@@ -567,7 +567,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
 | `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
-| `style`             | `"bold purple"` | The style for the module.                                                             |
+| `style`             | `"bold purple"` | Le style du module.                                                                   |
 | `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
 
 ### Exemple
@@ -592,7 +592,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 | `commit_hash_length` | `7`            | The length of the displayed git commit hash.          |
 | `prefix`             | `"("`          | Prefix to display immediately before git commit.      |
 | `suffix`             | `")"`          | Suffix to display immediately after git commit.       |
-| `style`              | `"bold green"` | The style for the module.                             |
+| `style`              | `"bold green"` | Le style du module.                                   |
 | `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
 | `disabled`           | `false`        | Disables the `git_commit` module.                     |
 
@@ -621,7 +621,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
 | `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
 | `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
-| `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
+| `style`            | `"bold yellow"`    | Le style du module.                                                                                              |
 | `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
 
 ### Exemple
@@ -662,7 +662,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `show_sync_count`  | `false`                    | Show ahead/behind count of the branch being tracked.    |
 | `prefix`           | `[`                        | Prefix to display immediately before git status.        |
 | `suffix`           | `]`                        | Suffix to display immediately after git status.         |
-| `style`            | `"bold green"`             | The style for the module.                               |
+| `style`            | `"bold green"`             | Le style du module.                                     |
 | `disabled`         | `false`                    | Disables the `git_status` module.                       |
 
 #### Git Status Counts
@@ -711,7 +711,7 @@ The `golang` module shows the currently installed version of Golang. Le module e
 | Variable   | Default       | Description                                              |
 | ---------- | ------------- | -------------------------------------------------------- |
 | `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
-| `style`    | `"bold cyan"` | The style for the module.                                |
+| `style`    | `"bold cyan"` | Le style du module.                                      |
 | `disabled` | `false`       | Disables the `golang` module.                            |
 
 ### Exemple
@@ -733,7 +733,7 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 | Variable   | Default        | Description                                               |
 | ---------- | -------------- | --------------------------------------------------------- |
 | `symbol`   | `"λ "`         | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold green"` | The style for the module.                                 |
+| `style`    | `"bold green"` | Le style du module.                                       |
 | `disabled` | `false`        | Disables the `haskell` module.                            |
 
 
@@ -758,7 +758,7 @@ The `hostname` module shows the system hostname.
 | `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
 | `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
 | `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
+| `style`    | `"bold dimmed green"` | Le style du module.                                                                                                                  |
 | `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### Exemple
@@ -786,7 +786,7 @@ The `java` module shows the currently installed version of Java. Le module est a
 | Variable   | Default        | Description                                            |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | The style for the module.                              |
+| `style`    | `"dimmed red"` | Le style du module.                                    |
 | `disabled` | `false`        | Disables the `java` module.                            |
 
 ### Exemple
@@ -808,7 +808,7 @@ The `jobs` module shows the current number of jobs running. The module will be s
 | ----------- | ------------- | ----------------------------------------------------- |
 | `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
 | `threshold` | `1`           | Show number of jobs if exceeded.                      |
-| `style`     | `"bold blue"` | The style for the module.                             |
+| `style`     | `"bold blue"` | Le style du module.                                   |
 | `disabled`  | `false`       | Disables the `jobs` module.                           |
 
 ### Exemple
@@ -834,7 +834,7 @@ The `julia` module shows the currently installed version of Julia. Le module est
 | Variable   | Default         | Description                                             |
 | ---------- | --------------- | ------------------------------------------------------- |
 | `symbol`   | `"ஃ "`          | The symbol used before displaying the version of Julia. |
-| `style`    | `"bold purple"` | The style for the module.                               |
+| `style`    | `"bold purple"` | Le style du module.                                     |
 | `disabled` | `false`         | Disables the `julia` module.                            |
 
 ### Exemple
@@ -851,7 +851,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
 
 :::
 
@@ -861,7 +861,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | ----------------- | ------------- | --------------------------------------------------- |
 | `symbol`          | `"☸ "`        | The symbol used before displaying the Cluster info. |
 | `context_aliases` |               | Table of context aliases to display                 |
-| `style`           | `"bold blue"` | The style for the module.                           |
+| `style`           | `"bold blue"` | Le style du module.                                 |
 | `disabled`        | `true`        | Disables the `kubernetes` module                    |
 
 ### Exemple
@@ -904,7 +904,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
 
 :::
 
@@ -917,7 +917,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
 | `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
 | `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | The style for the module.                                     |
+| `style`           | `"bold dimmed white"` | Le style du module.                                           |
 | `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
 ### Exemple
@@ -946,7 +946,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
 | `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
-| `style`             | `"bold purple"` | The style for the module.                                                                    |
+| `style`             | `"bold purple"` | Le style du module.                                                                          |
 | `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
 
 ### Exemple
@@ -973,7 +973,7 @@ The `nim` module shows the currently installed version of Nim. Le module est aff
 | Variable   | Default         | Description                                           |
 | ---------- | --------------- | ----------------------------------------------------- |
 | `symbol`   | `"👑 "`          | The symbol used before displaying the version of Nim. |
-| `style`    | `"bold yellow"` | The style for the module.                             |
+| `style`    | `"bold yellow"` | Le style du module.                                   |
 | `disabled` | `false`         | Disables the `nim` module.                            |
 
 ### Exemple
@@ -998,7 +998,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 | `impure_msg` | `"impure"`    | Customize the "impure" msg.                       |
 | `pure_msg`   | `"pure"`      | Customize the "pure" msg.                         |
 | `symbol`     | `"❄️  "`      | The symbol used before displaying the shell name. |
-| `style`      | `"bold blue"` | The style for the module.                         |
+| `style`      | `"bold blue"` | Le style du module.                               |
 | `disabled`   | `false`       | Disables the `nix_shell` module.                  |
 
 ### Exemple
@@ -1028,7 +1028,7 @@ The `nodejs` module shows the currently installed version of NodeJS. Le module e
 | Variable   | Default        | Description                                              |
 | ---------- | -------------- | -------------------------------------------------------- |
 | `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | The style for the module.                                |
+| `style`    | `"bold green"` | Le style du module.                                      |
 | `disabled` | `false`        | Disables the `nodejs` module.                            |
 
 ### Exemple
@@ -1059,7 +1059,7 @@ The `package` module is shown when the current directory is the repository for a
 | Variable          | Default      | Description                                                |
 | ----------------- | ------------ | ---------------------------------------------------------- |
 | `symbol`          | `"📦 "`       | The symbol used before displaying the version the package. |
-| `style`           | `"bold 208"` | The style for the module.                                  |
+| `style`           | `"bold 208"` | Le style du module.                                        |
 | `display_private` | `false`      | Enable displaying version for packages marked as private.  |
 | `disabled`        | `false`      | Disables the `package` module.                             |
 
@@ -1088,7 +1088,7 @@ The `ocaml` module shows the currently installed version of OCaml. Le module est
 | Variable   | Default         | Description                                             |
 | ---------- | --------------- | ------------------------------------------------------- |
 | `symbol`   | `"🐫 "`          | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"` | The style for the module.                               |
+| `style`    | `"bold yellow"` | Le style du module.                                     |
 | `disabled` | `false`         | Disables the `ocaml` module.                            |
 
 ### Exemple
@@ -1113,7 +1113,7 @@ The `php` module shows the currently installed version of PHP. Le module est aff
 | Variable   | Default      | Description                                           |
 | ---------- | ------------ | ----------------------------------------------------- |
 | `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
-| `style`    | `"bold 147"` | The style for the module.                             |
+| `style`    | `"bold 147"` | Le style du module.                                   |
 | `disabled` | `false`      | Disables the `php` module.                            |
 
 ### Exemple
@@ -1151,8 +1151,26 @@ Le module est affiché si l'une des ces conditions est remplie :
 | `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
 | `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
 | `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.  |
-| `style`              | `"bold yellow"` | The style for the module.                                                   |
+| `style`              | `"bold yellow"` | Le style du module.                                                         |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
+
+<details>
+<summary>This module has some advanced configuration options.</summary>
+
+| Variable        | Défaut   | Description                                                                   |
+| --------------- | -------- | ----------------------------------------------------------------------------- |
+| `python_binary` | `python` | Configures the python binary that Starship executes when getting the version. |
+
+The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+python_binary = "python3"
+```
+
+</details>
 
 ### Exemple
 
@@ -1175,10 +1193,10 @@ The `ruby` module shows the currently installed version of Ruby. Le module est a
 
 ### Options
 
-| Variable   | Défaut         | Description                                            |
+| Variable   | Default        | Description                                            |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`         | The symbol used before displaying the version of Ruby. |
-| `style`    | `"bold green"` | The style for the module.                              |
+| `style`    | `"bold green"` | Le style du module.                                    |
 | `disabled` | `false`        | Disables the `ruby` module.                            |
 
 ### Exemple
@@ -1202,7 +1220,7 @@ The `rust` module shows the currently installed version of Rust. Le module est a
 | Variable   | Default        | Description                                            |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`         | The symbol used before displaying the version of Rust. |
-| `style`    | `"bold green"` | The style for the module.                              |
+| `style`    | `"bold green"` | Le style du module.                                    |
 | `disabled` | `false`        | Disables the `rust` module.                            |
 
 ### Exemple
@@ -1226,7 +1244,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 | `prefix`   | `"["`                | Prefix to display immediately before image name. |
 | `suffix`   | `"]"`                | Suffix to display immediately after image name.  |
 | `symbol`   | `""`                 | The symbol used before the image name.           |
-| `style`    | `"bold dimmed blue"` | The style for the module.                        |
+| `style`    | `"bold dimmed blue"` | Le style du module.                              |
 | `disabled` | `false`              | Disables the `singularity` module.               |
 
 ### Exemple
@@ -1251,7 +1269,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 | -------------- | ------------ | ----------------------------------------------------------- |
 | `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
 | `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
-| `style`        | `"bold 105"` | The style for the module.                                   |
+| `style`        | `"bold 105"` | Le style du module.                                         |
 | `disabled`     | `false`      | Disables the `terraform` module.                            |
 
 ### Exemple
@@ -1263,28 +1281,28 @@ The `terraform` module shows the currently selected terraform workspace and vers
 symbol = "🏎💨 "
 ```
 
-## Time
+## Temps
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Le module `time` affiche l'heure actuelle **localement**. La valeur de `format` est utilisée par le package [`chrono`](https://crates.io/crates/chrono) pour contrôler la façon dont l'heure est affichée. Consultez la [doc de chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) pour découvrir les options disponibles.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
 
 :::
 
 ### Options
 
-| Variable          | Default         | Description                                                                                                         |
-| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | Enables 12 hour formatting.                                                                                         |
-| `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`           | `"bold yellow"` | The style for the module time.                                                                                      |
-| `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
-| `disabled`        | `true`          | Disables the `time` module.                                                                                         |
-| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format               |
+| Variable          | Default         | Description                                                                                                                                         |
+| ----------------- | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`         | Activer le format 12h.                                                                                                                              |
+| `format`          | voir plus bas   | Le [format chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) utilisé pour formater l'heure.                                   |
+| `style`           | `"bold yellow"` | Le style utilisé par le module.                                                                                                                     |
+| `utc_time_offset` | `"local"`       | Définir le décalage horaire UTC à utiliser. Intervalle de -24 < x < 24. Accepte des nombres décimaux pour s'adapter aux décalages de 30/45 minutes. |
+| `disabled`        | `true`          | Désactiver le module `time`.                                                                                                                        |
+| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                               |
 
-If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
+Si `use_12hr` a pour valeur `true`, le `format` par défaut est `"%r"`. Sinon, il est défini comme `"%T"`. Définir manuellement le `format` passera outre la valeur de `user_12hr`.
 
 ### Exemple
 
@@ -1298,23 +1316,23 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Username
+## Nom d'utilisateur
 
-The `username` module shows active user's username. Le module est affiché si l'une des ces conditions est remplie :
+Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le module est affiché si l'une des ces conditions est remplie :
 
-- The current user is root
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- L'utilisateur courant est root
+- L'utilisateur courant est différent de celui connecté
+- L'utilisateur est actuellement connecté à une session SSH
+- La variable `show_always` a comme valeur true
 
 ### Options
 
-| Variable      | Default         | Description                           |
-| ------------- | --------------- | ------------------------------------- |
-| `style_root`  | `"bold green"`  | The style used when the user is root. |
-| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
-| `show_always` | `false`         | Always shows the `username` module.   |
-| `disabled`    | `false`         | Disables the `username` module.       |
+| Variable      | Default         | Description                                      |
+| ------------- | --------------- | ------------------------------------------------ |
+| `style_root`  | `"bold green"`  | Le style utilisé quand l'utilisateur est root.   |
+| `style_user`  | `"bold yellow"` | Le style utilisé pour les utilisateurs non-root. |
+| `show_always` | `false`         | Toujours afficher le module `username`.          |
+| `disabled`    | `false`         | Désactiver le module `username`.                 |
 
 ### Exemple
 
@@ -1337,7 +1355,7 @@ The `zig` module shows the currently installed version of Zig. Le module est aff
 | Variable   | Default         | Description                                           |
 | ---------- | --------------- | ----------------------------------------------------- |
 | `symbol`   | `"↯ "`          | The symbol used before displaying the version of Zig. |
-| `style`    | `"bold yellow"` | The style for the module.                             |
+| `style`    | `"bold yellow"` | Le style du module.                                   |
 | `disabled` | `false`         | Disables the `zig` module.                            |
 
 ### Exemple
@@ -1383,7 +1401,7 @@ The order in which custom modules are shown can be individually set by setting `
 | `directories` | `[]`                      | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                      | The extensions that will be searched in the working directory for a match.                                                 |
 | `symbol`      | `""`                      | The symbol used before displaying the command output.                                                                      |
-| `style`       | `"bold green"`            | The style for the module.                                                                                                  |
+| `style`       | `"bold green"`            | Le style du module.                                                                                                        |
 | `prefix`      | `""`                      | Prefix to display immediately before the command output.                                                                   |
 | `suffix`      | `""`                      | Suffix to display immediately after the command output.                                                                    |
 | `disabled`    | `false`                   | Disables this `custom` module.                                                                                             |
@@ -1434,18 +1452,18 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of PureScript version. Le module est affiché si l'une des ces conditions est remplie :
+Le module `purescript` affiche la version courante de Purescript installée. Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
 
 ### Options
 
-| Variable   | Default        | Description                                                  |
-| ---------- | -------------- | ------------------------------------------------------------ |
-| `symbol`   | `"<=> "` | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"` | The style for the module.                                    |
-| `disabled` | `false`        | Disables the `purescript` module.                            |
+| Variable   | Default        | Description                                                   |
+| ---------- | -------------- | ------------------------------------------------------------- |
+| `symbol`   | `"<=> "` | Le symbole utilisé avant d'afficher la version de PureScript. |
+| `style`    | `"bold white"` | Le style du module.                                           |
+| `disabled` | `false`        | Désactive le module `purescript`.                             |
 
 ### Exemple
 

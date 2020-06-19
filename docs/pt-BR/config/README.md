@@ -9,7 +9,7 @@ As configurações estão sendo trabalhadas. Muitas novas opções de configura�
 Para começar a configurar a starship, crie o seguinte arquivo: `~/.config/starship.toml`.
 
 ```sh
-$ mkdir -p ~/.config && touch ~/.config/starship.toml
+mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 Todas as configurações do starship são feitas neste arquivo [TOML](https://github.com/toml-lang/toml):
@@ -1153,6 +1153,24 @@ The module will be shown if any of the following conditions are met:
 | `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.  |
 | `style`              | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
+
+<details>
+<summary>This module has some advanced configuration options.</summary>
+
+| Variable        | Default  | Description                                                                   |
+| --------------- | -------- | ----------------------------------------------------------------------------- |
+| `python_binary` | `python` | Configures the python binary that Starship executes when getting the version. |
+
+The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+python_binary = "python3"
+```
+
+</details>
 
 ### Example
 
