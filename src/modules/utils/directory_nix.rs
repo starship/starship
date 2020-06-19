@@ -2,7 +2,7 @@ use nix::sys::stat::Mode;
 use nix::unistd;
 use nix::unistd::{Gid, Uid};
 use std::fs;
-use std::os::linux::fs::MetadataExt;
+use std::os::unix::fs::MetadataExt;
 use std::os::unix::fs::PermissionsExt;
 
 const USER_WRITE_BIT: u32 = Mode::S_IWUSR.bits();
@@ -17,10 +17,10 @@ pub fn is_write_allowed(folder_path: &str) -> Result<bool, &'static str> {
     if euid.is_root() {
         return Ok(true);
     }
-    if meta.st_uid() == euid.as_raw() {
+    if meta.uid() == euid.as_raw() {
         Ok(perms & USER_WRITE_BIT != 0)
-    } else if (meta.st_gid() == Gid::effective().as_raw())
-        || (get_supplementary_groups().contains(&meta.st_gid()))
+    } else if (meta.gid() == Gid::effective().as_raw())
+        || (get_supplementary_groups().contains(&meta.gid()))
     {
         Ok(perms & GROUP_WRITE_BIT != 0)
     } else {
