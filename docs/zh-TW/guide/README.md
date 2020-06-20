@@ -30,11 +30,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/zh-TW/">網站</a>
+  <a href="https://starship.rs">Website</a>
   ·
-  <a href="#-安裝">安裝</a>
+  <a href="#🚀-installation">Installation</a>
   ·
-  <a href="https://starship.rs/zh-TW/config/">設定</a>
+  <a href="https://starship.rs/config/">Configuration</a>
 </p>
 
 <p align="center">
@@ -114,6 +114,8 @@
 <p align="center">
 <a href="https://starship.rs/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
+
+<a name="🚀-installation"></a>
 
 ## 🚀 安裝
 
@@ -250,7 +252,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 ## 💭 發想來自
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+請看之前這些幫助我們創造 Starship 的前任作品。 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - 給太空人的 ZSH 提示。
 
@@ -265,4 +267,4 @@ Please check out these previous works that helped inspire the creation of starsh
 
 ## 📝 許可
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> 這個專案使用 [ISC](https://github.com/starship/starship/blob/master/LICENSE) 許可。

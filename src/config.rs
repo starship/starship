@@ -153,6 +153,30 @@ where
     }
 }
 
+/// A wrapper around `Vec<T>` that implements `ModuleConfig`, and either
+/// accepts a value of type `T` or a list of values of type `T`.
+#[derive(Clone, Default)]
+pub struct VecOr<T>(pub Vec<T>);
+
+impl<'a, T> ModuleConfig<'a> for VecOr<T>
+where
+    T: ModuleConfig<'a> + Sized,
+{
+    fn from_config(config: &'a Value) -> Option<Self> {
+        if let Some(item) = T::from_config(config) {
+            return Some(VecOr(vec![item]));
+        }
+
+        let vec = config
+            .as_array()?
+            .iter()
+            .map(|value| T::from_config(value))
+            .collect::<Option<Vec<T>>>()?;
+
+        Some(VecOr(vec))
+    }
+}
+
 /// Root config of starship.
 pub struct StarshipConfig {
     pub config: Option<Value>,
@@ -216,6 +240,26 @@ impl StarshipConfig {
             log::trace!("No config found for \"{}\"", &module_name);
         }
         module_config
+    }
+
+    /// Get the subset of the table for a custom module by its name
+    pub fn get_custom_module_config(&self, module_name: &str) -> Option<&Value> {
+        let module_config = self.get_custom_modules()?.get(module_name);
+        if module_config.is_some() {
+            log::debug!(
+                "Custom config found for \"{}\": \n{:?}",
+                &module_name,
+                &module_config
+            );
+        } else {
+            log::trace!("No custom config found for \"{}\"", &module_name);
+        }
+        module_config
+    }
+
+    /// Get the table of all the registered custom modules, if any
+    pub fn get_custom_modules(&self) -> Option<&toml::value::Table> {
+        self.config.as_ref()?.as_table()?.get("custom")?.as_table()
     }
 
     pub fn get_root_config(&self) -> StarshipRootConfig {
@@ -403,7 +447,6 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
 mod tests {
     use super::*;
     use starship_module_config_derive::ModuleConfig;
-    use toml;
 
     #[test]
     fn test_load_config() {

@@ -2,7 +2,6 @@ use std::fs::File;
 use std::io::{self, Write};
 
 use ansi_term::Color;
-use tempfile;
 
 use crate::common::{self, TestCommand};
 
@@ -23,7 +22,7 @@ fn region_set() -> io::Result<()> {
     let output = common::render_module("aws")
         .env("AWS_REGION", "ap-northeast-2")
         .output()?;
-    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  ap-northeast-2"));
+    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  (ap-northeast-2)"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
@@ -38,7 +37,7 @@ fn region_set_with_alias() -> io::Result<()> {
             ap-southeast-2 = "au"
         })
         .output()?;
-    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  au"));
+    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  (au)"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
@@ -50,7 +49,7 @@ fn default_region_set() -> io::Result<()> {
         .env("AWS_REGION", "ap-northeast-2")
         .env("AWS_DEFAULT_REGION", "ap-northeast-1")
         .output()?;
-    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  ap-northeast-1"));
+    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  (ap-northeast-1)"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
@@ -113,7 +112,7 @@ region = us-east-2
     let output = common::render_module("aws")
         .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
         .output()?;
-    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  us-east-1"));
+    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  (us-east-1)"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     dir.close()
@@ -156,10 +155,6 @@ fn profile_and_region_set_with_display_all() -> io::Result<()> {
     let output = common::render_module("aws")
         .env("AWS_PROFILE", "astronauts")
         .env("AWS_REGION", "ap-northeast-1")
-        .use_config(toml::toml! {
-            [aws]
-            displayed_items = "all"
-        })
         .output()?;
     let expected = format!(
         "on {} ",
@@ -174,10 +169,6 @@ fn profile_and_region_set_with_display_all() -> io::Result<()> {
 fn profile_set_with_display_all() -> io::Result<()> {
     let output = common::render_module("aws")
         .env("AWS_PROFILE", "astronauts")
-        .use_config(toml::toml! {
-            [aws]
-            displayed_items = "all"
-        })
         .output()?;
     let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  astronauts"));
     let actual = String::from_utf8(output.stdout).unwrap();
@@ -189,12 +180,8 @@ fn profile_set_with_display_all() -> io::Result<()> {
 fn region_set_with_display_all() -> io::Result<()> {
     let output = common::render_module("aws")
         .env("AWS_REGION", "ap-northeast-1")
-        .use_config(toml::toml! {
-            [aws]
-            displayed_items = "all"
-        })
         .output()?;
-    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  ap-northeast-1"));
+    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  (ap-northeast-1)"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
@@ -207,7 +194,7 @@ fn profile_and_region_set_with_display_region() -> io::Result<()> {
         .env("AWS_DEFAULT_REGION", "ap-northeast-1")
         .use_config(toml::toml! {
             [aws]
-            displayed_items = "region"
+            format = "on [$symbol$region]($style) "
         })
         .output()?;
     let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  ap-northeast-1"));
@@ -223,7 +210,7 @@ fn profile_and_region_set_with_display_profile() -> io::Result<()> {
         .env("AWS_REGION", "ap-northeast-1")
         .use_config(toml::toml! {
             [aws]
-            displayed_items = "profile"
+            format = "on [$symbol$profile]($style) "
         })
         .output()?;
     let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  astronauts"));
@@ -238,10 +225,10 @@ fn region_set_with_display_profile() -> io::Result<()> {
         .env("AWS_REGION", "ap-northeast-1")
         .use_config(toml::toml! {
             [aws]
-            displayed_items = "profile"
+            format = "on [$symbol$profile]($style) "
         })
         .output()?;
-    let expected = "";
+    let expected = format!("on {} ", Color::Yellow.bold().paint("☁️  "));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
@@ -253,7 +240,7 @@ fn region_not_set_with_display_region() -> io::Result<()> {
     let output = common::render_module("aws")
         .use_config(toml::toml! {
             [aws]
-            displayed_items = "region"
+            format = "on [$symbol$region]($style) "
         })
         .output()?;
     let expected = "";

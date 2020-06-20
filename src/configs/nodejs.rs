@@ -1,20 +1,21 @@
-use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
+use crate::config::{ModuleConfig, RootModuleConfig};
 
-use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct NodejsConfig<'a> {
-    pub symbol: SegmentConfig<'a>,
-    pub style: Style,
+    pub format: &'a str,
+    pub symbol: &'a str,
+    pub style: &'a str,
     pub disabled: bool,
 }
 
 impl<'a> RootModuleConfig<'a> for NodejsConfig<'a> {
     fn new() -> Self {
         NodejsConfig {
-            symbol: SegmentConfig::new("⬢ "),
-            style: Color::Green.bold(),
+            format: "via [$symbol$version]($style) ",
+            symbol: "⬢ ",
+            style: "bold green",
             disabled: false,
         }
     }

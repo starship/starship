@@ -20,6 +20,21 @@ fn barrier() {
 }
 
 #[test]
+fn show_nothing_on_empty_dir() -> io::Result<()> {
+    let repo_dir = tempfile::tempdir()?;
+
+    let output = common::render_module("git_status")
+        .arg("--path")
+        .arg(repo_dir.path())
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    let expected = "";
+    assert_eq!(expected, actual);
+    repo_dir.close()
+}
+
+#[test]
 #[ignore]
 fn shows_behind() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;

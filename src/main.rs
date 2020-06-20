@@ -1,3 +1,4 @@
+use std::io;
 use std::time::SystemTime;
 
 #[macro_use]
@@ -19,10 +20,10 @@ mod segment;
 mod utils;
 
 use crate::module::ALL_MODULES;
-use clap::{App, AppSettings, Arg, SubCommand};
+use clap::{App, AppSettings, Arg, Shell, SubCommand};
 
 fn main() {
-    pretty_env_logger::init();
+    pretty_env_logger::init_custom_env("STARSHIP_LOG");
 
     let status_code_arg = Arg::with_name("status_code")
         .short("s")
@@ -71,7 +72,7 @@ fn main() {
         .long("print-full-init")
         .help("Print the main initialization script (as opposed to the init stub)");
 
-    let matches =
+    let mut app =
         App::new("starship")
             .about("The cross-shell prompt for astronauts. ☄🌌️")
             // pull the version number from Cargo.toml
@@ -116,7 +117,18 @@ fn main() {
                     .arg(&keymap_arg)
                     .arg(&jobs_arg),
             )
-            .subcommand(SubCommand::with_name("configure").about("Edit the starship configuration"))
+            .subcommand(
+                SubCommand::with_name("config")
+                    .alias("configure")
+                    .about("Edit the starship configuration")
+                    .arg(
+                        Arg::with_name("name")
+                            .help("Configuration key to edit")
+                            .required(false)
+                            .requires("value"),
+                    )
+                    .arg(Arg::with_name("value").help("Value to place into that key")),
+            )
             .subcommand(SubCommand::with_name("bug-report").about(
                 "Create a pre-populated GitHub issue with information about your configuration",
             ))
@@ -128,7 +140,21 @@ fn main() {
             .subcommand(
                 SubCommand::with_name("explain").about("Explains the currently showing modules"),
             )
-            .get_matches();
+            .subcommand(
+                SubCommand::with_name("completions")
+                    .about("Generate starship shell completions for your shell to stdout")
+                    .arg(
+                        Arg::with_name("shell")
+                            .takes_value(true)
+                            .possible_values(&Shell::variants())
+                            .help("the shell to generate completions for")
+                            .value_name("SHELL")
+                            .required(true)
+                            .env("STARSHIP_SHELL"),
+                    ),
+            );
+
+    let matches = app.clone().get_matches();
 
     match matches.subcommand() {
         ("init", Some(sub_m)) => {
@@ -152,7 +178,15 @@ fn main() {
                 print::module(module_name, sub_m.clone());
             }
         }
-        ("configure", Some(_)) => configure::edit_configuration(),
+        ("config", Some(sub_m)) => {
+            if let Some(name) = sub_m.value_of("name") {
+                if let Some(value) = sub_m.value_of("value") {
+                    configure::update_configuration(name, value)
+                }
+            } else {
+                configure::edit_configuration()
+            }
+        }
         ("bug-report", Some(_)) => bug_report::create(),
         ("time", _) => {
             match SystemTime::now()
@@ -164,6 +198,15 @@ fn main() {
             }
         }
         ("explain", Some(sub_m)) => print::explain(sub_m.clone()),
-        _ => {}
+        ("completions", Some(sub_m)) => {
+            let shell: Shell = sub_m
+                .value_of("shell")
+                .expect("Shell name missing.")
+                .parse()
+                .expect("Invalid shell");
+
+            app.gen_completions_to("starship", shell, &mut io::stdout().lock());
+        }
+        (command, _) => unreachable!("Invalid subcommand: {}", command),
     }
 }
