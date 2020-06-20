@@ -4,7 +4,7 @@
 //
 // Should be started with SOI and ended with EOI, with a format string in it.
 expression = _{ SOI ~ value* ~ EOI }
-value = _{ text | variable | textgroup | positional }
+value = _{ text | variable | textgroup | conditional }
 
 // Variable
 //
@@ -45,7 +45,7 @@ textgroup = { "[" ~ format ~ "]" ~ "(" ~ style ~ ")" }
 format = { value* }
 style = { (variable | string)* }
 
-// Positional
+// Conditional
 //
-// A positional format string that won't render if all the containing variables are empty.
-positional = { "(" ~ format ~ ")" }
+// A conditional format string that won't render if all the containing variables are empty.
+conditional = { "(" ~ format ~ ")" }

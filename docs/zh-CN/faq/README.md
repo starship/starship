@@ -31,7 +31,7 @@ STATUS=$?
 NUM_JOBS=$(jobs -p | wc -l)
 
 # Set the prompt to the output of `starship prompt`
-PS1="$(starship prompt --status=$STATUS --jobs=NUM_JOBS)"
+PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
 内置于 Starship 的 [Bash 适配](https://github.com/starship/starship/blob/master/src/init/starship.bash) 稍微复杂一些，实现了像 [命令用时统计组件](https://starship.rs/config/#Command-Duration) 这样的功能，还确保 Starship 能与之前设置的 Bash 配置相兼容。
@@ -43,3 +43,30 @@ starship prompt --help
 ```
 
 Starship 会处理所提供的全部上下文参数并在提示符中显示，但没有参数是“必需”的。
+
+## How do I run Starship on Linux distributions with older versions of glibc?
+
+If you get an error like "*version 'GLIBC_2.18' not found (required by starship)*" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+
+```sh
+curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
+```
+
+## Why don't I see a glyph symbol in my prompt?
+
+The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
+
+  - Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
+  - You have an emoji font installed. Most systems come with an emoji font by default, but some (notably Arch Linux) do not. You can usually install one through your system's package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
+  - You are using a [powerline-patched font](https://github.com/powerline/fonts).
+
+To test your system, run the following commands in a terminal:
+
+```
+echo -e "\xf0\x9f\x90\x8d"
+echo -e "\xee\x82\xa0"
+```
+
+The first line should produce a [snake emoji](https://emojipedia.org/snake/), while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
+
+If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)

@@ -10,7 +10,7 @@ Many new configuration options will be available in coming releases.
 To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
 ```sh
-$ mkdir -p ~/.config && touch ~/.config/starship.toml
+mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
@@ -33,21 +33,52 @@ You can change default `starship.toml` file location with `STARSHIP_CONFIG` envi
 export STARSHIP_CONFIG=~/.starship
 ```
 
+Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+```ps1
+$ENV:STARSHIP_CONFIG = "$HOME\.starship"
+```
+
 ### Terminology
 
 **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
-**Segment**: Smaller sub-components that compose a module. For example, the "symbol" segment in the "nodejs" module contains the character that is shown before the version number (⬢ by default).
+**Variable**: Smaller sub-components that contains information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
 
-Here is the representation of the node module. In the following example, "symbol" and "version"
-are segments within it. Every module also has a prefix and suffix that are the default terminal color.
+By convention, most modules have a prefix of default terminal color (e.g. `via ` in "nodejs") and an empty space as a suffix.
 
-```
-[prefix]      [symbol]     [version]    [suffix]
- "via "         "⬢"        "v10.4.1"       ""
-```
+### Format Strings
 
-### Style Strings
+Format strings are the format that a module prints all its variables with.
+Most modules have an entry called `format` that configures the display format of the module.
+You can use texts, variables and text groups in a format string.
+
+#### Variable
+
+A variable contains a `$` symbol followed by the name of the variable.
+The name of a variable only contains letters, numbers and `_`.
+
+For example:
+
+- `$version` is a format string with a variable named `version`.
+- `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
+- `$git_branch $git_commit` has the two variables separated with a space.
+
+#### Text Group
+
+A text group is made up of two different parts.
+
+The first part, which is enclosed in a `[]`, is a [format string](#format-strings).
+You can add texts, variables, or even nested text groups in it.
+
+In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
+
+For example:
+
+- `[on](red bold)` will print a string `on` with bold text colored red.
+- `[⬢ $version](bold green)` will print a symbol `⬢ ` followed by the content of variable `version`, with bold text colored green.
+- `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
+
+#### Style Strings
 
 Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
@@ -59,6 +90,48 @@ Most modules in starship allow you to configure their display styles. This is do
 - `""` explicitly disables all styling
 
 Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+
+#### Conditional Format Strings
+
+A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
+
+For example:
+
+- `(@$region)` will show nothing if the variable `region` is `None`, otherwise `@` followed by the value of region.
+- `(some text)` will always show nothing since there are no variables wrapped in the braces.
+
+#### Escapable characters
+
+The following symbols have special usage in a format string.
+If you want to print the following symbols, you have to escape them with a backslash (`\`).
+
+- $
+- \\
+- [
+- ]
+- (
+- )
+
+Note that `toml` has [its own escape syntax](https://github.com/toml-lang/toml#user-content-string).
+It is recommended to use a literal string (`''`) in your config.
+If you want to use a basic string (`""`), pay attention to escape the backslash `\`.
+
+For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
+
+```toml
+# with basic string
+format = "\n\\$"
+
+# with multiline basic string
+format = """
+
+\\$"""
+
+# with literal string
+format = '''
+
+\$'''
+```
 
 ## Prompt
 
@@ -105,16 +178,21 @@ prompt_order = [
     "dotnet",
     "elixir",
     "elm",
+    "erlang",
     "golang",
     "haskell",
     "java",
     "julia",
+    "nim",
     "nodejs",
+    "ocaml",
     "php",
+    "purescript",
     "python",
     "ruby",
     "rust",
     "terraform",
+    "zig",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -142,26 +220,64 @@ is read from the `AWS_VAULT` env var.
 
 ### Options
 
-| Variable          | Default         | Description                                                                 |
-| ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
-| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
-| `style`           | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
+| Option           | Default                                          | Description                                                     |
+| ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
+| `format`         | `"on [$symbol$profile(\\($region\\))]($style) "` | The format for the module.                                      |
+| `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current AWS profile.      |
+| `region_aliases` |                                                  | Table of region aliases to display in addition to the AWS name. |
+| `style`          | `"bold yellow"`                                  | The style for the module.                                       |
+| `disabled`       | `false`                                          | Disables the `AWS` module.                                      |
 
-### Example
+### Variables
+
+| Variable | Example          | Description                          |
+| -------- | ---------------- | ------------------------------------ |
+| region   | `ap-northeast-1` | The current AWS region               |
+| profile  | `astronauts`     | The current AWS profile              |
+| symbol   |                  | Mirrors the value of option `symbol` |
+| style\*  |                  | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Examples
+
+#### Display everything
 
 ```toml
 # ~/.config/starship.toml
 
 [aws]
+format = "on [$symbol$profile(\\($region\\))]($style) "
 style = "bold blue"
 symbol = "🅰 "
-displayed_items = "region"
 [aws.region_aliases]
 ap-southeast-2 = "au"
 us-east-1 = "va"
+```
+
+#### Display region
+
+```toml
+# ~/.config/starship.toml
+
+[aws]
+format = "on [$symbol$region]($style) "
+style = "bold blue"
+symbol = "🅰 "
+[aws.region_aliases]
+ap-southeast-2 = "au"
+us-east-1 = "va"
+```
+
+#### Display profile
+
+```toml
+# ~/.config/starship.toml
+
+[aws]
+format = "on [$symbol$profile]($style) "
+style = "bold blue"
+symbol = "🅰 "
 ```
 
 ## Battery
@@ -171,13 +287,14 @@ The module is only visible when the device's battery is below 10%.
 
 ### Options
 
-| Variable             | Default                  | Description                                       |
-| -------------------- | ------------------------ | ------------------------------------------------- |
-| `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
-| `discharging_symbol` | `"⇣"`                    | The symbol shown when the battery is discharging. |
-| `display`            | [link](#battery-display) | Display threshold and style for the module.       |
-| `disabled`           | `false`                  | Disables the `battery` module.                    |
+| Option               | Default                           | Description                                       |
+| -------------------- | --------------------------------- | ------------------------------------------------- |
+| `full_symbol`        | `"•"`                             | The symbol shown when the battery is full.        |
+| `charging_symbol`    | `"⇡"`                             | The symbol shown when the battery is charging.    |
+| `discharging_symbol` | `"⇣"`                             | The symbol shown when the battery is discharging. |
+| `format`             | `"[$symbol$percentage]($style) "` | The format for the module.                        |
+| `display`            | [link](#battery-display)          | Display threshold and style for the module.       |
+| `disabled`           | `false`                           | Disables the `battery` module.                    |
 
 <details>
 <summary>There are also options for some uncommon battery states.</summary>
@@ -289,13 +406,20 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Variable            | Default         | Description                                                |
-| ------------------- | --------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
-| `style`             | `"bold yellow"` | The style for the module.                                  |
-| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
+| Option              | Default                       | Description                                                |
+| ------------------- | ----------------------------- | ---------------------------------------------------------- |
+| `min_time`          | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds` | `false`                       | Show milliseconds in addition to seconds for the duration. |
+| `format`            | `"took [$duration]($style) "` | The format for the module.                                 |
+| `style`             | `"bold yellow"`               | The style for the module.                                  |
+| `disabled`          | `false`                       | Disables the `cmd_duration` module.                        |
+
+### Variables
+
+| Variable | Example  | Description                             |
+| -------- | -------- | --------------------------------------- |
+| duration | `16m40s` | The time it took to execute the command |
+| style\*  |          | Mirrors the value of option `style`     |
 
 ### Example
 
@@ -304,7 +428,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 [cmd_duration]
 min_time = 500
-prefix = "underwent "
+format = "underwent [$duration](bold yellow)"
 ```
 
 ## Conda
@@ -319,12 +443,23 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### Options
 
-| Variable            | Default        | Description                                                                                                                                                                                                 |
-| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
-| `style`             | `"bold green"` | The style for the module.                                                                                                                                                                                   |
-| `disabled`          | `false`        | Disables the `conda` module.                                                                                                                                                                                |
+| Option              | Default                            | Description                                                                                                                                                                                                 |
+| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"🅒 "`                             | The symbol used before the environment name.                                                                                                                                                                |
+| `style`             | `"bold green"`                     | The style for the module.                                                                                                                                                                                   |
+| `format`            | `"[$symbol$environment]($style) "` | The format for the module.                                                                                                                                                                                   |
+| `disabled`          | `false`                            | Disables the `conda` module.                                                                                                                                                                                |
+
+### Variables
+
+| Variable    | Example      | Description                          |
+| ----------- | ------------ | ------------------------------------ |
+| environment | `astronauts` | The current conda environment        |
+| symbol      |              | Mirrors the value of option `symbol` |
+| style\*     |              | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -332,7 +467,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 # ~/.config/starship.toml
 
 [conda]
-style = "dimmed green"
+format = "[$symbol$environment](dimmed green) "
 ```
 
 ## Crystal
@@ -345,11 +480,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default      | Description                                               |
-| ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`      | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold red"` | The style for the module.                                 |
-| `disabled` | `false`      | Disables the `crystal` module.                            |
+| Option     | Default                            | Description                                               |
+| ---------- | ---------------------------------- | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`                            | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"`                       | The style for the module.                                 |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                                |
+| `disabled` | `false`                            | Disables the `crystal` module.                            |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v0.32.1` | The version of `crystal`             |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -357,8 +503,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [crystal]
-symbol = "✨ "
-style = "bold blue"
+format = "via [✨ $version](bold blue) "
 ```
 
 ## Directory
@@ -377,21 +522,31 @@ it would have been `nixpkgs/pkgs`.
 
 ### Options
 
-| Variable            | Default       | Description                                                                      |
-| ------------------- | ------------- | -------------------------------------------------------------------------------- |
-| `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `prefix`            | `"in "`       | Prefix to display immediately before the directory.                              |
-| `style`             | `"bold cyan"` | The style for the module.                                                        |
-| `disabled`          | `false`       | Disables the `directory` module.                                                 |
+| Option              | Default              | Description                                                                      |
+| ------------------- | -------------------- | -------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                  | The number of parent folders that the current directory should be truncated to.  |
+| `truncate_to_repo`  | `true`               | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `format`            | `"[$path]($style) "` | The format for the module.                                                       |
+| `style`             | `"bold cyan"`        | The style for the module.                                                        |
+| `disabled`          | `false`              | Disables the `directory` module.                                                 |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Variable                    | Default | Description                                                                              |
+| Advanced Option             | Default | Description                                                                              |
 | --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
+| `substitutions`             |         | A table of substitutions to be made to the path.                                         |
 | `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
 | `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network
+prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+
+```toml
+[directory.substitutions]
+"/Volumes/network/path" = "/net"
+"src/com/long/java/path" = "mypath"
+```
 
 `fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero,
 the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path
@@ -400,6 +555,13 @@ the components of the path that would normally be truncated are instead displaye
 a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
 </details>
+
+### Variables
+
+| Variable | Example               | Description                         |
+| -------- | --------------------- | ----------------------------------- |
+| path     | `"D:/Projects"`       | The current directory path          |
+| style    | `"black bold dimmed"` | Mirrors the value of option `style` |
 
 ### Example
 
@@ -418,12 +580,23 @@ The `docker_context` module shows the currently active
 
 ### Options
 
-| Variable          | Default       | Description                                                                  |
-| ----------------- | ------------- | ---------------------------------------------------------------------------- |
-| `symbol`          | `"🐳 "`       | The symbol used before displaying the Docker context .                       |
-| `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
-| `style`           | `"bold blue"` | The style for the module.                                                    |
-| `disabled`        | `true`        | Disables the `docker_context` module.                                        |
+| Option            | Default                            | Description                                                                             |
+| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`          | `"via [$symbol$context]($style) "` | The format for the module.                                                              |
+| `symbol`          | `"🐳 "`                            | The symbol used before displaying the Docker context.                                   |
+| `style`           | `"blue bold"`                      | The style for the module.                                                               |
+| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
+| `disabled`        | `true`                             | Disables the `docker_context` module.                                                   |
+
+### Variables
+
+| Variable | Example        | Description                          |
+| -------- | -------------- | ------------------------------------ |
+| context  | `test_context` | The current docker context           |
+| symbol   |                | Mirrors the value of option `symbol` |
+| style\*  |                | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -431,7 +604,7 @@ The `docker_context` module shows the currently active
 # ~/.config/starship.toml
 
 [docker_context]
-symbol = "🐋 "
+format = "via [🐋 $context](blue bold)"
 ```
 
 ## Dotnet
@@ -494,10 +667,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default | Description                                                     |
-| ---------- | ------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "` | The symbol used before displaying the version of Elixir/Erlang. |
-| `disabled` | `false` | Disables the `elixir` module.                                   |
+| Variable   | Default         | Description                                                     |
+| ---------- | --------------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`         | The symbol used before displaying the version of Elixir/Erlang. |
+| `style`    | `"bold purple"` | The style for the module.                                       |
+| `disabled` | `false`         | Disables the `elixir` module.                                   |
 
 ### Example
 
@@ -521,12 +695,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default       | Description                                           |
-| ---------- | ------------- | ----------------------------------------------------- |
-| `symbol`   | `"🌳 "`       | The symbol used before displaying the version of Elm. |
-| `style`    | `"bold cyan"` | The style for the module.                             |
-| `disabled` | `false`       | Disables the `elm` module.                            |
+| Option     | Default                            | Description                                     |
+|------------|------------------------------------|-------------------------------------------------|
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
+| `symbol`   | `"🌳 "`                            | A format string representing the symbol of Elm. |
+| `style`    | `"cyan bold"`                      | The style for the module.                       |
+| `disabled` | `false`                            | Disables the `elm` module.                      |
 
+### Variables
+
+| Variable | Example   | Description                          |
+|----------|-----------|--------------------------------------|
+| version  | `v0.19.1` | The version of `elm`                 |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -534,7 +718,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [elm]
-symbol = " "
+format = "via [ $version](cyan bold) "
 ```
 
 ## Environment Variable
@@ -547,15 +731,21 @@ The module will be shown only if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default          | Description                                                                  |
-| ---------- | ---------------- | ---------------------------------------------------------------------------- |
-| `symbol`   |                  | The symbol used before displaying the variable value.                        |
-| `variable` |                  | The environment variable to be displayed.                                    |
-| `default`  |                  | The default value to be displayed when the selected variable is not defined. |
-| `prefix`   | `""`             | Prefix to display immediately before the variable value.                     |
-| `suffix`   | `""`             | Suffix to display immediately after the variable value.                      |
-| `style`    | `"dimmed black"` | The style for the module.                                                    |
-| `disabled` | `false`          | Disables the `env_var` module.                                               |
+| Option     | Default                          | Description                                                                  |
+| ---------- | -------------------------------- | ---------------------------------------------------------------------------- |
+| `symbol`   |                                  | The symbol used before displaying the variable value.                        |
+| `variable` |                                  | The environment variable to be displayed.                                    |
+| `default`  |                                  | The default value to be displayed when the selected variable is not defined. |
+| `format`   | `"with [${env_value}]($style) "` | The format for the module.                                                   |
+| `disabled` | `false`                          | Disables the `env_var` module.                                               |
+
+### Variables
+
+| Variable  | Example                                     | Description                                |
+| --------- | ------------------------------------------- | ------------------------------------------ |
+| env_value | `Windows NT` (if *variable* would be `$OS`) | The environment value of option `variable` |
+| symbol    |                                             | Mirrors the value of option `symbol`       |
+| style     | `black bold dimmed`                         | Mirrors the value of option `style`        |
 
 ### Example
 
@@ -565,6 +755,42 @@ The module will be shown only if any of the following conditions are met:
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+## Erlang
+
+The `erlang` module shows the currently installed version of Erlang/OTP.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
+
+### Options
+
+| Option     | Default                            | Description                                              |
+| ---------- | ---------------------------------- | -------------------------------------------------------- |
+| `symbol`   | `"🖧 "`                            | The symbol used before displaying the version of erlang. |
+| `style`    | `"bold red"`                       | The style for the module.                                |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                               |
+| `disabled` | `false`                            | Disables the `erlang` module.                            |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v22.1.3` | The version of `erlang`              |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[erlang]
+format = "via [e $version](bold red) "
 ```
 
 ## Git Branch
@@ -598,14 +824,22 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 
 ### Options
 
-| Variable             | Default        | Description                                           |
-| -------------------- | -------------- | ----------------------------------------------------- |
-| `commit_hash_length` | `7`            | The length of the displayed git commit hash.          |
-| `prefix`             | `"("`          | Prefix to display immediately before git commit.      |
-| `suffix`             | `")"`          | Suffix to display immediately after git commit.       |
-| `style`              | `"bold green"` | The style for the module.                             |
-| `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
-| `disabled`           | `false`        | Disables the `git_commit` module.                     |
+| Option               | Default                    | Description                                           |
+| -------------------- | -------------------------- | ----------------------------------------------------- |
+| `commit_hash_length` | `7`                        | The length of the displayed git commit hash.          |
+| `format`             | `"[\\($hash\\)]($style) "` | The format for the module.                            |
+| `style`              | `"bold green"`             | The style for the module.                             |
+| `only_detached`      | `true`                     | Only show git commit hash when in detached HEAD state |
+| `disabled`           | `false`                    | Disables the `git_commit` module.                     |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| hash     | `b703eb3` | The current git commit hash          |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -625,18 +859,29 @@ that information will be shown too.
 
 ### Options
 
-| Variable           | Default            | Description                                                                                                      |
-| ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
-| `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
-| `revert`           | `"REVERTING"`      | The text displayed when a `revert` is in progress.                                                               |
-| `cherry_pick`      | `"CHERRY-PICKING"` | The text displayed when a `cherry-pick` is in progress.                                                          |
-| `bisect`           | `"BISECTING"`      | The text displayed when a `bisect` is in progress.                                                               |
-| `am`               | `"AM"`             | The text displayed when an `apply-mailbox` (`git am`) is in progress.                                            |
-| `am_or_rebase`     | `"AM/REBASE"`      | The text displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.                                 |
-| `progress_divider` | `"/"`              | The symbol or text which will separate the current and total progress amounts. (e.g., `" of "`, for `"3 of 10"`) |
-| `style`            | `"bold yellow"`    | The style for the module.                                                                                        |
-| `disabled`         | `false`            | Disables the `git_state` module.                                                                                 |
+| Option         | Default                                                         | Description                                                                             |
+| -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `rebase`       | `"REBASING"`                                                    | A format string displayed when a `rebase` is in progress.                               |
+| `merge`        | `"MERGING"`                                                     | A format string displayed when a `merge` is in progress.                                |
+| `revert`       | `"REVERTING"`                                                   | A format string displayed when a `revert` is in progress.                               |
+| `cherry_pick`  | `"CHERRY-PICKING"`                                              | A format string displayed when a `cherry-pick` is in progress.                          |
+| `bisect`       | `"BISECTING"`                                                   | A format string displayed when a `bisect` is in progress.                               |
+| `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
+| `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
+| `style`        | `"bold yellow"`                                                 | The style for the module.                                                               |
+| `format`       | `"[\\($state( $progress_current/$progress_total)\\)]($style) "` | The format for the module.                                                              |
+| `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
+
+### Variables
+
+| Variable         | Example    | Description                         |
+| ---------------- | ---------- | ----------------------------------- |
+| state            | `REBASING` | The current state of the repo       |
+| progress_current | `1`        | The current operation progress      |
+| progress_total   | `2`        | The total operation progress        |
+| style\*          |            | Mirrors the value of option `style` |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -644,8 +889,8 @@ that information will be shown too.
 # ~/.config/starship.toml
 
 [git_state]
-progress_divider = " of "
-cherry_pick = "🍒 PICKING"
+format = "[\\($state( $progress_current of $progress_total)\\)]($style) "
+cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
 ## Git Status
@@ -724,11 +969,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default       | Description                                              |
-| ---------- | ------------- | -------------------------------------------------------- |
-| `symbol`   | `"🐹 "`       | The symbol used before displaying the version of Golang. |
-| `style`    | `"bold cyan"` | The style for the module.                                |
-| `disabled` | `false`       | Disables the `golang` module.                            |
+| Option     | Default                            | Description                                     |
+| ---------- | ---------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
+| `symbol`   | `"🐹 "`                            | A format string representing the symbol of Go.  |
+| `style`    | `"bold cyan"`                      | The style for the module.                       |
+| `disabled` | `false`                            | Disables the `golang` module.                   |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v1.12.1` | The version of `go`                  |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -736,23 +992,33 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [golang]
-symbol = "🏎💨 "
+format = "via [🏎💨 $version](bold cyan) "
 ```
+
 ## Haskell
 
 The `haskell` module shows the currently installed version of Haskell Stack version.
 The module will be shown if any of the following conditions are met:
 
-- The current directory contains a `stack.yaml` file
+- The current directory contains a `stack.yaml` or `stack.yml` file
+- The current directory contains a `package.yaml` or `package.yml` file
 
 ### Options
 
-| Variable   | Default      | Description                                               |
-| ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold red"` | The style for the module.                                 |
-| `disabled` | `false`      | Disables the `haskell` module.                            |
+| Option     | Default                             | Description                                        |
+| ---------- | ----------------------------------- | -------------------------------------------------- |
+| `format`   | `"via [${symbol}${version}](${style}) "` | The format for the module.                         |
+| `symbol`   | `"λ "`                               | A format string representing the symbol of Haskell |
+| `style`    | `"bold red"`                        | The style for the module.                          |
+| `disabled` | `false`                             | Disables the `haskell` module.                     |
 
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v8.8.3` | The version of `ghc`                 |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style    |          | Mirrors the value of option `style`  |
 
 ### Example
 
@@ -769,14 +1035,23 @@ The `hostname` module shows the system hostname.
 
 ### Options
 
-| Variable   | Default               | Description                                                                                                                          |
-| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
-| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
-| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
-| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `style`    | `"bold dimmed green"` | The style for the module.                                                                                                            |
-| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
+| Variable   | Default                   | Description                                                                                                                          |
+|------------|---------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| `ssh_only` | `true`                    | Only show hostname when connected to an SSH session.                                                                                 |
+| `trim_at`  | `"."`                     | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `format`   | "on [$hostname]($style) " | The format for the module.                                                                                                           |
+| `style`    | `"bold dimmed green"`     | The style for the module.                                                                                                            |
+| `disabled` | `false`                   | Disables the `hostname` module.                                                                                                      |
+
+### Variables
+
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| number   | `1`     | The number of jobs                   |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -785,8 +1060,7 @@ The `hostname` module shows the system hostname.
 
 [hostname]
 ssh_only = false
-prefix = "⟪"
-suffix = "⟫"
+format =  "on [$hostname](bold red) "
 trim_at = ".companyname.com"
 disabled = false
 ```
@@ -801,11 +1075,20 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default        | Description                                            |
-| ---------- | -------------- | ------------------------------------------------------ |
-| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
-| `style`    | `"dimmed red"` | The style for the module.                              |
-| `disabled` | `false`        | Disables the `java` module.                            |
+| Option     | Default                             | Description                                     |
+| ---------- | ----------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [${symbol}${version}]($style) "` | The format for the module.                      |
+| `symbol`   | `"☕ "`                               | A format string representing the symbol of Java |
+| `style`    | `"red dimmed"`                      | The style for the module.                       |
+| `disabled` | `false`                             | Disables the `java` module.                     |
+
+### Variables
+
+| Variable | Example      | Description                          |
+| -------- | ------------ | ------------------------------------ |
+| version  | "v14"        | The version of `java`                |
+| symbol   | "☕"          | Mirrors the value of option `symbol` |
+| style    | "red dimmed" | Mirrors the value of option `style`  |
 
 ### Example
 
@@ -825,12 +1108,23 @@ more than the `threshold` config value, if it exists.
 
 ### Options
 
-| Variable    | Default       | Description                                           |
-| ----------- | ------------- | ----------------------------------------------------- |
-| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
-| `threshold` | `1`           | Show number of jobs if exceeded.                      |
-| `style`     | `"bold blue"` | The style for the module.                             |
-| `disabled`  | `false`       | Disables the `jobs` module.                           |
+| Option      | Default                       | Description                                      |
+| ----------  | ----------------------------- | ------------------------------------------------ |
+| `threshold` | `1`                           | Show number of jobs if exceeded.                 |
+| `format`    | `"[$symbol$number]($style) "` | The format for the module.                       |
+| `symbol`    | `"✦"`                         | A format string representing the number of jobs. |
+| `style`     | `"bold blue"`                 | The style for the module.                        |
+| `disabled`  | `false`                       | Disables the `jobs` module.                      |
+
+### Variables
+
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| number   | `1`     | The number of jobs                   |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -853,11 +1147,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default       | Description                                              |
-| ---------- | ------------- | -------------------------------------------------------- |
-| `symbol`   | `"ஃ "`       | The symbol used before displaying the version of Julia. |
-| `style`    | `"bold purple"` | The style for the module.                                |
-| `disabled` | `false`       | Disables the `julia` module.                            |
+| Option     | Default                            | Description                                       |
+| ---------- | ---------------------------------- | ------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                        |
+| `symbol`   | `"ஃ "`                             | A format string representing the symbol of Julia. |
+| `style`    | `"bold purple"`                    | The style for the module.                         |
+| `disabled` | `false`                            | Disables the `julia` module.                      |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v1.4.0` | The version of `julia`               |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -867,12 +1172,13 @@ The module will be shown if any of the following conditions are met:
 [julia]
 symbol = "∴ "
 ```
+
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from
-the kubeconfig file. The namespace needs to be set in the kubeconfig file, this
-can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if
-not it will use the `~/.kube/config`.
+Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file.
+The namespace needs to be set in the kubeconfig file, this can be done via
+`kubectl config set-context starship-cluster --namespace astronaut`.
+If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
@@ -883,12 +1189,25 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable         | Default       | Description                                         |
-| ---------------- | ------------- | --------------------------------------------------- |
-| `symbol`         | `"☸ "`        | The symbol used before displaying the Cluster info. |
-| `context_aliases` |               | Table of context aliases to display                 |
-| `style`          | `"bold blue"` | The style for the module.                           |
-| `disabled`       | `true`        | Disables the `kubernetes` module                    |
+| Option                  | Default                                             | Description                                                           |
+| ----------------------- | --------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`                | `"☸ "`                                              | A format string representing the symbol displayed before the Cluster. |
+| `format`                | `"on [$symbol$context( \\($namespace\\))]($style) "` | The format for the module.                                            |
+| `style`                 | `"cyan bold"`                                       | The style for the module.                                             |
+| `namespace_spaceholder` | `none`                                              | The value to display if no namespace was found.                       |
+| `context_aliases`       |                                                     | Table of context aliases to display.                                  |
+| `disabled`              | `true`                                              | Disables the `kubernetes` module.                                     |
+
+### Variables
+
+| Variable  | Example              | Description                              |
+| --------- | -------------------- | ---------------------------------------- |
+| context   | `starship-cluster`   | The current kubernetes context           |
+| namespace | `starship-namespace` | If set, the current kubernetes namespace |
+| symbol    |                      | Mirrors the value of option `symbol`     |
+| style\*   |                      | Mirrors the value of option `style`      |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -896,8 +1215,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 # ~/.config/starship.toml
 
 [kubernetes]
-symbol = "⛵ "
-style = "dimmed green"
+format = "on [⛵ $context \\($namespace\\)](dimmed green) "
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
@@ -937,15 +1255,27 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable          | Default               | Description                                                   |
-| ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
-| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
-| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
-| `symbol`          | `"🐏 "`               | The symbol used before displaying the memory usage.           |
-| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | The style for the module.                                     |
-| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
+| Option      | Default                                       | Description                                              |
+| ----------- | --------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module.                               |
+| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
+| `style`     | `"bold dimmed white"`                         | The style for the module.                                |
+| `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
+
+### Variables
+
+| Variable    | Example       | Description                                                        |
+| ----------- | ------------- | ------------------------------------------------------------------ |
+| ram         | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
+| ram_pct     | `48%`         | The percentage of the current system memory.                       |
+| swap\**     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
+| swap_pct\** | `77%`         | The swap memory percentage of the current system swap memory file. |
+| symbol      | `🐏`           | Mirrors the value of option `symbol`                               |
+| style\*     |               | Mirrors the value of option `style`                                |
+
+\*: This variable can only be used as a part of a style string
+\*\*: The SWAP file information is only displayed if detected on the current system
 
 ### Example
 
@@ -968,13 +1298,24 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 
 ### Options
 
-| Variable            | Default         | Description                                                                                  |
-| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
-| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
-| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated.                                     |
-| `style`             | `"bold purple"` | The style for the module.                                                                    |
-| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+| Option              | Default                          | Description                                                                                  |
+| ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `style`             | `"bold purple"`                  | The style for the module.                                                                    |
+| `format`            | `"on [$symbol$branch]($style) "` | The format for the module.                                                                   |
+| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
+| `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| branch   | `master` | The active mercurial branch          |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -982,9 +1323,36 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 # ~/.config/starship.toml
 
 [hg_branch]
-symbol = "🌱 "
+format = "on [🌱 $branch](bold purple)"
 truncation_length = 4
 truncation_symbol = ""
+```
+
+## Nim
+
+The `nim` module shows the currently installed version of Nim.
+The module will be shown if any of the following conditions are met:
+- The current directory contains a `nim.cfg` file
+- The current directory contains a file with the `.nim` extension
+- The current directory contains a file with the `.nims` extension
+- The current directory contains a file with the `.nimble` extension
+
+### Options
+
+| Variable   | Default         | Description                                            |
+| ---------- | --------------- | ------------------------------------------------------ |
+| `symbol`   | `"👑 "`         | The symbol used before displaying the version of Nim.  |
+| `style`    | `"bold yellow"` | The style for the module.                              |
+| `disabled` | `false`         | Disables the `nim` module.                             |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[nim]
+style = "yellow"
+symbol = "🎣 "
 ```
 
 ## Nix-shell
@@ -994,14 +1362,25 @@ The module will be shown when inside a nix-shell environment.
 
 ### Options
 
-| Variable     | Default       | Description                                       |
-| ------------ | ------------- | ------------------------------------------------- |
-| `use_name`   | `false`       | Display the name of the nix-shell.                |
-| `impure_msg` | `"impure"`    | Customize the "impure" msg.                       |
-| `pure_msg`   | `"pure"`      | Customize the "pure" msg.                         |
-| `symbol`     | `"❄️  "`       | The symbol used before displaying the shell name. |
-| `style`      | `"bold blue"` | The style for the module.                         |
-| `disabled`   | `false`       | Disables the `nix_shell` module.                  |
+| Option       | Default                                        | Description                                           |
+| ------------ | ---------------------------------------------- | ----------------------------------------------------- |
+| `format`     | `"via [$symbol$state( \\($name\\))]($style) "` | The format for the module.                            |
+| `symbol`     | `"❄️  "`                                       | A format string representing the symbol of nix-shell. |
+| `style`      | `"bold blue"`                                  | The style for the module.                             |
+| `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
+| `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
+| `disabled`   | `false`                                        | Disables the `nix_shell` module.                      |
+
+### Variables
+
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| state    | `pure`  | The state of the nix-shell           |
+| name     | `lorri` | The name of the nix-shell            |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1010,10 +1389,9 @@ The module will be shown when inside a nix-shell environment.
 
 [nix_shell]
 disabled = true
-use_name = true
-impure_msg = "impure shell"
-pure_msg = "pure shell"
-symbol = "☃️  "
+impure_msg = "[impure shell](bold red)"
+pure_msg = "[pure shell](bold green)"
+format = "via [☃️ $state( \\($name\\))](bold blue) "
 ```
 
 ## NodeJS
@@ -1028,11 +1406,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default        | Description                                              |
-| ---------- | -------------- | -------------------------------------------------------- |
-| `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
-| `style`    | `"bold green"` | The style for the module.                                |
-| `disabled` | `false`        | Disables the `nodejs` module.                            |
+| Option     | Default                            | Description                                          |
+| ---------- | ---------------------------------- | ---------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                           |
+| `symbol`   | `"⬢ "`                             | A format string representing the symbol of NodeJS.  |
+| `style`    | `"bold green"`                     | The style for the module.                            |
+| `disabled` | `false`                            | Disables the `nodejs` module.                        |
+
+### Variables
+
+| Variable | Example    | Description                          |
+| -------- | ---------- | ------------------------------------ |
+| version  | `v13.12.0` | The version of `node`                |
+| symbol   |            | Mirrors the value of option `symbol` |
+| style\*  |            | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1040,7 +1429,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [nodejs]
-symbol = "🤖 "
+format = "via [🤖 $version](bold green) "
 ```
 
 ## Package Version
@@ -1066,11 +1455,23 @@ package, and shows its current version. The module currently supports `npm`, `ca
 
 ### Options
 
-| Variable   | Default      | Description                                                |
-| ---------- | ------------ | ---------------------------------------------------------- |
-| `symbol`   | `"📦 "`      | The symbol used before displaying the version the package. |
-| `style`    | `"bold red"` | The style for the module.                                  |
-| `disabled` | `false`      | Disables the `package` module.                             |
+| Option            | Default                            | Description                                                |
+|-------------------|------------------------------------|------------------------------------------------------------|
+| `format`          | `"via [$symbol$version]($style) "` | The format for the module.                                 |
+| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
+| `style`           | `"bold 208"`                       | The style for the module.                                  |
+| `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`                            | Disables the `package` module.                             |
+
+### Variables
+
+| Variable | Example  | Description                          |
+|----------|----------|--------------------------------------|
+| version  | `v1.0.0` | The version of your package          |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1078,7 +1479,47 @@ package, and shows its current version. The module currently supports `npm`, `ca
 # ~/.config/starship.toml
 
 [package]
-symbol = "🎁 "
+format = "via [🎁 $version](208 bold) "
+```
+
+## OCaml
+
+The `ocaml` module shows the currently installed version of OCaml.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with `.opam` extension or `_opam` directory
+- The current directory contains a `esy.lock` directory
+- The current directory contains a `dune` or `dune-project` file
+- The current directory contains a `jbuild` or `jbuild-ignore` file
+- The current directory contains a `.merlin` file
+- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+
+### Options
+
+| Option     | Default                            | Description                                             |
+| ---------- | ---------------------------------- | ------------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                       |
+| `symbol`   | `"🐫 "`                            | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"`                    | The style for the module.                               |
+| `disabled` | `false`                            | Disables the `ocaml` module.                            |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v4.10.0` | The version of `ocaml`               |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[ocaml]
+format = "via [🐪 $version]($style) "
 ```
 
 ## PHP
@@ -1092,11 +1533,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default      | Description                                           |
-| ---------- | ------------ | ----------------------------------------------------- |
-| `symbol`   | `"🐘 "`      | The symbol used before displaying the version of PHP. |
-| `style`    | `"bold red"` | The style for the module.                             |
-| `disabled` | `false`      | Disables the `php` module.                            |
+| Option     | Default                            | Description                                           |
+| ---------- | ---------------------------------- | ----------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                            |
+| `symbol`   | `"🐘 "`                            | The symbol used before displaying the version of PHP. |
+| `style`    | `"147 bold"`                       | The style for the module.                             |
+| `disabled` | `false`                            | Disables the `php` module.                            |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v7.3.8` | The version of `php`                 |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1104,18 +1556,16 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [php]
-symbol = "🔹 "
+format = "via [🔹 $version](147 bold) "
 ```
 
 ## Python
 
-The `python` module shows the currently installed version of Python.
+The `python` module shows the currently installed version of Python and the
+current Python virtual environment if one is activated.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name.
-
-Otherwise, it will display the version number from `python --version`
-and show the current Python virtual environment if one is
-activated.
+If `pyenv_version_name` is set to `true`, it will display the pyenv version
+name. Otherwise, it will display the version number from `python --version`.
 
 The module will be shown if any of the following conditions are met:
 
@@ -1131,14 +1581,42 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable             | Default         | Description                                                                 |
-| -------------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`             | `"🐍 "`         | The symbol used before displaying the version of Python.                    |
-| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
-| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
-| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.  |
-| `style`              | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`           | `false`         | Disables the `python` module.                                               |
+| Option               | Default                                                    | Description                                                                 |
+| -------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `format`             | `"via [${symbol}${version}( \\($virtualenv\\))]($style) "` | The format for the module.                                                  |
+| `symbol`             | `"🐍 "`                                                     | A format string representing the symbol of Python                           |
+| `style`              | `"yellow bold"`                                            | The style for the module.                                                   |
+| `pyenv_version_name` | `false`                                                    | Use pyenv to get Python version                                             |
+| `scan_for_pyfiles`   | `true`                                                     | If false, Python files in the current directory will not show this module.  |
+| `disabled`           | `false`                                                    | Disables the `python` module.                                               |
+
+### Variables
+
+| Variable   | Example         | Description                          |
+| ---------- | --------------- | ------------------------------------ |
+| version    | `"v3.8.1"`      | The version of `python`              |
+| symbol     | `"🐍 "`          | Mirrors the value of option `symbol` |
+| style      | `"yellow bold"` | Mirrors the value of option `style`  |
+| virtualenv | `"venv"`        | The current `virtualenv` name        |
+
+<details>
+<summary>This module has some advanced configuration options.</summary>
+
+| Variable        | Default  | Description                                                                  |
+| --------------- | -------- | ---------------------------------------------------------------------------- |
+| `python_binary` | `python` | Configures the python binary that Starship executes when getting the version. |
+
+The `python_binary` variable changes the binary that Starship executes to get
+the version of Python, it doesn't change the arguments that are used.
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+python_binary = "python3"
+```
+
+</details>
 
 ### Example
 
@@ -1162,11 +1640,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default      | Description                                            |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"💎 "`      | The symbol used before displaying the version of Ruby. |
-| `style`    | `"bold red"` | The style for the module.                              |
-| `disabled` | `false`      | Disables the `ruby` module.                            |
+| Option     | Default                            | Description                                     |
+| ---------- | ---------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
+| `symbol`   | `"💎 "`                            | A format string representing the symbol of Ruby. |
+| `style`    | `"bold red"`                       | The style for the module.                       |
+| `disabled` | `false`                            | Disables the `ruby` module.                     |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v2.5.1` | The version of `ruby`                |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1187,11 +1676,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default      | Description                                            |
-| ---------- | ------------ | ------------------------------------------------------ |
-| `symbol`   | `"🦀 "`      | The symbol used before displaying the version of Rust. |
-| `style`    | `"bold red"` | The style for the module.                              |
-| `disabled` | `false`      | Disables the `rust` module.                            |
+| Option     | Default                            | Description                                     |
+| ---------- | ---------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
+| `symbol`   | `"🦀 "`                            | A format string representing the symbol of Rust |
+| `style`    | `"bold red"`                       | The style for the module.                       |
+| `disabled` | `false`                            | Disables the `rust` module.                     |
+
+### Variables
+
+| Variable | Example           | Description                          |
+| -------- | ----------------- | ------------------------------------ |
+| version  | `v1.43.0-nightly` | The version of `rustc`               |
+| symbol   |                   | Mirrors the value of option `symbol` |
+| style\*  |                   | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1199,7 +1699,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [rust]
-symbol = "⚙️ "
+format = "via [⚙️ $version](red bold)"
 ```
 
 ## Singularity
@@ -1209,14 +1709,22 @@ and `$SINGULARITY_NAME` is set.
 
 ### Options
 
-| Variable   | Default              | Description                                      |
-| ---------- | -------------------- | ------------------------------------------------ |
-| `label`    | `""`                 | Prefix before the image name display.            |
-| `prefix`   | `"["`                | Prefix to display immediately before image name. |
-| `suffix`   | `"]"`                | Suffix to display immediately after image name.  |
-| `symbol`   | `""`                 | The symbol used before the image name.           |
-| `style`    | `"bold dimmed blue"` | The style for the module.                        |
-| `disabled` | `false`              | Disables the `singularity` module.               |
+| Variable   | Default                          | Description                                      |
+| ---------- | -------------------------------- | ------------------------------------------------ |
+| `format`   | `"[$symbol\\[$env\\]]($style) "` | The format for the module.                       |
+| `symbol`   | `""`                             | A format string displayed before the image name. |
+| `style`    | `"bold dimmed blue"`             | The style for the module.                        |
+| `disabled` | `false`                          | Disables the `singularity` module.               |
+
+### Variables
+
+| Variable | Example      | Description                          |
+| -------- | ------------ | ------------------------------------ |
+| env      | `centos.img` | The current singularity image        |
+| symbol   |              | Mirrors the value of option `symbol` |
+| style\*  |              | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1224,13 +1732,14 @@ and `$SINGULARITY_NAME` is set.
 # ~/.config/starship.toml
 
 [singularity]
-symbol = "📦 "
+format = "[📦 \\[$env\\]]($style) "
 ```
 
 ## Terraform
 
 The `terraform` module shows the currently selected terraform workspace and version.
 By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use.
+If you still want to enable it, [follow the example shown below](#with-version).
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.terraform` folder
@@ -1238,20 +1747,42 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable       | Default      | Description                                                 |
-| -------------- | ------------ | ----------------------------------------------------------- |
-| `symbol`       | `"💠 "`      | The symbol used before displaying the terraform workspace.  |
-| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
-| `style`        | `"bold 105"` | The style for the module.                                   |
-| `disabled`     | `false`      | Disables the `terraform` module.                            |
+| Variable   | Default                              | Description                                           |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
+| `symbol`   | `"💠 "`                              | A format string shown before the terraform workspace. |
+| `style`    | `"bold 105"`                         | The style for the module.                             |
+| `disabled` | `false`                              | Disables the `terraform` module.                      |
+
+### Variables
+
+| Variable  | Example    | Description                          |
+| --------- | ---------- | ------------------------------------ |
+| version   | `v0.12.24` | The version of `terraform`           |
+| workspace | `default`  | The current terraform workspace      |
+| symbol    |            | Mirrors the value of option `symbol` |
+| style\*   |            | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
+
+#### With Version
 
 ```toml
 # ~/.config/starship.toml
 
 [terraform]
-symbol = "🏎💨 "
+format = "[🏎💨 $version$workspace]($style) "
+```
+
+#### Without version
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+format = "[🏎💨 $workspace]($style) "
 ```
 
 ## Time
@@ -1268,16 +1799,28 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable          | Default         | Description                                                                                                         |
-| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | Enables 12 hour formatting                                                                                          |
-| `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
-| `style`           | `"bold yellow"` | The style for the module time                                                                                       |
-| `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
-| `disabled`        | `true`          | Disables the `time` module.                                                                                         |
+<<<<<<< HEAD
+| Option            | Default                 | Description                                                                                                            |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                      |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                             |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.    |
+| `style`           | `"bold yellow"`         | The style for the module time                                                                                          |
+| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                            |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                  |
 
-If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
-Manually setting `format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
+Manually setting `time_format` will override the `use_12hr` setting.
+
+### Variables
+
+| Variable | Example    | Description                          |
+| -------- | ---------- | ------------------------------------ |
+| time     | `13:08:10` | The current time.                    |
+| style\*  |            | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1286,8 +1829,10 @@ Manually setting `format` will override the `use_12hr` setting.
 
 [time]
 disabled = false
-format = "🕙[ %T ]"
+format = "🕙[\\[ $time \\]]($style) "
+time_format = "%T"
 utc_time_offset = "-5"
+time_range = "10:00:00-14:00:00"
 ```
 
 ## Username
@@ -1302,12 +1847,20 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable      | Default         | Description                           |
+| Option        | Default         | Description                           |
 | ------------- | --------------- | ------------------------------------- |
 | `style_root`  | `"bold red"`    | The style used when the user is root. |
 | `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `format`            | `"via [$user]($style) "` | The format for the module.                                                       |
 | `show_always` | `false`         | Always shows the `username` module.   |
 | `disabled`    | `false`         | Disables the `username` module.       |
+
+### Variables
+
+| Variable     | Example         | Description                                                         |
+| ------------ | --------------- | ------------------------------------------------------------------- |
+| `style` | `"red bold"`    | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
+| `user`       | `"matchai"`     | The currently logged-in user ID.                                    |
 
 ### Example
 
@@ -1315,7 +1868,44 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [username]
-disabled = true
+style_user = "white bold"
+style_root = "black bold"
+format = "user: [$user]($style) "
+disabled = false
+show_always = true
+```
+
+## Zig
+
+The `zig` module shows the currently installed version of Zig.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `.zig` file
+
+### Options
+
+| Variable   | Default                            | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| `symbol`   | `"↯ "`                             | The symbol used before displaying the version of Zig.  |
+| `style`    | `"bold yellow"`                    | The style for the module.                              |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                             |
+| `disabled` | `false`                            | Disables the `zig` module.                             |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v0.6.0` | The version of `zig`                 |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[zig]
+symbol = "⚡️ "
 ```
 
 ## Custom commands
@@ -1348,7 +1938,7 @@ will simply show all custom modules in the order they were defined.
 | ------------- | ------------------- | ---------------------------------------------------------------------------- |
 | `command`     |                     | The command whose output should be printed.                                  |
 | `when`        |                     | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                     | The path to the shell to use to execute the command. If unset, it will fallback to STARSHIP_SHELL and then to "sh". |
+| `shell`       |                     | [See below](#custom-command-shell)                                           |
 | `description` | `"<custom module>"` | The description of the module that is shown when running `starship explain`. |
 | `files`       | `[]`                | The files that will be searched in the working directory for a match.        |
 | `directories` | `[]`                | The directories that will be searched in the working directory for a match.  |
@@ -1358,6 +1948,45 @@ will simply show all custom modules in the order they were defined.
 | `prefix`      | `""`                | Prefix to display immediately before the command output.                     |
 | `suffix`      | `""`                | Suffix to display immediately after the command output.                      |
 | `disabled`    | `false`             | Disables this `custom` module.                                               |
+
+#### Custom command shell
+
+`shell` accepts a non-empty list of strings, where:
+- The first string is the path to the shell to use to execute the command.
+- Other following arguments are passed to the shell.
+
+If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
+
+If `shell` is not given or only contains one element and Starship detects PowerShell will be used,
+the following arguments will automatically be added: `-NoProfile -Command -`.
+This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+
+```toml
+shell = ["pwsh", "-Command", "-"]
+```
+
+::: warning Make sure your custom shell configuration exits gracefully
+
+If you set a custom command, make sure that the default Shell used by starship
+will properly execute the command with a graceful exit (via the `shell`
+option).
+
+For example, PowerShell requires the `-Command` parameter to execute a one
+liner. Omitting this parameter might throw starship into a recursive loop
+where the shell might try to load a full profile environment with starship
+itself again and hence re-execute the custom command, getting into a never
+ending loop.
+
+Parameters similar to `-NoProfile` in PowerShell are recommended for other
+shells as well to avoid extra loading time of a custom profile on every
+starship invocation.
+
+Automatic detection of shells and proper parameters addition are currently
+implemented, but it's possible that not all shells are covered.
+[Please open an issue](https://github.com/starship/starship/issues/new/choose)
+with shell details and starship configuration if you hit such scenario.
+
+:::
 
 ### Example
 
@@ -1369,4 +1998,46 @@ command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 prefix = " transcending "
+
+[custom.time]
+command = "time /T"
+files = ["*.pst"]
+prefix = "transcending "
+shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
+```
+
+## PureScript
+
+The `purescript` module shows the currently installed version of PureScript version.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `spago.dhall` file
+- The current directory contains a \*.purs files
+
+### Options
+
+| Option     | Default                            | Description                                                  |
+| ---------- | ---------------------------------- | ------------------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                                   |
+| `symbol`   | `"<=> "`                           | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"`                     | The style for the module.                                    |
+| `disabled` | `false`                            | Disables the `purescript` module.                            |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `0.13.5` | The version of `purescript`          |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[purescript]
+format = "via [$symbol$version](bold white)"
 ```

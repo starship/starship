@@ -11,18 +11,21 @@ pub trait StyleVariableHolder<T> {
     fn get_style_variables(&self) -> BTreeSet<T>;
 }
 
+#[derive(Clone)]
 pub struct TextGroup<'a> {
     pub format: Vec<FormatElement<'a>>,
     pub style: Vec<StyleElement<'a>>,
 }
 
+#[derive(Clone)]
 pub enum FormatElement<'a> {
     Text(Cow<'a, str>),
     Variable(Cow<'a, str>),
     TextGroup(TextGroup<'a>),
-    Positional(Vec<FormatElement<'a>>),
+    Conditional(Vec<FormatElement<'a>>),
 }
 
+#[derive(Clone)]
 pub enum StyleElement<'a> {
     Text(Cow<'a, str>),
     Variable(Cow<'a, str>),
@@ -37,7 +40,7 @@ impl<'a> VariableHolder<Cow<'a, str>> for FormatElement<'a> {
                 variables
             }
             FormatElement::TextGroup(textgroup) => textgroup.format.get_variables(),
-            FormatElement::Positional(format) => format.get_variables(),
+            FormatElement::Conditional(format) => format.get_variables(),
             _ => Default::default(),
         }
     }
@@ -81,7 +84,7 @@ impl<'a> StyleVariableHolder<Cow<'a, str>> for Vec<FormatElement<'a>> {
                 acc.extend(textgroup.style.get_style_variables());
                 acc
             }
-            FormatElement::Positional(format) => {
+            FormatElement::Conditional(format) => {
                 acc.extend(format.get_style_variables());
                 acc
             }

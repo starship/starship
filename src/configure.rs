@@ -1,9 +1,63 @@
 use std::env;
 use std::ffi::OsString;
 use std::io::ErrorKind;
+use std::process;
 use std::process::Command;
 
+use starship::config::StarshipConfig;
+use std::fs::File;
+use std::io::Write;
+use toml::map::Map;
+use toml::Value;
+
 const STD_EDITOR: &str = "vi";
+
+pub fn update_configuration(name: &str, value: &str) {
+    let config_path = get_config_path();
+
+    let keys: Vec<&str> = name.split('.').collect();
+    if keys.len() != 2 {
+        log::error!("Please pass in a config key with a '.'");
+        process::exit(1);
+    }
+
+    let starship_config = StarshipConfig::initialize();
+    let mut config = starship_config
+        .config
+        .expect("Failed to load starship config");
+
+    if let Some(table) = config.as_table_mut() {
+        if !table.contains_key(keys[0]) {
+            table.insert(keys[0].to_string(), Value::Table(Map::new()));
+        }
+
+        if let Some(values) = table.get(keys[0]).unwrap().as_table() {
+            let mut updated_values = values.clone();
+
+            if value.parse::<bool>().is_ok() {
+                updated_values.insert(
+                    keys[1].to_string(),
+                    Value::Boolean(value.parse::<bool>().unwrap()),
+                );
+            } else if value.parse::<i64>().is_ok() {
+                updated_values.insert(
+                    keys[1].to_string(),
+                    Value::Integer(value.parse::<i64>().unwrap()),
+                );
+            } else {
+                updated_values.insert(keys[1].to_string(), Value::String(value.to_string()));
+            }
+
+            table.insert(keys[0].to_string(), Value::Table(updated_values));
+        }
+
+        let config_str =
+            toml::to_string_pretty(&table).expect("Failed to serialize the config to string");
+        File::create(&config_path)
+            .and_then(|mut file| file.write_all(config_str.as_ref()))
+            .expect("Error writing starship config");
+    }
+}
 
 pub fn edit_configuration() {
     let config_path = get_config_path();
