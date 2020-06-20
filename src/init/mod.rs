@@ -23,9 +23,13 @@ struct StarshipPath {
 }
 impl StarshipPath {
     fn init() -> io::Result<Self> {
-        Ok(Self {
-            native_path: env::current_exe()?,
-        })
+        let argv0_path = env::args().next().map(PathBuf::from);
+        let native_path = match argv0_path {
+            Some(path) => path,
+            None => env::current_exe()?,
+        };
+
+        Ok(Self { native_path })
     }
     fn str_path(&self) -> io::Result<&str> {
         let current_exe = self
@@ -91,6 +95,9 @@ impl StarshipPath {
 init code. The stub produces the main init script, then evaluates it with
 `source` and process substitution */
 pub fn init_stub(shell_name: &str) -> io::Result<()> {
+    let starship = path_to_starship();
+
+    log::debug!("Starship: {}", starship);
     log::debug!("Shell name: {}", shell_name);
 
     let shell_basename = Path::new(shell_name)
