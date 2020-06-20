@@ -9,7 +9,7 @@
 Um mit der Konfiguration von Starship zu beginnen, musst du die folgende Datei erstellen: `~/.config/starship.toml`.
 
 ```sh
-$ mkdir -p ~/.config && touch ~/.config/starship.toml
+mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 Die gesamte Konfiguration von Starship wird über diese [TOML](https://github.com/toml-lang/toml)-Datei durchgeführt:
@@ -113,6 +113,7 @@ prompt_order = [
     "haskell",
     "java",
     "julia",
+    "nim",
     "nodejs",
     "ocaml",
     "php",
@@ -376,8 +377,17 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 | Variable                    | Standardwert | Beschreibung                                                                             |
 | --------------------------- | ------------ | ---------------------------------------------------------------------------------------- |
+| `substitutions`             |              | A table of substitutions to be made to the path.                                         |
 | `fish_style_pwd_dir_length` | `0`          | The number of characters to use when applying fish shell pwd path logic.                 |
 | `use_logical_path`          | `true`       | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+
+```toml
+[directory.substitutions]
+"/Volumes/network/path" = "/net"
+"src/com/long/java/path" = "mypath"
+```
 
 `fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
@@ -444,7 +454,7 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Das aktuelle Verzeichnis enthält eine `mix.exs`-Datei.
 
@@ -950,6 +960,32 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
+## Nim
+
+The `nim` module shows the currently installed version of Nim. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+- The current directory contains a `nim.cfg` file
+- The current directory contains a file with the `.nim` extension
+- The current directory contains a file with the `.nims` extension
+- The current directory contains a file with the `.nimble` extension
+
+### Optionen
+
+| Variable   | Standardwert    | Beschreibung                                          |
+| ---------- | --------------- | ----------------------------------------------------- |
+| `symbol`   | `"👑 "`          | The symbol used before displaying the version of Nim. |
+| `style`    | `"bold yellow"` | Stil für dieses Modul.                                |
+| `disabled` | `false`         | Disables the `nim` module.                            |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[nim]
+style = "yellow"
+symbol = "🎣 "
+```
+
 ## Nix-Shell
 
 Das `nix_shell`-Modul zeigt die nix-shell Umgebung an. Das Modul wird angezeigt, wenn es sich in einer nix-Shell-Umgebung befindet.
@@ -980,16 +1016,16 @@ symbol = "☃️  "
 
 ## NodeJS
 
-Das `nodejs`-Modul zeigt die aktuell installierte Version von NodeJS. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+Das `nodejs` Modul zeigt die derzeit installierte Version von NodeJS. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
-- Das aktuelle Verzeichnis enthält eine `package.json`-Datei
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
 - Das aktuelle Verzeichnis enthält ein `node_modules`-Verzeichnis
 - Das aktuelle Verzeichnis enthält eine Datei mit der `.js`-Erweiterung
 
 ### Optionen
 
-| Variable   | Standardwert   | Beschreibung                                      |
+| Variable   | Standartwert   | Beschreibung                                      |
 | ---------- | -------------- | ------------------------------------------------- |
 | `symbol`   | `"⬢ "`         | Symbol das vor der NodeJS-Version angezeigt wird. |
 | `style`    | `"bold green"` | Stil für dieses Modul.                            |
@@ -1020,7 +1056,7 @@ Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository
 
 ### Optionen
 
-| Variable          | Standartwert | Beschreibung                                              |
+| Variable          | Standardwert | Beschreibung                                              |
 | ----------------- | ------------ | --------------------------------------------------------- |
 | `symbol`          | `"📦 "`       | Symbol das vor der Paketversion angezeigt wird.           |
 | `style`           | `"bold 208"` | Stil für dieses Modul.                                    |
@@ -1066,9 +1102,9 @@ symbol = "🐪 "
 
 ## PHP
 
-Das `php`-Modul zeigt die aktuell installierte Version von PHP. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+Das `php`-Modul zeigt die aktuell installierte Version von PHP. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
-- Das aktuelle Verzeichnis enthält eine `composer.json`-Datei
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
 - Das aktuelle Verzeichnis enthält eine `.php`-Datei
 
@@ -1117,6 +1153,24 @@ Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 | `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module. |
 | `style`              | `"bold yellow"` | Stil für dieses Modul.                                                     |
 | `disabled`           | `false`         | Deaktiviert das `python`-Modul.                                            |
+
+<details>
+<summary>This module has some advanced configuration options.</summary>
+
+| Variable        | Standardwert | Beschreibung                                                                  |
+| --------------- | ------------ | ----------------------------------------------------------------------------- |
+| `python_binary` | `python`     | Configures the python binary that Starship executes when getting the version. |
+
+The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+python_binary = "python3"
+```
+
+</details>
 
 ### Beispiel
 
@@ -1184,7 +1238,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 
 ### Optionen
 
-| Variable   | Standardwert         | Beschreibung                                     |
+| Variable   | Standartwert         | Beschreibung                                     |
 | ---------- | -------------------- | ------------------------------------------------ |
 | `label`    | `""`                 | Prefix before the image name display.            |
 | `prefix`   | `"["`                | Prefix to display immediately before image name. |
@@ -1211,7 +1265,7 @@ Das `Terraform` Modul zeigt den aktuell ausgewählten terraform Arbeitsbereich u
 
 ### Optionen
 
-| Variable       | Standardwert | Beschreibung                                                                           |
+| Variable       | Standartwert | Beschreibung                                                                           |
 | -------------- | ------------ | -------------------------------------------------------------------------------------- |
 | `symbol`       | `"💠 "`       | Das Symbol das vor dem Terraform-Workspacenamen angezeigt wird.                        |
 | `show_version` | `false`      | Blendet die Terraform Versionsnummer ein. Kann In großen Workspaces sehr langsam sein. |
@@ -1241,11 +1295,12 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 | Variable          | Standartwert    | Beschreibung                                                                                                                  |
 | ----------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | Aktiviert 12-Stunden-Format                                                                                                   |
+| `use_12hr`        | `false`         | Aktiviert 12-Stunden-Format.                                                                                                  |
 | `format`          | siehe unten     | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html). |
-| `style`           | `"bold yellow"` | Stil für dieses Modul                                                                                                         |
+| `style`           | `"bold yellow"` | Stil für dieses Modul.                                                                                                        |
 | `utc_time_offset` | `"local"`       | Verwendetes Zeitzonen-Offset. Liegt zwischen -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.        |
 | `disabled`        | `true`          | Deaktiviert das `time`-Modul.                                                                                                 |
+| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                         |
 
 Wird `use_12hr` auf `true` gestellt, nimmt `format` automatisch den Wert `"%r"` an. Andernfalls ist es standardmäßig `"%T"`. Wird hingegen `format` gesetzt, so überschreibt dies die Einstellung `use_12hr`.
 
@@ -1258,6 +1313,7 @@ Wird `use_12hr` auf `true` gestellt, nimmt `format` automatisch den Wert `"%r"` 
 disabled = false
 format = "🕙[ %T ]"
 utc_time_offset = "-5"
+time_range = "10:00:00-14:00:00"
 ```
 
 ## Username
@@ -1339,7 +1395,7 @@ The order in which custom modules are shown can be individually set by setting `
 | -------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `command`      |                           | The command whose output should be printed.                                                                                |
 | `when`         |                           | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`        |                           | The path to the shell to use to execute the command. If unset, it will fallback to STARSHIP_SHELL and then to "sh".        |
+| `shell`        |                           | [See below](#custom-command-shell)                                                                                         |
 | `beschreibung` | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
 | `files`        | `[]`                      | The files that will be searched in the working directory for a match.                                                      |
 | `directories`  | `[]`                      | The directories that will be searched in the working directory for a match.                                                |
@@ -1349,6 +1405,32 @@ The order in which custom modules are shown can be individually set by setting `
 | `prefix`       | `""`                      | Prefix to display immediately before the command output.                                                                   |
 | `suffix`       | `""`                      | Suffix to display immediately after the command output.                                                                    |
 | `disabled`     | `false`                   | Disables this `custom` module.                                                                                             |
+
+#### Custom command shell
+
+`shell` accepts a non-empty list of strings, where:
+- The first string is the path to the shell to use to execute the command.
+- Other following arguments are passed to the shell.
+
+If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
+
+If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+
+```toml
+shell = ["pwsh", "-Command", "-"]
+```
+
+::: warning Make sure your custom shell configuration exits gracefully
+
+If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+
+For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+
+Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+
+Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
+
+:::
 
 ### Beispiel
 
@@ -1360,13 +1442,19 @@ command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 prefix = " transcending "
+
+[custom.time]
+command = "time /T"
+files = ["*.pst"]
+prefix = "transcending "
+shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 ```
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of PureScript version. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `purescript` module shows the currently installed version of PureScript version. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- The current directory contains a `spago.dhall` file
+- Das aktuelle Verzeichnis enthält eine `spago.dhall`-Datei
 - The current directory contains a \*.purs files
 
 ### Optionen

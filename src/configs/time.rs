@@ -8,8 +8,9 @@ pub struct TimeConfig<'a> {
     pub style: &'a str,
     pub use_12hr: bool,
     pub time_format: Option<&'a str>,
-    pub utc_time_offset: &'a str,
     pub disabled: bool,
+    pub utc_time_offset: &'a str,
+    pub time_range: &'a str,
 }
 
 impl<'a> RootModuleConfig<'a> for TimeConfig<'a> {
@@ -19,8 +20,9 @@ impl<'a> RootModuleConfig<'a> for TimeConfig<'a> {
             style: "bold yellow",
             use_12hr: false,
             time_format: None,
-            utc_time_offset: "local",
             disabled: true,
+            utc_time_offset: "local",
+            time_range: "-",
         }
     }
 }
