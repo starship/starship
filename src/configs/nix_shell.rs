@@ -20,7 +20,7 @@ impl<'a> RootModuleConfig<'a> for NixShellConfig<'a> {
             impure_msg: SegmentConfig::new("impure"),
             pure_msg: SegmentConfig::new("pure"),
             style: Color::Blue.bold(),
-            symbol: SegmentConfig::new("❄️  "),
+            symbol: SegmentConfig::new("❄️ "),
             disabled: false,
         }
     }
