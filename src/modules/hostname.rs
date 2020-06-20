@@ -43,17 +43,26 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         host.as_ref()
     };
 
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-        formatter.map(|variable| match variable {
-            "hostname" => Some(host.to_string()),
-            _ => None,
-        })
-    } else {
-        log::warn!("Error parsing format string in `hostname.format`");
-        return None;
-    };
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "hostname" => Some(Ok(host)),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.set_segments(formatter.parse(None));
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `hostname`:\n{}", error);
+            return None;
+        }
+    });
 
     module.get_prefix().set_value("");
     module.get_suffix().set_value("");

@@ -7,6 +7,7 @@ pub struct HostnameConfig<'a> {
     pub ssh_only: bool,
     pub trim_at: &'a str,
     pub format: &'a str,
+    pub style: &'a str,
     pub disabled: bool,
 }
 
@@ -15,7 +16,8 @@ impl<'a> RootModuleConfig<'a> for HostnameConfig<'a> {
         HostnameConfig {
             ssh_only: true,
             trim_at: ".",
-            format: "on [$hostname](green dimmed bold) ",
+            format: "on [$hostname]($style) ",
+            style: "green dimmed bold",
             disabled: false,
         }
     }
