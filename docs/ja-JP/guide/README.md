@@ -222,22 +222,22 @@
 
 もしあなたが Starship への貢献に興味がある場合は、我々の[貢献ガイド](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)をご覧ください。 また、気軽に我々の[Discord サーバー](https://discord.gg/8Jzqu3T)へ顔を出してください。 👋
 
-### Code Contributors
+### コードに貢献していただいた方々
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+このプロジェクトは、貢献したすべての人々のおかげで存在します。 [[Contribute](CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
-### Financial Contributors
+### 財政的な貢献をしていただいた方々
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+財政的な貢献者になって、私たちのコミュニティを維持するのを助けていただけると嬉しいです。 [[Contribute](https://opencollective.com/starship/contribute)]
 
-#### Individuals
+#### 個人
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
-#### Organizations
+#### 組織
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+あなたの組織でこのプロジェクトをサポートします。 あなたのロゴはあなたのウェブサイトへのリンクとここに表示されます。 [[Contribute](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>

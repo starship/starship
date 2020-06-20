@@ -10,7 +10,7 @@ Many new configuration options will be available in coming releases.
 To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
 ```sh
-$ mkdir -p ~/.config && touch ~/.config/starship.toml
+mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
@@ -105,12 +105,12 @@ For example:
 The following symbols have special usage in a format string.
 If you want to print the following symbols, you have to escape them with a backslash (`\`).
 
-- `$`
-- `\`
-- `[`
-- `]`
-- `(`
-- `)`
+- $
+- \\
+- [
+- ]
+- (
+- )
 
 Note that `toml` has [its own escape syntax](https://github.com/toml-lang/toml#user-content-string).
 It is recommended to use a literal string (`''`) in your config.
@@ -183,6 +183,7 @@ prompt_order = [
     "haskell",
     "java",
     "julia",
+    "nim",
     "nodejs",
     "ocaml",
     "php",
@@ -219,26 +220,64 @@ is read from the `AWS_VAULT` env var.
 
 ### Options
 
-| Variable          | Default         | Description                                                                 |
-| ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
-| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
-| `style`           | `"bold yellow"` | The style for the module.                                                   |
-| `disabled`        | `false`         | Disables the `AWS` module.                                                  |
+| Option           | Default                                          | Description                                                     |
+| ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
+| `format`         | `"on [$symbol$profile(\\($region\\))]($style) "` | The format for the module.                                      |
+| `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current AWS profile.      |
+| `region_aliases` |                                                  | Table of region aliases to display in addition to the AWS name. |
+| `style`          | `"bold yellow"`                                  | The style for the module.                                       |
+| `disabled`       | `false`                                          | Disables the `AWS` module.                                      |
 
-### Example
+### Variables
+
+| Variable | Example          | Description                          |
+| -------- | ---------------- | ------------------------------------ |
+| region   | `ap-northeast-1` | The current AWS region               |
+| profile  | `astronauts`     | The current AWS profile              |
+| symbol   |                  | Mirrors the value of option `symbol` |
+| style\*  |                  | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Examples
+
+#### Display everything
 
 ```toml
 # ~/.config/starship.toml
 
 [aws]
+format = "on [$symbol$profile(\\($region\\))]($style) "
 style = "bold blue"
 symbol = "🅰 "
-displayed_items = "region"
 [aws.region_aliases]
 ap-southeast-2 = "au"
 us-east-1 = "va"
+```
+
+#### Display region
+
+```toml
+# ~/.config/starship.toml
+
+[aws]
+format = "on [$symbol$region]($style) "
+style = "bold blue"
+symbol = "🅰 "
+[aws.region_aliases]
+ap-southeast-2 = "au"
+us-east-1 = "va"
+```
+
+#### Display profile
+
+```toml
+# ~/.config/starship.toml
+
+[aws]
+format = "on [$symbol$profile]($style) "
+style = "bold blue"
+symbol = "🅰 "
 ```
 
 ## Battery
@@ -496,8 +535,18 @@ it would have been `nixpkgs/pkgs`.
 
 | Advanced Option             | Default | Description                                                                              |
 | --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
+| `substitutions`             |         | A table of substitutions to be made to the path.                                         |
 | `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
 | `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network
+prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+
+```toml
+[directory.substitutions]
+"/Volumes/network/path" = "/net"
+"src/com/long/java/path" = "mypath"
+```
 
 `fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero,
 the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path
@@ -1025,12 +1074,23 @@ more than the `threshold` config value, if it exists.
 
 ### Options
 
-| Variable    | Default       | Description                                           |
-| ----------- | ------------- | ----------------------------------------------------- |
-| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
-| `threshold` | `1`           | Show number of jobs if exceeded.                      |
-| `style`     | `"bold blue"` | The style for the module.                             |
-| `disabled`  | `false`       | Disables the `jobs` module.                           |
+| Option      | Default                       | Description                                      |
+| ----------  | ----------------------------- | ------------------------------------------------ |
+| `threshold` | `1`                           | Show number of jobs if exceeded.                 |
+| `format`    | `"[$symbol$number]($style) "` | The format for the module.                       |
+| `symbol`    | `"✦"`                         | A format string representing the number of jobs. |
+| `style`     | `"bold blue"`                 | The style for the module.                        |
+| `disabled`  | `false`                       | Disables the `jobs` module.                      |
+
+### Variables
+
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| number   | `1`     | The number of jobs                   |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1181,7 +1241,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | style\*     |               | Mirrors the value of option `style`                                |
 
 \*: This variable can only be used as a part of a style string
-\**: The SWAP file information is only displayed if detected on the current system
+\*\*: The SWAP file information is only displayed if detected on the current system
 
 ### Example
 
@@ -1232,6 +1292,33 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 format = "on [🌱 $branch](bold purple)"
 truncation_length = 4
 truncation_symbol = ""
+```
+
+## Nim
+
+The `nim` module shows the currently installed version of Nim.
+The module will be shown if any of the following conditions are met:
+- The current directory contains a `nim.cfg` file
+- The current directory contains a file with the `.nim` extension
+- The current directory contains a file with the `.nims` extension
+- The current directory contains a file with the `.nimble` extension
+
+### Options
+
+| Variable   | Default         | Description                                            |
+| ---------- | --------------- | ------------------------------------------------------ |
+| `symbol`   | `"👑 "`         | The symbol used before displaying the version of Nim.  |
+| `style`    | `"bold yellow"` | The style for the module.                              |
+| `disabled` | `false`         | Disables the `nim` module.                             |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[nim]
+style = "yellow"
+symbol = "🎣 "
 ```
 
 ## Nix-shell
@@ -1364,11 +1451,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default         | Description                                             |
-| ---------- | --------------- | ------------------------------------------------------- |
-| `symbol`   | `"🐫 "`         | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"` | The style for the module.                               |
-| `disabled` | `false`         | Disables the `ocaml` module.                            |
+| Option     | Default                            | Description                                             |
+| ---------- | ---------------------------------- | ------------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                       |
+| `symbol`   | `"🐫 "`                            | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"`                    | The style for the module.                               |
+| `disabled` | `false`                            | Disables the `ocaml` module.                            |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v4.10.0` | The version of `ocaml`               |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1376,7 +1474,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [ocaml]
-symbol = "🐪 "
+format = "via [🐪 $version]($style) "
 ```
 
 ## PHP
@@ -1455,6 +1553,25 @@ The module will be shown if any of the following conditions are met:
 | symbol     | `"🐍 "`          | Mirrors the value of option `symbol` |
 | style      | `"yellow bold"` | Mirrors the value of option `style`  |
 | virtualenv | `"venv"`        | The current `virtualenv` name        |
+
+<details>
+<summary>This module has some advanced configuration options.</summary>
+
+| Variable        | Default  | Description                                                                  |
+| --------------- | -------- | ---------------------------------------------------------------------------- |
+| `python_binary` | `python` | Configures the python binary that Starship executes when getting the version. |
+
+The `python_binary` variable changes the binary that Starship executes to get
+the version of Python, it doesn't change the arguments that are used.
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+python_binary = "python3"
+```
+
+</details>
 
 ### Example
 
@@ -1637,16 +1754,28 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable          | Default         | Description                                                                                                            |
-| ----------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | Enables 12 hour formatting                                                                                             |
-| `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.    |
-| `style`           | `"bold yellow"` | The style for the module time                                                                                          |
-| `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`          | Disables the `time` module.                                                                                            |
+<<<<<<< HEAD
+| Option            | Default                 | Description                                                                                                            |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                      |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                             |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.    |
+| `style`           | `"bold yellow"`         | The style for the module time                                                                                          |
+| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                            |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                  |
 
-If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
-Manually setting `format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`.
+Manually setting `time_format` will override the `use_12hr` setting.
+
+### Variables
+
+| Variable | Example    | Description                          |
+| -------- | ---------- | ------------------------------------ |
+| time     | `13:08:10` | The current time.                    |
+| style\*  |            | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1655,8 +1784,10 @@ Manually setting `format` will override the `use_12hr` setting.
 
 [time]
 disabled = false
-format = "🕙[ %T ]"
+format = "🕙[\\[ $time \\]]($style) "
+time_format = "%T"
 utc_time_offset = "-5"
+time_range = "10:00:00-14:00:00"
 ```
 
 ## Username
@@ -1771,7 +1902,7 @@ will simply show all custom modules in the order they were defined.
 If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
 
 If `shell` is not given or only contains one element and Starship detects PowerShell will be used,
-the following arguments will automatically be added: `-NoProfile -Command -`.  
+the following arguments will automatically be added: `-NoProfile -Command -`.
 This behavior can be avoided by explicitly passing arguments to the shell, e.g.
 
 ```toml
@@ -1829,11 +1960,22 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default        | Description                                                  |
-| ---------- | -------------- | ------------------------------------------------------------ |
-| `symbol`   | `"<=> "`       | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"` | The style for the module.                                    |
-| `disabled` | `false`        | Disables the `purescript` module.                            |
+| Option     | Default                            | Description                                                  |
+| ---------- | ---------------------------------- | ------------------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                                   |
+| `symbol`   | `"<=> "`                           | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"`                     | The style for the module.                                    |
+| `disabled` | `false`                            | Disables the `purescript` module.                            |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `0.13.5` | The version of `purescript`          |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1841,5 +1983,5 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [purescript]
-symbol = "<=> "
+format = "via [$symbol$version](bold white)"
 ```

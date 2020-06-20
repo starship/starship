@@ -45,7 +45,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let python_version = if config.pyenv_version_name {
         utils::exec_cmd("pyenv", &["version-name"])?.stdout
     } else {
-        let version = get_python_version()?;
+        let version = get_python_version(&config.python_binary)?;
         format_python_version(&version)
     };
     let virtual_env = get_python_virtual_env();
@@ -82,8 +82,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_python_version() -> Option<String> {
-    match utils::exec_cmd("python", &["--version"]) {
+fn get_python_version(python_binary: &str) -> Option<String> {
+    match utils::exec_cmd(python_binary, &["--version"]) {
         Some(output) => {
             if output.stdout.is_empty() {
                 Some(output.stderr)
@@ -116,6 +116,10 @@ fn get_python_virtual_env() -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::modules::utils::test::render_module;
+    use ansi_term::Color;
+    use std::fs::File;
+    use std::io;
 
     #[test]
     fn test_format_python_version() {
@@ -127,5 +131,150 @@ mod tests {
     fn test_format_python_version_anaconda() {
         let input = "Python 3.6.10 :: Anaconda, Inc.";
         assert_eq!(format_python_version(input), "v3.6.10");
+    }
+
+    #[test]
+    fn folder_without_python_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let actual = render_module("python", dir.path(), None);
+        let expected = None;
+        assert_eq!(expected, actual);
+
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_python_version() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join(".python-version"))?.sync_all()?;
+
+        check_python2_renders(&dir, None);
+        check_python3_renders(&dir, None);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_requirements_txt() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("requirements.txt"))?.sync_all()?;
+
+        check_python2_renders(&dir, None);
+        check_python3_renders(&dir, None);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_pyproject_toml() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("pyproject.toml"))?.sync_all()?;
+
+        check_python2_renders(&dir, None);
+        check_python3_renders(&dir, None);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_pipfile() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("Pipfile"))?.sync_all()?;
+
+        check_python2_renders(&dir, None);
+        check_python3_renders(&dir, None);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_tox() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("tox.ini"))?.sync_all()?;
+
+        check_python2_renders(&dir, None);
+        check_python3_renders(&dir, None);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_setup_py() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("setup.py"))?.sync_all()?;
+
+        check_python2_renders(&dir, None);
+        check_python3_renders(&dir, None);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_init_py() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("__init__.py"))?.sync_all()?;
+
+        check_python2_renders(&dir, None);
+        check_python3_renders(&dir, None);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_py_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("main.py"))?.sync_all()?;
+
+        check_python2_renders(&dir, None);
+        check_python3_renders(&dir, None);
+        dir.close()
+    }
+
+    #[test]
+    fn disabled_scan_for_pyfiles_and_folder_with_ignored_py_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("foo.py"))?.sync_all()?;
+
+        let expected = None;
+        let config = toml::toml! {
+            [python]
+            scan_for_pyfiles = false
+        };
+        let actual = render_module("python", dir.path(), Some(config));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn disabled_scan_for_pyfiles_and_folder_with_setup_py() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("setup.py"))?.sync_all()?;
+
+        let config = toml::toml! {
+            [python]
+            scan_for_pyfiles = false
+        };
+
+        check_python2_renders(&dir, Some(config));
+
+        let config_python3 = toml::toml! {
+            [python]
+            python_binary = "python3"
+            scan_for_pyfiles = false
+        };
+
+        check_python3_renders(&dir, Some(config_python3));
+
+        dir.close()
+    }
+
+    fn check_python2_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
+        let actual = render_module("python", dir.path(), starship_config);
+        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐍 v2.7.17")));
+        assert_eq!(expected, actual);
+    }
+
+    fn check_python3_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
+        let config = Some(starship_config.unwrap_or(toml::toml! {
+             [python]
+             python_binary = "python3"
+        }));
+
+        let actual = render_module("python", dir.path(), config);
+        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐍 v3.8.0")));
+        assert_eq!(expected, actual);
     }
 }

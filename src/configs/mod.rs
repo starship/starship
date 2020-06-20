@@ -25,6 +25,7 @@ pub mod jobs;
 pub mod julia;
 pub mod kubernetes;
 pub mod memory_usage;
+pub mod nim;
 pub mod nix_shell;
 pub mod nodejs;
 pub mod ocaml;
