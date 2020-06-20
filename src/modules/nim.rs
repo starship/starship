@@ -1,6 +1,7 @@
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::nim::NimConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 /// Creates a module with the current Nim version
@@ -19,16 +20,41 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let nim_version_output = utils::exec_cmd("nim", &["--version"])?.stdout;
-    let formatted_nim_version = format!("v{}", parse_nim_version(&nim_version_output)?);
-
     let mut module = context.new_module("nim");
     let config = NimConfig::try_load(module.config);
 
-    module.set_style(config.style);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => utils::exec_cmd("nim", &["--version"])
+                    .map(|command_output| command_output.stdout)
+                    .and_then(|nim_version_output| {
+                        Some(format!("v{}", parse_nim_version(&nim_version_output)?))
+                    })
+                    .map(Ok),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &SegmentConfig::new(&formatted_nim_version));
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `nim`:\n{}", error);
+            return None;
+        }
+    });
+
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
 }

@@ -1323,11 +1323,20 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default         | Description                                            |
-| ---------- | --------------- | ------------------------------------------------------ |
-| `symbol`   | `"👑 "`         | The symbol used before displaying the version of Nim.  |
-| `style`    | `"bold yellow"` | The style for the module.                              |
-| `disabled` | `false`         | Disables the `nim` module.                             |
+| Variable   | Default                            | Description                                           |
+|------------|------------------------------------|-------------------------------------------------------|
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module                             |
+| `symbol`   | `"👑 "`                            | The symbol used before displaying the version of Nim. |
+| `style`    | `"bold yellow"`                    | The style for the module.                             |
+| `disabled` | `false`                            | Disables the `nim` module.                            |
+
+### Variables
+
+| Variable | Example  | Description                          |
+|----------|----------|--------------------------------------|
+| version  | `v1.2.0` | The version of `nimc`                |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
 
 ### Example
 
