@@ -119,54 +119,54 @@
 
 ## 🚀 安裝
 
-### 先決要求
+### 先決條件
 
-- 一個已經安裝並在你的終端機內啟動的 [Powerline 字型](https://github.com/powerline/fonts) (例如，試試看 [Fira Code](https://github.com/tonsky/FiraCode))。
+- 已經安裝並在您的終端機內啟用的 [Powerline 字型](https://github.com/powerline/fonts) (例如，試試看 [Fira Code](https://github.com/tonsky/FiraCode))。
 
 ### 入門
 
 1. 安裝 **starship** 執行檔：
 
 
-   #### Install Latest Version
+   #### 安裝最新版本
 
 
-   ##### From prebuilt binary, with Shell:
+   ##### 從 shell 安裝預編譯執行檔：
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   ##### From source on [crates.io](https://crates.io/):
+   ##### 從 [crates.io](https://crates.io/) 安裝原始碼：
 
    ```sh
    cargo install starship
    ```
 
 
-   #### Install via Package Manager
+   #### 透過套件管理程式安裝
 
 
-   ##### With [Homebrew](https://brew.sh/):
+   ##### 透過 [Homebrew](https://brew.sh/) 安裝：
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### 透過 [Scoop](https://scoop.sh) 安裝：
 
    ```powershell
    scoop install starship
    ```
 
-1. 將初始化腳本 (script) 加入你的 shell 的設定檔：
+1. 將初始化腳本 (script) 加入您的 shell 設定檔：
 
 
    #### Bash
 
-   將以下內容放到 `~/.bashrc` 的結尾：
+   將以下內容放至 `~/.bashrc` 結尾：
 
    ```sh
    # ~/.bashrc
@@ -177,7 +177,7 @@
 
    #### Fish
 
-   將以下內容放到 `~/.config/fish/config.fish` 的結尾：
+   將以下內容放至 `~/.config/fish/config.fish` 結尾：
 
    ```sh
    # ~/.config/fish/config.fish
@@ -188,7 +188,7 @@
 
    #### Zsh
 
-   將以下內容放到 `~/.zshrc` 的結尾：
+   將以下內容放至 `~/.zshrc` 結尾：
 
    ```sh
    # ~/.zshrc
@@ -199,7 +199,7 @@
 
    #### PowerShell
 
-   將以下內容放到 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 的結尾 (或是在 -Nix 上的 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`)：
+   將以下內容放至 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 結尾 (或是在 -Nix 上的 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`)：
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -208,7 +208,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   將以下內容放置 `~/.config/ion/initrc` 結尾：
 
    ```sh
    # ~/.config/ion/initrc
@@ -218,26 +218,26 @@
 
 ## 🤝 貢獻
 
-我們歡迎具有**各式各樣能力**的貢獻者！ 如果你正在尋找容易加入的方法，試試看標註為「[good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)」的 issue。
+我們歡迎具有**各式各樣能力**的貢獻者！ 如果您正在尋找容易加入的方法，試試看標註為「[good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)」的 issue。
 
-如果你對貢獻 Starship 有興趣，請看我們的 [貢獻指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) 。 另外，請不用客氣加入我們的 [Discord 伺服器](https://discord.gg/8Jzqu3T) 並來問候一下。 👋
+如果您對貢獻 Starship 有興趣，請看我們的 [貢獻指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) 。 另外，請不用客氣加入我們的 [Discord 伺服器](https://discord.gg/8Jzqu3T) 並來打個招呼。 👋
 
-### Code Contributors
+### 程式碼貢獻
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+這個專案的存在需感謝所有貢獻者的協助。 [[Contribute](CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
-### Financial Contributors
+### 財務貢獻
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+成為財務貢獻者並且幫助我們支援我們的社群。 [[Contribute](https://opencollective.com/starship/contribute)]
 
 #### Individuals
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
-#### Organizations
+#### 組織
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+在您的組織中支援這個專案。您的 logo 會在此出現並且連結至您網站的。 [[Contribute](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
