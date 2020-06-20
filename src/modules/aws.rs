@@ -5,8 +5,6 @@ use std::io::{BufRead, BufReader};
 use std::path::PathBuf;
 use std::str::FromStr;
 
-use dirs::home_dir;
-
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::aws::{AwsConfig, AwsItems};
@@ -19,7 +17,7 @@ fn get_aws_region_from_config(aws_profile: Option<&str>) -> Option<Region> {
         .ok()
         .and_then(|path| PathBuf::from_str(&path).ok())
         .or_else(|| {
-            let mut home = home_dir()?;
+            let mut home = dirs_next::home_dir()?;
             home.push(".aws/config");
             Some(home)
         })?;

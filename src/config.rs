@@ -6,7 +6,7 @@ use std::clone::Clone;
 use std::collections::HashMap;
 use std::marker::Sized;
 
-use dirs::home_dir;
+use dirs_next::home_dir;
 use std::env;
 use toml::Value;
 
