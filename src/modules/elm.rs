@@ -29,17 +29,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("elm");
     let config: ElmConfig = ElmConfig::try_load(module.config);
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-        formatter.map(|variable| match variable {
-            "version" => Some(module_version.clone()),
-            _ => None,
-        })
-    } else {
-        log::warn!("Error parsing format string in `elm.format`");
-        return None;
-    };
 
-    module.set_segments(formatter.parse(None));
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map(|variable| match variable {
+                "version" => Some(Ok(&module_version)),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `elm`:\n{}", error);
+            return None;
+        }
+    });
 
     module.get_prefix().set_value("");
     module.get_suffix().set_value("");
