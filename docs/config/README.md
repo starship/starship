@@ -1421,12 +1421,23 @@ package, and shows its current version. The module currently supports `npm`, `ca
 
 ### Options
 
-| Variable          | Default      | Description                                                |
-| ----------------- | ------------ | ---------------------------------------------------------- |
-| `symbol`          | `"📦 "`      | The symbol used before displaying the version the package. |
-| `style`           | `"bold 208"` | The style for the module.                                  |
-| `display_private` | `false`      | Enable displaying version for packages marked as private.  |
-| `disabled`        | `false`      | Disables the `package` module.                             |
+| Option            | Default                            | Description                                                |
+|-------------------|------------------------------------|------------------------------------------------------------|
+| `format`          | `"via [$symbol$version]($style) "` | The format for the module.                                 |
+| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
+| `style`           | `"bold 208"`                       | The style for the module.                                  |
+| `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`                            | Disables the `package` module.                             |
+
+### Variables
+
+| Variable | Example  | Description                          |
+|----------|----------|--------------------------------------|
+| version  | `v1.0.0` | The version of your package          |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1434,7 +1445,7 @@ package, and shows its current version. The module currently supports `npm`, `ca
 # ~/.config/starship.toml
 
 [package]
-symbol = "🎁 "
+format = "via [🎁 $version](208 bold) "
 ```
 
 ## OCaml
