@@ -42,7 +42,7 @@ fn substituted_truncated_path() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("in {} ", Color::Cyan.bold().paint("net/workspace/d/dev"));
+    let expected = format!("{} ", Color::Cyan.bold().paint("net/workspace/d/dev"));
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -63,7 +63,7 @@ fn strange_substitution() -> io::Result<()> {
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!(
-        "in {} ",
+        "{} ",
         Color::Cyan
             .bold()
             .paint(format!("/foo/bar/{}/path", strange_sub))
@@ -510,10 +510,7 @@ fn symlinked_git_repo_root() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!(
-        "in {} ",
-        Color::Cyan.bold().paint("rocket-controls-symlink")
-    );
+    let expected = format!("{} ", Color::Cyan.bold().paint("rocket-controls-symlink"));
     assert_eq!(expected, actual);
     tmp_dir.close()
 }
@@ -537,7 +534,7 @@ fn directory_in_symlinked_git_repo() -> io::Result<()> {
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!(
-        "in {} ",
+        "{} ",
         Color::Cyan.bold().paint("rocket-controls-symlink/src")
     );
     assert_eq!(expected, actual);
@@ -562,7 +559,7 @@ fn truncated_directory_in_symlinked_git_repo() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("in {} ", Color::Cyan.bold().paint("src/meters/fuel-gauge"));
+    let expected = format!("{} ", Color::Cyan.bold().paint("src/meters/fuel-gauge"));
     assert_eq!(expected, actual);
     tmp_dir.close()
 }
@@ -595,7 +592,7 @@ fn directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!(
-        "in {} ",
+        "{} ",
         Color::Cyan
             .bold()
             .paint("above-repo/rocket-controls-symlink/src/meters/fuel-gauge")
@@ -633,7 +630,7 @@ fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Res
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!(
-        "in {} ",
+        "{} ",
         Color::Cyan
             .bold()
             .paint("~/.t/above-repo/rocket-controls-symlink/src/meters/fuel-gauge")
@@ -671,7 +668,7 @@ fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Resu
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!(
-        "in {} ",
+        "{} ",
         Color::Cyan
             .bold()
             .paint("~/.t/a/rocket-controls-symlink/src/meters/fuel-gauge")
@@ -708,7 +705,7 @@ fn directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!(
-        "in {} ",
+        "{} ",
         Color::Cyan
             .bold()
             .paint("rocket-controls-symlink/src/meters/fuel-gauge")
@@ -740,7 +737,7 @@ fn symlinked_directory_in_git_repo() -> io::Result<()> {
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!(
-        "in {} ",
+        "{} ",
         Color::Cyan.bold().paint("rocket-controls/src/loop/loop")
     );
     assert_eq!(expected, actual);
@@ -767,7 +764,7 @@ fn symlinked_subdirectory_git_repo_out_of_tree() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("in {} ", Color::Cyan.bold().paint("~/fuel-gauge"));
+    let expected = format!("{} ", Color::Cyan.bold().paint("~/fuel-gauge"));
     assert_eq!(expected, actual);
     tmp_dir.close()
 }
