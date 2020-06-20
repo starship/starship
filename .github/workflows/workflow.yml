@@ -1,3 +1,4 @@
+---
 name: Main workflow
 on:
   push:
@@ -22,7 +23,6 @@ jobs:
           toolchain: stable
           components: rustfmt
           override: true
-      - run: rustup component add rustfmt
       - uses: actions-rs/cargo@v1
         with:
           command: fmt
@@ -45,28 +45,33 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --all-targets --all-features -- -D clippy::all
 
-  # Run a security audit on dependencies
-  cargo_audit:
-    name: Cargo Audit [Security]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-      - run: cargo install --force cargo-audit
-      - run: cargo generate-lockfile
-      - uses: actions-rs/cargo@v1
-        with:
-          command: audit
-
   # Ensure that the project could be successfully compiled
   cargo_check:
     name: Compile
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Cache cargo registry
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry-
+      - name: Cache cargo index
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-index-
+      - name: Cache cargo build
+        uses: actions/cache@v1
+        with:
+          path: target
+          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -81,7 +86,6 @@ jobs:
   # On both Rust stable and Rust nightly
   test:
     name: Test Suite
-    needs: [cargo_check]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -98,11 +102,15 @@ jobs:
         with:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry-
       - name: Cache cargo index
         uses: actions/cache@v1
         with:
           path: ~/.cargo/git
           key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-index-
       - name: Cache cargo build
         uses: actions/cache@v1
         with:
@@ -119,7 +127,7 @@ jobs:
       # Install Python at a fixed version
       - uses: actions/setup-python@v1
         with:
-          python-version: "3.7.6"
+          python-version: "3.7.7"
 
       # Install dotnet at a fixed version
       - uses: actions/setup-dotnet@v1
@@ -174,9 +182,9 @@ jobs:
           git config --global user.name "Matan Kushner"
           git config --global user.email "hello@matchai.dev"
 
-          cd $(brew --repo homebrew/core)	
+          cd $(brew --repo homebrew/core)
           git fetch origin
-          sudo git reset --hard origin/master	
+          sudo git reset --hard origin/master
           cd -
 
           brew bump-formula-pr --url=https://github.com/starship/starship/archive/$(git describe --tags).tar.gz --message="Automated release pull request using continuous integration." --no-browse -v starship --force
@@ -212,6 +220,21 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Cache cargo registry
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry-
+      - name: Cache cargo index
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-index-
+
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -230,7 +253,7 @@ jobs:
         with:
           command: build
           args: --release --target ${{ matrix.target }}
-    
+
       - name: Build target (musl)
         if: matrix.target == 'x86_64-unknown-linux-musl'
         uses: actions-rs/cargo@v1
@@ -269,8 +292,27 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Download build artifacts
-        uses: actions/download-artifact@v2
+      # These can be squashed when https://github.com/actions/download-artifact/issues/6 is closed
+      - name: Download releases from github_build
+        uses: actions/download-artifact@v1
+        with:
+          name: starship-x86_64-unknown-linux-gnu.tar.gz
+          path: .
+      - name: Download releases from github_build
+        uses: actions/download-artifact@v1
+        with:
+          name: starship-x86_64-unknown-linux-musl.tar.gz
+          path: .
+      - name: Download releases from github_build
+        uses: actions/download-artifact@v1
+        with:
+          name: starship-x86_64-apple-darwin.tar.gz
+          path: .
+      - name: Download releases from github_build
+        uses: actions/download-artifact@v1
+        with:
+          name: starship-x86_64-pc-windows-msvc.zip
+          path: .
 
       - name: Generate checksums
         run: for file in starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done

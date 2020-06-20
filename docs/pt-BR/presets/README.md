@@ -8,11 +8,11 @@ This preset doesn't change anything except for the symbols used for each module.
 
 ![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
 
-### Prerequisites
+### Pré-requisitos
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
 
-### Configuration
+### Configuração
 
 ```toml
 [aws]
@@ -55,6 +55,9 @@ symbol = " "
 
 [memory_usage]
 symbol = " "
+
+[nim]
+symbol = " "
 
 [nix_shell]
 symbol = " "

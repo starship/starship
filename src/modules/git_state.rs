@@ -1,8 +1,9 @@
 use git2::RepositoryState;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 use crate::configs::git_state::GitStateConfig;
+use crate::formatter::StringFormatter;
 
 /// Creates a module with the state of the git repository at the current directory
 ///
@@ -12,37 +13,40 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_state");
     let config: GitStateConfig = GitStateConfig::try_load(module.config);
 
-    module.set_style(config.style);
-    module.get_prefix().set_value("(");
-    module.get_suffix().set_value(") ");
-
     let repo = context.get_repo().ok()?;
     let repo_root = repo.root.as_ref()?;
     let repo_state = repo.state?;
 
-    let state_description = get_state_description(repo_state, repo_root, config);
+    let state_description = get_state_description(repo_state, repo_root, &config)?;
 
-    let label = match &state_description {
-        StateDescription::Label(label) => label,
-        StateDescription::LabelAndProgress(label, _) => label,
-        StateDescription::Clean => {
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "state" => Some(state_description.label),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "progress_current" => state_description.current.as_ref().map(Ok),
+                "progress_total" => state_description.total.as_ref().map(Ok),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `git_state`:\n{}", error);
             return None;
         }
-    };
+    });
 
-    module.create_segment(label.name, &label.segment);
-
-    if let StateDescription::LabelAndProgress(_, progress) = &state_description {
-        module.create_segment(
-            "progress_current",
-            &SegmentConfig::new(&format!(" {}", progress.current)),
-        );
-        module.create_segment("progress_divider", &SegmentConfig::new("/"));
-        module.create_segment(
-            "progress_total",
-            &SegmentConfig::new(&format!("{}", progress.total)),
-        );
-    }
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
 }
@@ -53,40 +57,57 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn get_state_description<'a>(
     state: RepositoryState,
     root: &'a std::path::PathBuf,
-    config: GitStateConfig<'a>,
-) -> StateDescription<'a> {
+    config: &GitStateConfig<'a>,
+) -> Option<StateDescription<'a>> {
     match state {
-        RepositoryState::Clean => StateDescription::Clean,
-        RepositoryState::Merge => StateDescription::Label(StateLabel::new("merge", config.merge)),
-        RepositoryState::Revert => {
-            StateDescription::Label(StateLabel::new("revert", config.revert))
-        }
-        RepositoryState::RevertSequence => {
-            StateDescription::Label(StateLabel::new("revert", config.revert))
-        }
-        RepositoryState::CherryPick => {
-            StateDescription::Label(StateLabel::new("cherry_pick", config.cherry_pick))
-        }
-        RepositoryState::CherryPickSequence => {
-            StateDescription::Label(StateLabel::new("cherry_pick", config.cherry_pick))
-        }
-        RepositoryState::Bisect => {
-            StateDescription::Label(StateLabel::new("bisect", config.bisect))
-        }
-        RepositoryState::ApplyMailbox => StateDescription::Label(StateLabel::new("am", config.am)),
-        RepositoryState::ApplyMailboxOrRebase => {
-            StateDescription::Label(StateLabel::new("am_or_rebase", config.am_or_rebase))
-        }
-        RepositoryState::Rebase => describe_rebase(root, config.rebase),
-        RepositoryState::RebaseInteractive => describe_rebase(root, config.rebase),
-        RepositoryState::RebaseMerge => describe_rebase(root, config.rebase),
+        RepositoryState::Clean => None,
+        RepositoryState::Merge => Some(StateDescription {
+            label: config.merge,
+            current: None,
+            total: None,
+        }),
+        RepositoryState::Revert => Some(StateDescription {
+            label: config.revert,
+            current: None,
+            total: None,
+        }),
+        RepositoryState::RevertSequence => Some(StateDescription {
+            label: config.revert,
+            current: None,
+            total: None,
+        }),
+        RepositoryState::CherryPick => Some(StateDescription {
+            label: config.cherry_pick,
+            current: None,
+            total: None,
+        }),
+        RepositoryState::CherryPickSequence => Some(StateDescription {
+            label: config.cherry_pick,
+            current: None,
+            total: None,
+        }),
+        RepositoryState::Bisect => Some(StateDescription {
+            label: config.bisect,
+            current: None,
+            total: None,
+        }),
+        RepositoryState::ApplyMailbox => Some(StateDescription {
+            label: config.am,
+            current: None,
+            total: None,
+        }),
+        RepositoryState::ApplyMailboxOrRebase => Some(StateDescription {
+            label: config.am_or_rebase,
+            current: None,
+            total: None,
+        }),
+        RepositoryState::Rebase => Some(describe_rebase(root, config.rebase)),
+        RepositoryState::RebaseInteractive => Some(describe_rebase(root, config.rebase)),
+        RepositoryState::RebaseMerge => Some(describe_rebase(root, config.rebase)),
     }
 }
 
-fn describe_rebase<'a>(
-    root: &'a PathBuf,
-    rebase_config: SegmentConfig<'a>,
-) -> StateDescription<'a> {
+fn describe_rebase<'a>(root: &'a PathBuf, rebase_config: &'a str) -> StateDescription<'a> {
     /*
      *  Sadly, libgit2 seems to have some issues with reading the state of
      *  interactive rebases. So, instead, we'll poke a few of the .git files
@@ -98,12 +119,12 @@ fn describe_rebase<'a>(
     let dot_git = root.join(".git");
 
     let has_path = |relative_path: &str| {
-        let path = dot_git.join(Path::new(relative_path));
+        let path = dot_git.join(PathBuf::from(relative_path));
         path.exists()
     };
 
     let file_to_usize = |relative_path: &str| {
-        let path = dot_git.join(Path::new(relative_path));
+        let path = dot_git.join(PathBuf::from(relative_path));
         let contents = crate::utils::read_file(path).ok()?;
         let quantity = contents.trim().parse::<usize>().ok()?;
         Some(quantity)
@@ -112,7 +133,7 @@ fn describe_rebase<'a>(
     let paths_to_progress = |current_path: &str, total_path: &str| {
         let current = file_to_usize(current_path)?;
         let total = file_to_usize(total_path)?;
-        Some(StateProgress { current, total })
+        Some((current, total))
     };
 
     let progress = if has_path("rebase-merge") {
@@ -123,32 +144,15 @@ fn describe_rebase<'a>(
         None
     };
 
-    match progress {
-        None => StateDescription::Label(StateLabel::new("rebase", rebase_config)),
-        Some(progress) => {
-            StateDescription::LabelAndProgress(StateLabel::new("rebase", rebase_config), progress)
-        }
+    StateDescription {
+        label: rebase_config,
+        current: Some(format!("{}", progress.unwrap().0)),
+        total: Some(format!("{}", progress.unwrap().1)),
     }
 }
 
-enum StateDescription<'a> {
-    Clean,
-    Label(StateLabel<'a>),
-    LabelAndProgress(StateLabel<'a>, StateProgress),
-}
-
-struct StateLabel<'a> {
-    name: &'static str,
-    segment: SegmentConfig<'a>,
-}
-
-struct StateProgress {
-    current: usize,
-    total: usize,
-}
-
-impl<'a> StateLabel<'a> {
-    fn new(name: &'static str, segment: SegmentConfig<'a>) -> Self {
-        Self { name, segment }
-    }
+struct StateDescription<'a> {
+    label: &'a str,
+    current: Option<String>,
+    total: Option<String>,
 }

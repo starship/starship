@@ -6,9 +6,8 @@ use std::path;
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::kubernetes::KubernetesConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
-
-const KUBERNETES_PREFIX: &str = "on ";
 
 fn get_kube_context(contents: &str) -> Option<(String, String)> {
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
@@ -63,23 +62,47 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 return None;
             };
 
-            module.set_style(config.style);
-            module.get_prefix().set_value(KUBERNETES_PREFIX);
+            let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+                formatter
+                    .map_meta(|variable, _| match variable {
+                        "symbol" => Some(config.symbol),
+                        _ => None,
+                    })
+                    .map_style(|variable| match variable {
+                        "style" => Some(Ok(config.style)),
+                        _ => None,
+                    })
+                    .map(|variable| match variable {
+                        "context" => match config.context_aliases.get(&kube_ctx) {
+                            None => Some(Ok(kube_ctx.as_str())),
+                            Some(&alias) => Some(Ok(alias)),
+                        },
+                        _ => None,
+                    })
+                    .map(|variable| match variable {
+                        "namespace" => {
+                            if kube_ns != "" {
+                                Some(Ok(kube_ns.as_str()))
+                            } else {
+                                None
+                            }
+                        }
+                        _ => None,
+                    })
+                    .parse(None)
+            });
 
-            module.create_segment("symbol", &config.symbol);
+            module.set_segments(match parsed {
+                Ok(segments) => segments,
+                Err(error) => {
+                    log::warn!("Error in module `kubernetes`: \n{}", error);
+                    return None;
+                }
+            });
 
-            let displayed_context = match config.context_aliases.get(&kube_ctx) {
-                None => &kube_ctx,
-                Some(&alias) => alias,
-            };
+            module.get_prefix().set_value("");
+            module.get_suffix().set_value("");
 
-            module.create_segment("context", &config.context.with_value(&displayed_context));
-            if kube_ns != "" {
-                module.create_segment(
-                    "namespace",
-                    &config.namespace.with_value(&format!(" ({})", kube_ns)),
-                );
-            }
             Some(module)
         }
         None => None,
