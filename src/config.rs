@@ -6,7 +6,6 @@ use std::clone::Clone;
 use std::collections::HashMap;
 use std::marker::Sized;
 
-use dirs::home_dir;
 use std::env;
 use toml::Value;
 
@@ -205,7 +204,7 @@ impl StarshipConfig {
         } else {
             // Default to using ~/.config/starship.toml
             log::debug!("STARSHIP_CONFIG is not set");
-            let config_path = home_dir()?.join(".config/starship.toml");
+            let config_path = dirs_next::home_dir()?.join(".config/starship.toml");
             let config_path_str = config_path.to_str()?.to_owned();
             log::debug!("Using default config path: {}", config_path_str);
             config_path_str

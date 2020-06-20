@@ -56,7 +56,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .unwrap_or_else(|| &context.current_dir),
     );
 
-    let home_dir = dirs::home_dir().unwrap();
+    let home_dir = dirs_next::home_dir().unwrap();
     log::debug!("Current directory: {:?}", current_dir);
 
     let repo = &context.get_repo().ok()?;
