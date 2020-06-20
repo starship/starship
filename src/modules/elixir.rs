@@ -21,8 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let (elixir_version, otp_version) =
-        parse_elixir_version(&utils::exec_cmd("elixir", &["version"])?.stdout.as_str())?;
+    let (otp_version, elixir_version) = get_elixir_version()?;
 
     let mut module = context.new_module("elixir");
     let config = ElixirConfig::try_load(module.config);
@@ -61,6 +60,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
+fn get_elixir_version() -> Option<(String, String)> {
+    let output = utils::exec_cmd("elixir", &["--version"])?.stdout;
+
+    parse_elixir_version(&output)
+}
+
 fn parse_elixir_version(version: &str) -> Option<(String, String)> {
     let version_regex = Regex::new(ELIXIR_VERSION_PATTERN).ok()?;
     let captures = version_regex.captures(version)?;
@@ -83,6 +88,7 @@ mod tests {
     fn test_parse_elixir_version() {
         const OUTPUT: &str = "\
 Erlang/OTP 22 [erts-10.5] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1] [hipe]
+
 Elixir 1.10 (compiled with Erlang/OTP 22)
 ";
 
@@ -96,10 +102,11 @@ Elixir 1.10 (compiled with Erlang/OTP 22)
     fn test_without_mix_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = render_module("elixir", dir.path(), None);
-
         let expected = None;
-        assert_eq!(actual, expected);
+        let output = render_module("elixir", dir.path(), None);
+
+        assert_eq!(output, expected);
+
         dir.close()
     }
 
