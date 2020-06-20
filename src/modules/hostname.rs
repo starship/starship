@@ -1,10 +1,11 @@
 use std::env;
 
-use super::{Context, Module, SegmentConfig};
+use super::{Context, Module};
 use std::ffi::OsString;
 
 use crate::config::RootModuleConfig;
 use crate::configs::hostname::HostnameConfig;
+use crate::formatter::StringFormatter;
 
 /// Creates a module with the system hostname
 ///
@@ -42,10 +43,29 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         host.as_ref()
     };
 
-    module.set_style(config.style);
-    let hostname_stacked = format!("{}{}{}", config.prefix, host, config.suffix);
-    module.create_segment("hostname", &SegmentConfig::new(&hostname_stacked));
-    module.get_prefix().set_value("on ");
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "hostname" => Some(Ok(host)),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `hostname`:\n{}", error);
+            return None;
+        }
+    });
+
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
 }
