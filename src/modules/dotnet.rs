@@ -43,35 +43,39 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Typically it is twice as fast as running `dotnet --version`.
     let enable_heuristic = config.heuristic;
 
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
-                "style" => Some(config.style.to_string()),
+                "style" => Some(Ok(config.style)),
                 _ => None,
             })
             .map(|variable| match variable {
-                "symbol" => Some(config.symbol),
+                "symbol" => Some(Ok(config.symbol)),
                 _ => None,
             })
             .map(|variable| match variable {
                 "version" => {
                     let version = if enable_heuristic {
                         let repo_root = context.get_repo().ok().and_then(|r| r.root.as_deref());
-                        estimate_dotnet_version(&dotnet_files, &context.current_dir, repo_root)?
+                        estimate_dotnet_version(&dotnet_files, &context.current_dir, repo_root)
                     } else {
-                        get_version_from_cli()?
+                        get_version_from_cli()
                     };
-                    Some(version.0)
+                    version.map(|v| Ok(v.0))
                 }
-                "tfm" => find_current_tfm(&dotnet_files),
+                "tfm" => find_current_tfm(&dotnet_files).map(Ok),
                 _ => None,
             })
-    } else {
-        log::warn!("Error parsing format string in `dotnet.format`");
-        return None;
-    };
+            .parse(None)
+    });
 
-    module.set_segments(formatter.parse(None));
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `dotnet`:\n{}", error);
+            return None;
+        }
+    });
 
     module.get_prefix().set_value("");
     module.get_suffix().set_value("");

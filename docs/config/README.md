@@ -622,19 +622,19 @@ as running `dotnet --version`, but it may show an incorrect version if your .NET
 unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by
 setting `heuristic = false` in the module options.
 
-The module will also show the Target Framework Moniker 
+The module will also show the Target Framework Moniker
 (https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions)
-when there is a csproj file in the current directory. 
+when there is a csproj file in the current directory.
 
 ### Options
 
-| Variable    | Default       | Description                                              |
-| ----------- | ------------- | -------------------------------------------------------- |
-| `format`   | `"v[$symbol$version]($style)( 🎯 $tfm)($style) "` | The format for the module.                             |
-| `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
-| `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
-| `style`     | `"bold blue"` | The style for the module.                                |
-| `disabled`  | `false`       | Disables the `dotnet` module.                            |
+| Variable    | Default                                   | Description                                              |
+|-------------|-------------------------------------------|----------------------------------------------------------|
+| `format`    | `"v[$symbol$version( 🎯 $tfm)]($style) "` | The format for the module.                               |
+| `symbol`    | `"•NET "`                                 | The symbol used before displaying the version of dotnet. |
+| `heuristic` | `true`                                    | Use faster version detection to keep starship snappy.    |
+| `style`     | `"bold blue"`                             | The style for the module.                                |
+| `disabled`  | `false`                                   | Disables the `dotnet` module.                            |
 
 ### Variables
 
