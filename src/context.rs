@@ -89,7 +89,7 @@ impl<'a> Context<'a> {
     fn expand_tilde(dir: PathBuf) -> PathBuf {
         if dir.starts_with("~") {
             let without_home = dir.strip_prefix("~").unwrap();
-            return dirs::home_dir().unwrap().join(without_home);
+            return dirs_next::home_dir().unwrap().join(without_home);
         }
         dir
     }
