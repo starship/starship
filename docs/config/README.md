@@ -1633,8 +1633,9 @@ The module will be shown if any of the following conditions are met:
 
 | Option        | Default         | Description                           |
 | ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`    | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
 | `format`            | `"via [$user]($style) "` | The format for the module.                                                       |
-| `style`  | (variable based on user or root)    | The style for the module. |
 | `show_always` | `false`         | Always shows the `username` module.   |
 | `disabled`    | `false`         | Disables the `username` module.       |
 
@@ -1642,8 +1643,7 @@ The module will be shown if any of the following conditions are met:
 
 | Variable     | Example         | Description                                                         |
 | ------------ | --------------- | ------------------------------------------------------------------- |
-| `style_root` | `"red bold"`    | Mirrors the value of option `style` when root is logged in.         |
-| `style_user` | `"yellow bold"` | Mirrors the value of option `style` when regular user is logged in. |
+| `style` | `"red bold"`    | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
 | `user`       | `"matchai"`     | The currently logged-in user ID.                                    |
 
 ### Example
