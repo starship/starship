@@ -339,3 +339,23 @@ jobs:
           body_path: RELEASE.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  aur_release:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    name: Create AUR release
+    needs: github_release # The -bin version downloads and shasums it
+    steps:
+      - name: Publish AUR package
+        uses: guumaster/aur-publish-docker-action@v1
+        with:
+          package_name: starship
+          commit_username: "TO_BE_DETERMENT"
+          commit_email: TO_BE_DETERMENT@example.com
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+      - name: Publish AUR package (-bin version)
+        uses: guumaster/aur-publish-docker-action@v1
+        with:
+          package_name: starship-bin
+          commit_username: "TO_BE_DETERMENT"
+          commit_email: TO_BE_DETERMENT@example.com
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
