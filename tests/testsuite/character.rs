@@ -114,7 +114,7 @@ fn zsh_keymap() -> io::Result<()> {
 }
 
 #[test]
-fn char_module_fish_keymap() -> io::Result<()> {
+fn fish_keymap() -> io::Result<()> {
     let expected_vicmd = format!("{} ", Color::Green.bold().paint("❮"));
     let expected_specified = format!("{} ", Color::Green.bold().paint("V"));
     let expected_other = format!("{} ", Color::Green.bold().paint("❯"));
