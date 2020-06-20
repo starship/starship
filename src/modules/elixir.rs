@@ -36,11 +36,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(elixir_version.clone())),
-                _ => None,
-            })
-            .map(|variable| match variable {
-                "otp_version" => Some(Ok(otp_version.clone())),
+                "version" => Some(Ok(&elixir_version)),
+                "otp_version" => Some(Ok(&otp_version)),
                 _ => None,
             })
             .parse(None)
@@ -70,10 +67,10 @@ fn parse_elixir_version(version: &str) -> Option<(String, String)> {
     let version_regex = Regex::new(ELIXIR_VERSION_PATTERN).ok()?;
     let captures = version_regex.captures(version)?;
 
-    let elixir_version = captures["elixir"].to_owned();
     let otp_version = captures["otp"].to_owned();
+    let elixir_version = captures["elixir"].to_owned();
 
-    Some((elixir_version, otp_version))
+    Some((otp_version, elixir_version))
 }
 
 #[cfg(test)]
