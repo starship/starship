@@ -27,15 +27,15 @@ Any styling that is applied to a module is inherited by its segments. Module pre
 ## Logging
 
 Debug logging in starship is done with [pretty_env_logger](https://crates.io/crates/pretty_env_logger).
-To run starship with debug logs, set the `RUST_LOG` environment variable to the log level needed.
+To run starship with debug logs, set the `STARSHIP_LOG` environment variable to the log level needed.
 For example, to enable the trace logs, run the following:
 
 ```sh
 # Run installed starship
-RUST_LOG=starship=trace starship
+STARSHIP_LOG=trace starship
 
 # Run with cargo
-RUST_LOG=starship=trace cargo run
+STARSHIP_LOG=trace cargo run
 ```
 
 ## Linting
@@ -84,7 +84,7 @@ For tests that depend on having preexisting state, whatever needed state will ha
 
 Any tests that depend on File I/O should use [`sync_all()`](https://doc.rust-lang.org/std/fs/struct.File.html#method.sync_all) when creating files or after writing to files.
 
-Any tests that use `tempfile::tempdir` should take care to call `dir.close()` after usage to ensure the lifecycle of the directory can be reasoned about. 
+Any tests that use `tempfile::tempdir` should take care to call `dir.close()` after usage to ensure the lifecycle of the directory can be reasoned about.
 
 Any tests that use `create_fixture_repo()` should remove the returned directory after usage with  `remove_dir_all::remove_dir_all()`.
 

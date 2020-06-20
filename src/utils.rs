@@ -47,6 +47,15 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             stdout: String::from("stdout ok!"),
             stderr: String::from("stderr ok!"),
         }),
+        "elixir --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+Erlang/OTP 22 [erts-10.6.4] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1] [hipe]
+
+Elixir 1.10 (compiled with Erlang/OTP 22)",
+            ),
+            stderr: String::default(),
+        }),
         "elm --version" => Some(CommandOutput {
             stdout: String::from("0.19.1"),
             stderr: String::default(),
@@ -59,6 +68,17 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             stdout: String::from("julia version 1.4.0"),
             stderr: String::default(),
         }),
+        "nim --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+Nim Compiler Version 1.2.0 [Linux: amd64]
+Compiled at 2020-04-03
+Copyright (c) 2006-2020 by Andreas Rumpf
+git hash: 7e83adff84be5d0c401a213eccb61e321a3fb1ff
+active boot switches: -d:release\n",
+            ),
+            stderr: String::default(),
+        }),
         "node --version" => Some(CommandOutput {
             stdout: String::from("v12.0.0"),
             stderr: String::default(),
@@ -67,7 +87,7 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             stdout: String::from("4.10.0"),
             stderr: String::default(),
         }),
-        "php -r echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION;" => {
+        "php -nr echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION;" => {
             Some(CommandOutput {
                 stdout: String::from("7.3.8"),
                 stderr: String::default(),
@@ -75,6 +95,14 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
         }
         "purs --version" => Some(CommandOutput {
             stdout: String::from("0.13.5"),
+            stderr: String::default(),
+        }),
+        "python --version" => Some(CommandOutput {
+            stdout: String::from("Python 2.7.17"),
+            stderr: String::default(),
+        }),
+        "python3 --version" => Some(CommandOutput {
+            stdout: String::from("Python 3.8.0"),
             stderr: String::default(),
         }),
         "ruby -v" => Some(CommandOutput {
@@ -87,15 +115,6 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
                 stderr: String::default(),
             })
         }
-        "elixir --version" => Some(CommandOutput {
-            stdout: String::from(
-                "\
-Erlang/OTP 22 [erts-10.6.4] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1] [hipe]
-
-Elixir 1.10 (compiled with Erlang/OTP 22)",
-            ),
-            stderr: String::default(),
-        }),
         "zig version" => Some(CommandOutput {
             stdout: String::from("0.6.0"),
             stderr: String::default(),

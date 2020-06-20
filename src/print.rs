@@ -40,10 +40,10 @@ pub fn get_prompt(context: Context) -> String {
     for module in printable {
         // Skip printing the prefix of a module after the line_break
         if print_without_prefix {
-            let module_without_prefix = module.to_string_without_prefix(context.shell.clone());
+            let module_without_prefix = module.to_string_without_prefix(context.shell);
             write!(buf, "{}", module_without_prefix).unwrap()
         } else {
-            let module = module.ansi_strings_for_shell(context.shell.clone());
+            let module = module.ansi_strings_for_shell(context.shell);
             write!(buf, "{}", ANSIStrings(&module)).unwrap();
         }
 

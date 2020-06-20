@@ -39,6 +39,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "haskell",
                 "java",
                 "julia",
+                "nim",
                 "nodejs",
                 "ocaml",
                 "php",

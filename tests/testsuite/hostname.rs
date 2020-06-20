@@ -60,48 +60,6 @@ fn ssh() -> io::Result<()> {
 }
 
 #[test]
-fn prefix() -> io::Result<()> {
-    let hostname = match get_hostname() {
-        Some(h) => h,
-        None => return hostname_not_tested(),
-    };
-    let output = common::render_module("hostname")
-        .env_clear()
-        .use_config(toml::toml! {
-            [hostname]
-            ssh_only = false
-            trim_at = ""
-            prefix = "<"
-        })
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = format!("on {} ", style().paint(format!("<{}", hostname)));
-    assert_eq!(actual, expected);
-    Ok(())
-}
-
-#[test]
-fn suffix() -> io::Result<()> {
-    let hostname = match get_hostname() {
-        Some(h) => h,
-        None => return hostname_not_tested(),
-    };
-    let output = common::render_module("hostname")
-        .env_clear()
-        .use_config(toml::toml! {
-            [hostname]
-            ssh_only = false
-            trim_at = ""
-            suffix = ">"
-        })
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = format!("on {} ", style().paint(format!("{}>", hostname)));
-    assert_eq!(actual, expected);
-    Ok(())
-}
-
-#[test]
 fn no_trim_at() -> io::Result<()> {
     let hostname = match get_hostname() {
         Some(h) => h,

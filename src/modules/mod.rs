@@ -26,6 +26,7 @@ mod julia;
 mod kubernetes;
 mod line_break;
 mod memory_usage;
+mod nim;
 mod nix_shell;
 mod nodejs;
 mod ocaml;
@@ -80,6 +81,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "kubernetes" => kubernetes::module(context),
         "line_break" => line_break::module(context),
         "memory_usage" => memory_usage::module(context),
+        "nim" => nim::module(context),
         "nix_shell" => nix_shell::module(context),
         "nodejs" => nodejs::module(context),
         "ocaml" => ocaml::module(context),
@@ -131,6 +133,7 @@ pub fn description(module: &str) -> &'static str {
         "kubernetes" => "The current Kubernetes context name and, if set, the namespace",
         "line_break" => "Separates the prompt into two lines",
         "memory_usage" => "Current system memory and swap usage",
+        "nim" => "The currently installed version of Nim",
         "nix_shell" => "The nix-shell environment",
         "nodejs" => "The currently installed version of NodeJS",
         "ocaml" => "The currently installed version of OCaml",
