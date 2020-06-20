@@ -4,7 +4,7 @@
 //
 // Should be started with SOI and ended with EOI, with a format string in it.
 expression = _{ SOI ~ value* ~ EOI }
-value = _{ text | variable | textgroup }
+value = _{ text | variable | textgroup | conditional }
 
 // Variable
 //
@@ -36,7 +36,7 @@ escape = _{ "\\" ~ escaped_char }
 escaped_char = { "[" | "]" | "(" | ")" | "\\" | "$" }
 
 // TextGroup
-// 
+//
 // A textgroup is a pair of `format` and `style` (`[format](style)`)
 //
 // - `format`: A format string, can contain any number of variables, texts or textgroups.
@@ -44,3 +44,8 @@ escaped_char = { "[" | "]" | "(" | ")" | "\\" | "$" }
 textgroup = { "[" ~ format ~ "]" ~ "(" ~ style ~ ")" }
 format = { value* }
 style = { (variable | string)* }
+
+// Conditional
+//
+// A conditional format string that won't render if all the containing variables are empty.
+conditional = { "(" ~ format ~ ")" }

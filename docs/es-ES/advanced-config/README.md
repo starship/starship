@@ -8,11 +8,11 @@ Las configuraciones de esta sección pueden sufrir cambios en futuras versiones 
 
 :::
 
-## Custom pre-prompt and pre-execution Commands in Bash
+## Comandos pre-prompt y pre-ejecucucióne personalizados en Bash
 
-Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+Bash no posee un framework oficial de preexec/precmd como la mayoría de las demás shells. Por lo tanto, es complicado proveer una personalización completa en `bash`. Sin embargo, Starship te da la posibilidad de insertar de forma limitada tus propias funciones en el proceso de renderizado del prompt:
 
-- To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
+- Para ejecutar una función personalizada previa al renderizado del prompt, defina una nueva función y asigne su nombre a `starship_precmd_user_func`. Por ejemplo, para renderizar un cohete antes del prompt, se puede realizar así:
 
 ```bash
 function blastoff(){
@@ -21,7 +21,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). However, you **must** trap the DEBUG signal *before* initializing Starship! Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
+- Para ejecutar una función personalizada antes de que un comando sea ejecutado, es posible usar el [mecanismo `DEBUG` trap](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). No obstante, ¡es **necesario** atrapar la señal DEBUG *antes* de inicializar Starship! Starship puede preservar el valor del mecanismo, pero si el mecanismo es reemplazado después de que Starship se inicie, algunas funcionalidades fallarán.
 
 ```bash
 function blastoff(){
@@ -31,37 +31,37 @@ trap blastoff DEBUG     # Trap DEBUG *before* running starship
 eval $(starship init bash)
 ```
 
-## Change Window Title
+## Cambiar el título de la ventana
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
+Algunos shell prompts van a cambiar automáticamente el título de la ventana por ti. (Por ejemplo, para mostrar tu directorio actual). Fish incluso lo hace de forma predeterminada. Starship no hace esto, pero es bastante sencillo añadir esta funcionalidad a `bash` o `zsh`.
 
-First, define a window title change function (identical in bash and zsh):
+Primero defina una función para el cambio de titulo de la ventana (idéntico en bash y zsh):
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; YOUR_WINDOW_TITLE_HERE \007"
+    echo -ne "\033]0; TU_TÍTULO_DE_VENTANA_AQUÍ \007"
 }
 ```
 
-You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
+Puede usar variables para personalizar este titulo (`$USER`, `$HOSTNAME` y `$PWD` son opciones populares).
 
-In `bash`, set this function to be the precmd starship function:
+En `bash`, establezca que esta función sea la función precmd de Starship:
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-In `zsh`, add this to the `precmd_functions` array:
+En `zsh`, añade esto al array `precmd_functions`:
 
 ```bash
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zsrhc`) to make it permanent.
+Si te gusta el resultado, añade estas líneas a tu archivo de configuración del shell (`~/.bashrc` o `~/.zsrhc`) para hacerlo permanente.
 
-## Style Strings
+## Cadenas de estilo
 
-Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+Las cadenas de estilo son una lista de palabras, separadas por espacios en blanco. Las palabras no son sensibles a mayúsculas (es decir, `negrita` y `NeGriTa` se consideran la misma cadena). Cada palabra puede ser una de las siguientes:
 
   - `bold`
   - `underline`
@@ -71,14 +71,14 @@ Style strings are a list of words, separated by whitespace. The words are not ca
   - `<color>`
   - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing , though this may change in the future. The order of words in the string does not matter.
+donde `<color>` es un especificador de color (discutido a continuación). `fg:<color>` y `<color>` hacen actualmente lo mismo, aunque esto puede cambiar en el futuro. El orden de las palabras en la cadena no importa.
 
-The `none` token overrides all other tokens in a string, so that e.g. `fg:red none fg:blue` will still create a string with no styling. It may become an error to use `none` in conjunction with other tokens in the future.
+El token `none` anula todas las otras fichas en una cadena, por lo que, por ejemplo, `fg:red none fg:blue` creará una cadena sin ningún tipo de estilo. Puede convertirse en un error usar `none` junto con otros tokens en el futuro.
 
-A color specifier can be one of the following:
+Un especificador de color puede ser uno de los siguientes:
 
- - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
- - A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
- - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+ - Uno de los colores estándar del terminal: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Opcionalmente puedes prefijar estos con `bright-` para obtener la versión brillante (por ejemplo, `bright-white`).
+ - Un `#` seguido de un número hexadecimal de seis dígitos. Esto especifica un [código hexadecimal de color RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+ - Un número entre 0-255. Esto especifica un [Código ANSI de color de 8-bits](https://i.stack.imgur.com/KTSQa.png).
 
-If multiple colors are specified for foreground/background, the last one in the string will take priority.
+Si se especifican varios colores para el primer plano/fondo, el último en la cadena tendrá prioridad.

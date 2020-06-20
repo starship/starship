@@ -6,6 +6,18 @@ use super::model::*;
 #[grammar = "formatter/spec.pest"]
 struct IdentParser;
 
+fn _parse_value(value: Pair<Rule>) -> FormatElement {
+    match value.as_rule() {
+        Rule::text => FormatElement::Text(_parse_text(value).into()),
+        Rule::variable => FormatElement::Variable(_parse_variable(value).into()),
+        Rule::textgroup => FormatElement::TextGroup(_parse_textgroup(value)),
+        Rule::conditional => {
+            FormatElement::Conditional(_parse_format(value.into_inner().next().unwrap()))
+        }
+        _ => unreachable!(),
+    }
+}
+
 fn _parse_textgroup(textgroup: Pair<Rule>) -> TextGroup {
     let mut inner_rules = textgroup.into_inner();
     let format = inner_rules.next().unwrap();
@@ -29,15 +41,7 @@ fn _parse_text(text: Pair<Rule>) -> String {
 }
 
 fn _parse_format(format: Pair<Rule>) -> Vec<FormatElement> {
-    format
-        .into_inner()
-        .map(|pair| match pair.as_rule() {
-            Rule::text => FormatElement::Text(_parse_text(pair).into()),
-            Rule::variable => FormatElement::Variable(_parse_variable(pair).into()),
-            Rule::textgroup => FormatElement::TextGroup(_parse_textgroup(pair)),
-            _ => unreachable!(),
-        })
-        .collect()
+    format.into_inner().map(_parse_value).collect()
 }
 
 fn _parse_style(style: Pair<Rule>) -> Vec<StyleElement> {
@@ -55,12 +59,7 @@ pub fn parse(format: &str) -> Result<Vec<FormatElement>, Error<Rule>> {
     IdentParser::parse(Rule::expression, format).map(|pairs| {
         pairs
             .take_while(|pair| pair.as_rule() != Rule::EOI)
-            .map(|pair| match pair.as_rule() {
-                Rule::text => FormatElement::Text(_parse_text(pair).into()),
-                Rule::variable => FormatElement::Variable(_parse_variable(pair).into()),
-                Rule::textgroup => FormatElement::TextGroup(_parse_textgroup(pair)),
-                _ => unreachable!(),
-            })
+            .map(_parse_value)
             .collect()
     })
 }
