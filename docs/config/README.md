@@ -1091,7 +1091,8 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
 - The current directory contains a `node_modules` directory
-- The current directory contains a file with the `.js` extension
+- The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
+- The current directory contains a file with the `.ts` extension
 
 ### Options
 
