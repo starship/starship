@@ -96,6 +96,7 @@ mod tests {
         dir.close()
     }
 
+    #[test]
     fn folder_with_cjs_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("index.cjs"))?.sync_all()?;
@@ -106,6 +107,7 @@ mod tests {
         dir.close()
     }
 
+    #[test]
     fn folder_with_ts_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("index.ts"))?.sync_all()?;
