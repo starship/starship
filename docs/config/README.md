@@ -663,7 +663,8 @@ The module will be shown if any of the following conditions are met:
 | Variable | Example | Description                          |
 |----------|---------|--------------------------------------|
 | version  | `v1.10` | The version of `elixir`              |
-| symbol   |         | Mirrors the value of option `symbol` |
+|otp_version|         | The otp version of `elixir`          |
+| symbol    |         | Mirrors the value of option `symbol` |
 | style\*  |         | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
