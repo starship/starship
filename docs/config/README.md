@@ -798,7 +798,9 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | -------- | -------- | ---------------------------------------------------------------------------------------------------- |
 | branch   | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
 | symbol   |          | Mirrors the value of option `symbol`                                                                 |
-| style    |          | Mirrors the value of option `style`                                                                  |
+| style\*  |          | Mirrors the value of option `style`                                                                  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
