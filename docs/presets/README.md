@@ -58,6 +58,9 @@ symbol = " "
 [memory_usage]
 symbol = " "
 
+[nim]
+symbol = " "
+
 [nix_shell]
 symbol = " "
 

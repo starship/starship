@@ -1,6 +1,7 @@
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::julia::JuliaConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 /// Creates a module with the current Julia version
@@ -21,14 +22,37 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let mut module = context.new_module("julia");
-    let config: JuliaConfig = JuliaConfig::try_load(module.config);
+    let config = JuliaConfig::try_load(module.config);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => {
+                    format_julia_version(&utils::exec_cmd("julia", &["--version"])?.stdout.as_str())
+                        .map(Ok)
+                }
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.set_style(config.style);
-    module.create_segment("symbol", &config.symbol);
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `julia`:\n{}", error);
+            return None;
+        }
+    });
 
-    let formatted_version =
-        format_julia_version(&utils::exec_cmd("julia", &["--version"])?.stdout.as_str())?;
-    module.create_segment("version", &config.version.with_value(&formatted_version));
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
 }

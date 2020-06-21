@@ -2,15 +2,10 @@ use ansi_term::Color;
 use std::io;
 
 use crate::common;
-use crate::common::TestCommand;
 
 #[test]
 fn not_in_env() -> io::Result<()> {
-    let output = common::render_module("conda")
-        .env_clear()
-        .env("PATH", env!("PATH"))
-        .use_config("".parse().unwrap())
-        .output()?;
+    let output = common::render_module("conda").output()?;
 
     let expected = "";
     let actual = String::from_utf8(output.stdout).unwrap();
@@ -22,12 +17,10 @@ fn not_in_env() -> io::Result<()> {
 #[test]
 fn env_set() -> io::Result<()> {
     let output = common::render_module("conda")
-        .env_clear()
         .env("CONDA_DEFAULT_ENV", "astronauts")
-        .use_config("".parse().unwrap())
         .output()?;
 
-    let expected = format!("via {} ", Color::Green.bold().paint("C astronauts"));
+    let expected = format!("via {} ", Color::Green.bold().paint("🅒 astronauts"));
     let actual = String::from_utf8(output.stdout).unwrap();
 
     assert_eq!(expected, actual);
@@ -37,12 +30,10 @@ fn env_set() -> io::Result<()> {
 #[test]
 fn truncate() -> io::Result<()> {
     let output = common::render_module("conda")
-        .env_clear()
-        .use_config("".parse().unwrap())
         .env("CONDA_DEFAULT_ENV", "/some/really/long/and/really/annoying/path/that/shouldnt/be/displayed/fully/conda/my_env")
         .output()?;
 
-    let expected = format!("via {} ", Color::Green.bold().paint("C my_env"));
+    let expected = format!("via {} ", Color::Green.bold().paint("🅒 my_env"));
     let actual = String::from_utf8(output.stdout).unwrap();
 
     assert_eq!(expected, actual);

@@ -1,20 +1,26 @@
 use path_slash::PathExt;
+use std::collections::HashMap;
+use std::iter::FromIterator;
 use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module};
 
 use super::utils::directory::truncate;
-use crate::config::{RootModuleConfig, SegmentConfig};
+use crate::config::RootModuleConfig;
 use crate::configs::directory::DirectoryConfig;
+use crate::formatter::StringFormatter;
 
 /// Creates a module with the current directory
 ///
-/// Will perform path contraction and truncation.
+/// Will perform path contraction, substitution, and truncation.
 /// **Contraction**
 ///     - Paths beginning with the home directory or with a git repo right
 /// inside the home directory will be contracted to `~`
 ///     - Paths containing a git repo will contract to begin at the repo root
+///
+/// **Substitution**
+/// Paths will undergo user-provided substitutions of substrings
 ///
 /// **Truncation**
 /// Paths will be limited in length to `3` path components by default.
@@ -23,8 +29,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
-
-    module.set_style(config.style);
 
     // Using environment PWD is the standard approach for determining logical path
     // If this is None for any reason, we fall back to reading the os-provided path
@@ -58,45 +62,59 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let dir_string = match &repo.root {
         Some(repo_root) if config.truncate_to_repo && (repo_root != &home_dir) => {
-            let repo_folder_name = repo_root.file_name().unwrap().to_str().unwrap();
-
+            log::debug!("Repo root: {:?}", repo_root);
             // Contract the path to the git repo root
-            contract_path(current_dir, repo_root, repo_folder_name)
+            contract_repo_path(current_dir, repo_root)
+                .unwrap_or_else(|| contract_path(current_dir, &home_dir, HOME_SYMBOL))
         }
         // Contract the path to the home directory
         _ => contract_path(current_dir, &home_dir, HOME_SYMBOL),
     };
+    log::debug!("Dir string: {}", dir_string);
+
+    let substituted_dir = substitute_path(dir_string, &config.substitutions);
 
     // Truncate the dir string to the maximum number of path components
-    let truncated_dir_string = truncate(dir_string, config.truncation_length as usize);
+    let truncated_dir_string = truncate(substituted_dir, config.truncation_length as usize);
 
-    if config.fish_style_pwd_dir_length > 0 {
+    // Substitutions could have changed the prefix, so don't allow them and
+    // fish-style path contraction together
+    let fish_prefix = if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
         // If user is using fish style path, we need to add the segment first
         let contracted_home_dir = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
-        let fish_style_dir = to_fish_style(
+        to_fish_style(
             config.fish_style_pwd_dir_length as usize,
             contracted_home_dir,
             &truncated_dir_string,
-        );
+        )
+    } else {
+        String::from("")
+    };
+    let final_dir_string = format!("{}{}", fish_prefix, truncated_dir_string);
 
-        module.create_segment(
-            "path",
-            &SegmentConfig {
-                value: &fish_style_dir,
-                style: None,
-            },
-        );
-    }
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "path" => Some(Ok(&final_dir_string)),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.create_segment(
-        "path",
-        &SegmentConfig {
-            value: &truncated_dir_string,
-            style: None,
-        },
-    );
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `directory`:\n{}", error);
+            return None;
+        }
+    });
 
-    module.get_prefix().set_value(config.prefix);
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
 }
@@ -124,6 +142,69 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
             .to_slash()
             .unwrap()
     )
+}
+
+/// Contract the root component of a path based on the real path
+///
+/// Replaces the `top_level_path` in a given `full_path` with the provided
+/// `top_level_replacement` by walking ancestors and comparing its real path.
+fn contract_repo_path(full_path: &Path, top_level_path: &Path) -> Option<String> {
+    let top_level_real_path = real_path(top_level_path);
+    // Walk ancestors to preserve logical path in `full_path`.
+    // If we'd just `full_real_path.strip_prefix(top_level_real_path)`,
+    // then it wouldn't preserve logical path. It would've returned physical path.
+    for (i, ancestor) in full_path.ancestors().enumerate() {
+        let ancestor_real_path = real_path(ancestor);
+        if ancestor_real_path != top_level_real_path {
+            continue;
+        }
+
+        let components: Vec<_> = full_path.components().collect();
+        let repo_name = components[components.len() - i - 1].as_os_str().to_str()?;
+
+        if i == 0 {
+            return Some(repo_name.to_string());
+        }
+
+        let path = PathBuf::from_iter(&components[components.len() - i..]);
+        return Some(format!(
+            "{repo_name}{separator}{path}",
+            repo_name = repo_name,
+            separator = "/",
+            path = path.to_slash()?
+        ));
+    }
+    None
+}
+
+fn real_path<P: AsRef<Path>>(path: P) -> PathBuf {
+    let path = path.as_ref();
+    let mut buf = PathBuf::new();
+    for component in path.components() {
+        let next = buf.join(component);
+        if let Ok(realpath) = next.read_link() {
+            if realpath.is_absolute() {
+                buf = realpath;
+            } else {
+                buf.push(realpath);
+            }
+        } else {
+            buf = next;
+        }
+    }
+    buf.canonicalize().unwrap_or_else(|_| path.into())
+}
+
+/// Perform a list of string substitutions on the path
+///
+/// Given a list of (from, to) pairs, this will perform the string
+/// substitutions, in order, on the path. Any non-pair of strings is ignored.
+fn substitute_path(dir_string: String, substitutions: &HashMap<String, &str>) -> String {
+    let mut substituted_dir = dir_string;
+    for substitution_pair in substitutions.iter() {
+        substituted_dir = substituted_dir.replace(substitution_pair.0, substitution_pair.1);
+    }
+    substituted_dir
 }
 
 /// Takes part before contracted path and replaces it with fish style path
@@ -221,6 +302,17 @@ mod tests {
 
         let output = contract_path(full_path, top_level_path, "~");
         assert_eq!(output, "C:/");
+    }
+
+    #[test]
+    fn substitute_prefix_and_middle() {
+        let full_path = "/absolute/path/foo/bar/baz";
+        let mut substitutions = HashMap::new();
+        substitutions.insert("/absolute/path".to_string(), "");
+        substitutions.insert("/bar/".to_string(), "/");
+
+        let output = substitute_path(full_path.to_string(), &substitutions);
+        assert_eq!(output, "/foo/baz");
     }
 
     #[test]
