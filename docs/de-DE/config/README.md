@@ -428,7 +428,18 @@ symbol = "🐋 "
 
 The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
 
-This module will only be shown in your prompt when one of the following files are present in the current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll also need the .NET Core command-line tools installed in order to use it correctly.
+This module will only be shown in your prompt when one or more of the following files are present in the current directory:
+* `global.json`
+* `project.json`
+* `Directory.Build.props`
+* `Directory.Build.targets`
+* `Packages.props`
+* `*.sln`
+* `*.csproj`
+* `*.fsproj`
+* `*.xproj`
+
+You'll also need the .NET Core SDK installed in order to use it correctly.
 
 Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
@@ -456,7 +467,7 @@ heuristic = false
 
 The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `mix.exs`-Datei.
+- The current directory contains a `mix.exs` file.
 
 ### Optionen
 
@@ -479,8 +490,8 @@ symbol = "🔮 "
 
 The `elm` module shows the currently installed version of Elm. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `elm.json`-Datei
-- Das aktuelle Verzeichnis enthält eine `elm-package.json`-Datei
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
 - The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
@@ -536,8 +547,8 @@ default = "unknown shell"
 
 The `erlang` module shows the currently installed version of Erlang/OTP. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `rebar.config`-Datei.
-- Das aktuelle Verzeichnis enthält eine `erlang.mk`-Datei.
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
 
 ### Optionen
 
@@ -558,7 +569,7 @@ symbol = "e "
 
 ## Git-Branch
 
-Das `git_branch`-Modul zeigt den aktiven Git-Branch des Repositories im aktuellen Verzeichnis an.
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### Optionen
 
@@ -695,16 +706,16 @@ deleted = "🗑"
 
 ## Golang
 
-Das `golang`-Modul zeigt die aktuell installierte Version von Golang. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `golang` module shows the currently installed version of Golang. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `go.mod`-Datei
-- Das aktuelle Verzeichnis enthält eine `go.sum`-Datei
-- Das aktuelle Verzeichnis enthält eine `glide.yaml`-Datei
-- Das aktuelle Verzeichnis enthält eine `Gopkg.yml`-Datei
-- Das aktuelle Verzeichnis enthält eine `Gopkg.lock`-Datei
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
 - The current directory contains a `.go-version` file
-- Das aktuelle Verzeichnis enthält ein `Godeps`-Verzeichnis
-- Das aktuelle Verzeichnis enthält eine Datei mit der `.go`-Erweiterung
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
 ### Optionen
 
@@ -726,7 +737,7 @@ symbol = "🏎💨 "
 
 The `haskell` module shows the currently installed version of Haskell Stack version. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `stack.yaml`-Datei
+- The current directory contains a `stack.yaml` file
 
 ### Optionen
 
@@ -748,7 +759,7 @@ symbol = " "
 
 ## Hostname
 
-Das `hostname`-Modul zeigt den Hostnamen des Systems an.
+The `hostname` module shows the system hostname.
 
 ### Optionen
 
@@ -776,7 +787,7 @@ disabled = false
 
 ## Java
 
-Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `java` module shows the currently installed version of Java. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
@@ -849,9 +860,9 @@ symbol = "∴ "
 
 Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-::: Tipp
+::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -879,7 +890,7 @@ disabled = false
 
 ## Zeilenumbruch
 
-Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
+The `line_break` module separates the prompt into two lines.
 
 ### Optionen
 
@@ -898,13 +909,13 @@ disabled = true
 
 ## Speicherauslastung
 
-Das `memory_usage` Modul zeigt den aktuellen Systemspeicher und die swap-Nutzung an.
+The `memory_usage` module shows current system memory and swap usage.
 
-Standardmäßig wird die swap-Nutzung angezeigt, wenn der gesamte System-swap nicht Null ist.
+By default the swap usage is displayed if the total system swap is non-zero.
 
-::: Tipp
+::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -962,7 +973,7 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of Nim. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `nim` module shows the currently installed version of Nim. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 - The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
@@ -988,7 +999,7 @@ symbol = "🎣 "
 
 ## Nix-Shell
 
-Das `nix_shell`-Modul zeigt die nix-shell Umgebung an. Das Modul wird angezeigt, wenn es sich in einer nix-Shell-Umgebung befindet.
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### Optionen
 
@@ -1016,12 +1027,12 @@ symbol = "☃️  "
 
 ## NodeJS
 
-Das `nodejs` Modul zeigt die derzeit installierte Version von NodeJS. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `nodejs` module shows the currently installed version of NodeJS. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
-- Das aktuelle Verzeichnis enthält ein `node_modules`-Verzeichnis
-- Das aktuelle Verzeichnis enthält eine Datei mit der `.js`-Erweiterung
+- The current directory contains a `node_modules` directory
+- The current directory contains a file with the `.js` extension
 
 ### Optionen
 
@@ -1042,11 +1053,11 @@ symbol = "🤖 "
 
 ## Paketversion
 
-Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository für ein Paket ist, und zeigt dessen aktuelle Version an. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
-- **npm** – Die `npm` Paketversion wird aus dem `package.json` gelesen, das sich im aktuellen Verzeichnis befindet
-- **Cargo** – Die `Cargo` Paketversion wird aus dem `Cargo.toml` gelesen, das sich im aktuellen Verzeichnis befindet
-- **poetry** – Die `poetry` Paketversion wird aus der `pyproject.toml` gelesen, das sich im aktuellen Verzeichnis befindet
+- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
+- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
 - **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 - **julia** - The package version is extracted from the `Project.toml` present
@@ -1074,7 +1085,7 @@ symbol = "🎁 "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of OCaml. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `ocaml` module shows the currently installed version of OCaml. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - The current directory contains a file with `.opam` extension or `_opam` directory
 - The current directory contains a `esy.lock` directory
@@ -1102,11 +1113,11 @@ symbol = "🐪 "
 
 ## PHP
 
-Das `php`-Modul zeigt die aktuell installierte Version von PHP. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `php` module shows the currently installed version of PHP. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
-- Das aktuelle Verzeichnis enthält eine `.php`-Datei
+- The current directory contains a `.php` file
 
 ### Optionen
 
@@ -1133,15 +1144,15 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `.python-version`-Datei
-- Das aktuelle Verzeichnis enthält eine `requirements.txt`-Datei
-- Das aktuelle Verzeichnis enthält eine `pyproject.toml`-Datei
+- The current directory contains a `.python-version` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `pyproject.toml` file
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
-- Das aktuelle Verzeichnis enthält eine `Pipfile`-Datei
-- Das aktuelle Verzeichnis enthält eine `tox.ini`-Datei
-- Das aktuelle Verzeichnis enthält eine `setup.py`-Datei
+- The current directory contains a `Pipfile` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
 - The current directory contains a `__init__.py` file
-- Ein virtualenv ist momentan aktiv
+- A virtual environment is currently activated
 
 ### Optionen
 
@@ -1185,11 +1196,11 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-Das `ruby` Modul zeigt die derzeit installierte Version von Ruby an. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `ruby` module shows the currently installed version of Ruby. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `Gemfile`-Datei
+- The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
-- Das aktuelle Verzeichnis enthält eine `.rb`-Datei
+- The current directory contains a `.rb` file
 
 ### Optionen
 
@@ -1210,10 +1221,10 @@ symbol = "🔺 "
 
 ## Rust
 
-Das `rust` Modul zeigt die derzeit installierte Version von Rust an. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `rust` module shows the currently installed version of Rust. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `Cargo.toml`-Datei
-- Das aktuelle Verzeichnis enthält eine Datei mit der `.rs`-Erweiterung
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### Optionen
 
@@ -1258,10 +1269,10 @@ symbol = "📦 "
 
 ## Terraform
 
-Das `Terraform` Modul zeigt den aktuell ausgewählten terraform Arbeitsbereich und die Version an. Standardmäßig wird die Terraform-Version nicht angezeigt, da dies bei aktuellen Versionen von Terraform langsam ist, wenn viele Plugins verwendet werden. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `.terraform`-Datei
-- Das aktuelle Verzeichnis enthält eine Datei mit der `.tf`-Erweiterung
+- The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf` extension
 
 ### Optionen
 
@@ -1283,11 +1294,11 @@ symbol = "🏎💨 "
 
 ## Zeit
 
-Das `time` Modul zeigt die aktuelle **lokale** Zeit an. Der `format` Wert wird von der crate [`chrono`](https://crates.io/crates/chrono) benutzt um die Zeit zu formatieren. Schau dir [die chrono strftime Dokumentation](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) an, um die möglichen Optionen zu sehen.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
-::: Tipp
+::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1302,7 +1313,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `disabled`        | `true`          | Deaktiviert das `time`-Modul.                                                                                                 |
 | `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                         |
 
-Wird `use_12hr` auf `true` gestellt, nimmt `format` automatisch den Wert `"%r"` an. Andernfalls ist es standardmäßig `"%T"`. Wird hingegen `format` gesetzt, so überschreibt dies die Einstellung `use_12hr`.
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
 ### Beispiel
 
@@ -1318,12 +1329,12 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-Das `username` Modul zeigt den Namen des aktiven Benutzers. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `username` module shows active user's username. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Der aktuelle Benutzer ist root
-- Der aktuelle Benutzer ist nicht der eingeloggte Benutzer
-- Der Benutzer ist aktuell via SSH verbunden
-- Die Variable `show_always` ist auf true gesetzt
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ### Optionen
 
@@ -1377,13 +1388,13 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a file whose extension is in `extensions`
 - The `when` command returns 0
 
-::: Tipp
+::: tip
 
 Multiple custom modules can be defined by using a `.`.
 
 :::
 
-::: Tipp
+::: tip
 
 The order in which custom modules are shown can be individually set by setting `custom.foo` in `prompt_order`. By default, the `custom` module will simply show all custom modules in the order they were defined.
 
@@ -1454,7 +1465,7 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 The `purescript` module shows the currently installed version of PureScript version. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `spago.dhall`-Datei
+- The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
 
 ### Optionen
