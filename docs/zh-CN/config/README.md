@@ -428,9 +428,20 @@ symbol = "🐋 "
 
 `dotnet` 模块显示与当前目录下使用的 .NET Core SDK 相关联的版本。 如果当前目录已被绑定了一个版本的 SDK，则显示被帮定的版本。 否则此组件将显示最新安装的 SDK 版本。
 
-此组件只会在以下文件之一出现在当前目录中时显示：`global.json`，`project.json`，`*.sln`，`*.csproj`，`*.fsproj`，`*.xproj`。 为了正确使用此组件，您还需要安装 .NET Core 命令行工具。
+This module will only be shown in your prompt when one or more of the following files are present in the current directory:
+* `global.json`
+* `project.json`
+* `Directory.Build.props`
+* `Directory.Build.targets`
+* `Packages.props`
+* `*.sln`
+* `*.csproj`
+* `*.fsproj`
+* `*.xproj`
 
-在内部，此组件使用自己的版本检测机制。 一般来说此组件是直接执行 `dotnet --version` 的两倍快，但当你的 .NET 项目使用了不常见的目录布局时此组件可能显示一个错误的版本。 如果相比于速度您更需要正确的版本号，您可以在组件设置中设置 `heuristic = false` 来禁用该机制。
+You'll also need the .NET Core SDK installed in order to use it correctly.
+
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
 ### 配置项
 
@@ -456,7 +467,7 @@ heuristic = false
 
 The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含一个 `mix.exs` 文件.
+- The current directory contains a `mix.exs` file.
 
 ### 配置项
 
@@ -479,8 +490,8 @@ symbol = "🔮 "
 
 The `elm` module shows the currently installed version of Elm. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含一个 `elm.json` 文件
-- 当前目录包含 `elm-package.json` 文件
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
 - The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
@@ -505,10 +516,10 @@ symbol = " "
 
 ## Environment Variable
 
-`env_var` 组件显示选定的环境变量的当前值。 此组件只有满足以下条件之一时才会被显示：
+The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
-- 设置的 `variable` 是一个已存在的环境变量
-- 未定义 `variable`，但定义了 `default`
+- The `variable` configuration option matches an existing environment variable
+- The `variable` configuration option is not defined, but the `default` configuration option is
 
 ### 配置项
 
@@ -534,10 +545,10 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. 此组件只有满足以下条件之一时才会被显示：
+The `erlang` module shows the currently installed version of Erlang/OTP. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含一个 `rebar.config` 文件.
-- 当前目录包含一个 `erlang.mk` 文件.
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
 
 ### 配置项
 
@@ -558,7 +569,7 @@ symbol = "e "
 
 ## Git Branch
 
-`git_branch` 组件显示当前目录的 git 仓库的活动分支。
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### 配置项
 
@@ -583,7 +594,7 @@ truncation_symbol = ""
 
 ## Git Commit
 
-`git_commit` 组件显示当前目录的 git 仓库的当前提交的哈希值。
+The `git_commit` module shows the current commit hash of the repo in your current directory.
 
 ### 配置项
 
@@ -607,7 +618,7 @@ commit_hash_length = 4
 
 ## Git State
 
-`git_state` 组件会显示当前目录在哪个 git 仓库中，以及正在进行的操作，例如：_REBASING_，_BISECTING_ 等。 进度信息（例如 REBASING 3/10）如果存在则也会被显示。
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
 ### 配置项
 
@@ -636,7 +647,7 @@ cherry_pick = "🍒 PICKING"
 
 ## Git Status
 
-`git_status`组件通过相应的符号显示您当前目录中 git 仓库的状态。
+The `git_status` module shows symbols representing the state of the repo in your current directory.
 
 ### 配置项
 
@@ -695,16 +706,16 @@ deleted = "🗑"
 
 ## Golang
 
-`golang` 组件显示当前安装的 Golang 版本。 此组件将在符合以下任意条件之一时显示：
+The `golang` module shows the currently installed version of Golang. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含 `go.mod` 文件
-- 当前目录包含 `go.sum` 文件
-- 当前目录包含 `glide.yaml` 文件
-- 当前目录包含 `Gopkg.yml` 文件
-- 当前目录包含 `Gopkg.lock` 文件
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
 - The current directory contains a `.go-version` file
-- 当前目录包含 `Godeps` 目录
-- 当前目录包含一个使用 `.go` 扩展名的文件
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
 ### 配置项
 
@@ -724,9 +735,9 @@ symbol = "🏎💨 "
 ```
 ## Haskell
 
-`haskell` 组件显示当前安装的 Haskell Stack 版本。 此组件将在符合以下任意条件之一时显示：
+The `haskell` module shows the currently installed version of Haskell Stack version. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含 `stack.yaml` 文件
+- The current directory contains a `stack.yaml` file
 
 ### 配置项
 
@@ -748,7 +759,7 @@ symbol = " "
 
 ## Hostname
 
-`hostname` 组件显示系统主机名。
+The `hostname` module shows the system hostname.
 
 ### 配置项
 
@@ -776,10 +787,10 @@ disabled = false
 
 ## Java
 
-`java` 组件显示当前安装的 Java 版本。 此组件将在符合以下任意条件之一时显示：
+The `java` module shows the currently installed version of Java. 此组件将在符合以下任意条件之一时显示：
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
-- 当前目录包含一个扩展名为 `.java`，`.class`，`.gradle` 或 `.jar` 的文件
+- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
 ### 配置项
 
@@ -800,7 +811,7 @@ symbol = "🌟 "
 
 ## Jobs
 
-`jobs` 组件显示当前正在运行的任务数量。 仅当有后台任务运行时，此组件才会显示。 如果有超过 1 个作业，模块将显示正在运行的作业数量，如果配置了 `threshold` 字段，则使用它作为显示作业数量的下限。
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
 ### 配置项
 
@@ -823,7 +834,7 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. 此组件将在符合以下条件之一时显示：
+The `julia` module shows the currently installed version of Julia. 此组件将在符合以下任意条件之一时显示：
 
 - The current directory contains a `Project.toml` file
 - The current directory contains a `Manifest.toml` file
@@ -847,11 +858,11 @@ symbol = "∴ "
 ```
 ## Kubernetes
 
-显示当前的 Kubernetes 上下文名以及，如果有相关设置，则显示来自 kubeconig 文件的命名空间。 命名空间需要在 kubeconfig 文件中设置，这可以通过 `kubectl config set-context starship-cluster --namespace astronaut` 完成。 如果设置了环境变量 `$KUBECONFIG`，此组件将使用该值，否则会使用 `~/.kube/config`。
+Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
-此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -879,7 +890,7 @@ disabled = false
 
 ## Line Break
 
-`line_break` 组件将提示分隔为两行。
+The `line_break` module separates the prompt into two lines.
 
 ### 配置项
 
@@ -898,13 +909,13 @@ disabled = true
 
 ## Memory Usage
 
-`memory_usage` 组件显示当前系统内存和交换区使用情况。
+The `memory_usage` module shows current system memory and swap usage.
 
-默认情况下，如果系统交换区使用不为 0，则会显示交换区使用情况。
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -937,7 +948,7 @@ style = "bold dimmed green"
 
 ## Mercurial Branch
 
-`hg_branch` 组件显示当前目录的 hg 仓库的活动分支。
+The `hg_branch` module shows the active branch of the repo in your current directory.
 
 ### 配置项
 
@@ -962,7 +973,7 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of Nim. 此组件只有满足以下条件之一时才会被显示：
+The `nim` module shows the currently installed version of Nim. 此组件将在符合以下任意条件之一时显示：
 - The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
@@ -988,7 +999,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-`nix_shell` 组件显示 nix-shell 环境。 当处于一个 nix-shell 环境中时，此组件会被显示。
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### 配置项
 
@@ -1016,12 +1027,12 @@ symbol = "☃️  "
 
 ## NodeJS
 
-`nodejs` 组件显示当前安装的 NodeJS 版本。 此组件将在符合以下任意条件时显示：
+The `nodejs` module shows the currently installed version of NodeJS. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含 `package.json` 文件
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
-- 当前目录包含 `node_modules` 目录
-- 当前目录包含一个使用 `.js` 扩展名的文件
+- The current directory contains a `node_modules` directory
+- The current directory contains a file with the `.js` extension
 
 ### 配置项
 
@@ -1042,12 +1053,12 @@ symbol = "🤖 "
 
 ## Package Version
 
-当前目录是软件包的代码仓库时，将显示 `package` 组件，并显示软件包当前版本。 The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
-- **npm** —— `npm` 软件包版本从当前目录下的 `package.json` 中得到
-- **cargo** —— `cargo` 软件包的版本从当前目录下的 `Cargo.toml` 中得到
-- **poetry** —— `poetry` 软件包版本从当前目录下的 `pyproject.toml` 中得到
-- **composer** —— `composer` 软件包版本从当前目录下的 `composer.json` 中得到
+- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
+- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 - **julia** - The package version is extracted from the `Project.toml` present
 - **mix** - The `mix` package version is extracted from the `mix.exs` present
@@ -1074,7 +1085,7 @@ symbol = "🎁 "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of OCaml. 此组件将在符合以下任意条件之一时显示：
+The `ocaml` module shows the currently installed version of OCaml. 此组件只有满足以下条件之一时才会被显示：
 
 - The current directory contains a file with `.opam` extension or `_opam` directory
 - The current directory contains a `esy.lock` directory
@@ -1102,11 +1113,11 @@ symbol = "🐪 "
 
 ## PHP
 
-`php` 组件显示当前安装的 PHP 版本。 此组件只有满足以下条件之一时才会被显示：
+The `php` module shows the currently installed version of PHP. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含一个 `composer.json` 文件
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
-- 当前目录包含一个 `.php` 文件
+- The current directory contains a `.php` file
 
 ### 配置项
 
@@ -1133,15 +1144,15 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含 `.python-version` 文件
-- 当前目录包含 `requirements.txt` 文件
-- 当前目录包含 `pyproject.toml` 文件
+- The current directory contains a `.python-version` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `pyproject.toml` file
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
-- 当前目录包含 `Pipfile` 文件
-- 当前目录包含一个 `tox.ini` 文件
-- 当前目录包含一个 `setup.py` 文件
+- The current directory contains a `Pipfile` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
 - The current directory contains a `__init__.py` file
-- 当前处于一个活跃的 python 虚拟环境中
+- A virtual environment is currently activated
 
 ### 配置项
 
@@ -1185,11 +1196,11 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-`ruby` 组件显示当前安装的 Ruby 版本。 此组件将在符合以下任意条件之一时显示：
+The `ruby` module shows the currently installed version of Ruby. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含 `Gemfile` 文件
+- The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
-- 当前目录包含 `.rb` 文件
+- The current directory contains a `.rb` file
 
 ### 配置项
 
@@ -1210,10 +1221,10 @@ symbol = "🔺 "
 
 ## Rust
 
-`rust` 组件显示当前安装的 Rust 版本。 此组件将在符合以下任意条件之一时显示：
+The `rust` module shows the currently installed version of Rust. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含 `Cargo.toml` 文件
-- 当前目录包含一个使用 `.rs` 扩展名的文件
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### 配置项
 
@@ -1258,10 +1269,10 @@ symbol = "📦 "
 
 ## Terraform
 
-`terraform` 组件显示当前选定的 terraform 工作区和版本。 默认情况下不会显示 terraform 版本，因为当使用大量插件时，当前版本 terraform 查询版本号很慢。 此组件将在符合以下任意条件之一时显示：
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含 `.terraform` 目录
-- 当前目录包含一个使用 `.tf` 扩展名的文件
+- The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf` extension
 
 ### 配置项
 
@@ -1283,11 +1294,11 @@ symbol = "🏎💨 "
 
 ## Time
 
-`time` 组件显示当前的 **本地** 时间。 `format` 字段值会提供给 [`chrono`](https://crates.io/crates/chrono) crate 用来控制时间显示方式。 请参阅 [chrono strftime 文档](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) 以了解可用格式选项。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
-此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1302,7 +1313,7 @@ symbol = "🏎💨 "
 | `disabled`        | `true`          | 禁用 `time` 组件。                                                                                         |
 | `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-如果 `use_12hr` 为 `true`，则`format` 默认值为 `"%r"`。 否则，其默认值为 `"%T"`。 手动设置 `format` 将使 `use_12hr` 被忽略。
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
 ### 示例
 
@@ -1318,12 +1329,12 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-`username` 组件显示当前活跃的用户名。 此组件将在符合以下任意条件之一时显示：
+The `username` module shows active user's username. 此组件将在符合以下任意条件之一时显示：
 
-- 当前用户是 root
-- 当前用户与登录用户不相同
-- 用户正通过 SSH 会话连接访问
-- 字段 `show_always` 被设置为 true
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ### 配置项
 
@@ -1454,7 +1465,7 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 The `purescript` module shows the currently installed version of PureScript version. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含一个 `spago.dhall` 文件
+- The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
 
 ### 配置项
