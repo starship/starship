@@ -99,6 +99,56 @@ fn test_japanese_truncation() -> io::Result<()> {
 }
 
 #[test]
+fn test_format_no_branch() -> io::Result<()> {
+    test_format("1337_hello_world", "no_branch", "", "no_branch")
+}
+
+#[test]
+fn test_format_just_branch_name() -> io::Result<()> {
+    test_format("1337_hello_world", "$branch", "", "1337_hello_world")
+}
+
+#[test]
+fn test_format_just_branch_name_color() -> io::Result<()> {
+    test_format(
+        "1337_hello_world",
+        "[$branch](bold blue)",
+        "",
+        Color::Blue.bold().paint("1337_hello_world").to_string(),
+    )
+}
+
+#[test]
+fn test_format_mixed_colors() -> io::Result<()> {
+    test_format(
+        "1337_hello_world",
+        "branch: [$branch](bold blue) [THE COLORS](red) ",
+        "",
+        format!(
+            "branch: {} {} ",
+            Color::Blue.bold().paint("1337_hello_world").to_string(),
+            Color::Red.paint("THE COLORS").to_string()
+        ),
+    )
+}
+
+#[test]
+fn test_format_symbol_style() -> io::Result<()> {
+    test_format(
+        "1337_hello_world",
+        "$symbol[$branch]($style)",
+        r#"
+            symbol = "git: "
+            style = "green"
+        "#,
+        format!(
+            "git: {}",
+            Color::Green.paint("1337_hello_world").to_string(),
+        ),
+    )
+}
+
+#[test]
 fn test_works_with_unborn_master() -> io::Result<()> {
     let repo_dir = tempfile::tempdir()?.into_path();
 
@@ -175,5 +225,39 @@ fn test_truncate_length_with_config(
             .paint(format!("\u{e0a0} {}{}", expected_name, truncation_symbol)),
     );
     assert_eq!(expected, actual);
+    remove_dir_all(repo_dir)
+}
+
+fn test_format<T: AsRef<str>>(
+    branch_name: &str,
+    format: &str,
+    config_options: &str,
+    expected: T,
+) -> io::Result<()> {
+    let repo_dir = common::create_fixture_repo()?;
+
+    Command::new("git")
+        .args(&["checkout", "-b", branch_name])
+        .current_dir(repo_dir.as_path())
+        .output()?;
+
+    let output = common::render_module("git_branch")
+        .use_config(
+            toml::from_str(&format!(
+                r#"
+                    [git_branch]
+                        format = "{}"
+                        {}
+                "#,
+                format, config_options
+            ))
+            .unwrap(),
+        )
+        .arg("--path")
+        .arg(&repo_dir)
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+
+    assert_eq!(expected.as_ref(), actual);
     remove_dir_all(repo_dir)
 }

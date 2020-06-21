@@ -852,13 +852,24 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Options
 
-| Variable            | Default         | Description                                                                           |
-| ------------------- | --------------- | ------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
-| `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
-| `truncation_symbol` | `"…"`           | The symbol used to indicate a branch name was truncated. You can use "" for no symbol |
-| `style`             | `"bold purple"` | The style for the module.                                                             |
-| `disabled`          | `false`         | Disables the `git_branch` module.                                                     |
+| Variable            | Default                          | Description                                                                            |
+| ------------------- | -------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`            | `"on [$symbol$branch]($style) "` | The format for the module.  Use `"$branch"` to refer to the current branch name.       |
+| `symbol`            | `" "`                           | A format string representing the symbol of git branch.                                 |
+| `style`             | `"bold purple"`                  | The style for the module.                                                              |
+| `truncation_length` | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                 |
+| `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
+| `disabled`          | `false`                          | Disables the `git_branch` module.                                                      |
+
+### Variables
+
+| Variable | Example  | Description                                                                                          |
+| -------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| branch   | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
+| symbol   |          | Mirrors the value of option `symbol`                                                                 |
+| style\*  |          | Mirrors the value of option `style`                                                                  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
