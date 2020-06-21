@@ -644,9 +644,19 @@ The `dotnet` module shows the relevant version of the .NET Core SDK for the curr
 the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module
 shows the latest installed version of the SDK.
 
-This module will only be shown in your prompt when one of the following files are present in the
-current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll
-also need the .NET Core command-line tools installed in order to use it correctly.
+This module will only be shown in your prompt when one or more of the following files are present in the
+current directory:
+* `global.json`
+* `project.json`
+* `Directory.Build.props`
+* `Directory.Build.targets`
+* `Packages.props`
+* `*.sln`
+* `*.csproj`
+* `*.fsproj`
+* `*.xproj`
+
+You'll also need the .NET Core SDK installed in order to use it correctly.
 
 Internally, this module uses its own mechanism for version detection. Typically it is twice as fast
 as running `dotnet --version`, but it may show an incorrect version if your .NET project has an
@@ -1445,7 +1455,8 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
 - The current directory contains a `node_modules` directory
-- The current directory contains a file with the `.js` extension
+- The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
+- The current directory contains a file with the `.ts` extension
 
 ### Options
 

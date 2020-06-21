@@ -1,4 +1,3 @@
-use dirs::home_dir;
 use std::env;
 use std::path::PathBuf;
 
@@ -28,7 +27,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
     let docker_config = PathBuf::from(
-        &env::var_os("DOCKER_CONFIG").unwrap_or(home_dir()?.join(".docker").into_os_string()),
+        &env::var_os("DOCKER_CONFIG")
+            .unwrap_or(dirs_next::home_dir()?.join(".docker").into_os_string()),
     )
     .join("config.json");
 
