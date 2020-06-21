@@ -428,7 +428,18 @@ symbol = "🐋 "
 
 El módulo `dotnet` muestra la versión usada de .NET Core SDK para el directorio actual. Si el SDK ha sido anclado en el directorio actual, se mostrará la versión fijada. De lo contrario, el módulo muestra la última versión instalada del SDK.
 
-This module will only be shown in your prompt when one of the following files are present in the current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll also need the .NET Core command-line tools installed in order to use it correctly.
+This module will only be shown in your prompt when one or more of the following files are present in the current directory:
+* `global.json`
+* `project.json`
+* `Directory.Build.props`
+* `Directory.Build.targets`
+* `Packages.props`
+* `*.sln`
+* `*.csproj`
+* `*.fsproj`
+* `*.xproj`
+
+You'll also need the .NET Core SDK installed in order to use it correctly.
 
 Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
@@ -456,7 +467,7 @@ heuristic = false
 
 The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un fichero `mix.exs`.
+- The current directory contains a `mix.exs` file.
 
 ### Opciones
 
@@ -479,8 +490,8 @@ symbol = "🔮 "
 
 The `elm` module shows the currently installed version of Elm. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un fichero `elm.json`
-- El directorio actual contiene un fichero `elm-package.json`
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
 - The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
@@ -536,8 +547,8 @@ default = "unknown shell"
 
 The `erlang` module shows the currently installed version of Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un fichero `rebar.config`.
-- El directorio actual contiene un fichero `erlang.mk`.
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
 
 ### Opciones
 
@@ -697,9 +708,9 @@ deleted = "🗑"
 
 The `golang` module shows the currently installed version of Golang. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un fichero `go.mod`
-- El directorio actual contiene un fichero `go.sum`
-- El directorio actual contiene un fichero `glide.yaml`
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
 - The current directory contains a `Gopkg.yml` file
 - The current directory contains a `Gopkg.lock` file
 - The current directory contains a `.go-version` file
@@ -726,7 +737,7 @@ symbol = "🏎💨 "
 
 The `haskell` module shows the currently installed version of Haskell Stack version. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un fichero `stack.yaml`
+- The current directory contains a `stack.yaml` file
 
 ### Opciones
 
@@ -1134,12 +1145,12 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `.python-version` file
-- El directorio actual contiene un fichero `requirements.txt`
-- El directorio actual contiene un fichero `pyproject.toml`
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `pyproject.toml` file
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - The current directory contains a `Pipfile` file
-- El directorio actual contiene un fichero `tox.ini`
-- El directorio actual contiene un fichero `setup.py`
+- The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
 - The current directory contains a `__init__.py` file
 - A virtual environment is currently activated
 
@@ -1454,7 +1465,7 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 The `purescript` module shows the currently installed version of PureScript version. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un fichero `spago.dhall`
+- The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
 
 ### Opciones
