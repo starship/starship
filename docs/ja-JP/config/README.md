@@ -428,9 +428,20 @@ symbol = "🐋 "
 
 `dotnet` モジュールはカレントディレクトリに関係する.NET Core SDKのバージョンを表示します。 もし SDKは現在のディレクトリに固定されているのであれば、その固定されたバージョンが表示されます。 それ以外の場合、モジュール SDKの最新のインストールバージョンを示します。
 
-このモジュールは、カレントディレクトリに次のファイルのいずれかが存在する場合にのみプロンプトに表示されます。: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj` 正しく使用するには、.NET Coreコマンドラインツールもインストールする必要があります。
+This module will only be shown in your prompt when one or more of the following files are present in the current directory:
+* `global.json`
+* `project.json`
+* `Directory.Build.props`
+* `Directory.Build.targets`
+* `Packages.props`
+* `*.sln`
+* `*.csproj`
+* `*.fsproj`
+* `*.xproj`
 
-内部的に、このモジュールは自身のバージョン検知のメカニズムを利用します。 `dotnet --version` を実行するより2倍速く実行できますが、.NET project一般的でないディレクトリlayoutの場合は間違ったバージョンが示されてしまうことがあります。 速度よりも精度が重要な場合は、次の方法でメカニズムを無効にできます。 モジュールオプションで`heuristic = false `を設定します。
+You'll also need the .NET Core SDK installed in order to use it correctly.
+
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
 ### オプション
 
@@ -456,7 +467,7 @@ heuristic = false
 
 The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`mix.exs`ファイルが含まれている.
+- The current directory contains a `mix.exs` file.
 
 ### オプション
 
@@ -477,13 +488,13 @@ symbol = "🔮 "
 
 ## Elm
 
-`elm`モジュールは、現在インストールされているElmのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `elm` module shows the currently installed version of Elm. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`elm.json`ファイルが含まれている
-- カレントディレクトリに`elm-package.json`ファイルが含まれている
-- カレントディレクトリに`.elm-version`ファイルが含まれている
-- カレントディレクトリに`elm-stuff`フォルダが含まれている
-- カレントディレクトリに`*.elm`ファイルが含まれている
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
+- The current directory contains a `.elm-version` file
+- The current directory contains a `elm-stuff` folder
+- The current directory contains a `*.elm` files
 
 ### オプション
 
@@ -505,10 +516,10 @@ symbol = " "
 
 ## 環境変数
 
-`env_var`モジュールは、選択された環境変数の現在の値を表示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
-- `variable`オプションが、既存の環境変数と一致する
-- `variable`オプションが定義されておらず、`default`オプションが定義されている
+- The `variable` configuration option matches an existing environment variable
+- The `variable` configuration option is not defined, but the `default` configuration option is
 
 ### オプション
 
@@ -536,8 +547,8 @@ default = "unknown shell"
 
 The `erlang` module shows the currently installed version of Erlang/OTP. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`rebar.config`ファイルが含まれている.
-- カレントディレクトリに`erlang.mk`ファイルが含まれている.
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
 
 ### オプション
 
@@ -558,7 +569,7 @@ symbol = "e "
 
 ## Git ブランチ
 
-`git_branch`モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを表示します。
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### オプション
 
@@ -583,7 +594,7 @@ truncation_symbol = ""
 
 ## Git コミット
 
-`git_commit`モジュールは、現在のディレクトリにあるリポジトリの現在のコミットハッシュを表示します。
+The `git_commit` module shows the current commit hash of the repo in your current directory.
 
 ### オプション
 
@@ -607,7 +618,7 @@ truncation_length = 4
 
 ## Git の進行状態
 
-`git_state`モジュールはgitディレクトリの進行状態を表します。 (例: _REBASING_, _BISECTING_, その他) 進捗情報がある場合(例: REBASING 3/10)はその情報も表示されます。
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
 ### オプション
 
@@ -636,7 +647,7 @@ cherry_pick = "🍒 PICKING"
 
 ## Git の状態
 
-`git_status`モジュールは、現在のディレクトリのリポジトリの状態を表すシンボルを表示します。
+The `git_status` module shows symbols representing the state of the repo in your current directory.
 
 ### オプション
 
@@ -695,16 +706,16 @@ deleted = "🗑"
 
 ## Golang
 
-`golang`モジュールは、現在インストールされているGolangのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `golang` module shows the currently installed version of Golang. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`go.mod`ファイルが含まれている
-- カレントディレクトリに`go.sum`ファイルが含まれている
-- カレントディレクトリに`glide.yaml`ファイルが含まれている
-- カレントディレクトリに`Gopkg.yml`ファイルが含まれている
-- カレントディレクトリに`Gopkg.lock`ファイルが含まれている
-- カレントディレクトリに`.go-version`ファイルが含まれている
-- カレントディレクトリに`Godeps`ファイルが含まれている
-- カレントディレクトリに`.go`の拡張子のファイルが含まれている
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
+- The current directory contains a `.go-version` file
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
 ### オプション
 
@@ -726,7 +737,7 @@ symbol = "🏎💨 "
 
 The `haskell` module shows the currently installed version of Haskell Stack version. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`stack.yaml`ファイルが含まれている
+- The current directory contains a `stack.yaml` file
 
 ### オプション
 
@@ -748,7 +759,7 @@ symbol = " "
 
 ## ホスト名
 
-`hostname`モジュールには、システムのホスト名が表示されます。
+The `hostname` module shows the system hostname.
 
 ### オプション
 
@@ -776,10 +787,10 @@ disabled = false
 
 ## Java
 
-`java`モジュールは、現在インストールされているJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `java` module shows the currently installed version of Java. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに `pom.xml`, `build.gradle.kts`, `build.sbt` ,もしくは`.java-version`が含まれている
-- カレントディレクトリに拡張子が`.java`, `.class`, `.gradle`, もしくは`.jar`のファイルが含まれている
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
+- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
 
 ### オプション
 
@@ -800,7 +811,7 @@ symbol = "🌟 "
 
 ## ジョブ
 
-`jobs`モジュールには、実行中のジョブの現在の数が表示されます。 このモジュールは、実行中のバックグラウンドジョブがある場合にのみ表示されます。 1つ以上のジョブがある、または`threshold`に指定した値以上にジョブがある場合は実行中のジョブの数を表示します。
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
 ### オプション
 
@@ -823,11 +834,11 @@ threshold = 4
 
 ## Julia
 
-`julia`モジュールは、現在インストールされているJuliaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `julia` module shows the currently installed version of Julia. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`Project.toml`ファイルが含まれている
-- カレントディレクトリに`Manifest.toml`ファイルが含まれている
-- カレントディレクトリに`.jl`の拡張子のファイルが含まれている
+- The current directory contains a `Project.toml` file
+- The current directory contains a `Manifest.toml` file
+- The current directory contains a file with the `.jl` extension
 
 ### オプション
 
@@ -847,11 +858,11 @@ symbol = "∴ "
 ```
 ## Kubernetes
 
-現在のKubernetesコンテキスト名と、設定されている場合は、kubeconfigファイルに基づいてネームスペースを表示します。 ネームスペースはkubconfigで設定されている必要があります。それは `kubectl config set-context starship-cluster --namespace astronaut` のようなコマンドで設定することができます。 `$KUBECONFIG` 環境変数が設定されている場合、モジュールはそれを使用します `~/.kube/config` は使用しません。
+Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -879,7 +890,7 @@ disabled = false
 
 ## 改行
 
-`line_break`モジュールは、プロンプトを2行に分割します。
+The `line_break` module separates the prompt into two lines.
 
 ### オプション
 
@@ -898,14 +909,13 @@ disabled = true
 
 ## メモリ使用量
 
-`memory_usage</ 0>モジュールは、現在のシステムメモリとスワップ使用量を示します。</p>
+The `memory_usage` module shows current system memory and swap usage.
 
-<p spaces-before="0">デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。</p>
+By default the swap usage is displayed if the total system swap is non-zero.
 
-<p spaces-before="0">::: tip</p>
+::: tip
 
-<p spaces-before="0">このモジュールはデフォルトで無効になっています。
-有効にするには、設定ファイルで<code>disabled`を`false`に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -938,7 +948,7 @@ style = "bold dimmed green"
 
 ## Mercurial ブランチ
 
-` hg_branch `モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを示します。
+The `hg_branch` module shows the active branch of the repo in your current directory.
 
 ### オプション
 
@@ -989,7 +999,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-`nix_shell`モジュールは、nix-shell環境を示しています。 このモジュールは、nixシェル環境内にあるときに表示されます。
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### オプション
 
@@ -1017,12 +1027,12 @@ symbol = "☃️  "
 
 ## NodeJS
 
-`nodejs`モジュールは、現在インストールされているNodeJSのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `nodejs` module shows the currently installed version of NodeJS. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`package.json`ファイルが含まれている
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
-- カレントディレクトリに`node_modules`ディレクトリが含まれている
-- カレントディレクトリに`.js`の拡張子のファイルが含まれている
+- The current directory contains a `node_modules` directory
+- The current directory contains a file with the `.js` extension
 
 ### オプション
 
@@ -1043,12 +1053,12 @@ symbol = "🤖 "
 
 ## パッケージのバージョン
 
-`package`モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。 The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
-- **npm** – `npm`パッケージバージョンは、現在のディレクトリにある`package.json`から抽出されます
-- **cargo** – `cargo`パッケージバージョンは、現在のディレクトリにある`Cargo.toml`から抽出されます。
-- **poetry** – `poetry`パッケージバージョンは、現在のディレクトリにある`pyproject.toml`から抽出されます
-- **composer** – `composer`パッケージバージョンは、現在のディレクトリにある`composer.json`から抽出されます
+- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
+- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 - **julia** - The package version is extracted from the `Project.toml` present
 - **mix** - The `mix` package version is extracted from the `mix.exs` present
@@ -1103,11 +1113,11 @@ symbol = "🐪 "
 
 ## PHP
 
-`php`モジュールは、現在インストールされているPHPのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `php` module shows the currently installed version of PHP. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
-- カレントディレクトリに`.php`の拡張子のファイルが含まれている
+- The current directory contains a `.php` file
 
 ### オプション
 
@@ -1134,15 +1144,15 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`.python-version`ファイルが含まれている
-- カレントディレクトリに`requirements.txt`ファイルが含まれている
-- カレントディレクトリに`pyproject.toml`ファイルが含まれている
+- The current directory contains a `.python-version` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `pyproject.toml` file
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
-- カレントディレクトリに`Pipfile`ファイルが含まれている
-- カレントディレクトリに`tox.ini`ファイルが含まれている
-- カレントディレクトリに`setup.py`ファイルが含まれている
+- The current directory contains a `Pipfile` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
 - The current directory contains a `__init__.py` file
-- 仮想環境がアクティブである
+- A virtual environment is currently activated
 
 ### オプション
 
@@ -1186,11 +1196,11 @@ pyenv_prefix = "foo "
 
 ## Ruby
 
-`ruby`モジュールは、現在インストールされているRubyのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `ruby` module shows the currently installed version of Ruby. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`Gemfile`ファイルが含まれている
+- The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
-- カレントディレクトリに`.rb`の拡張子のファイルが含まれている
+- The current directory contains a `.rb` file
 
 ### オプション
 
@@ -1211,10 +1221,10 @@ symbol = "🔺 "
 
 ## Rust
 
-`rust`モジュールには、現在インストールされているRustのバージョンが表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `rust` module shows the currently installed version of Rust. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`Cargo.toml`ファイルが含まれている
-- カレントディレクトリに`.rs`の拡張子のファイルが含まれている
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### オプション
 
@@ -1259,10 +1269,10 @@ symbol = "📦 "
 
 ## Terraform
 
-`terraform`モジュールには、現在選択されているterraformワークスペースとバージョンが表示されます。 デフォルトでは、Terraformのバージョンは表示されません。これは、多くのプラグインが使用されている場合、Terraformの現在のバージョンでは遅いためです。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`.terraform`フォルダが含まれている
-- カレントディレクトリに`.tf`の拡張子のファイルが含まれている
+- The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf` extension
 
 ### オプション
 
@@ -1284,11 +1294,11 @@ symbol = "🏎💨 "
 
 ## 時刻
 
-`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1303,7 +1313,7 @@ symbol = "🏎💨 "
 | `disabled`        | `true`          | `time`モジュールを無効にします。                                                                                   |
 | `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-`use_12hr` が `true` の場合、`format` のデフォルトは `"%r"` です。 それ以外の場合、デフォルトは`"%T"`です。 `format`を手動で設定すると、`use_12hr`の設定が上書きされます。
+If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
 ### 設定例
 
@@ -1319,12 +1329,12 @@ time_range = "10:00:00-14:00:00"
 
 ## ユーザー名
 
-`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `username` module shows active user's username. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントユーザーがroot
-- カレントユーザーが、ログインしているユーザーとは異なる
-- ユーザーがSSHセッションとして接続されている
-- `show_always`変数がtrueに設定されている
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ### オプション
 
@@ -1455,7 +1465,7 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 The `purescript` module shows the currently installed version of PureScript version. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`spago.dhall`ファイルが含まれている
+- The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
 
 ### オプション
