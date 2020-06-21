@@ -20,8 +20,8 @@ All configuration for starship is done in this [TOML](https://github.com/toml-la
 add_newline = false
 
 # Replace the "❯" symbol in the prompt with "➜"
-[character]      # The name of the module we are configuring is "character"
-symbol = "➜"     # The "symbol" segment is being set to "➜"
+[character]                            # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
 
 # Disable the package module, hiding it from the prompt completely
 [package]
@@ -29,11 +29,13 @@ disabled = true
 ```
 
 You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+
 ```sh
 export STARSHIP_CONFIG=~/.starship
 ```
 
 Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+
 ```ps1
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
@@ -360,30 +362,59 @@ The `character` module shows a character (usually an arrow) beside where the tex
 is entered in your terminal.
 
 The character will tell you whether the last command was successful or not. It
-can do this in two ways: by changing color (red/green) or by changing its shape
-(❯/✖). The latter will only be done if `use_symbol_for_status` is set to `true`.
+can do this in two ways:
+
+- changing color (`red`/`green`)
+- changing shape (`❯`/`✖`)
+
+By default it only changes color. If you also want to change it's shape take a
+look at [this example](#with-custom-error-shape).
 
 ### Options
 
-| Variable                | Default        | Description                                                                         |
-| ----------------------- | -------------- | ----------------------------------------------------------------------------------- |
-| `symbol`                | `"❯"`          | The symbol used before the text input in the prompt.                                |
-| `error_symbol`          | `"✖"`          | The symbol used before text input if the previous command failed.                   |
-| `use_symbol_for_status` | `false`        | Indicate error status by changing the symbol.                                       |
-| `vicmd_symbol`          | `"❮"`          | The symbol used before the text input in the prompt if shell is in vim normal mode. |
-| `style_success`         | `"bold green"` | The style used if the last command was successful.                                  |
-| `style_failure`         | `"bold red"`   | The style used if the last command failed.                                          |
-| `disabled`              | `false`        | Disables the `character` module.                                                    |
+| Variable         | Default              | Description                                                                      |
+| ---------------- | -------------------- | -------------------------------------------------------------------------------- |
+| `format`         | `"$symbol "`         | The format string used before the text input.                                    |
+| `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
+| `error_symbol`   | `"[❯](bold red)"`   | The format string used before the text input if the previous command failed.     |
+| `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
+| `disabled`       | `false`              | Disables the `character` module.                                                 |
 
-### Example
+### Variables
+
+| Variable | Example | Description                                                           |
+| -------- | ------- | --------------------------------------------------------------------- |
+| symbol   |         | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
+
+### Examples
+
+#### With custom error shape
 
 ```toml
 # ~/.config/starship.toml
 
 [character]
-symbol = "➜"
-error_symbol = "✗"
-use_symbol_for_status = true
+success_symbol = "[➜](bold green) "
+error_symbol = "[✗](bold red) "
+```
+
+#### Without custom error shape
+
+```toml
+# ~/.config/starship.toml
+
+[character]
+success_symbol = "[➜](bold green) "
+error_symbol = "[➜](bold red) "
+```
+
+#### With custom vim shape
+
+```toml
+# ~/.config/starship.toml
+
+[character]
+vicmd_symbol = "[V](bold green) "
 ```
 
 ## Command Duration
