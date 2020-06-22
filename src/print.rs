@@ -72,7 +72,7 @@ pub fn get_prompt(context: Context) -> String {
             .expect("Unexpected error returned in root format variables"),
     );
 
-    let module_strings = root_module.ansi_strings_for_shell(context.shell.clone());
+    let module_strings = root_module.ansi_strings_for_shell(context.shell);
     write!(buf, "{}", ANSIStrings(&module_strings)).unwrap();
 
     buf
