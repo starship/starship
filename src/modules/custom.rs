@@ -1,10 +1,9 @@
-use ansi_term::Color;
 use std::io::Write;
 use std::process::{Command, Output, Stdio};
 
 use super::{Context, Module, RootModuleConfig};
 
-use crate::{config::SegmentConfig, configs::custom::CustomConfig};
+use crate::{configs::custom::CustomConfig, formatter::StringFormatter};
 
 /// Creates a custom module with some configuration
 ///
@@ -44,35 +43,45 @@ pub fn module<'a>(name: &'a str, context: &'a Context) -> Option<Module<'a>> {
     }
 
     let mut module = Module::new(name, config.description, Some(toml_config));
-    let style = config.style.unwrap_or_else(|| Color::Green.bold());
 
-    if let Some(prefix) = config.prefix {
-        module.get_prefix().set_value(prefix);
-    }
-    if let Some(suffix) = config.suffix {
-        module.get_suffix().set_value(suffix);
-    }
+    let output = exec_command(config.command, &config.shell.0)?;
 
-    if let Some(symbol) = config.symbol {
-        module.create_segment("symbol", &symbol);
+    let trimmed = output.trim();
+    if trimmed.is_empty() {
+        return None;
     }
 
-    if let Some(output) = exec_command(config.command, &config.shell.0) {
-        let trimmed = output.trim();
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                // This may result in multiple calls to `get_module_version` when a user have
+                // multiple `$version` variables defined in `format`.
+                "output" => Some(Ok(trimmed)),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-        if trimmed.is_empty() {
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `custom.{}`:\n{}", name, error);
             return None;
         }
+    });
 
-        module.create_segment(
-            "output",
-            &SegmentConfig::new(&trimmed).with_style(Some(style)),
-        );
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
-        Some(module)
-    } else {
-        None
-    }
+    Some(module)
 }
 
 /// Return the invoking shell, using `shell` and fallbacking in order to STARSHIP_SHELL and "sh"
