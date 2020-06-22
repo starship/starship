@@ -46,7 +46,7 @@ mod zig;
 #[cfg(feature = "battery")]
 mod battery;
 
-use crate::config::{RootModuleConfig, SegmentConfig};
+use crate::config::RootModuleConfig;
 use crate::context::{Context, Shell};
 use crate::module::Module;
 

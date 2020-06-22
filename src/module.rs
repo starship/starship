@@ -1,4 +1,3 @@
-use crate::config::SegmentConfig;
 use crate::context::Shell;
 use crate::segment::Segment;
 use crate::utils::wrap_colorseq_for_shell;
@@ -92,16 +91,6 @@ impl<'a> Module<'a> {
             segments: Vec::new(),
             suffix: Affix::default_suffix(name),
         }
-    }
-
-    /// Get a reference to a newly created segment in the module
-    pub fn create_segment(&mut self, name: &str, segment_config: &SegmentConfig) -> &mut Segment {
-        let mut segment = Segment::new(name);
-        segment.set_style(segment_config.style.unwrap_or(self.style));
-        segment.set_value(segment_config.value);
-        self.segments.push(segment);
-
-        self.segments.last_mut().unwrap()
     }
 
     /// Set segments in module
