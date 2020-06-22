@@ -8,7 +8,7 @@ pub struct StarshipRootConfig<'a> {
     pub scan_timeout: u64,
 }
 
-pub const PROMPT_ORDER: [&str; 37] = [
+pub const PROMPT_ORDER: [&str; 43] = [
     "username",
     "hostname",
     "singularity",
@@ -26,22 +26,28 @@ pub const PROMPT_ORDER: [&str; 37] = [
     "dotnet",
     "elixir",
     "elm",
+    "erlang",
     "golang",
     "haskell",
     "java",
     "julia",
+    "nim",
     "nodejs",
+    "ocaml",
     "php",
+    "purescript",
     "python",
     "ruby",
     "rust",
     "terraform",
+    "zig",
     // ↑ Toolchain version modules ↑
     "nix_shell",
     "conda",
     "memory_usage",
     "aws",
     "env_var",
+    "crystal",
     "cmd_duration",
     "custom",
     "line_break",

@@ -11,8 +11,8 @@ fn _parse_value(value: Pair<Rule>) -> FormatElement {
         Rule::text => FormatElement::Text(_parse_text(value).into()),
         Rule::variable => FormatElement::Variable(_parse_variable(value).into()),
         Rule::textgroup => FormatElement::TextGroup(_parse_textgroup(value)),
-        Rule::positional => {
-            FormatElement::Positional(_parse_format(value.into_inner().next().unwrap()))
+        Rule::conditional => {
+            FormatElement::Conditional(_parse_format(value.into_inner().next().unwrap()))
         }
         _ => unreachable!(),
     }

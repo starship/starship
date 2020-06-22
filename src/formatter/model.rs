@@ -22,7 +22,7 @@ pub enum FormatElement<'a> {
     Text(Cow<'a, str>),
     Variable(Cow<'a, str>),
     TextGroup(TextGroup<'a>),
-    Positional(Vec<FormatElement<'a>>),
+    Conditional(Vec<FormatElement<'a>>),
 }
 
 #[derive(Clone)]
@@ -40,13 +40,22 @@ impl<'a> VariableHolder<Cow<'a, str>> for FormatElement<'a> {
                 variables
             }
             FormatElement::TextGroup(textgroup) => textgroup.format.get_variables(),
-            FormatElement::Positional(format) => format.get_variables(),
+            FormatElement::Conditional(format) => format.get_variables(),
             _ => Default::default(),
         }
     }
 }
 
 impl<'a> VariableHolder<Cow<'a, str>> for Vec<FormatElement<'a>> {
+    fn get_variables(&self) -> BTreeSet<Cow<'a, str>> {
+        self.iter().fold(BTreeSet::new(), |mut acc, el| {
+            acc.extend(el.get_variables());
+            acc
+        })
+    }
+}
+
+impl<'a> VariableHolder<Cow<'a, str>> for &[FormatElement<'a>] {
     fn get_variables(&self) -> BTreeSet<Cow<'a, str>> {
         self.iter().fold(BTreeSet::new(), |mut acc, el| {
             acc.extend(el.get_variables());
@@ -84,7 +93,7 @@ impl<'a> StyleVariableHolder<Cow<'a, str>> for Vec<FormatElement<'a>> {
                 acc.extend(textgroup.style.get_style_variables());
                 acc
             }
-            FormatElement::Positional(format) => {
+            FormatElement::Conditional(format) => {
                 acc.extend(format.get_style_variables());
                 acc
             }

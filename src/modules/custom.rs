@@ -1,10 +1,9 @@
-use ansi_term::Color;
 use std::io::Write;
 use std::process::{Command, Output, Stdio};
 
 use super::{Context, Module, RootModuleConfig};
 
-use crate::{config::SegmentConfig, configs::custom::CustomConfig};
+use crate::{configs::custom::CustomConfig, formatter::StringFormatter};
 
 /// Creates a custom module with some configuration
 ///
@@ -35,7 +34,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
 
     if !is_match {
         if let Some(when) = config.when {
-            is_match = exec_when(when, config.shell);
+            is_match = exec_when(when, &config.shell.0);
         }
 
         if !is_match {
@@ -44,59 +43,74 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     }
 
     let mut module = Module::new(name, config.description, Some(toml_config));
-    let style = config.style.unwrap_or_else(|| Color::Green.bold());
 
-    if let Some(prefix) = config.prefix {
-        module.get_prefix().set_value(prefix);
-    }
-    if let Some(suffix) = config.suffix {
-        module.get_suffix().set_value(suffix);
-    }
+    let output = exec_command(config.command, &config.shell.0)?;
 
-    if let Some(symbol) = config.symbol {
-        module.create_segment("symbol", &symbol);
+    let trimmed = output.trim();
+    if trimmed.is_empty() {
+        return None;
     }
 
-    if let Some(output) = exec_command(config.command, config.shell) {
-        let trimmed = output.trim();
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                // This may result in multiple calls to `get_module_version` when a user have
+                // multiple `$version` variables defined in `format`.
+                "output" => Some(Ok(trimmed)),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-        if trimmed.is_empty() {
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `custom.{}`:\n{}", name, error);
             return None;
         }
+    });
 
-        module.create_segment(
-            "output",
-            &SegmentConfig::new(&trimmed).with_style(Some(style)),
-        );
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
-        Some(module)
-    } else {
-        None
-    }
+    Some(module)
 }
 
 /// Return the invoking shell, using `shell` and fallbacking in order to STARSHIP_SHELL and "sh"
 #[cfg(not(windows))]
-fn get_shell(shell: Option<&str>) -> std::borrow::Cow<str> {
-    if let Some(forced_shell) = shell {
-        forced_shell.into()
+fn get_shell<'a, 'b>(shell_args: &'b [&'a str]) -> (std::borrow::Cow<'a, str>, &'b [&'a str]) {
+    if !shell_args.is_empty() {
+        (shell_args[0].into(), &shell_args[1..])
     } else if let Ok(env_shell) = std::env::var("STARSHIP_SHELL") {
-        env_shell.into()
+        (env_shell.into(), &[] as &[&str])
     } else {
-        "sh".into()
+        ("sh".into(), &[] as &[&str])
     }
 }
 
 /// Attempt to run the given command in a shell by passing it as `stdin` to `get_shell()`
 #[cfg(not(windows))]
-fn shell_command(cmd: &str, shell: Option<&str>) -> Option<Output> {
-    let command = Command::new(get_shell(shell).as_ref())
+fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
+    let (shell, shell_args) = get_shell(shell_args);
+    let mut command = Command::new(shell.as_ref());
+
+    command
+        .args(shell_args)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
-        .spawn();
+        .stderr(Stdio::piped());
 
-    let mut child = match command {
+    handle_powershell(&mut command, &shell, shell_args);
+
+    let mut child = match command.spawn() {
         Ok(command) => command,
         Err(_) => {
             log::debug!(
@@ -120,23 +134,30 @@ fn shell_command(cmd: &str, shell: Option<&str>) -> Option<Output> {
 /// Attempt to run the given command in a shell by passing it as `stdin` to `get_shell()`,
 /// or by invoking cmd.exe /C.
 #[cfg(windows)]
-fn shell_command(cmd: &str, shell: Option<&str>) -> Option<Output> {
-    let shell = if let Some(shell) = shell {
-        Some(std::borrow::Cow::Borrowed(shell))
+fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
+    let (shell, shell_args) = if !shell_args.is_empty() {
+        (
+            Some(std::borrow::Cow::Borrowed(shell_args[0])),
+            &shell_args[1..],
+        )
     } else if let Ok(env_shell) = std::env::var("STARSHIP_SHELL") {
-        Some(std::borrow::Cow::Owned(env_shell))
+        (Some(std::borrow::Cow::Owned(env_shell)), &[] as &[&str])
     } else {
-        None
+        (None, &[] as &[&str])
     };
 
     if let Some(forced_shell) = shell {
-        let command = Command::new(forced_shell.as_ref())
+        let mut command = Command::new(forced_shell.as_ref());
+
+        command
+            .args(shell_args)
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .spawn();
+            .stderr(Stdio::piped());
 
-        if let Ok(mut child) = command {
+        handle_powershell(&mut command, &forced_shell, shell_args);
+
+        if let Ok(mut child) = command.spawn() {
             child.stdin.as_mut()?.write_all(cmd.as_bytes()).ok()?;
 
             return child.wait_with_output().ok();
@@ -159,10 +180,10 @@ fn shell_command(cmd: &str, shell: Option<&str>) -> Option<Output> {
 }
 
 /// Execute the given command capturing all output, and return whether it return 0
-fn exec_when(cmd: &str, shell: Option<&str>) -> bool {
+fn exec_when(cmd: &str, shell_args: &[&str]) -> bool {
     log::trace!("Running '{}'", cmd);
 
-    if let Some(output) = shell_command(cmd, shell) {
+    if let Some(output) = shell_command(cmd, shell_args) {
         if !output.status.success() {
             log::trace!("non-zero exit code '{:?}'", output.status.code());
             log::trace!(
@@ -184,10 +205,10 @@ fn exec_when(cmd: &str, shell: Option<&str>) -> bool {
 }
 
 /// Execute the given command, returning its output on success
-fn exec_command(cmd: &str, shell: Option<&str>) -> Option<String> {
+fn exec_command(cmd: &str, shell_args: &[&str]) -> Option<String> {
     log::trace!("Running '{}'", cmd);
 
-    if let Some(output) = shell_command(cmd, shell) {
+    if let Some(output) = shell_command(cmd, shell_args) {
         if !output.status.success() {
             log::trace!("Non-zero exit code '{:?}'", output.status.code());
             log::trace!(
@@ -207,14 +228,27 @@ fn exec_command(cmd: &str, shell: Option<&str>) -> Option<String> {
     }
 }
 
+/// If the specified shell refers to PowerShell, adds the arguments "-Command -" to the
+/// given command.
+fn handle_powershell(command: &mut Command, shell: &str, shell_args: &[&str]) {
+    let is_powershell = shell.ends_with("pwsh.exe")
+        || shell.ends_with("powershell.exe")
+        || shell.ends_with("pwsh")
+        || shell.ends_with("powershell");
+
+    if is_powershell && shell_args.is_empty() {
+        command.arg("-NoProfile").arg("-Command").arg("-");
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[cfg(not(windows))]
-    const SHELL: Option<&'static str> = Some("/bin/sh");
+    const SHELL: &[&str] = &["/bin/sh"];
     #[cfg(windows)]
-    const SHELL: Option<&'static str> = None;
+    const SHELL: &[&str] = &[];
 
     #[cfg(not(windows))]
     const FAILING_COMMAND: &str = "false";

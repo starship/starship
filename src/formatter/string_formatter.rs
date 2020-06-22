@@ -292,15 +292,43 @@ impl<'a> StringFormatter<'a> {
                                 }
                             })
                             .unwrap_or_else(|| Ok(Vec::new())),
-                        FormatElement::Positional(format) => {
-                            // Show the positional format string if all the variables inside are not
+                        FormatElement::Conditional(format) => {
+                            // Show the conditional format string if all the variables inside are not
                             // none.
-                            let should_show: bool = format.get_variables().iter().any(|var| {
-                                variables
-                                    .get(var.as_ref())
-                                    .map(|segments| segments.is_some())
-                                    .unwrap_or(false)
-                            });
+                            fn _should_show_elements<'a>(
+                                format_elements: &[FormatElement],
+                                variables: &'a VariableMapType<'a>,
+                            ) -> bool {
+                                format_elements.get_variables().iter().any(|var| {
+                                    variables
+                                        .get(var.as_ref())
+                                        .map(|map_result| {
+                                            let map_result = map_result.as_ref();
+                                            map_result
+                                                .and_then(|result| result.as_ref().ok())
+                                                .map(|result| match result {
+                                                    // If the variable is a meta variable, also
+                                                    // check the format string inside it.
+                                                    VariableValue::Meta(meta_elements) => {
+                                                        let meta_variables =
+                                                            _clone_without_meta(variables);
+                                                        _should_show_elements(
+                                                            &meta_elements,
+                                                            &meta_variables,
+                                                        )
+                                                    }
+                                                    _ => true,
+                                                })
+                                                // The variable is None or Err, or a meta variable
+                                                // that shouldn't show
+                                                .unwrap_or(false)
+                                        })
+                                        // Can't find the variable in format string
+                                        .unwrap_or(false)
+                                })
+                            }
+
+                            let should_show: bool = _should_show_elements(&format, variables);
 
                             if should_show {
                                 _parse_format(format, style, variables, style_variables)
@@ -558,7 +586,7 @@ mod tests {
     }
 
     #[test]
-    fn test_positional() {
+    fn test_conditional() {
         const FORMAT_STR: &str = "($some) should render but ($none) shouldn't";
 
         let formatter = StringFormatter::new(FORMAT_STR)
@@ -575,7 +603,7 @@ mod tests {
     }
 
     #[test]
-    fn test_nested_positional() {
+    fn test_nested_conditional() {
         const FORMAT_STR: &str = "($some ($none)) and ($none ($some))";
 
         let formatter = StringFormatter::new(FORMAT_STR)
@@ -591,6 +619,21 @@ mod tests {
         match_next!(result_iter, " and ", None);
         match_next!(result_iter, " ", None);
         match_next!(result_iter, "$some", None);
+    }
+
+    #[test]
+    fn test_conditional_meta_variable() {
+        const FORMAT_STR: &str = r"(\[$all\]) ";
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map_meta(|var, _| match var {
+                "all" => Some("$some"),
+                _ => None,
+            });
+        let result = formatter.parse(None).unwrap();
+        let mut result_iter = result.iter();
+        match_next!(result_iter, " ", None);
     }
 
     #[test]

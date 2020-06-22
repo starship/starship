@@ -1,9 +1,10 @@
 use std::env;
 
-use super::{Context, Module, SegmentConfig};
+use super::{Context, Module};
 
 use crate::config::RootModuleConfig;
 use crate::configs::env_var::EnvVarConfig;
+use crate::formatter::StringFormatter;
 
 /// Creates a module with the value of the chosen environment variable
 ///
@@ -16,17 +17,32 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: EnvVarConfig = EnvVarConfig::try_load(module.config);
 
     let env_value = get_env_value(config.variable?, config.default)?;
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "env_value" => Some(Ok(&env_value)),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.set_style(config.style);
-    module.get_prefix().set_value("with ");
-
-    if let Some(symbol) = config.symbol {
-        module.create_segment("symbol", &symbol);
-    }
-
-    // TODO: Use native prefix and suffix instead of stacking custom ones together with env_value.
-    let env_var_stacked = format!("{}{}{}", config.prefix, env_value, config.suffix);
-    module.create_segment("env_var", &SegmentConfig::new(&env_var_stacked));
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `env_var`:\n{}", error);
+            return None;
+        }
+    });
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
 }

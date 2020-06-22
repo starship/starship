@@ -6,7 +6,6 @@ use std::clone::Clone;
 use std::collections::HashMap;
 use std::marker::Sized;
 
-use dirs::home_dir;
 use std::env;
 use toml::Value;
 
@@ -153,6 +152,30 @@ where
     }
 }
 
+/// A wrapper around `Vec<T>` that implements `ModuleConfig`, and either
+/// accepts a value of type `T` or a list of values of type `T`.
+#[derive(Clone, Default)]
+pub struct VecOr<T>(pub Vec<T>);
+
+impl<'a, T> ModuleConfig<'a> for VecOr<T>
+where
+    T: ModuleConfig<'a> + Sized,
+{
+    fn from_config(config: &'a Value) -> Option<Self> {
+        if let Some(item) = T::from_config(config) {
+            return Some(VecOr(vec![item]));
+        }
+
+        let vec = config
+            .as_array()?
+            .iter()
+            .map(|value| T::from_config(value))
+            .collect::<Option<Vec<T>>>()?;
+
+        Some(VecOr(vec))
+    }
+}
+
 /// Root config of starship.
 pub struct StarshipConfig {
     pub config: Option<Value>,
@@ -181,7 +204,7 @@ impl StarshipConfig {
         } else {
             // Default to using ~/.config/starship.toml
             log::debug!("STARSHIP_CONFIG is not set");
-            let config_path = home_dir()?.join(".config/starship.toml");
+            let config_path = dirs_next::home_dir()?.join(".config/starship.toml");
             let config_path_str = config_path.to_str()?.to_owned();
             log::debug!("Using default config path: {}", config_path_str);
             config_path_str

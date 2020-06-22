@@ -64,7 +64,7 @@ fn config_1s_duration_prefix_underwent() -> io::Result<()> {
     let output = common::render_module("cmd_duration")
         .use_config(toml::toml! {
             [cmd_duration]
-            prefix = "underwent "
+            format = "underwent [$duration]($style) "
         })
         .arg("--cmd-duration=1000")
         .output()?;
@@ -80,7 +80,7 @@ fn config_5s_duration_prefix_underwent() -> io::Result<()> {
     let output = common::render_module("cmd_duration")
         .use_config(toml::toml! {
             [cmd_duration]
-            prefix = "underwent "
+            format = "underwent [$duration]($style) "
         })
         .arg("--cmd-duration=5000")
         .output()?;
