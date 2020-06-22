@@ -55,6 +55,15 @@ impl<'a> VariableHolder<Cow<'a, str>> for Vec<FormatElement<'a>> {
     }
 }
 
+impl<'a> VariableHolder<Cow<'a, str>> for &[FormatElement<'a>] {
+    fn get_variables(&self) -> BTreeSet<Cow<'a, str>> {
+        self.iter().fold(BTreeSet::new(), |mut acc, el| {
+            acc.extend(el.get_variables());
+            acc
+        })
+    }
+}
+
 impl<'a> StyleVariableHolder<Cow<'a, str>> for StyleElement<'a> {
     fn get_style_variables(&self) -> BTreeSet<Cow<'a, str>> {
         match self {
