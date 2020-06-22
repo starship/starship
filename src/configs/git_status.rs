@@ -21,7 +21,7 @@ pub struct GitStatusConfig<'a> {
 impl<'a> RootModuleConfig<'a> for GitStatusConfig<'a> {
     fn new() -> Self {
         GitStatusConfig {
-            format: r"[\[$all_status$ahead_behind\]](red bold) ",
+            format: r"([\[$all_status$ahead_behind\]](red bold) )",
             stashed_format: r"\$",
             ahead_format: "⇡",
             behind_format: "⇣",

@@ -8,15 +8,7 @@ use crate::formatter::StringFormatter;
 use crate::segment::Segment;
 use std::sync::{Arc, RwLock};
 
-const ALL_STATUS_VARIABLES: [&str; 7] = [
-    "conflicted",
-    "stashed",
-    "deleted",
-    "renamed",
-    "modified",
-    "staged",
-    "untracked",
-];
+const ALL_STATUS_FORMAT: &str = r"($conflicted$stashed$deleted$renamed$modified$staged$untracked)";
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -42,90 +34,82 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.get_prefix().set_value("");
     module.get_suffix().set_value("");
 
-    let variable_mapper = |variable: &str| -> Option<Vec<Segment>> {
-        let info = Arc::clone(&info);
-        match variable {
-            "stashed" => info.get_stashed().and_then(|count| {
-                format_count(config.stashed_format, "git_status.stashed_format", count)
-            }),
-            "ahead_behind" => info.get_ahead_behind().and_then(|(ahead, behind)| {
-                if ahead > 0 && behind > 0 {
-                    format_text(
-                        config.diverged_format,
-                        "git_status.diverged_format",
-                        |variable| match variable {
-                            "ahead_count" => Some(ahead.to_string()),
-                            "behind_count" => Some(behind.to_string()),
-                            _ => None,
-                        },
-                    )
-                } else if ahead > 0 && behind == 0 {
-                    format_count(config.ahead_format, "git_status.ahead_format", ahead)
-                } else if behind > 0 && ahead == 0 {
-                    format_count(config.behind_format, "git_status.behind_format", behind)
-                } else {
-                    None
-                }
-            }),
-            "conflicted" => info.get_conflicted().and_then(|count| {
-                format_count(
-                    config.conflicted_format,
-                    "git_status.conflicted_format",
-                    count,
-                )
-            }),
-            "deleted" => info.get_deleted().and_then(|count| {
-                format_count(config.deleted_format, "git_status.deleted_format", count)
-            }),
-            "renamed" => info.get_renamed().and_then(|count| {
-                format_count(config.renamed_format, "git_status.renamed_format", count)
-            }),
-            "modified" => info.get_modified().and_then(|count| {
-                format_count(config.modified_format, "git_status.modified_format", count)
-            }),
-            "staged" => info.get_staged().and_then(|count| {
-                format_count(config.staged_format, "git_status.staged_format", count)
-            }),
-            "untracked" => info.get_untracked().and_then(|count| {
-                format_count(
-                    config.untracked_format,
-                    "git_status.untracked_format",
-                    count,
-                )
-            }),
-            _ => None,
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "all_status" => Some(ALL_STATUS_FORMAT),
+                _ => None,
+            })
+            .map_variables_to_segments(|variable: &str| {
+                let info = Arc::clone(&info);
+                let segments = match variable {
+                    "stashed" => info.get_stashed().and_then(|count| {
+                        format_count(config.stashed_format, "git_status.stashed_format", count)
+                    }),
+                    "ahead_behind" => info.get_ahead_behind().and_then(|(ahead, behind)| {
+                        if ahead > 0 && behind > 0 {
+                            format_text(
+                                config.diverged_format,
+                                "git_status.diverged_format",
+                                |variable| match variable {
+                                    "ahead_count" => Some(ahead.to_string()),
+                                    "behind_count" => Some(behind.to_string()),
+                                    _ => None,
+                                },
+                            )
+                        } else if ahead > 0 && behind == 0 {
+                            format_count(config.ahead_format, "git_status.ahead_format", ahead)
+                        } else if behind > 0 && ahead == 0 {
+                            format_count(config.behind_format, "git_status.behind_format", behind)
+                        } else {
+                            None
+                        }
+                    }),
+                    "conflicted" => info.get_conflicted().and_then(|count| {
+                        format_count(
+                            config.conflicted_format,
+                            "git_status.conflicted_format",
+                            count,
+                        )
+                    }),
+                    "deleted" => info.get_deleted().and_then(|count| {
+                        format_count(config.deleted_format, "git_status.deleted_format", count)
+                    }),
+                    "renamed" => info.get_renamed().and_then(|count| {
+                        format_count(config.renamed_format, "git_status.renamed_format", count)
+                    }),
+                    "modified" => info.get_modified().and_then(|count| {
+                        format_count(config.modified_format, "git_status.modified_format", count)
+                    }),
+                    "staged" => info.get_staged().and_then(|count| {
+                        format_count(config.staged_format, "git_status.staged_format", count)
+                    }),
+                    "untracked" => info.get_untracked().and_then(|count| {
+                        format_count(
+                            config.untracked_format,
+                            "git_status.untracked_format",
+                            count,
+                        )
+                    }),
+                    _ => None,
+                };
+                segments.map(Ok)
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `git_status`:\n{}", error);
+            return None;
         }
-    };
+    });
 
-    if let Ok(formatter) = StringFormatter::new(config.format) {
-        let formatter = formatter.map_variables_to_segments(|variable| match variable {
-            "all_status" => {
-                let segments = ALL_STATUS_VARIABLES
-                    .iter()
-                    .flat_map(|variable| variable_mapper(variable))
-                    .flatten()
-                    .collect::<Vec<Segment>>();
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
-                if segments.is_empty() {
-                    None
-                } else {
-                    Some(segments)
-                }
-            }
-            _ => variable_mapper(variable),
-        });
-
-        if formatter.filled_variables() {
-            let segments = formatter.parse(None);
-            module.set_segments(segments);
-            Some(module)
-        } else {
-            None
-        }
-    } else {
-        log::error!("Error parsing format string `git_status.format`");
-        None
-    }
+    Some(module)
 }
 
 struct GitStatusInfo<'a> {
@@ -374,7 +358,10 @@ where
     F: Fn(&str) -> Option<String> + Send + Sync,
 {
     if let Ok(formatter) = StringFormatter::new(format_str) {
-        Some(formatter.map(mapper).parse(None))
+        formatter
+            .map(|variable| mapper(variable).map(Ok))
+            .parse(None)
+            .ok()
     } else {
         log::error!("Error parsing format string `{}`", &config_path);
         None

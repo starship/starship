@@ -92,11 +92,6 @@ impl<'a> StringFormatter<'a> {
             .map_err(StringFormatterError::Parse)
     }
 
-    /// Check if self has non-empty variables.
-    pub fn filled_variables(&self) -> bool {
-        self.variables.values().any(|v| v.is_some())
-    }
-
     /// Maps variable name to its value
     ///
     /// You should provide a function or closure that accepts the variable name `name: &str` as a
