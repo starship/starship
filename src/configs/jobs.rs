@@ -1,22 +1,23 @@
-use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
+use crate::config::{ModuleConfig, RootModuleConfig};
 
-use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct JobsConfig<'a> {
-    pub symbol: SegmentConfig<'a>,
     pub threshold: i64,
-    pub style: Style,
+    pub format: &'a str,
+    pub symbol: &'a str,
+    pub style: &'a str,
     pub disabled: bool,
 }
 
 impl<'a> RootModuleConfig<'a> for JobsConfig<'a> {
     fn new() -> Self {
         JobsConfig {
-            symbol: SegmentConfig::new("✦"),
             threshold: 1,
-            style: Color::Blue.bold(),
+            format: "[$symbol$number]($style) ",
+            symbol: "✦",
+            style: "bold blue",
             disabled: false,
         }
     }

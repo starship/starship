@@ -47,7 +47,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .filter_map(|filename| parse_kubectl_file(&filename))
             .next(),
         Err(_) => {
-            let filename = dirs::home_dir()?.join(".kube").join("config");
+            let filename = dirs_next::home_dir()?.join(".kube").join("config");
             parse_kubectl_file(&filename)
         }
     };

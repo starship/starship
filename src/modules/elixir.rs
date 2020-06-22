@@ -1,9 +1,10 @@
-use regex::Regex;
-
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::elixir::ElixirConfig;
+use crate::formatter::StringFormatter;
+use crate::utils;
 
+use regex::Regex;
 const ELIXIR_VERSION_PATTERN: &str = "\
 Erlang/OTP (?P<otp>\\d+)[^\\n]+
 
@@ -11,7 +12,7 @@ Elixir (?P<elixir>\\d[.\\d]+).*";
 
 /// Create a module with the current Elixir version
 ///
-/// Will display the Rust version if any of the following criteria are met:
+/// Will display the Elixir version if any of the following criteria are met:
 ///     - Current directory contains a `mix.exs` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_elixir_project = context.try_begin_scan()?.set_files(&["mix.exs"]).is_match();
@@ -24,23 +25,39 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("elixir");
     let config = ElixirConfig::try_load(module.config);
-    module.set_style(config.style);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => Some(Ok(&elixir_version)),
+                "otp_version" => Some(Ok(&otp_version)),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &config.version.with_value(&elixir_version));
-    module.create_segment(
-        "otp_version",
-        &config
-            .otp_version
-            .with_value(&format!(" (OTP {})", otp_version)),
-    );
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `elixir`:\n{}", error);
+            return None;
+        }
+    });
+
+    module.get_prefix().set_value("");
+    module.get_suffix().set_value("");
 
     Some(module)
 }
 
 fn get_elixir_version() -> Option<(String, String)> {
-    use crate::utils;
-
     let output = utils::exec_cmd("elixir", &["--version"])?.stdout;
 
     parse_elixir_version(&output)

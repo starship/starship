@@ -9,7 +9,7 @@
 Чтобы начать конфигурацию Starship, создайте следующий файл: `~/.config/starship.toml`.
 
 ```sh
-$ mkdir -p ~/.config && touch ~/.config/starship.toml
+mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 Вся конфигурация Starship выполняется в этом файле [TOML](https://github.com/toml-lang/toml):
@@ -30,6 +30,11 @@ disabled = true
 Вы можете изменить расположение файла `starship.toml` переменной окружения `STARSHIP_CONFIG`:
 ```sh
 export STARSHIP_CONFIG=~/.starship
+```
+
+Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+```ps1
+$ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
 
 ### Терминология
@@ -108,12 +113,16 @@ prompt_order = [
     "haskell",
     "java",
     "julia",
+    "nim",
     "nodejs",
+    "ocaml",
     "php",
+    "purescript",
     "python",
     "ruby",
     "rust",
     "terraform",
+    "zig",
     "nix_shell",
     "conda",
     "memory_usage",
@@ -296,7 +305,7 @@ prefix = "underwent "
 
 Модуль `conda` показывает текущее окружение conda, если `$CONDA_DEFAULT_ENV` присвоено значение.
 
-::: tip Подсказка
+::: tip
 
 Это не подавляет модификатор командной строки самой conda. Возможно, вы захотите запустить `conda config --set changeps1 False`.
 
@@ -368,8 +377,17 @@ style = "bold blue"
 
 | Переменная                  | По умолчанию | Описание                                                                          |
 | --------------------------- | ------------ | --------------------------------------------------------------------------------- |
+| `substitutions`             |              | A table of substitutions to be made to the path.                                  |
 | `fish_style_pwd_dir_length` | `0`          | Количество символов, используемых при использовании логики создания пути из fish. |
 | `use_logical_path`          | `true`       | Отображает логический путь от оболочки (`PWD`) вместо пути от ОС.                 |
+
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+
+```toml
+[directory.substitutions]
+"/Volumes/network/path" = "/net"
+"src/com/long/java/path" = "mypath"
+```
 
 `fish_style_pwd_dir_length` взаимодействует со стандартными параметрами усечения, которые могут сначала показаться странными: если он не равен нулю, элементы пути, который обычно усекается, вместо этого отображаются с указанным количеством символов. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
@@ -730,7 +748,7 @@ symbol = " "
 
 ## Имя хоста
 
-Модуль `hostname` отображает имя системного хоста.
+Модуль `hostname` отображает имя системы (хоста).
 
 ### Опции
 
@@ -829,7 +847,7 @@ symbol = "∴ "
 ```
 ## Kubernetes
 
-Отображает текущее контекстное имя Kubernetes и, если применено, пространство имён из файла kubeconfig. Пространство имен дожно быть задано в файле kubeconfig, это делается через `kubectl config set-context starship-cluster --namespace astronaut`. Если переменная окружения `$KUBECONFIG` установлена, модуль будет использовать это, в противном случае будет использовать `~/.kube/config`.
+Отображает текущее контекстное имя Kubernetes и, если применено, пространство имён из файла kubeconfig. Пространство имен дожно быть задано в файле kubeconfig, это делается через `kubectl config set-context starship-cluster --namespace astronaut`. Если переменная окружения `$KUBECONFIG` задана, модуль будет использовать его значение, в противном случае будет использовать `~/.kube/config`.
 
 ::: tip
 
@@ -942,6 +960,32 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
+## Nim
+
+The `nim` module shows the currently installed version of Nim. Модуль будет показан, если любое из следующих условий соблюдено:
+- The current directory contains a `nim.cfg` file
+- The current directory contains a file with the `.nim` extension
+- The current directory contains a file with the `.nims` extension
+- The current directory contains a file with the `.nimble` extension
+
+### Опции
+
+| Переменная | По умолчанию    | Описание                                              |
+| ---------- | --------------- | ----------------------------------------------------- |
+| `symbol`   | `"👑 "`          | The symbol used before displaying the version of Nim. |
+| `style`    | `"bold yellow"` | Стиль модуля.                                         |
+| `disabled` | `false`         | Disables the `nim` module.                            |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[nim]
+style = "yellow"
+symbol = "🎣 "
+```
+
 ## Nix-shell
 
 Модуль `nix_shell` показывает окружение nix-shell. Модуль будет показываться внутри среды nix-shell.
@@ -951,7 +995,7 @@ truncation_symbol = ""
 | Переменная   | По умолчанию  | Описание                                          |
 | ------------ | ------------- | ------------------------------------------------- |
 | `use_name`   | `false`       | Отображать имя nix-shell.                         |
-| `impure_msg` | `"impure"`    | Настроить сообщение "impure".                     |
+| `impure_msg` | `"impure"`    | Настройте сообщение "impure".                     |
 | `pure_msg`   | `"pure"`      | Настройте сообщение "pure".                       |
 | `symbol`     | `"❄️  "`      | The symbol used before displaying the shell name. |
 | `style`      | `"bold blue"` | Стиль модуля.                                     |
@@ -1028,6 +1072,34 @@ symbol = "🤖 "
 symbol = "🎁 "
 ```
 
+## OCaml
+
+The `ocaml` module shows the currently installed version of OCaml. Модуль будет показан, если любое из следующих условий соблюдено:
+
+- The current directory contains a file with `.opam` extension or `_opam` directory
+- The current directory contains a `esy.lock` directory
+- The current directory contains a `dune` or `dune-project` file
+- The current directory contains a `jbuild` or `jbuild-ignore` file
+- The current directory contains a `.merlin` file
+- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+
+### Опции
+
+| Переменная | По умолчанию    | Описание                                                |
+| ---------- | --------------- | ------------------------------------------------------- |
+| `symbol`   | `"🐫 "`          | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"` | Стиль модуля.                                           |
+| `disabled` | `false`         | Disables the `ocaml` module.                            |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[ocaml]
+symbol = "🐪 "
+```
+
 ## PHP
 
 Модуль `php` показывает установленную версию PHP. Модуль будет показан, если любое из следующих условий соблюдено:
@@ -1081,6 +1153,24 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 | `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.            |
 | `style`              | `"bold yellow"` | Стиль модуля.                                                                         |
 | `disabled`           | `false`         | Disables the `python` module.                                                         |
+
+<details>
+<summary>This module has some advanced configuration options.</summary>
+
+| Переменная      | По умолчанию | Описание                                                                      |
+| --------------- | ------------ | ----------------------------------------------------------------------------- |
+| `python_binary` | `python`     | Configures the python binary that Starship executes when getting the version. |
+
+The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+python_binary = "python3"
+```
+
+</details>
 
 ### Пример
 
@@ -1205,11 +1295,12 @@ symbol = "🏎💨 "
 
 | Переменная        | По умолчанию    | Описание                                                                                                                                  |
 | ----------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | Включить 12-часовое форматирование                                                                                                        |
+| `use_12hr`        | `false`         | Включить 12-часовое форматирование.                                                                                                       |
 | `format`          | см. ниже        | [Строка формата chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), используемая для форматирования времени.         |
-| `style`           | `"bold yellow"` | Стиль модуля времени                                                                                                                      |
+| `style`           | `"bold yellow"` | Стиль модуля времени.                                                                                                                     |
 | `utc_time_offset` | `"local"`       | Устанавливает смещение UTC. Диапазон -24 < x < 24. Разрешает числам с плавающей точкой встраивать 30/45-минутное смещение временной зоны. |
 | `disabled`        | `true`          | Отключает модуль `time`.                                                                                                                  |
+| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                     |
 
 Если `use_12hr` равно `true`, то `format` по умолчанию равно `"%r"`. Иначе по умолчанию используется `"%T"`. Установка `format` вручную переопределит параметр `use_12hr`.
 
@@ -1222,6 +1313,7 @@ symbol = "🏎💨 "
 disabled = false
 format = "🕙[ %T ]"
 utc_time_offset = "-5"
+time_range = "10:00:00-14:00:00"
 ```
 
 ## Имя пользователя
@@ -1249,6 +1341,30 @@ utc_time_offset = "-5"
 
 [username]
 disabled = true
+```
+
+
+## Zig
+
+The `zig` module shows the currently installed version of Zig. Модуль будет показан, если любое из следующих условий соблюдено:
+
+- The current directory contains a `.zig` file
+
+### Опции
+
+| Переменная | По умолчанию    | Описание                                              |
+| ---------- | --------------- | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`          | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"` | Стиль модуля.                                         |
+| `disabled` | `false`         | Disables the `zig` module.                            |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[zig]
+symbol = "⚡️ "
 ```
 
 ## Custom commands
@@ -1279,7 +1395,7 @@ The order in which custom modules are shown can be individually set by setting `
 | ------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `command`     |                           | The command whose output should be printed.                                                                                |
 | `when`        |                           | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                           | The path to the shell to use to execute the command. If unset, it will fallback to STARSHIP_SHELL and then to "sh".        |
+| `shell`       |                           | [See below](#custom-command-shell)                                                                                         |
 | `описание`    | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                      | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                      | The directories that will be searched in the working directory for a match.                                                |
@@ -1289,6 +1405,32 @@ The order in which custom modules are shown can be individually set by setting `
 | `prefix`      | `""`                      | Prefix to display immediately before the command output.                                                                   |
 | `suffix`      | `""`                      | Suffix to display immediately after the command output.                                                                    |
 | `disabled`    | `false`                   | Disables this `custom` module.                                                                                             |
+
+#### Custom command shell
+
+`shell` accepts a non-empty list of strings, where:
+- The first string is the path to the shell to use to execute the command.
+- Other following arguments are passed to the shell.
+
+If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
+
+If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+
+```toml
+shell = ["pwsh", "-Command", "-"]
+```
+
+::: warning Make sure your custom shell configuration exits gracefully
+
+If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+
+For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+
+Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+
+Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
+
+:::
 
 ### Пример
 
@@ -1300,4 +1442,34 @@ command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 prefix = " transcending "
+
+[custom.time]
+command = "time /T"
+files = ["*.pst"]
+prefix = "transcending "
+shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
+```
+
+## PureScript
+
+The `purescript` module shows the currently installed version of PureScript version. Модуль будет показан, если любое из следующих условий соблюдено:
+
+- Текущий каталог содержит файл `spago.dhall`
+- The current directory contains a \*.purs files
+
+### Опции
+
+| Переменная | По умолчанию   | Описание                                                     |
+| ---------- | -------------- | ------------------------------------------------------------ |
+| `symbol`   | `"<=> "` | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"` | Стиль модуля.                                                |
+| `disabled` | `false`        | Disables the `purescript` module.                            |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[purescript]
+symbol = "<=> "
 ```
