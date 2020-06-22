@@ -44,13 +44,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 let info = Arc::clone(&info);
                 let segments = match variable {
                     "stashed" => info.get_stashed().and_then(|count| {
-                        format_count(config.stashed_format, "git_status.stashed_format", count)
+                        format_count(config.stashed, "git_status.stashed", count)
                     }),
                     "ahead_behind" => info.get_ahead_behind().and_then(|(ahead, behind)| {
                         if ahead > 0 && behind > 0 {
                             format_text(
-                                config.diverged_format,
-                                "git_status.diverged_format",
+                                config.diverged,
+                                "git_status.diverged",
                                 |variable| match variable {
                                     "ahead_count" => Some(ahead.to_string()),
                                     "behind_count" => Some(behind.to_string()),
@@ -58,36 +58,36 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                 },
                             )
                         } else if ahead > 0 && behind == 0 {
-                            format_count(config.ahead_format, "git_status.ahead_format", ahead)
+                            format_count(config.ahead, "git_status.ahead", ahead)
                         } else if behind > 0 && ahead == 0 {
-                            format_count(config.behind_format, "git_status.behind_format", behind)
+                            format_count(config.behind, "git_status.behind", behind)
                         } else {
                             None
                         }
                     }),
                     "conflicted" => info.get_conflicted().and_then(|count| {
                         format_count(
-                            config.conflicted_format,
-                            "git_status.conflicted_format",
+                            config.conflicted,
+                            "git_status.conflicted",
                             count,
                         )
                     }),
                     "deleted" => info.get_deleted().and_then(|count| {
-                        format_count(config.deleted_format, "git_status.deleted_format", count)
+                        format_count(config.deleted, "git_status.deleted", count)
                     }),
                     "renamed" => info.get_renamed().and_then(|count| {
-                        format_count(config.renamed_format, "git_status.renamed_format", count)
+                        format_count(config.renamed, "git_status.renamed", count)
                     }),
                     "modified" => info.get_modified().and_then(|count| {
-                        format_count(config.modified_format, "git_status.modified_format", count)
+                        format_count(config.modified, "git_status.modified", count)
                     }),
                     "staged" => info.get_staged().and_then(|count| {
-                        format_count(config.staged_format, "git_status.staged_format", count)
+                        format_count(config.staged, "git_status.staged", count)
                     }),
                     "untracked" => info.get_untracked().and_then(|count| {
                         format_count(
-                            config.untracked_format,
-                            "git_status.untracked_format",
+                            config.untracked,
+                            "git_status.untracked",
                             count,
                         )
                     }),
