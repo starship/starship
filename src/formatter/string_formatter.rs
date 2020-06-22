@@ -296,7 +296,7 @@ impl<'a> StringFormatter<'a> {
                             // Show the conditional format string if all the variables inside are not
                             // none.
                             fn _should_show_elements<'a>(
-                                format_elements: &Vec<FormatElement>,
+                                format_elements: &[FormatElement],
                                 variables: &'a VariableMapType<'a>,
                             ) -> bool {
                                 format_elements.get_variables().iter().any(|var| {
