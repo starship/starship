@@ -11,7 +11,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.get_suffix().set_value("");
 
     module.set_segments(vec![Segment {
-        _name: "line_break",
+        _name: "line_break".to_string(),
         style: None,
         value: LINE_ENDING.to_string(),
     }]);
