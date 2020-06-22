@@ -8,7 +8,7 @@ use crate::formatter::StringFormatter;
 use crate::segment::Segment;
 use std::sync::{Arc, RwLock};
 
-const ALL_STATUS_FORMAT: &str = r"($conflicted$stashed$deleted$renamed$modified$staged$untracked)";
+const ALL_STATUS_FORMAT: &str = r"$conflicted$stashed$deleted$renamed$modified$staged$untracked";
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -40,6 +40,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "all_status" => Some(ALL_STATUS_FORMAT),
                 _ => None,
             })
+            .map_style(|variable: &str| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
             .map_variables_to_segments(|variable: &str| {
                 let info = Arc::clone(&info);
                 let segments = match variable {
@@ -48,15 +52,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     }),
                     "ahead_behind" => info.get_ahead_behind().and_then(|(ahead, behind)| {
                         if ahead > 0 && behind > 0 {
-                            format_text(
-                                config.diverged,
-                                "git_status.diverged",
-                                |variable| match variable {
+                            format_text(config.diverged, "git_status.diverged", |variable| {
+                                match variable {
                                     "ahead_count" => Some(ahead.to_string()),
                                     "behind_count" => Some(behind.to_string()),
                                     _ => None,
-                                },
-                            )
+                                }
+                            })
                         } else if ahead > 0 && behind == 0 {
                             format_count(config.ahead, "git_status.ahead", ahead)
                         } else if behind > 0 && ahead == 0 {
@@ -66,11 +68,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         }
                     }),
                     "conflicted" => info.get_conflicted().and_then(|count| {
-                        format_count(
-                            config.conflicted,
-                            "git_status.conflicted",
-                            count,
-                        )
+                        format_count(config.conflicted, "git_status.conflicted", count)
                     }),
                     "deleted" => info.get_deleted().and_then(|count| {
                         format_count(config.deleted, "git_status.deleted", count)
@@ -81,15 +79,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     "modified" => info.get_modified().and_then(|count| {
                         format_count(config.modified, "git_status.modified", count)
                     }),
-                    "staged" => info.get_staged().and_then(|count| {
-                        format_count(config.staged, "git_status.staged", count)
-                    }),
+                    "staged" => info
+                        .get_staged()
+                        .and_then(|count| format_count(config.staged, "git_status.staged", count)),
                     "untracked" => info.get_untracked().and_then(|count| {
-                        format_count(
-                            config.untracked,
-                            "git_status.untracked",
-                            count,
-                        )
+                        format_count(config.untracked, "git_status.untracked", count)
                     }),
                     _ => None,
                 };
