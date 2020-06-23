@@ -19,38 +19,24 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let perl_version = utils::exec_cmd("perl", &["-e", "print substr($^V, 1);",])?.stdout;
-    let formatted_version = format_perl_version(&perl_version)?;
-
+    let perl_version = utils::exec_cmd("perl", &["-e", "print $^V;",])?.stdout;
 
     let mut module = context.new_module("perl");
     let config: PerlConfig = PerlConfig::try_load(module.config);
     module.set_style(config.style);
 
     module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &SegmentConfig::new(&formatted_version));
+    module.create_segment("version", &SegmentConfig::new(&perl_version));
 
     Some(module)
 }
 
-fn format_perl_version(perl_version: &str) -> Option<String> {
-    let formatted_version = format!("v{}", &perl_version);
-    Some(formatted_version)
-}
-
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::modules::utils::test::render_module;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
-
-    #[test]
-    fn test_format_perl_version() {
-        let input = "5.30.0";
-        assert_eq!(format_perl_version(input), Some("v5.30.0".to_string()));
-    }
 
     #[test]
     fn folder_without_perl_files() -> io::Result<()> {
