@@ -42,6 +42,7 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
                 "nim",
                 "nodejs",
                 "ocaml",
+                "perl",
                 "php",
                 "purescript",
                 "python",

@@ -31,6 +31,7 @@ mod nix_shell;
 mod nodejs;
 mod ocaml;
 mod package;
+mod perl;
 mod php;
 mod purescript;
 mod python;
@@ -86,6 +87,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "nodejs" => nodejs::module(context),
         "ocaml" => ocaml::module(context),
         "package" => package::module(context),
+        "perl" => perl::module(context),
         "php" => php::module(context),
         "purescript" => purescript::module(context),
         "python" => python::module(context),
@@ -138,6 +140,7 @@ pub fn description(module: &str) -> &'static str {
         "nodejs" => "The currently installed version of NodeJS",
         "ocaml" => "The currently installed version of OCaml",
         "package" => "The package version of the current directory's project",
+        "perl" => "The currently installed version of Perl",
         "php" => "The currently installed version of PHP",
         "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
