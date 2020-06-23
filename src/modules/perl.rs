@@ -15,8 +15,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "Makefile.PL",
             "cpanfile",
             "META.json",
-            "META.yml", 
-            ".perl-version"
+            "META.yml",
+            ".perl-version",
         ])
         .set_extensions(&["pl", "pm"])
         .is_match();
@@ -64,7 +64,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {} ",
-            Color::Fixed(149).bold().paint("🐪 5.26.1")
+            Color::Fixed(149).bold().paint("🐪 v5.26.1")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -79,7 +79,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {} ",
-            Color::Fixed(149).bold().paint("🐪 5.26.1")
+            Color::Fixed(149).bold().paint("🐪 v5.26.1")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -94,7 +94,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {} ",
-            Color::Fixed(149).bold().paint("🐪 5.26.1")
+            Color::Fixed(149).bold().paint("🐪 v5.26.1")
         ));
         assert_eq!(expected, actual);
         dir.close()
