@@ -116,6 +116,7 @@ prompt_order = [
     "nim",
     "nodejs",
     "ocaml",
+    "perl",
     "php",
     "purescript",
     "python",
@@ -1098,6 +1099,36 @@ The `ocaml` module shows the currently installed version of OCaml. Le module est
 
 [ocaml]
 symbol = "🐪 "
+```
+
+## Perl
+
+The `perl` module shows the currently installed version of Perl.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `Makefile.PL` file
+- The current directory contains a `cpanfile` file
+- The current directory contains a `META.json` file
+- The current directory contains a `META.yml` file
+- The current directory contains a `.perl-version` file
+- The current directory contains a `.pl` file
+- The current directory contains a `.pm` file
+
+### Options
+
+| Variable   | Default      | Description                                           |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐪 "`      | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold 149"` | The style for the module.                             |
+| `disabled` | `false`      | Disables the `perl` module.                           |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[perl]
+symbol = "🐫 "
 ```
 
 ## PHP

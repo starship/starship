@@ -7,7 +7,7 @@ use crate::utils;
 ///
 /// Will display the perl version if any of the following criteria are met:
 ///     - Current directory contains a `.pl` or a `.pm` file
-///     - Current directory contains a `composer.json` or `.perl-version` file
+///     - Current directory contains a "Makefile.PL", "cpanfile", "META.json", "META.yml", or ".perl-version" file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_perl_project = context
         .try_begin_scan()?
