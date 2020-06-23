@@ -11,7 +11,13 @@ use crate::utils;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_perl_project = context
         .try_begin_scan()?
-        .set_files(&["Makefile.PL", "cpanfile", "META.json", "META.yml", ".perl-version"])
+        .set_files(&[
+            "Makefile.PL",
+            "cpanfile",
+            "META.json",
+            "META.yml", 
+            ".perl-version"
+        ])
         .set_extensions(&["pl", "pm"])
         .is_match();
 
@@ -19,7 +25,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let perl_version = utils::exec_cmd("perl", &["-e", "print $^V;",])?.stdout;
+    let perl_version = utils::exec_cmd("perl", &["-e", "print $^V;"])?.stdout;
 
     let mut module = context.new_module("perl");
     let config: PerlConfig = PerlConfig::try_load(module.config);
@@ -58,7 +64,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {} ",
-            Color::Fixed(149).bold().paint("🐪 v5.30.0")
+            Color::Fixed(149).bold().paint("🐪 5.26.1")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -73,7 +79,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {} ",
-            Color::Fixed(149).bold().paint("🐪 v5.30.0")
+            Color::Fixed(149).bold().paint("🐪 5.26.1")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -88,7 +94,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {} ",
-            Color::Fixed(149).bold().paint("🐪 v5.30.0")
+            Color::Fixed(149).bold().paint("🐪 5.26.1")
         ));
         assert_eq!(expected, actual);
         dir.close()
