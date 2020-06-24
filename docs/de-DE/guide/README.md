@@ -121,7 +121,7 @@
 
 ### Voraussetzungen
 
-- Eine [Powerline-Schriftart](https://github.com/powerline/fonts) installiert und in deinem Terminal aktiviert (z.B. [Fira Code](https://github.com/tonsky/FiraCode)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Erste Schritte
 
