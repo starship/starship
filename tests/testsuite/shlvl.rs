@@ -20,6 +20,22 @@ fn empty_config() -> io::Result<()> {
         })
         .env(SHLVL_ENV_VAR, "3")
         .output()?;
+    let expected = "";
+    let actual = String::from_utf8(output.stdout).unwrap();
+    assert_eq!(expected, actual);
+    Ok(())
+}
+
+#[test]
+fn enabled() -> io::Result<()> {
+    let output = common::render_module("shlvl")
+        .env_clear()
+        .use_config(toml::toml! {
+            [shlvl]
+            disabled = false
+        })
+        .env(SHLVL_ENV_VAR, "3")
+        .output()?;
     let expected = format!("{}", style().paint("↕️ 3"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
@@ -32,6 +48,7 @@ fn no_level() -> io::Result<()> {
         .env_clear()
         .use_config(toml::toml! {
             [shlvl]
+            disabled = false
         })
         .output()?;
     let expected = "";
@@ -46,6 +63,7 @@ fn enabled_config_level_1() -> io::Result<()> {
         .env_clear()
         .use_config(toml::toml! {
             [shlvl]
+            disabled = false
         })
         .env(SHLVL_ENV_VAR, "1")
         .output()?;
@@ -96,6 +114,7 @@ fn custom_symbol() -> io::Result<()> {
         .use_config(toml::toml! {
             [shlvl]
             symbol = "shlvl is "
+            disabled = false
         })
         .env(SHLVL_ENV_VAR, "3")
         .output()?;
@@ -113,6 +132,7 @@ fn prefix_and_suffix() -> io::Result<()> {
             [shlvl]
             prefix = "shlvl "
             suffix = " level(s)"
+            disabled = false
         })
         .env(SHLVL_ENV_VAR, "3")
         .output()?;

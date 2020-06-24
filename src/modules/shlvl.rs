@@ -15,6 +15,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let mut module = context.new_module("shlvl");
             let config: ShLvlConfig = ShLvlConfig::try_load(module.config);
 
+            if config.disabled {
+                return None;
+            }
+
             if config.threshold <= shlvl_num {
                 module.set_style(config.style);
 
