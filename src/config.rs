@@ -221,9 +221,16 @@ impl StarshipConfig {
             }
         }?;
 
-        let config = toml::from_str(&toml_content).ok()?;
-        log::debug!("Config parsed: \n{:?}", &config);
-        Some(config)
+        match toml::from_str(&toml_content) {
+            Ok(parsed) => {
+                log::debug!("Config parsed: \n{:?}", &parsed);
+                Some(parsed)
+            }
+            Err(error) => {
+                log::debug!("Unable to parse the config file: {}", error);
+                None
+            }
+        }
     }
 
     /// Get the subset of the table for a module by its name
