@@ -87,7 +87,7 @@ active boot switches: -d:release\n",
             stdout: String::from("4.10.0"),
             stderr: String::default(),
         }),
-        "perl -e 'printf q#%vd#, $^V;'" => Some(CommandOutput {
+        "perl -e 'printf q#%vd#,$^V;'" => Some(CommandOutput {
             stdout: String::from("v5.26.1"),
             stderr: String::default(),
         }),
