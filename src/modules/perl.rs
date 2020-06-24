@@ -59,9 +59,84 @@ mod tests {
     }
 
     #[test]
+    fn folder_with_makefile_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("Makefile.PL"))?.sync_all()?;
+
+        let actual = render_module("perl", dir.path(), None);
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(149).bold().paint("🐪 v5.26.1")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_buildfile_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("Build.PL"))?.sync_all()?;
+
+        let actual = render_module("perl", dir.path(), None);
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(149).bold().paint("🐪 v5.26.1")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
     fn folder_with_cpanfile_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("cpanfile"))?.sync_all()?;
+
+        let actual = render_module("perl", dir.path(), None);
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(149).bold().paint("🐪 v5.26.1")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_cpanfile_snapshot_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("cpanfile.snapshot"))?.sync_all()?;
+
+        let actual = render_module("perl", dir.path(), None);
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(149).bold().paint("🐪 v5.26.1")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_meta_json_snapshot_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("META.json"))?.sync_all()?;
+
+        let actual = render_module("perl", dir.path(), None);
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(149).bold().paint("🐪 v5.26.1")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_meta_yml_snapshot_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("META.yml"))?.sync_all()?;
 
         let actual = render_module("perl", dir.path(), None);
 
@@ -92,6 +167,36 @@ mod tests {
     fn folder_with_perl_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.pl"))?.sync_all()?;
+
+        let actual = render_module("perl", dir.path(), None);
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(149).bold().paint("🐪 v5.26.1")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_perl_module_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.pm"))?.sync_all()?;
+
+        let actual = render_module("perl", dir.path(), None);
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(149).bold().paint("🐪 v5.26.1")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_perldoc_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.pod"))?.sync_all()?;
 
         let actual = render_module("perl", dir.path(), None);
 
