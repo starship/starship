@@ -1186,12 +1186,15 @@ The `perl` module shows the currently installed version of Perl.
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Makefile.PL` file
+- The current directory contains a `Build.PL` file
 - The current directory contains a `cpanfile` file
+- The current directory contains a `cpanfile.snapshot` file
 - The current directory contains a `META.json` file
 - The current directory contains a `META.yml` file
 - The current directory contains a `.perl-version` file
 - The current directory contains a `.pl` file
 - The current directory contains a `.pm` file
+- The current directory contains a `.pod` file
 
 ### Options
 
