@@ -116,7 +116,6 @@ prompt_order = [
     "nim",
     "nodejs",
     "ocaml",
-    "perl",
     "php",
     "purescript",
     "python",
