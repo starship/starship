@@ -7,7 +7,7 @@
   - **颜色方案**：[Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
   - **字体**：[Fira Code](https://github.com/tonsky/FiraCode)
 - **Shell**：[Fish Shell](https://fishshell.com/)
-  - **fish 配置**：[matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
+  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **提示符工具**：[Starship](https://starship.rs/)
 
 ## `prompt_order` 和 `<module>.disabled` 的效果是一样的吗？
