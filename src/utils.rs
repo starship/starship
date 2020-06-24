@@ -87,8 +87,8 @@ active boot switches: -d:release\n",
             stdout: String::from("4.10.0"),
             stderr: String::default(),
         }),
-        "perl -e 'print substr($^V, 1)'" => Some(CommandOutput {
-            stdout: String::from("5.30.0"),
+        "perl -e 'print $^V'" => Some(CommandOutput {
+            stdout: String::from("v5.26.1"),
             stderr: String::default(),
         }),
         "php -nr echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION;" => {
