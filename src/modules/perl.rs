@@ -13,19 +13,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .try_begin_scan()?
         .set_files(&[
             "Makefile.PL",
+            "Build.PL",
             "cpanfile",
+            "cpanfile.snapshot",
             "META.json",
             "META.yml",
             ".perl-version",
         ])
-        .set_extensions(&["pl", "pm"])
+        .set_extensions(&["pl", "pm", "pod"])
         .is_match();
 
     if !is_perl_project {
         return None;
     }
 
-    let perl_version = utils::exec_cmd("perl", &["-e", "print $^V;"])?.stdout;
+    let perl_version = utils::exec_cmd("perl", &["-e", "printf q#%vd#, $^V;"])?.stdout;
 
     let mut module = context.new_module("perl");
     let config: PerlConfig = PerlConfig::try_load(module.config);

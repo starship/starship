@@ -1207,7 +1207,7 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [perl]
-symbol = "🐫 "
+symbol = "🦪 "
 ```
 
 
