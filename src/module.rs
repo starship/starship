@@ -1,4 +1,3 @@
-use crate::config::SegmentConfig;
 use crate::context::Shell;
 use crate::segment::Segment;
 use crate::utils::wrap_colorseq_for_shell;
@@ -74,7 +73,7 @@ pub struct Module<'a> {
     prefix: Affix,
 
     /// The collection of segments that compose this module.
-    segments: Vec<Segment>,
+    pub segments: Vec<Segment>,
 
     /// The suffix used to separate the current module from the next one.
     suffix: Affix,
@@ -92,16 +91,6 @@ impl<'a> Module<'a> {
             segments: Vec::new(),
             suffix: Affix::default_suffix(name),
         }
-    }
-
-    /// Get a reference to a newly created segment in the module
-    pub fn create_segment(&mut self, name: &str, segment_config: &SegmentConfig) -> &mut Segment {
-        let mut segment = Segment::new(name);
-        segment.set_style(segment_config.style.unwrap_or(self.style));
-        segment.set_value(segment_config.value);
-        self.segments.push(segment);
-
-        self.segments.last_mut().unwrap()
     }
 
     /// Set segments in module
@@ -124,6 +113,7 @@ impl<'a> Module<'a> {
         self.segments.iter().all(|segment| segment.is_empty())
     }
 
+    /// Get values of the module's segments
     pub fn get_segments(&self) -> Vec<&str> {
         self.segments.iter().map(Segment::get_value).collect()
     }
@@ -172,10 +162,6 @@ impl<'a> Module<'a> {
         };
 
         ansi_strings
-    }
-
-    pub fn to_string_without_prefix(&self, shell: Shell) -> String {
-        ANSIStrings(&self.ansi_strings_for_shell(shell)[1..]).to_string()
     }
 }
 

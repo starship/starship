@@ -12,7 +12,7 @@ use crate::{configs::custom::CustomConfig, formatter::StringFormatter};
 /// command can be run -- if its result is 0, the module will be shown.
 ///
 /// Finally, the content of the module itself is also set by a command.
-pub fn module<'a>(name: &'a str, context: &'a Context) -> Option<Module<'a>> {
+pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     let toml_config = context.config.get_custom_module_config(name).expect(
         "modules::custom::module should only be called after ensuring that the module exists",
     );

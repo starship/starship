@@ -16,7 +16,7 @@ const EXE_PATH: &str = "./target/debug/starship.exe";
 const EXE_PATH: &str = "./target/debug/starship";
 
 /// Render the full starship prompt
-pub fn render_prompt() -> process::Command {
+pub fn _render_prompt() -> process::Command {
     let mut command = process::Command::new(EXE_PATH);
 
     command
