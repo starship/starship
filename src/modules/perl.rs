@@ -119,7 +119,7 @@ mod tests {
     }
 
     #[test]
-    fn folder_with_meta_json_snapshot_file() -> io::Result<()> {
+    fn folder_with_meta_json_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("META.json"))?.sync_all()?;
 
@@ -134,7 +134,7 @@ mod tests {
     }
 
     #[test]
-    fn folder_with_meta_yml_snapshot_file() -> io::Result<()> {
+    fn folder_with_meta_yml_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("META.yml"))?.sync_all()?;
 
