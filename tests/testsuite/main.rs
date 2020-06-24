@@ -18,6 +18,7 @@ mod jobs;
 mod modules;
 mod nix_shell;
 mod python;
+mod shlvl;
 mod singularity;
 mod terraform;
 mod time;
