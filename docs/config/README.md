@@ -178,6 +178,7 @@ format = """
 
 $username\
 $hostname\
+$shlvl\
 $kubernetes\
 $directory\
 $git_branch\
@@ -1983,6 +1984,32 @@ The module will be shown if any of the following conditions are met:
 
 [rust]
 format = "via [⚙️ $version](red bold)"
+```
+
+## SHLVL
+
+The `shlvl` module shows the current SHLVL image, if it is set and greater than the 
+specified threshold.
+
+### Options
+
+| Variable    | Default                | Description                                      |
+| ----------- | ---------------------- | ------------------------------------------------ |
+| `symbol`    | `"↕️ "`                 | The symbol used before displaying the SHLVL.     |
+| `threshold` | `3`                    | Display threshold.                               |
+| `prefix`    | `""`                   | Prefix to display immediately the value.         |
+| `suffix`    | `""`                   | Suffix to display immediately after the value.   |
+| `style`     | `"bold dimmed yellow"` | The style for the module.                        |
+| `disabled`  | `true`                 | Disables the `shlvl` module.                     |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[shlvl]
+disabled = false
+suffix = " levels down "
 ```
 
 ## Singularity
