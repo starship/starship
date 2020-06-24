@@ -88,7 +88,7 @@ active boot switches: -d:release\n",
             stderr: String::default(),
         }),
         "perl -e 'printf q#%vd#,$^V;'" => Some(CommandOutput {
-            stdout: String::from("v5.26.1"),
+            stdout: String::from("5.26.1"),
             stderr: String::default(),
         }),
         "php -nr echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION;" => {
