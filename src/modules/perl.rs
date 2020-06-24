@@ -27,7 +27,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let perl_version = utils::exec_cmd("perl", &["-e", "printf q#%vd#,$^V;"])?.stdout;
+    let perl_version = utils::exec_cmd("perl", &["-e", "'printf q#%vd#,$^V;'"])?.stdout;
     let formatted_version = format!("v{}", &perl_version);
 
     let mut module = context.new_module("perl");
