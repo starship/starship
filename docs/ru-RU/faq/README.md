@@ -7,7 +7,7 @@
   - **Цветовая схема**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
   - **Шрифт**: [Fira Code](https://github.com/tonsky/FiraCode)
 - **Оболочка**: [Fish Shell](https://fishshell.com/)
-  - **Конфигурация**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
+  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Подсказка**: [Starship](https://starship.rs/)
 
 ## `prompt_order` и `<module>.disabled` - это одно и то же?
