@@ -28,13 +28,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let perl_version = utils::exec_cmd("perl", &["-e", "printf q#%vd#,$^V;"])?.stdout;
+    let formatted_version = format!("v{}", &perl_version);
 
     let mut module = context.new_module("perl");
     let config: PerlConfig = PerlConfig::try_load(module.config);
     module.set_style(config.style);
 
     module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &SegmentConfig::new(&perl_version));
+    module.create_segment("version", &SegmentConfig::new(&formatted_version));
 
     Some(module)
 }
