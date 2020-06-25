@@ -28,6 +28,9 @@ discharging_symbol = ""
 [conda]
 symbol = " "
 
+[dart]
+symbol = " "
+
 [docker]
 symbol = " "
 
