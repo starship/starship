@@ -33,7 +33,7 @@ eval $(starship init bash)
 
 ## Altera o título da janela
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish faz isso por padrão. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
 
 First, define a window title change function (identical in bash and zsh):
 
