@@ -13,26 +13,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("shlvl");
     let config: ShLvlConfig = ShLvlConfig::try_load(module.config);
 
-    if config.disabled {
+    if config.disabled || shlvl < config.threshold {
         return None;
     }
 
-    if config.threshold <= shlvl {
-        module.set_style(config.style);
+    module.set_style(config.style);
 
-        module.get_prefix().set_value(config.prefix);
-        module.get_suffix().set_value(config.suffix);
+    module.get_prefix().set_value(config.prefix);
+    module.get_suffix().set_value(config.suffix);
 
-        if let Some(symbol) = config.symbol {
-            module.create_segment("symbol", &symbol);
-        }
-
-        module.create_segment("value", &SegmentConfig::new(&shlvl.to_string()));
-
-        Some(module)
-    } else {
-        None
+    if let Some(symbol) = config.symbol {
+        module.create_segment("symbol", &symbol);
     }
+
+    module.create_segment("value", &SegmentConfig::new(&shlvl.to_string()));
+
+    Some(module)
 }
 
 fn get_shlvl_value() -> Option<i64> {
