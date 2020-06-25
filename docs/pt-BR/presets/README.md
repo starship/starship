@@ -1,4 +1,4 @@
-# Presets
+# Predefinições
 
 Here is a collection of community-submitted configuration presets for Starship. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
 
@@ -6,7 +6,7 @@ Here is a collection of community-submitted configuration presets for Starship. 
 
 This preset doesn't change anything except for the symbols used for each module. If emojis aren't your thing, this might catch your eye!
 
-![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
+![Captura de tela da predefinição Nerd Font Symbols](/presets/nerd-font-symbols.png)
 
 ### Pré-requisitos
 
