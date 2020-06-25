@@ -19,7 +19,7 @@ impl<'a> RootModuleConfig<'a> for ShLvlConfig<'a> {
             threshold: 2,
             format: "[$symbol$shlvl]($style)",
             symbol: "↕️  ", // extra space for emoji
-            style: "yellow bold dimmed",
+            style: "yellow bold",
             disabled: true,
         }
     }
