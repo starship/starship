@@ -88,9 +88,9 @@ prompt_order=["rust","line_break","package","line_break","character"]
 scan_timeout = 10
 ```
 
-### Default Prompt Order
+### Ordem padrão do prompt de comando
 
-The default `prompt_order` is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. The default is as shown:
+The default `prompt_order` is used to define the order in which modules are shown in the prompt, if empty or no `prompt_order` is provided. Os valores padrão são os seguintes:
 
 ```toml
 prompt_order = [
@@ -208,7 +208,7 @@ discharging_symbol = "💀"
 
 ### Indicador de bateria
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. Os valores padrão são os seguintes:
 
 ```toml
 [[battery.display]]
@@ -240,7 +240,7 @@ style = "bold yellow"
 
 ```
 
-## Character
+## Caractere
 
 The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
@@ -273,7 +273,7 @@ use_symbol_for_status = true
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning Do not hook the DEBUG trap in Bash
+::: warning Não utilize o DEBUG-trap no Bash
 
 If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
@@ -283,13 +283,13 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Opções
 
-| Variável            | Padrão          | Descrição                                                  |
-| ------------------- | --------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | Prefix to display immediately before the command duration. |
-| `style`             | `"bold yellow"` | The style for the module.                                  |
-| `disabled`          | `false`         | Disables the `cmd_duration` module.                        |
+| Variável            | Padrão          | Descrição                                                                  |
+| ------------------- | --------------- | -------------------------------------------------------------------------- |
+| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).                      |
+| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration.                 |
+| `prefix`            | `took`          | Prefixo que é exibido imediatamente antes do tempo de execução do comando. |
+| `style`             | `"bold yellow"` | The style for the module.                                                  |
+| `disabled`          | `false`         | Disables the `cmd_duration` module.                                        |
 
 ### Exemplo
 
@@ -354,7 +354,7 @@ symbol = "✨ "
 style = "bold blue"
 ```
 
-## Directory
+## Diretório
 
 The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
