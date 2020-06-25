@@ -1,16 +1,16 @@
 # Configuração avançada
 
-Ainda que Starship seja um shell versátil, às vezes você precisará fazer algumas outras coisas além de editar o arquivo `starship.toml`. This page details some of the more advanced configuration techniques used in starship.
+Ainda que Starship seja um shell versátil, às vezes você precisará fazer algumas outras coisas além de editar o arquivo `starship.toml`. Esta página detalha algumas das configurações mais avançadas usadas em starship.
 
 ::: warning
 
-The configurations in this section are subject to change in future releases of Starship.
+As configurações nesta seção estão sujeitas a alterações em futuras versões do Starship.
 
 :::
 
-## Custom pre-prompt and pre-execution Commands in Bash
+## Comandos personalizados de pre-prompt e pre-execution no Bash
 
-Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+O Bash não possui uma estrutura formal para os hooks preexec/precmd como a maioria dos outros shells. Por esse motivo, é difícil fornecer hooks totalmente customizáveis no `bash`. No entanto, Starship te oferece uma capacidade limitada de inserir suas próprias funções na processo de prompt-rendering:
 
 - To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
 
@@ -63,8 +63,8 @@ If you like the result, add these lines to your shell configuration file (`~/.ba
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Cada palavra pode ser uma das seguintes:
 
-  - `bold`
-  - `underline`
+  - `negrito`
+  - `sublinhado`
   - `dimmed`
   - `bg:<color>`
   - `fg:<color>`
