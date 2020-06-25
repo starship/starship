@@ -888,7 +888,7 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ```
 
-## Line Break
+## Quebra de linha
 
 The `line_break` module separates the prompt into two lines.
 
@@ -907,7 +907,7 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
-## Memory Usage
+## Uso de memória
 
 The `memory_usage` module shows current system memory and swap usage.
 
