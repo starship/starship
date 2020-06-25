@@ -31,7 +31,7 @@ trap blastoff DEBUG     # Trap DEBUG *before* running starship
 eval $(starship init bash)
 ```
 
-## Change Window Title
+## Altera o título da janela
 
 Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
 
@@ -63,8 +63,8 @@ If you like the result, add these lines to your shell configuration file (`~/.ba
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Cada palavra pode ser uma das seguintes:
 
-  - `negrito`
-  - `sublinhado`
+  - `bold`
+  - `underline`
   - `dimmed`
   - `bg:<color>`
   - `fg:<color>`
