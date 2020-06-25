@@ -1993,14 +1993,14 @@ set and greater than the specified threshold.
 
 ### Options
 
-| Variable    | Default                | Description                                      |
-| ----------- | ---------------------- | ------------------------------------------------ |
-| `symbol`    | `"↕️ "`                 | The symbol used before displaying the SHLVL.     |
-| `threshold` | `3`                    | Display threshold.                               |
-| `prefix`    | `""`                   | Prefix to display immediately the value.         |
-| `suffix`    | `""`                   | Suffix to display immediately after the value.   |
-| `style`     | `"bold dimmed yellow"` | The style for the module.                        |
-| `disabled`  | `true`                 | Disables the `shlvl` module.                     |
+| Variable    | Default         | Description                                      |
+| ----------- | --------------- | ------------------------------------------------ |
+| `symbol`    | `"↕️ "`          | The symbol used before displaying the SHLVL.     |
+| `threshold` | `2`             | Display threshold.                               |
+| `prefix`    | `""`            | Prefix to display immediately the value.         |
+| `suffix`    | `""`            | Suffix to display immediately after the value.   |
+| `style`     | `"bold yellow"` | The style for the module.                        |
+| `disabled`  | `true`          | Disables the `shlvl` module.                     |
 
 ### Example
 
@@ -2010,6 +2010,7 @@ set and greater than the specified threshold.
 [shlvl]
 disabled = false
 suffix = " levels down "
+threshold = 3
 ```
 
 ## Singularity

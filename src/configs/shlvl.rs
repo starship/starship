@@ -16,9 +16,9 @@ pub struct ShLvlConfig<'a> {
 impl<'a> RootModuleConfig<'a> for ShLvlConfig<'a> {
     fn new() -> Self {
         ShLvlConfig {
-            threshold: 3,
+            threshold: 2,
             format: "[$symbol$shlvl]($style)",
-            symbol: "↕️ ",
+            symbol: "↕️  ", // extra space for emoji
             style: "yellow bold dimmed",
             disabled: true,
         }
