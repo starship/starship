@@ -69,11 +69,11 @@ This is the list of prompt-wide configuration options.
 
 ### Opções
 
-| Variável       | Default                       | Description                                            |
-| -------------- | ----------------------------- | ------------------------------------------------------ |
-| `add_newline`  | `true`                        | Add a new line before the start of the prompt.         |
-| `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs. |
-| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).  |
+| Variável       | Padrão                        | Descrição                                                     |
+| -------------- | ----------------------------- | ------------------------------------------------------------- |
+| `add_newline`  | `true`                        | Adiciona uma nova linha antes que o prompt de comando inicie. |
+| `prompt_order` | [link](#default-prompt-order) | Configure the order in which the prompt module occurs.        |
+| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds).         |
 
 ### Example
 
@@ -147,7 +147,7 @@ When using [aws-vault](https://github.com/99designs/aws-vault) the profile is re
 
 ### Opções
 
-| Variável          | Default         | Description                                                                 |
+| Variável          | Padrão          | Descrição                                                                   |
 | ----------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`          | `"☁️ "`         | The symbol used before displaying the current AWS profile.                  |
 | `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
@@ -175,7 +175,7 @@ The `battery` module shows how charged the device's battery is and its current c
 
 ### Opções
 
-| Variável             | Default                  | Description                                       |
+| Variável             | Padrão                   | Descrição                                         |
 | -------------------- | ------------------------ | ------------------------------------------------- |
 | `full_symbol`        | `"•"`                    | The symbol shown when the battery is full.        |
 | `charging_symbol`    | `"⇡"`                    | The symbol shown when the battery is charging.    |
@@ -186,7 +186,7 @@ The `battery` module shows how charged the device's battery is and its current c
 <details>
 <summary>There are also options for some uncommon battery states.</summary>
 
-| Variável         | Description                                         |
+| Variável         | Descrição                                           |
 | ---------------- | --------------------------------------------------- |
 | `unknown_symbol` | The symbol shown when the battery state is unknown. |
 | `empty_symbol`   | The symbol shown when the battery state is empty.   |
@@ -195,7 +195,7 @@ Note: Battery indicator will be hidden if the status is `unknown` or `empty` unl
 
 </details>
 
-### Example
+### Exemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -206,7 +206,7 @@ charging_symbol = "⚡️"
 discharging_symbol = "💀"
 ```
 
-### Battery Display
+### Indicador de bateria
 
 The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
 
@@ -220,7 +220,7 @@ style = "bold red"
 
 The `display` option is an array of the following table.
 
-| Variável    | Description                                     |
+| Variável    | Descrição                                       |
 | ----------- | ----------------------------------------------- |
 | `threshold` | The upper bound for the display option.         |
 | `style`     | The style used if the display option is in use. |
@@ -248,17 +248,17 @@ The character will tell you whether the last command was successful or not. It c
 
 ### Opções
 
-| Variável                | Default        | Description                                                                         |
+| Variável                | Padrão         | Descrição                                                                           |
 | ----------------------- | -------------- | ----------------------------------------------------------------------------------- |
-| `symbol`                | `"❯"`          | The symbol used before the text input in the prompt.                                |
+| `symbol`                | `"❯"`          | O símbolo usado no prompt de comando antes de inserir texto.                        |
 | `error_symbol`          | `"✖"`          | The symbol used before text input if the previous command failed.                   |
-| `use_symbol_for_status` | `false`        | Indicate error status by changing the symbol.                                       |
+| `use_symbol_for_status` | `false`        | Indica o estado do erro utilizando alterando o símbolo.                             |
 | `vicmd_symbol`          | `"❮"`          | The symbol used before the text input in the prompt if shell is in vim normal mode. |
 | `style_success`         | `"bold green"` | The style used if the last command was successful.                                  |
 | `style_failure`         | `"bold red"`   | The style used if the last command failed.                                          |
 | `disabled`              | `false`        | Disables the `character` module.                                                    |
 
-### Example
+### Exemplo
 
 ```toml
 # ~/.config/starship.toml
@@ -283,7 +283,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Opções
 
-| Variável            | Default         | Description                                                |
+| Variável            | Padrão          | Descrição                                                  |
 | ------------------- | --------------- | ---------------------------------------------------------- |
 | `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
 | `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
@@ -313,7 +313,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### Opções
 
-| Variável            | Default        | Description                                                                                                                                                                                                 |
+| Variável            | Padrão         | Descrição                                                                                                                                                                                                   |
 | ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
 | `symbol`            | `"C "`         | The symbol used before the environment name.                                                                                                                                                                |
@@ -338,7 +338,7 @@ The `crystal` module shows the currently installed version of Crystal. The modul
 
 ### Opções
 
-| Variável   | Default      | Description                                               |
+| Variável   | Padrão       | Descrição                                                 |
 | ---------- | ------------ | --------------------------------------------------------- |
 | `symbol`   | `"🔮 "`       | The symbol used before displaying the version of crystal. |
 | `style`    | `"bold red"` | The style for the module.                                 |
@@ -364,7 +364,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### Opções
 
-| Variável            | Default       | Description                                                                      |
+| Variável            | Padrão        | Descrição                                                                        |
 | ------------------- | ------------- | -------------------------------------------------------------------------------- |
 | `truncation_length` | `3`           | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`        | Whether or not to truncate to the root of the git repo that you're currently in. |
@@ -375,11 +375,11 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Variável                    | Default | Description                                                                              |
-| --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
-| `substitutions`             |         | A table of substitutions to be made to the path.                                         |
-| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
-| `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+| Variável                    | Padrão | Descrição                                                                                |
+| --------------------------- | ------ | ---------------------------------------------------------------------------------------- |
+| `substitutions`             |        | A table of substitutions to be made to the path.                                         |
+| `fish_style_pwd_dir_length` | `0`    | The number of characters to use when applying fish shell pwd path logic.                 |
+| `use_logical_path`          | `true` | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
 
@@ -408,7 +408,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Opções
 
-| Variável          | Default       | Description                                                                             |
+| Variável          | Padrão        | Descrição                                                                               |
 | ----------------- | ------------- | --------------------------------------------------------------------------------------- |
 | `symbol`          | `"🐳 "`        | The symbol used before displaying the Docker context .                                  |
 | `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
@@ -445,7 +445,7 @@ Internally, this module uses its own mechanism for version detection. Typically 
 
 ### Opções
 
-| Variável    | Default       | Description                                              |
+| Variável    | Padrão        | Descrição                                                |
 | ----------- | ------------- | -------------------------------------------------------- |
 | `symbol`    | `"•NET "`     | The symbol used before displaying the version of dotnet. |
 | `heuristic` | `true`        | Use faster version detection to keep starship snappy.    |
@@ -471,7 +471,7 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 ### Opções
 
-| Variável   | Default         | Description                                                     |
+| Variável   | Padrão          | Descrição                                                       |
 | ---------- | --------------- | --------------------------------------------------------------- |
 | `symbol`   | `"💧 "`          | The symbol used before displaying the version of Elixir/Erlang. |
 | `style`    | `"bold purple"` | The style for the module.                                       |
@@ -498,7 +498,7 @@ The `elm` module shows the currently installed version of Elm. The module will b
 
 ### Opções
 
-| Variável   | Default       | Description                                           |
+| Variável   | Padrão        | Descrição                                             |
 | ---------- | ------------- | ----------------------------------------------------- |
 | `symbol`   | `"🌳 "`        | The symbol used before displaying the version of Elm. |
 | `style`    | `"bold cyan"` | The style for the module.                             |
@@ -523,7 +523,7 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Opções
 
-| Variável   | Default               | Description                                                                  |
+| Variável   | Padrão                | Descrição                                                                    |
 | ---------- | --------------------- | ---------------------------------------------------------------------------- |
 | `symbol`   |                       | The symbol used before displaying the variable value.                        |
 | `variable` |                       | The environment variable to be displayed.                                    |
@@ -552,7 +552,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. The mod
 
 ### Opções
 
-| Variável   | Default    | Description                                              |
+| Variável   | Padrão     | Descrição                                                |
 | ---------- | ---------- | -------------------------------------------------------- |
 | `symbol`   | `"🖧 "`     | The symbol used before displaying the version of Erlang. |
 | `style`    | `bold red` | The style for this module.                               |
@@ -573,7 +573,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Opções
 
-| Variável            | Default         | Description                                                                           |
+| Variável            | Padrão          | Descrição                                                                             |
 | ------------------- | --------------- | ------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`          | The symbol used before the branch name of the repo in your current directory.         |
 | `truncation_length` | `2^63 - 1`      | Truncates a git branch to X graphemes                                                 |
@@ -598,7 +598,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 
 ### Opções
 
-| Variável             | Default        | Description                                           |
+| Variável             | Padrão         | Descrição                                             |
 | -------------------- | -------------- | ----------------------------------------------------- |
 | `commit_hash_length` | `7`            | The length of the displayed git commit hash.          |
 | `prefix`             | `"("`          | Prefix to display immediately before git commit.      |
@@ -622,7 +622,7 @@ The `git_state` module will show in directories which are part of a git reposito
 
 ### Opções
 
-| Variável           | Default            | Description                                                                                                      |
+| Variável           | Padrão             | Descrição                                                                                                        |
 | ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
 | `rebase`           | `"REBASING"`       | The text displayed when a `rebase` is in progress.                                                               |
 | `merge`            | `"MERGING"`        | The text displayed when a `merge` is in progress.                                                                |
@@ -651,7 +651,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 ### Opções
 
-| Variável           | Default                    | Description                                             |
+| Variável           | Padrão                     | Descrição                                               |
 | ------------------ | -------------------------- | ------------------------------------------------------- |
 | `conflicted`       | `"="`                      | This branch has merge conflicts.                        |
 | `conflicted_count` | [link](#git-status-counts) | Show and style the number of conflicts.                 |
@@ -678,7 +678,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 #### Git Status Counts
 
-| Variável  | Default | Description                                            |
+| Variável  | Padrão  | Descrição                                              |
 | --------- | ------- | ------------------------------------------------------ |
 | `enabled` | `false` | Show the number of files                               |
 | `style`   |         | Optionally style the count differently than the module |
@@ -719,7 +719,7 @@ The `golang` module shows the currently installed version of Golang. The module 
 
 ### Opções
 
-| Variável   | Default       | Description                                              |
+| Variável   | Padrão        | Descrição                                                |
 | ---------- | ------------- | -------------------------------------------------------- |
 | `symbol`   | `"🐹 "`        | The symbol used before displaying the version of Golang. |
 | `style`    | `"bold cyan"` | The style for the module.                                |
@@ -741,7 +741,7 @@ The `haskell` module shows the currently installed version of Haskell Stack vers
 
 ### Opções
 
-| Variável   | Default      | Description                                               |
+| Variável   | Padrão       | Descrição                                                 |
 | ---------- | ------------ | --------------------------------------------------------- |
 | `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
 | `style`    | `"bold red"` | The style for the module.                                 |
@@ -763,7 +763,7 @@ The `hostname` module shows the system hostname.
 
 ### Opções
 
-| Variável   | Default               | Description                                                                                                                          |
+| Variável   | Padrão                | Descrição                                                                                                                            |
 | ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
 | `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
@@ -794,7 +794,7 @@ The `java` module shows the currently installed version of Java. The module will
 
 ### Opções
 
-| Variável   | Default        | Description                                            |
+| Variável   | Padrão         | Descrição                                              |
 | ---------- | -------------- | ------------------------------------------------------ |
 | `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
 | `style`    | `"dimmed red"` | The style for the module.                              |
@@ -815,7 +815,7 @@ The `jobs` module shows the current number of jobs running. The module will be s
 
 ### Opções
 
-| Variável    | Default       | Description                                           |
+| Variável    | Padrão        | Descrição                                             |
 | ----------- | ------------- | ----------------------------------------------------- |
 | `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
 | `threshold` | `1`           | Show number of jobs if exceeded.                      |
@@ -842,7 +842,7 @@ The `julia` module shows the currently installed version of Julia. The module wi
 
 ### Opções
 
-| Variável   | Default         | Description                                             |
+| Variável   | Padrão          | Descrição                                               |
 | ---------- | --------------- | ------------------------------------------------------- |
 | `symbol`   | `"ஃ "`          | The symbol used before displaying the version of Julia. |
 | `style`    | `"bold purple"` | The style for the module.                               |
@@ -868,7 +868,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opções
 
-| Variável          | Default       | Description                                         |
+| Variável          | Padrão        | Descrição                                           |
 | ----------------- | ------------- | --------------------------------------------------- |
 | `symbol`          | `"☸ "`        | The symbol used before displaying the Cluster info. |
 | `context_aliases` |               | Table of context aliases to display                 |
@@ -894,7 +894,7 @@ The `line_break` module separates the prompt into two lines.
 
 ### Opções
 
-| Variável   | Default | Description                                                        |
+| Variável   | Padrão  | Descrição                                                          |
 | ---------- | ------- | ------------------------------------------------------------------ |
 | `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
@@ -921,7 +921,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opções
 
-| Variável          | Default               | Description                                                   |
+| Variável          | Padrão                | Descrição                                                     |
 | ----------------- | --------------------- | ------------------------------------------------------------- |
 | `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
 | `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
@@ -952,7 +952,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 
 ### Opções
 
-| Variável            | Default         | Description                                                                                  |
+| Variável            | Padrão          | Descrição                                                                                    |
 | ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
@@ -981,7 +981,7 @@ The `nim` module shows the currently installed version of Nim. The module will b
 
 ### Opções
 
-| Variável   | Default         | Description                                           |
+| Variável   | Padrão          | Descrição                                             |
 | ---------- | --------------- | ----------------------------------------------------- |
 | `symbol`   | `"👑 "`          | The symbol used before displaying the version of Nim. |
 | `style`    | `"bold yellow"` | The style for the module.                             |
@@ -1003,7 +1003,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 
 ### Opções
 
-| Variável     | Default       | Description                                       |
+| Variável     | Padrão        | Descrição                                         |
 | ------------ | ------------- | ------------------------------------------------- |
 | `use_name`   | `false`       | Display the name of the nix-shell.                |
 | `impure_msg` | `"impure"`    | Customize the "impure" msg.                       |
@@ -1037,7 +1037,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 
 ### Opções
 
-| Variável   | Default        | Description                                              |
+| Variável   | Padrão         | Descrição                                                |
 | ---------- | -------------- | -------------------------------------------------------- |
 | `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
 | `style`    | `"bold green"` | The style for the module.                                |
@@ -1068,7 +1068,7 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Opções
 
-| Variável          | Default      | Description                                                |
+| Variável          | Padrão       | Descrição                                                  |
 | ----------------- | ------------ | ---------------------------------------------------------- |
 | `symbol`          | `"📦 "`       | The symbol used before displaying the version the package. |
 | `style`           | `"bold 208"` | The style for the module.                                  |
@@ -1097,7 +1097,7 @@ The `ocaml` module shows the currently installed version of OCaml. The module wi
 
 ### Opções
 
-| Variável   | Default         | Description                                             |
+| Variável   | Padrão          | Descrição                                               |
 | ---------- | --------------- | ------------------------------------------------------- |
 | `symbol`   | `"🐫 "`          | The symbol used before displaying the version of OCaml. |
 | `style`    | `"bold yellow"` | The style for the module.                               |
@@ -1122,7 +1122,7 @@ The `php` module shows the currently installed version of PHP. The module will b
 
 ### Opções
 
-| Variável   | Default      | Description                                           |
+| Variável   | Padrão       | Descrição                                             |
 | ---------- | ------------ | ----------------------------------------------------- |
 | `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
 | `style`    | `"bold 147"` | The style for the module.                             |
@@ -1157,7 +1157,7 @@ The module will be shown if any of the following conditions are met:
 
 ### Opções
 
-| Variável             | Default         | Description                                                                 |
+| Variável             | Padrão          | Descrição                                                                   |
 | -------------------- | --------------- | --------------------------------------------------------------------------- |
 | `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
 | `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
@@ -1169,7 +1169,7 @@ The module will be shown if any of the following conditions are met:
 <details>
 <summary>This module has some advanced configuration options.</summary>
 
-| Variável        | Default  | Description                                                                   |
+| Variável        | Padrão   | Descrição                                                                     |
 | --------------- | -------- | ----------------------------------------------------------------------------- |
 | `python_binary` | `python` | Configures the python binary that Starship executes when getting the version. |
 
@@ -1205,7 +1205,7 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 
 ### Opções
 
-| Variável   | Default      | Description                                            |
+| Variável   | Padrão       | Descrição                                              |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
 | `style`    | `"bold red"` | The style for the module.                              |
@@ -1229,7 +1229,7 @@ The `rust` module shows the currently installed version of Rust. The module will
 
 ### Opções
 
-| Variável   | Default      | Description                                            |
+| Variável   | Padrão       | Descrição                                              |
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
 | `style`    | `"bold red"` | The style for the module.                              |
@@ -1250,7 +1250,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 
 ### Opções
 
-| Variável   | Default              | Description                                      |
+| Variável   | Padrão               | Descrição                                        |
 | ---------- | -------------------- | ------------------------------------------------ |
 | `label`    | `""`                 | Prefix before the image name display.            |
 | `prefix`   | `"["`                | Prefix to display immediately before image name. |
@@ -1277,7 +1277,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 
 ### Opções
 
-| Variável       | Default      | Description                                                 |
+| Variável       | Padrão       | Descrição                                                   |
 | -------------- | ------------ | ----------------------------------------------------------- |
 | `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
 | `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
@@ -1305,7 +1305,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opções
 
-| Variável          | Default         | Description                                                                                                         |
+| Variável          | Padrão          | Descrição                                                                                                           |
 | ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `use_12hr`        | `false`         | Enables 12 hour formatting.                                                                                         |
 | `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
@@ -1339,7 +1339,7 @@ The `username` module shows active user's username. The module will be shown if 
 
 ### Opções
 
-| Variável      | Default         | Description                           |
+| Variável      | Padrão          | Descrição                             |
 | ------------- | --------------- | ------------------------------------- |
 | `style_root`  | `"bold red"`    | The style used when the user is root. |
 | `style_user`  | `"bold yellow"` | The style used for non-root users.    |
@@ -1364,7 +1364,7 @@ The `zig` module shows the currently installed version of Zig. The module will b
 
 ### Opções
 
-| Variável   | Default         | Description                                           |
+| Variável   | Padrão          | Descrição                                             |
 | ---------- | --------------- | ----------------------------------------------------- |
 | `symbol`   | `"↯ "`          | The symbol used before displaying the version of Zig. |
 | `style`    | `"bold yellow"` | The style for the module.                             |
@@ -1403,7 +1403,7 @@ The order in which custom modules are shown can be individually set by setting `
 
 ### Opções
 
-| Variável      | Default                   | Description                                                                                                                |
+| Variável      | Padrão                    | Descrição                                                                                                                  |
 | ------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `command`     |                           | The command whose output should be printed.                                                                                |
 | `when`        |                           | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
@@ -1471,7 +1471,7 @@ The `purescript` module shows the currently installed version of PureScript vers
 
 ### Opções
 
-| Variável   | Default        | Description                                                  |
+| Variável   | Padrão         | Descrição                                                    |
 | ---------- | -------------- | ------------------------------------------------------------ |
 | `symbol`   | `"<=> "` | The symbol used before displaying the version of PureScript. |
 | `style`    | `"bold white"` | The style for the module.                                    |
