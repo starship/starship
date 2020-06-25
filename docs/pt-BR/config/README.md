@@ -169,7 +169,7 @@ ap-southeast-2 = "au"
 us-east-1 = "va"
 ```
 
-## Battery
+## Bateria
 
 The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
@@ -412,7 +412,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | ----------------- | ------------- | --------------------------------------------------------------------------------------- |
 | `symbol`          | `"🐳 "`        | The symbol used before displaying the Docker context .                                  |
 | `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
-| `style`           | `"bold blue"` | The style for the module.                                                               |
+| `style`           | `"bold blue"` | O estilo do módulo.                                                                     |
 | `disabled`        | `true`        | Disables the `docker_context` module.                                                   |
 
 ### Exemplo
@@ -554,7 +554,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. The mod
 
 | Variável   | Padrão     | Descrição                                                |
 | ---------- | ---------- | -------------------------------------------------------- |
-| `symbol`   | `"🖧 "`     | The symbol used before displaying the version of Erlang. |
+| `symbol`   | `" "`     | The symbol used before displaying the version of Erlang. |
 | `style`    | `bold red` | The style for this module.                               |
 | `disabled` | `false`    | Disables the `erlang` module.                            |
 
@@ -592,7 +592,7 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git Commit
+## Git commit
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
