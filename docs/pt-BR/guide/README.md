@@ -224,7 +224,7 @@ Se você está interessado em ajudar contribuindo com o projeto, dê uma olhada 
 
 ### Contribuidores de código
 
-Este projeto existe graças a todas as pessoas que contribuem. [[Contribuir](CONTRIBUTING.md)].
+Este projeto existe graças a todas as pessoas que contribuem. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
 ### Contribuidores Financeiros
