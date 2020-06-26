@@ -173,7 +173,7 @@ jobs:
   update_brew_formula:
     if: startsWith(github.ref, 'refs/tags/v')
     name: Update Brew Formula
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: mislav/bump-homebrew-formula-action@v1
         with:
