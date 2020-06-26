@@ -9,6 +9,7 @@ pub struct GitBranchConfig<'a> {
     pub truncation_length: i64,
     pub truncation_symbol: &'a str,
     pub branch_name: SegmentConfig<'a>,
+    pub prefix: &'a str,
     pub style: Style,
     pub disabled: bool,
 }
@@ -20,6 +21,7 @@ impl<'a> RootModuleConfig<'a> for GitBranchConfig<'a> {
             truncation_length: std::i64::MAX,
             truncation_symbol: "…",
             branch_name: SegmentConfig::default(),
+            prefix: "on ",
             style: Color::Purple.bold(),
             disabled: false,
         }
