@@ -224,7 +224,7 @@
 
 ### Соавторы кода
 
-Этот проект существует благодаря всем тем, кто внес свой вклад. [[Внести вклад](CONTRIBUTING.md)].
+Этот проект существует благодаря всем тем, кто внес свой вклад. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
 ### Финансовые спонсоры
