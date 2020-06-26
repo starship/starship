@@ -64,8 +64,6 @@ pub fn get_prompt(context: Context) -> String {
 
     // Creates a root module and prints it.
     let mut root_module = Module::new("Starship Root", "The root module", None);
-    root_module.get_prefix().set_value("");
-    root_module.get_suffix().set_value("");
     root_module.set_segments(
         formatter
             .parse(None)

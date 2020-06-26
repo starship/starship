@@ -12,9 +12,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_branch");
     let config = GitBranchConfig::try_load(module.config);
 
-    module.get_prefix().set_value("");
-    module.get_suffix().set_value("");
-
     let truncation_symbol = get_first_grapheme(config.truncation_symbol);
 
     // TODO: Once error handling is implemented, warn the user if their config
