@@ -224,7 +224,7 @@
 
 ### コードに貢献していただいた方々
 
-このプロジェクトは、貢献したすべての人々のおかげで存在します。 [[Contribute](CONTRIBUTING.md)].
+このプロジェクトは、貢献したすべての人々のおかげで存在します。 [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
 ### 財政的な貢献をしていただいた方々
