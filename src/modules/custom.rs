@@ -103,7 +103,8 @@ fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
 
     let mut child = match command.spawn() {
         Ok(command) => command,
-        Err(_) => {
+        Err(err) => {
+            log::trace!("Error executing command: {:?}", err);
             log::debug!(
                 "Could not launch command with given shell or STARSHIP_SHELL env variable, retrying with /bin/env sh"
             );
