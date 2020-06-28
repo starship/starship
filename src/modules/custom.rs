@@ -106,10 +106,10 @@ fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
         Err(err) => {
             log::trace!("Error executing command: {:?}", err);
             log::debug!(
-                "Could not launch command with given shell or STARSHIP_SHELL env variable, retrying with /bin/env sh"
+                "Could not launch command with given shell or STARSHIP_SHELL env variable, retrying with /usr/bin/env sh"
             );
 
-            Command::new("/bin/env")
+            Command::new("/usr/bin/env")
                 .arg("sh")
                 .stdin(Stdio::piped())
                 .stdout(Stdio::piped())
