@@ -112,19 +112,17 @@ impl<'a> Module<'a> {
     }
 
     pub fn ansi_strings_for_shell(&self, shell: Shell) -> Vec<ANSIString> {
-        let mut ansi_strings = self
+        let ansi_strings = self
             .segments
             .iter()
             .map(Segment::ansi_string)
             .collect::<Vec<ANSIString>>();
 
-        ansi_strings = match shell {
+        match shell {
             Shell::Bash => ansi_strings_modified(ansi_strings, shell),
             Shell::Zsh => ansi_strings_modified(ansi_strings, shell),
             _ => ansi_strings,
-        };
-
-        ansi_strings
+        }
     }
 }
 
