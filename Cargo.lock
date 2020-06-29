@@ -195,7 +195,7 @@ dependencies = [
  "atty",
  "bitflags",
  "strsim",
- "textwrap",
+ "textwrap 0.11.0",
  "unicode-width",
  "vec_map",
 ]
@@ -1156,7 +1156,7 @@ dependencies = [
  "sysinfo",
  "tempfile",
  "term_size",
- "textwrap",
+ "textwrap 0.12.0",
  "toml",
  "unicode-segmentation",
  "unicode-width",
@@ -1249,6 +1249,15 @@ name = "textwrap"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d326610f408c7a4eb6f51c37c330e496b08506c9457c9d34287ecc38809fb060"
+dependencies = [
+ "unicode-width",
+]
+
+[[package]]
+name = "textwrap"
+version = "0.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e30fc9a1b93fe45a3811654d49ead7306cf8fb18aa7fe6bf630a1099111cd2d6"
 dependencies = [
  "unicode-width",
 ]
