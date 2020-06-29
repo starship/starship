@@ -57,7 +57,7 @@ os_info = "2.0.6"
 urlencoding = "1.1.1"
 open = "1.4.0"
 unicode-width = "0.1.7"
-textwrap = "0.11.0"
+textwrap = "0.12.0"
 term_size = "0.3.2"
 
 # Optional/http:
