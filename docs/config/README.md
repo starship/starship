@@ -112,7 +112,6 @@ prompt_order = [
     "elm",
     "erlang",
     "golang",
-    "haskell",
     "java",
     "julia",
     "nim",
@@ -777,30 +776,6 @@ The module will be shown if any of the following conditions are met:
 
 [golang]
 symbol = "🏎💨 "
-```
-## Haskell
-
-The `haskell` module shows the currently installed version of Haskell Stack version.
-The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `stack.yaml` file
-
-### Options
-
-| Variable   | Default      | Description                                               |
-| ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold red"` | The style for the module.                                 |
-| `disabled` | `false`      | Disables the `haskell` module.                            |
-
-
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[haskell]
-symbol = " "
 ```
 
 ## Hostname
