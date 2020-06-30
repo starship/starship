@@ -75,6 +75,16 @@ precmd_functions+=(set_win_title)
 If you like the result, add these lines to your shell configuration file 
 (`~/.bashrc` or `~/.zsrhc`) to make it permanent.
 
+For example, If you want to display your current directory in your terminal tab title,
+Just add this code in `~/.bashrc` like below:
+
+```bash
+function set_win_title(){
+    echo -ne "\033]0; ${PWD##*/} \007"
+}
+starship_precmd_user_func="set_win_title"
+```
+
 ## Style Strings
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
