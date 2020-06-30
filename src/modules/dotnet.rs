@@ -12,6 +12,9 @@ type JValue = serde_json::Value;
 
 const GLOBAL_JSON_FILE: &str = "global.json";
 const PROJECT_JSON_FILE: &str = "project.json";
+const DIRECTORY_BUILD_PROPS_FILE: &str = "Directory.Build.props";
+const DIRECTORY_BUILD_TARGETS_FILE: &str = "Directory.Build.targets";
+const PACKAGES_PROPS_FILE: &str = "Packages.props";
 
 /// A module which shows the latest (or pinned) version of the dotnet SDK
 ///
@@ -23,7 +26,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // check for the version using the JSON files
     let is_dotnet_project = context
         .try_begin_scan()?
-        .set_files(&[GLOBAL_JSON_FILE, PROJECT_JSON_FILE])
+        .set_files(&[
+            GLOBAL_JSON_FILE,
+            PROJECT_JSON_FILE,
+            DIRECTORY_BUILD_PROPS_FILE,
+            DIRECTORY_BUILD_TARGETS_FILE,
+            PACKAGES_PROPS_FILE,
+        ])
         .set_extensions(&["sln", "csproj", "fsproj", "xproj"])
         .is_match();
 
@@ -196,6 +205,7 @@ fn get_dotnet_file_type(path: &Path) -> Option<FileType> {
     match extension_lower.as_ref().map(|f| f.as_ref()) {
         Some("sln") => return Some(FileType::SolutionFile),
         Some("csproj") | Some("fsproj") | Some("xproj") => return Some(FileType::ProjectFile),
+        Some("props") | Some("targets") => return Some(FileType::MsBuildFile),
         _ => (),
     };
 
@@ -259,6 +269,7 @@ enum FileType {
     ProjectFile,
     GlobalJson,
     SolutionFile,
+    MsBuildFile,
 }
 
 struct Version(String);

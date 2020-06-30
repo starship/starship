@@ -87,7 +87,7 @@ active boot switches: -d:release\n",
             stdout: String::from("4.10.0"),
             stderr: String::default(),
         }),
-        "php -r echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION;" => {
+        "php -nr echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION;" => {
             Some(CommandOutput {
                 stdout: String::from("7.3.8"),
                 stderr: String::default(),
@@ -95,6 +95,14 @@ active boot switches: -d:release\n",
         }
         "purs --version" => Some(CommandOutput {
             stdout: String::from("0.13.5"),
+            stderr: String::default(),
+        }),
+        "python --version" => Some(CommandOutput {
+            stdout: String::from("Python 2.7.17"),
+            stderr: String::default(),
+        }),
+        "python3 --version" => Some(CommandOutput {
+            stdout: String::from("Python 3.8.0"),
             stderr: String::default(),
         }),
         "ruby -v" => Some(CommandOutput {

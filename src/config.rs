@@ -6,7 +6,6 @@ use std::clone::Clone;
 use std::collections::HashMap;
 use std::marker::Sized;
 
-use dirs::home_dir;
 use std::env;
 use toml::Value;
 
@@ -205,7 +204,7 @@ impl StarshipConfig {
         } else {
             // Default to using ~/.config/starship.toml
             log::debug!("STARSHIP_CONFIG is not set");
-            let config_path = home_dir()?.join(".config/starship.toml");
+            let config_path = dirs_next::home_dir()?.join(".config/starship.toml");
             let config_path_str = config_path.to_str()?.to_owned();
             log::debug!("Using default config path: {}", config_path_str);
             config_path_str
@@ -222,9 +221,16 @@ impl StarshipConfig {
             }
         }?;
 
-        let config = toml::from_str(&toml_content).ok()?;
-        log::debug!("Config parsed: \n{:?}", &config);
-        Some(config)
+        match toml::from_str(&toml_content) {
+            Ok(parsed) => {
+                log::debug!("Config parsed: \n{:?}", &parsed);
+                Some(parsed)
+            }
+            Err(error) => {
+                log::debug!("Unable to parse the config file: {}", error);
+                None
+            }
+        }
     }
 
     /// Get the subset of the table for a module by its name

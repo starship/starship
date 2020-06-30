@@ -1,5 +1,3 @@
-use dirs::home_dir;
-
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::docker_context::DockerContextConfig;
@@ -26,7 +24,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let config_path = home_dir()?.join(DOCKER_CONFIG_FILE);
+    let config_path = dirs_next::home_dir()?.join(DOCKER_CONFIG_FILE);
     let json = utils::read_file(config_path).ok()?;
     let parsed_json = serde_json::from_str(&json).ok()?;
 

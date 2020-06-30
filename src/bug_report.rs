@@ -168,7 +168,7 @@ fn get_terminal_info() -> TerminalInfo {
 }
 
 fn get_config_path(shell: &str) -> Option<PathBuf> {
-    dirs::home_dir().and_then(|home_dir| {
+    dirs_next::home_dir().and_then(|home_dir| {
         match shell {
             "bash" => Some(".bashrc"),
             "fish" => Some(".config/fish/config.fish"),
@@ -192,7 +192,7 @@ fn get_starship_config() -> String {
         .map(PathBuf::from)
         .ok()
         .or_else(|| {
-            dirs::home_dir().map(|mut home_dir| {
+            dirs_next::home_dir().map(|mut home_dir| {
                 home_dir.push(".config/starship.toml");
                 home_dir
             })

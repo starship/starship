@@ -10,7 +10,7 @@ Many new configuration options will be available in coming releases.
 To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
 ```sh
-$ mkdir -p ~/.config && touch ~/.config/starship.toml
+mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
@@ -460,9 +460,19 @@ The `dotnet` module shows the relevant version of the .NET Core SDK for the curr
 the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module
 shows the latest installed version of the SDK.
 
-This module will only be shown in your prompt when one of the following files are present in the
-current directory: `global.json`, `project.json`, `*.sln`, `*.csproj`, `*.fsproj`, `*.xproj`. You'll
-also need the .NET Core command-line tools installed in order to use it correctly.
+This module will only be shown in your prompt when one or more of the following files are present in the
+current directory:
+* `global.json`
+* `project.json`
+* `Directory.Build.props`
+* `Directory.Build.targets`
+* `Packages.props`
+* `*.sln`
+* `*.csproj`
+* `*.fsproj`
+* `*.xproj`
+
+You'll also need the .NET Core SDK installed in order to use it correctly.
 
 Internally, this module uses its own mechanism for version detection. Typically it is twice as fast
 as running `dotnet --version`, but it may show an incorrect version if your .NET project has an
@@ -1084,7 +1094,8 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
 - The current directory contains a `node_modules` directory
-- The current directory contains a file with the `.js` extension
+- The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
+- The current directory contains a file with the `.ts` extension
 
 ### Options
 
@@ -1227,6 +1238,25 @@ The module will be shown if any of the following conditions are met:
 | `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.  |
 | `style`              | `"bold yellow"` | The style for the module.                                                   |
 | `disabled`           | `false`         | Disables the `python` module.                                               |
+
+<details>
+<summary>This module has some advanced configuration options.</summary>
+
+| Variable        | Default  | Description                                                                  |
+| --------------- | -------- | ---------------------------------------------------------------------------- |
+| `python_binary` | `python` | Configures the python binary that Starship executes when getting the version. |
+
+The `python_binary` variable changes the binary that Starship executes to get
+the version of Python, it doesn't change the arguments that are used.
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+python_binary = "python3"
+```
+
+</details>
 
 ### Example
 
@@ -1483,7 +1513,7 @@ will simply show all custom modules in the order they were defined.
 If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
 
 If `shell` is not given or only contains one element and Starship detects PowerShell will be used,
-the following arguments will automatically be added: `-NoProfile -Command -`.  
+the following arguments will automatically be added: `-NoProfile -Command -`.
 This behavior can be avoided by explicitly passing arguments to the shell, e.g.
 
 ```toml

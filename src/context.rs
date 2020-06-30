@@ -89,7 +89,7 @@ impl<'a> Context<'a> {
     fn expand_tilde(dir: PathBuf) -> PathBuf {
         if dir.starts_with("~") {
             let without_home = dir.strip_prefix("~").unwrap();
-            return dirs::home_dir().unwrap().join(without_home);
+            return dirs_next::home_dir().unwrap().join(without_home);
         }
         dir
     }
@@ -136,7 +136,11 @@ impl<'a> Context<'a> {
     pub fn get_repo(&self) -> Result<&Repo, std::io::Error> {
         self.repo
             .get_or_try_init(|| -> Result<Repo, std::io::Error> {
-                let repository = Repository::discover(&self.current_dir).ok();
+                let repository = if env::var("GIT_DIR").is_ok() {
+                    Repository::open_from_env().ok()
+                } else {
+                    Repository::discover(&self.current_dir).ok()
+                };
                 let branch = repository
                     .as_ref()
                     .and_then(|repo| get_current_branch(repo));
