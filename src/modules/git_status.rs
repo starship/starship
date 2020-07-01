@@ -31,9 +31,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_status");
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
 
-    module.get_prefix().set_value("");
-    module.get_suffix().set_value("");
-
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
@@ -99,9 +96,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             return None;
         }
     });
-
-    module.get_prefix().set_value("");
-    module.get_suffix().set_value("");
 
     Some(module)
 }

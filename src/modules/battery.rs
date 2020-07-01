@@ -56,8 +56,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             match formatter.parse(None) {
                 Ok(format_string) => {
                     module.set_segments(format_string);
-                    module.get_prefix().set_value("");
-                    module.get_suffix().set_value("");
                     Some(module)
                 }
                 Err(e) => {
