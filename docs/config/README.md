@@ -1998,7 +1998,7 @@ set and greater than the specified threshold.
 | `symbol`    | `"↕️ "`          | The symbol used before displaying the SHLVL.     |
 | `threshold` | `2`             | Display threshold.                               |
 | `prefix`    | `""`            | Prefix to display immediately the value.         |
-| `suffix`    | `""`            | Suffix to display immediately after the value.   |
+| `suffix`    | `" "`           | Suffix to display immediately after the value.   |
 | `style`     | `"bold yellow"` | The style for the module.                        |
 | `disabled`  | `true`          | Disables the `shlvl` module.                     |
 
