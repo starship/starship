@@ -57,11 +57,20 @@ En `zsh`, añade esto al array `precmd_functions`:
 precmd_functions+=(set_win_title)
 ```
 
-Si te gusta el resultado, añade estas líneas a tu archivo de configuración del shell (`~/.bashrc` o `~/.zsrhc`) para hacerlo permanente.
+If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+
+For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+
+```bash
+function set_win_title(){
+    echo -ne "\033]0; $(basename $PWD) \007"
+}
+starship_precmd_user_func="set_win_title"
+```
 
 ## Cadenas de estilo
 
-Las cadenas de estilo son una lista de palabras, separadas por espacios en blanco. Las palabras no son sensibles a mayúsculas (es decir, `negrita` y `NeGriTa` se consideran la misma cadena). Cada palabra puede ser una de las siguientes:
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
   - `bold`
   - `underline`
@@ -71,14 +80,14 @@ Las cadenas de estilo son una lista de palabras, separadas por espacios en blanc
   - `<color>`
   - `none`
 
-donde `<color>` es un especificador de color (discutido a continuación). `fg:<color>` y `<color>` hacen actualmente lo mismo, aunque esto puede cambiar en el futuro. El orden de las palabras en la cadena no importa.
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing , though this may change in the future. The order of words in the string does not matter.
 
-El token `none` anula todas las otras fichas en una cadena, por lo que, por ejemplo, `fg:red none fg:blue` creará una cadena sin ningún tipo de estilo. Puede convertirse en un error usar `none` junto con otros tokens en el futuro.
+The `none` token overrides all other tokens in a string, so that e.g. `fg:red none fg:blue` will still create a string with no styling. It may become an error to use `none` in conjunction with other tokens in the future.
 
-Un especificador de color puede ser uno de los siguientes:
+A color specifier can be one of the following:
 
  - Uno de los colores estándar del terminal: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Opcionalmente puedes prefijar estos con `bright-` para obtener la versión brillante (por ejemplo, `bright-white`).
  - Un `#` seguido de un número hexadecimal de seis dígitos. Esto especifica un [código hexadecimal de color RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
  - Un número entre 0-255. Esto especifica un [Código ANSI de color de 8-bits](https://i.stack.imgur.com/KTSQa.png).
 
-Si se especifican varios colores para el primer plano/fondo, el último en la cadena tendrá prioridad.
+If multiple colors are specified for foreground/background, the last one in the string will take priority.
