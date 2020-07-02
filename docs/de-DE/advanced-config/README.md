@@ -57,11 +57,20 @@ Füge dies in `Zsh` zum `precmd_functions`-Array hinzu:
 precmd_functions+=(set_win_title)
 ```
 
-Um die Funktion dauerhaft zu machen, schreiben Sie diese in die Shell-Konfigurationsdatei: (`~/.bashrc` oder `~/.zsrhc`).
+If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+
+For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+
+```bash
+function set_win_title(){
+    echo -ne "\033]0; $(basename $PWD) \007"
+}
+starship_precmd_user_func="set_win_title"
+```
 
 ## Style-Strings
 
-Style-String sind Wortlisten, getrennt durch Leerzeichen. Die Wörter haben keine Groß- und Kleinschreibung (z.B. `bold` und `BoLd` werden als dieselbe Zeichenkette betrachtet). Jedes Wort kann eines der folgenden sein:
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
   - `bold`
   - `underline`
@@ -71,14 +80,14 @@ Style-String sind Wortlisten, getrennt durch Leerzeichen. Die Wörter haben kein
   - `<color>`
   - `none`
 
-wobei `<color>` eine Farbspezifikation ist (siehe unten). `fg:<color>` und `<color>` tun derzeit dasselbe , das kann sich in Zukunft aber ändern. Die Reihenfolge der Wörter in der Liste spielt keine Rolle.
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing , though this may change in the future. The order of words in the string does not matter.
 
-`None` überschreibt alle anderen Tokens in einem String, so dass z.B. der string `fg:red none fg:blue` kein Styling anzeigen wird. In der Zukunft könnte die Unterstützung von `none` in Verbindung mit anderen Tokens fallen gelassen werden.
+The `none` token overrides all other tokens in a string, so that e.g. `fg:red none fg:blue` will still create a string with no styling. It may become an error to use `none` in conjunction with other tokens in the future.
 
-Eine Farbspezifikation kann wie folgt aussehen:
+A color specifier can be one of the following:
 
  - Einer der Standardfarben der Konsole: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Optional kann ein `bright-` vorangestellt werden um die helle Version zu erhalten (z.B. `bright-white`).
  - Eine `#` gefolgt von einer sechsstelligen Hexadezimalnummer. Dies ergibt einen [RGB hex Farbcode](https://www.w3schools.com/colors/colors_hexadecimal.asp).
  - Eine Zahl zwischen 0-255. Dies ergibt einen [8-bit ANSI-Farbcode](https://i.stack.imgur.com/KTSQa.png).
 
-Wenn mehrere Farben für Vordergrund oder Hintergrund angegeben werden, hat die letzte Farbe der Zeichenkette Priorität.
+If multiple colors are specified for foreground/background, the last one in the string will take priority.
