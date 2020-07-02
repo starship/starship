@@ -57,11 +57,20 @@ starship_precmd_user_func="set_win_title"
 precmd_functions+=(set_win_title)
 ```
 
-Если вам нравится результат, добавьте эти строки в конфигурационный файл оболочки (`~/.bashrc` или `~/.zsrhc`), чтобы сделать его постоянным.
+If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+
+For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+
+```bash
+function set_win_title(){
+    echo -ne "\033]0; $(basename $PWD) \007"
+}
+starship_precmd_user_func="set_win_title"
+```
 
 ## Строки стиля
 
-Строки стиля - это список слов, разделенных пробелами. Слова не чувствительны к регистру (то есть `bold` и `BoLd` считаются одной строкой). Каждое слово может быть одним из следующих:
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
   - `bold`
   - `underline`
@@ -71,14 +80,14 @@ precmd_functions+=(set_win_title)
   - `<color>`
   - `none`
 
-где `<color>` является цветовым спецификатором (обсуждается ниже). `fg:<color>` и `<color>` в настоящее время делают одно и то же, хотя это может измениться в будущем. Порядок слов в строке не имеет значения.
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing , though this may change in the future. The order of words in the string does not matter.
 
-Токен `none` переопределяет все остальные токены в строке, например `fg:red none fg:blue` все равно создаст строку без стиля. Использование `none` в сочетании с другими токенами может стать ошибкой в будущем.
+The `none` token overrides all other tokens in a string, so that e.g. `fg:red none fg:blue` will still create a string with no styling. It may become an error to use `none` in conjunction with other tokens in the future.
 
-Цветовой спецификатор может быть одним из следующих:
+A color specifier can be one of the following:
 
  - Один из стандартных цветов терминалов: `black`, `red`, `green`, `blue`, `gellow`, `purple`, `cyan`, `white`. Вы можете по желанию добавить префикс `bright-`, чтобы получить яркую версию (например, `bright-white`).
  - `#`, за которой следует шестизначное шестнадцатеричное число. Это определяет [шестнадцатеричный код цвета RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
  - Число от 0 до 255. Это определяет [8-битный код цвета ANSI](https://i.stack.imgur.com/KTSQa.png).
 
-Если для переднего плана/фона задано несколько цветов, то последняя из строк будет иметь приоритет.
+If multiple colors are specified for foreground/background, the last one in the string will take priority.
