@@ -774,9 +774,9 @@ dependencies = [
 
 [[package]]
 name = "path-slash"
-version = "0.1.2"
+version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ddf9566c1063a197427135fb518ed42f2be18630fc2401aa267ed2dc95e9c85d"
+checksum = "ff65715a17cba8979903db6294baef56c5d39e05c8b054cffa31e69e61f24c68"
 
 [[package]]
 name = "percent-encoding"
