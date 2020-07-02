@@ -36,7 +36,7 @@ fn enabled() -> io::Result<()> {
         })
         .env(SHLVL_ENV_VAR, "2")
         .output()?;
-    let expected = format!("{}", style().paint("↕️  2"));
+    let expected = format!("{} ", style().paint("↕️  2"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
@@ -84,7 +84,7 @@ fn lower_threshold() -> io::Result<()> {
         })
         .env(SHLVL_ENV_VAR, "1")
         .output()?;
-    let expected = format!("{}", style().paint("↕️  1"));
+    let expected = format!("{} ", style().paint("↕️  1"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
@@ -118,7 +118,7 @@ fn custom_style() -> io::Result<()> {
         })
         .env(SHLVL_ENV_VAR, "2")
         .output()?;
-    let expected = format!("{}", Color::Red.underline().paint("↕️  2"));
+    let expected = format!("{} ", Color::Red.underline().paint("↕️  2"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
@@ -135,7 +135,7 @@ fn custom_symbol() -> io::Result<()> {
         })
         .env(SHLVL_ENV_VAR, "2")
         .output()?;
-    let expected = format!("{}", style().paint("shlvl is 2"));
+    let expected = format!("{} ", style().paint("shlvl is 2"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
@@ -148,12 +148,12 @@ fn prefix_and_suffix() -> io::Result<()> {
         .use_config(toml::toml! {
             [shlvl]
             prefix = "shlvl "
-            suffix = " level(s)"
+            suffix = " level(s) "
             disabled = false
         })
         .env(SHLVL_ENV_VAR, "2")
         .output()?;
-    let expected = format!("shlvl {} level(s)", style().paint("↕️  2"));
+    let expected = format!("shlvl {} level(s) ", style().paint("↕️  2"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())
