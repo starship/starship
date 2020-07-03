@@ -90,7 +90,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     module.set_segments(match parsed {
-        Ok(segments) => segments,
+        Ok(segments) => {
+            if segments.is_empty() {
+                return None;
+            } else {
+                segments
+            }
+        }
         Err(error) => {
             log::warn!("Error in module `git_status`:\n{}", error);
             return None;
