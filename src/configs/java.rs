@@ -13,7 +13,7 @@ pub struct JavaConfig<'a> {
 impl<'a> RootModuleConfig<'a> for JavaConfig<'a> {
     fn new() -> Self {
         JavaConfig {
-            format: "via [${symbol}${version}]($style) ",
+            format: "via [$symbol$version]($style) ",
             disabled: false,
             style: "red dimmed",
             symbol: "☕ ",

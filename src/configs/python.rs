@@ -19,7 +19,7 @@ impl<'a> RootModuleConfig<'a> for PythonConfig<'a> {
             pyenv_version_name: false,
             python_binary: "python",
             scan_for_pyfiles: true,
-            format: "via [${symbol}${version}( \\($virtualenv\\))]($style) ",
+            format: "via [$symbol$version( \\($virtualenv\\))]($style) ",
             style: "yellow bold",
             symbol: "🐍 ",
             disabled: false,

@@ -15,7 +15,7 @@ impl<'a> RootModuleConfig<'a> for MemoryConfig<'a> {
     fn new() -> Self {
         MemoryConfig {
             threshold: 75,
-            format: "via ${symbol}[${ram}( | ${swap})]($style) ",
+            format: "via $symbol[$ram( | $swap)]($style) ",
             style: "white bold dimmed",
             symbol: "🐏 ",
             disabled: true,
