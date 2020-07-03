@@ -45,7 +45,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `rust`:\n{}", error);
+            log::warn!("Error in module `crystal`:\n{}", error);
             return None;
         }
     });

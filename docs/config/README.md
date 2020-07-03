@@ -461,6 +461,8 @@ running `eval $(starship init $0)`, and then proceed as normal.
 | duration | `16m40s` | The time it took to execute the command |
 | style\*  |          | Mirrors the value of option `style`     |
 
+\*: This variable can only be used as a part of a style string
+
 ### Example
 
 ```toml
@@ -601,7 +603,9 @@ a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/
 | Variable | Example               | Description                         |
 | -------- | --------------------- | ----------------------------------- |
 | path     | `"D:/Projects"`       | The current directory path          |
-| style    | `"black bold dimmed"` | Mirrors the value of option `style` |
+| style\*  | `"black bold dimmed"` | Mirrors the value of option `style` |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -720,7 +724,7 @@ The module will be shown if any of the following conditions are met:
 
 | Option     | Default                                                   | Description                                                     |
 | ---------- | --------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                    | The symbol used before displaying the version of Elixir/Erlang. |
+| `symbol`   | `"💧 "`                                                   | The symbol used before displaying the version of Elixir/Erlang. |
 | `style`    | `"bold purple"`                                           | The style for the module.                                       |
 | `format`   | `"via [$symbol$version \\(OTP $otp_version\\)]($style) "` | The format for the module elixir.                               |
 | `disabled` | `false`                                                   | Disables the `elixir` module.                                   |
@@ -808,7 +812,9 @@ The module will be shown only if any of the following conditions are met:
 | --------- | ------------------------------------------- | ------------------------------------------ |
 | env_value | `Windows NT` (if *variable* would be `$OS`) | The environment value of option `variable` |
 | symbol    |                                             | Mirrors the value of option `symbol`       |
-| style     | `black bold dimmed`                         | Mirrors the value of option `style`        |
+| style\*   | `black bold dimmed`                         | Mirrors the value of option `style`        |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1106,7 +1112,9 @@ The module will be shown if any of the following conditions are met:
 | -------- | -------- | ------------------------------------ |
 | version  | `v8.8.3` | The version of `ghc`                 |
 | symbol   |          | Mirrors the value of option `symbol` |
-| style    |          | Mirrors the value of option `style`  |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1175,8 +1183,10 @@ The module will be shown if any of the following conditions are met:
 | Variable | Example      | Description                          |
 | -------- | ------------ | ------------------------------------ |
 | version  | "v14"        | The version of `java`                |
-| symbol   | "☕"          | Mirrors the value of option `symbol` |
-| style    | "red dimmed" | Mirrors the value of option `style`  |
+| symbol   | "☕"         | Mirrors the value of option `symbol` |
+| style\*  | "red dimmed" | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1347,7 +1357,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | ----------- | --------------------------------------------- | -------------------------------------------------------- |
 | `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
 | `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module.                               |
-| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
+| `symbol`    | `"🐏"`                                        | The symbol used before displaying the memory usage.      |
 | `style`     | `"bold dimmed white"`                         | The style for the module.                                |
 | `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
 
@@ -1359,7 +1369,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | ram_pct     | `48%`         | The percentage of the current system memory.                       |
 | swap\**     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
 | swap_pct\** | `77%`         | The swap memory percentage of the current system swap memory file. |
-| symbol      | `🐏`           | Mirrors the value of option `symbol`                               |
+| symbol      | `🐏`          | Mirrors the value of option `symbol`                               |
 | style\*     |               | Mirrors the value of option `style`                                |
 
 \*: This variable can only be used as a part of a style string
@@ -1442,6 +1452,8 @@ The module will be shown if any of the following conditions are met:
 | version  | `v1.2.0` | The version of `nimc`                |
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1694,7 +1706,7 @@ The module will be shown if any of the following conditions are met:
 | Variable   | Example         | Description                          |
 | ---------- | --------------- | ------------------------------------ |
 | version    | `"v3.8.1"`      | The version of `python`              |
-| symbol     | `"🐍 "`          | Mirrors the value of option `symbol` |
+| symbol     | `"🐍 "`         | Mirrors the value of option `symbol` |
 | style      | `"yellow bold"` | Mirrors the value of option `style`  |
 | virtualenv | `"venv"`        | The current `virtualenv` name        |
 
@@ -1996,6 +2008,8 @@ The module will be shown if any of the following conditions are met:
 | version  | `v0.6.0` | The version of `zig`                 |
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### Example
 

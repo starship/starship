@@ -36,7 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `python`:\n{}", error);
+            log::warn!("Error in module `package`:\n{}", error);
             return None;
         }
     });
