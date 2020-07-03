@@ -95,16 +95,15 @@ pub fn explain(args: ArgMatches) {
         desc: String,
     }
 
-    let dont_print = vec!["character"];
+    let dont_print = vec!["line_break"];
 
     let modules = compute_modules(&context)
         .into_iter()
         .filter(|module| !dont_print.contains(&module.get_name().as_str()))
         .map(|module| {
-            let ansi_strings = module.ansi_strings();
             let value = module.get_segments().join("");
             ModuleInfo {
-                value: ansi_term::ANSIStrings(&ansi_strings[1..ansi_strings.len() - 1]).to_string(),
+                value: ansi_term::ANSIStrings(&module.ansi_strings()).to_string(),
                 value_len: value.chars().count() + count_wide_chars(&value),
                 desc: module.get_description().to_owned(),
             }
