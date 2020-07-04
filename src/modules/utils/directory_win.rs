@@ -16,6 +16,10 @@ use winapi::um::winnt::{
     TOKEN_DUPLICATE, TOKEN_IMPERSONATE, TOKEN_QUERY,
 };
 
+/// Checks if the current user has write access right to the `folder_path`
+///
+/// First, the function extracts DACL from the given directory and then calls `AccessCheck` against
+/// the current process access token and directory's security descriptor.
 pub fn is_write_allowed(folder_path: &str) -> std::result::Result<bool, &'static str> {
     let folder_name: Vec<u16> = OsStr::new(folder_path)
         .encode_wide()

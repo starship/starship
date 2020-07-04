@@ -4,6 +4,14 @@ use std::fs;
 use std::os::unix::fs::MetadataExt;
 use std::os::unix::fs::PermissionsExt;
 
+/// Checks if the current user can write to the `folder_path`.
+///
+/// It extracts Unix access rights from the directory and checks whether
+/// 1) the current user is the owner of the directory and whether it has the write access
+/// 2) the current user's primary group is the directory group owner whether if it has write access
+/// 2a) (not implemented on macOS) one of the supplementary groups of the current user is the
+/// directory group owner and whether it has write access
+/// 3) 'others' part of the access mask has the write access
 pub fn is_write_allowed(folder_path: &str) -> Result<bool, &'static str> {
     let meta = fs::metadata(folder_path).map_err(|_| "Unable to stat() directory")?;
     let perms = meta.permissions().mode();
@@ -42,6 +50,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[ignore]
     fn read_only_test() {
         assert_eq!(is_write_allowed("/etc"), Ok(false));
         assert_eq!(
