@@ -503,6 +503,92 @@ fn shows_deleted_file_with_count() -> io::Result<()> {
     remove_dir_all(repo_dir)
 }
 
+#[test]
+#[ignore]
+fn prefix() -> io::Result<()> {
+    let repo_dir = common::create_fixture_repo()?;
+    File::create(repo_dir.join("prefix"))?.sync_all()?;
+    let output = common::render_module("git_status")
+        .arg("--path")
+        .arg(&repo_dir)
+        .env_clear()
+        .use_config(toml::toml! {
+            [git_status]
+            prefix = "("
+            style = ""
+        })
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    let expected = "(";
+    assert!(actual.starts_with(&expected));
+    remove_dir_all(repo_dir)
+}
+
+#[test]
+#[ignore]
+fn suffix() -> io::Result<()> {
+    let repo_dir = common::create_fixture_repo()?;
+    File::create(repo_dir.join("suffix"))?.sync_all()?;
+    let output = common::render_module("git_status")
+        .arg("--path")
+        .arg(&repo_dir)
+        .env_clear()
+        .use_config(toml::toml! {
+            [git_status]
+            suffix = ")"
+            style = ""
+        })
+        .output()?;
+    let actual = String::from_utf8(output.stdout).unwrap();
+    let expected = ")";
+    assert!(actual.ends_with(&expected));
+    remove_dir_all(repo_dir)
+}
+
+// Whenever a file is manually renamed, git itself ('git status') does not treat such file as renamed,
+// but as untracked instead. The following test checks if manually deleted and manually renamed
+// files are tracked by git_status module in the same way 'git status' does.
+#[test]
+#[ignore]
+fn ignore_manually_renamed() -> io::Result<()> {
+    let repo_dir = common::create_fixture_repo()?;
+    File::create(repo_dir.join("a"))?.sync_all()?;
+    File::create(repo_dir.join("b"))?.sync_all()?;
+    Command::new("git")
+        .args(&["add", "--all"])
+        .current_dir(&repo_dir)
+        .output()?;
+    Command::new("git")
+        .args(&["commit", "-m", "add new files"])
+        .current_dir(&repo_dir)
+        .output()?;
+
+    fs::remove_file(repo_dir.join("a"))?;
+    fs::rename(repo_dir.join("b"), repo_dir.join("c"))?;
+    barrier();
+
+    let output = common::render_module("git_status")
+        .arg("--path")
+        .arg(&repo_dir)
+        .env_clear()
+        .use_config(toml::toml! {
+            [git_status]
+            prefix = ""
+            suffix = ""
+            style = ""
+            ahead = "A"
+            deleted = "D"
+            untracked = "U"
+        })
+        .output()?;
+
+    let actual = String::from_utf8(output.stdout).unwrap();
+    let expected = "ADU";
+    assert_eq!(actual, expected);
+
+    remove_dir_all(repo_dir)
+}
+
 fn ahead(repo_dir: &PathBuf) -> io::Result<()> {
     File::create(repo_dir.join("readme.md"))?.sync_all()?;
 
