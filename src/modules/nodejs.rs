@@ -19,7 +19,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .set_folders(&["node_modules"])
         .is_match();
 
-    if !is_js_project {
+    let is_esy_project = context
+        .try_begin_scan()?
+        .set_folders(&["esy.lock"])
+        .is_match();
+
+    if !is_js_project || is_esy_project {
         return None;
     }
 
@@ -76,6 +81,19 @@ mod tests {
 
         let actual = render_module("nodejs", dir.path(), None);
         let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_package_json_and_esy_lock() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("package.json"))?.sync_all()?;
+        let esy_lock = dir.path().join("esy.lock");
+        fs::create_dir_all(&esy_lock)?;
+
+        let actual = render_module("nodejs", dir.path(), None);
+        let expected = None;
         assert_eq!(expected, actual);
         dir.close()
     }
