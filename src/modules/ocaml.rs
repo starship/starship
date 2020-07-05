@@ -29,12 +29,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .set_folders(&["esy.lock"])
         .is_match();
 
-    let ocaml_version =  if is_esy_project {
+    let ocaml_version = if is_esy_project {
         utils::exec_cmd("esy", &["ocaml", "-vnum"])?.stdout
     } else {
         utils::exec_cmd("ocaml", &["-vnum"])?.stdout
     };
-     
+
     let formatted_version = format!("v{}", &ocaml_version);
 
     let mut module = context.new_module("ocaml");
@@ -90,7 +90,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         fs::create_dir_all(dir.path().join("esy.lock"))?;
         File::create(dir.path().join("package.json"))?.sync_all()?;
-        fs::write(dir.path().join("package.lock"), "{\"dependencies\": {\"ocaml\": \"4.8.1000\"}}")?;
+        fs::write(
+            dir.path().join("package.lock"),
+            "{\"dependencies\": {\"ocaml\": \"4.8.1000\"}}",
+        )?;
         let actual = render_module("ocaml", dir.path(), None);
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐫 v4.08.1")));
         assert_eq!(expected, actual);
