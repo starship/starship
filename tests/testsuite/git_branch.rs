@@ -100,11 +100,16 @@ fn test_japanese_truncation() -> io::Result<()> {
 }
 
 #[test]
-fn test_works_with_unborn_master() -> io::Result<()> {
+fn test_works_with_unborn_default_branch() -> io::Result<()> {
     let repo_dir = tempfile::tempdir()?.into_path();
 
     Command::new("git")
         .args(&["init"])
+        .current_dir(&repo_dir)
+        .output()?;
+
+    Command::new("git")
+        .args(&["symbolic-ref", "HEAD", "refs/heads/main"])
         .current_dir(&repo_dir)
         .output()?;
 
@@ -117,7 +122,7 @@ fn test_works_with_unborn_master() -> io::Result<()> {
 
     let expected = format!(
         "on {} ",
-        Color::Purple.bold().paint(format!("\u{e0a0} {}", "master")),
+        Color::Purple.bold().paint(format!("\u{e0a0} {}", "main")),
     );
     assert_eq!(expected, actual);
     remove_dir_all(repo_dir)
