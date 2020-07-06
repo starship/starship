@@ -64,19 +64,21 @@ fn render_time(raw_millis: u128, show_millis: bool) -> String {
     let mut rendered_components: Vec<String> = components
         .iter()
         .zip(&suffixes)
-        .map(render_time_component)
+        .filter_map(render_time_component)
         .collect();
     if show_millis || raw_millis < 1000 {
-        rendered_components.push(render_time_component((&millis, &"ms")));
+        if let Some(millis) = render_time_component((&millis, &"ms")) {
+            rendered_components.push(millis);
+        }
     }
-    rendered_components.join("")
+    rendered_components.join(" ")
 }
 
 /// Render a single component of the time string, giving an empty string if component is zero
-fn render_time_component((component, suffix): (&u128, &&str)) -> String {
+fn render_time_component((component, suffix): (&u128, &&str)) -> Option<String> {
     match component {
-        0 => String::new(),
-        n => format!("{}{}", n, suffix),
+        0 => None,
+        n => Some(format!("{}{}", n, suffix)),
     }
 }
 
@@ -133,18 +135,22 @@ mod tests {
     fn test_500ms() {
         assert_eq!(render_time(500_u128, true), "500ms")
     }
+
     #[test]
     fn test_10s() {
         assert_eq!(render_time(10_000_u128, true), "10s")
     }
+
     #[test]
     fn test_90s() {
-        assert_eq!(render_time(90_000_u128, true), "1m30s")
+        assert_eq!(render_time(90_000_u128, true), "1m 30s")
     }
+
     #[test]
     fn test_10110s() {
-        assert_eq!(render_time(10_110_000_u128, true), "2h48m30s")
+        assert_eq!(render_time(10_110_000_u128, true), "2h 48m 30s")
     }
+
     #[test]
     fn test_1d() {
         assert_eq!(render_time(86_400_000_u128, true), "1d")
