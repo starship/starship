@@ -58,7 +58,7 @@ The most common cause of this is system misconfiguration. Some Linux distros in 
 
   - Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
   - You have an emoji font installed. Most systems come with an emoji font by default, but some (notably Arch Linux) do not. You can usually install one through your system's package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
-  - You are using a [powerline-patched font](https://github.com/powerline/fonts).
+  - You are using a [Nerd Font](https://www.nerdfonts.com/).
 
 To test your system, run the following commands in a terminal:
 
