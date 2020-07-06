@@ -5,7 +5,7 @@
 - **Эмулятор терминала**: [iTerm2](https://iterm2.com/)
   - **Тема**: Минимальная
   - **Цветовая схема**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Шрифт**: [Fira Code](https://github.com/tonsky/FiraCode)
+  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
 - **Оболочка**: [Fish Shell](https://fishshell.com/)
   - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Подсказка**: [Starship](https://starship.rs/)
