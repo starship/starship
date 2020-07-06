@@ -143,7 +143,7 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Variable       | Default                        | Description                                           |
+| Option         | Default                        | Description                                           |
 | -------------- | ------------------------------ | ----------------------------------------------------- |
 | `format`       | [link](#default-prompt-format) | Configure the format of the prompt.                   |
 | `scan_timeout` | `30`                           | Timeout for starship to scan files (in milliseconds). |
