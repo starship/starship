@@ -110,7 +110,6 @@ prompt_order = [
     "elm",
     "erlang",
     "golang",
-    "haskell",
     "java",
     "julia",
     "nim",
@@ -733,29 +732,6 @@ The `golang` module shows the currently installed version of Golang. The module 
 [golang]
 symbol = "🏎💨 "
 ```
-## Haskell
-
-The `haskell` module shows the currently installed version of Haskell Stack version. The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `stack.yaml` file
-
-### Opções
-
-| Variável   | Padrão       | Descrição                                                 |
-| ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold red"` | The style for the module.                                 |
-| `disabled` | `false`      | Disables the `haskell` module.                            |
-
-
-### Exemplo
-
-```toml
-# ~/.config/starship.toml
-
-[haskell]
-symbol = " "
-```
 
 ## Hostname
 
@@ -888,7 +864,7 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ```
 
-## Quebra de linha
+## Line Break
 
 The `line_break` module separates the prompt into two lines.
 
@@ -907,7 +883,7 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
-## Uso de memória
+## Memory Usage
 
 The `memory_usage` module shows current system memory and swap usage.
 
