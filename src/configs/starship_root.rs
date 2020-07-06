@@ -7,9 +7,10 @@ pub struct StarshipRootConfig<'a> {
     pub format: &'a str,
     pub scan_timeout: u64,
 }
-            // List of default prompt order
-            // NOTE: If this const value is changed then Default prompt order subheading inside
-            // prompt heading of config docs needs to be updated according to changes made here.
+
+// List of default prompt order
+// NOTE: If this const value is changed then Default prompt order subheading inside
+// prompt heading of config docs needs to be updated according to changes made here.
 pub const PROMPT_ORDER: [&str; 43] = [
     "username",
     "hostname",
