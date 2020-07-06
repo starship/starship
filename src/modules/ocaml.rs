@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         utils::exec_cmd("ocaml", &["-vnum"])?.stdout
     };
 
-    let formatted_version = format!("v{}", &ocaml_version);
+    let formatted_version = format!("v{}", &ocaml_version.trim());
 
     let mut module = context.new_module("ocaml");
     let config = OCamlConfig::try_load(module.config);
