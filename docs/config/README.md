@@ -1180,11 +1180,11 @@ The module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable | Example      | Description                          |
-| -------- | ------------ | ------------------------------------ |
-| version  | "v14"        | The version of `java`                |
-| symbol   | "☕"         | Mirrors the value of option `symbol` |
-| style\*  | "red dimmed" | Mirrors the value of option `style`  |
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| version  | `v14`   | The version of `java`                |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
