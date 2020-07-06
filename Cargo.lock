@@ -1156,7 +1156,7 @@ dependencies = [
  "sysinfo",
  "tempfile",
  "term_size",
- "textwrap 0.12.0",
+ "textwrap 0.12.1",
  "toml",
  "unicode-segmentation",
  "unicode-width",
@@ -1255,9 +1255,9 @@ dependencies = [
 
 [[package]]
 name = "textwrap"
-version = "0.12.0"
+version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e30fc9a1b93fe45a3811654d49ead7306cf8fb18aa7fe6bf630a1099111cd2d6"
+checksum = "203008d98caf094106cfaba70acfed15e18ed3ddb7d94e49baec153a2b462789"
 dependencies = [
  "unicode-width",
 ]
