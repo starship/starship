@@ -8,7 +8,7 @@ use crate::formatter::StringFormatter;
 use crate::segment::Segment;
 use std::sync::{Arc, RwLock};
 
-const ALL_STATUS_FORMAT: &str = r"$conflicted$stashed$deleted$renamed$modified$staged$untracked";
+const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$staged$untracked";
 
 /// Creates a module with the Git branch in the current directory
 ///
