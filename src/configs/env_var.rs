@@ -19,7 +19,7 @@ impl<'a> RootModuleConfig<'a> for EnvVarConfig<'a> {
             style: "black bold dimmed",
             variable: None,
             default: None,
-            format: "with [${env_value}]($style) ",
+            format: "with [$env_value]($style) ",
             disabled: false,
         }
     }
