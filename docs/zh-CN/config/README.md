@@ -110,7 +110,6 @@ prompt_order = [
     "elm",
     "erlang",
     "golang",
-    "haskell",
     "java",
     "julia",
     "nim",
@@ -733,29 +732,6 @@ The `golang` module shows the currently installed version of Golang. 此组件�
 [golang]
 symbol = "🏎💨 "
 ```
-## Haskell
-
-The `haskell` module shows the currently installed version of Haskell Stack version. 此组件将在符合以下任意条件之一时显示：
-
-- The current directory contains a `stack.yaml` file
-
-### 配置项
-
-| 字段         | 默认值          | 描述                          |
-| ---------- | ------------ | --------------------------- |
-| `symbol`   | `"λ "`       | 这个字段的内容会显示在当前 Haskell 版本之前。 |
-| `style`    | `"bold red"` | 此组件的样式。                     |
-| `disabled` | `false`      | 禁用 `haskell` 组件。            |
-
-
-### 示例
-
-```toml
-# ~/.config/starship.toml
-
-[haskell]
-symbol = " "
-```
 
 ## Hostname
 
@@ -763,14 +739,14 @@ The `hostname` module shows the system hostname.
 
 ### 配置项
 
-| 字段         | 默认值                   | 描述                                                                 |
-| ---------- | --------------------- | ------------------------------------------------------------------ |
-| `ssh_only` | `true`                | 仅在连接到 SSH 会话时显示主机名。                                                |
-| `prefix`   | `""`                  | 直接在主机名前显示的前缀。                                                      |
-| `suffix`   | `""`                  | 直接在主机名后显示的后缀。                                                      |
-| `trim_at`  | `"."`                 | 当主机名过长被截断时，会截断成第一次匹配该字符串之前的主机名。 `"."` 会让主机名截断到第一个点处。 `""` 会禁用任何截断。 |
-| `style`    | `"bold dimmed green"` | 此组件的样式。                                                            |
-| `disabled` | `false`               | 禁用 `hostname` 组件。                                                  |
+| 字段         | 默认值                   | 描述                                                                                                                                   |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                | Only show hostname when connected to an SSH session.                                                                                 |
+| `prefix`   | `""`                  | Prefix to display immediately before the hostname.                                                                                   |
+| `suffix`   | `""`                  | Suffix to display immediately after the hostname.                                                                                    |
+| `trim_at`  | `"."`                 | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `style`    | `"bold dimmed green"` | 此组件的样式。                                                                                                                              |
+| `disabled` | `false`               | Disables the `hostname` module.                                                                                                      |
 
 ### 示例
 
@@ -794,11 +770,11 @@ The `java` module shows the currently installed version of Java. 此组件将在
 
 ### 配置项
 
-| 字段         | 默认值            | 描述                       |
-| ---------- | -------------- | ------------------------ |
-| `symbol`   | `"☕ "`         | 这个字段的内容会显示在当前 Java 版本之前。 |
-| `style`    | `"dimmed red"` | 此组件的样式。                  |
-| `disabled` | `false`        | 禁用 `java` 组件。            |
+| 字段         | 默认值            | 描述                                                     |
+| ---------- | -------------- | ------------------------------------------------------ |
+| `symbol`   | `"☕ "`         | The symbol used before displaying the version of Java. |
+| `style`    | `"dimmed red"` | 此组件的样式。                                                |
+| `disabled` | `false`        | Disables the `java` module.                            |
 
 ### 示例
 
@@ -815,12 +791,12 @@ The `jobs` module shows the current number of jobs running. The module will be s
 
 ### 配置项
 
-| 字段          | 默认值           | 描述                   |
-| ----------- | ------------- | -------------------- |
-| `symbol`    | `"✦"`         | 这个字段的内容会显示在当前作业数量之前。 |
-| `threshold` | `1`           | 如果超过此字段的值，显示任务数量。    |
-| `style`     | `"bold blue"` | 此组件的样式。              |
-| `disabled`  | `false`       | 禁用 `jobs` 组件。        |
+| 字段          | 默认值           | 描述                                                    |
+| ----------- | ------------- | ----------------------------------------------------- |
+| `symbol`    | `"✦"`         | The symbol used before displaying the number of jobs. |
+| `threshold` | `1`           | Show number of jobs if exceeded.                      |
+| `style`     | `"bold blue"` | 此组件的样式。                                               |
+| `disabled`  | `false`       | Disables the `jobs` module.                           |
 
 ### 示例
 
@@ -868,12 +844,12 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### 配置项
 
-| 字段                | 默认值           | 描述                                  |
-| ----------------- | ------------- | ----------------------------------- |
-| `symbol`          | `"☸ "`        | 这个字段的内容会显示在当前集群信息之前。                |
-| `context_aliases` |               | Table of context aliases to display |
-| `style`           | `"bold blue"` | 此组件的样式。                             |
-| `disabled`        | `true`        | 禁用 `kubernetes` 组件。                 |
+| 字段                | 默认值           | 描述                                                  |
+| ----------------- | ------------- | --------------------------------------------------- |
+| `symbol`          | `"☸ "`        | The symbol used before displaying the Cluster info. |
+| `context_aliases` |               | Table of context aliases to display                 |
+| `style`           | `"bold blue"` | 此组件的样式。                                             |
+| `disabled`        | `true`        | Disables the `kubernetes` module                    |
 
 ### 示例
 
@@ -894,9 +870,9 @@ The `line_break` module separates the prompt into two lines.
 
 ### 配置项
 
-| 字段         | 默认值     | 描述                          |
-| ---------- | ------- | --------------------------- |
-| `disabled` | `false` | 禁用 `line_break` 组件，使提示成为单行。 |
+| 字段         | 默认值     | 描述                                                                 |
+| ---------- | ------- | ------------------------------------------------------------------ |
+| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
 ### 示例
 
@@ -921,15 +897,15 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### 配置项
 
-| 字段                | 默认值                   | 描述                         |
-| ----------------- | --------------------- | -------------------------- |
-| `show_percentage` | `false`               | 用可用内存的百分比来显示内存使用情况。        |
-| `show_swap`       | `true`                | 如果总交换区使用量为非零，则显示交换区使用情况。   |
-| `threshold`       | `75`                  | 隐藏内存使用情况，除非它超过这个百分比。       |
-| `symbol`          | `"🐏 "`                | 这个字段的内容会显示在当前内存使用情况之前。     |
-| `separator`       | `" | "`               | 此字段所设置的符号或文本会分隔内存和交换区使用情况。 |
-| `style`           | `"bold dimmed white"` | 此组件的样式。                    |
-| `disabled`        | `true`                | 禁用 `memory_usage` 模块       |
+| 字段                | 默认值                   | 描述                                                            |
+| ----------------- | --------------------- | ------------------------------------------------------------- |
+| `show_percentage` | `false`               | Display memory usage as a percentage of the available memory. |
+| `show_swap`       | `true`                | Display swap usage if total swap is non-zero.                 |
+| `threshold`       | `75`                  | Hide the memory usage unless it exceeds this percentage.      |
+| `symbol`          | `"🐏 "`                | The symbol used before displaying the memory usage.           |
+| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
+| `style`           | `"bold dimmed white"` | 此组件的样式。                                                       |
+| `disabled`        | `true`                | Disables the `memory_usage` module.                           |
 
 ### 示例
 
@@ -952,13 +928,13 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 
 ### 配置项
 
-| 字段                  | 默认值             | 描述                              |
-| ------------------- | --------------- | ------------------------------- |
-| `symbol`            | `" "`          | 该字段的内容显示于当前仓库的 hg 书签或活动分支名之前。   |
-| `truncation_length` | `2^63 - 1`      | 将显示的 hg 分支名截断到该数量的字素（graphemes） |
-| `truncation_symbol` | `"…"`           | 此字段的内容用来表示分支名称被截断。              |
-| `style`             | `"bold purple"` | 此组件的样式。                         |
-| `disabled`          | `true`          | 禁用 `hg_branch` 组件。              |
+| 字段                  | 默认值             | 描述                                                                                           |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`           | 此字段的内容用来表示分支名称被截断。                                                                           |
+| `style`             | `"bold purple"` | 此组件的样式。                                                                                      |
+| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
 
 ### 示例
 
@@ -1005,12 +981,12 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 
 | 字段           | 默认值           | 描述                                                |
 | ------------ | ------------- | ------------------------------------------------- |
-| `use_name`   | `false`       | 显示 nix-shell 的名称。                                 |
-| `impure_msg` | `"impure"`    | 自定义“impure”消息。                                    |
-| `pure_msg`   | `"pure"`      | 自定义“pure”消息。                                      |
+| `use_name`   | `false`       | Display the name of the nix-shell.                |
+| `impure_msg` | `"impure"`    | Customize the "impure" msg.                       |
+| `pure_msg`   | `"pure"`      | Customize the "pure" msg.                         |
 | `symbol`     | `"❄️  "`      | The symbol used before displaying the shell name. |
 | `style`      | `"bold blue"` | 此组件的样式。                                           |
-| `disabled`   | `false`       | 禁用 `nix_shell` 组件。                                |
+| `disabled`   | `false`       | Disables the `nix_shell` module.                  |
 
 ### 示例
 
@@ -1037,11 +1013,11 @@ The `nodejs` module shows the currently installed version of NodeJS. 此组件�
 
 ### 配置项
 
-| 字段         | 默认值            | 描述                         |
-| ---------- | -------------- | -------------------------- |
-| `symbol`   | `"⬢ "`         | 这个字段的内容会显示在当前 NodeJS 版本之前。 |
-| `style`    | `"bold green"` | 此组件的样式。                    |
-| `disabled` | `false`        | 禁用 `nodejs` 组件。            |
+| 字段         | 默认值            | 描述                                                       |
+| ---------- | -------------- | -------------------------------------------------------- |
+| `symbol`   | `"⬢ "`         | The symbol used before displaying the version of NodeJS. |
+| `style`    | `"bold green"` | 此组件的样式。                                                  |
+| `disabled` | `false`        | Disables the `nodejs` module.                            |
 
 ### 示例
 
@@ -1068,12 +1044,12 @@ The `package` module is shown when the current directory is the repository for a
 
 ### 配置项
 
-| 字段                | 默认值          | 描述                                                        |
-| ----------------- | ------------ | --------------------------------------------------------- |
-| `symbol`          | `"📦 "`       | 这个字段的内容会显示在当前软件包版本之前。                                     |
-| `style`           | `"bold 208"` | 此组件的样式。                                                   |
-| `display_private` | `false`      | Enable displaying version for packages marked as private. |
-| `disabled`        | `false`      | 禁用 `package` 组件。                                          |
+| 字段                | 默认值          | 描述                                                         |
+| ----------------- | ------------ | ---------------------------------------------------------- |
+| `symbol`          | `"📦 "`       | The symbol used before displaying the version the package. |
+| `style`           | `"bold 208"` | 此组件的样式。                                                    |
+| `display_private` | `false`      | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`      | Disables the `package` module.                             |
 
 ### 示例
 
@@ -1086,7 +1062,7 @@ symbol = "🎁 "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of OCaml. 此组件只有满足以下条件之一时才会被显示：
+The `ocaml` module shows the currently installed version of OCaml. 此组件将在符合以下任意条件之一时显示：
 
 - The current directory contains a file with `.opam` extension or `_opam` directory
 - The current directory contains a `esy.lock` directory
@@ -1114,7 +1090,7 @@ symbol = "🐪 "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. 此组件将在符合以下任意条件之一时显示：
+The `php` module shows the currently installed version of PHP. 此组件只有满足以下条件之一时才会被显示：
 
 - The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
@@ -1122,11 +1098,11 @@ The `php` module shows the currently installed version of PHP. 此组件将在�
 
 ### 配置项
 
-| 字段         | 默认值          | 描述                      |
-| ---------- | ------------ | ----------------------- |
-| `symbol`   | `"🐘 "`       | 这个字段的内容会显示在当前 PHP 版本之前。 |
-| `style`    | `"bold 147"` | 此组件的样式。                 |
-| `disabled` | `false`      | 禁用 `php` 组件。            |
+| 字段         | 默认值          | 描述                                                    |
+| ---------- | ------------ | ----------------------------------------------------- |
+| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
+| `style`    | `"bold 147"` | 此组件的样式。                                               |
+| `disabled` | `false`      | Disables the `php` module.                            |
 
 ### 示例
 
@@ -1157,14 +1133,14 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 ### 配置项
 
-| 字段                   | 默认值             | 描述                                                                         |
-| -------------------- | --------------- | -------------------------------------------------------------------------- |
-| `symbol`             | `"🐍 "`          | 这个字段的内容会显示在当前 Python 版本之前。                                                 |
-| `pyenv_version_name` | `false`         | 使用 pyenv 获取 Python 版本                                                      |
-| `pyenv_prefix`       | `"pyenv "`      | 在 pyenv 版本前显示的前缀（默认显示 `pyenv MY_VERSION`）                                  |
-| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module. |
-| `style`              | `"bold yellow"` | 此组件的样式。                                                                    |
-| `disabled`           | `false`         | 禁用 `python` 组件。                                                            |
+| 字段                   | 默认值             | 描述                                                                          |
+| -------------------- | --------------- | --------------------------------------------------------------------------- |
+| `symbol`             | `"🐍 "`          | The symbol used before displaying the version of Python.                    |
+| `pyenv_version_name` | `false`         | Use pyenv to get Python version                                             |
+| `pyenv_prefix`       | `"pyenv "`      | Prefix before pyenv version display (default display is `pyenv MY_VERSION`) |
+| `scan_for_pyfiles`   | `true`          | If false, Python files in the current directory will not show this module.  |
+| `style`              | `"bold yellow"` | 此组件的样式。                                                                     |
+| `disabled`           | `false`         | Disables the `python` module.                                               |
 
 <details>
 <summary>This module has some advanced configuration options.</summary>
@@ -1209,7 +1185,7 @@ The `ruby` module shows the currently installed version of Ruby. 此组件将在
 | ---------- | ------------ | ------------------------------------------------------ |
 | `symbol`   | `"💎 "`       | The symbol used before displaying the version of Ruby. |
 | `style`    | `"bold red"` | 此组件的样式。                                                |
-| `disabled` | `false`      | 禁用 `ruby` 组件。                                          |
+| `disabled` | `false`      | Disables the `ruby` module.                            |
 
 ### 示例
 
@@ -1229,11 +1205,11 @@ The `rust` module shows the currently installed version of Rust. 此组件将在
 
 ### 配置项
 
-| 字段         | 默认值          | 描述                       |
-| ---------- | ------------ | ------------------------ |
-| `symbol`   | `"🦀 "`       | 这个字段的内容会显示在当前 Rust 版本之前。 |
-| `style`    | `"bold red"` | 此组件的样式。                  |
-| `disabled` | `false`      | 禁用 `rust` 组件。            |
+| 字段         | 默认值          | 描述                                                     |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `symbol`   | `"🦀 "`       | The symbol used before displaying the version of Rust. |
+| `style`    | `"bold red"` | 此组件的样式。                                                |
+| `disabled` | `false`      | Disables the `rust` module.                            |
 
 ### 示例
 
@@ -1277,12 +1253,12 @@ The `terraform` module shows the currently selected terraform workspace and vers
 
 ### 配置项
 
-| 字段             | 默认值          | 描述                               |
-| -------------- | ------------ | -------------------------------- |
-| `symbol`       | `"💠 "`       | 这个字段的内容会显示在当前 terraform 工作区之前。   |
-| `show_version` | `false`      | 显示 terraform 版本信息。 在大型工作空间中非常缓慢。 |
-| `style`        | `"bold 105"` | 此组件的样式。                          |
-| `disabled`     | `false`      | 禁用 `terraform` 组件。               |
+| 字段             | 默认值          | 描述                                                          |
+| -------------- | ------------ | ----------------------------------------------------------- |
+| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
+| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
+| `style`        | `"bold 105"` | 此组件的样式。                                                     |
+| `disabled`     | `false`      | Disables the `terraform` module.                            |
 
 ### 示例
 
@@ -1305,14 +1281,14 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### 配置项
 
-| 字段                | 默认值             | 描述                                                                                                    |
-| ----------------- | --------------- | ----------------------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | 启用 12 小时格式.                                                                                           |
-| `format`          | 见下文解释           | 用来格式化时间显示的 [chrono 格式字符串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)             |
-| `style`           | `"bold yellow"` | The style for the module time.                                                                        |
-| `utc_time_offset` | `"local"`       | 设置所用 UTC 偏移量。 范围是 -24 < x < 24。 允许使用浮点数来得到 30/45 分钟的时区偏移。                                             |
-| `disabled`        | `true`          | 禁用 `time` 组件。                                                                                         |
-| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
+| 字段                | 默认值             | 描述                                                                                                                  |
+| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `use_12hr`        | `false`         | Enables 12 hour formatting.                                                                                         |
+| `format`          | see below       | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time. |
+| `style`           | `"bold yellow"` | The style for the module time.                                                                                      |
+| `utc_time_offset` | `"local"`       | Sets the UTC offset to use. Range from -24 < x < 24. Allows floats to accommodate 30/45 minute timezone offsets.    |
+| `disabled`        | `true`          | Disables the `time` module.                                                                                         |
+| `time_range`      | `"-"`           | Sets the time range during which the module will be shown. Times must be specified in 24-hours format               |
 
 If `use_12hr` is `true`, then `format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `format` will override the `use_12hr` setting.
 
@@ -1339,12 +1315,12 @@ The `username` module shows active user's username. 此组件将在符合以下�
 
 ### 配置项
 
-| 字段            | 默认值             | 描述                  |
-| ------------- | --------------- | ------------------- |
-| `style_root`  | `"bold red"`    | 当前用户为 root 时使用的样式。  |
-| `style_user`  | `"bold yellow"` | 非 root 用户使用的样式。     |
-| `show_always` | `false`         | 总是显示 `username` 组件。 |
-| `disabled`    | `false`         | 禁用 `username` 组件。   |
+| 字段            | 默认值             | 描述                                    |
+| ------------- | --------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`    | The style used when the user is root. |
+| `style_user`  | `"bold yellow"` | The style used for non-root users.    |
+| `show_always` | `false`         | Always shows the `username` module.   |
+| `disabled`    | `false`         | Disables the `username` module.       |
 
 ### 示例
 
@@ -1408,7 +1384,7 @@ The order in which custom modules are shown can be individually set by setting `
 | `command`     |                           | The command whose output should be printed.                                                                                |
 | `when`        |                           | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                           | [See below](#custom-command-shell)                                                                                         |
-| `描述`          | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
+| `description` | `"<custom module>"` | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                      | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                      | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                      | The extensions that will be searched in the working directory for a match.                                                 |
