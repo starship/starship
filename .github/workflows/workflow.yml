@@ -108,7 +108,7 @@ jobs:
       - name: Setup | Rust
         uses: ATiltedTree/setup-rust@v1
         with:
-          rust-version: stable
+          rust-version: ${{ matrix.rust }}
 
       # Install dotnet at a fixed version
       - name: Setup | DotNet
