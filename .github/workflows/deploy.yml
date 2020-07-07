@@ -21,17 +21,17 @@ jobs:
           rust-version: stable
 
       - name: Build | Publish
-        run: cargo publish --dry-run #--token ${{ secrets.CRATES_IO_TOKEN }}
+        run: cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
 
-  # update_brew_formula:
-  #   name: Update Brew Formula
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: mislav/bump-homebrew-formula-action@v1.6
-  #       with:
-  #         formula-name: starship
-  #       env:
-  #         COMMITTER_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
+  update_brew_formula:
+    name: Update Brew Formula
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mislav/bump-homebrew-formula-action@v1.6
+        with:
+          formula-name: starship
+        env:
+          COMMITTER_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
 
   # Build sources for every OS
   github_build:
