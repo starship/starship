@@ -1,6 +1,7 @@
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::ocaml::OCamlConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 /// Creates a module with the current OCaml version
@@ -35,14 +36,33 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         utils::exec_cmd("ocaml", &["-vnum"])?.stdout
     };
 
-    let formatted_version = format!("v{}", &ocaml_version.trim());
-
     let mut module = context.new_module("ocaml");
-    let config = OCamlConfig::try_load(module.config);
-    module.set_style(config.style);
+    let config: OCamlConfig = OCamlConfig::try_load(module.config);
 
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &SegmentConfig::new(&formatted_version));
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => Some(Ok(format!("v{}", &ocaml_version))),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `ocaml`: \n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }

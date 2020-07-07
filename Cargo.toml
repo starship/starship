@@ -59,6 +59,7 @@ open = "1.4.0"
 unicode-width = "0.1.8"
 textwrap = "0.12.1"
 term_size = "0.3.2"
+quick-xml = "0.18.1"
 
 # Optional/http:
 attohttpc = { version = "0.15.0", optional = true, default-features = false, features = ["tls", "form"] }

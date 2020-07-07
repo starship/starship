@@ -1,10 +1,10 @@
 use std::env;
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
 
 use super::utils::directory::truncate;
-use crate::config::RootModuleConfig;
 use crate::configs::conda::CondaConfig;
+use crate::formatter::StringFormatter;
 
 /// Creates a module with the current Conda environment
 ///
@@ -17,14 +17,34 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let mut module = context.new_module("conda");
-    let config = CondaConfig::try_load(module.config);
+    let config: CondaConfig = CondaConfig::try_load(module.config);
 
     let conda_env = truncate(conda_env, config.truncation_length);
 
-    module.set_style(config.style);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "environment" => Some(Ok(conda_env.as_str())),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("environment", &config.environment.with_value(&conda_env));
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `conda`:\n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }

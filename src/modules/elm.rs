@@ -1,6 +1,7 @@
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::elm::ElmConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 /// Creates a module with the current Elm version
@@ -24,14 +25,35 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let elm_version = utils::exec_cmd("elm", &["--version"])?.stdout;
-    let formatted_version = Some(format!("v{}", elm_version.trim()))?;
+    let module_version = Some(format!("v{}", elm_version.trim()))?;
 
     let mut module = context.new_module("elm");
     let config: ElmConfig = ElmConfig::try_load(module.config);
-    module.set_style(config.style);
 
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &SegmentConfig::new(&formatted_version));
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => Some(Ok(&module_version)),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `elm`:\n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }

@@ -3,6 +3,7 @@ use unicode_segmentation::UnicodeSegmentation;
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::hg_branch::HgBranchConfig;
+use crate::formatter::StringFormatter;
 
 /// Creates a module with the Hg bookmark or branch in the current directory
 ///
@@ -15,12 +16,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let mut module = context.new_module("hg_branch");
-    let config = HgBranchConfig::try_load(module.config);
-    module.set_style(config.style);
-
-    module.get_prefix().set_value("on ");
-
-    module.create_segment("symbol", &config.symbol);
+    let config: HgBranchConfig = HgBranchConfig::try_load(module.config);
 
     // TODO: Once error handling is implemented, warn the user if their config
     // truncation length is nonsensical
@@ -46,10 +42,30 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         truncated_graphemes
     };
 
-    module.create_segment(
-        "name",
-        &config.branch_name.with_value(&truncated_and_symbol),
-    );
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "branch" => Some(Ok(truncated_and_symbol.as_str())),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `hg_branch`:\n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }

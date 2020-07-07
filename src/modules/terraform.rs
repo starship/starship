@@ -1,7 +1,9 @@
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::terraform::TerraformConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
+
 use std::env;
 use std::io;
 use std::path::PathBuf;
@@ -25,20 +27,34 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("terraform");
     let config: TerraformConfig = TerraformConfig::try_load(module.config);
 
-    module.set_style(config.style);
-    module.create_segment("symbol", &config.symbol);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => format_terraform_version(
+                    &utils::exec_cmd("terraform", &["version"])?.stdout.as_str(),
+                )
+                .map(Ok),
+                "workspace" => get_terraform_workspace(&context.current_dir).map(Ok),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    if config.show_version {
-        let terraform_version =
-            format_terraform_version(&utils::exec_cmd("terraform", &["version"])?.stdout.as_str())?;
-        module.create_segment("version", &config.version.with_value(&terraform_version));
-    }
-
-    let terraform_workspace = &get_terraform_workspace(&context.current_dir)?;
-    module.create_segment(
-        "workspace",
-        &config.workspace.with_value(&terraform_workspace),
-    );
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `terraform`:\n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }
