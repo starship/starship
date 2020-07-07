@@ -5,7 +5,7 @@
 - **Terminal Emulator**: [iTerm2](https://iterm2.com/)
   - **Theme**: Minimal
   - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [Fira Code](https://github.com/tonsky/FiraCode)
+  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
 - **Shell**: [Fish Shell](https://fishshell.com/)
   - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
@@ -62,7 +62,7 @@ particular do not come with font support out-of-the-box. You need to ensure that
   - You have an emoji font installed. Most systems come with an emoji font by default, but 
     some (notably Arch Linux) do not. You can usually install one through your system's
     package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
-  - You are using a [powerline-patched font](https://github.com/powerline/fonts).
+  - You are using a [Nerd Font](https://www.nerdfonts.com/).
 
 To test your system, run the following commands in a terminal:
 
