@@ -1,0 +1,153 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - "v*"
+
+jobs:
+  # Publish starship to Crates.io
+  cargo_publish:
+    name: Publish Cargo Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup | Rust
+        uses: ATiltedTree/setup-rust@v1
+        with:
+          rust-version: stable
+
+      # - name: Build | Publish
+      #   run: cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+
+  # update_brew_formula:
+  #   name: Update Brew Formula
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: mislav/bump-homebrew-formula-action@v1.6
+  #       with:
+  #         formula-name: starship
+  #       env:
+  #         COMMITTER_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
+
+  # Build sources for every OS
+  github_build:
+    name: Build release binaries
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - x86_64-unknown-linux-gnu
+          - x86_64-unknown-linux-musl
+          - x86_64-apple-darwin
+          - x86_64-pc-windows-msvc
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+            name: starship-x86_64-unknown-linux-gnu.tar.gz
+          - target: x86_64-unknown-linux-musl
+            os: ubuntu-latest
+            name: starship-x86_64-unknown-linux-musl.tar.gz
+          - target: x86_64-apple-darwin
+            os: macOS-latest
+            name: starship-x86_64-apple-darwin.tar.gz
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            name: starship-x86_64-pc-windows-msvc.zip
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v2
+
+      # Cache files between builds
+      - name: Setup | Cache Cargo
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Setup | Rust
+        uses: ATiltedTree/setup-rust@v1
+        with:
+          rust-version: stable
+          targets: ${{ matrix.target }}
+
+      - name: Setup | musl tools
+        if: matrix.target == 'x86_64-unknown-linux-musl'
+        run: sudo apt-get install -y musl-tools
+
+      - name: Build | Build
+        if: matrix.target != 'x86_64-unknown-linux-musl'
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --target ${{ matrix.target }}
+
+      - name: Build | Build (musl)
+        if: matrix.target == 'x86_64-unknown-linux-musl'
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --features tls-vendored --target ${{ matrix.target }}
+
+      - name: Post Setup | Prepare artifacts [Windows]
+        if: matrix.os == 'windows-latest'
+        run: |
+          cd target/${{ matrix.target }}/release
+          strip starship.exe
+          7z a ../../../${{ matrix.name }} starship.exe
+          cd -
+
+      - name: Post Setup | Prepare artifacts [-nix]
+        if: matrix.os != 'windows-latest'
+        run: |
+          cd target/${{ matrix.target }}/release
+          strip starship
+          tar czvf ../../../${{ matrix.name }} starship
+          cd -
+
+      - name: Post Setup | Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.name }}
+          path: ${{ matrix.name }}
+
+  # Create GitHub release with Rust build targets and release notes
+  github_release:
+    name: Create GitHub Release
+    needs: github_build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup | Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: "^1.13.1"
+
+      - name: Setup | Artifacts
+        uses: actions/download-artifact@v2
+
+      - name: Setup | Checksums
+        run: for file in starship-*/starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
+
+      - name: Setup | Release notes
+        run: |
+          go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
+          git-chglog -c .github/chglog/release.yml $(git describe --tags) > RELEASE.md
+
+      - name: Build | Publish
+        uses: softprops/action-gh-release@v1
+        with:
+          files: starship-*/starship-*
+          body_path: RELEASE.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
