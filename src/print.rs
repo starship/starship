@@ -34,6 +34,7 @@ pub fn get_prompt(context: Context) -> String {
 
     let modules = compute_modules(&context);
 
+    let mut last = "";
     let mut print_without_prefix = true;
     let printable = modules.iter();
 
@@ -47,7 +48,13 @@ pub fn get_prompt(context: Context) -> String {
             write!(buf, "{}", ANSIStrings(&module)).unwrap();
         }
 
-        print_without_prefix = module.get_name() == "line_break"
+        last = module.get_name();
+        print_without_prefix = last == "line_break";
+    }
+
+    // Ensure trailing newline doesn't get trimmed
+    if last == "line_break" {
+        buf.push_str("\x1b[0m");
     }
 
     buf
