@@ -75,6 +75,7 @@ jobs:
   test:
     name: Test Suite
     runs-on: ${{ matrix.os }}
+    needs: cargo_check # First check then run expansive tests
     strategy:
       fail-fast: false
       matrix:
@@ -108,9 +109,7 @@ jobs:
       # Install Mercurial (pre-installed on Linux and windows)
       - name: Setup | Mercurial (macos)
         if: matrix.os == 'macOS-latest'
-        env:
-          HGPYTHON3: 1
-        run: pip install mercurial
+        run: pip3 install mercurial
 
       # Install Terraform at a fixed version
       - name: Setup | Terraform
@@ -119,5 +118,5 @@ jobs:
           version: "0.12.14"
 
       # Run the ignored tests that expect the above setup
-      - name: Build | tests
+      - name: Build | Test
         run: cargo test -- -Z unstable-options --include-ignored
