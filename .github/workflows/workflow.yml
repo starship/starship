@@ -35,6 +35,16 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v2
 
+      # Cache files between builds
+      - name: Setup | Cache Cargo
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
       - name: Setup | Rust
         uses: ATiltedTree/setup-rust@v1
         with:
