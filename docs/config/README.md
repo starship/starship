@@ -443,10 +443,11 @@ The `cmake` module shows the currently installed version of CMake if:
 
 ### Variables
 
-| Variable | Example   | Description                         |
-| -------- | --------- | ----------------------------------- |
-| version  | `v3.17.3` | The version of cmake                |
-| style\*  |           | Mirrors the value of option `style` |
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v3.17.3` | The version of cmake                 |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
