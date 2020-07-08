@@ -14,9 +14,11 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup | Rust
-        uses: ATiltedTree/setup-rust@v1
+        uses: actions-rs/toolchain@v1
         with:
-          rust-version: stable
+          toolchain: stable
+          profile: minimal
+          override: true
 
       - name: Build | Publish
         run: cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
@@ -70,10 +72,12 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Setup | Rust
-        uses: ATiltedTree/setup-rust@v1
+        uses: actions-rs/toolchain@v1
         with:
-          rust-version: stable
-          targets: ${{ matrix.target }}
+          toolchain: stable
+          override: true
+          profile: minimal
+          target: ${{ matrix.target }}
 
       - name: Setup | musl tools
         if: matrix.target == 'x86_64-unknown-linux-musl'

@@ -19,9 +19,11 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup | Rust
-        uses: ATiltedTree/setup-rust@v1
+        uses: actions-rs/toolchain@v1
         with:
-          rust-version: stable
+          toolchain: stable
+          override: true
+          profile: minimal
           components: rustfmt
 
       - name: Build | Format
@@ -46,13 +48,18 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Setup | Rust
-        uses: ATiltedTree/setup-rust@v1
+        uses: actions-rs/toolchain@v1
         with:
-          rust-version: stable
+          toolchain: stable
+          override: true
+          profile: minimal
           components: clippy
 
       - name: Build | Lint
-        run: cargo clippy --all-targets --all-features -- -D clippy::all
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --all-targets --all-features -- -D clippy::all
 
   # Ensure that the project could be successfully compiled
   cargo_check:
@@ -73,9 +80,11 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Setup | Rust
-        uses: ATiltedTree/setup-rust@v1
+        uses: actions-rs/toolchain@v1
         with:
-          rust-version: stable
+          toolchain: stable
+          profile: minimal
+          override: true
 
       - name: Build | Check
         run: cargo check --all
@@ -106,9 +115,11 @@ jobs:
 
       # Install all the required dependencies for testing
       - name: Setup | Rust
-        uses: ATiltedTree/setup-rust@v1
+        uses: actions-rs/toolchain@v1
         with:
-          rust-version: ${{ matrix.rust }}
+          toolchain: ${{ matrix.rust }}
+          profile: minimal
+          override: true
 
       # Install dotnet at a fixed version
       - name: Setup | DotNet
