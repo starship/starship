@@ -97,6 +97,10 @@ fn format_terraform_version(version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::modules::utils::test::render_module;
+    use ansi_term::Color;
+    use std::fs::{self, File};
+    use std::io::Write;
 
     #[test]
     fn test_format_terraform_version_release() {
@@ -137,5 +141,56 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
             format_terraform_version(input),
             Some("v0.12.13 ".to_string())
         );
+    }
+
+    #[test]
+    #[ignore]
+    fn folder_with_dotterraform_with_version_no_environment() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let tf_dir = dir.path().join(".terraform");
+        fs::create_dir(&tf_dir)?;
+
+        let actual = render_module(
+            "terraform",
+            dir.path(),
+            Some(toml::toml! {
+                [terraform]
+                format = "via [$symbol$version$workspace]($style) "
+            }),
+        );
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 v0.12.14 default")
+        ));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    #[ignore]
+    fn folder_with_dotterraform_with_version_with_environment() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let tf_dir = dir.path().join(".terraform");
+        fs::create_dir(&tf_dir)?;
+        let mut file = File::create(tf_dir.join("environment"))?;
+        file.write_all(b"development")?;
+        file.sync_all()?;
+
+        let actual = render_module(
+            "terraform",
+            dir.path(),
+            Some(toml::toml! {
+                [terraform]
+                format = "via [$symbol$version$workspace]($style) "
+            }),
+        );
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 v0.12.14 development")
+        ));
+        assert_eq!(expected, actual);
+        Ok(())
     }
 }
