@@ -144,7 +144,6 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
     }
 
     #[test]
-    #[ignore]
     fn folder_with_dotterraform_with_version_no_environment() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let tf_dir = dir.path().join(".terraform");
@@ -168,7 +167,6 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
     }
 
     #[test]
-    #[ignore]
     fn folder_with_dotterraform_with_version_with_environment() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let tf_dir = dir.path().join(".terraform");
