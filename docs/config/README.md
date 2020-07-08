@@ -187,6 +187,7 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
+$cmake\
 $dotnet\
 $elixir\
 $elm\
@@ -424,6 +425,30 @@ error_symbol = "[➜](bold red) "
 [character]
 vicmd_symbol = "[V](bold green) "
 ```
+
+## CMake
+
+The `cmake` module shows the currently installed version of CMake if:
+
+- The current directory contains a `CMakeLists.txt` file
+
+### Options
+
+| Option     | Default                            | Description                                  |
+| ---------- | ---------------------------------- | -------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                   |
+| `symbol`   | `"🛆 "`                             | The symbol used before the version of cmake. |
+| `style`    | `"bold blue"`                      | The style for the module.                    |
+| `disabled` | `false`                            | Disables the `cmake` module.                 |
+
+### Variables
+
+| Variable | Example   | Description                         |
+| -------- | --------- | ----------------------------------- |
+| version  | `v3.17.3` | The version of cmake                |
+| style\*  |           | Mirrors the value of option `style` |
+
+\*: This variable can only be used as a part of a style string
 
 ## Command Duration
 

@@ -1,6 +1,7 @@
 // While adding out new module add out module to src/module.rs ALL_MODULES const array also.
 mod aws;
 mod character;
+mod cmake;
 mod cmd_duration;
 mod conda;
 mod crystal;
@@ -57,6 +58,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         #[cfg(feature = "battery")]
         "battery" => battery::module(context),
         "character" => character::module(context),
+        "cmake" => cmake::module(context),
         "cmd_duration" => cmd_duration::module(context),
         "conda" => conda::module(context),
         "directory" => directory::module(context),
@@ -109,6 +111,7 @@ pub fn description(module: &str) -> &'static str {
         "character" => {
             "A character (usually an arrow) beside where the text is entered in your terminal"
         }
+        "cmake" => "The currently installed version of CMake",
         "cmd_duration" => "How long the last command took to execute",
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
         "crystal" => "The currently installed version of Crystal",
