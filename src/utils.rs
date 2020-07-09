@@ -64,6 +64,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)",
             stdout: String::from("go version go1.12.1 linux/amd64"),
             stderr: String::default(),
         }),
+        "helm version --short --client" => Some(CommandOutput {
+            stdout: String::from("v3.1.1+gafe7058"),
+            stderr: String::default(),
+        }),
         "julia --version" => Some(CommandOutput {
             stdout: String::from("julia version 1.4.0"),
             stderr: String::default(),

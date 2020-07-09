@@ -18,6 +18,7 @@ mod git_commit;
 mod git_state;
 mod git_status;
 mod golang;
+mod helm;
 mod hg_branch;
 mod hostname;
 mod java;
@@ -73,6 +74,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "git_state" => git_state::module(context),
         "git_status" => git_status::module(context),
         "golang" => golang::module(context),
+        "helm" => helm::module(context),
         "hg_branch" => hg_branch::module(context),
         "hostname" => hostname::module(context),
         "java" => java::module(context),
@@ -125,6 +127,7 @@ pub fn description(module: &str) -> &'static str {
         "git_state" => "The current git operation, and it's progress",
         "git_status" => "Symbol representing the state of the repo",
         "golang" => "The currently installed version of Golang",
+        "helm" => "The currently installed version of Helm",
         "hg_branch" => "The active branch of the repo in your current directory",
         "hostname" => "The system hostname",
         "java" => "The currently installed version of Java",
