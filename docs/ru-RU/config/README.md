@@ -178,6 +178,7 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
+$cmake\
 $dotnet\
 $elixir\
 $elm\
@@ -408,7 +409,32 @@ error_symbol = "[➜](bold red) "
 vicmd_symbol = "[V](bold green) "
 ```
 
-## Длительность команды
+## CMake
+
+The `cmake` module shows the currently installed version of CMake if:
+
+- The current directory contains a `CMakeLists.txt` file
+
+### Опции
+
+| Option     | По умолчанию                       | Описание                                     |
+| ---------- | ---------------------------------- | -------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                   |
+| `symbol`   | `"🛆 "`                             | The symbol used before the version of cmake. |
+| `style`    | `"bold blue"`                      | Стиль модуля.                                |
+| `disabled` | `false`                            | Disables the `cmake` module.                 |
+
+### Variables
+
+| Переменная | Пример    | Описание                             |
+| ---------- | --------- | ------------------------------------ |
+| version    | `v3.17.3` | The version of cmake                 |
+| symbol     |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+## Command Duration
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
@@ -449,7 +475,7 @@ min_time = 500
 format = "underwent [$duration](bold yellow)"
 ```
 
-## Конда
+## Conda
 
 The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
@@ -523,7 +549,7 @@ The `crystal` module shows the currently installed version of Crystal. Моду�
 format = "via [✨ $version](bold blue) "
 ```
 
-## Каталог
+## Directory
 
 The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
@@ -580,7 +606,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 truncation_length = 8
 ```
 
-## Контекст Docker
+## Docker Context
 
 The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
 
@@ -740,7 +766,7 @@ The `elm` module shows the currently installed version of Elm. Модуль бу
 format = "via [ $version](cyan bold) "
 ```
 
-## Переменная Окружения
+## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
@@ -812,7 +838,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. Мод�
 format = "via [e $version](bold red) "
 ```
 
-## Ветвь Git
+## Git Branch
 
 The `git_branch` module shows the active branch of the repo in your current directory.
 
@@ -848,7 +874,7 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Коммит Git
+## Git Commit
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
@@ -880,7 +906,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 commit_hash_length = 4
 ```
 
-## Состояние Git
+## Git State
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
@@ -920,7 +946,7 @@ format = "[\\($state( $progress_current of $progress_total)\\)]($style) "
 cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
-## Статус Git
+## Git Status
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
