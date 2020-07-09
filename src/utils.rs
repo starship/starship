@@ -123,6 +123,15 @@ active boot switches: -d:release\n",
             stdout: String::from("0.6.0"),
             stderr: String::default(),
         }),
+        "cmake --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+cmake version 3.17.3
+
+CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
+            ),
+            stderr: String::default(),
+        }),
         "terraform version" => Some(CommandOutput {
             stdout: String::from("Terraform v0.12.14"),
             stderr: String::default(),
