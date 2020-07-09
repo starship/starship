@@ -1,21 +1,22 @@
 use crate::config::{ModuleConfig, RootModuleConfig};
 
-use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
-pub struct UsernameConfig {
-    pub style_root: Style,
-    pub style_user: Style,
+pub struct UsernameConfig<'a> {
+    pub format: &'a str,
+    pub style_root: &'a str,
+    pub style_user: &'a str,
     pub show_always: bool,
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for UsernameConfig {
+impl<'a> RootModuleConfig<'a> for UsernameConfig<'a> {
     fn new() -> Self {
         UsernameConfig {
-            style_root: Color::Red.bold(),
-            style_user: Color::Yellow.bold(),
+            format: "via [$user]($style) ",
+            style_root: "red bold",
+            style_user: "yellow bold",
             show_always: false,
             disabled: false,
         }

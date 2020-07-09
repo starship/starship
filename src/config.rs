@@ -6,7 +6,6 @@ use std::clone::Clone;
 use std::collections::HashMap;
 use std::marker::Sized;
 
-use dirs::home_dir;
 use std::env;
 use toml::Value;
 
@@ -205,7 +204,7 @@ impl StarshipConfig {
         } else {
             // Default to using ~/.config/starship.toml
             log::debug!("STARSHIP_CONFIG is not set");
-            let config_path = home_dir()?.join(".config/starship.toml");
+            let config_path = dirs_next::home_dir()?.join(".config/starship.toml");
             let config_path_str = config_path.to_str()?.to_owned();
             log::debug!("Using default config path: {}", config_path_str);
             config_path_str
@@ -222,44 +221,98 @@ impl StarshipConfig {
             }
         }?;
 
-        let config = toml::from_str(&toml_content).ok()?;
-        log::debug!("Config parsed: \n{:?}", &config);
-        Some(config)
+        match toml::from_str(&toml_content) {
+            Ok(parsed) => {
+                log::debug!("Config parsed: \n{:?}", &parsed);
+                Some(parsed)
+            }
+            Err(error) => {
+                log::debug!("Unable to parse the config file: {}", error);
+                None
+            }
+        }
     }
 
     /// Get the subset of the table for a module by its name
     pub fn get_module_config(&self, module_name: &str) -> Option<&Value> {
-        let module_config = self.config.as_ref()?.as_table()?.get(module_name);
+        let module_config = self.get_config(&[module_name]);
         if module_config.is_some() {
             log::debug!(
                 "Config found for \"{}\": \n{:?}",
                 &module_name,
                 &module_config
             );
-        } else {
-            log::trace!("No config found for \"{}\"", &module_name);
         }
         module_config
     }
 
+    /// Get the value of the config in a specific path
+    pub fn get_config(&self, path: &[&str]) -> Option<&Value> {
+        let mut prev_table = self.config.as_ref()?.as_table()?;
+
+        assert_ne!(
+            path.len(),
+            0,
+            "Starship::get_config called with an empty path"
+        );
+
+        let (table_options, _) = path.split_at(path.len() - 1);
+
+        // Assumes all keys except the last in path has a table
+        for option in table_options {
+            match prev_table.get(*option) {
+                Some(value) => match value.as_table() {
+                    Some(value) => {
+                        prev_table = value;
+                    }
+                    None => {
+                        log::trace!(
+                            "No config found for \"{}\": \"{}\" is not a table",
+                            path.join("."),
+                            &option
+                        );
+                        return None;
+                    }
+                },
+                None => {
+                    log::trace!(
+                        "No config found for \"{}\": Option \"{}\" not found",
+                        path.join("."),
+                        &option
+                    );
+                    return None;
+                }
+            }
+        }
+
+        let last_option = path.last().unwrap();
+        let value = prev_table.get(*last_option);
+        if value.is_none() {
+            log::trace!(
+                "No config found for \"{}\": Option \"{}\" not found",
+                path.join("."),
+                &last_option
+            );
+        };
+        value
+    }
+
     /// Get the subset of the table for a custom module by its name
     pub fn get_custom_module_config(&self, module_name: &str) -> Option<&Value> {
-        let module_config = self.get_custom_modules()?.get(module_name);
+        let module_config = self.get_config(&["custom", module_name]);
         if module_config.is_some() {
             log::debug!(
                 "Custom config found for \"{}\": \n{:?}",
                 &module_name,
                 &module_config
             );
-        } else {
-            log::trace!("No custom config found for \"{}\"", &module_name);
         }
         module_config
     }
 
     /// Get the table of all the registered custom modules, if any
     pub fn get_custom_modules(&self) -> Option<&toml::value::Table> {
-        self.config.as_ref()?.as_table()?.get("custom")?.as_table()
+        self.get_config(&["custom"])?.as_table()
     }
 
     pub fn get_root_config(&self) -> StarshipRootConfig {
@@ -268,75 +321,6 @@ impl StarshipConfig {
         } else {
             StarshipRootConfig::new()
         }
-    }
-}
-
-#[derive(Clone)]
-pub struct SegmentConfig<'a> {
-    pub value: &'a str,
-    pub style: Option<Style>,
-}
-
-impl<'a> ModuleConfig<'a> for SegmentConfig<'a> {
-    fn from_config(config: &'a Value) -> Option<Self> {
-        match config {
-            Value::String(ref config_str) => Some(Self {
-                value: config_str,
-                style: None,
-            }),
-            Value::Table(ref config_table) => Some(Self {
-                value: config_table.get("value")?.as_str()?,
-                style: config_table.get("style").and_then(<Style>::from_config),
-            }),
-            _ => None,
-        }
-    }
-
-    fn load_config(&self, config: &'a Value) -> Self {
-        let mut new_config = self.clone();
-        match config {
-            Value::String(ref config_str) => {
-                new_config.value = config_str;
-            }
-            Value::Table(ref config_table) => {
-                if let Some(Value::String(value)) = config_table.get("value") {
-                    new_config.value = value;
-                };
-                if let Some(style) = config_table.get("style") {
-                    new_config.style = <Style>::from_config(style);
-                };
-            }
-            _ => {}
-        };
-        new_config
-    }
-}
-
-impl<'a> SegmentConfig<'a> {
-    pub fn new(value: &'a str) -> Self {
-        Self { value, style: None }
-    }
-
-    /// Immutably set value
-    pub fn with_value(&self, value: &'a str) -> Self {
-        Self {
-            value,
-            style: self.style,
-        }
-    }
-
-    /// Immutably set style
-    pub fn with_style(&self, style: Option<Style>) -> Self {
-        Self {
-            value: self.value,
-            style,
-        }
-    }
-}
-
-impl Default for SegmentConfig<'static> {
-    fn default() -> Self {
-        Self::new("")
     }
 }
 

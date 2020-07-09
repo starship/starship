@@ -1,13 +1,12 @@
-use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
+use crate::config::{ModuleConfig, RootModuleConfig};
 
-use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct DotnetConfig<'a> {
-    pub symbol: SegmentConfig<'a>,
-    pub version: SegmentConfig<'a>,
-    pub style: Style,
+    pub format: &'a str,
+    pub symbol: &'a str,
+    pub style: &'a str,
     pub heuristic: bool,
     pub disabled: bool,
 }
@@ -15,9 +14,9 @@ pub struct DotnetConfig<'a> {
 impl<'a> RootModuleConfig<'a> for DotnetConfig<'a> {
     fn new() -> Self {
         DotnetConfig {
-            symbol: SegmentConfig::new("•NET "),
-            version: SegmentConfig::default(),
-            style: Color::Blue.bold(),
+            format: "[$symbol$version( 🎯 $tfm)]($style) ",
+            symbol: "•NET ",
+            style: "blue bold",
             heuristic: true,
             disabled: false,
         }

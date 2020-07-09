@@ -1,6 +1,7 @@
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::ruby::RubyConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 /// Creates a module with the current Ruby version
@@ -19,15 +20,34 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let ruby_version = utils::exec_cmd("ruby", &["-v"])?.stdout;
-    let formatted_version = format_ruby_version(&ruby_version)?;
-
     let mut module = context.new_module("ruby");
-    let config: RubyConfig = RubyConfig::try_load(module.config);
-    module.set_style(config.style);
+    let config = RubyConfig::try_load(module.config);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => {
+                    format_ruby_version(&utils::exec_cmd("ruby", &["-v"])?.stdout.as_str()).map(Ok)
+                }
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &SegmentConfig::new(&formatted_version));
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `ruby`:\n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }

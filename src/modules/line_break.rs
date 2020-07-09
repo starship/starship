@@ -1,5 +1,5 @@
 use super::{Context, Module};
-use crate::config::SegmentConfig;
+use crate::segment::Segment;
 
 /// Creates a module for the line break
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -7,10 +7,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("line_break");
 
-    module.get_prefix().set_value("");
-    module.get_suffix().set_value("");
-
-    module.create_segment("character", &SegmentConfig::new(LINE_ENDING));
+    module.set_segments(vec![Segment {
+        _name: "line_break".to_string(),
+        style: None,
+        value: LINE_ENDING.to_string(),
+    }]);
 
     Some(module)
 }

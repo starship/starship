@@ -1,7 +1,7 @@
-use super::{Context, Module, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 
-use crate::config::RootModuleConfig;
 use crate::configs::cmd_duration::CmdDurationConfig;
+use crate::formatter::StringFormatter;
 
 /// Outputs the time it took the last command to execute
 ///
@@ -28,19 +28,30 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let config_min = config.min_time as u128;
+    if elapsed < config.min_time as u128 {
+        return None;
+    }
 
-    let module_color = match elapsed {
-        time if time < config_min => return None,
-        _ => config.style,
-    };
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "duration" => Some(Ok(render_time(elapsed, config.show_milliseconds))),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.set_style(module_color);
-    module.create_segment(
-        "cmd_duration",
-        &SegmentConfig::new(&render_time(elapsed, config.show_milliseconds)),
-    );
-    module.get_prefix().set_value(config.prefix);
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `cmd_duration`: \n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }

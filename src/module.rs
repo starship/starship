@@ -1,8 +1,6 @@
-use crate::config::SegmentConfig;
 use crate::context::Shell;
 use crate::segment::Segment;
 use crate::utils::wrap_colorseq_for_shell;
-use ansi_term::Style;
 use ansi_term::{ANSIString, ANSIStrings};
 use std::fmt;
 
@@ -28,7 +26,6 @@ pub const ALL_MODULES: &[&str] = &[
     "git_state",
     "git_status",
     "golang",
-    "haskell",
     "hg_branch",
     "hostname",
     "java",
@@ -67,17 +64,8 @@ pub struct Module<'a> {
     /// The module's description
     description: String,
 
-    /// The styling to be inherited by all segments contained within this module.
-    style: Style,
-
-    /// The prefix used to separate the current module from the previous one.
-    prefix: Affix,
-
     /// The collection of segments that compose this module.
-    segments: Vec<Segment>,
-
-    /// The suffix used to separate the current module from the next one.
-    suffix: Affix,
+    pub segments: Vec<Segment>,
 }
 
 impl<'a> Module<'a> {
@@ -87,21 +75,8 @@ impl<'a> Module<'a> {
             config,
             _name: name.to_string(),
             description: desc.to_string(),
-            style: Style::default(),
-            prefix: Affix::default_prefix(name),
             segments: Vec::new(),
-            suffix: Affix::default_suffix(name),
         }
-    }
-
-    /// Get a reference to a newly created segment in the module
-    pub fn create_segment(&mut self, name: &str, segment_config: &SegmentConfig) -> &mut Segment {
-        let mut segment = Segment::new(name);
-        segment.set_style(segment_config.style.unwrap_or(self.style));
-        segment.set_value(segment_config.value);
-        self.segments.push(segment);
-
-        self.segments.last_mut().unwrap()
     }
 
     /// Set segments in module
@@ -124,29 +99,9 @@ impl<'a> Module<'a> {
         self.segments.iter().all(|segment| segment.is_empty())
     }
 
+    /// Get values of the module's segments
     pub fn get_segments(&self) -> Vec<&str> {
         self.segments.iter().map(Segment::get_value).collect()
-    }
-
-    /// Get the module's prefix
-    pub fn get_prefix(&mut self) -> &mut Affix {
-        &mut self.prefix
-    }
-
-    /// Get the module's suffix
-    pub fn get_suffix(&mut self) -> &mut Affix {
-        &mut self.suffix
-    }
-
-    /// Sets the style of the segment.
-    ///
-    /// Accepts either `Color` or `Style`.
-    pub fn set_style<T>(&mut self, style: T) -> &mut Module<'a>
-    where
-        T: Into<Style>,
-    {
-        self.style = style.into();
-        self
     }
 
     /// Returns a vector of colored ANSIString elements to be later used with
@@ -156,26 +111,17 @@ impl<'a> Module<'a> {
     }
 
     pub fn ansi_strings_for_shell(&self, shell: Shell) -> Vec<ANSIString> {
-        let mut ansi_strings = self
+        let ansi_strings = self
             .segments
             .iter()
             .map(Segment::ansi_string)
             .collect::<Vec<ANSIString>>();
 
-        ansi_strings.insert(0, self.prefix.ansi_string());
-        ansi_strings.push(self.suffix.ansi_string());
-
-        ansi_strings = match shell {
+        match shell {
             Shell::Bash => ansi_strings_modified(ansi_strings, shell),
             Shell::Zsh => ansi_strings_modified(ansi_strings, shell),
             _ => ansi_strings,
-        };
-
-        ansi_strings
-    }
-
-    pub fn to_string_without_prefix(&self, shell: Shell) -> String {
-        ANSIStrings(&self.ansi_strings_for_shell(shell)[1..]).to_string()
+        }
     }
 }
 
@@ -196,67 +142,6 @@ fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: Shell) -> Vec<ANS
         .collect::<Vec<ANSIString>>()
 }
 
-/// Module affixes are to be used for the prefix or suffix of a module.
-pub struct Affix {
-    /// The affix's name, to be used in configuration and logging.
-    _name: String,
-
-    /// The affix's style.
-    style: Style,
-
-    /// The string value of the affix.
-    value: String,
-}
-
-impl Affix {
-    pub fn default_prefix(name: &str) -> Self {
-        Self {
-            _name: format!("{}_prefix", name),
-            style: Style::default(),
-            value: "via ".to_string(),
-        }
-    }
-
-    pub fn default_suffix(name: &str) -> Self {
-        Self {
-            _name: format!("{}_suffix", name),
-            style: Style::default(),
-            value: " ".to_string(),
-        }
-    }
-
-    /// Sets the style of the module.
-    ///
-    /// Accepts either `Color` or `Style`.
-    pub fn set_style<T>(&mut self, style: T) -> &mut Self
-    where
-        T: Into<Style>,
-    {
-        self.style = style.into();
-        self
-    }
-
-    /// Sets the value of the module.
-    pub fn set_value<T>(&mut self, value: T) -> &mut Self
-    where
-        T: Into<String>,
-    {
-        self.value = value.into();
-        self
-    }
-
-    /// Generates the colored ANSIString output.
-    pub fn ansi_string(&self) -> ANSIString {
-        self.style.paint(&self.value)
-    }
-}
-
-impl fmt::Display for Affix {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.ansi_string())
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -269,10 +154,7 @@ mod tests {
             config: None,
             _name: name.to_string(),
             description: desc.to_string(),
-            style: Style::default(),
-            prefix: Affix::default_prefix(name),
             segments: Vec::new(),
-            suffix: Affix::default_suffix(name),
         };
 
         assert!(module.is_empty());
@@ -286,10 +168,7 @@ mod tests {
             config: None,
             _name: name.to_string(),
             description: desc.to_string(),
-            style: Style::default(),
-            prefix: Affix::default_prefix(name),
             segments: vec![Segment::new("test_segment")],
-            suffix: Affix::default_suffix(name),
         };
 
         assert!(module.is_empty());

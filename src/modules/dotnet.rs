@@ -1,3 +1,5 @@
+use quick_xml::events::Event;
+use quick_xml::Reader;
 use std::ffi::OsStr;
 use std::iter::Iterator;
 use std::ops::Deref;
@@ -6,12 +8,16 @@ use std::str;
 
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::dotnet::DotnetConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 type JValue = serde_json::Value;
 
 const GLOBAL_JSON_FILE: &str = "global.json";
 const PROJECT_JSON_FILE: &str = "project.json";
+const DIRECTORY_BUILD_PROPS_FILE: &str = "Directory.Build.props";
+const DIRECTORY_BUILD_TARGETS_FILE: &str = "Directory.Build.targets";
+const PACKAGES_PROPS_FILE: &str = "Packages.props";
 
 /// A module which shows the latest (or pinned) version of the dotnet SDK
 ///
@@ -23,7 +29,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // check for the version using the JSON files
     let is_dotnet_project = context
         .try_begin_scan()?
-        .set_files(&[GLOBAL_JSON_FILE, PROJECT_JSON_FILE])
+        .set_files(&[
+            GLOBAL_JSON_FILE,
+            PROJECT_JSON_FILE,
+            DIRECTORY_BUILD_PROPS_FILE,
+            DIRECTORY_BUILD_TARGETS_FILE,
+            PACKAGES_PROPS_FILE,
+        ])
         .set_extensions(&["sln", "csproj", "fsproj", "xproj"])
         .is_match();
 
@@ -39,18 +51,88 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Internally, this module uses its own mechanism for version detection.
     // Typically it is twice as fast as running `dotnet --version`.
     let enable_heuristic = config.heuristic;
-    let version = if enable_heuristic {
-        let repo_root = context.get_repo().ok().and_then(|r| r.root.as_deref());
-        estimate_dotnet_version(&dotnet_files, &context.current_dir, repo_root)?
-    } else {
-        get_version_from_cli()?
-    };
 
-    module.set_style(config.style);
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &config.version.with_value(&version.0));
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "symbol" => Some(Ok(config.symbol)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => {
+                    let version = if enable_heuristic {
+                        let repo_root = context.get_repo().ok().and_then(|r| r.root.as_deref());
+                        estimate_dotnet_version(&dotnet_files, &context.current_dir, repo_root)
+                    } else {
+                        get_version_from_cli()
+                    };
+                    version.map(|v| Ok(v.0))
+                }
+                "tfm" => find_current_tfm(&dotnet_files).map(Ok),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `dotnet`:\n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
+}
+
+fn find_current_tfm<'a>(files: &[DotNetFile<'a>]) -> Option<String> {
+    let get_file_of_type = |t: FileType| files.iter().find(|f| f.file_type == t);
+
+    let relevant_file = get_file_of_type(FileType::ProjectFile)?;
+
+    get_tfm_from_project_file(relevant_file.path)
+}
+
+fn get_tfm_from_project_file(path: &Path) -> Option<String> {
+    let project_file = utils::read_file(path).ok()?;
+    let mut reader = Reader::from_str(&project_file);
+    reader.trim_text(true);
+
+    let mut in_tfm = false;
+    let mut buf = Vec::new();
+
+    loop {
+        match reader.read_event(&mut buf) {
+            // for triggering namespaced events, use this instead:
+            // match reader.read_namespaced_event(&mut buf) {
+            Ok(Event::Start(ref e)) => {
+                // for namespaced:
+                // Ok((ref namespace_value, Event::Start(ref e)))
+                match e.name() {
+                    b"TargetFrameworks" => in_tfm = true,
+                    b"TargetFramework" => in_tfm = true,
+                    _ => in_tfm = false,
+                }
+            }
+            // unescape and decode the text event using the reader encoding
+            Ok(Event::Text(e)) => {
+                if in_tfm {
+                    return e.unescape_and_decode(&reader).ok();
+                }
+            }
+            Ok(Event::Eof) => break, // exits the loop when reaching end of file
+            Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
+            _ => (), // There are several other `Event`s we do not consider here
+        }
+
+        // if we don't keep a borrow elsewhere, we can clear the buffer to keep memory usage low
+        buf.clear();
+    }
+    None
 }
 
 fn estimate_dotnet_version<'a>(
@@ -196,6 +278,7 @@ fn get_dotnet_file_type(path: &Path) -> Option<FileType> {
     match extension_lower.as_ref().map(|f| f.as_ref()) {
         Some("sln") => return Some(FileType::SolutionFile),
         Some("csproj") | Some("fsproj") | Some("xproj") => return Some(FileType::ProjectFile),
+        Some("props") | Some("targets") => return Some(FileType::MsBuildFile),
         _ => (),
     };
 
@@ -259,6 +342,7 @@ enum FileType {
     ProjectFile,
     GlobalJson,
     SolutionFile,
+    MsBuildFile,
 }
 
 struct Version(String);
