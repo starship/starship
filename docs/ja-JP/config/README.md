@@ -178,6 +178,7 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
+$cmake\
 $dotnet\
 $elixir\
 $elm\
@@ -408,7 +409,32 @@ error_symbol = "[➜](bold red) "
 vicmd_symbol = "[V](bold green) "
 ```
 
-## コマンド実行時間
+## CMake
+
+The `cmake` module shows the currently installed version of CMake if:
+
+- The current directory contains a `CMakeLists.txt` file
+
+### オプション
+
+| Option     | デフォルト                              | 説明                                           |
+| ---------- | ---------------------------------- | -------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                   |
+| `symbol`   | `"🛆 "`                             | The symbol used before the version of cmake. |
+| `style`    | `"bold blue"`                      | モジュールのスタイルです。                                |
+| `disabled` | `false`                            | Disables the `cmake` module.                 |
+
+### Variables
+
+| 変数        | 設定例       | 説明                                   |
+| --------- | --------- | ------------------------------------ |
+| version   | `v3.17.3` | The version of cmake                 |
+| symbol    |           | Mirrors the value of option `symbol` |
+| style\* |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+## Command Duration
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
@@ -523,7 +549,7 @@ The `crystal` module shows the currently installed version of Crystal. 次の条
 format = "via [✨ $version](bold blue) "
 ```
 
-## ディレクトリ
+## Directory
 
 The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
@@ -740,7 +766,7 @@ The `elm` module shows the currently installed version of Elm. 次の条件の�
 format = "via [ $version](cyan bold) "
 ```
 
-## 環境変数
+## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
@@ -812,7 +838,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. 次の�
 format = "via [e $version](bold red) "
 ```
 
-## Git ブランチ
+## Git Branch
 
 The `git_branch` module shows the active branch of the repo in your current directory.
 
@@ -848,7 +874,7 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git コミット
+## Git Commit
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
@@ -880,7 +906,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 commit_hash_length = 4
 ```
 
-## Git の進行状態
+## Git State
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
@@ -920,7 +946,7 @@ format = "[\\($state( $progress_current of $progress_total)\\)]($style) "
 cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
-## Git の状態
+## Git Status
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
