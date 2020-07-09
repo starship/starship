@@ -178,6 +178,7 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
+$cmake\
 $dotnet\
 $elixir\
 $elm\
@@ -408,7 +409,32 @@ error_symbol = "[➜](bold red) "
 vicmd_symbol = "[V](bold green) "
 ```
 
-## Tiempo de ejecución
+## CMake
+
+The `cmake` module shows the currently installed version of CMake if:
+
+- The current directory contains a `CMakeLists.txt` file
+
+### Opciones
+
+| Option     | Por defecto                        | Descripción                                  |
+| ---------- | ---------------------------------- | -------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                   |
+| `symbol`   | `"🛆 "`                             | The symbol used before the version of cmake. |
+| `style`    | `"bold blue"`                      | El estilo del módulo.                        |
+| `disabled` | `false`                            | Disables the `cmake` module.                 |
+
+### Variables
+
+| Variable  | Ejemplo   | Descripción                          |
+| --------- | --------- | ------------------------------------ |
+| version   | `v3.17.3` | The version of cmake                 |
+| symbol    |           | Mirrors the value of option `symbol` |
+| style\* |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+## Command Duration
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
@@ -580,7 +606,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 truncation_length = 8
 ```
 
-## Docker context
+## Docker Context
 
 The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
 
@@ -740,7 +766,7 @@ The `elm` module shows the currently installed version of Elm. El módulo se mue
 format = "via [ $version](cyan bold) "
 ```
 
-## Variable de entorno
+## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
@@ -848,7 +874,7 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git commit
+## Git Commit
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
@@ -880,7 +906,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 commit_hash_length = 4
 ```
 
-## Git state
+## Git State
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
@@ -920,7 +946,7 @@ format = "[\\($state( $progress_current of $progress_total)\\)]($style) "
 cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
-## Git status
+## Git Status
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
