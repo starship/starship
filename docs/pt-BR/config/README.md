@@ -178,6 +178,7 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
+$cmake\
 $dotnet\
 $elixir\
 $elm\
@@ -408,7 +409,32 @@ error_symbol = "[➜](bold red) "
 vicmd_symbol = "[V](bold green) "
 ```
 
-## Tempo de execução do comando
+## CMake
+
+The `cmake` module shows the currently installed version of CMake if:
+
+- The current directory contains a `CMakeLists.txt` file
+
+### Opções
+
+| Option     | Padrão                             | Descrição                                    |
+| ---------- | ---------------------------------- | -------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                   |
+| `symbol`   | `"🛆 "`                             | The symbol used before the version of cmake. |
+| `style`    | `"bold blue"`                      | The style for the module.                    |
+| `disabled` | `false`                            | Disables the `cmake` module.                 |
+
+### Variables
+
+| Variável  | Exemplo   | Descrição                            |
+| --------- | --------- | ------------------------------------ |
+| version   | `v3.17.3` | The version of cmake                 |
+| symbol    |           | Mirrors the value of option `symbol` |
+| style\* |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+## Command Duration
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
@@ -523,7 +549,7 @@ The `crystal` module shows the currently installed version of Crystal. The modul
 format = "via [✨ $version](bold blue) "
 ```
 
-## Diretório
+## Directory
 
 The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
@@ -848,7 +874,7 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git commit
+## Git Commit
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
