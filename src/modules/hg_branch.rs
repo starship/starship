@@ -5,9 +5,9 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::hg_branch::HgBranchConfig;
 use crate::formatter::StringFormatter;
 
-/// Creates a module with the Hg bookmark or branch in the current directory
+/// Creates a module with the Hg bookmark, topic or branch in the current directory
 ///
-/// Will display the bookmark or branch name if the current directory is an hg repo
+/// Will display the bookmark, topic or branch name if the current directory is an hg repo
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_hg_repo = context.try_begin_scan()?.set_folders(&[".hg"]).is_match();
 
@@ -31,7 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let branch_name =
-        get_hg_current_bookmark(context).unwrap_or_else(|| get_hg_branch_name(context));
+        get_hg_current_bookmark(context).unwrap_or_else(|| get_hg_topic_name(context).unwrap_or_else(|| get_hg_branch_name(context)));
 
     let truncated_graphemes = get_graphemes(&branch_name, len);
     // The truncation symbol should only be added if we truncated
@@ -72,6 +72,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn get_hg_branch_name(ctx: &Context) -> String {
     std::fs::read_to_string(ctx.current_dir.join(".hg").join("branch"))
+        .map(|s| s.trim().into())
+        .unwrap_or_else(|_| "default".to_string())
+}
+
+fn get_hg_topic_name(ctx: &Context) -> String {
+    std::fs::read_to_string(ctx.current_dir.join(".hg").join("topic"))
         .map(|s| s.trim().into())
         .unwrap_or_else(|_| "default".to_string())
 }

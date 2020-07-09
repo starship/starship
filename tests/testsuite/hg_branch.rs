@@ -8,6 +8,7 @@ use crate::common::{self, TestCommand};
 
 enum Expect<'a> {
     BranchName(&'a str),
+    TopicName(&'a str),
     Empty,
     NoTruncation,
     Symbol(&'a str),
@@ -66,6 +67,20 @@ fn test_hg_bookmark() -> io::Result<()> {
         &repo_dir,
         "",
         &[Expect::BranchName(&"bookmark-101"), Expect::NoTruncation],
+    )?;
+    tempdir.close()
+}
+
+#[test]
+#[ignore]
+fn test_hg_topic() -> io::Result<()> {
+    let tempdir = tempfile::tempdir()?;
+    let repo_dir = create_fixture_hgrepo(&tempdir)?;
+    run_hg(&["topic", "topic-101"], &repo_dir)?;
+    expect_hg_branch_with_config(
+        &repo_dir,
+        "",
+        &[Expect::TopicName(&"topic-101"), Expect::NoTruncation],
     )?;
     tempdir.close()
 }
