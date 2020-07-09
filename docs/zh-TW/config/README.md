@@ -178,6 +178,7 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
+$cmake\
 $dotnet\
 $elixir\
 $elm\
@@ -408,7 +409,32 @@ error_symbol = "[➜](bold red) "
 vicmd_symbol = "[V](bold green) "
 ```
 
-## 指令持續時間
+## CMake
+
+The `cmake` module shows the currently installed version of CMake if:
+
+- The current directory contains a `CMakeLists.txt` file
+
+### 選項
+
+| Option     | 預設                                 | 說明                                           |
+| ---------- | ---------------------------------- | -------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                   |
+| `symbol`   | `"🛆 "`                             | The symbol used before the version of cmake. |
+| `style`    | `"bold blue"`                      | 這個模組的風格。                                     |
+| `disabled` | `false`                            | Disables the `cmake` module.                 |
+
+### Variables
+
+| 變數        | 範例        | 說明                                   |
+| --------- | --------- | ------------------------------------ |
+| version   | `v3.17.3` | The version of cmake                 |
+| symbol    |           | Mirrors the value of option `symbol` |
+| style\* |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+## Command Duration
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
@@ -523,7 +549,7 @@ The `crystal` module shows the currently installed version of Crystal. 這個模
 format = "via [✨ $version](bold blue) "
 ```
 
-## 資料夾
+## Directory
 
 The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
@@ -740,7 +766,7 @@ The `elm` module shows the currently installed version of Elm. 這個模組在�
 format = "via [ $version](cyan bold) "
 ```
 
-## 環境變數
+## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
@@ -812,7 +838,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. 這個�
 format = "via [e $version](bold red) "
 ```
 
-## Git 分支
+## Git Branch
 
 The `git_branch` module shows the active branch of the repo in your current directory.
 
