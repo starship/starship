@@ -30,6 +30,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("nodejs");
     let config = NodejsConfig::try_load(module.config);
+    let nodejs_version = utils::exec_cmd("node", &["--version"])?.stdout;
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -41,7 +42,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(utils::exec_cmd("node", &["--version"])?.stdout)),
+                "version" => Some(Ok(nodejs_version.trim())),
                 _ => None,
             })
             .parse(None)
