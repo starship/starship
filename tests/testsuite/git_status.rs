@@ -503,48 +503,6 @@ fn shows_deleted_file_with_count() -> io::Result<()> {
     remove_dir_all(repo_dir)
 }
 
-#[test]
-#[ignore]
-fn prefix() -> io::Result<()> {
-    let repo_dir = common::create_fixture_repo()?;
-    File::create(repo_dir.join("prefix"))?.sync_all()?;
-    let output = common::render_module("git_status")
-        .arg("--path")
-        .arg(&repo_dir)
-        .env_clear()
-        .use_config(toml::toml! {
-            [git_status]
-            prefix = "("
-            style = ""
-        })
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = "(";
-    assert!(actual.starts_with(&expected));
-    remove_dir_all(repo_dir)
-}
-
-#[test]
-#[ignore]
-fn suffix() -> io::Result<()> {
-    let repo_dir = common::create_fixture_repo()?;
-    File::create(repo_dir.join("suffix"))?.sync_all()?;
-    let output = common::render_module("git_status")
-        .arg("--path")
-        .arg(&repo_dir)
-        .env_clear()
-        .use_config(toml::toml! {
-            [git_status]
-            suffix = ")"
-            style = ""
-        })
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = ")";
-    assert!(actual.ends_with(&expected));
-    remove_dir_all(repo_dir)
-}
-
 // Whenever a file is manually renamed, git itself ('git status') does not treat such file as renamed,
 // but as untracked instead. The following test checks if manually deleted and manually renamed
 // files are tracked by git_status module in the same way 'git status' does.
@@ -579,12 +537,15 @@ fn ignore_manually_renamed() -> io::Result<()> {
             ahead = "A"
             deleted = "D"
             untracked = "U"
+            renamed = "R"
         })
         .output()?;
 
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = "ADU";
-    assert_eq!(actual, expected);
+    assert!(actual.contains('A'));
+    assert!(actual.contains('D'));
+    assert!(actual.contains('U'));
+    assert!(!actual.contains('R'));
 
     remove_dir_all(repo_dir)
 }
