@@ -17,9 +17,9 @@ impl<'a> RootModuleConfig<'a> for ShLvlConfig<'a> {
     fn new() -> Self {
         ShLvlConfig {
             threshold: 2,
-            format: "[$symbol$shlvl]($style)",
+            format: "[$symbol$shlvl]($style) ",
             symbol: "↕️  ", // extra space for emoji
-            style: "yellow bold",
+            style: "bold yellow",
             disabled: true,
         }
     }
