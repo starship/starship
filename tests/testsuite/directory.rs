@@ -145,7 +145,7 @@ fn root_directory() -> io::Result<()> {
         Color::Red.normal().paint("🔒")
     );
     #[cfg(target_os = "windows")]
-    let expected = format!("in {} ", Color::Cyan.bold().paint("/"),);
+    let expected = format!("{} ", Color::Cyan.bold().paint("/"),);
     assert_eq!(expected, actual);
     Ok(())
 }
