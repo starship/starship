@@ -42,6 +42,7 @@ pub const ALL_MODULES: &[&str] = &[
     "package",
     "purescript",
     "python",
+    "r",
     "ruby",
     "crystal",
     "rust",

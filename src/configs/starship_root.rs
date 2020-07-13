@@ -40,6 +40,7 @@ pub const PROMPT_ORDER: [&str; 43] = [
     "php",
     "purescript",
     "python",
+    "r",
     "ruby",
     "rust",
     "terraform",

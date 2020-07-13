@@ -34,6 +34,7 @@ mod package;
 mod php;
 mod purescript;
 mod python;
+mod r;
 mod ruby;
 mod rust;
 mod singularity;
@@ -89,6 +90,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "php" => php::module(context),
         "purescript" => purescript::module(context),
         "python" => python::module(context),
+        "r" => r::module(context),
         "ruby" => ruby::module(context),
         "rust" => rust::module(context),
         "singularity" => singularity::module(context),
@@ -141,6 +143,7 @@ pub fn description(module: &str) -> &'static str {
         "php" => "The currently installed version of PHP",
         "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
+        "r" => "The currently installed version of R",
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
         "terraform" => "The currently selected terraform workspace and version",
