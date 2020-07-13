@@ -384,9 +384,13 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
             "Attempting to read hexadecimal color string: {}",
             color_string
         );
-        let r: u8 = u8::from_str_radix(&color_string.get(1..3)?, 16).ok()?;
-        let g: u8 = u8::from_str_radix(&color_string.get(3..5)?, 16).ok()?;
-        let b: u8 = u8::from_str_radix(&color_string.get(5..7)?, 16).ok()?;
+        if color_string.len() != 7 {
+            log::debug!("Could not parse hexadecimal string: {}", color_string);
+            return None;
+        }
+        let r: u8 = u8::from_str_radix(&color_string[1..3], 16).ok()?;
+        let g: u8 = u8::from_str_radix(&color_string[3..5], 16).ok()?;
+        let b: u8 = u8::from_str_radix(&color_string[5..7], 16).ok()?;
         log::trace!("Read RGB color string: {},{},{}", r, g, b);
         return Some(Color::RGB(r, g, b));
     }
@@ -596,7 +600,13 @@ mod tests {
         let config = Value::from("#00000");
         assert_eq!(<Style>::from_config(&config), None);
 
-        let config = Value::from("#A12BCD");
+        let config = Value::from("#0000000");
+        assert_eq!(<Style>::from_config(&config), None);
+
+        let config = Value::from("#NOTHEX");
+        assert_eq!(<Style>::from_config(&config), None);
+
+        let config = Value::from("#a12BcD");
         assert_eq!(
             <Style>::from_config(&config).unwrap(),
             Color::RGB(0xA1, 0x2B, 0xCD).into()
