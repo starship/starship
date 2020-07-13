@@ -142,18 +142,18 @@ fn custom_symbol() -> io::Result<()> {
 }
 
 #[test]
-fn prefix_and_suffix() -> io::Result<()> {
+fn formatting() -> io::Result<()> {
     let output = common::render_module("shlvl")
         .env_clear()
         .use_config(toml::toml! {
             [shlvl]
-            prefix = "shlvl "
+            format = "$symbol going down [$shlvl]($style) GOING UP "
             suffix = " level(s) "
             disabled = false
         })
         .env(SHLVL_ENV_VAR, "2")
         .output()?;
-    let expected = format!("shlvl {} level(s) ", style().paint("↕️  2"));
+    let expected = format!("↕️   going down {} GOING UP ", style().paint("2"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(expected, actual);
     Ok(())

@@ -1,9 +1,10 @@
 use std::env;
 
-use super::{Context, Module, SegmentConfig};
+use super::{Context, Module};
 
 use crate::config::RootModuleConfig;
 use crate::configs::shlvl::ShLvlConfig;
+use crate::formatter::StringFormatter;
 
 const SHLVL_ENV_VAR: &str = "SHLVL";
 
@@ -17,16 +18,32 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    module.set_style(config.style);
+    let shlvl_str = &shlvl.to_string();
 
-    module.get_prefix().set_value(config.prefix);
-    module.get_suffix().set_value(config.suffix);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "shlvl" => Some(Ok(shlvl_str)),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    if let Some(symbol) = config.symbol {
-        module.create_segment("symbol", &symbol);
-    }
-
-    module.create_segment("value", &SegmentConfig::new(&shlvl.to_string()));
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `shlvl`:\n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }

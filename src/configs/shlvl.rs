@@ -1,11 +1,9 @@
-use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
+use crate::config::{ModuleConfig, RootModuleConfig};
 
-use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct ShLvlConfig<'a> {
-    pub symbol: Option<SegmentConfig<'a>>,
     pub threshold: i64,
     pub format: &'a str,
     pub symbol: &'a str,
