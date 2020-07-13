@@ -384,9 +384,9 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
             "Attempting to read hexadecimal color string: {}",
             color_string
         );
-        let r: u8 = u8::from_str_radix(&color_string[1..3], 16).ok()?;
-        let g: u8 = u8::from_str_radix(&color_string[3..5], 16).ok()?;
-        let b: u8 = u8::from_str_radix(&color_string[5..7], 16).ok()?;
+        let r: u8 = u8::from_str_radix(&color_string.get(1..3)?, 16).ok()?;
+        let g: u8 = u8::from_str_radix(&color_string.get(3..5)?, 16).ok()?;
+        let b: u8 = u8::from_str_radix(&color_string.get(5..7)?, 16).ok()?;
         log::trace!("Read RGB color string: {},{},{}", r, g, b);
         return Some(Color::RGB(r, g, b));
     }
@@ -589,6 +589,18 @@ mod tests {
     fn test_from_style() {
         let config = Value::from("red bold");
         assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.bold());
+    }
+
+    #[test]
+    fn test_from_hex_color_style() {
+        let config = Value::from("#00000");
+        assert_eq!(<Style>::from_config(&config), None);
+
+        let config = Value::from("#A12BCD");
+        assert_eq!(
+            <Style>::from_config(&config).unwrap(),
+            Color::RGB(0xA1, 0x2B, 0xCD).into()
+        );
     }
 
     #[test]
