@@ -1,3 +1,7 @@
+#[cfg(not(target_os = "windows"))]
+use super::utils::directory_nix as directory_utils;
+#[cfg(target_os = "windows")]
+use super::utils::directory_win as directory_utils;
 use path_slash::PathExt;
 use std::collections::HashMap;
 use std::iter::FromIterator;
@@ -93,15 +97,24 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::from("")
     };
     let final_dir_string = format!("{}{}", fish_prefix, truncated_dir_string);
+    let lock_symbol = String::from(config.read_only_symbol);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
+                "read_only_style" => Some(Ok(config.read_only_symbol_style)),
                 _ => None,
             })
             .map(|variable| match variable {
                 "path" => Some(Ok(&final_dir_string)),
+                "read_only" => {
+                    if is_readonly_dir(current_dir.to_str()?) {
+                        Some(Ok(&lock_symbol))
+                    } else {
+                        None
+                    }
+                }
                 _ => None,
             })
             .parse(None)
@@ -116,6 +129,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+fn is_readonly_dir(path: &str) -> bool {
+    match directory_utils::is_write_allowed(path) {
+        Ok(res) => !res,
+        Err(e) => {
+            log::debug!(
+                "Failed to detemine read only status of directory '{}': {}",
+                path,
+                e
+            );
+            false
+        }
+    }
 }
 
 /// Contract the root component of a path
@@ -481,7 +508,11 @@ mod tests {
         #[test]
         fn directory_in_root() -> io::Result<()> {
             let actual = ModuleRenderer::new("directory").path("/etc").collect();
-            let expected = Some(format!("{} ", Color::Cyan.bold().paint("/etc")));
+            let expected = Some(format!(
+                "{}{} ",
+                Color::Cyan.bold().paint("/etc"),
+                Color::Red.normal().paint("🔒")
+            ));
 
             assert_eq!(expected, actual);
             Ok(())
@@ -610,6 +641,13 @@ mod tests {
     #[test]
     fn root_directory() -> io::Result<()> {
         let actual = ModuleRenderer::new("directory").path("/").collect();
+        #[cfg(not(target_os = "windows"))]
+        let expected = Some(format!(
+            "{}{} ",
+            Color::Cyan.bold().paint("/"),
+            Color::Red.normal().paint("🔒")
+        ));
+        #[cfg(target_os = "windows")]
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("/")));
 
         assert_eq!(expected, actual);
