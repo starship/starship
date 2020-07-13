@@ -95,6 +95,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::from("")
     };
     let final_dir_string = format!("{}{}", fish_prefix, truncated_dir_string);
+    let lock_symbol = String::from(config.read_only_symbol);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -107,7 +108,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "path" => Some(Ok(&final_dir_string)),
                 "read_only" => {
                     if is_readonly_dir(current_dir.to_str()?) {
-                        Some(Ok(config.read_only_symbol))
+                        Some(Ok(&lock_symbol))
                     } else {
                         None
                     }

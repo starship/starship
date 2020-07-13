@@ -140,35 +140,12 @@ fn root_directory() -> io::Result<()> {
 
     #[cfg(not(target_os = "windows"))]
     let expected = format!(
-        "in {}{} ",
+        "{}{} ",
         Color::Cyan.bold().paint("/"),
         Color::Red.normal().paint("🔒")
     );
     #[cfg(target_os = "windows")]
     let expected = format!("in {} ", Color::Cyan.bold().paint("/"),);
-    assert_eq!(expected, actual);
-    Ok(())
-}
-
-#[test]
-fn test_prefix() -> io::Result<()> {
-    let output = common::render_module("directory")
-        .arg("--path=/")
-        .use_config(toml::toml! {
-            [directory]
-            prefix = "sample "
-        })
-        .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-
-    #[cfg(not(target_os = "windows"))]
-    let expected = format!(
-        "sample {}{} ",
-        Color::Cyan.bold().paint("/"),
-        Color::Red.normal().paint("🔒")
-    );
-    #[cfg(target_os = "windows")]
-    let expected = format!("sample {} ", Color::Cyan.bold().paint("/"),);
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -182,7 +159,7 @@ fn directory_in_root() -> io::Result<()> {
     let actual = String::from_utf8(output.stdout).unwrap();
 
     let expected = format!(
-        "in {}{} ",
+        "{}{} ",
         Color::Cyan.bold().paint("/etc"),
         Color::Red.normal().paint("🔒")
     );
