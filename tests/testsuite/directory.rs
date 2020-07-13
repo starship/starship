@@ -138,7 +138,14 @@ fn root_directory() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("{} ", Color::Cyan.bold().paint("/"));
+    #[cfg(not(target_os = "windows"))]
+    let expected = format!(
+        "{}{} ",
+        Color::Cyan.bold().paint("/"),
+        Color::Red.normal().paint("🔒")
+    );
+    #[cfg(target_os = "windows")]
+    let expected = format!("{} ", Color::Cyan.bold().paint("/"),);
     assert_eq!(expected, actual);
     Ok(())
 }
@@ -151,7 +158,11 @@ fn directory_in_root() -> io::Result<()> {
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    let expected = format!("{} ", Color::Cyan.bold().paint("/etc"));
+    let expected = format!(
+        "{}{} ",
+        Color::Cyan.bold().paint("/etc"),
+        Color::Red.normal().paint("🔒")
+    );
     assert_eq!(expected, actual);
     Ok(())
 }
