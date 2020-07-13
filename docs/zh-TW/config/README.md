@@ -559,13 +559,15 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### 選項
 
-| Option              | 預設                   | 說明                                                                               |
-| ------------------- | -------------------- | -------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                  | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`  | `true`               | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `format`            | `"[$path]($style) "` | The format for the module.                                                       |
-| `style`             | `"bold cyan"`        | 這個模組的風格。                                                                         |
-| `disabled`          | `false`              | Disables the `directory` module.                                                 |
+| 變數                       | 預設                                              | 說明                                                                               |
+| ------------------------ | ----------------------------------------------- | -------------------------------------------------------------------------------- |
+| `truncation_length`      | `3`                                             | The number of parent folders that the current directory should be truncated to.  |
+| `truncate_to_repo`       | `true`                                          | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `format`                 | `"[$path]($style)[$lock_symbol]($lock_style) "` | The format for the module.                                                       |
+| `style`                  | `"bold cyan"`                                   | 這個模組的風格。                                                                         |
+| `disabled`               | `false`                                         | Disables the `directory` module.                                                 |
+| `read_only_symbol`       | `"🔒"`                                           | The symbol indicating current directory is read only.                            |
+| `read_only_symbol_style` | `"red"`                                         | The style for the read only symbol.                                              |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
