@@ -92,5 +92,5 @@ If Starship was installed using the `curl | bash` script, the following command 
 
 ```sh
 # Locate and delete the starship binary
-rm -rf $(which starship)
+rm "$(which starship)"
 ```
