@@ -260,7 +260,6 @@ fn get_repo_status(repository: &mut Repository) -> Result<RepoStatus, git2::Erro
     status_options
         .renames_from_rewrites(true)
         .renames_head_to_index(true)
-        .renames_index_to_workdir(true)
         .include_unmodified(true);
 
     let statuses = repository.statuses(Some(&mut status_options))?;
@@ -797,6 +796,45 @@ mod tests {
         let expected = format_output("✘1");
 
         assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    // Whenever a file is manually renamed, git itself ('git status') does not treat such file as renamed,
+    // but as untracked instead. The following test checks if manually deleted and manually renamed
+    // files are tracked by git_status module in the same way 'git status' does.
+    #[test]
+    #[ignore]
+    fn ignore_manually_renamed() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        File::create(repo_dir.path().join("a"))?.sync_all()?;
+        File::create(repo_dir.path().join("b"))?.sync_all()?;
+        Command::new("git")
+            .args(&["add", "--all"])
+            .current_dir(&repo_dir.path())
+            .output()?;
+        Command::new("git")
+            .args(&["commit", "-m", "add new files"])
+            .current_dir(&repo_dir.path())
+            .output()?;
+
+        fs::remove_file(repo_dir.path().join("a"))?;
+        fs::rename(repo_dir.path().join("b"), repo_dir.path().join("c"))?;
+        barrier();
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .config(toml::toml! {
+                [git_status]
+                ahead = "A"
+                deleted = "D"
+                untracked = "U"
+                renamed = "R"
+            })
+            .collect();
+        let expected = format_output("DUA");
+
+        assert_eq!(actual, expected);
+
         repo_dir.close()
     }
 
