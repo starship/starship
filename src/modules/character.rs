@@ -38,21 +38,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         _ => ASSUMED_MODE,
     };
 
-    let symbol = match mode {
-        ShellEditMode::Normal => config.vicmd_symbol,
+    let format = match mode {
+        ShellEditMode::Normal => config.vicmd_format,
         ShellEditMode::Insert => {
             if exit_success {
-                config.success_symbol
+                config.success_format
             } else {
-                config.error_symbol
+                config.error_format
             }
         }
     };
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+    let parsed = StringFormatter::new(format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
-                "symbol" => Some(symbol),
+                "code" => Some(exit_code),
                 _ => None,
             })
             .parse(None)
