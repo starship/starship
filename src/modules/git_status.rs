@@ -260,7 +260,6 @@ fn get_repo_status(repository: &mut Repository) -> Result<RepoStatus, git2::Erro
     status_options
         .renames_from_rewrites(true)
         .renames_head_to_index(true)
-        .renames_index_to_workdir(true)
         .include_unmodified(true);
 
     let statuses = repository.statuses(Some(&mut status_options))?;
