@@ -4,7 +4,7 @@ use rayon::prelude::*;
 use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
 use std::io::{self, Write};
-use unicode_width::UnicodeWidthChar;
+use unicode_width::UnicodeWidthStr;
 
 use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Shell};
@@ -104,39 +104,28 @@ pub fn explain(args: ArgMatches) {
             let value = module.get_segments().join("");
             ModuleInfo {
                 value: ansi_term::ANSIStrings(&module.ansi_strings()).to_string(),
-                value_len: value.chars().count() + count_wide_chars(&value),
+                value_len: UnicodeWidthStr::width(value.as_str()),
                 desc: module.get_description().to_owned(),
             }
         })
         .collect::<Vec<ModuleInfo>>();
 
-    let mut max_ansi_module_width = 0;
-    let mut max_module_width = 0;
-
-    for info in &modules {
-        max_ansi_module_width = std::cmp::max(
-            max_ansi_module_width,
-            info.value.chars().count() + count_wide_chars(&info.value),
-        );
-        max_module_width = std::cmp::max(max_module_width, info.value_len);
-    }
+    let max_module_width = modules.iter().map(|i| i.value_len).max().unwrap_or(0);
 
     let desc_width = term_size::dimensions()
         .map(|(w, _)| w)
-        .map(|width| width - std::cmp::min(width, max_ansi_module_width));
+        .map(|width| width - std::cmp::min(width, max_module_width));
 
     println!("\n Here's a breakdown of your prompt:");
     for info in modules {
-        let wide_chars = count_wide_chars(&info.value);
-
         if let Some(desc_width) = desc_width {
             let wrapped = textwrap::fill(&info.desc, desc_width);
             let mut lines = wrapped.split('\n');
             println!(
-                " {:width$}  -  {}",
+                " {}{}  -  {}",
                 info.value,
+                " ".repeat(max_module_width - info.value_len),
                 lines.next().unwrap(),
-                width = max_ansi_module_width - wide_chars
             );
 
             for line in lines {
@@ -144,10 +133,10 @@ pub fn explain(args: ArgMatches) {
             }
         } else {
             println!(
-                " {:width$}  -  {}",
+                " {}{}  -  {}",
                 info.value,
+                " ".repeat(max_module_width - info.value_len),
                 info.desc,
-                width = max_ansi_module_width - wide_chars
             );
         };
     }
@@ -264,8 +253,4 @@ fn should_add_implicit_custom_module(
         .unwrap_or(&false_value)
         .as_bool()
         .unwrap_or(false)
-}
-
-fn count_wide_chars(value: &str) -> usize {
-    value.chars().filter(|c| c.width().unwrap_or(0) > 1).count()
 }
