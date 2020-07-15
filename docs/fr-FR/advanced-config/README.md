@@ -57,9 +57,9 @@ Dans `zsh`, ajoutez ceci au tableau `precmd_functions` :
 précmd_functions+=(set_titre_gagnant)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+Si vous aimez le résultat, ajoutez ces lignes à votre fichier de configuration shell (`~/.bashrc` ou `~/.zshrc`) pour le rendre permanent.
 
-For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+Par exemple, si vous voulez afficher votre répertoire actuel dans votre titre d'onglets de terminal, ajoutez le snippet suivant à votre `~/.bashrc` ou `~/.zshrc`:
 
 ```bash
 function set_win_title(){
@@ -70,7 +70,7 @@ starship_precmd_user_func="set_win_title"
 
 ## Chaînes de style
 
-Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+Les chaînes de style sont une liste de mots, séparés par des espaces. Les mots ne sont pas sensibles à la casse (c'est-à-dire `gras` et `GrAs` sont considérés comme le même mot). Chaque mot peut être l'un des suivants :
 
   - `bold`
   - `underline`
@@ -80,7 +80,7 @@ Style strings are a list of words, separated by whitespace. The words are not ca
   - `<color>`
   - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing , though this may change in the future. The order of words in the string does not matter.
+où `<color>` est un spécificateur de couleur (discuté ci-dessous). `fg:<color>` and `<color>` currently do the same thing , though this may change in the future. The order of words in the string does not matter.
 
 The `none` token overrides all other tokens in a string, so that e.g. `fg:red none fg:blue` will still create a string with no styling. It may become an error to use `none` in conjunction with other tokens in the future.
 
