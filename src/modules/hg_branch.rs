@@ -80,6 +80,7 @@ fn get_hg_topic_name(ctx: &Context) -> String {
     std::fs::read_to_string(ctx.current_dir.join(".hg").join("topic"))
         .map(|s| s.trim().into())
         .ok()
+}
 
 fn get_hg_current_bookmark(ctx: &Context) -> Option<String> {
     std::fs::read_to_string(ctx.current_dir.join(".hg").join("bookmarks.current"))
