@@ -143,7 +143,7 @@ pub fn explain(args: ArgMatches) {
                 // Handle normal wrapping
                 current_pos += grapheme_width(g);
                 // Wrap when hitting max width or newline
-                if g == "\n" || current_pos - 1 >= desc_width {
+                if g == "\n" || current_pos > desc_width {
                     // trim spaces on linebreak
                     if g == " " && desc_width > 1 {
                         continue;
