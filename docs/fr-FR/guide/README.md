@@ -2,14 +2,14 @@
   <img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship – Shell prompt multiplatformes" />
+    alt="Starship – Prompt Shell multi-platformes" />
 </p>
 
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
-      alt="GitHub Actions état du workflow" /></a>
+      alt="Statut du workflow actions GitHub" /></a>
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
@@ -17,7 +17,7 @@
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
-      alt="Statut de l'empaquetage" /></a
+      alt="Statut du package" /></a
 ><br />
   <a href="https://discord.gg/8Jzqu3T"
     ><img
