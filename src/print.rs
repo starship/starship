@@ -114,7 +114,7 @@ pub fn explain(args: ArgMatches) {
 
     let desc_width = term_size::dimensions()
         .map(|(w, _)| w)
-        .map(|width| width - std::cmp::min(width, max_module_width));
+        .map(|width| width - std::cmp::min(width, max_module_width + 6));
 
     println!("\n Here's a breakdown of your prompt:");
     for info in modules {
