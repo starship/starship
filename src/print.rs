@@ -119,8 +119,7 @@ pub fn explain(args: ArgMatches) {
     println!("\n Here's a breakdown of your prompt:");
     for info in modules {
         if let Some(desc_width) = desc_width {
-            let wrapped = textwrap::fill(&info.desc, desc_width);
-            let mut lines = wrapped.split('\n');
+            let mut lines = textwrap::wrap_iter(&info.desc, desc_width);
             println!(
                 " {}{}  -  {}",
                 info.value,
