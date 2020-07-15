@@ -4,6 +4,7 @@ use rayon::prelude::*;
 use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
 use std::io::{self, Write};
+use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::UnicodeWidthStr;
 
 use crate::configs::PROMPT_ORDER;
@@ -104,7 +105,7 @@ pub fn explain(args: ArgMatches) {
             let value = module.get_segments().join("");
             ModuleInfo {
                 value: ansi_term::ANSIStrings(&module.ansi_strings()).to_string(),
-                value_len: UnicodeWidthStr::width(value.as_str()),
+                value_len: better_width(value.as_str()),
                 desc: module.get_description().to_owned(),
             }
         })
@@ -119,17 +120,46 @@ pub fn explain(args: ArgMatches) {
     println!("\n Here's a breakdown of your prompt:");
     for info in modules {
         if let Some(desc_width) = desc_width {
-            let mut lines = textwrap::wrap_iter(&info.desc, desc_width);
-            println!(
-                " {}{}  -  {}",
+            // Custom Textwrapping!
+            let mut current_pos = 0;
+            let mut escaping = false;
+            // Print info
+            print!(
+                " {}{}  -  ",
                 info.value,
-                " ".repeat(max_module_width - info.value_len),
-                lines.next().unwrap(),
+                " ".repeat(max_module_width - info.value_len)
             );
+            for g in info.desc.graphemes(true) {
+                // Handle ANSI escape sequnces
+                if g == "\x1B" {
+                    escaping = true;
+                }
+                if escaping {
+                    print!("{}", g);
+                    escaping = !("a" <= g && "z" >= g || "A" <= g && "Z" >= g);
+                    continue;
+                }
 
-            for line in lines {
-                println!("{}{}", " ".repeat(max_module_width + 6), line.trim());
+                // Handle normal wrapping
+                current_pos += grapheme_width(g);
+                // Wrap when hitting max width or newline
+                if g == "\n" || current_pos - 1 >= desc_width {
+                    // trim spaces on linebreak
+                    if g == " " && desc_width > 1 {
+                        continue;
+                    }
+
+                    print!("\n{}", " ".repeat(max_module_width + 6));
+                    if g == "\n" {
+                        current_pos = 0;
+                        continue;
+                    }
+
+                    current_pos = 1;
+                }
+                print!("{}", g);
             }
+            println!();
         } else {
             println!(
                 " {}{}  -  {}",
@@ -252,4 +282,19 @@ fn should_add_implicit_custom_module(
         .unwrap_or(&false_value)
         .as_bool()
         .unwrap_or(false)
+}
+
+fn better_width(s: &str) -> usize {
+    s.graphemes(true).map(grapheme_width).sum()
+}
+
+// Assume that graphemes have a width of at most 2 to work around unicode-width not working on the grapheme level
+fn grapheme_width(g: &str) -> usize {
+    std::cmp::min(2, g.width())
+}
+
+#[test]
+fn test_grapheme_aware_better_width() {
+    // UnicodeWidthStr::width would return 8
+    assert_eq!(2, better_width("👩‍👩‍👦‍👦"))
 }
