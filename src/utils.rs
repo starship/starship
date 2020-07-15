@@ -84,11 +84,11 @@ active boot switches: -d:release\n",
             stderr: String::default(),
         }),
         "ocaml -vnum" => Some(CommandOutput {
-            stdout: String::from("4.10.0"),
+            stdout: String::from("4.10.0\n"),
             stderr: String::default(),
         }),
         "esy ocaml -vnum" => Some(CommandOutput {
-            stdout: String::from("4.08.1"),
+            stdout: String::from("4.08.1\n"),
             stderr: String::default(),
         }),
         "php -nr echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION;" => {

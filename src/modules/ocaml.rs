@@ -50,7 +50,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(format!("v{}", &ocaml_version))),
+                "version" => Some(Ok(format!("v{}", &ocaml_version.trim()))),
                 _ => None,
             })
             .parse(None)
