@@ -80,7 +80,7 @@ Les chaînes de style sont une liste de mots, séparés par des espaces. Les mot
   - `<color>`
   - `none`
 
-où `<color>` est un spécificateur de couleur (discuté ci-dessous). `fg:<color>` and `<color>` currently do the same thing , though this may change in the future. The order of words in the string does not matter.
+où `<color>` est un spécificateur de couleur (discuté ci-dessous). `fg:<color>` et `<color>` font actuellement la même chose, même si cela peut changer plus tard. The order of words in the string does not matter.
 
 The `none` token overrides all other tokens in a string, so that e.g. `fg:red none fg:blue` will still create a string with no styling. It may become an error to use `none` in conjunction with other tokens in the future.
 
