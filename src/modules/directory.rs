@@ -874,9 +874,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
-                .bold()
-                .paint("/t/.t/above-repo/rocket-controls/src/meters/fuel-gauge")
+            Color::Cyan.bold().paint(format!(
+                "{}/above-repo/rocket-controls/src/meters/fuel-gauge",
+                to_fish_style(1, tmp_dir.path().display().to_string(), "")
+            ))
         ));
 
         assert_eq!(expected, actual);
@@ -904,9 +905,14 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
-                .bold()
-                .paint("/t/.t/a/rocket-controls/src/meters/fuel-gauge")
+            Color::Cyan.bold().paint(format!(
+                "{}/rocket-controls/src/meters/fuel-gauge",
+                to_fish_style(
+                    1,
+                    tmp_dir.path().join("above-repo").display().to_string(),
+                    ""
+                )
+            ))
         ));
 
         assert_eq!(expected, actual);
@@ -1072,9 +1078,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
-                .bold()
-                .paint("/t/.t/above-repo/rocket-controls-symlink/src/meters/fuel-gauge")
+            Color::Cyan.bold().paint(format!(
+                "{}/above-repo/rocket-controls-symlink/src/meters/fuel-gauge",
+                to_fish_style(1, tmp_dir.path().display().to_string(), "")
+            ))
         ));
 
         assert_eq!(expected, actual);
@@ -1108,9 +1115,14 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
-                .bold()
-                .paint("/t/.t/a/rocket-controls-symlink/src/meters/fuel-gauge")
+            Color::Cyan.bold().paint(format!(
+                "{}/rocket-controls-symlink/src/meters/fuel-gauge",
+                to_fish_style(
+                    1,
+                    tmp_dir.path().join("above-repo").display().to_string(),
+                    ""
+                )
+            ))
         ));
 
         assert_eq!(expected, actual);
