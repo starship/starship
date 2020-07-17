@@ -11,7 +11,7 @@ pub struct StarshipRootConfig<'a> {
 // List of default prompt order
 // NOTE: If this const value is changed then Default prompt order subheading inside
 // prompt heading of config docs needs to be updated according to changes made here.
-pub const PROMPT_ORDER: [&str; 43] = [
+pub const PROMPT_ORDER: [&str; 44] = [
     "username",
     "hostname",
     "singularity",
@@ -32,6 +32,7 @@ pub const PROMPT_ORDER: [&str; 43] = [
     "elm",
     "erlang",
     "golang",
+    "helm",
     "java",
     "julia",
     "nim",
