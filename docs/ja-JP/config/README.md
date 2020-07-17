@@ -184,6 +184,7 @@ $elixir\
 $elm\
 $erlang\
 $golang\
+$helm\
 $java\
 $julia\
 $nim\
@@ -1060,6 +1061,41 @@ The `golang` module shows the currently installed version of Golang. 次の条�
 
 [golang]
 format = "via [🏎💨 $version](bold cyan) "
+```
+
+## Helm
+
+The `helm` module shows the currently installed version of Helm. 次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- The current directory contains a `helmfile.yaml` file
+- The current directory contains a `Chart.yaml` file
+
+### オプション
+
+| Option     | デフォルト                              | 説明                                               |
+| ---------- | ---------------------------------- | ------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
+| `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
+| `style`    | `"bold white"`                     | モジュールのスタイルです。                                    |
+| `disabled` | `false`                            | Disables the `helm` module.                      |
+
+### Variables
+
+| 変数        | 設定例      | 説明                                   |
+| --------- | -------- | ------------------------------------ |
+| version   | `v3.1.1` | The version of `helm`                |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[helm]
+format = "via [⎈ $version](bold white) "
 ```
 
 ## Hostname
