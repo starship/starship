@@ -184,6 +184,7 @@ $elixir\
 $elm\
 $erlang\
 $golang\
+$helm\
 $java\
 $julia\
 $nim\
@@ -1060,6 +1061,41 @@ The `golang` module shows the currently installed version of Golang. Модул�
 
 [golang]
 format = "via [🏎💨 $version](bold cyan) "
+```
+
+## Helm
+
+The `helm` module shows the currently installed version of Helm. Модуль будет показан, если любое из следующих условий соблюдено:
+
+- The current directory contains a `helmfile.yaml` file
+- The current directory contains a `Chart.yaml` file
+
+### Опции
+
+| Option     | По умолчанию                       | Описание                                         |
+| ---------- | ---------------------------------- | ------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
+| `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
+| `style`    | `"bold white"`                     | Стиль модуля.                                    |
+| `disabled` | `false`                            | Disables the `helm` module.                      |
+
+### Variables
+
+| Переменная | Пример   | Описание                             |
+| ---------- | -------- | ------------------------------------ |
+| version    | `v3.1.1` | The version of `helm`                |
+| symbol     |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[helm]
+format = "via [⎈ $version](bold white) "
 ```
 
 ## Hostname
