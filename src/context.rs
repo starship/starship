@@ -7,6 +7,7 @@ use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
 use once_cell::sync::OnceCell;
 use std::collections::{HashMap, HashSet};
 use std::env;
+use std::ffi::OsString;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::string::String;
@@ -33,6 +34,9 @@ pub struct Context<'a> {
 
     /// The shell the user is assumed to be running
     pub shell: Shell,
+
+    /// A HashMap of environment variable mocks
+    pub env: HashMap<&'a str, String>,
 }
 
 impl<'a> Context<'a> {
@@ -82,11 +86,30 @@ impl<'a> Context<'a> {
             dir_contents: OnceCell::new(),
             repo: OnceCell::new(),
             shell,
+            env: HashMap::new(),
+        }
+    }
+
+    // Retrives a environment variable from the os or from a table if in testing mode
+    pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
+        if cfg!(test) {
+            self.env.get(key.as_ref()).map(|val| val.to_string())
+        } else {
+            env::var(key.as_ref()).ok()
+        }
+    }
+
+    // Retrives a environment variable from the os or from a table if in testing mode (os version)
+    pub fn get_env_os<K: AsRef<str>>(&self, key: K) -> Option<OsString> {
+        if cfg!(test) {
+            self.env.get(key.as_ref()).map(|val| OsString::from(val))
+        } else {
+            env::var_os(key.as_ref())
         }
     }
 
     /// Convert a `~` in a path to the home directory
-    fn expand_tilde(dir: PathBuf) -> PathBuf {
+    pub fn expand_tilde(dir: PathBuf) -> PathBuf {
         if dir.starts_with("~") {
             let without_home = dir.strip_prefix("~").unwrap();
             return dirs_next::home_dir().unwrap().join(without_home);
@@ -306,7 +329,7 @@ impl<'a> ScanDir<'a> {
         self
     }
 
-    /// based on the current Pathbuf check to see
+    /// based on the current PathBuf check to see
     /// if any of this criteria match or exist and returning a boolean
     pub fn is_match(&self) -> bool {
         self.dir_contents.has_any_extension(self.extensions)

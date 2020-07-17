@@ -121,12 +121,6 @@ jobs:
           profile: minimal
           override: true
 
-      # Install dotnet at a fixed version
-      - name: Setup | DotNet
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: "2.2.402"
-
       # Install Mercurial (pre-installed on Linux and windows)
       - name: Setup | Mercurial (macos)
         if: matrix.os == 'macOS-latest'

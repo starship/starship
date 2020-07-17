@@ -68,7 +68,7 @@ fn format_crystal_version(crystal_version: &str) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -76,7 +76,7 @@ mod tests {
     #[test]
     fn folder_without_crystal_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = render_module("crystal", dir.path(), None);
+        let actual = ModuleRenderer::new("crystal").path(dir.path()).collect();
         let expected = None;
         assert_eq!(expected, actual);
 
@@ -88,7 +88,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("shard.yml"))?.sync_all()?;
 
-        let actual = render_module("crystal", dir.path(), None);
+        let actual = ModuleRenderer::new("crystal").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Red.bold().paint("🔮 v0.32.1")));
         assert_eq!(expected, actual);
 
@@ -100,7 +100,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.cr"))?.sync_all()?;
 
-        let actual = render_module("crystal", dir.path(), None);
+        let actual = ModuleRenderer::new("crystal").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Red.bold().paint("🔮 v0.32.1")));
         assert_eq!(expected, actual);
 

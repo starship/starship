@@ -22,7 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    match get_java_version() {
+    match get_java_version(context) {
         Some(java_version) => {
             let mut module = context.new_module("java");
             let config: JavaConfig = JavaConfig::try_load(module.config);
@@ -57,10 +57,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 }
 
-fn get_java_version() -> Option<String> {
-    let java_command = match std::env::var("JAVA_HOME") {
-        Ok(java_home) => format!("{}/bin/java", java_home),
-        Err(_) => String::from("java"),
+fn get_java_version(context: &Context) -> Option<String> {
+    let java_command = match context.get_env("JAVA_HOME") {
+        Some(java_home) => format!("{}/bin/java", java_home),
+        None => String::from("java"),
     };
 
     let output = utils::exec_cmd(&java_command.as_str(), &["-Xinternalversion"])?;

@@ -1,10 +1,6 @@
+use clap::{crate_authors, crate_version};
 use std::io;
 use std::time::SystemTime;
-
-#[macro_use]
-extern crate clap;
-#[macro_use]
-extern crate pest_derive;
 
 mod bug_report;
 mod config;
@@ -18,6 +14,9 @@ mod modules;
 mod print;
 mod segment;
 mod utils;
+
+#[cfg(test)]
+mod test;
 
 use crate::module::ALL_MODULES;
 use clap::{App, AppSettings, Arg, Shell, SubCommand};

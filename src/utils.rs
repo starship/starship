@@ -26,7 +26,7 @@ impl PartialEq for CommandOutput {
     }
 }
 
-/// Execute a command and return the output on stdout and stderr if sucessful
+/// Execute a command and return the output on stdout and stderr if successful
 #[cfg(not(test))]
 pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
     internal_exec_cmd(&cmd, &args)
@@ -130,6 +130,14 @@ cmake version 3.17.3
 
 CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             ),
+            stderr: String::default(),
+        }),
+        "dotnet --version" => Some(CommandOutput {
+            stdout: String::from("3.1.103"),
+            stderr: String::default(),
+        }),
+        "dotnet --list-sdks" => Some(CommandOutput {
+            stdout: String::from("3.1.103 [/usr/share/dotnet/sdk]"),
             stderr: String::default(),
         }),
         "terraform version" => Some(CommandOutput {
