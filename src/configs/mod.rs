@@ -18,6 +18,7 @@ pub mod git_commit;
 pub mod git_state;
 pub mod git_status;
 pub mod go;
+pub mod helm;
 pub mod hg_branch;
 pub mod hostname;
 pub mod java;
