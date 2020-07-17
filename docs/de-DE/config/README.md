@@ -184,6 +184,7 @@ $elixir\
 $elm\
 $erlang\
 $golang\
+$helm\
 $java\
 $julia\
 $nim\
@@ -1062,6 +1063,41 @@ The `golang` module shows the currently installed version of Golang. Das Modul w
 format = "via [🏎💨 $version](bold cyan) "
 ```
 
+## Helm
+
+The `helm` module shows the currently installed version of Helm. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+
+- The current directory contains a `helmfile.yaml` file
+- The current directory contains a `Chart.yaml` file
+
+### Optionen
+
+| Option     | Standartwert                       | Beschreibung                                     |
+| ---------- | ---------------------------------- | ------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
+| `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
+| `style`    | `"bold white"`                     | Stil für dieses Modul.                           |
+| `disabled` | `false`                            | Disables the `helm` module.                      |
+
+### Variables
+
+| Variable  | Beispiel | Beschreibung                         |
+| --------- | -------- | ------------------------------------ |
+| version   | `v3.1.1` | The version of `helm`                |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[helm]
+format = "via [⎈ $version](bold white) "
+```
+
 ## Hostname
 
 The `hostname` module shows the system hostname.
@@ -1139,7 +1175,7 @@ The `jobs` module shows the current number of jobs running. The module will be s
 
 ### Optionen
 
-| Option      | Standartwert                  | Beschreibung                                     |
+| Option      | Standardwert                  | Beschreibung                                     |
 | ----------- | ----------------------------- | ------------------------------------------------ |
 | `threshold` | `1`                           | Show number of jobs if exceeded.                 |
 | `format`    | `"[$symbol$number]($style) "` | The format for the module.                       |
