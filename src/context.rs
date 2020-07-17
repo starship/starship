@@ -102,7 +102,7 @@ impl<'a> Context<'a> {
     // Retrives a environment variable from the os or from a table if in testing mode (os version)
     pub fn get_env_os<K: AsRef<str>>(&self, key: K) -> Option<OsString> {
         if cfg!(test) {
-            self.env.get(key.as_ref()).map(|val| OsString::from(val))
+            self.env.get(key.as_ref()).map(OsString::from)
         } else {
             env::var_os(key.as_ref())
         }

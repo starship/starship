@@ -89,7 +89,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn find_current_tfm<'a>(files: &[DotNetFile]) -> Option<String> {
+fn find_current_tfm(files: &[DotNetFile]) -> Option<String> {
     let get_file_of_type = |t: FileType| files.iter().find(|f| f.file_type == t);
 
     let relevant_file = get_file_of_type(FileType::ProjectFile)?;
@@ -135,7 +135,7 @@ fn get_tfm_from_project_file(path: &Path) -> Option<String> {
     None
 }
 
-fn estimate_dotnet_version<'a>(
+fn estimate_dotnet_version(
     files: &[DotNetFile],
     current_dir: &Path,
     repo_root: Option<&Path>,

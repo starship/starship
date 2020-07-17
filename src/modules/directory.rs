@@ -443,7 +443,7 @@ mod tests {
         #[test]
         #[ignore]
         fn symlinked_subdirectory_git_repo_out_of_tree() -> io::Result<()> {
-            while LOCK.load(Ordering::Relaxed) == true {}
+            while LOCK.load(Ordering::Relaxed) {}
             LOCK.store(true, Ordering::Relaxed);
             let (tmp_dir, _) = make_known_tempdir(home_dir().unwrap().as_path())?;
             let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -467,13 +467,13 @@ mod tests {
 
             LOCK.store(false, Ordering::Relaxed);
 
-            return tmp_dir.close();
+            tmp_dir.close()
         }
 
         #[test]
         #[ignore]
         fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
-            while LOCK.load(Ordering::Relaxed) == true {}
+            while LOCK.load(Ordering::Relaxed) {}
             LOCK.store(true, Ordering::Relaxed);
             let (tmp_dir, _) = make_known_tempdir(home_dir().unwrap().as_path())?;
             let dir = tmp_dir.path().join("src/fuel-gauge");
@@ -502,7 +502,7 @@ mod tests {
 
             LOCK.store(false, Ordering::Relaxed);
 
-            return tmp_dir.close();
+            tmp_dir.close()
         }
 
         #[test]

@@ -6,11 +6,11 @@ use std::path::PathBuf;
 use std::process::Command;
 use tempfile::TempDir;
 
-const FIXTURE_DIR: Lazy<PathBuf> =
+static FIXTURE_DIR: Lazy<PathBuf> =
     Lazy::new(|| PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("src/test/fixtures/"));
 
-const GIT_FIXTURE: Lazy<PathBuf> = Lazy::new(|| FIXTURE_DIR.join("git-repo.bundle"));
-const HG_FIXTURE: Lazy<PathBuf> = Lazy::new(|| FIXTURE_DIR.join("hg-repo.bundle"));
+static GIT_FIXTURE: Lazy<PathBuf> = Lazy::new(|| FIXTURE_DIR.join("git-repo.bundle"));
+static HG_FIXTURE: Lazy<PathBuf> = Lazy::new(|| FIXTURE_DIR.join("hg-repo.bundle"));
 
 /// Render a specific starship module by name
 pub struct ModuleRenderer<'a> {
