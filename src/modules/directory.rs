@@ -628,11 +628,14 @@ mod tests {
     #[test]
     fn root_directory() -> io::Result<()> {
         let actual = ModuleRenderer::new("directory").path("/").collect();
+        #[cfg(not(target_os = "windows"))]
         let expected = Some(format!(
             "{}{} ",
             Color::Cyan.bold().paint("/"),
             Color::Red.normal().paint("🔒")
         ));
+        #[cfg(target_os = "windows")]
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("/")));
 
         assert_eq!(expected, actual);
         Ok(())
