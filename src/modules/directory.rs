@@ -673,7 +673,7 @@ mod tests {
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(format!("{}", truncate(dir.to_slash_lossy(), 100)))
+                .paint(truncate(dir.to_slash_lossy(), 100))
         ));
 
         assert_eq!(expected, actual);
@@ -698,7 +698,7 @@ mod tests {
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(format!("{}", to_fish_style(100, dir.to_slash_lossy(), "")))
+                .paint(to_fish_style(100, dir.to_slash_lossy(), ""))
         ));
 
         assert_eq!(expected, actual);
