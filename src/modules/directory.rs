@@ -405,6 +405,7 @@ mod tests {
     }
 
     fn make_known_tempdir(root: &Path) -> io::Result<(TempDir, String)> {
+        fs::create_dir_all(root)?;
         let dir = TempDir::new_in(root)?;
         let path = dir
             .path()
@@ -413,20 +414,6 @@ mod tests {
             .to_string_lossy()
             .to_string();
         Ok((dir, path))
-    }
-
-    #[cfg(target_os = "windows")]
-    mod windows {
-        use super::*;
-
-        #[test]
-        fn directory_in_root() -> io::Result<()> {
-            let actual = ModuleRenderer::new("directory").path("C:\\").collect();
-            let expected = Some(format!("{} ", Color::Cyan.bold().paint("C:")));
-
-            assert_eq!(expected, actual);
-            Ok(())
-        }
     }
 
     #[cfg(not(target_os = "windows"))]
@@ -445,7 +432,7 @@ mod tests {
         fn symlinked_subdirectory_git_repo_out_of_tree() -> io::Result<()> {
             while LOCK.load(Ordering::Relaxed) {}
             LOCK.store(true, Ordering::Relaxed);
-            let (tmp_dir, _) = make_known_tempdir(home_dir().unwrap().as_path())?;
+            let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
             let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
             let src_dir = repo_dir.join("src/meters/fuel-gauge");
             let symlink_dir = tmp_dir.path().join("fuel-gauge");
@@ -475,7 +462,7 @@ mod tests {
         fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
             while LOCK.load(Ordering::Relaxed) {}
             LOCK.store(true, Ordering::Relaxed);
-            let (tmp_dir, _) = make_known_tempdir(home_dir().unwrap().as_path())?;
+            let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
             let dir = tmp_dir.path().join("src/fuel-gauge");
             fs::create_dir_all(&dir)?;
             init_repo(&tmp_dir.path())?;
@@ -598,7 +585,7 @@ mod tests {
     #[test]
     fn truncated_directory_in_home() -> io::Result<()> {
         let (tmp_dir, name) = make_known_tempdir(home_dir().unwrap().as_path())?;
-        let dir = tmp_dir.path().join(&name).join("engine/schematics");
+        let dir = tmp_dir.path().join("engine/schematics");
         fs::create_dir_all(&dir)?;
 
         let actual = ModuleRenderer::new("directory").path(dir).collect();
@@ -641,14 +628,11 @@ mod tests {
     #[test]
     fn root_directory() -> io::Result<()> {
         let actual = ModuleRenderer::new("directory").path("/").collect();
-        #[cfg(not(target_os = "windows"))]
         let expected = Some(format!(
             "{}{} ",
             Color::Cyan.bold().paint("/"),
             Color::Red.normal().paint("🔒")
         ));
-        #[cfg(target_os = "windows")]
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("/")));
 
         assert_eq!(expected, actual);
         Ok(())
@@ -657,7 +641,7 @@ mod tests {
     #[test]
     fn truncated_directory_in_root() -> io::Result<()> {
         let (tmp_dir, name) = make_known_tempdir(Path::new("/tmp"))?;
-        let dir = tmp_dir.path().join(&name).join("thrusters/rocket");
+        let dir = tmp_dir.path().join("thrusters/rocket");
         fs::create_dir_all(&dir)?;
 
         let actual = ModuleRenderer::new("directory").path(dir).collect();
@@ -674,7 +658,7 @@ mod tests {
 
     #[test]
     fn truncated_directory_config_large() -> io::Result<()> {
-        let (tmp_dir, name) = make_known_tempdir(Path::new("/tmp"))?;
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let dir = tmp_dir.path().join("thrusters/rocket");
         fs::create_dir_all(&dir)?;
 
@@ -683,13 +667,13 @@ mod tests {
                 [directory]
                 truncation_length = 100
             })
-            .path(dir)
+            .path(&dir)
             .collect();
         let expected = Some(format!(
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(format!("/tmp/{}/thrusters/rocket", name))
+                .paint(format!("{}", truncate(dir.to_slash_lossy(), 100)))
         ));
 
         assert_eq!(expected, actual);
@@ -698,7 +682,7 @@ mod tests {
 
     #[test]
     fn fish_style_directory_config_large() -> io::Result<()> {
-        let (tmp_dir, name) = make_known_tempdir(Path::new("/tmp"))?;
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let dir = tmp_dir.path().join("thrusters/rocket");
         fs::create_dir_all(&dir)?;
 
@@ -708,13 +692,13 @@ mod tests {
                 truncation_length = 1
                 fish_style_pwd_dir_length = 100
             })
-            .path(dir)
+            .path(&dir)
             .collect();
         let expected = Some(format!(
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(format!("/tmp/{}/thrusters/rocket", name))
+                .paint(format!("{}", to_fish_style(100, dir.to_slash_lossy(), "")))
         ));
 
         assert_eq!(expected, actual);
@@ -745,7 +729,7 @@ mod tests {
 
     #[test]
     fn fish_directory_config_small() -> io::Result<()> {
-        let (tmp_dir, name) = make_known_tempdir(Path::new("/tmp"))?;
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let dir = tmp_dir.path().join("thrusters/rocket");
         fs::create_dir_all(&dir)?;
 
@@ -755,13 +739,14 @@ mod tests {
                 truncation_length = 2
                 fish_style_pwd_dir_length = 1
             })
-            .path(dir)
+            .path(&dir)
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
-                .bold()
-                .paint(format!("/t/{}/thrusters/rocket", name.split_at(2).0))
+            Color::Cyan.bold().paint(format!(
+                "{}/thrusters/rocket",
+                to_fish_style(1, dir.to_slash_lossy(), "/thrusters/rocket")
+            ))
         ));
 
         assert_eq!(expected, actual);
@@ -771,9 +756,6 @@ mod tests {
     #[test]
     #[ignore]
     fn git_repo_root() -> io::Result<()> {
-        // TODO: Investigate why git repo related tests fail when the tempdir is within /tmp/...
-        // Temporarily making the tempdir within $HOME
-        // #[ignore] can be removed after this TODO is addressed
         let tmp_dir = TempDir::new()?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
         fs::create_dir(&repo_dir)?;
@@ -856,7 +838,7 @@ mod tests {
     #[test]
     #[ignore]
     fn fish_path_directory_in_git_repo_truncate_to_repo_false() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
         let dir = repo_dir.join("src/meters/fuel-gauge");
         fs::create_dir_all(&dir)?;
@@ -876,7 +858,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(format!(
                 "{}/above-repo/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().display().to_string(), "")
+                to_fish_style(1, tmp_dir.path().to_slash_lossy(), "")
             ))
         ));
 
@@ -887,7 +869,7 @@ mod tests {
     #[test]
     #[ignore]
     fn fish_path_directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
         let dir = repo_dir.join("src/meters/fuel-gauge");
         fs::create_dir_all(&dir)?;
@@ -907,11 +889,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(format!(
                 "{}/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(
-                    1,
-                    tmp_dir.path().join("above-repo").display().to_string(),
-                    ""
-                )
+                to_fish_style(1, tmp_dir.path().join("above-repo").to_slash_lossy(), "")
             ))
         ));
 
@@ -922,7 +900,7 @@ mod tests {
     #[test]
     #[ignore]
     fn directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
         let dir = repo_dir.join("src/meters/fuel-gauge");
         fs::create_dir_all(&dir)?;
@@ -951,7 +929,7 @@ mod tests {
     #[test]
     #[ignore]
     fn symlinked_git_repo_root() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
         let symlink_dir = tmp_dir.path().join("rocket-controls-symlink");
         fs::create_dir(&repo_dir)?;
@@ -971,7 +949,7 @@ mod tests {
     #[test]
     #[ignore]
     fn directory_in_symlinked_git_repo() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
         let src_dir = repo_dir.join("src");
         let symlink_dir = tmp_dir.path().join("rocket-controls-symlink");
@@ -995,7 +973,7 @@ mod tests {
     #[test]
     #[ignore]
     fn truncated_directory_in_symlinked_git_repo() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
         let src_dir = repo_dir.join("src/meters/fuel-gauge");
         let symlink_dir = tmp_dir.path().join("rocket-controls-symlink");
@@ -1019,7 +997,7 @@ mod tests {
     #[test]
     #[ignore]
     fn directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
         let src_dir = repo_dir.join("src/meters/fuel-gauge");
         let symlink_dir = tmp_dir
@@ -1054,7 +1032,7 @@ mod tests {
     #[test]
     #[ignore]
     fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
         let src_dir = repo_dir.join("src/meters/fuel-gauge");
         let symlink_dir = tmp_dir
@@ -1080,7 +1058,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(format!(
                 "{}/above-repo/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().display().to_string(), "")
+                to_fish_style(1, tmp_dir.path().to_slash_lossy(), "")
             ))
         ));
 
@@ -1091,7 +1069,7 @@ mod tests {
     #[test]
     #[ignore]
     fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
         let src_dir = repo_dir.join("src/meters/fuel-gauge");
         let symlink_dir = tmp_dir
@@ -1117,11 +1095,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(format!(
                 "{}/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(
-                    1,
-                    tmp_dir.path().join("above-repo").display().to_string(),
-                    ""
-                )
+                to_fish_style(1, tmp_dir.path().join("above-repo").to_slash_lossy(), "")
             ))
         ));
 
@@ -1132,7 +1106,7 @@ mod tests {
     #[test]
     #[ignore]
     fn directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
         let src_dir = repo_dir.join("src/meters/fuel-gauge");
         let symlink_dir = tmp_dir
@@ -1167,7 +1141,7 @@ mod tests {
     #[test]
     #[ignore]
     fn symlinked_directory_in_git_repo() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
         let dir = repo_dir.join("src");
         fs::create_dir_all(&dir)?;
