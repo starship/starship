@@ -55,9 +55,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn format_crystal_version(crystal_version: &str) -> Option<String> {
     let version = crystal_version
-        // split into ["Crystal", "0.32.1", ...]
+        // split into ["Crystal", "0.35.1", ...]
         .split_whitespace()
-        // return "0.32.1"
+        // return "0.35.1"
         .nth(1)?;
 
     let mut formatted_version = String::with_capacity(version.len() + 1);
@@ -89,7 +89,7 @@ mod tests {
         File::create(dir.path().join("shard.yml"))?.sync_all()?;
 
         let actual = render_module("crystal", dir.path(), None);
-        let expected = Some(format!("via {} ", Color::Red.bold().paint("🔮 v0.32.1")));
+        let expected = Some(format!("via {} ", Color::Red.bold().paint("🔮 v0.35.1")));
         assert_eq!(expected, actual);
 
         dir.close()
@@ -101,7 +101,7 @@ mod tests {
         File::create(dir.path().join("main.cr"))?.sync_all()?;
 
         let actual = render_module("crystal", dir.path(), None);
-        let expected = Some(format!("via {} ", Color::Red.bold().paint("🔮 v0.32.1")));
+        let expected = Some(format!("via {} ", Color::Red.bold().paint("🔮 v0.35.1")));
         assert_eq!(expected, actual);
 
         dir.close()
