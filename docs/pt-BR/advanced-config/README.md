@@ -70,7 +70,7 @@ starship_precmd_user_func="set_win_title"
 
 ## Estilo dos textos
 
-Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Cada palavra pode ser uma das seguintes:
 
   - `bold`
   - `underline`
