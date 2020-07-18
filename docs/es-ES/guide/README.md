@@ -224,7 +224,7 @@ Si quiere ayudar a colaborar a starship, por favor mira a nuestra [Guía de Cola
 
 ### Desarrolladores
 
-Este proyecto existe gracias a todas las personas que han ayudado. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
+Este proyecto existe gracias a todas las personas que han ayudado. [[Contribuir](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
 ### Financiadores
