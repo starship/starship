@@ -210,6 +210,7 @@ $nix_shell\
 $conda\
 $memory_usage\
 $aws\
+$gcloud\
 $env_var\
 $crystal\
 $cmd_duration\
@@ -888,6 +889,67 @@ The module will be shown if any of the following conditions are met:
 
 [erlang]
 format = "via [e $version](bold red) "
+```
+
+## Gcloud
+
+The `gcloud` module shows the current GCP region and profile for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI.
+This is based on `~/.config/gcloud/active_config` file and `~/.config/gcloud/configurations/config_{CONFIG NAME}` file.
+
+### Options
+
+| Variable          | Default                                           | Description                                                                 |
+| ----------------- | ------------------------------------------------- | --------------------------------------------------------------------------- |
+| `format`          | `"on [$symbol$account(\\($region\\))]($style) "`  | The format for the module.                                                  |
+| `symbol`          | `"🇬️ "`                                            | The symbol used before displaying the current GCP profile.                  |
+| `region_aliases`  |                                                   | Table of region aliases to display in addition to the GCP name.             |
+| `style`           | `"bold blue"`                                     | The style for the module.                                                   |
+| `disabled`        | `false`                                           | Disables the `gcloud` module.                                               |
+
+### Variables
+
+| Variable | Example           | Description                                                        |
+| -------- | ----------------- | ------------------------------------------------------------------ |
+| region   | `us-central1`     | The current GCP region                                             |
+| account  | `foo@example.com` | The current GCP profile                                            |
+| project  |                   | The current GCP project                                            |
+| active   | `default`         | The active config name written in `~/.config/gcloud/active_config` |
+| symbol   |                   | Mirrors the value of option `symbol`                               |
+| style\*  |                   | Mirrors the value of option `style`                                |
+
+\*: This variable can only be used as a part of a style string
+
+### Examples
+
+#### Display account and project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = "on [$symbol$account(\\($project\\))]($style) "
+```
+
+#### Display active config name only
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = "[$symbol$active]($style) "
+style = "bold yellow"
+```
+
+#### Display account and aliased region
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+symbol = "️☁️ "
+[gcloud.region_aliases]
+us-central1 = "uc1"
+asia-northeast1 = "an1"
 ```
 
 ## Git Branch
