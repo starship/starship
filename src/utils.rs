@@ -40,36 +40,42 @@ pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
     };
     match command.as_str() {
         "crystal --version" => Some(CommandOutput {
-            stdout: String::from("Crystal 0.32.1 (2019-12-18)"),
+            stdout: String::from(
+                "\
+Crystal 0.35.1 (2020-06-19)
+
+LLVM: 10.0.0
+Default target: x86_64-apple-macosx\n",
+            ),
             stderr: String::default(),
         }),
         "dummy_command" => Some(CommandOutput {
-            stdout: String::from("stdout ok!"),
-            stderr: String::from("stderr ok!"),
+            stdout: String::from("stdout ok!\n"),
+            stderr: String::from("stderr ok!\n"),
         }),
         "elixir --version" => Some(CommandOutput {
             stdout: String::from(
                 "\
 Erlang/OTP 22 [erts-10.6.4] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1] [hipe]
 
-Elixir 1.10 (compiled with Erlang/OTP 22)",
+Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             ),
             stderr: String::default(),
         }),
         "elm --version" => Some(CommandOutput {
-            stdout: String::from("0.19.1"),
+            stdout: String::from("0.19.1\n"),
             stderr: String::default(),
         }),
         "go version" => Some(CommandOutput {
-            stdout: String::from("go version go1.12.1 linux/amd64"),
+            stdout: String::from("go version go1.12.1 linux/amd64\n"),
             stderr: String::default(),
         }),
         "helm version --short --client" => Some(CommandOutput {
-            stdout: String::from("v3.1.1+gafe7058"),
+            stdout: String::from("v3.1.1+gafe7058\n"),
             stderr: String::default(),
         }),
         "julia --version" => Some(CommandOutput {
-            stdout: String::from("julia version 1.4.0"),
+            stdout: String::from("julia version 1.4.0\n"),
             stderr: String::default(),
         }),
         "nim --version" => Some(CommandOutput {
@@ -84,7 +90,7 @@ active boot switches: -d:release\n",
             stderr: String::default(),
         }),
         "node --version" => Some(CommandOutput {
-            stdout: String::from("v12.0.0"),
+            stdout: String::from("v12.0.0\n"),
             stderr: String::default(),
         }),
         "ocaml -vnum" => Some(CommandOutput {
@@ -95,36 +101,30 @@ active boot switches: -d:release\n",
             stdout: String::from("4.08.1\n"),
             stderr: String::default(),
         }),
-        "php -nr echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION;" => {
+        "php -nr 'echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;'" => {
             Some(CommandOutput {
                 stdout: String::from("7.3.8"),
                 stderr: String::default(),
             })
         }
         "purs --version" => Some(CommandOutput {
-            stdout: String::from("0.13.5"),
+            stdout: String::from("0.13.5\n"),
             stderr: String::default(),
         }),
         "python --version" => Some(CommandOutput {
-            stdout: String::from("Python 2.7.17"),
-            stderr: String::default(),
+            stdout: String::default(),
+            stderr: String::from("Python 2.7.17\n"),
         }),
         "python3 --version" => Some(CommandOutput {
-            stdout: String::from("Python 3.8.0"),
+            stdout: String::from("Python 3.8.0\n"),
             stderr: String::default(),
         }),
         "ruby -v" => Some(CommandOutput {
-            stdout: String::from("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]"),
+            stdout: String::from("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]\n"),
             stderr: String::default(),
         }),
-        "stack --no-install-ghc --lock-file read-only ghc -- --numeric-version" => {
-            Some(CommandOutput {
-                stdout: String::from("8.6.5"),
-                stderr: String::default(),
-            })
-        }
         "zig version" => Some(CommandOutput {
-            stdout: String::from("0.6.0"),
+            stdout: String::from("0.6.0\n"),
             stderr: String::default(),
         }),
         "cmake --version" => Some(CommandOutput {
@@ -145,11 +145,11 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             stderr: String::default(),
         }),
         "terraform version" => Some(CommandOutput {
-            stdout: String::from("Terraform v0.12.14"),
+            stdout: String::from("Terraform v0.12.14\n"),
             stderr: String::default(),
         }),
-        s if s.starts_with("erl") => Some(CommandOutput {
-            stdout: String::from("22.1.3"),
+        s if s.starts_with("erl -noshell -eval") => Some(CommandOutput {
+            stdout: String::from("22.1.3\n"),
             stderr: String::default(),
         }),
         // If we don't have a mocked command fall back to executing the command
@@ -242,8 +242,8 @@ mod tests {
     fn exec_mocked_command() {
         let result = exec_cmd("dummy_command", &[]);
         let expected = Some(CommandOutput {
-            stdout: String::from("stdout ok!"),
-            stderr: String::from("stderr ok!"),
+            stdout: String::from("stdout ok!\n"),
+            stderr: String::from("stderr ok!\n"),
         });
 
         assert_eq!(result, expected)
