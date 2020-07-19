@@ -893,8 +893,8 @@ format = "via [e $version](bold red) "
 
 ## Gcloud
 
-The `gcloud` module shows the current GCP region and profile for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI.
-This is based on `~/.config/gcloud/active_config` file and `~/.config/gcloud/configurations/config_{CONFIG NAME}` file.
+The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI.
+This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
 ### Options
 
