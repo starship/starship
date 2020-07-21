@@ -25,11 +25,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let elm_version = utils::exec_cmd("elm", &["--version"])?.stdout;
-    let module_version = Some(format!("v{}", elm_version.trim()))?;
 
     let mut module = context.new_module("elm");
     let config: ElmConfig = ElmConfig::try_load(module.config);
-
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -41,7 +39,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(&module_version)),
+                "version" => Some(Ok(format!("v{}", &elm_version.trim()))),
                 _ => None,
             })
             .parse(None)

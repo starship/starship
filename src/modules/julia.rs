@@ -21,6 +21,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let julia_version = utils::exec_cmd("julia", &["--version"])?.stdout;
+
     let mut module = context.new_module("julia");
     let config = JuliaConfig::try_load(module.config);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -34,10 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => {
-                    format_julia_version(&utils::exec_cmd("julia", &["--version"])?.stdout.as_str())
-                        .map(Ok)
-                }
+                "version" => parse_julia_version(&julia_version).map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -54,7 +53,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_julia_version(julia_stdout: &str) -> Option<String> {
+fn parse_julia_version(julia_stdout: &str) -> Option<String> {
     // julia version output looks like this:
     // julia version 1.4.0
 
@@ -125,8 +124,8 @@ mod tests {
     }
 
     #[test]
-    fn test_format_julia_version() {
-        let input = "julia version 1.4.0";
-        assert_eq!(format_julia_version(input), Some("v1.4.0".to_string()));
+    fn test_parse_julia_version() {
+        const OUTPUT: &str = "julia version 1.4.0";
+        assert_eq!(parse_julia_version(OUTPUT), Some("v1.4.0".to_string()));
     }
 }

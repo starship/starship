@@ -18,6 +18,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let cmake_version = utils::exec_cmd("cmake", &["--version"])?.stdout;
+
     let mut module = context.new_module("cmake");
     let config = CMakeConfig::try_load(module.config);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -31,10 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => utils::exec_cmd("cmake", &["--version"])
-                    .map(|output| format_cmake_version(&output.stdout))
-                    .flatten()
-                    .map(Ok),
+                "version" => parse_cmake_version(&cmake_version).map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -51,17 +50,33 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_cmake_version(cmake_version: &str) -> Option<String> {
-    let version = cmake_version.split_whitespace().nth(2)?;
+fn parse_cmake_version(cmake_version: &str) -> Option<String> {
+    let version = cmake_version
+        // split into ["cmake", "version", "3.17.3", ...]
+        .split_whitespace()
+        // return "3.17.3"
+        .nth(2)?;
+
     Some(format!("v{}", version))
 }
 
 #[cfg(test)]
 mod tests {
+    use super::parse_cmake_version;
     use crate::modules::utils::test::render_module;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
+
+    #[test]
+    fn test_parse_cmake_version() {
+        const OUTPUT: &str = "\
+cmake version 3.17.3
+
+CMake suite maintained and supported by Kitware (kitware.com/cmake).\n";
+
+        assert_eq!(Some("v3.17.3".to_string()), parse_cmake_version(OUTPUT));
+    }
 
     #[test]
     fn folder_without_cmake_lists() -> io::Result<()> {

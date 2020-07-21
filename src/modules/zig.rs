@@ -18,11 +18,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let zig_version_output = utils::exec_cmd("zig", &["version"])?
-        .stdout
-        .trim()
-        .to_string();
-    let zig_version = format!("v{}", zig_version_output);
+    let zig_version = utils::exec_cmd("zig", &["version"])?.stdout;
 
     let mut module = context.new_module("zig");
     let config = ZigConfig::try_load(module.config);
@@ -38,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(zig_version.clone())),
+                "version" => Some(Ok(format!("v{}", &zig_version.trim()))),
                 _ => None,
             })
             .parse(None)

@@ -36,7 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => format_crystal_version(&crystal_version).map(Ok),
+                "version" => parse_crystal_version(&crystal_version).map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -53,25 +53,34 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_crystal_version(crystal_version: &str) -> Option<String> {
+fn parse_crystal_version(crystal_version: &str) -> Option<String> {
     let version = crystal_version
         // split into ["Crystal", "0.35.1", ...]
         .split_whitespace()
         // return "0.35.1"
         .nth(1)?;
 
-    let mut formatted_version = String::with_capacity(version.len() + 1);
-    formatted_version.push('v');
-    formatted_version.push_str(version);
-    Some(formatted_version)
+    Some(format!("v{}", version))
 }
 
 #[cfg(test)]
 mod tests {
+    use super::parse_crystal_version;
     use crate::modules::utils::test::render_module;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
+
+    #[test]
+    fn test_parse_crystal_version() {
+        const OUTPUT: &str = "\
+Crystal 0.35.1 (2020-06-19)
+
+LLVM: 10.0.0
+Default target: x86_64-apple-macosx\n";
+
+        assert_eq!(Some("v0.35.1".to_string()), parse_crystal_version(OUTPUT));
+    }
 
     #[test]
     fn folder_without_crystal_files() -> io::Result<()> {

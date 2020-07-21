@@ -36,7 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(format!("v{}", purs_version.trim()))),
+                "version" => Some(Ok(format!("v{}", &purs_version.trim()))),
                 _ => None,
             })
             .parse(None)

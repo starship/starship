@@ -34,6 +34,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let go_version = utils::exec_cmd("go", &["version"])?.stdout;
+
     let mut module = context.new_module("golang");
     let config = GoConfig::try_load(module.config);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -47,9 +49,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => {
-                    format_go_version(&utils::exec_cmd("go", &["version"])?.stdout.as_str()).map(Ok)
-                }
+                "version" => parse_go_version(&go_version).map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -66,7 +66,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_go_version(go_stdout: &str) -> Option<String> {
+fn parse_go_version(go_stdout: &str) -> Option<String> {
     // go version output looks like this:
     // go version go1.13.3 linux/amd64
 
@@ -196,8 +196,8 @@ mod tests {
     }
 
     #[test]
-    fn test_format_go_version() {
-        let input = "go version go1.12 darwin/amd64";
-        assert_eq!(format_go_version(input), Some("v1.12".to_string()));
+    fn test_parse_go_version() {
+        const OUTPUT: &str = "go version go1.12 darwin/amd64";
+        assert_eq!(parse_go_version(OUTPUT), Some("v1.12".to_string()));
     }
 }

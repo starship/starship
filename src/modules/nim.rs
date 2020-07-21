@@ -20,9 +20,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let nim_version = utils::exec_cmd("nim", &["--version"])?.stdout;
+
     let mut module = context.new_module("nim");
     let config = NimConfig::try_load(module.config);
-
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -34,12 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => utils::exec_cmd("nim", &["--version"])
-                    .map(|command_output| command_output.stdout)
-                    .and_then(|nim_version_output| {
-                        Some(format!("v{}", parse_nim_version(&nim_version_output)?))
-                    })
-                    .map(Ok),
+                "version" => parse_nim_version(&nim_version).map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -56,13 +52,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn parse_nim_version(version_cmd_output: &str) -> Option<&str> {
-    version_cmd_output
-        .lines()
-        // First line has the version
-        .next()?
-        .split(' ')
-        .find(|&s| s.chars().all(|c| c >= '0' && c <= '9' || c == '.'))
+fn parse_nim_version(nim_version: &str) -> Option<String> {
+    let version = nim_version
+        // split into ["Nim", "Compiler", "Version", "1.2.0", ...]
+        .split_whitespace()
+        // return "1.2.0"
+        .nth(3)?;
+
+    Some(format!("v{}", version))
 }
 
 #[cfg(test)]
@@ -74,26 +71,16 @@ mod tests {
     use std::io;
 
     #[test]
-    fn nim_version() {
-        let ok_versions = ["1.1.1", "2", "."];
-        let not_ok_versions = ["abc", " \n.", ". ", "abc."];
+    fn test_parse_nim_version() {
+        const OUTPUT: &str = "\
+Nim Compiler Version 1.2.0 [Linux: amd64]
+Compiled at 2020-04-03
+Copyright (c) 2006-2020 by Andreas Rumpf
 
-        let all_some = ok_versions.iter().all(|&v| parse_nim_version(v).is_some());
-        let all_none = not_ok_versions
-            .iter()
-            .any(|&v| parse_nim_version(v).is_some());
+git hash: 7e83adff84be5d0c401a213eccb61e321a3fb1ff
+active boot switches: -d:release\n";
 
-        assert_eq!(true, all_some);
-        assert_eq!(true, all_none);
-
-        let sample_nimc_output = "Nim Compiler Version 1.2.0 [Linux: amd64]
-            Compiled at 2020-04-03
-            Copyright (c) 2006-2020 by Andreas Rumpf
-
-            git hash: 7e83adff84be5d0c401a213eccb61e321a3fb1ff
-            active boot switches: -d:release\n";
-
-        assert_eq!(Some("1.2.0"), parse_nim_version(sample_nimc_output))
+        assert_eq!(Some("v1.2.0".to_string()), parse_nim_version(OUTPUT))
     }
 
     #[test]
