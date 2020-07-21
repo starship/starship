@@ -11,7 +11,10 @@ Cargo.lock
 # VSCode configuration
 .vscode/
 
-# Intellij IDE configuration
+# Sublime Text configuration
+*.sublime-*
+
+# IntelliJ IDE configuration
 .idea/
 /*.iml
 
