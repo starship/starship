@@ -24,7 +24,7 @@ account = foo@example.com
     let output = common::render_module("gcloud")
         .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy().as_ref())
         .output()?;
-    let expected = format!("on {} ", Color::Blue.bold().paint("🇬️ foo@example.com"));
+    let expected = format!("on {} ", Color::Blue.bold().paint("☁️ foo@example.com"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(actual, expected);
     dir.close()
@@ -54,7 +54,7 @@ region = us-central1
         .output()?;
     let expected = format!(
         "on {} ",
-        Color::Blue.bold().paint("🇬️ foo@example.com(us-central1)")
+        Color::Blue.bold().paint("☁️ foo@example.com(us-central1)")
     );
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(actual, expected);
@@ -87,7 +87,7 @@ region = us-central1
             us-central1 = "uc1"
         })
         .output()?;
-    let expected = format!("on {} ", Color::Blue.bold().paint("🇬️ foo@example.com(uc1)"));
+    let expected = format!("on {} ", Color::Blue.bold().paint("☁️ foo@example.com(uc1)"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(actual, expected);
     dir.close()
@@ -107,7 +107,7 @@ fn active_set() -> io::Result<()> {
             format = "on [$symbol$active]($style) "
         })
         .output()?;
-    let expected = format!("on {} ", Color::Blue.bold().paint("🇬️ default1"));
+    let expected = format!("on {} ", Color::Blue.bold().paint("☁️ default1"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(actual, expected);
     dir.close()
@@ -136,7 +136,7 @@ project = abc
             format = "on [$symbol$project]($style) "
         })
         .output()?;
-    let expected = format!("on {} ", Color::Blue.bold().paint("🇬️ abc"));
+    let expected = format!("on {} ", Color::Blue.bold().paint("☁️ abc"));
     let actual = String::from_utf8(output.stdout).unwrap();
     assert_eq!(actual, expected);
     dir.close()

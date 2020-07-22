@@ -15,7 +15,7 @@ impl<'a> RootModuleConfig<'a> for GcloudConfig<'a> {
     fn new() -> Self {
         GcloudConfig {
             format: "on [$symbol$account(\\($region\\))]($style) ",
-            symbol: "🇬️ ",
+            symbol: "☁️ ",
             style: "bold blue",
             disabled: false,
             region_aliases: HashMap::new(),
