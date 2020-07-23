@@ -57,11 +57,20 @@ Dans `zsh`, ajoutez ceci au tableau `precmd_functions` :
 précmd_functions+=(set_titre_gagnant)
 ```
 
-Si vous aimez le résultat, ajoutez ces lignes à votre fichier de configuration de shell (`~/.bashrc` ou `~/.zsrhc`) pour le rendre permanent.
+Si vous aimez le résultat, ajoutez ces lignes à votre fichier de configuration shell (`~/.bashrc` ou `~/.zshrc`) pour le rendre permanent.
+
+Par exemple, si vous voulez afficher votre répertoire actuel dans votre titre d'onglets de terminal, ajoutez le snippet suivant à votre `~/.bashrc` ou `~/.zshrc`:
+
+```bash
+function set_win_title(){
+    echo -ne "\033]0; $(basename $PWD) \007"
+}
+starship_precmd_user_func="set_win_title"
+```
 
 ## Chaînes de style
 
-Les chaînes de style sont une liste de mots, séparés par des espaces blancs. Les mots ne sont pas sensibles à la casse (` bold ` et ` boLd ` sont considérés comme la même string). Chaque mot peut être l'un des suivants :
+Les chaînes de style sont une liste de mots, séparés par des espaces. Les mots ne sont pas sensibles à la casse (c'est-à-dire `gras` et `GrAs` sont considérés comme le même mot). Chaque mot peut être l'un des suivants :
 
   - `bold`
   - `underline`
@@ -71,7 +80,7 @@ Les chaînes de style sont une liste de mots, séparés par des espaces blancs. 
   - `<color>`
   - `none`
 
-où `<color>` est un spécificateur de couleur (discuté ci-dessous). `fg:<color>` et `<color>` font actuellement la même chose , bien que cela puisse changer dans le futur. L'ordre des mots dans le string n'a pas d'importance.
+où `<color>` est un spécificateur de couleur (discuté ci-dessous). `fg:<color>` et `<color>` font actuellement la même chose, même si cela peut changer plus tard. L'ordre des mots dans le string n'a pas d'importance.
 
 Le jeton ` none ` remplace tous les autres jetons d'une string, de sorte que, par exemple, ` fg: red none fg: blue ` créera toujours une string sans style. Il peut devenir une erreur d'utiliser `none` en conjonction avec d'autres jetons dans le futur.
 

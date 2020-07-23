@@ -121,7 +121,7 @@
 
 ### Требования
 
-- Установленный и включённый [шрифт Powerline](https://github.com/powerline/fonts) (например, [Fira Code](https://github.com/tonsky/FiraCode)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Начало работы
 
@@ -224,7 +224,7 @@
 
 ### Соавторы кода
 
-Этот проект существует благодаря всем тем, кто внес свой вклад. [[Внести вклад](CONTRIBUTING.md)].
+Этот проект существует благодаря всем тем, кто внес свой вклад. [[Внести вклад](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
 ### Финансовые спонсоры
