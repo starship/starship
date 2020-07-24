@@ -63,8 +63,14 @@ fn get_java_version() -> Option<String> {
         Err(_) => String::from("java"),
     };
 
-    let output = utils::exec_cmd(&java_command.as_str(), &["-Xinternalversion"])?.stdout;
-    parse_java_version(&output)
+    let output = utils::exec_cmd(&java_command.as_str(), &["-Xinternalversion"])?;
+    let java_version = if output.stdout.is_empty() {
+        output.stderr
+    } else {
+        output.stdout
+    };
+
+    parse_java_version(&java_version)
 }
 
 fn parse_java_version(java_version: &str) -> Option<String> {
