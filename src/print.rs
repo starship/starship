@@ -5,7 +5,7 @@ use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
 use std::io::{self, Write};
 use unicode_segmentation::UnicodeSegmentation;
-use unicode_width::UnicodeWidthStr;
+use unicode_width::UnicodeWidthChar;
 
 use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Shell};
@@ -288,13 +288,15 @@ fn better_width(s: &str) -> usize {
     s.graphemes(true).map(grapheme_width).sum()
 }
 
-// Assume that graphemes have a width of at most 2 to work around unicode-width not working on the grapheme level
+// Assume that graphemes have width of the first character in the grapheme
 fn grapheme_width(g: &str) -> usize {
-    std::cmp::min(2, g.width())
+    g.chars().next().and_then(|i| i.width()).unwrap_or(0)
 }
 
 #[test]
 fn test_grapheme_aware_better_width() {
     // UnicodeWidthStr::width would return 8
-    assert_eq!(2, better_width("👩‍👩‍👦‍👦"))
+    assert_eq!(2, better_width("👩‍👩‍👦‍👦"));
+    assert_eq!(1, better_width("Ü"));
+    assert_eq!(11, better_width("normal text"));
 }
