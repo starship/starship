@@ -204,6 +204,7 @@ $purescript\
 $python\
 $ruby\
 $rust\
+$swift\
 $terraform\
 $zig\
 $nix_shell\
