@@ -46,7 +46,7 @@ starship prompt --help
 
 ## 古いバージョンの glibc を使用する Linux ディストリビューションで Starship を実行するにはどうすればよいですか?
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+"_version 'GLIBC_2のようなエラーが表示された場合。 8' が見つかりません (starshipで要求されます)_" プリビルドバイナリを使用しています（例えば、 CentOS 6 または 7 では、`glibc`の代わりに`musl`でコンパイルされたバイナリを使用できます。
 
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s --- -platform unknown-linux-musl
