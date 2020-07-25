@@ -6,7 +6,7 @@ use super::{Context, Module, RootModuleConfig};
 use crate::utils;
 
 use regex::Regex;
-const JAVA_VERSION_PATTERN: &str = "(?P<version>[\\d\\.]+)[^\\s]+\\s(?:built|from)";
+const JAVA_VERSION_PATTERN: &str = "(?P<version>[\\d\\.]+)[^\\s]*\\s(?:built|from)";
 
 /// Creates a module with the current Java version
 ///
