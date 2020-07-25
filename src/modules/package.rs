@@ -145,7 +145,7 @@ fn extract_maven_version(file_contents: &str) -> Option<String> {
                 let ver = t.unescape_and_decode(&reader).ok();
                 return match ver {
                     // Ignore version which is just a property reference
-                    Some(ref v) if !v.starts_with("$") => ver,
+                    Some(ref v) if !v.starts_with('$') => ver,
                     _ => None,
                 };
             }
