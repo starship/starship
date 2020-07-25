@@ -149,14 +149,14 @@ jobs:
     needs: github_release # The -bin version downloads and shasums it
     steps:
       - name: Build | Publish AUR package
-        uses: guumaster/aur-publish-docker-action@v1
+        uses: ATiltedTree/create-aur-release@v1
         with:
           package_name: starship
           commit_username: "Starship Bot"
           commit_email: starship.bot.noreply@gmail.com
           ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
       - name: Build | Publish AUR package (-bin version)
-        uses: guumaster/aur-publish-docker-action@v1
+        uses: ATiltedTree/create-aur-release@v1
         with:
           package_name: starship-bin
           commit_username: "Starship Bot"
