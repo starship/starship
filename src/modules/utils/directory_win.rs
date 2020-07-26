@@ -28,6 +28,10 @@ pub fn is_write_allowed(folder_path: &str) -> std::result::Result<bool, &'static
         .collect();
 
     if is_network_path(&folder_name) {
+        log::info!(
+            "Directory '{:?}' is a network drive, unable to check write permissions. See #1506 for details",
+            folder_path
+        );
         return Ok(true);
     }
 
@@ -122,6 +126,7 @@ pub fn is_write_allowed(folder_path: &str) -> std::result::Result<bool, &'static
     Ok(result != 0)
 }
 
+#[link(name = "Shlwapi")]
 extern "system" {
     fn PathIsNetworkPathW(pszPath: LPCWSTR) -> BOOLEAN;
 }
