@@ -1678,7 +1678,7 @@ The module will be shown if any of the following conditions are met:
 
 | Variable   | Default                            | Description                                           |
 | ---------- |----------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The symbol used before displaying the version of Perl |
+| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.|
 | `symbol`   | `"🐪 "`                            | The symbol used before displaying the version of Perl |
 | `style`    | `"bold 149"`                       | The style for the module.                             |
 | `disabled` | `false`                            | Disables the `perl` module.                           |
