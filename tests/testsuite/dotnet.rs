@@ -8,6 +8,8 @@ use tempfile::{self, TempDir};
 const DOTNET_OUTPUT_PATTERN: &str = "•NET v\\d+?\\.\\d+?\\.\\d?";
 const DOTNET_PINNED_VERSION: &str = "1.2.3";
 const DOTNET_PINNED_VERSION_OUTPUT_PATTERN: &str = "•NET v1\\.2\\.3";
+const DOTNET_TFM_PATTERN: &str = r"🎯 .+";
+const DOTNET_TFM_PINNED_VERSION: &str = r"netstandard2.0";
 
 #[test]
 #[ignore]
@@ -57,8 +59,10 @@ fn shows_latest_in_directory_with_solution() -> io::Result<()> {
 #[ignore]
 fn shows_latest_in_directory_with_csproj() -> io::Result<()> {
     let workspace = create_workspace(false)?;
-    touch_path(&workspace, "project.csproj", None)?;
+    let csproj = make_csproj_with_tfm("TargetFramework", "netstandard2.0");
+    touch_path(&workspace, "project.csproj", Some(&csproj))?;
     expect_output(&workspace, ".", Some(DOTNET_OUTPUT_PATTERN))?;
+    expect_output(&workspace, ".", Some(DOTNET_TFM_PATTERN))?;
     workspace.close()
 }
 
@@ -104,8 +108,9 @@ fn shows_pinned_in_directory_with_global_json() -> io::Result<()> {
 fn shows_pinned_in_project_below_root_with_global_json() -> io::Result<()> {
     let workspace = create_workspace(false)?;
     let global_json = make_pinned_sdk_json(DOTNET_PINNED_VERSION);
+    let csproj = make_csproj_with_tfm("TargetFramework", DOTNET_TFM_PINNED_VERSION);
     touch_path(&workspace, "global.json", Some(&global_json))?;
-    touch_path(&workspace, "project/project.csproj", None)?;
+    touch_path(&workspace, "project/project.csproj", Some(&csproj))?;
     expect_output(
         &workspace,
         "project",
@@ -118,14 +123,41 @@ fn shows_pinned_in_project_below_root_with_global_json() -> io::Result<()> {
 #[ignore]
 fn shows_pinned_in_deeply_nested_project_within_repository() -> io::Result<()> {
     let workspace = create_workspace(true)?;
-    let global_json = make_pinned_sdk_json(DOTNET_PINNED_VERSION);
+    let global_json = make_pinned_sdk_json("1.2.3");
+    let csproj = make_csproj_with_tfm("TargetFramework", DOTNET_TFM_PINNED_VERSION);
     touch_path(&workspace, "global.json", Some(&global_json))?;
-    touch_path(&workspace, "deep/path/to/project/project.csproj", None)?;
+    touch_path(
+        &workspace,
+        "deep/path/to/project/project.csproj",
+        Some(&csproj),
+    )?;
     expect_output(
         &workspace,
         "deep/path/to/project",
         Some(DOTNET_PINNED_VERSION_OUTPUT_PATTERN),
     )?;
+    workspace.close()
+}
+
+#[test]
+#[ignore]
+fn shows_single_tfm() -> io::Result<()> {
+    let workspace = create_workspace(false)?;
+    let csproj = make_csproj_with_tfm("TargetFramework", "netstandard2.0");
+    touch_path(&workspace, "project.csproj", Some(&csproj))?;
+    expect_output(&workspace, ".", Some("•NET v2.2.402"))?;
+    expect_output(&workspace, ".", Some("🎯 netstandard2.0"))?;
+    workspace.close()
+}
+
+#[test]
+#[ignore]
+fn shows_multiple_tfms() -> io::Result<()> {
+    let workspace = create_workspace(false)?;
+    let csproj = make_csproj_with_tfm("TargetFrameworks", "netstandard2.0;net461");
+    touch_path(&workspace, "project.csproj", Some(&csproj))?;
+    expect_output(&workspace, ".", Some("•NET v2.2.402"))?;
+    expect_output(&workspace, ".", Some("🎯 netstandard2.0;net461"))?;
     workspace.close()
 }
 
@@ -175,6 +207,19 @@ fn make_pinned_sdk_json(version: &str) -> String {
         }
     "#;
     json_text.replace("INSERT_VERSION", version)
+}
+
+fn make_csproj_with_tfm(tfm_element: &str, tfm: &str) -> String {
+    let json_text = r#"
+        <Project>
+            <PropertyGroup>
+                <TFM_ELEMENT>TFM_VALUE</TFM_ELEMENT>
+            </PropertyGroup>
+        </Project>
+    "#;
+    json_text
+        .replace("TFM_ELEMENT", tfm_element)
+        .replace("TFM_VALUE", tfm)
 }
 
 fn expect_output(workspace: &TempDir, run_from: &str, pattern: Option<&str>) -> io::Result<()> {

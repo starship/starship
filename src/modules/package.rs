@@ -1,13 +1,12 @@
 use std::path::PathBuf;
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
+use crate::configs::package::PackageConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 use regex::Regex;
 use serde_json as json;
-
-use super::{RootModuleConfig, SegmentConfig};
-use crate::configs::package::PackageConfig;
 
 /// Creates a module with the current package version
 ///
@@ -15,19 +14,34 @@ use crate::configs::package::PackageConfig;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("package");
     let config: PackageConfig = PackageConfig::try_load(module.config);
+    let module_version = get_package_version(&context.current_dir, &config)?;
 
-    match get_package_version(&context.current_dir, &config) {
-        Some(package_version) => {
-            module.set_style(config.style);
-            module.get_prefix().set_value("is ");
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => Some(Ok(&module_version)),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-            module.create_segment("symbol", &config.symbol);
-            module.create_segment("version", &SegmentConfig::new(&package_version));
-
-            Some(module)
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `package`:\n{}", error);
+            return None;
         }
-        None => None,
-    }
+    });
+
+    Some(module)
 }
 
 fn extract_cargo_version(file_contents: &str) -> Option<String> {

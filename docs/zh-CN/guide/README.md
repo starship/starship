@@ -121,7 +121,7 @@
 
 ### 前置要求
 
-- 安装一种 [Powerline 字体](https://github.com/powerline/fonts)（如 [Fira Code](https://github.com/tonsky/FiraCode)）并在您的终端启用 。
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### 开始安装
 
@@ -224,7 +224,7 @@
 
 ### Code Contributors
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+This project exists thanks to all the people who contribute. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
 ### Financial Contributors

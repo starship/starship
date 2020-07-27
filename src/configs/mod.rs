@@ -1,6 +1,7 @@
 pub mod aws;
 pub mod battery;
 pub mod character;
+pub mod cmake;
 pub mod cmd_duration;
 pub mod conda;
 pub mod crystal;
@@ -17,7 +18,7 @@ pub mod git_commit;
 pub mod git_state;
 pub mod git_status;
 pub mod go;
-pub mod haskell;
+pub mod helm;
 pub mod hg_branch;
 pub mod hostname;
 pub mod java;

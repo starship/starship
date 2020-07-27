@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name:  ❓ Ask a question
-    url: https://github.com/starship/starship/discussions/new
-    about: Ask questions and discuss with other community members
+  - name:  🙏 Ask a question
+    url: https://github.com/starship/starship/discussions/new?category_id=65593
+    about: Ask the community for help

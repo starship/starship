@@ -1,7 +1,9 @@
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::terraform::TerraformConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
+
 use std::env;
 use std::io;
 use std::path::PathBuf;
@@ -25,20 +27,34 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("terraform");
     let config: TerraformConfig = TerraformConfig::try_load(module.config);
 
-    module.set_style(config.style);
-    module.create_segment("symbol", &config.symbol);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => format_terraform_version(
+                    &utils::exec_cmd("terraform", &["version"])?.stdout.as_str(),
+                )
+                .map(Ok),
+                "workspace" => get_terraform_workspace(&context.current_dir).map(Ok),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    if config.show_version {
-        let terraform_version =
-            format_terraform_version(&utils::exec_cmd("terraform", &["version"])?.stdout.as_str())?;
-        module.create_segment("version", &config.version.with_value(&terraform_version));
-    }
-
-    let terraform_workspace = &get_terraform_workspace(&context.current_dir)?;
-    module.create_segment(
-        "workspace",
-        &config.workspace.with_value(&terraform_workspace),
-    );
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `terraform`:\n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }
@@ -81,6 +97,10 @@ fn format_terraform_version(version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::modules::utils::test::render_module;
+    use ansi_term::Color;
+    use std::fs::{self, File};
+    use std::io::Write;
 
     #[test]
     fn test_format_terraform_version_release() {
@@ -121,5 +141,54 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
             format_terraform_version(input),
             Some("v0.12.13 ".to_string())
         );
+    }
+
+    #[test]
+    fn folder_with_dotterraform_with_version_no_environment() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let tf_dir = dir.path().join(".terraform");
+        fs::create_dir(&tf_dir)?;
+
+        let actual = render_module(
+            "terraform",
+            dir.path(),
+            Some(toml::toml! {
+                [terraform]
+                format = "via [$symbol$version$workspace]($style) "
+            }),
+        );
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 v0.12.14 default")
+        ));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn folder_with_dotterraform_with_version_with_environment() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let tf_dir = dir.path().join(".terraform");
+        fs::create_dir(&tf_dir)?;
+        let mut file = File::create(tf_dir.join("environment"))?;
+        file.write_all(b"development")?;
+        file.sync_all()?;
+
+        let actual = render_module(
+            "terraform",
+            dir.path(),
+            Some(toml::toml! {
+                [terraform]
+                format = "via [$symbol$version$workspace]($style) "
+            }),
+        );
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 v0.12.14 development")
+        ));
+        assert_eq!(expected, actual);
+        Ok(())
     }
 }

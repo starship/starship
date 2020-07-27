@@ -1,8 +1,9 @@
 use std::env;
 
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::username::UsernameConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 /// Creates a module with the current user's username
@@ -23,13 +24,32 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: UsernameConfig = UsernameConfig::try_load(module.config);
 
     if user != logname || ssh_connection.is_some() || user_uid == ROOT_UID || config.show_always {
-        let module_style = match user_uid {
-            Some(0) => config.style_root,
-            _ => config.style_user,
-        };
-
-        module.set_style(module_style);
-        module.create_segment("username", &SegmentConfig::new(&user?));
+        let username = user?;
+        let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+            formatter
+                .map_style(|variable| match variable {
+                    "style" => {
+                        let module_style = match user_uid {
+                            Some(0) => config.style_root,
+                            _ => config.style_user,
+                        };
+                        Some(Ok(module_style))
+                    }
+                    _ => None,
+                })
+                .map(|variable| match variable {
+                    "user" => Some(Ok(&username)),
+                    _ => None,
+                })
+                .parse(None)
+        });
+        module.set_segments(match parsed {
+            Ok(segments) => segments,
+            Err(error) => {
+                log::warn!("Error in module `username`:\n{}", error);
+                return None;
+            }
+        });
 
         Some(module)
     } else {

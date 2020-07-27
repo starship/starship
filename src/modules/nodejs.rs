@@ -1,6 +1,7 @@
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::nodejs::NodejsConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 /// Creates a module with the current Node.js version
@@ -18,20 +19,42 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .set_folders(&["node_modules"])
         .is_match();
 
-    if !is_js_project {
+    let is_esy_project = context
+        .try_begin_scan()?
+        .set_folders(&["esy.lock"])
+        .is_match();
+
+    if !is_js_project || is_esy_project {
         return None;
     }
 
-    let node_version = utils::exec_cmd("node", &["--version"])?.stdout;
-
     let mut module = context.new_module("nodejs");
-    let config: NodejsConfig = NodejsConfig::try_load(module.config);
+    let config = NodejsConfig::try_load(module.config);
+    let nodejs_version = utils::exec_cmd("node", &["--version"])?.stdout;
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => Some(Ok(nodejs_version.trim())),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.set_style(config.style);
-
-    let formatted_version = node_version.trim();
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &SegmentConfig::new(formatted_version));
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `nodejs`:\n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }
@@ -59,6 +82,19 @@ mod tests {
 
         let actual = render_module("nodejs", dir.path(), None);
         let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_package_json_and_esy_lock() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("package.json"))?.sync_all()?;
+        let esy_lock = dir.path().join("esy.lock");
+        fs::create_dir_all(&esy_lock)?;
+
+        let actual = render_module("nodejs", dir.path(), None);
+        let expected = None;
         assert_eq!(expected, actual);
         dir.close()
     }

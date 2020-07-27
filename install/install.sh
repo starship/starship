@@ -152,7 +152,7 @@ install() {
     sudo=""
     msg="Installing Starship, please wait…"
   else
-    warn "Escalated permission are required to install to ${BIN_DIR}"
+    warn "Escalated permissions are required to install to ${BIN_DIR}"
     elevate_priv
     sudo="sudo"
     msg="Installing Starship as root, please wait…"

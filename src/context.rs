@@ -136,7 +136,11 @@ impl<'a> Context<'a> {
     pub fn get_repo(&self) -> Result<&Repo, std::io::Error> {
         self.repo
             .get_or_try_init(|| -> Result<Repo, std::io::Error> {
-                let repository = Repository::discover(&self.current_dir).ok();
+                let repository = if env::var("GIT_DIR").is_ok() {
+                    Repository::open_from_env().ok()
+                } else {
+                    Repository::discover(&self.current_dir).ok()
+                };
                 let branch = repository
                     .as_ref()
                     .and_then(|repo| get_current_branch(repo));
@@ -317,8 +321,19 @@ fn get_current_branch(repository: &Repository) -> Option<String> {
         Err(e) => {
             return if e.code() == UnbornBranch {
                 // HEAD should only be an unborn branch if the repository is fresh,
-                // in that case assume "master"
-                Some(String::from("master"))
+                // in that case read directly from `.git/HEAD`
+                let mut head_path = repository.path().to_path_buf();
+                head_path.push("HEAD");
+
+                // get first line, then last path segment
+                fs::read_to_string(&head_path)
+                    .ok()?
+                    .lines()
+                    .next()?
+                    .trim()
+                    .split('/')
+                    .last()
+                    .map(|r| r.to_owned())
             } else {
                 None
             };

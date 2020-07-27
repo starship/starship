@@ -19,6 +19,10 @@ fn barrier() {
     std::thread::sleep(std::time::Duration::from_millis(500));
 }
 
+fn format_output(symbols: &str) -> String {
+    format!("{} ", Color::Red.bold().paint(format!("[{}]", symbols)))
+}
+
 #[test]
 fn show_nothing_on_empty_dir() -> io::Result<()> {
     let repo_dir = tempfile::tempdir()?;
@@ -46,7 +50,7 @@ fn shows_behind() -> io::Result<()> {
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "⇣")).to_string();
+    let expected = format_output("⇣");
 
     assert_eq!(expected, actual);
 
@@ -63,13 +67,13 @@ fn shows_behind_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            show_sync_count = true
+            behind = "⇣$count"
         })
         .arg("--path")
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "⇣1")).to_string();
+    let expected = format_output("⇣1");
 
     assert_eq!(expected, actual);
 
@@ -89,7 +93,7 @@ fn shows_ahead() -> io::Result<()> {
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "⇡")).to_string();
+    let expected = format_output("⇡");
 
     assert_eq!(expected, actual);
 
@@ -107,13 +111,13 @@ fn shows_ahead_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            show_sync_count = true
+            ahead="⇡$count"
         })
         .arg("--path")
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "⇡1")).to_string();
+    let expected = format_output("⇡1");
 
     assert_eq!(expected, actual);
 
@@ -132,7 +136,7 @@ fn shows_diverged() -> io::Result<()> {
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "⇕")).to_string();
+    let expected = format_output("⇕");
 
     assert_eq!(expected, actual);
 
@@ -149,17 +153,13 @@ fn shows_diverged_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            show_sync_count = true
+            diverged=r"⇕⇡$ahead_count⇣$behind_count"
         })
         .arg("--path")
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red
-        .bold()
-        .paint(format!("[{}] ", "⇕⇡1⇣1"))
-        .to_string();
-
+    let expected = format_output("⇕⇡1⇣1");
     assert_eq!(expected, actual);
 
     remove_dir_all(repo_dir)
@@ -177,7 +177,7 @@ fn shows_conflicted() -> io::Result<()> {
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "=")).to_string();
+    let expected = format_output("=");
 
     assert_eq!(expected, actual);
 
@@ -194,13 +194,13 @@ fn shows_conflicted_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            conflicted_count.enabled = true
+            conflicted = "=$count"
         })
         .arg("--path")
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "=1")).to_string();
+    let expected = format_output("=1");
 
     assert_eq!(expected, actual);
 
@@ -219,7 +219,7 @@ fn shows_untracked_file() -> io::Result<()> {
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "?")).to_string();
+    let expected = format_output("?");
 
     assert_eq!(expected, actual);
 
@@ -236,13 +236,13 @@ fn shows_untracked_file_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            untracked_count.enabled = true
+            untracked = "?$count"
         })
         .arg("--path")
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "?1")).to_string();
+    let expected = format_output("?1");
 
     assert_eq!(expected, actual);
 
@@ -293,7 +293,7 @@ fn shows_stashed() -> io::Result<()> {
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "$")).to_string();
+    let expected = format_output("$");
 
     assert_eq!(expected, actual);
 
@@ -317,13 +317,13 @@ fn shows_stashed_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            stashed_count.enabled = true
+            stashed = r"\$$count"
         })
         .arg("--path")
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "$1")).to_string();
+    let expected = format_output("$1");
 
     assert_eq!(expected, actual);
     remove_dir_all(repo_dir)
@@ -341,7 +341,7 @@ fn shows_modified() -> io::Result<()> {
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "!")).to_string();
+    let expected = format_output("!");
 
     assert_eq!(expected, actual);
     remove_dir_all(repo_dir)
@@ -357,13 +357,13 @@ fn shows_modified_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            modified_count.enabled = true
+            modified = "!$count"
         })
         .arg("--path")
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "!1")).to_string();
+    let expected = format_output("!1");
 
     assert_eq!(expected, actual);
 
@@ -382,7 +382,7 @@ fn shows_staged_file() -> io::Result<()> {
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "+")).to_string();
+    let expected = format_output("+");
 
     assert_eq!(expected, actual);
 
@@ -399,19 +399,18 @@ fn shows_staged_file_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            staged_count.enabled = true
-            staged_count.style = "green"
+            staged = "+[$count](green)"
         })
         .arg("--path")
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
     let expected = format!(
-        "{}",
+        "{} ",
         ANSIStrings(&[
             Color::Red.bold().paint("[+"),
             Color::Green.paint("1"),
-            Color::Red.bold().paint("] "),
+            Color::Red.bold().paint("]"),
         ])
     );
 
@@ -432,7 +431,7 @@ fn shows_renamed_file() -> io::Result<()> {
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "»")).to_string();
+    let expected = format_output("»");
 
     assert_eq!(expected, actual);
 
@@ -449,13 +448,13 @@ fn shows_renamed_file_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            renamed_count.enabled = true
+            renamed = "»$count"
         })
         .arg("--path")
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "»1")).to_string();
+    let expected = format_output("»1");
 
     assert_eq!(expected, actual);
 
@@ -474,7 +473,7 @@ fn shows_deleted_file() -> io::Result<()> {
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "✘")).to_string();
+    let expected = format_output("✘");
 
     assert_eq!(expected, actual);
 
@@ -491,58 +490,63 @@ fn shows_deleted_file_with_count() -> io::Result<()> {
     let output = common::render_module("git_status")
         .use_config(toml::toml! {
             [git_status]
-            deleted_count.enabled = true
+            deleted = "✘$count"
         })
         .arg("--path")
         .arg(&repo_dir)
         .output()?;
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = Color::Red.bold().paint(format!("[{}] ", "✘1")).to_string();
+    let expected = format_output("✘1");
 
     assert_eq!(expected, actual);
 
     remove_dir_all(repo_dir)
 }
 
+// Whenever a file is manually renamed, git itself ('git status') does not treat such file as renamed,
+// but as untracked instead. The following test checks if manually deleted and manually renamed
+// files are tracked by git_status module in the same way 'git status' does.
 #[test]
 #[ignore]
-fn prefix() -> io::Result<()> {
+fn ignore_manually_renamed() -> io::Result<()> {
     let repo_dir = common::create_fixture_repo()?;
-    File::create(repo_dir.join("prefix"))?.sync_all()?;
-    let output = common::render_module("git_status")
-        .arg("--path")
-        .arg(&repo_dir)
-        .env_clear()
-        .use_config(toml::toml! {
-            [git_status]
-            prefix = "("
-            style = ""
-        })
+    File::create(repo_dir.join("a"))?.sync_all()?;
+    File::create(repo_dir.join("b"))?.sync_all()?;
+    Command::new("git")
+        .args(&["add", "--all"])
+        .current_dir(&repo_dir)
         .output()?;
-    let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = "(";
-    assert!(actual.starts_with(&expected));
-    remove_dir_all(repo_dir)
-}
+    Command::new("git")
+        .args(&["commit", "-m", "add new files"])
+        .current_dir(&repo_dir)
+        .output()?;
 
-#[test]
-#[ignore]
-fn suffix() -> io::Result<()> {
-    let repo_dir = common::create_fixture_repo()?;
-    File::create(repo_dir.join("suffix"))?.sync_all()?;
+    fs::remove_file(repo_dir.join("a"))?;
+    fs::rename(repo_dir.join("b"), repo_dir.join("c"))?;
+    barrier();
+
     let output = common::render_module("git_status")
         .arg("--path")
         .arg(&repo_dir)
         .env_clear()
         .use_config(toml::toml! {
             [git_status]
-            suffix = ")"
+            prefix = ""
+            suffix = ""
             style = ""
+            ahead = "A"
+            deleted = "D"
+            untracked = "U"
+            renamed = "R"
         })
         .output()?;
+
     let actual = String::from_utf8(output.stdout).unwrap();
-    let expected = ")";
-    assert!(actual.ends_with(&expected));
+    assert!(actual.contains('A'));
+    assert!(actual.contains('D'));
+    assert!(actual.contains('U'));
+    assert!(!actual.contains('R'));
+
     remove_dir_all(repo_dir)
 }
 

@@ -1,6 +1,7 @@
 // While adding out new module add out module to src/module.rs ALL_MODULES const array also.
 mod aws;
 mod character;
+mod cmake;
 mod cmd_duration;
 mod conda;
 mod crystal;
@@ -17,7 +18,7 @@ mod git_commit;
 mod git_state;
 mod git_status;
 mod golang;
-mod haskell;
+mod helm;
 mod hg_branch;
 mod hostname;
 mod java;
@@ -47,7 +48,7 @@ mod zig;
 #[cfg(feature = "battery")]
 mod battery;
 
-use crate::config::{RootModuleConfig, SegmentConfig};
+use crate::config::RootModuleConfig;
 use crate::context::{Context, Shell};
 use crate::module::Module;
 
@@ -59,6 +60,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         #[cfg(feature = "battery")]
         "battery" => battery::module(context),
         "character" => character::module(context),
+        "cmake" => cmake::module(context),
         "cmd_duration" => cmd_duration::module(context),
         "conda" => conda::module(context),
         "directory" => directory::module(context),
@@ -73,7 +75,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "git_state" => git_state::module(context),
         "git_status" => git_status::module(context),
         "golang" => golang::module(context),
-        "haskell" => haskell::module(context),
+        "helm" => helm::module(context),
         "hg_branch" => hg_branch::module(context),
         "hostname" => hostname::module(context),
         "java" => java::module(context),
@@ -113,6 +115,7 @@ pub fn description(module: &str) -> &'static str {
         "character" => {
             "A character (usually an arrow) beside where the text is entered in your terminal"
         }
+        "cmake" => "The currently installed version of CMake",
         "cmd_duration" => "How long the last command took to execute",
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
         "crystal" => "The currently installed version of Crystal",
@@ -126,7 +129,7 @@ pub fn description(module: &str) -> &'static str {
         "git_state" => "The current git operation, and it's progress",
         "git_status" => "Symbol representing the state of the repo",
         "golang" => "The currently installed version of Golang",
-        "haskell" => "The currently used version of Haskell",
+        "helm" => "The currently installed version of Helm",
         "hg_branch" => "The active branch of the repo in your current directory",
         "hostname" => "The system hostname",
         "java" => "The currently installed version of Java",

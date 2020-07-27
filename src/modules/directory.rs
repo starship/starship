@@ -1,3 +1,7 @@
+#[cfg(not(target_os = "windows"))]
+use super::utils::directory_nix as directory_utils;
+#[cfg(target_os = "windows")]
+use super::utils::directory_win as directory_utils;
 use path_slash::PathExt;
 use std::collections::HashMap;
 use std::iter::FromIterator;
@@ -7,8 +11,9 @@ use unicode_segmentation::UnicodeSegmentation;
 use super::{Context, Module};
 
 use super::utils::directory::truncate;
-use crate::config::{RootModuleConfig, SegmentConfig};
+use crate::config::RootModuleConfig;
 use crate::configs::directory::DirectoryConfig;
+use crate::formatter::StringFormatter;
 
 /// Creates a module with the current directory
 ///
@@ -28,8 +33,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
-
-    module.set_style(config.style);
 
     // Using environment PWD is the standard approach for determining logical path
     // If this is None for any reason, we fall back to reading the os-provided path
@@ -80,35 +83,64 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Substitutions could have changed the prefix, so don't allow them and
     // fish-style path contraction together
-    if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
+    let fish_prefix = if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
         // If user is using fish style path, we need to add the segment first
         let contracted_home_dir = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
-        let fish_style_dir = to_fish_style(
+        to_fish_style(
             config.fish_style_pwd_dir_length as usize,
             contracted_home_dir,
             &truncated_dir_string,
-        );
+        )
+    } else {
+        String::from("")
+    };
+    let final_dir_string = format!("{}{}", fish_prefix, truncated_dir_string);
+    let lock_symbol = String::from(config.read_only_symbol);
 
-        module.create_segment(
-            "path",
-            &SegmentConfig {
-                value: &fish_style_dir,
-                style: None,
-            },
-        );
-    }
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                "read_only_style" => Some(Ok(config.read_only_symbol_style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "path" => Some(Ok(&final_dir_string)),
+                "read_only" => {
+                    if is_readonly_dir(current_dir.to_str()?) {
+                        Some(Ok(&lock_symbol))
+                    } else {
+                        None
+                    }
+                }
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.create_segment(
-        "path",
-        &SegmentConfig {
-            value: &truncated_dir_string,
-            style: None,
-        },
-    );
-
-    module.get_prefix().set_value(config.prefix);
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `directory`:\n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
+}
+
+fn is_readonly_dir(path: &str) -> bool {
+    match directory_utils::is_write_allowed(path) {
+        Ok(res) => !res,
+        Err(e) => {
+            log::debug!(
+                "Failed to detemine read only status of directory '{}': {}",
+                path,
+                e
+            );
+            false
+        }
+    }
 }
 
 /// Contract the root component of a path
