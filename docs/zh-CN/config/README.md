@@ -1622,16 +1622,16 @@ format = "via [🔹 $version](147 bold) "
 
 ## Python
 
-The `python` module shows the currently installed version of Python and the current Python virtual environment if one is activated.
+`python` 组件组件展示已经安装了的Python版本以及如果虚拟环境被激活则会显示当前Python虚拟环境
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
+如果`pyenv_version_name`被设置为`true`, 本组件将会展示pyenv版本名。 否则则显示通过`python --version`获得的版本号
 
 此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含 `.python-version` 文件
 - 当前目录包含 `requirements.txt` 文件
 - 当前目录包含 `pyproject.toml` 文件
-- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
+- 当前目录包含一个扩展名名为`.py`的文件(以及`scan_for_pyfile`为true)
 - 当前目录包含 `Pipfile` 文件
 - 当前目录包含一个 `tox.ini` 文件
 - 当前目录包含一个 `setup.py` 文件
