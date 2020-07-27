@@ -1622,9 +1622,9 @@ format = "via [🔹 $version](147 bold) "
 
 ## Python
 
-The `python` module shows the currently installed version of Python and the current Python virtual environment if one is activated.
+`python`组件展示已经安装了的Python版本以及如果虚拟环境被激活则会显示当前Python虚拟环境
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
+如果`pyenv_version_name`被设置为`true`, 本组件将会展示pyenv版本名，否则则显示通过`python --version`获得的版本号
 
 此组件将在符合以下任意条件之一时显示：
 
@@ -1642,30 +1642,30 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 | Option               | 默认值                                                            | 描述                                                                         |
 | -------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `format`             | `"via [${symbol}${version}( \\($virtualenv\\))]($style) "` | The format for the module.                                                 |
-| `symbol`             | `"🐍 "`                                                         | A format string representing the symbol of Python                          |
+| `format`             | `"via [${symbol}${version}( \\($virtualenv\\))]($style) "`     | 组件格式化模板。                                                 |
+| `symbol`             | `"🐍 "`                                                        | 用于表示Python的格式化字符串。                          |
 | `style`              | `"yellow bold"`                                                | 此组件的样式。                                                                    |
 | `pyenv_version_name` | `false`                                                        | 使用 pyenv 获取 Python 版本                                                      |
-| `scan_for_pyfiles`   | `true`                                                         | If false, Python files in the current directory will not show this module. |
+| `scan_for_pyfiles`   | `true`                                                         | 如果设置为false, 在本目录下的Python文件将不会在本组件中显示。 |
 | `disabled`           | `false`                                                        | 禁用 `python` 组件。                                                            |
 
 ### Variables
 
 | 字段         | 示例              | 描述                                   |
 | ---------- | --------------- | ------------------------------------ |
-| version    | `"v3.8.1"`      | The version of `python`              |
-| symbol     | `"🐍 "`          | Mirrors the value of option `symbol` |
-| style      | `"yellow bold"` | Mirrors the value of option `style`  |
-| virtualenv | `"venv"`        | The current `virtualenv` name        |
+| version    | `"v3.8.1"`      | `python`版本              |
+| symbol     | `"🐍 "`          | `symbol`对应值 |
+| style      | `"yellow bold"` | `style`对应值  |
+| virtualenv | `"venv"`        | 当前`虚拟环境`名称 |
 
 <details>
-<summary>This module has some advanced configuration options.</summary>
+<summary>这个组件有高级配置。</summary>
 
 | 字段              | 默认值      | 描述                                                                            |
 | --------------- | -------- | ----------------------------------------------------------------------------- |
-| `python_binary` | `python` | Configures the python binary that Starship executes when getting the version. |
+| `python_binary` | `python` | 配置在Starship运行时获取Python版本的执行文件。 |
 
-The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
+`python_binary`变量改变Starship运行时获取Python版本号的二进制程序，但是它不改变获取版本号命令传入的参数。
 
 ```toml
 # ~/.config/starship.toml
