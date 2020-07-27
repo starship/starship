@@ -1635,37 +1635,37 @@ format = "via [🔹 $version](147 bold) "
 - 当前目录包含 `Pipfile` 文件
 - 当前目录包含一个 `tox.ini` 文件
 - 当前目录包含一个 `setup.py` 文件
-- The current directory contains a `__init__.py` file
+- 当前目录包含一个名为`__init__.py`的文件
 - 当前处于一个活跃的 python 虚拟环境中
 
 ### 配置项
 
-| Option               | 默认值                                                            | 描述                                                                         |
-| -------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `format`             | `"via [${symbol}${version}( \\($virtualenv\\))]($style) "` | The format for the module.                                                 |
-| `symbol`             | `"🐍 "`                                                         | A format string representing the symbol of Python                          |
-| `style`              | `"yellow bold"`                                                | 此组件的样式。                                                                    |
-| `pyenv_version_name` | `false`                                                        | 使用 pyenv 获取 Python 版本                                                      |
-| `scan_for_pyfiles`   | `true`                                                         | If false, Python files in the current directory will not show this module. |
-| `disabled`           | `false`                                                        | 禁用 `python` 组件。                                                            |
+| Option               | 默认值                                                            | 描述                                    |
+| -------------------- | -------------------------------------------------------------- | ------------------------------------- |
+| `format`             | `"via [${symbol}${version}( \\($virtualenv\\))]($style) "` | 组件格式化模板。                              |
+| `symbol`             | `"🐍 "`                                                         | 用于表示Python的格式化字符串。                    |
+| `style`              | `"yellow bold"`                                                | 此组件的样式。                               |
+| `pyenv_version_name` | `false`                                                        | 使用 pyenv 获取 Python 版本                 |
+| `scan_for_pyfiles`   | `true`                                                         | 如果设置为false, 在本目录下的Python文件将不会在本组件中显示。 |
+| `disabled`           | `false`                                                        | 禁用 `python` 组件。                       |
 
 ### Variables
 
-| 字段         | 示例              | 描述                                   |
-| ---------- | --------------- | ------------------------------------ |
-| version    | `"v3.8.1"`      | The version of `python`              |
-| symbol     | `"🐍 "`          | Mirrors the value of option `symbol` |
-| style      | `"yellow bold"` | Mirrors the value of option `style`  |
-| virtualenv | `"venv"`        | The current `virtualenv` name        |
+| 字段         | 示例              | 描述               |
+| ---------- | --------------- | ---------------- |
+| version    | `"v3.8.1"`      | `python`版本       |
+| symbol     | `"🐍 "`          | `symbol`对应值      |
+| style      | `"yellow bold"` | `style`对应值       |
+| virtualenv | `"venv"`        | 当前`virtualenv`名称 |
 
 <details>
-<summary>This module has some advanced configuration options.</summary>
+<summary>这个组件存在一些高级配置选项。</summary>
 
-| 字段              | 默认值      | 描述                                                                            |
-| --------------- | -------- | ----------------------------------------------------------------------------- |
-| `python_binary` | `python` | Configures the python binary that Starship executes when getting the version. |
+| 字段              | 默认值      | 描述                             |
+| --------------- | -------- | ------------------------------ |
+| `python_binary` | `python` | 配置在Starship运行时获取Python版本的二进制文件 |
 
-The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
+`python_binary`变量更改Starship执行的二进制文件以获得 Python版本，它没有改变使用的参数。
 
 ```toml
 # ~/.config/starship.toml
