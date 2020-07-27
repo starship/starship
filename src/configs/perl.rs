@@ -1,20 +1,21 @@
-use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
+use crate::config::{ModuleConfig, RootModuleConfig};
 
-use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct PerlConfig<'a> {
-    pub symbol: SegmentConfig<'a>,
-    pub style: Style,
+    pub symbol: &'a str,
+    pub style: &'a str,
+    pub format: &'a str,
     pub disabled: bool,
 }
 
 impl<'a> RootModuleConfig<'a> for PerlConfig<'a> {
     fn new() -> Self {
         PerlConfig {
-            symbol: SegmentConfig::new("🐪 "),
-            style: Color::Fixed(149).bold(),
+            symbol: "🐪 ",
+            style: "149 bold",
+            format: "via [$symbol$version]($style) ",
             disabled: false,
         }
     }
