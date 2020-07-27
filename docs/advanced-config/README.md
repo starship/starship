@@ -39,7 +39,9 @@ function blastoff(){
     echo "🚀"
 }
 trap blastoff DEBUG     # Trap DEBUG *before* running starship
+set -o functrace
 eval $(starship init bash)
+set +o functrace
 ```
 
 ## Change Window Title
