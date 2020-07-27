@@ -1,16 +1,16 @@
 # Configuração avançada
 
-While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
+Ainda que Starship seja um shell versátil, às vezes você precisará fazer algumas outras coisas além de editar o arquivo `starship.toml`. Esta página detalha algumas das configurações mais avançadas usadas em starship.
 
 ::: warning
 
-The configurations in this section are subject to change in future releases of Starship.
+As configurações nesta seção estão sujeitas a alterações em futuras versões do Starship.
 
 :::
 
-## Custom pre-prompt and pre-execution Commands in Bash
+## Comandos personalizados de pre-prompt e pre-execution no Bash
 
-Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+O Bash não possui uma estrutura formal para os hooks preexec/precmd como a maioria dos outros shells. Por esse motivo, é difícil fornecer hooks totalmente customizáveis no `bash`. No entanto, Starship te oferece uma capacidade limitada de inserir suas próprias funções na processo de prompt-rendering:
 
 - To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
 
@@ -31,9 +31,9 @@ trap blastoff DEBUG     # Trap DEBUG *before* running starship
 eval $(starship init bash)
 ```
 
-## Change Window Title
+## Altera o título da janela
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish faz isso por padrão. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
 
 First, define a window title change function (identical in bash and zsh):
 
@@ -57,7 +57,16 @@ In `zsh`, add this to the `precmd_functions` array:
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zsrhc`) to make it permanent.
+If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+
+For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+
+```bash
+function set_win_title(){
+    echo -ne "\033]0; $(basename $PWD) \007"
+}
+starship_precmd_user_func="set_win_title"
+```
 
 ## Estilo dos textos
 
