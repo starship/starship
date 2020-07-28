@@ -204,8 +204,12 @@ impl DirContents {
         let mut extensions: HashSet<String> = HashSet::new();
 
         fs::read_dir(base)?
-            .take_while(|_| SystemTime::now().duration_since(start).unwrap() < timeout)
-            .filter_map(Result::ok)
+            .enumerate()
+            .take_while(|(n, _)| {
+                n & 0xFF != 0 // only check SystemTime once every 2^8 entries
+                || SystemTime::now().duration_since(start).unwrap() < timeout
+            })
+            .filter_map(|(_, entry)| entry.ok())
             .for_each(|entry| {
                 let path = PathBuf::from(entry.path().strip_prefix(base).unwrap());
                 if entry.path().is_dir() {
