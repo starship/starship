@@ -101,7 +101,7 @@ active boot switches: -d:release\n",
             stdout: String::from("4.08.1\n"),
             stderr: String::default(),
         }),
-        "php -nr 'echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;'" => {
+        "php -nr echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;" => {
             Some(CommandOutput {
                 stdout: String::from("7.3.8"),
                 stderr: String::default(),
