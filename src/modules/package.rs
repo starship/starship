@@ -108,6 +108,12 @@ fn extract_project_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
+fn extract_helm_package_version(file_contents: &str) -> Option<String> {
+    let yaml = yaml_rust::YamlLoader::load_from_str(file_contents).ok()?;
+    let version = yaml.first()?["version"].as_str()?;
+    Some(format_version(version))
+}
+
 fn extract_mix_version(file_contents: &str) -> Option<String> {
     let re = Regex::new(r#"(?m)version: "(?P<version>[^"]+)""#).unwrap();
     let caps = re.captures(file_contents)?;
@@ -131,6 +137,8 @@ fn get_package_version(base_dir: &PathBuf, config: &PackageConfig) -> Option<Str
         extract_project_version(&project_toml)
     } else if let Ok(mix_file) = utils::read_file(base_dir.join("mix.exs")) {
         extract_mix_version(&mix_file)
+    } else if let Ok(chart_file) = utils::read_file(base_dir.join("Chart.yaml")) {
+        extract_helm_package_version(&chart_file)
     } else {
         None
     }
@@ -460,6 +468,21 @@ end";
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("v0.9.9-dev+20130417140000.amd64"), None)?;
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_helm_chart_version() -> io::Result<()> {
+        let config_name = "Chart.yaml";
+        let config_content = "
+        apiVersion: v1
+        name: starship
+        version: 0.2.0
+        ";
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.2.0"), None)?;
         project_dir.close()
     }
 
