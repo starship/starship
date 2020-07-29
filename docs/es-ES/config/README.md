@@ -179,6 +179,7 @@ $hg_branch\
 $docker_context\
 $package\
 $cmake\
+$dart\
 $dotnet\
 $elixir\
 $elm\
@@ -195,6 +196,7 @@ $purescript\
 $python\
 $ruby\
 $rust\
+$swift\
 $terraform\
 $zig\
 $nix_shell\
@@ -550,28 +552,64 @@ El módulo `crystal` muestra la versión actual de Crystal. El módulo se muestr
 format = "via [✨ $version](bold blue) "
 ```
 
-## Directory
+## Dart
 
-El módulo `directory` muestra la ruta hasta el directorio actual, mostrando tres directorios padre como máximo. Tu directorio se truncará a la raíz del repositorio git en el que estés.
+The `dart` module shows the currently installed version of Dart. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-Cuando usas el estilo fish de la opción pwd, en lugar de ocultar la ruta truncada, verás una versión acortada del nombre de cada directorio basada en el número que activa la opción.
-
-Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repositorio y el valor de la opción es `1`. En ese caso, verás `~/D/N/nixpkgs/pkgs`, cuando antes hubiera sido `nixpkgs/pkgs`.
+- The current directory contains a file with `.dart` extension
+- The current directory contains a `.dart_tool` directory
+- The current directory contains a `pubspec.yaml` or `pubspec.lock` file
 
 ### Opciones
 
-| Variable                 | Por defecto                                     | Descripción                                                                    |
-| ------------------------ | ----------------------------------------------- | ------------------------------------------------------------------------------ |
-| `truncation_length`      | `3`                                             | El número de directorios padre a los que se debe truncar el directorio actual. |
-| `truncate_to_repo`       | `true`                                          | Trunca o no hasta la raíz del repositorio git en el que estés.                 |
-| `format`                 | `"[$path]($style)[$lock_symbol]($lock_style) "` | The format for the module.                                                     |
-| `style`                  | `"bold cyan"`                                   | El estilo del módulo.                                                          |
-| `disabled`               | `false`                                         | Desactiva el módulo `directory`.                                               |
-| `read_only_symbol`       | `"🔒"`                                           | The symbol indicating current directory is read only.                          |
-| `read_only_symbol_style` | `"red"`                                         | The style for the read only symbol.                                            |
+| Variable   | Por defecto                        | Descripción                                     |
+| ---------- | ---------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
+| `symbol`   | `"🎯 "`                             | A format string representing the symbol of Dart |
+| `style`    | `"bold blue"`                      | El estilo del módulo.                           |
+| `disabled` | `false`                            | Disables the `dart` module.                     |
+
+### Variables
+
+| Variable  | Ejemplo  | Descripción                          |
+| --------- | -------- | ------------------------------------ |
+| version   | `v2.8.4` | The version of `dart`                |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Ejemplo
+
+```toml
+# ~/.config/starship.toml
+
+[dart]
+format = "via [🔰 $version](bold red) "
+```
+
+## Directory
+
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+
+When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+
+### Opciones
+
+| Variable                 | Por defecto                                     | Descripción                                                                      |
+| ------------------------ | ----------------------------------------------- | -------------------------------------------------------------------------------- |
+| `truncation_length`      | `3`                                             | The number of parent folders that the current directory should be truncated to.  |
+| `truncate_to_repo`       | `true`                                          | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `format`                 | `"[$path]($style)[$lock_symbol]($lock_style) "` | The format for the module.                                                       |
+| `style`                  | `"bold cyan"`                                   | El estilo del módulo.                                                            |
+| `disabled`               | `false`                                         | Disables the `directory` module.                                                 |
+| `read_only_symbol`       | `"🔒"`                                           | The symbol indicating current directory is read only.                            |
+| `read_only_symbol_style` | `"red"`                                         | The style for the read only symbol.                                              |
 
 <details>
-<summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | Advanced Option             | Por defecto | Descripción                                                                              |
 | --------------------------- | ----------- | ---------------------------------------------------------------------------------------- |
@@ -609,19 +647,19 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 truncation_length = 8
 ```
 
-## Docker context
+## Docker Context
 
-El módulo `docker_context` muestra el [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) activo si no está a `default`.
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
 
 ### Opciones
 
-| Option            | Por defecto                        | Descripción                                                                                        |
-| ----------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `format`          | `"via [$symbol$context]($style) "` | The format for the module.                                                                         |
-| `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                              |
-| `style`           | `"blue bold"`                      | El estilo del módulo.                                                                              |
-| `only_with_files` | `false`                            | Solo lo muestra cuando hay un archivo `docker-compose.yml` o `Dockerfile` en el directorio actual. |
-| `disabled`        | `true`                             | Desactiva el módulo `docker_context`.                                                              |
+| Option            | Por defecto                        | Descripción                                                                             |
+| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`          | `"via [$symbol$context]($style) "` | The format for the module.                                                              |
+| `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                   |
+| `style`           | `"blue bold"`                      | El estilo del módulo.                                                                   |
+| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
+| `disabled`        | `true`                             | Disables the `docker_context` module.                                                   |
 
 ### Variables
 
@@ -644,7 +682,7 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-El módulo `dotnet` muestra la versión usada de .NET Core SDK para el directorio actual. Si el SDK ha sido anclado en el directorio actual, se mostrará la versión fijada. De lo contrario, el módulo muestra la última versión instalada del SDK.
+The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
 
 This module will only be shown in your prompt when one or more of the following files are present in the current directory:
 
@@ -666,13 +704,13 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Opciones
 
-| Option      | Por defecto                              | Descripción                                           |
-| ----------- | ---------------------------------------- | ----------------------------------------------------- |
-| `format`    | `"v[$symbol$version( 🎯 $tfm)]($style) "` | The format for the module.                            |
-| `symbol`    | `"•NET "`                                | Símbolo usado antes de mostrar la versión de .NET     |
-| `heuristic` | `true`                                   | Use faster version detection to keep starship snappy. |
-| `style`     | `"bold blue"`                            | El estilo del módulo.                                 |
-| `disabled`  | `false`                                  | Deshabilita el módulo `dotnet`.                       |
+| Option      | Por defecto                              | Descripción                                              |
+| ----------- | ---------------------------------------- | -------------------------------------------------------- |
+| `format`    | `"v[$symbol$version( 🎯 $tfm)]($style) "` | The format for the module.                               |
+| `symbol`    | `"•NET "`                                | The symbol used before displaying the version of dotnet. |
+| `heuristic` | `true`                                   | Use faster version detection to keep starship snappy.    |
+| `style`     | `"bold blue"`                            | El estilo del módulo.                                    |
+| `disabled`  | `false`                                  | Disables the `dotnet` module.                            |
 
 ### Variables
 
@@ -700,7 +738,7 @@ heuristic = false
 
 The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un fichero `mix.exs`.
+- The current directory contains a `mix.exs` file.
 
 ### Opciones
 
@@ -735,8 +773,8 @@ symbol = "🔮 "
 
 The `elm` module shows the currently installed version of Elm. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un fichero `elm.json`
-- El directorio actual contiene un fichero `elm-package.json`
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
 - The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
@@ -769,7 +807,7 @@ The `elm` module shows the currently installed version of Elm. El módulo se mue
 format = "via [ $version](cyan bold) "
 ```
 
-## Variable de entorno
+## Environment Variable
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
@@ -778,13 +816,13 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Opciones
 
-| Option        | Por defecto                    | Descripción                                                                  |
-| ------------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`      |                                | The symbol used before displaying the variable value.                        |
-| `variable`    |                                | The environment variable to be displayed.                                    |
-| `por defecto` |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`      | `"with [$env_value]($style) "` | The format for the module.                                                   |
-| `disabled`    | `false`                        | Disables the `env_var` module.                                               |
+| Option     | Por defecto                    | Descripción                                                                  |
+| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`   |                                | The symbol used before displaying the variable value.                        |
+| `variable` |                                | The environment variable to be displayed.                                    |
+| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
+| `format`   | `"with [$env_value]($style) "` | The format for the module.                                                   |
+| `disabled` | `false`                        | Disables the `env_var` module.                                               |
 
 ### Variables
 
@@ -810,8 +848,8 @@ default = "unknown shell"
 
 The `erlang` module shows the currently installed version of Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un fichero `rebar.config`.
-- El directorio actual contiene un fichero `erlang.mk`.
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
 
 ### Opciones
 
@@ -877,7 +915,7 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git commit
+## Git Commit
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
@@ -909,7 +947,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 commit_hash_length = 4
 ```
 
-## Git state
+## Git State
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
@@ -949,7 +987,7 @@ format = "[\\($state( $progress_current of $progress_total)\\)]($style) "
 cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
-## Git status
+## Git Status
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
@@ -1026,9 +1064,9 @@ deleted = "🗑"
 
 The `golang` module shows the currently installed version of Golang. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un fichero `go.mod`
-- El directorio actual contiene un fichero `go.sum`
-- El directorio actual contiene un fichero `glide.yaml`
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
 - The current directory contains a `Gopkg.yml` file
 - The current directory contains a `Gopkg.lock` file
 - The current directory contains a `.go-version` file
@@ -1067,7 +1105,7 @@ format = "via [🏎💨 $version](bold cyan) "
 
 The `helm` module shows the currently installed version of Helm. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un fichero `helmfile.yaml`
+- The current directory contains a `helmfile.yaml` file
 - The current directory contains a `Chart.yaml` file
 
 ### Opciones
@@ -1283,7 +1321,7 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ```
 
-## Salto de línea
+## Line Break
 
 The `line_break` module separates the prompt into two lines.
 
@@ -1302,7 +1340,7 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
-## Memoria utilizada
+## Memory Usage
 
 The `memory_usage` module shows current system memory and swap usage.
 
@@ -1392,7 +1430,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of Nim. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un fichero `nim.cfg`
+- The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1468,7 +1506,7 @@ format = "via [☃️ $state( \\($name\\))](bold blue) "
 
 The `nodejs` module shows the currently installed version of NodeJS. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un fichero `package.json`
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
@@ -1502,7 +1540,7 @@ The `nodejs` module shows the currently installed version of NodeJS. El módulo 
 format = "via [🤖 $version](bold green) "
 ```
 
-## Versión del paquete
+## Package Version
 
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
@@ -1590,7 +1628,7 @@ format = "via [🐪 $version]($style) "
 
 The `php` module shows the currently installed version of PHP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un fichero `composer.json`
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
@@ -1631,12 +1669,12 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `.python-version` file
-- El directorio actual contiene un fichero `requirements.txt`
-- El directorio actual contiene un fichero `pyproject.toml`
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `pyproject.toml` file
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - The current directory contains a `Pipfile` file
-- El directorio actual contiene un fichero `tox.ini`
-- El directorio actual contiene un fichero `setup.py`
+- The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
 - The current directory contains a `__init__.py` file
 - A virtual environment is currently activated
 
@@ -1792,6 +1830,41 @@ The `singularity` module shows the current singularity image, if inside a contai
 format = "[📦 \\[$env\\]]($style) "
 ```
 
+## Swift
+
+The `swift` module shows the currently installed version of Swift. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+
+- The current directory contains a `Package.swift` file
+- The current directory contains a file with the `.swift` extension
+
+### Opciones
+
+| Option     | Por defecto                        | Descripción                                      |
+| ---------- | ---------------------------------- | ------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
+| `symbol`   | `"🐦 "`                             | A format string representing the symbol of Swift |
+| `style`    | `"bold 202"`                       | El estilo del módulo.                            |
+| `disabled` | `false`                            | Disables the `swift` module.                     |
+
+### Variables
+
+| Variable  | Ejemplo  | Descripción                          |
+| --------- | -------- | ------------------------------------ |
+| version   | `v5.2.4` | The version of `swift`               |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Ejemplo
+
+```toml
+# ~/.config/starship.toml
+
+[swift]
+format = "via [🏎  $version](red bold)"
+```
+
 ## Terraform
 
 The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). El módulo se muestra si algunas de las siguientes condiciones se cumplen:
@@ -1810,12 +1883,12 @@ The `terraform` module shows the currently selected terraform workspace and vers
 
 ### Variables
 
-| Variable  | Ejemplo       | Descripción                          |
-| --------- | ------------- | ------------------------------------ |
-| version   | `v0.12.24`    | The version of `terraform`           |
-| workspace | `por defecto` | The current terraform workspace      |
-| symbol    |               | Mirrors the value of option `symbol` |
-| style\* |               | Mirrors the value of option `style`  |
+| Variable  | Ejemplo    | Descripción                          |
+| --------- | ---------- | ------------------------------------ |
+| version   | `v0.12.24` | The version of `terraform`           |
+| workspace | `default`  | The current terraform workspace      |
+| symbol    |            | Mirrors the value of option `symbol` |
+| style\* |            | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1839,7 +1912,7 @@ format = "[🏎💨 $version$workspace]($style) "
 format = "[🏎💨 $workspace]($style) "
 ```
 
-## Hora
+## Time
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
@@ -1854,12 +1927,12 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | Option            | Por defecto             | Descripción                                                                                                                        |
 | ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
-| `use_12hr`        | `false`                 | Activa el formato de 12 horas                                                                                                      |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
 | `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
-| `style`           | `"bold yellow"`         | El estilo del módulo de la hora                                                                                                    |
+| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
 | `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
 | `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
-| `time_range`      | `"-"`                   | Establece el intervalo de tiempo durante el cual el módulo se mostrará. La hora debe ser especificada en formato de 24 horas       |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
 If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
@@ -1867,7 +1940,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Ejemplo    | Descripción                         |
 | --------- | ---------- | ----------------------------------- |
-| hora      | `13:08:10` | The current time.                   |
+| time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 \*: This variable can only be used as a part of a style string
@@ -1885,7 +1958,7 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Nombre de usuario
+## Username
 
 The `username` module shows active user's username. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
@@ -1958,7 +2031,7 @@ The `zig` module shows the currently installed version of Zig. El módulo se mue
 symbol = "⚡️ "
 ```
 
-## Comandos personalizados
+## Custom commands
 
 The `custom` modules show the output of some arbitrary commands.
 
@@ -1988,7 +2061,7 @@ The order in which custom modules are shown can be individually set by setting `
 | `command`     |                               | The command whose output should be printed.                                                                                |
 | `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                               | [See below](#custom-command-shell)                                                                                         |
-| `descripción` | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
+| `description` | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                          | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                          | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
@@ -2056,7 +2129,7 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 The `purescript` module shows the currently installed version of PureScript version. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un fichero `spago.dhall`
+- The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
 
 ### Opciones
