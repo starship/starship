@@ -6,6 +6,7 @@ mod cmd_duration;
 mod conda;
 mod crystal;
 pub(crate) mod custom;
+mod dart;
 mod directory;
 mod docker_context;
 mod dotnet;
@@ -63,6 +64,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "cmake" => cmake::module(context),
         "cmd_duration" => cmd_duration::module(context),
         "conda" => conda::module(context),
+        "dart" => dart::module(context),
         "directory" => directory::module(context),
         "docker_context" => docker_context::module(context),
         "dotnet" => dotnet::module(context),
@@ -119,6 +121,7 @@ pub fn description(module: &str) -> &'static str {
         "cmd_duration" => "How long the last command took to execute",
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
         "crystal" => "The currently installed version of Crystal",
+        "dart" => "The currently installed version of Dart",
         "directory" => "The current working directory",
         "docker_context" => "The current docker context",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",

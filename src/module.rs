@@ -15,6 +15,7 @@ pub const ALL_MODULES: &[&str] = &[
     "cmake",
     "cmd_duration",
     "conda",
+    "dart",
     "directory",
     "docker_context",
     "dotnet",

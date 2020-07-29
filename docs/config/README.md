@@ -188,6 +188,7 @@ $hg_branch\
 $docker_context\
 $package\
 $cmake\
+$dart\
 $dotnet\
 $elixir\
 $elm\
@@ -573,6 +574,43 @@ The module will be shown if any of the following conditions are met:
 
 [crystal]
 format = "via [✨ $version](bold blue) "
+```
+
+## Dart
+
+The `dart` module shows the currently installed version of Dart.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with `.dart` extension
+- The current directory contains a `.dart_tool` directory
+- The current directory contains a `pubspec.yaml` or `pubspec.lock` file
+
+### Options
+
+| Variable   | Default                            | Description                                     |
+| ---------- | ---------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
+| `symbol`   | `"🎯 "`                            | A format string representing the symbol of Dart |
+| `style`    | `"bold blue"`                      | The style for the module.                       |
+| `disabled` | `false`                            | Disables the `dart` module.                     |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v2.8.4` | The version of `dart`                |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[dart]
+format = "via [🔰 $version](bold red) "
 ```
 
 ## Directory
