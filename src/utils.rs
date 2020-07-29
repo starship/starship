@@ -123,6 +123,14 @@ active boot switches: -d:release\n",
             stdout: String::from("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]\n"),
             stderr: String::default(),
         }),
+        "swift --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+Apple Swift version 5.2.2 (swiftlang-1103.0.32.6 clang-1103.0.32.51)
+Target: x86_64-apple-darwin19.4.0\n",
+            ),
+            stderr: String::default(),
+        }),
         "zig version" => Some(CommandOutput {
             stdout: String::from("0.6.0\n"),
             stderr: String::default(),

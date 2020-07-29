@@ -204,6 +204,7 @@ $purescript\
 $python\
 $ruby\
 $rust\
+$swift\
 $terraform\
 $zig\
 $nix_shell\
@@ -1874,6 +1875,42 @@ and `$SINGULARITY_NAME` is set.
 
 [singularity]
 format = "[📦 \\[$env\\]]($style) "
+```
+
+## Swift
+
+The `swift` module shows the currently installed version of Swift.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `Package.swift` file
+- The current directory contains a file with the `.swift` extension
+
+### Options
+
+| Option     | Default                            | Description                                      |
+| ---------- | ---------------------------------- | ------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
+| `symbol`   | `"🐦 "`                            | A format string representing the symbol of Swift |
+| `style`    | `"bold 202"`                       | The style for the module.                        |
+| `disabled` | `false`                            | Disables the `swift` module.                     |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v5.2.4` | The version of `swift`               |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[swift]
+format = "via [🏎  $version](red bold)"
 ```
 
 ## Terraform
