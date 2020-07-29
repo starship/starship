@@ -179,6 +179,7 @@ $hg_branch\
 $docker_context\
 $package\
 $cmake\
+$dart\
 $dotnet\
 $elixir\
 $elm\
@@ -195,6 +196,7 @@ $purescript\
 $python\
 $ruby\
 $rust\
+$swift\
 $terraform\
 $zig\
 $nix_shell\
@@ -550,7 +552,43 @@ The `crystal` module shows the currently installed version of Crystal. The modul
 format = "via [✨ $version](bold blue) "
 ```
 
-## Diretório
+## Dart
+
+The `dart` module shows the currently installed version of Dart. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with `.dart` extension
+- The current directory contains a `.dart_tool` directory
+- The current directory contains a `pubspec.yaml` or `pubspec.lock` file
+
+### Opções
+
+| Variável   | Padrão                             | Descrição                                       |
+| ---------- | ---------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
+| `symbol`   | `"🎯 "`                             | A format string representing the symbol of Dart |
+| `style`    | `"bold blue"`                      | O estilo do módulo.                             |
+| `disabled` | `false`                            | Disables the `dart` module.                     |
+
+### Variables
+
+| Variável  | Exemplo  | Descrição                            |
+| --------- | -------- | ------------------------------------ |
+| version   | `v2.8.4` | The version of `dart`                |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Exemplo
+
+```toml
+# ~/.config/starship.toml
+
+[dart]
+format = "via [🔰 $version](bold red) "
+```
+
+## Directory
 
 The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
@@ -877,7 +915,7 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git commit
+## Git Commit
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
@@ -1283,7 +1321,7 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ```
 
-## Quebra de linha
+## Line Break
 
 The `line_break` module separates the prompt into two lines.
 
@@ -1302,7 +1340,7 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
-## Uso de memória
+## Memory Usage
 
 The `memory_usage` module shows current system memory and swap usage.
 
@@ -1792,6 +1830,41 @@ The `singularity` module shows the current singularity image, if inside a contai
 format = "[📦 \\[$env\\]]($style) "
 ```
 
+## Swift
+
+The `swift` module shows the currently installed version of Swift. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `Package.swift` file
+- The current directory contains a file with the `.swift` extension
+
+### Opções
+
+| Option     | Padrão                             | Descrição                                        |
+| ---------- | ---------------------------------- | ------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
+| `symbol`   | `"🐦 "`                             | A format string representing the symbol of Swift |
+| `style`    | `"bold 202"`                       | O estilo do módulo.                              |
+| `disabled` | `false`                            | Disables the `swift` module.                     |
+
+### Variables
+
+| Variável  | Exemplo  | Descrição                            |
+| --------- | -------- | ------------------------------------ |
+| version   | `v5.2.4` | The version of `swift`               |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Exemplo
+
+```toml
+# ~/.config/starship.toml
+
+[swift]
+format = "via [🏎  $version](red bold)"
+```
+
 ## Terraform
 
 The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). The module will be shown if any of the following conditions are met:
@@ -1988,7 +2061,7 @@ The order in which custom modules are shown can be individually set by setting `
 | `command`     |                               | The command whose output should be printed.                                                                                |
 | `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                               | [See below](#custom-command-shell)                                                                                         |
-| `descrição`   | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
+| `description` | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                          | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                          | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
