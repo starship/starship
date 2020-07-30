@@ -496,7 +496,8 @@ Hinweis: Dies unterdrückt nicht conda's eigenen Prompt-Modifikator, sie können
 | `symbol`            | `"🅒 "`                             | Symbol das vor dem Umgebungsnamen angezeigt wird.                                                                                                                                                                                                 |
 | `style`             | `"bold green"`                     | Stil für dieses Modul.                                                                                                                                                                                                                            |
 | `format`            | `"[$symbol$environment]($style) "` | The format for the module.                                                                                                                                                                                                                        |
-| `disabled`          | `false`                            | Deaktiviert das `conda`-Modul.                                                                                                                                                                                                                    |
+| `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                                                                                                                                                                        |
+| `disabled`          | `false`                            | Disables the `conda` module.                                                                                                                                                                                                                      |
 
 ### Variables
 
