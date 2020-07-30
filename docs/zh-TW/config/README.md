@@ -496,7 +496,8 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | `symbol`            | `"🅒 "`                             | 環境名稱前使用的符號。                                                                                     |
 | `style`             | `"bold green"`                     | 這個模組的風格。                                                                                        |
 | `format`            | `"[$symbol$environment]($style) "` | The format for the module.                                                                      |
-| `disabled`          | `false`                            | 停用 `conda` 模組。                                                                                  |
+| `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                      |
+| `disabled`          | `false`                            | Disables the `conda` module.                                                                    |
 
 ### Variables
 
