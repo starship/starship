@@ -3,9 +3,9 @@ use crate::configs::docker::DockerConfig;
 use super::{Context, Module, RootModuleConfig};
 use crate::formatter::StringFormatter;
 
-/// Creates a module with the current Docker and Docker Compose version
+/// Creates a segment to show if there is a Dockerfile or docker-compose.yml in current directory
 ///
-/// Will display the Docker and Docker Compose version if any of the following criteria are met:
+/// Will display the symbol if any of the following criteria are met:
 ///     - Current directory contains a `Dockerfile` file
 ///     - Current directory contains a `docker-compose.yml` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -31,10 +31,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "symbol" => Some(config.symbol),
                 _ => None,
             })
-//            .map_style(|variable| match variable {
-//                "style" => Some(Ok(config.style)),
-//                _ => None,
-//            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
             .parse(None)
     });
 
