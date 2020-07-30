@@ -19,6 +19,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("conda");
     let config: CondaConfig = CondaConfig::try_load(module.config);
 
+    if config.ignore_base && conda_env == "base" {
+        return None;
+    }
+
     let conda_env = truncate(conda_env, config.truncation_length);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
