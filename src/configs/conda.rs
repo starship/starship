@@ -19,7 +19,7 @@ impl<'a> RootModuleConfig<'a> for CondaConfig<'a> {
             format: "via [$symbol$environment]($style) ",
             symbol: "🅒 ",
             style: "green bold",
-            ignore_base: false,
+            ignore_base: true,
             disabled: false,
         }
     }
