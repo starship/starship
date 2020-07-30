@@ -5,6 +5,7 @@ mod common;
 mod conda;
 mod configuration;
 mod directory;
+mod docker;
 mod dotnet;
 mod env_var;
 mod git_branch;
