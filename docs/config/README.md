@@ -217,6 +217,7 @@ $crystal\
 $cmd_duration\
 $custom\
 $line_break\
+$docker\
 $jobs\
 $battery\
 $time\
@@ -682,6 +683,30 @@ a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/
 [directory]
 truncation_length = 8
 ```
+
+## Docker
+
+The `docker` module shows the symbol when there
+is either a `Dockerfile` or `docker-compose.yml` in the
+current directory.
+
+### Options
+
+| Option     | Default                | Description                   |
+| --------   | ---------------------- | ----------------------------- |
+| `format`   | `"[$symbol]($style) "` | The format for the module.    |
+| `symbol`   | `"🐳 "`                | The symbol displayed.         |
+| `style`    | `"blue bold"`          | The style for the module.     |
+| `disabled` | `false`                | Disables the `docker` module. |
+
+### Variables
+
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ## Docker Context
 
