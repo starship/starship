@@ -496,7 +496,8 @@ format = "underwent [$duration](bold yellow)"
 | `symbol`            | `"🅒 "`                             | Символ перед названием окружения.                                                                                                                                                                            |
 | `style`             | `"bold green"`                     | Стиль модуля.                                                                                                                                                                                                |
 | `format`            | `"[$symbol$environment]($style) "` | The format for the module.                                                                                                                                                                                   |
-| `disabled`          | `false`                            | Отключает модуль `conda`.                                                                                                                                                                                    |
+| `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                                                                                                                                   |
+| `disabled`          | `false`                            | Disables the `conda` module.                                                                                                                                                                                 |
 
 ### Variables
 
