@@ -496,7 +496,8 @@ Note: これはconda自身の プロンプト修飾子 を抑制しません。`
 | `symbol`            | `"🅒 "`                             | 環境名の直前に使用されるシンボルです。                                                                                              |
 | `style`             | `"bold green"`                     | モジュールのスタイルです。                                                                                                    |
 | `format`            | `"[$symbol$environment]($style) "` | The format for the module.                                                                                       |
-| `disabled`          | `false`                            | `conda`モジュールを無効にします。                                                                                             |
+| `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                                       |
+| `disabled`          | `false`                            | Disables the `conda` module.                                                                                     |
 
 ### Variables
 
