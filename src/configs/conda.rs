@@ -8,6 +8,7 @@ pub struct CondaConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
     pub style: &'a str,
+    pub ignore_base: bool,
     pub disabled: bool,
 }
 
@@ -18,6 +19,7 @@ impl<'a> RootModuleConfig<'a> for CondaConfig<'a> {
             format: "via [$symbol$environment]($style) ",
             symbol: "🅒 ",
             style: "green bold",
+            ignore_base: false,
             disabled: false,
         }
     }
