@@ -1,7 +1,8 @@
-use crate::config::RootModuleConfig;
+//use crate::config::RootModuleConfig;
 use crate::configs::docker::DockerConfig;
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
+use crate::formatter::StringFormatter;
 
 /// Creates a module with the current Docker and Docker Compose version
 ///
@@ -19,14 +20,34 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let mut module = context.new_module("docker");
-    let config = DockerConfig::try_load(module.config);
+    let config: DockerConfig = DockerConfig::try_load(module.config);
 
     if config.disabled {
         return None;
     }
 
-    module.set_style(config.style);
-    module.create_segment("symbol", &config.symbol);
+//    module.set_style(config.style);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+//    module.create_segment("symbol", &config.symbol);
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `docker`: \n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }
