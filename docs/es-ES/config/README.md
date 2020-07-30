@@ -496,7 +496,8 @@ Esto no modifica el propio símbolo de sistema de conda. En caso de querer supri
 | `symbol`            | `"🅒 "`                             | El símbolo usado antes del nombre del entorno.                                                                                                                                                                          |
 | `style`             | `"bold green"`                     | El estilo del módulo.                                                                                                                                                                                                   |
 | `format`            | `"[$symbol$environment]($style) "` | The format for the module.                                                                                                                                                                                              |
-| `disabled`          | `false`                            | Desactiva el módulo `conda`.                                                                                                                                                                                            |
+| `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                                                                                                                                              |
+| `disabled`          | `false`                            | Disables the `conda` module.                                                                                                                                                                                            |
 
 ### Variables
 
