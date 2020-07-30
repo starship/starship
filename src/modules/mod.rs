@@ -8,6 +8,7 @@ mod crystal;
 pub(crate) mod custom;
 mod dart;
 mod directory;
+mod docker;
 mod docker_context;
 mod dotnet;
 mod elixir;
@@ -66,6 +67,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "conda" => conda::module(context),
         "dart" => dart::module(context),
         "directory" => directory::module(context),
+        "docker" => docker::module(context),
         "docker_context" => docker_context::module(context),
         "dotnet" => dotnet::module(context),
         "elixir" => elixir::module(context),

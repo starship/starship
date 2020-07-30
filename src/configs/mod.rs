@@ -8,6 +8,7 @@ pub mod crystal;
 pub mod custom;
 pub mod dart;
 pub mod directory;
+pub mod docker;
 pub mod docker_context;
 pub mod dotnet;
 pub mod elixir;

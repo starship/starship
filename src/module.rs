@@ -17,6 +17,7 @@ pub const ALL_MODULES: &[&str] = &[
     "conda",
     "dart",
     "directory",
+    "docker",
     "docker_context",
     "dotnet",
     "elixir",
