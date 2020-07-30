@@ -1,3 +1,4 @@
+---
 name: Main workflow
 on:
   push:
@@ -134,4 +135,6 @@ jobs:
 
       # Run the ignored tests that expect the above setup
       - name: Build | Test
-        run: cargo test -- -Z unstable-options --include-ignored
+        run: |
+          cargo test -- -Z unstable-options --include-ignored \
+          || cargo test -- -Z unstable-options --include-ignored
