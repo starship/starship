@@ -496,7 +496,8 @@ format = "underwent [$duration](bold yellow)"
 | `symbol`            | `"🅒 "`                             | 在环境名之前显示的符号。                                                                                                     |
 | `style`             | `"bold green"`                     | 此组件的样式。                                                                                                          |
 | `format`            | `"[$symbol$environment]($style) "` | The format for the module.                                                                                       |
-| `disabled`          | `false`                            | 禁用 `conda` 组件。                                                                                                   |
+| `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                                       |
+| `disabled`          | `false`                            | Disables the `conda` module.                                                                                     |
 
 ### Variables
 
