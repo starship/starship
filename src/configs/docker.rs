@@ -14,7 +14,7 @@ impl<'a> RootModuleConfig<'a> for DockerConfig<'a> {
     fn new() -> Self {
         DockerConfig {
             format: "[$symbol]($style) ",
-            symbol: "🐳 ",
+            symbol: "🐳",
             style: "blue bold",
             disabled: false,
         }

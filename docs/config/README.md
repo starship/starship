@@ -695,7 +695,7 @@ current directory.
 | Option     | Default                | Description                   |
 | --------   | ---------------------- | ----------------------------- |
 | `format`   | `"[$symbol]($style) "` | The format for the module.    |
-| `symbol`   | `"🐳 "`                | The symbol displayed.         |
+| `symbol`   | `"🐳"`                 | The symbol displayed.         |
 | `style`    | `"blue bold"`          | The style for the module.     |
 | `disabled` | `false`                | Disables the `docker` module. |
 
