@@ -1,4 +1,3 @@
-//use crate::config::RootModuleConfig;
 use crate::configs::docker::DockerConfig;
 
 use super::{Context, Module, RootModuleConfig};
@@ -26,21 +25,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-//    module.set_style(config.style);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
                 "symbol" => Some(config.symbol),
                 _ => None,
             })
-            .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
-                _ => None,
-            })
+//            .map_style(|variable| match variable {
+//                "style" => Some(Ok(config.style)),
+//                _ => None,
+//            })
             .parse(None)
     });
 
-//    module.create_segment("symbol", &config.symbol);
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
