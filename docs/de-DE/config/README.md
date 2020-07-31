@@ -1553,7 +1553,7 @@ The `package` module is shown when the current directory is the repository for a
 - **julia** - The package version is extracted from the `Project.toml` present
 - **mix** - The `mix` package version is extracted from the `mix.exs` present
 - **helm** - The `helm` chart version is extracted from the `Chart.yaml` present
-
+- **maven** - The `maven` package version is extracted from the `pom.xml` present
 
 > ⚠️ Die angezeigte Version ist die des Pakets, dessen Quellcode im Verzeichnis liegt, nicht die des Paketmanagers.
 
