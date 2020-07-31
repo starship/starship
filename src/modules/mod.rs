@@ -6,6 +6,7 @@ mod cmd_duration;
 mod conda;
 mod crystal;
 pub(crate) mod custom;
+mod dart;
 mod directory;
 mod docker_context;
 mod dotnet;
@@ -38,6 +39,7 @@ mod python;
 mod ruby;
 mod rust;
 mod singularity;
+mod swift;
 mod terraform;
 mod time;
 mod username;
@@ -62,6 +64,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "cmake" => cmake::module(context),
         "cmd_duration" => cmd_duration::module(context),
         "conda" => conda::module(context),
+        "dart" => dart::module(context),
         "directory" => directory::module(context),
         "docker_context" => docker_context::module(context),
         "dotnet" => dotnet::module(context),
@@ -94,6 +97,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "ruby" => ruby::module(context),
         "rust" => rust::module(context),
         "singularity" => singularity::module(context),
+        "swift" => swift::module(context),
         "terraform" => terraform::module(context),
         "time" => time::module(context),
         "crystal" => crystal::module(context),
@@ -117,6 +121,7 @@ pub fn description(module: &str) -> &'static str {
         "cmd_duration" => "How long the last command took to execute",
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
         "crystal" => "The currently installed version of Crystal",
+        "dart" => "The currently installed version of Dart",
         "directory" => "The current working directory",
         "docker_context" => "The current docker context",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
@@ -146,6 +151,7 @@ pub fn description(module: &str) -> &'static str {
         "python" => "The currently installed version of Python",
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
+        "swift" => "The currently installed version of Swift",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "username" => "The active user's username",

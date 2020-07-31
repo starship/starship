@@ -10,21 +10,31 @@ use winapi::um::handleapi;
 use winapi::um::processthreadsapi;
 use winapi::um::securitybaseapi;
 use winapi::um::winnt::{
-    SecurityImpersonation, DACL_SECURITY_INFORMATION, FILE_ALL_ACCESS, FILE_GENERIC_EXECUTE,
-    FILE_GENERIC_READ, FILE_GENERIC_WRITE, GENERIC_MAPPING, GROUP_SECURITY_INFORMATION, HANDLE,
-    OWNER_SECURITY_INFORMATION, PRIVILEGE_SET, PSECURITY_DESCRIPTOR, STANDARD_RIGHTS_READ,
-    TOKEN_DUPLICATE, TOKEN_IMPERSONATE, TOKEN_QUERY,
+    SecurityImpersonation, BOOLEAN, DACL_SECURITY_INFORMATION, FILE_ALL_ACCESS,
+    FILE_GENERIC_EXECUTE, FILE_GENERIC_READ, FILE_GENERIC_WRITE, GENERIC_MAPPING,
+    GROUP_SECURITY_INFORMATION, HANDLE, LPCWSTR, OWNER_SECURITY_INFORMATION, PRIVILEGE_SET,
+    PSECURITY_DESCRIPTOR, STANDARD_RIGHTS_READ, TOKEN_DUPLICATE, TOKEN_IMPERSONATE, TOKEN_QUERY,
 };
 
 /// Checks if the current user has write access right to the `folder_path`
 ///
 /// First, the function extracts DACL from the given directory and then calls `AccessCheck` against
 /// the current process access token and directory's security descriptor.
+/// Does not work for network drives and always returns true
 pub fn is_write_allowed(folder_path: &str) -> std::result::Result<bool, &'static str> {
     let folder_name: Vec<u16> = OsStr::new(folder_path)
         .encode_wide()
         .chain(iter::once(0))
         .collect();
+
+    if is_network_path(&folder_name) {
+        log::info!(
+            "Directory '{:?}' is a network drive, unable to check write permissions. See #1506 for details",
+            folder_path
+        );
+        return Ok(true);
+    }
+
     let mut length: DWORD = 0;
 
     let rc = unsafe {
@@ -114,4 +124,13 @@ pub fn is_write_allowed(folder_path: &str) -> std::result::Result<bool, &'static
     }
 
     Ok(result != 0)
+}
+
+#[link(name = "Shlwapi")]
+extern "system" {
+    fn PathIsNetworkPathW(pszPath: LPCWSTR) -> BOOLEAN;
+}
+
+fn is_network_path(folder_path: &Vec<u16>) -> bool {
+    return unsafe { PathIsNetworkPathW(folder_path.as_ptr()) } == 1;
 }

@@ -109,7 +109,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "path" => Some(Ok(&final_dir_string)),
                 "read_only" => {
-                    if is_readonly_dir(current_dir.to_str()?) {
+                    if is_readonly_dir(context.current_dir.to_str()?) {
                         Some(Ok(&lock_symbol))
                     } else {
                         None

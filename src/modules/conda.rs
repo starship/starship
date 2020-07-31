@@ -19,6 +19,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("conda");
     let config: CondaConfig = CondaConfig::try_load(module.config);
 
+    if config.ignore_base && conda_env == "base" {
+        return None;
+    }
+
     let conda_env = truncate(conda_env, config.truncation_length);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -58,6 +62,22 @@ mod tests {
     #[test]
     fn not_in_env() -> io::Result<()> {
         let actual = ModuleRenderer::new("conda").collect();
+
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn ignore_base() -> io::Result<()> {
+        let actual = ModuleRenderer::new("conda")
+            .env("CONDA_DEFAULT_ENV", "base")
+            .config(toml::toml! {
+                [conda]
+                ignore_base = true
+            })
+            .collect();
 
         let expected = None;
 

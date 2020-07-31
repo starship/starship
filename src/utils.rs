@@ -49,6 +49,12 @@ Default target: x86_64-apple-macosx\n",
             ),
             stderr: String::default(),
         }),
+        "dart --version" => Some(CommandOutput {
+            stdout: String::default(),
+            stderr: String::from(
+                "Dart VM version: 2.8.4 (stable) (Wed Jun 3 12:26:04 2020 +0200) on \"macos_x64\"",
+            ),
+        }),
         "dummy_command" => Some(CommandOutput {
             stdout: String::from("stdout ok!\n"),
             stderr: String::from("stderr ok!\n"),
@@ -72,6 +78,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
         }),
         "helm version --short --client" => Some(CommandOutput {
             stdout: String::from("v3.1.1+gafe7058\n"),
+            stderr: String::default(),
+        }),
+        s if s.ends_with("java -Xinternalversion") => Some(CommandOutput {
+            stdout: String::from("OpenJDK 64-Bit Server VM (13.0.2+8) for bsd-amd64 JRE (13.0.2+8), built on Feb  6 2020 02:07:52 by \"brew\" with clang 4.2.1 Compatible Apple LLVM 11.0.0 (clang-1100.0.33.17)"),
             stderr: String::default(),
         }),
         "julia --version" => Some(CommandOutput {
@@ -121,6 +131,14 @@ active boot switches: -d:release\n",
         }),
         "ruby -v" => Some(CommandOutput {
             stdout: String::from("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]\n"),
+            stderr: String::default(),
+        }),
+        "swift --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+Apple Swift version 5.2.2 (swiftlang-1103.0.32.6 clang-1103.0.32.51)
+Target: x86_64-apple-darwin19.4.0\n",
+            ),
             stderr: String::default(),
         }),
         "zig version" => Some(CommandOutput {
