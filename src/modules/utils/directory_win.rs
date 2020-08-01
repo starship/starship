@@ -1,9 +1,9 @@
 extern crate winapi;
 
-use std::ffi::OsStr;
 use std::iter;
 use std::mem;
 use std::os::windows::ffi::OsStrExt;
+use std::path::Path;
 use winapi::ctypes::c_void;
 use winapi::shared::minwindef::{BOOL, DWORD};
 use winapi::um::handleapi;
@@ -21,8 +21,9 @@ use winapi::um::winnt::{
 /// First, the function extracts DACL from the given directory and then calls `AccessCheck` against
 /// the current process access token and directory's security descriptor.
 /// Does not work for network drives and always returns true
-pub fn is_write_allowed(folder_path: &str) -> std::result::Result<bool, &'static str> {
-    let folder_name: Vec<u16> = OsStr::new(folder_path)
+pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, &'static str> {
+    let folder_name: Vec<u16> = folder_path
+        .as_os_str()
         .encode_wide()
         .chain(iter::once(0))
         .collect();
@@ -131,6 +132,6 @@ extern "system" {
     fn PathIsNetworkPathW(pszPath: LPCWSTR) -> BOOLEAN;
 }
 
-fn is_network_path(folder_path: &Vec<u16>) -> bool {
-    return unsafe { PathIsNetworkPathW(folder_path.as_ptr()) } == 1;
+fn is_network_path(folder_path: &[u16]) -> bool {
+    unsafe { PathIsNetworkPathW(folder_path.as_ptr()) == 1 }
 }
