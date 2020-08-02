@@ -16,7 +16,7 @@ Todas as configurações do starship são feitas neste arquivo [TOML](https://gi
 
 ```toml
 # Don't print a new line at the start of the prompt
-add_newline = false
+format = "$all"
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
