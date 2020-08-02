@@ -107,7 +107,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "path" => Some(Ok(&final_dir_string)),
                 "read_only" => {
-                    if is_readonly_dir(context.current_dir.to_str()?) {
+                    if is_readonly_dir(&context.current_dir) {
                         Some(Ok(&lock_symbol))
                     } else {
                         None
@@ -129,12 +129,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn is_readonly_dir(path: &str) -> bool {
+fn is_readonly_dir(path: &Path) -> bool {
     match directory_utils::is_write_allowed(path) {
         Ok(res) => !res,
         Err(e) => {
             log::debug!(
-                "Failed to detemine read only status of directory '{}': {}",
+                "Failed to detemine read only status of directory '{:?}': {}",
                 path,
                 e
             );
