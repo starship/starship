@@ -16,7 +16,7 @@ Starship 的所有配置都在此 [TOML](https://github.com/toml-lang/toml) 配�
 
 ```toml
 # Don't print a new line at the start of the prompt
-add_newline = false
+format = "$all"
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
