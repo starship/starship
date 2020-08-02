@@ -30,6 +30,7 @@ pub fn _render_prompt() -> process::Command {
 
 /// Render a specific starship module by name
 pub fn render_module(module_name: &str) -> process::Command {
+    fs_sync();
     let binary = fs::canonicalize(EXE_PATH).unwrap();
     let mut command = process::Command::new(binary);
 
@@ -85,6 +86,15 @@ fn path_str(repo_dir: &PathBuf) -> io::Result<String> {
         .ok_or_else(|| Error::from(ErrorKind::Other))
         .map(|i| i.replace("\\", "/"))
 }
+
+/// Syncs the filesystem to disk to ensure consistent tests
+#[cfg(not(windows))]
+fn fs_sync() {
+    Command::new("sync").status().unwrap();
+}
+
+#[cfg(windows)]
+fn fs_sync() {}
 
 /// Extends `std::process::Command` with methods for testing
 pub trait TestCommand {
