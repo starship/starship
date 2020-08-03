@@ -203,6 +203,7 @@ $nix_shell\
 $conda\
 $memory_usage\
 $aws\
+$gcloud\
 $env_var\
 $crystal\
 $cmd_duration\
@@ -880,6 +881,66 @@ The `erlang` module shows the currently installed version of Erlang/OTP. Das Mod
 format = "via [e $version](bold red) "
 ```
 
+## Gcloud
+
+The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+
+### Optionen
+
+| Variable         | Standardwert                                         | Beschreibung                                                    |
+| ---------------- | ---------------------------------------------------- | --------------------------------------------------------------- |
+| `format`         | `"on [$symbol$account(\\($region\\))]($style) "` | The format for the module.                                      |
+| `symbol`         | `"☁️ "`                                              | The symbol used before displaying the current GCP profile.      |
+| `region_aliases` |                                                      | Table of region aliases to display in addition to the GCP name. |
+| `style`          | `"bold blue"`                                        | Stil für dieses Modul.                                          |
+| `disabled`       | `false`                                              | Disables the `gcloud` module.                                   |
+
+### Variables
+
+| Variable  | Beispiel          | Beschreibung                                                       |
+| --------- | ----------------- | ------------------------------------------------------------------ |
+| region    | `us-central1`     | The current GCP region                                             |
+| account   | `foo@example.com` | The current GCP profile                                            |
+| project   |                   | The current GCP project                                            |
+| active    | `default`         | The active config name written in `~/.config/gcloud/active_config` |
+| symbol    |                   | Mirrors the value of option `symbol`                               |
+| style\* |                   | Mirrors the value of option `style`                                |
+
+\*: This variable can only be used as a part of a style string
+
+### Examples
+
+#### Display account and project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = "on [$symbol$account(\\($project\\))]($style) "
+```
+
+#### Display active config name only
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = "[$symbol$active]($style) "
+style = "bold yellow"
+```
+
+#### Display account and aliased region
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+symbol = "️🇬️ "
+[gcloud.region_aliases]
+us-central1 = "uc1"
+asia-northeast1 = "an1"
+```
+
 ## Git Branch
 
 The `git_branch` module shows the active branch of the repo in your current directory.
@@ -922,7 +983,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 
 ### Optionen
 
-| Option               | Standardwert                   | Beschreibung                                          |
+| Option               | Standartwert                   | Beschreibung                                          |
 | -------------------- | ------------------------------ | ----------------------------------------------------- |
 | `commit_hash_length` | `7`                            | The length of the displayed git commit hash.          |
 | `format`             | `"[\\($hash\\)]($style) "` | The format for the module.                            |
@@ -954,7 +1015,7 @@ The `git_state` module will show in directories which are part of a git reposito
 
 ### Optionen
 
-| Option         | Standartwert                                                        | Beschreibung                                                                            |
+| Option         | Standardwert                                                        | Beschreibung                                                                            |
 | -------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `rebase`       | `"REBASING"`                                                        | A format string displayed when a `rebase` is in progress.                               |
 | `merge`        | `"MERGING"`                                                         | A format string displayed when a `merge` is in progress.                                |
@@ -1290,7 +1351,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Optionen
 
-| Option                  | Standartwert                                             | Beschreibung                                                          |
+| Option                  | Standardwert                                             | Beschreibung                                                          |
 | ----------------------- | -------------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`                | `"☸ "`                                                   | A format string representing the symbol displayed before the Cluster. |
 | `format`                | `"on [$symbol$context( \\($namespace\\))]($style) "` | The format for the module.                                            |
@@ -1681,7 +1742,7 @@ Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 ### Optionen
 
-| Option               | Standartwert                                                   | Beschreibung                                                               |
+| Option               | Standardwert                                                   | Beschreibung                                                               |
 | -------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------- |
 | `format`             | `"via [${symbol}${version}( \\($virtualenv\\))]($style) "` | The format for the module.                                                 |
 | `symbol`             | `"🐍 "`                                                         | A format string representing the symbol of Python                          |
@@ -2006,7 +2067,7 @@ The `zig` module shows the currently installed version of Zig. Das Modul wird ge
 
 ### Optionen
 
-| Option     | Standartwert                       | Beschreibung                                          |
+| Option     | Standardwert                       | Beschreibung                                          |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `symbol`   | `"↯ "`                             | The symbol used before displaying the version of Zig. |
 | `style`    | `"bold yellow"`                    | Stil für dieses Modul.                                |
