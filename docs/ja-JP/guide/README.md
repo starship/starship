@@ -112,7 +112,7 @@
 - **簡単:** 迅速なインストールが可能であり、数分で使用開始可能です。
 
 <p align="center">
-<a href="https://starship.rs/"><strong>Starshipのドキュメントを見る&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Starshipのドキュメントを見る&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
