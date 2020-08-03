@@ -1989,7 +1989,7 @@ format = "via [⚙️ $version](red bold)"
 ## SHLVL
 
 The `shlvl` module shows the current SHLVL ("shell level") environment variable, if it is
-set and greater than the specified threshold.
+set to a number and meets or exceeds the specified threshold.
 
 ### Options
 
