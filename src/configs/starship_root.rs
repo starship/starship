@@ -52,6 +52,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "conda",
     "memory_usage",
     "aws",
+    "gcloud",
     "env_var",
     "crystal",
     "cmd_duration",
