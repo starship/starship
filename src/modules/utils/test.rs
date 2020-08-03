@@ -1,7 +1,6 @@
 use crate::config::StarshipConfig;
 use crate::context::{Context, Shell};
 use std::path::Path;
-use std::process::Command;
 
 /// Render a specific starship module by name
 pub fn render_module(
@@ -21,6 +20,7 @@ pub fn render_module(
 /// Syncs directory in filesystem to disk to ensure consistent tests
 #[cfg(not(windows))]
 fn fs_sync(path: &Path) {
+    use std::process::Command;
     Command::new("sync").arg(path).status().unwrap();
 }
 
