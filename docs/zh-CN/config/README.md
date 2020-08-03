@@ -203,6 +203,7 @@ $nix_shell\
 $conda\
 $memory_usage\
 $aws\
+$gcloud\
 $env_var\
 $crystal\
 $cmd_duration\
@@ -878,6 +879,66 @@ The `erlang` module shows the currently installed version of Erlang/OTP. 此组�
 
 [erlang]
 format = "via [e $version](bold red) "
+```
+
+## Gcloud
+
+The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+
+### 配置项
+
+| 字段               | 默认值                                                  | 描述                                                              |
+| ---------------- | ---------------------------------------------------- | --------------------------------------------------------------- |
+| `format`         | `"on [$symbol$account(\\($region\\))]($style) "` | The format for the module.                                      |
+| `symbol`         | `"☁️ "`                                              | The symbol used before displaying the current GCP profile.      |
+| `region_aliases` |                                                      | Table of region aliases to display in addition to the GCP name. |
+| `style`          | `"bold blue"`                                        | 此组件的样式。                                                         |
+| `disabled`       | `false`                                              | Disables the `gcloud` module.                                   |
+
+### Variables
+
+| 字段        | 示例                | 描述                                                                 |
+| --------- | ----------------- | ------------------------------------------------------------------ |
+| region    | `us-central1`     | The current GCP region                                             |
+| account   | `foo@example.com` | The current GCP profile                                            |
+| project   |                   | The current GCP project                                            |
+| active    | `default`         | The active config name written in `~/.config/gcloud/active_config` |
+| symbol    |                   | Mirrors the value of option `symbol`                               |
+| style\* |                   | Mirrors the value of option `style`                                |
+
+\*: This variable can only be used as a part of a style string
+
+### Examples
+
+#### Display account and project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = "on [$symbol$account(\\($project\\))]($style) "
+```
+
+#### Display active config name only
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = "[$symbol$active]($style) "
+style = "bold yellow"
+```
+
+#### Display account and aliased region
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+symbol = "️🇬️ "
+[gcloud.region_aliases]
+us-central1 = "uc1"
+asia-northeast1 = "an1"
 ```
 
 ## Git Branch
@@ -1608,11 +1669,11 @@ The `ocaml` module shows the currently installed version of OCaml. 此组件将�
 
 ### Variables
 
-| 字段        | 示例        | 描述                                   |
-| --------- | --------- | ------------------------------------ |
-| version   | `v4.10.0` | The version of `ocaml`               |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| 字段        | 示例        | 描述                     |
+| --------- | --------- | ---------------------- |
+| version   | `v4.10.0` | The version of `ocaml` |
+| symbol    |           | `symbol`对应值            |
+| style\* |           | `style`对应值             |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1637,18 +1698,18 @@ The `php` module shows the currently installed version of PHP. 此组件将在�
 
 | Option     | 默认值                                | 描述                                                    |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                              |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                            |
 | `symbol`   | `"🐘 "`                             | The symbol used before displaying the version of PHP. |
 | `style`    | `"147 bold"`                       | 此组件的样式。                                               |
 | `disabled` | `false`                            | Disables the `php` module.                            |
 
 ### Variables
 
-| 字段        | 示例       | 描述                   |
-| --------- | -------- | -------------------- |
-| version   | `v7.3.8` | The version of `php` |
-| symbol    |          | `symbol`对应值          |
-| style\* |          | `style`对应值           |
+| 字段        | 示例       | 描述                                   |
+| --------- | -------- | ------------------------------------ |
+| version   | `v7.3.8` | The version of `php`                 |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
