@@ -148,7 +148,6 @@ fn formatting() -> io::Result<()> {
         .use_config(toml::toml! {
             [shlvl]
             format = "$symbol going down [$shlvl]($style) GOING UP "
-            suffix = " level(s) "
             disabled = false
         })
         .env(SHLVL_ENV_VAR, "2")
