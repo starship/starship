@@ -112,7 +112,7 @@
 - **Fácil de instalar**: empieza a usarlo en pocos minutos.
 
 <p align="center">
-<a href="https://starship.rs/"><strong>Explora la documentación de Starship&nbsp;&nbsp;</strong></a>
+<a href="https://starship.rs/config/"><strong>Explora la documentación de Starship&nbsp;&nbsp;</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
