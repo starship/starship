@@ -191,6 +191,7 @@ $julia\
 $nim\
 $nodejs\
 $ocaml\
+$perl\
 $php\
 $purescript\
 $python\
@@ -1685,6 +1686,44 @@ The `ocaml` module shows the currently installed version of OCaml. Модуль 
 [ocaml]
 format = "via [🐪 $version]($style) "
 ```
+
+
+## Perl
+
+The `perl` module shows the currently installed version of Perl. Модуль будет показан, если любое из следующих условий соблюдено:
+
+- The current directory contains a `Makefile.PL` or `Build.PL` file
+- The current directory contains a `cpanfile` or `cpanfile.snapshot` file
+- The current directory contains a `META.json` file or `META.yml` file
+- The current directory contains a `.perl-version` file
+- The current directory contains a `.pl`, `.pm` or `.pod`
+
+### Опции
+
+| Переменная | По умолчанию                       | Описание                                              |
+| ---------- | ---------------------------------- | ----------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
+| `symbol`   | `"🐪 "`                             | The symbol used before displaying the version of Perl |
+| `style`    | `"bold 149"`                       | Стиль модуля.                                         |
+| `disabled` | `false`                            | Disables the `perl` module.                           |
+
+### Variables
+
+| Переменная | Пример    | Описание                             |
+| ---------- | --------- | ------------------------------------ |
+| version    | `v5.26.1` | The version of `perl`                |
+| symbol     |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[perl]
+format = "via [🦪 $version]($style) "
+```
+
 
 ## PHP
 
