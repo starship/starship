@@ -193,9 +193,24 @@ fn test_git_dir_env_variable() -> io::Result<()> {
         .unwrap();
     let actual = String::from_utf8(output.stdout).unwrap();
 
+    const DEFAULT_BRANCH_NAME: &str = "master";
+    let default_branch_name = match git2::Config::open_default() {
+        Ok(config) => {
+            dbg!("bla");
+            dbg!(config.get_str("init.defaultBranch"))
+                .unwrap_or(DEFAULT_BRANCH_NAME)
+                .to_string()
+        }
+        Err(_) => String::from(DEFAULT_BRANCH_NAME),
+    };
+
+    dbg!(&default_branch_name);
+
     let expected = format!(
         "on {} ",
-        Color::Purple.bold().paint(format!("\u{e0a0} {}", "master")),
+        Color::Purple
+            .bold()
+            .paint(format!("\u{e0a0} {}", default_branch_name)),
     );
     assert_eq!(expected, actual);
     remove_dir_all(repo_dir)

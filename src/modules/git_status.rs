@@ -127,7 +127,19 @@ impl<'a> GitStatusInfo<'a> {
         self.repo
             .branch
             .clone()
-            .unwrap_or_else(|| String::from("master"))
+            .unwrap_or_else(|| self.get_default_branch_name())
+    }
+
+    fn get_default_branch_name(&self) -> String {
+        const DEFAULT_BRANCH_NAME: &str = "master";
+
+        match git2::Config::open_default() {
+            Ok(config) => config
+                .get_str("init.defaultBranch")
+                .unwrap_or(DEFAULT_BRANCH_NAME)
+                .to_string(),
+            Err(_) => String::from(DEFAULT_BRANCH_NAME),
+        }
     }
 
     fn get_repository(&self) -> Option<Repository> {
