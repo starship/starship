@@ -71,6 +71,9 @@ symbol = " "
 [package]
 symbol = " "
 
+[perl]
+symbol = " "
+
 [php]
 symbol = " "
 
