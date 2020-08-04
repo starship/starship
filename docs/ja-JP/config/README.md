@@ -191,6 +191,7 @@ $julia\
 $nim\
 $nodejs\
 $ocaml\
+$perl\
 $php\
 $purescript\
 $python\
@@ -1685,6 +1686,44 @@ The `ocaml` module shows the currently installed version of OCaml. 次の条件�
 [ocaml]
 format = "via [🐪 $version]($style) "
 ```
+
+
+## Perl
+
+The `perl` module shows the currently installed version of Perl. 次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- The current directory contains a `Makefile.PL` or `Build.PL` file
+- The current directory contains a `cpanfile` or `cpanfile.snapshot` file
+- The current directory contains a `META.json` file or `META.yml` file
+- The current directory contains a `.perl-version` file
+- The current directory contains a `.pl`, `.pm` or `.pod`
+
+### オプション
+
+| 変数         | デフォルト                              | 説明                                                    |
+| ---------- | ---------------------------------- | ----------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
+| `symbol`   | `"🐪 "`                             | The symbol used before displaying the version of Perl |
+| `style`    | `"bold 149"`                       | モジュールのスタイルです。                                         |
+| `disabled` | `false`                            | Disables the `perl` module.                           |
+
+### Variables
+
+| 変数        | 設定例       | 説明                                   |
+| --------- | --------- | ------------------------------------ |
+| version   | `v5.26.1` | The version of `perl`                |
+| symbol    |           | Mirrors the value of option `symbol` |
+| style\* |           | Mirrors the value of option `style`  |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[perl]
+format = "via [🦪 $version]($style) "
+```
+
 
 ## PHP
 
