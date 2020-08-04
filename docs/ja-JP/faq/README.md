@@ -57,7 +57,7 @@ curl -fsSL https://starship.rs/install.sh | bash -s --- -platform unknown-linux-
 これの最も一般的な原因は、システムの設定ミスです。 いくつかのLinuxディストリビューション 特に、すぐに使用できるフォントサポートは付属していません。 次のことを確認する必要があります。
 
 - ロケールは、`de_DE.UTF-8`や` ja_JP.UTF-8</ 0>などのUTF-8値に設定されています。 <code>LC_ALL`がUTF-8値でない場合、[変更する必要があります](https://www.tecmint.com/set-system-locales-in-linux/)。
-- 絵文字フォントがインストールされています。 Most systems come with an emoji font by default, but some (notably Arch Linux) do not. 通常、システムの パッケージマネージャーからインストールすることができます--[noto emoji](https://www.google.com/get/noto/help/emoji/)は人気な選択肢です。
+- 絵文字フォントがインストールされています。 ほとんどのシステムにはデフォルトで絵文字フォントが付属していますが、 一部(特にArch Linux) はそうではありません。 通常、システムの パッケージマネージャーからインストールすることができます--[noto emoji](https://www.google.com/get/noto/help/emoji/)は人気な選択肢です。
 - [Nerd Font](https://www.nerdfonts.com/)を使用しています。
 
 システムをテストするには、ターミナルで次のコマンドを実行します。
@@ -69,20 +69,20 @@ echo -e "\xee\x82\xa0"
 
 1行目は[snake emoji](https://emojipedia.org/snake/)を生成し、2行目は[powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs)を生成するはずです。
 
-いずれかのシンボルが正しく表示されない場合でも、システムの設定が間違っています。 残念ながら、フォント設定を正しくするのは難しい場合があります。 Discordのユーザーがお役に立てるかもしれません。 If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+いずれかのシンボルが正しく表示されない場合でも、システムの設定が間違っています。 残念ながら、フォント設定を正しくするのは難しい場合があります。 Discordのユーザーがお役に立てるかもしれません。 両方の記号が正しく表示されているにもかかわらず、まだStarshipに表示されていない場合は、[バグ報告をしてください!](https://github.com/starship/starship/issues/new/choose)
 
-## How do I uninstall Starship?
+## Starshipをアンインストールするにはどうすればいいですか?
 
-Starship is just as easy to uninstall as it is to install in the first place.
+Starshipは、最初の場所にインストールするのと同じくらい簡単にアンインストールできます。
 
-1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
-1. Delete the Starship binary.
+1. Starshipを初期化するために使用されるシェル設定の行を削除します(例:`~/.bashrc`)。
+1. Starshipのバイナリを削除します。
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+Starship がパッケージマネージャを使用してインストールされている場合は、アンインストール手順については、そのドキュメントを参照してください。
 
-If Starship was installed using the `curl | bash` script, the following command will delete the binary:
+Starship が `curl | bash` スクリプトを使用してインストールされた場合、次のコマンドはバイナリを削除します:
 
 ```sh
-# Locate and delete the starship binary
+# starshipバイナリを見つけて削除します
 rm "$(which starship)"
 ```
