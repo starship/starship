@@ -121,7 +121,7 @@
 
 ### 必要なもの
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- [Nerd Font](https://www.nerdfonts.com/)がインストールされ、端末にて有効になっている（例えば、[Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)を試してみてください）。
 
 ### 入門
 
