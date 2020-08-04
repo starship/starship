@@ -193,18 +193,22 @@ fn test_git_dir_env_variable() -> io::Result<()> {
         .unwrap();
     let actual = String::from_utf8(output.stdout).unwrap();
 
-    const DEFAULT_BRANCH_NAME: &str = "master";
-    let default_branch_name = match git2::Config::open_default() {
-        Ok(config) => {
-            dbg!("bla");
-            dbg!(config.get_str("init.defaultBranch"))
-                .unwrap_or(DEFAULT_BRANCH_NAME)
-                .to_string()
-        }
-        Err(_) => String::from(DEFAULT_BRANCH_NAME),
-    };
+    let default_branch_name = {
+        const DEFAULT_BRANCH_NAME: &str = "master";
 
-    dbg!(&default_branch_name);
+        let output = Command::new("git")
+            .args(&["config", "--global", "init.defaultBranch"])
+            .output()
+            .unwrap();
+
+        let default = String::from_utf8(output.stdout).unwrap().trim().to_string();
+
+        if default.is_empty() {
+            DEFAULT_BRANCH_NAME.to_string()
+        } else {
+            default
+        }
+    };
 
     let expected = format!(
         "on {} ",
