@@ -43,6 +43,7 @@ pub const ALL_MODULES: &[&str] = &[
     "nodejs",
     "ocaml",
     "package",
+    "perl",
     "purescript",
     "python",
     "ruby",
