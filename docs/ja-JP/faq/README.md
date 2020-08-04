@@ -5,7 +5,7 @@
 - **ターミナルエミュレータ**:[ iTerm2 ](https://iterm2.com/)
   - **テーマ**: Minimal
   - **カラースキーム**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+  - **フォント**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
 - **シェル**: [Fish Shell](https://fishshell.com/)
   - **設定**: [matchaiのDotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **プロンプト**: [Starship](https://starship.rs/)
@@ -52,24 +52,24 @@ starship prompt --help
 curl -fsSL https://starship.rs/install.sh | bash -s --- -platform unknown-linux-musl
 ```
 
-## Why don't I see a glyph symbol in my prompt?
+## プロンプトにグリフ記号が表示されないのはなぜですか?
 
-The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
+これの最も一般的な原因は、システムの設定ミスです。 いくつかのLinuxディストリビューション 特に、すぐに使用できるフォントサポートは付属していません。 次のことを確認する必要があります。
 
-- Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
-- You have an emoji font installed. Most systems come with an emoji font by default, but some (notably Arch Linux) do not. You can usually install one through your system's package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
-- You are using a [Nerd Font](https://www.nerdfonts.com/).
+- ロケールは、`de_DE.UTF-8`や` ja_JP.UTF-8</ 0>などのUTF-8値に設定されています。 <code>LC_ALL`がUTF-8値でない場合、[変更する必要があります](https://www.tecmint.com/set-system-locales-in-linux/)。
+- 絵文字フォントがインストールされています。 Most systems come with an emoji font by default, but some (notably Arch Linux) do not. 通常、システムの パッケージマネージャーからインストールすることができます--[noto emoji](https://www.google.com/get/noto/help/emoji/)は人気な選択肢です。
+- [Nerd Font](https://www.nerdfonts.com/)を使用しています。
 
-To test your system, run the following commands in a terminal:
+システムをテストするには、ターミナルで次のコマンドを実行します。
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
 
-The first line should produce a [snake emoji](https://emojipedia.org/snake/), while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
+1行目は[snake emoji](https://emojipedia.org/snake/)を生成し、2行目は[powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs)を生成するはずです。
 
-If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+いずれかのシンボルが正しく表示されない場合でも、システムの設定が間違っています。 残念ながら、フォント設定を正しくするのは難しい場合があります。 Discordのユーザーがお役に立てるかもしれません。 If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
 
 ## How do I uninstall Starship?
 
