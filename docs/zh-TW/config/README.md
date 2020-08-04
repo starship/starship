@@ -191,6 +191,7 @@ $julia\
 $nim\
 $nodejs\
 $ocaml\
+$perl\
 $php\
 $purescript\
 $python\
@@ -1685,6 +1686,44 @@ The `ocaml` module shows the currently installed version of OCaml. 這個模組�
 [ocaml]
 format = "via [🐪 $version]($style) "
 ```
+
+
+## Perl
+
+The `perl` module shows the currently installed version of Perl. 這個模組在下列其中一個條件達成時顯示：
+
+- The current directory contains a `Makefile.PL` or `Build.PL` file
+- The current directory contains a `cpanfile` or `cpanfile.snapshot` file
+- The current directory contains a `META.json` file or `META.yml` file
+- The current directory contains a `.perl-version` file
+- The current directory contains a `.pl`, `.pm` or `.pod`
+
+### 選項
+
+| 變數         | 預設                                 | 說明                                                    |
+| ---------- | ---------------------------------- | ----------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
+| `symbol`   | `"🐪 "`                             | The symbol used before displaying the version of Perl |
+| `style`    | `"bold 149"`                       | 這個模組的風格。                                              |
+| `disabled` | `false`                            | Disables the `perl` module.                           |
+
+### Variables
+
+| 變數        | 範例        | 說明                                   |
+| --------- | --------- | ------------------------------------ |
+| version   | `v5.26.1` | The version of `perl`                |
+| symbol    |           | Mirrors the value of option `symbol` |
+| style\* |           | Mirrors the value of option `style`  |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[perl]
+format = "via [🦪 $version]($style) "
+```
+
 
 ## PHP
 
