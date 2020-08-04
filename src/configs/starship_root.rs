@@ -27,6 +27,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     // ↓ Toolchain version modules ↓
     // (Let's keep these sorted alphabetically)
     "cmake",
+    "dart",
     "dotnet",
     "elixir",
     "elm",
@@ -44,6 +45,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "python",
     "ruby",
     "rust",
+    "swift",
     "terraform",
     "zig",
     // ↑ Toolchain version modules ↑
@@ -51,6 +53,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "conda",
     "memory_usage",
     "aws",
+    "gcloud",
     "env_var",
     "crystal",
     "cmd_duration",

@@ -1,3 +1,4 @@
+---
 name: Main workflow
 on:
   push:
@@ -32,7 +33,10 @@ jobs:
   # Run the `clippy` linting tool
   clippy:
     name: Clippy [Linter]
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v2

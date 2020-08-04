@@ -6,6 +6,7 @@ mod cmd_duration;
 mod conda;
 mod crystal;
 pub(crate) mod custom;
+mod dart;
 mod directory;
 mod docker_context;
 mod dotnet;
@@ -13,6 +14,7 @@ mod elixir;
 mod elm;
 mod env_var;
 mod erlang;
+mod gcloud;
 mod git_branch;
 mod git_commit;
 mod git_state;
@@ -39,6 +41,7 @@ mod python;
 mod ruby;
 mod rust;
 mod singularity;
+mod swift;
 mod terraform;
 mod time;
 mod username;
@@ -63,6 +66,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "cmake" => cmake::module(context),
         "cmd_duration" => cmd_duration::module(context),
         "conda" => conda::module(context),
+        "dart" => dart::module(context),
         "directory" => directory::module(context),
         "docker_context" => docker_context::module(context),
         "dotnet" => dotnet::module(context),
@@ -70,6 +74,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "elm" => elm::module(context),
         "erlang" => erlang::module(context),
         "env_var" => env_var::module(context),
+        "gcloud" => gcloud::module(context),
         "git_branch" => git_branch::module(context),
         "git_commit" => git_commit::module(context),
         "git_state" => git_state::module(context),
@@ -96,6 +101,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "ruby" => ruby::module(context),
         "rust" => rust::module(context),
         "singularity" => singularity::module(context),
+        "swift" => swift::module(context),
         "terraform" => terraform::module(context),
         "time" => time::module(context),
         "crystal" => crystal::module(context),
@@ -119,11 +125,13 @@ pub fn description(module: &str) -> &'static str {
         "cmd_duration" => "How long the last command took to execute",
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
         "crystal" => "The currently installed version of Crystal",
+        "dart" => "The currently installed version of Dart",
         "directory" => "The current working directory",
         "docker_context" => "The current docker context",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
         "env_var" => "Displays the current value of a selected environment variable",
         "erlang" => "Current OTP version",
+        "gcloud" => "The current GCP client configuration",
         "git_branch" => "The active branch of the repo in your current directory",
         "git_commit" => "The active commit of the repo in your current directory",
         "git_state" => "The current git operation, and it's progress",
@@ -149,6 +157,7 @@ pub fn description(module: &str) -> &'static str {
         "python" => "The currently installed version of Python",
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
+        "swift" => "The currently installed version of Swift",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "username" => "The active user's username",
