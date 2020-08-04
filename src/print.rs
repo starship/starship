@@ -115,6 +115,10 @@ pub fn explain(args: ArgMatches) {
 
     let desc_width = term_size::dimensions()
         .map(|(w, _)| w)
+        // In addition to the module width itself there are also 6 padding characters in each line.
+        // This needs to be updated here and later in the function on line formatting changes.
+        // Overall a line looks like this: " {module name}  -  {description}".
+        // Add padding length to module length to avoid text overflow. This line also assures desc_width >= 0.
         .map(|width| width - std::cmp::min(width, max_module_width + 6));
 
     println!("\n Here's a breakdown of your prompt:");
