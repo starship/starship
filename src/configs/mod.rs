@@ -39,6 +39,7 @@ pub mod purescript;
 pub mod python;
 pub mod ruby;
 pub mod rust;
+pub mod shlvl;
 pub mod singularity;
 mod starship_root;
 pub mod swift;

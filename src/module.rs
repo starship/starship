@@ -52,6 +52,7 @@ pub const ALL_MODULES: &[&str] = &[
     "php",
     "swift",
     "terraform",
+    "shlvl",
     "singularity",
     "time",
     "username",
