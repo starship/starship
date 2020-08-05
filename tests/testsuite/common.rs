@@ -90,9 +90,26 @@ fn path_str(repo_dir: &PathBuf) -> io::Result<String> {
 /// Syncs the filesystem to disk to ensure consistent tests
 #[cfg(not(windows))]
 fn fs_sync() {
+    #[cfg(any(
+        target_os = "dragonfly",
+        target_os = "freebsd",
+        target_os = "linux",
+        target_os = "netbsd",
+        target_os = "openbsd"
+    ))]
+    nix::unistd::sync();
+
+    #[cfg(not(any(
+        target_os = "dragonfly",
+        target_os = "freebsd",
+        target_os = "linux",
+        target_os = "netbsd",
+        target_os = "openbsd"
+    )))]
     Command::new("sync").status().unwrap();
 }
 
+// This would require admin in CI
 #[cfg(windows)]
 fn fs_sync() {}
 
