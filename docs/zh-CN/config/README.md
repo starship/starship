@@ -169,6 +169,7 @@ format = """
 
 $username\
 $hostname\
+$shlvl\
 $kubernetes\
 $directory\
 $git_branch\
@@ -1897,6 +1898,41 @@ The `rust` module shows the currently installed version of Rust. 此组件将在
 
 [rust]
 format = "via [⚙️ $version](red bold)"
+```
+
+## SHLVL
+
+The `shlvl` module shows the current SHLVL ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
+
+### 配置项
+
+| 字段          | 默认值                          | 描述                                      |
+| ----------- | ---------------------------- | --------------------------------------- |
+| `threshold` | `2`                          | Display threshold.                      |
+| `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.              |
+| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL. |
+| `style`     | `"bold yellow"`              | 此组件的样式。                                 |
+| `disabled`  | `true`                       | Disables the `shlvl` module.            |
+
+### Variables
+
+| 字段        | 示例  | 描述                                   |
+| --------- | --- | ------------------------------------ |
+| shlvl     | `3` | The current value of SHLVL           |
+| symbol    |     | Mirrors the value of option `symbol` |
+| style\* |     | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[shlvl]
+disabled = false
+format = "$shlvl level(s) down"
+threshold = 3
 ```
 
 ## Singularity
