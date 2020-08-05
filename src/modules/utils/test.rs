@@ -1,6 +1,12 @@
 use crate::config::StarshipConfig;
 use crate::context::{Context, Shell};
+use std::fs::OpenOptions;
 use std::path::Path;
+
+#[cfg(not(windows))]
+use std::os::unix::fs::OpenOptionsExt;
+#[cfg(windows)]
+use std::os::windows::fs::OpenOptionsExt;
 
 /// Render a specific starship module by name
 pub fn render_module(
@@ -18,58 +24,21 @@ pub fn render_module(
 }
 
 /// Syncs directory in filesystem to disk to ensure consistent tests
-#[cfg(not(windows))]
 fn fs_sync(path: &Path) {
-    use nix::fcntl::{open, OFlag};
-    use nix::sys::stat::Mode;
-    use nix::unistd::fsync;
-    let dir = open(
-        path,
-        OFlag::O_DIRECTORY | OFlag::O_RDONLY | OFlag::O_CLOEXEC,
-        Mode::empty(),
-    )
-    .unwrap();
-    fsync(dir).unwrap();
-}
+    let mut opener = OpenOptions::new();
 
-#[cfg(windows)]
-fn fs_sync(path: &Path) {
-    use std::iter;
-    use std::os::windows::ffi::OsStrExt;
-    use winapi::um::errhandlingapi::GetLastError;
-    use winapi::um::fileapi::{CreateFileW, FlushFileBuffers, OPEN_EXISTING};
-    use winapi::um::handleapi::{CloseHandle, INVALID_HANDLE_VALUE};
-    use winapi::um::winbase::FILE_FLAG_BACKUP_SEMANTICS;
-    use winapi::um::winnt::{
-        FILE_ATTRIBUTE_DIRECTORY, FILE_ATTRIBUTE_NORMAL, FILE_SHARE_DELETE, FILE_SHARE_READ,
-        FILE_SHARE_WRITE, GENERIC_WRITE,
-    };
-
-    let wpath: Vec<u16> = path
-        .as_os_str()
-        .encode_wide()
-        .chain(iter::once(0))
-        .collect();
-
-    let handle = unsafe {
-        CreateFileW(
-            wpath.as_ptr(),
-            GENERIC_WRITE,
-            FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE,
-            std::ptr::null_mut(),
-            OPEN_EXISTING,
-            FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_NORMAL | FILE_FLAG_BACKUP_SEMANTICS,
-            std::ptr::null_mut(),
-        )
-    };
-    if handle == INVALID_HANDLE_VALUE {
-        panic!("Failed to open dir for sync, {}", unsafe { GetLastError() });
+    // Fix opening directories
+    #[cfg(not(windows))]
+    {
+        opener.read(true);
+        opener.custom_flags(nix::fcntl::OFlag::O_DIRECTORY.bits());
     }
 
-    let r = unsafe { FlushFileBuffers(handle) };
-    if r == 0 {
-        panic!("Failed to flush dir, {}", unsafe { GetLastError() });
+    #[cfg(windows)]
+    {
+        opener.write(true);
+        opener.custom_flags(winapi::um::winbase::FILE_FLAG_BACKUP_SEMANTICS);
     }
 
-    unsafe { CloseHandle(handle) };
+    opener.open(path).unwrap().sync_all().unwrap();
 }
