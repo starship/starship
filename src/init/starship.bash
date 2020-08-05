@@ -71,7 +71,7 @@ else
     # add multiple instances of the starship function and keep other user functions if any.
     if [[ -z "$PROMPT_COMMAND" ]]; then
         PROMPT_COMMAND="starship_precmd"
-    elif [[ "$PROMPT_COMMAND" != *"starship_precmd" ]]; then
+    elif [[ "$PROMPT_COMMAND" != *"starship_precmd"* ]]; then
         # Appending to PROMPT_COMMAND breaks exit status ($?) checking.
         # Prepending to PROMPT_COMMAND breaks "command duration" module.
         # So, we are preserving the existing PROMPT_COMMAND

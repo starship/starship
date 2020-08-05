@@ -14,6 +14,7 @@ pub struct StarshipRootConfig<'a> {
 pub const PROMPT_ORDER: &[&str] = &[
     "username",
     "hostname",
+    "shlvl",
     "singularity",
     "kubernetes",
     "directory",
@@ -39,6 +40,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "nim",
     "nodejs",
     "ocaml",
+    "perl",
     "php",
     "purescript",
     "python",
@@ -52,6 +54,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "conda",
     "memory_usage",
     "aws",
+    "gcloud",
     "env_var",
     "crystal",
     "cmd_duration",

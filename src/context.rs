@@ -188,7 +188,7 @@ impl<'a> Context<'a> {
     }
 
     fn get_shell() -> Shell {
-        let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
+        let shell = env::var("STARSHIP_SHELL").unwrap_or_default();
         match shell.as_str() {
             "bash" => Shell::Bash,
             "fish" => Shell::Fish,

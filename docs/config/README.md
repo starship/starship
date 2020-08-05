@@ -17,7 +17,7 @@ All configuration for starship is done in this [TOML](https://github.com/toml-la
 
 ```toml
 # Don't print a new line at the start of the prompt
-add_newline = false
+format = "$all"
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
@@ -178,6 +178,7 @@ format = """
 
 $username\
 $hostname\
+$shlvl\
 $kubernetes\
 $directory\
 $git_branch\
@@ -200,6 +201,7 @@ $julia\
 $nim\
 $nodejs\
 $ocaml\
+$perl\
 $php\
 $purescript\
 $python\
@@ -212,6 +214,7 @@ $nix_shell\
 $conda\
 $memory_usage\
 $aws\
+$gcloud\
 $env_var\
 $crystal\
 $cmd_duration\
@@ -928,6 +931,67 @@ The module will be shown if any of the following conditions are met:
 
 [erlang]
 format = "via [e $version](bold red) "
+```
+
+## Gcloud
+
+The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI.
+This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+
+### Options
+
+| Variable          | Default                                           | Description                                                                 |
+| ----------------- | ------------------------------------------------- | --------------------------------------------------------------------------- |
+| `format`          | `"on [$symbol$account(\\($region\\))]($style) "`  | The format for the module.                                                  |
+| `symbol`          | `"☁️ "`                                            | The symbol used before displaying the current GCP profile.                  |
+| `region_aliases`  |                                                   | Table of region aliases to display in addition to the GCP name.             |
+| `style`           | `"bold blue"`                                     | The style for the module.                                                   |
+| `disabled`        | `false`                                           | Disables the `gcloud` module.                                               |
+
+### Variables
+
+| Variable | Example           | Description                                                        |
+| -------- | ----------------- | ------------------------------------------------------------------ |
+| region   | `us-central1`     | The current GCP region                                             |
+| account  | `foo@example.com` | The current GCP profile                                            |
+| project  |                   | The current GCP project                                            |
+| active   | `default`         | The active config name written in `~/.config/gcloud/active_config` |
+| symbol   |                   | Mirrors the value of option `symbol`                               |
+| style\*  |                   | Mirrors the value of option `style`                                |
+
+\*: This variable can only be used as a part of a style string
+
+### Examples
+
+#### Display account and project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = "on [$symbol$account(\\($project\\))]($style) "
+```
+
+#### Display active config name only
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = "[$symbol$active]($style) "
+style = "bold yellow"
+```
+
+#### Display account and aliased region
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+symbol = "️🇬️ "
+[gcloud.region_aliases]
+us-central1 = "uc1"
+asia-northeast1 = "an1"
 ```
 
 ## Git Branch
@@ -1703,6 +1767,45 @@ The module will be shown if any of the following conditions are met:
 format = "via [🐪 $version]($style) "
 ```
 
+
+## Perl
+
+The `perl` module shows the currently installed version of Perl.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `Makefile.PL` or `Build.PL` file
+- The current directory contains a `cpanfile` or `cpanfile.snapshot` file
+- The current directory contains a `META.json` file or `META.yml` file
+- The current directory contains a `.perl-version` file
+- The current directory contains a `.pl`, `.pm` or `.pod`
+
+### Options
+
+| Variable   | Default                            | Description                                           |
+| ---------- |----------------------------------- | ----------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.|
+| `symbol`   | `"🐪 "`                            | The symbol used before displaying the version of Perl |
+| `style`    | `"bold 149"`                       | The style for the module.                             |
+| `disabled` | `false`                            | Disables the `perl` module.                           |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v5.26.1` | The version of `perl`                |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[perl]
+format = "via [🦪 $version]($style) "
+```
+
+
 ## PHP
 
 The `php` module shows the currently installed version of PHP.
@@ -1881,6 +1984,42 @@ The module will be shown if any of the following conditions are met:
 
 [rust]
 format = "via [⚙️ $version](red bold)"
+```
+
+## SHLVL
+
+The `shlvl` module shows the current SHLVL ("shell level") environment variable, if it is
+set to a number and meets or exceeds the specified threshold.
+
+### Options
+
+| Variable    | Default                      | Description                                      |
+| ----------- | ---------------------------- | ------------------------------------------------ |
+| `threshold` | `2`                          | Display threshold.                               |
+| `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.                       |
+| `symbol`    | `"↕️ "`                       | The symbol used to represent the SHLVL.          |
+| `style`     | `"bold yellow"`              | The style for the module.                        |
+| `disabled`  | `true`                       | Disables the `shlvl` module.                     |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| shlvl    | `3`       | The current value of SHLVL           |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[shlvl]
+disabled = false
+format = "$shlvl level(s) down"
+threshold = 3
 ```
 
 ## Singularity
