@@ -360,12 +360,12 @@ style = "bold yellow"
 
 `character`モジュールは、端末でテキストが入力される場所の横に文字（通常は矢印）を表示します。
 
-文字は、最後のコマンドが成功したかどうかを示します。 It can do this in two ways:
+characterは、最後のコマンドが成功したかどうかを示します。 It can do this in two ways:
 
 - changing color (`red`/`green`)
 - changing shape (`❯`/`✖`)
 
-By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
+デフォルトでは、色だけが変更されます。 If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
 
 ### オプション
 
