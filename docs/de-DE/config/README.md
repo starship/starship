@@ -169,6 +169,7 @@ format = """
 
 $username\
 $hostname\
+$shlvl\
 $kubernetes\
 $directory\
 $git_branch\
@@ -1899,6 +1900,41 @@ The `rust` module shows the currently installed version of Rust. Das Modul wird 
 format = "via [⚙️ $version](red bold)"
 ```
 
+## SHLVL
+
+The `shlvl` module shows the current SHLVL ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
+
+### Optionen
+
+| Variable    | Standartwert                 | Beschreibung                            |
+| ----------- | ---------------------------- | --------------------------------------- |
+| `threshold` | `2`                          | Display threshold.                      |
+| `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.              |
+| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL. |
+| `style`     | `"bold yellow"`              | Stil für dieses Modul.                  |
+| `disabled`  | `true`                       | Disables the `shlvl` module.            |
+
+### Variables
+
+| Variable  | Beispiel | Beschreibung                         |
+| --------- | -------- | ------------------------------------ |
+| shlvl     | `3`      | The current value of SHLVL           |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[shlvl]
+disabled = false
+format = "$shlvl level(s) down"
+threshold = 3
+```
+
 ## Singularity
 
 The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
@@ -2025,7 +2061,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Optionen
 
-| Option            | Standartwert            | Beschreibung                                                                                                                       |
+| Option            | Standardwert            | Beschreibung                                                                                                                       |
 | ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
 | `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
