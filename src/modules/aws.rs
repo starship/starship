@@ -46,22 +46,22 @@ fn get_aws_region_from_config(context: &Context, aws_profile: Option<&str>) -> O
     Some(region.to_string())
 }
 
-fn get_aws_profile_and_region(contex: &Context) -> (Option<Profile>, Option<Region>) {
+fn get_aws_profile_and_region(context: &Context) -> (Option<Profile>, Option<Region>) {
     match (
-        contex
+        context
             .get_env("AWS_VAULT")
-            .or_else(|| contex.get_env("AWS_PROFILE")),
-        contex
+            .or_else(|| context.get_env("AWS_PROFILE")),
+        context
             .get_env("AWS_DEFAULT_REGION")
-            .or_else(|| contex.get_env("AWS_REGION")),
+            .or_else(|| context.get_env("AWS_REGION")),
     ) {
         (Some(p), Some(r)) => (Some(p), Some(r)),
         (None, Some(r)) => (None, Some(r)),
         (Some(ref p), None) => (
             Some(p.to_owned()),
-            get_aws_region_from_config(contex, Some(p)),
+            get_aws_region_from_config(context, Some(p)),
         ),
-        (None, None) => (None, get_aws_region_from_config(contex, None)),
+        (None, None) => (None, get_aws_region_from_config(context, None)),
     }
 }
 
