@@ -360,10 +360,10 @@ style = "bold yellow"
 
 `character`モジュールは、端末でテキストが入力される場所の横に文字（通常は矢印）を表示します。
 
-characterは、最後のコマンドが成功したかどうかを示します。 It can do this in two ways:
+characterは、最後のコマンドが成功したかどうかを示します。 表し方は下記の2つです。
 
-- changing color (`red`/`green`)
-- changing shape (`❯`/`✖`)
+- 色の変更 (`赤`/`緑`)
+- プロンプトの表示の変更 (`❯`/`✖`)
 
 デフォルトでは、色だけが変更されます。 If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
 
@@ -463,10 +463,10 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 
 ### 変数
 
-| 変数        | 設定例      | 説明                                      |
-| --------- | -------- | --------------------------------------- |
-| duration  | `16m40s` | The time it took to execute the command |
-| style\* |          | Mirrors the value of option `style`     |
+| 変数        | 設定例      | 説明                                  |
+| --------- | -------- | ----------------------------------- |
+| duration  | `16m40s` | コマンドの実行時間                           |
+| style\* |          | Mirrors the value of option `style` |
 
 \*: This variable can only be used as a part of a style string
 
@@ -492,7 +492,7 @@ Note: これはconda自身の プロンプト修飾子 を抑制しません。`
 
 ### オプション
 
-| Option              | デフォルト                              | 説明                                                                                                               |
+| オプション               | デフォルト                              | 説明                                                                                                               |
 | ------------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`                                | 環境が`conda create -p [path]`で作成された場合、環境パスが切り捨てられるディレクトリ数。 `0`は切り捨てがないことを意味します。  [`directory`](#directory)もご覧ください。 |
 | `symbol`            | `"🅒 "`                             | 環境名の直前に使用されるシンボルです。                                                                                              |
