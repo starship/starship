@@ -232,18 +232,18 @@ $character"""
 | `style`          | `"bold yellow"`                                      | モジュールのスタイルです。                 |
 | `disabled`       | `false`                                              | `aws`モジュールを無効にします。            |
 
-### Variables
+### 変数
 
 | 変数        | 設定例              | 説明                                   |
 | --------- | ---------------- | ------------------------------------ |
-| region    | `ap-northeast-1` | The current AWS region               |
-| profile   | `astronauts`     | The current AWS profile              |
+| region    | `ap-northeast-1` | 現在のAWSリージョン                          |
+| profile   | `astronauts`     | 現在のAWSプロファイル                         |
 | symbol    |                  | Mirrors the value of option `symbol` |
 | style\* |                  | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
-### Examples
+### 設定例
 
 #### Display everything
 
@@ -377,13 +377,13 @@ By default it only changes color. If you also want to change it's shape take a l
 | `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
 | `disabled`       | `false`             | `character`モジュールを無効にします。                                                         |
 
-### Variables
+### 変数
 
 | 変数     | 設定例 | 説明                                                                    |
 | ------ | --- | --------------------------------------------------------------------- |
 | symbol |     | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
 
-### Examples
+### 設定例
 
 #### With custom error shape
 
@@ -429,7 +429,7 @@ The `cmake` module shows the currently installed version of CMake if:
 | `style`    | `"bold blue"`                      | モジュールのスタイルです。                                |
 | `disabled` | `false`                            | Disables the `cmake` module.                 |
 
-### Variables
+### 変数
 
 | 変数        | 設定例       | 説明                                   |
 | --------- | --------- | ------------------------------------ |
@@ -461,7 +461,7 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 | `style`             | `"bold yellow"`               | モジュールのスタイルです。               |
 | `disabled`          | `false`                       | `cmd_duration`モジュールを無効にします。 |
 
-### Variables
+### 変数
 
 | 変数        | 設定例      | 説明                                      |
 | --------- | -------- | --------------------------------------- |
@@ -501,7 +501,7 @@ Note: これはconda自身の プロンプト修飾子 を抑制しません。`
 | `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                                       |
 | `disabled`          | `false`                            | Disables the `conda` module.                                                                                     |
 
-### Variables
+### 変数
 
 | 変数          | 設定例          | 説明                                   |
 | ----------- | ------------ | ------------------------------------ |
@@ -536,7 +536,7 @@ format = "[$symbol$environment](dimmed green) "
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.     |
 | `disabled` | `false`                            | `crystal`モジュールを無効にします。         |
 
-### Variables
+### 変数
 
 | 変数        | 設定例       | 説明                                   |
 | --------- | --------- | ------------------------------------ |
@@ -572,7 +572,7 @@ The `dart` module shows the currently installed version of Dart. 次の条件の
 | `style`    | `"bold blue"`                      | モジュールのスタイルです。                                   |
 | `disabled` | `false`                            | Disables the `dart` module.                     |
 
-### Variables
+### 変数
 
 | 変数        | 設定例      | 説明                                   |
 | --------- | -------- | ------------------------------------ |
@@ -632,7 +632,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 </details>
 
-### Variables
+### 変数
 
 | 変数        | 設定例                   | 説明                                  |
 | --------- | --------------------- | ----------------------------------- |
@@ -664,7 +664,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
 | `disabled`        | `true`                             | Disables the `docker_context` module.                                                   |
 
-### Variables
+### 変数
 
 | 変数        | 設定例            | 説明                                   |
 | --------- | -------------- | ------------------------------------ |
@@ -715,7 +715,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | `style`     | `"bold blue"`                            | モジュールのスタイルです。                                            |
 | `disabled`  | `false`                                  | Disables the `dotnet` module.                            |
 
-### Variables
+### 変数
 
 | 変数        | 設定例              | 説明                                                                 |
 | --------- | ---------------- | ------------------------------------------------------------------ |
@@ -752,7 +752,7 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 | `format`   | `"via [$symbol$version \\(OTP $otp_version\\)]($style) "` | The format for the module elixir.                               |
 | `disabled` | `false`                                                       | Disables the `elixir` module.                                   |
 
-### Variables
+### 変数
 
 | 変数          | 設定例     | 説明                                   |
 | ----------- | ------- | ------------------------------------ |
@@ -791,7 +791,7 @@ The `elm` module shows the currently installed version of Elm. 次の条件の�
 | `style`    | `"cyan bold"`                      | モジュールのスタイルです。                                   |
 | `disabled` | `false`                            | Disables the `elm` module.                      |
 
-### Variables
+### 変数
 
 | 変数        | 設定例       | 説明                                   |
 | --------- | --------- | ------------------------------------ |
@@ -827,7 +827,7 @@ The `env_var` module displays the current value of a selected environment variab
 | `format`   | `"with [$env_value]($style) "` | The format for the module.                                                   |
 | `disabled` | `false`                        | Disables the `env_var` module.                                               |
 
-### Variables
+### 変数
 
 | 変数        | 設定例                                         | 説明                                         |
 | --------- | ------------------------------------------- | ------------------------------------------ |
@@ -863,7 +863,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. 次の�
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                               |
 | `disabled` | `false`                            | Disables the `erlang` module.                            |
 
-### Variables
+### 変数
 
 | 変数        | 設定例       | 説明                                   |
 | --------- | --------- | ------------------------------------ |
@@ -896,7 +896,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | `style`          | `"bold blue"`                                        | モジュールのスタイルです。                                                   |
 | `disabled`       | `false`                                              | Disables the `gcloud` module.                                   |
 
-### Variables
+### 変数
 
 | 変数        | 設定例               | 説明                                                                 |
 | --------- | ----------------- | ------------------------------------------------------------------ |
@@ -909,7 +909,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 \*: This variable can only be used as a part of a style string
 
-### Examples
+### 設定例
 
 #### Display account and project
 
@@ -957,7 +957,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
 | `disabled`          | `false`                          | Disables the `git_branch` module.                                                        |
 
-### Variables
+### 変数
 
 | 変数        | 設定例      | 説明                                                                                                   |
 | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
@@ -992,7 +992,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 | `only_detached`      | `true`                         | Only show git commit hash when in detached HEAD state |
 | `disabled`           | `false`                        | Disables the `git_commit` module.                     |
 
-### Variables
+### 変数
 
 | 変数        | 設定例       | 説明                                  |
 | --------- | --------- | ----------------------------------- |
@@ -1029,7 +1029,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `format`       | `"[\\($state( $progress_current/$progress_total)\\)]($style) "` | The format for the module.                                                              |
 | `disabled`     | `false`                                                             | Disables the `git_state` module.                                                        |
 
-### Variables
+### 変数
 
 | 変数               | 設定例        | 説明                                  |
 | ---------------- | ---------- | ----------------------------------- |
@@ -1073,7 +1073,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `style`           | `"bold red"`                                    | モジュールのスタイルです。                                        |
 | `disabled`        | `false`                                         | Disables the `git_status` module.                    |
 
-### Variables
+### 変数
 
 The following variables can be used in `format`:
 
@@ -1145,7 +1145,7 @@ The `golang` module shows the currently installed version of Golang. 次の条�
 | `style`    | `"bold cyan"`                      | モジュールのスタイルです。                                  |
 | `disabled` | `false`                            | Disables the `golang` module.                  |
 
-### Variables
+### 変数
 
 | 変数        | 設定例       | 説明                                   |
 | --------- | --------- | ------------------------------------ |
@@ -1180,7 +1180,7 @@ The `helm` module shows the currently installed version of Helm. 次の条件の
 | `style`    | `"bold white"`                     | モジュールのスタイルです。                                    |
 | `disabled` | `false`                            | Disables the `helm` module.                      |
 
-### Variables
+### 変数
 
 | 変数        | 設定例      | 説明                                   |
 | --------- | -------- | ------------------------------------ |
@@ -1213,7 +1213,7 @@ The `hostname` module shows the system hostname.
 | `style`    | `"bold dimmed green"`       | モジュールのスタイルです。                                                                                                                        |
 | `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
 
-### Variables
+### 変数
 
 | 変数        | 設定例 | 説明                                   |
 | --------- | --- | ------------------------------------ |
@@ -1251,7 +1251,7 @@ The `java` module shows the currently installed version of Java. 次の条件の
 | `style`    | `"red dimmed"`                         | モジュールのスタイルです。                                   |
 | `disabled` | `false`                                | Disables the `java` module.                     |
 
-### Variables
+### 変数
 
 | 変数        | 設定例   | 説明                                   |
 | --------- | ----- | ------------------------------------ |
@@ -1284,7 +1284,7 @@ The `jobs` module shows the current number of jobs running. The module will be s
 | `style`     | `"bold blue"`                 | モジュールのスタイルです。                                    |
 | `disabled`  | `false`                       | Disables the `jobs` module.                      |
 
-### Variables
+### 変数
 
 | 変数        | 設定例 | 説明                                   |
 | --------- | --- | ------------------------------------ |
@@ -1321,7 +1321,7 @@ The `julia` module shows the currently installed version of Julia. 次の条件�
 | `style`    | `"bold purple"`                    | モジュールのスタイルです。                                     |
 | `disabled` | `false`                            | Disables the `julia` module.                      |
 
-### Variables
+### 変数
 
 | 変数        | 設定例      | 説明                                   |
 | --------- | -------- | ------------------------------------ |
@@ -1361,7 +1361,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `context_aliases`       |                                                          | Table of context aliases to display.                                  |
 | `disabled`              | `true`                                                   | Disables the `kubernetes` module.                                     |
 
-### Variables
+### 変数
 
 | 変数        | 設定例                  | 説明                                       |
 | --------- | -------------------- | ---------------------------------------- |
@@ -1425,7 +1425,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `style`     | `"bold dimmed white"`                         | モジュールのスタイルです。                                            |
 | `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
 
-### Variables
+### 変数
 
 | 変数            | 設定例           | 説明                                                                 |
 | ------------- | ------------- | ------------------------------------------------------------------ |
@@ -1468,7 +1468,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
-### Variables
+### 変数
 
 | 変数        | 設定例      | 説明                                   |
 | --------- | -------- | ------------------------------------ |
@@ -1507,7 +1507,7 @@ The `nim` module shows the currently installed version of Nim. 次の条件の�
 | `style`    | `"bold yellow"`                    | モジュールのスタイルです。                                         |
 | `disabled` | `false`                            | Disables the `nim` module.                            |
 
-### Variables
+### 変数
 
 | 変数        | 設定例      | 説明                                   |
 | --------- | -------- | ------------------------------------ |
@@ -1542,7 +1542,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 | `pure_msg`   | `"pure"`                                           | A format string shown when the shell is pure.         |
 | `disabled`   | `false`                                            | Disables the `nix_shell` module.                      |
 
-### Variables
+### 変数
 
 | 変数        | 設定例     | 説明                                   |
 | --------- | ------- | ------------------------------------ |
@@ -1629,7 +1629,7 @@ The `package` module is shown when the current directory is the repository for a
 | `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
 | `disabled`        | `false`                            | Disables the `package` module.                             |
 
-### Variables
+### 変数
 
 | 変数        | 設定例      | 説明                                   |
 | --------- | -------- | ------------------------------------ |
@@ -1668,7 +1668,7 @@ The `ocaml` module shows the currently installed version of OCaml. 次の条件�
 | `style`    | `"bold yellow"`                    | モジュールのスタイルです。                                           |
 | `disabled` | `false`                            | Disables the `ocaml` module.                            |
 
-### Variables
+### 変数
 
 | 変数        | 設定例       | 説明                                   |
 | --------- | --------- | ------------------------------------ |
@@ -1707,7 +1707,7 @@ The `perl` module shows the currently installed version of Perl. 次の条件の
 | `style`    | `"bold 149"`                       | モジュールのスタイルです。                                         |
 | `disabled` | `false`                            | Disables the `perl` module.                           |
 
-### Variables
+### 変数
 
 | 変数        | 設定例       | 説明                                   |
 | --------- | --------- | ------------------------------------ |
@@ -1742,7 +1742,7 @@ The `php` module shows the currently installed version of PHP. 次の条件の�
 | `style`    | `"147 bold"`                       | モジュールのスタイルです。                                         |
 | `disabled` | `false`                            | Disables the `php` module.                            |
 
-### Variables
+### 変数
 
 | 変数        | 設定例      | 説明                                   |
 | --------- | -------- | ------------------------------------ |
@@ -1790,7 +1790,7 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 | `scan_for_pyfiles`   | `true`                                                         | If false, Python files in the current directory will not show this module. |
 | `disabled`           | `false`                                                        | Disables the `python` module.                                              |
 
-### Variables
+### 変数
 
 | 変数         | 設定例             | 説明                                   |
 | ---------- | --------------- | ------------------------------------ |
@@ -1845,7 +1845,7 @@ The `ruby` module shows the currently installed version of Ruby. 次の条件の
 | `style`    | `"bold red"`                       | モジュールのスタイルです。                                    |
 | `disabled` | `false`                            | Disables the `ruby` module.                      |
 
-### Variables
+### 変数
 
 | 変数        | 設定例      | 説明                                   |
 | --------- | -------- | ------------------------------------ |
@@ -1880,7 +1880,7 @@ The `rust` module shows the currently installed version of Rust. 次の条件の
 | `style`    | `"bold red"`                       | モジュールのスタイルです。                                   |
 | `disabled` | `false`                            | Disables the `rust` module.                     |
 
-### Variables
+### 変数
 
 | 変数        | 設定例               | 説明                                   |
 | --------- | ----------------- | ------------------------------------ |
@@ -1912,7 +1912,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 | `style`    | `"bold dimmed blue"`                 | モジュールのスタイルです。                                    |
 | `disabled` | `false`                              | Disables the `singularity` module.               |
 
-### Variables
+### 変数
 
 | 変数        | 設定例          | 説明                                   |
 | --------- | ------------ | ------------------------------------ |
@@ -1947,7 +1947,7 @@ The `swift` module shows the currently installed version of Swift. 次の条件�
 | `style`    | `"bold 202"`                       | モジュールのスタイルです。                                    |
 | `disabled` | `false`                            | Disables the `swift` module.                     |
 
-### Variables
+### 変数
 
 | 変数        | 設定例      | 説明                                   |
 | --------- | -------- | ------------------------------------ |
@@ -1982,7 +1982,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 | `style`    | `"bold 105"`                         | モジュールのスタイルです。                                         |
 | `disabled` | `false`                              | Disables the `terraform` module.                      |
 
-### Variables
+### 変数
 
 | 変数        | 設定例        | 説明                                   |
 | --------- | ---------- | ------------------------------------ |
@@ -2037,7 +2037,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
-### Variables
+### 変数
 
 | 変数        | 設定例        | 説明                                  |
 | --------- | ---------- | ----------------------------------- |
@@ -2078,7 +2078,7 @@ The `username` module shows active user's username. 次の条件のいずれか�
 | `show_always` | `false`                  | Always shows the `username` module.   |
 | `disabled`    | `false`                  | Disables the `username` module.       |
 
-### Variables
+### 変数
 
 | 変数      | 設定例          | 説明                                                                                          |
 | ------- | ------------ | ------------------------------------------------------------------------------------------- |
@@ -2113,7 +2113,7 @@ The `zig` module shows the currently installed version of Zig. 次の条件の�
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                            |
 | `disabled` | `false`                            | Disables the `zig` module.                            |
 
-### Variables
+### 変数
 
 | 変数        | 設定例      | 説明                                   |
 | --------- | -------- | ------------------------------------ |
@@ -2171,7 +2171,7 @@ The order in which custom modules are shown can be individually set by setting `
 | `format`      | `"[$symbol$output]($style) "` | The format for the module.                                                                                                 |
 | `disabled`    | `false`                       | Disables this `custom` module.                                                                                             |
 
-### Variables
+### 変数
 
 | 変数        | 説明                                     |
 | --------- | -------------------------------------- |
@@ -2242,7 +2242,7 @@ The `purescript` module shows the currently installed version of PureScript vers
 | `style`    | `"bold white"`                     | モジュールのスタイルです。                                                |
 | `disabled` | `false`                            | Disables the `purescript` module.                            |
 
-### Variables
+### 変数
 
 | 変数        | 設定例      | 説明                                   |
 | --------- | -------- | ------------------------------------ |
