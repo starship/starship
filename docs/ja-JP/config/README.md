@@ -61,9 +61,9 @@ For example:
 - `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
 - `$git_branch $git_commit` has the two variables separated with a space.
 
-#### Text Group
+#### テキストグループ
 
-A text group is made up of two different parts.
+テキストグループは二つの異なる部分で構成されています。
 
 The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
 
