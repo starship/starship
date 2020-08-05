@@ -30,7 +30,7 @@ We have custom functions to be able to test our modules better. Here we show you
 
 ### Environment Variables
 
-To get a environment variable we have special function to allow for mocking of vars. Here's a quick example:
+To get an environment variable we have special function to allow for mocking of vars. Here's a quick example:
 
 ```rust
 use super::{Context, Module, RootModuleConfig};
@@ -108,7 +108,7 @@ Testing is critical to making sure starship works as intended on systems big and
 
 Unit tests are written using the built-in Rust testing library in the same file as the implementation, as is traditionally done in Rust codebases. These tests can be run with `cargo test` and are run on GitHub as part of our GitHub Actions continuous integration to ensure consistend behavior.
 
-All test that test the rendered output of a module should use `ModuleRenderer`. For Example:
+All tests that test the rendered output of a module should use `ModuleRenderer`. For Example:
 
 ```rust
 use super::{Context, Module, RootModuleConfig};
@@ -164,9 +164,9 @@ mod tests {
 }
 ```
 
-If a module depends on output of another program then that output should be added to the match statement in [`utils.rs`](src/utils.rs). The match has to be exactly the same as the call to `utils::exec_cmd()` that means that the program will we joined with the argument by a `" "` meaning that the call `utils::exec_cmd("program", &["arg", "more_args"])` would turn into `program arg more_args`.
+If a module depends on output of another program, then that output should be added to the match statement in [`utils.rs`](src/utils.rs). The match has to be exactly the same as the call to `utils::exec_cmd()`, including positional arguments and flags. The array of arguments are joined by a `" "`, so `utils::exec_cmd("program", &["arg", "more_args"])` would match with the `program arg more_args` match statement.
 
-If the program cannot be mocked (e.g. It performs some filesystem actions either writing or reading files) then it has to added to the project's GitHub Actions workflow file([`.github/workflows/workflow.yml`](.github/workflows/workflow.yml)) and the test has to be marked with a `#[ignored]` so that anyone can test their build without having to have some special programs.
+If the program cannot be mocked (e.g. It performs some filesystem operations, either writing or reading files) then it has to added to the project's GitHub Actions workflow file([`.github/workflows/workflow.yml`](.github/workflows/workflow.yml)) and the test has to be marked with an `#[ignored]`. This ensures that anyone can run the test suite locally without needing to pre-configure their environment. The `#[ignored]` attribute is bypassed during CI runs in GitHub Actions.
 
 Unit tests should be fully isolated, only testing a given function's expected output given a specific input, and should be reproducible on any machine. Unit tests should not expect the computer running them to be in any particular state. This includes having any applications pre-installed, having any environment variables set, etc.
 
@@ -176,7 +176,7 @@ The previous point should be emphasized: even seemingly innocuous ideas like "if
 
 Any tests that depend on File I/O should use [`sync_all()`](https://doc.rust-lang.org/std/fs/struct.File.html#method.sync_all) when creating files or after writing to files.
 
-Any tests that use `tempfile::tempdir` should take care to call `dir.close()` after usage to ensure the lifecycle of the directory can be reasoned about this includes `fixture_repo()` as it returns a TempDir that should be closed.
+Any tests that use `tempfile::tempdir` should take care to call `dir.close()` after usage to ensure the lifecycle of the directory can be reasoned about. This includes `fixture_repo()` as it returns a TempDir that should be closed.
 
 ## Running the Documentation Website Locally
 
