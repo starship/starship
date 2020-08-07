@@ -36,36 +36,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
 
-    // Using environment PWD is the standard approach for determining logical path
-    // If this is None for any reason, we fall back to reading the os-provided path
-    let physical_current_dir = if config.use_logical_path {
-        match context.get_env("PWD") {
-            Some(x) => Some(PathBuf::from(x)),
-            None => {
-                log::debug!("Error getting PWD environment variable!");
-                None
-            }
-        }
-    } else {
-        match std::env::current_dir() {
-            Ok(x) => Some(x),
-            Err(e) => {
-                log::debug!("Error getting physical current directory: {}", e);
-                None
-            }
-        }
-    };
-    let current_dir = Path::new(
-        physical_current_dir
-            .as_ref()
-            .unwrap_or_else(|| &context.current_dir),
-    );
+    let current_dir = &get_current_dir(&context, &config);
 
     let home_dir = dirs_next::home_dir().unwrap();
     log::debug!("Current directory: {:?}", current_dir);
 
     let repo = &context.get_repo().ok()?;
-
     let dir_string = match &repo.root {
         Some(repo_root) if config.truncate_to_repo && (repo_root != &home_dir) => {
             log::debug!("Repo root: {:?}", repo_root);
@@ -129,6 +105,33 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+fn get_current_dir(context: &Context, config: &DirectoryConfig) -> Path {
+    // Using environment PWD is the standard approach for determining logical path
+    // If this is None for any reason, we fall back to reading the os-provided path
+    let physical_current_dir = if config.use_logical_path {
+        match context.get_env("PWD") {
+            Some(x) => Some(PathBuf::from(x)),
+            None => {
+                log::debug!("Error getting PWD environment variable!");
+                None
+            }
+        }
+    } else {
+        match std::env::current_dir() {
+            Ok(x) => Some(x),
+            Err(e) => {
+                log::debug!("Error getting physical current directory: {}", e);
+                None
+            }
+        }
+    };
+    let current_dir = Path::new(
+        physical_current_dir
+            .as_ref()
+            .unwrap_or_else(|| &context.current_dir),
+    );
 }
 
 fn is_readonly_dir(path: &Path) -> bool {
