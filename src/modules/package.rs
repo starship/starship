@@ -198,7 +198,7 @@ fn format_version(version: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -741,12 +741,15 @@ end";
         contains: Option<&str>,
         config: Option<toml::Value>,
     ) -> io::Result<()> {
-        let starship_config = Some(config.unwrap_or(toml::toml! {
+        let starship_config = config.unwrap_or(toml::toml! {
             [package]
             disabled = false
-        }));
+        });
 
-        let actual = render_module("package", project_dir.path(), starship_config);
+        let actual = ModuleRenderer::new("package")
+            .path(project_dir.path())
+            .config(starship_config)
+            .collect();
         let text = String::from(contains.unwrap_or(""));
         let expected = Some(format!(
             "is {} ",

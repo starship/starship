@@ -1104,7 +1104,6 @@ dependencies = [
  "quick-xml",
  "rayon",
  "regex",
- "remove_dir_all",
  "serde_json",
  "starship_module_config_derive",
  "sysinfo",

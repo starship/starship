@@ -1,5 +1,3 @@
-use std::env;
-
 use super::{Context, Module};
 
 use crate::config::RootModuleConfig;
@@ -16,7 +14,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("env_var");
     let config: EnvVarConfig = EnvVarConfig::try_load(module.config);
 
-    let env_value = get_env_value(config.variable?, config.default)?;
+    let env_value = get_env_value(context, config.variable?, config.default)?;
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -45,12 +43,153 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_env_value(name: &str, default: Option<&str>) -> Option<String> {
-    match env::var_os(name) {
-        Some(os_value) => match os_value.into_string() {
-            Ok(value) => Some(value),
-            Err(_error) => None,
-        },
+fn get_env_value(context: &Context, name: &str, default: Option<&str>) -> Option<String> {
+    match context.get_env(name) {
+        Some(value) => Some(value),
         None => default.map(|value| value.to_owned()),
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use crate::test::ModuleRenderer;
+    use ansi_term::{Color, Style};
+    use std::io;
+
+    const TEST_VAR_VALUE: &str = "astronauts";
+
+    #[test]
+    fn empty_config() -> io::Result<()> {
+        let actual = ModuleRenderer::new("env_var")
+            .config(toml::toml! {
+                [env_var]
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn defined_variable() -> io::Result<()> {
+        let actual = ModuleRenderer::new("env_var")
+            .config(toml::toml! {
+                [env_var]
+                variable = "TEST_VAR"
+            })
+            .env("TEST_VAR", TEST_VAR_VALUE)
+            .collect();
+        let expected = Some(format!("with {} ", style().paint(TEST_VAR_VALUE)));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn undefined_variable() -> io::Result<()> {
+        let actual = ModuleRenderer::new("env_var")
+            .config(toml::toml! {
+                [env_var]
+                variable = "TEST_VAR"
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn default_has_no_effect() -> io::Result<()> {
+        let actual = ModuleRenderer::new("env_var")
+            .config(toml::toml! {
+                [env_var]
+                variable = "TEST_VAR"
+                default = "N/A"
+            })
+            .env("TEST_VAR", TEST_VAR_VALUE)
+            .collect();
+        let expected = Some(format!("with {} ", style().paint(TEST_VAR_VALUE)));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn default_takes_effect() -> io::Result<()> {
+        let actual = ModuleRenderer::new("env_var")
+            .config(toml::toml! {
+                [env_var]
+                variable = "UNDEFINED_TEST_VAR"
+                default = "N/A"
+            })
+            .collect();
+        let expected = Some(format!("with {} ", style().paint("N/A")));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn symbol() -> io::Result<()> {
+        let actual = ModuleRenderer::new("env_var")
+            .config(toml::toml! {
+                [env_var]
+                variable = "TEST_VAR"
+                format = "with [■ $env_value](black bold dimmed) "
+            })
+            .env("TEST_VAR", TEST_VAR_VALUE)
+            .collect();
+        let expected = Some(format!(
+            "with {} ",
+            style().paint(format!("■ {}", TEST_VAR_VALUE))
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn prefix() -> io::Result<()> {
+        let actual = ModuleRenderer::new("env_var")
+            .config(toml::toml! {
+                [env_var]
+                variable = "TEST_VAR"
+                format = "with [_$env_value](black bold dimmed) "
+            })
+            .env("TEST_VAR", TEST_VAR_VALUE)
+            .collect();
+        let expected = Some(format!(
+            "with {} ",
+            style().paint(format!("_{}", TEST_VAR_VALUE))
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn suffix() -> io::Result<()> {
+        let actual = ModuleRenderer::new("env_var")
+            .config(toml::toml! {
+                [env_var]
+                variable = "TEST_VAR"
+                format = "with [${env_value}_](black bold dimmed) "
+            })
+            .env("TEST_VAR", TEST_VAR_VALUE)
+            .collect();
+        let expected = Some(format!(
+            "with {} ",
+            style().paint(format!("{}_", TEST_VAR_VALUE))
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    fn style() -> Style {
+        // default style
+        Color::Black.bold().dimmed()
     }
 }

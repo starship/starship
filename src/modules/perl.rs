@@ -64,7 +64,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -73,7 +73,7 @@ mod tests {
     fn folder_without_perl_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = render_module("perl", dir.path(), None);
+        let actual = ModuleRenderer::new("perl").path(dir.path()).collect();
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -85,7 +85,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Makefile.PL"))?.sync_all()?;
 
-        let actual = render_module("perl", dir.path(), None);
+        let actual = ModuleRenderer::new("perl").path(dir.path()).collect();
 
         let expected = Some(format!(
             "via {} ",
@@ -100,7 +100,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Build.PL"))?.sync_all()?;
 
-        let actual = render_module("perl", dir.path(), None);
+        let actual = ModuleRenderer::new("perl").path(dir.path()).collect();
 
         let expected = Some(format!(
             "via {} ",
@@ -115,7 +115,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("cpanfile"))?.sync_all()?;
 
-        let actual = render_module("perl", dir.path(), None);
+        let actual = ModuleRenderer::new("perl").path(dir.path()).collect();
 
         let expected = Some(format!(
             "via {} ",
@@ -130,7 +130,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("cpanfile.snapshot"))?.sync_all()?;
 
-        let actual = render_module("perl", dir.path(), None);
+        let actual = ModuleRenderer::new("perl").path(dir.path()).collect();
 
         let expected = Some(format!(
             "via {} ",
@@ -145,7 +145,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("META.json"))?.sync_all()?;
 
-        let actual = render_module("perl", dir.path(), None);
+        let actual = ModuleRenderer::new("perl").path(dir.path()).collect();
 
         let expected = Some(format!(
             "via {} ",
@@ -160,7 +160,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("META.yml"))?.sync_all()?;
 
-        let actual = render_module("perl", dir.path(), None);
+        let actual = ModuleRenderer::new("perl").path(dir.path()).collect();
 
         let expected = Some(format!(
             "via {} ",
@@ -175,7 +175,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".perl-version"))?.sync_all()?;
 
-        let actual = render_module("perl", dir.path(), None);
+        let actual = ModuleRenderer::new("perl").path(dir.path()).collect();
 
         let expected = Some(format!(
             "via {} ",
@@ -190,7 +190,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.pl"))?.sync_all()?;
 
-        let actual = render_module("perl", dir.path(), None);
+        let actual = ModuleRenderer::new("perl").path(dir.path()).collect();
 
         let expected = Some(format!(
             "via {} ",
@@ -205,7 +205,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.pm"))?.sync_all()?;
 
-        let actual = render_module("perl", dir.path(), None);
+        let actual = ModuleRenderer::new("perl").path(dir.path()).collect();
 
         let expected = Some(format!(
             "via {} ",
@@ -220,7 +220,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.pod"))?.sync_all()?;
 
-        let actual = render_module("perl", dir.path(), None);
+        let actual = ModuleRenderer::new("perl").path(dir.path()).collect();
 
         let expected = Some(format!(
             "via {} ",
