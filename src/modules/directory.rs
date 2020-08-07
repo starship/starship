@@ -15,6 +15,8 @@ use crate::config::RootModuleConfig;
 use crate::configs::directory::DirectoryConfig;
 use crate::formatter::StringFormatter;
 
+const HOME_SYMBOL: &str = "~";
+
 /// Creates a module with the current directory
 ///
 /// Will perform path contraction, substitution, and truncation.
@@ -31,8 +33,6 @@ use crate::formatter::StringFormatter;
 /// **Truncation**
 /// Paths will be limited in length to `3` path components by default.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    const HOME_SYMBOL: &str = "~";
-
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
 
@@ -59,20 +59,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Truncate the dir string to the maximum number of path components
     let truncated_dir_string = truncate(substituted_dir, config.truncation_length as usize);
 
-    // Substitutions could have changed the prefix, so don't allow them and
-    // fish-style path contraction together
-    let fish_prefix = if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
-        // If user is using fish style path, we need to add the segment first
-        let contracted_home_dir = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
-        to_fish_style(
-            config.fish_style_pwd_dir_length as usize,
-            contracted_home_dir,
-            &truncated_dir_string,
-        )
+    let prefix = if is_truncated(&truncated_dir_string) {
+        // Substitutions could have changed the prefix, so don't allow them and
+        // fish-style path contraction together
+        if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
+            // If user is using fish style path, we need to add the segment first
+            let contracted_home_dir = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
+            to_fish_style(
+                config.fish_style_pwd_dir_length as usize,
+                contracted_home_dir,
+                &truncated_dir_string,
+            )
+        } else {
+            String::from(config.truncation_symbol)
+        }
     } else {
         String::from("")
     };
-    let final_dir_string = format!("{}{}", fish_prefix, truncated_dir_string);
+
+    let displayed_path = prefix + &truncated_dir_string;
     let lock_symbol = String::from(config.read_only);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -83,7 +88,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "path" => Some(Ok(&final_dir_string)),
+                "path" => Some(Ok(&displayed_path)),
                 "read_only" => {
                     if is_readonly_dir(&context.current_dir) {
                         Some(Ok(&lock_symbol))
@@ -107,7 +112,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_current_dir(context: &Context, config: &DirectoryConfig) -> Path {
+fn is_truncated(path: &str) -> bool {
+    !(path.starts_with(HOME_SYMBOL)
+        || PathBuf::from(path).has_root()
+        || (cfg!(target_os = "windows") && PathBuf::from(String::from(path) + r"\").has_root()))
+}
+
+fn get_current_dir(context: &Context, config: &DirectoryConfig) -> PathBuf {
     // Using environment PWD is the standard approach for determining logical path
     // If this is None for any reason, we fall back to reading the os-provided path
     let physical_current_dir = if config.use_logical_path {
@@ -127,11 +138,7 @@ fn get_current_dir(context: &Context, config: &DirectoryConfig) -> Path {
             }
         }
     };
-    let current_dir = Path::new(
-        physical_current_dir
-            .as_ref()
-            .unwrap_or_else(|| &context.current_dir),
-    );
+    physical_current_dir.unwrap_or_else(|| PathBuf::from(&context.current_dir))
 }
 
 fn is_readonly_dir(path: &Path) -> bool {
@@ -1168,5 +1175,183 @@ mod tests {
 
         assert_eq!(expected, actual);
         tmp_dir.close()
+    }
+
+    #[test]
+    fn truncation_symbol_truncated_root() -> io::Result<()> {
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 3
+                truncation_symbol = "…/"
+            })
+            .path(Path::new("/a/four/element/path"))
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint("…/four/element/path")
+        ));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn truncation_symbol_not_truncated_root() -> io::Result<()> {
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 4
+                truncation_symbol = "…/"
+            })
+            .path(Path::new("/a/four/element/path"))
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint("/a/four/element/path")
+        ));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn truncation_symbol_truncated_home() -> io::Result<()> {
+        let (tmp_dir, name) = make_known_tempdir(home_dir().unwrap().as_path())?;
+        let dir = tmp_dir.path().join("a/subpath");
+        fs::create_dir_all(&dir)?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 3
+                truncation_symbol = "…/"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint(format!("…/{}/a/subpath", name))
+        ));
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn truncation_symbol_not_truncated_home() -> io::Result<()> {
+        let (tmp_dir, name) = make_known_tempdir(home_dir().unwrap().as_path())?;
+        let dir = tmp_dir.path().join("a/subpath");
+        fs::create_dir_all(&dir)?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncate_to_repo = false // Necessary if homedir is a git repo
+                truncation_length = 4
+                truncation_symbol = "…/"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint(format!("~/{}/a/subpath", name))
+        ));
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn truncation_symbol_truncated_in_repo() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above").join("repo");
+        let dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 3
+                truncation_symbol = "…/"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("…/src/sub/path")));
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn truncation_symbol_not_truncated_in_repo() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above").join("repo");
+        let dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 5
+                truncation_symbol = "…/"
+                truncate_to_repo = true
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint("…/repo/src/sub/path")
+        ));
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
+    fn truncation_symbol_windows_root_not_truncated() -> io::Result<()> {
+        let dir = Path::new("C:\\temp");
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 2
+                truncation_symbol = "…/"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("C:/temp")));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
+    fn truncation_symbol_windows_root_truncated() -> io::Result<()> {
+        let dir = Path::new("C:\\temp");
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 1
+                truncation_symbol = "…/"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("…/temp")));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
+    fn truncation_symbol_windows_root_truncated_backslash() -> io::Result<()> {
+        let dir = Path::new("C:\\temp");
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 1
+                truncation_symbol = r"…\"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("…\\temp")));
+        assert_eq!(expected, actual);
+        Ok(())
     }
 }
