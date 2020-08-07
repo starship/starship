@@ -30,7 +30,7 @@ pub fn _render_prompt() -> process::Command {
 
 /// Render a specific starship module by name
 pub fn render_module(module_name: &str) -> process::Command {
-    fs_sync();
+    tempdirs_sync().unwrap();
     let binary = fs::canonicalize(EXE_PATH).unwrap();
     let mut command = process::Command::new(binary);
 
@@ -87,31 +87,49 @@ fn path_str(repo_dir: &PathBuf) -> io::Result<String> {
         .map(|i| i.replace("\\", "/"))
 }
 
-/// Syncs the filesystem to disk to ensure consistent tests
-#[cfg(not(windows))]
-fn fs_sync() {
-    #[cfg(any(
-        target_os = "dragonfly",
-        target_os = "freebsd",
-        target_os = "linux",
-        target_os = "netbsd",
-        target_os = "openbsd"
-    ))]
-    nix::unistd::sync();
-
-    #[cfg(not(any(
-        target_os = "dragonfly",
-        target_os = "freebsd",
-        target_os = "linux",
-        target_os = "netbsd",
-        target_os = "openbsd"
-    )))]
-    Command::new("sync").status().unwrap();
+/// Sync all temporary directories to disk to ensure consistent tests
+fn tempdirs_sync() -> io::Result<()> {
+    env::temp_dir()
+        .read_dir()?
+        // Ignore errors past this point because directories could be unrelated to test tempdirs
+        .filter_map(|i| i.ok())
+        .filter(|i| {
+            // Only sync directories
+            i.file_type().map(|i| i.is_dir()).unwrap_or(false)
+            // Only sync if dir uses temfile crate naming scheme
+                && i.file_name()
+                    .to_str()
+                    .map(|i| i.starts_with(".tmp") && i.len() == 10)
+                    .unwrap_or(false)
+        })
+        .for_each(|i| {
+            let _ = sync_dir(&i.path());
+        });
+    Ok(())
 }
 
-// This would require admin in CI
-#[cfg(windows)]
-fn fs_sync() {}
+/// Syncs directory in filesystem to disk to ensure consistent tests
+/// Duplicate defintion in src/modules/util/test.rs. Always change both!
+fn sync_dir(path: &Path) -> io::Result<()> {
+    let mut opener = fs::OpenOptions::new();
+
+    // Fix opening directories
+    #[cfg(not(windows))]
+    {
+        use std::os::unix::fs::OpenOptionsExt;
+        opener.read(true);
+        opener.custom_flags(nix::fcntl::OFlag::O_DIRECTORY.bits());
+    }
+
+    #[cfg(windows)]
+    {
+        use std::os::windows::fs::OpenOptionsExt;
+        opener.write(true);
+        opener.custom_flags(winapi::um::winbase::FILE_FLAG_BACKUP_SEMANTICS);
+    }
+
+    opener.open(path)?.sync_all()
+}
 
 /// Extends `std::process::Command` with methods for testing
 pub trait TestCommand {
