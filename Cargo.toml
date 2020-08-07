@@ -28,7 +28,7 @@ tls-vendored = ["native-tls/vendored"]
 
 
 [dependencies]
-clap = "2.33.1"
+clap = "2.33.2"
 ansi_term = "0.12.1"
 dirs-next = "1.0.1"
 git2 = { version = "0.13.8", default-features = false }
