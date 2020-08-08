@@ -1643,6 +1643,42 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ```
 
+### Kubernetes Display
+
+The `display` configuration option is used to customise what the current Kubernetes context name looks
+like (style) if the name matches defined regular expression.
+If no `display` is provided. The default is as shown:
+
+```toml
+[[kubernetes.display]]
+context_pattern = "prod"
+style = "bold red"
+```
+
+#### Options
+
+The `display` option is an array of the following table.
+
+| Variable            | Description                                                 |
+| ------------------- | ----------------------------------------------------------- |
+| `context_pattern` | Regular expression to match current Kubernetes context name |
+| `style`            | The style used if the display option is in use.             |
+
+#### Example
+
+```toml
+[[kubernetes.display]] # "bold red" style when Kubernetes current context name contains "prod"
+context_pattern = "prod"
+style = "bold red"
+
+[[kubernetes.display]] # "green" style when Kubernetes current context name contains "dev"
+context_pattern = "dev"
+style = "green"
+
+# when Kubernetes current context name doesn't container either "prod" or "dev", the style
+# specified in [kubernetes] will be used.
+```
+
 ## Line Break
 
 The `line_break` module separates the prompt into two lines.

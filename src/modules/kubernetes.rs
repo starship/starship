@@ -70,6 +70,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let kube_ns =
         env::split_paths(&kube_cfg).find_map(|filename| get_kube_ns(filename, kube_ctx.clone()));
 
+    // Parse config under `display`.
+    // Select the first style that matches the context_pattern
+    let display_style = config
+        .display
+        .iter()
+        .find(|display| {
+            regex::Regex::new(display.context_pattern)
+                .map(|re| re.is_match(&kube_ctx))
+                .unwrap_or(false)
+        })
+        .map(|display| display.style)
+        .unwrap_or(config.style);
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
@@ -77,7 +90,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
+                "style" => Some(Ok(display_style)),
                 _ => None,
             })
             .map(|variable| match variable {
@@ -391,5 +404,81 @@ users: []
         assert_eq!(expected, actual_ctx_first);
 
         dir.close()
+    }
+
+    #[test]
+    fn config_context_and_ns() -> std::io::Result<()> {
+        let tempdir = tempfile::tempdir()?;
+        let config_path = tempdir.path().join("config");
+        let mut file = File::create(&config_path)?;
+
+        let input = r#"
+apiVersion: v1
+clusters: []
+contexts:
+- context:
+    cluster: test_cluster
+    user: test_user
+    namespace: test_namespace
+  name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+"#;
+        file.write_all(input.as_bytes())?;
+        file.sync_all()?;
+
+        // verify the default style is applied
+        let actual = ModuleRenderer::new("kubernetes")
+            .env("KUBECONFIG", config_path.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+            })
+            .collect();
+        let expected = Some(format!(
+            "{} in ",
+            Color::Cyan.bold().paint("☸ test_context (test_namespace)")
+        ));
+
+        assert_eq!(expected, actual);
+
+        // verify the configured style is applied
+        let actual = ModuleRenderer::new("kubernetes")
+            .env("KUBECONFIG", config_path.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                style = "bold red"
+            })
+            .collect();
+        let expected = Some(format!(
+            "{} in ",
+            Color::Red.bold().paint("☸ test_context (test_namespace)")
+        ));
+
+        assert_eq!(expected, actual);
+
+        // verify that [[Kubernetes.display]] overrides the configured style
+        let actual = ModuleRenderer::new("kubernetes")
+            .env("KUBECONFIG", config_path.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                style = "bold red"
+
+                [[kubernetes.display]]
+                context_pattern = "test"
+                style = "bold green"
+            })
+            .collect();
+        let expected = Some(format!(
+            "{} in ",
+            Color::Green.bold().paint("☸ test_context (test_namespace)")
+        ));
+        assert_eq!(expected, actual);
+
+        tempdir.close()
     }
 }

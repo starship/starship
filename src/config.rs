@@ -133,6 +133,15 @@ where
     }
 }
 
+impl<'a> ModuleConfig<'a> for regex::Regex {
+    fn from_config(config: &Value) -> Option<Self> {
+        match config {
+            Value::String(value) => regex::Regex::new(value).ok(),
+            _ => None,
+        }
+    }
+}
+
 impl<'a, T, S: ::std::hash::BuildHasher + Default> ModuleConfig<'a> for HashMap<String, T, S>
 where
     T: ModuleConfig<'a>,

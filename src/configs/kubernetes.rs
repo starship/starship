@@ -11,6 +11,7 @@ pub struct KubernetesConfig<'a> {
     pub style: &'a str,
     pub disabled: bool,
     pub context_aliases: HashMap<String, &'a str>,
+    pub display: Vec<KubernetesDisplayConfig<'a>>,
 }
 
 impl<'a> Default for KubernetesConfig<'a> {
@@ -21,6 +22,13 @@ impl<'a> Default for KubernetesConfig<'a> {
             style: "cyan bold",
             disabled: true,
             context_aliases: HashMap::new(),
+            display: vec![],
         }
     }
+}
+
+#[derive(Clone, Default, ModuleConfig, Serialize)]
+pub struct KubernetesDisplayConfig<'a> {
+    pub context_pattern: &'a str,
+    pub style: &'a str,
 }
