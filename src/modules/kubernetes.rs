@@ -1,7 +1,6 @@
 use yaml_rust::YamlLoader;
 
 use std::borrow::Cow;
-use std::collections::HashMap;
 use std::env;
 use std::path;
 
@@ -80,30 +79,18 @@ fn get_kube_ctx_component(filename: path::PathBuf, current_ctx: &str) -> Option<
     Some(ctx_components)
 }
 
-fn get_kube_user<'a>(config: &'a KubernetesConfig, kube_user: &'a str) -> Cow<'a, str> {
-    return get_alias(&config.user_aliases, kube_user).unwrap_or(Cow::Borrowed(kube_user));
-}
-
-fn get_kube_context_name<'a>(config: &'a KubernetesConfig, kube_ctx: &'a str) -> Cow<'a, str> {
-    return get_alias(&config.context_aliases, kube_ctx).unwrap_or(Cow::Borrowed(kube_ctx));
-}
-
-fn get_alias<'a>(
-    aliases: &'a HashMap<String, &'a str>,
-    alias_candidate: &'a str,
-) -> Option<Cow<'a, str>> {
-    if let Some(val) = aliases.get(alias_candidate) {
-        return Some(Cow::Borrowed(val));
-    }
-
-    return aliases.iter().find_map(|(k, v)| {
-        let re = regex::Regex::new(&format!("^{k}$")).ok()?;
-        let replaced = re.replace(alias_candidate, *v);
-        match replaced {
-            Cow::Owned(replaced) => Some(Cow::Owned(replaced)),
-            _ => None,
+fn match_user_regex(regex: &str, text: &str) -> bool {
+    match regex::Regex::new(regex) {
+        Ok(re) => re.is_match(text),
+        Err(error) => {
+            log::warn!(
+                "Could not compile regular expression `{}`:\n{}",
+                regex,
+                error
+            );
+            false
         }
-    });
+    }
 }
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -145,33 +132,83 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .filter_map(|filename| get_kube_ctx_component(filename, &kube_ctx))
         .collect();
 
+    let kube_user = ctx_components.iter().find_map(|ctx| {
+        ctx.user
+            .as_ref()
+            .map(|kube_user| deprecated::get_kube_user_alias(&config, kube_user))
+    });
+
+    // Parse config under `display`.
+    // Select the first style that matches the context_pattern and,
+    // if it is defined, the user_pattern
+    let matched_context_config = config.contexts.iter().find(|context_config| {
+        let is_context_match = match_user_regex(context_config.context_pattern, &kube_ctx);
+        if !is_context_match {
+            return false;
+        };
+
+        if let Some(user_pattern) = context_config.user_pattern {
+            if let Some(kube_user) = &kube_user {
+                match_user_regex(user_pattern, kube_user)
+            } else {
+                // If a pattern is set, but we have no user, there is no match
+                false
+            }
+        } else {
+            // If user pattern not set, treat it as a match-all pattern
+            true
+        }
+    });
+
+    let display_context = match matched_context_config {
+        Some(ctx_cfg) => match ctx_cfg.context_alias {
+            Some(context_alias) => Cow::Borrowed(context_alias),
+            None => deprecated::get_kube_context_alias(&config, &kube_ctx),
+        },
+        None => deprecated::get_kube_context_alias(&config, &kube_ctx),
+    };
+
+    let display_user = match matched_context_config {
+        Some(ctx_cfg) => match ctx_cfg.user_alias {
+            Some(user_alias) => Some(Cow::Borrowed(user_alias)),
+            None => kube_user,
+        },
+        None => kube_user,
+    };
+
+    let display_style = match matched_context_config {
+        Some(ctx_cfg) => ctx_cfg.style.unwrap_or(config.style),
+        None => config.style,
+    };
+    let display_symbol = match matched_context_config {
+        Some(ctx_cfg) => ctx_cfg.symbol.unwrap_or(config.symbol),
+        None => config.symbol,
+    };
+
+    let kube_ns = ctx_components.iter().find(|&ctx| ctx.namespace.is_some());
+    let kube_cluster = ctx_components.iter().find(|&ctx| ctx.cluster.is_some());
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
-                "symbol" => Some(config.symbol),
+                "symbol" => Some(display_symbol),
                 _ => None,
             })
             .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
+                "style" => Some(Ok(display_style)),
                 _ => None,
             })
             .map(|variable| match variable {
-                "context" => Some(Ok(get_kube_context_name(&config, &kube_ctx))),
-
-                "namespace" => ctx_components
-                    .iter()
-                    .find_map(|kube| kube.namespace.as_deref())
-                    .map(|namespace| Ok(Cow::Borrowed(namespace))),
-
-                "user" => ctx_components
-                    .iter()
-                    .find_map(|kube| kube.user.as_deref())
-                    .map(|user| Ok(get_kube_user(&config, user))),
-
-                "cluster" => ctx_components
-                    .iter()
-                    .find_map(|kube| kube.cluster.as_deref())
-                    .map(|cluster| Ok(Cow::Borrowed(cluster))),
+                "context" => Some(Ok(display_context.clone())),
+                "namespace" => kube_ns.map(|ctx| {
+                    // unwrap is safe as kube_ns only holds kube.namespace.is_some()
+                    Ok(Cow::Borrowed(ctx.namespace.as_ref().unwrap().as_str()))
+                }),
+                "cluster" => kube_cluster.map(|ctx| {
+                    // unwrap is safe as kube_cluster only holds kube.cluster.is_some()
+                    Ok(Cow::Borrowed(ctx.cluster.as_ref().unwrap().as_str()))
+                }),
+                "user" => display_user.as_ref().map(|user| Ok(user.clone())),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -186,6 +223,66 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+mod deprecated {
+    use super::KubernetesConfig;
+    use std::borrow::Cow;
+    use std::collections::HashMap;
+
+    pub fn get_kube_user_alias<'a>(
+        config: &'a KubernetesConfig,
+        kube_user: &'a str,
+    ) -> Cow<'a, str> {
+        let user_alias = get_alias(&config.user_aliases, kube_user);
+        match user_alias {
+            Some(alias) => {
+                log::warn!(
+                        "Usage of 'user_aliases' is deprecated and will be removed in 2.0; Use 'contexts' with 'user_alias' instead. (`{}` -> `{}`)",
+                        kube_user,
+                        alias
+                    );
+                alias
+            }
+            None => Cow::Borrowed(kube_user),
+        }
+    }
+
+    pub fn get_kube_context_alias<'a>(
+        config: &'a KubernetesConfig,
+        kube_ctx: &'a str,
+    ) -> Cow<'a, str> {
+        let context_alias = get_alias(&config.context_aliases, kube_ctx);
+        match context_alias {
+            Some(alias) => {
+                log::warn!(
+                        "Usage of 'context_aliases' is deprecated and will be removed in 2.0; Use 'contexts' with 'context_alias' instead. (`{}` -> `{}`)",
+                        kube_ctx,
+                        alias
+                    );
+                alias
+            }
+            None => Cow::Borrowed(kube_ctx),
+        }
+    }
+
+    fn get_alias<'a>(
+        aliases: &'a HashMap<String, &'a str>,
+        alias_candidate: &'a str,
+    ) -> Option<Cow<'a, str>> {
+        if let Some(val) = aliases.get(alias_candidate) {
+            return Some(Cow::Borrowed(val));
+        }
+
+        return aliases.iter().find_map(|(k, v)| {
+            let re = regex::Regex::new(&format!("^{k}$")).ok()?;
+            let replaced = re.replace(alias_candidate, *v);
+            match replaced {
+                Cow::Owned(replaced) => Some(Cow::Owned(replaced)),
+                _ => None,
+            }
+        });
+    }
 }
 
 #[cfg(test)]
@@ -929,6 +1026,226 @@ users: []
             .collect();
 
         let expected = Some("☸ test_user test_namespace".to_string());
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_context_overwrites_defaults() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+      namespace: test_namespace
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                style = "bold red"
+
+                [[kubernetes.contexts]]
+                context_pattern = "test"
+                style = "bold green"
+                symbol = "§ "
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "{} in ",
+            Color::Green.bold().paint("§ test_context (test_namespace)")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_context_uses_aliases() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+      namespace: test_namespace
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                style = "bold red"
+                format = "$symbol($user )($context )($cluster )($namespace)"
+
+                [[kubernetes.contexts]]
+                context_pattern = "test"
+                context_alias = "xyz"
+                user_alias = "abc"
+                symbol = "§ "
+            })
+            .collect();
+
+        let expected = Some("§ abc xyz test_namespace".to_string());
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_context_user_pattern_does_not_match() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+      namespace: test_namespace
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                style = "bold red"
+                format = "$symbol($user )($context )($cluster )($namespace)"
+
+                [[kubernetes.contexts]]
+                context_pattern = "test"
+                user_pattern = "not_matching"
+                context_alias = "xyz"
+                user_alias = "abc"
+                symbol = "§ "
+            })
+            .collect();
+
+        let expected = Some("☸ test_user test_context test_namespace".to_string());
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_contexts_does_not_match() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+      namespace: test_namespace
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                style = "bold red"
+                contexts = [
+                    {context_pattern = "tests_.*", style = "bold green", symbol = "§ "},
+                ]
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "{} in ",
+            Color::Red.bold().paint("☸ test_context (test_namespace)")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_context_bad_regex_should_not_panic() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+      namespace: test_namespace
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                style = "bold red"
+                contexts = [
+                    {context_pattern = "tests_(.*", style = "bold green", symbol = "§ "},
+                ]
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "{} in ",
+            Color::Red.bold().paint("☸ test_context (test_namespace)")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
