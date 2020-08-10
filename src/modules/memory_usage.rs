@@ -72,10 +72,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             return None;
         }
 
-        used_memory_kb = mem_info.ullAvailPhys / 1_000;
+        used_memory_kb = (mem_info.ullTotalPhys - mem_info.ullAvailPhys) / 1_000;
         total_memory_kb = mem_info.ullTotalPhys / 1_000;
         total_swap_kb = (mem_info.ullTotalPageFile - mem_info.ullTotalPhys) / 1_000;
-        used_swap_kb = mem_info.ullAvailPageFile / 1_000;
+        used_swap_kb = total_swap_kb - (mem_info.ullAvailPageFile - mem_info.ullAvailPhys) / 1_000;
     }
 
     let ram_used = (used_memory_kb as f64 / total_memory_kb as f64) * 100.;
