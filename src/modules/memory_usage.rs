@@ -1,13 +1,20 @@
 use byte_unit::{Byte, ByteUnit};
+#[cfg(windows)]
+use std::mem::{size_of, zeroed};
+#[cfg(not(windows))]
 use sysinfo::{RefreshKind, SystemExt};
+#[cfg(windows)]
+use winapi::um::errhandlingapi::GetLastError;
+#[cfg(windows)]
+use winapi::um::sysinfoapi::{GlobalMemoryStatusEx, MEMORYSTATUSEX};
 
 use super::{Context, Module, RootModuleConfig, Shell};
 
 use crate::configs::memory_usage::MemoryConfig;
 use crate::formatter::StringFormatter;
 
-fn format_kib(n_kib: u64) -> String {
-    let byte = Byte::from_unit(n_kib as f64, ByteUnit::KiB).unwrap_or_else(|_| Byte::from_bytes(0));
+fn format_kb(n_kb: u64) -> String {
+    let byte = Byte::from_unit(n_kb as f64, ByteUnit::KB).unwrap_or_else(|_| Byte::from_bytes(0));
     let mut display_bytes = byte.get_appropriate_unit(true).format(0);
     display_bytes.retain(|c| c != ' ');
     display_bytes
@@ -18,7 +25,7 @@ fn format_pct(pct_number: f64, pct_sign: &str) -> String {
 }
 
 fn format_usage_total(usage: u64, total: u64) -> String {
-    format!("{}/{}", format_kib(usage), format_kib(total))
+    format!("{}/{}", format_kb(usage), format_kb(total))
 }
 
 /// Creates a module with system memory usage information
@@ -36,11 +43,41 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if config.disabled {
         return None;
     }
+    let used_memory_kb;
+    let total_memory_kb;
+    let total_swap_kb;
+    let used_swap_kb;
 
-    let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_memory());
-    let used_memory_kib = system.get_used_memory();
-    let total_memory_kib = system.get_total_memory();
-    let ram_used = (used_memory_kib as f64 / total_memory_kib as f64) * 100.;
+    #[cfg(not(windows))]
+    {
+        let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_memory());
+        used_memory_kb = system.get_used_memory();
+        total_memory_kb = system.get_total_memory();
+        total_swap_kb = system.get_total_swap();
+        used_swap_kb = system.get_used_swap();
+    }
+
+    // don't use sysinfo on windows because it's very slow there
+    #[cfg(windows)]
+    {
+        let mut mem_info: MEMORYSTATUSEX = unsafe { zeroed() };
+        mem_info.dwLength = size_of::<MEMORYSTATUSEX>() as u32;
+        let ret = unsafe { GlobalMemoryStatusEx(&mut mem_info) };
+
+        if ret == 0 {
+            log::warn!("Error in module `memory_usage`: {}", unsafe {
+                GetLastError()
+            });
+            return None;
+        }
+
+        used_memory_kb = mem_info.ullAvailPhys / 1_000;
+        total_memory_kb = mem_info.ullTotalPhys / 1_000;
+        total_swap_kb = (mem_info.ullTotalPageFile - mem_info.ullTotalPhys) / 1_000;
+        used_swap_kb = mem_info.ullAvailPageFile / 1_000;
+    }
+
+    let ram_used = (used_memory_kb as f64 / total_memory_kb as f64) * 100.;
     let ram_pct = format_pct(ram_used, pct_sign);
 
     let threshold = config.threshold;
@@ -48,12 +85,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let ram = format_usage_total(used_memory_kib, total_memory_kib);
-    let total_swap_kib = system.get_total_swap();
-    let used_swap_kib = system.get_used_swap();
-    let percent_swap_used = (used_swap_kib as f64 / total_swap_kib as f64) * 100.;
+    let ram = format_usage_total(used_memory_kb, total_memory_kb);
+    let percent_swap_used = (used_swap_kb as f64 / total_swap_kb as f64) * 100.;
     let swap_pct = format_pct(percent_swap_used, pct_sign);
-    let swap = format_usage_total(used_swap_kib, total_swap_kib);
+    let swap = format_usage_total(used_swap_kb, total_swap_kb);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -69,8 +104,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "ram" => Some(Ok(&ram)),
                 "ram_pct" => Some(Ok(&ram_pct)),
                 // swap only shown if there is swap on the system
-                "swap" if total_swap_kib > 0 => Some(Ok(&swap)),
-                "swap_pct" if total_swap_kib > 0 => Some(Ok(&swap_pct)),
+                "swap" if total_swap_kb > 0 => Some(Ok(&swap)),
+                "swap_pct" if total_swap_kb > 0 => Some(Ok(&swap_pct)),
                 _ => None,
             })
             .parse(None)

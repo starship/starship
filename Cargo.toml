@@ -45,7 +45,6 @@ unicode-segmentation = "1.6.0"
 gethostname = "0.2.1"
 once_cell = "1.4.0"
 chrono = "0.4"
-sysinfo = "0.15.1"
 byte-unit = "4.0.9"
 starship_module_config_derive = { version = "0.1.0", path = "starship_module_config_derive" }
 yaml-rust = "0.4"
@@ -70,11 +69,14 @@ winapi = { version = "0.3", features = [
   "securitybaseapi",
   "processthreadsapi",
   "handleapi",
+  "sysinfoapi",
+  "errhandlingapi",
   "impl-default",
 ] }
 
 [target.'cfg(not(windows))'.dependencies]
 nix = "0.18.0"
+sysinfo = "0.15.1"
 
 [dev-dependencies]
 tempfile = "3.1.0"
