@@ -737,9 +737,9 @@ dependencies = [
 
 [[package]]
 name = "os_info"
-version = "2.0.7"
+version = "2.0.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a0b045a2b6649afa9234ff4f40f84b2ea6e9bdc1a370ad9c03830c597b435953"
+checksum = "d2cc1b4330bb29087e791ae2a5cf56be64fb8946a4ff5aec2ba11c6ca51f5d60"
 dependencies = [
  "log",
  "serde",
