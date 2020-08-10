@@ -1,10 +1,8 @@
 use byte_unit::{Byte, ByteUnit};
-#[cfg(windows)]
-use std::mem::{size_of, zeroed};
 #[cfg(not(windows))]
 use sysinfo::{RefreshKind, SystemExt};
 #[cfg(windows)]
-use winapi::um::errhandlingapi::GetLastError;
+use winapi::shared::minwindef::DWORD;
 #[cfg(windows)]
 use winapi::um::sysinfoapi::{GlobalMemoryStatusEx, MEMORYSTATUSEX};
 
@@ -60,14 +58,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // don't use sysinfo on windows because it's very slow there
     #[cfg(windows)]
     {
-        let mut mem_info: MEMORYSTATUSEX = unsafe { zeroed() };
-        mem_info.dwLength = size_of::<MEMORYSTATUSEX>() as u32;
-        let ret = unsafe { GlobalMemoryStatusEx(&mut mem_info) };
+        let mut mem_info = MEMORYSTATUSEX {
+            dwLength: std::mem::size_of::<MEMORYSTATUSEX>() as DWORD,
+            ..MEMORYSTATUSEX::default()
+        };
 
+        let ret = unsafe { GlobalMemoryStatusEx(&mut mem_info) };
         if ret == 0 {
-            log::warn!("Error in module `memory_usage`: {}", unsafe {
-                GetLastError()
-            });
+            log::warn!(
+                "Error in module `memory_usage`:\n{:?}",
+                std::io::Error::last_os_error()
+            );
             return None;
         }
 

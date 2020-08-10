@@ -70,7 +70,6 @@ winapi = { version = "0.3", features = [
   "processthreadsapi",
   "handleapi",
   "sysinfoapi",
-  "errhandlingapi",
   "impl-default",
 ] }
 
