@@ -27,6 +27,9 @@ jobs:
           profile: minimal
           components: rustfmt
 
+      - name: Setup | libdbus (ubuntu)
+        run: sudo apt-get install libdbus-1-dev
+
       - name: Build | Format
         run: cargo fmt --all -- --check
 
@@ -50,6 +53,10 @@ jobs:
             ~/.cargo/git
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Setup | libdbus (ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install libdbus-1-dev
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1
@@ -108,6 +115,11 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v2
 
+      - name: Setup | libdbus (ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install libdbus-1-dev
+
+      # Cache files between builds
       - name: Setup | Cache Cargo
         uses: actions/cache@v2
         with:
@@ -132,4 +144,4 @@ jobs:
 
       # Run the ignored tests that expect the above setup
       - name: Build | Test
-        run: cargo test -- -Z unstable-options --include-ignored
+        run: cargo test --all-features -- -Z unstable-options --include-ignored

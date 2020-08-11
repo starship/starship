@@ -198,6 +198,10 @@ impl<'a> Context<'a> {
             _ => Shell::Unknown,
         }
     }
+
+    pub fn get_cmd_duration(&self) -> Option<u128> {
+        self.properties.get("cmd_duration")?.parse::<u128>().ok()
+    }
 }
 
 #[derive(Debug)]
