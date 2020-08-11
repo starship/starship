@@ -24,7 +24,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let host = match os_hostname.into_string() {
         Ok(host) => host,
         Err(bad) => {
-            log::debug!("hostname is not valid UTF!\n{:?}", bad);
+            log::warn!("hostname is not valid UTF!\n{:?}", bad);
             return None;
         }
     };

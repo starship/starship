@@ -18,11 +18,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .parse::<u128>()
         .ok()?;
 
-    /* TODO: Once error handling is implemented, warn the user if their config
-    min time is nonsensical */
     if config.min_time < 0 {
-        log::debug!(
-            "[WARN]: min_time in [cmd_duration] ({}) was less than zero",
+        log::warn!(
+            "min_time in [cmd_duration] ({}) was less than zero",
             config.min_time
         );
         return None;

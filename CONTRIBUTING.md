@@ -72,16 +72,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 ## Logging
 
-Debug logging in starship is done with [pretty_env_logger](https://crates.io/crates/pretty_env_logger).
-To run starship with debug logs, set the `STARSHIP_LOG` environment variable to the log level needed.
-For example, to enable the trace logs, run the following:
+Debug logging in starship is done with our custom logger implementation.
+To see the debug logs of the current starship session execute the following command:
 
 ```sh
 # Run installed starship
-STARSHIP_LOG=trace starship
+starship prompt
 
 # Run with cargo
-STARSHIP_LOG=trace cargo run
+cargo run prompt
+
+# Read the log file
+cat /tmp/starship/session_$(STARSHIP_SESSION_KEY).log
 ```
 
 ## Linting

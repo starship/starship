@@ -84,3 +84,8 @@ fi
 # Set up the start time and STARSHIP_SHELL, which controls shell-specific sequences
 STARSHIP_START_TIME=$(::STARSHIP:: time)
 export STARSHIP_SHELL="bash"
+
+# Set up the session key that will be used to store logs
+if [ -c /dev/urandom ]; then
+    export STARSHIP_SESSION_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)
+fi

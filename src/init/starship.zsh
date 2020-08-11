@@ -62,3 +62,8 @@ zle-keymap-select() {
 STARSHIP_START_TIME=$(::STARSHIP:: time)
 zle -N zle-keymap-select
 export STARSHIP_SHELL="zsh"
+
+# Set up the session key that will be used to store logs
+if [ -c /dev/urandom ]; then
+    export STARSHIP_SESSION_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)
+fi

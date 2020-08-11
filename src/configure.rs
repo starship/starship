@@ -77,12 +77,12 @@ pub fn edit_configuration() {
         Ok(_) => (),
         Err(error) => match error.kind() {
             ErrorKind::NotFound => {
-                eprintln!(
-                    "Error: editor {:?} was not found. Did you set your $EDITOR or $VISUAL \
-                    environment variables correctly?",
-                    editor
+                log::error!(
+                    "Editor {:?} was not found. Did you set your $EDITOR or $VISUAL \
+                    environment variables correctly?\n Full error: {:?}",
+                    editor,
+                    error
                 );
-                eprintln!("Full error: {:?}", error);
                 std::process::exit(1)
             }
             other_error => panic!("failed to open file: {:?}", other_error),

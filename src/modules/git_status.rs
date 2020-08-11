@@ -144,7 +144,7 @@ impl<'a> GitStatusInfo<'a> {
                 return match result.as_ref() {
                     Ok(ahead_behind) => Some(*ahead_behind),
                     Err(error) => {
-                        log::warn!("Warn: get_ahead_behind: {}", error);
+                        log::debug!("get_ahead_behind: {}", error);
                         None
                     }
                 };
@@ -159,7 +159,7 @@ impl<'a> GitStatusInfo<'a> {
             match data.as_ref().unwrap() {
                 Ok(ahead_behind) => Some(*ahead_behind),
                 Err(error) => {
-                    log::warn!("Warn: get_ahead_behind: {}", error);
+                    log::debug!("get_ahead_behind: {}", error);
                     None
                 }
             }
@@ -173,7 +173,7 @@ impl<'a> GitStatusInfo<'a> {
                 return match result.as_ref() {
                     Ok(repo_status) => Some(*repo_status),
                     Err(error) => {
-                        log::warn!("Warn: get_repo_status: {}", error);
+                        log::debug!("get_repo_status: {}", error);
                         None
                     }
                 };
@@ -187,7 +187,7 @@ impl<'a> GitStatusInfo<'a> {
             match data.as_ref().unwrap() {
                 Ok(repo_status) => Some(*repo_status),
                 Err(error) => {
-                    log::warn!("Warn: get_repo_status: {}", error);
+                    log::debug!(" get_repo_status: {}", error);
                     None
                 }
             }
@@ -201,7 +201,7 @@ impl<'a> GitStatusInfo<'a> {
                 return match result.as_ref() {
                     Ok(stashed_count) => Some(*stashed_count),
                     Err(error) => {
-                        log::warn!("Warn: get_stashed_count: {}", error);
+                        log::debug!("get_stashed_count: {}", error);
                         None
                     }
                 };
@@ -215,7 +215,7 @@ impl<'a> GitStatusInfo<'a> {
             match data.as_ref().unwrap() {
                 Ok(stashed_count) => Some(*stashed_count),
                 Err(error) => {
-                    log::warn!("Warn: get_stashed_count: {}", error);
+                    log::debug!("get_stashed_count: {}", error);
                     None
                 }
             }
@@ -356,7 +356,7 @@ where
             .parse(None)
             .ok()
     } else {
-        log::error!("Error parsing format string `{}`", &config_path);
+        log::warn!("Error parsing format string `{}`", &config_path);
         None
     }
 }

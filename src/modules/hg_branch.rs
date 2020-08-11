@@ -18,8 +18,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("hg_branch");
     let config: HgBranchConfig = HgBranchConfig::try_load(module.config);
 
-    // TODO: Once error handling is implemented, warn the user if their config
-    // truncation length is nonsensical
     let len = if config.truncation_length <= 0 {
         log::warn!(
             "\"truncation_length\" should be a positive value, found {}",
