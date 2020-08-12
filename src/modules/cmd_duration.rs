@@ -71,7 +71,8 @@ fn render_time(raw_millis: u128, show_millis: bool) -> String {
     if show_millis || raw_millis < 1000 {
         rendered_components.push(render_time_component((&millis, &"ms")));
     }
-    rendered_components.join("")
+    rendered_components.retain(|val| !val.is_empty());
+    rendered_components.join(" ")
 }
 
 /// Render a single component of the time string, giving an empty string if component is zero
