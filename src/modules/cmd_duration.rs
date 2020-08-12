@@ -143,11 +143,11 @@ mod tests {
     }
     #[test]
     fn test_90s() {
-        assert_eq!(render_time(90_000 as u128, true), "1m30s")
+        assert_eq!(render_time(90_000 as u128, true), "1m 30s")
     }
     #[test]
     fn test_10110s() {
-        assert_eq!(render_time(10_110_000 as u128, true), "2h48m30s")
+        assert_eq!(render_time(10_110_000 as u128, true), "2h 48m 30s")
     }
     #[test]
     fn test_1d() {
