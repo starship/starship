@@ -1,15 +1,16 @@
 use ansi_term::Color;
 use log::{Level, LevelFilter, Metadata, Record};
 use std::{
+    collections::HashSet,
     env,
     fs::{self, File, OpenOptions},
-    io::Write,
+    io::{BufWriter, Write},
     sync::{Arc, Mutex},
 };
 
 pub struct StarshipLogger {
-    log_file: Arc<Mutex<File>>,
-    log_file_content: Arc<String>,
+    log_file: Arc<Mutex<BufWriter<File>>>,
+    log_file_content: Arc<HashSet<String>>,
 }
 
 impl StarshipLogger {
@@ -24,20 +25,24 @@ impl StarshipLogger {
 
         Self {
             log_file_content: Arc::new(
-                fs::read_to_string(session_log_file.clone()).unwrap_or_default(),
+                fs::read_to_string(session_log_file.clone())
+                    .unwrap_or_default()
+                    .lines()
+                    .map(|line| line.to_string())
+                    .collect(),
             ),
-            log_file: Arc::new(Mutex::new(
+            log_file: Arc::new(Mutex::new(BufWriter::new(
                 OpenOptions::new()
                     .create(true)
                     .append(true)
                     .open(session_log_file)
                     .unwrap(),
-            )),
+            ))),
         }
     }
 }
 
-impl<'a> log::Log for StarshipLogger {
+impl log::Log for StarshipLogger {
     fn enabled(&self, metadata: &Metadata) -> bool {
         metadata.level() <= Level::Warn
     }
@@ -53,10 +58,10 @@ impl<'a> log::Log for StarshipLogger {
         self.log_file
             .lock()
             .map(|mut file| writeln!(file, "{}", to_print))
-            .expect("Log file mutex was poisoned!")
+            .expect("Log file writer mutex was poisoned!")
             .expect("Unable to write to the log file!");
 
-        if self.enabled(record.metadata()) && !self.log_file_content.contains(&to_print) {
+        if self.enabled(record.metadata()) && !self.log_file_content.contains(to_print.as_str()) {
             eprintln!(
                 "[{}] - ({}): {}",
                 match record.level() {
@@ -75,8 +80,8 @@ impl<'a> log::Log for StarshipLogger {
     fn flush(&self) {
         self.log_file
             .lock()
-            .map(|mut file| file.flush())
-            .expect("Log file mutex was poisoned!")
+            .map(|mut writer| writer.flush())
+            .expect("Log file writer mutex was poisoned!")
             .expect("Unable to flush the log file!");
     }
 }
