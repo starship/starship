@@ -4,12 +4,12 @@ use std::{
     collections::HashSet,
     env,
     fs::{self, File, OpenOptions},
-    io::{BufWriter, Write},
+    io::Write,
     sync::{Arc, Mutex},
 };
 
 pub struct StarshipLogger {
-    log_file: Arc<Mutex<BufWriter<File>>>,
+    log_file: Arc<Mutex<File>>,
     log_file_content: Arc<HashSet<String>>,
 }
 
@@ -31,13 +31,13 @@ impl StarshipLogger {
                     .map(|line| line.to_string())
                     .collect(),
             ),
-            log_file: Arc::new(Mutex::new(BufWriter::new(
+            log_file: Arc::new(Mutex::new(
                 OpenOptions::new()
                     .create(true)
                     .append(true)
                     .open(session_log_file)
                     .unwrap(),
-            ))),
+            )),
         }
     }
 }
