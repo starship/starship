@@ -1216,11 +1216,10 @@ The `hostname` module shows the system hostname.
 
 ### Variables
 
-| 變數        | 範例  | 說明                                   |
-| --------- | --- | ------------------------------------ |
-| number    | `1` | The number of jobs                   |
-| symbol    |     | Mirrors the value of option `symbol` |
-| style\* |     | Mirrors the value of option `style`  |
+| 變數        | 範例 | 說明                                   |
+| --------- | -- | ------------------------------------ |
+| symbol    |    | Mirrors the value of option `symbol` |
+| style\* |    | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
