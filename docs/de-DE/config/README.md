@@ -1218,7 +1218,6 @@ The `hostname` module shows the system hostname.
 
 | Variable  | Beispiel | Beschreibung                         |
 | --------- | -------- | ------------------------------------ |
-| number    | `1`      | The number of jobs                   |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
