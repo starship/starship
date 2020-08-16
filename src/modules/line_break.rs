@@ -6,7 +6,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const LINE_ENDING: &str = "\n";
 
     let show_newline = context.config.get_root_config().add_newline;
-    if show_newline == false {
+    if !show_newline {
         return None;
     }
 
