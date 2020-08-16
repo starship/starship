@@ -1,4 +1,3 @@
-use std::env;
 use std::path::Path;
 
 use super::{Context, Module, RootModuleConfig};
@@ -36,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     };
 
-    let is_venv = env::var("VIRTUAL_ENV").ok().is_some();
+    let is_venv = context.get_env("VIRTUAL_ENV").is_some();
 
     if !is_py_project && !is_venv {
         return None;
@@ -48,7 +47,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let version = get_python_version(&config.python_binary)?;
         format_python_version(&version)
     };
-    let virtual_env = get_python_virtual_env();
+    let virtual_env = get_python_virtual_env(context);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -102,8 +101,8 @@ fn format_python_version(python_stdout: &str) -> String {
     )
 }
 
-fn get_python_virtual_env() -> Option<String> {
-    env::var("VIRTUAL_ENV").ok().and_then(|venv| {
+fn get_python_virtual_env(context: &Context) -> Option<String> {
+    context.get_env("VIRTUAL_ENV").and_then(|venv| {
         Path::new(&venv)
             .file_name()
             .map(|filename| String::from(filename.to_str().unwrap_or("")))
@@ -113,7 +112,7 @@ fn get_python_virtual_env() -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -133,7 +132,7 @@ mod tests {
     #[test]
     fn folder_without_python_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = render_module("python", dir.path(), None);
+        let actual = ModuleRenderer::new("python").path(dir.path()).collect();
         let expected = None;
         assert_eq!(expected, actual);
 
@@ -230,7 +229,10 @@ mod tests {
             [python]
             scan_for_pyfiles = false
         };
-        let actual = render_module("python", dir.path(), Some(config));
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .config(config)
+            .collect();
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -258,19 +260,68 @@ mod tests {
         dir.close()
     }
 
+    #[test]
+    fn with_virtual_env() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("main.py"))?.sync_all()?;
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("VIRTUAL_ENV", "/foo/bar/my_venv")
+            .collect();
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Yellow.bold().paint("🐍 v2.7.17 (my_venv)")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn with_active_venv() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("VIRTUAL_ENV", "/foo/bar/my_venv")
+            .collect();
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Yellow.bold().paint("🐍 v2.7.17 (my_venv)")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
     fn check_python2_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
-        let actual = render_module("python", dir.path(), starship_config);
+        let config = starship_config.unwrap_or(toml::toml! {
+            [python]
+            python_binary = "python"
+        });
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .config(config)
+            .collect();
+
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐍 v2.7.17")));
         assert_eq!(expected, actual);
     }
 
     fn check_python3_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
-        let config = Some(starship_config.unwrap_or(toml::toml! {
+        let config = starship_config.unwrap_or(toml::toml! {
              [python]
              python_binary = "python3"
-        }));
+        });
 
-        let actual = render_module("python", dir.path(), config);
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .config(config)
+            .collect();
+
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐍 v3.8.0")));
         assert_eq!(expected, actual);
     }

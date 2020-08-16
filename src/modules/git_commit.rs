@@ -62,3 +62,138 @@ pub fn id_to_hex_abbrev(bytes: &[u8], len: usize) -> String {
         .take(len)
         .collect()
 }
+
+#[cfg(test)]
+mod tests {
+    use ansi_term::Color;
+    use std::process::Command;
+    use std::{io, str};
+
+    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+
+    #[test]
+    fn show_nothing_on_empty_dir() -> io::Result<()> {
+        let repo_dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("git_commit")
+            .path(&repo_dir.path())
+            .collect();
+
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn test_render_commit_hash() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        let mut git_output = Command::new("git")
+            .args(&["rev-parse", "HEAD"])
+            .current_dir(&repo_dir.path())
+            .output()?
+            .stdout;
+        git_output.truncate(7);
+        let expected_hash = str::from_utf8(&git_output).unwrap();
+
+        let actual = ModuleRenderer::new("git_commit")
+            .config(toml::toml! {
+                [git_commit]
+                    only_detached = false
+            })
+            .path(&repo_dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Green
+                .bold()
+                .paint(format!("({})", expected_hash))
+                .to_string()
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn test_render_commit_hash_len_override() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        let mut git_output = Command::new("git")
+            .args(&["rev-parse", "HEAD"])
+            .current_dir(&repo_dir.path())
+            .output()?
+            .stdout;
+        git_output.truncate(14);
+        let expected_hash = str::from_utf8(&git_output).unwrap();
+
+        let actual = ModuleRenderer::new("git_commit")
+            .config(toml::toml! {
+                [git_commit]
+                    only_detached = false
+                    commit_hash_length = 14
+            })
+            .path(&repo_dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Green
+                .bold()
+                .paint(format!("({})", expected_hash))
+                .to_string()
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn test_render_commit_hash_only_detached_on_branch() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        let actual = ModuleRenderer::new("git_commit")
+            .path(&repo_dir.path())
+            .collect();
+
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn test_render_commit_hash_only_detached_on_detached() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        Command::new("git")
+            .args(&["checkout", "@~1"])
+            .current_dir(&repo_dir.path())
+            .output()?;
+
+        let mut git_output = Command::new("git")
+            .args(&["rev-parse", "HEAD"])
+            .current_dir(&repo_dir.path())
+            .output()?
+            .stdout;
+        git_output.truncate(7);
+        let expected_hash = str::from_utf8(&git_output).unwrap();
+
+        let actual = ModuleRenderer::new("git_commit")
+            .path(&repo_dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Green
+                .bold()
+                .paint(format!("({})", expected_hash))
+                .to_string()
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+}

@@ -11,9 +11,10 @@ pub struct StarshipRootConfig<'a> {
 // List of default prompt order
 // NOTE: If this const value is changed then Default prompt order subheading inside
 // prompt heading of config docs needs to be updated according to changes made here.
-pub const PROMPT_ORDER: [&str; 44] = [
+pub const PROMPT_ORDER: &[&str] = &[
     "username",
     "hostname",
+    "shlvl",
     "singularity",
     "kubernetes",
     "directory",
@@ -27,22 +28,26 @@ pub const PROMPT_ORDER: [&str; 44] = [
     // ↓ Toolchain version modules ↓
     // (Let's keep these sorted alphabetically)
     "cmake",
+    "dart",
     "dotnet",
     "elixir",
     "elm",
     "erlang",
     "golang",
+    "helm",
     "java",
     "julia",
     "nim",
     "nodejs",
     "ocaml",
+    "perl",
     "php",
     "purescript",
     "python",
     "r",
     "ruby",
     "rust",
+    "swift",
     "terraform",
     "zig",
     // ↑ Toolchain version modules ↑
@@ -50,6 +55,7 @@ pub const PROMPT_ORDER: [&str; 44] = [
     "conda",
     "memory_usage",
     "aws",
+    "gcloud",
     "env_var",
     "crystal",
     "cmd_duration",

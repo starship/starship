@@ -260,7 +260,6 @@ fn get_repo_status(repository: &mut Repository) -> Result<RepoStatus, git2::Erro
     status_options
         .renames_from_rewrites(true)
         .renames_head_to_index(true)
-        .renames_index_to_workdir(true)
         .include_unmodified(true);
 
     let statuses = repository.statuses(Some(&mut status_options))?;
@@ -371,4 +370,600 @@ fn format_count(format_str: &str, config_path: &str, count: usize) -> Option<Vec
         "count" => Some(count.to_string()),
         _ => None,
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use ansi_term::{ANSIStrings, Color};
+    use std::fs::{self, File};
+    use std::io;
+    use std::path::Path;
+    use std::process::Command;
+
+    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+
+    /// Right after the calls to git the filesystem state may not have finished
+    /// updating yet causing some of the tests to fail. These barriers are placed
+    /// after each call to git.
+    /// This barrier is windows-specific though other operating systems may need it
+    /// in the future.
+    #[cfg(not(windows))]
+    fn barrier() {}
+    #[cfg(windows)]
+    fn barrier() {
+        std::thread::sleep(std::time::Duration::from_millis(500));
+    }
+
+    fn format_output(symbols: &str) -> Option<String> {
+        Some(format!(
+            "{} ",
+            Color::Red.bold().paint(format!("[{}]", symbols))
+        ))
+    }
+
+    #[test]
+    fn show_nothing_on_empty_dir() -> io::Result<()> {
+        let repo_dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(repo_dir.path())
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_behind() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        behind(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(repo_dir.path())
+            .collect();
+        let expected = format_output("⇣");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_behind_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        behind(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                behind = "⇣$count"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = format_output("⇣1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_ahead() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
+        ahead(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("⇡");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_ahead_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
+        ahead(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                ahead="⇡$count"
+            })
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("⇡1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_diverged() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        diverge(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("⇕");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_diverged_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        diverge(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                diverged=r"⇕⇡$ahead_count⇣$behind_count"
+            })
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("⇕⇡1⇣1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_conflicted() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        create_conflict(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("=");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_conflicted_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        create_conflict(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                conflicted = "=$count"
+            })
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("=1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_untracked_file() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        create_untracked(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("?");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_untracked_file_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        create_untracked(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                untracked = "?$count"
+            })
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("?1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        create_untracked(&repo_dir.path())?;
+
+        Command::new("git")
+            .args(&["config", "status.showUntrackedFiles", "no"])
+            .current_dir(repo_dir.path())
+            .output()?;
+        barrier();
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_stashed() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        barrier();
+
+        create_stash(&repo_dir.path())?;
+
+        Command::new("git")
+            .args(&["reset", "--hard", "HEAD"])
+            .current_dir(repo_dir.path())
+            .output()?;
+        barrier();
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("$");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_stashed_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        barrier();
+
+        create_stash(&repo_dir.path())?;
+        barrier();
+
+        Command::new("git")
+            .args(&["reset", "--hard", "HEAD"])
+            .current_dir(repo_dir.path())
+            .output()?;
+        barrier();
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                stashed = r"\$$count"
+            })
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("$1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_modified() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        create_modified(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("!");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_modified_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        create_modified(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                modified = "!$count"
+            })
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("!1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_staged_file() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        create_staged(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("+");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_staged_file_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        create_staged(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                staged = "+[$count](green)"
+            })
+            .path(&repo_dir.path())
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            ANSIStrings(&[
+                Color::Red.bold().paint("[+"),
+                Color::Green.paint("1"),
+                Color::Red.bold().paint("]"),
+            ])
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_renamed_file() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        create_renamed(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("»");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_renamed_file_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        create_renamed(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                renamed = "»$count"
+            })
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("»1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_deleted_file() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        create_deleted(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("✘");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_deleted_file_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        create_deleted(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                deleted = "✘$count"
+            })
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("✘1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    // Whenever a file is manually renamed, git itself ('git status') does not treat such file as renamed,
+    // but as untracked instead. The following test checks if manually deleted and manually renamed
+    // files are tracked by git_status module in the same way 'git status' does.
+    #[test]
+    #[ignore]
+    fn ignore_manually_renamed() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        File::create(repo_dir.path().join("a"))?.sync_all()?;
+        File::create(repo_dir.path().join("b"))?.sync_all()?;
+        Command::new("git")
+            .args(&["add", "--all"])
+            .current_dir(&repo_dir.path())
+            .output()?;
+        Command::new("git")
+            .args(&["commit", "-m", "add new files"])
+            .current_dir(&repo_dir.path())
+            .output()?;
+
+        fs::remove_file(repo_dir.path().join("a"))?;
+        fs::rename(repo_dir.path().join("b"), repo_dir.path().join("c"))?;
+        barrier();
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .config(toml::toml! {
+                [git_status]
+                ahead = "A"
+                deleted = "D"
+                untracked = "U"
+                renamed = "R"
+            })
+            .collect();
+        let expected = format_output("DUA");
+
+        assert_eq!(actual, expected);
+
+        repo_dir.close()
+    }
+
+    fn ahead(repo_dir: &Path) -> io::Result<()> {
+        File::create(repo_dir.join("readme.md"))?.sync_all()?;
+
+        Command::new("git")
+            .args(&["commit", "-am", "Update readme"])
+            .current_dir(&repo_dir)
+            .output()?;
+        barrier();
+
+        Ok(())
+    }
+
+    fn behind(repo_dir: &Path) -> io::Result<()> {
+        Command::new("git")
+            .args(&["reset", "--hard", "HEAD^"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        Ok(())
+    }
+
+    fn diverge(repo_dir: &Path) -> io::Result<()> {
+        Command::new("git")
+            .args(&["reset", "--hard", "HEAD^"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        fs::write(repo_dir.join("Cargo.toml"), " ")?;
+
+        Command::new("git")
+            .args(&["commit", "-am", "Update readme"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        Ok(())
+    }
+
+    fn create_conflict(repo_dir: &Path) -> io::Result<()> {
+        Command::new("git")
+            .args(&["reset", "--hard", "HEAD^"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        fs::write(repo_dir.join("readme.md"), "# goodbye")?;
+
+        Command::new("git")
+            .args(&["add", "."])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        Command::new("git")
+            .args(&["commit", "-m", "Change readme"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        Command::new("git")
+            .args(&["pull", "--rebase"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        Ok(())
+    }
+
+    fn create_stash(repo_dir: &Path) -> io::Result<()> {
+        File::create(repo_dir.join("readme.md"))?.sync_all()?;
+        barrier();
+
+        Command::new("git")
+            .args(&["stash", "--all"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        Ok(())
+    }
+
+    fn create_untracked(repo_dir: &Path) -> io::Result<()> {
+        File::create(repo_dir.join("license"))?.sync_all()?;
+
+        Ok(())
+    }
+
+    fn create_modified(repo_dir: &Path) -> io::Result<()> {
+        File::create(repo_dir.join("readme.md"))?.sync_all()?;
+
+        Ok(())
+    }
+
+    fn create_staged(repo_dir: &Path) -> io::Result<()> {
+        File::create(repo_dir.join("license"))?.sync_all()?;
+
+        Command::new("git")
+            .args(&["add", "."])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        Ok(())
+    }
+
+    fn create_renamed(repo_dir: &Path) -> io::Result<()> {
+        Command::new("git")
+            .args(&["mv", "readme.md", "readme.md.bak"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        Command::new("git")
+            .args(&["add", "-A"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        Ok(())
+    }
+
+    fn create_deleted(repo_dir: &Path) -> io::Result<()> {
+        fs::remove_file(repo_dir.join("readme.md"))?;
+
+        Ok(())
+    }
 }
