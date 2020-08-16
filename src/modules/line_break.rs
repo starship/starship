@@ -28,8 +28,7 @@ mod tests {
     #[test]
     fn add_newline_by_default() {
         let expected = Some(String::from("\n"));
-        let actual = ModuleRenderer::new("line_break")
-            .collect();
+        let actual = ModuleRenderer::new("line_break").collect();
         assert_eq!(expected, actual);
     }
 
@@ -39,9 +38,7 @@ mod tests {
         let config = toml::toml! {
             add_newline = false
         };
-        let actual = ModuleRenderer::new("line_break")
-            .config(config)
-            .collect();
+        let actual = ModuleRenderer::new("line_break").config(config).collect();
         assert_eq!(expected, actual);
     }
 }
