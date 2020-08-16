@@ -103,12 +103,17 @@ impl<'a> Module<'a> {
 
     /// Whether a module has non-empty segments
     pub fn is_empty(&self) -> bool {
-        self.segments.iter().all(|segment| segment.is_empty())
+        self.segments
+            .iter()
+            .all(|segment| segment.value.trim().is_empty())
     }
 
     /// Get values of the module's segments
     pub fn get_segments(&self) -> Vec<&str> {
-        self.segments.iter().map(Segment::get_value).collect()
+        self.segments
+            .iter()
+            .map(|segment| segment.value.as_str())
+            .collect()
     }
 
     /// Returns a vector of colored ANSIString elements to be later used with

@@ -271,11 +271,9 @@ impl<'a> StringFormatter<'a> {
                                     .into_iter()
                                     .map(|mut segment| {
                                         // Derive upper style if the style of segments are none.
-                                        if !segment.has_style() {
-                                            if let Some(style) = style {
-                                                segment.set_style(style);
-                                            }
-                                        }
+                                        if segment.style.is_none() {
+                                            segment.style = style;
+                                        };
                                         segment
                                     })
                                     .collect()),
