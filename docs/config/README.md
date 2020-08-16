@@ -1918,6 +1918,7 @@ The `r` module shows the currently installed version of R.
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.R` file
+- The current directory contains a `.Rproj` file
 
 ### Options
 

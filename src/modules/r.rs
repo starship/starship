@@ -13,7 +13,10 @@ const R_VERSION_PATTERN: &str = r" (?P<rversion>\d+\.\d+\.\d+) ";
 /// Will display the R programming language version if any of the following criteria are met:
 ///     - Current directory contains a `.R` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let is_r_project = context.try_begin_scan()?.set_extensions(&["R"]).is_match();
+    let is_r_project = context
+        .try_begin_scan()?
+        .set_extensions(&["R", "Rproj"])
+        .is_match();
     if !is_r_project {
         return None;
     }
