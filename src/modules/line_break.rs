@@ -5,6 +5,11 @@ use crate::segment::Segment;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const LINE_ENDING: &str = "\n";
 
+    let show_newline = context.config.get_root_config().add_newline;
+    if show_newline == false {
+        return None;
+    }
+
     let mut module = context.new_module("line_break");
 
     module.set_segments(vec![Segment {
