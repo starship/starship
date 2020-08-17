@@ -72,6 +72,9 @@ pub fn get_prompt(context: Context) -> String {
     );
 
     let module_strings = root_module.ansi_strings_for_shell(context.shell);
+    if config.add_newline {
+        writeln!(buf).unwrap();
+    }
     write!(buf, "{}", ANSIStrings(&module_strings)).unwrap();
 
     buf
