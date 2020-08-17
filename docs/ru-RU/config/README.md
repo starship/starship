@@ -1,22 +1,15 @@
 # Конфигурация
 
-::: tip Подсказка
-
-🔥 Конфигурация все еще находится в стадии разработки. Множество новых опций будут доступны в будущих версиях.
-
-:::
-
-Чтобы начать конфигурацию Starship, создайте следующий файл: `~/.config/starship.toml`.
+To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-Вся конфигурация Starship выполняется в этом файле [TOML](https://github.com/toml-lang/toml):
-
+All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 ```toml
 # Don't print a new line at the start of the prompt
-format = "$all"
+add_newline = false
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
@@ -27,7 +20,7 @@ success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being
 disabled = true
 ```
 
-Вы можете изменить расположение файла `starship.toml` переменной окружения `STARSHIP_CONFIG`:
+You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship
@@ -41,7 +34,7 @@ $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 
 ### Терминология
 
-**Модуль**: Компонент строки, дающий информацию на основе контекстной информации вашей ОС. Например, модуль "nodejs" показывает установленную версию NodeJS на вашем компьютере, если вы находитесь в директории проекта NodeJS.
+**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
 **Variable**: Smaller sub-components that contains information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
 
@@ -77,7 +70,7 @@ For example:
 
 #### Строки стиля
 
-В Starship, большинство модулей позволяют настроить стили отображения. Это делается записью (обычно называется `style`), которая представляет собой строку, определяющую конфигурацию. Ниже приведены несколько примеров стилей строк, а также, их действия. Подробнее о полном синтаксисе можно прочитать в [расширенном разделе конфигурации](/advanced-config/).
+Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
 - `"fg:green bg:blue"` устанавливает зеленый текст на синем фоне
 - `"bg:blue fg:bright-green"` устанавливает ярко-зеленый текст на синем фоне
@@ -86,7 +79,7 @@ For example:
 - `"bold italic fg:purple"` устанавливает жирный фиолетовый текст
 - `""` выключает все стили
 
-Обратите внимание на то, что, вид стиля зависит от вашего эмулятора терминала. Например, некоторые эмуляторы терминала будут использовать яркие цвета вместо жирного текста, и некоторые цветовые темы используют одинаковые значение для обычных и ярких цветов. Также, чтобы получить курсивный текст, ваш терминал должен поддерживать курсив.
+Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
 #### Conditional Format Strings
 
@@ -130,14 +123,15 @@ format = '''
 
 ## Командная строка
 
-Ниже находится список опций, применяющихся для всей командной строки.
+This is the list of prompt-wide configuration options.
 
 ### Опции
 
-| Option         | По умолчанию                     | Описание                                                |
-| -------------- | -------------------------------- | ------------------------------------------------------- |
-| `format`       | [ссылка](#default-prompt-format) | Configure the format of the prompt.                     |
-| `scan_timeout` | `30`                             | Тайм-аут запуска сканирования файлов (в миллисекундах). |
+| Option         | По умолчанию                     | Описание                                              |
+| -------------- | -------------------------------- | ----------------------------------------------------- |
+| `add_newline`  | `true`                           | Add a new line before the start of the prompt.        |
+| `format`       | [ссылка](#default-prompt-format) | Configure the format of the prompt.                   |
+| `scan_timeout` | `30`                             | Timeout for starship to scan files (in milliseconds). |
 
 ### Пример
 
@@ -145,7 +139,7 @@ format = '''
 # ~/.config/starship.toml
 
 # Disable the newline at the start of the prompt
-format = "$all"
+add_newline = false
 
 # Use custom format
 format = """
@@ -159,10 +153,10 @@ scan_timeout = 10
 
 ### Default Prompt Format
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. Значение по умолчанию:
+The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
 
 ```toml
-format = "\n$all"
+format = "$all"
 
 # Which is equivalent to
 format = """
@@ -219,9 +213,9 @@ $character"""
 
 ## AWS
 
-Модуль `aws` показывает текущий регион и профиль AWS. Основано на `AWS_REGION`, `AWS_DEFAULT_REGION`, и `AWS_PROFILE` переменных окружения и файле`~/.aws/config`.
+The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
 
-При использовании [aws-vault](https://github.com/99designs/aws-vault) профиль читается из переменной среды `AWS_VAULT`.
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
 
 ### Опции
 
@@ -287,7 +281,7 @@ symbol = "🅰 "
 
 ## Батарея
 
-Модуль `battery` показывает насколько заряжена батарея девайса и статус зарядки на данный момент. Модуль виден только, если заряд батареи устройства меньше 10%.
+The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
 ### Опции
 
@@ -301,14 +295,14 @@ symbol = "🅰 "
 | `disabled`           | `false`                           | Отключает модуль `battery`.                     |
 
 <details>
-<summary>Также, есть опции для некоторых нетипичных состояний батареи.</summary>
+<summary>There are also options for some uncommon battery states.</summary>
 
 | Переменная       | Описание                                                |
 | ---------------- | ------------------------------------------------------- |
 | `unknown_symbol` | Символ, отображаемый при неизвестном состоянии батареи. |
 | `empty_symbol`   | Символ, отображаемый при пустом состоянии батареи.      |
 
-Примечание: Индикатор батареи будет скрыт при состоянии `unknown` или `empty`, если вы не указали параметр в настройках.
+Note: Battery indicator will be hidden if the status is `unknown` or `empty` unless you specify the option in the config.
 
 </details>
 
@@ -325,7 +319,7 @@ discharging_symbol = "💀"
 
 ### Отображение батареи
 
-Параметр `display` используется для определения того, когда индикатор батареи должен быть показан (threshhold) и как он выглядит (style). Если `display` не предоставлено. Значение по умолчанию:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
 
 ```toml
 [[battery.display]]
@@ -335,7 +329,7 @@ style = "bold red"
 
 #### Опции
 
-Опция `display` представляет собой массив следующей таблицы.
+The `display` option is an array of the following table.
 
 | Переменная  | Описание                                                 |
 | ----------- | -------------------------------------------------------- |
@@ -359,9 +353,9 @@ style = "bold yellow"
 
 ## Символ
 
-Модуль `character` показывает символ (обычно, стрелка) рядом с вводимым текстом в терминале.
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-Символ показывает, была ли последняя команда успешной или нет. It can do this in two ways:
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - changing color (`red`/`green`)
 - changing shape (`❯`/`✖`)
@@ -442,15 +436,15 @@ The `cmake` module shows the currently installed version of CMake if:
 
 ## Длительность команды
 
-Модуль `cmd_duration` показывает время исполнения последней команды. Модуль будет показан только, если команда заняла более двух секунд, или если задан параметр `min_time`.
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning Не подключайте ловушку DEBUG к Bash
+::: warning Do not hook the DEBUG trap in Bash
 
-Если вы испоьзуете Starship в `bash`, не подключайте ловушку `DEBUG` после запуска `eval $(starship init $0)`, иначе этот модуль сломается.
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-Пользователи Bash, которым нужна функциональность, подобная preexec, могут использовать [фреймворк bash_preexec от rcaloras](https://github.com/rcaloras/bash-preexec). Просто определите массивы `preexec_functions` и `precmd_functions` перед запуском `eval $(starship init $0)`, а затем продолжайте нормально.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Опции
 
@@ -483,11 +477,11 @@ format = "underwent [$duration](bold yellow)"
 
 ## Конда
 
-Модуль `conda` показывает текущее окружение conda, если `$CONDA_DEFAULT_ENV` присвоено значение.
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
-::: tip
+::: tip Подсказка
 
-Это не подавляет модификатор командной строки самой conda. Возможно, вы захотите запустить `conda config --set changeps1 False`.
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
@@ -523,7 +517,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-Модуль `crystal` показывает установленную версию Crystal. Модуль будет показан, если любое из следующих условий соблюдено:
+The `crystal` module shows the currently installed version of Crystal. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит файл `shard.yml`
 - Текущий каталог содержит файл `.cr`
