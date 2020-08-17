@@ -1,22 +1,15 @@
 # Configuration
 
-::: tip
-
-🔥 La configuration est en train d'être travaillée. Beaucoup de nouvelles options de configuration seront disponibles dans les prochaines versions.
-
-:::
-
-Pour commencer à configurer starship, créez le fichier suivant : `~/.config/starship.toml`.
+To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-Toute la configuration de starship est effectuée dans ce fichier [TOML](https://github.com/toml-lang/toml) :
-
+All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 ```toml
 # Don't print a new line at the start of the prompt
-format = "$all"
+add_newline = false
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
@@ -27,13 +20,13 @@ success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being
 disabled = true
 ```
 
-Vous pouvez changer l'emplacement du fichier de configuration `starship.toml` grâce à la variable d'environnement `STARSHIP_CONFIG`:
+You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship
 ```
 
-De manière équivalente, pour Powershell (Windows), ajoutez la ligne suivante à votre `$PROFILE`:
+Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
 
 ```ps1
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
@@ -41,7 +34,7 @@ $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 
 ### Terminologie
 
-**Module**: Un composant dans l'invite donnant des informations basées sur des informations contextuelles à propos de votre Système d'Exploitation. Par exemple, le module "nodejs" montre la version de NodeJS qui est actuellement installée sur votre ordinateur, si votre répertoire actuel est un projet NodeJS.
+**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
 **Variable**: Smaller sub-components that contains information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
 
@@ -77,7 +70,7 @@ For example:
 
 #### Chaînes de style
 
-La plupart des modules de Starship vous permettent de configurer leurs styles d'affichage. Cela se fait avec une entrée (généralement appelée `style`) qui est une chaîne de caractères spécifiant la configuration. Voici quelques exemples de chaînes de style avec ce qu'elles font. Pour plus de détails sur la syntaxe complète, consultez le [guide de configuration avancé](/advanced-config/).
+Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
 - `"fg:green bg:blue"` définit un texte vert sur un fond bleu
 - `"bg:blue fg:bright-green"` définit un texte vert clair sur un fond bleu
@@ -86,7 +79,7 @@ La plupart des modules de Starship vous permettent de configurer leurs styles d'
 - `"bold italic fg:violet"` définit le texte en italique et gras sur un fond violet
 - `""` désactive explicitement tous les styles
 
-Notez que ce style sera contrôlé par votre émulateur de terminal. Par exemple, certains émulateurs de terminal éclairciront les couleurs au lieu de mettre le texte en gras, et certains thèmes de couleurs utilisent les mêmes valeurs pour les couleurs normales et claires. De plus, pour obtenir du texte italique, votre terminal doit prendre en charge l'italique.
+Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
 #### Conditional Format Strings
 
@@ -130,14 +123,15 @@ format = '''
 
 ## Invite
 
-Voici la liste des options de configuration de l'invite en lui-même.
+This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Option         | Default                        | Description                                                               |
-| -------------- | ------------------------------ | ------------------------------------------------------------------------- |
-| `format`       | [lien](#default-prompt-format) | Configure the format of the prompt.                                       |
-| `scan_timeout` | `30`                           | Délai d'attente pour que starship scanne les fichiers (en millisecondes). |
+| Option         | Default                        | Description                                           |
+| -------------- | ------------------------------ | ----------------------------------------------------- |
+| `add_newline`  | `true`                         | Add a new line before the start of the prompt.        |
+| `format`       | [lien](#default-prompt-format) | Configure the format of the prompt.                   |
+| `scan_timeout` | `30`                           | Timeout for starship to scan files (in milliseconds). |
 
 ### Exemple
 
@@ -145,7 +139,7 @@ Voici la liste des options de configuration de l'invite en lui-même.
 # ~/.config/starship.toml
 
 # Disable the newline at the start of the prompt
-format = "$all"
+add_newline = false
 
 # Use custom format
 format = """
@@ -159,10 +153,10 @@ scan_timeout = 10
 
 ### Default Prompt Format
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. La valeur par défaut est la suivante :
+The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
 
 ```toml
-format = "\n$all"
+format = "$all"
 
 # Which is equivalent to
 format = """
@@ -219,9 +213,9 @@ $character"""
 
 ## AWS
 
-Le module `aws` affiche la région et le profil AWS courant. Ces informations sont basées sur les variables d'environnement `AWS_REGION`, `AWS_DEFAULT_REGION`, et `AWS_PROFILE` ainsi que le fichier `~/.aws/config`.
+The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
 
-Quand [aws-vault](https://github.com/99designs/aws-vault) est utilisé, la valeur du profil est lu dans la variable d'environnement: `AWS_VAULT`.
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
 
 ### Options
 
@@ -325,7 +319,7 @@ discharging_symbol = "💀"
 
 ### Battery Display
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. La valeur par défaut est la suivante :
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
 
 ```toml
 [[battery.display]]
