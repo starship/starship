@@ -66,7 +66,7 @@ pub struct Module<'a> {
     pub config: Option<&'a toml::Value>,
 
     /// The module's name, to be used in configuration and logging.
-    _name: String,
+    name: String,
 
     /// The module's description
     description: String,
@@ -80,7 +80,7 @@ impl<'a> Module<'a> {
     pub fn new(name: &str, desc: &str, config: Option<&'a toml::Value>) -> Module<'a> {
         Module {
             config,
-            _name: name.to_string(),
+            name: name.to_string(),
             description: desc.to_string(),
             segments: Vec::new(),
         }
@@ -93,7 +93,7 @@ impl<'a> Module<'a> {
 
     /// Get module's name
     pub fn get_name(&self) -> &String {
-        &self._name
+        &self.name
     }
 
     /// Get module's description
@@ -103,12 +103,17 @@ impl<'a> Module<'a> {
 
     /// Whether a module has non-empty segments
     pub fn is_empty(&self) -> bool {
-        self.segments.iter().all(|segment| segment.is_empty())
+        self.segments
+            .iter()
+            .all(|segment| segment.value.trim().is_empty())
     }
 
     /// Get values of the module's segments
     pub fn get_segments(&self) -> Vec<&str> {
-        self.segments.iter().map(Segment::get_value).collect()
+        self.segments
+            .iter()
+            .map(|segment| segment.value.as_str())
+            .collect()
     }
 
     /// Returns a vector of colored ANSIString elements to be later used with
@@ -159,7 +164,7 @@ mod tests {
         let desc = "This is a unit test";
         let module = Module {
             config: None,
-            _name: name.to_string(),
+            name: name.to_string(),
             description: desc.to_string(),
             segments: Vec::new(),
         };
@@ -173,9 +178,9 @@ mod tests {
         let desc = "This is a unit test";
         let module = Module {
             config: None,
-            _name: name.to_string(),
+            name: name.to_string(),
             description: desc.to_string(),
-            segments: vec![Segment::new("test_segment")],
+            segments: vec![Segment::new(None, "")],
         };
 
         assert!(module.is_empty());
