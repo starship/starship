@@ -1,22 +1,15 @@
 # Configuración
 
-::: tip
-
-🔥 Este apartado está bajo construcción. Habrá nuevas opciones de configuración disponibles en próximas versiones.
-
-:::
-
-Para iniciar la configuración de starship, crea el siguiente fichero: `~/.config.toml`.
+To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-Toda la configuración de starship se incluye en este fichero [TOML](https://github.com/toml-lang/toml):
-
+All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 ```toml
 # Don't print a new line at the start of the prompt
-format = "$all"
+add_newline = false
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
@@ -27,13 +20,13 @@ success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being
 disabled = true
 ```
 
-Puedes modificar la ubicación por defecto del fichero `starship.toml` con la variable de entorno `STARSHIP_CONFIG`:
+You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship
 ```
 
-El equivalente en PowerShell (Windows) es añadir esta línea a tu `$PROFILE`:
+Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
 
 ```ps1
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
@@ -41,7 +34,7 @@ $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 
 ### Terminología
 
-**Módulo**: un componente en el símbolo de sistema que provee de información basada en información contextual de tu sistema operativo. Por ejemplo, el módulo "nodejs" muestra la versión de NodeJS que tienes actualmente instalada en tu ordenador, si el directorio actual es un proyecto NodeJS.
+**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
 **Variable**: Smaller sub-components that contains information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
 
@@ -77,7 +70,7 @@ For example:
 
 #### Cadenas de estilo
 
-La mayoría de los módulos de starship permiten configurar los estilos de su cadenas texto. Esto se consigue con una entrada (normalmente llamada `style` - estilo) que no es más que un texto donde se especifica la configuración. A continuación mostramos algunos ejemplos de textos estilados junto con su funcionalidad. Para más detalles sobre la sintaxis completa, consulta [la guía de configuración avanzada](/advanced-config/).
+Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
 - `"fg:green bg:blue"` pone texto verde sobre un fondo azul
 - `"bg:blue fg:bright-green"` pone texto verde claro sobre un fondo azul
@@ -86,7 +79,7 @@ La mayoría de los módulos de starship permiten configurar los estilos de su ca
 - `"bold italic fg:purple"` pone texto color morado, en negrita y cursiva
 - `""` desactiva explícitamente cualquier estilo
 
-Nótese que el estilo es similar a como se controlaría por el emulador de su terminal. Por ejemplo, algunos emuladores de terminal harán los colores más brillantes en lugar de más gruesos, y algunos temas usan los mismos valores para texto normal y colores brillantes. Además, para mostrar textos en cursiva tu terminal debe tener soporte para hacerlo.
+Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
 #### Conditional Format Strings
 
@@ -130,14 +123,15 @@ format = '''
 
 ## Símbolo del sistema
 
-Esta es la lista de opciones de configuración.
+This is the list of prompt-wide configuration options.
 
 ### Opciones
 
-| Option         | Por defecto                    | Descripción                                                               |
-| -------------- | ------------------------------ | ------------------------------------------------------------------------- |
-| `format`       | [link](#default-prompt-format) | Configure the format of the prompt.                                       |
-| `scan_timeout` | `30`                           | Tiempo de espera tras el que starship escanea archivos (en milisegundos). |
+| Option         | Por defecto                    | Descripción                                           |
+| -------------- | ------------------------------ | ----------------------------------------------------- |
+| `add_newline`  | `true`                         | Add a new line before the start of the prompt.        |
+| `format`       | [link](#default-prompt-format) | Configure the format of the prompt.                   |
+| `scan_timeout` | `30`                           | Timeout for starship to scan files (in milliseconds). |
 
 ### Ejemplo
 
@@ -145,7 +139,7 @@ Esta es la lista de opciones de configuración.
 # ~/.config/starship.toml
 
 # Disable the newline at the start of the prompt
-format = "$all"
+add_newline = false
 
 # Use custom format
 format = """
@@ -159,10 +153,10 @@ scan_timeout = 10
 
 ### Default Prompt Format
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. El valor por defecto es el siguiente:
+The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
 
 ```toml
-format = "\n$all"
+format = "$all"
 
 # Which is equivalent to
 format = """
@@ -219,9 +213,9 @@ $character"""
 
 ## AWS
 
-El módulo `aws` muestra la región actual de AWS y el perfil. Éste se basa en las variables de entorno `AWS_REGION`, `AWS_DEFAULT_REGION`, y `AWS_PROFILE` del fichero `~/.aws/config`.
+The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
 
-Cuando uses [aws-vault](https://github.com/99designs/aws-vault) el perfil se obtiene de la variable de entorno `AWS_VAULT`.
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
 
 ### Opciones
 
@@ -287,7 +281,7 @@ symbol = "🅰 "
 
 ## Battery
 
-El módulo `battery` muestra la cantidad de batería y si está cargando o no. El módulo es solo visible cuando la batería está por debajo del 10%.
+The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
 ### Opciones
 
@@ -301,7 +295,7 @@ El módulo `battery` muestra la cantidad de batería y si está cargando o no. E
 | `disabled`           | `false`                           | Desactiva el módulo `battery`.                    |
 
 <details>
-<summary>Hay otras opciones para algunos estados de la batería menos comunes.</summary>
+<summary>There are also options for some uncommon battery states.</summary>
 
 | Variable         | Descripción                                         |
 | ---------------- | --------------------------------------------------- |
@@ -325,7 +319,7 @@ discharging_symbol = "💀"
 
 ### Indicador de batería
 
-La configuración de la opción `display` es usada para definir cuándo se debe mostrar el indicador de batería y cómo debe mostrarse. Si no se provee ningún valor para `display`  El valor por defecto es el siguiente:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
 
 ```toml
 [[battery.display]]
@@ -335,7 +329,7 @@ style = "bold red"
 
 #### Opciones
 
-La opción `display` es un array de la siguiente tabla.
+The `display` option is an array of the following table.
 
 | Variable    | Descripción                                                     |
 | ----------- | --------------------------------------------------------------- |
@@ -359,9 +353,9 @@ style = "bold yellow"
 
 ## Character
 
-El módulo `character` muestra un carater (normalmente una flecha) tras el texto que introduces en el terminal.
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-El carácter te dirá si el último comando funcionó o no. It can do this in two ways:
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - changing color (`red`/`green`)
 - changing shape (`❯`/`✖`)
@@ -442,15 +436,15 @@ The `cmake` module shows the currently installed version of CMake if:
 
 ## Tiempo de ejecución
 
-El módulo `cmd_duration` muestra cuánto tiempo tardó el último comando en ejecutarse. El módulo se mostrará solo si el comando llevó dos segundos o más, o el valor de `min_time`, si existe.
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning No utilizar DEBUG en Bash
+::: warning Do not hook the DEBUG trap in Bash
 
-Si estás usando Starship con `bash`, no uses `DEBUG` después de ejecutar `eval $(starship init $0)`, o el módulo **se romperá**.
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-Los usuarios de bash que necesiten la funcionalidad preexec-like pueden usar el framework rcaloras's bash_preexec. Simplemente define los arrays preexec_functions y precmd_functions antes de ejecutar eval $(starship init $0), y continúa con normalidad. Basta con definir los arrays `preexec_functions` y `precmd_functions` antes de ejecutar `eval $(starship init $0)`, y luego proceder como siempre.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Opciones
 
@@ -483,11 +477,11 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-El módulo `conda` muestra el actual entorno conda, si la variable `$CONDA_DEFAULT_ENV` existe.
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
-Esto no modifica el propio símbolo de sistema de conda. En caso de querer suprimirlo, ejecuta `conda config --set changeps1 False`.
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
@@ -523,7 +517,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-El módulo `crystal` muestra la versión actual de Crystal. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `crystal` module shows the currently installed version of Crystal. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un fichero `shard.yml`
 - El directorio actual contiene un fichero `.cr`
