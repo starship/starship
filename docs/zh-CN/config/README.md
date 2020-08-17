@@ -1,22 +1,15 @@
 # 配置
 
-::: tip
-
-Starship 目前正在开发中。 很多新的配置选项将会在之后的版本中被公开。
-
-:::
-
-您需要创建配置文件 `~/.config/starship.toml` 以供 Starship 使用。
+To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-Starship 的所有配置都在此 [TOML](https://github.com/toml-lang/toml) 配置文件中完成：
-
+All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 ```toml
 # Don't print a new line at the start of the prompt
-format = "$all"
+add_newline = false
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
@@ -27,7 +20,7 @@ success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being
 disabled = true
 ```
 
-你可以设置环境变量 `STARSHIP_CONFIG` 来修改 starship 查找配置文件 `starship.toml` 时查找的位置：
+You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship
@@ -41,7 +34,7 @@ $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 
 ### 术语
 
-**组件（Module）**：提示符的组成部分，通过来自系统的上下文信息向用户显示各种信息。 比如“nodejs”组件会在当前目录是一个 NodeJS 项目时显示您当前安装的 NodeJS 版本。
+**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
 **Variable**: Smaller sub-components that contains information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
 
@@ -77,7 +70,7 @@ For example:
 
 #### 样式设定
 
-Starship 中的大多数组件允许您为其设置显示样式。 显示样式可以通过一个字符串字段（一般是 `style`）来设置。 以下的例子给出了一些样式字符串并描述了它们的效果。 样式字符串的完整语法请查阅 [高级配置指南](/advanced-config/)。
+Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
 - `"fg:green bg:blue"` 在蓝色背景上显示绿色文本
 - `"bg:blue fg:bright-green"` 在蓝色背景上显示亮绿色文本
@@ -86,7 +79,7 @@ Starship 中的大多数组件允许您为其设置显示样式。 显示样式�
 - `"bold italic fg:purple"` 设置文本为粗体、意大利体，颜色为紫色
 - `""` 显式禁用所有样式
 
-请注意，最终的显示样式将由您的终端模拟器控制。 例如，有的终端模拟器对于“bold”属性的文本是加亮颜色而不是加粗文字，有的颜色主题对“普通”和“明亮”两种属性的颜色使用相同的颜色值。 此外，要获得意大利体文本（一般设计为斜体），您的终端必须支持意大利体显示。
+Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
 #### Conditional Format Strings
 
@@ -130,14 +123,15 @@ format = '''
 
 ## 提示符
 
-以下是关于提示符的配置项。
+This is the list of prompt-wide configuration options.
 
 ### 配置项
 
-| Option         | 默认值                           | 描述                                  |
-| -------------- | ----------------------------- | ----------------------------------- |
-| `format`       | [见下文](#default-prompt-format) | Configure the format of the prompt. |
-| `scan_timeout` | `30`                          | Starship 扫描文件的超时时间（单位：毫秒）。          |
+| Option         | 默认值                           | 描述                                                    |
+| -------------- | ----------------------------- | ----------------------------------------------------- |
+| `add_newline`  | `true`                        | Add a new line before the start of the prompt.        |
+| `format`       | [见下文](#default-prompt-format) | Configure the format of the prompt.                   |
+| `scan_timeout` | `30`                          | Timeout for starship to scan files (in milliseconds). |
 
 ### 示例
 
@@ -145,7 +139,7 @@ format = '''
 # ~/.config/starship.toml
 
 # Disable the newline at the start of the prompt
-format = "$all"
+add_newline = false
 
 # Use custom format
 format = """
@@ -159,10 +153,10 @@ scan_timeout = 10
 
 ### Default Prompt Format
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. 默认设置如下：
+The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
 
 ```toml
-format = "\n$all"
+format = "$all"
 
 # Which is equivalent to
 format = """
@@ -219,7 +213,7 @@ $character"""
 
 ## AWS
 
-`aws` 组件显示当前 AWS 主机所在区域与配置信息。 各组件基于 `AWS_REGION`，`AWS_DEFAULT_REGION` 和 `AWS_PROFILE` 环境变量与 `~/.aws/config` 文件。
+The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
 
@@ -287,7 +281,7 @@ symbol = "🅰 "
 
 ## Battery
 
-`battery` 组件显示电池充电情况和当前充电状态。 这个组件只会在当前电量低于 10% 时显示。
+The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
 ### 配置项
 
@@ -301,14 +295,14 @@ symbol = "🅰 "
 | `disabled`           | `false`                           | 禁用 `battery` 组件。           |
 
 <details>
-<summary>也有一些给不常见的电源状态设立的字段。</summary>
+<summary>There are also options for some uncommon battery states.</summary>
 
 | 字段               | 描述         |
 | ---------------- | ---------- |
 | `unknown_symbol` | 显示于电池状态未知时 |
 | `empty_symbol`   | 显示于电池状态为空时 |
 
-注意：如果状态为 `unknown` 或 `empty`，电池指示器将被隐藏，除非您在配置中指定相关选项。
+Note: Battery indicator will be hidden if the status is `unknown` or `empty` unless you specify the option in the config.
 
 </details>
 
@@ -325,7 +319,7 @@ discharging_symbol = "💀"
 
 ### Battery 组件的显示
 
-`display` 选项用于定义电池指示器的显示阈值（threshold）和显示效果（style）。 如果 `display` 没有设置， 默认设置如下：
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
 
 ```toml
 [[battery.display]]
@@ -335,7 +329,7 @@ style = "bold red"
 
 #### 配置项
 
-`display` 字段的子字段如下：
+The `display` option is an array of the following table.
 
 | 字段          | 描述               |
 | ----------- | ---------------- |
@@ -359,9 +353,9 @@ style = "bold yellow"
 
 ## Character
 
-`character` 组件用于在您输入终端的文本旁显示一个字符（通常是一个箭头）。
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-这个字符可以告诉您最后一个命令是否执行成功。 It can do this in two ways:
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - changing color (`red`/`green`)
 - changing shape (`❯`/`✖`)
@@ -442,15 +436,15 @@ The `cmake` module shows the currently installed version of CMake if:
 
 ## Command Duration
 
-`cmd_duration` 组件显示上一个命令执行的时间。 此组件只在命令执行时间长于两秒时显示，或者当其 `min_time` 字段被设置时，按此值为执行时间的显示下限。
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning 不要在 Bash 里捕获 DEBUG 信号
+::: warning Do not hook the DEBUG trap in Bash
 
-如果您正在 `bash` 上使用 Starship，在运行 `eval $(starship)` 后，不要捕获 `DEBUG` 信号，否则此组件**将会**坏掉。
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-需要在自动每一条命令前执行某些操作的 Bash 用户可以使用 [rcaloras 的 bash_preexec 框架](https://github.com/rcaloras/bash-preexec)。 只需要在执行 `eval $(starship init $0)` 前简单地定义 `preexec_functions` 和 `precmd_functions` 两个列表，就可以照常运行了。
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### 配置项
 
@@ -483,11 +477,11 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-`conda` 组件在 `$CONDA_DEFAULT_ENV` 被设置时显示当前 conda 环境。
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
-此组件没有禁用 conda 自带的提示符修改，您可能需要执行 `conda config --set changeps1 False`。
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
