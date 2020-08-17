@@ -1,22 +1,15 @@
 # 設定
 
-::: tip
-
-🔥Starshipの開発は現在も進んでいます。 多くの新しいオプションが今後のリリースで利用可能になります。
-
-:::
-
-Starshipの設定を開始するには、`~/.config/starship.toml` ファイルを作成します。
+To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-Starshipのすべての設定は、この[TOML](https://github.com/toml-lang/toml)ファイルで行われます。
-
+All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 ```toml
 # Don't print a new line at the start of the prompt
-format = "$all"
+add_newline = false
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
@@ -27,13 +20,13 @@ success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being
 disabled = true
 ```
 
-`STARSHIP_CONFIG` 環境変数を使用して、デフォルトの`starship.toml` ファイルの場所を変更できます。
+You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship
 ```
 
-PowerShell (Windows) で同様に `$PROFILE`にこの行を追加します。
+Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
 
 ```ps1
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
@@ -41,7 +34,7 @@ $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 
 ### 用語
 
-**モジュール**: OSのコンテキスト情報に基づいて情報を提供するプロンプト内のコンポーネントです。 たとえば、現在のディレクトリがNodeJSプロジェクトである場合、「nodejs」モジュールは、現在コンピューターにインストールされているNodeJSのバージョンを表示します。
+**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
 **Variable**: Smaller sub-components that contains information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
 
@@ -63,7 +56,7 @@ For example:
 
 #### テキストグループ
 
-テキストグループは二つの異なる部分で構成されています。
+A text group is made up of two different parts.
 
 The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
 
@@ -77,7 +70,7 @@ For example:
 
 #### スタイルの設定
 
-Starshipのほとんどのモジュールでは、表示スタイルを設定できます。 これは、設定を指定する文字列であるエントリ（`style`）で行われます。 スタイル文字列の例とその機能を次に示します。 完全な構文の詳細については、詳細は [高度な設定](/advanced-config/)を参照してください 。
+Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
 - `"fg:green bg:blue"` は、青色の背景に緑色のテキストを設定します
 - `"bg:blue fg:bright-green"` は、青色の背景に明るい緑色のテキストを設定します
@@ -86,7 +79,7 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 - `"bold italic fg:purple"`は、紫色の太字斜体のテキストを設定します
 - `""` はすべてのスタイルを明示的に無効にします
 
-スタイリングがどのように見えるかは、端末エミュレータによって制御されることに注意してください。 たとえば、一部の端末エミュレータはテキストを太字にする代わりに色を明るくします。また、一部のカラーテーマは通常の色と明るい色と同じ値を使用します。 また、斜体のテキストを取得するには、端末で斜体をサポートする必要があります。
+Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
 #### Conditional Format Strings
 
@@ -130,14 +123,15 @@ format = '''
 
 ## プロンプト
 
-これは、プロンプト全体のオプションのリストです。
+This is the list of prompt-wide configuration options.
 
 ### オプション
 
-| Option         | デフォルト                          | 説明                                       |
-| -------------- | ------------------------------ | ---------------------------------------- |
-| `format`       | [link](#default-prompt-format) | Configure the format of the prompt.      |
-| `scan_timeout` | `30`                           | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。 |
+| Option         | デフォルト                          | 説明                                                    |
+| -------------- | ------------------------------ | ----------------------------------------------------- |
+| `add_newline`  | `true`                         | Add a new line before the start of the prompt.        |
+| `format`       | [link](#default-prompt-format) | Configure the format of the prompt.                   |
+| `scan_timeout` | `30`                           | Timeout for starship to scan files (in milliseconds). |
 
 ### 設定例
 
@@ -145,7 +139,7 @@ format = '''
 # ~/.config/starship.toml
 
 # Disable the newline at the start of the prompt
-format = "$all"
+add_newline = false
 
 # Use custom format
 format = """
@@ -159,10 +153,10 @@ scan_timeout = 10
 
 ### Default Prompt Format
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. デフォルトは次のとおりです。
+The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
 
 ```toml
-format = "\n$all"
+format = "$all"
 
 # Which is equivalent to
 format = """
@@ -219,9 +213,9 @@ $character"""
 
 ## AWS
 
-`aws` モジュールは現在のAWSプロファイルが表示されます。 これは `~/.aws/config` に記述されている `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` 環境変数に基づいています。
+The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
 
-[aws-vault](https://github.com/99designs/aws-vault)を使用する場合、プロファイル は`AWS_VAULT`env varから読み取られます。
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
 
 ### オプション
 
@@ -287,7 +281,7 @@ symbol = "🅰 "
 
 ## バッテリー
 
-`battery`モジュールは、デバイスのバッテリー残量と現在の充電状態を示します。 モジュールは、デバイスのバッテリー残量が10％未満の場合にのみ表示されます。
+The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
 ### オプション
 
@@ -301,14 +295,14 @@ symbol = "🅰 "
 | `disabled`           | `false`                           | `battery`モジュールを無効にします。     |
 
 <details>
-<summary>いくつかのまれなバッテリー状態のオプションもあります。</summary>
+<summary>There are also options for some uncommon battery states.</summary>
 
 | 変数               | 説明                       |
 | ---------------- | ------------------------ |
 | `unknown_symbol` | バッテリー状態が不明なときに表示される記号です。 |
 | `empty_symbol`   | バッテリーが空のときに表示される記号です。    |
 
-オプションを指定しない限り、バッテリーの状態が`unknown`もしくは`empty`になった場合にインジケーターは非表示になります。
+Note: Battery indicator will be hidden if the status is `unknown` or `empty` unless you specify the option in the config.
 
 </details>
 
@@ -325,7 +319,7 @@ discharging_symbol = "💀"
 
 ### バッテリーの表示
 
-`display` オプションを使用して、バッテリーインジケーターを表示するタイミング（閾値）と外観（スタイル）を定義します。 `display` が提供されない場合、 デフォルトは次のとおりです。
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
 
 ```toml
 [[battery.display]]
@@ -335,7 +329,7 @@ style = "bold red"
 
 #### オプション
 
-`display`オプションは、次の表の通りです。
+The `display` option is an array of the following table.
 
 | 変数          | 説明                             |
 | ----------- | ------------------------------ |
@@ -359,14 +353,14 @@ style = "bold yellow"
 
 ## 文字
 
-`character`モジュールは、端末でテキストが入力される場所の横に文字（通常は矢印）を表示します。
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-characterは、最後のコマンドが成功したかどうかを示します。 表し方は下記の2つです。
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - 色の変更 (`赤`/`緑`)
 - プロンプトの表示の変更 (`❯`/`✖`)
 
-デフォルトでは、色だけが変更されます。 If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
+By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
 
 ### オプション
 
@@ -442,15 +436,15 @@ The `cmake` module shows the currently installed version of CMake if:
 
 ## コマンド実行時間
 
-`cmd_duration`モジュールは、最後のコマンドの実行にかかった時間を示します。 モジュールが表示されるのは、コマンドが2秒以上かかった場合、または`min_time`値が存在する場合のみです。
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning BashでDEBUGトラップをhookしない
+::: warning Do not hook the DEBUG trap in Bash
 
-`bash`でStarshipを実行している場合、 `eval $(starship init $0)`実行した後に`DEBUG`トラップをフックしないでください。そうしないと、このモジュールが**おそらくですが**壊れます。
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-preexecのような機能を必要とするBashユーザーは、 [rcalorasのbash_preexecフレームワーク](https://github.com/rcaloras/bash-preexec)を使用できます。 `eval $(starship init $0)` を実行する前に、`preexec_functions`、および`precmd_functions`定義するだけで、通常どおり続行します。
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### オプション
 
@@ -483,11 +477,11 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-`$CONDA_DEFAULT_ENV`が設定されている場合、`conda`モジュールは現在のcondaの環境を表示します。
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
-Note: これはconda自身の プロンプト修飾子 を抑制しません。`conda config --set changeps1 False` で実行することができます。
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
@@ -523,7 +517,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-`crystal`モジュールには、現在インストールされているCrystalのバージョンが表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `crystal` module shows the currently installed version of Crystal. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`shard.yml`ファイルが含まれている
 - カレントディレクトリに`.cr`の拡張子のファイルが含まれている
