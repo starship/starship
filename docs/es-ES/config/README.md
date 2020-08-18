@@ -1,11 +1,5 @@
 # Configuración
 
-::: tip
-
-🔥 Configuration is currently being worked on. Many new configuration options will be available in coming releases.
-
-:::
-
 To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
 ```sh
@@ -13,10 +7,9 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
-
 ```toml
 # Don't print a new line at the start of the prompt
-format = "$all"
+add_newline = false
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
@@ -138,14 +131,12 @@ This is the list of prompt-wide configuration options.
 | -------------- | ------------------------------ | ----------------------------------------------------- |
 | `format`       | [link](#default-prompt-format) | Configure the format of the prompt.                   |
 | `scan_timeout` | `30`                           | Timeout for starship to scan files (in milliseconds). |
+| `add_newline`  | `true`                         | Add a new line before the start of the prompt.        |
 
 ### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
-
-# Disable the newline at the start of the prompt
-format = "$all"
 
 # Use custom format
 format = """
@@ -155,6 +146,9 @@ format = """
 
 # Wait 10 milliseconds for starship to check files under the current directory.
 scan_timeout = 10
+
+# Disable the newline at the start of the prompt
+add_newline = false
 ```
 
 ### Default Prompt Format
@@ -162,7 +156,7 @@ scan_timeout = 10
 The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
 
 ```toml
-format = "\n$all"
+format = "$all"
 
 # Which is equivalent to
 format = """
