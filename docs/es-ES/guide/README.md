@@ -30,11 +30,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Web</a>
+  <a href="https://starship.rs">Sitio Web</a>
   ·
 <a href="#🚀-installation">Instalación</a>
   ·
-<a href="https://starship.rs/config/">Configuration</a>
+<a href="https://starship.rs/config/">Configuración</a>
 </p>
 
 <p align="center">
@@ -105,11 +105,11 @@
 
 
 - **Rápido:** es rápido – _muy muy_ rápido! 🚀
-- **Customizable:** configura cada parte de tu intérprete de comandos.
-- **Universal:** funciona en cualquier símbolo del sistema, en cualquier sistema operativo.
+- **Personalizable:** configura cada parte de tu intérprete de comandos.
+- **Universal:** funciona en cualquier intérprete de comandos, en cualquier sistema operativo.
 - **Inteligente:** muestra información relevante de un vistazo.
 - **Repleto de funciones**: con soporte para tus herramientas favoritas.
-- **Fácil de instalar**: empieza a usarlo en pocos minutos.
+- **Fácil:** rápido de instalar – empieza a usarlo en minutos.
 
 <p align="center">
 <a href="https://starship.rs/config/"><strong>Explora la documentación de Starship&nbsp;&nbsp;</strong></a>
@@ -117,13 +117,13 @@
 
 <a name="🚀-installation"></a>
 
-## 🚀 Instalacíon
+## 🚀 Instalación
 
 ### Prerequisitos
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Una [Nerd Font](https://www.nerdfonts.com/) instalada y habilitada en tu terminal (por ejemplo, prueba [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Comenzando
+### Comenzar
 
 1. Instala el binario de **starship**:
 
@@ -131,21 +131,21 @@
    #### Instalar la última versión
 
 
-   ##### Desde un binario, con Shell:
+   ##### Desde un binario precontruido, con Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   ##### Con [crates.io](https://crates.io/):
+   ##### Desde el código fuente en [crates.io](https://crates.io/):
 
    ```sh
    cargo install starship
    ```
 
 
-   #### Instalar con un gestor de paquetes
+   #### Instalar vía un gestor de paquetes
 
 
    ##### Con [Homebew](https://brew.sh/):
