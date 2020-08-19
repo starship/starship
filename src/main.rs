@@ -21,6 +21,8 @@ mod test;
 
 use crate::module::ALL_MODULES;
 use clap::{App, AppSettings, Arg, Shell, SubCommand};
+use rand::distributions::Alphanumeric;
+use rand::Rng;
 
 fn main() {
     logger::init();
@@ -152,7 +154,8 @@ fn main() {
                             .required(true)
                             .env("STARSHIP_SHELL"),
                     ),
-            );
+            )
+            .subcommand(SubCommand::with_name("session").about("Generate random session key"));
 
     let matches = app.clone().get_matches();
 
@@ -207,6 +210,13 @@ fn main() {
 
             app.gen_completions_to("starship", shell, &mut io::stdout().lock());
         }
+        ("session", _) => println!(
+            "{}",
+            rand::thread_rng()
+                .sample_iter(&Alphanumeric)
+                .take(16)
+                .collect::<String>()
+        ),
         (command, _) => unreachable!("Invalid subcommand: {}", command),
     }
 }

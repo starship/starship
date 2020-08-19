@@ -26,4 +26,4 @@ function global:prompt {
 $ENV:STARSHIP_SHELL = "powershell"
 
 # Set up the session key that will be used to store logs
-$ENV:STARSHIP_SESSION_KEY = -join (('a'..'z') + ('A'..'Z') + ('0'..'9') | Get-Random -Count 16)
+$ENV:STARSHIP_SESSION_KEY = $(::STARSHIP:: session) 

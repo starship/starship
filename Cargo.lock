@@ -1173,6 +1173,7 @@ dependencies = [
  "pest",
  "pest_derive",
  "quick-xml",
+ "rand",
  "rayon",
  "regex",
  "serde_json",
