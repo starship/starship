@@ -18,6 +18,4 @@ function fish_mode_prompt; end
 export STARSHIP_SHELL="fish"
 
 # Set up the session key that will be used to store logs
-if test -c /dev/urandom
-    export STARSHIP_SESSION_KEY=(::STARSHIP:: session)
-end
+export STARSHIP_SESSION_KEY=(::STARSHIP:: session)

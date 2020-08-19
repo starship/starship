@@ -64,6 +64,4 @@ zle -N zle-keymap-select
 export STARSHIP_SHELL="zsh"
 
 # Set up the session key that will be used to store logs
-if [ -c /dev/urandom ]; then
-    export STARSHIP_SESSION_KEY=$(::STARSHIP:: session)
-fi
+export STARSHIP_SESSION_KEY=$(::STARSHIP:: session)
