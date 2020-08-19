@@ -218,9 +218,9 @@
 
 ## 🤝 Colaborando
 
-¡Siempre estamos buscando por colaboradores de **cualquier nivel**! Si esta buscando una manera fácil de ayudar este proyecto, puede intentar a resolver una de las propuestas con la etiqueta "[good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)" (primera buena propuesta).
+¡Siempre estamos buscando por colaboradores de **cualquier nivel**! Si estas buscando una manera fácil de ayudar este proyecto, puedes intentar resolver un problema con la etiqueta "[good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)".
 
-Si quiere ayudar a colaborar a starship, por favor mira a nuestra [Guía de Colaboradores](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) (Contributing Guide). Además, juntarse con nosotros en nuestro [servidor de Discord](https://discord.gg/8Jzqu3T) y di "¡hola!". 👋
+Si quieres ayudar a colaborar a starship, por favor mira nuestra [Guía de Colaboradores](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Además, siéntete libre de entrar en nuestro [servidor de Discord](https://discord.gg/8Jzqu3T) y di "¡Hola!". 👋
 
 ### Desarrolladores
 
@@ -229,7 +229,7 @@ Este proyecto existe gracias a todas las personas que han ayudado. [[Contribuir]
 
 ### Financiadores
 
-Invierte y ayúdanos a mantener nuestra comunidad. [[Contribuir](https://opencollective.com/starship/contribute)]
+Conviértete en un financiador y ayúdanos a mantener nuestra comunidad. [[Contribuir](https://opencollective.com/starship/contribute)]
 
 #### Personas
 
@@ -237,7 +237,7 @@ Invierte y ayúdanos a mantener nuestra comunidad. [[Contribuir](https://opencol
 
 #### Organizaciones
 
-Apoya este proyecto con tu organización. Vuestro logo se mostrará aquí con un enlace a vuestra web. [[Contribuir](https://opencollective.com/starship/contribute)]
+Apoya este proyecto con tu organización. Su logo se mostrará aquí con un enlace a su sitio web. [[Contribuir](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -250,11 +250,11 @@ Apoya este proyecto con tu organización. Vuestro logo se mostrará aquí con un
 <a href="https://opencollective.com/starship/organization/8/website"><img src="https://opencollective.com/starship/organization/8/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/9/website"><img src="https://opencollective.com/starship/organization/9/avatar.svg"></a>
 
-## 💭 Inspiración
+## 💭 Inspirado por
 
-Aquí tienes algunos de los trabajos previos que ayudaron a crear starship. 🙏
+Por favor, revisa estos proyectos que inspiraron la creación de starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Una prompt Zsh para astronautas.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Una prompt ZSH para astronautas.
 
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - robbyrussel, tema multi interfaz de línea de comandos escrito en JavaScript.
 
