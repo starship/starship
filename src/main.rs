@@ -2,24 +2,9 @@ use clap::{crate_authors, crate_version};
 use std::io;
 use std::time::SystemTime;
 
-mod bug_report;
-mod config;
-mod configs;
-mod configure;
-mod context;
-mod formatter;
-mod init;
-mod module;
-mod modules;
-mod print;
-mod segment;
-mod utils;
-
-#[cfg(test)]
-mod test;
-
-use crate::module::ALL_MODULES;
 use clap::{App, AppSettings, Arg, Shell, SubCommand};
+use starship::module::ALL_MODULES;
+use starship::*;
 
 fn main() {
     pretty_env_logger::init_custom_env("STARSHIP_LOG");
