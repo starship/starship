@@ -354,34 +354,34 @@ style = "bold yellow"
 
 ## Character
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+El módulo `character` muestra un caracter (normalmente una flecha) tras el texto que introduces en el terminal.
 
-The character will tell you whether the last command was successful or not. It can do this in two ways:
+El carácter mostrará si el último comando funcionó o no. Se puede hacer de dos maneras:
 
-- changing color (`red`/`green`)
-- changing shape (`❯`/`✖`)
+- cambiando el color (`red`/`green`)
+- cambiando la forma (`.`/`✖`)
 
-By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
+Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [este ejemplo](#with-custom-error-shape).
 
 ### Opciones
 
-| Opción           | Por defecto         | Descripción                                                                      |
-| ---------------- | ------------------- | -------------------------------------------------------------------------------- |
-| `format`         | `"$symbol "`        | The format string used before the text input.                                    |
-| `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
-| `error_symbol`   | `"[❯](bold red)"`   | The format string used before the text input if the previous command failed.     |
-| `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
-| `disabled`       | `false`             | Desactiva el módulo `character`.                                                 |
+| Opción           | Por defecto         | Descripción                                                                                |
+| ---------------- | ------------------- | ------------------------------------------------------------------------------------------ |
+| `format`         | `"$symbol "`        | La cadena de formato usada antes de la entrada de texto.                                   |
+| `success_symbol` | `"[❯](bold green)"` | La cadena de formato usada antes de la entrada de texto si el comando anterior tuvo éxito. |
+| `error_symbol`   | `"[❯](bold red)"`   | La cadena de formato usada antes de la entrada de texto si el comando anterior falló.      |
+| `vicmd_symbol`   | `"[❮](bold green)"` | El cadena de formato antes de la entrada de texto si la shell está en modo vim normal.     |
+| `disabled`       | `false`             | Desactiva el módulo `character`.                                                           |
 
 ### Variables
 
-| Variable | Ejemplo | Descripción                                                           |
-| -------- | ------- | --------------------------------------------------------------------- |
-| symbol   |         | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
+| Variable | Ejemplo | Descripción                                                    |
+| -------- | ------- | -------------------------------------------------------------- |
+| symbol   |         | Un espejo de `success_symbol`, `error_symbol` o `vicmd_symbol` |
 
 ### Ejemplos
 
-#### With custom error shape
+#### Con forma de error personalizada
 
 ```toml
 # ~/.config/starship.toml
@@ -391,7 +391,7 @@ success_symbol = "[➜](bold green) "
 error_symbol = "[✗](bold red) "
 ```
 
-#### Without custom error shape
+#### Sin forma de error personalizada
 
 ```toml
 # ~/.config/starship.toml
@@ -401,7 +401,7 @@ success_symbol = "[➜](bold green) "
 error_symbol = "[➜](bold red) "
 ```
 
-#### With custom vim shape
+#### Con forma vim personalizada
 
 ```toml
 # ~/.config/starship.toml
@@ -412,32 +412,32 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of CMake if:
+El módulo `cmake` muestra la versión actualmente instalada de CMake si:
 
-- The current directory contains a `CMakeLists.txt` file
+- El directorio actual contiene un archivo `CMakeLists.txt`
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                  |
-| ---------- | ---------------------------------- | -------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                       |
-| `symbol`   | `"🛆 "`                             | The symbol used before the version of cmake. |
-| `style`    | `"bold blue"`                      | El estilo del módulo.                        |
-| `disabled` | `false`                            | Disables the `cmake` module.                 |
+| Opción     | Por defecto                        | Descripción                                    |
+| ---------- | ---------------------------------- | ---------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                         |
+| `symbol`   | `"🛆 "`                             | El símbolo usado antes de la versión de cmake. |
+| `style`    | `"bold blue"`                      | El estilo del módulo.                          |
+| `disabled` | `false`                            | Deshabilita el módulo `cmake`.                 |
 
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v3.17.3` | The version of cmake                   |
+| version   | `v3.17.3` | La versión de cmake                    |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ## Tiempo de ejecución
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+El módulo `cmd_duration` muestra cuánto tiempo tomó ejecutarse el último comando. El módulo se mostrará solo si el comando tomó más de dos segundos, o si el valor de configuración de `min_time` existe.
 
 ::: warning Do not hook the DEBUG trap in Bash
 
