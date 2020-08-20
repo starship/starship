@@ -89,12 +89,12 @@ Una cadena de formato condicional envuelto en `(` y `)` no se renderizará si to
 Por ejemplo:
 
 - `(@$region)` no mostrará nada si la variable `region` es `None`, de lo contrario `@` seguido por el valor de la región.
-- `(some text)` will always show nothing since there are no variables wrapped in the braces.
-- When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. This works the same as `(\[$a$b\] )`.
+- `(algún texto)` siempre mostrará nada ya que no hay variables envueltas entre llaves.
+- Cuando `$all` es un atajo de teclado para `\[$a$b\]`, `($all)` no mostrará nada solo si `$a` y `$b` ambos son `None`. Esto funciona igual que `(\[$a$b\] )`.
 
-#### Escapable characters
+#### Carácteres de escape
 
-The following symbols have special usage in a format string. If you want to print the following symbols, you have to escape them with a backslash (`\`).
+Los siguientes símbolos tienen un uso especial en una cadena de formato. Si se quiere imprimir los siguientes símbolos, se tienen que escapar con una barra invertida (`\`).
 
 - $
 - \\
@@ -103,26 +103,26 @@ The following symbols have special usage in a format string. If you want to prin
 - (
 - )
 
-Note that `toml` has [its own escape syntax](https://github.com/toml-lang/toml#user-content-string). It is recommended to use a literal string (`''`) in your config. If you want to use a basic string (`""`), pay attention to escape the backslash `\`.
+Se debe tener en cuenta que `toml` tiene [su propia sintaxis de escape](https://github.com/toml-lang/toml#user-content-string). Se recomienda usar una cadena literal (`''`) en la configuración. Si se desea utilizar una cadena básica (`""`), prestar atención para escapar la barra inversa `\`.
 
-For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
+Por ejemplo, cuando se desea imprimir un símbolo `$` en una nueva línea, las siguientes configuraciones para el `format` son equivalentes:
 
 ```toml
-# with basic string
+# con cadena básica
 format = "\n\\$"
 
-# with multiline basic string
+# con cadena básica multilínea
 format = """
 
 \\$"""
 
-# with literal string
+# con cadena literal
 format = '''
 
 \$'''
 ```
 
-## Símbolo del sistema
+## Prompt
 
 This is the list of prompt-wide configuration options.
 
