@@ -71,7 +71,7 @@ Por ejemplo:
 
 #### Cadenas de estilo
 
-Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+La mayoría de los módulos de starship permiten configurar sus estilos de visualización. Esto se consigue con una entrada (normalmente llamada `style`) que no es más que un texto donde se especifica la configuración. Aquí hay algunos ejemplos de cadenas de estilo junto con lo que hacen. Para más detalles sobre la sintaxis completa, consultar [la guía de configuración avanzada](/advanced-config/).
 
 - `"fg:green bg:blue"` pone texto verde sobre un fondo azul
 - `"bg:blue fg:bright-green"` pone texto verde claro sobre un fondo azul
@@ -80,7 +80,7 @@ Most modules in starship allow you to configure their display styles. This is do
 - `"bold italic fg:purple"` pone texto color morado, en negrita y cursiva
 - `""` desactiva explícitamente cualquier estilo
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+Nótese que el estilo es similar a como se controlaría por el emulador de terminal. Por ejemplo, algunos emuladores de terminal harán los colores más brillantes en lugar de más gruesos, y algunos temas de colores usan los mismos valores para texto normal y colores brillantes. Also, to get italic text, your terminal must support italics.
 
 #### Conditional Format Strings
 
