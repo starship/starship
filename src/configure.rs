@@ -64,7 +64,7 @@ pub fn update_configuration(name: &str, value: &str) {
 
 pub fn edit_configuration() {
     let config_path = get_config_path();
-    let editor_cmd = shell_words::split(&get_editor()).unwrap();
+    let editor_cmd = shell_words::split(&get_editor()).expect("Unmatched quotes found in $EDITOR.");
 
     let command = Command::new(&editor_cmd[0])
         .args(&editor_cmd[1..])
