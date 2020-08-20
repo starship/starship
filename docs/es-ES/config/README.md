@@ -124,42 +124,42 @@ format = '''
 
 ## Prompt
 
-This is the list of prompt-wide configuration options.
+Esta es la lista de opciones de configuración del prompt.
 
 ### Opciones
 
-| Option         | Por defecto                    | Descripción                                           |
-| -------------- | ------------------------------ | ----------------------------------------------------- |
-| `format`       | [link](#default-prompt-format) | Configure the format of the prompt.                   |
-| `scan_timeout` | `30`                           | Timeout for starship to scan files (in milliseconds). |
-| `add_newline`  | `true`                         | Add a new line before the start of the prompt.        |
+| Opción         | Por defecto                    | Descripción                                                                   |
+| -------------- | ------------------------------ | ----------------------------------------------------------------------------- |
+| `format`       | [link](#default-prompt-format) | Configura el formato del prompt.                                              |
+| `scan_timeout` | `30`                           | Tiempo de espera tras el que starship escanea los archivos (en milisegundos). |
+| `add_newline`  | `true`                         | Añade una nueva línea antes del prompt.                                       |
 
 ### Ejemplo
 
 ```toml
 # ~/.config/starship.toml
 
-# Use custom format
+# Usar formato personalizado
 format = """
 [┌───────────────────>](bold green)
 [│](bold green)$directory$rust$package
 [└─>](bold green) """
 
-# Wait 10 milliseconds for starship to check files under the current directory.
+# Espera 10 milisegundos para que starship revise los archivos del directorio actual.
 scan_timeout = 10
 
-# Disable the newline at the start of the prompt
+# Desactiva la nueva línea al inicio del prompt
 add_newline = false
 ```
 
-### Default Prompt Format
+### Formato predeterminado del Prompt
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
+El `format` predeterminado se utiliza para definir el formato del prompt, si está vacío o no `format` se proporciona. El valor predeterminado es el siguiente:
 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Que es es equivalente a
 format = """
 
 $username\
@@ -214,13 +214,13 @@ $character"""
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
+El módulo `aws` muestra la región y el perfil AWS actuales. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
 
 ### Opciones
 
-| Option           | Por defecto                                          | Descripción                                                  |
+| Opción           | Por defecto                                          | Descripción                                                  |
 | ---------------- | ---------------------------------------------------- | ------------------------------------------------------------ |
 | `format`         | `"on [$symbol$profile(\\($region\\))]($style) "` | The format for the module.                                   |
 | `symbol`         | `"☁️ "`                                              | El símbolo que se muestra antes del perfil de AWS.           |
@@ -286,7 +286,7 @@ The `battery` module shows how charged the device's battery is and its current c
 
 ### Opciones
 
-| Option               | Por defecto                       | Descripción                                       |
+| Opción               | Por defecto                       | Descripción                                       |
 | -------------------- | --------------------------------- | ------------------------------------------------- |
 | `full_symbol`        | `"•"`                             | Se muestra cuando la batería está cargada.        |
 | `charging_symbol`    | `"⇡"`                             | Se muestra cuando la batería está cargando.       |
@@ -320,7 +320,7 @@ discharging_symbol = "💀"
 
 ### Indicador de batería
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. El valor predeterminado es el siguiente:
 
 ```toml
 [[battery.display]]
@@ -365,7 +365,7 @@ By default it only changes color. If you also want to change it's shape take a l
 
 ### Opciones
 
-| Option           | Por defecto         | Descripción                                                                      |
+| Opción           | Por defecto         | Descripción                                                                      |
 | ---------------- | ------------------- | -------------------------------------------------------------------------------- |
 | `format`         | `"$symbol "`        | The format string used before the text input.                                    |
 | `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
@@ -418,7 +418,7 @@ The `cmake` module shows the currently installed version of CMake if:
 
 ### Opciones
 
-| Option     | Por defecto                        | Descripción                                  |
+| Opción     | Por defecto                        | Descripción                                  |
 | ---------- | ---------------------------------- | -------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                   |
 | `symbol`   | `"🛆 "`                             | The symbol used before the version of cmake. |
@@ -449,7 +449,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Opciones
 
-| Option              | Por defecto                   | Descripción                                                           |
+| Opción              | Por defecto                   | Descripción                                                           |
 | ------------------- | ----------------------------- | --------------------------------------------------------------------- |
 | `min_time`          | `2_000`                       | Duración mínima para mostrar el tiempo de ejecución (en milisegundos) |
 | `show_milliseconds` | `false`                       | Muestra la duración con precisión en milisegundos.                    |
@@ -488,7 +488,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### Opciones
 
-| Option              | Por defecto                        | Descripción                                                                                                                                                                                                             |
+| Opción              | Por defecto                        | Descripción                                                                                                                                                                                                             |
 | ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`                                | El número de directorios a los que se debe truncar la variable de entorno, si el entorno fue creado usando `conda create -p [path]`. `0` significa sin truncamiento. Mirar también el módulo [`directory`](#directory). |
 | `symbol`            | `"🅒 "`                             | El símbolo usado antes del nombre del entorno.                                                                                                                                                                          |
@@ -525,7 +525,7 @@ The `crystal` module shows the currently installed version of Crystal. El módul
 
 ### Opciones
 
-| Option     | Por defecto                        | Descripción                                   |
+| Opción     | Por defecto                        | Descripción                                   |
 | ---------- | ---------------------------------- | --------------------------------------------- |
 | `symbol`   | `"🔮 "`                             | Símbolo usado antes de la versión de Crystal. |
 | `style`    | `"bold red"`                       | El estilo del módulo.                         |
@@ -652,7 +652,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Opciones
 
-| Option            | Por defecto                        | Descripción                                                                             |
+| Opción            | Por defecto                        | Descripción                                                                             |
 | ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
 | `format`          | `"via [$symbol$context]($style) "` | The format for the module.                                                              |
 | `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                   |
@@ -703,7 +703,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Opciones
 
-| Option      | Por defecto                              | Descripción                                              |
+| Opción      | Por defecto                              | Descripción                                              |
 | ----------- | ---------------------------------------- | -------------------------------------------------------- |
 | `format`    | `"v[$symbol$version( 🎯 $tfm)]($style) "` | The format for the module.                               |
 | `symbol`    | `"•NET "`                                | The symbol used before displaying the version of dotnet. |
@@ -741,7 +741,7 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 ### Opciones
 
-| Option     | Por defecto                                                   | Descripción                                                     |
+| Opción     | Por defecto                                                   | Descripción                                                     |
 | ---------- | ------------------------------------------------------------- | --------------------------------------------------------------- |
 | `symbol`   | `"💧 "`                                                        | The symbol used before displaying the version of Elixir/Erlang. |
 | `style`    | `"bold purple"`                                               | El estilo del módulo.                                           |
@@ -780,7 +780,7 @@ The `elm` module shows the currently installed version of Elm. El módulo se mue
 
 ### Opciones
 
-| Option     | Por defecto                        | Descripción                                     |
+| Opción     | Por defecto                        | Descripción                                     |
 | ---------- | ---------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
 | `symbol`   | `"🌳 "`                             | A format string representing the symbol of Elm. |
@@ -815,7 +815,7 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Opciones
 
-| Option     | Por defecto                    | Descripción                                                                  |
+| Opción     | Por defecto                    | Descripción                                                                  |
 | ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
 | `symbol`   |                                | The symbol used before displaying the variable value.                        |
 | `variable` |                                | The environment variable to be displayed.                                    |
@@ -852,7 +852,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. El mód
 
 ### Opciones
 
-| Option     | Por defecto                        | Descripción                                              |
+| Opción     | Por defecto                        | Descripción                                              |
 | ---------- | ---------------------------------- | -------------------------------------------------------- |
 | `symbol`   | `"🖧 "`                             | The symbol used before displaying the version of erlang. |
 | `style`    | `"bold red"`                       | El estilo del módulo.                                    |
@@ -944,7 +944,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Opciones
 
-| Option              | Por defecto                      | Descripción                                                                              |
+| Opción              | Por defecto                      | Descripción                                                                              |
 | ------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
 | `format`            | `"on [$symbol$branch]($style) "` | The format for the module.  Use `"$branch"` to refer to the current branch name.         |
 | `symbol`            | `" "`                           | A format string representing the symbol of git branch.                                   |
@@ -980,7 +980,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 
 ### Opciones
 
-| Option               | Por defecto                    | Descripción                                           |
+| Opción               | Por defecto                    | Descripción                                           |
 | -------------------- | ------------------------------ | ----------------------------------------------------- |
 | `commit_hash_length` | `7`                            | The length of the displayed git commit hash.          |
 | `format`             | `"[\\($hash\\)]($style) "` | The format for the module.                            |
@@ -1012,7 +1012,7 @@ The `git_state` module will show in directories which are part of a git reposito
 
 ### Opciones
 
-| Option         | Por defecto                                                         | Descripción                                                                             |
+| Opción         | Por defecto                                                         | Descripción                                                                             |
 | -------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `rebase`       | `"REBASING"`                                                        | A format string displayed when a `rebase` is in progress.                               |
 | `merge`        | `"MERGING"`                                                         | A format string displayed when a `merge` is in progress.                                |
@@ -1052,7 +1052,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 ### Opciones
 
-| Option            | Por defecto                                     | Descripción                                          |
+| Opción            | Por defecto                                     | Descripción                                          |
 | ----------------- | ----------------------------------------------- | ---------------------------------------------------- |
 | `format`          | "([\[$all_status$ahead_behind\]]($style) )" | The default format for `git_status`                  |
 | `conflicted`      | `"="`                                           | This branch has merge conflicts.                     |
@@ -1134,7 +1134,7 @@ The `golang` module shows the currently installed version of Golang. El módulo 
 
 ### Opciones
 
-| Option     | Por defecto                        | Descripción                                    |
+| Opción     | Por defecto                        | Descripción                                    |
 | ---------- | ---------------------------------- | ---------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                     |
 | `symbol`   | `"🐹 "`                             | A format string representing the symbol of Go. |
@@ -1169,7 +1169,7 @@ The `helm` module shows the currently installed version of Helm. El módulo se m
 
 ### Opciones
 
-| Option     | Por defecto                        | Descripción                                      |
+| Opción     | Por defecto                        | Descripción                                      |
 | ---------- | ---------------------------------- | ------------------------------------------------ |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
 | `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
@@ -1201,7 +1201,7 @@ The `hostname` module shows the system hostname.
 
 ### Opciones
 
-| Option     | Por defecto                 | Descripción                                                                                                                          |
+| Opción     | Por defecto                 | Descripción                                                                                                                          |
 | ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
 | `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
@@ -1239,7 +1239,7 @@ The `java` module shows the currently installed version of Java. El módulo se m
 
 ### Opciones
 
-| Option     | Por defecto                            | Descripción                                     |
+| Opción     | Por defecto                            | Descripción                                     |
 | ---------- | -------------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [${symbol}${version}]($style) "` | The format for the module.                      |
 | `symbol`   | `"☕ "`                                 | A format string representing the symbol of Java |
@@ -1271,7 +1271,7 @@ The `jobs` module shows the current number of jobs running. The module will be s
 
 ### Opciones
 
-| Option      | Por defecto                   | Descripción                                      |
+| Opción      | Por defecto                   | Descripción                                      |
 | ----------- | ----------------------------- | ------------------------------------------------ |
 | `threshold` | `1`                           | Show number of jobs if exceeded.                 |
 | `format`    | `"[$symbol$number]($style) "` | The format for the module.                       |
@@ -1309,7 +1309,7 @@ The `julia` module shows the currently installed version of Julia. El módulo se
 
 ### Opciones
 
-| Option     | Por defecto                        | Descripción                                       |
+| Opción     | Por defecto                        | Descripción                                       |
 | ---------- | ---------------------------------- | ------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                        |
 | `symbol`   | `"ஃ "`                             | A format string representing the symbol of Julia. |
@@ -1347,7 +1347,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opciones
 
-| Option                  | Por defecto                                              | Descripción                                                           |
+| Opción                  | Por defecto                                              | Descripción                                                           |
 | ----------------------- | -------------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`                | `"☸ "`                                                   | A format string representing the symbol displayed before the Cluster. |
 | `format`                | `"on [$symbol$context( \\($namespace\\))]($style) "` | The format for the module.                                            |
@@ -1385,7 +1385,7 @@ The `line_break` module separates the prompt into two lines.
 
 ### Opciones
 
-| Option     | Por defecto | Descripción                                                        |
+| Opción     | Por defecto | Descripción                                                        |
 | ---------- | ----------- | ------------------------------------------------------------------ |
 | `disabled` | `false`     | Disables the `line_break` module, making the prompt a single line. |
 
@@ -1412,7 +1412,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opciones
 
-| Option      | Por defecto                                   | Descripción                                              |
+| Opción      | Por defecto                                   | Descripción                                              |
 | ----------- | --------------------------------------------- | -------------------------------------------------------- |
 | `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
 | `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module.                               |
@@ -1454,7 +1454,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 
 ### Opciones
 
-| Option              | Por defecto                      | Descripción                                                                                  |
+| Opción              | Por defecto                      | Descripción                                                                                  |
 | ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `style`             | `"bold purple"`                  | El estilo del módulo.                                                                        |
@@ -1495,7 +1495,7 @@ The `nim` module shows the currently installed version of Nim. El módulo se mue
 
 ### Opciones
 
-| Option     | Por defecto                        | Descripción                                           |
+| Opción     | Por defecto                        | Descripción                                           |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module                             |
 | `symbol`   | `"👑 "`                             | The symbol used before displaying the version of Nim. |
@@ -1528,7 +1528,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 
 ### Opciones
 
-| Option       | Por defecto                                        | Descripción                                           |
+| Opción       | Por defecto                                        | Descripción                                           |
 | ------------ | -------------------------------------------------- | ----------------------------------------------------- |
 | `format`     | `"via [$symbol$state( \\($name\\))]($style) "` | The format for the module.                            |
 | `symbol`     | `"❄️  "`                                           | A format string representing the symbol of nix-shell. |
@@ -1572,7 +1572,7 @@ The `nodejs` module shows the currently installed version of NodeJS. El módulo 
 
 ### Opciones
 
-| Option     | Por defecto                        | Descripción                                        |
+| Opción     | Por defecto                        | Descripción                                        |
 | ---------- | ---------------------------------- | -------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                         |
 | `symbol`   | `"⬢ "`                             | A format string representing the symbol of NodeJS. |
@@ -1616,7 +1616,7 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Opciones
 
-| Option            | Por defecto                        | Descripción                                                |
+| Opción            | Por defecto                        | Descripción                                                |
 | ----------------- | ---------------------------------- | ---------------------------------------------------------- |
 | `format`          | `"via [$symbol$version]($style) "` | The format for the module.                                 |
 | `symbol`          | `"📦 "`                             | The symbol used before displaying the version the package. |
@@ -1656,7 +1656,7 @@ The `ocaml` module shows the currently installed version of OCaml. El módulo se
 
 ### Opciones
 
-| Option     | Por defecto                        | Descripción                                             |
+| Opción     | Por defecto                        | Descripción                                             |
 | ---------- | ---------------------------------- | ------------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                       |
 | `symbol`   | `"🐫 "`                             | The symbol used before displaying the version of OCaml. |
@@ -1730,7 +1730,7 @@ The `php` module shows the currently installed version of PHP. El módulo se mue
 
 ### Opciones
 
-| Option     | Por defecto                        | Descripción                                           |
+| Opción     | Por defecto                        | Descripción                                           |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                            |
 | `symbol`   | `"🐘 "`                             | The symbol used before displaying the version of PHP. |
@@ -1776,7 +1776,7 @@ El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 ### Opciones
 
-| Option               | Por defecto                                                    | Descripción                                                                |
+| Opción               | Por defecto                                                    | Descripción                                                                |
 | -------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------- |
 | `format`             | `"via [${symbol}${version}( \\($virtualenv\\))]($style) "` | The format for the module.                                                 |
 | `symbol`             | `"🐍 "`                                                         | A format string representing the symbol of Python                          |
@@ -1833,7 +1833,7 @@ The `ruby` module shows the currently installed version of Ruby. El módulo se m
 
 ### Opciones
 
-| Option     | Por defecto                        | Descripción                                      |
+| Opción     | Por defecto                        | Descripción                                      |
 | ---------- | ---------------------------------- | ------------------------------------------------ |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
 | `symbol`   | `"💎 "`                             | A format string representing the symbol of Ruby. |
@@ -1868,7 +1868,7 @@ The `rust` module shows the currently installed version of Rust. El módulo se m
 
 ### Opciones
 
-| Option     | Por defecto                        | Descripción                                     |
+| Opción     | Por defecto                        | Descripción                                     |
 | ---------- | ---------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
 | `symbol`   | `"🦀 "`                             | A format string representing the symbol of Rust |
@@ -1935,7 +1935,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 
 ### Opciones
 
-| Option     | Por defecto                          | Descripción                                      |
+| Opción     | Por defecto                          | Descripción                                      |
 | ---------- | ------------------------------------ | ------------------------------------------------ |
 | `format`   | `"[$symbol\\[$env\\]]($style) "` | The format for the module.                       |
 | `symbol`   | `""`                                 | A format string displayed before the image name. |
@@ -1970,7 +1970,7 @@ The `swift` module shows the currently installed version of Swift. El módulo se
 
 ### Opciones
 
-| Option     | Por defecto                        | Descripción                                      |
+| Opción     | Por defecto                        | Descripción                                      |
 | ---------- | ---------------------------------- | ------------------------------------------------ |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
 | `symbol`   | `"🐦 "`                             | A format string representing the symbol of Swift |
@@ -2005,7 +2005,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 
 ### Opciones
 
-| Option     | Por defecto                          | Descripción                                           |
+| Opción     | Por defecto                          | Descripción                                           |
 | ---------- | ------------------------------------ | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
 | `symbol`   | `"💠 "`                               | A format string shown before the terraform workspace. |
@@ -2055,7 +2055,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opciones
 
-| Option            | Por defecto             | Descripción                                                                                                                        |
+| Opción            | Por defecto             | Descripción                                                                                                                        |
 | ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
 | `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
@@ -2100,7 +2100,7 @@ The `username` module shows active user's username. El módulo se muestra si alg
 
 ### Opciones
 
-| Option        | Por defecto              | Descripción                           |
+| Opción        | Por defecto              | Descripción                           |
 | ------------- | ------------------------ | ------------------------------------- |
 | `style_root`  | `"bold red"`             | The style used when the user is root. |
 | `style_user`  | `"bold yellow"`          | The style used for non-root users.    |
@@ -2136,7 +2136,7 @@ The `zig` module shows the currently installed version of Zig. El módulo se mue
 
 ### Opciones
 
-| Option     | Por defecto                        | Descripción                                           |
+| Opción     | Por defecto                        | Descripción                                           |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `symbol`   | `"↯ "`                             | The symbol used before displaying the version of Zig. |
 | `style`    | `"bold yellow"`                    | El estilo del módulo.                                 |
@@ -2187,7 +2187,7 @@ The order in which custom modules are shown can be individually set by setting `
 
 ### Opciones
 
-| Option        | Por defecto                   | Descripción                                                                                                                |
+| Opción        | Por defecto                   | Descripción                                                                                                                |
 | ------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `command`     |                               | The command whose output should be printed.                                                                                |
 | `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
@@ -2265,7 +2265,7 @@ The `purescript` module shows the currently installed version of PureScript vers
 
 ### Opciones
 
-| Option     | Por defecto                        | Descripción                                                  |
+| Opción     | Por defecto                        | Descripción                                                  |
 | ---------- | ---------------------------------- | ------------------------------------------------------------ |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                                   |
 | `symbol`   | `"<=> "`                     | The symbol used before displaying the version of PureScript. |
