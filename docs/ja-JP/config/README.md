@@ -51,26 +51,26 @@ $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 例：
 
 - `$version` は、`version` という名前の変数を持つフォーマット文字列です。
-- `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
-- `$git_branch $git_commit` has the two variables separated with a space.
+- `$git_branch$git_commit` は `git_branch` と `git_commit` という2つの変数を持つフォーマット文字列です。
+- `$git_branch $git_commit` には空白で区切られた 2 つの変数があります。
 
 #### テキストグループ
 
-A text group is made up of two different parts.
+テキストグループは二つの異なる部分で構成されています。
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+`[]`で囲まれている最初の部分は、 [フォーマット文字列](#format-strings) です。 テキスト、変数、または入れ子になったテキストグループを追加できます。
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
+2 番目の部分では、 `()`で囲まれている [スタイル文字列](#style-strings) です。 これは最初のパートのスタイルを使用することができます。
 
 例：
 
-- `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⬢ $version](bold green)` will print a symbol `⬢` followed by the content of variable `version`, with bold text colored green.
-- `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
+- `[on](red bold)` は文字列 `on` に太字のテキストを赤色で表示します。
+- `[⬢ $version](bold green)` はシンボル `⬢` の後に変数 `バージョン`の内容を表示します 緑色の太字を付けています
+- `[a [b](red) c](green)` は  `a b c` を  `b` だけ赤色に表示し、 `a` と `c`  を緑色に表示します。
 
 #### スタイルの設定
 
-Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+Starshipのほとんどのモジュールでは、表示スタイルを設定できます。 これは、設定を指定する文字列であるエントリ（`style`）で行われます。 スタイル文字列の例とその機能を次に示します。 完全な構文の詳細については、詳細は [高度な設定](/advanced-config/)を参照してください 。
 
 - `"fg:green bg:blue"` は、青色の背景に緑色のテキストを設定します
 - `"bg:blue fg:bright-green"` は、青色の背景に明るい緑色のテキストを設定します
@@ -79,11 +79,11 @@ Most modules in starship allow you to configure their display styles. This is do
 - `"bold italic fg:purple"`は、紫色の太字斜体のテキストを設定します
 - `""` はすべてのスタイルを明示的に無効にします
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+スタイリングがどのように見えるかは、端末エミュレータによって制御されることに注意してください。 たとえば、一部の端末エミュレータはテキストを太字にする代わりに色を明るくします。また、一部のカラーテーマは通常の色と明るい色と同じ値を使用します。 また、斜体のテキストを取得するには、端末で斜体をサポートする必要があります。
 
-#### Conditional Format Strings
+#### 条件付き書式設定
 
-A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
+`(` と `)` 内のすべての変数が空の場合、条件付き書式文字列はレンダリングされません。
 
 例：
 
@@ -91,7 +91,7 @@ A conditional format string wrapped in `(` and `)` will not render if all variab
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
 - When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. This works the same as `(\[$a$b\] )`.
 
-#### Escapable characters
+#### エスケープ可能な文字
 
 The following symbols have special usage in a format string. If you want to print the following symbols, you have to escape them with a backslash (`\`).
 
