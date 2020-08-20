@@ -35,7 +35,7 @@ eval $(starship init bash)
 
 Algunas shells van a cambiar automáticamente el título de la ventana por ti. (por ejemplo, para mostrar tu directorio actual). Fish incluso lo hace de forma predeterminada. Starship no hace esto, pero es bastante sencillo añadir esta funcionalidad a `bash` o `zsh`.
 
-Primero defina una función para el cambio de titulo de la ventana (idéntico en bash y zsh):
+Primero, define una función para el cambio de titulo de la ventana (idéntico en bash y zsh):
 
 ```bash
 function set_win_title(){
@@ -43,9 +43,9 @@ function set_win_title(){
 }
 ```
 
-Puede usar variables para personalizar este titulo (`$USER`, `$HOSTNAME` y `$PWD` son opciones populares).
+Puedes usar variables para personalizar este titulo (`$USER`, `$HOSTNAME` y `$PWD` son opciones populares).
 
-En `bash`, establezca que esta función sea la función precmd de Starship:
+En `bash`, establece que esta función sea la función precmd de Starship:
 
 ```bash
 starship_precmd_user_func="set_win_title"
@@ -57,9 +57,9 @@ En `zsh`, añade esto al array `precmd_functions`:
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+Si te gusta el resultado, añade estas líneas a tu archivo de configuración del shell (`~/.bashrc` o `~/.zsrhc`) para hacerlo permanente.
 
-For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+Por ejemplo, si quieres mostrar tu directorio actual en el título de la pestaña de la terminal, añade el siguiente fragmento a tu `~/.ashrc` o `~/.zshrc`:
 
 ```bash
 function set_win_title(){
@@ -68,9 +68,9 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-## Cadenas de estilo
+## Estilo de cadenas de texto
 
-Las cadenas de estilo son una lista de palabras, separadas por espacios en blanco. Las palabras no son sensibles a mayúsculas (es decir, `negrita` y `NeGriTa` se consideran la misma cadena). Cada palabra puede ser una de las siguientes:
+Los estilos de cadenas de texto son una lista de palabras, separadas por espacios en blanco. Las palabras no son sensibles a mayúsculas (es decir, `negrita` y `NeGriTa` se consideran la misma cadena). Cada palabra puede ser una de las siguientes:
 
   - `bold`
   - `underline`
