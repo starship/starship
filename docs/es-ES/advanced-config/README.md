@@ -82,12 +82,12 @@ Los estilos de cadenas de texto son una lista de palabras, separadas por espacio
 
 donde `<color>` es un especificador de color (discutido a continuación). `fg:<color>` y `<color>` hacen actualmente lo mismo, aunque esto puede cambiar en el futuro. El orden de las palabras en la cadena no importa.
 
-El token `none` anula todas las otras fichas en una cadena, por lo que, por ejemplo, `fg:red none fg:blue` creará una cadena sin ningún tipo de estilo. Puede convertirse en un error usar `none` junto con otros tokens en el futuro.
+El estilo `none` anula todas los otros estilos en una cadena de texto, por lo que, por ejemplo, `fg:red none fg:blue` creará una cadena de texto sin ningún tipo de estilo. Puede convertirse en un error usar `none` junto con otros estilos en el futuro.
 
 Un especificador de color puede ser uno de los siguientes:
 
- - Uno de los colores estándar del terminal: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Opcionalmente puedes prefijar estos con `bright-` para obtener la versión brillante (por ejemplo, `bright-white`).
+ - Uno de los colores estándar del terminal: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Opcionalmente puedes agregar el prefijo `bright-` para obtener la versión brillante (por ejemplo, `bright-white`).
  - Un `#` seguido de un número hexadecimal de seis dígitos. Esto especifica un [código hexadecimal de color RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
- - Un número entre 0-255. Esto especifica un [Código ANSI de color de 8-bits](https://i.stack.imgur.com/KTSQa.png).
+ - Un número entre 0-255. Esto especifica un [Código de color ANSI de 8-bits](https://i.stack.imgur.com/KTSQa.png).
 
 Si se especifican varios colores para el primer plano/fondo, el último en la cadena tendrá prioridad.
