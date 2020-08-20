@@ -66,8 +66,8 @@ En la segunda parte, que está encerrada en un `()`, es un [formato de cadena de
 Por ejemplo:
 
 - `[on](bold red)` imprimirá una cadena `en` con texto en negrita color rojo.
-- `[⬢ $version](bold green)` will print a symbol `⬢` followed by the content of variable `version`, with bold text colored green.
-- `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
+- `[⬢ $version](bold green)` imprimirá un símbolo `⬢` seguido por el contenido de la variable `version`, con texto en negrita color verde.
+- `[a [b](red) c](green)` imprimirá `a b c` con `b` rojo. y `a` y `c` verde.
 
 #### Cadenas de estilo
 
