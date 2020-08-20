@@ -1,16 +1,16 @@
 # Configuración Avanzada
 
-Mientras que Starship es un versátil intérprete de comandos, a veces necesitas más que editar `starhip.toml` para que haga ciertas cosas. Esta página detalla algunas de las técnicas de configuración más avanzadas en starship.
+Mientras que Starship es un prompt versátil, a veces necesitas más que editar `starhip.toml` para que haga ciertas cosas. Esta página detalla algunas de las técnicas de configuración más avanzadas en starship.
 
 ::: aviso
 
-Las configuraciones de esta sección pueden sufrir cambios en futuras versiones de Starship.
+Las configuraciones de esta sección están sujetos a cambios en futuras versiones de Starship.
 
 :::
 
 ## Comandos pre-prompt y pre-ejecucucióne personalizados en Bash
 
-Bash no posee un framework oficial de preexec/precmd como la mayoría de las demás shells. Por lo tanto, es complicado proveer una personalización completa en `bash`. Sin embargo, Starship te da la posibilidad de insertar de forma limitada tus propias funciones en el proceso de renderizado del prompt:
+Bash no posee un framework formal de preexec/precmd como la mayoría de las demás shells. Por lo tanto, es complicado proveer una personalización completa en `bash`. Sin embargo, Starship te da la posibilidad de insertar de forma limitada tus propias funciones en el proceso de renderizado del prompt:
 
 - Para ejecutar una función personalizada previa al renderizado del prompt, defina una nueva función y asigne su nombre a `starship_precmd_user_func`. Por ejemplo, para renderizar un cohete antes del prompt, se puede realizar así:
 
