@@ -1,32 +1,32 @@
 # 設定
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
+Starshipの設定を開始するには、`~/.config/starship.toml` ファイルを作成します。
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
+Starshipのすべての設定は、この[TOML](https://github.com/toml-lang/toml)ファイルで行われます。
 ```toml
-# Don't print a new line at the start of the prompt
+# プロンプトの先頭に改行を表示しません
 add_newline = false
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# プロンプトの「❯」記号を「➜」に置き換えます
+[character]                            # 設定しているモジュールの名前は「character」です
+success_symbol = "[➜](bold green)"     # 「success_symbol」セグメントは「ボールドグリーン」の色で「➜」に設定されています
 
-# Disable the package module, hiding it from the prompt completely
+# package モジュールを無効にし、プロンプトから完全に隠します
 [package]
 disabled = true
 ```
 
-You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+`STARSHIP_CONFIG` 環境変数を使用して、デフォルトの`starship.toml` ファイルの場所を変更できます。
 
 ```sh
 export STARSHIP_CONFIG=~/.starship
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+PowerShell (Windows) で同様に `$PROFILE`にこの行を追加します。
 
 ```ps1
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
@@ -34,23 +34,23 @@ $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 
 ### 用語
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
+**モジュール**: OSのコンテキスト情報に基づいて情報を提供するプロンプト内のコンポーネントです。 たとえば、現在のディレクトリがNodeJSプロジェクトである場合、「nodejs」モジュールは、現在コンピューターにインストールされているNodeJSのバージョンを表示します。
 
-**Variable**: Smaller sub-components that contains information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
+**変数**: モジュールが提供する情報を含むサブコンポーネントを小さくする。 例えば、"nodejs" モジュール内の "version" 変数には、NodeJS の現在のバージョンが含まれています。
 
-By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+慣例により、ほとんどのモジュールにはデフォルトの端末色の接頭辞（「nodejs」の`via` など）と接尾辞として空のスペースがあります。
 
-### Format Strings
+### 文字列の書式
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+文字列の書式は、モジュールがすべての変数を出力する書式です。 ほとんどのモジュールには、モジュールの表示形式を設定する `format` というエントリがあります。 テキスト、変数、およびテキストグループをフォーマット文字列で使用できます。
 
 #### 変数
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable only contains letters, numbers and `_`.
+変数には、 `$` 記号と、その変数の名前が続きます。 変数の名前は、文字、数字、 `_` のみを含みます。
 
-For example:
+例：
 
-- `$version` is a format string with a variable named `version`.
+- `$version` は、`version` という名前の変数を持つフォーマット文字列です。
 - `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
 - `$git_branch $git_commit` has the two variables separated with a space.
 
@@ -62,7 +62,7 @@ The first part, which is enclosed in a `[]`, is a [format string](#format-string
 
 In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
 
-For example:
+例：
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
 - `[⬢ $version](bold green)` will print a symbol `⬢` followed by the content of variable `version`, with bold text colored green.
@@ -85,7 +85,7 @@ Note that what styling looks like will be controlled by your terminal emulator. 
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-For example:
+例：
 
 - `(@$region)` will show nothing if the variable `region` is `None`, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
