@@ -80,11 +80,11 @@ La mayoría de los módulos de starship permiten configurar sus estilos de visua
 - `"bold italic fg:purple"` pone texto color morado, en negrita y cursiva
 - `""` desactiva explícitamente cualquier estilo
 
-Nótese que el estilo es similar a como se controlaría por el emulador de terminal. Por ejemplo, algunos emuladores de terminal harán los colores más brillantes en lugar de más gruesos, y algunos temas de colores usan los mismos valores para texto normal y colores brillantes. Also, to get italic text, your terminal must support italics.
+Nótese que el estilo es similar a como se controlaría por el emulador de terminal. Por ejemplo, algunos emuladores de terminal harán los colores más brillantes en lugar de más gruesos, y algunos temas de colores usan los mismos valores para texto normal y colores brillantes. Además, para mostrar textos en cursiva tu terminal debe tener soporte para hacerlo.
 
-#### Conditional Format Strings
+#### Cadenas de formato condicionales
 
-A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
+Una cadena de formato condicional envuelto en `(` y `)` no se renderizará si todas las variables dentro están vacías.
 
 Por ejemplo:
 
