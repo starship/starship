@@ -439,13 +439,13 @@ El módulo `cmake` muestra la versión actualmente instalada de CMake si:
 
 El módulo `cmd_duration` muestra cuánto tiempo tomó ejecutarse el último comando. El módulo se mostrará solo si el comando tomó más de dos segundos, o si el valor de configuración de `min_time` existe.
 
-::: warning Do not hook the DEBUG trap in Bash
+::: advertencia No utilizar la trampa DEBUG en Bash
 
-If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
+Si se está usando Starship con `bash`, no usar `DEBUG` después de ejecutar `eval $(starship init $0)`, o el módulo **se romperá**.
 
 :::
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+Los usuarios de bash que necesiten una funcionalidad como preexec pueden usar el [framework rcaloras's bash_preexec](https://github.com/rcaloras/bash-preexec). Simplemente definir los arreglos `preexec_functions` y `precmd_functions` antes de ejecutar `eval $(starship init $0)`, y luego proceder de forma normal.
 
 ### Opciones
 
@@ -459,12 +459,12 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Variables
 
-| Variable  | Ejemplo  | Descripción                             |
-| --------- | -------- | --------------------------------------- |
-| duration  | `16m40s` | The time it took to execute the command |
-| style\* |          | Refleja el valor de la opción `style`   |
+| Variable  | Ejemplo  | Descripción                                |
+| --------- | -------- | ------------------------------------------ |
+| duration  | `16m40s` | El tiempo que tardó en ejecutar el comando |
+| style\* |          | Refleja el valor de la opción `style`      |
 
-\*: This variable can only be used as a part of a style string
+\*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -478,11 +478,11 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+El módulo `conda` muestra el entorno conda actual, si `$CONDA_DEFAULT_ENV` está configurado.
 
 ::: tip
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+Esto no modifica el propio prompt de conda. En caso de querer suprimirlo, ejecutar `conda config --set changeps1 False`.
 
 :::
 
@@ -494,18 +494,18 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | `symbol`            | `"🅒 "`                             | El símbolo usado antes del nombre del entorno.                                                                                                                                                                          |
 | `style`             | `"bold green"`                     | El estilo del módulo.                                                                                                                                                                                                   |
 | `format`            | `"[$symbol$environment]($style) "` | El formato del módulo.                                                                                                                                                                                                  |
-| `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                                                                                                                                              |
-| `disabled`          | `false`                            | Disables the `conda` module.                                                                                                                                                                                            |
+| `ignore_base`       | `true`                             | Ignora el entorno `base` cuando se activa.                                                                                                                                                                              |
+| `disabled`          | `false`                            | Deshabilita el módulo `conda`.                                                                                                                                                                                          |
 
 ### Variables
 
 | Variable    | Ejemplo      | Descripción                            |
 | ----------- | ------------ | -------------------------------------- |
-| environment | `astronauts` | The current conda environment          |
+| environment | `astronauts` | El entorno conda actual                |
 | symbol      |              | Refleja el valor de la opción `symbol` |
 | style\*   |              | Refleja el valor de la opción `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -518,7 +518,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `crystal` muestra la versión actual de Crystal. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un fichero `shard.yml`
 - El directorio actual contiene un fichero `.cr`
@@ -536,11 +536,11 @@ The `crystal` module shows the currently installed version of Crystal. El módul
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v0.32.1` | The version of `crystal`               |
+| version   | `v0.32.1` | La versión de `crystal`                |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -553,11 +553,11 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-The `dart` module shows the currently installed version of Dart. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `dart` muestra la versión actualmente instalada de Dart. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a file with `.dart` extension
-- The current directory contains a `.dart_tool` directory
-- The current directory contains a `pubspec.yaml` or `pubspec.lock` file
+- El directorio actual contiene un archivo con la extensión `.dart`
+- El directorio actual contiene un directorio `.dart_tool`
+- El directorio actual contiene un archivo `pubspec.yaml` o `pubspec.lock`
 
 ### Opciones
 
