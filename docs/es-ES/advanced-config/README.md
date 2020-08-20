@@ -21,7 +21,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Para ejecutar una función personalizada antes de que un comando sea ejecutado, es posible usar el [mecanismo trap `DEBUG`](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). No obstante, ¡**debes** atrapar la señal DEBUG *antes* de inicializar Starship! Starship puede preservar el valor del mecanismo, pero si el mecanismo es reemplazado después de que Starship se inicie, algunas funcionalidades fallarán.
+- Para ejecutar una función personalizada antes de que un comando sea ejecutado, es posible usar el [mecanismo trap `DEBUG`](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). No obstante, ¡**debes** atrapar la señal DEBUG *antes* de inicializar Starship! Starship puede preservar el valor de la trampa DEBUG, pero si el trampa es reemplazada después de que Starship inicie, alguna funcionalidad fallará.
 
 ```bash
 function blastoff(){
@@ -33,7 +33,7 @@ eval $(starship init bash)
 
 ## Cambiar el título de la ventana
 
-Algunos shell prompts van a cambiar automáticamente el título de la ventana por ti. (Por ejemplo, para mostrar tu directorio actual). Fish incluso lo hace de forma predeterminada. Starship no hace esto, pero es bastante sencillo añadir esta funcionalidad a `bash` o `zsh`.
+Algunas shells van a cambiar automáticamente el título de la ventana por ti. (por ejemplo, para mostrar tu directorio actual). Fish incluso lo hace de forma predeterminada. Starship no hace esto, pero es bastante sencillo añadir esta funcionalidad a `bash` o `zsh`.
 
 Primero defina una función para el cambio de titulo de la ventana (idéntico en bash y zsh):
 
