@@ -43,29 +43,29 @@ Por convención, la mayoría de los módulos tienen un prefijo del color predete
 
 ### Formato de cadenas de texto
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+Es el formato con el que un módulo imprime todas sus variables. La mayoría de los módulos tienen una entrada llamada `format` que configura el formato de visualización del módulo. Se puede utilizar textos, variables y grupos de texto.
 
 #### Variable
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable only contains letters, numbers and `_`.
+Una variable contiene un símbolo `$` seguido por el nombre de la variable. El nombre de una variable solo contiene letras, números y `_`.
 
-For example:
+Por ejemplo:
 
-- `$version` is a format string with a variable named `version`.
-- `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
-- `$git_branch $git_commit` has the two variables separated with a space.
+- `$version` es un formato de cadena de texto con una variable llamada `version`.
+- `$git_branch$git_commit` es un formato de cadena de texto con dos variables nombradas `git_branch` y `git_commit`.
+- `$git_branch $git_commit` tiene las dos variables separadas por un espacio.
 
-#### Text Group
+#### Grupo de texto
 
-A text group is made up of two different parts.
+Un grupo de texto se compone de dos partes diferentes.
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+La primera parte, que está encerrada en un `[]`, es un [formato de cadena de texto](#format-strings). Se puede agregar textos, variables, o incluso grupos de texto anidados.
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
+En la segunda parte, que está encerrada en un `()`, es un [formato de cadena de texto](#style-strings). Se puede utilizar el estilo de la primera parte.
 
-For example:
+Por ejemplo:
 
-- `[on](red bold)` will print a string `on` with bold text colored red.
+- `[on](bold red)` imprimirá una cadena `en` con texto en negrita color rojo.
 - `[⬢ $version](bold green)` will print a symbol `⬢` followed by the content of variable `version`, with bold text colored green.
 - `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
 
@@ -86,7 +86,7 @@ Note that what styling looks like will be controlled by your terminal emulator. 
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-For example:
+Por ejemplo:
 
 - `(@$region)` will show nothing if the variable `region` is `None`, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
