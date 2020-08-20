@@ -1,21 +1,22 @@
 # Configuración
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
+Para comenzar a configurar starship, crea el siguiente archivo: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
+Toda la configuración de starship se realiza en este archivo [TOML](https://github.com/toml-lang/toml):
 ```toml
-# Don't print a new line at the start of the prompt
+# Evita imprimir una nueva linea al inicio del prompt
 add_newline = false
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# Reemplaza el símbolo "❯" por "➜" del prompt
+[character]       # El nombre del módulo que se está configurando es "character"
+symbol = "➜"     # El segmento "symbol" es reemplazado por "➜"
+success_symbol = "[➜](bold green)"     # El segmento "success_symbol" es reemplazado por "➜" con el color "bold green"
 
-# Disable the package module, hiding it from the prompt completely
+# Desactiva el gestor de paquetes, ocultándolo por completo del prompt
 [package]
 disabled = true
 ```
