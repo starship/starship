@@ -8,7 +8,7 @@ function global:prompt {
     $jobs = @(Get-Job | Where-Object { $_.State -eq 'Running' }).Count
 
     $env:PWD = $PWD
-    $current_directory = (Convert-Path $PWD)
+    $current_directory = (Convert-Path -LiteralPath $PWD)
 
     if ($lastCmd = Get-History -Count 1) {
         $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalMilliseconds)
