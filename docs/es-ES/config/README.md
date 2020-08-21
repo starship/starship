@@ -561,18 +561,18 @@ El módulo `dart` muestra la versión actualmente instalada de Dart. El módulo 
 
 ### Opciones
 
-| Variable   | Por defecto                        | Descripción                                     |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                          |
-| `symbol`   | `"🎯 "`                             | A format string representing the symbol of Dart |
-| `style`    | `"bold blue"`                      | El estilo del módulo.                           |
-| `disabled` | `false`                            | Disables the `dart` module.                     |
+| Variable   | Por defecto                        | Descripción                                             |
+| ---------- | ---------------------------------- | ------------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                  |
+| `symbol`   | `"🎯 "`                             | Una cadena de formato que representa el símbolo de Dart |
+| `style`    | `"bold blue"`                      | El estilo del módulo.                                   |
+| `disabled` | `false`                            | Deshabilita el módulo `dart`.                           |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v2.8.4` | The version of `dart`                  |
+| version   | `v2.8.4` | La versión de `dart`                   |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
