@@ -655,20 +655,20 @@ El módulo `docker_context` muestra el [contexto de Docker](https://docs.docker.
 | Opción            | Por defecto                        | Descripción                                                                             |
 | ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
 | `format`          | `"via [$symbol$context]($style) "` | El formato del módulo.                                                                  |
-| `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                   |
+| `symbol`          | `"🐳 "`                             | El símbolo usado antes de mostrar el contexto de Docker.                                |
 | `style`           | `"blue bold"`                      | El estilo del módulo.                                                                   |
-| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
-| `disabled`        | `true`                             | Disables the `docker_context` module.                                                   |
+| `only_with_files` | `false`                            | Mostrar solo cuando hay un `docker-compose.yml` o `Dockerfile` en el directorio actual. |
+| `disabled`        | `true`                             | Deshabilita el módulo `docker_context`.                                                 |
 
 ### Variables
 
 | Variable  | Ejemplo        | Descripción                            |
 | --------- | -------------- | -------------------------------------- |
-| context   | `test_context` | The current docker context             |
+| context   | `test_context` | El contexto actual de docker           |
 | symbol    |                | Refleja el valor de la opción `symbol` |
 | style\* |                | Refleja el valor de la opción `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -2203,20 +2203,20 @@ The order in which custom modules are shown can be individually set by setting `
 
 ### Variables
 
-| Variable  | Descripción                            |
-| --------- | -------------------------------------- |
-| output    | The output of shell command in `shell` |
-| symbol    | Refleja el valor de la opción `symbol` |
-| style\* | Refleja el valor de la opción `style`  |
+| Variable  | Descripción                               |
+| --------- | ----------------------------------------- |
+| output    | La salida del comando de shell en `shell` |
+| symbol    | Refleja el valor de la opción `symbol`    |
+| style\* | Refleja el valor de la opción `style`     |
 
-\*: This variable can only be used as a part of a style string
+\*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
-#### Custom command shell
+#### Comando personalizado de shell
 
-`shell` accepts a non-empty list of strings, where:
+`shell` acepta una lista no vacía de cadenas, donde:
 
-- The first string is the path to the shell to use to execute the command.
-- Other following arguments are passed to the shell.
+- La primera cadena es la ruta al intérprete de comandos a usar para ejecutar el comando.
+- Otros argumentos siguientes son pasados al shell.
 
 If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
 
@@ -2244,8 +2244,8 @@ Automatic detection of shells and proper parameters addition are currently imple
 # ~/.config/starship.toml
 
 [custom.foo]
-command = "echo foo"  # shows output of command
-files = ["foo"]       # can specify filters
+command = "echo foo"  # muestra la salida del comando
+files = ["foo"]       # se pueden especificar filtros
 when = """ test "$HOME" == "$PWD" """
 prefix = " transcending "
 
@@ -2258,29 +2258,29 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of PureScript version. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `purescript` muestra la versión actualmente instalada de PureScript. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `spago.dhall` file
-- The current directory contains a \*.purs files
+- El directorio actual contiene un archivo `spago.dhall`
+- El directorio actual contiene un archivo \*.purs
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                                  |
-| ---------- | ---------------------------------- | ------------------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                       |
-| `symbol`   | `"<=> "`                     | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"`                     | El estilo del módulo.                                        |
-| `disabled` | `false`                            | Disables the `purescript` module.                            |
+| Opción     | Por defecto                        | Descripción                                                 |
+| ---------- | ---------------------------------- | ----------------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                      |
+| `symbol`   | `"<=> "`                     | El símbolo usado antes de mostrar la versión de PureScript. |
+| `style`    | `"bold white"`                     | El estilo del módulo.                                       |
+| `disabled` | `false`                            | Deshabilita el módulo `purescript`.                         |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `0.13.5` | The version of `purescript`            |
+| version   | `0.13.5` | La versión de `purescript`             |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
