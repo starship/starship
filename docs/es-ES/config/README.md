@@ -593,19 +593,19 @@ El módulo `directory` muestra la ruta hasta el directorio actual, mostrando tre
 
 Al usarse la opción pwd del estilo fish, en lugar de ocultar la ruta truncada, se mostrará un nombre abreviado de cada directorio según el número habilitado para la opción.
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repositorio y el valor de la opción es `1`. Ahora se mostrará `~/D/N/nixpkgs/pkgs`, mientras que antes habría sido `nixpkgs/pkgs`.
 
 ### Opciones
 
-| Variable                 | Por defecto                                     | Descripción                                                                      |
-| ------------------------ | ----------------------------------------------- | -------------------------------------------------------------------------------- |
-| `truncation_length`      | `3`                                             | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`       | `true`                                          | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `format`                 | `"[$path]($style)[$lock_symbol]($lock_style) "` | El formato del módulo.                                                           |
-| `style`                  | `"bold cyan"`                                   | El estilo del módulo.                                                            |
-| `disabled`               | `false`                                         | Disables the `directory` module.                                                 |
-| `read_only_symbol`       | `"🔒"`                                           | The symbol indicating current directory is read only.                            |
-| `read_only_symbol_style` | `"red"`                                         | The style for the read only symbol.                                              |
+| Variable                 | Por defecto                                     | Descripción                                                           |
+| ------------------------ | ----------------------------------------------- | --------------------------------------------------------------------- |
+| `truncation_length`      | `3`                                             | El número de carpetas a las que se debe truncar el directorio actual. |
+| `truncate_to_repo`       | `true`                                          | Truncar o no hasta la raíz del repositorio git en el que se esté.     |
+| `format`                 | `"[$path]($style)[$lock_symbol]($lock_style) "` | El formato del módulo.                                                |
+| `style`                  | `"bold cyan"`                                   | El estilo del módulo.                                                 |
+| `disabled`               | `false`                                         | Deshabilita el módulo `directory`.                                    |
+| `read_only_symbol`       | `"🔒"`                                           | The symbol indicating current directory is read only.                 |
+| `read_only_symbol_style` | `"red"`                                         | The style for the read only symbol.                                   |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
