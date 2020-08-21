@@ -576,7 +576,7 @@ El módulo `dart` muestra la versión actualmente instalada de Dart. El módulo 
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -589,9 +589,9 @@ format = "via [🔰 $version](bold red) "
 
 ## Directory
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+El módulo `directory` muestra la ruta hasta el directorio actual, mostrando tres directorios padre como máximo. El directorio se truncará a la raíz del repositorio git en el que se esté.
 
-When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+Al usarse la opción pwd del estilo fish, en lugar de ocultar la ruta truncada, se mostrará un nombre abreviado de cada directorio según el número habilitado para la opción.
 
 For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
