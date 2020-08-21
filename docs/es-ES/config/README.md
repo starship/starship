@@ -604,11 +604,11 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 | `format`                 | `"[$path]($style)[$lock_symbol]($lock_style) "` | El formato del módulo.                                                |
 | `style`                  | `"bold cyan"`                                   | El estilo del módulo.                                                 |
 | `disabled`               | `false`                                         | Deshabilita el módulo `directory`.                                    |
-| `read_only_symbol`       | `"🔒"`                                           | The symbol indicating current directory is read only.                 |
-| `read_only_symbol_style` | `"red"`                                         | The style for the read only symbol.                                   |
+| `read_only_symbol`       | `"🔒"`                                           | El símbolo que indica si el directorio actual es de sólo lectura.     |
+| `read_only_symbol_style` | `"red"`                                         | El estilo para el símbolo de sólo lectura.                            |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
 
 | Advanced Option             | Por defecto | Descripción                                                                              |
 | --------------------------- | ----------- | ---------------------------------------------------------------------------------------- |
@@ -632,10 +632,10 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 
 | Variable  | Ejemplo               | Descripción                           |
 | --------- | --------------------- | ------------------------------------- |
-| path      | `"D:/Projects"`       | The current directory path            |
+| path      | `"D:/Projects"`       | La ruta de directorio actual          |
 | style\* | `"black bold dimmed"` | Refleja el valor de la opción `style` |
 
-\*: This variable can only be used as a part of a style string
+\*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -648,7 +648,7 @@ truncation_length = 8
 
 ## Docker Context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
+El módulo `docker_context` muestra el [contexto de Docker](https://docs.docker.com/engine/context/working-with-contexts/) actualmente activo si no está establecido en `default`.
 
 ### Opciones
 
