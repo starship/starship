@@ -170,20 +170,14 @@ detect_platform() {
   local platform
   platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
 
-  # check for MUSL
-  if [ "${platform}" = "linux" ]; then
-    if ldd /bin/sh | grep -i musl >/dev/null; then
-      platform=unknown-linux-musl
-    fi
-  fi
-
   # mingw is Git-Bash
   if echo "${platform}" | grep -i mingw >/dev/null; then
     platform=pc-windows-msvc
   fi
 
   if [ "${platform}" = "linux" ]; then
-    platform=unknown-linux-gnu
+    # use the statically compiled musl bins on linux to avoid linking issues.
+    platform=unknown-linux-musl
   fi
 
   if [ "${platform}" = "darwin" ]; then

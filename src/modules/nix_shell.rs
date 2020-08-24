@@ -1,5 +1,3 @@
-use std::env;
-
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::nix_shell::NixShellConfig;
@@ -23,8 +21,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("nix_shell");
     let config: NixShellConfig = NixShellConfig::try_load(module.config);
 
-    let shell_name = env::var("name").ok();
-    let shell_type = env::var("IN_NIX_SHELL").ok()?;
+    let shell_name = context.get_env("name");
+    let shell_type = context.get_env("IN_NIX_SHELL")?;
     let shell_type_format = match shell_type.as_ref() {
         "impure" => config.impure_msg,
         "pure" => config.pure_msg,
@@ -60,4 +58,83 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::test::ModuleRenderer;
+    use ansi_term::Color;
+    use std::io;
+
+    #[test]
+    fn no_env_variables() -> io::Result<()> {
+        let actual = ModuleRenderer::new("nix_shell").collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn invalid_env_variables() -> io::Result<()> {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env("IN_NIX_SHELL", "something_wrong")
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn pure_shell() -> io::Result<()> {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env("IN_NIX_SHELL", "pure")
+            .collect();
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  pure")));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn impure_shell() -> io::Result<()> {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env("IN_NIX_SHELL", "impure")
+            .collect();
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  impure")));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn pure_shell_name() -> io::Result<()> {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env("IN_NIX_SHELL", "pure")
+            .env("name", "starship")
+            .collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Blue.bold().paint("❄️  pure (starship)")
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn impure_shell_name() -> io::Result<()> {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env("IN_NIX_SHELL", "impure")
+            .env("name", "starship")
+            .collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Blue.bold().paint("❄️  impure (starship)")
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
 }

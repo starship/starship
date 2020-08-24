@@ -26,7 +26,7 @@ impl PartialEq for CommandOutput {
     }
 }
 
-/// Execute a command and return the output on stdout and stderr if sucessful
+/// Execute a command and return the output on stdout and stderr if successful
 #[cfg(not(test))]
 pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
     internal_exec_cmd(&cmd, &args)
@@ -48,6 +48,12 @@ LLVM: 10.0.0
 Default target: x86_64-apple-macosx\n",
             ),
             stderr: String::default(),
+        }),
+        "dart --version" => Some(CommandOutput {
+            stdout: String::default(),
+            stderr: String::from(
+                "Dart VM version: 2.8.4 (stable) (Wed Jun 3 12:26:04 2020 +0200) on \"macos_x64\"",
+            ),
         }),
         "dummy_command" => Some(CommandOutput {
             stdout: String::from("stdout ok!\n"),
@@ -72,6 +78,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
         }),
         "helm version --short --client" => Some(CommandOutput {
             stdout: String::from("v3.1.1+gafe7058\n"),
+            stderr: String::default(),
+        }),
+        s if s.ends_with("java -Xinternalversion") => Some(CommandOutput {
+            stdout: String::from("OpenJDK 64-Bit Server VM (13.0.2+8) for bsd-amd64 JRE (13.0.2+8), built on Feb  6 2020 02:07:52 by \"brew\" with clang 4.2.1 Compatible Apple LLVM 11.0.0 (clang-1100.0.33.17)"),
             stderr: String::default(),
         }),
         "julia --version" => Some(CommandOutput {
@@ -101,6 +111,10 @@ active boot switches: -d:release\n",
             stdout: String::from("4.08.1\n"),
             stderr: String::default(),
         }),
+        "perl -e printf q#%vd#,$^V;" => Some(CommandOutput {
+            stdout: String::from("5.26.1"),
+            stderr: String::default(),
+        }),
         "php -nr echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;" => {
             Some(CommandOutput {
                 stdout: String::from("7.3.8"),
@@ -123,6 +137,14 @@ active boot switches: -d:release\n",
             stdout: String::from("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]\n"),
             stderr: String::default(),
         }),
+        "swift --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+Apple Swift version 5.2.2 (swiftlang-1103.0.32.6 clang-1103.0.32.51)
+Target: x86_64-apple-darwin19.4.0\n",
+            ),
+            stderr: String::default(),
+        }),
         "zig version" => Some(CommandOutput {
             stdout: String::from("0.6.0\n"),
             stderr: String::default(),
@@ -134,6 +156,14 @@ cmake version 3.17.3
 
 CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             ),
+            stderr: String::default(),
+        }),
+        "dotnet --version" => Some(CommandOutput {
+            stdout: String::from("3.1.103"),
+            stderr: String::default(),
+        }),
+        "dotnet --list-sdks" => Some(CommandOutput {
+            stdout: String::from("3.1.103 [/usr/share/dotnet/sdk]"),
             stderr: String::default(),
         }),
         "terraform version" => Some(CommandOutput {

@@ -151,7 +151,9 @@ tests become extra important */
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test::ModuleRenderer;
     use chrono::offset::TimeZone;
+    use std::io;
 
     const FMT_12: &str = "%r";
     const FMT_24: &str = "%T";
@@ -463,5 +465,51 @@ mod tests {
         assert_eq!(is_inside_time_range(time_now, time_start, time_end), true);
         assert_eq!(is_inside_time_range(time_now2, time_start, time_end), false);
         assert_eq!(is_inside_time_range(time_now3, time_start, time_end), true);
+    }
+
+    #[test]
+    fn config_enabled() -> io::Result<()> {
+        let actual = ModuleRenderer::new("time")
+            .config(toml::toml! {
+                [time]
+                disabled = false
+            })
+            .collect();
+
+        // We can't test what it actually is...but we can assert that it is something
+        assert!(actual.is_some());
+        Ok(())
+    }
+
+    #[test]
+    fn config_blank() -> io::Result<()> {
+        let actual = ModuleRenderer::new("time").collect();
+
+        let expected = None;
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn config_check_prefix_and_suffix() -> io::Result<()> {
+        let actual = ModuleRenderer::new("time")
+            .config(toml::toml! {
+                [time]
+                disabled = false
+                format = "at [\\[$time\\]]($style) "
+                time_format = "%T"
+            })
+            .collect()
+            .unwrap();
+
+        // This is the prefix with "at ", the color code, then the prefix char [
+        let col_prefix = format!("at {}{}[", '\u{1b}', "[1;33m");
+
+        // This is the suffix with suffix char ']', then color codes, then a space
+        let col_suffix = format!("]{}{} ", '\u{1b}', "[0m");
+
+        assert!(actual.starts_with(&col_prefix));
+        assert!(actual.ends_with(&col_suffix));
+        Ok(())
     }
 }

@@ -68,3 +68,142 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     Some(module)
 }
+
+#[cfg(test)]
+mod test {
+    use crate::context::Shell;
+    use crate::test::ModuleRenderer;
+    use ansi_term::Color;
+    use std::io;
+
+    #[test]
+    fn success_status() -> io::Result<()> {
+        let expected = Some(format!("{} ", Color::Green.bold().paint("❯")));
+
+        // Status code 0
+        let actual = ModuleRenderer::new("character").status(0).collect();
+        assert_eq!(expected, actual);
+
+        // No status code
+        let actual = ModuleRenderer::new("character").collect();
+        assert_eq!(expected, actual);
+
+        Ok(())
+    }
+
+    #[test]
+    fn failure_status() -> io::Result<()> {
+        let expected = Some(format!("{} ", Color::Red.bold().paint("❯")));
+
+        let exit_values = [1, 54321, -5000];
+
+        for status in &exit_values {
+            let actual = ModuleRenderer::new("character").status(*status).collect();
+            assert_eq!(expected, actual);
+        }
+
+        Ok(())
+    }
+
+    #[test]
+    fn custom_symbol() -> io::Result<()> {
+        let expected_fail = Some(format!("{} ", Color::Red.bold().paint("✖")));
+        let expected_success = Some(format!("{} ", Color::Green.bold().paint("➜")));
+
+        let exit_values = [1, 54321, -5000];
+
+        // Test failure values
+        for status in &exit_values {
+            let actual = ModuleRenderer::new("character")
+                .config(toml::toml! {
+                    [character]
+                    success_symbol = "[➜](bold green)"
+                    error_symbol = "[✖](bold red)"
+                })
+                .status(*status)
+                .collect();
+            assert_eq!(expected_fail, actual);
+        }
+
+        // Test success
+        let actual = ModuleRenderer::new("character")
+            .config(toml::toml! {
+                [character]
+                success_symbol = "[➜](bold green)"
+                error_symbol = "[✖](bold red)"
+            })
+            .status(0)
+            .collect();
+        assert_eq!(expected_success, actual);
+
+        Ok(())
+    }
+
+    #[test]
+    fn zsh_keymap() -> io::Result<()> {
+        let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
+        let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
+        let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
+
+        // zle keymap is vicmd
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Zsh)
+            .keymap("vicmd")
+            .collect();
+        assert_eq!(expected_vicmd, actual);
+
+        // specified vicmd character
+        let actual = ModuleRenderer::new("character")
+            .config(toml::toml! {
+                [character]
+                vicmd_symbol = "[V](bold green)"
+            })
+            .shell(Shell::Zsh)
+            .keymap("vicmd")
+            .collect();
+        assert_eq!(expected_specified, actual);
+
+        // zle keymap is other
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Zsh)
+            .keymap("visual")
+            .collect();
+        assert_eq!(expected_other, actual);
+
+        Ok(())
+    }
+
+    #[test]
+    fn fish_keymap() -> io::Result<()> {
+        let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
+        let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
+        let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
+
+        // fish keymap is default
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Fish)
+            .keymap("default")
+            .collect();
+        assert_eq!(expected_vicmd, actual);
+
+        // specified vicmd character
+        let actual = ModuleRenderer::new("character")
+            .config(toml::toml! {
+                [character]
+                vicmd_symbol = "[V](bold green)"
+            })
+            .shell(Shell::Fish)
+            .keymap("default")
+            .collect();
+        assert_eq!(expected_specified, actual);
+
+        // fish keymap is other
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Fish)
+            .keymap("visual")
+            .collect();
+        assert_eq!(expected_other, actual);
+
+        Ok(())
+    }
+}

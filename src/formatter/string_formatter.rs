@@ -204,13 +204,13 @@ impl<'a> StringFormatter<'a> {
     /// - Format string in meta variables fails to parse
     /// - Variable mapper returns an error.
     pub fn parse(self, default_style: Option<Style>) -> Result<Vec<Segment>, StringFormatterError> {
-        fn _parse_textgroup<'a>(
+        fn parse_textgroup<'a>(
             textgroup: TextGroup<'a>,
             variables: &'a VariableMapType<'a>,
             style_variables: &'a StyleVariableMapType<'a>,
         ) -> Result<Vec<Segment>, StringFormatterError> {
-            let style = _parse_style(textgroup.style, style_variables);
-            _parse_format(
+            let style = parse_style(textgroup.style, style_variables);
+            parse_format(
                 textgroup.format,
                 style.transpose()?,
                 &variables,
@@ -218,7 +218,7 @@ impl<'a> StringFormatter<'a> {
             )
         }
 
-        fn _parse_style<'a>(
+        fn parse_style<'a>(
             style: Vec<StyleElement>,
             variables: &'a StyleVariableMapType<'a>,
         ) -> Option<Result<Style, StringFormatterError>> {
@@ -244,7 +244,7 @@ impl<'a> StringFormatter<'a> {
                 .transpose()
         }
 
-        fn _parse_format<'a>(
+        fn parse_format<'a>(
             format: Vec<FormatElement<'a>>,
             style: Option<Style>,
             variables: &'a VariableMapType<'a>,
@@ -254,13 +254,13 @@ impl<'a> StringFormatter<'a> {
                 .into_iter()
                 .map(|el| {
                     match el {
-                        FormatElement::Text(text) => Ok(vec![_new_segment("_text", text, style)]),
+                        FormatElement::Text(text) => Ok(vec![Segment::new(style, text)]),
                         FormatElement::TextGroup(textgroup) => {
                             let textgroup = TextGroup {
                                 format: textgroup.format,
                                 style: textgroup.style,
                             };
-                            _parse_textgroup(textgroup, &variables, &style_variables)
+                            parse_textgroup(textgroup, &variables, &style_variables)
                         }
                         FormatElement::Variable(name) => variables
                             .get(name.as_ref())
@@ -271,21 +271,17 @@ impl<'a> StringFormatter<'a> {
                                     .into_iter()
                                     .map(|mut segment| {
                                         // Derive upper style if the style of segments are none.
-                                        if !segment.has_style() {
-                                            if let Some(style) = style {
-                                                segment.set_style(style);
-                                            }
-                                        }
+                                        if segment.style.is_none() {
+                                            segment.style = style;
+                                        };
                                         segment
                                     })
                                     .collect()),
-                                VariableValue::Plain(text) => {
-                                    Ok(vec![_new_segment(name, text, style)])
-                                }
+                                VariableValue::Plain(text) => Ok(vec![Segment::new(style, text)]),
                                 VariableValue::Meta(format) => {
                                     let formatter = StringFormatter {
                                         format,
-                                        variables: _clone_without_meta(variables),
+                                        variables: clone_without_meta(variables),
                                         style_variables: style_variables.clone(),
                                     };
                                     formatter.parse(style)
@@ -295,7 +291,7 @@ impl<'a> StringFormatter<'a> {
                         FormatElement::Conditional(format) => {
                             // Show the conditional format string if all the variables inside are not
                             // none.
-                            fn _should_show_elements<'a>(
+                            fn should_show_elements<'a>(
                                 format_elements: &[FormatElement],
                                 variables: &'a VariableMapType<'a>,
                             ) -> bool {
@@ -311,8 +307,8 @@ impl<'a> StringFormatter<'a> {
                                                     // check the format string inside it.
                                                     VariableValue::Meta(meta_elements) => {
                                                         let meta_variables =
-                                                            _clone_without_meta(variables);
-                                                        _should_show_elements(
+                                                            clone_without_meta(variables);
+                                                        should_show_elements(
                                                             &meta_elements,
                                                             &meta_variables,
                                                         )
@@ -328,10 +324,10 @@ impl<'a> StringFormatter<'a> {
                                 })
                             }
 
-                            let should_show: bool = _should_show_elements(&format, variables);
+                            let should_show: bool = should_show_elements(&format, variables);
 
                             if should_show {
-                                _parse_format(format, style, variables, style_variables)
+                                parse_format(format, style, variables, style_variables)
                             } else {
                                 Ok(Vec::new())
                             }
@@ -342,7 +338,7 @@ impl<'a> StringFormatter<'a> {
             Ok(results?.into_iter().flatten().collect())
         }
 
-        _parse_format(
+        parse_format(
             self.format,
             default_style,
             &self.variables,
@@ -363,20 +359,7 @@ impl<'a> StyleVariableHolder<String> for StringFormatter<'a> {
     }
 }
 
-/// Helper function to create a new segment
-fn _new_segment(
-    name: impl Into<String>,
-    value: impl Into<String>,
-    style: Option<Style>,
-) -> Segment {
-    Segment {
-        _name: name.into(),
-        value: value.into(),
-        style,
-    }
-}
-
-fn _clone_without_meta<'a>(variables: &VariableMapType<'a>) -> VariableMapType<'a> {
+fn clone_without_meta<'a>(variables: &VariableMapType<'a>) -> VariableMapType<'a> {
     VariableMapType::from_iter(variables.iter().map(|(key, value)| {
         let value = match value {
             Some(Ok(value)) => match value {
@@ -523,13 +506,9 @@ mod tests {
             .unwrap()
             .map_variables_to_segments(|variable| match variable {
                 "var" => Some(Ok(vec![
-                    _new_segment("_1".to_owned(), "styless".to_owned(), None),
-                    _new_segment("_2".to_owned(), "styled".to_owned(), styled_style),
-                    _new_segment(
-                        "_3".to_owned(),
-                        "styled_no_modifier".to_owned(),
-                        styled_no_modifier_style,
-                    ),
+                    Segment::new(None, "styless"),
+                    Segment::new(styled_style, "styled"),
+                    Segment::new(styled_no_modifier_style, "styled_no_modifier"),
                 ])),
                 _ => None,
             });

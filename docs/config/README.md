@@ -1,12 +1,5 @@
 # Configuration
 
-::: tip
-
-🔥 Configuration is currently being worked on.
-Many new configuration options will be available in coming releases.
-
-:::
-
 To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
 ```sh
@@ -14,7 +7,6 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
-
 ```toml
 # Don't print a new line at the start of the prompt
 add_newline = false
@@ -147,14 +139,12 @@ This is the list of prompt-wide configuration options.
 | -------------- | ------------------------------ | ----------------------------------------------------- |
 | `format`       | [link](#default-prompt-format) | Configure the format of the prompt.                   |
 | `scan_timeout` | `30`                           | Timeout for starship to scan files (in milliseconds). |
+| `add_newline`  | `true`                         | Add a new line before the start of the prompt.        |
 
 ### Example
 
 ```toml
 # ~/.config/starship.toml
-
-# Disable the newline at the start of the prompt
-format = "$all"
 
 # Use custom format
 format = """
@@ -164,6 +154,9 @@ format = """
 
 # Wait 10 milliseconds for starship to check files under the current directory.
 scan_timeout = 10
+
+# Disable the newline at the start of the prompt
+add_newline = false
 ```
 
 ### Default Prompt Format
@@ -171,13 +164,14 @@ scan_timeout = 10
 The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
 
 ```toml
-format = "\n$all"
+format = "$all"
 
 # Which is equivalent to
 format = """
 
 $username\
 $hostname\
+$shlvl\
 $kubernetes\
 $directory\
 $git_branch\
@@ -188,6 +182,7 @@ $hg_branch\
 $docker_context\
 $package\
 $cmake\
+$dart\
 $dotnet\
 $elixir\
 $elm\
@@ -199,17 +194,20 @@ $julia\
 $nim\
 $nodejs\
 $ocaml\
+$perl\
 $php\
 $purescript\
 $python\
 $ruby\
 $rust\
+$swift\
 $terraform\
 $zig\
 $nix_shell\
 $conda\
 $memory_usage\
 $aws\
+$gcloud\
 $env_var\
 $crystal\
 $cmd_duration\
@@ -517,6 +515,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | `symbol`            | `"🅒 "`                             | The symbol used before the environment name.                                                                                                                                                                |
 | `style`             | `"bold green"`                     | The style for the module.                                                                                                                                                                                   |
 | `format`            | `"[$symbol$environment]($style) "` | The format for the module.                                                                                                                                                                                  |
+| `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                                                                                                                                  |
 | `disabled`          | `false`                            | Disables the `conda` module.                                                                                                                                                                                |
 
 ### Variables
@@ -572,6 +571,43 @@ The module will be shown if any of the following conditions are met:
 
 [crystal]
 format = "via [✨ $version](bold blue) "
+```
+
+## Dart
+
+The `dart` module shows the currently installed version of Dart.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with `.dart` extension
+- The current directory contains a `.dart_tool` directory
+- The current directory contains a `pubspec.yaml` or `pubspec.lock` file
+
+### Options
+
+| Variable   | Default                            | Description                                     |
+| ---------- | ---------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
+| `symbol`   | `"🎯 "`                            | A format string representing the symbol of Dart |
+| `style`    | `"bold blue"`                      | The style for the module.                       |
+| `disabled` | `false`                            | Disables the `dart` module.                     |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v2.8.4` | The version of `dart`                |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[dart]
+format = "via [🔰 $version](bold red) "
 ```
 
 ## Directory
@@ -890,6 +926,67 @@ The module will be shown if any of the following conditions are met:
 format = "via [e $version](bold red) "
 ```
 
+## Gcloud
+
+The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI.
+This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+
+### Options
+
+| Variable          | Default                                           | Description                                                                 |
+| ----------------- | ------------------------------------------------- | --------------------------------------------------------------------------- |
+| `format`          | `"on [$symbol$account(\\($region\\))]($style) "`  | The format for the module.                                                  |
+| `symbol`          | `"☁️ "`                                            | The symbol used before displaying the current GCP profile.                  |
+| `region_aliases`  |                                                   | Table of region aliases to display in addition to the GCP name.             |
+| `style`           | `"bold blue"`                                     | The style for the module.                                                   |
+| `disabled`        | `false`                                           | Disables the `gcloud` module.                                               |
+
+### Variables
+
+| Variable | Example           | Description                                                        |
+| -------- | ----------------- | ------------------------------------------------------------------ |
+| region   | `us-central1`     | The current GCP region                                             |
+| account  | `foo@example.com` | The current GCP profile                                            |
+| project  |                   | The current GCP project                                            |
+| active   | `default`         | The active config name written in `~/.config/gcloud/active_config` |
+| symbol   |                   | Mirrors the value of option `symbol`                               |
+| style\*  |                   | Mirrors the value of option `style`                                |
+
+\*: This variable can only be used as a part of a style string
+
+### Examples
+
+#### Display account and project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = "on [$symbol$account(\\($project\\))]($style) "
+```
+
+#### Display active config name only
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = "[$symbol$active]($style) "
+style = "bold yellow"
+```
+
+#### Display account and aliased region
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+symbol = "️🇬️ "
+[gcloud.region_aliases]
+us-central1 = "uc1"
+asia-northeast1 = "an1"
+```
+
 ## Git Branch
 
 The `git_branch` module shows the active branch of the repo in your current directory.
@@ -1171,7 +1268,6 @@ The `hostname` module shows the system hostname.
 
 | Variable | Example | Description                          |
 | -------- | ------- | ------------------------------------ |
-| number   | `1`     | The number of jobs                   |
 | symbol   |         | Mirrors the value of option `symbol` |
 | style\*  |         | Mirrors the value of option `style`  |
 
@@ -1575,7 +1671,7 @@ format = "via [🤖 $version](bold green) "
 
 The `package` module is shown when the current directory is the repository for a
 package, and shows its current version. The module currently supports `npm`, `cargo`,
-`poetry`, `composer`, `gradle`, `julia` and `mix` packages.
+`poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
 - **npm** – The `npm` package version is extracted from the `package.json` present
   in the current directory
@@ -1588,6 +1684,8 @@ package, and shows its current version. The module currently supports `npm`, `ca
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 - **julia** - The package version is extracted from the `Project.toml` present
 - **mix** - The `mix` package version is extracted from the `mix.exs` present
+- **helm** - The `helm` chart version is extracted from the `Chart.yaml` present
+- **maven** - The `maven` package version is extracted from the `pom.xml` present
 
 > ⚠️ The version being shown is that of the package whose source code is in your
 > current directory, not your package manager.
@@ -1660,6 +1758,45 @@ The module will be shown if any of the following conditions are met:
 [ocaml]
 format = "via [🐪 $version]($style) "
 ```
+
+
+## Perl
+
+The `perl` module shows the currently installed version of Perl.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `Makefile.PL` or `Build.PL` file
+- The current directory contains a `cpanfile` or `cpanfile.snapshot` file
+- The current directory contains a `META.json` file or `META.yml` file
+- The current directory contains a `.perl-version` file
+- The current directory contains a `.pl`, `.pm` or `.pod`
+
+### Options
+
+| Variable   | Default                            | Description                                           |
+| ---------- |----------------------------------- | ----------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.|
+| `symbol`   | `"🐪 "`                            | The symbol used before displaying the version of Perl |
+| `style`    | `"bold 149"`                       | The style for the module.                             |
+| `disabled` | `false`                            | Disables the `perl` module.                           |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v5.26.1` | The version of `perl`                |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[perl]
+format = "via [🦪 $version]($style) "
+```
+
 
 ## PHP
 
@@ -1841,6 +1978,42 @@ The module will be shown if any of the following conditions are met:
 format = "via [⚙️ $version](red bold)"
 ```
 
+## SHLVL
+
+The `shlvl` module shows the current SHLVL ("shell level") environment variable, if it is
+set to a number and meets or exceeds the specified threshold.
+
+### Options
+
+| Variable    | Default                      | Description                                      |
+| ----------- | ---------------------------- | ------------------------------------------------ |
+| `threshold` | `2`                          | Display threshold.                               |
+| `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.                       |
+| `symbol`    | `"↕️ "`                       | The symbol used to represent the SHLVL.          |
+| `style`     | `"bold yellow"`              | The style for the module.                        |
+| `disabled`  | `true`                       | Disables the `shlvl` module.                     |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| shlvl    | `3`       | The current value of SHLVL           |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[shlvl]
+disabled = false
+format = "$shlvl level(s) down"
+threshold = 3
+```
+
 ## Singularity
 
 The `singularity` module shows the current singularity image, if inside a container
@@ -1872,6 +2045,42 @@ and `$SINGULARITY_NAME` is set.
 
 [singularity]
 format = "[📦 \\[$env\\]]($style) "
+```
+
+## Swift
+
+The `swift` module shows the currently installed version of Swift.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `Package.swift` file
+- The current directory contains a file with the `.swift` extension
+
+### Options
+
+| Option     | Default                            | Description                                      |
+| ---------- | ---------------------------------- | ------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
+| `symbol`   | `"🐦 "`                            | A format string representing the symbol of Swift |
+| `style`    | `"bold 202"`                       | The style for the module.                        |
+| `disabled` | `false`                            | Disables the `swift` module.                     |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v5.2.4` | The version of `swift`               |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[swift]
+format = "via [🏎  $version](red bold)"
 ```
 
 ## Terraform

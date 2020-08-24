@@ -4,6 +4,7 @@ use rayon::prelude::*;
 use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
 use std::io::{self, Write};
+use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::UnicodeWidthChar;
 
 use crate::configs::PROMPT_ORDER;
@@ -71,6 +72,9 @@ pub fn get_prompt(context: Context) -> String {
     );
 
     let module_strings = root_module.ansi_strings_for_shell(context.shell);
+    if config.add_newline {
+        writeln!(buf).unwrap();
+    }
     write!(buf, "{}", ANSIStrings(&module_strings)).unwrap();
 
     buf
@@ -104,50 +108,72 @@ pub fn explain(args: ArgMatches) {
             let value = module.get_segments().join("");
             ModuleInfo {
                 value: ansi_term::ANSIStrings(&module.ansi_strings()).to_string(),
-                value_len: value.chars().count() + count_wide_chars(&value),
+                value_len: better_width(value.as_str()),
                 desc: module.get_description().to_owned(),
             }
         })
         .collect::<Vec<ModuleInfo>>();
 
-    let mut max_ansi_module_width = 0;
-    let mut max_module_width = 0;
+    let max_module_width = modules.iter().map(|i| i.value_len).max().unwrap_or(0);
 
-    for info in &modules {
-        max_ansi_module_width = std::cmp::max(
-            max_ansi_module_width,
-            info.value.chars().count() + count_wide_chars(&info.value),
-        );
-        max_module_width = std::cmp::max(max_module_width, info.value_len);
-    }
+    // In addition to the module width itself there are also 6 padding characters in each line.
+    // Overall a line looks like this: " {module name}  -  {description}".
+    const PADDING_WIDTH: usize = 6;
 
     let desc_width = term_size::dimensions()
         .map(|(w, _)| w)
-        .map(|width| width - std::cmp::min(width, max_ansi_module_width));
+        // Add padding length to module length to avoid text overflow. This line also assures desc_width >= 0.
+        .map(|width| width - std::cmp::min(width, max_module_width + PADDING_WIDTH));
 
     println!("\n Here's a breakdown of your prompt:");
     for info in modules {
-        let wide_chars = count_wide_chars(&info.value);
-
         if let Some(desc_width) = desc_width {
-            let wrapped = textwrap::fill(&info.desc, desc_width);
-            let mut lines = wrapped.split('\n');
-            println!(
-                " {:width$}  -  {}",
+            // Custom Textwrapping!
+            let mut current_pos = 0;
+            let mut escaping = false;
+            // Print info
+            print!(
+                " {}{}  -  ",
                 info.value,
-                lines.next().unwrap(),
-                width = max_ansi_module_width - wide_chars
+                " ".repeat(max_module_width - info.value_len)
             );
+            for g in info.desc.graphemes(true) {
+                // Handle ANSI escape sequnces
+                if g == "\x1B" {
+                    escaping = true;
+                }
+                if escaping {
+                    print!("{}", g);
+                    escaping = !("a" <= g && "z" >= g || "A" <= g && "Z" >= g);
+                    continue;
+                }
 
-            for line in lines {
-                println!("{}{}", " ".repeat(max_module_width + 6), line.trim());
+                // Handle normal wrapping
+                current_pos += grapheme_width(g);
+                // Wrap when hitting max width or newline
+                if g == "\n" || current_pos > desc_width {
+                    // trim spaces on linebreak
+                    if g == " " && desc_width > 1 {
+                        continue;
+                    }
+
+                    print!("\n{}", " ".repeat(max_module_width + PADDING_WIDTH));
+                    if g == "\n" {
+                        current_pos = 0;
+                        continue;
+                    }
+
+                    current_pos = 1;
+                }
+                print!("{}", g);
             }
+            println!();
         } else {
             println!(
-                " {:width$}  -  {}",
+                " {}{}  -  {}",
                 info.value,
+                " ".repeat(max_module_width - info.value_len),
                 info.desc,
-                width = max_ansi_module_width - wide_chars
             );
         };
     }
@@ -266,6 +292,19 @@ fn should_add_implicit_custom_module(
         .unwrap_or(false)
 }
 
-fn count_wide_chars(value: &str) -> usize {
-    value.chars().filter(|c| c.width().unwrap_or(0) > 1).count()
+fn better_width(s: &str) -> usize {
+    s.graphemes(true).map(grapheme_width).sum()
+}
+
+// Assume that graphemes have width of the first character in the grapheme
+fn grapheme_width(g: &str) -> usize {
+    g.chars().next().and_then(|i| i.width()).unwrap_or(0)
+}
+
+#[test]
+fn test_grapheme_aware_better_width() {
+    // UnicodeWidthStr::width would return 8
+    assert_eq!(2, better_width("👩‍👩‍👦‍👦"));
+    assert_eq!(1, better_width("Ü"));
+    assert_eq!(11, better_width("normal text"));
 }

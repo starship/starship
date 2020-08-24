@@ -6,6 +6,7 @@ use starship_module_config_derive::ModuleConfig;
 pub struct StarshipRootConfig<'a> {
     pub format: &'a str,
     pub scan_timeout: u64,
+    pub add_newline: bool,
 }
 
 // List of default prompt order
@@ -14,6 +15,7 @@ pub struct StarshipRootConfig<'a> {
 pub const PROMPT_ORDER: &[&str] = &[
     "username",
     "hostname",
+    "shlvl",
     "singularity",
     "kubernetes",
     "directory",
@@ -27,6 +29,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     // ↓ Toolchain version modules ↓
     // (Let's keep these sorted alphabetically)
     "cmake",
+    "dart",
     "dotnet",
     "elixir",
     "elm",
@@ -38,11 +41,13 @@ pub const PROMPT_ORDER: &[&str] = &[
     "nim",
     "nodejs",
     "ocaml",
+    "perl",
     "php",
     "purescript",
     "python",
     "ruby",
     "rust",
+    "swift",
     "terraform",
     "zig",
     // ↑ Toolchain version modules ↑
@@ -50,6 +55,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "conda",
     "memory_usage",
     "aws",
+    "gcloud",
     "env_var",
     "crystal",
     "cmd_duration",
@@ -65,8 +71,9 @@ pub const PROMPT_ORDER: &[&str] = &[
 impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
     fn new() -> Self {
         StarshipRootConfig {
-            format: "\n$all",
+            format: "$all",
             scan_timeout: 30,
+            add_newline: true,
         }
     }
 }

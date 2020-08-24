@@ -1,5 +1,6 @@
 use crate::utils::exec_cmd;
 
+use clap::crate_version;
 use std::fs;
 use std::path::PathBuf;
 
@@ -254,5 +255,6 @@ mod tests {
 
         let config_path = get_config_path("bash");
         assert_eq!("/test/home/.bashrc", config_path.unwrap().to_str().unwrap());
+        env::remove_var("HOME");
     }
 }

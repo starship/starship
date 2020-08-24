@@ -69,7 +69,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
@@ -77,7 +77,7 @@ mod tests {
     #[test]
     fn folder_without_ocaml_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = render_module("ocaml", dir.path(), None);
+        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -88,7 +88,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.opam"))?.sync_all()?;
 
-        let actual = render_module("ocaml", dir.path(), None);
+        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐫 v4.10.0")));
         assert_eq!(expected, actual);
         dir.close()
@@ -99,7 +99,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         fs::create_dir_all(dir.path().join("_opam"))?;
 
-        let actual = render_module("ocaml", dir.path(), None);
+        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐫 v4.10.0")));
         assert_eq!(expected, actual);
         dir.close()
@@ -114,7 +114,7 @@ mod tests {
             dir.path().join("package.lock"),
             "{\"dependencies\": {\"ocaml\": \"4.8.1000\"}}",
         )?;
-        let actual = render_module("ocaml", dir.path(), None);
+        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐫 v4.08.1")));
         assert_eq!(expected, actual);
         dir.close()
@@ -125,7 +125,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("dune"))?.sync_all()?;
 
-        let actual = render_module("ocaml", dir.path(), None);
+        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐫 v4.10.0")));
         assert_eq!(expected, actual);
         dir.close()
@@ -136,7 +136,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("dune-project"))?.sync_all()?;
 
-        let actual = render_module("ocaml", dir.path(), None);
+        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐫 v4.10.0")));
         assert_eq!(expected, actual);
         dir.close()
@@ -147,7 +147,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("jbuild"))?.sync_all()?;
 
-        let actual = render_module("ocaml", dir.path(), None);
+        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐫 v4.10.0")));
         assert_eq!(expected, actual);
         dir.close()
@@ -158,7 +158,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("jbuild-ignore"))?.sync_all()?;
 
-        let actual = render_module("ocaml", dir.path(), None);
+        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐫 v4.10.0")));
         assert_eq!(expected, actual);
         dir.close()
@@ -169,7 +169,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".merlin"))?.sync_all()?;
 
-        let actual = render_module("ocaml", dir.path(), None);
+        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐫 v4.10.0")));
         assert_eq!(expected, actual);
         dir.close()
@@ -180,7 +180,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.ml"))?.sync_all()?;
 
-        let actual = render_module("ocaml", dir.path(), None);
+        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐫 v4.10.0")));
         assert_eq!(expected, actual);
         dir.close()
@@ -191,7 +191,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.mli"))?.sync_all()?;
 
-        let actual = render_module("ocaml", dir.path(), None);
+        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐫 v4.10.0")));
         assert_eq!(expected, actual);
         dir.close()
@@ -202,7 +202,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.re"))?.sync_all()?;
 
-        let actual = render_module("ocaml", dir.path(), None);
+        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐫 v4.10.0")));
         assert_eq!(expected, actual);
         dir.close()
@@ -213,7 +213,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.rei"))?.sync_all()?;
 
-        let actual = render_module("ocaml", dir.path(), None);
+        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐫 v4.10.0")));
         assert_eq!(expected, actual);
         dir.close()

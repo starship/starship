@@ -73,7 +73,7 @@ fn parse_elixir_version(version: &str) -> Option<(String, String)> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -97,7 +97,7 @@ Elixir 1.10 (compiled with Erlang/OTP 22)
         let dir = tempfile::tempdir()?;
 
         let expected = None;
-        let output = render_module("elixir", dir.path(), None);
+        let output = ModuleRenderer::new("elixir").path(dir.path()).collect();
 
         assert_eq!(output, expected);
 
@@ -113,7 +113,7 @@ Elixir 1.10 (compiled with Erlang/OTP 22)
             "via {} ",
             Color::Purple.bold().paint("💧 1.10 (OTP 22)")
         ));
-        let output = render_module("elixir", dir.path(), None);
+        let output = ModuleRenderer::new("elixir").path(dir.path()).collect();
 
         assert_eq!(output, expected);
 
