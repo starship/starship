@@ -57,10 +57,10 @@ fn get_erlang_version() -> Option<String> {
         &[
             "-noshell",
             "-eval",
-            "'Fn=filename:join([code:root_dir(),\"releases\",erlang:system_info(otp_release),\"OTP_VERSION\"]),\
+            "Fn=filename:join([code:root_dir(),\"releases\",erlang:system_info(otp_release),\"OTP_VERSION\"]),\
              {ok,Content}=file:read_file(Fn),\
              io:format(\"~s\",[Content]),\
-             halt(0).'"
+             halt(0)."
         ]
     )?.stdout.trim().to_string())
 }
