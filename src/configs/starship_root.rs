@@ -6,6 +6,7 @@ use starship_module_config_derive::ModuleConfig;
 pub struct StarshipRootConfig<'a> {
     pub format: &'a str,
     pub scan_timeout: u64,
+    pub add_newline: bool,
 }
 
 // List of default prompt order
@@ -71,8 +72,9 @@ pub const PROMPT_ORDER: &[&str] = &[
 impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
     fn new() -> Self {
         StarshipRootConfig {
-            format: "\n$all",
+            format: "$all",
             scan_timeout: 30,
+            add_newline: true,
         }
     }
 }
