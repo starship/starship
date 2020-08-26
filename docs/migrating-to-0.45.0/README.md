@@ -52,3 +52,29 @@ format = """\
   $character\
   """
 ```
+
+## Module `prefix` and `suffix` will be replaced by `format`
+
+Previously to v0.45.0, some modules would accept `prefix` and/or `suffix`
+in order to stylize the way that modules are rendered.
+
+Starship v0.45.0 will instead be accepting a `format` value, allowing for further
+customization of how modules are rendered. Instead of defining a prefix and suffix
+for the context-based variables, the variables can now be substituted from within
+a format string, which represents the module's output.
+
+**Example pre-v0.45.0 configuration**
+
+```toml
+[time]
+prefix = "took "
+```
+
+**Example v0.45.0 configuration**
+
+```toml
+[time]
+# $duration – The command duration (e.g. "15s")
+#    $style – The default style of the module (e.g. "bold yellow")
+format = "took [$duration]($style)
+```
