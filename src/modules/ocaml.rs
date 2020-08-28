@@ -18,7 +18,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .try_begin_scan()?
         .set_files(&["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"])
         .set_folders(&["_opam", "esy.lock"])
-        .set_extensions(&["opam", "ml", "mli", "re", "rei"])
+        .set_extensions(&["opam", "ml", "mli", "re", "rei", "res", "resi"])
         .is_match();
 
     if !is_ocaml_project {
