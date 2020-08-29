@@ -2282,6 +2282,13 @@ By default, the `custom` module will simply show all custom modules in the order
 
 :::
 
+::: tip
+
+[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules.
+If you have an interesting example not covered there, feel free to share it there!
+
+:::
+
 ### Options
 
 | Option        | Default                       | Description                                                                                                                |
