@@ -2276,9 +2276,9 @@ Multiple custom modules can be defined by using a `.`.
 
 ::: tip
 
-The order in which custom modules are shown can be individually set
-by setting `custom.foo` in `prompt_order`. By default, the `custom` module
-will simply show all custom modules in the order they were defined.
+The order in which custom modules are shown can be individually set by including 
+`${custom.foo}` in `prompt_order` (as it includes a dot, you need to use `${...}`). 
+By default, the `custom` module will simply show all custom modules in the order they were defined.
 
 :::
 
