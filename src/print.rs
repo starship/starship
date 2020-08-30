@@ -249,19 +249,19 @@ fn handle_module<'a>(
             Some(false) => modules.push(modules::custom::module(&module[7..], &context)),
             None => match context.config.get_custom_modules() {
                 Some(modules) => log::debug!(
-                    "prompt_order contains custom module \"{}\", but no configuration was provided. Configuration for the following modules were provided: {:?}",
+                    "top level format contains custom module \"{}\", but no configuration was provided. Configuration for the following modules were provided: {:?}",
                     module,
                     DebugCustomModules(modules),
                     ),
                 None => log::debug!(
-                    "prompt_order contains custom module \"{}\", but no configuration was provided.",
+                    "top level format contains custom module \"{}\", but no configuration was provided.",
                     module,
                     ),
             },
         }
     } else {
         log::debug!(
-            "Expected prompt_order to contain value from {:?}. Instead received {}",
+            "Expected top level format to contain value from {:?}. Instead received {}",
             ALL_MODULES,
             module,
         );
