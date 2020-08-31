@@ -52,6 +52,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "branch" => Some(Ok(graphemes.concat())),
                 _ => None,
             })
+            .map(|variable| match variable {
+                "prefix" => Some(Ok(config.prefix)),
+                _ => None,
+            })
             .parse(None)
     });
 
@@ -311,7 +315,7 @@ mod tests {
                 toml::from_str(&format!(
                     "
                     [git_branch]
-                        prefix = \"on\"
+                        prefix = \"on \"
                         truncation_length = {}
                         {}
                 ",
