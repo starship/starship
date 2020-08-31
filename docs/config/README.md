@@ -993,14 +993,15 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Options
 
-| Option              | Default                          | Description                                                                              |
-| ------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
-| `format`            | `"on [$symbol$branch]($style) "` | The format for the module.  Use `"$branch"` to refer to the current branch name.         |
-| `symbol`            | `" "`                           | A format string representing the symbol of git branch.                                   |
-| `style`             | `"bold purple"`                  | The style for the module.                                                                |
-| `truncation_length` | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                   |
-| `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
-| `disabled`          | `false`                          | Disables the `git_branch` module.                                                        |
+| Option              | Default                              | Description                                                                              |
+| ------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------- |
+| `format`            | `"$prefix[$symbol$branch]($style) "` | The format for the module.  Use `"$branch"` to refer to the current branch name.         |
+| `symbol`            | `" "`                               | A format string representing the symbol of git branch.                                   |
+| `style`             | `"bold purple"`                      | The style for the module.                                                                |
+| `prefix`            | `"on "`                              | The prefix for the module                                                                |
+| `truncation_length` | `2^63 - 1`                           | Truncates a git branch to X graphemes.                                                   |
+| `truncation_symbol` | `"…"`                                | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
+| `disabled`          | `false`                              | Disables the `git_branch` module.                                                        |
 
 ### Variables
 
@@ -1411,14 +1412,15 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Option                  | Default                                              | Description                                                           |
-| ----------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`                | `"☸ "`                                              | A format string representing the symbol displayed before the Cluster. |
-| `format`                | `"on [$symbol$context( \\($namespace\\))]($style) "` | The format for the module.                                            |
-| `style`                 | `"cyan bold"`                                        | The style for the module.                                             |
-| `namespace_spaceholder` | `none`                                               | The value to display if no namespace was found.                       |
-| `context_aliases`       |                                                      | Table of context aliases to display.                                  |
-| `disabled`              | `true`                                               | Disables the `kubernetes` module.                                     |
+| Option                  | Default                                                  | Description                                                           |
+| ----------------------- | -------------------------------------------------------- | --------------------------------------------------------------------- |
+| `format`                | `"$prefix[$symbol$context( \\($namespace\\))]($style) "` | The format for the module.                                            |
+| `symbol`                | `"☸ "`                                                   | A format string representing the symbol displayed before the Cluster. |
+| `prefix`                | `"on "`                                                  | The prefix for the module.                                            |
+| `style`                 | `"cyan bold"`                                            | The style for the module.                                             |
+| `namespace_spaceholder` | `none`                                                   | The value to display if no namespace was found.                       |
+| `context_aliases`       |                                                          | Table of context aliases to display.                                  |
+| `disabled`              | `true`                                                   | Disables the `kubernetes` module.                                     |
 
 ### Variables
 
