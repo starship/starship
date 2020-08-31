@@ -6,6 +6,7 @@ use std::collections::HashMap;
 #[derive(Clone, ModuleConfig)]
 pub struct KubernetesConfig<'a> {
     pub symbol: &'a str,
+    pub prefix: &'a str,
     pub format: &'a str,
     pub style: &'a str,
     pub disabled: bool,
@@ -16,7 +17,8 @@ impl<'a> RootModuleConfig<'a> for KubernetesConfig<'a> {
     fn new() -> Self {
         KubernetesConfig {
             symbol: "☸ ",
-            format: "on [$symbol$context( \\($namespace\\))]($style) ",
+            prefix: "on ",
+            format: "$prefix[$symbol$context( \\($namespace\\))]($style) ",
             style: "cyan bold",
             disabled: true,
             context_aliases: HashMap::new(),
