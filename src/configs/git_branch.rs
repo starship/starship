@@ -7,6 +7,7 @@ pub struct GitBranchConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
     pub style: &'a str,
+    pub prefix: &'a str,
     pub truncation_length: i64,
     pub truncation_symbol: &'a str,
     pub disabled: bool,
@@ -15,9 +16,10 @@ pub struct GitBranchConfig<'a> {
 impl<'a> RootModuleConfig<'a> for GitBranchConfig<'a> {
     fn new() -> Self {
         GitBranchConfig {
-            format: "on [$symbol$branch]($style) ",
+            format: "$prefix[$symbol$branch]($style) ",
             symbol: " ",
             style: "bold purple",
+            prefix: "on ",
             truncation_length: std::i64::MAX,
             truncation_symbol: "…",
             disabled: false,
