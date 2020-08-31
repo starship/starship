@@ -288,7 +288,7 @@ mod tests {
             truncate_length,
             expected_name,
             truncation_symbol,
-            "prefix = \"on \"",
+            "",
         )
     }
 
@@ -311,6 +311,7 @@ mod tests {
                 toml::from_str(&format!(
                     "
                     [git_branch]
+                        prefix = \"on\"
                         truncation_length = {}
                         {}
                 ",
