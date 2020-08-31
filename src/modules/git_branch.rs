@@ -288,8 +288,7 @@ mod tests {
             truncate_length,
             expected_name,
             truncation_symbol,
-            "on ",
-            "",
+            "prefix = \"on \"",
         )
     }
 
@@ -298,7 +297,6 @@ mod tests {
         truncate_length: i64,
         expected_name: &str,
         truncation_symbol: &str,
-        prefix: &str,
         config_options: &str,
     ) -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::GIT)?;
@@ -314,10 +312,9 @@ mod tests {
                     "
                     [git_branch]
                         truncation_length = {}
-                        prefix = {}
                         {}
                 ",
-                    truncate_length, prefix, config_options
+                    truncate_length, config_options
                 ))
                 .unwrap(),
             )
