@@ -10,11 +10,11 @@
   - **Configuración**: [archivos de configuración de matchai](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
-## ¿`prompt_order` y `<module>.disabled` hacen lo mismo?
+## Do top level `format` and `<module>.disabled` do the same thing?
 
 Sí, se pueden usar ambos para desactivar los módulos en el símbolo del sistema. Si todo lo que planeas es desactivar módulos, `<module>.disabled` es el método preferido por las siguientes razones:
 
-- Es más evidente desactivar módulos que omitirlos usando prompt_order
+- Disabling modules is more explicit than omitting them from the top level `format`
 - Los nuevos módulos se añadirán al símbolo del sistema en cuanto Starship se actualice
 
 ## La documentación dice que Starship es compatible con cualquier intérprete de comandos pero no soporta X Shell. ¿Por qué?
