@@ -4,6 +4,7 @@ use rayon::prelude::*;
 use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
 use std::io::{self, Write};
+use std::time::Duration;
 use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::UnicodeWidthChar;
 
@@ -88,6 +89,51 @@ pub fn module(module_name: &str, args: ArgMatches) {
 
 pub fn get_module(module_name: &str, context: Context) -> Option<String> {
     modules::handle(module_name, &context).map(|m| m.to_string())
+}
+
+pub fn timings(args: ArgMatches) {
+    let context = Context::new(args);
+
+    struct ModuleTiming {
+        name: String,
+        name_len: usize,
+        value: String,
+        duration: Option<Duration>,
+        duration_len: usize,
+    }
+
+    let mut modules = compute_modules(&context)
+        .iter()
+        .map(|module| ModuleTiming {
+            name: String::from(module.get_name().as_str()),
+            name_len: better_width(module.get_name().as_str()),
+            value: ansi_term::ANSIStrings(&module.ansi_strings())
+                .to_string()
+                .replace('\n', "\\n"),
+            duration: module.duration,
+            duration_len: better_width(format_duration(&module.duration).as_str()),
+        })
+        .collect::<Vec<ModuleTiming>>();
+
+    modules.sort_by(|a, b| b.duration.cmp(&a.duration));
+
+    let max_name_width = modules.iter().map(|i| i.name_len).max().unwrap_or(0);
+    let max_duration_width = modules.iter().map(|i| i.duration_len).max().unwrap_or(0);
+
+    // for now we do not expect a wrap around at the end... famous last words
+    // Overall a line looks like this: " {module name}  -  {duration}  -  {module value}".
+    println!("\n Here are the timings of all active modules in your prompt:");
+
+    for timing in &modules {
+        println!(
+            " {}{}  -  {}{}  -   {}",
+            timing.name,
+            " ".repeat(max_name_width - (timing.name_len)),
+            " ".repeat(max_duration_width - (timing.duration_len)),
+            format_duration(&timing.duration),
+            timing.value
+        );
+    }
 }
 
 pub fn explain(args: ArgMatches) {
@@ -296,6 +342,20 @@ fn should_add_implicit_custom_module(
 
 fn better_width(s: &str) -> usize {
     s.graphemes(true).map(grapheme_width).sum()
+}
+
+pub fn format_duration(duration: &Option<Duration>) -> String {
+    match duration {
+        Some(duration) => {
+            let milis = duration.as_millis();
+            if milis == 0 {
+                "<1ms".to_string()
+            } else {
+                format!("{:?}ms", duration.as_millis())
+            }
+        }
+        None => "<unknown>".to_string(),
+    }
 }
 
 // Assume that graphemes have width of the first character in the grapheme

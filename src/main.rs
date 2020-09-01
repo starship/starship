@@ -140,6 +140,9 @@ fn main() {
                 SubCommand::with_name("explain").about("Explains the currently showing modules"),
             )
             .subcommand(
+                    SubCommand::with_name("timings").about("Print timings of all active modules"),
+            )
+            .subcommand(
                 SubCommand::with_name("completions")
                     .about("Generate starship shell completions for your shell to stdout")
                     .arg(
@@ -197,6 +200,7 @@ fn main() {
             }
         }
         ("explain", Some(sub_m)) => print::explain(sub_m.clone()),
+        ("timings", Some(sub_m)) => print::timings(sub_m.clone()),
         ("completions", Some(sub_m)) => {
             let shell: Shell = sub_m
                 .value_of("shell")
