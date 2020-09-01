@@ -2181,7 +2181,13 @@ Multiple custom modules can be defined by using a `.`.
 
 ::: tip
 
-The order in which custom modules are shown can be individually set by setting `custom.foo` in `prompt_order`. By default, the `custom` module will simply show all custom modules in the order they were defined.
+The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
+
+:::
+
+::: tip
+
+[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
 
 :::
 
@@ -2189,7 +2195,7 @@ The order in which custom modules are shown can be individually set by setting `
 
 | オプション         | デフォルト                         | 説明                                                                                                                         |
 | ------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                               | The command whose output should be printed.                                                                                |
+| `command`     |                               | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                               | [See below](#custom-command-shell)                                                                                         |
 | `description` | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
@@ -2219,6 +2225,8 @@ The order in which custom modules are shown can be individually set by setting `
 - Other following arguments are passed to the shell.
 
 If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
+
+The `command` will be passed in on stdin.
 
 If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
 
