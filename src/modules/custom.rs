@@ -1,5 +1,6 @@
 use std::io::Write;
 use std::process::{Command, Output, Stdio};
+use std::time::Instant;
 
 use super::{Context, Module, RootModuleConfig};
 
@@ -13,6 +14,7 @@ use crate::{configs::custom::CustomConfig, formatter::StringFormatter};
 ///
 /// Finally, the content of the module itself is also set by a command.
 pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
+    let start: Instant = Instant::now();
     let toml_config = context.config.get_custom_module_config(name).expect(
         "modules::custom::module should only be called after ensuring that the module exists",
     );
@@ -70,14 +72,13 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
             .parse(None)
     });
 
-    module.set_segments(match parsed {
-        Ok(segments) => segments,
+    match parsed {
+        Ok(segments) => module.set_segments(segments),
         Err(error) => {
             log::warn!("Error in module `custom.{}`:\n{}", name, error);
-            return None;
         }
-    });
-
+    };
+    module.duration = Option::from(start.elapsed());
     Some(module)
 }
 

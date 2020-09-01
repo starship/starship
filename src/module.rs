@@ -3,6 +3,7 @@ use crate::segment::Segment;
 use crate::utils::wrap_colorseq_for_shell;
 use ansi_term::{ANSIString, ANSIStrings};
 use std::fmt;
+use std::time::Duration;
 
 // List of all modules
 // Keep these ordered alphabetically.
@@ -73,6 +74,9 @@ pub struct Module<'a> {
 
     /// The collection of segments that compose this module.
     pub segments: Vec<Segment>,
+
+    /// the time it took to compute this module
+    pub duration: Option<Duration>,
 }
 
 impl<'a> Module<'a> {
@@ -83,6 +87,7 @@ impl<'a> Module<'a> {
             name: name.to_string(),
             description: desc.to_string(),
             segments: Vec::new(),
+            duration: None,
         }
     }
 
@@ -167,6 +172,7 @@ mod tests {
             name: name.to_string(),
             description: desc.to_string(),
             segments: Vec::new(),
+            duration: None,
         };
 
         assert!(module.is_empty());
@@ -181,6 +187,7 @@ mod tests {
             name: name.to_string(),
             description: desc.to_string(),
             segments: vec![Segment::new(None, "")],
+            duration: None,
         };
 
         assert!(module.is_empty());

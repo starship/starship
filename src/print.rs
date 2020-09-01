@@ -104,6 +104,8 @@ pub fn explain(args: ArgMatches) {
     let modules = compute_modules(&context)
         .into_iter()
         .filter(|module| !dont_print.contains(&module.get_name().as_str()))
+        // this contains empty modules which should not print
+        .filter(|module| !module.is_empty())
         .map(|module| {
             let value = module.get_segments().join("");
             ModuleInfo {
