@@ -44,9 +44,9 @@ starship prompt --help
 
 L'invite de commande utilisera toutes les données contextuelles fournies, mais aucun indicateur n'est "requis".
 
-## How do I run Starship on Linux distributions with older versions of glibc?
+## Comment utiliser Starship sur des distributions Linux avec des versions de glibc plus ancienne ?
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+Si vous obtenez une erreur du type "_version 'GLIBC_2.18' not found (required by starship)_" lors de l'utilisation du binaire précompilé (par exemple sur CentOS 6 ou 7), vous pouvez utiliser un binaire compilé avec `musl` au lieu de `glibc`:
 
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
