@@ -75,6 +75,6 @@ prefix = "took "
 ```toml
 [cmd_duration]
 # $duration – The command duration (e.g. "15s")
-#    $style – The default style of the module (e.g. "bold yellow")
-format = "took [$duration]($style)
+# $style    – The default style of the module (e.g. "bold yellow")
+format = "took [$duration]($style)"
 ```
