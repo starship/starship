@@ -143,6 +143,7 @@ pub fn explain(args: ArgMatches) {
         value: String,
         value_len: usize,
         desc: String,
+        duration: String,
     }
 
     let dont_print = vec!["line_break"];
@@ -156,17 +157,19 @@ pub fn explain(args: ArgMatches) {
             let value = module.get_segments().join("");
             ModuleInfo {
                 value: ansi_term::ANSIStrings(&module.ansi_strings()).to_string(),
-                value_len: better_width(value.as_str()),
+                value_len: better_width(value.as_str())
+                    + better_width(format_duration(&module.duration).as_str()),
                 desc: module.get_description().to_owned(),
+                duration: format_duration(&module.duration),
             }
         })
         .collect::<Vec<ModuleInfo>>();
 
     let max_module_width = modules.iter().map(|i| i.value_len).max().unwrap_or(0);
 
-    // In addition to the module width itself there are also 6 padding characters in each line.
-    // Overall a line looks like this: " {module name}  -  {description}".
-    const PADDING_WIDTH: usize = 6;
+    // In addition to the module width itself there are also 9 padding characters in each line.
+    // Overall a line looks like this: " {module value} ({xxxms})  -  {description}".
+    const PADDING_WIDTH: usize = 9;
 
     let desc_width = term_size::dimensions()
         .map(|(w, _)| w)
@@ -181,9 +184,10 @@ pub fn explain(args: ArgMatches) {
             let mut escaping = false;
             // Print info
             print!(
-                " {}{}  -  ",
+                " {} ({}){}  -  ",
                 info.value,
-                " ".repeat(max_module_width - info.value_len)
+                info.duration,
+                " ".repeat(max_module_width - (info.value_len))
             );
             for g in info.desc.graphemes(true) {
                 // Handle ANSI escape sequnces
