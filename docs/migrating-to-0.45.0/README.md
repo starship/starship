@@ -73,7 +73,7 @@ prefix = "took "
 **Example v0.45.0 configuration**
 
 ```toml
-[time]
+[cmd_duration]
 # $duration – The command duration (e.g. "15s")
 #    $style – The default style of the module (e.g. "bold yellow")
 format = "took [$duration]($style)
