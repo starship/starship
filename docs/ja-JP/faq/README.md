@@ -10,11 +10,11 @@
   - **設定**: [matchaiのDotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **プロンプト**: [Starship](https://starship.rs/)
 
-## `prompt_order` と `<module>.disabled` は同じことをしますか？
+## Do top level `format` and `<module>.disabled` do the same thing?
 
 はい、両方ともプロンプトでモジュールを無効にするために使用できます。 モジュールを無効にするだけの場合は、これらの理由から` <module> .disabled `を無効にする方法をお勧めします。
 
-- モジュールを無効にすると、prompt_orderからモジュールを省略するよりも明確になります。
+- Disabling modules is more explicit than omitting them from the top level `format`
 - Starshipが更新されると、新しく作成されたモジュールがプロンプトに追加されます
 
 ## ドキュメントによると、Starshipはクロスシェル対応をしているようですが、Xシェルはサポートしていません。 なぜですか？
