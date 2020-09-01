@@ -10,11 +10,11 @@
   - **Configuration**: [Dotfiles de matchai](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Invite de commande**: [Starship](https://starship.rs/)
 
-## Est-ce que `prompt_order` et `<module>.disabled` font la même chose ?
+## Do top level `format` and `<module>.disabled` do the same thing?
 
 Oui, ils peuvent tous deux être utilisés pour désactiver les modules dans l'invite de commande. Si tout ce que vous prévoyez de faire est de désactiver les modules, `<module>.disabled` est le meilleur moyen de le faire pour ces raisons :
 
-- Désactiver les modules est plus explicite que de les omettre dans le prompt_order
+- Disabling modules is more explicit than omitting them from the top level `format`
 - Les modules nouvellement créés seront ajoutés à l'invite de commande au fur et à mesure que Starship sera mis à jour
 
 ## La doc dit que Starship est cross-shell, mais il ne supporte pas X shell. Pourquoi ?
