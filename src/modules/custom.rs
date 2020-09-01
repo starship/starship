@@ -49,35 +49,33 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     let output = exec_command(config.command, &config.shell.0)?;
 
     let trimmed = output.trim();
-    if trimmed.is_empty() {
-        return None;
+    if !trimmed.is_empty() {
+        let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+            formatter
+                .map_meta(|var, _| match var {
+                    "symbol" => Some(config.symbol),
+                    _ => None,
+                })
+                .map_style(|variable| match variable {
+                    "style" => Some(Ok(config.style)),
+                    _ => None,
+                })
+                .map(|variable| match variable {
+                    // This may result in multiple calls to `get_module_version` when a user have
+                    // multiple `$version` variables defined in `format`.
+                    "output" => Some(Ok(trimmed)),
+                    _ => None,
+                })
+                .parse(None)
+        });
+
+        match parsed {
+            Ok(segments) => module.set_segments(segments),
+            Err(error) => {
+                log::warn!("Error in module `custom.{}`:\n{}", name, error);
+            }
+        };
     }
-
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
-            .map_meta(|var, _| match var {
-                "symbol" => Some(config.symbol),
-                _ => None,
-            })
-            .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
-                _ => None,
-            })
-            .map(|variable| match variable {
-                // This may result in multiple calls to `get_module_version` when a user have
-                // multiple `$version` variables defined in `format`.
-                "output" => Some(Ok(trimmed)),
-                _ => None,
-            })
-            .parse(None)
-    });
-
-    match parsed {
-        Ok(segments) => module.set_segments(segments),
-        Err(error) => {
-            log::warn!("Error in module `custom.{}`:\n{}", name, error);
-        }
-    };
     module.duration = Option::from(start.elapsed());
     Some(module)
 }
