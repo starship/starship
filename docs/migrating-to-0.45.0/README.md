@@ -66,7 +66,7 @@ a format string, which represents the module's output.
 **Example pre-v0.45.0 configuration**
 
 ```toml
-[time]
+[cmd_duration]
 prefix = "took "
 ```
 
