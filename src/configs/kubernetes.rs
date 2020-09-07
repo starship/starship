@@ -16,7 +16,7 @@ impl<'a> RootModuleConfig<'a> for KubernetesConfig<'a> {
     fn new() -> Self {
         KubernetesConfig {
             symbol: "☸ ",
-            format: "[$symbol$context( \\($namespace\\))]($style) on ",
+            format: "[$symbol$context( \\($namespace\\))]($style) in ",
             style: "cyan bold",
             disabled: true,
             context_aliases: HashMap::new(),

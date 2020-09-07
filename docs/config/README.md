@@ -1261,7 +1261,7 @@ The `hostname` module shows the system hostname.
 | ---------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only` | `true`                     | Only show hostname when connected to an SSH session.                                                                                 |
 | `trim_at`  | `"."`                      | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`   | `"[$hostname]($style) on "` | The format for the module.                                                                                                           |
+| `format`   | `"[$hostname]($style) in "` | The format for the module.                                                                                                           |
 | `style`    | `"bold dimmed green"`      | The style for the module.                                                                                                            |
 | `disabled` | `false`                    | Disables the `hostname` module.                                                                                                      |
 
@@ -1415,7 +1415,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | Option                  | Default                                             | Description                                                           |
 | ----------------------- | --------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`                | `"☸ "`                                              | A format string representing the symbol displayed before the Cluster. |
-| `format`                | `"[$symbol$context( \\($namespace\\))]($style) on "` | The format for the module.                                            |
+| `format`                | `"[$symbol$context( \\($namespace\\))]($style) in "` | The format for the module.                                            |
 | `style`                 | `"cyan bold"`                                       | The style for the module.                                             |
 | `namespace_spaceholder` | `none`                                              | The value to display if no namespace was found.                       |
 | `context_aliases`       |                                                     | Table of context aliases to display.                                  |
@@ -2197,7 +2197,7 @@ The module will be shown if any of the following conditions are met:
 | ------------- | ---------------------- | ------------------------------------- |
 | `style_root`  | `"bold red"`           | The style used when the user is root. |
 | `style_user`  | `"bold yellow"`        | The style used for non-root users.    |
-| `format`      | `"[$user]($style) on "` | The format for the module.            |
+| `format`      | `"[$user]($style) in "` | The format for the module.            |
 | `show_always` | `false`                | Always shows the `username` module.   |
 | `disabled`    | `false`                | Disables the `username` module.       |
 
