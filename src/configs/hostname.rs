@@ -16,7 +16,7 @@ impl<'a> RootModuleConfig<'a> for HostnameConfig<'a> {
         HostnameConfig {
             ssh_only: true,
             trim_at: ".",
-            format: "on [$hostname]($style) ",
+            format: "[$hostname]($style) on",
             style: "green dimmed bold",
             disabled: false,
         }
