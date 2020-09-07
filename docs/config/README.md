@@ -1257,13 +1257,13 @@ The `hostname` module shows the system hostname.
 
 ### Options
 
-| Option     | Default                    | Description                                                                                                                          |
-| ---------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                     | Only show hostname when connected to an SSH session.                                                                                 |
-| `trim_at`  | `"."`                      | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| Option     | Default                     | Description                                                                                                                          |
+| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
+| `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
 | `format`   | `"[$hostname]($style) in "` | The format for the module.                                                                                                           |
-| `style`    | `"bold dimmed green"`      | The style for the module.                                                                                                            |
-| `disabled` | `false`                    | Disables the `hostname` module.                                                                                                      |
+| `style`    | `"bold dimmed green"`       | The style for the module.                                                                                                            |
+| `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
 
 ### Variables
 
@@ -1412,14 +1412,14 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Option                  | Default                                             | Description                                                           |
-| ----------------------- | --------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`                | `"☸ "`                                              | A format string representing the symbol displayed before the Cluster. |
+| Option                  | Default                                              | Description                                                           |
+| ----------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`                | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
 | `format`                | `"[$symbol$context( \\($namespace\\))]($style) in "` | The format for the module.                                            |
-| `style`                 | `"cyan bold"`                                       | The style for the module.                                             |
-| `namespace_spaceholder` | `none`                                              | The value to display if no namespace was found.                       |
-| `context_aliases`       |                                                     | Table of context aliases to display.                                  |
-| `disabled`              | `true`                                              | Disables the `kubernetes` module.                                     |
+| `style`                 | `"cyan bold"`                                        | The style for the module.                                             |
+| `namespace_spaceholder` | `none`                                               | The value to display if no namespace was found.                       |
+| `context_aliases`       |                                                      | Table of context aliases to display.                                  |
+| `disabled`              | `true`                                               | Disables the `kubernetes` module.                                     |
 
 ### Variables
 
@@ -2193,13 +2193,13 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option        | Default                | Description                           |
-| ------------- | ---------------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`           | The style used when the user is root. |
-| `style_user`  | `"bold yellow"`        | The style used for non-root users.    |
+| Option        | Default                 | Description                           |
+| ------------- | ----------------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`            | The style used when the user is root. |
+| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
 | `format`      | `"[$user]($style) in "` | The format for the module.            |
-| `show_always` | `false`                | Always shows the `username` module.   |
-| `disabled`    | `false`                | Disables the `username` module.       |
+| `show_always` | `false`                 | Always shows the `username` module.   |
+| `disabled`    | `false`                 | Disables the `username` module.       |
 
 ### Variables
 
