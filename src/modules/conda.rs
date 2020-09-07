@@ -63,7 +63,7 @@ mod tests {
     fn not_in_env() -> io::Result<()> {
         let actual = ModuleRenderer::new("conda").collect();
 
-        let expected = Some(String::from(""));
+        let expected = None;
 
         assert_eq!(expected, actual);
         Ok(())
@@ -79,7 +79,7 @@ mod tests {
             })
             .collect();
 
-        let expected = Some(String::from(""));
+        let expected = None;
 
         assert_eq!(expected, actual);
         Ok(())

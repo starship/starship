@@ -69,7 +69,7 @@ mod tests {
     #[test]
     fn no_env_variables() -> io::Result<()> {
         let actual = ModuleRenderer::new("nix_shell").collect();
-        let expected = Some(String::from(""));
+        let expected = None;
 
         assert_eq!(expected, actual);
         Ok(())
@@ -80,7 +80,7 @@ mod tests {
         let actual = ModuleRenderer::new("nix_shell")
             .env("IN_NIX_SHELL", "something_wrong")
             .collect();
-        let expected = Some(String::from(""));
+        let expected = None;
 
         assert_eq!(expected, actual);
         Ok(())

@@ -77,7 +77,7 @@ mod tests {
     fn folder_without_crystal_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let actual = ModuleRenderer::new("crystal").path(dir.path()).collect();
-        let expected = Some(String::from(""));
+        let expected = None;
         assert_eq!(expected, actual);
 
         dir.close()

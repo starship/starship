@@ -120,7 +120,7 @@ mod tests {
             .path(repo_dir.path())
             .collect();
 
-        let expected = Some(String::from(""));
+        let expected = None;
         assert_eq!(expected, actual);
         repo_dir.close()
     }
@@ -279,7 +279,7 @@ mod tests {
         for expect in expectations {
             match expect {
                 Expect::Empty => {
-                    assert_eq!(Some(String::from("")), actual);
+                    assert_eq!(None, actual);
                     return Ok(());
                 }
                 Expect::Symbol(symbol) => {

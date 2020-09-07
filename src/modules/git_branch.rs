@@ -87,7 +87,7 @@ mod tests {
         let actual = ModuleRenderer::new("git_branch")
             .path(repo_dir.path())
             .collect();
-        let expected = Some(String::from(""));
+        let expected = None;
 
         assert_eq!(expected, actual);
         repo_dir.close()

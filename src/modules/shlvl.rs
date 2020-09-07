@@ -67,7 +67,7 @@ mod tests {
             })
             .env(SHLVL_ENV_VAR, "2")
             .collect();
-        let expected = Some(String::from(""));
+        let expected = None;
 
         assert_eq!(expected, actual);
         Ok(())
@@ -96,7 +96,7 @@ mod tests {
                 disabled = false
             })
             .collect();
-        let expected = Some(String::from(""));
+        let expected = None;
 
         assert_eq!(expected, actual);
         Ok(())
@@ -111,7 +111,7 @@ mod tests {
             })
             .env(SHLVL_ENV_VAR, "1")
             .collect();
-        let expected = Some(String::from(""));
+        let expected = None;
 
         assert_eq!(expected, actual);
         Ok(())
@@ -143,7 +143,7 @@ mod tests {
             })
             .env(SHLVL_ENV_VAR, "1")
             .collect();
-        let expected = Some(String::from(""));
+        let expected = None;
 
         assert_eq!(expected, actual);
         Ok(())

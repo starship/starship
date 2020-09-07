@@ -88,7 +88,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("helm").path(dir.path()).collect();
 
-        let expected = Some(String::from(""));
+        let expected = None;
         assert_eq!(expected, actual);
         dir.close()
     }

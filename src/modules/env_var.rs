@@ -65,7 +65,7 @@ mod test {
                 [env_var]
             })
             .collect();
-        let expected = Some(String::from(""));
+        let expected = None;
 
         assert_eq!(expected, actual);
         Ok(())
@@ -94,7 +94,7 @@ mod test {
                 variable = "TEST_VAR"
             })
             .collect();
-        let expected = Some(String::from(""));
+        let expected = None;
 
         assert_eq!(expected, actual);
         Ok(())

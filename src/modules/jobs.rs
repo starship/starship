@@ -63,7 +63,7 @@ mod test {
     fn config_blank_job_0() -> io::Result<()> {
         let actual = ModuleRenderer::new("jobs").jobs(0).collect();
 
-        let expected = Some(String::from(""));
+        let expected = None;
         assert_eq!(expected, actual);
         Ok(())
     }

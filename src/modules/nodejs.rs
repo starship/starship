@@ -70,7 +70,7 @@ mod tests {
     fn folder_without_node_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(String::from(""));
+        let expected = None;
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -94,7 +94,7 @@ mod tests {
         fs::create_dir_all(&esy_lock)?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(String::from(""));
+        let expected = None;
         assert_eq!(expected, actual);
         dir.close()
     }

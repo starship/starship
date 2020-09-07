@@ -109,7 +109,7 @@ mod tests {
                 ssh_only = true
             })
             .collect();
-        let expected = Some(String::from(""));
+        let expected = None;
 
         assert_eq!(expected, actual);
         Ok(())

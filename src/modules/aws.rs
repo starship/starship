@@ -126,7 +126,7 @@ mod tests {
     #[test]
     fn no_region_set() -> io::Result<()> {
         let actual = ModuleRenderer::new("aws").collect();
-        let expected = Some(String::from(""));
+        let expected = None;
 
         assert_eq!(expected, actual);
         Ok(())
@@ -384,7 +384,7 @@ region = us-east-2
                 format = "on [$symbol$region]($style) "
             })
             .collect();
-        let expected = Some(String::from(""));
+        let expected = None;
 
         assert_eq!(expected, actual);
         Ok(())

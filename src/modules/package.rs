@@ -759,7 +759,7 @@ end";
         if contains.is_some() {
             assert_eq!(actual, expected);
         } else {
-            assert_eq!(actual, Some(String::from("")));
+            assert_eq!(actual, None);
         }
 
         Ok(())

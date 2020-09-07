@@ -311,7 +311,7 @@ project = abc
                 format = "on [$symbol$region]($style) "
             })
             .collect();
-        let expected = Some(String::from(""));
+        let expected = None;
 
         assert_eq!(expected, actual);
         dir.close()

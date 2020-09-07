@@ -133,7 +133,7 @@ mod tests {
     fn folder_without_python_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let actual = ModuleRenderer::new("python").path(dir.path()).collect();
-        let expected = Some(String::from(""));
+        let expected = None;
         assert_eq!(expected, actual);
 
         dir.close()
@@ -224,7 +224,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("foo.py"))?.sync_all()?;
 
-        let expected = Some(String::from(""));
+        let expected = None;
         let config = toml::toml! {
             [python]
             scan_for_pyfiles = false

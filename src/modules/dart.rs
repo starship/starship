@@ -83,7 +83,7 @@ mod tests {
     fn folder_without_dart_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let actual = ModuleRenderer::new("dart").path(dir.path()).collect();
-        let expected = Some(String::from(""));
+        let expected = None;
         assert_eq!(expected, actual);
         dir.close()
     }

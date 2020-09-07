@@ -485,7 +485,7 @@ mod tests {
     fn config_blank() -> io::Result<()> {
         let actual = ModuleRenderer::new("time").collect();
 
-        let expected = Some(String::from(""));
+        let expected = None;
         assert_eq!(expected, actual);
         Ok(())
     }

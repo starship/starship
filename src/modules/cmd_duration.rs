@@ -159,7 +159,7 @@ mod tests {
             .cmd_duration(1000)
             .collect();
 
-        let expected = Some(String::from(""));
+        let expected = None;
         assert_eq!(expected, actual);
         Ok(())
     }
@@ -185,7 +185,7 @@ mod tests {
             .cmd_duration(3000)
             .collect();
 
-        let expected = Some(String::from(""));
+        let expected = None;
         assert_eq!(expected, actual);
         Ok(())
     }
@@ -215,7 +215,7 @@ mod tests {
             .cmd_duration(1000)
             .collect();
 
-        let expected = Some(String::from(""));
+        let expected = None;
         assert_eq!(expected, actual);
         Ok(())
     }

@@ -101,7 +101,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("nim.txt"))?.sync_all()?;
         let actual = ModuleRenderer::new("nim").path(dir.path()).collect();
-        let expected = Some(String::from(""));
+        let expected = None;
         assert_eq!(expected, actual);
         dir.close()
     }
