@@ -104,6 +104,7 @@ pub fn timings(args: ArgMatches) {
 
     let mut modules = compute_modules(&context)
         .iter()
+        .filter(|module| !module.is_empty() || module.duration.map_or(0, |d| d.as_millis()) > 0)
         .map(|module| ModuleTiming {
             name: String::from(module.get_name().as_str()),
             name_len: better_width(module.get_name().as_str()),
@@ -120,10 +121,10 @@ pub fn timings(args: ArgMatches) {
     let max_name_width = modules.iter().map(|i| i.name_len).max().unwrap_or(0);
     let max_duration_width = modules.iter().map(|i| i.duration_len).max().unwrap_or(0);
 
+    println!("\n Here are the timings of modules in your prompt (>=1ms or output):");
+
     // for now we do not expect a wrap around at the end... famous last words
     // Overall a line looks like this: " {module name}  -  {duration}  -  {module value}".
-    println!("\n Here are the timings of all active modules in your prompt:");
-
     for timing in &modules {
         println!(
             " {}{}  -  {}{}  -   {}",
