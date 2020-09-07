@@ -79,7 +79,7 @@ mod tests {
             .path(&repo_dir.path())
             .collect();
 
-        let expected = None;
+        let expected = Some(String::from(""));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -158,7 +158,7 @@ mod tests {
             .path(&repo_dir.path())
             .collect();
 
-        let expected = None;
+        let expected = Some(String::from(""));
 
         assert_eq!(expected, actual);
         repo_dir.close()

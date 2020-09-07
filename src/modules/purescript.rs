@@ -64,7 +64,7 @@ mod tests {
     fn folder_without_purescript_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let actual = ModuleRenderer::new("purescript").path(dir.path()).collect();
-        let expected = None;
+        let expected = Some(String::from(""));
         assert_eq!(expected, actual);
         dir.close()
     }

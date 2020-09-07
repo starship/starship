@@ -75,7 +75,7 @@ mod tests {
     #[test]
     fn no_env_variables() -> io::Result<()> {
         let actual = ModuleRenderer::new("username").collect();
-        let expected = None;
+        let expected = Some(String::from(""));
 
         assert_eq!(expected, actual);
         Ok(())
@@ -87,7 +87,7 @@ mod tests {
             .env("LOGNAME", "astronaut")
             .env("USER", "astronaut")
             .collect();
-        let expected = None;
+        let expected = Some(String::from(""));
 
         assert_eq!(expected, actual);
         Ok(())
@@ -99,7 +99,7 @@ mod tests {
         let actual = ModuleRenderer::new("username")
             .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
             .collect();
-        let expected = None;
+        let expected = Some(String::from(""));
 
         assert_eq!(expected, actual);
         Ok(())

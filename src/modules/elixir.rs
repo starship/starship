@@ -96,7 +96,7 @@ Elixir 1.10 (compiled with Erlang/OTP 22)
     fn test_without_mix_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let expected = None;
+        let expected = Some(String::from(""));
         let output = ModuleRenderer::new("elixir").path(dir.path()).collect();
 
         assert_eq!(output, expected);

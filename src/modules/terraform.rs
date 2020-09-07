@@ -194,7 +194,7 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
         let dir = tempfile::tempdir()?;
 
         let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
-        let expected = None;
+        let expected = Some(String::from(""));
 
         assert_eq!(expected, actual);
         dir.close()

@@ -69,7 +69,7 @@ mod tests {
     fn folder_without_elm() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let actual = ModuleRenderer::new("elm").path(dir.path()).collect();
-        let expected = None;
+        let expected = Some(String::from(""));
         assert_eq!(expected, actual);
         dir.close()
     }

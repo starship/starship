@@ -366,7 +366,7 @@ mod tests {
     #[test]
     fn shows_nothing_in_directory_with_zero_relevant_files() -> io::Result<()> {
         let workspace = create_workspace(false)?;
-        expect_output(&workspace.path(), None)?;
+        expect_output(&workspace.path(), Some(String::from("")))?;
         workspace.close()
     }
 

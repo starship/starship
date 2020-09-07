@@ -408,7 +408,7 @@ mod tests {
         let actual = ModuleRenderer::new("git_status")
             .path(repo_dir.path())
             .collect();
-        let expected = None;
+        let expected = Some(String::from(""));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -601,7 +601,7 @@ mod tests {
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
             .collect();
-        let expected = None;
+        let expected = Some(String::from(""));
 
         assert_eq!(expected, actual);
         repo_dir.close()

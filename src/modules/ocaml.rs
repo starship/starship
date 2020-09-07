@@ -78,7 +78,7 @@ mod tests {
     fn folder_without_ocaml_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
-        let expected = None;
+        let expected = Some(String::from(""));
         assert_eq!(expected, actual);
         dir.close()
     }

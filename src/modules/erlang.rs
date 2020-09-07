@@ -76,7 +76,7 @@ mod tests {
     fn test_without_config() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let expected = None;
+        let expected = Some(String::from(""));
         let output = ModuleRenderer::new("erlang").path(dir.path()).collect();
 
         assert_eq!(output, expected);

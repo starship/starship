@@ -51,7 +51,7 @@ mod tests {
     fn no_env_set() -> io::Result<()> {
         let actual = ModuleRenderer::new("singularity").collect();
 
-        let expected = None;
+        let expected = Some(String::from(""));
         assert_eq!(expected, actual);
         Ok(())
     }
