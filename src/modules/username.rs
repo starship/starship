@@ -111,7 +111,7 @@ mod tests {
             .env("LOGNAME", "astronaut")
             .env("USER", "cosmonaut")
             .collect();
-        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("cosmonaut")));
+        let expected = Some(format!("{} on ", Color::Yellow.bold().paint("cosmonaut")));
 
         assert_eq!(expected, actual);
         Ok(())
