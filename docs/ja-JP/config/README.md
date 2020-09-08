@@ -7,6 +7,7 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 Starshipのすべての設定は、この[TOML](https://github.com/toml-lang/toml)ファイルで行われます。
+
 ```toml
 # プロンプトの先頭に改行を表示しません
 add_newline = false
@@ -95,7 +96,7 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 
 以下の記号は、フォーマット文字列に特別な使用法があります。 次の記号を印刷したい場合は、バックスラッシュ(`\`)でエスケープする必要があります。
 
-- $
+- \$
 - \\
 - [
 - ]
@@ -827,7 +828,7 @@ The `env_var` module displays the current value of a selected environment variab
 
 | 変数        | 設定例                                         | 説明                                         |
 | --------- | ------------------------------------------- | ------------------------------------------ |
-| env_value | `Windows NT` (if *variable* would be `$OS`) | The environment value of option `variable` |
+| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
 | symbol    |                                             | オプション `記号` の値をミラーする                        |
 | style\* | `black bold dimmed`                         | オプション `style` の値をミラーする                     |
 
@@ -946,7 +947,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 | オプション               | デフォルト                            | 説明                                                                                       |
 | ------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
-| `format`            | `"on [$symbol$branch]($style) "` | moduleのフォーマットです。  Use `"$branch"` to refer to the current branch name.                   |
+| `format`            | `"on [$symbol$branch]($style) "` | moduleのフォーマットです。 Use `"$branch"` to refer to the current branch name.                    |
 | `symbol`            | `" "`                           | A format string representing the symbol of git branch.                                   |
 | `style`             | `"bold purple"`                  | モジュールのスタイルです。                                                                            |
 | `truncation_length` | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                   |
@@ -1078,12 +1079,12 @@ The following variables can be used in `format`:
 | `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                   |
 | `ahead_behind` | Displays `diverged` `ahead` or `behind` format string based on the current status of the repo |
 | `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                   |
-| `untracked`    | Displays `untracked`  when there are untracked files in the working directory.                |
-| `stashed`      | Displays `stashed`    when a stash exists for the local repository.                           |
-| `modified`     | Displays `modified`   when there are file modifications in the working directory.             |
-| `staged`       | Displays `staged`     when a new file has been added to the staging area.                     |
-| `renamed`      | Displays `renamed`    when a renamed file has been added to the staging area.                 |
-| `deleted`      | Displays `deleted`    when a file's deletion has been added to the staging area.              |
+| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                 |
+| `stashed`      | Displays `stashed` when a stash exists for the local repository.                              |
+| `modified`     | Displays `modified` when there are file modifications in the working directory.               |
+| `staged`       | Displays `staged` when a new file has been added to the staging area.                         |
+| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                    |
+| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                 |
 | style\*      | オプション `style` の値をミラーする                                                                        |
 
 \*: This variable can only be used as a part of a style string
@@ -1205,7 +1206,7 @@ The `hostname` module shows the system hostname.
 | ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
 | `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`   | `"on [$hostname]($style) "` | moduleのフォーマットです。                                                                                                                     |
+| `format`   | `"[$hostname]($style) in "` | moduleのフォーマットです。                                                                                                                     |
 | `style`    | `"bold dimmed green"`       | モジュールのスタイルです。                                                                                                                        |
 | `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
 
@@ -1350,7 +1351,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | オプション                   | デフォルト                                                    | 説明                                                                    |
 | ----------------------- | -------------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`                | `"☸ "`                                                   | A format string representing the symbol displayed before the Cluster. |
-| `format`                | `"on [$symbol$context( \\($namespace\\))]($style) "` | moduleのフォーマットです。                                                      |
+| `format`                | `"[$symbol$context( \\($namespace\\))]($style) in "` | moduleのフォーマットです。                                                      |
 | `style`                 | `"cyan bold"`                                            | モジュールのスタイルです。                                                         |
 | `namespace_spaceholder` | `none`                                                   | The value to display if no namespace was found.                       |
 | `context_aliases`       |                                                          | Table of context aliases to display.                                  |
@@ -1422,14 +1423,14 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### 変数
 
-| 変数            | 設定例           | 説明                                                                 |
-| ------------- | ------------- | ------------------------------------------------------------------ |
-| ram           | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
-| ram_pct       | `48%`         | The percentage of the current system memory.                       |
-| swap\**     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
-| swap_pct\** | `77%`         | The swap memory percentage of the current system swap memory file. |
-| symbol        | `🐏`           | オプション `記号` の値をミラーする                                                |
-| style\*     |               | オプション `style` の値をミラーする                                             |
+| 変数               | 設定例           | 説明                                                                 |
+| ---------------- | ------------- | ------------------------------------------------------------------ |
+| ram              | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
+| ram_pct          | `48%`         | The percentage of the current system memory.                       |
+| swap\*\*     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
+| swap_pct\*\* | `77%`         | The swap memory percentage of the current system swap memory file. |
+| symbol           | `🐏`           | オプション `記号` の値をミラーする                                                |
+| style\*        |               | オプション `style` の値をミラーする                                             |
 
 \*: This variable can only be used as a part of a style string \*\*: The SWAP file information is only displayed if detected on the current system
 
@@ -1531,7 +1532,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 | オプション        | デフォルト                                              | 説明                                                    |
 | ------------ | -------------------------------------------------- | ----------------------------------------------------- |
 | `format`     | `"via [$symbol$state( \\($name\\))]($style) "` | moduleのフォーマットです。                                      |
-| `symbol`     | `"❄️  "`                                           | A format string representing the symbol of nix-shell. |
+| `symbol`     | `"❄️ "`                                            | A format string representing the symbol of nix-shell. |
 | `style`      | `"bold blue"`                                      | モジュールのスタイルです。                                         |
 | `impure_msg` | `"impure"`                                         | A format string shown when the shell is impure.       |
 | `pure_msg`   | `"pure"`                                           | A format string shown when the shell is pure.         |
@@ -1682,7 +1683,6 @@ The `ocaml` module shows the currently installed version of OCaml. 次の条件�
 format = "via [🐪 $version]($style) "
 ```
 
-
 ## Perl
 
 The `perl` module shows the currently installed version of Perl. 次の条件のいずれかが満たされると、モジュールが表示されます。
@@ -1718,7 +1718,6 @@ The `perl` module shows the currently installed version of Perl. 次の条件の
 [perl]
 format = "via [🦪 $version]($style) "
 ```
-
 
 ## PHP
 
@@ -2100,13 +2099,13 @@ The `username` module shows active user's username. 次の条件のいずれか�
 
 ### オプション
 
-| オプション         | デフォルト                    | 説明                                    |
-| ------------- | ------------------------ | ------------------------------------- |
-| `style_root`  | `"bold red"`             | The style used when the user is root. |
-| `style_user`  | `"bold yellow"`          | The style used for non-root users.    |
-| `format`      | `"via [$user]($style) "` | moduleのフォーマットです。                      |
-| `show_always` | `false`                  | Always shows the `username` module.   |
-| `disabled`    | `false`                  | Disables the `username` module.       |
+| オプション         | デフォルト                   | 説明                                    |
+| ------------- | ----------------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`            | The style used when the user is root. |
+| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
+| `format`      | `"[$user]($style) in "` | moduleのフォーマットです。                      |
+| `show_always` | `false`                 | Always shows the `username` module.   |
+| `disabled`    | `false`                 | Disables the `username` module.       |
 
 ### 変数
 
