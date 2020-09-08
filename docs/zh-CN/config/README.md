@@ -7,6 +7,7 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
+
 ```toml
 # Don't print a new line at the start of the prompt
 add_newline = false
@@ -95,7 +96,7 @@ For example:
 
 The following symbols have special usage in a format string. If you want to print the following symbols, you have to escape them with a backslash (`\`).
 
-- $
+- \$
 - \\
 - [
 - ]
@@ -826,7 +827,7 @@ The `env_var` module displays the current value of a selected environment variab
 
 | 字段        | 示例                                          | 描述                                         |
 | --------- | ------------------------------------------- | ------------------------------------------ |
-| env_value | `Windows NT` (if *variable* would be `$OS`) | The environment value of option `variable` |
+| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
 | symbol    |                                             | Mirrors the value of option `symbol`       |
 | style\* | `black bold dimmed`                         | Mirrors the value of option `style`        |
 
@@ -945,7 +946,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 | Option              | 默认值                              | 描述                                                                                       |
 | ------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
-| `format`            | `"on [$symbol$branch]($style) "` | The format for the module.  Use `"$branch"` to refer to the current branch name.         |
+| `format`            | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.          |
 | `symbol`            | `" "`                           | A format string representing the symbol of git branch.                                   |
 | `style`             | `"bold purple"`                  | 此组件的样式。                                                                                  |
 | `truncation_length` | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                   |
@@ -1077,12 +1078,12 @@ The following variables can be used in `format`:
 | `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                   |
 | `ahead_behind` | Displays `diverged` `ahead` or `behind` format string based on the current status of the repo |
 | `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                   |
-| `untracked`    | Displays `untracked`  when there are untracked files in the working directory.                |
-| `stashed`      | Displays `stashed`    when a stash exists for the local repository.                           |
-| `modified`     | Displays `modified`   when there are file modifications in the working directory.             |
-| `staged`       | Displays `staged`     when a new file has been added to the staging area.                     |
-| `renamed`      | Displays `renamed`    when a renamed file has been added to the staging area.                 |
-| `deleted`      | Displays `deleted`    when a file's deletion has been added to the staging area.              |
+| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                 |
+| `stashed`      | Displays `stashed` when a stash exists for the local repository.                              |
+| `modified`     | Displays `modified` when there are file modifications in the working directory.               |
+| `staged`       | Displays `staged` when a new file has been added to the staging area.                         |
+| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                    |
+| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                 |
 | style\*      | Mirrors the value of option `style`                                                           |
 
 \*: This variable can only be used as a part of a style string
@@ -1204,7 +1205,7 @@ The `hostname` module shows the system hostname.
 | ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
 | `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`   | `"on [$hostname]($style) "` | The format for the module.                                                                                                           |
+| `format`   | `"[$hostname]($style) in "` | The format for the module.                                                                                                           |
 | `style`    | `"bold dimmed green"`       | 此组件的样式。                                                                                                                              |
 | `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
 
@@ -1349,7 +1350,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | Option                  | 默认值                                                      | 描述                                                                    |
 | ----------------------- | -------------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`                | `"☸ "`                                                   | A format string representing the symbol displayed before the Cluster. |
-| `format`                | `"on [$symbol$context( \\($namespace\\))]($style) "` | The format for the module.                                            |
+| `format`                | `"[$symbol$context( \\($namespace\\))]($style) in "` | The format for the module.                                            |
 | `style`                 | `"cyan bold"`                                            | 此组件的样式。                                                               |
 | `namespace_spaceholder` | `none`                                                   | The value to display if no namespace was found.                       |
 | `context_aliases`       |                                                          | Table of context aliases to display.                                  |
@@ -1421,14 +1422,14 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| 字段            | 示例            | 描述                                                                 |
-| ------------- | ------------- | ------------------------------------------------------------------ |
-| ram           | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
-| ram_pct       | `48%`         | The percentage of the current system memory.                       |
-| swap\**     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
-| swap_pct\** | `77%`         | The swap memory percentage of the current system swap memory file. |
-| symbol        | `🐏`           | Mirrors the value of option `symbol`                               |
-| style\*     |               | Mirrors the value of option `style`                                |
+| 字段               | 示例            | 描述                                                                 |
+| ---------------- | ------------- | ------------------------------------------------------------------ |
+| ram              | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
+| ram_pct          | `48%`         | The percentage of the current system memory.                       |
+| swap\*\*     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
+| swap_pct\*\* | `77%`         | The swap memory percentage of the current system swap memory file. |
+| symbol           | `🐏`           | Mirrors the value of option `symbol`                               |
+| style\*        |               | Mirrors the value of option `style`                                |
 
 \*: This variable can only be used as a part of a style string \*\*: The SWAP file information is only displayed if detected on the current system
 
@@ -1530,7 +1531,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 | Option       | 默认值                                                | 描述                                                    |
 | ------------ | -------------------------------------------------- | ----------------------------------------------------- |
 | `format`     | `"via [$symbol$state( \\($name\\))]($style) "` | The format for the module.                            |
-| `symbol`     | `"❄️  "`                                           | A format string representing the symbol of nix-shell. |
+| `symbol`     | `"❄️ "`                                            | A format string representing the symbol of nix-shell. |
 | `style`      | `"bold blue"`                                      | 此组件的样式。                                               |
 | `impure_msg` | `"impure"`                                         | A format string shown when the shell is impure.       |
 | `pure_msg`   | `"pure"`                                           | A format string shown when the shell is pure.         |
@@ -1681,7 +1682,6 @@ The `ocaml` module shows the currently installed version of OCaml. 此组件将�
 format = "via [🐪 $version]($style) "
 ```
 
-
 ## Perl
 
 The `perl` module shows the currently installed version of Perl. 此组件将在符合以下任意条件之一时显示：
@@ -1717,7 +1717,6 @@ The `perl` module shows the currently installed version of Perl. 此组件将在
 [perl]
 format = "via [🦪 $version]($style) "
 ```
-
 
 ## PHP
 
@@ -2099,13 +2098,13 @@ The `username` module shows active user's username. 此组件将在符合以下�
 
 ### 配置项
 
-| Option        | 默认值                      | 描述                                    |
-| ------------- | ------------------------ | ------------------------------------- |
-| `style_root`  | `"bold red"`             | The style used when the user is root. |
-| `style_user`  | `"bold yellow"`          | The style used for non-root users.    |
-| `format`      | `"via [$user]($style) "` | The format for the module.            |
-| `show_always` | `false`                  | Always shows the `username` module.   |
-| `disabled`    | `false`                  | Disables the `username` module.       |
+| Option        | 默认值                     | 描述                                    |
+| ------------- | ----------------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`            | The style used when the user is root. |
+| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
+| `format`      | `"[$user]($style) in "` | The format for the module.            |
+| `show_always` | `false`                 | Always shows the `username` module.   |
+| `disabled`    | `false`                 | Disables the `username` module.       |
 
 ### Variables
 
