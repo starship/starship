@@ -1814,7 +1814,7 @@ By default the module will be shown if any of the following conditions are met:
 | Option              | Default                              | Description                                        |
 | ------------------- | ------------------------------------ | -------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                         |
-| `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS. |
+| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS. |
 | `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.       |
 | `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.        |
 | `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.          |
