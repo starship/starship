@@ -682,9 +682,9 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. Si el SDK ha sido anclado en el directorio actual, se mostrará la versión anclada. De lo contrario, el módulo muestra la última versión instalada del SDK.
+El módulo `dotnet` muestra la versión usada del SDK de .NET Core para el directorio actual. Si el SDK ha sido anclado en el directorio actual, se mostrará la versión anclada. De lo contrario, el módulo muestra la última versión instalada del SDK.
 
-This module will only be shown in your prompt when one or more of the following files are present in the current directory:
+Este módulo solo se mostrará en tu mensaje cuando uno o más de los siguientes archivos estén presentes en el directorio actual:
 
 - `global.json`
 - `project.json`
@@ -704,22 +704,22 @@ El módulo también mostrará el Target Framework Moniker ([https://docs.microso
 
 ### Opciones
 
-| Opción      | Por defecto                              | Descripción                                              |
-| ----------- | ---------------------------------------- | -------------------------------------------------------- |
-| `format`    | `"v[$symbol$version( 🎯 $tfm)]($style) "` | El formato del módulo.                                   |
-| `symbol`    | `"•NET "`                                | The symbol used before displaying the version of dotnet. |
-| `heuristic` | `true`                                   | Use faster version detection to keep starship snappy.    |
-| `style`     | `"bold blue"`                            | El estilo del módulo.                                    |
-| `disabled`  | `false`                                  | Disables the `dotnet` module.                            |
+| Opción      | Por defecto                              | Descripción                                                               |
+| ----------- | ---------------------------------------- | ------------------------------------------------------------------------- |
+| `format`    | `"v[$symbol$version( 🎯 $tfm)]($style) "` | El formato del módulo.                                                    |
+| `symbol`    | `"•NET "`                                | El símbolo usado antes de mostrar la version de dotnet.                   |
+| `heuristic` | `true`                                   | Usa una detección de versiones más rápida para mantener a starship veloz. |
+| `style`     | `"bold blue"`                            | El estilo del módulo.                                                     |
+| `disabled`  | `false`                                  | Deshabilita el módulo `dotnet`.                                           |
 
 ### Variables
 
-| Variable  | Ejemplo          | Descripción                                                        |
-| --------- | ---------------- | ------------------------------------------------------------------ |
-| version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
-| tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
-| symbol    |                  | Refleja el valor de la opción `symbol`                             |
-| style\* |                  | Refleja el valor de la opción `style`                              |
+| Variable  | Ejemplo          | Descripción                                                     |
+| --------- | ---------------- | --------------------------------------------------------------- |
+| version   | `v3.1.201`       | La version del sdk de `dotnet`                                  |
+| tfm       | `netstandard2.0` | El Target Framework Moniker al que se dirige el proyecto actual |
+| symbol    |                  | Refleja el valor de la opción `symbol`                          |
+| style\* |                  | Refleja el valor de la opción `style`                           |
 
 \*: This variable can only be used as a part of a style string
 
