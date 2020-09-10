@@ -721,7 +721,7 @@ El módulo también mostrará el Target Framework Moniker ([https://docs.microso
 | symbol    |                  | Refleja el valor de la opción `symbol`                          |
 | style\* |                  | Refleja el valor de la opción `style`                           |
 
-\*: This variable can only be used as a part of a style string
+\*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -736,29 +736,29 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `elixir` muestra la version instalada actualmente de Elixir y Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `mix.exs` file.
+- El directorio actual contiene un archivo `mix.exs`.
 
 ### Opciones
 
-| Opción     | Por defecto                                                   | Descripción                                                     |
-| ---------- | ------------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                        | The symbol used before displaying the version of Elixir/Erlang. |
-| `style`    | `"bold purple"`                                               | El estilo del módulo.                                           |
-| `format`   | `"via [$symbol$version \\(OTP $otp_version\\)]($style) "` | The format for the module elixir.                               |
-| `disabled` | `false`                                                       | Disables the `elixir` module.                                   |
+| Opción     | Por defecto                                                   | Descripción                                                    |
+| ---------- | ------------------------------------------------------------- | -------------------------------------------------------------- |
+| `symbol`   | `"💧 "`                                                        | El símbolo usado antes de mostrar la version de Elixir/Erlang. |
+| `style`    | `"bold purple"`                                               | El estilo del módulo.                                          |
+| `format`   | `"via [$symbol$version \\(OTP $otp_version\\)]($style) "` | El formato para el módulo elixir.                              |
+| `disabled` | `false`                                                       | Deshabilita el módulo `elixir`.                                |
 
 ### Variables
 
 | Variable    | Ejemplo | Descripción                            |
 | ----------- | ------- | -------------------------------------- |
-| version     | `v1.10` | The version of `elixir`                |
-| otp_version |         | The otp version of `elixir`            |
+| version     | `v1.10` | La version de `elixir`                 |
+| otp_version |         | La version de otp de `elixir`          |
 | symbol      |         | Refleja el valor de la opción `symbol` |
 | style\*   |         | Refleja el valor de la opción `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
