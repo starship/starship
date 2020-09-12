@@ -57,7 +57,16 @@ Füge dies in `Zsh` zum `precmd_functions`-Array hinzu:
 precmd_functions+=(set_win_title)
 ```
 
-Um die Funktion dauerhaft zu machen, schreiben Sie diese in die Shell-Konfigurationsdatei: (`~/.bashrc` oder `~/.zsrhc`).
+If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+
+For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+
+```bash
+function set_win_title(){
+    echo -ne "\033]0; $(basename $PWD) \007"
+}
+starship_precmd_user_func="set_win_title"
+```
 
 ## Style-Strings
 

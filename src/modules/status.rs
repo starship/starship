@@ -7,11 +7,10 @@ use crate::formatter::StringFormatter;
 ///
 /// Will display the status only if it is not 0
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let exit_code_default = std::string::String::from("0");
     let exit_code = context
         .properties
         .get("status_code")
-        .unwrap_or(&exit_code_default);
+        .map_or("0", String::as_str);
 
     if exit_code == "0" {
         None
@@ -19,18 +18,69 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let mut module = context.new_module("status");
         let config = StatusConfig::try_load(module.config);
 
-        let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-            formatter.map(|variable| match variable {
-                "status" => Some(exit_code.to_owned()),
-                _ => None,
-            })
-        } else {
-            log::warn!("Error parsing format string in `status.format`");
-            return None;
-        };
-        module.set_segments(formatter.parse(None));
-        module.get_prefix().set_value("");
-        module.get_suffix().set_value("");
+        let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+            formatter
+                .map_meta(|var, _| match var {
+                    "symbol" => Some(config.symbol),
+                    _ => None,
+                })
+                .map_style(|variable| match variable {
+                    "style" => Some(Ok(config.style)),
+                    _ => None,
+                })
+                .map(|variable| match variable {
+                    "status" => Some(Ok(exit_code)),
+                    _ => None,
+                })
+                .parse(None)
+        });
+
+        module.set_segments(match parsed {
+            Ok(segments) => segments,
+            Err(_error) => {
+                log::warn!("Error parsing format string in `status.format`");
+                return None;
+            }
+        });
         Some(module)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use ansi_term::Color;
+    use std::io;
+
+    use crate::test::ModuleRenderer;
+
+    #[test]
+    fn success_status() -> io::Result<()> {
+        let expected = None;
+
+        // Status code 0
+        let actual = ModuleRenderer::new("status").status(0).collect();
+        assert_eq!(expected, actual);
+
+        // No status code
+        let actual = ModuleRenderer::new("status").collect();
+        assert_eq!(expected, actual);
+
+        Ok(())
+    }
+
+    #[test]
+    fn failure_status() -> io::Result<()> {
+        let exit_values = [1, 2, 130];
+
+        for status in exit_values.iter() {
+            let expected = Some(format!(
+                "{} ",
+                Color::Red.bold().paint(format!("✖{}", status))
+            ));
+            let actual = ModuleRenderer::new("status").status(*status).collect();
+            assert_eq!(expected, actual);
+        }
+
+        Ok(())
     }
 }

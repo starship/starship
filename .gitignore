@@ -11,12 +11,19 @@ Cargo.lock
 # VSCode configuration
 .vscode/
 
-# Intellij IDE configuration
+# Sublime Text configuration
+*.sublime-*
+
+# IntelliJ IDE configuration
 .idea/
 /*.iml
 
 # Vim swap files
 *.swp
+
+# Emacs
+*~
+\#*\#
 
 # Compiled files for documentation
 docs/node_modules

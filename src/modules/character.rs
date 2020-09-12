@@ -1,14 +1,15 @@
 use super::{Context, Module, RootModuleConfig, Shell};
 use crate::configs::character::CharacterConfig;
+use crate::formatter::StringFormatter;
 
 /// Creates a module for the prompt character
 ///
-/// The character segment prints an arrow character in a color dependant on the exit-
-/// code of the last executed command:
-/// - If the exit-code was "0", the arrow will be formatted with `style_success`
-/// (green by default)
-/// - If the exit-code was anything else, the arrow will be formatted with
-/// `style_failure` (red by default)
+/// The character segment prints an arrow character in a color dependant on the
+/// exit-code of the last executed command:
+/// - If the exit-code was "0", it will be formatted with `success_symbol`
+///   (green arrow by default)
+/// - If the exit-code was anything else, it will be formatted with
+///   `error_symbol` (red arrow by default)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     enum ShellEditMode {
         Normal,
@@ -19,12 +20,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("character");
     let config: CharacterConfig = CharacterConfig::try_load(module.config);
-    module.get_prefix().set_value("");
 
     let props = &context.properties;
-    let exit_code_default = std::string::String::from("0");
+    let exit_code_default = String::from("0");
     let exit_code = props.get("status_code").unwrap_or(&exit_code_default);
-    let keymap_default = std::string::String::from("viins");
+    let keymap_default = String::from("viins");
     let keymap = props.get("keymap").unwrap_or(&keymap_default);
     let exit_success = exit_code == "0";
 
@@ -38,22 +38,172 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         _ => ASSUMED_MODE,
     };
 
-    if exit_success {
-        module.set_style(config.style_success);
-    } else {
-        module.set_style(config.style_failure);
-    };
-
-    /* If an error symbol is set in the config, use symbols to indicate
-    success/failure, in addition to color */
-    if config.use_symbol_for_status && !exit_success {
-        module.create_segment("error_symbol", &config.error_symbol)
-    } else {
-        match mode {
-            ShellEditMode::Normal => module.create_segment("vicmd_symbol", &config.vicmd_symbol),
-            ShellEditMode::Insert => module.create_segment("symbol", &config.symbol),
+    let symbol = match mode {
+        ShellEditMode::Normal => config.vicmd_symbol,
+        ShellEditMode::Insert => {
+            if exit_success {
+                config.success_symbol
+            } else {
+                config.error_symbol
+            }
         }
     };
 
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(symbol),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `character`:\n{}", error);
+            return None;
+        }
+    });
+
     Some(module)
+}
+
+#[cfg(test)]
+mod test {
+    use crate::context::Shell;
+    use crate::test::ModuleRenderer;
+    use ansi_term::Color;
+    use std::io;
+
+    #[test]
+    fn success_status() -> io::Result<()> {
+        let expected = Some(format!("{} ", Color::Green.bold().paint("❯")));
+
+        // Status code 0
+        let actual = ModuleRenderer::new("character").status(0).collect();
+        assert_eq!(expected, actual);
+
+        // No status code
+        let actual = ModuleRenderer::new("character").collect();
+        assert_eq!(expected, actual);
+
+        Ok(())
+    }
+
+    #[test]
+    fn failure_status() -> io::Result<()> {
+        let expected = Some(format!("{} ", Color::Red.bold().paint("❯")));
+
+        let exit_values = [1, 54321, -5000];
+
+        for status in &exit_values {
+            let actual = ModuleRenderer::new("character").status(*status).collect();
+            assert_eq!(expected, actual);
+        }
+
+        Ok(())
+    }
+
+    #[test]
+    fn custom_symbol() -> io::Result<()> {
+        let expected_fail = Some(format!("{} ", Color::Red.bold().paint("✖")));
+        let expected_success = Some(format!("{} ", Color::Green.bold().paint("➜")));
+
+        let exit_values = [1, 54321, -5000];
+
+        // Test failure values
+        for status in &exit_values {
+            let actual = ModuleRenderer::new("character")
+                .config(toml::toml! {
+                    [character]
+                    success_symbol = "[➜](bold green)"
+                    error_symbol = "[✖](bold red)"
+                })
+                .status(*status)
+                .collect();
+            assert_eq!(expected_fail, actual);
+        }
+
+        // Test success
+        let actual = ModuleRenderer::new("character")
+            .config(toml::toml! {
+                [character]
+                success_symbol = "[➜](bold green)"
+                error_symbol = "[✖](bold red)"
+            })
+            .status(0)
+            .collect();
+        assert_eq!(expected_success, actual);
+
+        Ok(())
+    }
+
+    #[test]
+    fn zsh_keymap() -> io::Result<()> {
+        let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
+        let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
+        let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
+
+        // zle keymap is vicmd
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Zsh)
+            .keymap("vicmd")
+            .collect();
+        assert_eq!(expected_vicmd, actual);
+
+        // specified vicmd character
+        let actual = ModuleRenderer::new("character")
+            .config(toml::toml! {
+                [character]
+                vicmd_symbol = "[V](bold green)"
+            })
+            .shell(Shell::Zsh)
+            .keymap("vicmd")
+            .collect();
+        assert_eq!(expected_specified, actual);
+
+        // zle keymap is other
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Zsh)
+            .keymap("visual")
+            .collect();
+        assert_eq!(expected_other, actual);
+
+        Ok(())
+    }
+
+    #[test]
+    fn fish_keymap() -> io::Result<()> {
+        let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
+        let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
+        let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
+
+        // fish keymap is default
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Fish)
+            .keymap("default")
+            .collect();
+        assert_eq!(expected_vicmd, actual);
+
+        // specified vicmd character
+        let actual = ModuleRenderer::new("character")
+            .config(toml::toml! {
+                [character]
+                vicmd_symbol = "[V](bold green)"
+            })
+            .shell(Shell::Fish)
+            .keymap("default")
+            .collect();
+        assert_eq!(expected_specified, actual);
+
+        // fish keymap is other
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Fish)
+            .keymap("visual")
+            .collect();
+        assert_eq!(expected_other, actual);
+
+        Ok(())
+    }
 }

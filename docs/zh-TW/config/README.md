@@ -9,43 +9,73 @@
 為了開始設定 Starship，請建立下右檔案： `~/.config/starship.toml`.
 
 ```sh
-$ mkdir -p ~/.config && touch ~/.config/starship.toml
+mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 所有關於 Starship 的設定都在這個 [TOML](https://github.com/toml-lang/toml) 檔案內：
 
 ```toml
-# 不要在提示字元的開頭換行
+# Don't print a new line at the start of the prompt
 add_newline = false
 
-# 把提示字元中的 "❯" 符號換成 "➜"
-[character]      # 我們正在設定的模組叫做 "character"
-symbol = "➜"     #  設定 "symbol" 區段為 "➜"
+# Replace the "❯" symbol in the prompt with "➜"
+[character]                            # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
 
-# 關閉 package 模組，把它完全從提示字元藏起來
+# Disable the package module, hiding it from the prompt completely
 [package]
 disabled = true
 ```
 
-You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+你可以藉由修改 `STARSHIP_CONFIG`環境變數而改變預設的`starship.toml` 檔案位置
+
 ```sh
 export STARSHIP_CONFIG=~/.starship
+```
+
+Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+
+```ps1
+$ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
 
 ### 術語
 
 **模組 (Module)**： 提示字元中的一個元件，基於你的作業系統提供的背景資訊來提供訊息。 舉例來說，如果你現在的資料夾是一個 NodeJS 專案，"nodejs" 模組會顯示出現在安裝在你的電腦上的 NodeJS 版本。
 
-**區段 (Segment)**： 組成一個模組的子元件。 舉例來說，"nodejs" 模組內的 "symbol" 區段包含了一個會顯示在版本編號之前的字元 (預設是 ⬢)。
+**Variable**: Smaller sub-components that contains information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
 
-這是一個 node 模組的表示法。 在下面的例子裡，"symbol" 跟 "version" 都是模組內的區段。 每個模組也包含了使用預設終端機顏色的一個前綴 (prefix) 跟一個後綴 (suffix)。
+By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
 
-```
-[prefix]      [symbol]     [version]    [suffix]
- "via "         "⬢"        "v10.4.1"       ""
-```
+### Format Strings
 
-### 風格字串
+Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+
+#### 變數
+
+A variable contains a `$` symbol followed by the name of the variable. The name of a variable only contains letters, numbers and `_`.
+
+For example:
+
+- `$version` is a format string with a variable named `version`.
+- `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
+- `$git_branch $git_commit` has the two variables separated with a space.
+
+#### Text Group
+
+A text group is made up of two different parts.
+
+The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+
+In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
+
+For example:
+
+- `[on](red bold)` will print a string `on` with bold text colored red.
+- `[⬢ $version](bold green)` will print a symbol `⬢` followed by the content of variable `version`, with bold text colored green.
+- `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
+
+#### 風格字串
 
 Starship 內大多數的模組允許你設定他們的顯示風格。 這要透過一個條目 (通常叫做 `style`)，這個條目使用一個字串來進行設定。 這裡給幾個風格字串的例子，以及這些字串的功用。 對於完整語法的詳細說明，請參照 [進階設定指南](/advanced-config/)。
 
@@ -58,17 +88,56 @@ Starship 內大多數的模組允許你設定他們的顯示風格。 這要透�
 
 注意風格產出的樣子取決於你的終端機模擬器。 例如，有些終端機模擬器會提升顏色的亮度而不是讓文字變粗體，而且有些色彩主題對一般與加亮顏色使用的是相同色碼。 除此之外，為了要有斜體字，你的終端機一定要支援斜體。
 
+#### Conditional Format Strings
+
+A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
+
+For example:
+
+- `(@$region)` will show nothing if the variable `region` is `None`, otherwise `@` followed by the value of region.
+- `(some text)` will always show nothing since there are no variables wrapped in the braces.
+- When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. This works the same as `(\[$a$b\] )`.
+
+#### Escapable characters
+
+The following symbols have special usage in a format string. If you want to print the following symbols, you have to escape them with a backslash (`\`).
+
+- $
+- \\
+- [
+- ]
+- (
+- )
+
+Note that `toml` has [its own escape syntax](https://github.com/toml-lang/toml#user-content-string). It is recommended to use a literal string (`''`) in your config. If you want to use a basic string (`""`), pay attention to escape the backslash `\`.
+
+For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
+
+```toml
+# with basic string
+format = "\n\\$"
+
+# with multiline basic string
+format = """
+
+\\$"""
+
+# with literal string
+format = '''
+
+\$'''
+```
+
 ## 提示字元
 
 以下是針對提示字元內容的設定。
 
 ### 選項
 
-| 變數             | 預設                          | 說明                                                    |
-| -------------- | --------------------------- | ----------------------------------------------------- |
-| `add_newline`  | `true`                      | 在提示字元前面加上換行字元。                                        |
-| `prompt_order` | [連結](#default-prompt-order) | 調整各個提示字元模組的顯示順序。                                      |
-| `scan_timeout` | `30`                        | Timeout for starship to scan files (in milliseconds). |
+| Option         | 預設                           | 說明                                                    |
+| -------------- | ---------------------------- | ----------------------------------------------------- |
+| `format`       | [連結](#default-prompt-format) | Configure the format of the prompt.                   |
+| `scan_timeout` | `30`                         | Timeout for starship to scan files (in milliseconds). |
 
 ### 範例
 
@@ -76,86 +145,139 @@ Starship 內大多數的模組允許你設定他們的顯示風格。 這要透�
 # ~/.config/starship.toml
 
 # Disable the newline at the start of the prompt
-add_newline = false
-# Overwrite a default_prompt_order and  use custom prompt_order
-prompt_order=["rust","line_break","package","line_break","character"]
+format = "$all"
+
+# Use custom format
+format = """
+[┌───────────────────>](bold green)
+[│](bold green)$directory$rust$package
+[└─>](bold green) """
+
 # Wait 10 milliseconds for starship to check files under the current directory.
 scan_timeout = 10
 ```
 
-### 預設的提示字元順序
+### Default Prompt Format
 
-預設 `prompt_order` 是用來在 `prompt_order` 為空時或者沒有提供時定義模組顯示在提示字元的順序。 預設如下：
+The default `format` is used to define the format of the prompt, if empty or no `format` is provided. 預設如下：
 
 ```toml
-prompt_order = [
-    "username",
-    "hostname",
-    "kubernetes",
-    "directory",
-    "git_branch",
-    "git_commit",
-    "git_state",
-    "git_status",
-    "hg_branch",
-    "docker_context",
-    "package",
-    "dotnet",
-    "elixir",
-    "elm",
-    "golang",
-    "haskell",
-    "java",
-    "julia",
-    "nodejs",
-    "php",
-    "python",
-    "ruby",
-    "rust",
-    "terraform",
-    "nix_shell",
-    "conda",
-    "memory_usage",
-    "aws",
-    "env_var",
-    "crystal",
-    "cmd_duration",
-    "line_break",
-    "jobs",
-    "battery",
-    "time",
-    "character",
-]
+format = "\n$all"
+
+# Which is equivalent to
+format = """
+
+$username\
+$hostname\
+$kubernetes\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$hg_branch\
+$docker_context\
+$package\
+$cmake\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$golang\
+$helm\
+$java\
+$julia\
+$nim\
+$nodejs\
+$ocaml\
+$php\
+$purescript\
+$python\
+$ruby\
+$rust\
+$terraform\
+$zig\
+$nix_shell\
+$conda\
+$memory_usage\
+$aws\
+$env_var\
+$crystal\
+$cmd_duration\
+$custom\
+$line_break\
+$jobs\
+$battery\
+$time\
+$character"""
 ```
 
 ## AWS
 
 `aws` 模組顯示現在 AWS 的區域與概況。 這是根據 `AWS_REGION`、`AWS_DEFAULT_REGION` 與 `AWS_PROFILE` 環境變數及 `~/.aws/config` 檔案。
 
-When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
+從 `AWS_VAULT`讀取而使用 [aws-vault](https://github.com/99designs/aws-vault) 這個設定檔
 
 ### 選項
 
-| 變數                | 預設              | 說明                                                                          |
-| ----------------- | --------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `"☁️ "`         | 顯示在目前 AWS 配置之前的符號。                                                          |
-| `displayed_items` | `all`           | Choose which item to display. Possible values: [`all`, `profile`, `region`] |
-| `region_aliases`  |                 | Table of region aliases to display in addition to the AWS name.             |
-| `style`           | `"bold yellow"` | 這個模組的風格。                                                                    |
-| `disabled`        | `false`         | 停用 `AWS` 模組。                                                                |
+| Option           | 預設                                                   | 說明                         |
+| ---------------- | ---------------------------------------------------- | -------------------------- |
+| `format`         | `"on [$symbol$profile(\\($region\\))]($style) "` | The format for the module. |
+| `symbol`         | `"☁️ "`                                              | 顯示在目前 AWS 配置之前的符號。         |
+| `region_aliases` |                                                      | 除了AWS名稱外，顯示區域別名表           |
+| `style`          | `"bold yellow"`                                      | 這個模組的風格。                   |
+| `disabled`       | `false`                                              | 停用 `AWS` 模組。               |
 
-### 範例
+### Variables
+
+| 變數        | 範例               | 說明                                   |
+| --------- | ---------------- | ------------------------------------ |
+| region    | `ap-northeast-1` | The current AWS region               |
+| profile   | `astronauts`     | The current AWS profile              |
+| symbol    |                  | Mirrors the value of option `symbol` |
+| style\* |                  | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Examples
+
+#### Display everything
 
 ```toml
 # ~/.config/starship.toml
 
 [aws]
+format = "on [$symbol$profile(\\($region\\))]($style) "
 style = "bold blue"
 symbol = "🅰 "
-displayed_items = "region"
 [aws.region_aliases]
 ap-southeast-2 = "au"
 us-east-1 = "va"
+```
+
+#### Display region
+
+```toml
+# ~/.config/starship.toml
+
+[aws]
+format = "on [$symbol$region]($style) "
+style = "bold blue"
+symbol = "🅰 "
+[aws.region_aliases]
+ap-southeast-2 = "au"
+us-east-1 = "va"
+```
+
+#### Display profile
+
+```toml
+# ~/.config/starship.toml
+
+[aws]
+format = "on [$symbol$profile]($style) "
+style = "bold blue"
+symbol = "🅰 "
 ```
 
 ## 電池
@@ -164,13 +286,14 @@ us-east-1 = "va"
 
 ### 選項
 
-| 變數                   | 預設                     | 說明               |
-| -------------------- | ---------------------- | ---------------- |
-| `full_symbol`        | `"•"`                  | 當電池充飽時顯示的符號。     |
-| `charging_symbol`    | `"⇡"`                  | 當電池正在充電時顯示的符號。   |
-| `discharging_symbol` | `"⇣"`                  | 當電池正在放電時顯示的符號。   |
-| `display`            | [連結](#battery-display) | 顯示的門檻與模組的風格。     |
-| `disabled`           | `false`                | 停用 `battery` 模組。 |
+| Option               | 預設                                | 說明                         |
+| -------------------- | --------------------------------- | -------------------------- |
+| `full_symbol`        | `"•"`                             | 當電池充飽時顯示的符號。               |
+| `charging_symbol`    | `"⇡"`                             | 當電池正在充電時顯示的符號。             |
+| `discharging_symbol` | `"⇣"`                             | 當電池正在放電時顯示的符號。             |
+| `format`             | `"[$symbol$percentage]($style) "` | The format for the module. |
+| `display`            | [連結](#battery-display)            | 顯示的門檻與模組的風格。               |
+| `disabled`           | `false`                           | 停用 `battery` 模組。           |
 
 <details>
 <summary>也有些針對不常見的電池狀態設定的選項。</summary>
@@ -233,30 +356,84 @@ style = "bold yellow"
 
 `character` 模組在你的文字輸入處旁顯示一個字元 (通常是箭頭)。
 
-這個字元會告訴你最後的指令是成功還是失敗。 他會用兩種方式告訴你：改變他的顏色 (紅色/綠色) 或是改變他的形狀 (❯/✖)。 後者只會在 `use_symbol_for_status` 被設定為 `true` 時出現。
+這個字元會告訴你最後的指令是成功還是失敗。 It can do this in two ways:
+
+- changing color (`red`/`green`)
+- changing shape (`❯`/`✖`)
+
+By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
 
 ### 選項
 
-| 變數                      | 預設             | 說明                                        |
-| ----------------------- | -------------- | ----------------------------------------- |
-| `symbol`                | `"❯"`          | 使用在提示字元文字輸入處前的符號。                         |
-| `error_symbol`          | `"✖"`          | 如果前一個指令失敗時，使用在文字輸入處前的符號。                  |
-| `use_symbol_for_status` | `false`        | 是否透過改變符號來提示錯誤狀態。                          |
-| `vicmd_symbol`          | `"❮"`          | 如果 shell 正在 vim 正常模式內，在提示字元的文字輸入處前的使用的符號。 |
-| `style_success`         | `"bold green"` | 最後的指令成功時使用的風格。                            |
-| `style_failure`         | `"bold red"`   | 最後的指令失敗時使用的風格。                            |
-| `disabled`              | `false`        | 停用 `character` 模組。                        |
+| Option           | 預設                  | 說明                                                                               |
+| ---------------- | ------------------- | -------------------------------------------------------------------------------- |
+| `format`         | `"$symbol "`        | The format string used before the text input.                                    |
+| `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
+| `error_symbol`   | `"[❯](bold red)"`   | The format string used before the text input if the previous command failed.     |
+| `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
+| `disabled`       | `false`             | 停用 `character` 模組。                                                               |
 
-### 範例
+### Variables
+
+| 變數     | 範例 | 說明                                                                    |
+| ------ | -- | --------------------------------------------------------------------- |
+| symbol |    | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
+
+### Examples
+
+#### With custom error shape
 
 ```toml
 # ~/.config/starship.toml
 
 [character]
-symbol = "➜"
-error_symbol = "✗"
-use_symbol_for_status = true
+success_symbol = "[➜](bold green) "
+error_symbol = "[✗](bold red) "
 ```
+
+#### Without custom error shape
+
+```toml
+# ~/.config/starship.toml
+
+[character]
+success_symbol = "[➜](bold green) "
+error_symbol = "[➜](bold red) "
+```
+
+#### With custom vim shape
+
+```toml
+# ~/.config/starship.toml
+
+[character]
+vicmd_symbol = "[V](bold green) "
+```
+
+## CMake
+
+The `cmake` module shows the currently installed version of CMake if:
+
+- The current directory contains a `CMakeLists.txt` file
+
+### 選項
+
+| Option     | 預設                                 | 說明                                           |
+| ---------- | ---------------------------------- | -------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                   |
+| `symbol`   | `"🛆 "`                             | The symbol used before the version of cmake. |
+| `style`    | `"bold blue"`                      | 這個模組的風格。                                     |
+| `disabled` | `false`                            | Disables the `cmake` module.                 |
+
+### Variables
+
+| 變數        | 範例        | 說明                                   |
+| --------- | --------- | ------------------------------------ |
+| version   | `v3.17.3` | The version of cmake                 |
+| symbol    |           | Mirrors the value of option `symbol` |
+| style\* |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ## 指令持續時間
 
@@ -272,13 +449,22 @@ use_symbol_for_status = true
 
 ### 選項
 
-| 變數                  | 預設              | 說明                                                         |
-| ------------------- | --------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`         | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`         | Show milliseconds in addition to seconds for the duration. |
-| `prefix`            | `took`          | 在指令持續時間正前方顯示的前綴。                                           |
-| `style`             | `"bold yellow"` | 這個模組的風格。                                                   |
-| `disabled`          | `false`         | 停用 `cmd_duration` 模組。                                      |
+| Option              | 預設                            | 說明                                                    |
+| ------------------- | ----------------------------- | ----------------------------------------------------- |
+| `min_time`          | `2_000`                       | Shortest duration to show time for (in milliseconds). |
+| `show_milliseconds` | `false`                       | 顯示時間除了以秒為單位外，亦以毫秒顯示                                   |
+| `format`            | `"took [$duration]($style) "` | The format for the module.                            |
+| `style`             | `"bold yellow"`               | 這個模組的風格。                                              |
+| `disabled`          | `false`                       | 停用 `cmd_duration` 模組。                                 |
+
+### Variables
+
+| 變數        | 範例       | 說明                                      |
+| --------- | -------- | --------------------------------------- |
+| duration  | `16m40s` | The time it took to execute the command |
+| style\* |          | Mirrors the value of option `style`     |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -287,7 +473,7 @@ use_symbol_for_status = true
 
 [cmd_duration]
 min_time = 500
-prefix = "underwent "
+format = "underwent [$duration](bold yellow)"
 ```
 
 ## Conda
@@ -302,12 +488,23 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### 選項
 
-| 變數                  | 預設             | 說明                                                                                                                                                                                                          |
-| ------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`            | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"C "`         | 環境名稱前使用的符號。                                                                                                                                                                                                 |
-| `style`             | `"bold green"` | 這個模組的風格。                                                                                                                                                                                                    |
-| `disabled`          | `false`        | 停用 `conda` 模組。                                                                                                                                                                                              |
+| Option              | 預設                                 | 說明                                                                                              |
+| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                | 如果環境變數由所`conda create -p [path]`產生時，環境變數的資料夾需要截斷的數目。 `0` 表示不截斷 也請參考 [`directory`](#directory)模組 |
+| `symbol`            | `"🅒 "`                             | 環境名稱前使用的符號。                                                                                     |
+| `style`             | `"bold green"`                     | 這個模組的風格。                                                                                        |
+| `format`            | `"[$symbol$environment]($style) "` | The format for the module.                                                                      |
+| `disabled`          | `false`                            | 停用 `conda` 模組。                                                                                  |
+
+### Variables
+
+| 變數          | 範例           | 說明                                   |
+| ----------- | ------------ | ------------------------------------ |
+| environment | `astronauts` | The current conda environment        |
+| symbol      |              | Mirrors the value of option `symbol` |
+| style\*   |              | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -315,23 +512,34 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 # ~/.config/starship.toml
 
 [conda]
-style = "dimmed green"
+format = "[$symbol$environment](dimmed green) "
 ```
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. 這個模組在下列其中一個條件達成時顯示：
+`crystal` 模組顯示現在所安裝的Crystal版本 這個模組在下列其中一個條件達成時顯示：
 
 - 現在資料夾中含有一個 `shard.yml` 檔案
-- The current directory contains a `.cr` file
+- 現在資料夾中含有一個`.cr`檔案
 
 ### 選項
 
-| 變數         | 預設           | 說明                                                        |
-| ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`       | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold red"` | 這個模組的風格。                                                  |
-| `disabled` | `false`      | Disables the `crystal` module.                            |
+| Option     | 預設                                 | 說明                                                        |
+| ---------- | ---------------------------------- | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`                             | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"`                       | 這個模組的風格。                                                  |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                                |
+| `disabled` | `false`                            | Disables the `crystal` module.                            |
+
+### Variables
+
+| 變數        | 範例        | 說明                                   |
+| --------- | --------- | ------------------------------------ |
+| version   | `v0.32.1` | The version of `crystal`             |
+| symbol    |           | Mirrors the value of option `symbol` |
+| style\* |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -339,8 +547,7 @@ The `crystal` module shows the currently installed version of Crystal. 這個模
 # ~/.config/starship.toml
 
 [crystal]
-symbol = "✨ "
-style = "bold blue"
+format = "via [✨ $version](bold blue) "
 ```
 
 ## 資料夾
@@ -353,25 +560,45 @@ style = "bold blue"
 
 ### 選項
 
-| 變數                  | 預設            | 說明                                                  |
-| ------------------- | ------------- | --------------------------------------------------- |
-| `truncation_length` | `3`           | 到達現在資料夾的路徑中，要被裁減掉的資料夾數目。                            |
-| `truncate_to_repo`  | `true`        | 是否要裁減到你現在所在的 git 儲存庫的根目錄。                           |
-| `prefix`            | `"in "`       | Prefix to display immediately before the directory. |
-| `style`             | `"bold cyan"` | 這個模組的風格。                                            |
-| `disabled`          | `false`       | 停用 `directory` 模組。                                  |
+| 變數                       | 預設                                              | 說明                                                    |
+| ------------------------ | ----------------------------------------------- | ----------------------------------------------------- |
+| `truncation_length`      | `3`                                             | 到達現在資料夾的路徑中，要被裁減掉的資料夾數目。                              |
+| `truncate_to_repo`       | `true`                                          | 是否要裁減到你現在所在的 git 儲存庫的根目錄。                             |
+| `format`                 | `"[$path]($style)[$lock_symbol]($lock_style) "` | The format for the module.                            |
+| `style`                  | `"bold cyan"`                                   | 這個模組的風格。                                              |
+| `disabled`               | `false`                                         | 停用 `directory` 模組。                                    |
+| `read_only_symbol`       | `"🔒"`                                           | The symbol indicating current directory is read only. |
+| `read_only_symbol_style` | `"red"`                                         | The style for the read only symbol.                   |
 
 <details>
 <summary>這個模組有些進階設定選項可以控制顯示資料夾。</summary>
 
-| 變數                          | 預設     | 說明                                   |
-| --------------------------- | ------ | ------------------------------------ |
-| `fish_style_pwd_dir_length` | `0`    | 當使用 fish shell 的 pwd 路徑邏輯時使用的字元數量。   |
-| `use_logical_path`          | `true` | 顯示 shell (`PWD`) 提供的邏輯路徑，而不是 OS 的路徑。 |
+| Advanced Option             | 預設     | 說明                                               |
+| --------------------------- | ------ | ------------------------------------------------ |
+| `substitutions`             |        | A table of substitutions to be made to the path. |
+| `fish_style_pwd_dir_length` | `0`    | 當使用 fish shell 的 pwd 路徑邏輯時使用的字元數量。               |
+| `use_logical_path`          | `true` | 顯示 shell (`PWD`) 提供的邏輯路徑，而不是 OS 的路徑。             |
+
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+
+```toml
+[directory.substitutions]
+"/Volumes/network/path" = "/net"
+"src/com/long/java/path" = "mypath"
+```
 
 `fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
 </details>
+
+### Variables
+
+| 變數        | 範例                    | 說明                                  |
+| --------- | --------------------- | ----------------------------------- |
+| path      | `"D:/Projects"`       | The current directory path          |
+| style\* | `"black bold dimmed"` | Mirrors the value of option `style` |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -388,12 +615,23 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### 選項
 
-| 變數                | 預設            | 說明                                                                                      |
-| ----------------- | ------------- | --------------------------------------------------------------------------------------- |
-| `symbol`          | `"🐳 "`        | The symbol used before displaying the Docker context .                                  |
-| `only_with_files` | `false`       | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
-| `style`           | `"bold blue"` | 這個模組的風格。                                                                                |
-| `disabled`        | `true`        | Disables the `docker_context` module.                                                   |
+| Option            | 預設                                 | 說明                                                                                      |
+| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`          | `"via [$symbol$context]($style) "` | The format for the module.                                                              |
+| `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                   |
+| `style`           | `"blue bold"`                      | 這個模組的風格。                                                                                |
+| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
+| `disabled`        | `true`                             | Disables the `docker_context` module.                                                   |
+
+### Variables
+
+| 變數        | 範例             | 說明                                   |
+| --------- | -------------- | ------------------------------------ |
+| context   | `test_context` | The current docker context           |
+| symbol    |                | Mirrors the value of option `symbol` |
+| style\* |                | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -401,25 +639,51 @@ The `docker_context` module shows the currently active [Docker context](https://
 # ~/.config/starship.toml
 
 [docker_context]
-symbol = "🐋 "
+format = "via [🐋 $context](blue bold)"
 ```
 
 ## Dotnet
 
 `dotnet` 模組顯示現在資料夾使用的 .NET Core SDK 的版本。 如果這個資料夾已經選定一個 SDK，則顯示這個 SDK 的版本。 如果沒有的話，則顯示最新安裝的 SDK 版本。
 
-這個模組只會在下列檔案出現在你的現在資料夾中時，顯示在你的提示字元：`global.json`、`project.json`、`*.sln`、`*.csproj`、`*.fsproj`、`*.xproj`。 你也會需要安裝 .NET Core 文字命令工具來正確使用這個模組。
+This module will only be shown in your prompt when one or more of the following files are present in the current directory:
+
+- `global.json`
+- `project.json`
+- `Directory.Build.props`
+- `Directory.Build.targets`
+- `Packages.props`
+- `*.sln`
+- `*.csproj`
+- `*.fsproj`
+- `*.xproj`
+
+You'll also need the .NET Core SDK installed in order to use it correctly.
 
 這個模組內部是使用它自己的機制來偵測版本。 一般來說這個模組有 `dotnet --version` 的兩倍快，但是它可能會在你的 .NET 專案有不尋常的資料夾結構時顯示不正確的版本。 如果精確度比速度更重要的話，你可以藉由設定模組中的 `heuristic = false` 選項來停用這個功能。
 
+The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) when there is a csproj file in the current directory.
+
 ### 選項
 
-| 變數          | 預設            | 說明                           |
-| ----------- | ------------- | ---------------------------- |
-| `symbol`    | `"•NET "`     | 在顯示 dotnet 版本之前用的符號。         |
-| `heuristic` | `true`        | 使用更快速的版本偵測法來保持 starship 的速度。 |
-| `style`     | `"bold blue"` | 這個模組的風格。                     |
-| `disabled`  | `false`       | 停用 `dotnet` 模組。              |
+| Option      | 預設                                       | 說明                           |
+| ----------- | ---------------------------------------- | ---------------------------- |
+| `format`    | `"v[$symbol$version( 🎯 $tfm)]($style) "` | The format for the module.   |
+| `symbol`    | `"•NET "`                                | 在顯示 dotnet 版本之前用的符號。         |
+| `heuristic` | `true`                                   | 使用更快速的版本偵測法來保持 starship 的速度。 |
+| `style`     | `"bold blue"`                            | 這個模組的風格。                     |
+| `disabled`  | `false`                                  | 停用 `dotnet` 模組。              |
+
+### Variables
+
+| 變數        | 範例               | 說明                                                                 |
+| --------- | ---------------- | ------------------------------------------------------------------ |
+| version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
+| tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
+| symbol    |                  | Mirrors the value of option `symbol`                               |
+| style\* |                  | Mirrors the value of option `style`                                |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -440,10 +704,23 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 ### 選項
 
-| 變數         | 預設      | 說明                                                              |
-| ---------- | ------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`  | The symbol used before displaying the version of Elixir/Erlang. |
-| `disabled` | `false` | Disables the `elixir` module.                                   |
+| Option     | 預設                                                            | 說明                                                              |
+| ---------- | ------------------------------------------------------------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`                                                        | The symbol used before displaying the version of Elixir/Erlang. |
+| `style`    | `"bold purple"`                                               | 這個模組的風格。                                                        |
+| `format`   | `"via [$symbol$version \\(OTP $otp_version\\)]($style) "` | The format for the module elixir.                               |
+| `disabled` | `false`                                                       | Disables the `elixir` module.                                   |
+
+### Variables
+
+| 變數          | 範例      | 說明                                   |
+| ----------- | ------- | ------------------------------------ |
+| version     | `v1.10` | The version of `elixir`              |
+| otp_version |         | The otp version of `elixir`          |
+| symbol      |         | Mirrors the value of option `symbol` |
+| style\*   |         | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -466,12 +743,22 @@ The `elm` module shows the currently installed version of Elm. 這個模組在�
 
 ### 選項
 
-| 變數         | 預設            | 說明                                                    |
-| ---------- | ------------- | ----------------------------------------------------- |
-| `symbol`   | `"🌳 "`        | The symbol used before displaying the version of Elm. |
-| `style`    | `"bold cyan"` | 這個模組的風格。                                              |
-| `disabled` | `false`       | Disables the `elm` module.                            |
+| Option     | 預設                                 | 說明                                              |
+| ---------- | ---------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
+| `symbol`   | `"🌳 "`                             | A format string representing the symbol of Elm. |
+| `style`    | `"cyan bold"`                      | 這個模組的風格。                                        |
+| `disabled` | `false`                            | Disables the `elm` module.                      |
 
+### Variables
+
+| 變數        | 範例        | 說明                                   |
+| --------- | --------- | ------------------------------------ |
+| version   | `v0.19.1` | The version of `elm`                 |
+| symbol    |           | Mirrors the value of option `symbol` |
+| style\* |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -479,7 +766,7 @@ The `elm` module shows the currently installed version of Elm. 這個模組在�
 # ~/.config/starship.toml
 
 [elm]
-symbol = " "
+format = "via [ $version](cyan bold) "
 ```
 
 ## 環境變數
@@ -491,15 +778,23 @@ symbol = " "
 
 ### 選項
 
-| 變數         | 預設               | 說明                   |
-| ---------- | ---------------- | -------------------- |
-| `symbol`   |                  | 顯示在變數數值之前的符號。        |
-| `variable` |                  | 要顯示的環境變數。            |
-| `default`  |                  | 在選擇的變數值沒有定義時，顯示的預設值。 |
-| `prefix`   | `""`             | 在變數值正前方顯示的前綴。        |
-| `suffix`   | `""`             | 在變數值正後方顯示的後綴。        |
-| `style`    | `"dimmed black"` | 這個模組的風格。             |
-| `disabled` | `false`          | 停用 `env_var` 模組。     |
+| Option     | 預設                             | 說明                         |
+| ---------- | ------------------------------ | -------------------------- |
+| `symbol`   |                                | 顯示在變數數值之前的符號。              |
+| `variable` |                                | 要顯示的環境變數。                  |
+| `default`  |                                | 在選擇的變數值沒有定義時，顯示的預設值。       |
+| `format`   | `"with [$env_value]($style) "` | The format for the module. |
+| `disabled` | `false`                        | 停用 `env_var` 模組。           |
+
+### Variables
+
+| 變數        | 範例                                          | 說明                                         |
+| --------- | ------------------------------------------- | ------------------------------------------ |
+| env_value | `Windows NT` (if *variable* would be `$OS`) | The environment value of option `variable` |
+| symbol    |                                             | Mirrors the value of option `symbol`       |
+| style\* | `black bold dimmed`                         | Mirrors the value of option `style`        |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -511,19 +806,65 @@ variable = "SHELL"
 default = "unknown shell"
 ```
 
+## Erlang
+
+The `erlang` module shows the currently installed version of Erlang/OTP. 這個模組在下列其中一個條件達成時顯示：
+
+- 現在資料夾中包含一個 `rebar.config` 檔案.
+- 現在資料夾中包含一個 `erlang.mk` 檔案.
+
+### 選項
+
+| Option     | 預設                                 | 說明                                                       |
+| ---------- | ---------------------------------- | -------------------------------------------------------- |
+| `symbol`   | `"🖧 "`                             | The symbol used before displaying the version of erlang. |
+| `style`    | `"bold red"`                       | 這個模組的風格。                                                 |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                               |
+| `disabled` | `false`                            | Disables the `erlang` module.                            |
+
+### Variables
+
+| 變數        | 範例        | 說明                                   |
+| --------- | --------- | ------------------------------------ |
+| version   | `v22.1.3` | The version of `erlang`              |
+| symbol    |           | Mirrors the value of option `symbol` |
+| style\* |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[erlang]
+format = "via [e $version](bold red) "
+```
+
 ## Git 分支
 
 `git_branch` 模組顯示現在的資料夾中使用中的儲存庫的分支。
 
 ### 選項
 
-| 變數                  | 預設              | 說明                               |
-| ------------------- | --------------- | -------------------------------- |
-| `symbol`            | `" "`          | 在你現在資料夾之中的儲存庫的分支名稱前使用的符號。        |
-| `truncation_length` | `2^63 - 1`      | 裁減一個 git 分支到 X 字素 (grapheme)。    |
-| `truncation_symbol` | `"…"`           | 用來指示分支名稱被縮減的符號。 你可以用 "" 來表示不要顯示。 |
-| `style`             | `"bold purple"` | 這個模組的風格。                         |
-| `disabled`          | `false`         | 停用 `git_branch` 模組。              |
+| Option              | 預設                               | 說明                                                                               |
+| ------------------- | -------------------------------- | -------------------------------------------------------------------------------- |
+| `format`            | `"on [$symbol$branch]($style) "` | The format for the module.  Use `"$branch"` to refer to the current branch name. |
+| `symbol`            | `" "`                           | A format string representing the symbol of git branch.                           |
+| `style`             | `"bold purple"`                  | 這個模組的風格。                                                                         |
+| `truncation_length` | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                           |
+| `truncation_symbol` | `"…"`                            | 用來指示分支名稱被縮減的符號。 You can use `""` for no symbol.                                  |
+| `disabled`          | `false`                          | 停用 `git_branch` 模組。                                                              |
+
+### Variables
+
+| 變數        | 範例       | 說明                                                                                                   |
+| --------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| branch    | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
+| symbol    |          | Mirrors the value of option `symbol`                                                                 |
+| style\* |          | Mirrors the value of option `style`                                                                  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -542,14 +883,22 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 
 ### 選項
 
-| 變數                   | 預設             | 說明                                                    |
-| -------------------- | -------------- | ----------------------------------------------------- |
-| `commit_hash_length` | `7`            | The length of the displayed git commit hash.          |
-| `prefix`             | `"("`          | Prefix to display immediately before git commit.      |
-| `suffix`             | `")"`          | Suffix to display immediately after git commit.       |
-| `style`              | `"bold green"` | 這個模組的風格。                                              |
-| `only_detached`      | `true`         | Only show git commit hash when in detached HEAD state |
-| `disabled`           | `false`        | Disables the `git_commit` module.                     |
+| Option               | 預設                             | 說明                                                    |
+| -------------------- | ------------------------------ | ----------------------------------------------------- |
+| `commit_hash_length` | `7`                            | The length of the displayed git commit hash.          |
+| `format`             | `"[\\($hash\\)]($style) "` | The format for the module.                            |
+| `style`              | `"bold green"`                 | 這個模組的風格。                                              |
+| `only_detached`      | `true`                         | Only show git commit hash when in detached HEAD state |
+| `disabled`           | `false`                        | Disables the `git_commit` module.                     |
+
+### Variables
+
+| 變數        | 範例        | 說明                                  |
+| --------- | --------- | ----------------------------------- |
+| hash      | `b703eb3` | The current git commit hash         |
+| style\* |           | Mirrors the value of option `style` |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -566,18 +915,29 @@ commit_hash_length = 4
 
 ### 選項
 
-| 變數                 | 預設                 | 說明                                                 |
-| ------------------ | ------------------ | -------------------------------------------------- |
-| `rebase`           | `"REBASING"`       | `rebase` 進行中顯示的文字。                                 |
-| `merge`            | `"MERGING"`        | `merge` 進行中顯示的文字。                                  |
-| `revert`           | `"REVERTING"`      | `revert` 進行中顯示的文字。                                 |
-| `cherry_pick`      | `"CHERRY-PICKING"` | `cherry-pick` 進行中顯示的文字。                            |
-| `bisect`           | `"BISECTING"`      | `bisect` 進行中顯示的文字。                                 |
-| `am`               | `"AM"`             | `apply-mailbox` (`git am`) 進行中顯示的文字。               |
-| `am_or_rebase`     | `"AM/REBASE"`      | 當不容易分辨是 `apply-mailbox` 或 `rebase` 正在進行中時顯示的文字。    |
-| `progress_divider` | `"/"`              | 用來分開現在與總共進度量的符號。 (例如：`" of "` 會得到 `"3 of 10"` 的效果) |
-| `style`            | `"bold yellow"`    | 這個模組的風格。                                           |
-| `disabled`         | `false`            | 停用 `git_state` 模組。                                 |
+| Option         | 預設                                                                  | 說明                                                                                      |
+| -------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `rebase`       | `"REBASING"`                                                        | A format string displayed when a `rebase` is in progress.                               |
+| `merge`        | `"MERGING"`                                                         | A format string displayed when a `merge` is in progress.                                |
+| `revert`       | `"REVERTING"`                                                       | A format string displayed when a `revert` is in progress.                               |
+| `cherry_pick`  | `"CHERRY-PICKING"`                                                  | A format string displayed when a `cherry-pick` is in progress.                          |
+| `bisect`       | `"BISECTING"`                                                       | A format string displayed when a `bisect` is in progress.                               |
+| `am`           | `"AM"`                                                              | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
+| `am_or_rebase` | `"AM/REBASE"`                                                       | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
+| `style`        | `"bold yellow"`                                                     | 這個模組的風格。                                                                                |
+| `format`       | `"[\\($state( $progress_current/$progress_total)\\)]($style) "` | The format for the module.                                                              |
+| `disabled`     | `false`                                                             | 停用 `git_state` 模組。                                                                      |
+
+### Variables
+
+| 變數               | 範例         | 說明                                  |
+| ---------------- | ---------- | ----------------------------------- |
+| state            | `REBASING` | The current state of the repo       |
+| progress_current | `1`        | The current operation progress      |
+| progress_total   | `2`        | The total operation progress        |
+| style\*        |            | Mirrors the value of option `style` |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -585,8 +945,8 @@ commit_hash_length = 4
 # ~/.config/starship.toml
 
 [git_state]
-progress_divider = " of "
-cherry_pick = "🍒 PICKING"
+format = "[\\($state( $progress_current of $progress_total)\\)]($style) "
+cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
 ## Git Status
@@ -595,37 +955,54 @@ cherry_pick = "🍒 PICKING"
 
 ### 選項
 
-| 變數                 | 預設                       | 說明                                               |
-| ------------------ | ------------------------ | ------------------------------------------------ |
-| `conflicted`       | `"="`                    | 這個分支有合併衝突。                                       |
-| `conflicted_count` | [連結](#git-status-counts) | Show and style the number of conflicts.          |
-| `ahead`            | `"⇡"`                    | 這個分支超前正在追蹤的分支。                                   |
-| `behind`           | `"⇣"`                    | 這個分支落後正在追蹤的分支。                                   |
-| `diverged`         | `"⇕"`                    | 這個分支偏離正在追蹤的分支。                                   |
-| `untracked`        | `"?"`                    | 工作資料夾中有沒有追蹤的檔案。                                  |
-| `untracked_count`  | [連結](#git-status-counts) | Show and style the number of untracked files.    |
-| `stashed`          | `"$"`                    | 本地儲存庫有 stash。                                    |
-| `stashed_count`    | [連結](#git-status-counts) | Show and style the number of stashes.            |
-| `modified`         | `"!"`                    | 工作資料夾中有修改過的檔案。                                   |
-| `modified_count`   | [連結](#git-status-counts) | Show and style the number of modified files.     |
-| `staged`           | `"+"`                    | 一個新檔案被加入了暫存區 (staging area)。                     |
-| `staged_count`     | [連結](#git-status-counts) | Show and style the number of files staged files. |
-| `renamed`          | `"»"`                    | 一個被改名的檔案被加入了暫存區 (staging area)。                  |
-| `renamed_count`    | [連結](#git-status-counts) | Show and style the number of renamed files.      |
-| `deleted`          | `"✘"`                    | 一個刪除檔案的動作被加入了暫存區 (staging area)。                 |
-| `deleted_count`    | [連結](#git-status-counts) | Show and style the number of deleted files.      |
-| `show_sync_count`  | `false`                  | 顯示超前/落後追蹤的分支的數量。                                 |
-| `prefix`           | `[`                      | 在 git 狀態正前方顯示的前綴。                                |
-| `suffix`           | `]`                      | 在 git 狀態正後方顯示的後綴。                                |
-| `style`            | `"bold red"`             | 這個模組的風格。                                         |
-| `disabled`         | `false`                  | 停用 `git_status` 模組。                              |
+| Option            | 預設                                              | 說明                                  |
+| ----------------- | ----------------------------------------------- | ----------------------------------- |
+| `format`          | "([\[$all_status$ahead_behind\]]($style) )" | The default format for `git_status` |
+| `conflicted`      | `"="`                                           | 這個分支有合併衝突。                          |
+| `ahead`           | `"⇡"`                                           | The format of `ahead`               |
+| `behind`          | `"⇣"`                                           | The format of `behind`              |
+| `diverged`        | `"⇕"`                                           | The format of `diverged`            |
+| `untracked`       | `"?"`                                           | The format of `untracked`           |
+| `stashed`         | `"$"`                                           | The format of `stashed`             |
+| `modified`        | `"!"`                                           | The format of `modified`            |
+| `staged`          | `"+"`                                           | The format of `staged`              |
+| `renamed`         | `"»"`                                           | The format of `renamed`             |
+| `deleted`         | `"✘"`                                           | The format of `deleted`             |
+| `show_sync_count` | `false`                                         | 顯示超前/落後追蹤的分支的數量。                    |
+| `style`           | `"bold red"`                                    | 這個模組的風格。                            |
+| `disabled`        | `false`                                         | 停用 `git_status` 模組。                 |
 
-#### Git Status Counts
+### Variables
 
-| 變數        | 預設      | 說明                                                     |
-| --------- | ------- | ------------------------------------------------------ |
-| `enabled` | `false` | Show the number of files                               |
-| `style`   |         | Optionally style the count differently than the module |
+The following variables can be used in `format`:
+
+| 變數             | 說明                                                                                            |
+| -------------- | --------------------------------------------------------------------------------------------- |
+| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                   |
+| `ahead_behind` | Displays `diverged` `ahead` or `behind` format string based on the current status of the repo |
+| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                   |
+| `untracked`    | Displays `untracked`  when there are untracked files in the working directory.                |
+| `stashed`      | Displays `stashed`    when a stash exists for the local repository.                           |
+| `modified`     | Displays `modified`   when there are file modifications in the working directory.             |
+| `staged`       | Displays `staged`     when a new file has been added to the staging area.                     |
+| `renamed`      | Displays `renamed`    when a renamed file has been added to the staging area.                 |
+| `deleted`      | Displays `deleted`    when a file's deletion has been added to the staging area.              |
+| style\*      | Mirrors the value of option `style`                                                           |
+
+\*: This variable can only be used as a part of a style string
+
+The following variables can be used in `diverged`:
+
+| 變數             | 說明                                             |
+| -------------- | ---------------------------------------------- |
+| `ahead_count`  | Number of commits ahead of the tracking branch |
+| `behind_count` | Number of commits behind the tracking branch   |
+
+The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+
+| 變數      | 說明                       |
+| ------- | ------------------------ |
+| `count` | Show the number of files |
 
 ### 範例
 
@@ -640,10 +1017,7 @@ diverged = "😵"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"
-staged.value = "++"
-staged.style = "green"
-staged_count.enabled = true
-staged_count.style = "green"
+staged = '[++\($count\)](green)'
 renamed = "👅"
 deleted = "🗑"
 ```
@@ -663,11 +1037,22 @@ deleted = "🗑"
 
 ### 選項
 
-| 變數         | 預設            | 說明                  |
-| ---------- | ------------- | ------------------- |
-| `symbol`   | `"🐹 "`        | 顯示在 Golang 版本之前的符號。 |
-| `style`    | `"bold cyan"` | 這個模組的風格。            |
-| `disabled` | `false`       | 停用 `golang` 模組。     |
+| Option     | 預設                                 | 說明                                             |
+| ---------- | ---------------------------------- | ---------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                     |
+| `symbol`   | `"🐹 "`                             | A format string representing the symbol of Go. |
+| `style`    | `"bold cyan"`                      | 這個模組的風格。                                       |
+| `disabled` | `false`                            | 停用 `golang` 模組。                                |
+
+### Variables
+
+| 變數        | 範例        | 說明                                   |
+| --------- | --------- | ------------------------------------ |
+| version   | `v1.12.1` | The version of `go`                  |
+| symbol    |           | Mirrors the value of option `symbol` |
+| style\* |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -675,30 +1060,42 @@ deleted = "🗑"
 # ~/.config/starship.toml
 
 [golang]
-symbol = "🏎💨 "
+format = "via [🏎💨 $version](bold cyan) "
 ```
-## Haskell
 
-The `haskell` module shows the currently installed version of Haskell Stack version. 這個模組在下列其中一個條件達成時顯示：
+## Helm
 
-- 現在資料夾中包含一個 `stack.yaml` 檔案
+The `helm` module shows the currently installed version of Helm. 這個模組在下列其中一個條件達成時顯示：
+
+- 現在資料夾中包含一個 `helmfile.yaml` 檔案
+- The current directory contains a `Chart.yaml` file
 
 ### 選項
 
-| 變數         | 預設           | 說明                                                        |
-| ---------- | ------------ | --------------------------------------------------------- |
-| `symbol`   | `"λ "`       | The symbol used before displaying the version of Haskell. |
-| `style`    | `"bold red"` | 這個模組的風格。                                                  |
-| `disabled` | `false`      | Disables the `haskell` module.                            |
+| Option     | 預設                                 | 說明                                               |
+| ---------- | ---------------------------------- | ------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
+| `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
+| `style`    | `"bold white"`                     | 這個模組的風格。                                         |
+| `disabled` | `false`                            | Disables the `helm` module.                      |
 
+### Variables
+
+| 變數        | 範例       | 說明                                   |
+| --------- | -------- | ------------------------------------ |
+| version   | `v3.1.1` | The version of `helm`                |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
 ```toml
 # ~/.config/starship.toml
 
-[haskell]
-symbol = " "
+[helm]
+format = "via [⎈ $version](bold white) "
 ```
 
 ## 主機名稱
@@ -707,14 +1104,23 @@ symbol = " "
 
 ### 選項
 
-| 變數         | 預設                    | 說明                                                         |
-| ---------- | --------------------- | ---------------------------------------------------------- |
-| `ssh_only` | `true`                | 只在連接到一個 SSH session 時顯示主機名稱。                               |
-| `prefix`   | `""`                  | 在主機名稱正前方顯示的前綴。                                             |
-| `suffix`   | `""`                  | 在主機名稱正後方顯示的後綴。                                             |
-| `trim_at`  | `"."`                 | 擷取出主機名稱的斷點，以第一個符合的為準。 `"."` 會讓它停在第一個點的符號。 `""` 會停用任何的截斷功能。 |
-| `style`    | `"bold dimmed green"` | 這個模組的風格。                                                   |
-| `disabled` | `false`               | 停用 `hostname` 模組。                                          |
+| Option     | 預設                          | 說明                                                         |
+| ---------- | --------------------------- | ---------------------------------------------------------- |
+| `ssh_only` | `true`                      | 只在連接到一個 SSH session 時顯示主機名稱。                               |
+| `trim_at`  | `"."`                       | 擷取出主機名稱的斷點，以第一個符合的為準。 `"."` 會讓它停在第一個點的符號。 `""` 會停用任何的截斷功能。 |
+| `format`   | `"on [$hostname]($style) "` | The format for the module.                                 |
+| `style`    | `"bold dimmed green"`       | 這個模組的風格。                                                   |
+| `disabled` | `false`                     | 停用 `hostname` 模組。                                          |
+
+### Variables
+
+| 變數        | 範例  | 說明                                   |
+| --------- | --- | ------------------------------------ |
+| number    | `1` | The number of jobs                   |
+| symbol    |     | Mirrors the value of option `symbol` |
+| style\* |     | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -723,8 +1129,7 @@ symbol = " "
 
 [hostname]
 ssh_only = false
-prefix = "⟪"
-suffix = "⟫"
+format =  "on [$hostname](bold red) "
 trim_at = ".companyname.com"
 disabled = false
 ```
@@ -738,11 +1143,22 @@ disabled = false
 
 ### 選項
 
-| 變數         | 預設             | 說明                |
-| ---------- | -------------- | ----------------- |
-| `symbol`   | `"☕ "`         | 顯示在 Java 版本之前的符號。 |
-| `style`    | `"dimmed red"` | 這個模組的風格。          |
-| `disabled` | `false`        | 停用 `java` 模組。     |
+| Option     | 預設                                     | 說明                                              |
+| ---------- | -------------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [${symbol}${version}]($style) "` | The format for the module.                      |
+| `symbol`   | `"☕ "`                                 | A format string representing the symbol of Java |
+| `style`    | `"red dimmed"`                         | 這個模組的風格。                                        |
+| `disabled` | `false`                                | 停用 `java` 模組。                                   |
+
+### Variables
+
+| 變數        | 範例    | 說明                                   |
+| --------- | ----- | ------------------------------------ |
+| version   | `v14` | The version of `java`                |
+| symbol    |       | Mirrors the value of option `symbol` |
+| style\* |       | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -759,12 +1175,23 @@ symbol = "🌟 "
 
 ### 選項
 
-| 變數          | 預設            | 說明             |
-| ----------- | ------------- | -------------- |
-| `symbol`    | `"✦"`         | 在顯示工作數量之前用的符號。 |
-| `threshold` | `1`           | 在超過指定值時顯示工作數量。 |
-| `style`     | `"bold blue"` | 這個模組的風格。       |
-| `disabled`  | `false`       | 停用 `jobs` 模組。  |
+| Option      | 預設                            | 說明                                               |
+| ----------- | ----------------------------- | ------------------------------------------------ |
+| `threshold` | `1`                           | 在超過指定值時顯示工作數量。                                   |
+| `format`    | `"[$symbol$number]($style) "` | The format for the module.                       |
+| `symbol`    | `"✦"`                         | A format string representing the number of jobs. |
+| `style`     | `"bold blue"`                 | 這個模組的風格。                                         |
+| `disabled`  | `false`                       | 停用 `jobs` 模組。                                    |
+
+### Variables
+
+| 變數        | 範例  | 說明                                   |
+| --------- | --- | ------------------------------------ |
+| number    | `1` | The number of jobs                   |
+| symbol    |     | Mirrors the value of option `symbol` |
+| style\* |     | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -786,11 +1213,22 @@ The `julia` module shows the currently installed version of Julia. 這個模組�
 
 ### 選項
 
-| 變數         | 預設              | 說明                                                      |
-| ---------- | --------------- | ------------------------------------------------------- |
-| `symbol`   | `"∴ "`          | The symbol used before displaying the version of Julia. |
-| `style`    | `"bold purple"` | 這個模組的風格。                                                |
-| `disabled` | `false`         | Disables the `julia` module.                            |
+| Option     | 預設                                 | 說明                                                |
+| ---------- | ---------------------------------- | ------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                        |
+| `symbol`   | `"ஃ "`                             | A format string representing the symbol of Julia. |
+| `style`    | `"bold purple"`                    | 這個模組的風格。                                          |
+| `disabled` | `false`                            | Disables the `julia` module.                      |
+
+### Variables
+
+| 變數        | 範例       | 說明                                   |
+| --------- | -------- | ------------------------------------ |
+| version   | `v1.4.0` | The version of `julia`               |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -798,11 +1236,12 @@ The `julia` module shows the currently installed version of Julia. 這個模組�
 # ~/.config/starship.toml
 
 [julia]
-symbol = "👸 "
+symbol = "∴ "
 ```
+
 ## Kubernetes
 
-顯示現在 Kubernetes 主體名稱以及從 kubeconfig 檔案來的名稱空間 (如果有設定的話)。 The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. 如果有設定 `$KUBECONFIG` 環境變數，這個模組就會使用設定值；如果沒有，它就會使用 `~/.kube/config`。
+Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
@@ -812,12 +1251,25 @@ symbol = "👸 "
 
 ### 選項
 
-| 變數                | 預設            | 說明                                  |
-| ----------------- | ------------- | ----------------------------------- |
-| `symbol`          | `"☸ "`        | 顯示在叢集 (cluster) 資訊之前的符號。            |
-| `context_aliases` |               | Table of context aliases to display |
-| `style`           | `"bold blue"` | 這個模組的風格。                            |
-| `disabled`        | `true`        | 停用 `kubernetes` 模組。                 |
+| Option                  | 預設                                                       | 說明                                                                    |
+| ----------------------- | -------------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`                | `"☸ "`                                                   | A format string representing the symbol displayed before the Cluster. |
+| `format`                | `"on [$symbol$context( \\($namespace\\))]($style) "` | The format for the module.                                            |
+| `style`                 | `"cyan bold"`                                            | 這個模組的風格。                                                              |
+| `namespace_spaceholder` | `none`                                                   | The value to display if no namespace was found.                       |
+| `context_aliases`       |                                                          | Table of context aliases to display.                                  |
+| `disabled`              | `true`                                                   | Disables the `kubernetes` module.                                     |
+
+### Variables
+
+| 變數        | 範例                   | 說明                                       |
+| --------- | -------------------- | ---------------------------------------- |
+| context   | `starship-cluster`   | The current kubernetes context           |
+| namespace | `starship-namespace` | If set, the current kubernetes namespace |
+| symbol    |                      | Mirrors the value of option `symbol`     |
+| style\* |                      | Mirrors the value of option `style`      |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -825,8 +1277,7 @@ symbol = "👸 "
 # ~/.config/starship.toml
 
 [kubernetes]
-symbol = "⛵ "
-style = "dimmed green"
+format = "on [⛵ $context \\($namespace\\)](dimmed green) "
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
@@ -838,7 +1289,7 @@ disabled = false
 
 ### 選項
 
-| 變數         | 預設      | 說明                            |
+| Option     | 預設      | 說明                            |
 | ---------- | ------- | ----------------------------- |
 | `disabled` | `false` | 停用 `line_break` 模組，讓提示字元變成一行。 |
 
@@ -865,15 +1316,26 @@ disabled = true
 
 ### 選項
 
-| 變數                | 預設                    | 說明                                                            |
-| ----------------- | --------------------- | ------------------------------------------------------------- |
-| `show_percentage` | `false`               | 以剩餘記憶體佔有的百分比的方式顯示記憶體使用狀況。                                     |
-| `show_swap`       | `true`                | 如果總 swap 使用量不為零的話，顯示 swap 使用量                                 |
-| `threshold`       | `75`                  | 將記憶體使用量隱藏，除非使用量超過指定值。                                         |
-| `symbol`          | `"🐏 "`                | 顯示在記憶體使用量之前的符號。                                               |
-| `separator`       | `" | "`               | The symbol or text that will seperate the ram and swap usage. |
-| `style`           | `"bold dimmed white"` | 這個模組的風格。                                                      |
-| `disabled`        | `true`                | 停用 `memory_usage` 模組。                                         |
+| Option      | 預設                                            | 說明                         |
+| ----------- | --------------------------------------------- | -------------------------- |
+| `threshold` | `75`                                          | 將記憶體使用量隱藏，除非使用量超過指定值。      |
+| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module. |
+| `symbol`    | `"🐏"`                                         | 顯示在記憶體使用量之前的符號。            |
+| `style`     | `"bold dimmed white"`                         | 這個模組的風格。                   |
+| `disabled`  | `true`                                        | 停用 `memory_usage` 模組。      |
+
+### Variables
+
+| 變數            | 範例            | 說明                                                                 |
+| ------------- | ------------- | ------------------------------------------------------------------ |
+| ram           | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
+| ram_pct       | `48%`         | The percentage of the current system memory.                       |
+| swap\**     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
+| swap_pct\** | `77%`         | The swap memory percentage of the current system swap memory file. |
+| symbol        | `🐏`           | Mirrors the value of option `symbol`                               |
+| style\*     |               | Mirrors the value of option `style`                                |
+
+\*: This variable can only be used as a part of a style string \*\*: The SWAP file information is only displayed if detected on the current system
 
 ### 範例
 
@@ -896,13 +1358,24 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 
 ### 選項
 
-| 變數                  | 預設              | 說明                                                                                           |
-| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`          | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
-| `truncation_length` | `2^63 - 1`      | Truncates the hg branch name to X graphemes                                                  |
-| `truncation_symbol` | `"…"`           | 用來指示分支名稱被縮減的符號。                                                                              |
-| `style`             | `"bold purple"` | 這個模組的風格。                                                                                     |
-| `disabled`          | `true`          | Disables the `hg_branch` module.                                                             |
+| Option              | 預設                               | 說明                                                                                           |
+| ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `style`             | `"bold purple"`                  | 這個模組的風格。                                                                                     |
+| `format`            | `"on [$symbol$branch]($style) "` | The format for the module.                                                                   |
+| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`                            | 用來指示分支名稱被縮減的符號。                                                                              |
+| `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
+
+### Variables
+
+| 變數        | 範例       | 說明                                   |
+| --------- | -------- | ------------------------------------ |
+| branch    | `master` | The active mercurial branch          |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -910,9 +1383,47 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 # ~/.config/starship.toml
 
 [hg_branch]
-symbol = "🌱 "
+format = "on [🌱 $branch](bold purple)"
 truncation_length = 4
 truncation_symbol = ""
+```
+
+## Nim
+
+The `nim` module shows the currently installed version of Nim. 這個模組在下列其中一個條件達成時顯示：
+
+- 現在資料夾中包含一個 `nim.cfg` 檔案
+- The current directory contains a file with the `.nim` extension
+- The current directory contains a file with the `.nims` extension
+- The current directory contains a file with the `.nimble` extension
+
+### 選項
+
+| Option     | 預設                                 | 說明                                                    |
+| ---------- | ---------------------------------- | ----------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module                             |
+| `symbol`   | `"👑 "`                             | The symbol used before displaying the version of Nim. |
+| `style`    | `"bold yellow"`                    | 這個模組的風格。                                              |
+| `disabled` | `false`                            | Disables the `nim` module.                            |
+
+### Variables
+
+| 變數        | 範例       | 說明                                   |
+| --------- | -------- | ------------------------------------ |
+| version   | `v1.2.0` | The version of `nimc`                |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[nim]
+style = "yellow"
+symbol = "🎣 "
 ```
 
 ## Nix-shell
@@ -921,13 +1432,25 @@ truncation_symbol = ""
 
 ### 選項
 
-| 變數           | 預設           | 說明                 |
-| ------------ | ------------ | ------------------ |
-| `use_name`   | `false`      | 顯示 nix-shell 的名稱。  |
-| `impure_msg` | `"impure"`   | 自定義「impure」訊息。     |
-| `pure_msg`   | `"pure"`     | 自定義「pure」訊息。       |
-| `style`      | `"bold red"` | 這個模組的風格。           |
-| `disabled`   | `false`      | 停用 `nix_shell` 模組。 |
+| Option       | 預設                                                 | 說明                                                    |
+| ------------ | -------------------------------------------------- | ----------------------------------------------------- |
+| `format`     | `"via [$symbol$state( \\($name\\))]($style) "` | The format for the module.                            |
+| `symbol`     | `"❄️  "`                                           | A format string representing the symbol of nix-shell. |
+| `style`      | `"bold blue"`                                      | 這個模組的風格。                                              |
+| `impure_msg` | `"impure"`                                         | A format string shown when the shell is impure.       |
+| `pure_msg`   | `"pure"`                                           | A format string shown when the shell is pure.         |
+| `disabled`   | `false`                                            | 停用 `nix_shell` 模組。                                    |
+
+### Variables
+
+| 變數        | 範例      | 說明                                   |
+| --------- | ------- | ------------------------------------ |
+| state     | `pure`  | The state of the nix-shell           |
+| name      | `lorri` | The name of the nix-shell            |
+| symbol    |         | Mirrors the value of option `symbol` |
+| style\* |         | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -936,9 +1459,9 @@ truncation_symbol = ""
 
 [nix_shell]
 disabled = true
-use_name = true
-impure_msg = "impure shell"
-pure_msg = "pure shell"
+impure_msg = "[impure shell](bold red)"
+pure_msg = "[pure shell](bold green)"
+format = "via [☃️ $state( \\($name\\))](bold blue) "
 ```
 
 ## NodeJS
@@ -948,15 +1471,27 @@ pure_msg = "pure shell"
 - 現在資料夾中包含一個 `package.json` 檔案
 - The current directory contains a `.node-version` file
 - 現在資料夾中包含一個 `node_modules` 資料夾
-- 現在資料夾中包含一個檔案具有 `.js` 副檔名
+- The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
+- The current directory contains a file with the `.ts` extension
 
 ### 選項
 
-| 變數         | 預設             | 說明                   |
-| ---------- | -------------- | -------------------- |
-| `symbol`   | `"⬢ "`         | 在顯示 NodeJS 版本之前用的符號。 |
-| `style`    | `"bold green"` | 這個模組的風格。             |
-| `disabled` | `false`        | 停用 `nodejs` 模組。      |
+| Option     | 預設                                 | 說明                                                 |
+| ---------- | ---------------------------------- | -------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                         |
+| `symbol`   | `"⬢ "`                             | A format string representing the symbol of NodeJS. |
+| `style`    | `"bold green"`                     | 這個模組的風格。                                           |
+| `disabled` | `false`                            | 停用 `nodejs` 模組。                                    |
+
+###  Variables
+
+| 變數        | 範例         | 說明                                   |
+| --------- | ---------- | ------------------------------------ |
+| version   | `v13.12.0` | The version of `node`                |
+| symbol    |            | Mirrors the value of option `symbol` |
+| style\* |            | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -964,12 +1499,12 @@ pure_msg = "pure shell"
 # ~/.config/starship.toml
 
 [nodejs]
-symbol = "🤖 "
+format = "via [🤖 $version](bold green) "
 ```
 
 ## 套件版本
 
-The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並顯示他的現在版本。 The module currently supports `npm`, `cargo`, `poetry`, `composer`, and `gradle` packages.
+The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並顯示他的現在版本。 The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia` and `mix` packages.
 
 - **npm** – `npm` 套件的版本是從現在資料夾中的 `package.json` 之中擷取出來的
 - **cargo** – `cargo` 套件的版本是從現在資料夾中的 `Cargo.toml` 之中擷取出來的
@@ -977,16 +1512,29 @@ The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並
 - **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 - **julia** - The package version is extracted from the `Project.toml` present
+- **mix** - The `mix` package version is extracted from the `mix.exs` present
 
 > ⚠️ 顯示出來的版本是從你的現在資料夾之中擷取出來的，並非從套件管理員取得。
 
 ### 選項
 
-| 變數         | 預設           | 說明               |
-| ---------- | ------------ | ---------------- |
-| `symbol`   | `"📦 "`       | 顯示在套件的版本之前的符號。   |
-| `style`    | `"bold red"` | 這個模組的風格。         |
-| `disabled` | `false`      | 停用 `package` 模組。 |
+| Option            | 預設                                 | 說明                                                        |
+| ----------------- | ---------------------------------- | --------------------------------------------------------- |
+| `format`          | `"via [$symbol$version]($style) "` | The format for the module.                                |
+| `symbol`          | `"📦 "`                             | 顯示在套件的版本之前的符號。                                            |
+| `style`           | `"bold 208"`                       | 這個模組的風格。                                                  |
+| `display_private` | `false`                            | Enable displaying version for packages marked as private. |
+| `disabled`        | `false`                            | 停用 `package` 模組。                                          |
+
+### Variables
+
+| 變數        | 範例       | 說明                                   |
+| --------- | -------- | ------------------------------------ |
+| version   | `v1.0.0` | The version of your package          |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -994,24 +1542,74 @@ The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並
 # ~/.config/starship.toml
 
 [package]
-symbol = "🎁 "
+format = "via [🎁 $version](208 bold) "
+```
+
+## OCaml
+
+The `ocaml` module shows the currently installed version of OCaml. 這個模組在下列其中一個條件達成時顯示：
+
+- The current directory contains a file with `.opam` extension or `_opam` directory
+- The current directory contains a `esy.lock` directory
+- The current directory contains a `dune` or `dune-project` file
+- The current directory contains a `jbuild` or `jbuild-ignore` file
+- The current directory contains a `.merlin` file
+- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+
+### 選項
+
+| Option     | 預設                                 | 說明                                                      |
+| ---------- | ---------------------------------- | ------------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                       |
+| `symbol`   | `"🐫 "`                             | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"`                    | 這個模組的風格。                                                |
+| `disabled` | `false`                            | Disables the `ocaml` module.                            |
+
+### Variables
+
+| 變數        | 範例        | 說明                                   |
+| --------- | --------- | ------------------------------------ |
+| version   | `v4.10.0` | The version of `ocaml`               |
+| symbol    |           | Mirrors the value of option `symbol` |
+| style\* |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[ocaml]
+format = "via [🐪 $version]($style) "
 ```
 
 ## PHP
 
 The `php` module shows the currently installed version of PHP. 這個模組在下列其中一個條件達成時顯示：
 
-- 現在資料夾中含有一個 `composer.json` 檔案
+- 現在資料夾中包含一個 `composer.json` 檔案
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
 ### 選項
 
-| 變數         | 預設           | 說明                                                    |
-| ---------- | ------------ | ----------------------------------------------------- |
-| `symbol`   | `"🐘 "`       | The symbol used before displaying the version of PHP. |
-| `style`    | `"bold red"` | 這個模組的風格。                                              |
-| `disabled` | `false`      | Disables the `php` module.                            |
+| Option     | 預設                                 | 說明                                                    |
+| ---------- | ---------------------------------- | ----------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                            |
+| `symbol`   | `"🐘 "`                             | The symbol used before displaying the version of PHP. |
+| `style`    | `"147 bold"`                       | 這個模組的風格。                                              |
+| `disabled` | `false`                            | Disables the `php` module.                            |
+
+### Variables
+
+| 變數        | 範例       | 說明                                   |
+| --------- | -------- | ------------------------------------ |
+| version   | `v7.3.8` | The version of `php`                 |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -1019,36 +1617,64 @@ The `php` module shows the currently installed version of PHP. 這個模組在�
 # ~/.config/starship.toml
 
 [php]
-symbol = "🔹 "
+format = "via [🔹 $version](147 bold) "
 ```
 
 ## Python
 
-`python` 模組顯示現在安裝的 Python 版本
+The `python` module shows the currently installed version of Python and the current Python virtual environment if one is activated.
 
-如果 `pyenv_version_name` 的值為 `true`, 會顯示 pyenv 內的版本名稱
-
-要不然就會顯示 `python -version` 的版本和有啟用的 Python 虛擬環境版本
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
 這個模組在下列其中一個條件達成時顯示：
 
 - 目前資料夾中有一個 `.python-version` 檔案
 - 目前資料夾中有一個 `requirements.txt` 檔案
 - 目前資料夾中有一個 `pyproject.toml` 檔案
-- 目前資料夾中有一個 `.py` 副檔名的檔案
+- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - 目前資料夾中有一個 `Pipfile` 檔案
 - 目前資料夾中有一個 `tox.ini` 檔案
+- 現在資料夾中包含一個 `setup.py` 檔案
+- The current directory contains a `__init__.py` file
 - A virtual environment is currently activated
 
 ### 選項
 
-| 變數                   | 預設              | 說明                                            |
-| -------------------- | --------------- | --------------------------------------------- |
-| `symbol`             | `"🐍 "`          | 顯示在 Python 版本之前的符號。                           |
-| `pyenv_version_name` | `false`         | 使用 pyenv 取得 Python 的版本。                       |
-| `pyenv_prefix`       | `"pyenv "`      | 顯示在 pyenv 版本之前的前綴 (預設顯示是 `pyenv MY_VERSION`)。 |
-| `style`              | `"bold yellow"` | 這個模組的風格。                                      |
-| `disabled`           | `false`         | 停用 `python` 模組。                               |
+| Option               | 預設                                                             | 說明                                                                         |
+| -------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `format`             | `"via [${symbol}${version}( \\($virtualenv\\))]($style) "` | The format for the module.                                                 |
+| `symbol`             | `"🐍 "`                                                         | A format string representing the symbol of Python                          |
+| `style`              | `"yellow bold"`                                                | 這個模組的風格。                                                                   |
+| `pyenv_version_name` | `false`                                                        | 使用 pyenv 取得 Python 的版本。                                                    |
+| `scan_for_pyfiles`   | `true`                                                         | If false, Python files in the current directory will not show this module. |
+| `disabled`           | `false`                                                        | 停用 `python` 模組。                                                            |
+
+### Variables
+
+| 變數         | 範例              | 說明                                   |
+| ---------- | --------------- | ------------------------------------ |
+| version    | `"v3.8.1"`      | The version of `python`              |
+| symbol     | `"🐍 "`          | Mirrors the value of option `symbol` |
+| style      | `"yellow bold"` | Mirrors the value of option `style`  |
+| virtualenv | `"venv"`        | The current `virtualenv` name        |
+
+<details>
+<summary>This module has some advanced configuration options.</summary>
+
+| 變數              | 預設       | 說明                                                                            |
+| --------------- | -------- | ----------------------------------------------------------------------------- |
+| `python_binary` | `python` | Configures the python binary that Starship executes when getting the version. |
+
+The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+python_binary = "python3"
+```
+
+</details>
 
 ### 範例
 
@@ -1071,11 +1697,22 @@ pyenv_prefix = "foo "
 
 ### 選項
 
-| 變數         | 預設           | 說明                |
-| ---------- | ------------ | ----------------- |
-| `symbol`   | `"💎 "`       | 顯示在 Ruby 版本之前的符號。 |
-| `style`    | `"bold red"` | 這個模組的風格。          |
-| `disabled` | `false`      | 停用 `ruby` 模組。     |
+| Option     | 預設                                 | 說明                                               |
+| ---------- | ---------------------------------- | ------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
+| `symbol`   | `"💎 "`                             | A format string representing the symbol of Ruby. |
+| `style`    | `"bold red"`                       | 這個模組的風格。                                         |
+| `disabled` | `false`                            | 停用 `ruby` 模組。                                    |
+
+### Variables
+
+| 變數        | 範例       | 說明                                   |
+| --------- | -------- | ------------------------------------ |
+| version   | `v2.5.1` | The version of `ruby`                |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -1095,11 +1732,22 @@ symbol = "🔺 "
 
 ### 選項
 
-| 變數         | 預設           | 說明                |
-| ---------- | ------------ | ----------------- |
-| `symbol`   | `"🦀 "`       | 顯示在 Rust 版本之前的符號。 |
-| `style`    | `"bold red"` | 這個模組的風格。          |
-| `disabled` | `false`      | 停用 `rust` 模組。     |
+| Option     | 預設                                 | 說明                                              |
+| ---------- | ---------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
+| `symbol`   | `"🦀 "`                             | A format string representing the symbol of Rust |
+| `style`    | `"bold red"`                       | 這個模組的風格。                                        |
+| `disabled` | `false`                            | 停用 `rust` 模組。                                   |
+
+### Variables
+
+| 變數        | 範例                | 說明                                   |
+| --------- | ----------------- | ------------------------------------ |
+| version   | `v1.43.0-nightly` | The version of `rustc`               |
+| symbol    |                   | Mirrors the value of option `symbol` |
+| style\* |                   | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -1107,25 +1755,31 @@ symbol = "🔺 "
 # ~/.config/starship.toml
 
 [rust]
-symbol = "⚙️ "
+format = "via [⚙️ $version](red bold)"
 ```
 
 ## Singularity
 
 The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
 
-:::
-
 ### 選項
 
-| 變數         | 預設                   | 說明                                               |
-| ---------- | -------------------- | ------------------------------------------------ |
-| `label`    | `""`                 | Prefix before the image name display.            |
-| `prefix`   | `"["`                | Prefix to display immediately before image name. |
-| `suffix`   | `"]"`                | Suffix to display immediately after image name.  |
-| `symbol`   | `""`                 | The symbol used before the image name.           |
-| `style`    | `"bold dimmed blue"` | 這個模組的風格。                                         |
-| `disabled` | `false`              | Disables the `singularity` module.               |
+| Option     | 預設                                   | 說明                                               |
+| ---------- | ------------------------------------ | ------------------------------------------------ |
+| `format`   | `"[$symbol\\[$env\\]]($style) "` | The format for the module.                       |
+| `symbol`   | `""`                                 | A format string displayed before the image name. |
+| `style`    | `"bold dimmed blue"`                 | 這個模組的風格。                                         |
+| `disabled` | `false`                              | Disables the `singularity` module.               |
+
+### Variables
+
+| 變數        | 範例           | 說明                                   |
+| --------- | ------------ | ------------------------------------ |
+| env       | `centos.img` | The current singularity image        |
+| symbol    |              | Mirrors the value of option `symbol` |
+| style\* |              | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -1133,32 +1787,54 @@ The `singularity` module shows the current singularity image, if inside a contai
 # ~/.config/starship.toml
 
 [singularity]
-symbol = "📦 "
+format = "[📦 \\[$env\\]]($style) "
 ```
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. 這個模組在下列其中一個條件達成時顯示：
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). 這個模組在下列其中一個條件達成時顯示：
 
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` extension
 
 ### 選項
 
-| 變數             | 預設           | 說明                                                          |
-| -------------- | ------------ | ----------------------------------------------------------- |
-| `symbol`       | `"💠 "`       | The symbol used before displaying the terraform workspace.  |
-| `show_version` | `false`      | Shows the terraform version. Very slow on large workspaces. |
-| `style`        | `"bold 105"` | 這個模組的風格。                                                    |
-| `disabled`     | `false`      | Disables the `terraform` module.                            |
+| Option     | 預設                                   | 說明                                                    |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
+| `symbol`   | `"💠 "`                               | A format string shown before the terraform workspace. |
+| `style`    | `"bold 105"`                         | 這個模組的風格。                                              |
+| `disabled` | `false`                              | Disables the `terraform` module.                      |
+
+### Variables
+
+| 變數        | 範例         | 說明                                   |
+| --------- | ---------- | ------------------------------------ |
+| version   | `v0.12.24` | The version of `terraform`           |
+| workspace | `default`  | The current terraform workspace      |
+| symbol    |            | Mirrors the value of option `symbol` |
+| style\* |            | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
+
+#### With Version
 
 ```toml
 # ~/.config/starship.toml
 
 [terraform]
-symbol = "🏎💨 "
+format = "[🏎💨 $version$workspace]($style) "
+```
+
+#### Without version
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+format = "[🏎💨 $workspace]($style) "
 ```
 
 ## 時間
@@ -1173,15 +1849,26 @@ symbol = "🏎💨 "
 
 ### 選項
 
-| 變數                | 預設              | 說明                                                                                     |
-| ----------------- | --------------- | -------------------------------------------------------------------------------------- |
-| `use_12hr`        | `false`         | 啟用 12 小時格式。                                                                            |
-| `format`          | 請看下列            | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。 |
-| `style`           | `"bold yellow"` | 這個模組的時間的風格。                                                                            |
-| `utc_time_offset` | `"local"`       | 設定相對於 UTC 的時差。 範圍 -24 < x < 24。 允許使用浮點數來表示 30/45 分鐘時差的時區。                              |
-| `disabled`        | `true`          | 停用 `time` 模組。                                                                          |
+| Option            | 預設                      | 說明                                                                                                    |
+| ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                     |
+| `use_12hr`        | `false`                 | 啟用 12 小時格式。                                                                                           |
+| `time_format`     | 請看下列                    | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。                |
+| `style`           | `"bold yellow"`         | 這個模組的時間的風格。                                                                                           |
+| `utc_time_offset` | `"local"`               | 設定相對於 UTC 的時差。 Range from -24 &lt; x &lt; 24. 允許使用浮點數來表示 30/45 分鐘時差的時區。                   |
+| `disabled`        | `true`                  | 停用 `time` 模組。                                                                                         |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-如果 `use_12hr` 是 `true` 的話，`format` 會被預設為 `"%r"`。 不然的話，它會被預設為 `"%T"`。 手動設定 `format` 的設定值會覆寫 `use_12hr` 的設定。
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. 不然的話，它會被預設為 `"%T"`。 Manually setting `time_format` will override the `use_12hr` setting.
+
+### Variables
+
+| 變數        | 範例         | 說明                                  |
+| --------- | ---------- | ----------------------------------- |
+| 時間        | `13:08:10` | The current time.                   |
+| style\* |            | Mirrors the value of option `style` |
+
+\*: This variable can only be used as a part of a style string
 
 ### 範例
 
@@ -1190,8 +1877,10 @@ symbol = "🏎💨 "
 
 [time]
 disabled = false
-format = "🕙[ %T ]"
+format = "🕙[\\[ $time \\]]($style) "
+time_format = "%T"
 utc_time_offset = "-5"
+time_range = "10:00:00-14:00:00"
 ```
 
 ## 使用者名稱
@@ -1205,12 +1894,20 @@ utc_time_offset = "-5"
 
 ### 選項
 
-| 變數            | 預設              | 說明                  |
-| ------------- | --------------- | ------------------- |
-| `style_root`  | `"bold red"`    | 使用者為 root 時使用的風格。   |
-| `style_user`  | `"bold yellow"` | 非 root 使用者時使用的風格。   |
-| `show_always` | `false`         | 總是顯示 `username` 模組。 |
-| `disabled`    | `false`         | 停用 `username` 模組。   |
+| Option        | 預設                       | 說明                         |
+| ------------- | ------------------------ | -------------------------- |
+| `style_root`  | `"bold red"`             | 使用者為 root 時使用的風格。          |
+| `style_user`  | `"bold yellow"`          | 非 root 使用者時使用的風格。          |
+| `format`      | `"via [$user]($style) "` | The format for the module. |
+| `show_always` | `false`                  | 總是顯示 `username` 模組。        |
+| `disabled`    | `false`                  | 停用 `username` 模組。          |
+
+### Variables
+
+| 變數      | 範例           | 說明                                                                                          |
+| ------- | ------------ | ------------------------------------------------------------------------------------------- |
+| `style` | `"red bold"` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
+| `user`  | `"matchai"`  | The currently logged-in user ID.                                                            |
 
 ### 範例
 
@@ -1218,5 +1915,172 @@ utc_time_offset = "-5"
 # ~/.config/starship.toml
 
 [username]
-disabled = true
+style_user = "white bold"
+style_root = "black bold"
+format = "user: [$user]($style) "
+disabled = false
+show_always = true
+```
+
+## Zig
+
+The `zig` module shows the currently installed version of Zig. 這個模組在下列其中一個條件達成時顯示：
+
+- The current directory contains a `.zig` file
+
+### 選項
+
+| Option     | 預設                                 | 說明                                                    |
+| ---------- | ---------------------------------- | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`                             | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"`                    | 這個模組的風格。                                              |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                            |
+| `disabled` | `false`                            | Disables the `zig` module.                            |
+
+### Variables
+
+| 變數        | 範例       | 說明                                   |
+| --------- | -------- | ------------------------------------ |
+| version   | `v0.6.0` | The version of `zig`                 |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[zig]
+symbol = "⚡️ "
+```
+
+## Custom commands
+
+The `custom` modules show the output of some arbitrary commands.
+
+These modules will be shown if any of the following conditions are met:
+
+- The current directory contains a file whose name is in `files`
+- The current directory contains a directory whose name is in `directories`
+- The current directory contains a file whose extension is in `extensions`
+- The `when` command returns 0
+
+::: tip
+
+Multiple custom modules can be defined by using a `.`.
+
+:::
+
+::: tip
+
+The order in which custom modules are shown can be individually set by setting `custom.foo` in `prompt_order`. By default, the `custom` module will simply show all custom modules in the order they were defined.
+
+:::
+
+### 選項
+
+| Option        | 預設                            | 說明                                                                                                                         |
+| ------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                               | The command whose output should be printed.                                                                                |
+| `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                               | [See below](#custom-command-shell)                                                                                         |
+| `說明`          | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
+| `files`       | `[]`                          | The files that will be searched in the working directory for a match.                                                      |
+| `directories` | `[]`                          | The directories that will be searched in the working directory for a match.                                                |
+| `extensions`  | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
+| `symbol`      | `""`                          | The symbol used before displaying the command output.                                                                      |
+| `style`       | `"bold green"`                | 這個模組的風格。                                                                                                                   |
+| `format`      | `"[$symbol$output]($style) "` | The format for the module.                                                                                                 |
+| `disabled`    | `false`                       | Disables this `custom` module.                                                                                             |
+
+### Variables
+
+| 變數        | 說明                                     |
+| --------- | -------------------------------------- |
+| output    | The output of shell command in `shell` |
+| symbol    | Mirrors the value of option `symbol`   |
+| style\* | Mirrors the value of option `style`    |
+
+\*: This variable can only be used as a part of a style string
+
+#### Custom command shell
+
+`shell` accepts a non-empty list of strings, where:
+
+- The first string is the path to the shell to use to execute the command.
+- Other following arguments are passed to the shell.
+
+If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
+
+If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+
+```toml
+shell = ["pwsh", "-Command", "-"]
+```
+
+::: warning Make sure your custom shell configuration exits gracefully
+
+If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+
+For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+
+Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+
+Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
+
+:::
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[custom.foo]
+command = "echo foo"  # shows output of command
+files = ["foo"]       # can specify filters
+when = """ test "$HOME" == "$PWD" """
+prefix = " transcending "
+
+[custom.time]
+command = "time /T"
+files = ["*.pst"]
+prefix = "transcending "
+shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
+```
+
+## PureScript
+
+The `purescript` module shows the currently installed version of PureScript version. 這個模組在下列其中一個條件達成時顯示：
+
+- 現在資料夾中包含一個 `spago.dhall` 檔案
+- The current directory contains a \*.purs files
+
+### 選項
+
+| Option     | 預設                                 | 說明                                                           |
+| ---------- | ---------------------------------- | ------------------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                                   |
+| `symbol`   | `"<=> "`                     | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"`                     | 這個模組的風格。                                                     |
+| `disabled` | `false`                            | Disables the `purescript` module.                            |
+
+### Variables
+
+| 變數        | 範例       | 說明                                   |
+| --------- | -------- | ------------------------------------ |
+| version   | `0.13.5` | The version of `purescript`          |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[purescript]
+format = "via [$symbol$version](bold white)"
 ```

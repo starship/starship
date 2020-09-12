@@ -2,14 +2,14 @@
   <img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship – Shell prompt multiplatformes" />
+    alt="Starship – Prompt Shell multi-platformes" />
 </p>
 
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
-      alt="GitHub Actions état du workflow" /></a>
+      alt="Statut du workflow actions GitHub" /></a>
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
@@ -17,7 +17,7 @@
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
-      alt="Statut de l'empaquetage" /></a
+      alt="Statut du package" /></a
 ><br />
   <a href="https://discord.gg/8Jzqu3T"
     ><img
@@ -32,7 +32,7 @@
 <p align="center">
   <a href="https://starship.rs">Site web</a>
   ·
-  <a href="#-installation">Installation</a>
+  <a href="#🚀-installation">Installation</a>
   ·
   <a href="https://starship.rs/config/">Configuration</a>
 </p>
@@ -115,11 +115,13 @@
 <a href="https://starship.rs/"><strong>Consulter la documentation de Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
+<a name="🚀-installation"></a>
+
 ## 🚀 Installation
 
 ### Pré-requis
 
-- Une [police d'écriture Powerline](https://github.com/powerline/fonts) installée et activée dans votre terminal (Par exemple, essayez [Fira Code](https://github.com/tonsky/FiraCode)).
+- Une police [Nerd Font](https://www.nerdfonts.com/) installée et activée dans votre terminal (Par exemple, essayez [Fira Code](https://www.nerdfonts.com/font-downloads)).
 
 ### Démarrage rapide
 
@@ -220,22 +222,22 @@ Nous sommes toujours à la recherche de contributeurs de **tous les niveaux de c
 
 Si vous êtes intéressé à aider à contribuer à Starship, veuillez jeter un coup d'oeil à notre [Guide de contribution](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Aussi, n'hésitez pas à vous rendre sur notre [serveur Discord](https://discord.gg/8Jzqu3T) pour dire bonjour. 👋
 
-### Code Contributors
+### Contributeurs de code
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+Ce projet existe grâce à toutes les personnes qui y contribuent. [[Contribuer](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
-### Financial Contributors
+### Contributeurs financiers
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+Devenez un contributeur financier et aidez-nous à soutenir notre communauté. [[Contribuer](https://opencollective.com/starship/contribute)]
 
-#### Individuals
+#### Particuliers
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
-#### Organizations
+#### Organisations
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+Soutenez ce projet avec votre organisation. Votre logo apparaîtra ici avec un lien vers votre site Web. [[Contribuer](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -250,7 +252,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 ## 💭Inspiré par
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Voyez ces travaux précédents qui ont contribué à inspirer la création de vaisseau. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Un ZSH prompt pour les astronautes.
 
@@ -260,9 +262,9 @@ Please check out these previous works that helped inspire the creation of starsh
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Icône de fusée de Starship">
 </p>
 
 ## 📝 License
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-présent, [Contributeurs Starship](https://github.com/starship/starship/graphs/contributors).<br /> Ce projet est sous licence[ISC](https://github.com/starship/starship/blob/master/LICENSE).

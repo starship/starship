@@ -30,11 +30,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/ja/">ウェブサイト</a>
+  <a href="https://starship.rs">ウェブサイト</a>
   ·
-  <a href="#-インストール">インストール</a>
+  <a href="#🚀-installation">インストール</a>
   ·
-  <a href="https://starship.rs/ja/config/">設定</a>
+  <a href="https://starship.rs/config/">設定</a>
 </p>
 
 <p align="center">
@@ -104,22 +104,24 @@
 **シェル用の最小限の、非常に高速で、無限にカスタマイズ可能なプロンプトです！**
 
 
-- **高速: ** _本当に</ 1>高速です！ 🚀</li>
-- **カスタマイズ可能: **プロンプトのあらゆる側面を構成します。
-- **ユニバーサル: ** あらゆるシェル、あらゆるオペレーティングシステムで動作します。
+- **高速:** _本当に_ 高速です！ 🚀
+- **カスタマイズ可能:** プロンプトのあらゆる側面を構成します。
+- **ユニバーサル:** あらゆるシェル、あらゆるオペレーティングシステムで動作します。
 - **インテリジェント:** 関連情報を一目で示します。
-- **豊富な機能: ** お気に入りのツールをすべてサポートします。
-- **簡単: ** 迅速なインストールが可能であり、数分で使用開始可能です。</ul>
+- **豊富な機能:** お気に入りのツールをすべてサポートします。
+- **簡単:** 迅速なインストールが可能であり、数分で使用開始可能です。
 
 <p align="center">
 <a href="https://starship.rs/"><strong>Starshipのドキュメントを見る&nbsp;&nbsp;▶</strong></a>
 </p>
 
+<a name="🚀-installation"></a>
+
 ## 🚀 インストール
 
 ### 必要なもの
 
-- [Powerline フォント](https://github.com/powerline/fonts) がターミナルにインストールされて有効になっている必要があります（例えば [Fira Code](https://github.com/tonsky/FiraCode) を試してみてください）。
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### 入門
 
@@ -220,22 +222,22 @@
 
 もしあなたが Starship への貢献に興味がある場合は、我々の[貢献ガイド](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)をご覧ください。 また、気軽に我々の[Discord サーバー](https://discord.gg/8Jzqu3T)へ顔を出してください。 👋
 
-### Code Contributors
+### コードに貢献していただいた方々
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+このプロジェクトは、貢献したすべての人々のおかげで存在します。 [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
-### Financial Contributors
+### 財政的な貢献をしていただいた方々
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+財政的な貢献者になって、私たちのコミュニティを維持するのを助けていただけると嬉しいです。 [[Contribute](https://opencollective.com/starship/contribute)]
 
-#### Individuals
+#### 個人
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
-#### Organizations
+#### 組織
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+あなたの組織でこのプロジェクトをサポートします。 あなたのロゴはあなたのウェブサイトへのリンクとここに表示されます。 [[Contribute](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -250,7 +252,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 ## 💭影響を受けたプロダクト
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+よければStarship の作成に影響を与えた、これまでのプロジェクトをチェックしてください 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - 宇宙飛行士のための ZSH プロンプト。
 
@@ -265,4 +267,4 @@ Please check out these previous works that helped inspire the creation of starsh
 
 ## 📝 ライセンス
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> このプロジェクトは [ISC](https://github.com/starship/starship/blob/master/LICENSE) でライセンスされています。

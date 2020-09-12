@@ -5,9 +5,9 @@
 - **终端模拟器**：[iTerm2](https://iterm2.com/)
   - **主题**：Minimal
   - **颜色方案**：[Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **字体**：[Fira Code](https://github.com/tonsky/FiraCode)
+  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
 - **Shell**：[Fish Shell](https://fishshell.com/)
-  - **fish 配置**：[matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/master/.config/fish/config.fish)
+  - **fish 配置**：[matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **提示符工具**：[Starship](https://starship.rs/)
 
 ## `prompt_order` 和 `<module>.disabled` 的效果是一样的吗？
@@ -31,7 +31,7 @@ STATUS=$?
 NUM_JOBS=$(jobs -p | wc -l)
 
 # Set the prompt to the output of `starship prompt`
-PS1="$(starship prompt --status=$STATUS --jobs=NUM_JOBS)"
+PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
 内置于 Starship 的 [Bash 适配](https://github.com/starship/starship/blob/master/src/init/starship.bash) 稍微复杂一些，实现了像 [命令用时统计组件](https://starship.rs/config/#Command-Duration) 这样的功能，还确保 Starship 能与之前设置的 Bash 配置相兼容。
@@ -43,3 +43,46 @@ starship prompt --help
 ```
 
 Starship 会处理所提供的全部上下文参数并在提示符中显示，但没有参数是“必需”的。
+
+## How do I run Starship on Linux distributions with older versions of glibc?
+
+If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+
+```sh
+curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
+```
+
+## Why don't I see a glyph symbol in my prompt?
+
+The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
+
+- Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
+- You have an emoji font installed. Most systems come with an emoji font by default, but some (notably Arch Linux) do not. You can usually install one through your system's package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
+- You are using a [Nerd Font](https://www.nerdfonts.com/).
+
+To test your system, run the following commands in a terminal:
+
+```sh
+echo -e "\xf0\x9f\x90\x8d"
+echo -e "\xee\x82\xa0"
+```
+
+The first line should produce a [snake emoji](https://emojipedia.org/snake/), while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
+
+If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+
+## How do I uninstall Starship?
+
+Starship is just as easy to uninstall as it is to install in the first place.
+
+1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
+1. Delete the Starship binary.
+
+If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+
+If Starship was installed using the `curl | bash` script, the following command will delete the binary:
+
+```sh
+# Locate and delete the starship binary
+rm "$(which starship)"
+```
