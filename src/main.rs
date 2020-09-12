@@ -140,7 +140,7 @@ fn main() {
         .subcommand(
             SubCommand::with_name("explain").about("Explains the currently showing modules"),
         )
-        .subcommand(SubCommand::with_name("timings").about("Print timings of all active modules"))
+        .subcommand(SubCommand::with_name("timings").about("Prints timings of all active modules"))
         .subcommand(
             SubCommand::with_name("completions")
                 .about("Generate starship shell completions for your shell to stdout")
