@@ -2091,7 +2091,7 @@ The module will be shown only if the exit code is not `0`.
 ### Options
 
 | Variable   | Default                       | Description                                            |
-| ---------- | ----------------------- ------| ------------------------------------------------------ |
+| ---------- | ----------------------------- | ------------------------------------------------------ |
 | `format`   | `[$symbol$status]($style) `   | The format of the module                               |
 | `symbol`   | `"✖"`                         | A format string representing the symbol for the status |
 | `style`    | `"bold red"`                  | The style for the module.                              |
