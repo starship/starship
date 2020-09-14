@@ -63,7 +63,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     let mut m: Option<Module> = {
         match module {
             // Keep these ordered alphabetically.
-            // Default ordering is handled in configs/mod.rs
+            // Default ordering is handled in configs/starship_root.rs
             "aws" => aws::module(context),
             #[cfg(feature = "battery")]
             "battery" => battery::module(context),

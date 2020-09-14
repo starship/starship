@@ -111,7 +111,7 @@ mod tests {
             .env("LOGNAME", "astronaut")
             .env("USER", "cosmonaut")
             .collect();
-        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("cosmonaut")));
+        let expected = Some(format!("{} in ", Color::Yellow.bold().paint("cosmonaut")));
 
         assert_eq!(expected, actual);
         Ok(())
@@ -123,7 +123,7 @@ mod tests {
             .env("USER", "astronaut")
             .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
             .collect();
-        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("astronaut")));
+        let expected = Some(format!("{} in ", Color::Yellow.bold().paint("astronaut")));
 
         assert_eq!(expected, actual);
         Ok(())
@@ -138,7 +138,7 @@ mod tests {
                 show_always = true
             })
             .collect();
-        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("astronaut")));
+        let expected = Some(format!("{} in ", Color::Yellow.bold().paint("astronaut")));
 
         assert_eq!(expected, actual);
         Ok(())
