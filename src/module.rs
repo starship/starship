@@ -110,7 +110,8 @@ impl<'a> Module<'a> {
     pub fn is_empty(&self) -> bool {
         self.segments
             .iter()
-            .all(|segment| segment.value.trim().is_empty())
+            // no trim: if we add spaces/linebreaks it's not "empty" as we change the final output
+            .all(|segment| segment.value.is_empty())
     }
 
     /// Get values of the module's segments
@@ -191,5 +192,35 @@ mod tests {
         };
 
         assert!(module.is_empty());
+    }
+
+    #[test]
+    fn test_module_is_not_empty_with_linebreak_only() {
+        let name = "unit_test";
+        let desc = "This is a unit test";
+        let module = Module {
+            config: None,
+            name: name.to_string(),
+            description: desc.to_string(),
+            segments: vec![Segment::new(None, "\n")],
+            duration: None,
+        };
+
+        assert!(!module.is_empty());
+    }
+
+    #[test]
+    fn test_module_is_not_empty_with_space_only() {
+        let name = "unit_test";
+        let desc = "This is a unit test";
+        let module = Module {
+            config: None,
+            name: name.to_string(),
+            description: desc.to_string(),
+            segments: vec![Segment::new(None, " ")],
+            duration: None,
+        };
+
+        assert!(!module.is_empty());
     }
 }
