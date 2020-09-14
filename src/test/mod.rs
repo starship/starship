@@ -92,7 +92,7 @@ impl<'a> ModuleRenderer<'a> {
         match &ret {
             Some(value) => {
                 if value == &String::from("") {
-                    return None;
+                    None
                 } else {
                     ret
                 }
