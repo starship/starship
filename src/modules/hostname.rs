@@ -1,5 +1,3 @@
-use std::env;
-
 use super::{Context, Module};
 use std::ffi::OsString;
 
@@ -16,7 +14,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("hostname");
     let config: HostnameConfig = HostnameConfig::try_load(module.config);
 
-    let ssh_connection = env::var("SSH_CONNECTION").ok();
+    let ssh_connection = context.get_env("SSH_CONNECTION");
     if config.ssh_only && ssh_connection.is_none() {
         return None;
     }
@@ -65,4 +63,109 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::test::ModuleRenderer;
+    use ansi_term::{Color, Style};
+    use std::io;
+
+    macro_rules! get_hostname {
+        () => {
+            if let Some(hostname) = gethostname::gethostname().into_string().ok() {
+                hostname
+            } else {
+                println!(
+                    "hostname was not tested because gethostname failed! \
+                     This could be caused by your hostname containing invalid UTF."
+                );
+                return Ok(());
+            }
+        };
+    }
+
+    #[test]
+    fn ssh_only_false() -> io::Result<()> {
+        let hostname = get_hostname!();
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml::toml! {
+                [hostname]
+                ssh_only = false
+                trim_at = ""
+            })
+            .collect();
+        let expected = Some(format!("{} in ", style().paint(hostname)));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn no_ssh() -> io::Result<()> {
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml::toml! {
+                [hostname]
+                ssh_only = true
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn ssh() -> io::Result<()> {
+        let hostname = get_hostname!();
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml::toml! {
+                [hostname]
+                ssh_only = true
+                trim_at = ""
+            })
+            .env("SSH_CONNECTION", "something")
+            .collect();
+        let expected = Some(format!("{} in ", style().paint(hostname)));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn no_trim_at() -> io::Result<()> {
+        let hostname = get_hostname!();
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml::toml! {
+                [hostname]
+                ssh_only = false
+                trim_at = ""
+            })
+            .collect();
+        let expected = Some(format!("{} in ", style().paint(hostname)));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn trim_at() -> io::Result<()> {
+        let hostname = get_hostname!();
+        let (remainder, trim_at) = hostname.split_at(1);
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml::toml! {
+                [hostname]
+                ssh_only = false
+                trim_at = trim_at
+            })
+            .collect();
+        let expected = Some(format!("{} in ", style().paint(remainder)));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    fn style() -> Style {
+        Color::Green.bold().dimmed()
+    }
 }

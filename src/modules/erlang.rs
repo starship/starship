@@ -57,17 +57,17 @@ fn get_erlang_version() -> Option<String> {
         &[
             "-noshell",
             "-eval",
-            "'Fn=filename:join([code:root_dir(),\"releases\",erlang:system_info(otp_release),\"OTP_VERSION\"]),\
+            "Fn=filename:join([code:root_dir(),\"releases\",erlang:system_info(otp_release),\"OTP_VERSION\"]),\
              {ok,Content}=file:read_file(Fn),\
              io:format(\"~s\",[Content]),\
-             halt(0).'"
+             halt(0)."
         ]
     )?.stdout.trim().to_string())
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -77,7 +77,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
 
         let expected = None;
-        let output = render_module("erlang", dir.path(), None);
+        let output = ModuleRenderer::new("erlang").path(dir.path()).collect();
 
         assert_eq!(output, expected);
 
@@ -90,7 +90,7 @@ mod tests {
         File::create(dir.path().join("rebar.config"))?.sync_all()?;
 
         let expected = Some(format!("via {} ", Color::Red.bold().paint("🖧 22.1.3")));
-        let output = render_module("erlang", dir.path(), None);
+        let output = ModuleRenderer::new("erlang").path(dir.path()).collect();
 
         assert_eq!(output, expected);
 

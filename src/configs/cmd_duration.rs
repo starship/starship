@@ -9,6 +9,8 @@ pub struct CmdDurationConfig<'a> {
     pub style: &'a str,
     pub show_milliseconds: bool,
     pub disabled: bool,
+    pub show_notifications: bool,
+    pub min_time_to_notify: i64,
 }
 
 impl<'a> RootModuleConfig<'a> for CmdDurationConfig<'a> {
@@ -19,6 +21,8 @@ impl<'a> RootModuleConfig<'a> for CmdDurationConfig<'a> {
             show_milliseconds: false,
             style: "yellow bold",
             disabled: false,
+            show_notifications: false,
+            min_time_to_notify: 45_000,
         }
     }
 }

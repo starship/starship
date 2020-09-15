@@ -26,7 +26,7 @@ impl PartialEq for CommandOutput {
     }
 }
 
-/// Execute a command and return the output on stdout and stderr if sucessful
+/// Execute a command and return the output on stdout and stderr if successful
 #[cfg(not(test))]
 pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
     internal_exec_cmd(&cmd, &args)
@@ -111,7 +111,11 @@ active boot switches: -d:release\n",
             stdout: String::from("4.08.1\n"),
             stderr: String::default(),
         }),
-        "php -nr 'echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;'" => {
+        "perl -e printf q#%vd#,$^V;" => Some(CommandOutput {
+            stdout: String::from("5.26.1"),
+            stderr: String::default(),
+        }),
+        "php -nr echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;" => {
             Some(CommandOutput {
                 stdout: String::from("7.3.8"),
                 stderr: String::default(),
@@ -152,6 +156,14 @@ cmake version 3.17.3
 
 CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             ),
+            stderr: String::default(),
+        }),
+        "dotnet --version" => Some(CommandOutput {
+            stdout: String::from("3.1.103"),
+            stderr: String::default(),
+        }),
+        "dotnet --list-sdks" => Some(CommandOutput {
+            stdout: String::from("3.1.103 [/usr/share/dotnet/sdk]"),
             stderr: String::default(),
         }),
         "terraform version" => Some(CommandOutput {

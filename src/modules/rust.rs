@@ -1,6 +1,6 @@
+use std::fs;
 use std::path::Path;
 use std::process::{Command, Output};
-use std::{env, fs};
 
 use super::{Context, Module, RootModuleConfig};
 
@@ -72,7 +72,7 @@ fn get_module_version(context: &Context) -> Option<String> {
     // - `rustup show`
     // - `rustup show active-toolchain`
     // - `rustup which`
-    let module_version = if let Some(toolchain) = env_rustup_toolchain()
+    let module_version = if let Some(toolchain) = env_rustup_toolchain(context)
         .or_else(|| execute_rustup_override_list(&context.current_dir))
         .or_else(|| find_rust_toolchain_file(&context))
     {
@@ -93,8 +93,8 @@ fn get_module_version(context: &Context) -> Option<String> {
     Some(module_version)
 }
 
-fn env_rustup_toolchain() -> Option<String> {
-    let val = env::var("RUSTUP_TOOLCHAIN").ok()?;
+fn env_rustup_toolchain(context: &Context) -> Option<String> {
+    let val = context.get_env("RUSTUP_TOOLCHAIN")?;
     Some(val.trim().to_owned())
 }
 
