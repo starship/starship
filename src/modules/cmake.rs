@@ -58,7 +58,7 @@ fn format_cmake_version(cmake_version: &str) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -66,7 +66,7 @@ mod tests {
     #[test]
     fn folder_without_cmake_lists() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = render_module("cmake", dir.path(), None);
+        let actual = ModuleRenderer::new("cmake").path(dir.path()).collect();
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -76,7 +76,7 @@ mod tests {
     fn folder_with_cmake_lists() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("CMakeLists.txt"))?.sync_all()?;
-        let actual = render_module("cmake", dir.path(), None);
+        let actual = ModuleRenderer::new("cmake").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🛆 v3.17.3")));
         assert_eq!(expected, actual);
         dir.close()

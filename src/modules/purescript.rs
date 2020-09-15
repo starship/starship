@@ -55,7 +55,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -63,7 +63,7 @@ mod tests {
     #[test]
     fn folder_without_purescript_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = render_module("purescript", dir.path(), None);
+        let actual = ModuleRenderer::new("purescript").path(dir.path()).collect();
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -74,7 +74,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Main.purs"))?.sync_all()?;
 
-        let actual = render_module("purescript", dir.path(), None);
+        let actual = ModuleRenderer::new("purescript").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::White.bold().paint("<=> v0.13.5")));
         assert_eq!(expected, actual);
         dir.close()
@@ -85,7 +85,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("spago.dhall"))?.sync_all()?;
 
-        let actual = render_module("purescript", dir.path(), None);
+        let actual = ModuleRenderer::new("purescript").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::White.bold().paint("<=> v0.13.5")));
         assert_eq!(expected, actual);
         dir.close()

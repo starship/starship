@@ -24,7 +24,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         "php",
         &[
             "-nr",
-            "'echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;'",
+            "echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;",
         ],
     ) {
         Some(php_cmd_output) => {
@@ -72,7 +72,7 @@ fn format_php_version(php_version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -87,7 +87,7 @@ mod tests {
     fn folder_without_php_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = render_module("php", dir.path(), None);
+        let actual = ModuleRenderer::new("php").path(dir.path()).collect();
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -99,7 +99,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("composer.json"))?.sync_all()?;
 
-        let actual = render_module("php", dir.path(), None);
+        let actual = ModuleRenderer::new("php").path(dir.path()).collect();
 
         let expected = Some(format!(
             "via {} ",
@@ -114,7 +114,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".php-version"))?.sync_all()?;
 
-        let actual = render_module("php", dir.path(), None);
+        let actual = ModuleRenderer::new("php").path(dir.path()).collect();
 
         let expected = Some(format!(
             "via {} ",
@@ -129,7 +129,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.php"))?.sync_all()?;
 
-        let actual = render_module("php", dir.path(), None);
+        let actual = ModuleRenderer::new("php").path(dir.path()).collect();
 
         let expected = Some(format!(
             "via {} ",

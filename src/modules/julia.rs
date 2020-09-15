@@ -72,7 +72,7 @@ fn format_julia_version(julia_stdout: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -81,7 +81,7 @@ mod tests {
     fn folder_without_julia_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = render_module("julia", dir.path(), None);
+        let actual = ModuleRenderer::new("julia").path(dir.path()).collect();
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -93,7 +93,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("hello.jl"))?.sync_all()?;
 
-        let actual = render_module("julia", dir.path(), None);
+        let actual = ModuleRenderer::new("julia").path(dir.path()).collect();
 
         let expected = Some(format!("via {} ", Color::Purple.bold().paint("ஃ v1.4.0")));
         assert_eq!(expected, actual);
@@ -105,7 +105,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Project.toml"))?.sync_all()?;
 
-        let actual = render_module("julia", dir.path(), None);
+        let actual = ModuleRenderer::new("julia").path(dir.path()).collect();
 
         let expected = Some(format!("via {} ", Color::Purple.bold().paint("ஃ v1.4.0")));
         assert_eq!(expected, actual);
@@ -117,7 +117,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Manifest.toml"))?.sync_all()?;
 
-        let actual = render_module("julia", dir.path(), None);
+        let actual = ModuleRenderer::new("julia").path(dir.path()).collect();
 
         let expected = Some(format!("via {} ", Color::Purple.bold().paint("ஃ v1.4.0")));
         assert_eq!(expected, actual);

@@ -7,11 +7,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("line_break");
 
-    module.set_segments(vec![Segment {
-        _name: "line_break".to_string(),
-        style: None,
-        value: LINE_ENDING.to_string(),
-    }]);
+    module.set_segments(vec![Segment::new(None, LINE_ENDING)]);
 
     Some(module)
 }

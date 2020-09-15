@@ -68,7 +68,7 @@ fn parse_dart_version(dart_version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::parse_dart_version;
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
@@ -82,7 +82,7 @@ mod tests {
     #[test]
     fn folder_without_dart_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = render_module("dart", dir.path(), None);
+        let actual = ModuleRenderer::new("dart").path(dir.path()).collect();
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -93,7 +93,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.dart"))?.sync_all()?;
 
-        let actual = render_module("dart", dir.path(), None);
+        let actual = ModuleRenderer::new("dart").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🎯 v2.8.4")));
         assert_eq!(expected, actual);
         dir.close()
@@ -104,7 +104,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         fs::create_dir_all(dir.path().join(".dart_tool"))?;
 
-        let actual = render_module("dart", dir.path(), None);
+        let actual = ModuleRenderer::new("dart").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🎯 v2.8.4")));
         assert_eq!(expected, actual);
         dir.close()
@@ -115,7 +115,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("pubspec.yaml"))?.sync_all()?;
 
-        let actual = render_module("dart", dir.path(), None);
+        let actual = ModuleRenderer::new("dart").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🎯 v2.8.4")));
         assert_eq!(expected, actual);
         dir.close()
@@ -126,7 +126,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("pubspec.yml"))?.sync_all()?;
 
-        let actual = render_module("dart", dir.path(), None);
+        let actual = ModuleRenderer::new("dart").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🎯 v2.8.4")));
         assert_eq!(expected, actual);
         dir.close()
@@ -137,7 +137,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("pubspec.lock"))?.sync_all()?;
 
-        let actual = render_module("dart", dir.path(), None);
+        let actual = ModuleRenderer::new("dart").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🎯 v2.8.4")));
         assert_eq!(expected, actual);
         dir.close()

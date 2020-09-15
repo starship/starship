@@ -52,3 +52,67 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     Some(module)
 }
+
+#[cfg(test)]
+mod test {
+    use crate::test::ModuleRenderer;
+    use ansi_term::Color;
+    use std::io;
+
+    #[test]
+    fn config_blank_job_0() -> io::Result<()> {
+        let actual = ModuleRenderer::new("jobs").jobs(0).collect();
+
+        let expected = None;
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn config_blank_job_1() -> io::Result<()> {
+        let actual = ModuleRenderer::new("jobs").jobs(1).collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦")));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn config_blank_job_2() -> io::Result<()> {
+        let actual = ModuleRenderer::new("jobs").jobs(2).collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦2")));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn config_2_job_2() -> io::Result<()> {
+        let actual = ModuleRenderer::new("jobs")
+            .config(toml::toml! {
+                [jobs]
+                threshold = 2
+            })
+            .jobs(2)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦")));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn config_2_job_3() -> io::Result<()> {
+        let actual = ModuleRenderer::new("jobs")
+            .config(toml::toml! {
+                [jobs]
+                threshold = 2
+            })
+            .jobs(3)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦3")));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+}

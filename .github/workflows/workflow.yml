@@ -1,3 +1,4 @@
+---
 name: Main workflow
 on:
   push:
@@ -26,13 +27,19 @@ jobs:
           profile: minimal
           components: rustfmt
 
+      - name: Setup | libdbus (ubuntu)
+        run: sudo apt-get install libdbus-1-dev
+
       - name: Build | Format
         run: cargo fmt --all -- --check
 
   # Run the `clippy` linting tool
   clippy:
     name: Clippy [Linter]
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v2
@@ -46,6 +53,10 @@ jobs:
             ~/.cargo/git
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Setup | libdbus (ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install libdbus-1-dev
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1
@@ -104,6 +115,11 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v2
 
+      - name: Setup | libdbus (ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install libdbus-1-dev
+
+      # Cache files between builds
       - name: Setup | Cache Cargo
         uses: actions/cache@v2
         with:
@@ -121,12 +137,6 @@ jobs:
           profile: minimal
           override: true
 
-      # Install dotnet at a fixed version
-      - name: Setup | DotNet
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: "2.2.402"
-
       # Install Mercurial (pre-installed on Linux and windows)
       - name: Setup | Mercurial (macos)
         if: matrix.os == 'macOS-latest'
@@ -134,4 +144,4 @@ jobs:
 
       # Run the ignored tests that expect the above setup
       - name: Build | Test
-        run: cargo test -- -Z unstable-options --include-ignored
+        run: cargo test --all-features -- -Z unstable-options --include-ignored

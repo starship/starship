@@ -57,7 +57,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -66,7 +66,7 @@ mod tests {
     fn folder_without_zig() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("zig.txt"))?.sync_all()?;
-        let actual = render_module("zig", dir.path(), None);
+        let actual = ModuleRenderer::new("zig").path(dir.path()).collect();
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -76,7 +76,7 @@ mod tests {
     fn folder_with_zig_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.zig"))?.sync_all()?;
-        let actual = render_module("zig", dir.path(), None);
+        let actual = ModuleRenderer::new("zig").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("↯ v0.6.0")));
         assert_eq!(expected, actual);
         dir.close()
