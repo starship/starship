@@ -124,15 +124,15 @@ format = '''
 
 ## Invite
 
-This is the list of prompt-wide configuration options.
+Voici la liste des options de configuration globales de l'invite de commandes.
 
 ### Options
 
-| Option         | Default                        | Description                                           |
-| -------------- | ------------------------------ | ----------------------------------------------------- |
-| `format`       | [lien](#default-prompt-format) | Configure the format of the prompt.                   |
-| `scan_timeout` | `30`                           | Timeout for starship to scan files (in milliseconds). |
-| `add_newline`  | `true`                         | Add a new line before the start of the prompt.        |
+| Option         | Défaut                         | Description                                                                |
+| -------------- | ------------------------------ | -------------------------------------------------------------------------- |
+| `format`       | [lien](#default-prompt-format) | Configure le format de l'invite.                                           |
+| `scan_timeout` | `30`                           | Délai d'attente avant que starship scanne les fichiers (en millisecondes). |
+| `add_newline`  | `true`                         | Ajoute une nouvelle ligne a début de l'invite.                             |
 
 ### Exemple
 
@@ -597,7 +597,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### Options
 
-| Variable                 | Default                                         | Description                                                                      |
+| Variable                 | Défaut                                          | Description                                                                      |
 | ------------------------ | ----------------------------------------------- | -------------------------------------------------------------------------------- |
 | `truncation_length`      | `3`                                             | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`       | `true`                                          | Whether or not to truncate to the root of the git repo that you're currently in. |
@@ -1012,7 +1012,7 @@ The `git_state` module will show in directories which are part of a git reposito
 
 ### Options
 
-| Option         | Default                                                             | Description                                                                             |
+| Option         | Défaut                                                              | Description                                                                             |
 | -------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `rebase`       | `"REBASING"`                                                        | A format string displayed when a `rebase` is in progress.                               |
 | `merge`        | `"MERGING"`                                                         | A format string displayed when a `merge` is in progress.                                |
@@ -1052,7 +1052,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 ### Options
 
-| Option            | Default                                         | Description                                          |
+| Option            | Défaut                                          | Description                                          |
 | ----------------- | ----------------------------------------------- | ---------------------------------------------------- |
 | `format`          | "([\[$all_status$ahead_behind\]]($style) )" | The default format for `git_status`                  |
 | `conflicted`      | `"="`                                           | This branch has merge conflicts.                     |
@@ -1347,7 +1347,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Option                  | Default                                                  | Description                                                           |
+| Option                  | Défaut                                                   | Description                                                           |
 | ----------------------- | -------------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`                | `"☸ "`                                                   | A format string representing the symbol displayed before the Cluster. |
 | `format`                | `"[$symbol$context( \\($namespace\\))]($style) in "` | The format for the module.                                            |
@@ -1385,7 +1385,7 @@ The `line_break` module separates the prompt into two lines.
 
 ### Options
 
-| Option     | Default | Description                                                        |
+| Option     | Défaut  | Description                                                        |
 | ---------- | ------- | ------------------------------------------------------------------ |
 | `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
@@ -1728,7 +1728,7 @@ The `php` module shows the currently installed version of PHP. Le module est aff
 
 ### Options
 
-| Option     | Default                            | Description                                           |
+| Option     | Défaut                             | Description                                           |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                            |
 | `symbol`   | `"🐘 "`                             | The symbol used before displaying the version of PHP. |
@@ -1774,7 +1774,7 @@ Le module est affiché si l'une des ces conditions est remplie :
 
 ### Options
 
-| Option               | Default                                                        | Description                                                                |
+| Option               | Défaut                                                         | Description                                                                |
 | -------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------- |
 | `format`             | `"via [${symbol}${version}( \\($virtualenv\\))]($style) "` | The format for the module.                                                 |
 | `symbol`             | `"🐍 "`                                                         | A format string representing the symbol of Python                          |
@@ -1795,7 +1795,7 @@ Le module est affiché si l'une des ces conditions est remplie :
 <details>
 <summary>This module has some advanced configuration options.</summary>
 
-| Variable        | Default  | Description                                                                   |
+| Variable        | Défaut   | Description                                                                   |
 | --------------- | -------- | ----------------------------------------------------------------------------- |
 | `python_binary` | `python` | Configures the python binary that Starship executes when getting the version. |
 
@@ -2053,7 +2053,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Option            | Default                 | Description                                                                                                                        |
+| Option            | Défaut                  | Description                                                                                                                        |
 | ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
 | `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
@@ -2098,7 +2098,7 @@ The `username` module shows active user's username. Le module est affiché si l'
 
 ### Options
 
-| Option        | Default                 | Description                           |
+| Option        | Défaut                  | Description                           |
 | ------------- | ----------------------- | ------------------------------------- |
 | `style_root`  | `"bold green"`          | The style used when the user is root. |
 | `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
@@ -2134,7 +2134,7 @@ The `zig` module shows the currently installed version of Zig. Le module est aff
 
 ### Options
 
-| Option     | Default                            | Description                                           |
+| Option     | Défaut                             | Description                                           |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `symbol`   | `"↯ "`                             | The symbol used before displaying the version of Zig. |
 | `style`    | `"bold yellow"`                    | Le style du module.                                   |
@@ -2191,7 +2191,7 @@ The order in which custom modules are shown can be individually set by including
 
 ### Options
 
-| Option        | Default                       | Description                                                                                                                |
+| Option        | Défaut                        | Description                                                                                                                |
 | ------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `command`     |                               | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
@@ -2271,7 +2271,7 @@ The `purescript` module shows the currently installed version of PureScript vers
 
 ### Options
 
-| Option     | Default                            | Description                                                  |
+| Option     | Défaut                             | Description                                                  |
 | ---------- | ---------------------------------- | ------------------------------------------------------------ |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                                   |
 | `symbol`   | `"<=> "`                     | The symbol used before displaying the version of PureScript. |
