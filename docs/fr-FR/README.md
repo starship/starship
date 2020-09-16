@@ -7,11 +7,11 @@ actionText: Commencez →
 actionLink: ./guide/
 features:
   - 
-    title: Compatibilité d'abord
+    title: Compatibilité avant tout
     details: Fonctionne sur tous les principaux shells et système d'exploitation. Utilisez-le partout !
   - 
     title: Propulsé par Rust
-    details: Profiter de toute la rapidité et la securité de Rust, pour rendre votre prompt le plus rapide et fiable possible.
+    details: Profiter de toute la rapidité et la sécurité de Rust pour rendre votre invite de commandes le plus rapide et fiable possible.
   - 
     title: Personnalisable
     details: Tous les petits détails sont personnalisable à votre goût, pour rendre votre prompt aussi léger ou complet que le vous souhaitez.
