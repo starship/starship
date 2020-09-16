@@ -14,11 +14,11 @@ features:
     details: Profiter de toute la rapidité et la sécurité de Rust pour rendre votre invite de commandes le plus rapide et fiable possible.
   - 
     title: Personnalisable
-    details: Tous les petits détails sont personnalisable à votre goût, pour rendre votre prompt aussi léger ou complet que le vous souhaitez.
-footer: ISC licencié | Copyright © 2019-present Starship Contributors
+    details: Tous les petits détails sont personnalisable à votre goût, pour rendre votre invite de commandes aussi léger ou complet que le vous souhaitez.
+footer: Licence ISC | Copyright © 2019-présent Contributeurs Starship
 #Used for the description meta tag, for SEO
-metaTitle: "Starship: Invite Cross-Shell"
-description: Starship est un invite minimaliste, ultra-rapide et hautement personnalisable pour n'importe quel shell ! Montrez les informations dont vous avez besoin, tout en restant élégant et minimaliste. Installation rapide disponible pour Bash, Fish, ZSH, Ion et PowerShell.
+metaTitle: "Starship : Invite Multi-Shell"
+description: Starship est un invite minimaliste, ultra-rapide et hautement personnalisable pour n'importe quel shell ! Montre les informations dont vous avez besoin tout en restant élégant et minimaliste. Installation rapide disponible pour Bash, Fish, ZSH, Ion et PowerShell.
 ---
 
 <div class="center">
@@ -56,7 +56,7 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
    scoop install starship
    ```
 
-1. Ajouter le script d'initialization à la fiche config de votre shell:
+1. Ajouter le script d’initialisation au fichier configuration de votre shell:
 
 
    #### Bash
