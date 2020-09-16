@@ -152,14 +152,14 @@ scan_timeout = 10
 add_newline = false
 ```
 
-### Default Prompt Format
+### Format par Défaut
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
+Le `format` par défaut est utilisé pour définir le format de l'invite, si il est vide ou mal `formaté`. La valeur par défaut est la suivante :
 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Est équivalent à
 format = """
 
 $username\
@@ -320,7 +320,7 @@ discharging_symbol = "💀"
 
 ### Battery Display
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. La valeur par défaut est la suivante :
 
 ```toml
 [[battery.display]]
