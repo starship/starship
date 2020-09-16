@@ -107,7 +107,7 @@
 - **Rapide** : il est rapide - _vraiment vraiment_ rapide ! 🚀
 - **Personnalisable:** configurer chaque élément de votre invite.
 - **Universel:** fonctionne avec n'importe quel shell, sur n'importe quel système d'exploitation.
-- **Intelligent:** affiche les informations utiles en un coup d'oeil.
+- **Intelligent:** affiche les informations utiles en un coup d'œil.
 - **Riche en fonctionnalités:** supporte tous vos outils favoris.
 - **Facile:** rapide à installer - commencer à l'utiliser en quelques minutes.
 
@@ -131,7 +131,7 @@
    #### Installer la dernière version
 
 
-   ##### Depuis une version pré-compilée depuis le shell:
+   ##### Depuis une version pré-compilée, depuis le shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
@@ -161,7 +161,7 @@
    scoop install starship
    ```
 
-1. Ajouter le script d'initialization à la fiche config de votre shell:
+1. Ajouter le script d’initialisation au fichier de configuration de votre shell:
 
 
    #### Bash
