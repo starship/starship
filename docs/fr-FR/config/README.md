@@ -137,18 +137,18 @@ Voici la liste des options de configuration globales de l'invite de commandes.
 ### Exemple
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship. oml
 
-# Use custom format
+# Utilisez un format personnalisé
 format = """
 [┌───────────────────>](bold green)
 [│](bold green)$directory$rust$package
 [└─>](bold green) """
 
-# Wait 10 milliseconds for starship to check files under the current directory.
+# Attendez 10 millisecondes pour que starship vérifie les fichiers dans le répertoire de travail.
 scan_timeout = 10
 
-# Disable the newline at the start of the prompt
+# Désactive la nouvelle ligne au démarrage de l'invite
 add_newline = false
 ```
 
