@@ -1,6 +1,6 @@
 # Configuration avancée
 
-Alors que Starship est un shell polyvalent, vous devez parfois faire plus que d'éditer `starship.toml` pour le faire les choses. Cette page détaille quelques techniques de configuration avancées qu'on peut utiliser dans starship.
+Même si Starship est un shell polyvalent, éditer `starship.toml` ne suffit parfois pas pour faire certaines choses. Cette page détaille quelques techniques de configuration avancées utilisées dans starship.
 
 ::: warning
 
