@@ -252,11 +252,11 @@ Soutenez ce projet avec votre organisation. Votre logo apparaîtra ici avec un l
 
 ## 💭Inspiré par
 
-Voyez ces travaux précédents qui ont contribué à inspirer la création de vaisseau. 🙏
+Jetez un œil aux précédents projets qui ont inspiré la création de starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Un ZSH prompt pour les astronautes.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Un invite de commandes ZSH pour les astronautes.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Thème Cross-shell robbyrussell écrit en JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Thème multi-shell robbyrussell écrit en JavaScript.
 
 - **[reujab/silver](https://github.com/reujab/silver)** - Un shell multi-platformes de type powerline personnalisable avec des icônes.
 
