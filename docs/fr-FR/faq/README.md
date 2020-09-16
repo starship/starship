@@ -5,12 +5,12 @@
 - **Émulateur de terminal**: [iTerm2](https://iterm2.com/)
   - **Thème** : Minimal
   - **Palette de couleurs**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+  - **Police**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
 - **Shell** : [Fish Shell](https://fishshell.com/)
   - **Configuration**: [Dotfiles de matchai](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Invite de commande**: [Starship](https://starship.rs/)
 
-## Do top level `format` and `<module>.disabled` do the same thing?
+## Est-ce que l'option globale `format` et `<module>.disabled` font la même chose ?
 
 Oui, ils peuvent tous deux être utilisés pour désactiver les modules dans l'invite de commande. Si tout ce que vous prévoyez de faire est de désactiver les modules, `<module>.disabled` est le meilleur moyen de le faire pour ces raisons :
 
