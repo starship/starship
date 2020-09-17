@@ -375,13 +375,13 @@ Par défaut, il ne change que la couleur. Si vous voulez également changer sa f
 
 ### Variables
 
-| Variable | Exemple | Description                                                           |
-| -------- | ------- | --------------------------------------------------------------------- |
-| symbol   |         | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
+| Variable | Exemple | Description                                                     |
+| -------- | ------- | --------------------------------------------------------------- |
+| symbol   |         | Reflète sois `success_symbol`, `error_symbol` ou `vicmd_symbol` |
 
 ### Exemples
 
-#### With custom error shape
+#### Avec une forme d'erreur personnalisée
 
 ```toml
 # ~/.config/starship.toml
@@ -391,7 +391,7 @@ success_symbol = "[➜](bold green) "
 error_symbol = "[✗](bold red) "
 ```
 
-#### Without custom error shape
+#### Sans forme d'erreur personnalisée
 
 ```toml
 # ~/.config/starship.toml
@@ -401,7 +401,7 @@ success_symbol = "[➜](bold green) "
 error_symbol = "[➜](bold red) "
 ```
 
-#### With custom vim shape
+#### Avec une forme vim personnalisée
 
 ```toml
 # ~/.config/starship.toml
@@ -412,59 +412,59 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of CMake if:
+Le module `cmake` affiche la version actuellement installée de CMake si :
 
-- The current directory contains a `CMakeLists.txt` file
+- Le répertoire actuel contient un fichier `CMakeLists.txt`
 
 ### Options
 
-| Option     | Default                            | Description                                  |
-| ---------- | ---------------------------------- | -------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Format du module.                            |
-| `symbol`   | `"🛆 "`                             | The symbol used before the version of cmake. |
-| `style`    | `"bold blue"`                      | Le style du module.                          |
-| `disabled` | `false`                            | Disables the `cmake` module.                 |
+| Option     | Default                            | Description                                   |
+| ---------- | ---------------------------------- | --------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | Format du module.                             |
+| `symbol`   | `"🛆 "`                             | Le symbole utilisé avant la version de cmake. |
+| `style`    | `"bold blue"`                      | Le style du module.                           |
+| `disabled` | `false`                            | Désactive le module `cmake`.                  |
 
 ### Variables
 
 | Variable  | Exemple   | Description                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v3.17.3` | The version of cmake                   |
+| version   | `v3.17.3` | La version de cmake                    |
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\* : Cette variable ne peut être utilisée que comme partie d'un style
 
-## Command Duration
+## Temps d'exécution
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+Le module `cmd_duration` montre le temps qu'a pris la dernière commande a pris pour s'exécuter. Le module ne sera affiché que si la commande a pris plus de deux secondes, ou si la valeur de configuration `min_time` existe.
 
-::: warning Do not hook the DEBUG trap in Bash
+::: attention, n'accrochez pas la trappe DEBUG en Bash
 
-If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
+Si vous utilisez starship en `bash`, n'accrochez pas `DEBUG` après avoir exécuté `eval $(starship init $0)`, ou ce module **cassera**.
 
 :::
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+Les utilisateurs de Bash qui ont besoin de fonctionnalité pré-exec peuvent utiliser [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Définissez simplement les array `preexec_functions` et `precmd_functions` avant d'éxécuter `eval $(starship init $0)`, puis procédez comme d'habitude.
 
 ### Options
 
-| Option              | Default                       | Description                                                |
-| ------------------- | ----------------------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`                       | Show milliseconds in addition to seconds for the duration. |
-| `format`            | `"took [$duration]($style) "` | Format du module.                                          |
-| `style`             | `"bold yellow"`               | Le style du module.                                        |
-| `disabled`          | `false`                       | Disables the `cmd_duration` module.                        |
+| Option              | Default                       | Description                                                       |
+| ------------------- | ----------------------------- | ----------------------------------------------------------------- |
+| `min_time`          | `2_000`                       | Durée la plus courte quand afficher le temps (en millisecondes).  |
+| `show_milliseconds` | `false`                       | Afficher les millisecondes en plus des secondes pendant la durée. |
+| `format`            | `"took [$duration]($style) "` | Format du module.                                                 |
+| `style`             | `"bold yellow"`               | Le style du module.                                               |
+| `disabled`          | `false`                       | Désactive le module `cmd_duration`.                               |
 
 ### Variables
 
-| Variable  | Exemple  | Description                             |
-| --------- | -------- | --------------------------------------- |
-| duration  | `16m40s` | The time it took to execute the command |
-| style\* |          | Reflète la valeur de l'option `style`   |
+| Variable  | Exemple  | Description                                   |
+| --------- | -------- | --------------------------------------------- |
+| duration  | `16m40s` | Le temps nécessaire pour exécuter la commande |
+| style\* |          | Reflète la valeur de l'option `style`         |
 
-\*: This variable can only be used as a part of a style string
+\* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
 ### Exemple
 
@@ -478,7 +478,7 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+Le module `conda` affiche l'environnement conda actuel, si `$CONDA_DEFAULT_ENV` est défini.
 
 ::: tip
 
