@@ -330,11 +330,11 @@ style = "bold red"
 
 #### Options
 
-The `display` option is an array of the following table.
+L'option `display` est une array de la table suivante.
 
 | Variable    | Description                                     |
 | ----------- | ----------------------------------------------- |
-| `threshold` | The upper bound for the display option.         |
+| `threshold` | La limite supérieure pour l'option d'affichage. |
 | `style`     | The style used if the display option is in use. |
 
 #### Exemple
