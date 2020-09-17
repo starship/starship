@@ -332,46 +332,46 @@ style = "bold red"
 
 L'option `display` est une array de la table suivante.
 
-| Variable    | Description                                     |
-| ----------- | ----------------------------------------------- |
-| `threshold` | La limite supérieure pour l'option d'affichage. |
-| `style`     | The style used if the display option is in use. |
+| Variable    | Description                                        |
+| ----------- | -------------------------------------------------- |
+| `threshold` | La limite supérieure pour l'option d'affichage.    |
+| `style`     | Le style de l'option display si elle est utilisée. |
 
 #### Exemple
 
 ```toml
-[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
+[[battery.display]]  # le style "bold red" lorsque la capacité est comprise entre 0% et 10% 
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
+[[battery.display]]  # le style "bold yellow" quand la capacité est comprise entre 10% et 30%
 threshold = 30
 style = "bold yellow"
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# lorsque la capacité est supérieure à 30%, l'indicateur de batterie ne sera pas affiché
 
 ```
 
-## Character
+## Caractères
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+Le module `character` affiche un caractère (habituellement une flèche) à côté de l'endroit où le texte est entré dans votre terminal.
 
-The character will tell you whether the last command was successful or not. It can do this in two ways:
+Le caractère vous dira si la dernière commande a été réussie ou pas. Cela peut être fait de deux manières:
 
-- changing color (`red`/`green`)
-- changing shape (`❯`/`✖`)
+- changement de couleur (`red`/`green`)
+- changement de forme (`❯`/`✖`)
 
-By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
+Par défaut, il ne change que la couleur. Si vous voulez également changer sa forme, jetez un œil à [cet exemple](#with-custom-error-shape).
 
 ### Options
 
-| Option           | Default             | Description                                                                      |
-| ---------------- | ------------------- | -------------------------------------------------------------------------------- |
-| `format`         | `"$symbol "`        | The format string used before the text input.                                    |
-| `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
-| `error_symbol`   | `"[❯](bold red)"`   | The format string used before the text input if the previous command failed.     |
-| `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
-| `disabled`       | `false`             | Disables the `character` module.                                                 |
+| Option           | Default             | Description                                                                   |
+| ---------------- | ------------------- | ----------------------------------------------------------------------------- |
+| `format`         | `"$symbol "`        | Le format utilisée avant l'entrée de texte.                                   |
+| `success_symbol` | `"[❯](bold green)"` | Le format utilisé avant l'entrée de texte si la commande précédente a réussi. |
+| `error_symbol`   | `"[❯](bold red)"`   | Le format utilisé avant l'entrée de texte si la commande précédente a échoué. |
+| `vicmd_symbol`   | `"[❮](bold green)"` | Le format utilisé avant l'entrée de texte si le shell est en mode vim normal. |
+| `disabled`       | `false`             | Désactive le module `character`.                                              |
 
 ### Variables
 
