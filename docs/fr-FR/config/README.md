@@ -482,7 +482,7 @@ Le module `conda` affiche l'environnement conda actuel, si `$CONDA_DEFAULT_ENV` 
 
 ::: tip
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+Cela ne supprime pas le modificateur d'invite de conda, vous pouvez exécuter `conda config --set changeps1 False`.
 
 :::
 
