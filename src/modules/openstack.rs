@@ -116,7 +116,7 @@ mod tests {
         file.write_all(
             b"---
 dummy_yaml
-"
+",
         )?;
         let actual = ModuleRenderer::new("openstack")
             .env("PWD", ".")
