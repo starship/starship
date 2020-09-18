@@ -33,6 +33,7 @@ mod nim;
 mod nix_shell;
 mod nodejs;
 mod ocaml;
+mod openstack;
 mod package;
 mod perl;
 mod php;
@@ -94,6 +95,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "nix_shell" => nix_shell::module(context),
         "nodejs" => nodejs::module(context),
         "ocaml" => ocaml::module(context),
+        "openstack" => openstack::module(context),
         "package" => package::module(context),
         "perl" => perl::module(context),
         "php" => php::module(context),

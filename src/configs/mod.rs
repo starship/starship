@@ -32,6 +32,7 @@ pub mod nim;
 pub mod nix_shell;
 pub mod nodejs;
 pub mod ocaml;
+pub mod openstack;
 pub mod package;
 pub mod perl;
 pub mod php;
