@@ -89,16 +89,7 @@ impl<'a> ModuleRenderer<'a> {
         // convention was that there would be no module but None. This is nowadays not anymore
         // the case (to get durations for all modules). So here we make it so, that an empty
         // module returns None in the tests...
-        match &ret {
-            Some(value) => {
-                if value == &String::from("") {
-                    None
-                } else {
-                    ret
-                }
-            }
-            None => None,
-        }
+        ret.filter(|s| s != &String::from(""))
     }
 }
 
