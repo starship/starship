@@ -114,10 +114,9 @@ mod tests {
         let config_path = dir.path().join("clouds.yaml");
         let mut file = File::create(&config_path)?;
         file.write_all(
-            "---
+            b"---
 dummy_yaml
 "
-            .as_bytes(),
         )?;
         let actual = ModuleRenderer::new("openstack")
             .env("PWD", ".")
