@@ -33,25 +33,23 @@ fn get_osp_project_from_config(context: &Context, osp_cloud: Option<&str>) -> Op
                             //log::debug!("clouds.yaml from etc");
                             Some(content)
                         }
-                        Err(_e) => {
-                            return None
-                        }
+                        Err(_e) => return None,
                     }
                 }
             }
         }
     }?;
     let clouds = YamlLoader::load_from_str(&contents).unwrap();
-    let project = &clouds[0]["clouds"][osp_cloud.unwrap()]["auth"]["project_name"].as_str().unwrap();
+    let project = &clouds[0]["clouds"][osp_cloud.unwrap()]["auth"]["project_name"]
+        .as_str()
+        .unwrap();
     Some(project.to_string())
 }
 
 fn get_osp_cloud_and_project(context: &Context) -> (Option<Cloud>, Option<Project>) {
     match (
-        context
-            .get_env("OS_CLOUD"),
-        context
-            .get_env("OS_PROJECT_NAME")
+        context.get_env("OS_CLOUD"),
+        context.get_env("OS_PROJECT_NAME"),
     ) {
         (Some(p), Some(r)) => (Some(p), Some(r)),
         (None, Some(r)) => (None, Some(r)),
@@ -92,12 +90,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     module.set_segments(match parsed {
-            Ok(segments) => segments,
-            Err(error) => {
-                log::error!("Error in module `openstack`: \n{}", error);
-                return None;
-            }
-        });
+        Ok(segments) => segments,
+        Err(error) => {
+            log::error!("Error in module `openstack`: \n{}", error);
+            return None;
+        }
+    });
 
-        Some(module)
+    Some(module)
 }
