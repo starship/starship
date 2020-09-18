@@ -98,13 +98,13 @@ pub fn timings(args: ArgMatches) {
         name: String,
         name_len: usize,
         value: String,
-        duration: Option<Duration>,
+        duration: Duration,
         duration_len: usize,
     }
 
     let mut modules = compute_modules(&context)
         .iter()
-        .filter(|module| !module.is_empty() || module.duration.map_or(0, |d| d.as_millis()) > 0)
+        .filter(|module| !module.is_empty() || module.duration.as_millis() > 0)
         .map(|module| ModuleTiming {
             name: String::from(module.get_name().as_str()),
             name_len: better_width(module.get_name().as_str()),
@@ -349,17 +349,12 @@ fn better_width(s: &str) -> usize {
     s.graphemes(true).map(grapheme_width).sum()
 }
 
-pub fn format_duration(duration: &Option<Duration>) -> String {
-    match duration {
-        Some(duration) => {
-            let milis = duration.as_millis();
-            if milis == 0 {
-                "<1ms".to_string()
-            } else {
-                format!("{:?}ms", duration.as_millis())
-            }
-        }
-        None => "<unknown>".to_string(),
+pub fn format_duration(duration: &Duration) -> String {
+    let milis = duration.as_millis();
+    if milis == 0 {
+        "<1ms".to_string()
+    } else {
+        format!("{:?}ms", &milis)
     }
 }
 

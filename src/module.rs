@@ -76,7 +76,7 @@ pub struct Module<'a> {
     pub segments: Vec<Segment>,
 
     /// the time it took to compute this module
-    pub duration: Option<Duration>,
+    pub duration: Duration,
 }
 
 impl<'a> Module<'a> {
@@ -87,7 +87,7 @@ impl<'a> Module<'a> {
             name: name.to_string(),
             description: desc.to_string(),
             segments: Vec::new(),
-            duration: None,
+            duration: Duration::default(),
         }
     }
 
@@ -173,7 +173,7 @@ mod tests {
             name: name.to_string(),
             description: desc.to_string(),
             segments: Vec::new(),
-            duration: None,
+            duration: Duration::default(),
         };
 
         assert!(module.is_empty());
@@ -188,7 +188,7 @@ mod tests {
             name: name.to_string(),
             description: desc.to_string(),
             segments: vec![Segment::new(None, "")],
-            duration: None,
+            duration: Duration::default(),
         };
 
         assert!(module.is_empty());
@@ -203,7 +203,7 @@ mod tests {
             name: name.to_string(),
             description: desc.to_string(),
             segments: vec![Segment::new(None, "\n")],
-            duration: None,
+            duration: Duration::default(),
         };
 
         assert!(!module.is_empty());
@@ -218,7 +218,7 @@ mod tests {
             name: name.to_string(),
             description: desc.to_string(),
             segments: vec![Segment::new(None, " ")],
-            duration: None,
+            duration: Duration::default(),
         };
 
         assert!(!module.is_empty());

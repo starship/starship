@@ -76,7 +76,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
             }
         };
     }
-    module.duration = Option::from(start.elapsed());
+    module.duration = start.elapsed();
     Some(module)
 }
 

@@ -120,7 +120,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         }
     };
 
-    m.get_or_insert(context.new_module(module)).duration = Option::from(start.elapsed());
+    m.get_or_insert(context.new_module(module)).duration = start.elapsed();
     m
 }
 
