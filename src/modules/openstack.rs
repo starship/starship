@@ -39,10 +39,13 @@ fn get_osp_project_from_config(context: &Context, osp_cloud: Option<&str>) -> Op
             }
         }
     }?;
-    let clouds = YamlLoader::load_from_str(&contents).unwrap();
+    let clouds = YamlLoader::load_from_str(&contents).ok()?;
     let project = &clouds[0]["clouds"][osp_cloud.unwrap()]["auth"]["project_name"]
         .as_str()
-        .unwrap();
+        .unwrap_or("");
+    if project.is_empty() {
+        return None
+    }
     Some(project.to_string())
 }
 
@@ -98,4 +101,36 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::test::ModuleRenderer;
+    use ansi_term::Color;
+    use std::fs::File;
+    use std::io::{self, Write};
+
+    #[test]
+    fn parse_broken_config() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("clouds.yaml");
+        let mut file = File::create(&config_path)?;
+        file.write_all(
+            "---
+dummy_yaml
+"
+            .as_bytes(),
+        )?;
+        let actual = ModuleRenderer::new("openstack")
+            .env("PWD", ".")
+            .env("OS_CLOUD", "test")
+            .config(toml::toml! {
+                [openstack]
+            })
+            .collect();
+        let expected = Some(format!("on {} ", Color::Yellow.bold().paint("☁️  test")));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
 }
