@@ -70,9 +70,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let (osp_cloud, osp_project) = get_osp_cloud_and_project(context);
 
-    if osp_cloud.is_none() {
-        return None;
-    }
+    osp_cloud.as_ref()?;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
