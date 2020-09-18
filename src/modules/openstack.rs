@@ -44,7 +44,7 @@ fn get_osp_project_from_config(context: &Context, osp_cloud: Option<&str>) -> Op
         .as_str()
         .unwrap_or("");
     if project.is_empty() {
-        return None
+        return None;
     }
     Some(project.to_string())
 }
