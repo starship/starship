@@ -4,7 +4,7 @@ Starship v0.45.0 is a release containing breaking changes, in preparation for th
 
 This guide is intended to walk you through the breaking changes.
 
-## `prompt_order` will be replaced by a root-level `format`
+## `prompt_order` has been replaced by a root-level `format`
 
 Previously to v0.45.0, `prompt_order` would accept an array of module names
 in the order which they should be rendered by Starship.
@@ -77,4 +77,115 @@ prefix = "took "
 # $duration – The command duration (e.g. "15s")
 # $style    – The default style of the module (e.g. "bold yellow")
 format = "took [$duration]($style)"
+```
+
+### Affected Modules
+
+#### Command Duration
+
+| Deprecated Property | Replacement |
+| ------------------- | ----------- |
+| `prefix`            | `format`    |
+
+```diff
+[cmd_duration]
+-- prefix = "took "
+++ format = "took [$duration]($style)"
+```
+
+#### Directory
+
+| Deprecated Property | Replacement |
+| ------------------- | ----------- |
+| `prefix`            | `format`    |
+
+```diff
+[cmd_duration]
+-- prefix = "in "
+++ format = "[$path]($style)[$lock_symbol]($lock_style)"
+```
+
+#### Environment Variable
+
+| Deprecated Property | Replacement |
+| ------------------- | ----------- |
+| `prefix`            | `format`    |
+| `suffix`            | `format`    |
+
+```diff
+[cmd_duration]
+-- prefix = ""
+-- suffix = ""
+++ format = "with [$env_value]($style) "
+```
+
+#### Git Commit
+
+| Deprecated Property | Replacement |
+| ------------------- | ----------- |
+| `prefix`            | `format`    |
+| `suffix`            | `format`    |
+
+```diff
+[cmd_duration]
+-- prefix = "("
+-- suffix = ")"
+++ format = "[\\($hash\\)]($style) "
+```
+
+#### Git Status
+
+| Deprecated Property | Replacement |
+| ------------------- | ----------- |
+| `prefix`            | `format`    |
+| `suffix`            | `format`    |
+
+```diff
+[cmd_duration]
+-- prefix = "["
+-- suffix = "]"
+++ format = "([$all_status$ahead_behind] )"
+```
+
+#### Hostname
+
+| Deprecated Property | Replacement |
+| ------------------- | ----------- |
+| `prefix`            | `format`    |
+| `suffix`            | `format`    |
+
+```diff
+[cmd_duration]
+-- prefix = ""
+-- suffix = ""
+++ format = "[$hostname]($style) in "
+```
+
+#### Singularity
+
+| Deprecated Property | Replacement |
+| ------------------- | ----------- |
+| `label`             | `format`    |
+| `prefix`            | `format`    |
+| `suffix`            | `format`    |
+
+```diff
+[cmd_duration]
+-- prefix = ""
+-- suffix = ""
+++ format = "[$symbol\\[$env\\]]($style) "
+```
+
+#### Custom Commands
+
+| Deprecated Property | Replacement |
+| ------------------- | ----------- |
+| `prefix`            | `format`    |
+| `suffix`            | `format`    |
+
+```diff
+[cmd_duration]
+-- prefix = ""
+-- suffix = ""
+++ format = "[$symbol$output]($style) "
 ```
