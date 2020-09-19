@@ -1109,7 +1109,7 @@ current directory.
 
 | Option            | Default                                     | Description                                          |
 | ----------------- | ------------------------------------------- | ---------------------------------------------------- |
-| `format`          | "([\[$all_status$ahead_behind\]]($style) )" | The default format for `git_status`                  |
+| `format`          | `"[\[$all_status$ahead_behind\]]($style) "` | The default format for `git_status`                  |
 | `conflicted`      | `"="`                                       | This branch has merge conflicts.                     |
 | `ahead`           | `"⇡"`                                       | The format of `ahead`                                |
 | `behind`          | `"⇣"`                                       | The format of `behind`                               |
@@ -1913,7 +1913,6 @@ python_binary = "python3"
 [python]
 symbol = "👾 "
 pyenv_version_name = true
-pyenv_prefix = "foo "
 ```
 
 ## Ruby
@@ -2422,12 +2421,11 @@ with shell details and starship configuration if you hit such scenario.
 command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
-prefix = " transcending "
+format = " transcending [$output]($style)"
 
 [custom.time]
 command = "time /T"
 files = ["*.pst"]
-prefix = "transcending "
 shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 ```
 
