@@ -90,12 +90,12 @@ Starship source files are linted with [clippy](https://crates.io/crates/clippy).
 
 ```sh
 rustup component add clippy
-cargo clippy
+cargo clippy --all-targets --all-features
 ```
 
 ## Formatting
 
-Starship source files are formatted with [rustfmt](https://crates.io/crates/rustfmt-nightly). Rustfmt will be ran as part of CI. Unformatted code will fail a build, so it is suggested that you run rustfmt locally:
+Starship source files are formatted with [rustfmt](https://crates.io/crates/rustfmt-nightly), using the default configuration. Rustfmt will be ran as part of CI. Unformatted code will fail a build, so it is suggested that you run rustfmt locally:
 
 ```sh
 rustup component add rustfmt
