@@ -1763,8 +1763,10 @@ format = "via [🐪 $version]($style) "
 
 ## OpenStack
 
-The `openstack` module shows the current OpenStack cloud and project. This is based on
-`OS_CLOUD` env var with `clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files).
+The `openstack` module shows the current OpenStack cloud and project. The module
+only active when the `OS_CLOUD` env var is set, in which case it will read
+`clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files).
+to fetch the current project in use.
 
 ### Options
 
