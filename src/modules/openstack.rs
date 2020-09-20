@@ -10,6 +10,8 @@ type Cloud = String;
 type Project = String;
 
 fn get_osp_project_from_config(context: &Context, osp_cloud: Option<&str>) -> Option<Project> {
+    // Attempt to follow OpenStack standards for clouds.yaml location:
+    // 1st = $PWD/clouds.yaml, 2nd = $HOME/.config/openstack/clouds.yaml, 3rd = /etc/openstack/clouds.yaml
     let config = vec![
         utils::read_file(context.get_env("PWD").unwrap() + "/clouds.yaml"),
         utils::read_file(dirs_next::home_dir()?.join(".config/openstack/clouds.yaml")),
