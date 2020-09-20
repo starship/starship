@@ -90,7 +90,7 @@ Starship source files are linted with [clippy](https://crates.io/crates/clippy).
 
 ```sh
 rustup component add clippy
-cargo clippy
+cargo clippy --all-targets --all-features
 ```
 
 ## Formatting
