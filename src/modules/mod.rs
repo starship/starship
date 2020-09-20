@@ -128,7 +128,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     } else {
         // if we took more than 1ms we want to report that and so--in case we have None currently--
         // need to create an empty module just to hold the duration for that case
-        m.get_or_insert(context.new_module(module)).duration = elapsed;
+        m.get_or_insert_with(|| context.new_module(module)).duration = elapsed;
         m
     }
 }
