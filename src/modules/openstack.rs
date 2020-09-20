@@ -15,7 +15,8 @@ fn get_osp_project_from_config(context: &Context, osp_cloud: Option<&str>) -> Op
         utils::read_file(dirs_next::home_dir()?.join(".config/openstack/clouds.yaml")),
         utils::read_file("/etc/openstack/clouds.yaml"),
     ];
-    let clouds = YamlLoader::load_from_str(&config.into_iter().find_map(Result::ok).unwrap()).ok()?;
+    let clouds =
+        YamlLoader::load_from_str(&config.into_iter().find_map(Result::ok).unwrap()).ok()?;
     let project = &clouds[0]["clouds"][osp_cloud.unwrap()]["auth"]["project_name"]
         .as_str()
         .unwrap_or("");
