@@ -154,6 +154,7 @@ pub fn description(module: &str) -> &'static str {
         "nix_shell" => "The nix-shell environment",
         "nodejs" => "The currently installed version of NodeJS",
         "ocaml" => "The currently installed version of OCaml",
+        "openstack" => "The current OpenStack cloud and project",
         "package" => "The package version of the current directory's project",
         "perl" => "The currently installed version of Perl",
         "php" => "The currently installed version of PHP",
