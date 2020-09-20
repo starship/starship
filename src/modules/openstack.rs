@@ -85,6 +85,36 @@ mod tests {
     use std::fs::File;
     use std::io::{self, Write};
 
+
+    #[test]
+    fn parse_valid_config() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("clouds.yaml");
+        let mut file = File::create(&config_path)?;
+        file.write_all(
+            b"---
+clouds:
+  corp:
+    auth:
+      auth_url: https://overcloud.example.com:13000/v3
+      project_name: testproject
+    identity_api_version: '3'
+    interface: public
+",
+        )?;
+        let actual = ModuleRenderer::new("openstack")
+            .env("PWD", dir.path().to_str().unwrap())
+            .env("OS_CLOUD", "corp")
+            .config(toml::toml! {
+                [openstack]
+            })
+            .collect();
+        let expected = Some(format!("on {} ", Color::Yellow.bold().paint("☁️  corp(testproject)")));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
     #[test]
     fn parse_broken_config() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
@@ -96,7 +126,7 @@ dummy_yaml
 ",
         )?;
         let actual = ModuleRenderer::new("openstack")
-            .env("PWD", ".")
+            .env("PWD", dir.path().to_str().unwrap())
             .env("OS_CLOUD", "test")
             .config(toml::toml! {
                 [openstack]
