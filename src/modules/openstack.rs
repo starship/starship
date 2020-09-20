@@ -85,7 +85,6 @@ mod tests {
     use std::fs::File;
     use std::io::{self, Write};
 
-
     #[test]
     fn parse_valid_config() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
@@ -109,7 +108,10 @@ clouds:
                 [openstack]
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Yellow.bold().paint("☁️  corp(testproject)")));
+        let expected = Some(format!(
+            "on {} ",
+            Color::Yellow.bold().paint("☁️  corp(testproject)")
+        ));
 
         assert_eq!(actual, expected);
         dir.close()
