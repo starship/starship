@@ -10,36 +10,12 @@ type Cloud = String;
 type Project = String;
 
 fn get_osp_project_from_config(context: &Context, osp_cloud: Option<&str>) -> Option<Project> {
-    let config_local = context.get_env("PWD").unwrap() + "/clouds.yaml";
-    let config_user = dirs_next::home_dir()?.join(".config/openstack/clouds.yaml");
-    let config_global = "/etc/openstack/clouds.yaml";
-    // Attempt to follow OpenStack standards for clouds.yaml location:
-    // 1st = $PWD/clouds.yaml, 2nd = $HOME/.config/openstack/clouds.yaml, 3rd = /etc/openstack/clouds.yaml
-    // TODO: I'm sure there is a better way to do this.
-    let contents = match utils::read_file(&config_local) {
-        Ok(content) => {
-            //log::debug!("clouds.yaml from local directory");
-            Some(content)
-        }
-        Err(_e) => {
-            match utils::read_file(&config_user) {
-                Ok(content) => {
-                    //log::debug!("clouds.yaml from home dir");
-                    Some(content)
-                }
-                Err(_e) => {
-                    match utils::read_file(&config_global) {
-                        Ok(content) => {
-                            //log::debug!("clouds.yaml from etc");
-                            Some(content)
-                        }
-                        Err(_e) => return None,
-                    }
-                }
-            }
-        }
-    }?;
-    let clouds = YamlLoader::load_from_str(&contents).ok()?;
+    let config = vec![
+        utils::read_file(context.get_env("PWD").unwrap() + "/clouds.yaml"),
+        utils::read_file(dirs_next::home_dir()?.join(".config/openstack/clouds.yaml")),
+        utils::read_file("/etc/openstack/clouds.yaml"),
+    ];
+    let clouds = YamlLoader::load_from_str(&config.into_iter().find_map(Result::ok).unwrap()).ok()?;
     let project = &clouds[0]["clouds"][osp_cloud.unwrap()]["auth"]["project_name"]
         .as_str()
         .unwrap_or("");
