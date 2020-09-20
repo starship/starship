@@ -2088,6 +2088,12 @@ format = "via [🏎  $version](red bold)"
 The `status` module displays the exit code of the previous command.
 The module will be shown only if the exit code is not `0`.
 
+::: tip
+                                                              
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+:::
+
 ### Options
 
 | Variable   | Default                       | Description                                            |
