@@ -1,6 +1,3 @@
-extern crate proc_macro;
-extern crate proc_macro2;
-
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, DeriveInput};
@@ -22,6 +19,12 @@ fn impl_module_config(dinput: DeriveInput) -> proc_macro::TokenStream {
         if let syn::Fields::Named(fields_named) = data.fields {
             let mut load_tokens = quote! {};
             let mut from_tokens = quote! {};
+
+            let check_migrations = quote! {
+                if config.get("prefix").is_some() || config.get("suffix").is_some() {
+                    log::warn!("You're using the outdated config format! Migrate your config here: https://starship.rs/migrating-to-0.45.0/")
+                }
+            };
 
             for field in fields_named.named.iter() {
                 let ident = field.ident.as_ref().unwrap();
@@ -50,6 +53,7 @@ fn impl_module_config(dinput: DeriveInput) -> proc_macro::TokenStream {
                 fn load_config(&self, config: &'a toml::Value) -> Self {
                     let mut new_module_config = self.clone();
                     if let toml::Value::Table(config) = config {
+                        #check_migrations
                         #load_tokens
                     }
                     new_module_config
