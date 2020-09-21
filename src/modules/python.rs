@@ -48,6 +48,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         format_python_version(&version)
     };
     let virtual_env = get_python_virtual_env(context);
+    let pyenv_prefix = if config.pyenv_version_name {
+        config.pyenv_prefix
+    } else {
+        ""
+    };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -62,6 +67,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => Some(Ok(python_version.trim())),
                 "virtualenv" => virtual_env.as_ref().map(|e| Ok(e.trim())),
+                "pyenv_prefix" => Some(Ok(pyenv_prefix)),
                 _ => None,
             })
             .parse(None)
@@ -146,6 +152,7 @@ mod tests {
 
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
         dir.close()
     }
 
@@ -156,6 +163,7 @@ mod tests {
 
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
         dir.close()
     }
 
@@ -166,6 +174,7 @@ mod tests {
 
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
         dir.close()
     }
 
@@ -176,6 +185,7 @@ mod tests {
 
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
         dir.close()
     }
 
@@ -186,6 +196,7 @@ mod tests {
 
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
         dir.close()
     }
 
@@ -196,6 +207,7 @@ mod tests {
 
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
         dir.close()
     }
 
@@ -206,6 +218,7 @@ mod tests {
 
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
         dir.close()
     }
 
@@ -216,6 +229,7 @@ mod tests {
 
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
         dir.close()
     }
 
@@ -257,6 +271,13 @@ mod tests {
 
         check_python3_renders(&dir, Some(config_python3));
 
+        let config_pyenv = toml::toml! {
+            [python]
+            pyenv_version_name = true
+            pyenv_prefix = "test_pyenv "
+            scan_for_pyfiles = false
+        };
+        check_pyenv_renders(&dir, Some(config_pyenv));
         dir.close()
     }
 
@@ -323,6 +344,25 @@ mod tests {
             .collect();
 
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐍 v3.8.0")));
+        assert_eq!(expected, actual);
+    }
+
+    fn check_pyenv_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
+        let config = starship_config.unwrap_or(toml::toml! {
+             [python]
+             pyenv_version_name = true
+             pyenv_prefix = "test_pyenv "
+        });
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .config(config)
+            .collect();
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Yellow.bold().paint("🐍 test_pyenv system")
+        ));
         assert_eq!(expected, actual);
     }
 }
