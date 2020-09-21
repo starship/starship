@@ -1076,7 +1076,7 @@ that information will be shown too.
 | `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
 | `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
 | `style`        | `"bold yellow"`                                                 | The style for the module.                                                               |
-| `format`       | `"[\\($state( $progress_current/$progress_total)\\)]($style) "` | The format for the module.                                                              |
+| `format`       | `"\\([$state( $progress_current/$progress_total)]($style)\\) "` | The format for the module.                                                              |
 | `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
 
 ### Variables
@@ -1857,23 +1857,25 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option               | Default                                                    | Description                                                                |
-| -------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `format`             | `"via [${symbol}${version}( \\($virtualenv\\))]($style) "` | The format for the module.                                                 |
-| `symbol`             | `"🐍 "`                                                    | A format string representing the symbol of Python                          |
-| `style`              | `"yellow bold"`                                            | The style for the module.                                                  |
-| `pyenv_version_name` | `false`                                                    | Use pyenv to get Python version                                            |
-| `scan_for_pyfiles`   | `true`                                                     | If false, Python files in the current directory will not show this module. |
-| `disabled`           | `false`                                                    | Disables the `python` module.                                              |
+| Option               | Default                                                                   | Description                                                                |
+| -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `format`             | `"via [${symbol}${pyenv_prefix}${version}( \\($virtualenv\\))]($style) "` | The format for the module.                                                 |
+| `symbol`             | `"🐍 "`                                                                   | A format string representing the symbol of Python                          |
+| `style`              | `"yellow bold"`                                                           | The style for the module.                                                  |
+| `pyenv_version_name` | `false`                                                                   | Use pyenv to get Python version                                            |
+| `pyenv_prefix`       | `pyenv `                                                                  | Prefix before pyenv version display, only used if pyenv is used            |
+| `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module. |
+| `disabled`           | `false`                                                                   | Disables the `python` module.                                              |
 
 ### Variables
 
-| Variable   | Example         | Description                          |
-| ---------- | --------------- | ------------------------------------ |
-| version    | `"v3.8.1"`      | The version of `python`              |
-| symbol     | `"🐍 "`         | Mirrors the value of option `symbol` |
-| style      | `"yellow bold"` | Mirrors the value of option `style`  |
-| virtualenv | `"venv"`        | The current `virtualenv` name        |
+| Variable     | Example         | Description                                |
+| ------------ | --------------- | ------------------------------------------ |
+| version      | `"v3.8.1"`      | The version of `python`                    |
+| symbol       | `"🐍 "`         | Mirrors the value of option `symbol`       |
+| style        | `"yellow bold"` | Mirrors the value of option `style`        |
+| pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
+| virtualenv   | `"venv"`        | The current `virtualenv` name              |
 
 <details>
 <summary>This module has some advanced configuration options.</summary>

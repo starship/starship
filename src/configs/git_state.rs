@@ -27,7 +27,7 @@ impl<'a> RootModuleConfig<'a> for GitStateConfig<'a> {
             am: "AM",
             am_or_rebase: "AM/REBASE",
             style: "bold yellow",
-            format: "[\\($state( $progress_current/$progress_total)\\)]($style) ",
+            format: "\\([$state( $progress_current/$progress_total)]($style)\\) ",
             disabled: false,
         }
     }

@@ -84,7 +84,12 @@ impl<'a> ModuleRenderer<'a> {
 
     /// Renders the module returning its output
     pub fn collect(self) -> Option<String> {
-        crate::print::get_module(self.name, self.context)
+        let ret = crate::print::get_module(self.name, self.context);
+        // all tests rely on the fact that an empty module produces None as output as the
+        // convention was that there would be no module but None. This is nowadays not anymore
+        // the case (to get durations for all modules). So here we make it so, that an empty
+        // module returns None in the tests...
+        ret.filter(|s| s != "")
     }
 }
 
