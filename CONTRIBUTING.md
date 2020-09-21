@@ -83,7 +83,7 @@ starship prompt
 cargo run prompt
 
 # Read the log file
-cat /tmp/starship/session_$(STARSHIP_SESSION_KEY).log
+cat ~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log
 ```
 
 ## Linting
