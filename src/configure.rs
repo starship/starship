@@ -75,7 +75,7 @@ pub fn edit_configuration() {
         Ok(_) => (),
         Err(error) => match error.kind() {
             ErrorKind::NotFound => {
-               eprintln!(
+                eprintln!(
                     "Error: editor {:?} was not found. Did you set your $EDITOR or $VISUAL \
                     environment variables correctly?",
                     editor_cmd

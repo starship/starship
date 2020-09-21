@@ -5,6 +5,7 @@ use std::{
     env,
     fs::{self, File, OpenOptions},
     io::Write,
+    path::PathBuf,
     sync::{Arc, Mutex},
 };
 
@@ -15,7 +16,13 @@ pub struct StarshipLogger {
 
 impl StarshipLogger {
     fn new() -> Self {
-        let log_dir = env::temp_dir().join("starship");
+        let log_dir = env::var_os("STARSHIP_CACHE")
+            .map(PathBuf::from)
+            .unwrap_or_else(|| {
+                dirs_next::home_dir()
+                    .expect("Unable to find home directory")
+                    .join(".cache/starship")
+            });
 
         fs::create_dir_all(log_dir.clone()).expect("Unable to create log dir!");
         let session_log_file = log_dir.join(format!(
