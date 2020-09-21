@@ -1775,23 +1775,25 @@ El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 ### Opciones
 
-| Opción               | Por defecto                                                    | Descripción                                                                |
-| -------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `format`             | `"via [${symbol}${version}( \\($virtualenv\\))]($style) "` | El formato del módulo.                                                     |
-| `symbol`             | `"🐍 "`                                                         | A format string representing the symbol of Python                          |
-| `style`              | `"yellow bold"`                                                | El estilo del módulo.                                                      |
-| `pyenv_version_name` | `false`                                                        | Use pyenv to get Python version                                            |
-| `scan_for_pyfiles`   | `true`                                                         | If false, Python files in the current directory will not show this module. |
-| `disabled`           | `false`                                                        | Disables the `python` module.                                              |
+| Opción               | Por defecto                                                                   | Descripción                                                                |
+| -------------------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `format`             | `"via [${symbol}${pyenv_prefix}${version}( \\($virtualenv\\))]($style) "` | El formato del módulo.                                                     |
+| `symbol`             | `"🐍 "`                                                                        | A format string representing the symbol of Python                          |
+| `style`              | `"yellow bold"`                                                               | El estilo del módulo.                                                      |
+| `pyenv_version_name` | `false`                                                                       | Use pyenv to get Python version                                            |
+| `pyenv_prefix`       | `pyenv`                                                                       | Prefix before pyenv version display, only used if pyenv is used            |
+| `scan_for_pyfiles`   | `true`                                                                        | If false, Python files in the current directory will not show this module. |
+| `disabled`           | `false`                                                                       | Disables the `python` module.                                              |
 
 ### Variables
 
-| Variable   | Ejemplo         | Descripción                            |
-| ---------- | --------------- | -------------------------------------- |
-| version    | `"v3.8.1"`      | The version of `python`                |
-| symbol     | `"🐍 "`          | Refleja el valor de la opción `symbol` |
-| style      | `"yellow bold"` | Refleja el valor de la opción `style`  |
-| virtualenv | `"venv"`        | The current `virtualenv` name          |
+| Variable     | Ejemplo         | Descripción                                |
+| ------------ | --------------- | ------------------------------------------ |
+| version      | `"v3.8.1"`      | The version of `python`                    |
+| symbol       | `"🐍 "`          | Refleja el valor de la opción `symbol`     |
+| style        | `"yellow bold"` | Refleja el valor de la opción `style`      |
+| pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
+| virtualenv   | `"venv"`        | The current `virtualenv` name              |
 
 <details>
 <summary>This module has some advanced configuration options.</summary>
