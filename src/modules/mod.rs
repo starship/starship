@@ -121,6 +121,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     };
 
     let elapsed = start.elapsed();
+    log::trace!("Took {:?} to compute module {:?}", elapsed, module);
     if elapsed.as_millis() < 1 {
         // If we take less than 1ms to compute a None, then we will not return a module at all
         // if we have a module: default duration is 0 so no need to change it

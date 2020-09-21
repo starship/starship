@@ -76,7 +76,9 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
             }
         };
     }
-    module.duration = start.elapsed();
+    let elapsed = start.elapsed();
+    log::trace!("Took {:?} to compute custom module {:?}", elapsed, name);
+    module.duration = elapsed;
     Some(module)
 }
 
