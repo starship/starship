@@ -110,8 +110,8 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         "username" => username::module(context),
         "zig" => zig::module(context),
         _ => {
-            log::error!(
-                "Unknown module {}. Use starship module --list to list out all supported modules.",
+            eprintln!(
+                "Error: Unknown module {}. Use starship module --list to list out all supported modules.",
                 module
             );
             None
