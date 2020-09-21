@@ -81,11 +81,46 @@ format = "took [$duration]($style)"
 
 ### Affected Modules
 
+#### Character
+
+| Deprecated Property     | Replacement      |
+| ----------------------- | ---------------- |
+| `symbol`                | `success_symbol` |
+| `use_symbol_for_status` | `error_symbol`   |
+| `style_success`         | `success_symbol` |
+| `style_failure`         | `error_symbol`   |
+
+**Changes to the Default Configuration**
+
+```diff
+[character]
+-- symbol = "❯"
+-- error_symbol = "✖"
+-- use_symbol_for_status = true
+-- vicmd_symbol = "❮"
+++ success_symbol = "[❯](bold green) "
+++ error_symbol = "[❯](bold red) "
+++ vicmd_symbol = "[❮](bold green)"
+```
+
+Previously, the `use_symbol_for_status` property was used to configure the prompt to show the `error_symbol` when the last command resulted in a non-zero status code.
+
+With the release of v0.45.0, we now always use `error_symbol` after non-zero status codes, unifying `use_symbol_for_status` and `error_symbol` properties.
+
+To configure the prompt to use the older `use_symbol_for_status = true` configuration, add the following to your config file:
+
+```toml
+[character]
+error_symbol = "[✖](bold red) "
+```
+
 #### Command Duration
 
 | Deprecated Property | Replacement |
 | ------------------- | ----------- |
 | `prefix`            | `format`    |
+
+**Changes to the Default Configuration**
 
 ```diff
 [cmd_duration]
@@ -99,6 +134,8 @@ format = "took [$duration]($style)"
 | ------------------- | ----------- |
 | `prefix`            | `format`    |
 
+**Changes to the Default Configuration**
+
 ```diff
 [cmd_duration]
 -- prefix = "in "
@@ -111,6 +148,8 @@ format = "took [$duration]($style)"
 | ------------------- | ----------- |
 | `prefix`            | `format`    |
 | `suffix`            | `format`    |
+
+**Changes to the Default Configuration**
 
 ```diff
 [cmd_duration]
@@ -126,6 +165,8 @@ format = "took [$duration]($style)"
 | `prefix`            | `format`    |
 | `suffix`            | `format`    |
 
+**Changes to the Default Configuration**
+
 ```diff
 [cmd_duration]
 -- prefix = "("
@@ -140,6 +181,8 @@ format = "took [$duration]($style)"
 | `prefix`            | `format`    |
 | `suffix`            | `format`    |
 
+**Changes to the Default Configuration**
+
 ```diff
 [cmd_duration]
 -- prefix = "["
@@ -153,6 +196,8 @@ format = "took [$duration]($style)"
 | ------------------- | ----------- |
 | `prefix`            | `format`    |
 | `suffix`            | `format`    |
+
+**Changes to the Default Configuration**
 
 ```diff
 [cmd_duration]
@@ -169,11 +214,28 @@ format = "took [$duration]($style)"
 | `prefix`            | `format`    |
 | `suffix`            | `format`    |
 
+**Changes to the Default Configuration**
+
 ```diff
 [cmd_duration]
 -- prefix = ""
 -- suffix = ""
 ++ format = "[$symbol\\[$env\\]]($style) "
+```
+
+#### Time
+
+| Deprecated Property | Replacement   |
+| ------------------- | ------------- |
+| `format`            | `time_format` |
+
+**Changes to the Default Configuration**
+
+```diff
+[time]
+-- format = "🕙[ %T ]"
+++ time_format = "%T"
+++ format = "at 🕙[$time]($style)
 ```
 
 #### Custom Commands
@@ -182,6 +244,8 @@ format = "took [$duration]($style)"
 | ------------------- | ----------- |
 | `prefix`            | `format`    |
 | `suffix`            | `format`    |
+
+**Changes to the Default Configuration**
 
 ```diff
 [cmd_duration]
