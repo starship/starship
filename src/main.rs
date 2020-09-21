@@ -71,87 +71,89 @@ fn main() {
         .long("print-full-init")
         .help("Print the main initialization script (as opposed to the init stub)");
 
-    let mut app =
-        App::new("starship")
-            .about("The cross-shell prompt for astronauts. ☄🌌️")
-            // pull the version number from Cargo.toml
-            .version(crate_version!())
-            // pull the authors from Cargo.toml
-            .author(crate_authors!())
-            .after_help("https://github.com/starship/starship")
-            .setting(AppSettings::SubcommandRequiredElseHelp)
-            .subcommand(
-                SubCommand::with_name("init")
-                    .about("Prints the shell function used to execute starship")
-                    .arg(&shell_arg)
-                    .arg(&init_scripts_arg),
-            )
-            .subcommand(
-                SubCommand::with_name("prompt")
-                    .about("Prints the full starship prompt")
-                    .arg(&status_code_arg)
-                    .arg(&path_arg)
-                    .arg(&cmd_duration_arg)
-                    .arg(&keymap_arg)
-                    .arg(&jobs_arg),
-            )
-            .subcommand(
-                SubCommand::with_name("module")
-                    .about("Prints a specific prompt module")
-                    .arg(
-                        Arg::with_name("name")
-                            .help("The name of the module to be printed")
-                            .required(true)
-                            .required_unless("list"),
-                    )
-                    .arg(
-                        Arg::with_name("list")
-                            .short("l")
-                            .long("list")
-                            .help("List out all supported modules"),
-                    )
-                    .arg(&status_code_arg)
-                    .arg(&path_arg)
-                    .arg(&cmd_duration_arg)
-                    .arg(&keymap_arg)
-                    .arg(&jobs_arg),
-            )
-            .subcommand(
-                SubCommand::with_name("config")
-                    .alias("configure")
-                    .about("Edit the starship configuration")
-                    .arg(
-                        Arg::with_name("name")
-                            .help("Configuration key to edit")
-                            .required(false)
-                            .requires("value"),
-                    )
-                    .arg(Arg::with_name("value").help("Value to place into that key")),
-            )
-            .subcommand(SubCommand::with_name("bug-report").about(
+    let mut app = App::new("starship")
+        .about("The cross-shell prompt for astronauts. ☄🌌️")
+        // pull the version number from Cargo.toml
+        .version(crate_version!())
+        // pull the authors from Cargo.toml
+        .author(crate_authors!())
+        .after_help("https://github.com/starship/starship")
+        .setting(AppSettings::SubcommandRequiredElseHelp)
+        .subcommand(
+            SubCommand::with_name("init")
+                .about("Prints the shell function used to execute starship")
+                .arg(&shell_arg)
+                .arg(&init_scripts_arg),
+        )
+        .subcommand(
+            SubCommand::with_name("prompt")
+                .about("Prints the full starship prompt")
+                .arg(&status_code_arg)
+                .arg(&path_arg)
+                .arg(&cmd_duration_arg)
+                .arg(&keymap_arg)
+                .arg(&jobs_arg),
+        )
+        .subcommand(
+            SubCommand::with_name("module")
+                .about("Prints a specific prompt module")
+                .arg(
+                    Arg::with_name("name")
+                        .help("The name of the module to be printed")
+                        .required(true)
+                        .required_unless("list"),
+                )
+                .arg(
+                    Arg::with_name("list")
+                        .short("l")
+                        .long("list")
+                        .help("List out all supported modules"),
+                )
+                .arg(&status_code_arg)
+                .arg(&path_arg)
+                .arg(&cmd_duration_arg)
+                .arg(&keymap_arg)
+                .arg(&jobs_arg),
+        )
+        .subcommand(
+            SubCommand::with_name("config")
+                .alias("configure")
+                .about("Edit the starship configuration")
+                .arg(
+                    Arg::with_name("name")
+                        .help("Configuration key to edit")
+                        .required(false)
+                        .requires("value"),
+                )
+                .arg(Arg::with_name("value").help("Value to place into that key")),
+        )
+        .subcommand(
+            SubCommand::with_name("bug-report").about(
                 "Create a pre-populated GitHub issue with information about your configuration",
-            ))
-            .subcommand(
-                SubCommand::with_name("time")
-                    .about("Prints time in milliseconds")
-                    .settings(&[AppSettings::Hidden]),
-            )
-            .subcommand(
-                SubCommand::with_name("explain").about("Explains the currently showing modules"),
-            )
-            .subcommand(
-                SubCommand::with_name("completions")
-                    .about("Generate starship shell completions for your shell to stdout")
-                    .arg(
-                        Arg::with_name("shell")
-                            .takes_value(true)
-                            .possible_values(&Shell::variants())
-                            .help("the shell to generate completions for")
-                            .value_name("SHELL")
-                            .required(true)
-                            .env("STARSHIP_SHELL"),
-                    ),
-            );
+            ),
+        )
+        .subcommand(
+            SubCommand::with_name("time")
+                .about("Prints time in milliseconds")
+                .settings(&[AppSettings::Hidden]),
+        )
+        .subcommand(
+            SubCommand::with_name("explain").about("Explains the currently showing modules"),
+        )
+        .subcommand(SubCommand::with_name("timings").about("Prints timings of all active modules"))
+        .subcommand(
+            SubCommand::with_name("completions")
+                .about("Generate starship shell completions for your shell to stdout")
+                .arg(
+                    Arg::with_name("shell")
+                        .takes_value(true)
+                        .possible_values(&Shell::variants())
+                        .help("the shell to generate completions for")
+                        .value_name("SHELL")
+                        .required(true)
+                        .env("STARSHIP_SHELL"),
+                ),
+        );
 
     let matches = app.clone().get_matches();
 
@@ -197,6 +199,7 @@ fn main() {
             }
         }
         ("explain", Some(sub_m)) => print::explain(sub_m.clone()),
+        ("timings", Some(sub_m)) => print::timings(sub_m.clone()),
         ("completions", Some(sub_m)) => {
             let shell: Shell = sub_m
                 .value_of("shell")
