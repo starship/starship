@@ -1775,23 +1775,25 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 ### オプション
 
-| オプション                | デフォルト                                                          | 説明                                                                         |
-| -------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `format`             | `"via [${symbol}${version}( \\($virtualenv\\))]($style) "` | moduleのフォーマットです。                                                           |
-| `symbol`             | `"🐍 "`                                                         | A format string representing the symbol of Python                          |
-| `style`              | `"yellow bold"`                                                | モジュールのスタイルです。                                                              |
-| `pyenv_version_name` | `false`                                                        | Use pyenv to get Python version                                            |
-| `scan_for_pyfiles`   | `true`                                                         | If false, Python files in the current directory will not show this module. |
-| `disabled`           | `false`                                                        | Disables the `python` module.                                              |
+| オプション                | デフォルト                                                                         | 説明                                                                         |
+| -------------------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `format`             | `"via [${symbol}${pyenv_prefix}${version}( \\($virtualenv\\))]($style) "` | moduleのフォーマットです。                                                           |
+| `symbol`             | `"🐍 "`                                                                        | A format string representing the symbol of Python                          |
+| `style`              | `"yellow bold"`                                                               | モジュールのスタイルです。                                                              |
+| `pyenv_version_name` | `false`                                                                       | Use pyenv to get Python version                                            |
+| `pyenv_prefix`       | `pyenv`                                                                       | Prefix before pyenv version display, only used if pyenv is used            |
+| `scan_for_pyfiles`   | `true`                                                                        | If false, Python files in the current directory will not show this module. |
+| `disabled`           | `false`                                                                       | Disables the `python` module.                                              |
 
 ### 変数
 
-| 変数         | 設定例             | 説明                            |
-| ---------- | --------------- | ----------------------------- |
-| version    | `"v3.8.1"`      | The version of `python`       |
-| symbol     | `"🐍 "`          | オプション `記号` の値をミラーする           |
-| style      | `"yellow bold"` | オプション `style` の値をミラーする        |
-| virtualenv | `"venv"`        | The current `virtualenv` name |
+| 変数           | 設定例             | 説明                                         |
+| ------------ | --------------- | ------------------------------------------ |
+| version      | `"v3.8.1"`      | The version of `python`                    |
+| symbol       | `"🐍 "`          | オプション `記号` の値をミラーする                        |
+| style        | `"yellow bold"` | オプション `style` の値をミラーする                     |
+| pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
+| virtualenv   | `"venv"`        | The current `virtualenv` name              |
 
 <details>
 <summary>This module has some advanced configuration options.</summary>
