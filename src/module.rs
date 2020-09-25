@@ -55,6 +55,7 @@ pub const ALL_MODULES: &[&str] = &[
     "terraform",
     "shlvl",
     "singularity",
+    "status",
     "time",
     "username",
     "zig",
