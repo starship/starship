@@ -209,6 +209,7 @@ $line_break\
 $jobs\
 $battery\
 $time\
+$status\
 $character"""
 ```
 
@@ -1996,6 +1997,48 @@ The `swift` module shows the currently installed version of Swift. Das Modul wir
 format = "via [🏎  $version](red bold)"
 ```
 
+## Status
+
+The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
+
+::: tip
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. :::
+
+### Optionen
+
+| Variable   | Standartwert               | Beschreibung                                           |
+| ---------- | -------------------------- | ------------------------------------------------------ |
+| `format`   | `[$symbol$status]($style)` | The format of the module                               |
+| `symbol`   | `"✖"`                      | A format string representing the symbol for the status |
+| `style`    | `"bold red"`               | Stil für dieses Modul.                                 |
+| `disabled` | `true`                     | Disables the `status` module.                          |
+
+
+### Variables
+
+| Variable  | Beispiel | Beschreibung                         |
+| --------- | -------- | ------------------------------------ |
+| status    | `127`    | The exit code of the last command    |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+
+### Beispiel
+```toml
+
+# ~/.config/starship.toml
+
+[status]
+style = "bg:blue"
+symbol = "💣 "
+format = "[\\[$symbol$status\\]]($style) "
+disabled = false
+
+```
+
 ## Terraform
 
 The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
@@ -2005,7 +2048,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 
 ### Optionen
 
-| Option     | Standartwert                         | Beschreibung                                          |
+| Option     | Standardwert                         | Beschreibung                                          |
 | ---------- | ------------------------------------ | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
 | `symbol`   | `"💠 "`                               | A format string shown before the terraform workspace. |
