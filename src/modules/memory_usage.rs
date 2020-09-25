@@ -33,8 +33,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         _ => "%",
     };
 
-    // As we default to disabled=true, we have to check here after loading our config module,
-    // before it was only checking against whatever is in the config starship.toml
     if config.disabled {
         return None;
     }
