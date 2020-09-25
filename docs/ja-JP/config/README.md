@@ -160,7 +160,7 @@ add_newline = false
 ```toml
 format = "$all"
 
-# 以下と同等です
+# Which is equivalent to
 format = """
 
 $username\
@@ -210,6 +210,7 @@ $line_break\
 $jobs\
 $battery\
 $time\
+$status\
 $character"""
 ```
 
@@ -1995,6 +1996,48 @@ The `swift` module shows the currently installed version of Swift. 次の条件�
 
 [swift]
 format = "via [🏎  $version](red bold)"
+```
+
+## Status
+
+The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
+
+::: tip
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. :::
+
+### オプション
+
+| 変数         | デフォルト                      | 説明                                                     |
+| ---------- | -------------------------- | ------------------------------------------------------ |
+| `format`   | `[$symbol$status]($style)` | The format of the module                               |
+| `symbol`   | `"✖"`                      | A format string representing the symbol for the status |
+| `style`    | `"bold red"`               | モジュールのスタイルです。                                          |
+| `disabled` | `true`                     | Disables the `status` module.                          |
+
+
+### 変数
+
+| 変数        | 設定例   | 説明                                |
+| --------- | ----- | --------------------------------- |
+| status    | `127` | The exit code of the last command |
+| symbol    |       | オプション `記号` の値をミラーする               |
+| style\* |       | オプション `style` の値をミラーする            |
+
+\*: This variable can only be used as a part of a style string
+
+
+### 設定例
+```toml
+
+# ~/.config/starship.toml
+
+[status]
+style = "bg:blue"
+symbol = "💣 "
+format = "[\\[$symbol$status\\]]($style) "
+disabled = false
+
 ```
 
 ## Terraform
