@@ -209,6 +209,7 @@ $line_break\
 $jobs\
 $battery\
 $time\
+$status\
 $character"""
 ```
 
@@ -1994,6 +1995,48 @@ The `swift` module shows the currently installed version of Swift. Модуль 
 
 [swift]
 format = "via [🏎  $version](red bold)"
+```
+
+## Status
+
+The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
+
+::: tip Подсказка
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. :::
+
+### Опции
+
+| Переменная | По умолчанию               | Описание                                               |
+| ---------- | -------------------------- | ------------------------------------------------------ |
+| `format`   | `[$symbol$status]($style)` | The format of the module                               |
+| `symbol`   | `"✖"`                      | A format string representing the symbol for the status |
+| `style`    | `"bold red"`               | Стиль модуля.                                          |
+| `disabled` | `true`                     | Disables the `status` module.                          |
+
+
+### Variables
+
+| Переменная | Пример | Описание                             |
+| ---------- | ------ | ------------------------------------ |
+| status     | `127`  | The exit code of the last command    |
+| symbol     |        | Mirrors the value of option `symbol` |
+| style\*  |        | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+
+### Пример
+```toml
+
+# ~/.config/starship.toml
+
+[status]
+style = "bg:blue"
+symbol = "💣 "
+format = "[\\[$symbol$status\\]]($style) "
+disabled = false
+
 ```
 
 ## Terraform
