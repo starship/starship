@@ -160,7 +160,7 @@ El `format` predeterminado se utiliza para definir el formato del prompt, si est
 ```toml
 format = "$all"
 
-# Que es es equivalente a
+# Which is equivalent to
 format = """
 
 $username\
@@ -210,6 +210,7 @@ $line_break\
 $jobs\
 $battery\
 $time\
+$status\
 $character"""
 ```
 
@@ -1997,6 +1998,48 @@ The `swift` module shows the currently installed version of Swift. El módulo se
 format = "via [🏎  $version](red bold)"
 ```
 
+## Status
+
+The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
+
+::: tip
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. :::
+
+### Opciones
+
+| Variable   | Por defecto                | Descripción                                            |
+| ---------- | -------------------------- | ------------------------------------------------------ |
+| `format`   | `[$symbol$status]($style)` | The format of the module                               |
+| `symbol`   | `"✖"`                      | A format string representing the symbol for the status |
+| `style`    | `"bold red"`               | El estilo del módulo.                                  |
+| `disabled` | `true`                     | Disables the `status` module.                          |
+
+
+### Variables
+
+| Variable  | Ejemplo | Descripción                            |
+| --------- | ------- | -------------------------------------- |
+| status    | `127`   | The exit code of the last command      |
+| symbol    |         | Refleja el valor de la opción `symbol` |
+| style\* |         | Refleja el valor de la opción `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+
+### Ejemplo
+```toml
+
+# ~/.config/starship.toml
+
+[status]
+style = "bg:blue"
+symbol = "💣 "
+format = "[\\[$symbol$status\\]]($style) "
+disabled = false
+
+```
+
 ## Terraform
 
 The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). El módulo se muestra si algunas de las siguientes condiciones se cumplen:
@@ -2210,11 +2253,11 @@ The order in which custom modules are shown can be individually set by including
 
 ### Variables
 
-| Variable  | Descripción                               |
-| --------- | ----------------------------------------- |
-| output    | La salida del comando de shell en `shell` |
-| symbol    | Refleja el valor de la opción `symbol`    |
-| style\* | Refleja el valor de la opción `style`     |
+| Variable  | Descripción                            |
+| --------- | -------------------------------------- |
+| output    | The output of shell command in `shell` |
+| symbol    | Refleja el valor de la opción `symbol` |
+| style\* | Refleja el valor de la opción `style`  |
 
 \*: This variable can only be used as a part of a style string
 
@@ -2253,8 +2296,8 @@ Automatic detection of shells and proper parameters addition are currently imple
 # ~/.config/starship.toml
 
 [custom.foo]
-command = "echo foo"  # muestra la salida del comando
-files = ["foo"]       # se pueden especificar filtros
+command = "echo foo"  # shows output of command
+files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 prefix = " transcending "
 
@@ -2274,18 +2317,18 @@ The `purescript` module shows the currently installed version of PureScript vers
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                                 |
-| ---------- | ---------------------------------- | ----------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                      |
-| `symbol`   | `"<=> "`                     | El símbolo usado antes de mostrar la versión de PureScript. |
-| `style`    | `"bold white"`                     | El estilo del módulo.                                       |
-| `disabled` | `false`                            | Deshabilita el módulo `purescript`.                         |
+| Opción     | Por defecto                        | Descripción                                                  |
+| ---------- | ---------------------------------- | ------------------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                       |
+| `symbol`   | `"<=> "`                     | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"`                     | El estilo del módulo.                                        |
+| `disabled` | `false`                            | Disables the `purescript` module.                            |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `0.13.5` | La versión de `purescript`             |
+| version   | `0.13.5` | The version of `purescript`            |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
