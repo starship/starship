@@ -232,6 +232,7 @@ $line_break\
 $jobs\
 $battery\
 $time\
+$status\
 $character"""
 ```
 
@@ -1090,7 +1091,7 @@ that information will be shown too.
 | `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
 | `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
 | `style`        | `"bold yellow"`                                                 | The style for the module.                                                               |
-| `format`       | `"[\\($state( $progress_current/$progress_total)\\)]($style) "` | The format for the module.                                                              |
+| `format`       | `"\\([$state( $progress_current/$progress_total)]($style)\\) "` | The format for the module.                                                              |
 | `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
 
 ### Variables
@@ -2097,6 +2098,51 @@ The module will be shown if any of the following conditions are met:
 
 [swift]
 format = "via [🏎  $version](red bold)"
+```
+
+## Status
+
+The `status` module displays the exit code of the previous command.
+The module will be shown only if the exit code is not `0`.
+
+::: tip
+                                                              
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+:::
+
+### Options
+
+| Variable   | Default                       | Description                                            |
+| ---------- | ----------------------------- | ------------------------------------------------------ |
+| `format`   | `[$symbol$status]($style) `   | The format of the module                               |
+| `symbol`   | `"✖"`                         | A format string representing the symbol for the status |
+| `style`    | `"bold red"`                  | The style for the module.                              |
+| `disabled` | `true`                        | Disables the `status` module.                          |
+
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| status   | `127`    | The exit code of the last command    |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+
+### Example
+```toml
+
+# ~/.config/starship.toml
+
+[status]
+style = "bg:blue"
+symbol = "💣 "
+format = "[\\[$symbol$status\\]]($style) "
+disabled = false
+
 ```
 
 ## Terraform

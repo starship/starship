@@ -42,6 +42,7 @@ mod ruby;
 mod rust;
 mod shlvl;
 mod singularity;
+mod status;
 mod swift;
 mod terraform;
 mod time;
@@ -108,6 +109,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "shlvl" => shlvl::module(context),
             "singularity" => singularity::module(context),
             "swift" => swift::module(context),
+            "status" => status::module(context),
             "terraform" => terraform::module(context),
             "time" => time::module(context),
             "crystal" => crystal::module(context),
@@ -179,6 +181,7 @@ pub fn description(module: &str) -> &'static str {
         "rust" => "The currently installed version of Rust",
         "swift" => "The currently installed version of Swift",
         "shlvl" => "The current value of SHLVL",
+        "status" => "The status of the last command",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "username" => "The active user's username",

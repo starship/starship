@@ -190,7 +190,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
-        let expected = Some(format!("{} ", Color::Yellow.bold().paint("(REBASING 1/1)")));
+        let expected = Some(format!("({}) ", Color::Yellow.bold().paint("REBASING 1/1")));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -205,7 +205,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
-        let expected = Some(format!("{} ", Color::Yellow.bold().paint("(MERGING)")));
+        let expected = Some(format!("({}) ", Color::Yellow.bold().paint("MERGING")));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -221,8 +221,8 @@ mod tests {
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
         let expected = Some(format!(
-            "{} ",
-            Color::Yellow.bold().paint("(CHERRY-PICKING)")
+            "({}) ",
+            Color::Yellow.bold().paint("CHERRY-PICKING")
         ));
 
         assert_eq!(expected, actual);
@@ -238,7 +238,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
-        let expected = Some(format!("{} ", Color::Yellow.bold().paint("(BISECTING)")));
+        let expected = Some(format!("({}) ", Color::Yellow.bold().paint("BISECTING")));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -253,7 +253,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
-        let expected = Some(format!("{} ", Color::Yellow.bold().paint("(REVERTING)")));
+        let expected = Some(format!("({}) ", Color::Yellow.bold().paint("REVERTING")));
 
         assert_eq!(expected, actual);
         repo_dir.close()
