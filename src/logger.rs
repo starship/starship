@@ -12,6 +12,7 @@ use std::{
 pub struct StarshipLogger {
     log_file: Arc<Mutex<File>>,
     log_file_content: Arc<HashSet<String>>,
+    log_level: Level,
 }
 
 impl StarshipLogger {
@@ -24,7 +25,7 @@ impl StarshipLogger {
                     .join(".cache/starship")
             });
 
-        fs::create_dir_all(log_dir.clone()).expect("Unable to create log dir!");
+        fs::create_dir_all(&log_dir).expect("Unable to create log dir!");
         let session_log_file = log_dir.join(format!(
             "session_{}.log",
             env::var("STARSHIP_SESSION_KEY").unwrap_or_default()
@@ -32,7 +33,7 @@ impl StarshipLogger {
 
         Self {
             log_file_content: Arc::new(
-                fs::read_to_string(session_log_file.clone())
+                fs::read_to_string(&session_log_file)
                     .unwrap_or_default()
                     .lines()
                     .map(|line| line.to_string())
@@ -45,13 +46,23 @@ impl StarshipLogger {
                     .open(session_log_file)
                     .unwrap(),
             )),
+            log_level: env::var("STARSHIP_LOG")
+                .map(|level| match level.to_lowercase().as_str() {
+                    "trace" => Level::Trace,
+                    "debug" => Level::Debug,
+                    "info" => Level::Info,
+                    "warn" => Level::Warn,
+                    "error" => Level::Error,
+                    _ => Level::Warn,
+                })
+                .unwrap_or_else(|_| Level::Warn),
         }
     }
 }
 
 impl log::Log for StarshipLogger {
     fn enabled(&self, metadata: &Metadata) -> bool {
-        metadata.level() <= Level::Warn
+        metadata.level() <= self.log_level
     }
 
     fn log(&self, record: &Record) {
@@ -61,12 +72,6 @@ impl log::Log for StarshipLogger {
             record.module_path().unwrap_or_default(),
             record.args()
         );
-
-        self.log_file
-            .lock()
-            .map(|mut file| writeln!(file, "{}", to_print))
-            .expect("Log file writer mutex was poisoned!")
-            .expect("Unable to write to the log file!");
 
         if self.enabled(record.metadata()) && !self.log_file_content.contains(to_print.as_str()) {
             eprintln!(
@@ -81,6 +86,11 @@ impl log::Log for StarshipLogger {
                 record.module_path().unwrap_or_default(),
                 record.args()
             );
+            self.log_file
+                .lock()
+                .map(|mut file| writeln!(file, "{}", to_print))
+                .expect("Log file writer mutex was poisoned!")
+                .expect("Unable to write to the log file!");
         }
     }
 
