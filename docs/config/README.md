@@ -1120,7 +1120,6 @@ current directory.
 | `staged`          | `"+"`                                       | The format of `staged`                               |
 | `renamed`         | `"»"`                                       | The format of `renamed`                              |
 | `deleted`         | `"✘"`                                       | The format of `deleted`                              |
-| `show_sync_count` | `false`                                     | Show ahead/behind count of the branch being tracked. |
 | `style`           | `"bold red"`                                | The style for the module.                            |
 | `disabled`        | `false`                                     | Disables the `git_status` module.                    |
 
@@ -1172,6 +1171,16 @@ modified = "📝"
 staged = '[++\($count\)](green)'
 renamed = "👅"
 deleted = "🗑"
+```
+
+Show ahead/behind count of the branch being tracked
+```toml
+# ~/.config/starship.toml
+
+[git_status]
+ahead = "⇡${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+behind = "⇣${count}"
 ```
 
 ## Golang
