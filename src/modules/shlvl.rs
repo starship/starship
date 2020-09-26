@@ -12,6 +12,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("shlvl");
     let config: ShLvlConfig = ShLvlConfig::try_load(module.config);
 
+    // As we default to disabled=true, we have to check here after loading our config module,
+    // before it was only checking against whatever is in the config starship.toml
     if config.disabled || shlvl < config.threshold {
         return None;
     }
@@ -45,6 +47,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     Some(module)
 }
+
 #[cfg(test)]
 mod tests {
     use ansi_term::{Color, Style};
