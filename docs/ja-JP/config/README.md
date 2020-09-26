@@ -1054,22 +1054,21 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ### オプション
 
-| オプション             | デフォルト                                           | 説明                                                   |
-| ----------------- | ----------------------------------------------- | ---------------------------------------------------- |
-| `format`          | "([\[$all_status$ahead_behind\]]($style) )" | `git_status` のデフォルトフォーマット                            |
-| `conflicted`      | `"="`                                           | このブランチにはマージの競合があります。                                 |
-| `ahead`           | `"⇡"`                                           | `ahead`のフォーマット                                       |
-| `behind`          | `"⇣"`                                           | `behind`のフォーマット                                      |
-| `diverged`        | `"⇕"`                                           | `diverged`のフォーマット                                    |
-| `untracked`       | `"?"`                                           | The format of `untracked`                            |
-| `stashed`         | `"$"`                                           | The format of `stashed`                              |
-| `modified`        | `"!"`                                           | The format of `modified`                             |
-| `staged`          | `"+"`                                           | The format of `staged`                               |
-| `renamed`         | `"»"`                                           | The format of `renamed`                              |
-| `deleted`         | `"✘"`                                           | The format of `deleted`                              |
-| `show_sync_count` | `false`                                         | Show ahead/behind count of the branch being tracked. |
-| `style`           | `"bold red"`                                    | モジュールのスタイルです。                                        |
-| `disabled`        | `false`                                         | Disables the `git_status` module.                    |
+| オプション        | デフォルト                                           | 説明                                |
+| ------------ | ----------------------------------------------- | --------------------------------- |
+| `format`     | "([\[$all_status$ahead_behind\]]($style) )" | `git_status` のデフォルトフォーマット         |
+| `conflicted` | `"="`                                           | このブランチにはマージの競合があります。              |
+| `ahead`      | `"⇡"`                                           | `ahead`のフォーマット                    |
+| `behind`     | `"⇣"`                                           | `behind`のフォーマット                   |
+| `diverged`   | `"⇕"`                                           | `diverged`のフォーマット                 |
+| `untracked`  | `"?"`                                           | The format of `untracked`         |
+| `stashed`    | `"$"`                                           | The format of `stashed`           |
+| `modified`   | `"!"`                                           | The format of `modified`          |
+| `staged`     | `"+"`                                           | The format of `staged`            |
+| `renamed`    | `"»"`                                           | The format of `renamed`           |
+| `deleted`    | `"✘"`                                           | The format of `deleted`           |
+| `style`      | `"bold red"`                                    | モジュールのスタイルです。                     |
+| `disabled`   | `false`                                         | Disables the `git_status` module. |
 
 ### 変数
 
@@ -1119,6 +1118,16 @@ modified = "📝"
 staged = '[++\($count\)](green)'
 renamed = "👅"
 deleted = "🗑"
+```
+
+Show ahead/behind count of the branch being tracked
+```toml
+# ~/.config/starship.toml
+
+[git_status]
+ahead = "⇡${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+behind = "⇣${count}"
 ```
 
 ## Golang
