@@ -1053,22 +1053,21 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 ### Options
 
-| Option            | Default                                         | Description                                          |
-| ----------------- | ----------------------------------------------- | ---------------------------------------------------- |
-| `format`          | "([\[$all_status$ahead_behind\]]($style) )" | The default format for `git_status`                  |
-| `conflicted`      | `"="`                                           | This branch has merge conflicts.                     |
-| `ahead`           | `"⇡"`                                           | The format of `ahead`                                |
-| `behind`          | `"⇣"`                                           | The format of `behind`                               |
-| `diverged`        | `"⇕"`                                           | The format of `diverged`                             |
-| `untracked`       | `"?"`                                           | The format of `untracked`                            |
-| `stashed`         | `"$"`                                           | The format of `stashed`                              |
-| `modified`        | `"!"`                                           | The format of `modified`                             |
-| `staged`          | `"+"`                                           | The format of `staged`                               |
-| `renamed`         | `"»"`                                           | The format of `renamed`                              |
-| `deleted`         | `"✘"`                                           | The format of `deleted`                              |
-| `show_sync_count` | `false`                                         | Show ahead/behind count of the branch being tracked. |
-| `style`           | `"bold red"`                                    | The style for the module.                            |
-| `disabled`        | `false`                                         | Disables the `git_status` module.                    |
+| Option       | Default                                         | Description                         |
+| ------------ | ----------------------------------------------- | ----------------------------------- |
+| `format`     | "([\[$all_status$ahead_behind\]]($style) )" | The default format for `git_status` |
+| `conflicted` | `"="`                                           | This branch has merge conflicts.    |
+| `ahead`      | `"⇡"`                                           | The format of `ahead`               |
+| `behind`     | `"⇣"`                                           | The format of `behind`              |
+| `diverged`   | `"⇕"`                                           | The format of `diverged`            |
+| `untracked`  | `"?"`                                           | The format of `untracked`           |
+| `stashed`    | `"$"`                                           | The format of `stashed`             |
+| `modified`   | `"!"`                                           | The format of `modified`            |
+| `staged`     | `"+"`                                           | The format of `staged`              |
+| `renamed`    | `"»"`                                           | The format of `renamed`             |
+| `deleted`    | `"✘"`                                           | The format of `deleted`             |
+| `style`      | `"bold red"`                                    | The style for the module.           |
+| `disabled`   | `false`                                         | Disables the `git_status` module.   |
 
 ### Variables
 
@@ -1118,6 +1117,16 @@ modified = "📝"
 staged = '[++\($count\)](green)'
 renamed = "👅"
 deleted = "🗑"
+```
+
+Show ahead/behind count of the branch being tracked
+```toml
+# ~/.config/starship.toml
+
+[git_status]
+ahead = "⇡${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+behind = "⇣${count}"
 ```
 
 ## Golang
