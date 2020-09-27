@@ -58,8 +58,8 @@ pub const PROMPT_ORDER: &[&str] = &[
     "gcloud",
     "env_var",
     "crystal",
-    "cmd_duration",
     "custom",
+    "cmd_duration",
     "line_break",
     "jobs",
     #[cfg(feature = "battery")]
