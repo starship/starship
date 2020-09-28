@@ -33,7 +33,21 @@ Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
 
-### Терминология
+### Logging
+
+By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+
+```sh
+export STARSHIP_CACHE=~/.starship/cache
+```
+
+Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+
+```ps1
+$ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
+```
+
+### Terminology
 
 **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
@@ -319,7 +333,7 @@ charging_symbol = "⚡️"
 discharging_symbol = "💀"
 ```
 
-### Отображение батареи
+### Battery Display
 
 The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
 
@@ -341,15 +355,15 @@ The `display` option is an array of the following table.
 #### Пример
 
 ```toml
-[[battery.display]] # стиль "bold red" (жирный красный) если заряд между 0% и 10%
+[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]] # стиль "bold yellow" (жирный желтый) если заряд между 10% и 30%
+[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
 
-# когда заряд батареи больше 30%, индикатор батареи скрыт
+# when capacity is over 30%, the battery indicator will not be displayed
 
 ```
 
@@ -481,7 +495,7 @@ format = "underwent [$duration](bold yellow)"
 
 The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
-::: tip Подсказка
+::: tip
 
 This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
@@ -1349,7 +1363,7 @@ symbol = "∴ "
 
 Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-::: tip Подсказка
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -1414,7 +1428,7 @@ The `memory_usage` module shows current system memory and swap usage.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
-::: tip Подсказка
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2009,7 +2023,7 @@ format = "via [🏎  $version](red bold)"
 
 The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
 
-::: tip Подсказка
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. :::
 
@@ -2098,7 +2112,7 @@ format = "[🏎💨 $workspace]($style) "
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
-::: tip Подсказка
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2224,19 +2238,19 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a file whose extension is in `extensions`
 - The `when` command returns 0
 
-::: tip Подсказка
+::: tip
 
 Multiple custom modules can be defined by using a `.`.
 
 :::
 
-::: tip Подсказка
+::: tip
 
 The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
 
 :::
 
-::: tip Подсказка
+::: tip
 
 [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
 
