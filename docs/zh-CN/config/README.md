@@ -33,7 +33,21 @@ Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
 
-### 术语
+### Logging
+
+By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+
+```sh
+export STARSHIP_CACHE=~/.starship/cache
+```
+
+Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+
+```ps1
+$ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
+```
+
+### Terminology
 
 **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
@@ -319,7 +333,7 @@ charging_symbol = "⚡️"
 discharging_symbol = "💀"
 ```
 
-### Battery 组件的显示
+### Battery Display
 
 The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
 
@@ -341,15 +355,15 @@ The `display` option is an array of the following table.
 #### 示例
 
 ```toml
-[[battery.display]]  # 当电量在 0% 到 10% 时以 "bold red" 样式显示
+[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # 当电量在 10% 到 30% 时以 "bold yellow" 样式显示
+[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
 
-# 当电量在 30% 时以上时，电池指示器组件将不会显示出来
+# when capacity is over 30%, the battery indicator will not be displayed
 
 ```
 
