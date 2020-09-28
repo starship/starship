@@ -1054,21 +1054,21 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ### オプション
 
-| オプション        | デフォルト                                           | 説明                                |
-| ------------ | ----------------------------------------------- | --------------------------------- |
-| `format`     | "([\[$all_status$ahead_behind\]]($style) )" | `git_status` のデフォルトフォーマット         |
-| `conflicted` | `"="`                                           | このブランチにはマージの競合があります。              |
-| `ahead`      | `"⇡"`                                           | `ahead`のフォーマット                    |
-| `behind`     | `"⇣"`                                           | `behind`のフォーマット                   |
-| `diverged`   | `"⇕"`                                           | `diverged`のフォーマット                 |
-| `untracked`  | `"?"`                                           | The format of `untracked`         |
-| `stashed`    | `"$"`                                           | The format of `stashed`           |
-| `modified`   | `"!"`                                           | The format of `modified`          |
-| `staged`     | `"+"`                                           | The format of `staged`            |
-| `renamed`    | `"»"`                                           | The format of `renamed`           |
-| `deleted`    | `"✘"`                                           | The format of `deleted`           |
-| `style`      | `"bold red"`                                    | モジュールのスタイルです。                     |
-| `disabled`   | `false`                                         | Disables the `git_status` module. |
+| オプション        | デフォルト                                         | 説明                                |
+| ------------ | --------------------------------------------- | --------------------------------- |
+| `format`     | `"[\[$all_status$ahead_behind\]]($style) "` | `git_status` のデフォルトフォーマット         |
+| `conflicted` | `"="`                                         | このブランチにはマージの競合があります。              |
+| `ahead`      | `"⇡"`                                         | `ahead`のフォーマット                    |
+| `behind`     | `"⇣"`                                         | `behind`のフォーマット                   |
+| `diverged`   | `"⇕"`                                         | `diverged`のフォーマット                 |
+| `untracked`  | `"?"`                                         | The format of `untracked`         |
+| `stashed`    | `"$"`                                         | The format of `stashed`           |
+| `modified`   | `"!"`                                         | The format of `modified`          |
+| `staged`     | `"+"`                                         | The format of `staged`            |
+| `renamed`    | `"»"`                                         | The format of `renamed`           |
+| `deleted`    | `"✘"`                                         | The format of `deleted`           |
+| `style`      | `"bold red"`                                  | モジュールのスタイルです。                     |
+| `disabled`   | `false`                                       | Disables the `git_status` module. |
 
 ### 変数
 
@@ -1831,7 +1831,6 @@ python_binary = "python3"
 [python]
 symbol = "👾 "
 pyenv_version_name = true
-pyenv_prefix = "foo "
 ```
 
 ## Ruby
@@ -2308,12 +2307,11 @@ Automatic detection of shells and proper parameters addition are currently imple
 command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
-prefix = " transcending "
+format = " transcending [$output]($style)"
 
 [custom.time]
 command = "time /T"
 files = ["*.pst"]
-prefix = "transcending "
 shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 ```
 
