@@ -137,7 +137,7 @@ error_symbol = "[✖](bold red) "
 **Changes to the Default Configuration**
 
 ```diff
-[cmd_duration]
+[directory]
 -- prefix = "in "
 ++ format = "[$path]($style)[$lock_symbol]($lock_style)"
 ```
@@ -152,7 +152,7 @@ error_symbol = "[✖](bold red) "
 **Changes to the Default Configuration**
 
 ```diff
-[cmd_duration]
+[env_var]
 -- prefix = ""
 -- suffix = ""
 ++ format = "with [$env_value]($style) "
@@ -168,7 +168,7 @@ error_symbol = "[✖](bold red) "
 **Changes to the Default Configuration**
 
 ```diff
-[cmd_duration]
+[git_commit]
 -- prefix = "("
 -- suffix = ")"
 ++ format = "[\\($hash\\)]($style) "
@@ -180,14 +180,31 @@ error_symbol = "[✖](bold red) "
 | ------------------- | ----------- |
 | `prefix`            | `format`    |
 | `suffix`            | `format`    |
+| `show_sync_count`   | `format`    |
 
 **Changes to the Default Configuration**
 
 ```diff
-[cmd_duration]
+[git_status]
 -- prefix = "["
 -- suffix = "]"
+-- show_sync_count = false
 ++ format = "([$all_status$ahead_behind] )"
+```
+
+Previously, the `show_sync_count` property was used to configure the prompt to
+show the number of commits the branch was ahead or behind the remote branch.
+
+With the release of v0.45.0, this has been replaced with the
+
+To configure the prompt to use the older `show_sync_count = true`
+configuration, set the following to your config file:
+
+```toml
+[git_status]
+ahead = "⇡${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+behind = "⇣${count}"
 ```
 
 #### Hostname
@@ -200,7 +217,7 @@ error_symbol = "[✖](bold red) "
 **Changes to the Default Configuration**
 
 ```diff
-[cmd_duration]
+[hostname]
 -- prefix = ""
 -- suffix = ""
 ++ format = "[$hostname]($style) in "
@@ -217,7 +234,7 @@ error_symbol = "[✖](bold red) "
 **Changes to the Default Configuration**
 
 ```diff
-[cmd_duration]
+[singularity]
 -- prefix = ""
 -- suffix = ""
 ++ format = "[$symbol\\[$env\\]]($style) "
@@ -248,7 +265,7 @@ error_symbol = "[✖](bold red) "
 **Changes to the Default Configuration**
 
 ```diff
-[cmd_duration]
+[custom.example]
 -- prefix = ""
 -- suffix = ""
 ++ format = "[$symbol$output]($style) "
