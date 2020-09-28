@@ -199,7 +199,7 @@ impl StarshipConfig {
     fn config_from_file() -> Option<Value> {
         let file_path = if let Ok(path) = env::var("STARSHIP_CONFIG") {
             // Use $STARSHIP_CONFIG as the config path if available
-            log::debug!("STARSHIP_CONFIG is set: \n{}", &path);
+            log::debug!("STARSHIP_CONFIG is set: {}", &path);
             path
         } else {
             // Default to using ~/.config/starship.toml
@@ -212,22 +212,22 @@ impl StarshipConfig {
 
         let toml_content = match utils::read_file(&file_path) {
             Ok(content) => {
-                log::trace!("Config file content: \n{}", &content);
+                log::trace!("Config file content: \"\n{}\"", &content);
                 Some(content)
             }
             Err(e) => {
-                log::debug!("Unable to read config file content: \n{}", &e);
+                log::debug!("Unable to read config file content: {}", &e);
                 None
             }
         }?;
 
         match toml::from_str(&toml_content) {
             Ok(parsed) => {
-                log::debug!("Config parsed: \n{:?}", &parsed);
+                log::debug!("Config parsed: {:?}", &parsed);
                 Some(parsed)
             }
             Err(error) => {
-                log::debug!("Unable to parse the config file: {}", error);
+                log::error!("Unable to parse the config file: {}", error);
                 None
             }
         }
@@ -238,7 +238,7 @@ impl StarshipConfig {
         let module_config = self.get_config(&[module_name]);
         if module_config.is_some() {
             log::debug!(
-                "Config found for \"{}\": \n{:?}",
+                "Config found for \"{}\": {:?}",
                 &module_name,
                 &module_config
             );
@@ -302,7 +302,7 @@ impl StarshipConfig {
         let module_config = self.get_config(&["custom", module_name]);
         if module_config.is_some() {
             log::debug!(
-                "Custom config found for \"{}\": \n{:?}",
+                "Custom config found for \"{}\": {:?}",
                 &module_name,
                 &module_config
             );

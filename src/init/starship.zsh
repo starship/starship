@@ -62,3 +62,6 @@ zle-keymap-select() {
 STARSHIP_START_TIME=$(::STARSHIP:: time)
 zle -N zle-keymap-select
 export STARSHIP_SHELL="zsh"
+
+# Set up the session key that will be used to store logs
+export STARSHIP_SESSION_KEY=$(::STARSHIP:: session)

@@ -24,8 +24,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    // TODO: Once error handling is implemented, warn the user if their config
-    // truncation length is nonsensical
     let len = if config.truncation_length <= 0 {
         log::warn!(
             "\"truncation_length\" should be a positive value, found {}",

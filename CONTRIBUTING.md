@@ -72,7 +72,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 ## Logging
 
-Debug logging in starship is done with [pretty_env_logger](https://crates.io/crates/pretty_env_logger).
+Debug logging in starship is done with our custom logger implementation.
 To run starship with debug logs, set the `STARSHIP_LOG` environment variable to the log level needed.
 For example, to enable the trace logs, run the following:
 

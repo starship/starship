@@ -9,6 +9,7 @@ mod configure;
 mod context;
 mod formatter;
 mod init;
+mod logger;
 mod module;
 mod modules;
 mod print;
@@ -20,9 +21,11 @@ mod test;
 
 use crate::module::ALL_MODULES;
 use clap::{App, AppSettings, Arg, Shell, SubCommand};
+use rand::distributions::Alphanumeric;
+use rand::Rng;
 
 fn main() {
-    pretty_env_logger::init_custom_env("STARSHIP_LOG");
+    logger::init();
 
     let status_code_arg = Arg::with_name("status_code")
         .short("s")
@@ -153,7 +156,8 @@ fn main() {
                         .required(true)
                         .env("STARSHIP_SHELL"),
                 ),
-        );
+        )
+        .subcommand(SubCommand::with_name("session").about("Generate random session key"));
 
     let matches = app.clone().get_matches();
 
@@ -209,6 +213,13 @@ fn main() {
 
             app.gen_completions_to("starship", shell, &mut io::stdout().lock());
         }
+        ("session", _) => println!(
+            "{}",
+            rand::thread_rng()
+                .sample_iter(&Alphanumeric)
+                .take(16)
+                .collect::<String>()
+        ),
         (command, _) => unreachable!("Invalid subcommand: {}", command),
     }
 }
