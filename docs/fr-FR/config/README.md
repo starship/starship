@@ -33,23 +33,37 @@ De manière équivalente, pour Powershell (Windows), ajoutez la ligne suivante �
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
 
-### Terminologie
+### Logging
 
-**Module**: Un composant dans l'invite de commande donnant des informations basées sur des données contextuelles de votre OS. Par exemple, le module "nodejs" montre la version de NodeJS qui est actuellement installée sur votre ordinateur si votre répertoire actuel est un projet NodeJS.
+By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
 
-**Variable**: Petits sous-composants qui contiennent des informations fournies par le module. Par exemple, la variable "version" dans le module "nodejs" contient la version actuelle de NodeJS.
+```sh
+export STARSHIP_CACHE=~/.starship/cache
+```
 
-Par convention, la plupart des modules ont un préfixe de la couleur par défaut du terminal (par exemple `via` dans "nodejs") et un espace vide comme suffixe.
+De manière équivalente, pour Powershell (Windows), ajoutez la ligne suivante à votre `$PROFILE`:
 
-### Chaîne de formatage
+```ps1
+$ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
+```
 
-Les chaînes de formatage sont le format avec lequel un module affiche toutes ses variables. La plupart des modules ont une entrée appelée `format` qui configure le format d'affichage du module. Vous pouvez utiliser des textes, des variables et des groupes de texte dans une chaîne de format.
+### Terminology
+
+**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
+
+**Variable**: Smaller sub-components that contains information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
+
+By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+
+### Format Strings
+
+Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
 
 #### Variable
 
-Une variable contient un symbole `$` suivi du nom de la variable. Le nom d'une variable ne contient que des lettres, des chiffres et `_`.
+A variable contains a `$` symbol followed by the name of the variable. The name of a variable only contains letters, numbers and `_`.
 
-Par exemple :
+For example:
 
 - `$version` est une chaîne de formatage avec une variable nommée `version`.
 - `$git_branch$git_commit` est une chaîne de formatage avec deux variables appelées `git_branch` et `git_commit`.
@@ -57,13 +71,13 @@ Par exemple :
 
 #### Groupe de texte
 
-Un groupe de texte se compose de deux parties différentes.
+A text group is made up of two different parts.
 
-La première partie, qui est entourée dans un `[]`, est une [chaîne de formatage](#format-strings). Vous pouvez y ajouter des textes, des variables, ou même des groupes de texte imbriqués.
+The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
 
-La deuxième partie, qui est entourée par `()`, est une [chaîne de style](#style-strings). Ceci peut être utilisé pour styliser la première partie.
+In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
 
-Par exemple :
+For example:
 
 - `[on](red bold)` affichera une chaîne de caractères `on` avec un texte gras de couleur rouge.
 - `[⬢ $version](bold green)` affichera un symbole `⬢` suivi du contenu de la variable `version`, avec un texte en gras de couleur verte.
@@ -71,7 +85,7 @@ Par exemple :
 
 #### Chaînes de style
 
-La plupart des modules de Starship vous permettent de configurer leurs styles d'affichage. Cela se fait avec une entrée (généralement appelée `style`) qui est une chaîne de caractères spécifiant la configuration. Voici quelques exemples de chaînes de style avec ce qu'elles font. Pour plus de détails sur la syntaxe complète, consultez le [guide de configuration avancé](/advanced-config/).
+Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
 - `"fg:green bg:blue"` définit un texte vert sur un fond bleu
 - `"bg:blue fg:bright-green"` définit un texte vert clair sur un fond bleu
@@ -80,13 +94,13 @@ La plupart des modules de Starship vous permettent de configurer leurs styles d'
 - `"bold italic fg:purple"` définit le texte en italique et gras sur un fond violet
 - `""` désactive explicitement tous les styles
 
-Notez que ce style sera contrôlé par votre émulateur de terminal. Par exemple, certains émulateurs de terminal éclairciront les couleurs au lieu de mettre le texte en gras, et certains thèmes de couleurs utilisent les mêmes valeurs pour les couleurs normales et claires. De plus, pour obtenir du texte italique, votre terminal doit prendre en charge l'italique.
+Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
 #### Chaînes de formatage conditionnel
 
-Une chaîne de formatage conditionnel enveloppée dans `(` et `)` ne sera pas rendue si toutes les variables à l'intérieur sont vides.
+A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-Par exemple :
+For example:
 
 - `(@$region)` ne montrera rien si la variable `région` est `None`, sinon `@` suivi de la valeur de la région.
 - `(some text)` ne montrera toujours rien puisqu'il n'y a pas de variables enveloppées dans les accolades.
@@ -94,7 +108,7 @@ Par exemple :
 
 #### Caractère d’échappement
 
-Les symboles suivants ont une utilisation spéciale dans une chaîne de formatage. Si vous voulez afficher les symboles suivants, vous devez les échapper avec un antislash (`\`).
+The following symbols have special usage in a format string. If you want to print the following symbols, you have to escape them with a backslash (`\`).
 
 - \$
 - \\
@@ -103,20 +117,20 @@ Les symboles suivants ont une utilisation spéciale dans une chaîne de formatag
 - (
 - )
 
-Notez que `toml` a [sa propre syntaxe d'échappement](https://github.com/toml-lang/toml#user-content-string). Il est recommandé d'utiliser une chaîne littérale (`''`) dans votre configuration. Si vous voulez utiliser une chaîne de base (`""`), faites attention à l'échappement de l'antislash `\`.
+Note that `toml` has [its own escape syntax](https://github.com/toml-lang/toml#user-content-string). It is recommended to use a literal string (`''`) in your config. If you want to use a basic string (`""`), pay attention to escape the backslash `\`.
 
-Par exemple, lorsque vous voulez imprimer un symbole `$` sur une nouvelle ligne, les configurations suivantes pour le `formatage` sont équivalentes :
+For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
 
 ```toml
-# avec la chaîne de base
+# with basic string
 format = "\n\\$"
 
-# avec la chaîne de caractères de base multiligne
+# with multiline basic string
 format = """
 
 \\$"""
 
-# avec la chaîne littérale
+# with literal string
 format = '''
 
 \$'''
@@ -124,7 +138,7 @@ format = '''
 
 ## Invite
 
-Voici la liste des options de configuration globales de l'invite de commandes.
+This is the list of prompt-wide configuration options.
 
 ### Options
 
@@ -137,24 +151,24 @@ Voici la liste des options de configuration globales de l'invite de commandes.
 ### Exemple
 
 ```toml
-# ~/.config/starship. oml
+# ~/.config/starship.toml
 
-# Utilisez un format personnalisé
+# Use custom format
 format = """
 [┌───────────────────>](bold green)
 [│](bold green)$directory$rust$package
 [└─>](bold green) """
 
-# Attendez 10 millisecondes pour que starship vérifie les fichiers dans le répertoire de travail.
+# Wait 10 milliseconds for starship to check files under the current directory.
 scan_timeout = 10
 
-# Désactive la nouvelle ligne au démarrage de l'invite
+# Disable the newline at the start of the prompt
 add_newline = false
 ```
 
-### Format par Défaut
+### Default Prompt Format
 
-Le `format` par défaut est utilisé pour définir le format de l'invite, si il est vide ou mal `formaté`. La valeur par défaut est la suivante :
+The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
 
 ```toml
 format = "$all"
@@ -215,9 +229,9 @@ $character"""
 
 ## AWS
 
-Le module `aws` montre la région actuelle et le profil. Il est basé sur les variables d'environnement `AWS_REGION`, `AWS_DEFAULT_REGION`, et `AWS_PROFILE` via le fichier `~/.aws/config`.
+The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
 
-Quand [aws-vault](https://github.com/99designs/aws-vault) est utilisé, le profil est lu depuis la variable d'environnement `AWS_VAULT`.
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
 
 ### Options
 
@@ -238,9 +252,9 @@ Quand [aws-vault](https://github.com/99designs/aws-vault) est utilisé, le profi
 | symbol    |                  | Reflète la valeur de l'option `symbol` |
 | style\* |                  | Reflète la valeur de l'option `style`  |
 
-\* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
+\*: This variable can only be used as a part of a style string
 
-### Exemples
+### Examples
 
 #### Tout afficher
 
@@ -283,7 +297,7 @@ symbol = "🅰 "
 
 ## Battery
 
-Le module `battery` montre à quel point la batterie de l'appareil est chargée et son état de charge actuel. Ce module n'est visible que lorsque la batterie de l'appareil est inférieure à 10%.
+The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
 ### Options
 
@@ -297,14 +311,14 @@ Le module `battery` montre à quel point la batterie de l'appareil est chargée 
 | `disabled`           | `false`                           | Désactive le module `battery`.                      |
 
 <details>
-<summary>Il existe aussi des options pour des états de batterie peu communs.</summary>
+<summary>There are also options for some uncommon battery states.</summary>
 
 | Variable         | Description                                                   |
 | ---------------- | ------------------------------------------------------------- |
 | `unknown_symbol` | Le symbole affiché lorsque l'état de la batterie est inconnu. |
 | `empty_symbol`   | Le symbole affiché lorsque la batterie est vide.              |
 
-Remarque : L'indicateur de batterie sera masqué si le statut est `unknown` ou `empty` sauf si vous spécifiez l'option dans la configuration.
+Note: Battery indicator will be hidden if the status is `unknown` or `empty` unless you specify the option in the config.
 
 </details>
 
@@ -319,9 +333,9 @@ charging_symbol = "⚡️"
 discharging_symbol = "💀"
 ```
 
-### Indicateur de batterie
+### Battery Display
 
-L'option de configuration `display` est utilisée pour définir quand l'indicateur de batterie doit être affiché (seuil) et à quoi il ressemble (style). Si aucun `display` n'est fourni. La valeur par défaut est la suivante :
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
 
 ```toml
 [[battery.display]]
@@ -331,7 +345,7 @@ style = "bold red"
 
 #### Options
 
-L'option `display` est une array de la table suivante.
+The `display` option is an array of the following table.
 
 | Variable    | Description                                        |
 | ----------- | -------------------------------------------------- |
@@ -341,28 +355,28 @@ L'option `display` est une array de la table suivante.
 #### Exemple
 
 ```toml
-[[battery.display]]  # le style "bold red" lorsque la capacité est comprise entre 0% et 10% 
+[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # le style "bold yellow" quand la capacité est comprise entre 10% et 30%
+[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
 
-# lorsque la capacité est supérieure à 30%, l'indicateur de batterie ne sera pas affiché
+# when capacity is over 30%, the battery indicator will not be displayed
 
 ```
 
 ## Caractères
 
-Le module `character` affiche un caractère (habituellement une flèche) à côté de l'endroit où le texte est entré dans votre terminal.
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-Le caractère vous dira si la dernière commande a été réussie ou pas. Cela peut être fait de deux manières:
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - changement de couleur (`red`/`green`)
 - changement de forme (`❯`/`✖`)
 
-Par défaut, il ne change que la couleur. Si vous voulez également changer sa forme, jetez un œil à [cet exemple](#with-custom-error-shape).
+By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
 
 ### Options
 
@@ -380,7 +394,7 @@ Par défaut, il ne change que la couleur. Si vous voulez également changer sa f
 | -------- | ------- | --------------------------------------------------------------- |
 | symbol   |         | Reflète sois `success_symbol`, `error_symbol` ou `vicmd_symbol` |
 
-### Exemples
+### Examples
 
 #### Avec une forme d'erreur personnalisée
 
@@ -413,7 +427,7 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-Le module `cmake` affiche la version actuellement installée de CMake si :
+The `cmake` module shows the currently installed version of CMake if:
 
 - Le répertoire actuel contient un fichier `CMakeLists.txt`
 
@@ -434,19 +448,19 @@ Le module `cmake` affiche la version actuellement installée de CMake si :
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
-\* : Cette variable ne peut être utilisée que comme partie d'un style
+\*: This variable can only be used as a part of a style string
 
 ## Temps d'exécution
 
-Le module `cmd_duration` montre le temps qu'a pris la dernière commande a pris pour s'exécuter. Le module ne sera affiché que si la commande a pris plus de deux secondes, ou si la valeur de configuration `min_time` existe.
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: attention, n'accrochez pas la trappe DEBUG en Bash
+::: warning Do not hook the DEBUG trap in Bash
 
-Si vous utilisez starship en `bash`, n'accrochez pas `DEBUG` après avoir exécuté `eval $(starship init $0)`, ou ce module **cassera**.
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-Les utilisateurs de Bash qui ont besoin de fonctionnalité pré-exec peuvent utiliser [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Définissez simplement les array `preexec_functions` et `precmd_functions` avant d'éxécuter `eval $(starship init $0)`, puis procédez comme d'habitude.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
@@ -465,7 +479,7 @@ Les utilisateurs de Bash qui ont besoin de fonctionnalité pré-exec peuvent uti
 | duration  | `16m40s` | Le temps nécessaire pour exécuter la commande |
 | style\* |          | Reflète la valeur de l'option `style`         |
 
-\* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
+\*: This variable can only be used as a part of a style string
 
 ### Exemple
 
@@ -479,11 +493,11 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-Le module `conda` affiche l'environnement conda actuel, si `$CONDA_DEFAULT_ENV` est défini.
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
-Cela ne supprime pas le modificateur d'invite de conda, vous pouvez exécuter `conda config --set changeps1 False`.
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
@@ -906,7 +920,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 \*: This variable can only be used as a part of a style string
 
-### Exemples
+### Examples
 
 #### Display account and project
 
