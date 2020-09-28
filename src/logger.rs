@@ -73,6 +73,14 @@ impl log::Log for StarshipLogger {
             record.args()
         );
 
+        if record.metadata().level() <= Level::Warn {
+            self.log_file
+                .lock()
+                .map(|mut file| writeln!(file, "{}", to_print))
+                .expect("Log file writer mutex was poisoned!")
+                .expect("Unable to write to the log file!");
+        }
+
         if self.enabled(record.metadata()) && !self.log_file_content.contains(to_print.as_str()) {
             eprintln!(
                 "[{}] - ({}): {}",
@@ -86,11 +94,6 @@ impl log::Log for StarshipLogger {
                 record.module_path().unwrap_or_default(),
                 record.args()
             );
-            self.log_file
-                .lock()
-                .map(|mut file| writeln!(file, "{}", to_print))
-                .expect("Log file writer mutex was poisoned!")
-                .expect("Unable to write to the log file!");
         }
     }
 
