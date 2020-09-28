@@ -1053,21 +1053,21 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 ### Опции
 
-| Option       | По умолчанию                                    | Описание                            |
-| ------------ | ----------------------------------------------- | ----------------------------------- |
-| `format`     | "([\[$all_status$ahead_behind\]]($style) )" | The default format for `git_status` |
-| `conflicted` | `"="`                                           | This branch has merge conflicts.    |
-| `ahead`      | `"⇡"`                                           | The format of `ahead`               |
-| `behind`     | `"⇣"`                                           | The format of `behind`              |
-| `diverged`   | `"⇕"`                                           | The format of `diverged`            |
-| `untracked`  | `"?"`                                           | The format of `untracked`           |
-| `stashed`    | `"$"`                                           | The format of `stashed`             |
-| `modified`   | `"!"`                                           | The format of `modified`            |
-| `staged`     | `"+"`                                           | The format of `staged`              |
-| `renamed`    | `"»"`                                           | The format of `renamed`             |
-| `deleted`    | `"✘"`                                           | The format of `deleted`             |
-| `style`      | `"bold red"`                                    | Стиль модуля.                       |
-| `disabled`   | `false`                                         | Disables the `git_status` module.   |
+| Option       | По умолчанию                                  | Описание                            |
+| ------------ | --------------------------------------------- | ----------------------------------- |
+| `format`     | `"[\[$all_status$ahead_behind\]]($style) "` | The default format for `git_status` |
+| `conflicted` | `"="`                                         | This branch has merge conflicts.    |
+| `ahead`      | `"⇡"`                                         | The format of `ahead`               |
+| `behind`     | `"⇣"`                                         | The format of `behind`              |
+| `diverged`   | `"⇕"`                                         | The format of `diverged`            |
+| `untracked`  | `"?"`                                         | The format of `untracked`           |
+| `stashed`    | `"$"`                                         | The format of `stashed`             |
+| `modified`   | `"!"`                                         | The format of `modified`            |
+| `staged`     | `"+"`                                         | The format of `staged`              |
+| `renamed`    | `"»"`                                         | The format of `renamed`             |
+| `deleted`    | `"✘"`                                         | The format of `deleted`             |
+| `style`      | `"bold red"`                                  | Стиль модуля.                       |
+| `disabled`   | `false`                                       | Disables the `git_status` module.   |
 
 ### Variables
 
@@ -1830,7 +1830,6 @@ python_binary = "python3"
 [python]
 symbol = "👾 "
 pyenv_version_name = true
-pyenv_prefix = "foo "
 ```
 
 ## Ruby
@@ -2307,12 +2306,11 @@ Automatic detection of shells and proper parameters addition are currently imple
 command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
-prefix = " transcending "
+format = " transcending [$output]($style)"
 
 [custom.time]
 command = "time /T"
 files = ["*.pst"]
-prefix = "transcending "
 shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 ```
 
