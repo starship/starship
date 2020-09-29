@@ -10,7 +10,10 @@ use std::io::Write;
 use toml::map::Map;
 use toml::Value;
 
+#[cfg(not(windows))]
 const STD_EDITOR: &str = "vi";
+#[cfg(windows)]
+const STD_EDITOR: &str = "notepad.exe";
 
 pub fn update_configuration(name: &str, value: &str) {
     let config_path = get_config_path();
@@ -61,17 +64,12 @@ pub fn update_configuration(name: &str, value: &str) {
 
 pub fn edit_configuration() {
     let config_path = get_config_path();
-    let editor_cmd = get_editor();
+    let editor_cmd = shell_words::split(&get_editor()).expect("Unmatched quotes found in $EDITOR.");
 
-    let mut cmd_iter = editor_cmd
-        .to_str()
-        .expect("environment variable contains invalid unicode")
-        .split_whitespace();
-
-    let editor = cmd_iter.next().unwrap_or(STD_EDITOR);
-    let args: Vec<_> = cmd_iter.collect();
-
-    let command = Command::new(editor).args(args).arg(config_path).status();
+    let command = Command::new(&editor_cmd[0])
+        .args(&editor_cmd[1..])
+        .arg(config_path)
+        .status();
 
     match command {
         Ok(_) => (),
@@ -80,9 +78,8 @@ pub fn edit_configuration() {
                 eprintln!(
                     "Error: editor {:?} was not found. Did you set your $EDITOR or $VISUAL \
                     environment variables correctly?",
-                    editor
+                    editor_cmd
                 );
-                eprintln!("Full error: {:?}", error);
                 std::process::exit(1)
             }
             other_error => panic!("failed to open file: {:?}", other_error),
@@ -90,16 +87,16 @@ pub fn edit_configuration() {
     };
 }
 
-fn get_editor() -> OsString {
-    get_editor_internal(env::var_os("VISUAL"), env::var_os("EDITOR"))
+fn get_editor() -> String {
+    get_editor_internal(env::var("VISUAL").ok(), env::var("EDITOR").ok())
 }
 
-fn get_editor_internal(visual: Option<OsString>, editor: Option<OsString>) -> OsString {
-    let mut editor_name = visual.unwrap_or_else(|| "".into());
+fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String {
+    let editor_name = visual.unwrap_or_else(|| "".into());
     if !editor_name.is_empty() {
         return editor_name;
     }
-    editor_name = editor.unwrap_or_else(|| "".into());
+    let editor_name = editor.unwrap_or_else(|| "".into());
     if !editor_name.is_empty() {
         return editor_name;
     }
@@ -107,16 +104,14 @@ fn get_editor_internal(visual: Option<OsString>, editor: Option<OsString>) -> Os
 }
 
 fn get_config_path() -> OsString {
-    let config_path = env::var_os("STARSHIP_CONFIG").unwrap_or_else(|| "".into());
-    if config_path.is_empty() {
-        dirs_next::home_dir()
-            .expect("couldn't find home directory")
-            .join(".config/starship.toml")
-            .as_os_str()
-            .to_owned()
-    } else {
-        config_path
+    if let Some(config_path) = env::var_os("STARSHIP_CONFIG") {
+        return config_path;
     }
+    dirs_next::home_dir()
+        .expect("couldn't find home directory")
+        .join(".config")
+        .join("starship.toml")
+        .into()
 }
 
 #[cfg(test)]
@@ -149,12 +144,12 @@ mod tests {
     #[test]
     fn visual_empty_editor_empty() {
         let actual = get_editor_internal(Some("".into()), Some("".into()));
-        assert_eq!("vi", actual);
+        assert_eq!(STD_EDITOR, actual);
     }
     #[test]
     fn visual_empty_editor_not_set() {
         let actual = get_editor_internal(Some("".into()), None);
-        assert_eq!("vi", actual);
+        assert_eq!(STD_EDITOR, actual);
     }
 
     #[test]
@@ -165,11 +160,11 @@ mod tests {
     #[test]
     fn visual_not_set_editor_empty() {
         let actual = get_editor_internal(None, Some("".into()));
-        assert_eq!("vi", actual);
+        assert_eq!(STD_EDITOR, actual);
     }
     #[test]
     fn visual_not_set_editor_not_set() {
         let actual = get_editor_internal(None, None);
-        assert_eq!("vi", actual);
+        assert_eq!(STD_EDITOR, actual);
     }
 }

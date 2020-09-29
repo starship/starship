@@ -1,13 +1,14 @@
 use std::path::PathBuf;
 
-use super::{Context, Module};
+use super::{Context, Module, RootModuleConfig};
+use crate::configs::package::PackageConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
+use quick_xml::events::Event as QXEvent;
+use quick_xml::Reader as QXReader;
 use regex::Regex;
 use serde_json as json;
-
-use super::{RootModuleConfig, SegmentConfig};
-use crate::configs::package::PackageConfig;
 
 /// Creates a module with the current package version
 ///
@@ -15,19 +16,34 @@ use crate::configs::package::PackageConfig;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("package");
     let config: PackageConfig = PackageConfig::try_load(module.config);
+    let module_version = get_package_version(&context.current_dir, &config)?;
 
-    match get_package_version(&context.current_dir, &config) {
-        Some(package_version) => {
-            module.set_style(config.style);
-            module.get_prefix().set_value("is ");
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => Some(Ok(&module_version)),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-            module.create_segment("symbol", &config.symbol);
-            module.create_segment("version", &SegmentConfig::new(&package_version));
-
-            Some(module)
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `package`:\n{}", error);
+            return None;
         }
-        None => None,
-    }
+    });
+
+    Some(module)
 }
 
 fn extract_cargo_version(file_contents: &str) -> Option<String> {
@@ -94,12 +110,56 @@ fn extract_project_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
+fn extract_helm_package_version(file_contents: &str) -> Option<String> {
+    let yaml = yaml_rust::YamlLoader::load_from_str(file_contents).ok()?;
+    let version = yaml.first()?["version"].as_str()?;
+    Some(format_version(version))
+}
+
 fn extract_mix_version(file_contents: &str) -> Option<String> {
     let re = Regex::new(r#"(?m)version: "(?P<version>[^"]+)""#).unwrap();
     let caps = re.captures(file_contents)?;
 
     let formatted_version = format_version(&caps["version"]);
     Some(formatted_version)
+}
+
+fn extract_maven_version(file_contents: &str) -> Option<String> {
+    let mut reader = QXReader::from_str(file_contents);
+    reader.trim_text(true);
+
+    let mut buf = vec![];
+    let mut in_ver = false;
+    let mut depth = 0;
+    loop {
+        match reader.read_event(&mut buf) {
+            Ok(QXEvent::Start(ref e)) => {
+                in_ver = depth == 1 && e.name() == b"version";
+                depth += 1;
+            }
+            Ok(QXEvent::End(_)) => {
+                in_ver = false;
+                depth -= 1;
+            }
+            Ok(QXEvent::Text(t)) if in_ver => {
+                let ver = t.unescape_and_decode(&reader).ok();
+                return match ver {
+                    // Ignore version which is just a property reference
+                    Some(ref v) if !v.starts_with('$') => ver,
+                    _ => None,
+                };
+            }
+            Ok(QXEvent::Eof) => break,
+            Ok(_) => (),
+
+            Err(err) => {
+                log::warn!("Error parsing pom.xml`:\n{}", err);
+                break;
+            }
+        }
+    }
+
+    None
 }
 
 fn get_package_version(base_dir: &PathBuf, config: &PackageConfig) -> Option<String> {
@@ -117,6 +177,10 @@ fn get_package_version(base_dir: &PathBuf, config: &PackageConfig) -> Option<Str
         extract_project_version(&project_toml)
     } else if let Ok(mix_file) = utils::read_file(base_dir.join("mix.exs")) {
         extract_mix_version(&mix_file)
+    } else if let Ok(chart_file) = utils::read_file(base_dir.join("Chart.yaml")) {
+        extract_helm_package_version(&chart_file)
+    } else if let Ok(pom_file) = utils::read_file(base_dir.join("pom.xml")) {
+        extract_maven_version(&pom_file)
     } else {
         None
     }
@@ -134,7 +198,7 @@ fn format_version(version: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -450,6 +514,21 @@ end";
     }
 
     #[test]
+    fn test_extract_helm_chart_version() -> io::Result<()> {
+        let config_name = "Chart.yaml";
+        let config_content = "
+        apiVersion: v1
+        name: starship
+        version: 0.2.0
+        ";
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.2.0"), None)?;
+        project_dir.close()
+    }
+
+    #[test]
     fn test_extract_composer_version() -> io::Result<()> {
         let config_name = "composer.json";
         let config_content = json::json!({
@@ -507,6 +586,142 @@ end";
         project_dir.close()
     }
 
+    #[test]
+    fn test_extract_maven_version_with_deps() -> io::Result<()> {
+        // pom.xml with common nested tags and dependencies
+        let pom = "
+            <project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd\">
+
+              <modelVersion>4.0.0</modelVersion>
+              <artifactId>parent</artifactId>
+              <packaging>pom</packaging>
+
+              <version>0.3.20-SNAPSHOT</version>
+
+              <name>Test POM</name>
+              <description>Test POM</description>
+
+              <properties>
+                <jdk.version>1.8</jdk.version>
+                <jta.version>2.3.3</jta.version>
+                <woodstox.version>4.13</woodstox.version>
+                <jackson.version>3.3.3</jackson.version>
+              </properties>
+
+              <dependencyManagement>
+                  <dependencies>
+                      <dependency>
+                          <groupId>jta</groupId>
+                          <artifactId>jta</artifactId>
+                          <version>${jta.version}</version>
+                      </dependency>
+                      <dependency>
+                          <groupId>com.fasterxml.woodstox</groupId>
+                          <artifactId>woodstox-core</artifactId>
+                          <version>${woodstox.core.version}</version>
+                      </dependency>
+                      <dependency>
+                          <groupId>com.fasterxml.jackson.dataformat</groupId>
+                          <artifactId>jackson-dataformat-xml</artifactId>
+                          <version>${jackson.version}</version>
+                      </dependency>
+                  </dependencies>
+              </dependencyManagement>
+
+              <build>
+                <plugins>
+                  <plugin>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>${maven.enforcer.version}</version>
+                    <executions>
+                      <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                          <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                          <rules>
+                            <requireMavenVersion>
+                              <version>3.0.5</version>
+                            </requireMavenVersion>
+                          </rules>
+                        </configuration>
+                      </execution>
+                    </executions>
+                  </plugin>
+                </plugins>
+              </build>
+
+            </project>";
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, "pom.xml", Some(&pom))?;
+        expect_output(&project_dir, Some("0.3.20-SNAPSHOT"), None)?;
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_maven_version_no_version() -> io::Result<()> {
+        // pom.xml with common nested tags and dependencies
+        let pom = "
+            <project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd\">
+
+              <modelVersion>4.0.0</modelVersion>
+
+              <dependencies>
+                  <dependency>
+                      <groupId>jta</groupId>
+                      <artifactId>jta</artifactId>
+                      <version>1.2.3</version>
+                  </dependency>
+              </dependencies>
+
+            </project>";
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, "pom.xml", Some(&pom))?;
+        expect_output(&project_dir, None, None)?;
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_maven_version_is_prop() -> io::Result<()> {
+        // pom.xml with common nested tags and dependencies
+        let pom = "
+            <project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd\">
+
+              <modelVersion>4.0.0</modelVersion>
+              <version>${pom.parent.version}</version>
+
+            </project>";
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, "pom.xml", Some(&pom))?;
+        expect_output(&project_dir, None, None)?;
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_maven_version_no_version_but_deps() -> io::Result<()> {
+        // pom.xml with common nested tags and dependencies
+        let pom = "
+            <project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd\">
+
+              <modelVersion>4.0.0</modelVersion>
+              <artifactId>parent</artifactId>
+              <packaging>pom</packaging>
+
+              <name>Test POM</name>
+              <description>Test POM</description>
+
+            </project>";
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, "pom.xml", Some(&pom))?;
+        expect_output(&project_dir, None, None)?;
+        project_dir.close()
+    }
+
     fn create_project_dir() -> io::Result<TempDir> {
         Ok(tempfile::tempdir()?)
     }
@@ -526,12 +741,15 @@ end";
         contains: Option<&str>,
         config: Option<toml::Value>,
     ) -> io::Result<()> {
-        let starship_config = Some(config.unwrap_or(toml::toml! {
+        let starship_config = config.unwrap_or(toml::toml! {
             [package]
             disabled = false
-        }));
+        });
 
-        let actual = render_module("package", project_dir.path(), starship_config);
+        let actual = ModuleRenderer::new("package")
+            .path(project_dir.path())
+            .config(starship_config)
+            .collect();
         let text = String::from(contains.unwrap_or(""));
         let expected = Some(format!(
             "is {} ",

@@ -1,30 +1,29 @@
-use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig};
+use crate::config::{ModuleConfig, RootModuleConfig};
 
-use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct PythonConfig<'a> {
-    pub symbol: SegmentConfig<'a>,
-    pub version: SegmentConfig<'a>,
-    pub pyenv_prefix: SegmentConfig<'a>,
     pub pyenv_version_name: bool,
+    pub pyenv_prefix: &'a str,
     pub python_binary: &'a str,
     pub scan_for_pyfiles: bool,
-    pub style: Style,
+    pub format: &'a str,
+    pub style: &'a str,
+    pub symbol: &'a str,
     pub disabled: bool,
 }
 
 impl<'a> RootModuleConfig<'a> for PythonConfig<'a> {
     fn new() -> Self {
         PythonConfig {
-            symbol: SegmentConfig::new("🐍 "),
-            version: SegmentConfig::default(),
-            pyenv_prefix: SegmentConfig::new("pyenv "),
             pyenv_version_name: false,
+            pyenv_prefix: "pyenv ",
             python_binary: "python",
             scan_for_pyfiles: true,
-            style: Color::Yellow.bold(),
+            format: "via [${symbol}${pyenv_prefix}${version}( \\($virtualenv\\))]($style) ",
+            style: "yellow bold",
+            symbol: "🐍 ",
             disabled: false,
         }
     }

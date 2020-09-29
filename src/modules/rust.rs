@@ -1,10 +1,11 @@
+use std::fs;
 use std::path::Path;
 use std::process::{Command, Output};
-use std::{env, fs};
 
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::rust::RustConfig;
+use crate::formatter::StringFormatter;
 
 /// Creates a module with the current Rust version
 ///
@@ -22,6 +23,39 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let mut module = context.new_module("rust");
+    let config = RustConfig::try_load(module.config);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                // This may result in multiple calls to `get_module_version` when a user have
+                // multiple `$version` variables defined in `format`.
+                "version" => get_module_version(context).map(Ok),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `rust`:\n{}", error);
+            return None;
+        }
+    });
+
+    Some(module)
+}
+
+fn get_module_version(context: &Context) -> Option<String> {
     // `$CARGO_HOME/bin/rustc(.exe) --version` may attempt installing a rustup toolchain.
     // https://github.com/starship/starship/issues/417
     //
@@ -38,7 +72,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // - `rustup show`
     // - `rustup show active-toolchain`
     // - `rustup which`
-    let module_version = if let Some(toolchain) = env_rustup_toolchain()
+    let module_version = if let Some(toolchain) = env_rustup_toolchain(context)
         .or_else(|| execute_rustup_override_list(&context.current_dir))
         .or_else(|| find_rust_toolchain_file(&context))
     {
@@ -56,18 +90,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         format_rustc_version(execute_rustc_version()?)
     };
 
-    let mut module = context.new_module("rust");
-    let config = RustConfig::try_load(module.config);
-    module.set_style(config.style);
-
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &config.version.with_value(&module_version));
-
-    Some(module)
+    Some(module_version)
 }
 
-fn env_rustup_toolchain() -> Option<String> {
-    let val = env::var("RUSTUP_TOOLCHAIN").ok()?;
+fn env_rustup_toolchain(context: &Context) -> Option<String> {
+    let val = context.get_env("RUSTUP_TOOLCHAIN")?;
     Some(val.trim().to_owned())
 }
 

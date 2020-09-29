@@ -1,6 +1,5 @@
-use crate::config::{ModuleConfig, RootModuleConfig, SegmentConfig, VecOr};
+use crate::config::{ModuleConfig, RootModuleConfig, VecOr};
 
-use ansi_term::Style;
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, Default, PartialEq)]
@@ -14,15 +13,14 @@ pub struct Directories<'a>(pub Vec<&'a str>);
 
 #[derive(Clone, ModuleConfig)]
 pub struct CustomConfig<'a> {
-    pub symbol: Option<SegmentConfig<'a>>,
+    pub format: &'a str,
+    pub symbol: &'a str,
     pub command: &'a str,
     pub when: Option<&'a str>,
     pub shell: VecOr<&'a str>,
     pub description: &'a str,
-    pub style: Option<Style>,
+    pub style: &'a str,
     pub disabled: bool,
-    pub prefix: Option<&'a str>,
-    pub suffix: Option<&'a str>,
     pub files: Files<'a>,
     pub extensions: Extensions<'a>,
     pub directories: Directories<'a>,
@@ -31,15 +29,14 @@ pub struct CustomConfig<'a> {
 impl<'a> RootModuleConfig<'a> for CustomConfig<'a> {
     fn new() -> Self {
         CustomConfig {
-            symbol: None,
+            format: "[$symbol$output]($style) ",
+            symbol: "",
             command: "",
             when: None,
             shell: VecOr::default(),
             description: "<custom config>",
-            style: None,
+            style: "green bold",
             disabled: false,
-            prefix: None,
-            suffix: None,
             files: Files::default(),
             extensions: Extensions::default(),
             directories: Directories::default(),
@@ -55,7 +52,7 @@ impl<'a> ModuleConfig<'a> for Files<'a> {
             if let Some(file) = item.as_str() {
                 files.push(file);
             } else {
-                log::debug!("Unexpected file {:?}", item);
+                log::warn!("Unexpected file {:?}", item);
             }
         }
 
@@ -71,7 +68,7 @@ impl<'a> ModuleConfig<'a> for Extensions<'a> {
             if let Some(file) = item.as_str() {
                 extensions.push(file);
             } else {
-                log::debug!("Unexpected extension {:?}", item);
+                log::warn!("Unexpected extension {:?}", item);
             }
         }
 
@@ -87,7 +84,7 @@ impl<'a> ModuleConfig<'a> for Directories<'a> {
             if let Some(file) = item.as_str() {
                 directories.push(file);
             } else {
-                log::debug!("Unexpected directory {:?}", item);
+                log::warn!("Unexpected directory {:?}", item);
             }
         }
 

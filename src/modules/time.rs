@@ -1,16 +1,16 @@
 use chrono::{DateTime, FixedOffset, Local, NaiveTime, Utc};
 
-use super::{Context, Module};
-
-use crate::config::{RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 use crate::configs::time::TimeConfig;
+use crate::formatter::StringFormatter;
 
 /// Outputs the current time
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    const TIME_PREFIX: &str = "at ";
-
     let mut module = context.new_module("time");
     let config: TimeConfig = TimeConfig::try_load(module.config);
+
+    // As we default to disabled=true, we have to check here after loading our config module,
+    // before it was only checking against whatever is in the config starship.toml
     if config.disabled {
         return None;
     };
@@ -23,7 +23,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let default_format = if config.use_12hr { "%r" } else { "%T" };
-    let time_format = config.format.unwrap_or(default_format);
+    let time_format = config.time_format.unwrap_or(default_format);
 
     log::trace!(
         "Timer module is enabled with format string: {}",
@@ -44,17 +44,26 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         format_time(&time_format, Local::now())
     };
 
-    module.set_style(config.style);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "time" => Some(Ok(&formatted_time_string)),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.get_prefix().set_value(TIME_PREFIX);
-
-    module.create_segment(
-        "time",
-        &SegmentConfig {
-            value: &formatted_time_string,
-            style: None,
-        },
-    );
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `time`: \n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }
@@ -145,7 +154,9 @@ tests become extra important */
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test::ModuleRenderer;
     use chrono::offset::TimeZone;
+    use std::io;
 
     const FMT_12: &str = "%r";
     const FMT_24: &str = "%T";
@@ -457,5 +468,51 @@ mod tests {
         assert_eq!(is_inside_time_range(time_now, time_start, time_end), true);
         assert_eq!(is_inside_time_range(time_now2, time_start, time_end), false);
         assert_eq!(is_inside_time_range(time_now3, time_start, time_end), true);
+    }
+
+    #[test]
+    fn config_enabled() -> io::Result<()> {
+        let actual = ModuleRenderer::new("time")
+            .config(toml::toml! {
+                [time]
+                disabled = false
+            })
+            .collect();
+
+        // We can't test what it actually is...but we can assert that it is something
+        assert!(actual.is_some());
+        Ok(())
+    }
+
+    #[test]
+    fn config_blank() -> io::Result<()> {
+        let actual = ModuleRenderer::new("time").collect();
+
+        let expected = None;
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn config_check_prefix_and_suffix() -> io::Result<()> {
+        let actual = ModuleRenderer::new("time")
+            .config(toml::toml! {
+                [time]
+                disabled = false
+                format = "at [\\[$time\\]]($style) "
+                time_format = "%T"
+            })
+            .collect()
+            .unwrap();
+
+        // This is the prefix with "at ", the color code, then the prefix char [
+        let col_prefix = format!("at {}{}[", '\u{1b}', "[1;33m");
+
+        // This is the suffix with suffix char ']', then color codes, then a space
+        let col_suffix = format!("]{}{} ", '\u{1b}', "[0m");
+
+        assert!(actual.starts_with(&col_prefix));
+        assert!(actual.ends_with(&col_suffix));
+        Ok(())
     }
 }

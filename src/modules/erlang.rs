@@ -1,6 +1,7 @@
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::erlang::ErlangConfig;
+use crate::formatter::StringFormatter;
 
 /// Create a module with the current Erlang version
 ///
@@ -17,14 +18,33 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let erlang_version = get_erlang_version()?;
-
     let mut module = context.new_module("erlang");
     let config = ErlangConfig::try_load(module.config);
-    module.set_style(config.style);
 
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &config.version.with_value(&erlang_version));
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => get_erlang_version().map(Ok),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `erlang`:\n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }
@@ -47,7 +67,7 @@ fn get_erlang_version() -> Option<String> {
 
 #[cfg(test)]
 mod tests {
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -57,7 +77,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
 
         let expected = None;
-        let output = render_module("erlang", dir.path(), None);
+        let output = ModuleRenderer::new("erlang").path(dir.path()).collect();
 
         assert_eq!(output, expected);
 
@@ -70,7 +90,7 @@ mod tests {
         File::create(dir.path().join("rebar.config"))?.sync_all()?;
 
         let expected = Some(format!("via {} ", Color::Red.bold().paint("🖧 22.1.3")));
-        let output = render_module("erlang", dir.path(), None);
+        let output = ModuleRenderer::new("erlang").path(dir.path()).collect();
 
         assert_eq!(output, expected);
 

@@ -1,6 +1,7 @@
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::nim::NimConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 /// Creates a module with the current Nim version
@@ -19,16 +20,38 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let nim_version_output = utils::exec_cmd("nim", &["--version"])?.stdout;
-    let formatted_nim_version = format!("v{}", parse_nim_version(&nim_version_output)?);
-
     let mut module = context.new_module("nim");
     let config = NimConfig::try_load(module.config);
 
-    module.set_style(config.style);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => utils::exec_cmd("nim", &["--version"])
+                    .map(|command_output| command_output.stdout)
+                    .and_then(|nim_version_output| {
+                        Some(format!("v{}", parse_nim_version(&nim_version_output)?))
+                    })
+                    .map(Ok),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &SegmentConfig::new(&formatted_nim_version));
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `nim`:\n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }
@@ -45,7 +68,7 @@ fn parse_nim_version(version_cmd_output: &str) -> Option<&str> {
 #[cfg(test)]
 mod tests {
     use super::parse_nim_version;
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -77,7 +100,7 @@ mod tests {
     fn folder_without_nim() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("nim.txt"))?.sync_all()?;
-        let actual = render_module("nim", dir.path(), None);
+        let actual = ModuleRenderer::new("nim").path(dir.path()).collect();
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -87,7 +110,7 @@ mod tests {
     fn folder_with_nimble_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.nimble"))?.sync_all()?;
-        let actual = render_module("nim", dir.path(), None);
+        let actual = ModuleRenderer::new("nim").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("👑 v1.2.0")));
         assert_eq!(expected, actual);
         dir.close()
@@ -97,7 +120,7 @@ mod tests {
     fn folder_with_nim_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.nim"))?.sync_all()?;
-        let actual = render_module("nim", dir.path(), None);
+        let actual = ModuleRenderer::new("nim").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("👑 v1.2.0")));
         assert_eq!(expected, actual);
         dir.close()
@@ -107,7 +130,7 @@ mod tests {
     fn folder_with_nims_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.nims"))?.sync_all()?;
-        let actual = render_module("nim", dir.path(), None);
+        let actual = ModuleRenderer::new("nim").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("👑 v1.2.0")));
         assert_eq!(expected, actual);
         dir.close()
@@ -117,7 +140,7 @@ mod tests {
     fn folder_with_cfg_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("cfg.nim"))?.sync_all()?;
-        let actual = render_module("nim", dir.path(), None);
+        let actual = ModuleRenderer::new("nim").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("👑 v1.2.0")));
         assert_eq!(expected, actual);
         dir.close()

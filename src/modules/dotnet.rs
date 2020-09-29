@@ -1,11 +1,14 @@
+use quick_xml::events::Event;
+use quick_xml::Reader;
 use std::ffi::OsStr;
 use std::iter::Iterator;
 use std::ops::Deref;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::str;
 
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::dotnet::DotnetConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 type JValue = serde_json::Value;
@@ -48,22 +51,92 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Internally, this module uses its own mechanism for version detection.
     // Typically it is twice as fast as running `dotnet --version`.
     let enable_heuristic = config.heuristic;
-    let version = if enable_heuristic {
-        let repo_root = context.get_repo().ok().and_then(|r| r.root.as_deref());
-        estimate_dotnet_version(&dotnet_files, &context.current_dir, repo_root)?
-    } else {
-        get_version_from_cli()?
-    };
 
-    module.set_style(config.style);
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &config.version.with_value(&version.0));
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "symbol" => Some(Ok(config.symbol)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => {
+                    let version = if enable_heuristic {
+                        let repo_root = context.get_repo().ok().and_then(|r| r.root.as_deref());
+                        estimate_dotnet_version(&dotnet_files, &context.current_dir, repo_root)
+                    } else {
+                        get_version_from_cli()
+                    };
+                    version.map(|v| Ok(v.0))
+                }
+                "tfm" => find_current_tfm(&dotnet_files).map(Ok),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `dotnet`:\n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }
 
-fn estimate_dotnet_version<'a>(
-    files: &[DotNetFile<'a>],
+fn find_current_tfm(files: &[DotNetFile]) -> Option<String> {
+    let get_file_of_type = |t: FileType| files.iter().find(|f| f.file_type == t);
+
+    let relevant_file = get_file_of_type(FileType::ProjectFile)?;
+
+    get_tfm_from_project_file(relevant_file.path.as_path())
+}
+
+fn get_tfm_from_project_file(path: &Path) -> Option<String> {
+    let project_file = utils::read_file(path).ok()?;
+    let mut reader = Reader::from_str(&project_file);
+    reader.trim_text(true);
+
+    let mut in_tfm = false;
+    let mut buf = Vec::new();
+
+    loop {
+        match reader.read_event(&mut buf) {
+            // for triggering namespaced events, use this instead:
+            // match reader.read_namespaced_event(&mut buf) {
+            Ok(Event::Start(ref e)) => {
+                // for namespaced:
+                // Ok((ref namespace_value, Event::Start(ref e)))
+                match e.name() {
+                    b"TargetFrameworks" => in_tfm = true,
+                    b"TargetFramework" => in_tfm = true,
+                    _ => in_tfm = false,
+                }
+            }
+            // unescape and decode the text event using the reader encoding
+            Ok(Event::Text(e)) => {
+                if in_tfm {
+                    return e.unescape_and_decode(&reader).ok();
+                }
+            }
+            Ok(Event::Eof) => break, // exits the loop when reaching end of file
+            Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
+            _ => (), // There are several other `Event`s we do not consider here
+        }
+
+        // if we don't keep a borrow elsewhere, we can clear the buffer to keep memory usage low
+        buf.clear();
+    }
+    None
+}
+
+fn estimate_dotnet_version(
+    files: &[DotNetFile],
     current_dir: &Path,
     repo_root: Option<&Path>,
 ) -> Option<Version> {
@@ -76,9 +149,8 @@ fn estimate_dotnet_version<'a>(
         .or_else(|| files.iter().next())?;
 
     match relevant_file.file_type {
-        FileType::GlobalJson => {
-            get_pinned_sdk_version_from_file(relevant_file.path).or_else(get_latest_sdk_from_cli)
-        }
+        FileType::GlobalJson => get_pinned_sdk_version_from_file(relevant_file.path.as_path())
+            .or_else(get_latest_sdk_from_cli),
         FileType::SolutionFile => {
             // With this heuristic, we'll assume that a "global.json" won't
             // be found in any directory above the solution file.
@@ -178,13 +250,13 @@ fn get_pinned_sdk_version(json: &str) -> Option<Version> {
     }
 }
 
-fn get_local_dotnet_files<'a>(context: &'a Context) -> Result<Vec<DotNetFile<'a>>, std::io::Error> {
+fn get_local_dotnet_files<'a>(context: &'a Context) -> Result<Vec<DotNetFile>, std::io::Error> {
     Ok(context
         .dir_contents()?
         .files()
         .filter_map(|p| {
             get_dotnet_file_type(p).map(|t| DotNetFile {
-                path: p.as_ref(),
+                path: context.current_dir.join(p),
                 file_type: t,
             })
         })
@@ -249,7 +321,7 @@ fn get_latest_sdk_from_cli() -> Option<Version> {
         None => {
             // Older versions of the dotnet cli do not support the --list-sdks command
             // So, if the status code indicates failure, fall back to `dotnet --version`
-            log::warn!(
+            log::debug!(
                 "Received a non-success exit code from `dotnet --list-sdks`. \
                  Falling back to `dotnet --version`.",
             );
@@ -258,8 +330,8 @@ fn get_latest_sdk_from_cli() -> Option<Version> {
     }
 }
 
-struct DotNetFile<'a> {
-    path: &'a Path,
+struct DotNetFile {
+    path: PathBuf,
     file_type: FileType,
 }
 
@@ -281,9 +353,266 @@ impl Deref for Version {
     }
 }
 
-#[test]
-fn should_parse_version_from_global_json() {
-    let json_text = r#"
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::test::ModuleRenderer;
+    use ansi_term::Color;
+    use std::fs::{self, OpenOptions};
+    use std::io::{self, Write};
+    use std::process::Command;
+    use tempfile::{self, TempDir};
+
+    #[test]
+    fn shows_nothing_in_directory_with_zero_relevant_files() -> io::Result<()> {
+        let workspace = create_workspace(false)?;
+        expect_output(&workspace.path(), None)?;
+        workspace.close()
+    }
+
+    #[test]
+    fn shows_latest_in_directory_with_directory_build_props_file() -> io::Result<()> {
+        let workspace = create_workspace(false)?;
+        touch_path(&workspace, "Directory.Build.props", None)?;
+        expect_output(
+            &workspace.path(),
+            Some(format!("{} ", Color::Blue.bold().paint("•NET v3.1.103"))),
+        )?;
+        workspace.close()
+    }
+
+    #[test]
+    fn shows_latest_in_directory_with_directory_build_targets_file() -> io::Result<()> {
+        let workspace = create_workspace(false)?;
+        touch_path(&workspace, "Directory.Build.targets", None)?;
+        expect_output(
+            &workspace.path(),
+            Some(format!("{} ", Color::Blue.bold().paint("•NET v3.1.103"))),
+        )?;
+        workspace.close()
+    }
+
+    #[test]
+    fn shows_latest_in_directory_with_packages_props_file() -> io::Result<()> {
+        let workspace = create_workspace(false)?;
+        touch_path(&workspace, "Packages.props", None)?;
+        expect_output(
+            &workspace.path(),
+            Some(format!("{} ", Color::Blue.bold().paint("•NET v3.1.103"))),
+        )?;
+        workspace.close()
+    }
+
+    #[test]
+    fn shows_latest_in_directory_with_solution() -> io::Result<()> {
+        let workspace = create_workspace(false)?;
+        touch_path(&workspace, "solution.sln", None)?;
+        expect_output(
+            &workspace.path(),
+            Some(format!("{} ", Color::Blue.bold().paint("•NET v3.1.103"))),
+        )?;
+        workspace.close()
+    }
+
+    #[test]
+    fn shows_latest_in_directory_with_csproj() -> io::Result<()> {
+        let workspace = create_workspace(false)?;
+        let csproj = make_csproj_with_tfm("TargetFramework", "netstandard2.0");
+        touch_path(&workspace, "project.csproj", Some(&csproj))?;
+        expect_output(
+            &workspace.path(),
+            Some(format!(
+                "{} ",
+                Color::Blue.bold().paint("•NET v3.1.103 🎯 netstandard2.0")
+            )),
+        )?;
+        workspace.close()
+    }
+
+    #[test]
+    fn shows_latest_in_directory_with_fsproj() -> io::Result<()> {
+        let workspace = create_workspace(false)?;
+        touch_path(&workspace, "project.fsproj", None)?;
+        expect_output(
+            &workspace.path(),
+            Some(format!("{} ", Color::Blue.bold().paint("•NET v3.1.103"))),
+        )?;
+        workspace.close()
+    }
+
+    #[test]
+    fn shows_latest_in_directory_with_xproj() -> io::Result<()> {
+        let workspace = create_workspace(false)?;
+        touch_path(&workspace, "project.xproj", None)?;
+        expect_output(
+            &workspace.path(),
+            Some(format!("{} ", Color::Blue.bold().paint("•NET v3.1.103"))),
+        )?;
+        workspace.close()
+    }
+
+    #[test]
+    fn shows_latest_in_directory_with_project_json() -> io::Result<()> {
+        let workspace = create_workspace(false)?;
+        touch_path(&workspace, "project.json", None)?;
+        expect_output(
+            &workspace.path(),
+            Some(format!("{} ", Color::Blue.bold().paint("•NET v3.1.103"))),
+        )?;
+        workspace.close()
+    }
+
+    #[test]
+    fn shows_pinned_in_directory_with_global_json() -> io::Result<()> {
+        let workspace = create_workspace(false)?;
+        let global_json = make_pinned_sdk_json("1.2.3");
+        touch_path(&workspace, "global.json", Some(&global_json))?;
+        expect_output(
+            &workspace.path(),
+            Some(format!("{} ", Color::Blue.bold().paint("•NET v1.2.3"))),
+        )?;
+        workspace.close()
+    }
+
+    #[test]
+    fn shows_pinned_in_project_below_root_with_global_json() -> io::Result<()> {
+        let workspace = create_workspace(false)?;
+        let global_json = make_pinned_sdk_json("1.2.3");
+        let csproj = make_csproj_with_tfm("TargetFramework", "netstandard2.0");
+        touch_path(&workspace, "global.json", Some(&global_json))?;
+        touch_path(&workspace, "project/project.csproj", Some(&csproj))?;
+        expect_output(
+            &workspace.path().join("project"),
+            Some(format!(
+                "{} ",
+                Color::Blue.bold().paint("•NET v1.2.3 🎯 netstandard2.0")
+            )),
+        )?;
+        workspace.close()
+    }
+
+    #[test]
+    fn shows_pinned_in_deeply_nested_project_within_repository() -> io::Result<()> {
+        let workspace = create_workspace(true)?;
+        let global_json = make_pinned_sdk_json("1.2.3");
+        let csproj = make_csproj_with_tfm("TargetFramework", "netstandard2.0");
+        touch_path(&workspace, "global.json", Some(&global_json))?;
+        touch_path(
+            &workspace,
+            "deep/path/to/project/project.csproj",
+            Some(&csproj),
+        )?;
+        expect_output(
+            &workspace.path().join("deep/path/to/project"),
+            Some(format!(
+                "{} ",
+                Color::Blue.bold().paint("•NET v1.2.3 🎯 netstandard2.0")
+            )),
+        )?;
+        workspace.close()
+    }
+
+    #[test]
+    fn shows_single_tfm() -> io::Result<()> {
+        let workspace = create_workspace(false)?;
+        let csproj = make_csproj_with_tfm("TargetFramework", "netstandard2.0");
+        touch_path(&workspace, "project.csproj", Some(&csproj))?;
+        expect_output(
+            workspace.path(),
+            Some(format!(
+                "{} ",
+                Color::Blue.bold().paint("•NET v3.1.103 🎯 netstandard2.0")
+            )),
+        )?;
+        workspace.close()
+    }
+
+    #[test]
+    fn shows_multiple_tfms() -> io::Result<()> {
+        let workspace = create_workspace(false)?;
+        let csproj = make_csproj_with_tfm("TargetFrameworks", "netstandard2.0;net461");
+        touch_path(&workspace, "project.csproj", Some(&csproj))?;
+        expect_output(
+            workspace.path(),
+            Some(format!(
+                "{} ",
+                Color::Blue
+                    .bold()
+                    .paint("•NET v3.1.103 🎯 netstandard2.0;net461")
+            )),
+        )?;
+        workspace.close()
+    }
+
+    fn create_workspace(is_repo: bool) -> io::Result<TempDir> {
+        let repo_dir = tempfile::tempdir()?;
+
+        if is_repo {
+            Command::new("git")
+                .args(&["init", "--quiet"])
+                .current_dir(repo_dir.path())
+                .output()?;
+        }
+
+        Ok(repo_dir)
+    }
+
+    fn touch_path(
+        workspace: &TempDir,
+        relative_path: &str,
+        contents: Option<&str>,
+    ) -> io::Result<()> {
+        let path = workspace.path().join(relative_path);
+
+        fs::create_dir_all(
+            path.parent()
+                .expect("Expected relative_path to be a file in a directory"),
+        )?;
+
+        let mut file = OpenOptions::new()
+            .write(true)
+            .create(true)
+            .truncate(true)
+            .open(&path)?;
+        write!(file, "{}", contents.unwrap_or(""))?;
+        file.sync_data()
+    }
+
+    fn make_pinned_sdk_json(version: &str) -> String {
+        let json_text = r#"
+        {
+            "sdk": {
+                "version": "INSERT_VERSION"
+            }
+        }
+    "#;
+        json_text.replace("INSERT_VERSION", version)
+    }
+
+    fn make_csproj_with_tfm(tfm_element: &str, tfm: &str) -> String {
+        let json_text = r#"
+        <Project>
+            <PropertyGroup>
+                <TFM_ELEMENT>TFM_VALUE</TFM_ELEMENT>
+            </PropertyGroup>
+        </Project>
+    "#;
+        json_text
+            .replace("TFM_ELEMENT", tfm_element)
+            .replace("TFM_VALUE", tfm)
+    }
+
+    fn expect_output(dir: &Path, expected: Option<String>) -> io::Result<()> {
+        let actual = ModuleRenderer::new("dotnet").path(dir).collect();
+
+        assert_eq!(actual, expected);
+
+        Ok(())
+    }
+
+    #[test]
+    fn should_parse_version_from_global_json() {
+        let json_text = r#"
         {
             "sdk": {
                 "version": "1.2.3"
@@ -291,14 +620,15 @@ fn should_parse_version_from_global_json() {
         }
     "#;
 
-    let version = get_pinned_sdk_version(json_text).unwrap();
-    assert_eq!("v1.2.3", version.0);
-}
+        let version = get_pinned_sdk_version(json_text).unwrap();
+        assert_eq!("v1.2.3", version.0);
+    }
 
-#[test]
-fn should_ignore_empty_global_json() {
-    let json_text = "{}";
+    #[test]
+    fn should_ignore_empty_global_json() {
+        let json_text = "{}";
 
-    let version = get_pinned_sdk_version(json_text);
-    assert!(version.is_none());
+        let version = get_pinned_sdk_version(json_text);
+        assert!(version.is_none());
+    }
 }

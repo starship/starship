@@ -1,5 +1,6 @@
 use crate::utils::exec_cmd;
 
+use clap::crate_version;
 use std::fs;
 use std::path::PathBuf;
 
@@ -211,7 +212,7 @@ mod tests {
         let starship_version = "0.1.2";
         let environment = Environment {
             os_type: os_info::Type::Linux,
-            os_version: os_info::Version::semantic(1, 2, 3, Some("test".to_string())),
+            os_version: os_info::Version::Semantic(1, 2, 3),
             shell_info: ShellInfo {
                 name: "test_shell".to_string(),
                 version: "2.3.4".to_string(),
@@ -254,5 +255,6 @@ mod tests {
 
         let config_path = get_config_path("bash");
         assert_eq!("/test/home/.bashrc", config_path.unwrap().to_str().unwrap());
+        env::remove_var("HOME");
     }
 }

@@ -5,16 +5,16 @@
 - **Terminal Emulator**: [iTerm2](https://iterm2.com/)
   - **Theme**: Minimal
   - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [Fira Code](https://github.com/tonsky/FiraCode)
+  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
 - **Shell**: [Fish Shell](https://fishshell.com/)
   - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
-## Do `prompt_order` and `<module>.disabled` do the same thing?
+## Do top level `format` and `<module>.disabled` do the same thing?
 
 Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
 
-- Disabling modules is more explicit than omitting them from the prompt_order
+- Disabling modules is more explicit than omitting them from the top level `format`
 - Newly created modules will be added to the prompt as Starship is updated
 
 ## The docs say Starship is cross-shell, but it doesn't support X shell. Why?
@@ -46,7 +46,7 @@ The prompt will use as much context as is provided, but no flags are "required".
 
 ## How do I run Starship on Linux distributions with older versions of glibc?
 
-If you get an error like "*version 'GLIBC_2.18' not found (required by starship)*" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
 
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
@@ -57,16 +57,16 @@ curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-
 The most common cause of this is system misconfiguration. Some Linux distros in
 particular do not come with font support out-of-the-box. You need to ensure that:
 
-  - Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, 
-    [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
-  - You have an emoji font installed. Most systems come with an emoji font by default, but 
-    some (notably Arch Linux) do not. You can usually install one through your system's
-    package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
-  - You are using a [powerline-patched font](https://github.com/powerline/fonts).
+- Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value,
+  [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
+- You have an emoji font installed. Most systems come with an emoji font by default, but
+  some (notably Arch Linux) do not. You can usually install one through your system's
+  package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
+- You are using a [Nerd Font](https://www.nerdfonts.com/).
 
 To test your system, run the following commands in a terminal:
 
-```
+```sh
 echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
@@ -78,3 +78,19 @@ If either symbol fails to display correctly, your system is still misconfigured.
 Unfortunately, getting font configuration correct is sometimes difficult. Users
 on the Discord may be able to help. If both symbols display correctly, but
 you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+
+## How do I uninstall Starship?
+
+Starship is just as easy to uninstall as it is to install in the first place.
+
+1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
+1. Delete the Starship binary.
+
+If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+
+If Starship was installed using the `curl | bash` script, the following command will delete the binary:
+
+```sh
+# Locate and delete the starship binary
+rm "$(which starship)"
+```

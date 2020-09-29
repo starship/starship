@@ -7,6 +7,7 @@ use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
 use once_cell::sync::OnceCell;
 use std::collections::{HashMap, HashSet};
 use std::env;
+use std::ffi::OsString;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::string::String;
@@ -33,6 +34,9 @@ pub struct Context<'a> {
 
     /// The shell the user is assumed to be running
     pub shell: Shell,
+
+    /// A HashMap of environment variable mocks
+    pub env: HashMap<&'a str, String>,
 }
 
 impl<'a> Context<'a> {
@@ -82,11 +86,30 @@ impl<'a> Context<'a> {
             dir_contents: OnceCell::new(),
             repo: OnceCell::new(),
             shell,
+            env: HashMap::new(),
+        }
+    }
+
+    // Retrives a environment variable from the os or from a table if in testing mode
+    pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
+        if cfg!(test) {
+            self.env.get(key.as_ref()).map(|val| val.to_string())
+        } else {
+            env::var(key.as_ref()).ok()
+        }
+    }
+
+    // Retrives a environment variable from the os or from a table if in testing mode (os version)
+    pub fn get_env_os<K: AsRef<str>>(&self, key: K) -> Option<OsString> {
+        if cfg!(test) {
+            self.env.get(key.as_ref()).map(OsString::from)
+        } else {
+            env::var_os(key.as_ref())
         }
     }
 
     /// Convert a `~` in a path to the home directory
-    fn expand_tilde(dir: PathBuf) -> PathBuf {
+    pub fn expand_tilde(dir: PathBuf) -> PathBuf {
         if dir.starts_with("~") {
             let without_home = dir.strip_prefix("~").unwrap();
             return dirs_next::home_dir().unwrap().join(without_home);
@@ -165,7 +188,7 @@ impl<'a> Context<'a> {
     }
 
     fn get_shell() -> Shell {
-        let shell = std::env::var("STARSHIP_SHELL").unwrap_or_default();
+        let shell = env::var("STARSHIP_SHELL").unwrap_or_default();
         match shell.as_str() {
             "bash" => Shell::Bash,
             "fish" => Shell::Fish,
@@ -174,6 +197,10 @@ impl<'a> Context<'a> {
             "zsh" => Shell::Zsh,
             _ => Shell::Unknown,
         }
+    }
+
+    pub fn get_cmd_duration(&self) -> Option<u128> {
+        self.properties.get("cmd_duration")?.parse::<u128>().ok()
     }
 }
 
@@ -204,8 +231,12 @@ impl DirContents {
         let mut extensions: HashSet<String> = HashSet::new();
 
         fs::read_dir(base)?
-            .take_while(|_| SystemTime::now().duration_since(start).unwrap() < timeout)
-            .filter_map(Result::ok)
+            .enumerate()
+            .take_while(|(n, _)| {
+                n & 0xFF != 0 // only check SystemTime once every 2^8 entries
+                || SystemTime::now().duration_since(start).unwrap() < timeout
+            })
+            .filter_map(|(_, entry)| entry.ok())
             .for_each(|entry| {
                 let path = PathBuf::from(entry.path().strip_prefix(base).unwrap());
                 if entry.path().is_dir() {
@@ -306,7 +337,7 @@ impl<'a> ScanDir<'a> {
         self
     }
 
-    /// based on the current Pathbuf check to see
+    /// based on the current PathBuf check to see
     /// if any of this criteria match or exist and returning a boolean
     pub fn is_match(&self) -> bool {
         self.dir_contents.has_any_extension(self.extensions)
@@ -321,8 +352,19 @@ fn get_current_branch(repository: &Repository) -> Option<String> {
         Err(e) => {
             return if e.code() == UnbornBranch {
                 // HEAD should only be an unborn branch if the repository is fresh,
-                // in that case assume "master"
-                Some(String::from("master"))
+                // in that case read directly from `.git/HEAD`
+                let mut head_path = repository.path().to_path_buf();
+                head_path.push("HEAD");
+
+                // get first line, then last path segment
+                fs::read_to_string(&head_path)
+                    .ok()?
+                    .lines()
+                    .next()?
+                    .trim()
+                    .split('/')
+                    .last()
+                    .map(|r| r.to_owned())
             } else {
                 None
             };

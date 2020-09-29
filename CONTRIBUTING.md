@@ -24,9 +24,55 @@ The project begins in [`main.rs`](src/main.rs), where the appropriate `print::` 
 
 Any styling that is applied to a module is inherited by its segments. Module prefixes and suffixes by default don't have any styling applied to them.
 
+## Environment Variables and external commands
+
+We have custom functions to be able to test our modules better. Here we show you how.
+
+### Environment Variables
+
+To get an environment variable we have special function to allow for mocking of vars. Here's a quick example:
+
+```rust
+use super::{Context, Module, RootModuleConfig};
+
+use crate::configs::php::PhpConfig;
+use crate::formatter::StringFormatter;
+use crate::utils;
+
+
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+   // Here `my_env_var` will be either the contents of the var or the function
+   // will exit if the variable is not set.
+   let my_env_var = context.get_env("MY_VAR")?;
+
+   // Then you can happily use the value
+}
+```
+
+## External commands
+
+To run a external command (e.g. to get the version of a tool) and to allow for mocking use the `utils::exec_cmd` function. Here's a quick example:
+
+```rust
+use super::{Context, Module, RootModuleConfig};
+
+use crate::configs::php::PhpConfig;
+use crate::formatter::StringFormatter;
+use crate::utils;
+
+
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+   // Here `my_env_var` will be either the stdout of the called command or the function
+   // will exit if the called program was not installed or could not be run.
+   let output = utils::exec_cmd("my_command", &["first_arg", "second_arg"])?.stdout;
+
+   // Then you can happily use the output
+}
+```
+
 ## Logging
 
-Debug logging in starship is done with [pretty_env_logger](https://crates.io/crates/pretty_env_logger).
+Debug logging in starship is done with our custom logger implementation.
 To run starship with debug logs, set the `STARSHIP_LOG` environment variable to the log level needed.
 For example, to enable the trace logs, run the following:
 
@@ -44,49 +90,93 @@ Starship source files are linted with [clippy](https://crates.io/crates/clippy).
 
 ```sh
 rustup component add clippy
-cargo clippy
+cargo clippy --all-targets --all-features
 ```
 
 ## Formatting
 
-Starship source files are formatted with [rustfmt](https://crates.io/crates/rustfmt-nightly). Rustfmt will be ran as part of CI. Unformatted code will fail a build, so it is suggested that you run rustfmt locally:
+Starship source files are formatted with [rustfmt](https://crates.io/crates/rustfmt-nightly), using the default configuration. Rustfmt will be ran as part of CI. Unformatted code will fail a build, so it is suggested that you run rustfmt locally:
 
 ```sh
 rustup component add rustfmt
 cargo fmt
 ```
 
-
 ## Testing
 
 Testing is critical to making sure starship works as intended on systems big and small. Starship interfaces with many applications and system APIs when generating the prompt, so there's a lot of room for bugs to slip in.
 
-Unit tests and a subset of integration tests can be run with `cargo test`.
-The full integration test suite is run on GitHub as part of our GitHub Actions continuous integration.
+Unit tests are written using the built-in Rust testing library in the same file as the implementation, as is traditionally done in Rust codebases. These tests can be run with `cargo test` and are run on GitHub as part of our GitHub Actions continuous integration to ensure consistend behavior.
 
-### Unit Testing
+All tests that test the rendered output of a module should use `ModuleRenderer`. For Example:
 
-Unit tests are written using the built-in Rust testing library in the same file as the implementation, as is traditionally done in Rust codebases. These tests can be run with `cargo test`.
+```rust
+use super::{Context, Module, RootModuleConfig};
+
+use crate::configs::php::PhpConfig;
+use crate::formatter::StringFormatter;
+use crate::utils;
+
+
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+   /* This is where your module code goes */
+}
+
+#[cfg(test)]
+mod tests {
+   use super::*;
+   use crate::test::ModuleRenderer;
+   use ansi_term::Color;
+   use std::fs::File;
+   use std::io;
+
+
+   #[test]
+   fn should_render() -> io::Result<()> {
+      // Here you setup the testing environment
+      let tempdir = tempfile::tempdir()?;
+      // Create some file needed to render the module
+      File::create(dir.path().join("YOUR_FILE"))?.sync_all()?;
+
+      // The output of the module
+      let actual = ModuleRenderer::new("YOUR_MODULE_NAME")
+         // For a custom path
+         .path(&tempdir.path())
+         // For a custom config
+         .config(toml::toml!{
+            [YOUR_MODULE_NAME]
+            val = 1
+         })
+         // For env mocking
+         .env("KEY","VALUE")
+         // Run the module and collect the output
+         .collect();
+
+      // The value that should be rendered by the module.
+      let expected = Some(format!("{} ",Color::Black.paint("THIS SHOULD BE RENDERED")));
+
+      // Assert that the actual and expected values are the same
+      assert_eq!(actual, expected);
+
+      // Close the tempdir
+      tempdir.close()
+   }
+}
+```
+
+If a module depends on output of another program, then that output should be added to the match statement in [`utils.rs`](src/utils.rs). The match has to be exactly the same as the call to `utils::exec_cmd()`, including positional arguments and flags. The array of arguments are joined by a `" "`, so `utils::exec_cmd("program", &["arg", "more_args"])` would match with the `program arg more_args` match statement.
+
+If the program cannot be mocked (e.g. It performs some filesystem operations, either writing or reading files) then it has to added to the project's GitHub Actions workflow file([`.github/workflows/workflow.yml`](.github/workflows/workflow.yml)) and the test has to be marked with an `#[ignored]`. This ensures that anyone can run the test suite locally without needing to pre-configure their environment. The `#[ignored]` attribute is bypassed during CI runs in GitHub Actions.
 
 Unit tests should be fully isolated, only testing a given function's expected output given a specific input, and should be reproducible on any machine. Unit tests should not expect the computer running them to be in any particular state. This includes having any applications pre-installed, having any environment variables set, etc.
 
 The previous point should be emphasized: even seemingly innocuous ideas like "if we can see the directory, we can read it" or "nobody will have their home directory be a git repo" have bitten us in the past. Having even a single test fail can completely break installation on some platforms, so be careful with tests!
 
-### Integration Testing
-
-Integration tests are located in the [`tests/`](tests) directory and are also written using the built-in Rust testing library.
-
-Integration tests should test full modules or the entire prompt. All integration tests that expect the testing environment to have pre-existing state or tests that make permanent changes to the filesystem should have the `#[ignore]` attribute added to them. All tests that don't depend on any preexisting state will be run alongside the unit tests with `cargo test`.
-
-For tests that depend on having preexisting state, whatever needed state will have to be added to the project's GitHub Actions workflow file([`.github/workflows/workflow.yml`](.github/workflows/workflow.yml)).
-
 ### Test Programming Guidelines
 
 Any tests that depend on File I/O should use [`sync_all()`](https://doc.rust-lang.org/std/fs/struct.File.html#method.sync_all) when creating files or after writing to files.
 
-Any tests that use `tempfile::tempdir` should take care to call `dir.close()` after usage to ensure the lifecycle of the directory can be reasoned about.
-
-Any tests that use `create_fixture_repo()` should remove the returned directory after usage with  `remove_dir_all::remove_dir_all()`.
+Any tests that use `tempfile::tempdir` should take care to call `dir.close()` after usage to ensure the lifecycle of the directory can be reasoned about. This includes `fixture_repo()` as it returns a TempDir that should be closed.
 
 ## Running the Documentation Website Locally
 
@@ -98,17 +188,20 @@ After cloning the project, you can do the following to run the VuePress website 
 
 1. `cd` into the `/docs` directory.
 2. Install the project dependencies:
-```
-$ npm install
-```
+
+   ```sh
+   npm install
+   ```
+
 3. Start the project in development mode:
-```
-$ npm run dev
-```
 
-Once setup is complete, you can refer to VuePress documentation on the actual implementation here: https://vuepress.vuejs.org/guide/.
+   ```sh
+   npm run dev
+   ```
 
-### Git/GitHub workflow
+Once setup is complete, you can refer to VuePress documentation on the actual implementation here: <https://vuepress.vuejs.org/guide/>.
+
+## Git/GitHub workflow
 
 This is our preferred process for opening a PR on GitHub:
 

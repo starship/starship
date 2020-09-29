@@ -46,10 +46,10 @@ starship_preexec() {
 
 # If starship precmd/preexec functions are already hooked, don't double-hook them
 # to avoid unnecessary performance degradation in nested shells
-if [[ ${precmd_functions[(ie)starship_precmd]} -gt ${#precmd_functions} ]]; then
+if [[ -z ${precmd_functions[(re)starship_precmd]} ]]; then
     precmd_functions+=(starship_precmd)
 fi
-if [[ ${preexec_functions[(ie)starship_preexec]} -gt ${#preexec_functions} ]]; then
+if [[ -z ${preexec_function[(re)starship_preexec]} ]]; then
     preexec_functions+=(starship_preexec)
 fi
 
@@ -62,3 +62,6 @@ zle-keymap-select() {
 STARSHIP_START_TIME=$(::STARSHIP:: time)
 zle -N zle-keymap-select
 export STARSHIP_SHELL="zsh"
+
+# Set up the session key that will be used to store logs
+export STARSHIP_SESSION_KEY=$(::STARSHIP:: session)

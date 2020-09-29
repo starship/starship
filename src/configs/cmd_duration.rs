@@ -1,25 +1,28 @@
 use crate::config::{ModuleConfig, RootModuleConfig};
 
-use ansi_term::{Color, Style};
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig)]
 pub struct CmdDurationConfig<'a> {
     pub min_time: i64,
-    pub prefix: &'a str,
-    pub style: Style,
+    pub format: &'a str,
+    pub style: &'a str,
     pub show_milliseconds: bool,
     pub disabled: bool,
+    pub show_notifications: bool,
+    pub min_time_to_notify: i64,
 }
 
 impl<'a> RootModuleConfig<'a> for CmdDurationConfig<'a> {
     fn new() -> Self {
         CmdDurationConfig {
             min_time: 2_000,
-            prefix: "took ",
+            format: "took [$duration]($style) ",
             show_milliseconds: false,
-            style: Color::Yellow.bold(),
+            style: "yellow bold",
             disabled: false,
+            show_notifications: false,
+            min_time_to_notify: 45_000,
         }
     }
 }

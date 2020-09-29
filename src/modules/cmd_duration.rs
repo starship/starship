@@ -1,7 +1,7 @@
-use super::{Context, Module, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 
-use crate::config::RootModuleConfig;
 use crate::configs::cmd_duration::CmdDurationConfig;
+use crate::formatter::StringFormatter;
 
 /// Outputs the time it took the last command to execute
 ///
@@ -11,38 +11,43 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("cmd_duration");
     let config: CmdDurationConfig = CmdDurationConfig::try_load(module.config);
 
-    let props = &context.properties;
-    let elapsed = props
-        .get("cmd_duration")
-        .unwrap_or(&"invalid_time".into())
-        .parse::<u128>()
-        .ok()?;
-
-    /* TODO: Once error handling is implemented, warn the user if their config
-    min time is nonsensical */
     if config.min_time < 0 {
-        log::debug!(
-            "[WARN]: min_time in [cmd_duration] ({}) was less than zero",
+        log::warn!(
+            "min_time in [cmd_duration] ({}) was less than zero",
             config.min_time
         );
         return None;
     }
 
+    let elapsed = context.get_cmd_duration()?;
     let config_min = config.min_time as u128;
 
-    let module_color = match elapsed {
-        time if time < config_min => return None,
-        _ => config.style,
-    };
+    if elapsed < config_min {
+        return None;
+    }
 
-    module.set_style(module_color);
-    module.create_segment(
-        "cmd_duration",
-        &SegmentConfig::new(&render_time(elapsed, config.show_milliseconds)),
-    );
-    module.get_prefix().set_value(config.prefix);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "duration" => Some(Ok(render_time(elapsed, config.show_milliseconds))),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    Some(module)
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `cmd_duration`: \n{}", error);
+            return None;
+        }
+    });
+
+    Some(undistract_me(module, &config, elapsed))
 }
 
 // Render the time into a nice human-readable string
@@ -75,9 +80,55 @@ fn render_time_component((component, suffix): (&u128, &&str)) -> String {
     }
 }
 
+#[cfg(not(feature = "notify-rust"))]
+fn undistract_me<'a, 'b>(
+    module: Module<'a>,
+    config: &'b CmdDurationConfig,
+    _elapsed: u128,
+) -> Module<'a> {
+    if config.show_notifications {
+        log::debug!("This version of starship was built without notification support.");
+    }
+
+    module
+}
+
+#[cfg(feature = "notify-rust")]
+fn undistract_me<'a, 'b>(
+    module: Module<'a>,
+    config: &'b CmdDurationConfig,
+    elapsed: u128,
+) -> Module<'a> {
+    use ansi_term::{unstyle, ANSIStrings};
+    use notify_rust::{Notification, Timeout};
+
+    if config.show_notifications && config.min_time_to_notify as u128 <= elapsed {
+        let body = format!(
+            "Command execution {}",
+            unstyle(&ANSIStrings(&module.ansi_strings()))
+        );
+
+        let mut notification = Notification::new();
+        notification
+            .summary("Command finished")
+            .body(&body)
+            .icon("utilities-terminal")
+            .timeout(Timeout::Milliseconds(750));
+
+        if let Err(err) = notification.show() {
+            log::trace!("Cannot show notification: {}", err);
+        }
+    }
+
+    module
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test::ModuleRenderer;
+    use ansi_term::Color;
+    use std::io;
 
     #[test]
     fn test_500ms() {
@@ -98,5 +149,87 @@ mod tests {
     #[test]
     fn test_1d() {
         assert_eq!(render_time(86_400_000 as u128, true), "1d")
+    }
+
+    #[test]
+    fn config_blank_duration_1s() -> io::Result<()> {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .cmd_duration(1000)
+            .collect();
+
+        let expected = None;
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn config_blank_duration_5s() -> io::Result<()> {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .cmd_duration(5000)
+            .collect();
+
+        let expected = Some(format!("took {} ", Color::Yellow.bold().paint("5s")));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn config_5s_duration_3s() -> io::Result<()> {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                min_time = 5000
+            })
+            .cmd_duration(3000)
+            .collect();
+
+        let expected = None;
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn config_5s_duration_10s() -> io::Result<()> {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                min_time = 5000
+            })
+            .cmd_duration(10000)
+            .collect();
+
+        let expected = Some(format!("took {} ", Color::Yellow.bold().paint("10s")));
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn config_1s_duration_prefix_underwent() -> io::Result<()> {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                format = "underwent [$duration]($style) "
+            })
+            .cmd_duration(1000)
+            .collect();
+
+        let expected = None;
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn config_5s_duration_prefix_underwent() -> io::Result<()> {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                format = "underwent [$duration]($style) "
+            })
+            .cmd_duration(5000)
+            .collect();
+
+        let expected = Some(format!("underwent {} ", Color::Yellow.bold().paint("5s")));
+        assert_eq!(expected, actual);
+        Ok(())
     }
 }

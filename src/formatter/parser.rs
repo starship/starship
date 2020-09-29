@@ -1,4 +1,5 @@
 use pest::{error::Error, iterators::Pair, Parser};
+use pest_derive::*;
 
 use super::model::*;
 
@@ -6,71 +7,60 @@ use super::model::*;
 #[grammar = "formatter/spec.pest"]
 struct IdentParser;
 
-fn _parse_textgroup(textgroup: Pair<Rule>) -> TextGroup {
+fn parse_value(value: Pair<Rule>) -> FormatElement {
+    match value.as_rule() {
+        Rule::text => FormatElement::Text(parse_text(value).into()),
+        Rule::variable => FormatElement::Variable(parse_variable(value).into()),
+        Rule::textgroup => FormatElement::TextGroup(parse_textgroup(value)),
+        Rule::conditional => {
+            FormatElement::Conditional(parse_format(value.into_inner().next().unwrap()))
+        }
+        _ => unreachable!(),
+    }
+}
+
+fn parse_textgroup(textgroup: Pair<Rule>) -> TextGroup {
     let mut inner_rules = textgroup.into_inner();
     let format = inner_rules.next().unwrap();
     let style = inner_rules.next().unwrap();
 
     TextGroup {
-        format: _parse_format(format),
-        style: _parse_style(style),
+        format: parse_format(format),
+        style: parse_style(style),
     }
 }
 
-fn _parse_variable(variable: Pair<Rule>) -> &str {
+fn parse_variable(variable: Pair<Rule>) -> &str {
     variable.into_inner().next().unwrap().as_str()
 }
 
-fn _parse_text(text: Pair<Rule>) -> String {
-    let mut result = String::new();
-    for pair in text.into_inner() {
-        result.push_str(pair.as_str());
-    }
-    result
+fn parse_text(text: Pair<Rule>) -> String {
+    text.into_inner()
+        .map(|pair| pair.as_str().chars())
+        .flatten()
+        .collect()
 }
 
-fn _parse_format(format: Pair<Rule>) -> Vec<FormatElement> {
-    let mut result: Vec<FormatElement> = Vec::new();
-
-    for pair in format.into_inner() {
-        match pair.as_rule() {
-            Rule::text => result.push(FormatElement::Text(_parse_text(pair).into())),
-            Rule::variable => result.push(FormatElement::Variable(_parse_variable(pair).into())),
-            Rule::textgroup => result.push(FormatElement::TextGroup(_parse_textgroup(pair))),
-            _ => unreachable!(),
-        }
-    }
-
-    result
+fn parse_format(format: Pair<Rule>) -> Vec<FormatElement> {
+    format.into_inner().map(parse_value).collect()
 }
 
-fn _parse_style(style: Pair<Rule>) -> Vec<StyleElement> {
-    let mut result: Vec<StyleElement> = Vec::new();
-
-    for pair in style.into_inner() {
-        match pair.as_rule() {
-            Rule::text => result.push(StyleElement::Text(_parse_text(pair).into())),
-            Rule::variable => result.push(StyleElement::Variable(_parse_variable(pair).into())),
+fn parse_style(style: Pair<Rule>) -> Vec<StyleElement> {
+    style
+        .into_inner()
+        .map(|pair| match pair.as_rule() {
+            Rule::string => StyleElement::Text(pair.as_str().into()),
+            Rule::variable => StyleElement::Variable(parse_variable(pair).into()),
             _ => unreachable!(),
-        }
-    }
-
-    result
+        })
+        .collect()
 }
 
 pub fn parse(format: &str) -> Result<Vec<FormatElement>, Error<Rule>> {
-    let pairs = IdentParser::parse(Rule::expression, format)?;
-    let mut result: Vec<FormatElement> = Vec::new();
-
-    // Lifetime of Segment is the same as result
-    for pair in pairs.take_while(|pair| pair.as_rule() != Rule::EOI) {
-        match pair.as_rule() {
-            Rule::text => result.push(FormatElement::Text(_parse_text(pair).into())),
-            Rule::variable => result.push(FormatElement::Variable(_parse_variable(pair).into())),
-            Rule::textgroup => result.push(FormatElement::TextGroup(_parse_textgroup(pair))),
-            _ => unreachable!(),
-        }
-    }
-
-    Ok(result)
+    IdentParser::parse(Rule::expression, format).map(|pairs| {
+        pairs
+            .take_while(|pair| pair.as_rule() != Rule::EOI)
+            .map(parse_value)
+            .collect()
+    })
 }

@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::env;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::PathBuf;
@@ -7,14 +6,15 @@ use std::str::FromStr;
 
 use super::{Context, Module, RootModuleConfig};
 
-use crate::configs::aws::{AwsConfig, AwsItems};
+use crate::configs::aws::AwsConfig;
+use crate::formatter::StringFormatter;
 
 type Profile = String;
 type Region = String;
 
-fn get_aws_region_from_config(aws_profile: Option<&str>) -> Option<Region> {
-    let config_location = env::var("AWS_CONFIG_FILE")
-        .ok()
+fn get_aws_region_from_config(context: &Context, aws_profile: Option<&str>) -> Option<Region> {
+    let config_location = context
+        .get_env("AWS_CONFIG_FILE")
         .and_then(|path| PathBuf::from_str(&path).ok())
         .or_else(|| {
             let mut home = dirs_next::home_dir()?;
@@ -46,78 +46,347 @@ fn get_aws_region_from_config(aws_profile: Option<&str>) -> Option<Region> {
     Some(region.to_string())
 }
 
-fn get_aws_profile_and_region() -> (Option<Profile>, Option<Region>) {
+fn get_aws_profile_and_region(context: &Context) -> (Option<Profile>, Option<Region>) {
     match (
-        env::var("AWS_VAULT")
-            .or_else(|_| env::var("AWS_PROFILE"))
-            .ok(),
-        env::var("AWS_REGION").ok(),
-        env::var("AWS_DEFAULT_REGION").ok(),
+        context
+            .get_env("AWS_VAULT")
+            .or_else(|| context.get_env("AWS_PROFILE")),
+        context
+            .get_env("AWS_DEFAULT_REGION")
+            .or_else(|| context.get_env("AWS_REGION")),
     ) {
-        (Some(p), Some(_), Some(dr)) => (Some(p), Some(dr)),
-        (Some(p), Some(r), None) => (Some(p), Some(r)),
-        (None, Some(r), None) => (None, Some(r)),
-        (Some(p), None, Some(dr)) => (Some(p), Some(dr)),
-        (Some(ref p), None, None) => (Some(p.to_owned()), get_aws_region_from_config(Some(p))),
-        (None, None, Some(dr)) => (None, Some(dr)),
-        (None, Some(_), Some(dr)) => (None, Some(dr)),
-        (None, None, None) => (None, get_aws_region_from_config(None)),
+        (Some(p), Some(r)) => (Some(p), Some(r)),
+        (None, Some(r)) => (None, Some(r)),
+        (Some(ref p), None) => (
+            Some(p.to_owned()),
+            get_aws_region_from_config(context, Some(p)),
+        ),
+        (None, None) => (None, get_aws_region_from_config(context, None)),
     }
 }
 
-fn get_aws_region() -> Option<Region> {
-    match (
-        env::var("AWS_REGION").ok(),
-        env::var("AWS_DEFAULT_REGION").ok(),
-    ) {
-        (Some(r), None) => Some(r),
-        (None, Some(dr)) => Some(dr),
-        (Some(_), Some(dr)) => Some(dr),
-        (None, None) => get_aws_region_from_config(None),
-    }
-}
-
-fn alias_region(region: &str, aliases: &HashMap<String, &str>) -> String {
-    match aliases.get(region) {
-        None => region.to_string(),
+fn alias_region(region: String, aliases: &HashMap<String, &str>) -> String {
+    match aliases.get(&region) {
+        None => region,
         Some(alias) => (*alias).to_string(),
     }
 }
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    const AWS_PREFIX: &str = "on ";
-
     let mut module = context.new_module("aws");
     let config: AwsConfig = AwsConfig::try_load(module.config);
 
-    module.set_style(config.style);
+    let (aws_profile, aws_region) = get_aws_profile_and_region(context);
+    if aws_profile.is_none() && aws_region.is_none() {
+        return None;
+    }
 
-    module.get_prefix().set_value(AWS_PREFIX);
-
-    module.create_segment("symbol", &config.symbol);
-    match config.displayed_items {
-        AwsItems::All => {
-            let (aws_profile, aws_region) = get_aws_profile_and_region();
-
-            let aws_segment = match (&aws_profile, &aws_region) {
-                (None, None) => return None,
-                (Some(p), Some(r)) => format!("{}({})", p, alias_region(r, &config.region_aliases)),
-                (Some(p), None) => p.to_string(),
-                (None, Some(r)) => alias_region(r, &config.region_aliases),
-            };
-            module.create_segment("all", &config.region.with_value(&aws_segment));
-        }
-        AwsItems::Profile => {
-            let aws_profile = env::var("AWS_PROFILE").ok()?;
-
-            module.create_segment("profile", &config.profile.with_value(&aws_profile));
-        }
-        AwsItems::Region => {
-            let aws_region = alias_region(&get_aws_region()?, &config.region_aliases);
-
-            module.create_segment("region", &config.region.with_value(&aws_region));
-        }
+    let mapped_region = if let Some(aws_region) = aws_region {
+        Some(alias_region(aws_region, &config.region_aliases))
+    } else {
+        None
     };
 
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "profile" => aws_profile.as_ref().map(Ok),
+                "region" => mapped_region.as_ref().map(Ok),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `aws`: \n{}", error);
+            return None;
+        }
+    });
+
     Some(module)
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::test::ModuleRenderer;
+    use ansi_term::Color;
+    use std::fs::File;
+    use std::io::{self, Write};
+
+    #[test]
+    fn no_region_set() -> io::Result<()> {
+        let actual = ModuleRenderer::new("aws").collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn region_set() -> io::Result<()> {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_REGION", "ap-northeast-2")
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Yellow.bold().paint("☁️  (ap-northeast-2)")
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn region_set_with_alias() -> io::Result<()> {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_REGION", "ap-southeast-2")
+            .config(toml::toml! {
+                [aws.region_aliases]
+                ap-southeast-2 = "au"
+            })
+            .collect();
+        let expected = Some(format!("on {} ", Color::Yellow.bold().paint("☁️  (au)")));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn default_region_set() -> io::Result<()> {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_REGION", "ap-northeast-2")
+            .env("AWS_DEFAULT_REGION", "ap-northeast-1")
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Yellow.bold().paint("☁️  (ap-northeast-1)")
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn profile_set() -> io::Result<()> {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Yellow.bold().paint("☁️  astronauts")
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn profile_set_from_aws_vault() -> io::Result<()> {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_VAULT", "astronauts-vault")
+            .env("AWS_PROFILE", "astronauts-profile")
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Yellow.bold().paint("☁️  astronauts-vault")
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn profile_and_region_set() -> io::Result<()> {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_REGION", "ap-northeast-2")
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Yellow.bold().paint("☁️  astronauts(ap-northeast-2)")
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn default_profile_set() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let mut file = File::create(&config_path)?;
+
+        file.write_all(
+            "[default]
+region = us-east-1
+
+[profile astronauts]
+region = us-east-2
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Yellow.bold().paint("☁️  (us-east-1)")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn profile_and_config_set() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let mut file = File::create(&config_path)?;
+
+        file.write_all(
+            "[default]
+region = us-east-1
+
+[profile astronauts]
+region = us-east-2
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .env("AWS_PROFILE", "astronauts")
+            .config(toml::toml! {
+                [aws]
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Yellow.bold().paint("☁️  astronauts(us-east-2)")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn profile_and_region_set_with_display_all() -> io::Result<()> {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_REGION", "ap-northeast-1")
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Yellow.bold().paint("☁️  astronauts(ap-northeast-1)")
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn profile_set_with_display_all() -> io::Result<()> {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Yellow.bold().paint("☁️  astronauts")
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn region_set_with_display_all() -> io::Result<()> {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_REGION", "ap-northeast-1")
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Yellow.bold().paint("☁️  (ap-northeast-1)")
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn profile_and_region_set_with_display_region() -> io::Result<()> {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_DEFAULT_REGION", "ap-northeast-1")
+            .config(toml::toml! {
+                [aws]
+                format = "on [$symbol$region]($style) "
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Yellow.bold().paint("☁️  ap-northeast-1")
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn profile_and_region_set_with_display_profile() -> io::Result<()> {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_REGION", "ap-northeast-1")
+            .config(toml::toml! {
+                [aws]
+                format = "on [$symbol$profile]($style) "
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Yellow.bold().paint("☁️  astronauts")
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn region_set_with_display_profile() -> io::Result<()> {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_REGION", "ap-northeast-1")
+            .config(toml::toml! {
+                [aws]
+                format = "on [$symbol$profile]($style) "
+            })
+            .collect();
+        let expected = Some(format!("on {} ", Color::Yellow.bold().paint("☁️  ")));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn region_not_set_with_display_region() -> io::Result<()> {
+        let actual = ModuleRenderer::new("aws")
+            .config(toml::toml! {
+                [aws]
+                format = "on [$symbol$region]($style) "
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
 }

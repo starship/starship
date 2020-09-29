@@ -6,9 +6,8 @@ use std::path;
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::kubernetes::KubernetesConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
-
-const KUBERNETES_PREFIX: &str = "on ";
 
 fn get_kube_context(contents: &str) -> Option<(String, String)> {
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
@@ -43,11 +42,11 @@ fn parse_kubectl_file(filename: &path::PathBuf) -> Option<(String, String)> {
 }
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let kube_cfg = match env::var("KUBECONFIG") {
-        Ok(paths) => env::split_paths(&paths)
+    let kube_cfg = match context.get_env("KUBECONFIG") {
+        Some(paths) => env::split_paths(&paths)
             .filter_map(|filename| parse_kubectl_file(&filename))
             .next(),
-        Err(_) => {
+        None => {
             let filename = dirs_next::home_dir()?.join(".kube").join("config");
             parse_kubectl_file(&filename)
         }
@@ -59,27 +58,51 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
             let mut module = context.new_module("kubernetes");
             let config: KubernetesConfig = KubernetesConfig::try_load(module.config);
+
+            // As we default to disabled=true, we have to check here after loading our config module,
+            // before it was only checking against whatever is in the config starship.toml
             if config.disabled {
                 return None;
             };
 
-            module.set_style(config.style);
-            module.get_prefix().set_value(KUBERNETES_PREFIX);
+            let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+                formatter
+                    .map_meta(|variable, _| match variable {
+                        "symbol" => Some(config.symbol),
+                        _ => None,
+                    })
+                    .map_style(|variable| match variable {
+                        "style" => Some(Ok(config.style)),
+                        _ => None,
+                    })
+                    .map(|variable| match variable {
+                        "context" => match config.context_aliases.get(&kube_ctx) {
+                            None => Some(Ok(kube_ctx.as_str())),
+                            Some(&alias) => Some(Ok(alias)),
+                        },
+                        _ => None,
+                    })
+                    .map(|variable| match variable {
+                        "namespace" => {
+                            if kube_ns != "" {
+                                Some(Ok(kube_ns.as_str()))
+                            } else {
+                                None
+                            }
+                        }
+                        _ => None,
+                    })
+                    .parse(None)
+            });
 
-            module.create_segment("symbol", &config.symbol);
+            module.set_segments(match parsed {
+                Ok(segments) => segments,
+                Err(error) => {
+                    log::warn!("Error in module `kubernetes`: \n{}", error);
+                    return None;
+                }
+            });
 
-            let displayed_context = match config.context_aliases.get(&kube_ctx) {
-                None => &kube_ctx,
-                Some(&alias) => alias,
-            };
-
-            module.create_segment("context", &config.context.with_value(&displayed_context));
-            if kube_ns != "" {
-                module.create_segment(
-                    "namespace",
-                    &config.namespace.with_value(&format!(" ({})", kube_ns)),
-                );
-            }
             Some(module)
         }
         None => None,

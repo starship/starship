@@ -1,10 +1,10 @@
-use ansi_term::Color;
 use std::io::Write;
 use std::process::{Command, Output, Stdio};
+use std::time::Instant;
 
 use super::{Context, Module, RootModuleConfig};
 
-use crate::{config::SegmentConfig, configs::custom::CustomConfig};
+use crate::{configs::custom::CustomConfig, formatter::StringFormatter};
 
 /// Creates a custom module with some configuration
 ///
@@ -13,7 +13,8 @@ use crate::{config::SegmentConfig, configs::custom::CustomConfig};
 /// command can be run -- if its result is 0, the module will be shown.
 ///
 /// Finally, the content of the module itself is also set by a command.
-pub fn module<'a>(name: &'a str, context: &'a Context) -> Option<Module<'a>> {
+pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
+    let start: Instant = Instant::now();
     let toml_config = context.config.get_custom_module_config(name).expect(
         "modules::custom::module should only be called after ensuring that the module exists",
     );
@@ -44,35 +45,41 @@ pub fn module<'a>(name: &'a str, context: &'a Context) -> Option<Module<'a>> {
     }
 
     let mut module = Module::new(name, config.description, Some(toml_config));
-    let style = config.style.unwrap_or_else(|| Color::Green.bold());
 
-    if let Some(prefix) = config.prefix {
-        module.get_prefix().set_value(prefix);
+    let output = exec_command(config.command, &config.shell.0)?;
+
+    let trimmed = output.trim();
+    if !trimmed.is_empty() {
+        let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+            formatter
+                .map_meta(|var, _| match var {
+                    "symbol" => Some(config.symbol),
+                    _ => None,
+                })
+                .map_style(|variable| match variable {
+                    "style" => Some(Ok(config.style)),
+                    _ => None,
+                })
+                .map(|variable| match variable {
+                    // This may result in multiple calls to `get_module_version` when a user have
+                    // multiple `$version` variables defined in `format`.
+                    "output" => Some(Ok(trimmed)),
+                    _ => None,
+                })
+                .parse(None)
+        });
+
+        match parsed {
+            Ok(segments) => module.set_segments(segments),
+            Err(error) => {
+                log::warn!("Error in module `custom.{}`:\n{}", name, error);
+            }
+        };
     }
-    if let Some(suffix) = config.suffix {
-        module.get_suffix().set_value(suffix);
-    }
-
-    if let Some(symbol) = config.symbol {
-        module.create_segment("symbol", &symbol);
-    }
-
-    if let Some(output) = exec_command(config.command, &config.shell.0) {
-        let trimmed = output.trim();
-
-        if trimmed.is_empty() {
-            return None;
-        }
-
-        module.create_segment(
-            "output",
-            &SegmentConfig::new(&trimmed).with_style(Some(style)),
-        );
-
-        Some(module)
-    } else {
-        None
-    }
+    let elapsed = start.elapsed();
+    log::trace!("Took {:?} to compute custom module {:?}", elapsed, name);
+    module.duration = elapsed;
+    Some(module)
 }
 
 /// Return the invoking shell, using `shell` and fallbacking in order to STARSHIP_SHELL and "sh"

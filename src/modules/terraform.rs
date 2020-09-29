@@ -1,8 +1,9 @@
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::terraform::TerraformConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
-use std::env;
+
 use std::io;
 use std::path::PathBuf;
 
@@ -25,36 +26,50 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("terraform");
     let config: TerraformConfig = TerraformConfig::try_load(module.config);
 
-    module.set_style(config.style);
-    module.create_segment("symbol", &config.symbol);
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => format_terraform_version(
+                    &utils::exec_cmd("terraform", &["version"])?.stdout.as_str(),
+                )
+                .map(Ok),
+                "workspace" => get_terraform_workspace(context).map(Ok),
+                _ => None,
+            })
+            .parse(None)
+    });
 
-    if config.show_version {
-        let terraform_version =
-            format_terraform_version(&utils::exec_cmd("terraform", &["version"])?.stdout.as_str())?;
-        module.create_segment("version", &config.version.with_value(&terraform_version));
-    }
-
-    let terraform_workspace = &get_terraform_workspace(&context.current_dir)?;
-    module.create_segment(
-        "workspace",
-        &config.workspace.with_value(&terraform_workspace),
-    );
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `terraform`:\n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }
 
 // Determines the currently selected workspace (see https://github.com/hashicorp/terraform/blob/master/command/meta.go for the original implementation)
-fn get_terraform_workspace(cwd: &PathBuf) -> Option<String> {
+fn get_terraform_workspace(context: &Context) -> Option<String> {
     // Workspace can be explicitly overwritten by an env var
-    let workspace_override = env::var("TF_WORKSPACE");
-    if workspace_override.is_ok() {
-        return workspace_override.ok();
+    let workspace_override = context.get_env("TF_WORKSPACE");
+    if workspace_override.is_some() {
+        return workspace_override;
     }
 
     // Data directory containing current workspace can be overwritten by an env var
-    let datadir = match env::var("TF_DATA_DIR") {
-        Ok(s) => PathBuf::from(s),
-        Err(_) => cwd.join(".terraform"),
+    let datadir = match context.get_env("TF_DATA_DIR") {
+        Some(s) => PathBuf::from(s),
+        None => context.current_dir.join(".terraform"),
     };
     match utils::read_file(datadir.join("environment")) {
         Err(ref e) if e.kind() == io::ErrorKind::NotFound => Some("default".to_string()),
@@ -81,6 +96,10 @@ fn format_terraform_version(version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test::ModuleRenderer;
+    use ansi_term::Color;
+    use std::fs::{self, File};
+    use std::io::{self, Write};
 
     #[test]
     fn test_format_terraform_version_release() {
@@ -121,5 +140,155 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
             format_terraform_version(input),
             Some("v0.12.13 ".to_string())
         );
+    }
+
+    #[test]
+    fn folder_with_dotterraform_with_version_no_environment() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let tf_dir = dir.path().join(".terraform");
+        fs::create_dir(&tf_dir)?;
+
+        let actual = ModuleRenderer::new("terraform")
+            .path(dir.path())
+            .config(toml::toml! {
+                [terraform]
+                format = "via [$symbol$version$workspace]($style) "
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 v0.12.14 default")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_dotterraform_with_version_with_environment() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let tf_dir = dir.path().join(".terraform");
+        fs::create_dir(&tf_dir)?;
+        let mut file = File::create(tf_dir.join("environment"))?;
+        file.write_all(b"development")?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("terraform")
+            .path(dir.path())
+            .config(toml::toml! {
+                [terraform]
+                format = "via [$symbol$version$workspace]($style) "
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 v0.12.14 development")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_without_dotterraform() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_tf_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("main.tf"))?;
+
+        let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 default")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_workspace_override() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("main.tf"))?;
+
+        let actual = ModuleRenderer::new("terraform")
+            .path(dir.path())
+            .env("TF_WORKSPACE", "development")
+            .collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 development")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_datadir_override() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("main.tf"))?;
+
+        let datadir = tempfile::tempdir()?;
+        let mut file = File::create(datadir.path().join("environment"))?;
+        file.write_all(b"development")?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("terraform")
+            .path(dir.path())
+            .env("TF_DATA_DIR", datadir.path().to_str().unwrap())
+            .collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 development")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()?;
+        datadir.close()
+    }
+
+    #[test]
+    fn folder_with_dotterraform_no_environment() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let tf_dir = dir.path().join(".terraform");
+        fs::create_dir(&tf_dir)?;
+
+        let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 default")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_dotterraform_with_environment() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let tf_dir = dir.path().join(".terraform");
+        fs::create_dir(&tf_dir)?;
+        let mut file = File::create(tf_dir.join("environment"))?;
+        file.write_all(b"development")?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 development")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
     }
 }

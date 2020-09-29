@@ -1,6 +1,7 @@
-use super::{Context, Module, RootModuleConfig, SegmentConfig};
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::purescript::PureScriptConfig;
+use crate::formatter::StringFormatter;
 use crate::utils;
 
 /// Creates a module with the current PureScript version
@@ -20,21 +21,41 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let purs_version = utils::exec_cmd("purs", &["--version"])?.stdout;
-    let formatted_version = Some(format!("v{}", purs_version.trim()))?;
 
     let mut module = context.new_module("purescript");
     let config: PureScriptConfig = PureScriptConfig::try_load(module.config);
-    module.set_style(config.style);
 
-    module.create_segment("symbol", &config.symbol);
-    module.create_segment("version", &SegmentConfig::new(&formatted_version));
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => Some(Ok(format!("v{}", purs_version.trim()))),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `purescript`:\n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::modules::utils::test::render_module;
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -42,7 +63,7 @@ mod tests {
     #[test]
     fn folder_without_purescript_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = render_module("purescript", dir.path(), None);
+        let actual = ModuleRenderer::new("purescript").path(dir.path()).collect();
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -53,7 +74,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Main.purs"))?.sync_all()?;
 
-        let actual = render_module("purescript", dir.path(), None);
+        let actual = ModuleRenderer::new("purescript").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::White.bold().paint("<=> v0.13.5")));
         assert_eq!(expected, actual);
         dir.close()
@@ -64,7 +85,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("spago.dhall"))?.sync_all()?;
 
-        let actual = render_module("purescript", dir.path(), None);
+        let actual = ModuleRenderer::new("purescript").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::White.bold().paint("<=> v0.13.5")));
         assert_eq!(expected, actual);
         dir.close()
