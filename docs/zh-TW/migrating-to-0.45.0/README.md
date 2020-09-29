@@ -78,7 +78,7 @@ format = "took [$duration]($style)"
 
 #### 字元
 
-| Deprecated Property     | Replacement      |
+| Removed Property        | Replacement      |
 | ----------------------- | ---------------- |
 | `symbol`                | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
@@ -111,9 +111,9 @@ error_symbol = "[✖](bold red) "
 
 #### 指令持續時間
 
-| Deprecated Property | Replacement |
-| ------------------- | ----------- |
-| `prefix`            | `format`    |
+| Removed Property | Replacement |
+| ---------------- | ----------- |
+| `prefix`         | `format`    |
 
 **Changes to the Default Configuration**
 
@@ -125,9 +125,9 @@ error_symbol = "[✖](bold red) "
 
 #### Directory
 
-| Deprecated Property | Replacement |
-| ------------------- | ----------- |
-| `prefix`            | `format`    |
+| Removed Property | Replacement |
+| ---------------- | ----------- |
+| `prefix`         | `format`    |
 
 **Changes to the Default Configuration**
 
@@ -139,10 +139,10 @@ error_symbol = "[✖](bold red) "
 
 #### Environment Variable
 
-| Deprecated Property | Replacement |
-| ------------------- | ----------- |
-| `prefix`            | `format`    |
-| `suffix`            | `format`    |
+| Removed Property | Replacement |
+| ---------------- | ----------- |
+| `prefix`         | `format`    |
+| `suffix`         | `format`    |
 
 **Changes to the Default Configuration**
 
@@ -155,10 +155,10 @@ error_symbol = "[✖](bold red) "
 
 #### Git Commit
 
-| Deprecated Property | Replacement |
-| ------------------- | ----------- |
-| `prefix`            | `format`    |
-| `suffix`            | `format`    |
+| Removed Property | Replacement |
+| ---------------- | ----------- |
+| `prefix`         | `format`    |
+| `suffix`         | `format`    |
 
 **Changes to the Default Configuration**
 
@@ -171,11 +171,11 @@ error_symbol = "[✖](bold red) "
 
 #### Git Status
 
-| Deprecated Property | Replacement |
-| ------------------- | ----------- |
-| `prefix`            | `format`    |
-| `suffix`            | `format`    |
-| `show_sync_count`   | `format`    |
+| Removed Property  | Replacement |
+| ----------------- | ----------- |
+| `prefix`          | `format`    |
+| `suffix`          | `format`    |
+| `show_sync_count` | `format`    |
 
 **Changes to the Default Configuration**
 
@@ -202,10 +202,10 @@ behind = "⇣${count}"
 
 #### Hostname
 
-| Deprecated Property | Replacement |
-| ------------------- | ----------- |
-| `prefix`            | `format`    |
-| `suffix`            | `format`    |
+| Removed Property | Replacement |
+| ---------------- | ----------- |
+| `prefix`         | `format`    |
+| `suffix`         | `format`    |
 
 **Changes to the Default Configuration**
 
@@ -218,11 +218,11 @@ behind = "⇣${count}"
 
 #### Singularity
 
-| Deprecated Property | Replacement |
-| ------------------- | ----------- |
-| `label`             | `format`    |
-| `prefix`            | `format`    |
-| `suffix`            | `format`    |
+| Removed Property | Replacement |
+| ---------------- | ----------- |
+| `label`          | `format`    |
+| `prefix`         | `format`    |
+| `suffix`         | `format`    |
 
 **Changes to the Default Configuration**
 
@@ -235,9 +235,9 @@ behind = "⇣${count}"
 
 #### Time
 
-| Deprecated Property | Replacement   |
-| ------------------- | ------------- |
-| `format`            | `time_format` |
+| Removed Property | Replacement   |
+| ---------------- | ------------- |
+| `format`         | `time_format` |
 
 **Changes to the Default Configuration**
 
@@ -250,10 +250,10 @@ behind = "⇣${count}"
 
 #### Custom Commands
 
-| Deprecated Property | Replacement |
-| ------------------- | ----------- |
-| `prefix`            | `format`    |
-| `suffix`            | `format`    |
+| Removed Property | Replacement |
+| ---------------- | ----------- |
+| `prefix`         | `format`    |
+| `suffix`         | `format`    |
 
 **Changes to the Default Configuration**
 
