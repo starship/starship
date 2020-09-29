@@ -21,7 +21,7 @@ where
     /// values.
     fn load(config: &'a Value) -> Self {
         if config.get("prompt_order").is_some() {
-            log::warn!("\"prompt_order\" has been deprecated in favor of \"format\". For more details, see: https://starship.rs/migrating-to-0.45.0/")
+            log::warn!("\"prompt_order\" has been removed in favor of \"format\". For more details, see: https://starship.rs/migrating-to-0.45.0/")
         }
         Self::new().load_config(config)
     }
