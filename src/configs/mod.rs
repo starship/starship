@@ -43,6 +43,7 @@ pub mod rust;
 pub mod shlvl;
 pub mod singularity;
 mod starship_root;
+pub mod status;
 pub mod swift;
 pub mod terraform;
 pub mod time;

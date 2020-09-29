@@ -7,6 +7,7 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
+
 ```toml
 # Don't print a new line at the start of the prompt
 add_newline = false
@@ -30,6 +31,21 @@ Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE
 
 ```ps1
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
+```
+
+### Logging
+
+By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal.
+This, however can be changed using the `STARSHIP_CACHE` environment variable:
+
+```sh
+export STARSHIP_CACHE=~/.starship/cache
+```
+
+Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+
+```ps1
+$ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
 ### Terminology
@@ -101,7 +117,7 @@ For example:
 The following symbols have special usage in a format string.
 If you want to print the following symbols, you have to escape them with a backslash (`\`).
 
-- $
+- \$
 - \\
 - [
 - ]
@@ -216,6 +232,7 @@ $line_break\
 $jobs\
 $battery\
 $time\
+$status\
 $character"""
 ```
 
@@ -874,7 +891,7 @@ The module will be shown only if any of the following conditions are met:
 
 | Variable  | Example                                     | Description                                |
 | --------- | ------------------------------------------- | ------------------------------------------ |
-| env_value | `Windows NT` (if *variable* would be `$OS`) | The environment value of option `variable` |
+| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
 | symbol    |                                             | Mirrors the value of option `symbol`       |
 | style\*   | `black bold dimmed`                         | Mirrors the value of option `style`        |
 
@@ -902,7 +919,7 @@ The module will be shown if any of the following conditions are met:
 
 | Option     | Default                            | Description                                              |
 | ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `symbol`   | `"🖧 "`                            | The symbol used before displaying the version of erlang. |
+| `symbol`   | `"🖧 "`                             | The symbol used before displaying the version of erlang. |
 | `style`    | `"bold red"`                       | The style for the module.                                |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                               |
 | `disabled` | `false`                            | Disables the `erlang` module.                            |
@@ -933,13 +950,13 @@ This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gc
 
 ### Options
 
-| Variable          | Default                                           | Description                                                                 |
-| ----------------- | ------------------------------------------------- | --------------------------------------------------------------------------- |
-| `format`          | `"on [$symbol$account(\\($region\\))]($style) "`  | The format for the module.                                                  |
-| `symbol`          | `"☁️ "`                                            | The symbol used before displaying the current GCP profile.                  |
-| `region_aliases`  |                                                   | Table of region aliases to display in addition to the GCP name.             |
-| `style`           | `"bold blue"`                                     | The style for the module.                                                   |
-| `disabled`        | `false`                                           | Disables the `gcloud` module.                                               |
+| Variable         | Default                                          | Description                                                     |
+| ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
+| `format`         | `"on [$symbol$account(\\($region\\))]($style) "` | The format for the module.                                      |
+| `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current GCP profile.      |
+| `region_aliases` |                                                  | Table of region aliases to display in addition to the GCP name. |
+| `style`          | `"bold blue"`                                    | The style for the module.                                       |
+| `disabled`       | `false`                                          | Disables the `gcloud` module.                                   |
 
 ### Variables
 
@@ -995,7 +1012,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 | Option              | Default                          | Description                                                                              |
 | ------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
-| `format`            | `"on [$symbol$branch]($style) "` | The format for the module.  Use `"$branch"` to refer to the current branch name.         |
+| `format`            | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.          |
 | `symbol`            | `" "`                           | A format string representing the symbol of git branch.                                   |
 | `style`             | `"bold purple"`                  | The style for the module.                                                                |
 | `truncation_length` | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                   |
@@ -1074,7 +1091,7 @@ that information will be shown too.
 | `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
 | `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
 | `style`        | `"bold yellow"`                                                 | The style for the module.                                                               |
-| `format`       | `"[\\($state( $progress_current/$progress_total)\\)]($style) "` | The format for the module.                                                              |
+| `format`       | `"\\([$state( $progress_current/$progress_total)]($style)\\) "` | The format for the module.                                                              |
 | `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
 
 ### Variables
@@ -1107,7 +1124,7 @@ current directory.
 
 | Option            | Default                                     | Description                                          |
 | ----------------- | ------------------------------------------- | ---------------------------------------------------- |
-| `format`          | "([\[$all_status$ahead_behind\]]($style) )" | The default format for `git_status`                  |
+| `format`          | `"[\[$all_status$ahead_behind\]]($style) "` | The default format for `git_status`                  |
 | `conflicted`      | `"="`                                       | This branch has merge conflicts.                     |
 | `ahead`           | `"⇡"`                                       | The format of `ahead`                                |
 | `behind`          | `"⇣"`                                       | The format of `behind`                               |
@@ -1118,7 +1135,6 @@ current directory.
 | `staged`          | `"+"`                                       | The format of `staged`                               |
 | `renamed`         | `"»"`                                       | The format of `renamed`                              |
 | `deleted`         | `"✘"`                                       | The format of `deleted`                              |
-| `show_sync_count` | `false`                                     | Show ahead/behind count of the branch being tracked. |
 | `style`           | `"bold red"`                                | The style for the module.                            |
 | `disabled`        | `false`                                     | Disables the `git_status` module.                    |
 
@@ -1131,12 +1147,12 @@ The following variables can be used in `format`:
 | `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                   |
 | `ahead_behind` | Displays `diverged` `ahead` or `behind` format string based on the current status of the repo |
 | `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                   |
-| `untracked`    | Displays `untracked`  when there are untracked files in the working directory.                |
-| `stashed`      | Displays `stashed`    when a stash exists for the local repository.                           |
-| `modified`     | Displays `modified`   when there are file modifications in the working directory.             |
-| `staged`       | Displays `staged`     when a new file has been added to the staging area.                     |
-| `renamed`      | Displays `renamed`    when a renamed file has been added to the staging area.                 |
-| `deleted`      | Displays `deleted`    when a file's deletion has been added to the staging area.              |
+| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                 |
+| `stashed`      | Displays `stashed` when a stash exists for the local repository.                              |
+| `modified`     | Displays `modified` when there are file modifications in the working directory.               |
+| `staged`       | Displays `staged` when a new file has been added to the staging area.                         |
+| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                    |
+| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                 |
 | style\*        | Mirrors the value of option `style`                                                           |
 
 \*: This variable can only be used as a part of a style string
@@ -1170,6 +1186,16 @@ modified = "📝"
 staged = '[++\($count\)](green)'
 renamed = "👅"
 deleted = "🗑"
+```
+
+Show ahead/behind count of the branch being tracked
+```toml
+# ~/.config/starship.toml
+
+[git_status]
+ahead = "⇡${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+behind = "⇣${count}"
 ```
 
 ## Golang
@@ -1224,20 +1250,20 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                    |
-| ---------- | ---------------------------------- | ---------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                     |
-| `symbol`   | `"⎈ "`                            | A format string representing the symbol of Helm. |
-| `style`    | `"bold white"`                      | The style for the module.                      |
-| `disabled` | `false`                            | Disables the `helm` module.                  |
+| Option     | Default                            | Description                                      |
+| ---------- | ---------------------------------- | ------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
+| `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
+| `style`    | `"bold white"`                     | The style for the module.                        |
+| `disabled` | `false`                            | Disables the `helm` module.                      |
 
 ### Variables
 
-| Variable | Example   | Description                          |
-| -------- | --------- | ------------------------------------ |
-| version  | `v3.1.1` | The version of `helm`                  |
-| symbol   |           | Mirrors the value of option `symbol` |
-| style\*  |           | Mirrors the value of option `style`  |
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v3.1.1` | The version of `helm`                |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1260,7 +1286,7 @@ The `hostname` module shows the system hostname.
 | ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
 | `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`   | `"on [$hostname]($style) "` | The format for the module.                                                                                                           |
+| `format`   | `"[$hostname]($style) in "` | The format for the module.                                                                                                           |
 | `style`    | `"bold dimmed green"`       | The style for the module.                                                                                                            |
 | `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
 
@@ -1413,8 +1439,8 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 | Option                  | Default                                              | Description                                                           |
 | ----------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`                | `"☸ "`                                              | A format string representing the symbol displayed before the Cluster. |
-| `format`                | `"on [$symbol$context( \\($namespace\\))]($style) "` | The format for the module.                                            |
+| `symbol`                | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
+| `format`                | `"[$symbol$context( \\($namespace\\))]($style) in "` | The format for the module.                                            |
 | `style`                 | `"cyan bold"`                                        | The style for the module.                                             |
 | `namespace_spaceholder` | `none`                                               | The value to display if no namespace was found.                       |
 | `context_aliases`       |                                                      | Table of context aliases to display.                                  |
@@ -1487,14 +1513,14 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Variables
 
-| Variable    | Example       | Description                                                        |
-| ----------- | ------------- | ------------------------------------------------------------------ |
-| ram         | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
-| ram_pct     | `48%`         | The percentage of the current system memory.                       |
-| swap\**     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
-| swap_pct\** | `77%`         | The swap memory percentage of the current system swap memory file. |
-| symbol      | `🐏`          | Mirrors the value of option `symbol`                               |
-| style\*     |               | Mirrors the value of option `style`                                |
+| Variable     | Example       | Description                                                        |
+| ------------ | ------------- | ------------------------------------------------------------------ |
+| ram          | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
+| ram_pct      | `48%`         | The percentage of the current system memory.                       |
+| swap\*\*     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
+| swap_pct\*\* | `77%`         | The swap memory percentage of the current system swap memory file. |
+| symbol       | `🐏`          | Mirrors the value of option `symbol`                               |
+| style\*      |               | Mirrors the value of option `style`                                |
 
 \*: This variable can only be used as a part of a style string
 \*\*: The SWAP file information is only displayed if detected on the current system
@@ -1599,7 +1625,7 @@ The module will be shown when inside a nix-shell environment.
 | Option       | Default                                        | Description                                           |
 | ------------ | ---------------------------------------------- | ----------------------------------------------------- |
 | `format`     | `"via [$symbol$state( \\($name\\))]($style) "` | The format for the module.                            |
-| `symbol`     | `"❄️  "`                                       | A format string representing the symbol of nix-shell. |
+| `symbol`     | `"❄️ "`                                        | A format string representing the symbol of nix-shell. |
 | `style`      | `"bold blue"`                                  | The style for the module.                             |
 | `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
 | `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
@@ -1759,7 +1785,6 @@ The module will be shown if any of the following conditions are met:
 format = "via [🐪 $version]($style) "
 ```
 
-
 ## Perl
 
 The `perl` module shows the currently installed version of Perl.
@@ -1774,8 +1799,8 @@ The module will be shown if any of the following conditions are met:
 ### Options
 
 | Variable   | Default                            | Description                                           |
-| ---------- |----------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.|
+| ---------- | ---------------------------------- | ----------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
 | `symbol`   | `"🐪 "`                            | The symbol used before displaying the version of Perl |
 | `style`    | `"bold 149"`                       | The style for the module.                             |
 | `disabled` | `false`                            | Disables the `perl` module.                           |
@@ -1796,7 +1821,6 @@ The module will be shown if any of the following conditions are met:
 [perl]
 format = "via [🦪 $version]($style) "
 ```
-
 
 ## PHP
 
@@ -1857,23 +1881,25 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option               | Default                                                    | Description                                                                |
-| -------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `format`             | `"via [${symbol}${version}( \\($virtualenv\\))]($style) "` | The format for the module.                                                 |
-| `symbol`             | `"🐍 "`                                                    | A format string representing the symbol of Python                          |
-| `style`              | `"yellow bold"`                                            | The style for the module.                                                  |
-| `pyenv_version_name` | `false`                                                    | Use pyenv to get Python version                                            |
-| `scan_for_pyfiles`   | `true`                                                     | If false, Python files in the current directory will not show this module. |
-| `disabled`           | `false`                                                    | Disables the `python` module.                                              |
+| Option               | Default                                                                   | Description                                                                |
+| -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `format`             | `"via [${symbol}${pyenv_prefix}${version}( \\($virtualenv\\))]($style) "` | The format for the module.                                                 |
+| `symbol`             | `"🐍 "`                                                                   | A format string representing the symbol of Python                          |
+| `style`              | `"yellow bold"`                                                           | The style for the module.                                                  |
+| `pyenv_version_name` | `false`                                                                   | Use pyenv to get Python version                                            |
+| `pyenv_prefix`       | `pyenv `                                                                  | Prefix before pyenv version display, only used if pyenv is used            |
+| `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module. |
+| `disabled`           | `false`                                                                   | Disables the `python` module.                                              |
 
 ### Variables
 
-| Variable   | Example         | Description                          |
-| ---------- | --------------- | ------------------------------------ |
-| version    | `"v3.8.1"`      | The version of `python`              |
-| symbol     | `"🐍 "`         | Mirrors the value of option `symbol` |
-| style      | `"yellow bold"` | Mirrors the value of option `style`  |
-| virtualenv | `"venv"`        | The current `virtualenv` name        |
+| Variable     | Example         | Description                                |
+| ------------ | --------------- | ------------------------------------------ |
+| version      | `"v3.8.1"`      | The version of `python`                    |
+| symbol       | `"🐍 "`         | Mirrors the value of option `symbol`       |
+| style        | `"yellow bold"` | Mirrors the value of option `style`        |
+| pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
+| virtualenv   | `"venv"`        | The current `virtualenv` name              |
 
 <details>
 <summary>This module has some advanced configuration options.</summary>
@@ -1902,7 +1928,6 @@ python_binary = "python3"
 [python]
 symbol = "👾 "
 pyenv_version_name = true
-pyenv_prefix = "foo "
 ```
 
 ## R
@@ -2019,21 +2044,21 @@ set to a number and meets or exceeds the specified threshold.
 
 ### Options
 
-| Variable    | Default                      | Description                                      |
-| ----------- | ---------------------------- | ------------------------------------------------ |
-| `threshold` | `2`                          | Display threshold.                               |
-| `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.                       |
-| `symbol`    | `"↕️ "`                       | The symbol used to represent the SHLVL.          |
-| `style`     | `"bold yellow"`              | The style for the module.                        |
-| `disabled`  | `true`                       | Disables the `shlvl` module.                     |
+| Variable    | Default                      | Description                             |
+| ----------- | ---------------------------- | --------------------------------------- |
+| `threshold` | `2`                          | Display threshold.                      |
+| `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.              |
+| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL. |
+| `style`     | `"bold yellow"`              | The style for the module.               |
+| `disabled`  | `true`                       | Disables the `shlvl` module.            |
 
 ### Variables
 
-| Variable | Example   | Description                          |
-| -------- | --------- | ------------------------------------ |
-| shlvl    | `3`       | The current value of SHLVL           |
-| symbol   |           | Mirrors the value of option `symbol` |
-| style\*  |           | Mirrors the value of option `style`  |
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| shlvl    | `3`     | The current value of SHLVL           |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
@@ -2115,6 +2140,51 @@ The module will be shown if any of the following conditions are met:
 
 [swift]
 format = "via [🏎  $version](red bold)"
+```
+
+## Status
+
+The `status` module displays the exit code of the previous command.
+The module will be shown only if the exit code is not `0`.
+
+::: tip
+                                                              
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+:::
+
+### Options
+
+| Variable   | Default                       | Description                                            |
+| ---------- | ----------------------------- | ------------------------------------------------------ |
+| `format`   | `[$symbol$status]($style) `   | The format of the module                               |
+| `symbol`   | `"✖"`                         | A format string representing the symbol for the status |
+| `style`    | `"bold red"`                  | The style for the module.                              |
+| `disabled` | `true`                        | Disables the `status` module.                          |
+
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| status   | `127`    | The exit code of the last command    |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+
+### Example
+```toml
+
+# ~/.config/starship.toml
+
+[status]
+style = "bg:blue"
+symbol = "💣 "
+format = "[\\[$symbol$status\\]]($style) "
+disabled = false
+
 ```
 
 ## Terraform
@@ -2228,13 +2298,13 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option        | Default                  | Description                           |
-| ------------- | ------------------------ | ------------------------------------- |
-| `style_root`  | `"bold red"`             | The style used when the user is root. |
-| `style_user`  | `"bold yellow"`          | The style used for non-root users.    |
-| `format`      | `"via [$user]($style) "` | The format for the module.            |
-| `show_always` | `false`                  | Always shows the `username` module.   |
-| `disabled`    | `false`                  | Disables the `username` module.       |
+| Option        | Default                 | Description                           |
+| ------------- | ----------------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`            | The style used when the user is root. |
+| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
+| `format`      | `"[$user]($style) in "` | The format for the module.            |
+| `show_always` | `false`                 | Always shows the `username` module.   |
+| `disabled`    | `false`                 | Disables the `username` module.       |
 
 ### Variables
 
@@ -2310,9 +2380,16 @@ Multiple custom modules can be defined by using a `.`.
 
 ::: tip
 
-The order in which custom modules are shown can be individually set
-by setting `custom.foo` in `prompt_order`. By default, the `custom` module
-will simply show all custom modules in the order they were defined.
+The order in which custom modules are shown can be individually set by including
+`${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`).
+By default, the `custom` module will simply show all custom modules in the order they were defined.
+
+:::
+
+::: tip
+
+[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules.
+If you have an interesting example not covered there, feel free to share it there!
 
 :::
 
@@ -2320,7 +2397,7 @@ will simply show all custom modules in the order they were defined.
 
 | Option        | Default                       | Description                                                                                                                |
 | ------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                               | The command whose output should be printed.                                                                                |
+| `command`     |                               | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                               | [See below](#custom-command-shell)                                                                                         |
 | `description` | `"<custom module>"`           | The description of the module that is shown when running `starship explain`.                                               |
@@ -2350,6 +2427,8 @@ will simply show all custom modules in the order they were defined.
 - Other following arguments are passed to the shell.
 
 If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
+
+The `command` will be passed in on stdin.
 
 If `shell` is not given or only contains one element and Starship detects PowerShell will be used,
 the following arguments will automatically be added: `-NoProfile -Command -`.
@@ -2391,12 +2470,11 @@ with shell details and starship configuration if you hit such scenario.
 command = "echo foo"  # shows output of command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
-prefix = " transcending "
+format = " transcending [$output]($style)"
 
 [custom.time]
 command = "time /T"
 files = ["*.pst"]
-prefix = "transcending "
 shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 ```
 

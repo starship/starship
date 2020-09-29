@@ -136,7 +136,7 @@ fn is_readonly_dir(path: &Path) -> bool {
         Ok(res) => !res,
         Err(e) => {
             log::debug!(
-                "Failed to detemine read only status of directory '{:?}': {}",
+                "Failed to determine read only status of directory '{:?}': {}",
                 path,
                 e
             );

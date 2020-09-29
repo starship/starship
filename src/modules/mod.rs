@@ -43,6 +43,7 @@ mod ruby;
 mod rust;
 mod shlvl;
 mod singularity;
+mod status;
 mod swift;
 mod terraform;
 mod time;
@@ -56,65 +57,84 @@ mod battery;
 use crate::config::RootModuleConfig;
 use crate::context::{Context, Shell};
 use crate::module::Module;
+use std::time::Instant;
 
 pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
-    match module {
-        // Keep these ordered alphabetically.
-        // Default ordering is handled in configs/mod.rs
-        "aws" => aws::module(context),
-        #[cfg(feature = "battery")]
-        "battery" => battery::module(context),
-        "character" => character::module(context),
-        "cmake" => cmake::module(context),
-        "cmd_duration" => cmd_duration::module(context),
-        "conda" => conda::module(context),
-        "dart" => dart::module(context),
-        "directory" => directory::module(context),
-        "docker_context" => docker_context::module(context),
-        "dotnet" => dotnet::module(context),
-        "elixir" => elixir::module(context),
-        "elm" => elm::module(context),
-        "erlang" => erlang::module(context),
-        "env_var" => env_var::module(context),
-        "gcloud" => gcloud::module(context),
-        "git_branch" => git_branch::module(context),
-        "git_commit" => git_commit::module(context),
-        "git_state" => git_state::module(context),
-        "git_status" => git_status::module(context),
-        "golang" => golang::module(context),
-        "helm" => helm::module(context),
-        "hg_branch" => hg_branch::module(context),
-        "hostname" => hostname::module(context),
-        "java" => java::module(context),
-        "jobs" => jobs::module(context),
-        "julia" => julia::module(context),
-        "kubernetes" => kubernetes::module(context),
-        "line_break" => line_break::module(context),
-        "memory_usage" => memory_usage::module(context),
-        "nim" => nim::module(context),
-        "nix_shell" => nix_shell::module(context),
-        "nodejs" => nodejs::module(context),
-        "ocaml" => ocaml::module(context),
-        "package" => package::module(context),
-        "perl" => perl::module(context),
-        "php" => php::module(context),
-        "purescript" => purescript::module(context),
-        "python" => python::module(context),
-        "r" => r::module(context),
-        "ruby" => ruby::module(context),
-        "rust" => rust::module(context),
-        "shlvl" => shlvl::module(context),
-        "singularity" => singularity::module(context),
-        "swift" => swift::module(context),
-        "terraform" => terraform::module(context),
-        "time" => time::module(context),
-        "crystal" => crystal::module(context),
-        "username" => username::module(context),
-        "zig" => zig::module(context),
-        _ => {
-            eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
-            None
+    let start: Instant = Instant::now();
+
+    let mut m: Option<Module> = {
+        match module {
+            // Keep these ordered alphabetically.
+            // Default ordering is handled in configs/starship_root.rs
+            "aws" => aws::module(context),
+            #[cfg(feature = "battery")]
+            "battery" => battery::module(context),
+            "character" => character::module(context),
+            "cmake" => cmake::module(context),
+            "cmd_duration" => cmd_duration::module(context),
+            "conda" => conda::module(context),
+            "dart" => dart::module(context),
+            "directory" => directory::module(context),
+            "docker_context" => docker_context::module(context),
+            "dotnet" => dotnet::module(context),
+            "elixir" => elixir::module(context),
+            "elm" => elm::module(context),
+            "erlang" => erlang::module(context),
+            "env_var" => env_var::module(context),
+            "gcloud" => gcloud::module(context),
+            "git_branch" => git_branch::module(context),
+            "git_commit" => git_commit::module(context),
+            "git_state" => git_state::module(context),
+            "git_status" => git_status::module(context),
+            "golang" => golang::module(context),
+            "helm" => helm::module(context),
+            "hg_branch" => hg_branch::module(context),
+            "hostname" => hostname::module(context),
+            "java" => java::module(context),
+            "jobs" => jobs::module(context),
+            "julia" => julia::module(context),
+            "kubernetes" => kubernetes::module(context),
+            "line_break" => line_break::module(context),
+            "memory_usage" => memory_usage::module(context),
+            "nim" => nim::module(context),
+            "nix_shell" => nix_shell::module(context),
+            "nodejs" => nodejs::module(context),
+            "ocaml" => ocaml::module(context),
+            "package" => package::module(context),
+            "perl" => perl::module(context),
+            "php" => php::module(context),
+            "purescript" => purescript::module(context),
+            "python" => python::module(context),
+            "r" => r::module(context),
+            "ruby" => ruby::module(context),
+            "rust" => rust::module(context),
+            "shlvl" => shlvl::module(context),
+            "singularity" => singularity::module(context),
+            "swift" => swift::module(context),
+            "status" => status::module(context),
+            "terraform" => terraform::module(context),
+            "time" => time::module(context),
+            "crystal" => crystal::module(context),
+            "username" => username::module(context),
+            "zig" => zig::module(context),
+            _ => {
+                eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
+                None
+            }
         }
+    };
+
+    let elapsed = start.elapsed();
+    log::trace!("Took {:?} to compute module {:?}", elapsed, module);
+    if elapsed.as_millis() < 1 {
+        // If we take less than 1ms to compute a None, then we will not return a module at all
+        // if we have a module: default duration is 0 so no need to change it
+        m
+    } else {
+        // if we took more than 1ms we want to report that and so--in case we have None currently--
+        // need to create an empty module just to hold the duration for that case
+        m.get_or_insert_with(|| context.new_module(module)).duration = elapsed;
+        m
     }
 }
 
@@ -164,6 +184,7 @@ pub fn description(module: &str) -> &'static str {
         "rust" => "The currently installed version of Rust",
         "swift" => "The currently installed version of Swift",
         "shlvl" => "The current value of SHLVL",
+        "status" => "The status of the last command",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "username" => "The active user's username",

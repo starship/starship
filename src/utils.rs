@@ -125,6 +125,10 @@ active boot switches: -d:release\n",
             stdout: String::from("0.13.5\n"),
             stderr: String::default(),
         }),
+        "pyenv version-name" => Some(CommandOutput {
+            stdout: String::from("system\n"),
+            stderr: String::default(),
+        }),
         "python --version" => Some(CommandOutput {
             stdout: String::default(),
             stderr: String::from("Python 2.7.17\n"),
@@ -249,7 +253,7 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             })
         }
         Err(error) => {
-            log::trace!("Executing command {:?} failed by: {:?}", cmd, error);
+            log::warn!("Executing command {:?} failed by: {:?}", cmd, error);
             None
         }
     }
