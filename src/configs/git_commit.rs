@@ -9,7 +9,6 @@ pub struct GitCommitConfig<'a> {
     pub style: &'a str,
     pub only_detached: bool,
     pub disabled: bool,
-    pub tag: SegmentConfig<'a>,
     pub tag_symbol: &'a str,
     pub tag_disabled: bool,
 }
@@ -19,11 +18,10 @@ impl<'a> RootModuleConfig<'a> for GitCommitConfig<'a> {
         GitCommitConfig {
             // be consistent with git by default, which has DEFAULT_ABBREV set to 7
             commit_hash_length: 7,
-            format: "[\\($hash\\)]($style) ",
+            format: "[\\($hash$tag\\)]($style) ",
             style: "green bold",
             only_detached: true,
             disabled: false,
-            tag: SegmentConfig::default(),
             tag_symbol: "🏷  ",
             tag_disabled: true,
         }

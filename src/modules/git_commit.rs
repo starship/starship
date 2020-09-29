@@ -24,7 +24,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let head_commit = git_head.peel_to_commit().ok()?;
     let commit_oid = head_commit.id();
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+    let mut parsed;
+
+    parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
@@ -38,14 +40,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .parse(None)
-    });
-
-    module.set_segments(match parsed {
-        Ok(segments) => segments,
-        Err(error) => {
-            log::warn!("Error in module `git_commit`:\n{}", error);
-            return None;
-        }
     });
 
     if !config.tag_disabled {
@@ -68,14 +62,35 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
         // If we have tag...
         if !tag_name.is_empty() {
-            module.create_segment(
-                "tag",
-                &config
-                    .tag
-                    .with_value(&format!(" {}{}", &config.tag_symbol, &tag_name)),
-            );
+            parsed = StringFormatter::new(config.format).and_then(|formatter| {
+                formatter
+                    .map_style(|variable| match variable {
+                        "style" => Some(Ok(config.style)),
+                        _ => None,
+                    })
+                    .map(|variable| match variable {
+                        "hash" => Some(Ok(id_to_hex_abbrev(
+                            commit_oid.as_bytes(),
+                            config.commit_hash_length,
+                        ))),
+                        _ => None,
+                    })
+                    .map(|variable| match variable {
+                        "tag" => Some(Ok(format!(" {}{}", &config.tag_symbol, &tag_name))),
+                        _ => None,
+                    })
+                    .parse(None)
+            });
         }
     };
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `git_commit`:\n{}", error);
+            return None;
+        }
+    });
 
     Some(module)
 }
