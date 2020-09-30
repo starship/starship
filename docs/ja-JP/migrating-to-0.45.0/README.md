@@ -1,10 +1,10 @@
-# Migrating to v0.45.0
+# 0.45への移行
 
-Starship v0.45.0 is a release containing breaking changes, in preparation for the big v1.0.0. We have made some major changes around how configuration is done on the prompt, to allow for a greater degree of customization.
+Starship v0.45.0は、v1.0.0の準備として互換性の無い変更を含むリリースになります。 私たちはより多くのカスタマイズを可能にするために、プロンプトでの設定方法にいくつかの大きな変更を加えました。
 
-This guide is intended to walk you through the breaking changes.
+このガイドは、互換性のない変更を説明することを意図しています。
 
-## `prompt_order` has been replaced by a root-level `format`
+## `prompt_order`がルートレベルの`format`に置換
 
 Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
 
