@@ -4,13 +4,13 @@ Starship v0.45.0は、v1.0.0の準備として互換性の無い変更を含む�
 
 このガイドは、互換性のない変更を説明することを意図しています。
 
-## `prompt_order`がルートレベルの`format`に置換
+## `prompt_order`をルートレベルの`format`に置換
 
-Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
+v0.45.0以前は、`prompt_order` はStarshipによってレンダリングされる順序でモジュール名の配列を指定できるようになっていました。
 
-Starship v0.45.0 will instead be accepting a `format` value, allowing for customization of the prompt outside of the modules themselves.
+Starship v0.45.0は代わりに  `format` を指定できるようになり、モジュール自体の外側でプロンプトをカスタマイズ可能になります。
 
-**Example pre-v0.45.0 configuration**
+**v0.45.0以前の設定例**
 
 ```toml
 prompt_order = [
@@ -31,7 +31,7 @@ prompt_order = [
 ]
 ```
 
-**Example v0.45.0 configuration**
+**v0.45.0での設定例**
 
 ```toml
 format = """\
@@ -52,20 +52,20 @@ format = """\
   """
 ```
 
-## Module `prefix` and `suffix` will be replaced by `format`
+## `prefix`と `suffix` モジュールが`format`を置換
 
-Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
+v0.45.0以前では、モジュールのレンダリング方法をスタイリングするために、 `prefix` や`suffix`の指定可能なモジュールがありました。
 
 Starship v0.45.0 will instead be accepting a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
 
-**Example pre-v0.45.0 configuration**
+**v0.45.0以前の設定例**
 
 ```toml
 [cmd_duration]
 prefix = "took "
 ```
 
-**Example v0.45.0 configuration**
+**v0.45.0での設定例**
 
 ```toml
 [cmd_duration]
