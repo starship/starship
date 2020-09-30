@@ -123,7 +123,7 @@ error_symbol = "[✖](bold red) "
 ++ format = "took [$duration]($style)"
 ```
 
-#### Directory
+#### Verzeichnis
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
@@ -137,7 +137,7 @@ error_symbol = "[✖](bold red) "
 ++ format = "[$path]($style)[$lock_symbol]($lock_style)"
 ```
 
-#### Environment Variable
+#### Umgebungsvariablen
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
@@ -169,7 +169,7 @@ error_symbol = "[✖](bold red) "
 ++ format = "[\\($hash\\)]($style) "
 ```
 
-#### Git Status
+#### Git-Status
 
 | Removed Property  | Replacement |
 | ----------------- | ----------- |
@@ -233,7 +233,7 @@ behind = "⇣${count}"
 ++ format = "[$symbol\\[$env\\]]($style) "
 ```
 
-#### Time
+#### Zeit
 
 | Removed Property | Replacement   |
 | ---------------- | ------------- |
