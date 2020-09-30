@@ -1,12 +1,12 @@
 # Configuração
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
+Para começar a configurar a starship, crie o seguinte arquivo: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
+Todas as configurações do starship são feitas neste arquivo [TOML](https://github.com/toml-lang/toml):
 
 ```toml
 # Don't print a new line at the start of the prompt
@@ -21,13 +21,13 @@ success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being
 disabled = true
 ```
 
-You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+Você pode alterar o caminho padrão do arquivo `starship.toml` com a variável de ambiente `STARSHIP_CONFIG`:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+No PowerShell (Windows) você pode adicionar a seguinte linha no seu `$PROFILE`:
 
 ```ps1
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
@@ -41,15 +41,15 @@ By default starship logs warnings and errors into a file named `~/.cache/starshi
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+No PowerShell (Windows) você pode adicionar a seguinte linha no seu `$PROFILE`:
 
 ```ps1
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-### Terminology
+### Terminologia
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
+**Módulo**: Um componente no prompt que fornece informações baseado no contexto do seu SO. Por exemplo, o módulo "nodejs" mostra a versão do NodeJS instalado no seu computador, se o diretório atual for um projeto NodeJS.
 
 **Variable**: Smaller sub-components that contains information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
 
@@ -85,7 +85,7 @@ For example:
 
 #### Estilo dos textos
 
-Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+A maioria dos módulos do starship permite que você configure o estilo de exibição dos textos. Isso é feito através de um parâmetro (geralmente chamado `style`) que é uma string especificando a configuração. Aqui estão alguns exemplos de strings de estilo e o que elas fazem. Para detalhes sobre a sintaxe completa, consulte o [guia de configurações avançadas](/advanced-config/).
 
 - `"fg:green bg:blue"` deixa o texto verde com o fundo azul
 - `"bg:blue fg:bright-green"` deixa o texto verde brilhante com o fundo azul
@@ -94,7 +94,7 @@ Most modules in starship allow you to configure their display styles. This is do
 - `"bold italic fg:purple"` deixa o texto em negrito e itálico com a cor roxa
 - `""` desabilita explicitamente todos os estilos
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+Note que a aparência do estilo será controlado pelo seu terminal. Por exemplo, alguns terminais deixarão as cores mais brilhantes ao invés de deixar o texto em negrito, ou alguns temas podem usar as mesmas cores para cores brilhantes e normais. Além disso, para textos em itálico, o terminal precisa ter suporte.
 
 #### Conditional Format Strings
 
@@ -142,11 +142,11 @@ This is the list of prompt-wide configuration options.
 
 ### Opções
 
-| Option         | Padrão                         | Descrição                                             |
-| -------------- | ------------------------------ | ----------------------------------------------------- |
-| `format`       | [link](#default-prompt-format) | Configure the format of the prompt.                   |
-| `scan_timeout` | `30`                           | Timeout for starship to scan files (in milliseconds). |
-| `add_newline`  | `true`                         | Add a new line before the start of the prompt.        |
+| Option         | Padrão                         | Descrição                                                     |
+| -------------- | ------------------------------ | ------------------------------------------------------------- |
+| `format`       | [link](#default-prompt-format) | Configure the format of the prompt.                           |
+| `scan_timeout` | `30`                           | Timeout for starship to scan files (in milliseconds).         |
+| `add_newline`  | `true`                         | Adiciona uma nova linha antes que o prompt de comando inicie. |
 
 ### Exemplo
 
@@ -168,7 +168,7 @@ add_newline = false
 
 ### Default Prompt Format
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
+The default `format` is used to define the format of the prompt, if empty or no `format` is provided. Os valores padrão são os seguintes:
 
 ```toml
 format = "$all"
@@ -332,9 +332,9 @@ charging_symbol = "⚡️"
 discharging_symbol = "💀"
 ```
 
-### Battery Display
+### Indicador de bateria
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. Os valores padrão são os seguintes:
 
 ```toml
 [[battery.display]]
@@ -453,7 +453,7 @@ The `cmake` module shows the currently installed version of CMake if:
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning Do not hook the DEBUG trap in Bash
+::: warning Não utilize o DEBUG-trap no Bash
 
 If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
@@ -601,7 +601,7 @@ The `dart` module shows the currently installed version of Dart. The module will
 format = "via [🔰 $version](bold red) "
 ```
 
-## Directory
+## Diretório
 
 The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
@@ -988,7 +988,7 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git Commit
+## Git commit
 
 The `git_commit` module shows the current commit hash of the repo in your current directory.
 
@@ -1402,7 +1402,7 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ```
 
-## Line Break
+## Quebra de linha
 
 The `line_break` module separates the prompt into two lines.
 
@@ -1421,7 +1421,7 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
-## Memory Usage
+## Uso de memória
 
 The `memory_usage` module shows current system memory and swap usage.
 
@@ -2262,7 +2262,7 @@ The order in which custom modules are shown can be individually set by including
 | `command`     |                               | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                               | [See below](#custom-command-shell)                                                                                         |
-| `description` | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
+| `descrição`   | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                          | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                          | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
