@@ -240,4 +240,99 @@ mod tests {
         assert_eq!(expected, actual);
         repo_dir.close()
     }
+
+    #[test]
+    fn test_render_commit_hash_with_tag_enabled() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        let mut git_commit = Command::new("git")
+            .args(&["rev-parse", "HEAD"])
+            .current_dir(&repo_dir.path())
+            .output()?
+            .stdout;
+        git_commit.truncate(7);
+        let commit_output = str::from_utf8(&git_commit).unwrap().trim();
+
+        let git_tag = Command::new("git")
+            .args(&["describe", "--tags", "--exact-match", "HEAD"])
+            .current_dir(&repo_dir.path())
+            .output()?
+            .stdout;
+        let tag_output = str::from_utf8(&git_tag).unwrap().trim();
+
+        let expected_output = format!("{} {}", commit_output, tag_output);
+
+        let actual = ModuleRenderer::new("git_commit")
+            .config(toml::toml! {
+                [git_commit]
+                    only_detached = false
+                    tag_disabled = false
+                    tag_symbol = ""
+            })
+            .path(&repo_dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Green
+                .bold()
+                .paint(format!("({})", expected_output.trim()))
+                .to_string()
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn test_render_commit_hash_only_detached_on_detached_with_tag_enabled() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        Command::new("git")
+            .args(&["checkout", "@~1"])
+            .current_dir(&repo_dir.path())
+            .output()?;
+
+        Command::new("git")
+            .args(&["tag", "tagOnDetached", "-m", "Testing tags on detached"])
+            .current_dir(&repo_dir.path())
+            .output()?;
+
+        let mut git_commit = Command::new("git")
+            .args(&["rev-parse", "HEAD"])
+            .current_dir(&repo_dir.path())
+            .output()?
+            .stdout;
+        git_commit.truncate(7);
+        let commit_output = str::from_utf8(&git_commit).unwrap().trim();
+
+        let git_tag = Command::new("git")
+            .args(&["describe", "--tags", "--exact-match", "HEAD"])
+            .current_dir(&repo_dir.path())
+            .output()?
+            .stdout;
+        let tag_output = str::from_utf8(&git_tag).unwrap().trim();
+
+        let expected_output = format!("{} {}", commit_output, tag_output);
+
+        let actual = ModuleRenderer::new("git_commit")
+            .config(toml::toml! {
+                [git_commit]
+                    tag_disabled = false
+                    tag_symbol = ""
+            })
+            .path(&repo_dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Green
+                .bold()
+                .paint(format!("({})", expected_output.trim()))
+                .to_string()
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
 }
