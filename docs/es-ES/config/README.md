@@ -612,15 +612,15 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 
 ### Opciones
 
-| Variable                 | Por defecto                                     | Descripción                                                           |
-| ------------------------ | ----------------------------------------------- | --------------------------------------------------------------------- |
-| `truncation_length`      | `3`                                             | El número de carpetas a las que se debe truncar el directorio actual. |
-| `truncate_to_repo`       | `true`                                          | Truncar o no hasta la raíz del repositorio git en el que se esté.     |
-| `format`                 | `"[$path]($style)[$lock_symbol]($lock_style) "` | El formato del módulo.                                                |
-| `style`                  | `"bold cyan"`                                   | El estilo del módulo.                                                 |
-| `disabled`               | `false`                                         | Deshabilita el módulo `directory`.                                    |
-| `read_only_symbol`       | `"🔒"`                                           | El símbolo que indica si el directorio actual es de sólo lectura.     |
-| `read_only_symbol_style` | `"red"`                                         | El estilo para el símbolo de sólo lectura.                            |
+| Variable            | Por defecto                                        | Descripción                                                           |
+| ------------------- | -------------------------------------------------- | --------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | El número de carpetas a las que se debe truncar el directorio actual. |
+| `truncate_to_repo`  | `true`                                             | Truncar o no hasta la raíz del repositorio git en el que se esté.     |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | El formato del módulo.                                                |
+| `style`             | `"bold cyan"`                                      | El estilo del módulo.                                                 |
+| `disabled`          | `false`                                            | Deshabilita el módulo `directory`.                                    |
+| `read_only`         | `"🔒"`                                              | El símbolo que indica si el directorio actual es de sólo lectura.     |
+| `read_only_style`   | `"red"`                                            | El estilo para el símbolo de sólo lectura.                            |
 
 <details>
 <summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
@@ -1134,6 +1134,7 @@ deleted = "🗑"
 ```
 
 Show ahead/behind count of the branch being tracked
+
 ```toml
 # ~/.config/starship.toml
 
@@ -2036,7 +2037,6 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `style`    | `"bold red"`               | El estilo del módulo.                                  |
 | `disabled` | `true`                     | Disables the `status` module.                          |
 
-
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
@@ -2047,8 +2047,8 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
-
 ### Ejemplo
+
 ```toml
 
 # ~/.config/starship.toml
