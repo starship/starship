@@ -1169,7 +1169,7 @@ dependencies = [
 
 [[package]]
 name = "starship_module_config_derive"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "proc-macro2",
  "quote 1.0.7",
