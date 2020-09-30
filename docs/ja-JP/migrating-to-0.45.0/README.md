@@ -78,7 +78,7 @@ format = "took [$duration]($style)"
 
 #### Character
 
-| 削除されたプロパティ              | 再配置              |
+| 削除されたプロパティ              | 置換後              |
 | ----------------------- | ---------------- |
 | `symbol`                | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
@@ -98,20 +98,20 @@ format = "took [$duration]($style)"
 ++ vicmd_symbol = "[❮](bold green)"
 ```
 
-Previously, the `use_symbol_for_status` property was used to configure the prompt to show the `error_symbol` when the last command resulted in a non-zero status code.
+以前は `use_symbol_for_status` プロパティを使用して、最後のコマンドがステータスコードをゼロにした場合、 `error_symbol` を表示するようにプロンプトを設定しました。
 
-With the release of v0.45.0, we now always use `error_symbol` after non-zero status codes, unifying `use_symbol_for_status` and `error_symbol` properties.
+v0.45.0 のリリースでは、ステータスコードがゼロでないときに `error_symbol` を常に使用するようになりました。 `use_symbol_for_status` と `error_symbol` プロパティを統合します。
 
-To configure the prompt to use the older `use_symbol_for_status = true` configuration, add the following to your config file:
+以前の `use_symbol_for_status = true` 設定を使用するようにプロンプトを設定するには、次の設定ファイルを追加します。
 
 ```toml
 [character]
 error_symbol = "[✖](bold red) "
 ```
 
-#### コマンド実行時間
+#### Command Duration
 
-| 削除されたプロパティ | 再配置      |
+| 削除されたプロパティ | 置換後      |
 | ---------- | -------- |
 | `prefix`   | `format` |
 
@@ -125,7 +125,7 @@ error_symbol = "[✖](bold red) "
 
 #### Directory
 
-| 削除されたプロパティ | 再配置      |
+| 削除されたプロパティ | 置換後      |
 | ---------- | -------- |
 | `prefix`   | `format` |
 
@@ -139,7 +139,7 @@ error_symbol = "[✖](bold red) "
 
 #### Environment Variable
 
-| 削除されたプロパティ | 再配置      |
+| 削除されたプロパティ | 置換後      |
 | ---------- | -------- |
 | `prefix`   | `format` |
 | `suffix`   | `format` |
@@ -155,7 +155,7 @@ error_symbol = "[✖](bold red) "
 
 #### Git Commit
 
-| 削除されたプロパティ | 再配置      |
+| 削除されたプロパティ | 置換後      |
 | ---------- | -------- |
 | `prefix`   | `format` |
 | `suffix`   | `format` |
@@ -169,9 +169,9 @@ error_symbol = "[✖](bold red) "
 ++ format = "[\\($hash\\)]($style) "
 ```
 
-#### Git の状態
+#### Git Status
 
-| 削除されたプロパティ        | 再配置      |
+| 削除されたプロパティ        | 置換後      |
 | ----------------- | -------- |
 | `prefix`          | `format` |
 | `suffix`          | `format` |
@@ -187,11 +187,11 @@ error_symbol = "[✖](bold red) "
 ++ format = "([$all_status$ahead_behind] )"
 ```
 
-Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
+以前は `show_sync_count` プロパティを使用して、 ブランチが先行またはリモートブランチの後ろにあるコミット数を表示するようにプロンプトを設定していました。
 
 With the release of v0.45.0, this has been replaced with the
 
-To configure the prompt to use the older `show_sync_count = true` configuration, set the following to your config file:
+以前の `show_sync_count = true` 設定を使用するようにプロンプトを構成するには、次の設定ファイルを設定します。
 
 ```toml
 [git_status]
@@ -202,7 +202,7 @@ behind = "⇣${count}"
 
 #### Hostname
 
-| 削除されたプロパティ | 再配置      |
+| 削除されたプロパティ | 置換後      |
 | ---------- | -------- |
 | `prefix`   | `format` |
 | `suffix`   | `format` |
@@ -218,7 +218,7 @@ behind = "⇣${count}"
 
 #### Singularity
 
-| 削除されたプロパティ | 再配置      |
+| 削除されたプロパティ | 置換後      |
 | ---------- | -------- |
 | `label`    | `format` |
 | `prefix`   | `format` |
@@ -235,7 +235,7 @@ behind = "⇣${count}"
 
 #### Time
 
-| 削除されたプロパティ | 再配置           |
+| 削除されたプロパティ | 置換後           |
 | ---------- | ------------- |
 | `format`   | `time_format` |
 
@@ -250,7 +250,7 @@ behind = "⇣${count}"
 
 #### Custom Commands
 
-| 削除されたプロパティ | 再配置      |
+| 削除されたプロパティ | 置換後      |
 | ---------- | -------- |
 | `prefix`   | `format` |
 | `suffix`   | `format` |
