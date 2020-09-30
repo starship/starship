@@ -13,13 +13,13 @@ starship_render() {
     # Use length of jobstates array as number of jobs. Expansion fails inside
     # quotes so we set it here and then use the value later on.
     NUM_JOBS=$#jobstates
-    PROMPT="$(::STARSHIP:: prompt --keymap="${KEYMAP-}" --status=$STATUS --cmd-duration=${STARSHIP_DURATION-} --jobs="$NUM_JOBS")"
+    PROMPT="$(::STARSHIP:: prompt --keymap="${KEYMAP-}" --status=$STARSHIP_CMD_STATUS --cmd-duration=${STARSHIP_DURATION-} --jobs="$NUM_JOBS")"
 }
 
 # Will be run before every prompt draw
 starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
-    STATUS=$?
+    STARSHIP_CMD_STATUS=$?
 
     # Compute cmd_duration, if we have a time to consume, otherwise clear the
     # previous duration
