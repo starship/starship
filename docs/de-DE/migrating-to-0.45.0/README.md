@@ -134,7 +134,7 @@ error_symbol = "[✖](bold red) "
 ```diff
 [directory]
 -- prefix = "in "
-++ format = "[$path]($style)[$lock_symbol]($lock_style)"
+++ format = "[$path]($style)[$read_only]($read_only_style)"
 ```
 
 #### Umgebungsvariablen
