@@ -184,7 +184,6 @@ format = "$all"
 
 # Which is equivalent to
 format = """
-
 $username\
 $hostname\
 $shlvl\
