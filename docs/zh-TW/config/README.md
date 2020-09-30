@@ -611,15 +611,15 @@ format = "via [🔰 $version](bold red) "
 
 ### 選項
 
-| 變數                       | 預設                                              | 說明                                                    |
-| ------------------------ | ----------------------------------------------- | ----------------------------------------------------- |
-| `truncation_length`      | `3`                                             | 到達現在資料夾的路徑中，要被裁減掉的資料夾數目。                              |
-| `truncate_to_repo`       | `true`                                          | 是否要裁減到你現在所在的 git 儲存庫的根目錄。                             |
-| `format`                 | `"[$path]($style)[$lock_symbol]($lock_style) "` | The format for the module.                            |
-| `style`                  | `"bold cyan"`                                   | 這個模組的風格。                                              |
-| `disabled`               | `false`                                         | 停用 `directory` 模組。                                    |
-| `read_only_symbol`       | `"🔒"`                                           | The symbol indicating current directory is read only. |
-| `read_only_symbol_style` | `"red"`                                         | The style for the read only symbol.                   |
+| 變數                  | 預設                                                 | 說明                                                    |
+| ------------------- | -------------------------------------------------- | ----------------------------------------------------- |
+| `truncation_length` | `3`                                                | 到達現在資料夾的路徑中，要被裁減掉的資料夾數目。                              |
+| `truncate_to_repo`  | `true`                                             | 是否要裁減到你現在所在的 git 儲存庫的根目錄。                             |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | The format for the module.                            |
+| `style`             | `"bold cyan"`                                      | 這個模組的風格。                                              |
+| `disabled`          | `false`                                            | 停用 `directory` 模組。                                    |
+| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only. |
+| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                   |
 
 <details>
 <summary>這個模組有些進階設定選項可以控制顯示資料夾。</summary>
@@ -1133,6 +1133,7 @@ deleted = "🗑"
 ```
 
 Show ahead/behind count of the branch being tracked
+
 ```toml
 # ~/.config/starship.toml
 
@@ -2035,7 +2036,6 @@ The `status` module displays the exit code of the previous command. The module w
 | `style`    | `"bold red"`               | 這個模組的風格。                                               |
 | `disabled` | `true`                     | Disables the `status` module.                          |
 
-
 ### Variables
 
 | 變數        | 範例    | 說明                                   |
@@ -2046,8 +2046,8 @@ The `status` module displays the exit code of the previous command. The module w
 
 \*: This variable can only be used as a part of a style string
 
-
 ### 範例
+
 ```toml
 
 # ~/.config/starship.toml
