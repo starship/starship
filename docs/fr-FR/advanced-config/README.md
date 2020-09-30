@@ -1,16 +1,16 @@
 # Configuration avancée
 
-Alors que Starship est un shell polyvalent, vous devez parfois faire plus que d'éditer `starship.toml` pour le faire les choses. Cette page détaille quelques techniques de configuration avancées qu'on peut utiliser dans starship.
+Même si Starship est un shell polyvalent, éditer `starship.toml` ne suffit parfois pas pour faire certaines choses. Cette page détaille quelques techniques de configuration avancées utilisées dans starship.
 
 ::: warning
 
-Les configurations de cette section sont sujettes à modification dans les versions à venir de Starship.
+Les configurations dans cette section sont sujettes à modification dans les futures versions de Starship.
 
 :::
 
-## Commandes pré-commande et pré-exécution personnalisées en Bash
+## Personnalisation des commandes pré-commande et pré-exécution en Bash
 
-Bash n'a pas de cadre officiel préexec/précmd comme la plupart des autres shell du commande. C'est pourquoi il est difficile de fournir des crochets entièrement personnalisables dans `bash`. Cependant, Starship vous donne une capacité limitée à insérer vos propres fonctions dans la procédure de rendu commande :
+Bash n'a pas de structure officielle préexec/précmd comme la plupart des autres shells. C'est pourquoi il est difficile de fournir des hooks entièrement personnalisables dans `bash`. Cependant, Starship vous donne une capacité limitée à insérer vos propres fonctions dans la procédure de rendu commande :
 
 - Pour exécuter une fonction personnalisée juste avant que commande soit dessinée, définissez une nouvelle fonction et assignez son nom à `starship_precmd_user_func`. Par exemple, pour dessiner une fusée avant la commande, vous feriez
 

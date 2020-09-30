@@ -5,16 +5,16 @@
 - **Émulateur de terminal**: [iTerm2](https://iterm2.com/)
   - **Thème** : Minimal
   - **Palette de couleurs**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+  - **Police**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
 - **Shell** : [Fish Shell](https://fishshell.com/)
   - **Configuration**: [Dotfiles de matchai](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Invite de commande**: [Starship](https://starship.rs/)
 
-## Est-ce que `prompt_order` et `<module>.disabled` font la même chose ?
+## Est-ce que l'option globale `format` et `<module>.disabled` font la même chose ?
 
 Oui, ils peuvent tous deux être utilisés pour désactiver les modules dans l'invite de commande. Si tout ce que vous prévoyez de faire est de désactiver les modules, `<module>.disabled` est le meilleur moyen de le faire pour ces raisons :
 
-- Désactiver les modules est plus explicite que de les omettre dans le prompt_order
+- Disabling modules is more explicit than omitting them from the top level `format`
 - Les modules nouvellement créés seront ajoutés à l'invite de commande au fur et à mesure que Starship sera mis à jour
 
 ## La doc dit que Starship est cross-shell, mais il ne supporte pas X shell. Pourquoi ?
@@ -44,9 +44,9 @@ starship prompt --help
 
 L'invite de commande utilisera toutes les données contextuelles fournies, mais aucun indicateur n'est "requis".
 
-## How do I run Starship on Linux distributions with older versions of glibc?
+## Comment utiliser Starship sur des distributions Linux avec des versions de glibc plus ancienne ?
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+Si vous obtenez une erreur du type "_version 'GLIBC_2.18' not found (required by starship)_" lors de l'utilisation du binaire précompilé (par exemple sur CentOS 6 ou 7), vous pouvez utiliser un binaire compilé avec `musl` au lieu de `glibc`:
 
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
