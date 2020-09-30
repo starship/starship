@@ -123,7 +123,7 @@ error_symbol = "[✖](bold red) "
 ++ format = "took [$duration]($style)"
 ```
 
-#### Directory
+#### Diretório
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
@@ -153,7 +153,7 @@ error_symbol = "[✖](bold red) "
 ++ format = "with [$env_value]($style) "
 ```
 
-#### Git Commit
+#### Git commit
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
