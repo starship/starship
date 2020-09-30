@@ -612,15 +612,15 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 
 ### オプション
 
-| 変数                       | デフォルト                                           | 説明                                                    |
-| ------------------------ | ----------------------------------------------- | ----------------------------------------------------- |
-| `truncation_length`      | `3`                                             | 現在のディレクトリを切り捨てる親フォルダーの数です。                            |
-| `truncate_to_repo`       | `true`                                          | 現在いるgitリポジトリのルートに切り捨てるかどうかです。                         |
-| `format`                 | `"[$path]($style)[$lock_symbol]($lock_style) "` | moduleのフォーマットです。                                      |
-| `style`                  | `"bold cyan"`                                   | モジュールのスタイルです。                                         |
-| `disabled`               | `false`                                         | `directory`モジュールを無効にします。                              |
-| `read_only_symbol`       | `"🔒"`                                           | The symbol indicating current directory is read only. |
-| `read_only_symbol_style` | `"red"`                                         | The style for the read only symbol.                   |
+| 変数                  | デフォルト                                              | 説明                                                    |
+| ------------------- | -------------------------------------------------- | ----------------------------------------------------- |
+| `truncation_length` | `3`                                                | 現在のディレクトリを切り捨てる親フォルダーの数です。                            |
+| `truncate_to_repo`  | `true`                                             | 現在いるgitリポジトリのルートに切り捨てるかどうかです。                         |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | moduleのフォーマットです。                                      |
+| `style`             | `"bold cyan"`                                      | モジュールのスタイルです。                                         |
+| `disabled`          | `false`                                            | `directory`モジュールを無効にします。                              |
+| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only. |
+| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                   |
 
 <details>
 <summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
@@ -1134,6 +1134,7 @@ deleted = "🗑"
 ```
 
 Show ahead/behind count of the branch being tracked
+
 ```toml
 # ~/.config/starship.toml
 
@@ -2037,7 +2038,6 @@ The `status` module displays the exit code of the previous command. The module w
 | `style`    | `"bold red"`               | モジュールのスタイルです。                                          |
 | `disabled` | `true`                     | Disables the `status` module.                          |
 
-
 ### 変数
 
 | 変数        | 設定例   | 説明                                |
@@ -2048,8 +2048,8 @@ The `status` module displays the exit code of the previous command. The module w
 
 \*: この変数はスタイル文字列の一部としてのみ使用できます
 
-
 ### 設定例
+
 ```toml
 
 # ~/.config/starship.toml
