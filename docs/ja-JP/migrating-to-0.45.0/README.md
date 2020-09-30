@@ -56,7 +56,7 @@ format = """\
 
 v0.45.0以前では、モジュールのレンダリング方法をスタイリングするために、 `prefix` や`suffix`の指定可能なモジュールがありました。
 
-Starship v0.45.0 will instead be accepting a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
+Starship v0.45.0 は代わりに `format` の値を受け付け、モジュールのレンダリング方法をさらにカスタマイズすることができます。 接頭辞と接尾辞を定義する代わりに、コンテキストベースの変数については、モジュールの出力を表現するフォーマット文字列の中から変数を置き換えることができるようになりました。
 
 **v0.45.0以前の設定例**
 
@@ -69,23 +69,23 @@ prefix = "took "
 
 ```toml
 [cmd_duration]
-# $duration – The command duration (e.g. "15s")
-# $style    – The default style of the module (e.g. "bold yellow")
+# $duration – コマンド実行時間 (例: "15s")
+# $style    – デフォルトのモジュールスタイル (例: "bold yellow")
 format = "took [$duration]($style)"
 ```
 
-### Affected Modules
+### 影響を受けるモジュール
 
-#### 文字
+#### Character
 
-| Removed Property        | Replacement      |
+| 削除されたプロパティ              | 再配置              |
 | ----------------------- | ---------------- |
 | `symbol`                | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
 
-**Changes to the Default Configuration**
+**デフォルト設定への変更**
 
 ```diff
 [character]
@@ -111,11 +111,11 @@ error_symbol = "[✖](bold red) "
 
 #### コマンド実行時間
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| 削除されたプロパティ | 再配置      |
+| ---------- | -------- |
+| `prefix`   | `format` |
 
-**Changes to the Default Configuration**
+**デフォルト設定への変更**
 
 ```diff
 [cmd_duration]
@@ -125,11 +125,11 @@ error_symbol = "[✖](bold red) "
 
 #### Directory
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| 削除されたプロパティ | 再配置      |
+| ---------- | -------- |
+| `prefix`   | `format` |
 
-**Changes to the Default Configuration**
+**デフォルト設定への変更**
 
 ```diff
 [directory]
@@ -139,12 +139,12 @@ error_symbol = "[✖](bold red) "
 
 #### Environment Variable
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| 削除されたプロパティ | 再配置      |
+| ---------- | -------- |
+| `prefix`   | `format` |
+| `suffix`   | `format` |
 
-**Changes to the Default Configuration**
+**デフォルト設定への変更**
 
 ```diff
 [env_var]
@@ -155,12 +155,12 @@ error_symbol = "[✖](bold red) "
 
 #### Git Commit
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| 削除されたプロパティ | 再配置      |
+| ---------- | -------- |
+| `prefix`   | `format` |
+| `suffix`   | `format` |
 
-**Changes to the Default Configuration**
+**デフォルト設定への変更**
 
 ```diff
 [git_commit]
@@ -171,13 +171,13 @@ error_symbol = "[✖](bold red) "
 
 #### Git の状態
 
-| Removed Property  | Replacement |
-| ----------------- | ----------- |
-| `prefix`          | `format`    |
-| `suffix`          | `format`    |
-| `show_sync_count` | `format`    |
+| 削除されたプロパティ        | 再配置      |
+| ----------------- | -------- |
+| `prefix`          | `format` |
+| `suffix`          | `format` |
+| `show_sync_count` | `format` |
 
-**Changes to the Default Configuration**
+**デフォルト設定への変更**
 
 ```diff
 [git_status]
@@ -202,12 +202,12 @@ behind = "⇣${count}"
 
 #### Hostname
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| 削除されたプロパティ | 再配置      |
+| ---------- | -------- |
+| `prefix`   | `format` |
+| `suffix`   | `format` |
 
-**Changes to the Default Configuration**
+**デフォルト設定への変更**
 
 ```diff
 [hostname]
@@ -218,13 +218,13 @@ behind = "⇣${count}"
 
 #### Singularity
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `label`          | `format`    |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| 削除されたプロパティ | 再配置      |
+| ---------- | -------- |
+| `label`    | `format` |
+| `prefix`   | `format` |
+| `suffix`   | `format` |
 
-**Changes to the Default Configuration**
+**デフォルト設定への変更**
 
 ```diff
 [singularity]
@@ -235,11 +235,11 @@ behind = "⇣${count}"
 
 #### Time
 
-| Removed Property | Replacement   |
-| ---------------- | ------------- |
-| `format`         | `time_format` |
+| 削除されたプロパティ | 再配置           |
+| ---------- | ------------- |
+| `format`   | `time_format` |
 
-**Changes to the Default Configuration**
+**デフォルト設定への変更**
 
 ```diff
 [time]
@@ -250,12 +250,12 @@ behind = "⇣${count}"
 
 #### Custom Commands
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| 削除されたプロパティ | 再配置      |
+| ---------- | -------- |
+| `prefix`   | `format` |
+| `suffix`   | `format` |
 
-**Changes to the Default Configuration**
+**デフォルト設定への変更**
 
 ```diff
 [custom.example]
