@@ -611,15 +611,15 @@ format = "via [🔰 $version](bold red) "
 
 ### 配置项
 
-| 字段                       | 默认值                                             | 描述                                                    |
-| ------------------------ | ----------------------------------------------- | ----------------------------------------------------- |
-| `truncation_length`      | `3`                                             | 当前目录路径被截断后最多保留的父目录数量。                                 |
-| `truncate_to_repo`       | `true`                                          | 是否只截断到您当前处于的 git 仓库根目录下。                              |
-| `format`                 | `"[$path]($style)[$lock_symbol]($lock_style) "` | 组件格式化模板。                                              |
-| `style`                  | `"bold cyan"`                                   | 此组件的样式。                                               |
-| `disabled`               | `false`                                         | 禁用 `directory` 组件。                                    |
-| `read_only_symbol`       | `"🔒"`                                           | The symbol indicating current directory is read only. |
-| `read_only_symbol_style` | `"red"`                                         | The style for the read only symbol.                   |
+| 字段                  | 默认值                                                | 描述                                                    |
+| ------------------- | -------------------------------------------------- | ----------------------------------------------------- |
+| `truncation_length` | `3`                                                | 当前目录路径被截断后最多保留的父目录数量。                                 |
+| `truncate_to_repo`  | `true`                                             | 是否只截断到您当前处于的 git 仓库根目录下。                              |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | 组件格式化模板。                                              |
+| `style`             | `"bold cyan"`                                      | 此组件的样式。                                               |
+| `disabled`          | `false`                                            | 禁用 `directory` 组件。                                    |
+| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only. |
+| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                   |
 
 <details>
 <summary>此组件有几个高级配置选项来控制当前目录路径的显示方式。</summary>
@@ -1133,6 +1133,7 @@ deleted = "🗑"
 ```
 
 Show ahead/behind count of the branch being tracked
+
 ```toml
 # ~/.config/starship.toml
 
@@ -2035,7 +2036,6 @@ The `status` module displays the exit code of the previous command. The module w
 | `style`    | `"bold red"`               | 此组件的样式。                                                |
 | `disabled` | `true`                     | Disables the `status` module.                          |
 
-
 ### Variables
 
 | 字段        | 示例    | 描述                                |
@@ -2046,8 +2046,8 @@ The `status` module displays the exit code of the previous command. The module w
 
 \*: This variable can only be used as a part of a style string
 
-
 ### 示例
+
 ```toml
 
 # ~/.config/starship.toml
