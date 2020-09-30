@@ -611,15 +611,15 @@ format = "via [🔰 $version](bold red) "
 
 ### Опции
 
-| Переменная               | По умолчанию                                    | Описание                                                                     |
-| ------------------------ | ----------------------------------------------- | ---------------------------------------------------------------------------- |
-| `truncation_length`      | `3`                                             | Количество родительских папок, к которым должен быть усечен текущий каталог. |
-| `truncate_to_repo`       | `true`                                          | Следует или нет обрезать до корня репозитория git, в котором вы находитесь.  |
-| `format`                 | `"[$path]($style)[$lock_symbol]($lock_style) "` | The format for the module.                                                   |
-| `style`                  | `"bold cyan"`                                   | Стиль модуля.                                                                |
-| `disabled`               | `false`                                         | Отключает модуль `directory`.                                                |
-| `read_only_symbol`       | `"🔒"`                                           | The symbol indicating current directory is read only.                        |
-| `read_only_symbol_style` | `"red"`                                         | The style for the read only symbol.                                          |
+| Переменная          | По умолчанию                                       | Описание                                                                     |
+| ------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | Количество родительских папок, к которым должен быть усечен текущий каталог. |
+| `truncate_to_repo`  | `true`                                             | Следует или нет обрезать до корня репозитория git, в котором вы находитесь.  |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | The format for the module.                                                   |
+| `style`             | `"bold cyan"`                                      | Стиль модуля.                                                                |
+| `disabled`          | `false`                                            | Отключает модуль `directory`.                                                |
+| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                        |
+| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                          |
 
 <details>
 <summary>Этот модуль имеет несколько расширенных опций конфигурации, которые контролируют отображение каталога.</summary>
@@ -1133,6 +1133,7 @@ deleted = "🗑"
 ```
 
 Показывать счетчик впереди/позади для отслеживаемой ветки
+
 ```toml
 # ~/.config/starship.toml
 
@@ -2035,7 +2036,6 @@ The `status` module displays the exit code of the previous command. The module w
 | `style`    | `"bold red"`               | Стиль модуля.                                          |
 | `disabled` | `true`                     | Disables the `status` module.                          |
 
-
 ### Variables
 
 | Переменная | Пример | Описание                             |
@@ -2046,8 +2046,8 @@ The `status` module displays the exit code of the previous command. The module w
 
 \*: This variable can only be used as a part of a style string
 
-
 ### Пример
+
 ```toml
 
 # ~/.config/starship.toml
