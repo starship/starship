@@ -611,15 +611,15 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### Options
 
-| Variable                 | Défaut                                          | Description                                                                      |
-| ------------------------ | ----------------------------------------------- | -------------------------------------------------------------------------------- |
-| `truncation_length`      | `3`                                             | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`       | `true`                                          | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `format`                 | `"[$path]($style)[$lock_symbol]($lock_style) "` | Format du module.                                                                |
-| `style`                  | `"bold cyan"`                                   | Le style du module.                                                              |
-| `disabled`               | `false`                                         | Disables the `directory` module.                                                 |
-| `read_only_symbol`       | `"🔒"`                                           | The symbol indicating current directory is read only.                            |
-| `read_only_symbol_style` | `"red"`                                         | The style for the read only symbol.                                              |
+| Variable            | Défaut                                             | Description                                                                      |
+| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
+| `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format du module.                                                                |
+| `style`             | `"bold cyan"`                                      | Le style du module.                                                              |
+| `disabled`          | `false`                                            | Disables the `directory` module.                                                 |
+| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                            |
+| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
@@ -1133,6 +1133,7 @@ deleted = "🗑"
 ```
 
 Show ahead/behind count of the branch being tracked
+
 ```toml
 # ~/.config/starship.toml
 
@@ -2035,7 +2036,6 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `style`    | `"bold green"`             | Le style du module.                                    |
 | `disabled` | `true`                     | Disables the `status` module.                          |
 
-
 ### Variables
 
 | Variable  | Exemple | Description                            |
@@ -2046,8 +2046,8 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
-
 ### Exemple
+
 ```toml
 
 # ~/.config/starship.toml
