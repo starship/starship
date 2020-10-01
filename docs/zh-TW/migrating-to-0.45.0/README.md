@@ -71,7 +71,7 @@ prefix = "took "
 [cmd_duration]
 # $duration – The command duration (e.g. "15s")
 # $style    – The default style of the module (e.g. "bold yellow")
-format = "took [$duration]($style)"
+format = "took [$duration]($style) "
 ```
 
 ### Affected Modules
@@ -93,8 +93,8 @@ format = "took [$duration]($style)"
 -- error_symbol = "✖"
 -- use_symbol_for_status = true
 -- vicmd_symbol = "❮"
-++ success_symbol = "[❯](bold green) "
-++ error_symbol = "[❯](bold red) "
+++ success_symbol = "[❯](bold green)"
+++ error_symbol = "[❯](bold red)"
 ++ vicmd_symbol = "[❮](bold green)"
 ```
 
@@ -106,8 +106,10 @@ To configure the prompt to use the older `use_symbol_for_status = true` configur
 
 ```toml
 [character]
-error_symbol = "[✖](bold red) "
+error_symbol = "[✖](bold red)"
 ```
+
+*Note:* The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
 
 #### 指令持續時間
 
@@ -120,7 +122,7 @@ error_symbol = "[✖](bold red) "
 ```diff
 [cmd_duration]
 -- prefix = "took "
-++ format = "took [$duration]($style)"
+++ format = "took [$duration]($style) "
 ```
 
 #### 資料夾
@@ -134,7 +136,7 @@ error_symbol = "[✖](bold red) "
 ```diff
 [directory]
 -- prefix = "in "
-++ format = "[$path]($style)[$read_only]($read_only_style)"
+++ format = "[$path]($style)[$read_only]($read_only_style) "
 ```
 
 #### 環境變數
@@ -184,12 +186,12 @@ error_symbol = "[✖](bold red) "
 -- prefix = "["
 -- suffix = "]"
 -- show_sync_count = false
-++ format = "([$all_status$ahead_behind] )"
+++ format = "([$all_status$ahead_behind] ) "
 ```
 
 Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
 
-With the release of v0.45.0, this has been replaced with the
+With the release of v0.45.0, this has been replaced with three separate properties, `ahead`, `behind`, and `diverged`.
 
 To configure the prompt to use the older `show_sync_count = true` configuration, set the following to your config file:
 
@@ -245,7 +247,7 @@ behind = "⇣${count}"
 [time]
 -- format = "🕙[ %T ]"
 ++ time_format = "%T"
-++ format = "at 🕙[$time]($style)
+++ format = "at 🕙[$time]($style) "
 ```
 
 #### Custom Commands
