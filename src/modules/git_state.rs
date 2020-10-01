@@ -321,6 +321,16 @@ mod tests {
             true,
         )?;
 
+        // Ensure on the expected branch.
+        // If build environment has `init.defaultBranch` global set
+        // it will default to an unknown branch, so neeed to make & change branch
+        run_git_cmd(
+            &["checkout", "-b", "master"],
+            Some(path),
+            // command expected to fail if already on the expected branch
+            false,
+        )?;
+
         // Write a file on master and commit it
         write_file("Version A")?;
         run_git_cmd(&["add", "the_file"], Some(path), true)?;
