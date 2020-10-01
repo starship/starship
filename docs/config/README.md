@@ -493,6 +493,8 @@ running `eval $(starship init $0)`, and then proceed as normal.
 | `format`            | `"took [$duration]($style) "` | The format for the module.                                 |
 | `style`             | `"bold yellow"`               | The style for the module.                                  |
 | `disabled`          | `false`                       | Disables the `cmd_duration` module.                        |
+| `show_notifications`| `false`                       | Display a desktop notification.                            |
+| `min_time_to_notify`| `45_000`                      | Shortest duration to show a notification for (in milliseconds). |
 
 ### Variables
 
