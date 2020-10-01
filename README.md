@@ -192,6 +192,14 @@
    starship init fish | source
    ```
 
+   #### Nushell
+
+   Add the following to Nushell's `$(config path)`:
+
+   ```toml
+   prompt = "echo $(starship prompt)"
+   ```
+
    #### Zsh
 
    Add the following to the end of `~/.zshrc`:
