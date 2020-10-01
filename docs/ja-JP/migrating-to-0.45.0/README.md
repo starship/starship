@@ -52,7 +52,7 @@ format = """\
   """
 ```
 
-## `prefix`と `suffix` モジュールが`format`を置換
+## `prefix`と `suffix` モジュールを`format`に置換
 
 v0.45.0以前では、モジュールのレンダリング方法をスタイリングするために、 `prefix` や`suffix`の指定可能なモジュールがありました。
 
