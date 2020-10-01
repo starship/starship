@@ -642,15 +642,15 @@ it would have been `nixpkgs/pkgs`.
 
 ### Options
 
-| Variable                 | Default                                         | Description                                                                      |
-| ------------------------ | ----------------------------------------------- | -------------------------------------------------------------------------------- |
-| `truncation_length`      | `3`                                             | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`       | `true`                                          | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `format`                 | `"[$path]($style)[$lock_symbol]($lock_style) "` | The format for the module.                                                       |
-| `style`                  | `"bold cyan"`                                   | The style for the module.                                                        |
-| `disabled`               | `false`                                         | Disables the `directory` module.                                                 |
-| `read_only_symbol`       | `"🔒"`                                          | The symbol indicating current directory is read only.                            |
-| `read_only_symbol_style` | `"red"`                                         | The style for the read only symbol.                                              |
+| Variable            | Default                                            | Description                                                                      |
+| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
+| `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | The format for the module.                                                       |
+| `style`             | `"bold cyan"`                                      | The style for the module.                                                        |
+| `disabled`          | `false`                                            | Disables the `directory` module.                                                 |
+| `read_only`         | `"🔒"`                                             | The symbol indicating current directory is read only.                            |
+| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
@@ -1124,21 +1124,21 @@ current directory.
 
 ### Options
 
-| Option            | Default                                     | Description                                          |
-| ----------------- | ------------------------------------------- | ---------------------------------------------------- |
-| `format`          | `"[\[$all_status$ahead_behind\]]($style) "` | The default format for `git_status`                  |
-| `conflicted`      | `"="`                                       | This branch has merge conflicts.                     |
-| `ahead`           | `"⇡"`                                       | The format of `ahead`                                |
-| `behind`          | `"⇣"`                                       | The format of `behind`                               |
-| `diverged`        | `"⇕"`                                       | The format of `diverged`                             |
-| `untracked`       | `"?"`                                       | The format of `untracked`                            |
-| `stashed`         | `"$"`                                       | The format of `stashed`                              |
-| `modified`        | `"!"`                                       | The format of `modified`                             |
-| `staged`          | `"+"`                                       | The format of `staged`                               |
-| `renamed`         | `"»"`                                       | The format of `renamed`                              |
-| `deleted`         | `"✘"`                                       | The format of `deleted`                              |
-| `style`           | `"bold red"`                                | The style for the module.                            |
-| `disabled`        | `false`                                     | Disables the `git_status` module.                    |
+| Option       | Default                                     | Description                         |
+| ------------ | ------------------------------------------- | ----------------------------------- |
+| `format`     | `"[\[$all_status$ahead_behind\]]($style) "` | The default format for `git_status` |
+| `conflicted` | `"="`                                       | This branch has merge conflicts.    |
+| `ahead`      | `"⇡"`                                       | The format of `ahead`               |
+| `behind`     | `"⇣"`                                       | The format of `behind`              |
+| `diverged`   | `"⇕"`                                       | The format of `diverged`            |
+| `untracked`  | `"?"`                                       | The format of `untracked`           |
+| `stashed`    | `"$"`                                       | The format of `stashed`             |
+| `modified`   | `"!"`                                       | The format of `modified`            |
+| `staged`     | `"+"`                                       | The format of `staged`              |
+| `renamed`    | `"»"`                                       | The format of `renamed`             |
+| `deleted`    | `"✘"`                                       | The format of `deleted`             |
+| `style`      | `"bold red"`                                | The style for the module.           |
+| `disabled`   | `false`                                     | Disables the `git_status` module.   |
 
 ### Variables
 
@@ -1191,6 +1191,7 @@ deleted = "🗑"
 ```
 
 Show ahead/behind count of the branch being tracked
+
 ```toml
 # ~/.config/starship.toml
 
@@ -1505,13 +1506,13 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Option      | Default                                       | Description                                              |
-| ----------- | --------------------------------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module.                               |
-| `symbol`    | `"🐏"`                                        | The symbol used before displaying the memory usage.      |
-| `style`     | `"bold dimmed white"`                         | The style for the module.                                |
-| `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
+| Option      | Default                | Description                                              |
+| ----------- | ---------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                   | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "`                                     | The format for the module. |
+| `symbol`    | `"🐏"`                 | The symbol used before displaying the memory usage.      |
+| `style`     | `"bold dimmed white"`  | The style for the module.                                |
+| `disabled`  | `true`                 | Disables the `memory_usage` module.                      |
 
 ### Variables
 
@@ -2116,33 +2117,32 @@ The `status` module displays the exit code of the previous command.
 The module will be shown only if the exit code is not `0`.
 
 ::: tip
-                                                              
+
 This module is disabled by default.
 To enable it, set `disabled` to `false` in your configuration file.
 :::
 
 ### Options
 
-| Variable   | Default                       | Description                                            |
-| ---------- | ----------------------------- | ------------------------------------------------------ |
-| `format`   | `[$symbol$status]($style) `   | The format of the module                               |
-| `symbol`   | `"✖"`                         | A format string representing the symbol for the status |
-| `style`    | `"bold red"`                  | The style for the module.                              |
-| `disabled` | `true`                        | Disables the `status` module.                          |
-
+| Variable   | Default                     | Description                                            |
+| ---------- | --------------------------- | ------------------------------------------------------ |
+| `format`   | `[$symbol$status]($style) ` | The format of the module                               |
+| `symbol`   | `"✖"`                       | A format string representing the symbol for the status |
+| `style`    | `"bold red"`                | The style for the module.                              |
+| `disabled` | `true`                      | Disables the `status` module.                          |
 
 ### Variables
 
-| Variable | Example  | Description                          |
-| -------- | -------- | ------------------------------------ |
-| status   | `127`    | The exit code of the last command    |
-| symbol   |          | Mirrors the value of option `symbol` |
-| style\*  |          | Mirrors the value of option `style`  |
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| status   | `127`   | The exit code of the last command    |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
-
 ### Example
+
 ```toml
 
 # ~/.config/starship.toml

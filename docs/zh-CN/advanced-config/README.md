@@ -1,6 +1,6 @@
-# 高级配置
+# Advanced Configuration
 
-Starship 功能繁多，有时您必须在编辑 `starship.toml` 之外做更多工作才能实现某些效果。 此页面详细介绍了一些在 starship 中使用的高级配置技巧。
+`Starship 功能繁多，有时您必须在编辑 <code>starship.toml` 之外做更多工作才能实现某些效果。 此页面详细介绍了一些在 starship 中使用的高级配置技巧。
 
 ::: warning
 

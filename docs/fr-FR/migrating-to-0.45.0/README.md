@@ -6,8 +6,7 @@ This guide is intended to walk you through the breaking changes.
 
 ## `prompt_order` has been replaced by a root-level `format`
 
-Previously to v0.45.0, `prompt_order` would accept an array of module names
-in the order which they should be rendered by Starship.
+Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
 
 Starship v0.45.0 will instead be accepting a `format` value, allowing for customization of the prompt outside of the modules themselves.
 
@@ -55,13 +54,9 @@ format = """\
 
 ## Module `prefix` and `suffix` will be replaced by `format`
 
-Previously to v0.45.0, some modules would accept `prefix` and/or `suffix`
-in order to stylize the way that modules are rendered.
+Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
 
-Starship v0.45.0 will instead be accepting a `format` value, allowing for further
-customization of how modules are rendered. Instead of defining a prefix and suffix
-for the context-based variables, the variables can now be substituted from within
-a format string, which represents the module's output.
+Starship v0.45.0 will instead be accepting a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
 
 **Example pre-v0.45.0 configuration**
 
@@ -81,7 +76,7 @@ format = "took [$duration]($style)"
 
 ### Affected Modules
 
-#### Character
+#### Caractères
 
 | Removed Property        | Replacement      |
 | ----------------------- | ---------------- |
@@ -114,7 +109,7 @@ To configure the prompt to use the older `use_symbol_for_status = true` configur
 error_symbol = "[✖](bold red) "
 ```
 
-#### Command Duration
+#### Temps d'exécution
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
@@ -192,13 +187,11 @@ error_symbol = "[✖](bold red) "
 ++ format = "([$all_status$ahead_behind] )"
 ```
 
-Previously, the `show_sync_count` property was used to configure the prompt to
-show the number of commits the branch was ahead or behind the remote branch.
+Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
 
 With the release of v0.45.0, this has been replaced with the
 
-To configure the prompt to use the older `show_sync_count = true`
-configuration, set the following to your config file:
+To configure the prompt to use the older `show_sync_count = true` configuration, set the following to your config file:
 
 ```toml
 [git_status]
@@ -240,7 +233,7 @@ behind = "⇣${count}"
 ++ format = "[$symbol\\[$env\\]]($style) "
 ```
 
-#### Time
+#### Temps
 
 | Removed Property | Replacement   |
 | ---------------- | ------------- |
