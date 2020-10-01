@@ -123,7 +123,7 @@ error_symbol = "[✖](bold red) "
 ++ format = "took [$duration]($style)"
 ```
 
-#### Directory
+#### 資料夾
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
@@ -134,10 +134,10 @@ error_symbol = "[✖](bold red) "
 ```diff
 [directory]
 -- prefix = "in "
-++ format = "[$path]($style)[$lock_symbol]($lock_style)"
+++ format = "[$path]($style)[$read_only]($read_only_style)"
 ```
 
-#### Environment Variable
+#### 環境變數
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
@@ -200,7 +200,7 @@ diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 behind = "⇣${count}"
 ```
 
-#### Hostname
+#### 主機名稱
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
@@ -233,7 +233,7 @@ behind = "⇣${count}"
 ++ format = "[$symbol\\[$env\\]]($style) "
 ```
 
-#### Time
+#### 時間
 
 | Removed Property | Replacement   |
 | ---------------- | ------------- |

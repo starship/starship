@@ -123,7 +123,7 @@ error_symbol = "[✖](bold red) "
 ++ format = "took [$duration]($style)"
 ```
 
-#### Directory
+#### Каталог
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
@@ -134,10 +134,10 @@ error_symbol = "[✖](bold red) "
 ```diff
 [directory]
 -- prefix = "in "
-++ format = "[$path]($style)[$lock_symbol]($lock_style)"
+++ format = "[$path]($style)[$read_only]($read_only_style)"
 ```
 
-#### Environment Variable
+#### Переменная Окружения
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
@@ -153,7 +153,7 @@ error_symbol = "[✖](bold red) "
 ++ format = "with [$env_value]($style) "
 ```
 
-#### Git Commit
+#### Коммит Git
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
@@ -169,7 +169,7 @@ error_symbol = "[✖](bold red) "
 ++ format = "[\\($hash\\)]($style) "
 ```
 
-#### Git Status
+#### Статус Git
 
 | Removed Property  | Replacement |
 | ----------------- | ----------- |
@@ -200,7 +200,7 @@ diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 behind = "⇣${count}"
 ```
 
-#### Hostname
+#### Имя хоста
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
@@ -233,7 +233,7 @@ behind = "⇣${count}"
 ++ format = "[$symbol\\[$env\\]]($style) "
 ```
 
-#### Time
+#### Время
 
 | Removed Property | Replacement   |
 | ---------------- | ------------- |

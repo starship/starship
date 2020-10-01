@@ -134,10 +134,10 @@ error_symbol = "[✖](bold red) "
 ```diff
 [directory]
 -- prefix = "in "
-++ format = "[$path]($style)[$lock_symbol]($lock_style)"
+++ format = "[$path]($style)[$read_only]($read_only_style)"
 ```
 
-#### Environment Variable
+#### Variable de entorno
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
@@ -153,7 +153,7 @@ error_symbol = "[✖](bold red) "
 ++ format = "with [$env_value]($style) "
 ```
 
-#### Git Commit
+#### Git commit
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
@@ -169,7 +169,7 @@ error_symbol = "[✖](bold red) "
 ++ format = "[\\($hash\\)]($style) "
 ```
 
-#### Git Status
+#### Git status
 
 | Removed Property  | Replacement |
 | ----------------- | ----------- |
@@ -233,7 +233,7 @@ behind = "⇣${count}"
 ++ format = "[$symbol\\[$env\\]]($style) "
 ```
 
-#### Time
+#### Hora
 
 | Removed Property | Replacement   |
 | ---------------- | ------------- |

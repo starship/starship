@@ -1,4 +1,4 @@
-# 0.45への移行
+# v0.45への移行
 
 Starship v0.45.0は、v1.0.0の準備として互換性の無い変更を含むリリースになります。 私たちはより多くのカスタマイズを可能にするために、プロンプトでの設定方法にいくつかの大きな変更を加えました。
 
@@ -52,7 +52,7 @@ format = """\
   """
 ```
 
-## `prefix`と `suffix` モジュールが`format`を置換
+## `prefix`と `suffix` モジュールを`format`に置換
 
 v0.45.0以前では、モジュールのレンダリング方法をスタイリングするために、 `prefix` や`suffix`の指定可能なモジュールがありました。
 
@@ -134,7 +134,7 @@ error_symbol = "[✖](bold red) "
 ```diff
 [directory]
 -- prefix = "in "
-++ format = "[$path]($style)[$lock_symbol]($lock_style)"
+++ format = "[$path]($style)[$read_only]($read_only_style)"
 ```
 
 #### Environment Variable
