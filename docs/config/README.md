@@ -388,6 +388,10 @@ can do this in two ways:
 
 By default it only changes color. If you also want to change it's shape take a
 look at [this example](#with-custom-error-shape).
+ 
+::: warning
+`error_symbol` is not supported on elvish shell.
+:::
 
 ### Options
 
@@ -2315,6 +2319,10 @@ The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
+
+::: warning
+This module is not supported on elvish shell.
+:::
 
 ### Options
 
