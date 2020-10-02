@@ -173,7 +173,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
         match shell {
             "bash" => Some(".bashrc"),
             "fish" => Some(".config/fish/config.fish"),
-            "ion" => Some("~/.config/ion/initrc"),
+            "ion" => Some(".config/ion/initrc"),
             "powershell" => {
                 if cfg!(windows) {
                     Some("Documents/PowerShell/Microsoft.PowerShell_profile.ps1")
