@@ -166,6 +166,13 @@ fi"#,
             let script = format!("eval $({} init ion --print-full-init)", starship.sprint()?);
             Some(script)
         }
+        Some("elvish") => {
+            let script = format!(
+                "eval ({} init elvish --print-full-init | slurp)",
+                starship.sprint_posix()?
+            );
+            Some(script)
+        }
         None => {
             println!(
                 "Invalid shell name provided: {}\\n\
@@ -204,6 +211,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         "fish" => print_script(FISH_INIT, &starship_path.sprint_posix()?),
         "powershell" => print_script(PWSH_INIT, &starship_path.sprint()?),
         "ion" => print_script(ION_INIT, &starship_path.sprint()?),
+        "elvish" => print_script(ELVISH_INIT, &starship_path.sprint_posix()?),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
@@ -245,3 +253,5 @@ const FISH_INIT: &str = include_str!("starship.fish");
 const PWSH_INIT: &str = include_str!("starship.ps1");
 
 const ION_INIT: &str = include_str!("starship.ion");
+
+const ELVISH_INIT: &str = include_str!("starship.elv");

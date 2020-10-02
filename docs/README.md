@@ -101,3 +101,14 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    eval $(starship init ion)
    ```
+   #### Elvish
+
+   **Warning:** Only elvish 0.15 (unreleased) or higher is supported.
+   Add the following to the end of `~/.elvish/rc.elv`:
+
+   ```sh
+   # ~/.elvish/rc.elv
+
+   eval $(starship init evlish)
+   ```
+
