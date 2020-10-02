@@ -97,13 +97,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::from("")
     };
     let final_dir_string = format!("{}{}", fish_prefix, truncated_dir_string);
-    let lock_symbol = String::from(config.read_only_symbol);
+    let lock_symbol = String::from(config.read_only);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
-                "read_only_style" => Some(Ok(config.read_only_symbol_style)),
+                "read_only_style" => Some(Ok(config.read_only_style)),
                 _ => None,
             })
             .map(|variable| match variable {
