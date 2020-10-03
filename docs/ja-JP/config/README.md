@@ -621,6 +621,7 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 | `disabled`          | `false`                                            | `directory`モジュールを無効にします。                              |
 | `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only. |
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                   |
+| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"     |
 
 <details>
 <summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
@@ -659,6 +660,7 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 
 [directory]
 truncation_length = 8
+truncation_symbol = "…/"
 ```
 
 ## Docker Context
