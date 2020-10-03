@@ -620,6 +620,7 @@ format = "via [🔰 $version](bold red) "
 | `disabled`          | `false`                                            | 停用 `directory` 模組。                                    |
 | `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only. |
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                   |
+| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"     |
 
 <details>
 <summary>這個模組有些進階設定選項可以控制顯示資料夾。</summary>
@@ -658,6 +659,7 @@ format = "via [🔰 $version](bold red) "
 
 [directory]
 truncation_length = 8
+truncation_symbol = "…/"
 ```
 
 ## Docker Context
