@@ -621,6 +621,7 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 | `disabled`          | `false`                                            | Deshabilita el módulo `directory`.                                    |
 | `read_only`         | `"🔒"`                                              | El símbolo que indica si el directorio actual es de sólo lectura.     |
 | `read_only_style`   | `"red"`                                            | El estilo para el símbolo de sólo lectura.                            |
+| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                     |
 
 <details>
 <summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
@@ -659,6 +660,7 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 
 [directory]
 truncation_length = 8
+truncation_symbol = "…/"
 ```
 
 ## Docker Context
