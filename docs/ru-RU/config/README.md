@@ -620,6 +620,7 @@ format = "via [🔰 $version](bold red) "
 | `disabled`          | `false`                                            | Отключает модуль `directory`.                                                |
 | `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                        |
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                          |
+| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                            |
 
 <details>
 <summary>Этот модуль имеет несколько расширенных опций конфигурации, которые контролируют отображение каталога.</summary>
@@ -658,6 +659,7 @@ format = "via [🔰 $version](bold red) "
 
 [directory]
 truncation_length = 8
+truncation_symbol = "…/"
 ```
 
 ## Контекст Docker
