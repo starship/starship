@@ -334,13 +334,17 @@ mod tests {
         // Write a file on master and commit it
         write_file("Version A")?;
         run_git_cmd(&["add", "the_file"], Some(path), true)?;
-        run_git_cmd(&["commit", "--message", "Commit A"], Some(path), true)?;
+        run_git_cmd(
+            &["commit", "--message", "Commit A", "--no-gpg-sign"],
+            Some(path),
+            true,
+        )?;
 
         // Switch to another branch, and commit a change to the file
         run_git_cmd(&["checkout", "-b", "other-branch"], Some(path), true)?;
         write_file("Version B")?;
         run_git_cmd(
-            &["commit", "--all", "--message", "Commit B"],
+            &["commit", "--all", "--message", "Commit B", "--no-gpg-sign"],
             Some(path),
             true,
         )?;
@@ -349,7 +353,7 @@ mod tests {
         run_git_cmd(&["checkout", "master"], Some(path), true)?;
         write_file("Version C")?;
         run_git_cmd(
-            &["commit", "--all", "--message", "Commit C"],
+            &["commit", "--all", "--message", "Commit C", "--no-gpg-sign"],
             Some(path),
             true,
         )?;

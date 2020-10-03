@@ -813,7 +813,7 @@ mod tests {
             .current_dir(&repo_dir.path())
             .output()?;
         Command::new("git")
-            .args(&["commit", "-m", "add new files"])
+            .args(&["commit", "-m", "add new files", "--no-gpg-sign"])
             .current_dir(&repo_dir.path())
             .output()?;
 
@@ -842,7 +842,7 @@ mod tests {
         File::create(repo_dir.join("readme.md"))?.sync_all()?;
 
         Command::new("git")
-            .args(&["commit", "-am", "Update readme"])
+            .args(&["commit", "-am", "Update readme", "--no-gpg-sign"])
             .current_dir(&repo_dir)
             .output()?;
         barrier();
@@ -870,7 +870,7 @@ mod tests {
         fs::write(repo_dir.join("Cargo.toml"), " ")?;
 
         Command::new("git")
-            .args(&["commit", "-am", "Update readme"])
+            .args(&["commit", "-am", "Update readme", "--no-gpg-sign"])
             .current_dir(repo_dir)
             .output()?;
         barrier();
@@ -894,7 +894,7 @@ mod tests {
         barrier();
 
         Command::new("git")
-            .args(&["commit", "-m", "Change readme"])
+            .args(&["commit", "-m", "Change readme", "--no-gpg-sign"])
             .current_dir(repo_dir)
             .output()?;
         barrier();
