@@ -620,6 +620,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `disabled`          | `false`                                            | Disables the `directory` module.                                                 |
 | `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                            |
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
+| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
@@ -658,6 +659,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 [directory]
 truncation_length = 8
+truncation_symbol = "…/"
 ```
 
 ## Docker Context
