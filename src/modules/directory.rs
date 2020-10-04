@@ -13,6 +13,7 @@ use super::{Context, Module};
 use super::utils::directory::truncate;
 use crate::config::RootModuleConfig;
 use crate::configs::directory::DirectoryConfig;
+use crate::context::Shell;
 use crate::formatter::StringFormatter;
 
 const HOME_SYMBOL: &str = "~";
@@ -123,7 +124,17 @@ fn get_current_dir(context: &Context, config: &DirectoryConfig) -> PathBuf {
     // If this is None for any reason, we fall back to reading the os-provided path
     let physical_current_dir = if config.use_logical_path {
         match context.get_env("PWD") {
-            Some(x) => Some(PathBuf::from(x)),
+            Some(mut x) => {
+                // Prevent Powershell from prepending "Microsoft.PowerShell.Core\FileSystem::" to some paths
+                if cfg!(windows) && context.shell == Shell::PowerShell {
+                    if let Some(no_prefix) =
+                        x.strip_prefix(r"Microsoft.PowerShell.Core\FileSystem::")
+                    {
+                        x = no_prefix.to_string();
+                    }
+                }
+                Some(PathBuf::from(x))
+            }
             None => {
                 log::debug!("Error getting PWD environment variable!");
                 None
@@ -424,6 +435,52 @@ mod tests {
             .to_string_lossy()
             .to_string();
         Ok((dir, path))
+    }
+
+    #[test]
+    fn windows_strip_prefix() {
+        let with_prefix = r"Microsoft.PowerShell.Core\FileSystem::/path";
+        let without_prefix = r"/path";
+
+        let actual = ModuleRenderer::new("directory")
+            // use a different physical path here as a sentinel value
+            .path("/")
+            .env("PWD", with_prefix)
+            .shell(Shell::PowerShell)
+            .config(toml::toml! {
+                [directory]
+                format = "$path"
+                truncation_length = 100
+            })
+            .collect()
+            .unwrap();
+        let expected = if cfg!(windows) {
+            without_prefix
+        } else {
+            with_prefix
+        };
+        let expected = Path::new(expected).to_slash().unwrap();
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn windows_strip_prefix_no_pwsh() {
+        let with_prefix = r"Microsoft.PowerShell.Core\FileSystem::/path";
+
+        let actual = ModuleRenderer::new("directory")
+            // use a different physical path here as a sentinel value
+            .path("/")
+            .env("PWD", with_prefix)
+            .shell(Shell::Bash)
+            .config(toml::toml! {
+                [directory]
+                format = "$path"
+                truncation_length = 100
+            })
+            .collect()
+            .unwrap();
+        let expected = Path::new(with_prefix).to_slash().unwrap();
+        assert_eq!(actual, expected);
     }
 
     #[cfg(not(target_os = "windows"))]
