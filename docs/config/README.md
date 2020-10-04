@@ -1889,8 +1889,8 @@ The module will be shown if any of the following conditions are met:
 | `pyenv_version_name` | `false`                                                                   | Use pyenv to get Python version                                               |
 | `pyenv_prefix`       | `pyenv `                                                                  | Prefix before pyenv version display, only used if pyenv is used               |
 | `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.    |
-| `disabled`           | `false`                                                                   | Disables the `python` module.                                                 |
 | `python_binary`      | `python`                                                                  | Configures the python binary that Starship executes when getting the version. |
+| `disabled`           | `false`                                                                   | Disables the `python` module.                                                 |
 
 ### Variables
 
