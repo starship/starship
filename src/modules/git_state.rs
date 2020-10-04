@@ -267,6 +267,8 @@ mod tests {
         let mut command = Command::new("git");
         command
             .args(args)
+            // By setting the home to /dev/null/ we prevent git from using the user's git config.
+            .env("HOME", "/dev/null")
             .stdout(Stdio::null())
             .stderr(Stdio::null())
             .stdin(Stdio::null());
