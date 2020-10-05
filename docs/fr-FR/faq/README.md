@@ -10,18 +10,22 @@
   - **Configuration**: [Dotfiles de matchai](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Invite de commande**: [Starship](https://starship.rs/)
 
-## Est-ce que l'option globale `format` et `<module>.disabled` font la même chose ?
+## How do I get command completion as shown in the demo GIF?
 
-Oui, ils peuvent tous deux être utilisés pour désactiver les modules dans l'invite de commande. Si tout ce que vous prévoyez de faire est de désactiver les modules, `<module>.disabled` est le meilleur moyen de le faire pour ces raisons :
+Completion support is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+
+## Do top level `format` and `<module>.disabled` do the same thing?
+
+Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
 
 - Disabling modules is more explicit than omitting them from the top level `format`
 - Les modules nouvellement créés seront ajoutés à l'invite de commande au fur et à mesure que Starship sera mis à jour
 
-## La doc dit que Starship est cross-shell, mais il ne supporte pas X shell. Pourquoi ?
+## The docs say Starship is cross-shell, but it doesn't support X shell. Why?
 
-Étant donné la façon dont Starship est construit, il devrait être possible d'ajouter le support pour pratiquement n'importe quel shell. Le binaire de Starship est sans état et agnostique, donc tant que votre shell supporte la personnalisation rapide et l'expansion du shell, Starship peut être utilisé.
+The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
 
-Voici un petit exemple pour que Starship fonctionne avec bash :
+Here's a small example getting Starship working with bash:
 
 ```sh
 # Récupère le code d'état de la dernière commande exécutée
@@ -34,19 +38,19 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-[L'implémentation Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) intégrée dans Starship est légèrement plus complexe pour permettre des fonctionnalités avancées comme le [module Durée de commande](https://starship.rs/config/#Command-Duration) et pour s'assurer que Starship est compatible avec les configurations Bash préinstallées.
+The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#Command-Duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
 
-Pour une liste de tous les flags acceptés par `starship prompt`, utilisez la commande suivante :
+For a list of all flags accepted by `starship prompt`, use the following command:
 
 ```sh
 starship prompt --help
 ```
 
-L'invite de commande utilisera toutes les données contextuelles fournies, mais aucun indicateur n'est "requis".
+The prompt will use as much context as is provided, but no flags are "required".
 
-## Comment utiliser Starship sur des distributions Linux avec des versions de glibc plus ancienne ?
+## How do I run Starship on Linux distributions with older versions of glibc?
 
-Si vous obtenez une erreur du type "_version 'GLIBC_2.18' not found (required by starship)_" lors de l'utilisation du binaire précompilé (par exemple sur CentOS 6 ou 7), vous pouvez utiliser un binaire compilé avec `musl` au lieu de `glibc`:
+If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
 
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
