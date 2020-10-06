@@ -14,9 +14,30 @@ function global:prompt {
     $current_directory = (Convert-Path -LiteralPath $PWD)
     
     # If an external command has not been executed, then the $LASTEXITCODE will be $null.
-    # For the purposes of the prompt, replace this with a 0 exit code so that the prompt
-    # doesn't show the last command as a failure (because it had a non-zero exit code).
-    $lastExitCodeForPrompt = if ($origLastExitCode) { $origLastExitCode } else { 0 }
+    # it isn't populated or modified until you execute a Powershell task that returns an exit
+    # code e.g. On a fresh Powershell console:
+    # > $LASTEXITCODE -eq $null
+    # True
+    # In the same console after running a Powershell cmdlet:
+    # > gci ~/non_existing_folder
+    # ...
+    # > $LASTEXITCODE -eq $null
+    # True
+    # It only gets populated when running an external executable that returns an exit code, e. g.
+    # > bash -c 'exit 5'
+    # > $LASTEXITCODE -eq $null
+    # False
+    # > $LASTEXITCODE
+    # 5
+    # Therefore, for the purpose of the prompt, to avoid coloring the prompt wrongly we should rely
+    # rather on the dollar hook ($?) to check for success/failure of the previous execution.
+    # There's some edge cases like iex where the execution is successful even when the command passed
+    # as parameter returns a failure exit code or fails to execute.
+    # As of Powershell 7 we can leaverage the ternary operator as follows:
+    # $lastExitCodeForPrompt = $origDollarQuestion ? 0 : 1
+    # But for backwards compatibility sake, we can get away with:
+
+    $lastExitCodeForPrompt = @({1}, {0})[$origDollarQuestion]
 
     if ($lastCmd = Get-History -Count 1) {
         $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalMilliseconds)
