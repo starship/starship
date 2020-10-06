@@ -56,6 +56,7 @@ pub const ALL_MODULES: &[&str] = &[
     "shlvl",
     "singularity",
     "status",
+    "disk_used",
     "time",
     "username",
     "zig",

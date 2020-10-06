@@ -54,6 +54,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "nix_shell",
     "conda",
     "memory_usage",
+    "disk_used",
     "aws",
     "gcloud",
     "env_var",

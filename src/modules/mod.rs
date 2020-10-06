@@ -43,6 +43,7 @@ mod rust;
 mod shlvl;
 mod singularity;
 mod status;
+mod disk_used;
 mod swift;
 mod terraform;
 mod time;
@@ -110,6 +111,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "singularity" => singularity::module(context),
             "swift" => swift::module(context),
             "status" => status::module(context),
+            "disk_used" => disk_used::module(context),
             "terraform" => terraform::module(context),
             "time" => time::module(context),
             "crystal" => crystal::module(context),
@@ -168,6 +170,7 @@ pub fn description(module: &str) -> &'static str {
         "kubernetes" => "The current Kubernetes context name and, if set, the namespace",
         "line_break" => "Separates the prompt into two lines",
         "memory_usage" => "Current system memory and swap usage",
+        "disk_used" => "Current disk used", // TODO: Make it more informative
         "nim" => "The currently installed version of Nim",
         "nix_shell" => "The nix-shell environment",
         "nodejs" => "The currently installed version of NodeJS",
