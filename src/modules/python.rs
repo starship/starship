@@ -110,12 +110,9 @@ fn format_python_version(python_stdout: &str) -> String {
 
 fn get_python_virtual_env(context: &Context) -> Option<String> {
     context.get_env("VIRTUAL_ENV").and_then(|venv| {
-        context
-            .get_env("VIRTUAL_ENV_PROMPT") // Set starting python 3.10
-            .or(get_prompt_from_venv(Path::new(&venv)))
-            .or(Path::new(&venv)
-                .file_name()
-                .map(|filename| String::from(filename.to_str().unwrap_or(""))))
+        get_prompt_from_venv(Path::new(&venv)).or(Path::new(&venv)
+            .file_name()
+            .map(|filename| String::from(filename.to_str().unwrap_or(""))))
     })
 }
 fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
@@ -331,25 +328,6 @@ mod tests {
 
     #[test]
     fn with_active_venv_and_prompt() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-
-        let actual = ModuleRenderer::new("python")
-            .path(dir.path())
-            .env("VIRTUAL_ENV", "/foo/bar/my_venv")
-            .env("VIRTUAL_ENV_PROMPT", "my_best_venv")
-            .collect();
-
-        let expected = Some(format!(
-            "via {} ",
-            Color::Yellow.bold().paint("🐍 v2.7.17 (my_best_venv)")
-        ));
-
-        assert_eq!(actual, expected);
-        dir.close()
-    }
-
-    #[test]
-    fn with_active_venv_and_prompt_but_no_env_variable() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         create_dir_all(dir.path().join("my_venv"))?;
         let mut venv_cfg = File::create(dir.path().join("my_venv").join("pyvenv.cfg"))?;
