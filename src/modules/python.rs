@@ -110,9 +110,11 @@ fn format_python_version(python_stdout: &str) -> String {
 
 fn get_python_virtual_env(context: &Context) -> Option<String> {
     context.get_env("VIRTUAL_ENV").and_then(|venv| {
-        get_prompt_from_venv(Path::new(&venv)).or(Path::new(&venv)
-            .file_name()
-            .map(|filename| String::from(filename.to_str().unwrap_or(""))))
+        get_prompt_from_venv(Path::new(&venv)).or_else(|| {
+            Path::new(&venv)
+                .file_name()
+                .map(|filename| String::from(filename.to_str().unwrap_or("")))
+        })
     })
 }
 fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
@@ -341,13 +343,7 @@ prompt = 'foo'
 
         let actual = ModuleRenderer::new("python")
             .path(dir.path())
-            .env(
-                "VIRTUAL_ENV",
-                dir.path()
-                    .join("my_venv")
-                    .to_str()
-                    .ok_or(io::Error::last_os_error())?,
-            )
+            .env("VIRTUAL_ENV", dir.path().join("my_venv").to_str().unwrap())
             .collect();
 
         let expected = Some(format!(
