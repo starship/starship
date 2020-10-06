@@ -8,6 +8,7 @@ mod crystal;
 pub(crate) mod custom;
 mod dart;
 mod directory;
+mod disk_used;
 mod docker_context;
 mod dotnet;
 mod elixir;
@@ -43,7 +44,6 @@ mod rust;
 mod shlvl;
 mod singularity;
 mod status;
-mod disk_used;
 mod swift;
 mod terraform;
 mod time;
@@ -75,6 +75,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "conda" => conda::module(context),
             "dart" => dart::module(context),
             "directory" => directory::module(context),
+            "disk_used" => disk_used::module(context),
             "docker_context" => docker_context::module(context),
             "dotnet" => dotnet::module(context),
             "elixir" => elixir::module(context),
@@ -111,7 +112,6 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "singularity" => singularity::module(context),
             "swift" => swift::module(context),
             "status" => status::module(context),
-            "disk_used" => disk_used::module(context),
             "terraform" => terraform::module(context),
             "time" => time::module(context),
             "crystal" => crystal::module(context),
@@ -151,6 +151,7 @@ pub fn description(module: &str) -> &'static str {
         "crystal" => "The currently installed version of Crystal",
         "dart" => "The currently installed version of Dart",
         "directory" => "The current working directory",
+        "disk_used" => "Current disk used",
         "docker_context" => "The current docker context",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
         "env_var" => "Displays the current value of a selected environment variable",
@@ -170,7 +171,6 @@ pub fn description(module: &str) -> &'static str {
         "kubernetes" => "The current Kubernetes context name and, if set, the namespace",
         "line_break" => "Separates the prompt into two lines",
         "memory_usage" => "Current system memory and swap usage",
-        "disk_used" => "Current disk used", // TODO: Make it more informative
         "nim" => "The currently installed version of Nim",
         "nix_shell" => "The nix-shell environment",
         "nodejs" => "The currently installed version of NodeJS",

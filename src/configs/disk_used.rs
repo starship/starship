@@ -33,12 +33,18 @@ impl<'a> RootModuleConfig<'a> for DiskUsedConfig<'a> {
             disabled: true,
             show_percentage: true,
             current_threshold: Some(30),
-            all_threshold: Some(30),
+            all_threshold: None,
             show_current_name: false,
             default_style: "white bold",
             threshold_styles: vec![
-                ThresholdStyle {threshold: 50, style: "yellow bold"},
-                ThresholdStyle {threshold: 80, style: "red bold"},
+                ThresholdStyle {
+                    threshold: 50,
+                    style: "yellow bold",
+                },
+                ThresholdStyle {
+                    threshold: 80,
+                    style: "red bold",
+                },
             ],
         }
     }

@@ -1,9 +1,13 @@
-use std::{fs, fmt, path::{Path, PathBuf}, error::Error};
+use std::{
+    error::Error,
+    fmt, fs,
+    path::{Path, PathBuf},
+};
 
-use byte_unit::{Byte, ByteUnit, ByteError};
-use sysinfo::{Disk, DiskExt, System, RefreshKind, SystemExt};
+use byte_unit::{Byte, ByteError, ByteUnit};
+use sysinfo::{Disk, DiskExt, RefreshKind, System, SystemExt};
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, RootModuleConfig, Shell};
 
 use crate::configs::disk_used::DiskUsedConfig;
 use crate::formatter::StringFormatter;
@@ -21,53 +25,60 @@ fn get_disk_name(disk: &'_ Disk) -> Option<&'_ str> {
     let disk_name = Path::new(full_disk_name).file_name();
     match disk_name {
         Some(disk_name) => disk_name.to_str(),
-        None => full_disk_name.to_str()
+        None => full_disk_name.to_str(),
     }
 }
 
 fn format_disk_used(
-    disk: &Disk, config: &DiskUsedConfig, show_disk_name: bool, add_separator: bool
+    disk: &Disk,
+    config: &DiskUsedConfig,
+    show_disk_name: bool,
+    add_separator: bool,
+    percentage_char: &'_ str,
 ) -> Result<Vec<Segment>, Box<dyn Error>> {
     let used_space = (disk.get_total_space() - disk.get_available_space()) as f64;
     let total_space = disk.get_total_space() as f64;
 
     let formatted_usage = if config.show_percentage {
-        format!("{:.2}%", (used_space / total_space) * 100f64)
+        format!(
+            "{:.2}{}",
+            (used_space / total_space) * 100f64,
+            percentage_char
+        )
     } else {
         format!("{}/{}", format_byte(used_space)?, format_byte(total_space)?)
     };
 
-    let threshold_config = config
-        .threshold_styles
-        .iter()
-        .find(|threshold_style| {
-            (used_space / total_space) >= (threshold_style.threshold as f64 * 0.01f64)
-        });
-    
+    let threshold_config = config.threshold_styles.iter().find(|threshold_style| {
+        (used_space / total_space) >= (threshold_style.threshold as f64 * 0.01f64)
+    });
+
     let style = match threshold_config {
         Some(threshold_config) => threshold_config.style,
-        None => config.default_style
+        None => config.default_style,
     };
 
-    let parsed = StringFormatter::new("([$name:]($default_style))[$usage]($style)([$separator]($default_style))")
-        .and_then(|formatter| {
-            formatter
-                .map_style(|variable| match variable {
-                    "style" => Some(Ok(style)),
-                    "default_style" => Some(Ok(config.default_style)),
+    let parsed = StringFormatter::new(
+        "([$name:]($default_style))[$usage]($style)([$separator]($default_style))",
+    )
+    .and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(style)),
+                "default_style" => Some(Ok(config.default_style)),
+                _ => None,
+            })
+            .map(|var| match var {
+                "name" if show_disk_name => match get_disk_name(disk) {
+                    Some(name) => Some(Ok(name)),
                     _ => None,
-                })
-                .map(|var| match var {
-                    "name" if show_disk_name => match get_disk_name(disk) {
-                        Some(name) => Some(Ok(name)),
-                        _ => None
-                    },
-                    "usage" => Some(Ok(formatted_usage.as_str())),
-                    "separator" if add_separator => Some(Ok(config.separator)),
-                    _ => None,
-                })
+                },
+                "usage" => Some(Ok(formatted_usage.as_str())),
+                "separator" if add_separator => Some(Ok(config.separator)),
+                _ => None,
+            })
             .parse(None)
-        });
+    });
 
     match parsed {
         Ok(parsed) => Ok(parsed),
@@ -76,10 +87,9 @@ fn format_disk_used(
 }
 
 fn should_display_disk(disk: &Disk, threshold: i64) -> bool {
-    let percentage =
-        (disk.get_total_space() - disk.get_available_space()) as f64 
+    let percentage = (disk.get_total_space() - disk.get_available_space()) as f64
         / disk.get_total_space() as f64;
-    
+
     percentage >= (threshold as f64 * 0.01f64)
 }
 
@@ -104,33 +114,32 @@ impl Error for DiskNotFoundError {}
 fn get_drive_from_path(path: PathBuf) -> io::Result<u64> {
     use std::ffi::OsStr;
     use winapi::{
-        um::{
-            winnt::{LPCWSTR, LPCWSTR},
-            fileapi::GetVolumePathNameW,
-        },
-        shared::minwindef::{DWORD, BOOL},
+        shared::minwindef::{BOOL, DWORD},
+        um::{fileapi::GetVolumePathNameW, winnt::LPCWSTR},
     };
 
     let path: Vec<u16> = OsStr::from(path).encode_wide().chain(once(0)).collect();
     let volume_path_name: Vec<u16> = vec![0; 260];
     let path_size: u16;
 
-    let ret = unsafe {
-        GetVolumePathNameW(path.as_ref(), volume_path_name.as_ref(), path_size.as_ref())
-    };    
+    let ret =
+        unsafe { GetVolumePathNameW(path.as_ref(), volume_path_name.as_ref(), path_size.as_ref()) };
 
     if ret == 0 {
         let volume_path_name: PathBuf = volume_path_name.truncate(path_size).collect();
         log::info!("Got path name: {} for dir: {}", volume_path_name, path);
         for disk in disks {
             log::info!("Testing against: {}", disk.get_name());
-            if volume_path_name == disk.get_name() { return Ok(disk) }
+            if volume_path_name == disk.get_name() {
+                return Ok(disk);
+            }
         }
         Err(Box::new(DiskNotFoundError::new(volume_path_name)))
     } else {
-        Err(Box::new(DiskNotFoundError::new(
-            format!("Recived {} from GetVolumePathNameW.", ret)
-        )))
+        Err(Box::new(DiskNotFoundError::new(format!(
+            "Recived {} from GetVolumePathNameW.",
+            ret,
+        ))))
     }
 }
 
@@ -144,7 +153,9 @@ fn get_drive_from_path(path: PathBuf) -> io::Result<u64> {
 
     for disk in disks {
         let disk_meta = fs::metadata(disk.get_name())?;
-        if disk_meta.rdev() == dev_id { return Ok(disk) }
+        if disk_meta.rdev() == dev_id {
+            return Ok(disk);
+        }
     }
 
     Err(Box::new(DiskNotFoundError::new(path.to_owned())))
@@ -152,9 +163,7 @@ fn get_drive_from_path(path: PathBuf) -> io::Result<u64> {
 
 /// Uses the device id to get the drive
 #[cfg(target_os = "linux")]
-fn get_drive_from_path<'a>(
-    path: &PathBuf, disks: &'a [Disk]
-) -> Result<&'a Disk, Box<dyn Error>> {
+fn get_drive_from_path<'a>(path: &PathBuf, disks: &'a [Disk]) -> Result<&'a Disk, Box<dyn Error>> {
     use std::os::linux::fs::MetadataExt;
 
     let meta = fs::metadata(path)?;
@@ -162,7 +171,9 @@ fn get_drive_from_path<'a>(
 
     for disk in disks {
         let disk_meta = fs::metadata(disk.get_name())?;
-        if disk_meta.st_rdev() == dev_id { return Ok(disk) }
+        if disk_meta.st_rdev() == dev_id {
+            return Ok(disk);
+        }
     }
 
     Err(Box::new(DiskNotFoundError::new(path.to_owned())))
@@ -176,12 +187,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let percentage_char = match context.shell {
+        Shell::Zsh => "%%", // % is an escape in zsh, see PROMPT in `man zshmisc`
+        _ => "%",
+    };
+
     let mut current_disk = None;
     let mut current_storage = None;
     let mut other_storage: Option<Vec<Segment>> = None;
-    let system = System::new_with_specifics(
-        RefreshKind::new().with_disks().with_disks_list()
-    );
+    let system = System::new_with_specifics(RefreshKind::new().with_disks().with_disks_list());
     let all_disks = system.get_disks();
 
     if let Some(threshold) = config.current_threshold {
@@ -189,14 +203,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             Ok(disk) => {
                 current_disk = Some(disk);
                 if should_display_disk(disk, threshold) {
-                    match format_disk_used(&disk, &config, false, false) {
+                    match format_disk_used(
+                        &disk,
+                        &config,
+                        config.show_current_name,
+                        false,
+                        percentage_char,
+                    ) {
                         Ok(segments) => current_storage = Some(segments),
                         Err(e) => {
                             log::warn!("Couldn't format disk from current path: {}", e);
                         }
                     }
                 }
-            },
+            }
             Err(e) => {
                 log::warn!("Couldn't get disk from current path: {}", e);
             }
@@ -208,23 +228,27 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .iter()
             .filter(|disk| match current_disk {
                 Some(current) => *disk != current,
-                None => true
+                None => true,
             })
             .filter(|disk| should_display_disk(disk, threshold))
             .collect();
         let mut all_segments = Vec::new();
 
         for (i, disk) in display_disks.iter().enumerate() {
-            match format_disk_used(&disk, &config, true, display_disks.len() != i + 1) {
+            match format_disk_used(
+                &disk,
+                &config,
+                true,
+                display_disks.len() != i + 1,
+                percentage_char,
+            ) {
                 Ok(ref mut segments) => {
                     all_segments.append(segments);
-                },
-                Err(e) => {
-                    match get_disk_name(&disk) {
-                        Some(name) => log::warn!("Couldn't format disk {}: {}", name, e),
-                        None => log::warn!("Couldn't get disk name or do formatting: {}", e),
-                    }
                 }
+                Err(e) => match get_disk_name(&disk) {
+                    Some(name) => log::warn!("Couldn't format disk {}: {}", name, e),
+                    None => log::warn!("Couldn't get disk name or do formatting: {}", e),
+                },
             }
         }
 

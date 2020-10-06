@@ -229,6 +229,7 @@ $cmd_duration\
 $custom\
 $line_break\
 $jobs\
+$disk_used\
 $battery\
 $time\
 $status\
@@ -696,6 +697,76 @@ a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/
 [directory]
 truncation_length = 8
 truncation_symbol = "…/"
+```
+
+## Disk Used
+
+The `disk_used` module shows disk used in current directory or any disk specified.
+
+By default the moduel only shows the current directory's disk used when it is more than 30%.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Option              | Default                                                                | Description                                                                     |
+| ------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `prefix`            | ` `                                                                    | A prefix for the module output.                                                 |
+| `format`            | `"[($prefix )]($style)$symbol$current_storage(\\[$other_storage\\]) "` | The format for the module.                                                      |
+| `symbol`            | `"💾 "`                                                                | The symbol used before displaying the disk used usage.                          |
+| `default_style`     | `"white bold"`                                                         | The style for the module.                                                       |
+| `disabled`          | `true`                                                                 | Disables the `disk_used` module.                                                |
+| `separator`         | `|`                                                                    | Used to seprate disk used texts.                                                |
+| `show_percentage`   | `true`                                                                 | Switches between `63.05%` and `147GB/233GB`.                                    |
+| `current_threshold` | `30`                                                                   | Hides the current directory disk used if it is less than this value.            |
+| `all_threshold`     | ` `                                                                    | Hides all disk used if it is less than this value.                              |
+| `show_current_name` | `false`                                                                | Toggles between `💾 sda1: 63.05%` and `💾 63.05%`.                              |
+| `threshold_styles`  | [link](#disk-used-style-threshold)                                     | Thresholds and style pairs for disk used                                        |
+
+### Disk Used Style Threshold
+
+The `threshold_styles` are used to change the style of the disk used display based on the percentage of disk used.
+
+```toml
+[[disk_used.threshold_styles]]
+threshold = 50
+style = "yellow bold"
+[[disk_used.threshold_styles]]
+threshold = 80
+style = "red bold"
+```
+
+### Variables
+
+| Variable          | Example                   | Description                                                                                   |
+| ----------------- | ------------------------- | --------------------------------------------------------------------------------------------- |
+| prefix            | `used`                    | A perfix for the prompt.                                                                      |
+| style\*           | `white bold`              | Mirrors the value of option `default_style`.                                                  |
+| symbol            | `💾 `                     | Mirrors the value of option `symbol`.                                                         |
+| current_storage   | `63.05%`                  | The amount of used space on the current disk.                                                 |
+| other_storage\*\* | `sda2:63.05%|sdb1:63.05%` | The amount of used space on all disks. Only displays the disks that pass the `all_threshold`  |
+
+\*: This variable can only be used as a part of a style string
+\*\*: Disabled if `all_threshold` is not defined
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[memory_usage]
+disabled = false
+show_percentage = true
+current_threshold = 0
+symbol = "💾 "
+separator = "|"
+style = "white bold"
+show_current_name = false
 ```
 
 ## Docker Context
