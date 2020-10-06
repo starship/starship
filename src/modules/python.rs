@@ -1,3 +1,4 @@
+use regex::Regex;
 use std::path::Path;
 
 use super::{Context, Module, RootModuleConfig};
@@ -109,10 +110,27 @@ fn format_python_version(python_stdout: &str) -> String {
 
 fn get_python_virtual_env(context: &Context) -> Option<String> {
     context.get_env("VIRTUAL_ENV").and_then(|venv| {
-        Path::new(&venv)
-            .file_name()
-            .map(|filename| String::from(filename.to_str().unwrap_or("")))
+        context
+            .get_env("VIRTUAL_ENV_PROMPT") // Set starting python 3.10
+            .or(get_prompt_from_venv(&venv))
+            .or(Path::new(&venv)
+                .file_name()
+                .map(|filename| String::from(filename.to_str().unwrap_or(""))))
     })
+}
+
+fn get_prompt_from_venv(venv: &str) -> Option<String> {
+    let file = if Path::new(venv).join("bin").exists() {
+        Path::new(venv).join("bin").join("activate")
+    } else {
+        Path::new(venv).join("Scripts").join("activate") // Windows
+    };
+    let activation_script = utils::read_file(file).ok()?;
+    let re = Regex::new("PS1=\"(?P<prompt>.+) ${PS1}:-\"").ok()?;
+    let captures = re.captures(activation_script.as_str())?;
+    captures
+        .name("prompt")
+        .map(|prompt| String::from(prompt.as_str()))
 }
 
 #[cfg(test)]
