@@ -1,6 +1,6 @@
 use std::{
     error::Error,
-    fmt, fs,
+    fmt,
     path::{Path, PathBuf},
 };
 
@@ -109,44 +109,73 @@ impl fmt::Display for DiskNotFoundError {
 }
 impl Error for DiskNotFoundError {}
 
-/// Should use winapi::um::fileapi::GetVolumePathNameW
 #[cfg(target_os = "windows")]
-fn get_drive_from_path(path: PathBuf) -> io::Result<u64> {
-    use std::ffi::OsStr;
-    use winapi::{
-        shared::minwindef::{BOOL, DWORD},
-        um::{fileapi::GetVolumePathNameW, winnt::LPCWSTR},
+#[derive(Debug)]
+struct WinAPIVolumeError {
+    desc: String,
+}
+#[cfg(target_os = "windows")]
+impl WinAPIVolumeError {
+    fn new(desc: String) -> Self {
+        WinAPIVolumeError { desc }
+    }
+}
+#[cfg(target_os = "windows")]
+impl fmt::Display for WinAPIVolumeError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.desc)
+    }
+}
+#[cfg(target_os = "windows")]
+impl Error for WinAPIVolumeError {}
+
+#[cfg(target_os = "windows")]
+fn get_drive_from_path<'a>(path: &PathBuf, disks: &'a [Disk]) -> Result<&'a Disk, Box<dyn Error>> {
+    use std::{ffi::OsString, iter::once, os::windows::prelude::*};
+    use winapi::um::{errhandlingapi::GetLastError, fileapi::GetVolumePathNameW};
+
+    let path: Vec<u16> = path.as_os_str().encode_wide().chain(once(0)).collect();
+    let mut volume_path_name: Vec<u16> = vec![0; 260];
+
+    let ret = unsafe {
+        GetVolumePathNameW(
+            path.as_ptr(),
+            volume_path_name.as_mut_ptr(),
+            volume_path_name.len() as u32,
+        )
     };
 
-    let path: Vec<u16> = OsStr::from(path).encode_wide().chain(once(0)).collect();
-    let volume_path_name: Vec<u16> = vec![0; 260];
-    let path_size: u16;
-
-    let ret =
-        unsafe { GetVolumePathNameW(path.as_ref(), volume_path_name.as_ref(), path_size.as_ref()) };
-
-    if ret == 0 {
-        let volume_path_name: PathBuf = volume_path_name.truncate(path_size).collect();
-        log::info!("Got path name: {} for dir: {}", volume_path_name, path);
+    if ret != 0 {
+        // Strip out the nulls from the end
+        while let Some(last) = volume_path_name.last() {
+            if *last == 0 {
+                volume_path_name.pop();
+            } else {
+                break;
+            }
+        }
+        let volume_path_name = OsString::from_wide(&volume_path_name);
+        log::info!("Got path name: {:?}", volume_path_name);
         for disk in disks {
-            log::info!("Testing against: {}", disk.get_name());
-            if volume_path_name == disk.get_name() {
+            if volume_path_name == disk.get_mount_point() {
                 return Ok(disk);
             }
         }
-        Err(Box::new(DiskNotFoundError::new(volume_path_name)))
+        Err(Box::new(DiskNotFoundError::new(PathBuf::from(
+            volume_path_name,
+        ))))
     } else {
-        Err(Box::new(DiskNotFoundError::new(format!(
-            "Recived {} from GetVolumePathNameW.",
-            ret,
+        let last_error = unsafe { GetLastError() };
+        Err(Box::new(WinAPIVolumeError::new(format!(
+            "Recived {:?} from GetVolumePathNameW with GetLastError {}",
+            ret, last_error
         ))))
     }
 }
 
-/// Uses the device id to get the drive
-#[cfg(target_os = "unix")]
-fn get_drive_from_path(path: PathBuf) -> io::Result<u64> {
-    use std::os::unix::fs::MetadataExt;
+#[cfg(any(target_os = "unix", target_os = "macos"))]
+fn get_drive_from_path<'a>(path: &PathBuf, disks: &'a [Disk]) -> Result<&'a Disk, Box<dyn Error>> {
+    use std::{fs, os::unix::fs::MetadataExt};
 
     let meta = fs::metadata(path)?;
     let dev_id = meta.dev();
@@ -164,7 +193,7 @@ fn get_drive_from_path(path: PathBuf) -> io::Result<u64> {
 /// Uses the device id to get the drive
 #[cfg(target_os = "linux")]
 fn get_drive_from_path<'a>(path: &PathBuf, disks: &'a [Disk]) -> Result<&'a Disk, Box<dyn Error>> {
-    use std::os::linux::fs::MetadataExt;
+    use std::{fs, os::linux::fs::MetadataExt};
 
     let meta = fs::metadata(path)?;
     let dev_id = meta.st_dev();
@@ -227,7 +256,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let display_disks: Vec<_> = all_disks
             .iter()
             .filter(|disk| match current_disk {
-                Some(current) => *disk != current,
+                Some(current) => disk.get_name() != current.get_name(),
                 None => true,
             })
             .filter(|disk| should_display_disk(disk, threshold))
