@@ -210,7 +210,7 @@ confirm() {
     rc=$?
     set -e
     if [ $rc -ne 0 ]; then
-      error 'Error reading from prompt (please re-run with the `--yes` option)'
+      error "Error reading from prompt (please re-run with the '--yes' option)"
       exit 1
     fi
     if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
