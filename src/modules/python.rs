@@ -1,4 +1,4 @@
-use regex::Regex;
+use ini::Ini;
 use std::path::Path;
 
 use super::{Context, Module, RootModuleConfig};
@@ -112,25 +112,18 @@ fn get_python_virtual_env(context: &Context) -> Option<String> {
     context.get_env("VIRTUAL_ENV").and_then(|venv| {
         context
             .get_env("VIRTUAL_ENV_PROMPT") // Set starting python 3.10
-            .or(get_prompt_from_venv(&venv))
+            .or(get_prompt_from_venv(Path::new(&venv)))
             .or(Path::new(&venv)
                 .file_name()
                 .map(|filename| String::from(filename.to_str().unwrap_or(""))))
     })
 }
-
-fn get_prompt_from_venv(venv: &str) -> Option<String> {
-    let file = if Path::new(venv).join("bin").exists() {
-        Path::new(venv).join("bin").join("activate")
-    } else {
-        Path::new(venv).join("Scripts").join("activate") // Windows
-    };
-    let activation_script = utils::read_file(file).ok()?;
-    let re = Regex::new("PS1=\"(?P<prompt>.+) ${PS1}:-\"").ok()?;
-    let captures = re.captures(activation_script.as_str())?;
-    captures
-        .name("prompt")
-        .map(|prompt| String::from(prompt.as_str()))
+fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
+    Ini::load_from_file(venv_path.join("pyvenv.cfg"))
+        .ok()?
+        .general_section()
+        .get("prompt")
+        .map(String::from)
 }
 
 #[cfg(test)]
@@ -138,8 +131,9 @@ mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
-    use std::fs::File;
+    use std::fs::{create_dir_all, File};
     use std::io;
+    use std::io::Write;
 
     #[test]
     fn test_format_python_version() {
@@ -329,6 +323,58 @@ mod tests {
         let expected = Some(format!(
             "via {} ",
             Color::Yellow.bold().paint("🐍 v2.7.17 (my_venv)")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn with_active_venv_and_prompt() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("VIRTUAL_ENV", "/foo/bar/my_venv")
+            .env("VIRTUAL_ENV_PROMPT", "my_best_venv")
+            .collect();
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Yellow.bold().paint("🐍 v2.7.17 (my_best_venv)")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn with_active_venv_and_prompt_but_no_env_variable() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        create_dir_all(dir.path().join("my_venv"))?;
+        let mut venv_cfg = File::create(dir.path().join("my_venv").join("pyvenv.cfg"))?;
+        venv_cfg.write_all(
+            br#"
+home = something
+prompt = 'foo' 
+        "#,
+        )?;
+        venv_cfg.sync_all()?;
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env(
+                "VIRTUAL_ENV",
+                dir.path()
+                    .join("my_venv")
+                    .to_str()
+                    .ok_or(io::Error::last_os_error())?,
+            )
+            .collect();
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Yellow.bold().paint("🐍 v2.7.17 (foo)")
         ));
 
         assert_eq!(actual, expected);
