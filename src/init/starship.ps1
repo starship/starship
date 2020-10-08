@@ -5,6 +5,8 @@
 function global:prompt {
     $origDollarQuestion = $global:?
     $origLastExitCode = $global:LASTEXITCODE
+    $origCaretValue = ${global:^}
+    $origLastErrorCmdletName = Get-Error |  Where-Object {$_ -ne $null} | Select-Object -expand InvocationInfo | Where-Object {$_.InvocationName -ne $null} | Select-Object -expand InvocationName
 
     $out = $null
     # @ makes sure the result is an array even if single or no values are returned
@@ -29,15 +31,23 @@ function global:prompt {
     # False
     # > $LASTEXITCODE
     # 5
-    # Therefore, for the purpose of the prompt, to avoid coloring the prompt wrongly we should rely
-    # rather on the dollar hook ($?) to check for success/failure of the previous execution.
-    # There's some edge cases like iex where the execution is successful even when the command passed
-    # as parameter returns a failure exit code or fails to execute.
-    # As of Powershell 7 we can leaverage the ternary operator as follows:
-    # $lastExitCodeForPrompt = $origDollarQuestion ? 0 : 1
-    # But for backwards compatibility sake, we can get away with:
+    # Whe start from the premise that the command executed correctly, which covers also the fresh console.
+    $lastExitCodeForPrompt = 0
 
-    $lastExitCodeForPrompt = @({1}, {0})[$origDollarQuestion]
+    # In case we have a False on the Dollar hook, we know there's an error.
+    if( -not $origDollarQuestion){
+    # We check if the caret (^) original value is null aka. this is the first command executed.
+      if ($origCaretValue -eq $null){
+    # If there's a $LASTEXITCODE we use it, otherwise, we can safely return the standard error.
+        $lastExitCodeForPrompt = @($origLastExitCode,{1})[$origLastExitCode -eq $null]
+      }else{
+    # Finally if the last error origin is the same as the last command run, we know it was an internal
+    # Powershell command and we can return 1, otherwise, we use the $LASTEXITCODE
+        $lastExitCodeForPrompt = @({1},$origLastExitCode)[$origCaretValue -eq $origLastErrorCmdletName]
+      }
+    }
+
+
 
     if ($lastCmd = Get-History -Count 1) {
         $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalMilliseconds)
