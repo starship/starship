@@ -1883,15 +1883,16 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option               | Default                                                                   | Description                                                                |
-| -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `format`             | `"via [${symbol}${pyenv_prefix}${version}( \\($virtualenv\\))]($style) "` | The format for the module.                                                 |
-| `symbol`             | `"🐍 "`                                                                   | A format string representing the symbol of Python                          |
-| `style`              | `"yellow bold"`                                                           | The style for the module.                                                  |
-| `pyenv_version_name` | `false`                                                                   | Use pyenv to get Python version                                            |
-| `pyenv_prefix`       | `pyenv `                                                                  | Prefix before pyenv version display, only used if pyenv is used            |
-| `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module. |
-| `disabled`           | `false`                                                                   | Disables the `python` module.                                              |
+| Option               | Default                                                                   | Description                                                                   |
+| -------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `format`             | `"via [${symbol}${pyenv_prefix}${version}( \\($virtualenv\\))]($style) "` | The format for the module.                                                    |
+| `symbol`             | `"🐍 "`                                                                   | A format string representing the symbol of Python                             |
+| `style`              | `"yellow bold"`                                                           | The style for the module.                                                     |
+| `pyenv_version_name` | `false`                                                                   | Use pyenv to get Python version                                               |
+| `pyenv_prefix`       | `pyenv `                                                                  | Prefix before pyenv version display, only used if pyenv is used               |
+| `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.    |
+| `python_binary`      | `python`                                                                  | Configures the python binary that Starship executes when getting the version. |
+| `disabled`           | `false`                                                                   | Disables the `python` module.                                                 |
 
 ### Variables
 
@@ -1903,24 +1904,6 @@ The module will be shown if any of the following conditions are met:
 | pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
 | virtualenv   | `"venv"`        | The current `virtualenv` name              |
 
-<details>
-<summary>This module has some advanced configuration options.</summary>
-
-| Variable        | Default  | Description                                                                   |
-| --------------- | -------- | ----------------------------------------------------------------------------- |
-| `python_binary` | `python` | Configures the python binary that Starship executes when getting the version. |
-
-The `python_binary` variable changes the binary that Starship executes to get
-the version of Python, it doesn't change the arguments that are used.
-
-```toml
-# ~/.config/starship.toml
-
-[python]
-python_binary = "python3"
-```
-
-</details>
 
 ### Example
 
@@ -1930,6 +1913,18 @@ python_binary = "python3"
 [python]
 symbol = "👾 "
 pyenv_version_name = true
+```
+
+Using the `python3` binary to get the version.
+
+Note - The `python_binary` variable changes the binary that Starship executes
+to get the version of Python, it doesn't change the arguments that are used.
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+python_binary = "python3"
 ```
 
 ## Ruby
