@@ -6,9 +6,9 @@ Starship v0.45.0は、v1.0.0の準備として互換性の無い変更を含む�
 
 ## `prompt_order`をルートレベルの`format`に置換
 
-v0.45.0以前は、`prompt_order` はStarshipによってレンダリングされる順序でモジュール名の配列を指定できるようになっていました。
+Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
 
-Starship v0.45.0は代わりに  `format` を指定できるようになり、モジュール自体の外側でプロンプトをカスタマイズ可能になります。
+Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
 
 **v0.45.0以前の設定例**
 
@@ -52,11 +52,11 @@ format = """\
   """
 ```
 
-## `prefix`と `suffix` モジュールを`format`に置換
+## Module `prefix` and `suffix` have been replaced by `format`
 
-v0.45.0以前では、モジュールのレンダリング方法をスタイリングするために、 `prefix` や`suffix`の指定可能なモジュールがありました。
+Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
 
-Starship v0.45.0 は代わりに `format` の値を受け付け、モジュールのレンダリング方法をさらにカスタマイズすることができます。 接頭辞と接尾辞を定義する代わりに、コンテキストベースの変数については、モジュールの出力を表現するフォーマット文字列の中から変数を置き換えることができるようになりました。
+Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
 
 **v0.45.0以前の設定例**
 
@@ -186,7 +186,7 @@ error_symbol = "[✖](bold red)"
 -- prefix = "["
 -- suffix = "]"
 -- show_sync_count = false
-++ format = "([$all_status$ahead_behind] ) "
+++ format = "[\\[$all_status$ahead_behind\\]]($style)"
 ```
 
 Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
