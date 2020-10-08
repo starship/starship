@@ -78,4 +78,6 @@ STARSHIP_START_TIME=$(::STARSHIP:: time)
 export STARSHIP_SHELL="zsh"
 
 # Set up the session key that will be used to store logs
-export STARSHIP_SESSION_KEY=$(::STARSHIP:: session)
+STARSHIP_SESSION_KEY="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"; # Random generates a number b/w 0 - 32767
+STARSHIP_SESSION_KEY="${STARSHIP_SESSION_KEY}0000000000000000" # Pad it to 16+ chars.
+export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if excess.
