@@ -6,10 +6,9 @@ This guide is intended to walk you through the breaking changes.
 
 ## `prompt_order` has been replaced by a root-level `format`
 
-Previously to v0.45.0, `prompt_order` would accept an array of module names
-in the order which they should be rendered by Starship.
+Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
 
-Starship v0.45.0 will instead be accepting a `format` value, allowing for customization of the prompt outside of the modules themselves.
+Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
 
 **Example pre-v0.45.0 configuration**
 
@@ -53,15 +52,11 @@ format = """\
   """
 ```
 
-## Module `prefix` and `suffix` will be replaced by `format`
+## Module `prefix` and `suffix` have been replaced by `format`
 
-Previously to v0.45.0, some modules would accept `prefix` and/or `suffix`
-in order to stylize the way that modules are rendered.
+Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
 
-Starship v0.45.0 will instead be accepting a `format` value, allowing for further
-customization of how modules are rendered. Instead of defining a prefix and suffix
-for the context-based variables, the variables can now be substituted from within
-a format string, which represents the module's output.
+Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
 
 **Example pre-v0.45.0 configuration**
 
@@ -191,7 +186,7 @@ error_symbol = "[✖](bold red)"
 -- prefix = "["
 -- suffix = "]"
 -- show_sync_count = false
-++ format = "([$all_status$ahead_behind] ) "
+++ format = "[\\[$all_status$ahead_behind\\]]($style)"
 ```
 
 Previously, the `show_sync_count` property was used to configure the prompt to
