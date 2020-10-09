@@ -86,7 +86,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   Add the following to the end of `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix):
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. The location of this file can be checked with the `$PROFILE` command on PowerShell.
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
