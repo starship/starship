@@ -94,7 +94,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Powershell
 
-   `Microsoft.PowerShell_profile.ps1` の末尾に以下を追加してください。このファイルの置き場所は PowerShell で `$PROFILE` コマンドを実行することで確認することができます。
+   `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (それか Nix上の `~/.config/powershell/Microsoft.PowerShell_profile.ps1` )の末尾に以下を追加してください。
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
