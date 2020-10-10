@@ -5,8 +5,6 @@
 function global:prompt {
     $origDollarQuestion = $global:?
     $origLastExitCode = $global:LASTEXITCODE
-    $origCaretValue = ${global:^}
-    $origLastErrorCmdletName = Get-Error |  Where-Object {$_ -ne $null} | Select-Object -expand InvocationInfo | Where-Object {$_.InvocationName -ne $null} | Select-Object -expand InvocationName
 
     $out = $null
     # @ makes sure the result is an array even if single or no values are returned
@@ -15,41 +13,19 @@ function global:prompt {
     $env:PWD = $PWD
     $current_directory = (Convert-Path -LiteralPath $PWD)
     
-    # If an external command has not been executed, then the $LASTEXITCODE will be $null.
-    # it isn't populated or modified until you execute a Powershell task that returns an exit
-    # code e.g. On a fresh Powershell console:
-    # > $LASTEXITCODE -eq $null
-    # True
-    # In the same console after running a Powershell cmdlet:
-    # > gci ~/non_existing_folder
-    # ...
-    # > $LASTEXITCODE -eq $null
-    # True
-    # It only gets populated when running an external executable that returns an exit code, e. g.
-    # > bash -c 'exit 5'
-    # > $LASTEXITCODE -eq $null
-    # False
-    # > $LASTEXITCODE
-    # 5
     # Whe start from the premise that the command executed correctly, which covers also the fresh console.
     $lastExitCodeForPrompt = 0
 
-    # In case we have a False on the Dollar hook, we know there's an error.
-    if( -not $origDollarQuestion){
-    # We check if the caret (^) original value is null aka. this is the first command executed.
-      if ($origCaretValue -eq $null){
-    # If there's a $LASTEXITCODE we use it, otherwise, we can safely return the standard error.
-        $lastExitCodeForPrompt = @($origLastExitCode,{1})[$origLastExitCode -eq $null]
-      }else{
-    # Finally if the last error origin is the same as the last command run, we know it was an internal
-    # Powershell command and we can return 1, otherwise, we use the $LASTEXITCODE
-        $lastExitCodeForPrompt = @({1},$origLastExitCode)[$origCaretValue -eq $origLastErrorCmdletName]
-      }
-    }
-
-
-
     if ($lastCmd = Get-History -Count 1) {
+        # In case we have a False on the Dollar hook, we know there's an error.
+        if( -not $origDollarQuestion){
+          # We retrieve the InvocationInfo from the most recent error.
+          $lastCmdletError = Get-Error |  Where-Object {$_ -ne $null} | Select-Object -expand InvocationInfo
+          # We check if the las command executed matches the line that caused the last error , in which case we know
+          # it was an internal Powershell command, otherwise, there MUST be an error code.
+          $lastExitCodeForPrompt = if($lastCmd.CommandLine -eq $lastCmdletError.Line){1} else {$origLastExitCode}
+        }
+
         $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalMilliseconds)
         # & ensures the path is interpreted as something to execute
         $out = @(&::STARSHIP:: prompt "--path=$current_directory" --status=$lastExitCodeForPrompt --jobs=$jobs --cmd-duration=$duration)
