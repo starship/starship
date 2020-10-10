@@ -360,7 +360,7 @@ style = "bold red"
 
 The `display` option is an array of the following table.
 
-| Variable    | Description                                     |
+| Option      | Description                                     |
 | ----------- | ----------------------------------------------- |
 | `threshold` | The upper bound for the display option.         |
 | `style`     | The style used if the display option is in use. |
@@ -600,7 +600,7 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default                            | Description                                     |
+| Option     | Default                            | Description                                     |
 | ---------- | ---------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
 | `symbol`   | `"🎯 "`                            | A format string representing the symbol of Dart |
@@ -642,7 +642,7 @@ it would have been `nixpkgs/pkgs`.
 
 ### Options
 
-| Variable            | Default                                            | Description                                                                      |
+| Option              | Default                                            | Description                                                                      |
 | ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
 | `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
@@ -951,7 +951,7 @@ This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gc
 
 ### Options
 
-| Variable         | Default                                        | Description                                                     |
+| Option           | Default                                        | Description                                                     |
 | ---------------- | ---------------------------------------------- | --------------------------------------------------------------- |
 | `format`         | `'on [$symbol$account(\($region\))]($style) '` | The format for the module.                                      |
 | `symbol`         | `"☁️ "`                                        | The symbol used before displaying the current GCP profile.      |
@@ -1800,7 +1800,7 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Variable   | Default                            | Description                                           |
+| Option     | Default                            | Description                                           |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
 | `symbol`   | `"🐪 "`                            | The symbol used before displaying the version of Perl |
@@ -2007,7 +2007,7 @@ set to a number and meets or exceeds the specified threshold.
 
 ### Options
 
-| Variable    | Default                      | Description                             |
+| Option      | Default                      | Description                             |
 | ----------- | ---------------------------- | --------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                      |
 | `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.              |
@@ -2118,7 +2118,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Variable   | Default                     | Description                                            |
+| Option     | Default                     | Description                                            |
 | ---------- | --------------------------- | ------------------------------------------------------ |
 | `format`   | `[$symbol$status]($style) ` | The format of the module                               |
 | `symbol`   | `"✖"`                       | A format string representing the symbol for the status |
