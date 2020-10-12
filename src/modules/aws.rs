@@ -124,6 +124,7 @@ mod tests {
     use std::io::{self, Write};
 
     #[test]
+    #[ignore]
     fn no_region_set() -> io::Result<()> {
         let actual = ModuleRenderer::new("aws").collect();
         let expected = None;
@@ -377,6 +378,7 @@ region = us-east-2
     }
 
     #[test]
+    #[ignore]
     fn region_not_set_with_display_region() -> io::Result<()> {
         let actual = ModuleRenderer::new("aws")
             .config(toml::toml! {
