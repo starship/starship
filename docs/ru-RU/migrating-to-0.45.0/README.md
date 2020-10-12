@@ -168,7 +168,7 @@ error_symbol = "[✖](bold red)"
 [git_commit]
 -- prefix = "("
 -- suffix = ")"
-++ format = "[\\($hash\\)]($style) "
+++ format = '[\($hash\)]($style) '
 ```
 
 #### Статус Git
@@ -186,7 +186,7 @@ error_symbol = "[✖](bold red)"
 -- prefix = "["
 -- suffix = "]"
 -- show_sync_count = false
-++ format = "[\\[$all_status$ahead_behind\\]]($style)"
+++ format = '([\[$all_status$ahead_behind\]]($style) )'
 ```
 
 Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
@@ -232,7 +232,7 @@ behind = "⇣${count}"
 [singularity]
 -- prefix = ""
 -- suffix = ""
-++ format = "[$symbol\\[$env\\]]($style) "
+++ format = '[$symbol\[$env\]]($style) '
 ```
 
 #### Время
