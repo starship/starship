@@ -234,13 +234,13 @@ $character"""
 
 ### 選項
 
-| Option           | 預設                                                   | 說明                         |
-| ---------------- | ---------------------------------------------------- | -------------------------- |
-| `format`         | `"on [$symbol$profile(\\($region\\))]($style) "` | The format for the module. |
-| `symbol`         | `"☁️ "`                                              | 顯示在目前 AWS 配置之前的符號。         |
-| `region_aliases` |                                                      | 除了AWS名稱外，顯示區域別名表           |
-| `style`          | `"bold yellow"`                                      | 這個模組的風格。                   |
-| `disabled`       | `false`                                              | 停用 `AWS` 模組。               |
+| Option           | 預設                                               | 說明                         |
+| ---------------- | ------------------------------------------------ | -------------------------- |
+| `format`         | `'on [$symbol$profile(\($region\))]($style) '` | The format for the module. |
+| `symbol`         | `"☁️ "`                                          | 顯示在目前 AWS 配置之前的符號。         |
+| `region_aliases` |                                                  | 除了AWS名稱外，顯示區域別名表           |
+| `style`          | `"bold yellow"`                                  | 這個模組的風格。                   |
+| `disabled`       | `false`                                          | 停用 `AWS` 模組。               |
 
 ### Variables
 
@@ -261,7 +261,7 @@ $character"""
 # ~/.config/starship.toml
 
 [aws]
-format = "on [$symbol$profile(\\($region\\))]($style) "
+format = 'on [$symbol$profile(\($region\))]($style) '
 style = "bold blue"
 symbol = "🅰 "
 [aws.region_aliases]
@@ -346,7 +346,7 @@ style = "bold red"
 
 `display` 選項是一個下列表格的陣列。
 
-| 變數          | 說明          |
+| Option      | 說明          |
 | ----------- | ----------- |
 | `threshold` | 顯示選項的上界。    |
 | `style`     | 顯示選項使用時的風格。 |
@@ -575,7 +575,7 @@ The `dart` module shows the currently installed version of Dart. 這個模組在
 
 ### 選項
 
-| 變數         | 預設                                 | 說明                                              |
+| Option     | 預設                                 | 說明                                              |
 | ---------- | ---------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
 | `symbol`   | `"🎯 "`                             | A format string representing the symbol of Dart |
@@ -611,7 +611,7 @@ format = "via [🔰 $version](bold red) "
 
 ### 選項
 
-| 變數                  | 預設                                                 | 說明                                                    |
+| Option              | 預設                                                 | 說明                                                    |
 | ------------------- | -------------------------------------------------- | ----------------------------------------------------- |
 | `truncation_length` | `3`                                                | 到達現在資料夾的路徑中，要被裁減掉的資料夾數目。                              |
 | `truncate_to_repo`  | `true`                                             | 是否要裁減到你現在所在的 git 儲存庫的根目錄。                             |
@@ -757,12 +757,12 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 ### 選項
 
-| Option     | 預設                                                            | 說明                                                              |
-| ---------- | ------------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                        | The symbol used before displaying the version of Elixir/Erlang. |
-| `style`    | `"bold purple"`                                               | 這個模組的風格。                                                        |
-| `format`   | `"via [$symbol$version \\(OTP $otp_version\\)]($style) "` | The format for the module elixir.                               |
-| `disabled` | `false`                                                       | Disables the `elixir` module.                                   |
+| Option     | 預設                                                        | 說明                                                              |
+| ---------- | --------------------------------------------------------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`                                                    | The symbol used before displaying the version of Elixir/Erlang. |
+| `style`    | `"bold purple"`                                           | 這個模組的風格。                                                        |
+| `format`   | `'via [$symbol$version \(OTP $otp_version\)]($style) '` | The format for the module elixir.                               |
+| `disabled` | `false`                                                   | Disables the `elixir` module.                                   |
 
 ### Variables
 
@@ -900,13 +900,13 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### 選項
 
-| 變數               | 預設                                                   | 說明                                                              |
-| ---------------- | ---------------------------------------------------- | --------------------------------------------------------------- |
-| `format`         | `"on [$symbol$account(\\($region\\))]($style) "` | The format for the module.                                      |
-| `symbol`         | `"☁️ "`                                              | The symbol used before displaying the current GCP profile.      |
-| `region_aliases` |                                                      | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                        | 這個模組的風格。                                                        |
-| `disabled`       | `false`                                              | Disables the `gcloud` module.                                   |
+| Option           | 預設                                               | 說明                                                              |
+| ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
+| `format`         | `'on [$symbol$account(\($region\))]($style) '` | The format for the module.                                      |
+| `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current GCP profile.      |
+| `region_aliases` |                                                  | Table of region aliases to display in addition to the GCP name. |
+| `style`          | `"bold blue"`                                    | 這個模組的風格。                                                        |
+| `disabled`       | `false`                                          | Disables the `gcloud` module.                                   |
 
 ### Variables
 
@@ -929,7 +929,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 # ~/.config/starship.toml
 
 [gcloud]
-format = "on [$symbol$account(\\($project\\))]($style) "
+format = 'on [$symbol$account(\($project\))]($style) '
 ```
 
 #### Display active config name only
@@ -996,13 +996,13 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 
 ### 選項
 
-| Option               | 預設                             | 說明                                                    |
-| -------------------- | ------------------------------ | ----------------------------------------------------- |
-| `commit_hash_length` | `7`                            | The length of the displayed git commit hash.          |
-| `format`             | `"[\\($hash\\)]($style) "` | The format for the module.                            |
-| `style`              | `"bold green"`                 | 這個模組的風格。                                              |
-| `only_detached`      | `true`                         | Only show git commit hash when in detached HEAD state |
-| `disabled`           | `false`                        | Disables the `git_commit` module.                     |
+| Option               | 預設                         | 說明                                                    |
+| -------------------- | -------------------------- | ----------------------------------------------------- |
+| `commit_hash_length` | `7`                        | The length of the displayed git commit hash.          |
+| `format`             | `'[\($hash\)]($style) '` | The format for the module.                            |
+| `style`              | `"bold green"`             | 這個模組的風格。                                              |
+| `only_detached`      | `true`                     | Only show git commit hash when in detached HEAD state |
+| `disabled`           | `false`                    | Disables the `git_commit` module.                     |
 
 ### Variables
 
@@ -1028,18 +1028,18 @@ commit_hash_length = 4
 
 ### 選項
 
-| Option         | 預設                                                                  | 說明                                                                                      |
-| -------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `rebase`       | `"REBASING"`                                                        | A format string displayed when a `rebase` is in progress.                               |
-| `merge`        | `"MERGING"`                                                         | A format string displayed when a `merge` is in progress.                                |
-| `revert`       | `"REVERTING"`                                                       | A format string displayed when a `revert` is in progress.                               |
-| `cherry_pick`  | `"CHERRY-PICKING"`                                                  | A format string displayed when a `cherry-pick` is in progress.                          |
-| `bisect`       | `"BISECTING"`                                                       | A format string displayed when a `bisect` is in progress.                               |
-| `am`           | `"AM"`                                                              | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
-| `am_or_rebase` | `"AM/REBASE"`                                                       | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
-| `style`        | `"bold yellow"`                                                     | 這個模組的風格。                                                                                |
-| `format`       | `"\\([$state( $progress_current/$progress_total)]($style)\\) "` | The format for the module.                                                              |
-| `disabled`     | `false`                                                             | 停用 `git_state` 模組。                                                                      |
+| Option         | 預設                                                              | 說明                                                                                      |
+| -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `rebase`       | `"REBASING"`                                                    | A format string displayed when a `rebase` is in progress.                               |
+| `merge`        | `"MERGING"`                                                     | A format string displayed when a `merge` is in progress.                                |
+| `revert`       | `"REVERTING"`                                                   | A format string displayed when a `revert` is in progress.                               |
+| `cherry_pick`  | `"CHERRY-PICKING"`                                              | A format string displayed when a `cherry-pick` is in progress.                          |
+| `bisect`       | `"BISECTING"`                                                   | A format string displayed when a `bisect` is in progress.                               |
+| `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
+| `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
+| `style`        | `"bold yellow"`                                                 | 這個模組的風格。                                                                                |
+| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | The format for the module.                                                              |
+| `disabled`     | `false`                                                         | 停用 `git_state` 模組。                                                                      |
 
 ### Variables
 
@@ -1058,7 +1058,7 @@ commit_hash_length = 4
 # ~/.config/starship.toml
 
 [git_state]
-format = "[\\($state( $progress_current of $progress_total)\\)]($style) "
+format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
@@ -1068,21 +1068,21 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ### 選項
 
-| Option       | 預設                                            | 說明                                  |
-| ------------ | --------------------------------------------- | ----------------------------------- |
-| `format`     | `"[\[$all_status$ahead_behind\]]($style) "` | The default format for `git_status` |
-| `conflicted` | `"="`                                         | 這個分支有合併衝突。                          |
-| `ahead`      | `"⇡"`                                         | The format of `ahead`               |
-| `behind`     | `"⇣"`                                         | The format of `behind`              |
-| `diverged`   | `"⇕"`                                         | The format of `diverged`            |
-| `untracked`  | `"?"`                                         | The format of `untracked`           |
-| `stashed`    | `"$"`                                         | The format of `stashed`             |
-| `modified`   | `"!"`                                         | The format of `modified`            |
-| `staged`     | `"+"`                                         | The format of `staged`              |
-| `renamed`    | `"»"`                                         | The format of `renamed`             |
-| `deleted`    | `"✘"`                                         | The format of `deleted`             |
-| `style`      | `"bold red"`                                  | 這個模組的風格。                            |
-| `disabled`   | `false`                                       | 停用 `git_status` 模組。                 |
+| Option       | 預設                                              | 說明                                  |
+| ------------ | ----------------------------------------------- | ----------------------------------- |
+| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
+| `conflicted` | `"="`                                           | 這個分支有合併衝突。                          |
+| `ahead`      | `"⇡"`                                           | The format of `ahead`               |
+| `behind`     | `"⇣"`                                           | The format of `behind`              |
+| `diverged`   | `"⇕"`                                           | The format of `diverged`            |
+| `untracked`  | `"?"`                                           | The format of `untracked`           |
+| `stashed`    | `"$"`                                           | The format of `stashed`             |
+| `modified`   | `"!"`                                           | The format of `modified`            |
+| `staged`     | `"+"`                                           | The format of `staged`              |
+| `renamed`    | `"»"`                                           | The format of `renamed`             |
+| `deleted`    | `"✘"`                                           | The format of `deleted`             |
+| `style`      | `"bold red"`                                    | 這個模組的風格。                            |
+| `disabled`   | `false`                                         | 停用 `git_status` 模組。                 |
 
 ### Variables
 
@@ -1373,14 +1373,13 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ### 選項
 
-| Option                  | 預設                                                       | 說明                                                                    |
-| ----------------------- | -------------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`                | `"☸ "`                                                   | A format string representing the symbol displayed before the Cluster. |
-| `format`                | `"[$symbol$context( \\($namespace\\))]($style) in "` | The format for the module.                                            |
-| `style`                 | `"cyan bold"`                                            | 這個模組的風格。                                                              |
-| `namespace_spaceholder` | `none`                                                   | The value to display if no namespace was found.                       |
-| `context_aliases`       |                                                          | Table of context aliases to display.                                  |
-| `disabled`              | `true`                                                   | Disables the `kubernetes` module.                                     |
+| Option            | 預設                                                   | 說明                                                                    |
+| ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
+| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
+| `style`           | `"cyan bold"`                                        | 這個模組的風格。                                                              |
+| `context_aliases` |                                                      | Table of context aliases to display.                                  |
+| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
 
 ### Variables
 
@@ -1399,7 +1398,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 # ~/.config/starship.toml
 
 [kubernetes]
-format = "on [⛵ $context \\($namespace\\)](dimmed green) "
+format = 'on [⛵ $context \($namespace\)](dimmed green) '
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
@@ -1554,14 +1553,14 @@ symbol = "🎣 "
 
 ### 選項
 
-| Option       | 預設                                                 | 說明                                                    |
-| ------------ | -------------------------------------------------- | ----------------------------------------------------- |
-| `format`     | `"via [$symbol$state( \\($name\\))]($style) "` | The format for the module.                            |
-| `symbol`     | `"❄️ "`                                            | A format string representing the symbol of nix-shell. |
-| `style`      | `"bold blue"`                                      | 這個模組的風格。                                              |
-| `impure_msg` | `"impure"`                                         | A format string shown when the shell is impure.       |
-| `pure_msg`   | `"pure"`                                           | A format string shown when the shell is pure.         |
-| `disabled`   | `false`                                            | 停用 `nix_shell` 模組。                                    |
+| Option       | 預設                                             | 說明                                                    |
+| ------------ | ---------------------------------------------- | ----------------------------------------------------- |
+| `format`     | `'via [$symbol$state( \($name\))]($style) '` | The format for the module.                            |
+| `symbol`     | `"❄️ "`                                        | A format string representing the symbol of nix-shell. |
+| `style`      | `"bold blue"`                                  | 這個模組的風格。                                              |
+| `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
+| `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
+| `disabled`   | `false`                                        | 停用 `nix_shell` 模組。                                    |
 
 ### Variables
 
@@ -1583,7 +1582,7 @@ symbol = "🎣 "
 disabled = true
 impure_msg = "[impure shell](bold red)"
 pure_msg = "[pure shell](bold green)"
-format = "via [☃️ $state( \\($name\\))](bold blue) "
+format = 'via [☃️ $state( \($name\))](bold blue) '
 ```
 
 ## NodeJS
@@ -1720,7 +1719,7 @@ The `perl` module shows the currently installed version of Perl. 這個模組在
 
 ### 選項
 
-| 變數         | 預設                                 | 說明                                                    |
+| Option     | 預設                                 | 說明                                                    |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
 | `symbol`   | `"🐪 "`                             | The symbol used before displaying the version of Perl |
@@ -1800,16 +1799,16 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 ### 選項
 
-| Option               | 預設                                                                            | 說明                                                                            |
-| -------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `format`             | `"via [${symbol}${pyenv_prefix}${version}( \\($virtualenv\\))]($style) "` | The format for the module.                                                    |
-| `symbol`             | `"🐍 "`                                                                        | A format string representing the symbol of Python                             |
-| `style`              | `"yellow bold"`                                                               | 這個模組的風格。                                                                      |
-| `pyenv_version_name` | `false`                                                                       | 使用 pyenv 取得 Python 的版本。                                                       |
-| `pyenv_prefix`       | `pyenv`                                                                       | Prefix before pyenv version display, only used if pyenv is used               |
-| `scan_for_pyfiles`   | `true`                                                                        | If false, Python files in the current directory will not show this module.    |
-| `python_binary`      | `python`                                                                      | Configures the python binary that Starship executes when getting the version. |
-| `disabled`           | `false`                                                                       | Disables the `python` module.                                                 |
+| Option               | 預設                                                                        | 說明                                                                            |
+| -------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | The format for the module.                                                    |
+| `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                             |
+| `style`              | `"yellow bold"`                                                           | 這個模組的風格。                                                                      |
+| `pyenv_version_name` | `false`                                                                   | 使用 pyenv 取得 Python 的版本。                                                       |
+| `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used               |
+| `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.    |
+| `python_binary`      | `python`                                                                  | Configures the python binary that Starship executes when getting the version. |
+| `disabled`           | `false`                                                                   | Disables the `python` module.                                                 |
 
 ### Variables
 
@@ -1920,7 +1919,7 @@ The `shlvl` module shows the current SHLVL ("shell level") environment variable,
 
 ### 選項
 
-| 變數          | 預設                           | 說明                                      |
+| Option      | 預設                           | 說明                                      |
 | ----------- | ---------------------------- | --------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                      |
 | `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.              |
@@ -1955,12 +1954,12 @@ The `singularity` module shows the current singularity image, if inside a contai
 
 ### 選項
 
-| Option     | 預設                                   | 說明                                               |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"[$symbol\\[$env\\]]($style) "` | The format for the module.                       |
-| `symbol`   | `""`                                 | A format string displayed before the image name. |
-| `style`    | `"bold dimmed blue"`                 | 這個模組的風格。                                         |
-| `disabled` | `false`                              | Disables the `singularity` module.               |
+| Option     | 預設                               | 說明                                               |
+| ---------- | -------------------------------- | ------------------------------------------------ |
+| `format`   | `'[$symbol\[$env\]]($style) '` | The format for the module.                       |
+| `symbol`   | `""`                             | A format string displayed before the image name. |
+| `style`    | `"bold dimmed blue"`             | 這個模組的風格。                                         |
+| `disabled` | `false`                          | Disables the `singularity` module.               |
 
 ### Variables
 
@@ -1978,7 +1977,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 # ~/.config/starship.toml
 
 [singularity]
-format = "[📦 \\[$env\\]]($style) "
+format = '[📦 \[$env\]]($style) '
 ```
 
 ## Swift
@@ -2026,7 +2025,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ### 選項
 
-| 變數         | 預設                         | 說明                                                     |
+| Option     | 預設                         | 說明                                                     |
 | ---------- | -------------------------- | ------------------------------------------------------ |
 | `format`   | `[$symbol$status]($style)` | The format of the module                               |
 | `symbol`   | `"✖"`                      | A format string representing the symbol for the status |
@@ -2052,7 +2051,7 @@ The `status` module displays the exit code of the previous command. The module w
 [status]
 style = "bg:blue"
 symbol = "💣 "
-format = "[\\[$symbol$status\\]]($style) "
+format = '[\[$symbol$status\]]($style) '
 disabled = false
 
 ```
@@ -2144,7 +2143,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 [time]
 disabled = false
-format = "🕙[\\[ $time \\]]($style) "
+format = '🕙[\[ $time \]]($style) '
 time_format = "%T"
 utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
