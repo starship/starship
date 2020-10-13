@@ -37,7 +37,7 @@ pub fn get_prompt(context: Context) -> String {
         formatter
     } else {
         log::error!("Error parsing `format`");
-        buf.push_str(">");
+        buf.push('>');
         return buf;
     };
     let modules = formatter.get_variables();
@@ -295,11 +295,11 @@ fn handle_module<'a>(
                 .collect::<Vec<Option<Module<'a>>>>();
             modules.extend(custom_modules)
         }
-    } else if module.starts_with("custom.") {
+    } else if let Some(module) = module.strip_prefix("custom.") {
         // Write out a custom module if it isn't disabled (and it exists...)
-        match context.is_custom_module_disabled_in_config(&module[7..]) {
+        match context.is_custom_module_disabled_in_config(&module) {
             Some(true) => (), // Module is disabled, we don't add it to the prompt
-            Some(false) => modules.push(modules::custom::module(&module[7..], &context)),
+            Some(false) => modules.push(modules::custom::module(&module, &context)),
             None => match context.config.get_custom_modules() {
                 Some(modules) => log::debug!(
                     "top level format contains custom module \"{}\", but no configuration was provided. Configuration for the following modules were provided: {:?}",
