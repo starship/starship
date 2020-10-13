@@ -1198,6 +1198,7 @@ dependencies = [
  "rayon",
  "regex",
  "rust-ini",
+ "serde_derive",
  "serde_json",
  "shell-words",
  "starship_module_config_derive",
