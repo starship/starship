@@ -435,7 +435,7 @@ The `cmake` module shows the currently installed version of CMake if:
 | Option     | 默认值                                | 描述                                           |
 | ---------- | ---------------------------------- | -------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                     |
-| `symbol`   | `"🛆 "`                             | The symbol used before the version of cmake. |
+| `symbol`   | `"喝 "`                             | The symbol used before the version of cmake. |
 | `style`    | `"bold blue"`                      | 此组件的样式。                                      |
 | `disabled` | `false`                            | Disables the `cmake` module.                 |
 
@@ -870,7 +870,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. 此组�
 
 | Option     | 默认值                                | 描述                                                       |
 | ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `symbol`   | `"🖧 "`                             | The symbol used before displaying the version of erlang. |
+| `symbol`   | `" "`                             | The symbol used before displaying the version of erlang. |
 | `style`    | `"bold red"`                       | 此组件的样式。                                                  |
 | `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                                 |
 | `disabled` | `false`                            | Disables the `erlang` module.                            |
