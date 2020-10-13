@@ -14,7 +14,7 @@ impl<'a> RootModuleConfig<'a> for CMakeConfig<'a> {
     fn new() -> Self {
         CMakeConfig {
             format: "via [$symbol$version]($style) ",
-            symbol: "🛆 ",
+            symbol: "喝 ",
             style: "bold blue",
             disabled: false,
         }
