@@ -438,15 +438,6 @@ dependencies = [
 
 [[package]]
 name = "hashbrown"
-version = "0.8.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e91b62f79061a0bc2e046024cb7ba44b08419ed238ecbd9adbd787434b9e8c25"
-dependencies = [
- "autocfg",
-]
-
-[[package]]
-name = "hashbrown"
 version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d7afe4a420e3fe79967a00898cc1f4db7c8a49a9333a29f8a4bd76a253d5cd04"
@@ -487,12 +478,12 @@ dependencies = [
 
 [[package]]
 name = "indexmap"
-version = "1.5.1"
+version = "1.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "86b45e59b16c76b11bf9738fd5d38879d3bd28ad292d7b313608becb17ae2df9"
+checksum = "55e2e4c765aa53a0424761bf9f41aa7a6ac1efa87238f59560640e27fca028f2"
 dependencies = [
  "autocfg",
- "hashbrown 0.8.2",
+ "hashbrown",
 ]
 
 [[package]]
@@ -818,7 +809,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "87a6df8506c2d359d5105344891f283e8e7ef81a7c6a542d516f8707e4a09b6b"
 dependencies = [
  "dlv-list",
- "hashbrown 0.9.1",
+ "hashbrown",
 ]
 
 [[package]]
@@ -1183,6 +1174,7 @@ dependencies = [
  "dirs-next",
  "gethostname",
  "git2",
+ "indexmap",
  "log",
  "native-tls",
  "nix",

@@ -1,6 +1,7 @@
 use crate::configs::StarshipRootConfig;
 use crate::utils;
 use ansi_term::{Color, Style};
+use indexmap::IndexMap;
 
 use std::clone::Clone;
 use std::collections::HashMap;
@@ -143,6 +144,22 @@ where
         }
 
         Some(hm)
+    }
+}
+
+impl<'a, T, S: ::std::hash::BuildHasher + Default> ModuleConfig<'a> for IndexMap<String, T, S>
+where
+    T: ModuleConfig<'a>,
+    S: Clone,
+{
+    fn from_config(config: &'a Value) -> Option<Self> {
+        let mut im = IndexMap::default();
+
+        for (x, y) in config.as_table()?.iter() {
+            im.insert(x.clone(), T::from_config(y)?);
+        }
+
+        Some(im)
     }
 }
 
