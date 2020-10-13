@@ -8,7 +8,7 @@ This guide is intended to walk you through the breaking changes.
 
 Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
 
-Starship v0.45.0 will instead be accepting a `format` value, allowing for customization of the prompt outside of the modules themselves.
+Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
 
 **Example pre-v0.45.0 configuration**
 
@@ -52,11 +52,11 @@ format = """\
   """
 ```
 
-## Module `prefix` and `suffix` will be replaced by `format`
+## Module `prefix` and `suffix` have been replaced by `format`
 
 Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
 
-Starship v0.45.0 will instead be accepting a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
+Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
 
 **Example pre-v0.45.0 configuration**
 
@@ -71,7 +71,7 @@ prefix = "took "
 [cmd_duration]
 # $duration – The command duration (e.g. "15s")
 # $style    – The default style of the module (e.g. "bold yellow")
-format = "took [$duration]($style)"
+format = "took [$duration]($style) "
 ```
 
 ### Affected Modules
@@ -93,8 +93,8 @@ format = "took [$duration]($style)"
 -- error_symbol = "✖"
 -- use_symbol_for_status = true
 -- vicmd_symbol = "❮"
-++ success_symbol = "[❯](bold green) "
-++ error_symbol = "[❯](bold red) "
+++ success_symbol = "[❯](bold green)"
+++ error_symbol = "[❯](bold red)"
 ++ vicmd_symbol = "[❮](bold green)"
 ```
 
@@ -106,8 +106,10 @@ To configure the prompt to use the older `use_symbol_for_status = true` configur
 
 ```toml
 [character]
-error_symbol = "[✖](bold red) "
+error_symbol = "[✖](bold red)"
 ```
+
+*Note:* The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
 
 #### Befehlsdauer
 
@@ -120,7 +122,7 @@ error_symbol = "[✖](bold red) "
 ```diff
 [cmd_duration]
 -- prefix = "took "
-++ format = "took [$duration]($style)"
+++ format = "took [$duration]($style) "
 ```
 
 #### Verzeichnis
@@ -134,7 +136,7 @@ error_symbol = "[✖](bold red) "
 ```diff
 [directory]
 -- prefix = "in "
-++ format = "[$path]($style)[$read_only]($read_only_style)"
+++ format = "[$path]($style)[$read_only]($read_only_style) "
 ```
 
 #### Umgebungsvariablen
@@ -166,7 +168,7 @@ error_symbol = "[✖](bold red) "
 [git_commit]
 -- prefix = "("
 -- suffix = ")"
-++ format = "[\\($hash\\)]($style) "
+++ format = '[\($hash\)]($style) '
 ```
 
 #### Git-Status
@@ -184,12 +186,12 @@ error_symbol = "[✖](bold red) "
 -- prefix = "["
 -- suffix = "]"
 -- show_sync_count = false
-++ format = "([$all_status$ahead_behind] )"
+++ format = '([\[$all_status$ahead_behind\]]($style) )'
 ```
 
 Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
 
-With the release of v0.45.0, this has been replaced with the
+With the release of v0.45.0, this has been replaced with three separate properties, `ahead`, `behind`, and `diverged`.
 
 To configure the prompt to use the older `show_sync_count = true` configuration, set the following to your config file:
 
@@ -230,7 +232,7 @@ behind = "⇣${count}"
 [singularity]
 -- prefix = ""
 -- suffix = ""
-++ format = "[$symbol\\[$env\\]]($style) "
+++ format = '[$symbol\[$env\]]($style) '
 ```
 
 #### Zeit
@@ -245,7 +247,7 @@ behind = "⇣${count}"
 [time]
 -- format = "🕙[ %T ]"
 ++ time_format = "%T"
-++ format = "at 🕙[$time]($style)
+++ format = "at 🕙[$time]($style) "
 ```
 
 #### Custom Commands

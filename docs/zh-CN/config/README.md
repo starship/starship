@@ -234,13 +234,13 @@ When using [aws-vault](https://github.com/99designs/aws-vault) the profile is re
 
 ### 配置项
 
-| Option           | 默认值                                                  | 描述                        |
-| ---------------- | ---------------------------------------------------- | ------------------------- |
-| `format`         | `"on [$symbol$profile(\\($region\\))]($style) "` | 组件格式化模板。                  |
-| `symbol`         | `"☁️ "`                                              | 这个字段的内容会显示在当前 AWS 配置信息之前。 |
-| `region_aliases` |                                                      | 地区缩写列表，用来显示在 AWS 主机名之后。   |
-| `style`          | `"bold yellow"`                                      | 此组件的样式。                   |
-| `disabled`       | `false`                                              | 禁用 `AWS` 组件。              |
+| Option           | 默认值                                              | 描述                        |
+| ---------------- | ------------------------------------------------ | ------------------------- |
+| `format`         | `'on [$symbol$profile(\($region\))]($style) '` | 组件格式化模板。                  |
+| `symbol`         | `"☁️ "`                                          | 这个字段的内容会显示在当前 AWS 配置信息之前。 |
+| `region_aliases` |                                                  | 地区缩写列表，用来显示在 AWS 主机名之后。   |
+| `style`          | `"bold yellow"`                                  | 此组件的样式。                   |
+| `disabled`       | `false`                                          | 禁用 `AWS` 组件。              |
 
 ### Variables
 
@@ -261,7 +261,7 @@ When using [aws-vault](https://github.com/99designs/aws-vault) the profile is re
 # ~/.config/starship.toml
 
 [aws]
-format = "on [$symbol$profile(\\($region\\))]($style) "
+format = 'on [$symbol$profile(\($region\))]($style) '
 style = "bold blue"
 symbol = "🅰 "
 [aws.region_aliases]
@@ -346,7 +346,7 @@ style = "bold red"
 
 `display` 字段的子字段如下：
 
-| 字段          | 描述               |
+| Option      | 描述               |
 | ----------- | ---------------- |
 | `threshold` | 当前显示设置的电量上限（见示例） |
 | `style`     | 若组件被显示，则使用此样式    |
@@ -575,7 +575,7 @@ The `dart` module shows the currently installed version of Dart. 此组件将在
 
 ### 配置项
 
-| 字段         | 默认值                                | 描述                                              |
+| Option     | 默认值                                | 描述                                              |
 | ---------- | ---------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                        |
 | `symbol`   | `"🎯 "`                             | A format string representing the symbol of Dart |
@@ -611,7 +611,7 @@ format = "via [🔰 $version](bold red) "
 
 ### 配置项
 
-| 字段                  | 默认值                                                | 描述                                                    |
+| Option              | 默认值                                                | 描述                                                    |
 | ------------------- | -------------------------------------------------- | ----------------------------------------------------- |
 | `truncation_length` | `3`                                                | 当前目录路径被截断后最多保留的父目录数量。                                 |
 | `truncate_to_repo`  | `true`                                             | 是否只截断到您当前处于的 git 仓库根目录下。                              |
@@ -620,6 +620,7 @@ format = "via [🔰 $version](bold red) "
 | `disabled`          | `false`                                            | 禁用 `directory` 组件。                                    |
 | `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only. |
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                   |
+| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"     |
 
 <details>
 <summary>此组件有几个高级配置选项来控制当前目录路径的显示方式。</summary>
@@ -658,6 +659,7 @@ format = "via [🔰 $version](bold red) "
 
 [directory]
 truncation_length = 8
+truncation_symbol = "…/"
 ```
 
 ## Docker Context
@@ -755,12 +757,12 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 ### 配置项
 
-| Option     | 默认值                                                           | 描述                                                              |
-| ---------- | ------------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                        | The symbol used before displaying the version of Elixir/Erlang. |
-| `style`    | `"bold purple"`                                               | 此组件的样式。                                                         |
-| `format`   | `"via [$symbol$version \\(OTP $otp_version\\)]($style) "` | The format for the module elixir.                               |
-| `disabled` | `false`                                                       | Disables the `elixir` module.                                   |
+| Option     | 默认值                                                       | 描述                                                              |
+| ---------- | --------------------------------------------------------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`                                                    | The symbol used before displaying the version of Elixir/Erlang. |
+| `style`    | `"bold purple"`                                           | 此组件的样式。                                                         |
+| `format`   | `'via [$symbol$version \(OTP $otp_version\)]($style) '` | The format for the module elixir.                               |
+| `disabled` | `false`                                                   | Disables the `elixir` module.                                   |
 
 ### Variables
 
@@ -898,13 +900,13 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### 配置项
 
-| 字段               | 默认值                                                  | 描述                                                              |
-| ---------------- | ---------------------------------------------------- | --------------------------------------------------------------- |
-| `format`         | `"on [$symbol$account(\\($region\\))]($style) "` | 组件格式化模板。                                                        |
-| `symbol`         | `"☁️ "`                                              | The symbol used before displaying the current GCP profile.      |
-| `region_aliases` |                                                      | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                        | 此组件的样式。                                                         |
-| `disabled`       | `false`                                              | Disables the `gcloud` module.                                   |
+| Option           | 默认值                                              | 描述                                                              |
+| ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
+| `format`         | `'on [$symbol$account(\($region\))]($style) '` | 组件格式化模板。                                                        |
+| `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current GCP profile.      |
+| `region_aliases` |                                                  | Table of region aliases to display in addition to the GCP name. |
+| `style`          | `"bold blue"`                                    | 此组件的样式。                                                         |
+| `disabled`       | `false`                                          | Disables the `gcloud` module.                                   |
 
 ### Variables
 
@@ -927,7 +929,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 # ~/.config/starship.toml
 
 [gcloud]
-format = "on [$symbol$account(\\($project\\))]($style) "
+format = 'on [$symbol$account(\($project\))]($style) '
 ```
 
 #### Display active config name only
@@ -994,13 +996,13 @@ truncation_symbol = ""
 
 ### 配置项
 
-| Option               | 默认值                            | 描述                                                    |
-| -------------------- | ------------------------------ | ----------------------------------------------------- |
-| `commit_hash_length` | `7`                            | 显示的 git 提交哈希值的长度。                                     |
-| `format`             | `"[\\($hash\\)]($style) "` | 组件格式化模板。                                              |
-| `style`              | `"bold green"`                 | 此组件的样式。                                               |
-| `only_detached`      | `true`                         | Only show git commit hash when in detached HEAD state |
-| `disabled`           | `false`                        | 禁用 `git_commit` 组件。                                   |
+| Option               | 默认值                        | 描述                                                    |
+| -------------------- | -------------------------- | ----------------------------------------------------- |
+| `commit_hash_length` | `7`                        | 显示的 git 提交哈希值的长度。                                     |
+| `format`             | `'[\($hash\)]($style) '` | 组件格式化模板。                                              |
+| `style`              | `"bold green"`             | 此组件的样式。                                               |
+| `only_detached`      | `true`                     | Only show git commit hash when in detached HEAD state |
+| `disabled`           | `false`                    | 禁用 `git_commit` 组件。                                   |
 
 ### Variables
 
@@ -1026,18 +1028,18 @@ commit_hash_length = 4
 
 ### 配置项
 
-| Option         | 默认值                                                                 | 描述                                                                                      |
-| -------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `rebase`       | `"REBASING"`                                                        | A format string displayed when a `rebase` is in progress.                               |
-| `merge`        | `"MERGING"`                                                         | A format string displayed when a `merge` is in progress.                                |
-| `revert`       | `"REVERTING"`                                                       | A format string displayed when a `revert` is in progress.                               |
-| `cherry_pick`  | `"CHERRY-PICKING"`                                                  | A format string displayed when a `cherry-pick` is in progress.                          |
-| `bisect`       | `"BISECTING"`                                                       | A format string displayed when a `bisect` is in progress.                               |
-| `am`           | `"AM"`                                                              | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
-| `am_or_rebase` | `"AM/REBASE"`                                                       | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
-| `style`        | `"bold yellow"`                                                     | 此组件的样式。                                                                                 |
-| `format`       | `"\\([$state( $progress_current/$progress_total)]($style)\\) "` | 组件格式化模板。                                                                                |
-| `disabled`     | `false`                                                             | 禁用 `git_state` 模块                                                                       |
+| Option         | 默认值                                                             | 描述                                                                                      |
+| -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `rebase`       | `"REBASING"`                                                    | A format string displayed when a `rebase` is in progress.                               |
+| `merge`        | `"MERGING"`                                                     | A format string displayed when a `merge` is in progress.                                |
+| `revert`       | `"REVERTING"`                                                   | A format string displayed when a `revert` is in progress.                               |
+| `cherry_pick`  | `"CHERRY-PICKING"`                                              | A format string displayed when a `cherry-pick` is in progress.                          |
+| `bisect`       | `"BISECTING"`                                                   | A format string displayed when a `bisect` is in progress.                               |
+| `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
+| `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
+| `style`        | `"bold yellow"`                                                 | 此组件的样式。                                                                                 |
+| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | 组件格式化模板。                                                                                |
+| `disabled`     | `false`                                                         | 禁用 `git_state` 模块                                                                       |
 
 ### Variables
 
@@ -1056,7 +1058,7 @@ commit_hash_length = 4
 # ~/.config/starship.toml
 
 [git_state]
-format = "[\\($state( $progress_current of $progress_total)\\)]($style) "
+format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
@@ -1066,21 +1068,21 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ### 配置项
 
-| Option       | 默认值                                           | 描述                                  |
-| ------------ | --------------------------------------------- | ----------------------------------- |
-| `format`     | `"[\[$all_status$ahead_behind\]]($style) "` | The default format for `git_status` |
-| `conflicted` | `"="`                                         | 这个分支有合并冲突。                          |
-| `ahead`      | `"⇡"`                                         | The format of `ahead`               |
-| `behind`     | `"⇣"`                                         | The format of `behind`              |
-| `diverged`   | `"⇕"`                                         | The format of `diverged`            |
-| `untracked`  | `"?"`                                         | The format of `untracked`           |
-| `stashed`    | `"$"`                                         | The format of `stashed`             |
-| `modified`   | `"!"`                                         | The format of `modified`            |
-| `staged`     | `"+"`                                         | The format of `staged`              |
-| `renamed`    | `"»"`                                         | The format of `renamed`             |
-| `deleted`    | `"✘"`                                         | The format of `deleted`             |
-| `style`      | `"bold red"`                                  | 此组件的样式。                             |
-| `disabled`   | `false`                                       | 禁用 `git_status` 组件。                 |
+| Option       | 默认值                                             | 描述                                  |
+| ------------ | ----------------------------------------------- | ----------------------------------- |
+| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
+| `conflicted` | `"="`                                           | 这个分支有合并冲突。                          |
+| `ahead`      | `"⇡"`                                           | The format of `ahead`               |
+| `behind`     | `"⇣"`                                           | The format of `behind`              |
+| `diverged`   | `"⇕"`                                           | The format of `diverged`            |
+| `untracked`  | `"?"`                                           | The format of `untracked`           |
+| `stashed`    | `"$"`                                           | The format of `stashed`             |
+| `modified`   | `"!"`                                           | The format of `modified`            |
+| `staged`     | `"+"`                                           | The format of `staged`              |
+| `renamed`    | `"»"`                                           | The format of `renamed`             |
+| `deleted`    | `"✘"`                                           | The format of `deleted`             |
+| `style`      | `"bold red"`                                    | 此组件的样式。                             |
+| `disabled`   | `false`                                         | 禁用 `git_status` 组件。                 |
 
 ### Variables
 
@@ -1371,14 +1373,13 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ### 配置项
 
-| Option                  | 默认值                                                      | 描述                                                                    |
-| ----------------------- | -------------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`                | `"☸ "`                                                   | A format string representing the symbol displayed before the Cluster. |
-| `format`                | `"[$symbol$context( \\($namespace\\))]($style) in "` | 组件格式化模板。                                                              |
-| `style`                 | `"cyan bold"`                                            | 此组件的样式。                                                               |
-| `namespace_spaceholder` | `none`                                                   | The value to display if no namespace was found.                       |
-| `context_aliases`       |                                                          | Table of context aliases to display.                                  |
-| `disabled`              | `true`                                                   | Disables the `kubernetes` module.                                     |
+| Option            | 默认值                                                  | 描述                                                                    |
+| ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
+| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | 组件格式化模板。                                                              |
+| `style`           | `"cyan bold"`                                        | 此组件的样式。                                                               |
+| `context_aliases` |                                                      | Table of context aliases to display.                                  |
+| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
 
 ### Variables
 
@@ -1397,7 +1398,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 # ~/.config/starship.toml
 
 [kubernetes]
-format = "on [⛵ $context \\($namespace\\)](dimmed green) "
+format = 'on [⛵ $context \($namespace\)](dimmed green) '
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
@@ -1552,14 +1553,14 @@ symbol = "🎣 "
 
 ### 配置项
 
-| Option       | 默认值                                                | 描述                                                    |
-| ------------ | -------------------------------------------------- | ----------------------------------------------------- |
-| `format`     | `"via [$symbol$state( \\($name\\))]($style) "` | 组件格式化模板。                                              |
-| `symbol`     | `"❄️ "`                                            | A format string representing the symbol of nix-shell. |
-| `style`      | `"bold blue"`                                      | 此组件的样式。                                               |
-| `impure_msg` | `"impure"`                                         | A format string shown when the shell is impure.       |
-| `pure_msg`   | `"pure"`                                           | A format string shown when the shell is pure.         |
-| `disabled`   | `false`                                            | 禁用 `nix_shell` 组件。                                    |
+| Option       | 默认值                                            | 描述                                                    |
+| ------------ | ---------------------------------------------- | ----------------------------------------------------- |
+| `format`     | `'via [$symbol$state( \($name\))]($style) '` | 组件格式化模板。                                              |
+| `symbol`     | `"❄️ "`                                        | A format string representing the symbol of nix-shell. |
+| `style`      | `"bold blue"`                                  | 此组件的样式。                                               |
+| `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
+| `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
+| `disabled`   | `false`                                        | 禁用 `nix_shell` 组件。                                    |
 
 ### Variables
 
@@ -1581,7 +1582,7 @@ symbol = "🎣 "
 disabled = true
 impure_msg = "[impure shell](bold red)"
 pure_msg = "[pure shell](bold green)"
-format = "via [☃️ $state( \\($name\\))](bold blue) "
+format = 'via [☃️ $state( \($name\))](bold blue) '
 ```
 
 ## NodeJS
@@ -1718,7 +1719,7 @@ The `perl` module shows the currently installed version of Perl. 此组件将在
 
 ### 配置项
 
-| 字段         | 默认值                                | 描述                                                    |
+| Option     | 默认值                                | 描述                                                    |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
 | `symbol`   | `"🐪 "`                             | The symbol used before displaying the version of Perl |
@@ -1798,15 +1799,16 @@ format = "via [🔹 $version](147 bold) "
 
 ### 配置项
 
-| Option               | 默认值                                                                           | 描述                                                              |
-| -------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| `format`             | `"via [${symbol}${pyenv_prefix}${version}( \\($virtualenv\\))]($style) "` | 组件格式化模板。                                                        |
-| `symbol`             | `"🐍 "`                                                                        | 用于表示Python的格式化字符串。                                              |
-| `style`              | `"yellow bold"`                                                               | 此组件的样式。                                                         |
-| `pyenv_version_name` | `false`                                                                       | 使用 pyenv 获取 Python 版本                                           |
-| `pyenv_prefix`       | `pyenv`                                                                       | Prefix before pyenv version display, only used if pyenv is used |
-| `scan_for_pyfiles`   | `true`                                                                        | 如果设置为false, 在本目录下的Python文件将不会在本组件中显示。                           |
-| `disabled`           | `false`                                                                       | 禁用 `python` 组件。                                                 |
+| Option               | 默认值                                                                       | 描述                                                              |
+| -------------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | 组件格式化模板。                                                        |
+| `symbol`             | `"🐍 "`                                                                    | 用于表示Python的格式化字符串。                                              |
+| `style`              | `"yellow bold"`                                                           | 此组件的样式。                                                         |
+| `pyenv_version_name` | `false`                                                                   | 使用 pyenv 获取 Python 版本                                           |
+| `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used |
+| `scan_for_pyfiles`   | `true`                                                                    | 如果设置为false, 在本目录下的Python文件将不会在本组件中显示。                           |
+| `python_binary`      | `python`                                                                  | 配置在Starship运行时获取Python版本的二进制文件                                  |
+| `disabled`           | `false`                                                                   | 禁用 `python` 组件。                                                 |
 
 ### Variables
 
@@ -1818,23 +1820,6 @@ format = "via [🔹 $version](147 bold) "
 | pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
 | virtualenv   | `"venv"`        | 当前`virtualenv`名称                           |
 
-<details>
-<summary>这个组件存在一些高级配置选项。</summary>
-
-| 字段              | 默认值      | 描述                             |
-| --------------- | -------- | ------------------------------ |
-| `python_binary` | `python` | 配置在Starship运行时获取Python版本的二进制文件 |
-
-`python_binary`变量更改Starship执行的二进制文件以获得 Python版本，它没有改变使用的参数。
-
-```toml
-# ~/.config/starship.toml
-
-[python]
-python_binary = "python3"
-```
-
-</details>
 
 ### 示例
 
@@ -1844,6 +1829,17 @@ python_binary = "python3"
 [python]
 symbol = "👾 "
 pyenv_version_name = true
+```
+
+Using the `python3` binary to get the version.
+
+Note - The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+python_binary = "python3"
 ```
 
 ## Ruby
@@ -1923,7 +1919,7 @@ The `shlvl` module shows the current SHLVL ("shell level") environment variable,
 
 ### 配置项
 
-| 字段          | 默认值                          | 描述                                      |
+| Option      | 默认值                          | 描述                                      |
 | ----------- | ---------------------------- | --------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                      |
 | `format`    | `"[$symbol$shlvl]($style) "` | 组件格式化模板。                                |
@@ -1958,12 +1954,12 @@ The `singularity` module shows the current singularity image, if inside a contai
 
 ### 配置项
 
-| Option     | 默认值                                  | 描述                                               |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"[$symbol\\[$env\\]]($style) "` | 组件格式化模板。                                         |
-| `symbol`   | `""`                                 | A format string displayed before the image name. |
-| `style`    | `"bold dimmed blue"`                 | 此组件的样式。                                          |
-| `disabled` | `false`                              | Disables the `singularity` module.               |
+| Option     | 默认值                              | 描述                                               |
+| ---------- | -------------------------------- | ------------------------------------------------ |
+| `format`   | `'[$symbol\[$env\]]($style) '` | 组件格式化模板。                                         |
+| `symbol`   | `""`                             | A format string displayed before the image name. |
+| `style`    | `"bold dimmed blue"`             | 此组件的样式。                                          |
+| `disabled` | `false`                          | Disables the `singularity` module.               |
 
 ### Variables
 
@@ -1981,7 +1977,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 # ~/.config/starship.toml
 
 [singularity]
-format = "[📦 \\[$env\\]]($style) "
+format = '[📦 \[$env\]]($style) '
 ```
 
 ## Swift
@@ -2029,7 +2025,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ### 配置项
 
-| 字段         | 默认值                        | 描述                                                     |
+| Option     | 默认值                        | 描述                                                     |
 | ---------- | -------------------------- | ------------------------------------------------------ |
 | `format`   | `[$symbol$status]($style)` | The format of the module                               |
 | `symbol`   | `"✖"`                      | A format string representing the symbol for the status |
@@ -2055,7 +2051,7 @@ The `status` module displays the exit code of the previous command. The module w
 [status]
 style = "bg:blue"
 symbol = "💣 "
-format = "[\\[$symbol$status\\]]($style) "
+format = '[\[$symbol$status\]]($style) '
 disabled = false
 
 ```
@@ -2147,7 +2143,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. 否则，其默�
 
 [time]
 disabled = false
-format = "🕙[\\[ $time \\]]($style) "
+format = '🕙[\[ $time \]]($style) '
 time_format = "%T"
 utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
