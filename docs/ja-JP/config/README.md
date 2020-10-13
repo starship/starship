@@ -436,7 +436,7 @@ The `cmake` module shows the currently installed version of CMake if:
 | オプション      | デフォルト                              | 説明                                           |
 | ---------- | ---------------------------------- | -------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                             |
-| `symbol`   | `"🛆 "`                             | The symbol used before the version of cmake. |
+| `symbol`   | `"喝 "`                             | The symbol used before the version of cmake. |
 | `style`    | `"bold blue"`                      | モジュールのスタイルです。                                |
 | `disabled` | `false`                            | Disables the `cmake` module.                 |
 
@@ -871,7 +871,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. 次の�
 
 | オプション      | デフォルト                              | 説明                                                       |
 | ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `symbol`   | `"🖧 "`                             | The symbol used before displaying the version of erlang. |
+| `symbol`   | `" "`                             | The symbol used before displaying the version of erlang. |
 | `style`    | `"bold red"`                       | モジュールのスタイルです。                                            |
 | `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                         |
 | `disabled` | `false`                            | Disables the `erlang` module.                            |
