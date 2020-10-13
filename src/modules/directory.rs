@@ -2,8 +2,8 @@
 use super::utils::directory_nix as directory_utils;
 #[cfg(target_os = "windows")]
 use super::utils::directory_win as directory_utils;
+use indexmap::IndexMap;
 use path_slash::PathExt;
-use std::collections::HashMap;
 use std::iter::FromIterator;
 use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
@@ -246,7 +246,7 @@ fn real_path<P: AsRef<Path>>(path: P) -> PathBuf {
 ///
 /// Given a list of (from, to) pairs, this will perform the string
 /// substitutions, in order, on the path. Any non-pair of strings is ignored.
-fn substitute_path(dir_string: String, substitutions: &HashMap<String, &str>) -> String {
+fn substitute_path(dir_string: String, substitutions: &IndexMap<String, &str>) -> String {
     let mut substituted_dir = dir_string;
     for substitution_pair in substitutions.iter() {
         substituted_dir = substituted_dir.replace(substitution_pair.0, substitution_pair.1);
@@ -365,7 +365,7 @@ mod tests {
     #[test]
     fn substitute_prefix_and_middle() {
         let full_path = "/absolute/path/foo/bar/baz";
-        let mut substitutions = HashMap::new();
+        let mut substitutions = IndexMap::new();
         substitutions.insert("/absolute/path".to_string(), "");
         substitutions.insert("/bar/".to_string(), "/");
 
@@ -602,6 +602,22 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint("net/workspace/d/dev")
         ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn substitution_order() -> io::Result<()> {
+        let actual = ModuleRenderer::new("directory")
+            .path("/path/to/sub")
+            .config(toml::toml! {
+                [directory.substitutions]
+                "/path/to/sub" = "/correct/order"
+                "/to/sub" = "/wrong/order"
+            })
+            .collect();
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("/correct/order")));
 
         assert_eq!(expected, actual);
         Ok(())
