@@ -47,9 +47,9 @@ checksum = "cff77d8686867eceff3105329d4698d96c2391c176d5d03adc90c7389162b5b8"
 
 [[package]]
 name = "attohttpc"
-version = "0.15.0"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe174d1b67f7b2bafed829c09db039301eb5841f66e43be2cf60b326e7f8e2cc"
+checksum = "1082810677916862c7704351dfe4696a837aaf34da0dd6431abc60783e71ee8f"
 dependencies = [
  "http",
  "log",
@@ -58,6 +58,7 @@ dependencies = [
  "serde",
  "serde_urlencoded",
  "url",
+ "wildmatch",
 ]
 
 [[package]]
@@ -1462,6 +1463,12 @@ name = "wasi"
 version = "0.9.0+wasi-snapshot-preview1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cccddf32554fecc6acb585f82a32a72e28b48f8c4c1883ddfeeeaa96f7d8e519"
+
+[[package]]
+name = "wildmatch"
+version = "1.0.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ae79c150cec3fd46326dfb57f358b1f8f75223869555c5cb6c896a393ee4615c"
 
 [[package]]
 name = "winapi"
