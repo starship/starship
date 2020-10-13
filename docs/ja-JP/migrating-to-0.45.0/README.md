@@ -69,8 +69,8 @@ prefix = "took "
 
 ```toml
 [cmd_duration]
-# $duration – The command duration (e.g. "15s")
-# $style    – The default style of the module (e.g. "bold yellow")
+# $duration – コマンド実行時間 (例: "15s")
+# $style    – デフォルトのモジュールスタイル (例: "bold yellow")
 format = "took [$duration]($style) "
 ```
 
@@ -189,11 +189,11 @@ error_symbol = "[✖](bold red)"
 ++ format = '([\[$all_status$ahead_behind\]]($style) )'
 ```
 
-Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
+以前は `show_sync_count` プロパティを使用して、 ブランチが先行またはリモートブランチの後ろにあるコミット数を表示するようにプロンプトを設定していました。
 
 With the release of v0.45.0, this has been replaced with three separate properties, `ahead`, `behind`, and `diverged`.
 
-To configure the prompt to use the older `show_sync_count = true` configuration, set the following to your config file:
+以前の `show_sync_count = true` 設定を使用するようにプロンプトを構成するには、次の設定ファイルを設定します。
 
 ```toml
 [git_status]
