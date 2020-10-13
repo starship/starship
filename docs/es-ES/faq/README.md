@@ -16,16 +16,16 @@ Completion support is provided by your shell of choice. In the case of the demo,
 
 ## Do top level `format` and `<module>.disabled` do the same thing?
 
-Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
+Sí, se pueden usar ambos para desactivar los módulos en el símbolo del sistema. Si todo lo que planeas es desactivar módulos, `<module>.disabled` es el método preferido por las siguientes razones:
 
 - Disabling modules is more explicit than omitting them from the top level `format`
 - Los nuevos módulos se añadirán al símbolo del sistema en cuanto Starship se actualice
 
-## The docs say Starship is cross-shell, but it doesn't support X shell. Why?
+## La documentación dice que Starship es compatible con cualquier intérprete de comandos pero no soporta X Shell. ¿Por qué?
 
-The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
+Por la forma en que Starshp está construído, debería ser posible añadir soporte para prácticamente cualquier intérprete de comandos. El binario de Starship es sin estado y agnóstico, por lo que mientras que tu intérprete de comandos se pueda ampliar y soporte la personalización del símbolo del sistema, puede utilizar Starship.
 
-Here's a small example getting Starship working with bash:
+Aquí tienes un pequeño ejemplo haciendo que Starship funcione con bash:
 
 ```sh
 # Obtener el código de estado del último comando ejecutado
@@ -38,19 +38,19 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#Command-Duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
+La [implementación de Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) en Starship es sensíblemente is ligeramente más compleja para permitir características avanzadas como [el módulo de duración de comando](https://starship.rs/config/#Command-Duration) y para asegurar que Starship es compatible con las configuraciones preinstaladas de Bash.
 
-For a list of all flags accepted by `starship prompt`, use the following command:
+Para obtener una lista de todos los parámetros aceptados por `el símbolo del sistema starship`, usa el siguiente comando:
 
 ```sh
 starship prompt --help
 ```
 
-The prompt will use as much context as is provided, but no flags are "required".
+El símbolo de sistema usará tanto contexto como le proveas, pero no hay parámetros "obligatorios".
 
-## How do I run Starship on Linux distributions with older versions of glibc?
+## ¿Cómo lanzo Starship en distribuciones Linux con versiones antiguas de glibc?
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+Si obtienes un error como "_version 'GLIBC_2.18' not found (required by starship)_" al usar el binario precompilado (por ejemplo, en CentOS 6 o 7), puedes usar el binario compilado con `musl` en vez de `glibc`:
 
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
