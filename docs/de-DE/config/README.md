@@ -435,7 +435,7 @@ The `cmake` module shows the currently installed version of CMake if:
 | Option     | Standardwert                       | Beschreibung                                 |
 | ---------- | ---------------------------------- | -------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                   |
-| `symbol`   | `"🛆 "`                             | The symbol used before the version of cmake. |
+| `symbol`   | `"喝 "`                             | The symbol used before the version of cmake. |
 | `style`    | `"bold blue"`                      | Stil für dieses Modul.                       |
 | `disabled` | `false`                            | Disables the `cmake` module.                 |
 
@@ -870,7 +870,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. Das Mod
 
 | Option     | Standardwert                       | Beschreibung                                             |
 | ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `symbol`   | `"🖧 "`                             | The symbol used before displaying the version of erlang. |
+| `symbol`   | `" "`                             | The symbol used before displaying the version of erlang. |
 | `style`    | `"bold red"`                       | Stil für dieses Modul.                                   |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                               |
 | `disabled` | `false`                            | Disables the `erlang` module.                            |
