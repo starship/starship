@@ -77,7 +77,7 @@ winapi = { version = "0.3", features = [
 ] }
 
 [target.'cfg(not(windows))'.dependencies]
-nix = "0.18.0"
+nix = "0.19.0"
 
 [dev-dependencies]
 tempfile = "3.1.0"
