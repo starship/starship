@@ -36,7 +36,7 @@ $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 
 ### Logging
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+Starship registra por defecto los mensajes de advertencia y error en un fichero con nombre `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, en el que la clave de sesión corresponde con una instancia de tu terminal. Esto, sin embargo, puede ser cambiado usando la variable de entorno `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -174,7 +174,7 @@ El `format` predeterminado se utiliza para definir el formato del prompt, si est
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Que es equivalente a
 format = """
 $username\
 $hostname\
