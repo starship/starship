@@ -135,18 +135,17 @@ fn describe_rebase<'a>(root: &'a PathBuf, rebase_config: &'a str) -> StateDescri
 
     let progress = if has_path("rebase-merge/msgnum") {
         paths_to_progress("rebase-merge/msgnum", "rebase-merge/end")
-    } else if has_path("rebase-merge/onto") {
-        Some((1, 1))
     } else if has_path("rebase-apply") {
         paths_to_progress("rebase-apply/next", "rebase-apply/last")
     } else {
         None
     };
+    let progress = progress.unwrap_or((1, 1));
 
     StateDescription {
         label: rebase_config,
-        current: Some(format!("{}", progress.unwrap().0)),
-        total: Some(format!("{}", progress.unwrap().1)),
+        current: Some(format!("{}", progress.0)),
+        total: Some(format!("{}", progress.1)),
     }
 }
 

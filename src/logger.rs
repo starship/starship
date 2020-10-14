@@ -25,7 +25,8 @@ impl StarshipLogger {
                     .join(".cache/starship")
             });
 
-        fs::create_dir_all(&log_dir).expect("Unable to create log dir!");
+        fs::create_dir_all(&log_dir)
+            .unwrap_or_else(|err| panic!("Unable to create log dir {:?}: {:?}!", log_dir, err));
         let session_log_file = log_dir.join(format!(
             "session_{}.log",
             env::var("STARSHIP_SESSION_KEY").unwrap_or_default()
@@ -43,8 +44,13 @@ impl StarshipLogger {
                 OpenOptions::new()
                     .create(true)
                     .append(true)
-                    .open(session_log_file)
-                    .unwrap(),
+                    .open(session_log_file.clone())
+                    .unwrap_or_else(|err| {
+                        panic!(
+                            "Unable to open session log file {:?}: {:?}!",
+                            session_log_file, err
+                        )
+                    }),
             )),
             log_level: env::var("STARSHIP_LOG")
                 .map(|level| match level.to_lowercase().as_str() {
