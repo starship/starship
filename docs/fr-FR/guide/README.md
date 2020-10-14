@@ -125,7 +125,7 @@
 
 ### Démarrage rapide
 
-1. Installer le binaire **starship** :
+1. Installer l'exécutable **starship** :
 
 
    #### Installer la dernière version

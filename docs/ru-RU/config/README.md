@@ -234,13 +234,13 @@ $character"""
 
 ### Опции
 
-| Option           | По умолчанию                                         | Описание                                                       |
-| ---------------- | ---------------------------------------------------- | -------------------------------------------------------------- |
-| `format`         | `"on [$symbol$profile(\\($region\\))]($style) "` | The format for the module.                                     |
-| `symbol`         | `"☁️ "`                                              | Символ перед отображением текущего профиля AWS.                |
-| `region_aliases` |                                                      | Таблица региона псевдонимов, отображаемая вместе с именем AWS. |
-| `style`          | `"bold yellow"`                                      | Стиль модуля.                                                  |
-| `disabled`       | `false`                                              | Отключение модуля `AWS`.                                       |
+| Option           | По умолчанию                                     | Описание                                                       |
+| ---------------- | ------------------------------------------------ | -------------------------------------------------------------- |
+| `format`         | `'on [$symbol$profile(\($region\))]($style) '` | The format for the module.                                     |
+| `symbol`         | `"☁️ "`                                          | Символ перед отображением текущего профиля AWS.                |
+| `region_aliases` |                                                  | Таблица региона псевдонимов, отображаемая вместе с именем AWS. |
+| `style`          | `"bold yellow"`                                  | Стиль модуля.                                                  |
+| `disabled`       | `false`                                          | Отключение модуля `AWS`.                                       |
 
 ### Variables
 
@@ -261,7 +261,7 @@ $character"""
 # ~/.config/starship.toml
 
 [aws]
-format = "on [$symbol$profile(\\($region\\))]($style) "
+format = 'on [$symbol$profile(\($region\))]($style) '
 style = "bold blue"
 symbol = "🅰 "
 [aws.region_aliases]
@@ -346,7 +346,7 @@ style = "bold red"
 
 Опция `display` представляет собой массив следующей таблицы.
 
-| Переменная  | Описание                                                 |
+| Option      | Описание                                                 |
 | ----------- | -------------------------------------------------------- |
 | `threshold` | Верхняя граница опции отображения.                       |
 | `style`     | Используемый стиль, если используется опция отображения. |
@@ -575,7 +575,7 @@ The `dart` module shows the currently installed version of Dart. Модуль б
 
 ### Опции
 
-| Переменная | По умолчанию                       | Описание                                        |
+| Option     | По умолчанию                       | Описание                                        |
 | ---------- | ---------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
 | `symbol`   | `"🎯 "`                             | A format string representing the symbol of Dart |
@@ -611,7 +611,7 @@ format = "via [🔰 $version](bold red) "
 
 ### Опции
 
-| Переменная          | По умолчанию                                       | Описание                                                                     |
+| Option              | По умолчанию                                       | Описание                                                                     |
 | ------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------- |
 | `truncation_length` | `3`                                                | Количество родительских папок, к которым должен быть усечен текущий каталог. |
 | `truncate_to_repo`  | `true`                                             | Следует или нет обрезать до корня репозитория git, в котором вы находитесь.  |
@@ -620,6 +620,7 @@ format = "via [🔰 $version](bold red) "
 | `disabled`          | `false`                                            | Отключает модуль `directory`.                                                |
 | `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                        |
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                          |
+| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                            |
 
 <details>
 <summary>Этот модуль имеет несколько расширенных опций конфигурации, которые контролируют отображение каталога.</summary>
@@ -658,6 +659,7 @@ format = "via [🔰 $version](bold red) "
 
 [directory]
 truncation_length = 8
+truncation_symbol = "…/"
 ```
 
 ## Контекст Docker
@@ -755,12 +757,12 @@ heuristic = false
 
 ### Опции
 
-| Option     | По умолчанию                                                  | Описание                                                      |
-| ---------- | ------------------------------------------------------------- | ------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                        | Символ, используемый перед отображением версии Elixir/Erlang. |
-| `style`    | `"bold purple"`                                               | Стиль модуля.                                                 |
-| `format`   | `"via [$symbol$version \\(OTP $otp_version\\)]($style) "` | The format for the module elixir.                             |
-| `disabled` | `false`                                                       | Отключает модуль `elixir`.                                    |
+| Option     | По умолчанию                                              | Описание                                                      |
+| ---------- | --------------------------------------------------------- | ------------------------------------------------------------- |
+| `symbol`   | `"💧 "`                                                    | Символ, используемый перед отображением версии Elixir/Erlang. |
+| `style`    | `"bold purple"`                                           | Стиль модуля.                                                 |
+| `format`   | `'via [$symbol$version \(OTP $otp_version\)]($style) '` | The format for the module elixir.                             |
+| `disabled` | `false`                                                   | Отключает модуль `elixir`.                                    |
 
 ### Variables
 
@@ -898,13 +900,13 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### Опции
 
-| Переменная       | По умолчанию                                         | Описание                                                        |
-| ---------------- | ---------------------------------------------------- | --------------------------------------------------------------- |
-| `format`         | `"on [$symbol$account(\\($region\\))]($style) "` | The format for the module.                                      |
-| `symbol`         | `"☁️ "`                                              | The symbol used before displaying the current GCP profile.      |
-| `region_aliases` |                                                      | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                        | Стиль модуля.                                                   |
-| `disabled`       | `false`                                              | Disables the `gcloud` module.                                   |
+| Option           | По умолчанию                                     | Описание                                                        |
+| ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
+| `format`         | `'on [$symbol$account(\($region\))]($style) '` | The format for the module.                                      |
+| `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current GCP profile.      |
+| `region_aliases` |                                                  | Table of region aliases to display in addition to the GCP name. |
+| `style`          | `"bold blue"`                                    | Стиль модуля.                                                   |
+| `disabled`       | `false`                                          | Disables the `gcloud` module.                                   |
 
 ### Variables
 
@@ -927,7 +929,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 # ~/.config/starship.toml
 
 [gcloud]
-format = "on [$symbol$account(\\($project\\))]($style) "
+format = 'on [$symbol$account(\($project\))]($style) '
 ```
 
 #### Display active config name only
@@ -994,13 +996,13 @@ truncation_symbol = ""
 
 ### Опции
 
-| Option               | По умолчанию                   | Описание                                                                |
-| -------------------- | ------------------------------ | ----------------------------------------------------------------------- |
-| `commit_hash_length` | `7`                            | Длина отображаемого хэша коммита git.                                   |
-| `format`             | `"[\\($hash\\)]($style) "` | The format for the module.                                              |
-| `style`              | `"bold green"`                 | Стиль модуля.                                                           |
-| `only_detached`      | `true`                         | Показывать хэш коммита git, только находясь в состоянии отделённой HEAD |
-| `disabled`           | `false`                        | Отключает модуль `git_commit`.                                          |
+| Option               | По умолчанию               | Описание                                                                |
+| -------------------- | -------------------------- | ----------------------------------------------------------------------- |
+| `commit_hash_length` | `7`                        | Длина отображаемого хэша коммита git.                                   |
+| `format`             | `'[\($hash\)]($style) '` | The format for the module.                                              |
+| `style`              | `"bold green"`             | Стиль модуля.                                                           |
+| `only_detached`      | `true`                     | Показывать хэш коммита git, только находясь в состоянии отделённой HEAD |
+| `disabled`           | `false`                    | Отключает модуль `git_commit`.                                          |
 
 ### Variables
 
@@ -1026,18 +1028,18 @@ commit_hash_length = 4
 
 ### Опции
 
-| Option         | По умолчанию                                                        | Описание                                                                                |
-| -------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `rebase`       | `"REBASING"`                                                        | A format string displayed when a `rebase` is in progress.                               |
-| `merge`        | `"MERGING"`                                                         | A format string displayed when a `merge` is in progress.                                |
-| `revert`       | `"REVERTING"`                                                       | A format string displayed when a `revert` is in progress.                               |
-| `cherry_pick`  | `"CHERRY-PICKING"`                                                  | A format string displayed when a `cherry-pick` is in progress.                          |
-| `bisect`       | `"BISECTING"`                                                       | A format string displayed when a `bisect` is in progress.                               |
-| `am`           | `"AM"`                                                              | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
-| `am_or_rebase` | `"AM/REBASE"`                                                       | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
-| `style`        | `"bold yellow"`                                                     | Стиль модуля.                                                                           |
-| `format`       | `"\\([$state( $progress_current/$progress_total)]($style)\\) "` | The format for the module.                                                              |
-| `disabled`     | `false`                                                             | Отключает модуль `git_state`.                                                           |
+| Option         | По умолчанию                                                    | Описание                                                                                |
+| -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `rebase`       | `"REBASING"`                                                    | A format string displayed when a `rebase` is in progress.                               |
+| `merge`        | `"MERGING"`                                                     | A format string displayed when a `merge` is in progress.                                |
+| `revert`       | `"REVERTING"`                                                   | A format string displayed when a `revert` is in progress.                               |
+| `cherry_pick`  | `"CHERRY-PICKING"`                                              | A format string displayed when a `cherry-pick` is in progress.                          |
+| `bisect`       | `"BISECTING"`                                                   | A format string displayed when a `bisect` is in progress.                               |
+| `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
+| `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
+| `style`        | `"bold yellow"`                                                 | Стиль модуля.                                                                           |
+| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | The format for the module.                                                              |
+| `disabled`     | `false`                                                         | Отключает модуль `git_state`.                                                           |
 
 ### Variables
 
@@ -1056,7 +1058,7 @@ commit_hash_length = 4
 # ~/.config/starship.toml
 
 [git_state]
-format = "[\\($state( $progress_current of $progress_total)\\)]($style) "
+format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
@@ -1066,21 +1068,21 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ### Опции
 
-| Option       | По умолчанию                                  | Описание                            |
-| ------------ | --------------------------------------------- | ----------------------------------- |
-| `format`     | `"[\[$all_status$ahead_behind\]]($style) "` | The default format for `git_status` |
-| `conflicted` | `"="`                                         | Эта ветка имеет конфликты слияния.  |
-| `ahead`      | `"⇡"`                                         | The format of `ahead`               |
-| `behind`     | `"⇣"`                                         | The format of `behind`              |
-| `diverged`   | `"⇕"`                                         | The format of `diverged`            |
-| `untracked`  | `"?"`                                         | The format of `untracked`           |
-| `stashed`    | `"$"`                                         | The format of `stashed`             |
-| `modified`   | `"!"`                                         | The format of `modified`            |
-| `staged`     | `"+"`                                         | The format of `staged`              |
-| `renamed`    | `"»"`                                         | The format of `renamed`             |
-| `deleted`    | `"✘"`                                         | The format of `deleted`             |
-| `style`      | `"bold red"`                                  | Стиль модуля.                       |
-| `disabled`   | `false`                                       | Отключает модуль `git_status`.      |
+| Option       | По умолчанию                                    | Описание                            |
+| ------------ | ----------------------------------------------- | ----------------------------------- |
+| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
+| `conflicted` | `"="`                                           | Эта ветка имеет конфликты слияния.  |
+| `ahead`      | `"⇡"`                                           | The format of `ahead`               |
+| `behind`     | `"⇣"`                                           | The format of `behind`              |
+| `diverged`   | `"⇕"`                                           | The format of `diverged`            |
+| `untracked`  | `"?"`                                           | The format of `untracked`           |
+| `stashed`    | `"$"`                                           | The format of `stashed`             |
+| `modified`   | `"!"`                                           | The format of `modified`            |
+| `staged`     | `"+"`                                           | The format of `staged`              |
+| `renamed`    | `"»"`                                           | The format of `renamed`             |
+| `deleted`    | `"✘"`                                           | The format of `deleted`             |
+| `style`      | `"bold red"`                                    | Стиль модуля.                       |
+| `disabled`   | `false`                                         | Отключает модуль `git_status`.      |
 
 ### Variables
 
@@ -1371,14 +1373,13 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ### Опции
 
-| Option                  | По умолчанию                                             | Описание                                                              |
-| ----------------------- | -------------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`                | `"☸ "`                                                   | A format string representing the symbol displayed before the Cluster. |
-| `format`                | `"[$symbol$context( \\($namespace\\))]($style) in "` | The format for the module.                                            |
-| `style`                 | `"cyan bold"`                                            | Стиль модуля.                                                         |
-| `namespace_spaceholder` | `none`                                                   | The value to display if no namespace was found.                       |
-| `context_aliases`       |                                                          | Table of context aliases to display.                                  |
-| `disabled`              | `true`                                                   | Отключает модуль `kubernetes`.                                        |
+| Option            | По умолчанию                                         | Описание                                                              |
+| ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
+| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
+| `style`           | `"cyan bold"`                                        | Стиль модуля.                                                         |
+| `context_aliases` |                                                      | Table of context aliases to display.                                  |
+| `disabled`        | `true`                                               | Отключает модуль `kubernetes`.                                        |
 
 ### Variables
 
@@ -1397,7 +1398,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 # ~/.config/starship.toml
 
 [kubernetes]
-format = "on [⛵ $context \\($namespace\\)](dimmed green) "
+format = 'on [⛵ $context \($namespace\)](dimmed green) '
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
@@ -1552,14 +1553,14 @@ symbol = "🎣 "
 
 ### Опции
 
-| Option       | По умолчанию                                       | Описание                                              |
-| ------------ | -------------------------------------------------- | ----------------------------------------------------- |
-| `format`     | `"via [$symbol$state( \\($name\\))]($style) "` | The format for the module.                            |
-| `symbol`     | `"❄️ "`                                            | A format string representing the symbol of nix-shell. |
-| `style`      | `"bold blue"`                                      | Стиль модуля.                                         |
-| `impure_msg` | `"impure"`                                         | A format string shown when the shell is impure.       |
-| `pure_msg`   | `"pure"`                                           | A format string shown when the shell is pure.         |
-| `disabled`   | `false`                                            | Отключает модуль `nix_shell`.                         |
+| Option       | По умолчанию                                   | Описание                                              |
+| ------------ | ---------------------------------------------- | ----------------------------------------------------- |
+| `format`     | `'via [$symbol$state( \($name\))]($style) '` | The format for the module.                            |
+| `symbol`     | `"❄️ "`                                        | A format string representing the symbol of nix-shell. |
+| `style`      | `"bold blue"`                                  | Стиль модуля.                                         |
+| `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
+| `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
+| `disabled`   | `false`                                        | Отключает модуль `nix_shell`.                         |
 
 ### Variables
 
@@ -1581,7 +1582,7 @@ symbol = "🎣 "
 disabled = true
 impure_msg = "[impure shell](bold red)"
 pure_msg = "[pure shell](bold green)"
-format = "via [☃️ $state( \\($name\\))](bold blue) "
+format = 'via [☃️ $state( \($name\))](bold blue) '
 ```
 
 ## NodeJS
@@ -1718,7 +1719,7 @@ The `perl` module shows the currently installed version of Perl. Модуль б
 
 ### Опции
 
-| Переменная | По умолчанию                       | Описание                                              |
+| Option     | По умолчанию                       | Описание                                              |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
 | `symbol`   | `"🐪 "`                             | The symbol used before displaying the version of Perl |
@@ -1798,15 +1799,16 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 ### Опции
 
-| Option               | По умолчанию                                                                  | Описание                                                                   |
-| -------------------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `format`             | `"via [${symbol}${pyenv_prefix}${version}( \\($virtualenv\\))]($style) "` | The format for the module.                                                 |
-| `symbol`             | `"🐍 "`                                                                        | A format string representing the symbol of Python                          |
-| `style`              | `"yellow bold"`                                                               | Стиль модуля.                                                              |
-| `pyenv_version_name` | `false`                                                                       | Использовать pyenv для получения версии Python                             |
-| `pyenv_prefix`       | `pyenv`                                                                       | Prefix before pyenv version display, only used if pyenv is used            |
-| `scan_for_pyfiles`   | `true`                                                                        | If false, Python files in the current directory will not show this module. |
-| `disabled`           | `false`                                                                       | Disables the `python` module.                                              |
+| Option               | По умолчанию                                                              | Описание                                                                      |
+| -------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | The format for the module.                                                    |
+| `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                             |
+| `style`              | `"yellow bold"`                                                           | Стиль модуля.                                                                 |
+| `pyenv_version_name` | `false`                                                                   | Использовать pyenv для получения версии Python                                |
+| `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used               |
+| `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.    |
+| `python_binary`      | `python`                                                                  | Configures the python binary that Starship executes when getting the version. |
+| `disabled`           | `false`                                                                   | Disables the `python` module.                                                 |
 
 ### Variables
 
@@ -1818,23 +1820,6 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 | pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
 | virtualenv   | `"venv"`        | The current `virtualenv` name              |
 
-<details>
-<summary>This module has some advanced configuration options.</summary>
-
-| Переменная      | По умолчанию | Описание                                                                      |
-| --------------- | ------------ | ----------------------------------------------------------------------------- |
-| `python_binary` | `python`     | Configures the python binary that Starship executes when getting the version. |
-
-The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
-
-```toml
-# ~/.config/starship.toml
-
-[python]
-python_binary = "python3"
-```
-
-</details>
 
 ### Пример
 
@@ -1844,6 +1829,17 @@ python_binary = "python3"
 [python]
 symbol = "👾 "
 pyenv_version_name = true
+```
+
+Using the `python3` binary to get the version.
+
+Note - The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+python_binary = "python3"
 ```
 
 ## Ruby
@@ -1923,7 +1919,7 @@ The `shlvl` module shows the current SHLVL ("shell level") environment variable,
 
 ### Опции
 
-| Переменная  | По умолчанию                 | Описание                                |
+| Option      | По умолчанию                 | Описание                                |
 | ----------- | ---------------------------- | --------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                      |
 | `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.              |
@@ -1958,12 +1954,12 @@ threshold = 3
 
 ### Опции
 
-| Option     | По умолчанию                         | Описание                                         |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"[$symbol\\[$env\\]]($style) "` | The format for the module.                       |
-| `symbol`   | `""`                                 | A format string displayed before the image name. |
-| `style`    | `"bold dimmed blue"`                 | Стиль модуля.                                    |
-| `disabled` | `false`                              | Disables the `singularity` module.               |
+| Option     | По умолчанию                     | Описание                                         |
+| ---------- | -------------------------------- | ------------------------------------------------ |
+| `format`   | `'[$symbol\[$env\]]($style) '` | The format for the module.                       |
+| `symbol`   | `""`                             | A format string displayed before the image name. |
+| `style`    | `"bold dimmed blue"`             | Стиль модуля.                                    |
+| `disabled` | `false`                          | Disables the `singularity` module.               |
 
 ### Variables
 
@@ -1981,7 +1977,7 @@ threshold = 3
 # ~/.config/starship.toml
 
 [singularity]
-format = "[📦 \\[$env\\]]($style) "
+format = '[📦 \[$env\]]($style) '
 ```
 
 ## Swift
@@ -2029,7 +2025,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ### Опции
 
-| Переменная | По умолчанию               | Описание                                               |
+| Option     | По умолчанию               | Описание                                               |
 | ---------- | -------------------------- | ------------------------------------------------------ |
 | `format`   | `[$symbol$status]($style)` | The format of the module                               |
 | `symbol`   | `"✖"`                      | A format string representing the symbol for the status |
@@ -2055,7 +2051,7 @@ The `status` module displays the exit code of the previous command. The module w
 [status]
 style = "bg:blue"
 symbol = "💣 "
-format = "[\\[$symbol$status\\]]($style) "
+format = '[\[$symbol$status\]]($style) '
 disabled = false
 
 ```
@@ -2147,7 +2143,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Иначе по 
 
 [time]
 disabled = false
-format = "🕙[\\[ $time \\]]($style) "
+format = '🕙[\[ $time \]]($style) '
 time_format = "%T"
 utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"

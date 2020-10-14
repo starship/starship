@@ -6,9 +6,9 @@ Starship v0.45.0は、v1.0.0の準備として互換性の無い変更を含む�
 
 ## `prompt_order`をルートレベルの`format`に置換
 
-v0.45.0以前は、`prompt_order` はStarshipによってレンダリングされる順序でモジュール名の配列を指定できるようになっていました。
+Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
 
-Starship v0.45.0は代わりに  `format` を指定できるようになり、モジュール自体の外側でプロンプトをカスタマイズ可能になります。
+Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
 
 **v0.45.0以前の設定例**
 
@@ -52,11 +52,11 @@ format = """\
   """
 ```
 
-## `prefix`と `suffix` モジュールを`format`に置換
+## Module `prefix` and `suffix` have been replaced by `format`
 
-v0.45.0以前では、モジュールのレンダリング方法をスタイリングするために、 `prefix` や`suffix`の指定可能なモジュールがありました。
+Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
 
-Starship v0.45.0 は代わりに `format` の値を受け付け、モジュールのレンダリング方法をさらにカスタマイズすることができます。 接頭辞と接尾辞を定義する代わりに、コンテキストベースの変数については、モジュールの出力を表現するフォーマット文字列の中から変数を置き換えることができるようになりました。
+Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
 
 **v0.45.0以前の設定例**
 
@@ -71,7 +71,7 @@ prefix = "took "
 [cmd_duration]
 # $duration – コマンド実行時間 (例: "15s")
 # $style    – デフォルトのモジュールスタイル (例: "bold yellow")
-format = "took [$duration]($style)"
+format = "took [$duration]($style) "
 ```
 
 ### 影響を受けるモジュール
@@ -93,8 +93,8 @@ format = "took [$duration]($style)"
 -- error_symbol = "✖"
 -- use_symbol_for_status = true
 -- vicmd_symbol = "❮"
-++ success_symbol = "[❯](bold green) "
-++ error_symbol = "[❯](bold red) "
+++ success_symbol = "[❯](bold green)"
+++ error_symbol = "[❯](bold red)"
 ++ vicmd_symbol = "[❮](bold green)"
 ```
 
@@ -106,8 +106,10 @@ v0.45.0 のリリースでは、ステータスコードがゼロでないとき
 
 ```toml
 [character]
-error_symbol = "[✖](bold red) "
+error_symbol = "[✖](bold red)"
 ```
+
+*Note:* The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
 
 #### Command Duration
 
@@ -120,7 +122,7 @@ error_symbol = "[✖](bold red) "
 ```diff
 [cmd_duration]
 -- prefix = "took "
-++ format = "took [$duration]($style)"
+++ format = "took [$duration]($style) "
 ```
 
 #### Directory
@@ -134,7 +136,7 @@ error_symbol = "[✖](bold red) "
 ```diff
 [directory]
 -- prefix = "in "
-++ format = "[$path]($style)[$read_only]($read_only_style)"
+++ format = "[$path]($style)[$read_only]($read_only_style) "
 ```
 
 #### Environment Variable
@@ -166,7 +168,7 @@ error_symbol = "[✖](bold red) "
 [git_commit]
 -- prefix = "("
 -- suffix = ")"
-++ format = "[\\($hash\\)]($style) "
+++ format = '[\($hash\)]($style) '
 ```
 
 #### Git Status
@@ -184,12 +186,12 @@ error_symbol = "[✖](bold red) "
 -- prefix = "["
 -- suffix = "]"
 -- show_sync_count = false
-++ format = "([$all_status$ahead_behind] )"
+++ format = '([\[$all_status$ahead_behind\]]($style) )'
 ```
 
 以前は `show_sync_count` プロパティを使用して、 ブランチが先行またはリモートブランチの後ろにあるコミット数を表示するようにプロンプトを設定していました。
 
-v0.45.0のリリースではこれが変更されます。
+With the release of v0.45.0, this has been replaced with three separate properties, `ahead`, `behind`, and `diverged`.
 
 以前の `show_sync_count = true` 設定を使用するようにプロンプトを構成するには、次の設定ファイルを設定します。
 
@@ -230,7 +232,7 @@ behind = "⇣${count}"
 [singularity]
 -- prefix = ""
 -- suffix = ""
-++ format = "[$symbol\\[$env\\]]($style) "
+++ format = '[$symbol\[$env\]]($style) '
 ```
 
 #### Time
@@ -245,7 +247,7 @@ behind = "⇣${count}"
 [time]
 -- format = "🕙[ %T ]"
 ++ time_format = "%T"
-++ format = "at 🕙[$time]($style)
+++ format = "at 🕙[$time]($style) "
 ```
 
 #### Custom Commands
