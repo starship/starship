@@ -84,3 +84,6 @@ fi
 # Set up the start time and STARSHIP_SHELL, which controls shell-specific sequences
 STARSHIP_START_TIME=$(::STARSHIP:: time)
 export STARSHIP_SHELL="bash"
+
+# Set up the session key that will be used to store logs
+export STARSHIP_SESSION_KEY=$(::STARSHIP:: session)

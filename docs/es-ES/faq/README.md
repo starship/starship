@@ -10,11 +10,15 @@
   - **Configuración**: [archivos de configuración de matchai](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
-## ¿`prompt_order` y `<module>.disabled` hacen lo mismo?
+## How do I get command completion as shown in the demo GIF?
+
+Completion support is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+
+## Do top level `format` and `<module>.disabled` do the same thing?
 
 Sí, se pueden usar ambos para desactivar los módulos en el símbolo del sistema. Si todo lo que planeas es desactivar módulos, `<module>.disabled` es el método preferido por las siguientes razones:
 
-- Es más evidente desactivar módulos que omitirlos usando prompt_order
+- Disabling modules is more explicit than omitting them from the top level `format`
 - Los nuevos módulos se añadirán al símbolo del sistema en cuanto Starship se actualice
 
 ## La documentación dice que Starship es compatible con cualquier intérprete de comandos pero no soporta X Shell. ¿Por qué?
@@ -46,7 +50,7 @@ El símbolo de sistema usará tanto contexto como le proveas, pero no hay parám
 
 ## ¿Cómo lanzo Starship en distribuciones Linux con versiones antiguas de glibc?
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+Si obtienes un error como "_version 'GLIBC_2.18' not found (required by starship)_" al usar el binario precompilado (por ejemplo, en CentOS 6 o 7), puedes usar el binario compilado con `musl` en vez de `glibc`:
 
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl

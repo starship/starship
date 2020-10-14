@@ -4,9 +4,9 @@
     "build": "vuepress build"
   },
   "devDependencies": {
-    "@vuepress/plugin-google-analytics": "^1.5.3",
-    "vuepress": "^1.5.3",
-    "vuepress-theme-default-prefers-color-scheme": "^1.1.0",
+    "@vuepress/plugin-google-analytics": "^1.6.0",
+    "vuepress": "^1.6.0",
+    "vuepress-theme-default-prefers-color-scheme": "^1.1.1",
     "vuepress-plugin-sitemap": "^2.3.1"
   }
 }

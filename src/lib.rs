@@ -1,11 +1,11 @@
 // Lib is present to allow for benchmarking
-pub mod bug_report;
-mod config;
-mod configs;
+pub mod config;
+pub mod configs;
 pub mod configure;
-mod context;
-mod formatter;
+pub mod context;
+pub mod formatter;
 pub mod init;
+pub mod logger;
 pub mod module;
 mod modules;
 pub mod print;

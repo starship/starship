@@ -14,7 +14,7 @@ pub struct UsernameConfig<'a> {
 impl<'a> RootModuleConfig<'a> for UsernameConfig<'a> {
     fn new() -> Self {
         UsernameConfig {
-            format: "via [$user]($style) ",
+            format: "[$user]($style) in ",
             style_root: "red bold",
             style_user: "yellow bold",
             show_always: false,

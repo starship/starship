@@ -107,12 +107,12 @@
 - **Rapide** : il est rapide - _vraiment vraiment_ rapide ! 🚀
 - **Personnalisable:** configurer chaque élément de votre invite.
 - **Universel:** fonctionne avec n'importe quel shell, sur n'importe quel système d'exploitation.
-- **Intelligent:** affiche les informations utiles en un coup d'oeil.
+- **Intelligent:** affiche les informations utiles en un coup d'œil.
 - **Riche en fonctionnalités:** supporte tous vos outils favoris.
 - **Facile:** rapide à installer - commencer à l'utiliser en quelques minutes.
 
 <p align="center">
-<a href="https://starship.rs/"><strong>Consulter la documentation de Starship&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Consulter la documentation de Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -125,13 +125,13 @@
 
 ### Démarrage rapide
 
-1. Installer le binaire **starship** :
+1. Installer l'exécutable **starship** :
 
 
    #### Installer la dernière version
 
 
-   ##### Depuis une version pré-compilée depuis le shell:
+   ##### Depuis une version pré-compilée, depuis le shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
@@ -161,7 +161,7 @@
    scoop install starship
    ```
 
-1. Ajouter le script d'initialization à la fiche config de votre shell:
+1. Ajouter le script d’initialisation au fichier de configuration de votre shell:
 
 
    #### Bash
@@ -218,11 +218,11 @@
 
 ## 🤝Contribution
 
-Nous sommes toujours à la recherche de contributeurs de **tous les niveaux de compétence**! Si vous cherchez à faciliter votre entrée dans le projet, essayez un [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+Nous sommes toujours à la recherche de contributeurs de **tous niveaux de compétence**! Si vous cherchez à faciliter votre entrée dans le projet, essayez un [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-Si vous êtes intéressé à aider à contribuer à Starship, veuillez jeter un coup d'oeil à notre [Guide de contribution](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Aussi, n'hésitez pas à vous rendre sur notre [serveur Discord](https://discord.gg/8Jzqu3T) pour dire bonjour. 👋
+Si vous êtes intéressé pour aider et contribuer à Starship, veuillez jeter un coup d'œil à notre [Guide de contribution](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Aussi, n'hésitez pas à vous rendre sur notre [serveur Discord](https://discord.gg/8Jzqu3T) pour dire bonjour. 👋
 
-### Contributeurs de code
+### Contributeurs
 
 Ce projet existe grâce à toutes les personnes qui y contribuent. [[Contribuer](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
@@ -252,11 +252,11 @@ Soutenez ce projet avec votre organisation. Votre logo apparaîtra ici avec un l
 
 ## 💭Inspiré par
 
-Voyez ces travaux précédents qui ont contribué à inspirer la création de vaisseau. 🙏
+Jetez un œil aux précédents projets qui ont inspiré la création de starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Un ZSH prompt pour les astronautes.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Un invite de commandes ZSH pour les astronautes.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Thème Cross-shell robbyrussell écrit en JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Thème multi-shell robbyrussell écrit en JavaScript.
 
 - **[reujab/silver](https://github.com/reujab/silver)** - Un shell multi-platformes de type powerline personnalisable avec des icônes.
 
