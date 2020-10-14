@@ -152,9 +152,9 @@ impl<'a> GitStatusInfo<'a> {
         }
 
         {
+            let mut data = self.ahead_behind.write().unwrap();
             let repo = self.get_repository()?;
             let branch_name = self.get_branch_name();
-            let mut data = self.ahead_behind.write().unwrap();
             *data = Some(get_ahead_behind(&repo, &branch_name));
             match data.as_ref().unwrap() {
                 Ok(ahead_behind) => Some(*ahead_behind),
@@ -181,8 +181,8 @@ impl<'a> GitStatusInfo<'a> {
         }
 
         {
-            let mut repo = self.get_repository()?;
             let mut data = self.repo_status.write().unwrap();
+            let mut repo = self.get_repository()?;
             *data = Some(get_repo_status(&mut repo));
             match data.as_ref().unwrap() {
                 Ok(repo_status) => Some(*repo_status),
@@ -209,8 +209,8 @@ impl<'a> GitStatusInfo<'a> {
         }
 
         {
-            let mut repo = self.get_repository()?;
             let mut data = self.stashed_count.write().unwrap();
+            let mut repo = self.get_repository()?;
             *data = Some(get_stashed_count(&mut repo));
             match data.as_ref().unwrap() {
                 Ok(stashed_count) => Some(*stashed_count),
@@ -249,6 +249,7 @@ impl<'a> GitStatusInfo<'a> {
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
 fn get_repo_status(repository: &mut Repository) -> Result<RepoStatus, git2::Error> {
+    log::debug!("New repo status created");
     let mut status_options = git2::StatusOptions::new();
 
     let mut repo_status = RepoStatus::default();
