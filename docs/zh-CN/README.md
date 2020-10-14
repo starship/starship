@@ -94,7 +94,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` （对于 *nix 系统是`~/.config/powershell/Microsoft.PowerShell_profile.ps1`）的最后，添加以下内容：
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~\.config\powershell\Microsoft.PowerShell_profile.ps1` on -Nix.
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
