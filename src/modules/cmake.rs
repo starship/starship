@@ -81,7 +81,7 @@ mod tests {
         assert_eq!(expected, actual);
         dir.close()
     }
-    
+
     #[test]
     fn buildfolder_with_cmake_cache() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
