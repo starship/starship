@@ -509,7 +509,7 @@ Cela ne supprime pas le modificateur d'invite de conda, vous pouvez exécuter `c
 | `style`             | `"bold green"`                     | Le style du module.                                                                                                                                                                                         |
 | `format`            | `"[$symbol$environment]($style) "` | Format du module.                                                                                                                                                                                           |
 | `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                                                                                                                                  |
-| `disabled`          | `false`                            | Disables the `conda` module.                                                                                                                                                                                |
+| `disabled`          | `false`                            | Désactive le module `conda`.                                                                                                                                                                                |
 
 ### Variables
 
