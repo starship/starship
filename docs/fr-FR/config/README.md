@@ -513,11 +513,11 @@ Cela ne supprime pas le modificateur d'invite de conda, vous pouvez exécuter `c
 
 ### Variables
 
-| Variable    | Exemple      | Description                            |
-| ----------- | ------------ | -------------------------------------- |
-| environment | `astronauts` | The current conda environment          |
-| symbol      |              | Reflète la valeur de l'option `symbol` |
-| style\*   |              | Reflète la valeur de l'option `style`  |
+| Variable      | Exemple      | Description                            |
+| ------------- | ------------ | -------------------------------------- |
+| environnement | `astronauts` | La version courante de conda           |
+| symbol        |              | Reflète la valeur de l'option `symbol` |
+| style\*     |              | Reflète la valeur de l'option `style`  |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
@@ -532,26 +532,26 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. Le module est affiché si l'une des ces conditions est remplie :
+Le module `crystal` affiche la version actuellement installée de Crystal. Le module est affiché si l'une des ces conditions est remplie :
 
-- The current directory contains a `shard.yml` file
-- The current directory contains a `.cr` file
+- Le répertoire courant contient un fichier `shard.yml`
+- Le répertoire courant contient un fichier `.cr`
 
 ### Options
 
-| Option     | Default                            | Description                                               |
-| ---------- | ---------------------------------- | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`                             | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold green"`                     | Le style du module.                                       |
-| `format`   | `"via [$symbol$version]($style) "` | Format du module.                                         |
-| `disabled` | `false`                            | Disables the `crystal` module.                            |
+| Option     | Default                            | Description                                                |
+| ---------- | ---------------------------------- | ---------------------------------------------------------- |
+| `symbol`   | `"🔮 "`                             | Le symbole utilisé avant d'afficher la version de crystal. |
+| `style`    | `"bold green"`                     | Le style du module.                                        |
+| `format`   | `"via [$symbol$version]($style) "` | Format du module.                                          |
+| `disabled` | `false`                            | Désactive le module `crystal`.                             |
 
 ### Variables
 
 | Variable  | Exemple   | Description                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v0.32.1` | The version of `crystal`               |
-| symbol    |           | Reflète la valeur de l'option `symbol` |
+| version   | `v0.32.1` | La version de `cristal`                |
+| symbole   |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
@@ -567,26 +567,26 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-The `dart` module shows the currently installed version of Dart. Le module est affiché si l'une des ces conditions est remplie :
+Le module `crystal` affiche la version courante installée de Dart. Le module est affiché si l'une des ces conditions est remplie :
 
-- The current directory contains a file with `.dart` extension
-- The current directory contains a `.dart_tool` directory
-- The current directory contains a `pubspec.yaml` or `pubspec.lock` file
+- Le répertoire courant contient un fichier `.dart`
+- Le répertoire courant contient un répertoire `.dart_tool`
+- Le répertoire courant contient un fichier `pubspec.yaml` ou `pubspec.lock`
 
 ### Options
 
-| Option     | Default                            | Description                                     |
+| Option     | Défaut                             | Description                                     |
 | ---------- | ---------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | Format du module.                               |
 | `symbol`   | `"🎯 "`                             | A format string representing the symbol of Dart |
 | `style`    | `"bold blue"`                      | Le style du module.                             |
-| `disabled` | `false`                            | Disables the `dart` module.                     |
+| `disabled` | `false`                            | Désactive le module `dart`.                     |
 
 ### Variables
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v2.8.4` | The version of `dart`                  |
+| version   | `v2.8.4` | La version de `dart`                   |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
