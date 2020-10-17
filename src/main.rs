@@ -3,10 +3,10 @@ use std::io;
 use std::time::SystemTime;
 
 use clap::{App, AppSettings, Arg, Shell, SubCommand};
-use starship::module::ALL_MODULES;
-use starship::*;
 use rand::distributions::Alphanumeric;
 use rand::Rng;
+use starship::module::ALL_MODULES;
+use starship::*;
 
 fn main() {
     logger::init();
