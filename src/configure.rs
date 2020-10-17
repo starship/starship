@@ -4,7 +4,7 @@ use std::io::ErrorKind;
 use std::process;
 use std::process::Command;
 
-use starship::config::StarshipConfig;
+use crate::config::StarshipConfig;
 use std::fs::File;
 use std::io::Write;
 use toml::map::Map;

@@ -2,27 +2,11 @@ use clap::{crate_authors, crate_version};
 use std::io;
 use std::time::SystemTime;
 
-mod bug_report;
-mod config;
-mod configs;
-mod configure;
-mod context;
-mod formatter;
-mod init;
-mod logger;
-mod module;
-mod modules;
-mod print;
-mod segment;
-mod utils;
-
-#[cfg(test)]
-mod test;
-
-use crate::module::ALL_MODULES;
 use clap::{App, AppSettings, Arg, Shell, SubCommand};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
+use starship::module::ALL_MODULES;
+use starship::*;
 
 fn main() {
     logger::init();

@@ -1536,11 +1536,8 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 [memory_usage]
 disabled = false
-show_percentage = true
-show_swap = true
 threshold = -1
 symbol = " "
-separator = "/"
 style = "bold dimmed green"
 ```
 
