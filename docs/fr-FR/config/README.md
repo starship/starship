@@ -1465,11 +1465,8 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 [memory_usage]
 disabled = false
-show_percentage = true
-show_swap = true
 threshold = -1
 symbol = " "
-separator = "/"
 style = "bold dimmed green"
 ```
 
