@@ -11,7 +11,7 @@ use std::ffi::OsString;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::string::String;
-use std::time::{Duration, SystemTime};
+use std::time::{Duration, Instant};
 
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering
@@ -223,7 +223,7 @@ impl DirContents {
     }
 
     fn from_path_with_timeout(base: &PathBuf, timeout: Duration) -> Result<Self, std::io::Error> {
-        let start = SystemTime::now();
+        let start = Instant::now();
 
         let mut folders: HashSet<PathBuf> = HashSet::new();
         let mut files: HashSet<PathBuf> = HashSet::new();
@@ -233,8 +233,8 @@ impl DirContents {
         fs::read_dir(base)?
             .enumerate()
             .take_while(|(n, _)| {
-                n & 0xFF != 0 // only check SystemTime once every 2^8 entries
-                || SystemTime::now().duration_since(start).unwrap() < timeout
+                n & 0xFF != 0 // only check timeout once every 2^8 entries
+                || start.elapsed() < timeout
             })
             .filter_map(|(_, entry)| entry.ok())
             .for_each(|entry| {
@@ -255,7 +255,7 @@ impl DirContents {
 
         log::trace!(
             "Building HashSets of directory files, folders and extensions took {:?}",
-            SystemTime::now().duration_since(start).unwrap()
+            start.elapsed()
         );
 
         Ok(DirContents {
