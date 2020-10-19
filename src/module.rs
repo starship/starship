@@ -58,6 +58,7 @@ pub const ALL_MODULES: &[&str] = &[
     "status",
     "time",
     "username",
+    "vagrant",
     "zig",
 ];
 
