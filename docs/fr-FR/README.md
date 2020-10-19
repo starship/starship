@@ -94,7 +94,7 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~\.config\powershell\Microsoft.PowerShell_profile.ps1` on -Nix.
+   Ajoutez ce qui suit à la fin de `Microsoft.PowerShell_profile.ps1`. Vous pouvez vérifier l'emplacement de ce fichier en regardant la variable `$PROFILE` dans PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~\.config\powershell\Microsoft.PowerShell_profile.ps1` on -Nix.
 
    ```sh
    # ~\Documents\PowerShell\Profile.ps1
