@@ -33,9 +33,9 @@ De manière équivalente, pour Powershell (Windows), ajoutez la ligne suivante �
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
 
-### Logging
+### Journalisation
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+Par défaut, Starship enregistre les avertissements et les erreurs dans un fichier nommé `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, où la clé de session correspond à une instance de votre terminal. Ceci, peut cependant être modifié en utilisant la variable d'environnement `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -502,14 +502,14 @@ Cela ne supprime pas le modificateur d'invite de conda, vous pouvez exécuter `c
 
 ### Options
 
-| Option              | Default                            | Description                                                                                                                                                                                                 |
-| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"🅒 "`                             | The symbol used before the environment name.                                                                                                                                                                |
-| `style`             | `"bold green"`                     | Le style du module.                                                                                                                                                                                         |
-| `format`            | `"[$symbol$environment]($style) "` | Format du module.                                                                                                                                                                                           |
-| `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                                                                                                                                  |
-| `disabled`          | `false`                            | Désactive le module `conda`.                                                                                                                                                                                |
+| Option              | Default                            | Description                                                                                                                                                                                                                                   |
+| ------------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                | Le nombre de répertoires dans lesquels le chemin d'environnement (Path) doit être tronqué, si l'environnement a été créé via `conda create -p [path]`. `0` ne signifie pas de troncature. Regardez aussi le module [`directory`](#directory). |
+| `symbol`            | `"🅒 "`                             | Le symbole utilisé avant le nom d'environnement.                                                                                                                                                                                              |
+| `style`             | `"bold green"`                     | Le style du module.                                                                                                                                                                                                                           |
+| `format`            | `"[$symbol$environment]($style) "` | Format du module.                                                                                                                                                                                                                             |
+| `ignore_base`       | `true`                             | Ignore l'environnement `base` lorsqu'il est activé.                                                                                                                                                                                           |
+| `disabled`          | `false`                            | Désactive le module `conda`.                                                                                                                                                                                                                  |
 
 ### Variables
 
@@ -575,12 +575,12 @@ Le module `crystal` affiche la version courante installée de Dart. Le module es
 
 ### Options
 
-| Option     | Défaut                             | Description                                     |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Format du module.                               |
-| `symbol`   | `"🎯 "`                             | A format string representing the symbol of Dart |
-| `style`    | `"bold blue"`                      | Le style du module.                             |
-| `disabled` | `false`                            | Désactive le module `dart`.                     |
+| Option     | Défaut                             | Description                                              |
+| ---------- | ---------------------------------- | -------------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | Format du module.                                        |
+| `symbol`   | `"🎯 "`                             | Une chaîne de caractères représentant le symbole de Dart |
+| `style`    | `"bold blue"`                      | Le style du module.                                      |
+| `disabled` | `false`                            | Désactive le module `dart`.                              |
 
 ### Variables
 
@@ -601,11 +601,11 @@ Le module `crystal` affiche la version courante installée de Dart. Le module es
 format = "via [🔰 $version](bold red) "
 ```
 
-## Directory
+## Dossier
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+Le mode `directory` montre le chemin de votre dossier actuel, tronqué au 3 dossiers parents. Votre répertoire sera également tronqué à la racine du repo git dans lequel vous vous trouvez actuellement.
 
-When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+Quand vous utilisez le style pwd de fish, au lieu de cacher le path qui est troqué, vous verrez un nom raccourcis de chaque dossiers basés sur le nombre établi pour l'option.
 
 For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
