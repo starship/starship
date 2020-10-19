@@ -1,7 +1,5 @@
 #!/usr/bin/env pwsh
 
-# Starship assumes UTF-8
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 function global:prompt {
     $origDollarQuestion = $global:?
     $origLastExitCode = $global:LASTEXITCODE
@@ -18,6 +16,9 @@ function global:prompt {
     # doesn't show the last command as a failure (because it had a non-zero exit code).
     $lastExitCodeForPrompt = if ($origLastExitCode) { $origLastExitCode } else { 0 }
 
+    # Save old output encoding and set it to UTF-8
+    $origOutputEncoding = [Console]::OutputEncoding
+    [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
     if ($lastCmd = Get-History -Count 1) {
         $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalMilliseconds)
         # & ensures the path is interpreted as something to execute
@@ -25,6 +26,8 @@ function global:prompt {
     } else {
         $out = @(&::STARSHIP:: prompt "--path=$current_directory" --status=$lastExitCodeForPrompt --jobs=$jobs)
     }
+    # Restore old output encoding
+    [Console]::OutputEncoding = $origOutputEncoding
 
     # Convert stdout (array of lines) to expected return type string
     # `n is an escaped newline
