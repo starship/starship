@@ -3,6 +3,7 @@ use crate::segment::Segment;
 use crate::utils::wrap_colorseq_for_shell;
 use ansi_term::{ANSIString, ANSIStrings};
 use std::fmt;
+use std::time::Duration;
 
 // List of all modules
 // Keep these ordered alphabetically.
@@ -55,6 +56,7 @@ pub const ALL_MODULES: &[&str] = &[
     "terraform",
     "shlvl",
     "singularity",
+    "status",
     "time",
     "username",
     "zig",
@@ -74,6 +76,9 @@ pub struct Module<'a> {
 
     /// The collection of segments that compose this module.
     pub segments: Vec<Segment>,
+
+    /// the time it took to compute this module
+    pub duration: Duration,
 }
 
 impl<'a> Module<'a> {
@@ -84,6 +89,7 @@ impl<'a> Module<'a> {
             name: name.to_string(),
             description: desc.to_string(),
             segments: Vec::new(),
+            duration: Duration::default(),
         }
     }
 
@@ -106,7 +112,8 @@ impl<'a> Module<'a> {
     pub fn is_empty(&self) -> bool {
         self.segments
             .iter()
-            .all(|segment| segment.value.trim().is_empty())
+            // no trim: if we add spaces/linebreaks it's not "empty" as we change the final output
+            .all(|segment| segment.value.is_empty())
     }
 
     /// Get values of the module's segments
@@ -168,6 +175,7 @@ mod tests {
             name: name.to_string(),
             description: desc.to_string(),
             segments: Vec::new(),
+            duration: Duration::default(),
         };
 
         assert!(module.is_empty());
@@ -182,8 +190,39 @@ mod tests {
             name: name.to_string(),
             description: desc.to_string(),
             segments: vec![Segment::new(None, "")],
+            duration: Duration::default(),
         };
 
         assert!(module.is_empty());
+    }
+
+    #[test]
+    fn test_module_is_not_empty_with_linebreak_only() {
+        let name = "unit_test";
+        let desc = "This is a unit test";
+        let module = Module {
+            config: None,
+            name: name.to_string(),
+            description: desc.to_string(),
+            segments: vec![Segment::new(None, "\n")],
+            duration: Duration::default(),
+        };
+
+        assert!(!module.is_empty());
+    }
+
+    #[test]
+    fn test_module_is_not_empty_with_space_only() {
+        let name = "unit_test";
+        let desc = "This is a unit test";
+        let module = Module {
+            config: None,
+            name: name.to_string(),
+            description: desc.to_string(),
+            segments: vec![Segment::new(None, " ")],
+            duration: Duration::default(),
+        };
+
+        assert!(!module.is_empty());
     }
 }

@@ -1,6 +1,7 @@
 use crate::configs::StarshipRootConfig;
 use crate::utils;
 use ansi_term::{Color, Style};
+use indexmap::IndexMap;
 
 use std::clone::Clone;
 use std::collections::HashMap;
@@ -20,6 +21,9 @@ where
     /// Load root module config from given Value and fill unset variables with default
     /// values.
     fn load(config: &'a Value) -> Self {
+        if config.get("prompt_order").is_some() {
+            log::warn!("\"prompt_order\" has been removed in favor of \"format\". For more details, see: https://starship.rs/migrating-to-0.45.0/")
+        }
         Self::new().load_config(config)
     }
 
@@ -143,6 +147,22 @@ where
     }
 }
 
+impl<'a, T, S: ::std::hash::BuildHasher + Default> ModuleConfig<'a> for IndexMap<String, T, S>
+where
+    T: ModuleConfig<'a>,
+    S: Clone,
+{
+    fn from_config(config: &'a Value) -> Option<Self> {
+        let mut im = IndexMap::default();
+
+        for (x, y) in config.as_table()?.iter() {
+            im.insert(x.clone(), T::from_config(y)?);
+        }
+
+        Some(im)
+    }
+}
+
 impl<'a, T> ModuleConfig<'a> for Option<T>
 where
     T: ModuleConfig<'a> + Sized,
@@ -199,7 +219,7 @@ impl StarshipConfig {
     fn config_from_file() -> Option<Value> {
         let file_path = if let Ok(path) = env::var("STARSHIP_CONFIG") {
             // Use $STARSHIP_CONFIG as the config path if available
-            log::debug!("STARSHIP_CONFIG is set: \n{}", &path);
+            log::debug!("STARSHIP_CONFIG is set: {}", &path);
             path
         } else {
             // Default to using ~/.config/starship.toml
@@ -212,22 +232,22 @@ impl StarshipConfig {
 
         let toml_content = match utils::read_file(&file_path) {
             Ok(content) => {
-                log::trace!("Config file content: \n{}", &content);
+                log::trace!("Config file content: \"\n{}\"", &content);
                 Some(content)
             }
             Err(e) => {
-                log::debug!("Unable to read config file content: \n{}", &e);
+                log::debug!("Unable to read config file content: {}", &e);
                 None
             }
         }?;
 
         match toml::from_str(&toml_content) {
             Ok(parsed) => {
-                log::debug!("Config parsed: \n{:?}", &parsed);
+                log::debug!("Config parsed: {:?}", &parsed);
                 Some(parsed)
             }
             Err(error) => {
-                log::debug!("Unable to parse the config file: {}", error);
+                log::error!("Unable to parse the config file: {}", error);
                 None
             }
         }
@@ -238,7 +258,7 @@ impl StarshipConfig {
         let module_config = self.get_config(&[module_name]);
         if module_config.is_some() {
             log::debug!(
-                "Config found for \"{}\": \n{:?}",
+                "Config found for \"{}\": {:?}",
                 &module_name,
                 &module_config
             );
@@ -302,7 +322,7 @@ impl StarshipConfig {
         let module_config = self.get_config(&["custom", module_name]);
         if module_config.is_some() {
             log::debug!(
-                "Custom config found for \"{}\": \n{:?}",
+                "Custom config found for \"{}\": {:?}",
                 &module_name,
                 &module_config
             );

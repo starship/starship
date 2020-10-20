@@ -2,13 +2,13 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: El símbolo de sistema minimalista, ultrarápido e infinitamente customizable para cualquier intérprete de comandos.
-actionText: Empezar →
+tagline: '¡El prompt minimalista, increíblemente rápido, e infinitamente personalizable para cualquier shell!'
+actionText: Comenzar →
 actionLink: ./guide/
 features:
   - 
     title: Compatibilidad primero
-    details: Funciona en las interfaces de líneas de comando (shells) más comunes en los sistemas operativos más comunes. ¡Úsalo donde sea!
+    details: Funciona en las shells más comunes en los sistemas operativos más comunes. ¡Úsalo en todas partes!
   - 
     title: Desarrollado en Rust
     details: Obtén la mayor velocidad y seguridad de Rust, para hacer tu prompt lo más rápida y segura posible.

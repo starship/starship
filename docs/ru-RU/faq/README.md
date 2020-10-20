@@ -10,11 +10,15 @@
   - **Конфигурация**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Подсказка**: [Starship](https://starship.rs/)
 
-## `prompt_order` и `<module>.disabled` - это одно и то же?
+## How do I get command completion as shown in the demo GIF?
+
+Completion support is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+
+## Do top level `format` and `<module>.disabled` do the same thing?
 
 Да, они могут быть использованы для отключения модулей в подсказке. Если всё, что вы хотите сделать - это отключить модули, `<module>.disabled` - предпочитаемый способ сделать это по следующим причинам:
 
-- Отключение модулей является более явным, чем удаление их из prompt_order
+- Disabling modules is more explicit than omitting them from the top level `format`
 - Новосозданные модули будут добавлены в подсказку по мере обновления Starship
 
 ## В документации написано, что Starship - для многих оболочек, но он не поддерживает оболочку X. Почему?
@@ -46,7 +50,7 @@ starship prompt --help
 
 ## Как запускать Starship на Linux-дистрибутивах с более ранними версиями glibc?
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+Если вы получаете ошибку типа "_version 'GLIBC_2.18' not found (required by starship)_" при использовании заранее собранного бинарного файла (например, на CentOS 6 или 7), вы можете использовать бинарный файл, скомпилированый с `musl` вместо `glibc`:
 
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl

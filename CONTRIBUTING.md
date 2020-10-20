@@ -72,7 +72,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 ## Logging
 
-Debug logging in starship is done with [pretty_env_logger](https://crates.io/crates/pretty_env_logger).
+Debug logging in starship is done with our custom logger implementation.
 To run starship with debug logs, set the `STARSHIP_LOG` environment variable to the log level needed.
 For example, to enable the trace logs, run the following:
 
@@ -106,7 +106,7 @@ cargo fmt
 
 Testing is critical to making sure starship works as intended on systems big and small. Starship interfaces with many applications and system APIs when generating the prompt, so there's a lot of room for bugs to slip in.
 
-Unit tests are written using the built-in Rust testing library in the same file as the implementation, as is traditionally done in Rust codebases. These tests can be run with `cargo test` and are run on GitHub as part of our GitHub Actions continuous integration to ensure consistend behavior.
+Unit tests are written using the built-in Rust testing library in the same file as the implementation, as is traditionally done in Rust codebases. These tests can be run with `cargo test` and are run on GitHub as part of our GitHub Actions continuous integration to ensure consistent behavior.
 
 All tests that test the rendered output of a module should use `ModuleRenderer`. For Example:
 

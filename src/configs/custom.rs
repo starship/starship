@@ -52,7 +52,7 @@ impl<'a> ModuleConfig<'a> for Files<'a> {
             if let Some(file) = item.as_str() {
                 files.push(file);
             } else {
-                log::debug!("Unexpected file {:?}", item);
+                log::warn!("Unexpected file {:?}", item);
             }
         }
 
@@ -68,7 +68,7 @@ impl<'a> ModuleConfig<'a> for Extensions<'a> {
             if let Some(file) = item.as_str() {
                 extensions.push(file);
             } else {
-                log::debug!("Unexpected extension {:?}", item);
+                log::warn!("Unexpected extension {:?}", item);
             }
         }
 
@@ -84,7 +84,7 @@ impl<'a> ModuleConfig<'a> for Directories<'a> {
             if let Some(file) = item.as_str() {
                 directories.push(file);
             } else {
-                log::debug!("Unexpected directory {:?}", item);
+                log::warn!("Unexpected directory {:?}", item);
             }
         }
 

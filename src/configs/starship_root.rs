@@ -66,6 +66,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     #[cfg(feature = "battery")]
     "battery",
     "time",
+    "status",
     "character",
 ];
 

@@ -1,3 +1,4 @@
+use ini::Ini;
 use std::path::Path;
 
 use super::{Context, Module, RootModuleConfig};
@@ -48,6 +49,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         format_python_version(&version)
     };
     let virtual_env = get_python_virtual_env(context);
+    let pyenv_prefix = if config.pyenv_version_name {
+        config.pyenv_prefix
+    } else {
+        ""
+    };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -62,6 +68,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => Some(Ok(python_version.trim())),
                 "virtualenv" => virtual_env.as_ref().map(|e| Ok(e.trim())),
+                "pyenv_prefix" => Some(Ok(pyenv_prefix)),
                 _ => None,
             })
             .parse(None)
@@ -103,10 +110,19 @@ fn format_python_version(python_stdout: &str) -> String {
 
 fn get_python_virtual_env(context: &Context) -> Option<String> {
     context.get_env("VIRTUAL_ENV").and_then(|venv| {
-        Path::new(&venv)
-            .file_name()
-            .map(|filename| String::from(filename.to_str().unwrap_or("")))
+        get_prompt_from_venv(Path::new(&venv)).or_else(|| {
+            Path::new(&venv)
+                .file_name()
+                .map(|filename| String::from(filename.to_str().unwrap_or("")))
+        })
     })
+}
+fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
+    Ini::load_from_file(venv_path.join("pyvenv.cfg"))
+        .ok()?
+        .general_section()
+        .get("prompt")
+        .map(String::from)
 }
 
 #[cfg(test)]
@@ -114,8 +130,9 @@ mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
-    use std::fs::File;
+    use std::fs::{create_dir_all, File};
     use std::io;
+    use std::io::Write;
 
     #[test]
     fn test_format_python_version() {
@@ -146,6 +163,7 @@ mod tests {
 
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
         dir.close()
     }
 
@@ -156,6 +174,7 @@ mod tests {
 
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
         dir.close()
     }
 
@@ -166,6 +185,7 @@ mod tests {
 
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
         dir.close()
     }
 
@@ -176,6 +196,7 @@ mod tests {
 
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
         dir.close()
     }
 
@@ -186,6 +207,7 @@ mod tests {
 
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
         dir.close()
     }
 
@@ -196,6 +218,7 @@ mod tests {
 
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
         dir.close()
     }
 
@@ -206,6 +229,7 @@ mod tests {
 
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
         dir.close()
     }
 
@@ -216,6 +240,7 @@ mod tests {
 
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
         dir.close()
     }
 
@@ -257,6 +282,13 @@ mod tests {
 
         check_python3_renders(&dir, Some(config_python3));
 
+        let config_pyenv = toml::toml! {
+            [python]
+            pyenv_version_name = true
+            pyenv_prefix = "test_pyenv "
+            scan_for_pyfiles = false
+        };
+        check_pyenv_renders(&dir, Some(config_pyenv));
         dir.close()
     }
 
@@ -296,6 +328,33 @@ mod tests {
         dir.close()
     }
 
+    #[test]
+    fn with_active_venv_and_prompt() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        create_dir_all(dir.path().join("my_venv"))?;
+        let mut venv_cfg = File::create(dir.path().join("my_venv").join("pyvenv.cfg"))?;
+        venv_cfg.write_all(
+            br#"
+home = something
+prompt = 'foo' 
+        "#,
+        )?;
+        venv_cfg.sync_all()?;
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("VIRTUAL_ENV", dir.path().join("my_venv").to_str().unwrap())
+            .collect();
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Yellow.bold().paint("🐍 v2.7.17 (foo)")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
     fn check_python2_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
         let config = starship_config.unwrap_or(toml::toml! {
             [python]
@@ -323,6 +382,25 @@ mod tests {
             .collect();
 
         let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐍 v3.8.0")));
+        assert_eq!(expected, actual);
+    }
+
+    fn check_pyenv_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
+        let config = starship_config.unwrap_or(toml::toml! {
+             [python]
+             pyenv_version_name = true
+             pyenv_prefix = "test_pyenv "
+        });
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .config(config)
+            .collect();
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Yellow.bold().paint("🐍 test_pyenv system")
+        ));
         assert_eq!(expected, actual);
     }
 }

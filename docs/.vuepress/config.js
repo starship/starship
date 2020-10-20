@@ -48,8 +48,8 @@ module.exports = {
     // Black Lives Matter
     ["script", { type:"text/javascript", src:"https://makerbadge.s3.amazonaws.com/blmbadge.js" }],
     ["script", {}, `BLMBadge.init({
-  layout:1, 
-  theme:'dark', 
+  layout:1,
+  theme:'dark',
   promoText : 'Send a donation '+String.fromCodePoint(0x2192),
   promoLink : 'https://minnesotafreedomfund.org/',
   message : 'To be silent is to be complicit. Black lives matter.',
@@ -94,7 +94,8 @@ module.exports = {
           ["/config/", "Configuration"],
           ["/advanced-config/", "Advanced Configuration"],
           ["/faq/", "Frequently Asked Questions"],
-          ["/presets/", "Presets"]
+          ["/presets/", "Presets"],
+          ["/migrating-to-0.45.0/", "Migrating to v0.45.0"]
         ]
       },
       "/de-DE/": {
@@ -151,7 +152,8 @@ module.exports = {
           ["/ja-JP/config/", "設定"],
           ["/ja-JP/advanced-config/", "高度な設定"],
           ["/ja-JP/faq/", "FAQ"],
-          ["/ja-JP/presets/", "準備するもの"]
+          ["/ja-JP/presets/", "準備するもの"],
+          ["/ja-JP/migrating-to-0.45.0/", "v0.45への移行"]
         ]
       },
       "/zh-TW/": {
