@@ -8,11 +8,13 @@ use crate::utils;
 ///
 /// Will display the Lua version if any of the following criteria are met:
 ///     - Current directory contains a `.lua-version` file
+///     - Current directory contains a `lua` directory
 ///     - Current directory contains a file with the `.lua` extension
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_lua_project = context
         .try_begin_scan()?
         .set_files(&[".lua-version"])
+        .set_folders(&["lua"])
         .set_extensions(&["lua"])
         .is_match();
 
@@ -100,6 +102,18 @@ mod tests {
     fn folder_with_lua_version() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".lua-version"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("lua").path(dir.path()).collect();
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🌙 v5.4.0")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_lua_folder() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let lua_dir = dir.path().join("lua");
+        fs::create_dir_all(&lua_dir)?;
 
         let actual = ModuleRenderer::new("lua").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🌙 v5.4.0")));

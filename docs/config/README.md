@@ -1496,6 +1496,7 @@ The `lua` module shows the currently installed version of Lua.
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.lua-version` file
+- The current directory contains a `lua` directory
 - The current directory contains a file with the `.lua` extension
 
 ### Options
