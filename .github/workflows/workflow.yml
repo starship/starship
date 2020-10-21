@@ -110,7 +110,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
-        rust: [stable]
+        rust: [stable, nightly]
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v2
