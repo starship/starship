@@ -28,6 +28,7 @@ mod jobs;
 mod julia;
 mod kubernetes;
 mod line_break;
+mod lua;
 mod memory_usage;
 mod nim;
 mod nix_shell;
@@ -94,6 +95,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "julia" => julia::module(context),
             "kubernetes" => kubernetes::module(context),
             "line_break" => line_break::module(context),
+            "lua" => lua::module(context),
             "memory_usage" => memory_usage::module(context),
             "nim" => nim::module(context),
             "nix_shell" => nix_shell::module(context),
