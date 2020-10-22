@@ -5,7 +5,7 @@ use crate::formatter::StringFormatter;
 use crate::utils;
 
 use regex::Regex;
-const LUA_VERSION_PATERN: &str = "(?P<version>[\\d\\.]+)[^\\s]*";
+const LUA_VERSION_PATERN: &str = "(?P<version>[\\d\\.]+[a-z\\-]*[1-9]*)[^\\s]*";
 
 /// Creates a module with the current Lua version
 ///
@@ -158,8 +158,13 @@ mod tests {
     #[test]
     fn test_format_lua_version() {
         let lua_input = "Lua 5.4.0  Copyright (C) 1994-2020 Lua.org, PUC-Rio";
-        let luajit_input = "LuaJIT 2.0.5 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/";
         assert_eq!(format_lua_version(lua_input), Some("v5.4.0".to_string()));
-        assert_eq!(format_lua_version(luajit_input), Some("v2.0.5".to_string()));
+
+        let luajit_input =
+            "LuaJIT 2.1.0-beta3 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/";
+        assert_eq!(
+            format_lua_version(luajit_input),
+            Some("v2.1.0-beta3".to_string())
+        );
     }
 }
