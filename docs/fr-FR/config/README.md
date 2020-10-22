@@ -647,7 +647,7 @@ Par exemple, donné `~/Dev/Nix/nixpkgs/pkgs` où `nixpkgs` est la racine du repo
 
 | Variable  | Exemple               | Description                           |
 | --------- | --------------------- | ------------------------------------- |
-| path      | `"D:/Projects"`       | The current directory path            |
+| path      | `"D:/Projects"`       | Le chemin du répertoire courant       |
 | style\* | `"black bold dimmed"` | Reflète la valeur de l'option `style` |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
@@ -674,7 +674,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                   |
 | `style`           | `"blue bold"`                      | Le style du module.                                                                     |
 | `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
-| `disabled`        | `true`                             | Disables the `docker_context` module.                                                   |
+| `disabled`        | `true`                             | Désactive le module `docker_context`.                                                   |
 
 ### Variables
 
@@ -725,13 +725,13 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | `symbol`    | `"•NET "`                                | The symbol used before displaying the version of dotnet. |
 | `heuristic` | `true`                                   | Use faster version detection to keep starship snappy.    |
 | `style`     | `"bold blue"`                            | Le style du module.                                      |
-| `disabled`  | `false`                                  | Disables the `dotnet` module.                            |
+| `disabled`  | `false`                                  | Désactive le module `dotnet`.                            |
 
 ### Variables
 
 | Variable  | Exemple          | Description                                                        |
 | --------- | ---------------- | ------------------------------------------------------------------ |
-| version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
+| version   | `v3.1.201`       | La version du sdk `dotnet`                                         |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
 | symbol    |                  | Reflète la valeur de l'option `symbol`                             |
 | style\* |                  | Reflète la valeur de l'option `style`                              |
