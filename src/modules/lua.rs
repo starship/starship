@@ -4,6 +4,9 @@ use crate::configs::lua::LuaConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
 
+use regex::Regex;
+const LUA_VERSION_PATERN: &str = "(?P<version>[\\d\\.]+)[^\\s]*";
+
 /// Creates a module with the current Lua version
 ///
 /// Will display the Lua version if any of the following criteria are met:
@@ -24,6 +27,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("lua");
     let config = LuaConfig::try_load(module.config);
+    let lua_version = format_lua_version(&get_lua_version(&config.lua_binary)?)?;
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -35,9 +39,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => {
-                    format_lua_version(&utils::exec_cmd("lua", &["-v"])?.stdout.as_str()).map(Ok)
-                }
+                "version" => Some(Ok(&lua_version)),
                 _ => None,
             })
             .parse(None)
@@ -54,20 +56,28 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
+fn get_lua_version(lua_binary: &str) -> Option<String> {
+    match utils::exec_cmd(lua_binary, &["-v"]) {
+        Some(output) => {
+            if output.stdout.is_empty() {
+                Some(output.stderr)
+            } else {
+                Some(output.stdout)
+            }
+        }
+        None => None,
+    }
+}
+
 fn format_lua_version(lua_stdout: &str) -> Option<String> {
     // lua -v output looks like this:
     // Lua 5.4.0  Copyright (C) 1994-2020 Lua.org, PUC-Rio
 
-    let version = lua_stdout
-        // split into ["", "5.4.0  Copyright (C) 1994-2020 Lua.org, PUC-Rio"]
-        .splitn(2, "Lua ")
-        // return "5.4.0  Copyright (C) 1994-2020 Lua.org, PUC-Rio"
-        .nth(1)?
-        // split into ["5.4.0", "Copyright", "(C)", "1994-2020", "Lua.org", "PUC-Rio"]
-        .split_whitespace()
-        // return "5.4.0"
-        .next()?;
-
+    // luajit -v output looks like this:
+    // LuaJIT 2.0.5 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/
+    let re = Regex::new(LUA_VERSION_PATERN).ok()?;
+    let captures = re.captures(lua_stdout)?;
+    let version = &captures["version"];
     Some(format!("v{}", version))
 }
 
@@ -122,8 +132,34 @@ mod tests {
     }
 
     #[test]
+    fn lua_binary_is_luajit() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("main.lua"))?.sync_all()?;
+
+        check_luajit_renders(&dir, None);
+        dir.close()
+    }
+
+    fn check_luajit_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
+        let config = starship_config.unwrap_or(toml::toml! {
+             [lua]
+             lua_binary = "luajit"
+        });
+
+        let actual = ModuleRenderer::new("lua")
+            .path(dir.path())
+            .config(config)
+            .collect();
+
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🌙 v2.0.5")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn test_format_lua_version() {
-        let input = "Lua 5.4.0  Copyright (C) 1994-2020 Lua.org, PUC-Rio";
-        assert_eq!(format_lua_version(input), Some("v5.4.0".to_string()));
+        let lua_input = "Lua 5.4.0  Copyright (C) 1994-2020 Lua.org, PUC-Rio";
+        let luajit_input = "LuaJIT 2.0.5 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/";
+        assert_eq!(format_lua_version(lua_input), Some("v5.4.0".to_string()));
+        assert_eq!(format_lua_version(luajit_input), Some("v2.0.5".to_string()));
     }
 }
