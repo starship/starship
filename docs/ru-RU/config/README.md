@@ -992,17 +992,19 @@ truncation_symbol = ""
 
 ## Коммит Git
 
-Модуль `git_commit` показывает хэш текущего коммита репозитория в вашем текущем каталоге.
+The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
 
 ### Опции
 
-| Option               | По умолчанию               | Описание                                                                |
-| -------------------- | -------------------------- | ----------------------------------------------------------------------- |
-| `commit_hash_length` | `7`                        | Длина отображаемого хэша коммита git.                                   |
-| `format`             | `'[\($hash\)]($style) '` | The format for the module.                                              |
-| `style`              | `"bold green"`             | Стиль модуля.                                                           |
-| `only_detached`      | `true`                     | Показывать хэш коммита git, только находясь в состоянии отделённой HEAD |
-| `disabled`           | `false`                    | Отключает модуль `git_commit`.                                          |
+| Option               | По умолчанию                                           | Описание                                                                |
+| -------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------- |
+| `commit_hash_length` | `7`                                                    | Длина отображаемого хэша коммита git.                                   |
+| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | The format for the module.                                              |
+| `style`              | `"bold green"`                                         | Стиль модуля.                                                           |
+| `only_detached`      | `true`                                                 | Показывать хэш коммита git, только находясь в состоянии отделённой HEAD |
+| `tag_disabled`       | `true`                                                 | Disables showing tag info in `git_commit` module.                       |
+| `tag_symbol`         | `"🏷 "`                                                 | Tag symbol prefixing the info shown                                     |
+| `disabled`           | `false`                                                | Disables the `git_commit` module.                                       |
 
 ### Variables
 
@@ -1020,6 +1022,7 @@ truncation_symbol = ""
 
 [git_commit]
 commit_hash_length = 4
+tag_symbol = "🔖 "
 ```
 
 ## Состояние Git
