@@ -1506,7 +1506,7 @@ The module will be shown if any of the following conditions are met:
 | `format`     | `"via [$symbol$version]($style) "` | The format for the module.                                                    |
 | `symbol`     | `"🌙 "`                            | A format string representing the symbol of Lua.                               |
 | `style`      | `"bold blue"`                      | The style for the module.                                                     |
-| `lua_binary` | `"lua"`                            | Configures the python binary that Starship executes when getting the version. |
+| `lua_binary` | `"lua"`                            | Configures the lua binary that Starship executes when getting the version.    |
 | `disabled`   | `false`                            | Disables the `lua` module.                                                    |
 
 ### Variables
