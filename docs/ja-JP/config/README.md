@@ -993,17 +993,19 @@ truncation_symbol = ""
 
 ## Git コミット
 
-`git_commit`モジュールは、現在のディレクトリにあるリポジトリの現在のコミットハッシュを表示します。
+The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
 
 ### オプション
 
-| オプション                | デフォルト                      | 説明                                     |
-| -------------------- | -------------------------- | -------------------------------------- |
-| `commit_hash_length` | `7`                        | 表示されるgitコミットハッシュの長さです。                 |
-| `format`             | `'[\($hash\)]($style) '` | moduleのフォーマットです。                       |
-| `style`              | `"bold green"`             | モジュールのスタイルです。                          |
-| `only_detached`      | `true`                     | 切り離されたHEAD状態のときのみgit commit hashを表示します |
-| `disabled`           | `false`                    | `git_commit`モジュールを無効にします。              |
+| オプション                | デフォルト                                                  | 説明                                                |
+| -------------------- | ------------------------------------------------------ | ------------------------------------------------- |
+| `commit_hash_length` | `7`                                                    | 表示されるgitコミットハッシュの長さです。                            |
+| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | moduleのフォーマットです。                                  |
+| `style`              | `"bold green"`                                         | モジュールのスタイルです。                                     |
+| `only_detached`      | `true`                                                 | 切り離されたHEAD状態のときのみgit commit hashを表示します            |
+| `tag_disabled`       | `true`                                                 | Disables showing tag info in `git_commit` module. |
+| `tag_symbol`         | `"🏷 "`                                                 | Tag symbol prefixing the info shown               |
+| `disabled`           | `false`                                                | Disables the `git_commit` module.                 |
 
 ### 変数
 
@@ -1020,7 +1022,8 @@ truncation_symbol = ""
 # ~/.config/starship.toml
 
 [git_commit]
-truncation_length = 4
+commit_hash_length = 4
+tag_symbol = "🔖 "
 ```
 
 ## Git の進行状態
