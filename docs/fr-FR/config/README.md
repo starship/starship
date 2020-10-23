@@ -2324,7 +2324,7 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 Le module `purescript` affiche la version courante de Purescript installée. Le module est affiché si l'une des ces conditions est remplie :
 
-- The current directory contains a `spago.dhall` file
+- Le répertoire courant contient un fichier `spago.dhall`
 - The current directory contains a \*.purs files
 
 ### Options
