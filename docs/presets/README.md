@@ -3,7 +3,7 @@
 Here is a collection of community-submitted configuration presets for Starship.
 If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
 
-## Default: Nerd Font Symbols
+## Default configuration with Nerd Font Symbols
 
 This preset doesn't change anything except for the symbols used for each module.
 If emojis aren't your thing, this might catch your eye!
@@ -22,12 +22,12 @@ The configuration file also includes all default settings, so that you can easil
 2. Place the downloaded `starship.toml` in your `~/.config/` or `$XDG_CONFIG_HOME` directory
 3. If you would like to adjust the configuration to your needs, open the file in your editor (for more details see the <a href="https://starship.rs/config"><strong>Configuration section of the docs&nbsp;▶</strong></a>)
 
-## Default: Powerline ##
+## Default configuration in Powerline style & with Nerd Font Symbols
 
 This preset is customized to look like a _Powerline_ prompt, but still keeps the default colors. It also uses the Nerd Font symobls instead of emojis.
 It looks best, if you do not use the [Line Break](/config/#line-break).
 
-![Screenshot of Nerd Font Symbols preset](/presets/default-nerd-font-powerline.png)
+![Screenshot of Powerline style preset](/presets/default-nerd-font-powerline.png)
 
 ### Prerequisites
 
@@ -41,12 +41,12 @@ It looks best, if you do not use the [Line Break](/config/#line-break).
 
 ## M.y.t.h.: Dark/Pointed
 
-This preset is using a _Powerline_ style and all available Nerd Font symbols for the modules. Additionally, the color of the modules are based on the colors of the services/languages/tools.
+This preset is using a _Powerline_ style and the symbols for the modules are all based on the available Nerd Font symbols. Additionally, the color of the modules are based on the colors of the services/languages/tools.
 It looks best, if you do not use the [Line Break](/config/#line-break).
 
-Made by [mickimnet](https://github.com/mickimnet). You can find more information about the themes on his [repository](https://github.com/mickimnet/myth-prompt-themes) at GitHub.
+From [M.y.t.h.: prompt themes](https://github.com/mickimnet/myth-prompt-themes)
 
-![Screenshot of Nerd Font Symbols preset](/presets/myth-dark-pointed.png)
+![Screenshot of M.y.t.h.: Dark/Pointed preset](/presets/myth-dark-pointed.png)
 
 ### Prerequisites
 
@@ -62,9 +62,9 @@ Made by [mickimnet](https://github.com/mickimnet). You can find more information
 
 This preset is a deviation of the [M.y.t.h. Dark/Pointed](/presets/#m-y-t-h-dark-pointed) to use slanted separators.
 
-Made by [mickimnet](https://github.com/mickimnet). You can find more information about the themes on his [repository](https://github.com/mickimnet/myth-prompt-themes) at GitHub.
+From [M.y.t.h.: prompt themes](https://github.com/mickimnet/myth-prompt-themes)
 
-![Screenshot of Nerd Font Symbols preset](/presets/myth-dark-slanted.png)
+![Screenshot of M.y.t.h.: prompt themes preset](/presets/myth-dark-slanted.png)
 
 ### Prerequisites
 
