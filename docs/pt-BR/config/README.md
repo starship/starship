@@ -992,17 +992,19 @@ truncation_symbol = ""
 
 ## Git commit
 
-The `git_commit` module shows the current commit hash of the repo in your current directory.
+The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
 
 ### Opções
 
-| Option               | Padrão                     | Descrição                                             |
-| -------------------- | -------------------------- | ----------------------------------------------------- |
-| `commit_hash_length` | `7`                        | The length of the displayed git commit hash.          |
-| `format`             | `'[\($hash\)]($style) '` | The format for the module.                            |
-| `style`              | `"bold green"`             | O estilo do módulo.                                   |
-| `only_detached`      | `true`                     | Only show git commit hash when in detached HEAD state |
-| `disabled`           | `false`                    | Disables the `git_commit` module.                     |
+| Option               | Padrão                                                 | Descrição                                             |
+| -------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
+| `commit_hash_length` | `7`                                                    | The length of the displayed git commit hash.          |
+| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | The format for the module.                            |
+| `style`              | `"bold green"`                                         | O estilo do módulo.                                   |
+| `only_detached`      | `true`                                                 | Only show git commit hash when in detached HEAD state |
+| `tag_disabled`       | `true`                                                 | Disables showing tag info in `git_commit` module.     |
+| `tag_symbol`         | `"🏷 "`                                                 | Tag symbol prefixing the info shown                   |
+| `disabled`           | `false`                                                | Disables the `git_commit` module.                     |
 
 ### Variables
 
@@ -1020,6 +1022,7 @@ The `git_commit` module shows the current commit hash of the repo in your curren
 
 [git_commit]
 commit_hash_length = 4
+tag_symbol = "🔖 "
 ```
 
 ## Git State
