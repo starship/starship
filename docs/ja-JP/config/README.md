@@ -144,7 +144,7 @@ format = '''
 
 | オプション          | デフォルト                          | 説明                                       |
 | -------------- | ------------------------------ | ---------------------------------------- |
-| `format`       | [link](#default-prompt-format) | プロンプトの形式を設定します。                          |
+| `format`       | [link](#デフォルトのプロンプトフォーマット) | プロンプトの形式を設定します。                          |
 | `scan_timeout` | `30`                           | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。 |
 | `add_newline`  | `true`                         | プロンプトの開始前に新しい行を追加します。                    |
 
@@ -307,7 +307,7 @@ symbol = "🅰 "
 | `charging_symbol`    | `"⇡"`                             | バッテリーの充電中に表示される記号です。      |
 | `discharging_symbol` | `"⇣"`                             | バッテリーが放電しているときに表示される記号です。 |
 | `format`             | `"[$symbol$percentage]($style) "` | moduleのフォーマットです。          |
-| `display`            | [link](#battery-display)          | モジュールの閾値とスタイルを表示します。      |
+| `display`            | [link](#バッテリーの表示)          | モジュールの閾値とスタイルを表示します。      |
 | `disabled`           | `false`                           | `battery`モジュールを無効にします。    |
 
 <details>
