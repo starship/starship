@@ -24,7 +24,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let head_commit = git_head.peel_to_commit().ok()?;
     let commit_oid = head_commit.id();
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+    let mut parsed;
+
+    parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
@@ -39,6 +41,48 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .parse(None)
     });
+
+    if !config.tag_disabled {
+        // Let's get repo tags names
+        let tag_names = git_repo.tag_names(None).ok()?;
+        let tag_and_refs = tag_names.iter().flat_map(|name| {
+            let full_tag = format!("refs/tags/{}", name.unwrap());
+            git_repo
+                .find_reference(&full_tag)
+                .map(|reference| (String::from(name.unwrap()), reference))
+        });
+
+        let mut tag_name = String::new();
+        // Let's check if HEAD has some tag. If several, only gets first...
+        for (name, reference) in tag_and_refs {
+            if commit_oid == reference.peel_to_commit().ok()?.id() {
+                tag_name = name;
+                break;
+            }
+        }
+        // If we have tag...
+        if !tag_name.is_empty() {
+            parsed = StringFormatter::new(config.format).and_then(|formatter| {
+                formatter
+                    .map_style(|variable| match variable {
+                        "style" => Some(Ok(config.style)),
+                        _ => None,
+                    })
+                    .map(|variable| match variable {
+                        "hash" => Some(Ok(id_to_hex_abbrev(
+                            commit_oid.as_bytes(),
+                            config.commit_hash_length,
+                        ))),
+                        _ => None,
+                    })
+                    .map(|variable| match variable {
+                        "tag" => Some(Ok(format!(" {}{}", &config.tag_symbol, &tag_name))),
+                        _ => None,
+                    })
+                    .parse(None)
+            });
+        }
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -195,5 +239,100 @@ mod tests {
 
         assert_eq!(expected, actual);
         repo_dir.close()
+    }
+
+    #[test]
+    fn test_render_commit_hash_with_tag_enabled() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        let mut git_commit = Command::new("git")
+            .args(&["rev-parse", "HEAD"])
+            .current_dir(&repo_dir.path())
+            .output()?
+            .stdout;
+        git_commit.truncate(7);
+        let commit_output = str::from_utf8(&git_commit).unwrap().trim();
+
+        let git_tag = Command::new("git")
+            .args(&["describe", "--tags", "--exact-match", "HEAD"])
+            .current_dir(&repo_dir.path())
+            .output()?
+            .stdout;
+        let tag_output = str::from_utf8(&git_tag).unwrap().trim();
+
+        let expected_output = format!("{} {}", commit_output, tag_output);
+
+        let actual = ModuleRenderer::new("git_commit")
+            .config(toml::toml! {
+                [git_commit]
+                    only_detached = false
+                    tag_disabled = false
+                    tag_symbol = ""
+            })
+            .path(&repo_dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Green
+                .bold()
+                .paint(format!("({})", expected_output.trim()))
+                .to_string()
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn test_render_commit_hash_only_detached_on_detached_with_tag_enabled() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        Command::new("git")
+            .args(&["checkout", "@~1"])
+            .current_dir(&repo_dir.path())
+            .output()?;
+
+        Command::new("git")
+            .args(&["tag", "tagOnDetached", "-m", "Testing tags on detached"])
+            .current_dir(&repo_dir.path())
+            .output()?;
+
+        let mut git_commit = Command::new("git")
+            .args(&["rev-parse", "HEAD"])
+            .current_dir(&repo_dir.path())
+            .output()?
+            .stdout;
+        git_commit.truncate(7);
+        let commit_output = str::from_utf8(&git_commit).unwrap().trim();
+
+        let git_tag = Command::new("git")
+            .args(&["describe", "--tags", "--exact-match", "HEAD"])
+            .current_dir(&repo_dir.path())
+            .output()?
+            .stdout;
+        let tag_output = str::from_utf8(&git_tag).unwrap().trim();
+
+        let expected_output = format!("{} {}", commit_output, tag_output);
+
+        let actual = ModuleRenderer::new("git_commit")
+            .config(toml::toml! {
+                [git_commit]
+                    tag_disabled = false
+                    tag_symbol = ""
+            })
+            .path(&repo_dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Green
+                .bold()
+                .paint(format!("({})", expected_output.trim()))
+                .to_string()
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
     }
 }

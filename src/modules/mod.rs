@@ -155,7 +155,7 @@ pub fn description(module: &str) -> &'static str {
         "erlang" => "Current OTP version",
         "gcloud" => "The current GCP client configuration",
         "git_branch" => "The active branch of the repo in your current directory",
-        "git_commit" => "The active commit of the repo in your current directory",
+        "git_commit" => "The active commit (and tag if any) of the repo in your current directory",
         "git_state" => "The current git operation, and it's progress",
         "git_status" => "Symbol representing the state of the repo",
         "golang" => "The currently installed version of Golang",
