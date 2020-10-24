@@ -214,6 +214,7 @@ $conda\
 $memory_usage\
 $aws\
 $gcloud\
+$openstack\
 $env_var\
 $crystal\
 $cmd_duration\
@@ -1707,6 +1708,41 @@ The `ocaml` module shows the currently installed version of OCaml. The module wi
 format = "via [🐪 $version]($style) "
 ```
 
+## OpenStack
+
+The `openstack` module shows the current OpenStack cloud and project. The module only active when the `OS_CLOUD` env var is set, in which case it will read `clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). to fetch the current project in use.
+
+### Opções
+
+| Option     | Padrão                                              | Descrição                                                      |
+| ---------- | --------------------------------------------------- | -------------------------------------------------------------- |
+| `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | The format for the module.                                     |
+| `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
+| `style`    | `"bold yellow"`                                     | O estilo do módulo.                                            |
+| `disabled` | `false`                                             | Disables the `OpenStack` module.                               |
+
+### Variables
+
+| Variável  | Exemplo | Descrição                            |
+| --------- | ------- | ------------------------------------ |
+| cloud     | `corp`  | The current OpenStack cloud          |
+| project   | `dev`   | The current OpenStack project        |
+| symbol    |         | Mirrors the value of option `symbol` |
+| style\* |         | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Exemplo
+
+```toml
+# ~/.config/starship.toml
+
+[openstack]
+format = "on [$symbol$cloud(\\($project\\))]($style) "
+style = "bold yellow"
+symbol = "☁️ "
+```
+
 ## Perl
 
 The `perl` module shows the currently installed version of Perl. The module will be shown if any of the following conditions are met:
@@ -2258,7 +2294,7 @@ The order in which custom modules are shown can be individually set by including
 | `command`     |                               | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                               | [See below](#custom-command-shell)                                                                                         |
-| `descrição`   | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
+| `description` | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                          | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                          | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
