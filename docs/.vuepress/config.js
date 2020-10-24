@@ -95,6 +95,7 @@ module.exports = {
           ["/advanced-config/", "Advanced Configuration"],
           ["/faq/", "Frequently Asked Questions"],
           ["/presets/", "Presets"],
+          ["/gallery/", "Gallery"],
           ["/migrating-to-0.45.0/", "Migrating to v0.45.0"]
         ]
       },

@@ -1,0 +1,158 @@
+########################################
+# prompt global settings
+########################################
+
+# document link: https://starship.rs/ja-JP/config/#%E3%83%95%E3%82%9A%E3%83%AD%E3%83%B3%E3%83%95%E3%82%9A%E3%83%88
+# format = "$all"
+format = """
+$username\
+$hostname\
+$shlvl\
+$kubernetes\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$hg_branch\
+$docker_context\
+$package\
+$cmake\
+$dart\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$golang\
+$helm\
+$java\
+$julia\
+$nim\
+$nodejs\
+$ocaml\
+$perl\
+$php\
+$purescript\
+$python\
+$ruby\
+$rust\
+$swift\
+$terraform\
+$zig\
+$nix_shell\
+$conda\
+$memory_usage\
+$aws\
+$gcloud\
+$env_var\
+$crystal\
+$cmd_duration\
+$custom\
+$line_break\
+$jobs\
+$battery\
+$time\
+$status\n\
+$character"""
+add_newline = true
+
+########################################
+# prompt detail settings
+########################################
+
+[username]
+disabled = false
+show_always = true
+style_user = "white bold"
+style_root = "white bold"
+# format = "user: [$user]($style) "
+
+[directory]
+truncation_length = 0
+truncate_to_repo = false
+
+## Git settings
+[git_branch]
+style = "bold purple"
+# symbol = "🌱 "
+truncation_length = 100  # no truncation
+truncation_symbol = "..."
+
+[git_status]
+modified = "M"
+untracked = "U"
+deleted = "🗑 "
+renamed = "👅"
+conflicted = "🏳 "
+ahead = "⇡"  # unpushed commit
+behind = "😰"
+diverged = "😵"
+staged.value = "++"
+staged.style = "green"
+staged_count.enabled = true
+staged_count.style = "green"
+
+[git_state]
+progress_divider = " of "
+cherry_pick = "🍒 PICKING"
+
+## Memory
+[memory_usage]
+disabled = false
+threshold = 1
+show_percentage = false
+show_swap = true
+# style = "bold dimmed green"
+style = "bold gray"
+
+[jobs]
+# doc: https://starship.rs/config/#jobs
+symbol = "🏃‍♂️ "
+threshold = 1
+
+[battery]
+disabled = false
+# full_symbol = "🔋"
+charging_symbol = "⚡"
+discharging_symbol = "🔋 "
+[[battery.display]]
+threshold = 70
+style = "bold green"
+
+[time]
+disabled = false
+# format = "🕙[ \[$time\] ]($style)"
+format = "at 🗓  [$time]($style) "
+style = "bold yellow"
+use_12hr = false
+time_format = "%Y/%m/%d %T"
+utc_time_offset = "+9"
+time_range="-"  # always: time_range="00:00:00-23:59:59"
+
+[line_break]
+disabled = true # separate prompt into 2 lines
+
+[character]
+# symbol = "🍺"
+disabled = false
+success_symbol = "[➜](bold green)" 
+error_symbol = "[✗](bold red) "
+
+########################################
+# disabled: prompt detail settings
+########################################
+
+[gcloud]
+disabled = true
+
+[aws]
+# format = "on [$symbol$profile(\($region\))]($style) ""
+disabled = true
+format = ""
+style = "bold blue"
+symbol = "AWS Region: "
+
+[aws.region_aliases]
+# ap-northeast-1 = "an1"
+ap-southeast-2 = "au"
+us-east-1 = "va"
