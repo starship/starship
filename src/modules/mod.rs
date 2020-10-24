@@ -169,6 +169,7 @@ pub fn description(module: &str) -> &'static str {
         "julia" => "The currently installed version of Julia",
         "kubernetes" => "The current Kubernetes context name and, if set, the namespace",
         "line_break" => "Separates the prompt into two lines",
+        "lua" => "The currently installed version of Lua",
         "memory_usage" => "Current system memory and swap usage",
         "nim" => "The currently installed version of Nim",
         "nix_shell" => "The nix-shell environment",
