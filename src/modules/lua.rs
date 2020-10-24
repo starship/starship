@@ -136,15 +136,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.lua"))?.sync_all()?;
 
-        check_luajit_renders(&dir, None);
-        dir.close()
-    }
-
-    fn check_luajit_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
-        let config = starship_config.unwrap_or(toml::toml! {
+        let config = toml::toml! {
              [lua]
              lua_binary = "luajit"
-        });
+        };
 
         let actual = ModuleRenderer::new("lua")
             .path(dir.path())
@@ -153,6 +148,7 @@ mod tests {
 
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🌙 v2.0.5")));
         assert_eq!(expected, actual);
+        dir.close()
     }
 
     #[test]
