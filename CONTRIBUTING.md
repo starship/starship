@@ -178,11 +178,13 @@ Any tests that depend on File I/O should use [`sync_all()`](https://doc.rust-lan
 
 Any tests that use `tempfile::tempdir` should take care to call `dir.close()` after usage to ensure the lifecycle of the directory can be reasoned about. This includes `fixture_repo()` as it returns a TempDir that should be closed.
 
-## Running the Documentation Website Locally
+## Documentation
+
+### Running the Documentation Website Locally
 
 If you are contributing to the design of Starship's website, the following section will help you get started.
 
-### Setup
+#### Setup
 
 After cloning the project, you can do the following to run the VuePress website on your local machine:
 
@@ -200,6 +202,31 @@ After cloning the project, you can do the following to run the VuePress website 
    ```
 
 Once setup is complete, you can refer to VuePress documentation on the actual implementation here: <https://vuepress.vuejs.org/guide/>.
+
+### Add Your Own Prompt with Starship to Gallery
+
+You can add your own prompt setting with Starship to Gallery.
+
+#### How to Add to Gallery
+
+There6 step.
+
+1. Create branch like `gallery-[YOUR-GitHub-ID]`.
+2. Prepare 2 files:
+   - your `starship.toml`
+   - a screenshot of your prompt with Starship
+3. Create a directory `docs/[YOUR-GitHub-ID]/` and put these files into it.
+4. Edit `docs/.vuepress/prompts.js` to add your prompt to Gallery like below.
+
+   ```js
+   const prompts = [
+       {githubId: "[YOUR-GitHub-ID]"},  // add your line
+       ...
+   ]
+   ```
+
+5. Check Gallery in documentation [locally](#running-the-documentation-website-locally).
+6. Create PR.
 
 ## Git/GitHub workflow
 
