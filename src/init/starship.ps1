@@ -11,15 +11,22 @@ function global:prompt {
     $env:PWD = $PWD
     $current_directory = (Convert-Path -LiteralPath $PWD)
     
-    # If an external command has not been executed, then the $LASTEXITCODE will be $null.
-    # For the purposes of the prompt, replace this with a 0 exit code so that the prompt
-    # doesn't show the last command as a failure (because it had a non-zero exit code).
-    $lastExitCodeForPrompt = if ($origLastExitCode) { $origLastExitCode } else { 0 }
+    # Whe start from the premise that the command executed correctly, which covers also the fresh console.
+    $lastExitCodeForPrompt = 0
 
     # Save old output encoding and set it to UTF-8
     $origOutputEncoding = [Console]::OutputEncoding
     [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
     if ($lastCmd = Get-History -Count 1) {
+        # In case we have a False on the Dollar hook, we know there's an error.
+        if( -not $origDollarQuestion){
+          # We retrieve the InvocationInfo from the most recent error.
+          $lastCmdletError = Get-Error |  Where-Object {$_ -ne $null} | Select-Object -expand InvocationInfo
+          # We check if the las command executed matches the line that caused the last error , in which case we know
+          # it was an internal Powershell command, otherwise, there MUST be an error code.
+          $lastExitCodeForPrompt = if($lastCmd.CommandLine -eq $lastCmdletError.Line){1} else {$origLastExitCode}
+        }
+
         $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalMilliseconds)
         # & ensures the path is interpreted as something to execute
         $out = @(&::STARSHIP:: prompt "--path=$current_directory" --status=$lastExitCodeForPrompt --jobs=$jobs --cmd-duration=$duration)
