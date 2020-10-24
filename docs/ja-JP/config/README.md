@@ -215,6 +215,7 @@ $conda\
 $memory_usage\
 $aws\
 $gcloud\
+$openstack\
 $env_var\
 $crystal\
 $cmd_duration\
@@ -1709,6 +1710,41 @@ The `ocaml` module shows the currently installed version of OCaml. 次の条件�
 format = "via [🐪 $version]($style) "
 ```
 
+## OpenStack
+
+The `openstack` module shows the current OpenStack cloud and project. The module only active when the `OS_CLOUD` env var is set, in which case it will read `clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). to fetch the current project in use.
+
+### オプション
+
+| オプション      | デフォルト                                               | 説明                                                             |
+| ---------- | --------------------------------------------------- | -------------------------------------------------------------- |
+| `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | moduleのフォーマットです。                                               |
+| `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
+| `style`    | `"bold yellow"`                                     | モジュールのスタイルです。                                                  |
+| `disabled` | `false`                                             | Disables the `OpenStack` module.                               |
+
+### 変数
+
+| 変数        | 設定例    | 説明                            |
+| --------- | ------ | ----------------------------- |
+| cloud     | `corp` | The current OpenStack cloud   |
+| project   | `dev`  | The current OpenStack project |
+| symbol    |        | オプション `記号` の値をミラーする           |
+| style\* |        | オプション `style` の値をミラーする        |
+
+\*: この変数はスタイル文字列の一部としてのみ使用できます
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[openstack]
+format = "on [$symbol$cloud(\\($project\\))]($style) "
+style = "bold yellow"
+symbol = "☁️ "
+```
+
 ## Perl
 
 The `perl` module shows the currently installed version of Perl. 次の条件のいずれかが満たされると、モジュールが表示されます。
@@ -1747,7 +1783,7 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-`php`モジュールは、現在インストールされているPHPのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `php` module shows the currently installed version of PHP. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`composer.json`ファイルが含まれている
 - The current directory contains a `.php-version` file
@@ -1755,12 +1791,12 @@ format = "via [🦪 $version]($style) "
 
 ### オプション
 
-| オプション      | デフォルト                              | 説明                         |
-| ---------- | ---------------------------------- | -------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。           |
-| `symbol`   | `"🐘 "`                             | PHPのバージョンを表示する前に使用される記号です。 |
-| `style`    | `"147 bold"`                       | モジュールのスタイルです。              |
-| `disabled` | `false`                            | `php`モジュールを無効にします。         |
+| オプション      | デフォルト                              | 説明                                                    |
+| ---------- | ---------------------------------- | ----------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                      |
+| `symbol`   | `"🐘 "`                             | The symbol used before displaying the version of PHP. |
+| `style`    | `"147 bold"`                       | モジュールのスタイルです。                                         |
+| `disabled` | `false`                            | Disables the `php` module.                            |
 
 ### 変数
 
@@ -1806,11 +1842,11 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 | `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | moduleのフォーマットです。                                                              |
 | `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                             |
 | `style`              | `"yellow bold"`                                                           | モジュールのスタイルです。                                                                 |
-| `pyenv_version_name` | `false`                                                                   | pyenvを使用してPythonバージョンを取得します                                                   |
+| `pyenv_version_name` | `false`                                                                   | Use pyenv to get Python version                                               |
 | `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used               |
 | `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.    |
 | `python_binary`      | `python`                                                                  | Configures the python binary that Starship executes when getting the version. |
-| `disabled`           | `false`                                                                   | `python`モジュールを無効にします。                                                         |
+| `disabled`           | `false`                                                                   | Disables the `python` module.                                                 |
 
 ### 変数
 
@@ -1846,7 +1882,7 @@ python_binary = "python3"
 
 ## Ruby
 
-`ruby`モジュールは、現在インストールされているRubyのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `ruby` module shows the currently installed version of Ruby. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Gemfile`ファイルが含まれている
 - The current directory contains a `.ruby-version` file
@@ -1859,7 +1895,7 @@ python_binary = "python3"
 | `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                 |
 | `symbol`   | `"💎 "`                             | A format string representing the symbol of Ruby. |
 | `style`    | `"bold red"`                       | モジュールのスタイルです。                                    |
-| `disabled` | `false`                            | `ruby`モジュールを無効にします。                              |
+| `disabled` | `false`                            | Disables the `ruby` module.                      |
 
 ### 変数
 
@@ -1882,7 +1918,7 @@ symbol = "🔺 "
 
 ## Rust
 
-`rust`モジュールには、現在インストールされているRustのバージョンが表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `rust` module shows the currently installed version of Rust. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Cargo.toml`ファイルが含まれている
 - カレントディレクトリに`.rs`の拡張子のファイルが含まれている
@@ -1894,7 +1930,7 @@ symbol = "🔺 "
 | `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                |
 | `symbol`   | `"🦀 "`                             | A format string representing the symbol of Rust |
 | `style`    | `"bold red"`                       | モジュールのスタイルです。                                   |
-| `disabled` | `false`                            | `rust`モジュールを無効にします。                             |
+| `disabled` | `false`                            | Disables the `rust` module.                     |
 
 ### 変数
 
@@ -2060,7 +2096,7 @@ disabled = false
 
 ## Terraform
 
-`terraform`モジュールには、現在選択されているterraformワークスペースとバージョンが表示されます。 デフォルトでは、Terraformのバージョンは表示されません。これは、多くのプラグインが使用されている場合、Terraformの現在のバージョンでは遅いためです。 If you still want to enable it, [follow the example shown below](#with-version). 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`.terraform`フォルダが含まれている
 - カレントディレクトリに`.tf`の拡張子のファイルが含まれている
@@ -2072,7 +2108,7 @@ disabled = false
 | `format`   | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
 | `symbol`   | `"💠 "`                               | A format string shown before the terraform workspace. |
 | `style`    | `"bold 105"`                         | モジュールのスタイルです。                                         |
-| `disabled` | `false`                              | `terraform`モジュールを無効にします。                              |
+| `disabled` | `false`                              | Disables the `terraform` module.                      |
 
 ### 変数
 
@@ -2107,7 +2143,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Time
 
-`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -2117,23 +2153,23 @@ format = "[🏎💨 $workspace]($style) "
 
 ### オプション
 
-| オプション             | デフォルト                   | 説明                                                                                                    |
-| ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                     |
-| `use_12hr`        | `false`                 | 12時間のフォーマットを有効にします。                                                                                   |
-| `time_format`     | この表の下を参照してください          | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。     |
-| `style`           | `"bold yellow"`         | モジュールのスタイルです。                                                                                         |
-| `utc_time_offset` | `"local"`               | 使用するUTCオフセットを設定します。 Range from -24 &lt; x &lt; 24. フロートが30/45分のタイムゾーンオフセットに対応できるようにします。   |
-| `disabled`        | `true`                  | `time`モジュールを無効にします。                                                                                   |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
+| オプション             | デフォルト                   | 説明                                                                                                                                 |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
+| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
+| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. それ以外の場合、デフォルトは`"%T"`です。 Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### 変数
 
 | 変数        | 設定例        | 説明                     |
 | --------- | ---------- | ---------------------- |
-| 時刻        | `13:08:10` | The current time.      |
+| time      | `13:08:10` | The current time.      |
 | style\* |            | オプション `style` の値をミラーする |
 
 \*: この変数はスタイル文字列の一部としてのみ使用できます
@@ -2151,9 +2187,9 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## ユーザー名
+## Username
 
-`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `username` module shows active user's username. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントユーザーがroot
 - カレントユーザーが、ログインしているユーザーとは異なる
@@ -2162,13 +2198,13 @@ time_range = "10:00:00-14:00:00"
 
 ### オプション
 
-| オプション         | デフォルト                   | 説明                        |
-| ------------- | ----------------------- | ------------------------- |
-| `style_root`  | `"bold red"`            | ユーザーがrootのときに使用されるスタイルです。 |
-| `style_user`  | `"bold yellow"`         | 非rootユーザーに使用されるスタイルです。    |
-| `format`      | `"[$user]($style) in "` | moduleのフォーマットです。          |
-| `show_always` | `false`                 | `username` モジュールを常に表示します。 |
-| `disabled`    | `false`                 | `username` モジュールを無効にします。  |
+| オプション         | デフォルト                   | 説明                                    |
+| ------------- | ----------------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`            | The style used when the user is root. |
+| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
+| `format`      | `"[$user]($style) in "` | moduleのフォーマットです。                      |
+| `show_always` | `false`                 | Always shows the `username` module.   |
+| `disabled`    | `false`                 | Disables the `username` module.       |
 
 ### 変数
 
@@ -2259,8 +2295,8 @@ The order in which custom modules are shown can be individually set by including
 | ------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `command`     |                               | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                               | [この表の下を参照してください](#custom-command-shell)                                                                                    |
-| `説明`          | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
+| `shell`       |                               | [See below](#custom-command-shell)                                                                                         |
+| `description` | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                          | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                          | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
