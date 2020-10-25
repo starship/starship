@@ -426,10 +426,9 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of CMake if any of the following conditions are met:
+The `cmake` module shows the currently installed version of CMake if:
 
 - The current directory contains a `CMakeLists.txt` file
-- The current directory contains a `CMakeCache.txt` file
 
 ### Optionen
 
