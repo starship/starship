@@ -11,7 +11,7 @@ use crate::utils;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_cmake_project = context
         .try_begin_scan()?
-        .set_files(&["CMakeLists.txt"])
+        .set_files(&["CMakeLists.txt", "CMakeCache.txt"])
         .is_match();
 
     if !is_cmake_project {
@@ -76,6 +76,16 @@ mod tests {
     fn folder_with_cmake_lists() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("CMakeLists.txt"))?.sync_all()?;
+        let actual = ModuleRenderer::new("cmake").path(dir.path()).collect();
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("喝 v3.17.3")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn buildfolder_with_cmake_cache() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("CMakeCache.txt"))?.sync_all()?;
         let actual = ModuleRenderer::new("cmake").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("喝 v3.17.3")));
         assert_eq!(expected, actual);
