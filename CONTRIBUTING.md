@@ -203,30 +203,48 @@ After cloning the project, you can do the following to run the VuePress website 
 
 Once setup is complete, you can refer to VuePress documentation on the actual implementation here: <https://vuepress.vuejs.org/guide/>.
 
-### Add Your Own Prompt with Starship to Gallery
+### Add Your Own Prompt to the Gallery
 
-You can add your own prompt setting with Starship to Gallery.
-
-#### How to Add to Gallery
-
-There6 step.
-
-1. Create branch like `gallery-[YOUR-GitHub-ID]`.
-2. Prepare 2 files:
+1. Create a branch like `gallery-[Your-GitHub-ID]`.
+2. Prepare at least 2 files:
    - your `starship.toml`
-   - a screenshot of your prompt with Starship
-3. Create a directory `docs/[YOUR-GitHub-ID]/` and put these files into it.
-4. Edit `docs/.vuepress/prompts.js` to add your prompt to Gallery like below.
+   - a screenshot of your prompt with Starship named 'prompt.png' (size should be around 860 pixel wide)
+3. Create a directory in `docs/.vuepress/public/gallery/[Your-GitHub-ID]/` and put those files into it.
+4. If you have more presets to share, please create a sub-directory like `docs/.vuepress/public/gallery/[Your-GitHub-ID]/[first-prompt-name]` and place the above mentioned file(s) in those directories.
+5. Edit `docs/.vuepress/components/prompts.js` to add your prompt(s) to the Gallery like below.
 
    ```js
-   const prompts = [
-       {githubId: "[YOUR-GitHub-ID]"},  // add your line
-       ...
+const prompts = [
+    {
+        githubId: "[Your-GitHub-ID]",
+        displayName: "[Name to show]",
+        presets: [], // leave empty if you only have one preset
+    },
+    {
+        githubId: "[Your-GitHub-ID]",
+        displayName: "[Name to show]",
+        presets: [
+            {
+                id: "[first-prompt-name]",
+                name: "[Name of your first prompt]",
+                info: "[Additional information about your prompt]", // The content will be shown below the preview picture.
+                external: null,
+            },
+            {
+                id: "[second-prompt-name]",
+                name: "[Name of your second prompt]",
+                info: "",
+                external: "[Link to your starship.toml, e. g. on GitHub (RAW)]", // use if you have an own repository for your "starship.toml"
+            },
+        ],
+    ]
+    },
+    ...
    ]
    ```
 
-5. Check Gallery in documentation [locally](#running-the-documentation-website-locally).
-6. Create PR.
+5. Check the Gallery [locally](#running-the-documentation-website-locally) in a browser.
+6. Create a pull request.
 
 ## Git/GitHub workflow
 
