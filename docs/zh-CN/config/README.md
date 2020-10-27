@@ -220,6 +220,7 @@ $crystal\
 $cmd_duration\
 $custom\
 $line_break\
+$lua\
 $jobs\
 $battery\
 $time\
@@ -1428,11 +1429,48 @@ disabled = false
 disabled = true
 ```
 
+## Lua
+
+The `lua` module shows the currently installed version of Lua. 此组件将在符合以下任意条件之一时显示：
+
+- The current directory contains a `.lua-version` file
+- The current directory contains a `lua` directory
+- The current directory contains a file with the `.lua` extension
+
+### 配置项
+
+| Option       | 默认值                                | 描述                                                                         |
+| ------------ | ---------------------------------- | -------------------------------------------------------------------------- |
+| `format`     | `"via [$symbol$version]($style) "` | 组件格式化模板。                                                                   |
+| `symbol`     | `"🌙 "`                             | A format string representing the symbol of Lua.                            |
+| `style`      | `"bold blue"`                      | 此组件的样式。                                                                    |
+| `lua_binary` | `"lua"`                            | Configures the lua binary that Starship executes when getting the version. |
+| `disabled`   | `false`                            | Disables the `lua` module.                                                 |
+
+### Variables
+
+| 字段        | 示例       | 描述                   |
+| --------- | -------- | -------------------- |
+| version   | `v5.4.0` | The version of `lua` |
+| symbol    |          | `symbol`对应值          |
+| style\* |          | `style`对应值           |
+
+\*: This variable can only be used as a part of a style string
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[lua]
+format = "via [🌕 $version](bold blue) "
+```
+
 ## Memory Usage
 
-`memory_usage` 组件显示当前系统内存和交换区使用情况。
+The `memory_usage` module shows current system memory and swap usage.
 
-默认情况下，如果系统交换区使用不为 0，则会显示交换区使用情况。
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
@@ -1442,13 +1480,13 @@ disabled = true
 
 ### 配置项
 
-| Option      | 默认值                                           | 描述                     |
-| ----------- | --------------------------------------------- | ---------------------- |
-| `threshold` | `75`                                          | 隐藏内存使用情况，除非它超过这个百分比。   |
-| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | 组件格式化模板。               |
-| `symbol`    | `"🐏"`                                         | 这个字段的内容会显示在当前内存使用情况之前。 |
-| `style`     | `"bold dimmed white"`                         | 此组件的样式。                |
-| `disabled`  | `true`                                        | 禁用 `memory_usage` 模块   |
+| Option      | 默认值                                           | 描述                                                       |
+| ----------- | --------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | 组件格式化模板。                                                 |
+| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
+| `style`     | `"bold dimmed white"`                         | 此组件的样式。                                                  |
+| `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
 
 ### Variables
 
@@ -1477,18 +1515,18 @@ style = "bold dimmed green"
 
 ## Mercurial Branch
 
-`hg_branch` 组件显示当前目录的 hg 仓库的活动分支。
+The `hg_branch` module shows the active branch of the repo in your current directory.
 
 ### 配置项
 
-| Option              | 默认值                              | 描述                              |
-| ------------------- | -------------------------------- | ------------------------------- |
-| `symbol`            | `" "`                           | 该字段的内容显示于当前仓库的 hg 书签或活动分支名之前。   |
-| `style`             | `"bold purple"`                  | 此组件的样式。                         |
-| `format`            | `"on [$symbol$branch]($style) "` | 组件格式化模板。                        |
-| `truncation_length` | `2^63 - 1`                       | 将显示的 hg 分支名截断到该数量的字素（graphemes） |
-| `truncation_symbol` | `"…"`                            | 此字段的内容用来表示分支名称被截断。              |
-| `disabled`          | `true`                           | 禁用 `hg_branch` 组件。              |
+| Option              | 默认值                              | 描述                                                                                           |
+| ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `style`             | `"bold purple"`                  | 此组件的样式。                                                                                      |
+| `format`            | `"on [$symbol$branch]($style) "` | 组件格式化模板。                                                                                     |
+| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_symbol` | `"…"`                            | 此字段的内容用来表示分支名称被截断。                                                                           |
+| `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
 ### Variables
 
@@ -1515,7 +1553,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of Nim. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含一个 `nim.cfg` 文件
+- The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1551,7 +1589,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-`nix_shell` 组件显示 nix-shell 环境。 当处于一个 nix-shell 环境中时，此组件会被显示。
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### 配置项
 
@@ -1562,7 +1600,7 @@ symbol = "🎣 "
 | `style`      | `"bold blue"`                                  | 此组件的样式。                                               |
 | `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
 | `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
-| `disabled`   | `false`                                        | 禁用 `nix_shell` 组件。                                    |
+| `disabled`   | `false`                                        | Disables the `nix_shell` module.                      |
 
 ### Variables
 
@@ -1589,11 +1627,11 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-`nodejs` 组件显示当前安装的 NodeJS 版本。 此组件将在符合以下任意条件之一时显示：
+The `nodejs` module shows the currently installed version of NodeJS. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含 `package.json` 文件
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
-- 当前目录包含 `node_modules` 目录
+- The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts` extension
 
@@ -1604,7 +1642,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 | `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                           |
 | `symbol`   | `"⬢ "`                             | A format string representing the symbol of NodeJS. |
 | `style`    | `"bold green"`                     | 此组件的样式。                                            |
-| `disabled` | `false`                            | 禁用 `nodejs` 组件。                                    |
+| `disabled` | `false`                            | Disables the `nodejs` module.                      |
 
 ###  Variables
 
@@ -1627,12 +1665,12 @@ format = "via [🤖 $version](bold green) "
 
 ## Package Version
 
-当前目录是软件包的代码仓库时，将显示 `package` 组件，并显示软件包当前版本。 The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
-- **npm** —— `npm` 软件包版本从当前目录下的 `package.json` 中得到
-- **cargo** —— `cargo` 软件包的版本从当前目录下的 `Cargo.toml` 中得到
-- **poetry** —— `poetry` 软件包版本从当前目录下的 `pyproject.toml` 中得到
-- **composer** —— `composer` 软件包版本从当前目录下的 `composer.json` 中得到
+- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
+- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 - **julia** - The package version is extracted from the `Project.toml` present
 - **mix** - The `mix` package version is extracted from the `mix.exs` present
@@ -1643,13 +1681,13 @@ format = "via [🤖 $version](bold green) "
 
 ### 配置项
 
-| Option            | 默认值                                | 描述                                                        |
-| ----------------- | ---------------------------------- | --------------------------------------------------------- |
-| `format`          | `"via [$symbol$version]($style) "` | 组件格式化模板。                                                  |
-| `symbol`          | `"📦 "`                             | 这个字段的内容会显示在当前软件包版本之前。                                     |
-| `style`           | `"bold 208"`                       | 此组件的样式。                                                   |
-| `display_private` | `false`                            | Enable displaying version for packages marked as private. |
-| `disabled`        | `false`                            | 禁用 `package` 组件。                                          |
+| Option            | 默认值                                | 描述                                                         |
+| ----------------- | ---------------------------------- | ---------------------------------------------------------- |
+| `format`          | `"via [$symbol$version]($style) "` | 组件格式化模板。                                                   |
+| `symbol`          | `"📦 "`                             | The symbol used before displaying the version the package. |
+| `style`           | `"bold 208"`                       | 此组件的样式。                                                    |
+| `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`                            | Disables the `package` module.                             |
 
 ### Variables
 
@@ -1784,9 +1822,9 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of PHP. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含一个 `composer.json` 文件
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
-- 当前目录包含一个 `.php` 文件
+- The current directory contains a `.php` file
 
 ### 配置项
 
@@ -1824,15 +1862,15 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含 `.python-version` 文件
-- 当前目录包含 `requirements.txt` 文件
-- 当前目录包含 `pyproject.toml` 文件
-- 当前目录包含一个扩展名名为`.py`的文件(以及`scan_for_pyfile`为true)
-- 当前目录包含 `Pipfile` 文件
-- 当前目录包含一个 `tox.ini` 文件
-- 当前目录包含一个 `setup.py` 文件
-- 当前目录包含一个名为`__init__.py`的文件
-- 当前处于一个活跃的 python 虚拟环境中
+- The current directory contains a `.python-version` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
+- The current directory contains a `Pipfile` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `__init__.py` file
+- A virtual environment is currently activated
 
 ### 配置项
 
@@ -1883,9 +1921,9 @@ python_binary = "python3"
 
 The `ruby` module shows the currently installed version of Ruby. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含 `Gemfile` 文件
+- The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
-- 当前目录包含 `.rb` 文件
+- The current directory contains a `.rb` file
 
 ### 配置项
 
@@ -1919,8 +1957,8 @@ symbol = "🔺 "
 
 The `rust` module shows the currently installed version of Rust. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含 `Cargo.toml` 文件
-- 当前目录包含一个使用 `.rs` 扩展名的文件
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### 配置项
 
@@ -2097,8 +2135,8 @@ disabled = false
 
 The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含 `.terraform` 目录
-- 当前目录包含一个使用 `.tf` 扩展名的文件
+- The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf` extension
 
 ### 配置项
 
@@ -2190,10 +2228,10 @@ time_range = "10:00:00-14:00:00"
 
 The `username` module shows active user's username. 此组件将在符合以下任意条件之一时显示：
 
-- 当前用户是 root
-- 当前用户与登录用户不相同
-- 用户正通过 SSH 会话连接访问
-- 字段 `show_always` 被设置为 true
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ### 配置项
 
@@ -2364,7 +2402,7 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 The `purescript` module shows the currently installed version of PureScript version. 此组件将在符合以下任意条件之一时显示：
 
-- 当前目录包含一个 `spago.dhall` 文件
+- The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
 
 ### 配置项
