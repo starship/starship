@@ -114,7 +114,6 @@ module.exports = {
           ["/de-DE/config/", "Konfiguration"],
           ["/de-DE/advanced-config/", "Erweiterte Konfiguration"],
           ["/de-DE/faq/", "Häufig gestellte Fragen"],
-          ["/de-DE/gallery/", "Gallerie"],
         ]
       },
       "/ru-RU/": {
@@ -133,8 +132,6 @@ module.exports = {
           ["/ru-RU/config/", "Настройка"],
           ["/ru-RU/advanced-config/", "Расширенная Настройка"],
           ["/ru-RU/faq/", "Часто Задаваемые Вопросы"],
-          ["/ru-RU/presets/", "Предустановки"]
-          ["/ru-RU/gallery/", "Галерея"],
         ]
       },
       "/ja-JP/": {
@@ -153,7 +150,6 @@ module.exports = {
           ["/ja-JP/config/", "設定"],
           ["/ja-JP/advanced-config/", "高度な設定"],
           ["/ja-JP/faq/", "FAQ"],
-          ["/ja-JP/gallery/", "ギャラリー"],
           ["/ja-JP/migrating-to-0.45.0/", "v0.45への移行"]
         ]
       },
@@ -190,7 +186,6 @@ module.exports = {
           ["/zh-CN/config/", "配置"],
           ["/zh-CN/advanced-config/", "高级配置"],
           ["/zh-CN/faq/", "常见问题"],
-          ["/zh-CN/gallery/", "畫廊"],
         ]
       }
     }
