@@ -54,13 +54,27 @@ if [[ -z ${preexec_function[(re)starship_preexec]} ]]; then
 fi
 
 # Set up a function to redraw the prompt if the user switches vi modes
-zle-keymap-select() {
+starship_zle-keymap-select() {
     starship_render
     zle reset-prompt
 }
 
+## Check for existing keymap-select widget.
+local existing_keymap_select_fn=$widgets[zle-keymap-select];
+# zle-keymap-select is a special widget so it'll be "user:fnName" or nothing. Let's get fnName only.
+existing_keymap_select_fn=${existing_keymap_select_fn//user:};
+if [[ -z ${existing_keymap_select_fn} ]]; then
+    zle -N zle-keymap-select starship_zle-keymap-select;
+else
+    # Define a wrapper fn to call the original widget fn and then Starship's.
+    starship_zle-keymap-select-wrapped() {
+        ${existing_keymap_select_fn} "$@";
+        starship_zle-keymap-select "$@";
+    }
+    zle -N zle-keymap-select starship_zle-keymap-select-wrapped;
+fi
+
 STARSHIP_START_TIME=$(::STARSHIP:: time)
-zle -N zle-keymap-select
 export STARSHIP_SHELL="zsh"
 
 # Set up the session key that will be used to store logs
