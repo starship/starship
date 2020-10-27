@@ -88,6 +88,14 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("julia version 1.4.0\n"),
             stderr: String::default(),
         }),
+        "lua -v" => Some(CommandOutput{
+            stdout: String::from("Lua 5.4.0  Copyright (C) 1994-2020 Lua.org, PUC-Rio\n"),
+            stderr: String::default(),
+        }),
+        "luajit -v" => Some(CommandOutput{
+            stdout: String::from("LuaJIT 2.0.5 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/\n"),
+            stderr: String::default(),
+        }),
         "nim --version" => Some(CommandOutput {
             stdout: String::from(
                 "\

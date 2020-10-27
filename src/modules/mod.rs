@@ -28,6 +28,7 @@ mod jobs;
 mod julia;
 mod kubernetes;
 mod line_break;
+mod lua;
 mod memory_usage;
 mod nim;
 mod nix_shell;
@@ -95,6 +96,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "julia" => julia::module(context),
             "kubernetes" => kubernetes::module(context),
             "line_break" => line_break::module(context),
+            "lua" => lua::module(context),
             "memory_usage" => memory_usage::module(context),
             "nim" => nim::module(context),
             "nix_shell" => nix_shell::module(context),
@@ -169,6 +171,7 @@ pub fn description(module: &str) -> &'static str {
         "julia" => "The currently installed version of Julia",
         "kubernetes" => "The current Kubernetes context name and, if set, the namespace",
         "line_break" => "Separates the prompt into two lines",
+        "lua" => "The currently installed version of Lua",
         "memory_usage" => "Current system memory and swap usage",
         "nim" => "The currently installed version of Nim",
         "nix_shell" => "The nix-shell environment",
