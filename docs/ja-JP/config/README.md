@@ -221,6 +221,7 @@ $crystal\
 $cmd_duration\
 $custom\
 $line_break\
+$lua\
 $jobs\
 $battery\
 $time\
@@ -1429,28 +1430,64 @@ disabled = false
 disabled = true
 ```
 
-## メモリ使用量
+## Lua
 
-`memory_usage</ 0>モジュールは、現在のシステムメモリとスワップ使用量を示します。</p>
+The `lua` module shows the currently installed version of Lua. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-<p spaces-before="0">デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。</p>
+- The current directory contains a `.lua-version` file
+- The current directory contains a `lua` directory
+- The current directory contains a file with the `.lua` extension
 
-<p spaces-before="0">::: tip</p>
+### オプション
 
-<p spaces-before="0">このモジュールはデフォルトで無効になっています。
-有効にするには、設定ファイルで<code>disabled`を`false`に設定します。
+| オプション        | デフォルト                              | 説明                                                                         |
+| ------------ | ---------------------------------- | -------------------------------------------------------------------------- |
+| `format`     | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                                           |
+| `symbol`     | `"🌙 "`                             | A format string representing the symbol of Lua.                            |
+| `style`      | `"bold blue"`                      | モジュールのスタイルです。                                                              |
+| `lua_binary` | `"lua"`                            | Configures the lua binary that Starship executes when getting the version. |
+| `disabled`   | `false`                            | Disables the `lua` module.                                                 |
+
+### 変数
+
+| 変数        | 設定例      | 説明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v5.4.0` | The version of `lua`   |
+| symbol    |          | オプション `記号` の値をミラーする    |
+| style\* |          | オプション `style` の値をミラーする |
+
+\*: この変数はスタイル文字列の一部としてのみ使用できます
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[lua]
+format = "via [🌕 $version](bold blue) "
+```
+
+## Memory Usage
+
+The `memory_usage` module shows current system memory and swap usage.
+
+By default the swap usage is displayed if the total system swap is non-zero.
+
+::: tip
+
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
 ### オプション
 
-| オプション       | デフォルト                                         | 説明                          |
-| ----------- | --------------------------------------------- | --------------------------- |
-| `threshold` | `75`                                          | この閾値を超えない限り、メモリ使用率は表示されません。 |
-| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | moduleのフォーマットです。            |
-| `symbol`    | `"🐏"`                                         | メモリ使用率を表示する前に使用される記号です。     |
-| `style`     | `"bold dimmed white"`                         | モジュールのスタイルです。               |
-| `disabled`  | `true`                                        | `memory_usage`モジュールを無効にします。 |
+| オプション       | デフォルト                                         | 説明                                                       |
+| ----------- | --------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | moduleのフォーマットです。                                         |
+| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
+| `style`     | `"bold dimmed white"`                         | モジュールのスタイルです。                                            |
+| `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
 
 ### 変数
 
@@ -1477,9 +1514,9 @@ symbol = " "
 style = "bold dimmed green"
 ```
 
-## Mercurial ブランチ
+## Mercurial Branch
 
-` hg_branch `モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを示します。
+The `hg_branch` module shows the active branch of the repo in your current directory.
 
 ### オプション
 
@@ -1517,7 +1554,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of Nim. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`nim.cfg`ファイルが含まれている
+- The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1553,7 +1590,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-`nix_shell`モジュールは、nix-shell環境を示しています。 このモジュールは、nixシェル環境内にあるときに表示されます。
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### オプション
 
@@ -1564,7 +1601,7 @@ symbol = "🎣 "
 | `style`      | `"bold blue"`                                  | モジュールのスタイルです。                                         |
 | `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
 | `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
-| `disabled`   | `false`                                        | `nix_shell`モジュールを無効にします。                              |
+| `disabled`   | `false`                                        | Disables the `nix_shell` module.                      |
 
 ### 変数
 
@@ -1591,11 +1628,11 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-`nodejs`モジュールは、現在インストールされているNodeJSのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `nodejs` module shows the currently installed version of NodeJS. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`package.json`ファイルが含まれている
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
-- カレントディレクトリに`node_modules`ディレクトリが含まれている
+- The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts` extension
 
@@ -1606,7 +1643,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 | `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                   |
 | `symbol`   | `"⬢ "`                             | A format string representing the symbol of NodeJS. |
 | `style`    | `"bold green"`                     | モジュールのスタイルです。                                      |
-| `disabled` | `false`                            | `nodejs`モジュールを無効にします。                              |
+| `disabled` | `false`                            | Disables the `nodejs` module.                      |
 
 ###  Variables
 
@@ -1627,14 +1664,14 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 format = "via [🤖 $version](bold green) "
 ```
 
-## パッケージのバージョン
+## Package Version
 
-`package`モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。 The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
-- **npm** – `npm`パッケージバージョンは、現在のディレクトリにある`package.json`から抽出されます
-- **cargo** – `cargo`パッケージバージョンは、現在のディレクトリにある`Cargo.toml`から抽出されます。
-- **poetry** – `poetry`パッケージバージョンは、現在のディレクトリにある`pyproject.toml`から抽出されます
-- **composer** – `composer`パッケージバージョンは、現在のディレクトリにある`composer.json`から抽出されます
+- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
+- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 - **julia** - The package version is extracted from the `Project.toml` present
 - **mix** - The `mix` package version is extracted from the `mix.exs` present
@@ -1645,13 +1682,13 @@ format = "via [🤖 $version](bold green) "
 
 ### オプション
 
-| オプション             | デフォルト                              | 説明                                                        |
-| ----------------- | ---------------------------------- | --------------------------------------------------------- |
-| `format`          | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                          |
-| `symbol`          | `"📦 "`                             | パッケージのバージョンを表示する前に使用される記号です。                              |
-| `style`           | `"bold 208"`                       | モジュールのスタイルです。                                             |
-| `display_private` | `false`                            | Enable displaying version for packages marked as private. |
-| `disabled`        | `false`                            | `package` モジュールを無効にします。                                   |
+| オプション             | デフォルト                              | 説明                                                         |
+| ----------------- | ---------------------------------- | ---------------------------------------------------------- |
+| `format`          | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                           |
+| `symbol`          | `"📦 "`                             | The symbol used before displaying the version the package. |
+| `style`           | `"bold 208"`                       | モジュールのスタイルです。                                              |
+| `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`                            | Disables the `package` module.                             |
 
 ### 変数
 
@@ -1786,9 +1823,9 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of PHP. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`composer.json`ファイルが含まれている
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
-- カレントディレクトリに`.php`の拡張子のファイルが含まれている
+- The current directory contains a `.php` file
 
 ### オプション
 
@@ -1826,15 +1863,15 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`.python-version`ファイルが含まれている
-- カレントディレクトリに`requirements.txt`ファイルが含まれている
-- カレントディレクトリに`pyproject.toml`ファイルが含まれている
+- The current directory contains a `.python-version` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `pyproject.toml` file
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
-- カレントディレクトリに`Pipfile`ファイルが含まれている
-- カレントディレクトリに`tox.ini`ファイルが含まれている
-- カレントディレクトリに`setup.py`ファイルが含まれている
+- The current directory contains a `Pipfile` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
 - The current directory contains a `__init__.py` file
-- 仮想環境がアクティブである
+- A virtual environment is currently activated
 
 ### オプション
 
@@ -1885,9 +1922,9 @@ python_binary = "python3"
 
 The `ruby` module shows the currently installed version of Ruby. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`Gemfile`ファイルが含まれている
+- The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
-- カレントディレクトリに`.rb`の拡張子のファイルが含まれている
+- The current directory contains a `.rb` file
 
 ### オプション
 
@@ -1921,8 +1958,8 @@ symbol = "🔺 "
 
 The `rust` module shows the currently installed version of Rust. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`Cargo.toml`ファイルが含まれている
-- カレントディレクトリに`.rs`の拡張子のファイルが含まれている
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### オプション
 
@@ -2099,8 +2136,8 @@ disabled = false
 
 The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`.terraform`フォルダが含まれている
-- カレントディレクトリに`.tf`の拡張子のファイルが含まれている
+- The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf` extension
 
 ### オプション
 
@@ -2192,10 +2229,10 @@ time_range = "10:00:00-14:00:00"
 
 The `username` module shows active user's username. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントユーザーがroot
-- カレントユーザーが、ログインしているユーザーとは異なる
-- ユーザーがSSHセッションとして接続されている
-- `show_always`変数がtrueに設定されている
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ### オプション
 
@@ -2366,7 +2403,7 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 The `purescript` module shows the currently installed version of PureScript version. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`spago.dhall`ファイルが含まれている
+- The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
 
 ### オプション
