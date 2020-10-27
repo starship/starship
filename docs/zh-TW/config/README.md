@@ -220,6 +220,7 @@ $crystal\
 $cmd_duration\
 $custom\
 $line_break\
+$lua\
 $jobs\
 $battery\
 $time\
@@ -1428,11 +1429,48 @@ disabled = false
 disabled = true
 ```
 
-## 記憶體使用量
+## Lua
 
-`memory_usage` 模組顯示現在系統記憶體與 swap 的使用量。
+The `lua` module shows the currently installed version of Lua. 這個模組在下列其中一個條件達成時顯示：
 
-預設 swap 使用量會在系統總 swap 使用量不為 0 時顯示出來。
+- The current directory contains a `.lua-version` file
+- The current directory contains a `lua` directory
+- The current directory contains a file with the `.lua` extension
+
+### 選項
+
+| Option       | 預設                                 | 說明                                                                         |
+| ------------ | ---------------------------------- | -------------------------------------------------------------------------- |
+| `format`     | `"via [$symbol$version]($style) "` | The format for the module.                                                 |
+| `symbol`     | `"🌙 "`                             | A format string representing the symbol of Lua.                            |
+| `style`      | `"bold blue"`                      | 這個模組的風格。                                                                   |
+| `lua_binary` | `"lua"`                            | Configures the lua binary that Starship executes when getting the version. |
+| `disabled`   | `false`                            | Disables the `lua` module.                                                 |
+
+### Variables
+
+| 變數        | 範例       | 說明                                   |
+| --------- | -------- | ------------------------------------ |
+| version   | `v5.4.0` | The version of `lua`                 |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[lua]
+format = "via [🌕 $version](bold blue) "
+```
+
+## Memory Usage
+
+The `memory_usage` module shows current system memory and swap usage.
+
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
@@ -1442,13 +1480,13 @@ disabled = true
 
 ### 選項
 
-| Option      | 預設                                            | 說明                         |
-| ----------- | --------------------------------------------- | -------------------------- |
-| `threshold` | `75`                                          | 將記憶體使用量隱藏，除非使用量超過指定值。      |
-| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module. |
-| `symbol`    | `"🐏"`                                         | 顯示在記憶體使用量之前的符號。            |
-| `style`     | `"bold dimmed white"`                         | 這個模組的風格。                   |
-| `disabled`  | `true`                                        | 停用 `memory_usage` 模組。      |
+| Option      | 預設                                            | 說明                                                       |
+| ----------- | --------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module.                               |
+| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
+| `style`     | `"bold dimmed white"`                         | 這個模組的風格。                                                 |
+| `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
 
 ### Variables
 
@@ -1515,7 +1553,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of Nim. 這個模組在下列其中一個條件達成時顯示：
 
-- 現在資料夾中包含一個 `nim.cfg` 檔案
+- The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1551,7 +1589,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-`nix_shell` 模組顯示 nix-shell 環境。 這個模組會在 nix-shell 環境中顯示。
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### 選項
 
@@ -1562,7 +1600,7 @@ symbol = "🎣 "
 | `style`      | `"bold blue"`                                  | 這個模組的風格。                                              |
 | `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
 | `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
-| `disabled`   | `false`                                        | 停用 `nix_shell` 模組。                                    |
+| `disabled`   | `false`                                        | Disables the `nix_shell` module.                      |
 
 ### Variables
 
@@ -1589,11 +1627,11 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-`nodejs` 模組顯示現在安裝的 NodeJS 版本。 這個模組在下列其中一個條件達成時顯示：
+The `nodejs` module shows the currently installed version of NodeJS. 這個模組在下列其中一個條件達成時顯示：
 
-- 現在資料夾中包含一個 `package.json` 檔案
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
-- 現在資料夾中包含一個 `node_modules` 資料夾
+- The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts` extension
 
@@ -1604,7 +1642,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                         |
 | `symbol`   | `"⬢ "`                             | A format string representing the symbol of NodeJS. |
 | `style`    | `"bold green"`                     | 這個模組的風格。                                           |
-| `disabled` | `false`                            | 停用 `nodejs` 模組。                                    |
+| `disabled` | `false`                            | Disables the `nodejs` module.                      |
 
 ###  Variables
 
@@ -1625,13 +1663,13 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 format = "via [🤖 $version](bold green) "
 ```
 
-## 套件版本
+## Package Version
 
-The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並顯示他的現在版本。 The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
-- **npm** – `npm` 套件的版本是從現在資料夾中的 `package.json` 之中擷取出來的
-- **cargo** – `cargo` 套件的版本是從現在資料夾中的 `Cargo.toml` 之中擷取出來的
-- **poetry** – `poetry` 套件的版本是從現在資料夾中的 `pyproject.toml` 之中擷取出來的
+- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
+- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
 - **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 - **julia** - The package version is extracted from the `Project.toml` present
@@ -1643,13 +1681,13 @@ The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並
 
 ### 選項
 
-| Option            | 預設                                 | 說明                                                        |
-| ----------------- | ---------------------------------- | --------------------------------------------------------- |
-| `format`          | `"via [$symbol$version]($style) "` | The format for the module.                                |
-| `symbol`          | `"📦 "`                             | 顯示在套件的版本之前的符號。                                            |
-| `style`           | `"bold 208"`                       | 這個模組的風格。                                                  |
-| `display_private` | `false`                            | Enable displaying version for packages marked as private. |
-| `disabled`        | `false`                            | 停用 `package` 模組。                                          |
+| Option            | 預設                                 | 說明                                                         |
+| ----------------- | ---------------------------------- | ---------------------------------------------------------- |
+| `format`          | `"via [$symbol$version]($style) "` | The format for the module.                                 |
+| `symbol`          | `"📦 "`                             | The symbol used before displaying the version the package. |
+| `style`           | `"bold 208"`                       | 這個模組的風格。                                                   |
+| `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`                            | Disables the `package` module.                             |
 
 ### Variables
 
@@ -1784,7 +1822,7 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of PHP. 這個模組在下列其中一個條件達成時顯示：
 
-- 現在資料夾中包含一個 `composer.json` 檔案
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
@@ -1824,13 +1862,13 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 這個模組在下列其中一個條件達成時顯示：
 
-- 目前資料夾中有一個 `.python-version` 檔案
-- 目前資料夾中有一個 `requirements.txt` 檔案
-- 目前資料夾中有一個 `pyproject.toml` 檔案
+- The current directory contains a `.python-version` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `pyproject.toml` file
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
-- 目前資料夾中有一個 `Pipfile` 檔案
-- 目前資料夾中有一個 `tox.ini` 檔案
-- 現在資料夾中包含一個 `setup.py` 檔案
+- The current directory contains a `Pipfile` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
 - The current directory contains a `__init__.py` file
 - A virtual environment is currently activated
 
@@ -1883,9 +1921,9 @@ python_binary = "python3"
 
 The `ruby` module shows the currently installed version of Ruby. 這個模組在下列其中一個條件達成時顯示：
 
-- 目前資料夾中有一個 `Gemfile` 檔案
+- The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
-- 目前資料夾中有一個 `.rb` 檔案
+- The current directory contains a `.rb` file
 
 ### 選項
 
@@ -1919,8 +1957,8 @@ symbol = "🔺 "
 
 The `rust` module shows the currently installed version of Rust. 這個模組在下列其中一個條件達成時顯示：
 
-- 目前資料夾中有一個 `Cargo.toml` 檔案
-- 現在資料夾中包含一個檔案具有 `.rs` 副檔名
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### 選項
 
@@ -2190,10 +2228,10 @@ time_range = "10:00:00-14:00:00"
 
 The `username` module shows active user's username. 這個模組在下列其中一個條件達成時顯示：
 
-- 目前使用者為 root
-- 目前使用者並非登入時的使用者
-- 使用者透過 SSH session 進行連線
-- 變數 `show_always` 被設為 true
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ### 選項
 
@@ -2364,7 +2402,7 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 The `purescript` module shows the currently installed version of PureScript version. 這個模組在下列其中一個條件達成時顯示：
 
-- 現在資料夾中包含一個 `spago.dhall` 檔案
+- The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
 
 ### 選項
