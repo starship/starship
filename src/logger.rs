@@ -1,17 +1,19 @@
 use ansi_term::Color;
 use log::{Level, LevelFilter, Metadata, Record};
+use once_cell::sync::OnceCell;
 use std::{
     collections::HashSet,
     env,
     fs::{self, File, OpenOptions},
     io::Write,
     path::PathBuf,
-    sync::{Arc, Mutex},
+    sync::Mutex,
 };
 
 pub struct StarshipLogger {
-    log_file: Arc<Mutex<File>>,
-    log_file_content: Arc<HashSet<String>>,
+    log_file: OnceCell<Mutex<File>>,
+    log_file_path: PathBuf,
+    log_file_content: HashSet<String>,
     log_level: Level,
 }
 
@@ -33,25 +35,13 @@ impl StarshipLogger {
         ));
 
         Self {
-            log_file_content: Arc::new(
-                fs::read_to_string(&session_log_file)
-                    .unwrap_or_default()
-                    .lines()
-                    .map(|line| line.to_string())
-                    .collect(),
-            ),
-            log_file: Arc::new(Mutex::new(
-                OpenOptions::new()
-                    .create(true)
-                    .append(true)
-                    .open(session_log_file.clone())
-                    .unwrap_or_else(|err| {
-                        panic!(
-                            "Unable to open session log file {:?}: {:?}!",
-                            session_log_file, err
-                        )
-                    }),
-            )),
+            log_file_content: fs::read_to_string(&session_log_file)
+                .unwrap_or_default()
+                .lines()
+                .map(|line| line.to_string())
+                .collect(),
+            log_file: OnceCell::new(),
+            log_file_path: session_log_file,
             log_level: env::var("STARSHIP_LOG")
                 .map(|level| match level.to_lowercase().as_str() {
                     "trace" => Level::Trace,
@@ -81,6 +71,21 @@ impl log::Log for StarshipLogger {
 
         if record.metadata().level() <= Level::Warn {
             self.log_file
+                .get_or_try_init(|| {
+                    let m = Mutex::new(
+                        OpenOptions::new()
+                            .create(true)
+                            .append(true)
+                            .open(&self.log_file_path)?,
+                    );
+                    Ok(m)
+                })
+                .unwrap_or_else(|err: std::io::Error| {
+                    panic!(
+                        "Unable to open session log file {:?}: {:?}!",
+                        self.log_file_path, err
+                    )
+                })
                 .lock()
                 .map(|mut file| writeln!(file, "{}", to_print))
                 .expect("Log file writer mutex was poisoned!")
@@ -104,11 +109,12 @@ impl log::Log for StarshipLogger {
     }
 
     fn flush(&self) {
-        self.log_file
-            .lock()
-            .map(|mut writer| writer.flush())
-            .expect("Log file writer mutex was poisoned!")
-            .expect("Unable to flush the log file!");
+        if let Some(m) = self.log_file.get() {
+            m.lock()
+                .map(|mut writer| writer.flush())
+                .expect("Log file writer mutex was poisoned!")
+                .expect("Unable to flush the log file!");
+        }
     }
 }
 
