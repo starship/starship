@@ -20,7 +20,10 @@ pub fn create() {
 
     let link = make_github_issue_link(crate_version!(), environment);
 
-    if open::that(&link).is_ok() {
+    if open::that(&link)
+        .map(|status| status.success())
+        .unwrap_or(false)
+    {
         print!("Take a look at your browser. A GitHub issue has been populated with your configuration")
     } else {
         let link = shorten_link(&link).unwrap_or(link);
