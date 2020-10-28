@@ -19,19 +19,19 @@ pub fn create() {
     };
 
     let link = make_github_issue_link(crate_version!(), environment);
+    let short_link = shorten_link(&link);
 
     if open::that(&link)
         .map(|status| status.success())
         .unwrap_or(false)
     {
-        print!("Take a look at your browser. A GitHub issue has been populated with your configuration")
+        println!("Take a look at your browser. A GitHub issue has been populated with your configuration.");
+        println!("If your browser has failed to open, please click this link:\n");
     } else {
-        let link = shorten_link(&link).unwrap_or(link);
-        println!(
-            "Click this link to create a GitHub issue populated with your configuration:\n\n  {}",
-            link
-        );
+        println!("Click this link to create a GitHub issue populated with your configuration:\n");
     }
+
+    println!(" {}", short_link.unwrap_or(link));
 }
 
 #[cfg(feature = "http")]
