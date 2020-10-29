@@ -1663,7 +1663,7 @@ The `nodejs` module shows the currently installed version of NodeJS. 這個模�
 format = "via [🤖 $version](bold green) "
 ```
 
-## Package Version
+## 套件版本
 
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
