@@ -44,6 +44,7 @@ jobs:
           - x86_64-unknown-linux-musl
           - x86_64-apple-darwin
           - x86_64-pc-windows-msvc
+          - i686-unknown-linux-musl
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
@@ -57,6 +58,9 @@ jobs:
           - target: x86_64-pc-windows-msvc
             os: windows-latest
             name: starship-x86_64-pc-windows-msvc.zip
+          - target: i686-unknown-linux-musl
+            os: ubuntu-latest
+            name: starship-i686-unknown-linux-musl.tar.gz
     runs-on: ${{ matrix.os }}
     steps:
       - name: Setup | Checkout
@@ -80,15 +84,15 @@ jobs:
           target: ${{ matrix.target }}
 
       - name: Setup | musl tools
-        if: matrix.target == 'x86_64-unknown-linux-musl'
+        if: matrix.target == 'x86_64-unknown-linux-musl' || matrix.target == 'i686-unknown-linux-musl'
         run: sudo apt install -y musl-tools
 
       - name: Build | Build
-        if: matrix.target != 'x86_64-unknown-linux-musl'
+        if: matrix.target != 'x86_64-unknown-linux-musl'|| matrix.target != 'i686-unknown-linux-musl'
         run: cargo build --release --target ${{ matrix.target }}
 
       - name: Build | Build (musl)
-        if: matrix.target == 'x86_64-unknown-linux-musl'
+        if: matrix.target == 'x86_64-unknown-linux-musl' || matrix.target == 'i686-unknown-linux-musl'
         run: cargo build --release --features tls-vendored --target ${{ matrix.target }}
 
       - name: Post Setup | Prepare artifacts [Windows]
