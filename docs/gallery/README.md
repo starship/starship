@@ -1,19 +1,8 @@
 # Gallery
 
 Here is a collection of community-submitted configration examples for Starship.
+You can not only see these examples, but also download settings for these examples here.
 
-## Prerequisites
-
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
-
-## Install instructions
-
-1. Use the download link provided for each prompt section and save the `starship.toml` to your system
-2. Place the downloaded `starship.toml` in your `~/.config/` or `$XDG_CONFIG_HOME` directory or use the environment variable `STARSHIP_CONFIG` (see at the top of the [Configuration section ▶](/config/))
-3. If you would like to adjust the configuration to your needs, open the file in your editor (for more details see the [Configuration section of the docs ▶](/config/))
-
-## Gallery of Prompts
-
-<!-- TODO: Vue のコンポーネントで自動生成したい -->
+If you wanna use themes below, please see the [Guide - Installation](http://localhost:8080/guide/#%F0%9F%9A%80-installation) and [Configuration](/config/).
 
 <Gallery/>
