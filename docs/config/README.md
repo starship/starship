@@ -759,7 +759,7 @@ style = "red bold"
 ```toml
 # ~/.config/starship.toml
 
-[memory_usage]
+[disk_used]
 disabled = false
 show_percentage = true
 current_threshold = 0

@@ -110,29 +110,9 @@ impl fmt::Display for DiskNotFoundError {
 impl Error for DiskNotFoundError {}
 
 #[cfg(target_os = "windows")]
-#[derive(Debug)]
-struct WinAPIVolumeError {
-    desc: String,
-}
-#[cfg(target_os = "windows")]
-impl WinAPIVolumeError {
-    fn new(desc: String) -> Self {
-        WinAPIVolumeError { desc }
-    }
-}
-#[cfg(target_os = "windows")]
-impl fmt::Display for WinAPIVolumeError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.desc)
-    }
-}
-#[cfg(target_os = "windows")]
-impl Error for WinAPIVolumeError {}
-
-#[cfg(target_os = "windows")]
 fn get_drive_from_path<'a>(path: &PathBuf, disks: &'a [Disk]) -> Result<&'a Disk, Box<dyn Error>> {
-    use std::{ffi::OsString, iter::once, os::windows::prelude::*};
-    use winapi::um::{errhandlingapi::GetLastError, fileapi::GetVolumePathNameW};
+    use std::{ffi::OsString, io::Error, iter::once, os::windows::prelude::*};
+    use winapi::um::fileapi::GetVolumePathNameW;
 
     let path: Vec<u16> = path.as_os_str().encode_wide().chain(once(0)).collect();
     let mut volume_path_name: Vec<u16> = vec![0; 260];
@@ -165,11 +145,7 @@ fn get_drive_from_path<'a>(path: &PathBuf, disks: &'a [Disk]) -> Result<&'a Disk
             volume_path_name,
         ))))
     } else {
-        let last_error = unsafe { GetLastError() };
-        Err(Box::new(WinAPIVolumeError::new(format!(
-            "Recived {:?} from GetVolumePathNameW with GetLastError {}",
-            ret, last_error
-        ))))
+        Err(Box::new(Error::last_os_error()))
     }
 }
 
@@ -239,7 +215,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         false,
                         percentage_char,
                     ) {
-                        Ok(segments) => current_storage = Some(segments),
+                        Ok(segments) => {
+                            if !segments.is_empty() {
+                                current_storage = Some(segments);
+                            }
+                        }
                         Err(e) => {
                             log::warn!("Couldn't format disk from current path: {}", e);
                         }
@@ -286,6 +266,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     }
 
+    // If there is no storage data return None
+    if current_storage.is_none() && other_storage.is_none() {
+        return None;
+    }
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|mvar, _| match mvar {
