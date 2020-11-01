@@ -1,39 +1,29 @@
 <template>
-  <div>
-    <div v-for="prompt in prompts" :key="prompt.githubId">
-      <h3><a :href="'https://github.com/' + prompt.githubId">{{ prompt.displayName }}</a></h3>
-      <div v-for="preset in prompt.presets" :key="preset.id">
-        <h4>{{preset.name}}</h4>
-        <img :src="'/gallery/' + prompt.githubId + '/' + preset.id + '/prompt.png'" :alt="preset.name + 'Image'"/>
-        <p v-if="preset.info.length != 0">
-          {{preset.info}}
-        </p>
-        <p v-if="preset.external">
-          Download the <a :href="preset.external" download>starship.toml</a> (please <em>right click</em> on the link and use <em>"Save Link As .../Download Linked File As ..."</em>).
-        </p>
-        <p v-else>
-          Download the <a :href="'/gallery/' + prompt.githubId +  '/' + preset.id + '/starship.toml'">starship.toml</a>.
-        </p>
-      </div>
-      <div v-if="prompt.presets.length == 0">
-        <img :src="'/gallery/' + prompt.githubId + '/prompt.png'" alt="Prompt Image"/>
+<div>
+    <div v-for="prompt in prompts" :key="prompt.id">
+        <h2>{{ prompt.name  }}</h2>
+        <img :src="'/gallery/' + prompt.id + '.png'" :alt="prompt.name + ' Image'" @mouseover="hover = true" @mouseleave="hover = false" :class="{active: hover}" />
+        <p>{{ prompt.description }}</p>
         <p>
-          Download the <a :href="'/gallery/' + prompt.githubId + '/starship.toml'">starship.toml</a>.
+            Created by <a :href="'https://github.com/' + prompt.githubId">{{ prompt.displayCreatorName }}</a>.
+            Download the <a :href="prompt.link_raw" download>starship.toml</a> or view it on <a :href="prompt.link">GitHub</a>.
         </p>
-      </div>
+        <!-- (please <em>right click</em> on the link and use <em>"Save Link As .../Download Linked File As ..."</em>). -->
     </div>
-  </div>
+</div>
 </template>
 
 <script>
-  import prompts from "../components/prompts"
+// import HoverImage from "../components/HoverImage";
+import prompts from "../public/gallery.json";
 
-  export default {
+export default {
     name: "Gallery",
     data() {
-      return {
-        prompts: prompts,
-      }
+        return {
+            prompts: prompts,
+            hover: false,
+        }
     }
-  }
+}
 </script>

@@ -1,0 +1,47 @@
+[
+  {
+    "id": "nf-symbols",
+    "name": "Nerd Font Symbols",
+    "link": "https://gist.github.com/nukopy/fe23c9517032963a4ad863356572b4dc",
+    "link_raw": "https://gist.githubusercontent.com/nukopy/fe23c9517032963a4ad863356572b4dc/raw/7c200905e3a9a7b3ba91cd2d832a6cfa112f2b1d/starship.toml",
+    "description": "Starship default config, extracted from the source",
+    "githubId": "starship",
+    "displayCreatorName": "Starship"
+  },
+  {
+    "id": "powerline",
+    "name": "Powerline style",
+    "link": "https://gist.github.com/nukopy/539365070767ba3bbd3d252f5e579c23",
+    "link_raw": "https://gist.githubusercontent.com/nukopy/539365070767ba3bbd3d252f5e579c23/raw/86888f6f9b3451189266d91a57ab99a07ef9f5cb/starship.toml",
+    "description": "Power line theme",
+    "githubId": "starship",
+    "displayCreatorName": "Starship"
+  },
+  {
+    "id": "dark-pointed",
+    "name": "Dark/Pointed",
+    "link": "https://github.com/mickimnet/myth-prompt-themes/blob/main/dark/pointed/starship/starship.toml",
+    "link_raw": "https://raw.githubusercontent.com/mickimnet/myth-prompt-themes/main/dark/pointed/starship/starship.toml",
+    "description": "The symbols for the modules are all based on the original logos, if available in Nerd Font. Additionally, the color of the modules are based on the colors of the services/languages/tools.",
+    "githubId": "mickimnet",
+    "displayCreatorName": "M.y.t.h."
+  },
+  {
+    "id": "dark-slanted",
+    "name": "Dark/Slanted",
+    "link": "https://github.com/mickimnet/myth-prompt-themes/blob/main/dark/slanted/starship/starship.toml",
+    "link_raw": "https://raw.githubusercontent.com/mickimnet/myth-prompt-themes/main/dark/slanted/starship/starship.toml",
+    "description": "The symbols for the modules are all based on the original logos, if available in Nerd Font. Additionally, the color of the modules are based on the colors of the services/languages/tools.",
+    "githubId": "mickimnet",
+    "displayCreatorName": "M.y.t.h."
+  },
+  {
+    "id": "simple",
+    "name": "Simple",
+    "link": "https://gist.github.com/nukopy/f2f2c896aa4f91dc85e3082b3936e974",
+    "link_raw": "https://gist.githubusercontent.com/nukopy/f2f2c896aa4f91dc85e3082b3936e974/raw/61925bf85d56aed29cca4744e9ca17619ff2bbd4/starship.toml",
+    "description": "Simple theme with Starship",
+    "githubId": "nukopy",
+    "displayCreatorName": "nukopy"
+  }
+]
