@@ -86,15 +86,16 @@ checksum = "3441f0f7b02788e948e47f457ca01f1d7e6d92c693bc132c22b087d3141c03ff"
 
 [[package]]
 name = "battery"
-version = "0.7.7"
+version = "0.7.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e3ba81abd3ec70c6ef1d7a85c85cfcbab52b6b9536ea97e5ab7948d971603d2b"
+checksum = "b4b624268937c0e0a3edb7c27843f9e547c320d730c610d3b8e6e8e95b2026e4"
 dependencies = [
  "cfg-if 1.0.0",
  "core-foundation",
  "lazycell",
  "libc",
  "mach",
+ "nix",
  "num-traits",
  "uom",
  "winapi",
