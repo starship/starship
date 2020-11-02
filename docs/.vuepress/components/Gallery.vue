@@ -9,7 +9,7 @@
 
 <script>
 import HoverImage from "../components/HoverImage";
-import prompts from "../public/gallery.json";
+import prompts from "../gallery.json";
 
 export default {
     name: "Gallery",
