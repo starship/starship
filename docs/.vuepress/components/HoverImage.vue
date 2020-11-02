@@ -73,7 +73,7 @@ export default {
 }
 
 .prompt:hover img {
-    filter: brightness(60%);
+    filter: brightness(50%);
 }
 
 /* buttons */ 
@@ -88,7 +88,7 @@ export default {
     color: white;
     font-size: 1rem;
     font-weight: 500;
-    margin-left: 0.5rem;
+    margin-left: 1rem;
 }
 
 .buttons a:hover {
