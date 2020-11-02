@@ -4,9 +4,9 @@
         <img class="image" :src="'/gallery/' + prompt.id + '.png'" :alt="prompt.name + ' Image'" />
         <transition name="buttons">
             <div class="buttons" v-if="hover">
-                <a :href="prompt.link_raw" class="action-button gallery-button" download>
+                <span v-on:click="downloadText(prompt.link_raw, $event)" class="action-button gallery-button">
                     Download the starship.toml
-                </a>
+                </span>
                 <a :href="prompt.link" target="_black" class="action-button gallery-button">
                     View on GitHub
                 </a>
@@ -23,9 +23,43 @@ export default {
         return {
             hover: false,
         }
+    },
+    methods: {
+        downloadText: function(url, event) {
+            fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "text/plain",
+                },
+            })
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error(`${res.status} ${res.statusText}`);
+                }
+                return res.blob();
+            })
+            .then((blob) => {
+                // create <a> element for blob
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                document.body.appendChild(a);
+                a.download = "starship.toml"
+                a.href = url;
+
+                // simulate clicking download button
+                a.click();
+                a.remove();
+                return true;
+            })
+            .then((isDownloadDone) => {
+                URL.revokeObjectURL(url);
+            })
+            .catch((reason) => {
+                console.log(reason);
+            });
+        }
     }
 }
-
 </script>
 
 <style scoped>
@@ -50,7 +84,7 @@ export default {
     opacity: 0.9;
 }
 
-.buttons a {
+.buttons a, span {
     color: white;
     font-size: 1rem;
     font-weight: 500;
@@ -59,7 +93,6 @@ export default {
 
 .buttons a:hover {
     text-decoration: none;
-    position: relative;
 }
 
 .gallery-button {
@@ -85,7 +118,7 @@ export default {
 }
 
 @media (max-width: 480px) {
-    .buttons a {
+    .buttons a, span {
         display: block;
         margin-top: 0.5rem;
     }
