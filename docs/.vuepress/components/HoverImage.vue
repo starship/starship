@@ -8,7 +8,7 @@
                     Download the starship.toml
                 </span>
                 <a :href="prompt.link" target="_black" class="action-button gallery-button">
-                    View on GitHub
+                    View the starship.toml on GitHub
                 </a>
             </div>
         </transition>
@@ -117,7 +117,7 @@ export default {
     opacity: 0;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     .buttons a, span {
         display: block;
         margin-top: 0.5rem;
