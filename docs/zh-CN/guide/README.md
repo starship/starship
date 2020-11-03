@@ -199,7 +199,7 @@
 
    #### PowerShell
 
-   将以下内容添加到`~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (或`~/.config/powershell/Microsoft.PowerShell_profile.ps1`，对于 *nix 系统)：
+    Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
