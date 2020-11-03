@@ -497,8 +497,12 @@ running `eval $(starship init $0)`, and then proceed as normal.
 | `show_notifications`| `false`                       | Show desktop notifications when command completes.         |
 | `min_time_to_notify`| `45_000`                      | Shortest duration for notification (in milliseconds).      |
 
+::: tip
+
 Showing desktop notifications requires starship to be built with `rust-notify` support. You check if your starship
-supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60_000`.
+supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
+
+:::
 
 ### Variables
 
