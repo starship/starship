@@ -466,13 +466,21 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 
 ### Опции
 
-| Option              | По умолчанию                  | Описание                                                             |
-| ------------------- | ----------------------------- | -------------------------------------------------------------------- |
-| `min_time`          | `2_000`                       | Кратчайшая продолжительность для показа времени (в миллисекундах).   |
-| `show_milliseconds` | `false`                       | Показывать миллисекунды в дополнение к секундам в продолжительности. |
-| `format`            | `"took [$duration]($style) "` | The format for the module.                                           |
-| `style`             | `"bold yellow"`               | Стиль модуля.                                                        |
-| `disabled`          | `false`                       | Отключает модуль `cmd_duration`.                                     |
+| Option               | По умолчанию                  | Описание                                                             |
+| -------------------- | ----------------------------- | -------------------------------------------------------------------- |
+| `min_time`           | `2_000`                       | Кратчайшая продолжительность для показа времени (в миллисекундах).   |
+| `show_milliseconds`  | `false`                       | Показывать миллисекунды в дополнение к секундам в продолжительности. |
+| `format`             | `"took [$duration]($style) "` | The format for the module.                                           |
+| `style`              | `"bold yellow"`               | Стиль модуля.                                                        |
+| `disabled`           | `false`                       | Отключает модуль `cmd_duration`.                                     |
+| `show_notifications` | `false`                       | Show desktop notifications when command completes.                   |
+| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).                |
+
+::: tip
+
+Showing desktop notifications requires starship to be built with `rust-notify` support. You check if your starship supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
+
+:::
 
 ### Variables
 
@@ -495,11 +503,11 @@ format = "underwent [$duration](bold yellow)"
 
 ## Конда
 
-Модуль `conda` показывает текущее окружение conda, если `$CONDA_DEFAULT_ENV` присвоено значение.
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
-Это не подавляет модификатор командной строки самой conda. Возможно, вы захотите запустить `conda config --set changeps1 False`.
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
@@ -535,7 +543,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-Модуль `crystal` показывает установленную версию Crystal. Модуль будет показан, если любое из следующих условий соблюдено:
+The `crystal` module shows the currently installed version of Crystal. The module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `shard.yml`
 - Текущий каталог содержит файл `.cr`
@@ -570,7 +578,7 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-The `dart` module shows the currently installed version of Dart. Модуль будет показан, если любое из следующих условий соблюдено:
+The `dart` module shows the currently installed version of Dart. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.dart` extension
 - The current directory contains a `.dart_tool` directory
@@ -606,11 +614,11 @@ format = "via [🔰 $version](bold red) "
 
 ## Каталог
 
-Модуль `directory` показывает путь к вашей текущей директории, усеченной до трех родительских папок. Ваш каталог также будет отсечен до корня git репозитория, в котором вы находитесь.
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
-При использовании стиля оболочки fish, вместо скрытия усеченного каталога, вы увидите укороченное имя каталога, зависимое от числа символов вы установите для этой опции.
+When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-Например, возьмем `~/Dev/Nix/nixpkgs/pkgs` где `nixpkgs` является корневым репозиторием, и в опции установлено `1`. Вы увидите `~/D/N/nixpkgs/pkgs`, а до этого было бы `nixpkgs/pkgs`.
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
 ### Опции
 
@@ -626,7 +634,7 @@ format = "via [🔰 $version](bold red) "
 | `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                            |
 
 <details>
-<summary>Этот модуль имеет несколько расширенных опций конфигурации, которые контролируют отображение каталога.</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | Advanced Option             | По умолчанию | Описание                                                                          |
 | --------------------------- | ------------ | --------------------------------------------------------------------------------- |
@@ -642,7 +650,7 @@ format = "via [🔰 $version](bold red) "
 "src/com/long/java/path" = "mypath"
 ```
 
-`fish_style_pwd_dir_length` взаимодействует со стандартными параметрами усечения, которые могут сначала показаться странными: если он не равен нулю, элементы пути, который обычно усекается, вместо этого отображаются с указанным количеством символов. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -667,7 +675,7 @@ truncation_symbol = "…/"
 
 ## Контекст Docker
 
-Модуль `docker_context` показывает текущий активный [контекст Docker](https://docs.docker.com/engine/context/working-with-contexts/), если он не установлен как `default`.
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
 
 ### Опции
 
@@ -700,7 +708,7 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-Модуль `dotnet` показывает соответствующую версию .NET Core SDK для текущего каталога. Если SDK был закреплен в текущей директории, будет показана закрепленная версия. В противном случае модуль отображает последнюю установленную версию SDK.
+The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
 
 This module will only be shown in your prompt when one or more of the following files are present in the current directory:
 
@@ -716,7 +724,7 @@ This module will only be shown in your prompt when one or more of the following 
 
 You'll also need the .NET Core SDK installed in order to use it correctly.
 
-Внутренне этот модуль использует свой собственный механизм определения версий. Обычно он в два раза быстрее, чем `dotnet --version`, но он может показывать неправильную версию, если ваш .NET проект имеет необычный формат каталога. Если точность важнее, чем скорость, вы можете отключить механизм опцией `heuristic = false` в настройках модуля.
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
 The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) when there is a csproj file in the current directory.
 
@@ -754,7 +762,7 @@ heuristic = false
 
 ## Elixir
 
-Модуль `elixir` показывает установленную версию Elixir и Erlang/OTP. Модуль будет показан, если любое из следующих условий соблюдено:
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. The module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `mix.exs`.
 
@@ -789,7 +797,7 @@ symbol = "🔮 "
 
 ## Elm
 
-Модуль `elm` показывает установленную версию Elm. Модуль будет показан, если любое из следующих условий соблюдено:
+The `elm` module shows the currently installed version of Elm. The module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `elm.json`
 - Текущий каталог содержит файл `elm-package.json`
@@ -827,7 +835,7 @@ format = "via [ $version](cyan bold) "
 
 ## Переменная Окружения
 
-Модуль `env_var` отображает текущее значение выбранной переменной окружения. Модуль будет показан только в том случае, если любое из следующих условий соблюдено:
+The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
 - Опция `variable` соответствует существующей переменной среды
 - Опция `variable` не определена, но определена опция `default`
@@ -864,7 +872,7 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. Модуль будет показан, если любое из следующих условий соблюдено:
+The `erlang` module shows the currently installed version of Erlang/OTP. The module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `rebar.config`.
 - Текущий каталог содержит файл `erlang.mk`.
@@ -959,7 +967,7 @@ asia-northeast1 = "an1"
 
 ## Ветвь Git
 
-Модуль `git_branch` показывает активную ветку репозитория в вашем текущей директории.
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### Опции
 
@@ -1030,7 +1038,7 @@ tag_symbol = "🔖 "
 
 ## Состояние Git
 
-Модуль `git_state` будет отображаться в директориях, являющимися частью репозитория git, и там, где выполняется операция, такие как: _REBASING_, _BISECTING_, и т. д. Если есть информация о прогрессе (например, REBASING 3/10), эта информация также будет показана.
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
 ### Опции
 
@@ -1070,7 +1078,7 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ## Статус Git
 
-Модуль `git_status` отображает символы, представляющие состояние репозитория в вашей текущей директории.
+The `git_status` module shows symbols representing the state of the repo in your current directory.
 
 ### Опции
 
@@ -1140,7 +1148,7 @@ renamed = "👅"
 deleted = "🗑"
 ```
 
-Показывать счетчик впереди/позади для отслеживаемой ветки
+Show ahead/behind count of the branch being tracked
 
 ```toml
 # ~/.config/starship.toml
@@ -1153,7 +1161,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-Модуль `golang` показывает установленную версию Golang. Модуль будет показан, если любое из следующих условий соблюдено:
+The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `go.mod`
 - Текущий каталог содержит файл `go.sum`
@@ -1194,7 +1202,7 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of Helm. Модуль будет показан, если любое из следующих условий соблюдено:
+The `helm` module shows the currently installed version of Helm. The module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `helmfile.yaml`
 - The current directory contains a `Chart.yaml` file
@@ -1229,7 +1237,7 @@ format = "via [⎈ $version](bold white) "
 
 ## Имя хоста
 
-Модуль `hostname` отображает имя системы (хоста).
+The `hostname` module shows the system hostname.
 
 ### Опции
 
@@ -1264,7 +1272,7 @@ disabled = false
 
 ## Java
 
-Модуль `java` показывает установленную версию Java. Модуль будет показан, если любое из следующих условий соблюдено:
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
@@ -1299,7 +1307,7 @@ symbol = "🌟 "
 
 ## Задачи
 
-Модуль `jobs` отображает текущее количество запущенных работ. Модуль будет показан только если работы выполняются в фоне. Модуль покажет количество запущенных задач при наличии более чем 1 задачи, или больше, чем значение конфигурации `threshold`, если оно существует.
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
 ### Опции
 
@@ -1333,7 +1341,7 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. Модуль будет показан, если любое из следующих условий соблюдено:
+The `julia` module shows the currently installed version of Julia. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Project.toml` file
 - The current directory contains a `Manifest.toml` file
@@ -1373,7 +1381,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: tip
 
-По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1412,7 +1420,7 @@ disabled = false
 
 ## Перевод Строки
 
-Модуль `line_break` разделяет командную строку на две строки.
+The `line_break` module separates the prompt into two lines.
 
 ### Опции
 
@@ -1431,7 +1439,7 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of Lua. Модуль будет показан, если любое из следующих условий соблюдено:
+The `lua` module shows the currently installed version of Lua. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.lua-version` file
 - The current directory contains a `lua` directory
@@ -1474,7 +1482,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1551,7 +1559,7 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of Nim. Модуль будет показан, если любое из следующих условий соблюдено:
+The `nim` module shows the currently installed version of Nim. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
@@ -1627,7 +1635,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. Модуль будет показан, если любое из следующих условий соблюдено:
+The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
@@ -1710,7 +1718,7 @@ format = "via [🎁 $version](208 bold) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of OCaml. Модуль будет показан, если любое из следующих условий соблюдено:
+The `ocaml` module shows the currently installed version of OCaml. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.opam` extension or `_opam` directory
 - The current directory contains a `esy.lock` directory
@@ -1784,7 +1792,7 @@ symbol = "☁️ "
 
 ## Perl
 
-The `perl` module shows the currently installed version of Perl. Модуль будет показан, если любое из следующих условий соблюдено:
+The `perl` module shows the currently installed version of Perl. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Makefile.PL` or `Build.PL` file
 - The current directory contains a `cpanfile` or `cpanfile.snapshot` file
@@ -1820,7 +1828,7 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. Модуль будет показан, если любое из следующих условий соблюдено:
+The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
@@ -1860,7 +1868,7 @@ The `python` module shows the currently installed version of Python and the curr
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
-Модуль будет показан, если любое из следующих условий соблюдено:
+The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.python-version` file
 - The current directory contains a `requirements.txt` file
@@ -1919,7 +1927,7 @@ python_binary = "python3"
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. Модуль будет показан, если любое из следующих условий соблюдено:
+The `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
@@ -1955,7 +1963,7 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. Модуль будет показан, если любое из следующих условий соблюдено:
+The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
@@ -2057,7 +2065,7 @@ format = '[📦 \[$env\]]($style) '
 
 ## Swift
 
-The `swift` module shows the currently installed version of Swift. Модуль будет показан, если любое из следующих условий соблюдено:
+The `swift` module shows the currently installed version of Swift. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2096,7 +2104,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации. :::
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. :::
 
 ### Опции
 
@@ -2133,7 +2141,7 @@ disabled = false
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). Модуль будет показан, если любое из следующих условий соблюдено:
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` extension
@@ -2184,7 +2192,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2226,7 +2234,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. Модуль будет показан, если любое из следующих условий соблюдено:
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
 - The current user is root
 - The current user isn't the same as the one that is logged in
@@ -2265,7 +2273,7 @@ show_always = true
 
 ## Zig
 
-The `zig` module shows the currently installed version of Zig. Модуль будет показан, если любое из следующих условий соблюдено:
+The `zig` module shows the currently installed version of Zig. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.zig` file
 
@@ -2400,7 +2408,7 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of PureScript version. Модуль будет показан, если любое из следующих условий соблюдено:
+The `purescript` module shows the currently installed version of PureScript version. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
