@@ -466,13 +466,21 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 
 ### 選項
 
-| Option              | 預設                            | 說明                                                    |
-| ------------------- | ----------------------------- | ----------------------------------------------------- |
-| `min_time`          | `2_000`                       | Shortest duration to show time for (in milliseconds). |
-| `show_milliseconds` | `false`                       | 顯示時間除了以秒為單位外，亦以毫秒顯示                                   |
-| `format`            | `"took [$duration]($style) "` | The format for the module.                            |
-| `style`             | `"bold yellow"`               | 這個模組的風格。                                              |
-| `disabled`          | `false`                       | 停用 `cmd_duration` 模組。                                 |
+| Option               | 預設                            | 說明                                                    |
+| -------------------- | ----------------------------- | ----------------------------------------------------- |
+| `min_time`           | `2_000`                       | Shortest duration to show time for (in milliseconds). |
+| `show_milliseconds`  | `false`                       | 顯示時間除了以秒為單位外，亦以毫秒顯示                                   |
+| `format`             | `"took [$duration]($style) "` | The format for the module.                            |
+| `style`              | `"bold yellow"`               | 這個模組的風格。                                              |
+| `disabled`           | `false`                       | 停用 `cmd_duration` 模組。                                 |
+| `show_notifications` | `false`                       | Show desktop notifications when command completes.    |
+| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds). |
+
+::: tip
+
+Showing desktop notifications requires starship to be built with `rust-notify` support. You check if your starship supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
+
+:::
 
 ### Variables
 
@@ -495,7 +503,7 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-如果有設定 `$CONDA_DEFAULT_ENV` 時，`conda` 模組顯示現在 conda 的環境。
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
@@ -535,7 +543,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-`crystal` 模組顯示現在所安裝的Crystal版本 這個模組在下列其中一個條件達成時顯示：
+The `crystal` module shows the currently installed version of Crystal. The module will be shown if any of the following conditions are met:
 
 - 現在資料夾中含有一個 `shard.yml` 檔案
 - 現在資料夾中含有一個`.cr`檔案
@@ -570,7 +578,7 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-The `dart` module shows the currently installed version of Dart. 這個模組在下列其中一個條件達成時顯示：
+The `dart` module shows the currently installed version of Dart. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.dart` extension
 - The current directory contains a `.dart_tool` directory
@@ -606,11 +614,11 @@ format = "via [🔰 $version](bold red) "
 
 ## 資料夾
 
-`directory` 模組顯示到現在資料夾的路徑，並裁減到前三層資料夾。 你的資料夾也會被裁減到你所在的 git 儲存庫的根目錄。
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
-如果正在使用 fish 風格的 pwd 選項，將不會隱藏被裁減的資料夾，而是會根據你在選項中設定的數字看到每一層資料夾的縮寫。
+When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-例如，給定一個右列的路徑 `~/Dev/Nix/nixpkgs/pkgs` 其中 `nixpkgs` 是儲存庫的根目錄，而且該選項被設定為 `1`。 你會看到 `~/D/N/nixpkgs/pkgs`，而在這個設定之前則是 `nixpkgs/pkgs`。
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
 ### 選項
 
@@ -626,7 +634,7 @@ format = "via [🔰 $version](bold red) "
 | `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"     |
 
 <details>
-<summary>這個模組有些進階設定選項可以控制顯示資料夾。</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | Advanced Option             | 預設     | 說明                                               |
 | --------------------------- | ------ | ------------------------------------------------ |
@@ -700,7 +708,7 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-`dotnet` 模組顯示現在資料夾使用的 .NET Core SDK 的版本。 如果這個資料夾已經選定一個 SDK，則顯示這個 SDK 的版本。 如果沒有的話，則顯示最新安裝的 SDK 版本。
+The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
 
 This module will only be shown in your prompt when one or more of the following files are present in the current directory:
 
@@ -716,7 +724,7 @@ This module will only be shown in your prompt when one or more of the following 
 
 You'll also need the .NET Core SDK installed in order to use it correctly.
 
-這個模組內部是使用它自己的機制來偵測版本。 一般來說這個模組有 `dotnet --version` 的兩倍快，但是它可能會在你的 .NET 專案有不尋常的資料夾結構時顯示不正確的版本。 如果精確度比速度更重要的話，你可以藉由設定模組中的 `heuristic = false` 選項來停用這個功能。
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
 The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) when there is a csproj file in the current directory.
 
@@ -754,7 +762,7 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. 這個模組在下列其中一個條件達成時顯示：
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. The module will be shown if any of the following conditions are met:
 
 - 現在資料夾中包含一個 `mix.exs` 檔案.
 
@@ -789,7 +797,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. 這個模組在下列其中一個條件達成時顯示：
+The `elm` module shows the currently installed version of Elm. The module will be shown if any of the following conditions are met:
 
 - 現在資料夾中包含一個 `elm.json` 檔案
 - 現在資料夾中包含一個 `elm-package.json` 檔案
@@ -827,7 +835,7 @@ format = "via [ $version](cyan bold) "
 
 ## 環境變數
 
-`env_var`模組顯示一個選擇的環境變數的現在數值。 這個模組只在下列條件其中之一達到時顯示：
+The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
 - `variable` 設定選項符合一個存在的環境變數。
 - 沒有設定 `variable` 選項，但是有設定 `default` 選項。
@@ -864,7 +872,7 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. 這個模組在下列其中一個條件達成時顯示：
+The `erlang` module shows the currently installed version of Erlang/OTP. The module will be shown if any of the following conditions are met:
 
 - 現在資料夾中包含一個 `rebar.config` 檔案.
 - 現在資料夾中包含一個 `erlang.mk` 檔案.
@@ -959,7 +967,7 @@ asia-northeast1 = "an1"
 
 ## Git 分支
 
-`git_branch` 模組顯示現在的資料夾中使用中的儲存庫的分支。
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### 選項
 
@@ -1030,7 +1038,7 @@ tag_symbol = "🔖 "
 
 ## Git State
 
-`git_state` 模組會顯示在 git 儲存庫中的資料夾內，以及會在有作業正在進行時顯示，像是：_REBASING_、_BISECTING_ 等等。 如果有進展的資訊 (像是 REBASING 3/10)，也會一併顯示出來。
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
 ### 選項
 
@@ -1070,7 +1078,7 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ## Git Status
 
-`git_status` 模組顯示用來表示現在資料夾之中儲存庫狀態的符號。
+The `git_status` module shows symbols representing the state of the repo in your current directory.
 
 ### 選項
 
@@ -1153,7 +1161,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-`golang` 模組顯示現在安裝的 Golang 版本。 這個模組在下列其中一個條件達成時顯示：
+The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
 
 - 現在資料夾中含有一個 `go.mod` 檔案
 - 現在資料夾中含有一個 `go.sum` 檔案
@@ -1194,7 +1202,7 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of Helm. 這個模組在下列其中一個條件達成時顯示：
+The `helm` module shows the currently installed version of Helm. The module will be shown if any of the following conditions are met:
 
 - 現在資料夾中包含一個 `helmfile.yaml` 檔案
 - The current directory contains a `Chart.yaml` file
@@ -1229,7 +1237,7 @@ format = "via [⎈ $version](bold white) "
 
 ## 主機名稱
 
-`hostname` 模組顯示系統的主機名稱。
+The `hostname` module shows the system hostname.
 
 ### 選項
 
@@ -1264,7 +1272,7 @@ disabled = false
 
 ## Java
 
-`java` 模組顯示現在安裝的 Java 版本。 這個模組在下列其中一個條件達成時顯示：
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
@@ -1299,7 +1307,7 @@ symbol = "🌟 "
 
 ## 工作
 
-`jobs` 模組顯示現在正在執行中的工作。 這個模組只會在有背景工作正在執行時顯示。 這個模組會在工作數量超過一個，或者有設定 `threshold` 時且數量超過設定值時，顯示工作的數量。
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
 ### 選項
 
@@ -1333,7 +1341,7 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. 這個模組在下列其中一個條件達成時顯示：
+The `julia` module shows the currently installed version of Julia. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Project.toml` file
 - The current directory contains a `Manifest.toml` file
@@ -1373,7 +1381,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1412,7 +1420,7 @@ disabled = false
 
 ## 換行
 
-`line_break` 模組將提示字元分成兩行。
+The `line_break` module separates the prompt into two lines.
 
 ### 選項
 
@@ -1431,7 +1439,7 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of Lua. 這個模組在下列其中一個條件達成時顯示：
+The `lua` module shows the currently installed version of Lua. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.lua-version` file
 - The current directory contains a `lua` directory
@@ -1474,7 +1482,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1551,7 +1559,7 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of Nim. 這個模組在下列其中一個條件達成時顯示：
+The `nim` module shows the currently installed version of Nim. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
@@ -1627,7 +1635,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. 這個模組在下列其中一個條件達成時顯示：
+The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
@@ -1665,7 +1673,7 @@ format = "via [🤖 $version](bold green) "
 
 ## 套件版本
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. 這個模組目前支援 `npm`、`cargo`、`poetry`、`composer`、`gradle`、`julia`、`mix`, 跟 `helm` 套件
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
 - **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
 - **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -1710,7 +1718,7 @@ format = "via [🎁 $version](208 bold) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of OCaml. 這個模組在下列其中一個條件達成時顯示：
+The `ocaml` module shows the currently installed version of OCaml. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.opam` extension or `_opam` directory
 - The current directory contains a `esy.lock` directory
@@ -1784,7 +1792,7 @@ symbol = "☁️ "
 
 ## Perl
 
-The `perl` module shows the currently installed version of Perl. 這個模組在下列其中一個條件達成時顯示：
+The `perl` module shows the currently installed version of Perl. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Makefile.PL` or `Build.PL` file
 - The current directory contains a `cpanfile` or `cpanfile.snapshot` file
@@ -1820,7 +1828,7 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. 這個模組在下列其中一個條件達成時顯示：
+The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
@@ -1860,7 +1868,7 @@ The `python` module shows the currently installed version of Python and the curr
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
-這個模組在下列其中一個條件達成時顯示：
+The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.python-version` file
 - The current directory contains a `requirements.txt` file
@@ -1919,7 +1927,7 @@ python_binary = "python3"
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. 這個模組在下列其中一個條件達成時顯示：
+The `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
@@ -1955,7 +1963,7 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. 這個模組在下列其中一個條件達成時顯示：
+The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
@@ -2057,7 +2065,7 @@ format = '[📦 \[$env\]]($style) '
 
 ## Swift
 
-The `swift` module shows the currently installed version of Swift. 這個模組在下列其中一個條件達成時顯示：
+The `swift` module shows the currently installed version of Swift. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2096,7 +2104,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。 :::
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. :::
 
 ### 選項
 
@@ -2133,7 +2141,7 @@ disabled = false
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). 這個模組在下列其中一個條件達成時顯示：
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` extension
@@ -2184,7 +2192,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2226,7 +2234,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. 這個模組在下列其中一個條件達成時顯示：
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
 - The current user is root
 - The current user isn't the same as the one that is logged in
@@ -2265,7 +2273,7 @@ show_always = true
 
 ## Zig
 
-The `zig` module shows the currently installed version of Zig. 這個模組在下列其中一個條件達成時顯示：
+The `zig` module shows the currently installed version of Zig. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.zig` file
 
@@ -2400,7 +2408,7 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of PureScript version. 這個模組在下列其中一個條件達成時顯示：
+The `purescript` module shows the currently installed version of PureScript version. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
