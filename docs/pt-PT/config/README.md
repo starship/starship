@@ -466,13 +466,21 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Options
 
-| Option              | Default                       | Description                                                |
-| ------------------- | ----------------------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`                       | Show milliseconds in addition to seconds for the duration. |
-| `format`            | `"took [$duration]($style) "` | The format for the module.                                 |
-| `style`             | `"bold yellow"`               | The style for the module.                                  |
-| `disabled`          | `false`                       | Disables the `cmd_duration` module.                        |
+| Option               | Default                       | Description                                                |
+| -------------------- | ----------------------------- | ---------------------------------------------------------- |
+| `min_time`           | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds`  | `false`                       | Show milliseconds in addition to seconds for the duration. |
+| `format`             | `"took [$duration]($style) "` | The format for the module.                                 |
+| `style`              | `"bold yellow"`               | The style for the module.                                  |
+| `disabled`           | `false`                       | Disables the `cmd_duration` module.                        |
+| `show_notifications` | `false`                       | Show desktop notifications when command completes.         |
+| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).      |
+
+::: tip
+
+Showing desktop notifications requires starship to be built with `rust-notify` support. You check if your starship supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
+
+:::
 
 ### Variables
 
