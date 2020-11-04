@@ -466,13 +466,21 @@ Bash Nutzer, die eine "preexec" ähnliche Funktion benötigen, können [rcaloras
 
 ### Optionen
 
-| Option              | Standardwert                  | Beschreibung                                                       |
-| ------------------- | ----------------------------- | ------------------------------------------------------------------ |
-| `min_time`          | `2_000`                       | Schwellwert für kleinste anzuzeigende Laufzeit (in Millisekunden). |
-| `show_milliseconds` | `false`                       | Zeige Millisekunden zusätzlich zu Sekunden.                        |
-| `format`            | `"took [$duration]($style) "` | The format for the module.                                         |
-| `style`             | `"bold yellow"`               | Stil für dieses Modul.                                             |
-| `disabled`          | `false`                       | Deaktiviert das `cmd_duration`-Modul.                              |
+| Option               | Standardwert                  | Beschreibung                                                       |
+| -------------------- | ----------------------------- | ------------------------------------------------------------------ |
+| `min_time`           | `2_000`                       | Schwellwert für kleinste anzuzeigende Laufzeit (in Millisekunden). |
+| `show_milliseconds`  | `false`                       | Zeige Millisekunden zusätzlich zu Sekunden.                        |
+| `format`             | `"took [$duration]($style) "` | The format for the module.                                         |
+| `style`              | `"bold yellow"`               | Stil für dieses Modul.                                             |
+| `disabled`           | `false`                       | Deaktiviert das `cmd_duration`-Modul.                              |
+| `show_notifications` | `false`                       | Show desktop notifications when command completes.                 |
+| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).              |
+
+::: Tipp
+
+Showing desktop notifications requires starship to be built with `rust-notify` support. You check if your starship supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
+
+:::
 
 ### Variables
 
@@ -495,11 +503,11 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-Das `conda`-Modul zeigt dessen aktuelle Umgebung an, sofern `$CONDA_DEFAULT_ENV` gesetzt ist.
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: Tipp
 
-Hinweis: Dies unterdrückt nicht conda's eigenen Prompt-Modifikator, sie können jedoch conda mit `conda config --set changeps1 False` konfigurieren, um die Ausgabe von conda selbst auszuschalten.
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
@@ -535,7 +543,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `crystal` module shows the currently installed version of Crystal. The module will be shown if any of the following conditions are met:
 
 - Das aktuelle Verzeichnis enthält eine `shard.yml`-Datei
 - The current directory contains a `.cr` file
@@ -570,7 +578,7 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-The `dart` module shows the currently installed version of Dart. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `dart` module shows the currently installed version of Dart. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.dart` extension
 - The current directory contains a `.dart_tool` directory
@@ -606,7 +614,7 @@ format = "via [🔰 $version](bold red) "
 
 ## Verzeichnis
 
-Das `directory` -Modul zeigt den Pfad zu Ihrem aktuellen Verzeichnis an, abgeschnitten auf drei übergeordnete Ordner. Your directory will also be truncated to the root of the git repo that you're currently in.
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
 When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
@@ -626,7 +634,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
 
 <details>
-<summary>Dieses Modul hat einige erweiterte Konfigurationsoptionen, welche die Darstellung von Verzeichnissen steuern.</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | Advanced Option             | Standardwert | Beschreibung                                                                             |
 | --------------------------- | ------------ | ---------------------------------------------------------------------------------------- |
@@ -754,7 +762,7 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. The module will be shown if any of the following conditions are met:
 
 - Das aktuelle Verzeichnis enthält eine `mix.exs`-Datei.
 
@@ -789,7 +797,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `elm` module shows the currently installed version of Elm. The module will be shown if any of the following conditions are met:
 
 - Das aktuelle Verzeichnis enthält eine `elm.json`-Datei
 - Das aktuelle Verzeichnis enthält eine `elm-package.json`-Datei
@@ -864,7 +872,7 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `erlang` module shows the currently installed version of Erlang/OTP. The module will be shown if any of the following conditions are met:
 
 - Das aktuelle Verzeichnis enthält eine `rebar.config`-Datei.
 - Das aktuelle Verzeichnis enthält eine `erlang.mk`-Datei.
@@ -959,7 +967,7 @@ asia-northeast1 = "an1"
 
 ## Git-Branch
 
-Das `git_branch`-Modul zeigt den aktiven Git-Branch des Repositories im aktuellen Verzeichnis an.
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### Optionen
 
@@ -1153,7 +1161,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-Das `golang`-Modul zeigt die aktuell installierte Version von Golang. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
 
 - Das aktuelle Verzeichnis enthält eine `go.mod`-Datei
 - Das aktuelle Verzeichnis enthält eine `go.sum`-Datei
@@ -1194,7 +1202,7 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of Helm. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `helm` module shows the currently installed version of Helm. The module will be shown if any of the following conditions are met:
 
 - Das aktuelle Verzeichnis enthält eine `helmfile.yaml`-Datei
 - The current directory contains a `Chart.yaml` file
@@ -1229,7 +1237,7 @@ format = "via [⎈ $version](bold white) "
 
 ## Hostname
 
-Das `hostname`-Modul zeigt den Hostnamen des Systems an.
+The `hostname` module shows the system hostname.
 
 ### Optionen
 
@@ -1264,7 +1272,7 @@ disabled = false
 
 ## Java
 
-Das `java` Modul zeigt die derzeit installierte Version von Java an. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
@@ -1333,7 +1341,7 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `julia` module shows the currently installed version of Julia. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Project.toml` file
 - The current directory contains a `Manifest.toml` file
@@ -1373,7 +1381,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: Tipp
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1412,7 +1420,7 @@ disabled = false
 
 ## Zeilenumbruch
 
-Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
+The `line_break` module separates the prompt into two lines.
 
 ### Optionen
 
@@ -1431,7 +1439,7 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of Lua. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `lua` module shows the currently installed version of Lua. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.lua-version` file
 - The current directory contains a `lua` directory
@@ -1474,7 +1482,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: Tipp
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1551,7 +1559,7 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of Nim. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `nim` module shows the currently installed version of Nim. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
@@ -1627,7 +1635,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
@@ -1710,7 +1718,7 @@ format = "via [🎁 $version](208 bold) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of OCaml. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `ocaml` module shows the currently installed version of OCaml. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.opam` extension or `_opam` directory
 - The current directory contains a `esy.lock` directory
@@ -1784,7 +1792,7 @@ symbol = "☁️ "
 
 ## Perl
 
-The `perl` module shows the currently installed version of Perl. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `perl` module shows the currently installed version of Perl. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Makefile.PL` or `Build.PL` file
 - The current directory contains a `cpanfile` or `cpanfile.snapshot` file
@@ -1820,7 +1828,7 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
@@ -1860,7 +1868,7 @@ The `python` module shows the currently installed version of Python and the curr
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
-Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.python-version` file
 - The current directory contains a `requirements.txt` file
@@ -1919,7 +1927,7 @@ python_binary = "python3"
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
@@ -1955,7 +1963,7 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
@@ -2057,7 +2065,7 @@ format = '[📦 \[$env\]]($style) '
 
 ## Swift
 
-The `swift` module shows the currently installed version of Swift. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `swift` module shows the currently installed version of Swift. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2096,7 +2104,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: Tipp
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren. :::
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. :::
 
 ### Optionen
 
@@ -2133,7 +2141,7 @@ disabled = false
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` extension
@@ -2184,7 +2192,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: Tipp
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2226,7 +2234,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
 - The current user is root
 - The current user isn't the same as the one that is logged in
@@ -2265,7 +2273,7 @@ show_always = true
 
 ## Zig
 
-The `zig` module shows the currently installed version of Zig. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `zig` module shows the currently installed version of Zig. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.zig` file
 
@@ -2400,7 +2408,7 @@ shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of PureScript version. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `purescript` module shows the currently installed version of PureScript version. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
