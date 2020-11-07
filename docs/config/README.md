@@ -1715,6 +1715,7 @@ The module will be shown if any of the following conditions are met:
 | `symbol`   | `"⬢ "`                             | A format string representing the symbol of NodeJS. |
 | `style`    | `"bold green"`                     | The style for the module.                          |
 | `disabled` | `false`                            | Disables the `nodejs` module.                      |
+| `not_capable_style` | `bold red` | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ### Variables
 

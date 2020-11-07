@@ -37,8 +37,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("nodejs");
     let config = NodejsConfig::try_load(module.config);
     let nodejs_version = utils::exec_cmd("node", &["--version"])?.stdout;
-    let _engines_version = get_engines_version(&context.current_dir);
-    let in_engines_range = check_engines_version(&nodejs_version, _engines_version);
+    let engines_version = get_engines_version(&context.current_dir);
+    let in_engines_range = check_engines_version(&nodejs_version, engines_version);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -74,26 +74,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_engines_version(base_dir: &PathBuf) -> Option<String> {
-    if let Ok(json_str) = utils::read_file(base_dir.join("package.json")) {
-        let package_json: json::Value = json::from_str(&json_str).ok()?;
-        let raw_version = package_json.get("engines")?.get("node")?.as_str()?;
-        Some(raw_version.to_string())
-    } else {
-        None
-    }
+    let json_str = utils::read_file(base_dir.join("package.json")).ok()?;
+    let package_json: json::Value = json::from_str(&json_str).ok()?;
+    let raw_version = package_json.get("engines")?.get("node")?.as_str()?;
+    Some(raw_version.to_string())
 }
 
-fn check_engines_version(_nodejs_version: &str, _engines_version: Option<String>) -> bool {
-    if _engines_version.is_none() {
+fn check_engines_version(nodejs_version: &str, engines_version: Option<String>) -> bool {
+    if engines_version.is_none() {
         return true;
     }
-    let r = match VersionReq::parse(&_engines_version.unwrap()) {
+    let r = match VersionReq::parse(&engines_version.unwrap()) {
         Ok(r) => r,
         Err(_e) => return true,
     };
     let re = Regex::new(r"\d+\.\d+\.\d+").unwrap();
     let version = re
-        .captures(_nodejs_version)
+        .captures(nodejs_version)
         .unwrap()
         .get(0)
         .unwrap()
