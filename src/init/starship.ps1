@@ -19,12 +19,12 @@ function global:prompt {
     [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
     if ($lastCmd = Get-History -Count 1) {
         # In case we have a False on the Dollar hook, we know there's an error.
-        if( -not $origDollarQuestion){
-          # We retrieve the InvocationInfo from the most recent error.
-          $lastCmdletError = Get-Error |  Where-Object {$_ -ne $null} | Select-Object -expand InvocationInfo
-          # We check if the las command executed matches the line that caused the last error , in which case we know
-          # it was an internal Powershell command, otherwise, there MUST be an error code.
-          $lastExitCodeForPrompt = if($lastCmd.CommandLine -eq $lastCmdletError.Line){1} else {$origLastExitCode}
+        if (-not $origDollarQuestion) {
+            # We retrieve the InvocationInfo from the most recent error.
+            $lastCmdletError = try { Get-Error |  Where-Object { $_ -ne $null } | Select-Object -expand InvocationInfo } catch { $null }
+            # We check if the las command executed matches the line that caused the last error , in which case we know
+            # it was an internal Powershell command, otherwise, there MUST be an error code.
+            $lastExitCodeForPrompt = if ($null -ne $lastCmdletError -and $lastCmd.CommandLine -eq $lastCmdletError.Line) { 1 } else { $origLastExitCode }
         }
 
         $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalMilliseconds)
