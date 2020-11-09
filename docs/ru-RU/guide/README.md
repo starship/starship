@@ -121,7 +121,7 @@
 
 ### Требования
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Установленный и включенный в терминале [шрифт Nerd](https://www.nerdfonts.com/) (попробуйте [шрифт Fira Code Nerd](https://www.nerdfonts.com/font-downloads), например).
 
 ### Начало работы
 
