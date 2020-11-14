@@ -6,7 +6,7 @@ pub use meminfo_linux::MemInfo;
 #[cfg(not(target_os = "linux"))]
 mod meminfo_general;
 #[cfg(not(target_os = "linux"))]
-pub use meminfo_other::MemInfo;
+pub use meminfo_general::MemInfo;
 
 /// Contains all the methods to calculate the memory usage
 pub trait MemoryUsage: Sized {

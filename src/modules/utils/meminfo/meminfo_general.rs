@@ -1,5 +1,4 @@
 use super::MemoryUsage;
-use std::ops::Deref;
 use sysinfo::{RefreshKind, System, SystemExt};
 pub struct MemInfo(System);
 
