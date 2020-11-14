@@ -16,7 +16,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_terraform_project = context
         .try_begin_scan()?
         .set_folders(&[".terraform"])
-        .set_extensions(&["tf"])
+        .set_extensions(&["tf", "hcl"])
         .is_match();
 
     if !is_terraform_project {
