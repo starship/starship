@@ -46,6 +46,7 @@ gethostname = "0.2.1"
 once_cell = "1.5.1"
 chrono = "0.4"
 sysinfo = "0.15.3"
+procfs = "0.8.1"
 byte-unit = "4.0.9"
 starship_module_config_derive = { version = "0.1.2", path = "starship_module_config_derive" }
 yaml-rust = "0.4"
@@ -85,6 +86,7 @@ tempfile = "3.1.0"
 
 [profile.release]
 codegen-units = 1
+debug = true
 lto = true
 
 [[bin]]

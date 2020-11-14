@@ -1,6 +1,6 @@
 use byte_unit::{Byte, ByteUnit};
-use sysinfo::{RefreshKind, SystemExt};
 
+use super::utils::meminfo::{MemInfo, MemoryUsage};
 use super::{Context, Module, RootModuleConfig, Shell};
 
 use crate::configs::memory_usage::MemoryConfig;
@@ -39,9 +39,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_memory());
-    let used_memory_kib = system.get_used_memory();
-    let total_memory_kib = system.get_total_memory();
+    let meminfo = MemInfo::create().or_else(|| {
+        log::warn!("Fail to retrieve memory usage");
+        None
+    })?;
+    let used_memory_kib = meminfo.used_memory();
+    let total_memory_kib = meminfo.total_memory();
     let ram_used = (used_memory_kib as f64 / total_memory_kib as f64) * 100.;
     let ram_pct = format_pct(ram_used, pct_sign);
 
@@ -51,8 +54,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let ram = format_usage_total(used_memory_kib, total_memory_kib);
-    let total_swap_kib = system.get_total_swap();
-    let used_swap_kib = system.get_used_swap();
+    let total_swap_kib = meminfo.total_swap();
+    let used_swap_kib = meminfo.used_swap();
     let percent_swap_used = (used_swap_kib as f64 / total_swap_kib as f64) * 100.;
     let swap_pct = format_pct(percent_swap_used, pct_sign);
     let swap = format_usage_total(used_swap_kib, total_swap_kib);
