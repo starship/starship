@@ -86,7 +86,6 @@ tempfile = "3.1.0"
 
 [profile.release]
 codegen-units = 1
-debug = true
 lto = true
 
 [[bin]]
