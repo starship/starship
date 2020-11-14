@@ -1671,51 +1671,6 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 format = "via [🤖 $version](bold green) "
 ```
 
-## 套件版本
-
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
-
-- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
-- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
-- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
-- **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
-- **gradle** – The `gradle` package version is extracted from the `build.gradle` present
-- **julia** - The package version is extracted from the `Project.toml` present
-- **mix** - The `mix` package version is extracted from the `mix.exs` present
-- **helm** - The `helm` chart version is extracted from the `Chart.yaml` present
-- **maven** - The `maven` package version is extracted from the `pom.xml` present
-
-> ⚠️ 顯示出來的版本是從你的現在資料夾之中擷取出來的，並非從套件管理員取得。
-
-### 選項
-
-| Option            | 預設                                 | 說明                                                         |
-| ----------------- | ---------------------------------- | ---------------------------------------------------------- |
-| `format`          | `"via [$symbol$version]($style) "` | The format for the module.                                 |
-| `symbol`          | `"📦 "`                             | The symbol used before displaying the version the package. |
-| `style`           | `"bold 208"`                       | 這個模組的風格。                                                   |
-| `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
-| `disabled`        | `false`                            | Disables the `package` module.                             |
-
-### Variables
-
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.0.0` | The version of your package          |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
-
-\*: This variable can only be used as a part of a style string
-
-### 範例
-
-```toml
-# ~/.config/starship.toml
-
-[package]
-format = "via [🎁 $version](208 bold) "
-```
-
 ## OCaml
 
 The `ocaml` module shows the currently installed version of OCaml. The module will be shown if any of the following conditions are met:
@@ -1790,6 +1745,51 @@ style = "bold yellow"
 symbol = "☁️ "
 ```
 
+## Package Version
+
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
+
+- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
+- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
+- **gradle** – The `gradle` package version is extracted from the `build.gradle` present
+- **julia** - The package version is extracted from the `Project.toml` present
+- **mix** - The `mix` package version is extracted from the `mix.exs` present
+- **helm** - The `helm` chart version is extracted from the `Chart.yaml` present
+- **maven** - The `maven` package version is extracted from the `pom.xml` present
+
+> ⚠️ 顯示出來的版本是從你的現在資料夾之中擷取出來的，並非從套件管理員取得。
+
+### 選項
+
+| Option            | 預設                                 | 說明                                                         |
+| ----------------- | ---------------------------------- | ---------------------------------------------------------- |
+| `format`          | `"via [$symbol$version]($style) "` | The format for the module.                                 |
+| `symbol`          | `"📦 "`                             | The symbol used before displaying the version the package. |
+| `style`           | `"bold 208"`                       | 這個模組的風格。                                                   |
+| `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`                            | Disables the `package` module.                             |
+
+### Variables
+
+| 變數        | 範例       | 說明                                   |
+| --------- | -------- | ------------------------------------ |
+| version   | `v1.0.0` | The version of your package          |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[package]
+format = "via [🎁 $version](208 bold) "
+```
+
 ## Perl
 
 The `perl` module shows the currently installed version of Perl. The module will be shown if any of the following conditions are met:
@@ -1860,6 +1860,41 @@ The `php` module shows the currently installed version of PHP. The module will b
 
 [php]
 format = "via [🔹 $version](147 bold) "
+```
+
+## PureScript
+
+The `purescript` module shows the currently installed version of PureScript version. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `spago.dhall` file
+- The current directory contains a \*.purs files
+
+### 選項
+
+| Option     | 預設                                 | 說明                                                           |
+| ---------- | ---------------------------------- | ------------------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                                   |
+| `symbol`   | `"<=> "`                     | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"`                     | 這個模組的風格。                                                     |
+| `disabled` | `false`                            | Disables the `purescript` module.                            |
+
+### Variables
+
+| 變數        | 範例       | 說明                                   |
+| --------- | -------- | ------------------------------------ |
+| version   | `0.13.5` | The version of `purescript`          |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[purescript]
+format = "via [$symbol$version](bold white)"
 ```
 
 ## Python
@@ -2063,41 +2098,6 @@ The `singularity` module shows the current singularity image, if inside a contai
 format = '[📦 \[$env\]]($style) '
 ```
 
-## Swift
-
-The `swift` module shows the currently installed version of Swift. The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `Package.swift` file
-- The current directory contains a file with the `.swift` extension
-
-### 選項
-
-| Option     | 預設                                 | 說明                                               |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
-| `symbol`   | `"🐦 "`                             | A format string representing the symbol of Swift |
-| `style`    | `"bold 202"`                       | 這個模組的風格。                                         |
-| `disabled` | `false`                            | Disables the `swift` module.                     |
-
-### Variables
-
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v5.2.4` | The version of `swift`               |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
-
-\*: This variable can only be used as a part of a style string
-
-### 範例
-
-```toml
-# ~/.config/starship.toml
-
-[swift]
-format = "via [🏎  $version](red bold)"
-```
-
 ## Status
 
 The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
@@ -2137,6 +2137,41 @@ symbol = "💣 "
 format = '[\[$symbol$status\]]($style) '
 disabled = false
 
+```
+
+## Swift
+
+The `swift` module shows the currently installed version of Swift. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `Package.swift` file
+- The current directory contains a file with the `.swift` extension
+
+### 選項
+
+| Option     | 預設                                 | 說明                                               |
+| ---------- | ---------------------------------- | ------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
+| `symbol`   | `"🐦 "`                             | A format string representing the symbol of Swift |
+| `style`    | `"bold 202"`                       | 這個模組的風格。                                         |
+| `disabled` | `false`                            | Disables the `swift` module.                     |
+
+### Variables
+
+| 變數        | 範例       | 說明                                   |
+| --------- | -------- | ------------------------------------ |
+| version   | `v5.2.4` | The version of `swift`               |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[swift]
+format = "via [🏎  $version](red bold)"
 ```
 
 ## Terraform
@@ -2404,39 +2439,4 @@ format = " transcending [$output]($style)"
 command = "time /T"
 files = ["*.pst"]
 shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
-```
-
-## PureScript
-
-The `purescript` module shows the currently installed version of PureScript version. The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `spago.dhall` file
-- The current directory contains a \*.purs files
-
-### 選項
-
-| Option     | 預設                                 | 說明                                                           |
-| ---------- | ---------------------------------- | ------------------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                                   |
-| `symbol`   | `"<=> "`                     | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"`                     | 這個模組的風格。                                                     |
-| `disabled` | `false`                            | Disables the `purescript` module.                            |
-
-### Variables
-
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `0.13.5` | The version of `purescript`          |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
-
-\*: This variable can only be used as a part of a style string
-
-### 範例
-
-```toml
-# ~/.config/starship.toml
-
-[purescript]
-format = "via [$symbol$version](bold white)"
 ```
