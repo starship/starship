@@ -40,7 +40,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let system = sys_info::mem_info();
     if system.is_err() {
-        log::warn!("Unable to access memory usage information:\n{}", system.unwrap_err());
+        log::warn!(
+            "Unable to access memory usage information:\n{}",
+            system.unwrap_err()
+        );
         return None;
     }
     let system = system.unwrap();
