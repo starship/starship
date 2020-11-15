@@ -1,12 +1,10 @@
-use std::env;
 use std::ffi::OsString;
-use std::io::ErrorKind;
-use std::process;
 use std::process::Stdio;
 use std::str::FromStr;
+use std::{env, process};
 
-use crate::config::ModuleConfig;
 use crate::config::StarshipConfig;
+use crate::config::{read_configs, ModuleConfig};
 use crate::configs::PROMPT_ORDER;
 use crate::utils;
 use std::fs::File;
@@ -232,26 +230,11 @@ pub fn get_configuration() -> Value {
 
 pub fn get_configuration_edit() -> Document {
     let file_path = get_config_path();
-    let toml_content = match utils::read_file(&file_path) {
-        Ok(content) => {
-            log::trace!("Config file content: \"\n{}\"", &content);
-            Some(content)
-        }
-        Err(e) => {
-            let level = if e.kind() == ErrorKind::NotFound {
-                log::Level::Debug
-            } else {
-                log::Level::Error
-            };
+    let contents = read_configs(&file_path);
 
-            log::log!(level, "Unable to read config file content: {}", &e);
-            None
-        }
-    };
-
-    toml_content
-        .unwrap_or_default()
-        .parse::<Document>()
+    contents
+        .first()
+        .and_then(|s| s.parse().ok())
         .expect("Failed to load starship config")
 }
 
@@ -319,14 +302,17 @@ fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String
 }
 
 fn get_config_path() -> OsString {
-    if let Some(config_path) = env::var_os("STARSHIP_CONFIG") {
-        return config_path;
+    let path = crate::config::get_config_path().expect("couldn't find home directory");
+
+    let mut paths = env::split_paths(&path);
+    if let (Some(_), Some(_)) = (paths.next(), paths.next()) {
+        eprintln!(
+            "Only one config can be edited at a time. Please specify a single path in \
+            $STARSHIP_CONFIG"
+        );
+        process::exit(1);
     }
-    utils::home_dir()
-        .expect("couldn't find home directory")
-        .join(".config")
-        .join("starship.toml")
-        .into()
+    path.into()
 }
 
 #[cfg(test)]

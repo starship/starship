@@ -10,9 +10,9 @@ use serde::{
 use std::borrow::Cow;
 use std::clone::Clone;
 use std::collections::HashMap;
-use std::io::ErrorKind;
-
 use std::env;
+use std::ffi::OsStr;
+use std::io::ErrorKind;
 use toml::Value;
 
 /// Root config of a module.
@@ -108,6 +108,7 @@ pub struct StarshipConfig {
     pub config: Option<Value>,
 }
 
+/// Get the contents of the starship config environment variable
 pub fn get_config_path() -> Option<String> {
     if let Ok(path) = env::var("STARSHIP_CONFIG") {
         // Use $STARSHIP_CONFIG as the config path if available
@@ -123,25 +124,10 @@ pub fn get_config_path() -> Option<String> {
     }
 }
 
-impl StarshipConfig {
-    /// Initialize the Config struct
-    pub fn initialize() -> Self {
-        if let Some(file_data) = Self::config_from_file() {
-            Self {
-                config: Some(file_data),
-            }
-        } else {
-            Self {
-                config: Some(Value::Table(toml::value::Table::new())),
-            }
-        }
-    }
-
-    /// Create a config from a starship configuration file
-    fn config_from_file() -> Option<Value> {
-        let file_path = get_config_path()?;
-
-        let toml_content = match utils::read_file(&file_path) {
+/// Reads config(s) from a path by separating values by the OS's path separator (usually `:`).
+pub fn read_configs(path: impl AsRef<OsStr>) -> Vec<String> {
+    env::split_paths(&path)
+        .filter_map(|path| match utils::read_file(&path) {
             Ok(content) => {
                 log::trace!("Config file content: \"\n{}\"", &content);
                 Some(content)
@@ -156,18 +142,54 @@ impl StarshipConfig {
                 log::log!(level, "Unable to read config file content: {}", &e);
                 None
             }
-        }?;
+        })
+        .collect()
+}
 
-        match toml::from_str(&toml_content) {
-            Ok(parsed) => {
-                log::debug!("Config parsed: {:?}", &parsed);
-                Some(parsed)
+impl StarshipConfig {
+    /// Initialize the Config struct
+    pub fn initialize() -> Self {
+        if let Some(file_data) = get_config_path()
+            .map(read_configs)
+            .and_then(Self::parse_configs)
+        {
+            Self {
+                config: Some(file_data),
             }
-            Err(error) => {
-                log::error!("Unable to parse the config file: {}", error);
-                None
+        } else {
+            Self {
+                config: Some(Value::Table(toml::value::Table::new())),
             }
         }
+    }
+
+    /// Parse one or more configurations, combining values where the first mention wins
+    fn parse_configs(configs: Vec<String>) -> Option<Value> {
+        configs
+            .iter()
+            .filter_map(|content| match toml::from_str(content) {
+                Ok(parsed) => {
+                    log::debug!("Config parsed: {:?}", &parsed);
+                    Some(parsed)
+                }
+                Err(error) => {
+                    log::error!("Unable to parse the config file: {}", error);
+                    None
+                }
+            })
+            .fold(None, |acc, val: Value| {
+                if let Some(mut base) = acc {
+                    log::trace!("Merging config {:?} into {:?}", val, base);
+                    merge_toml(&mut base, &val);
+                    Some(base)
+                } else {
+                    Some(val)
+                }
+            })
+            .map(|v| {
+                log::trace!("Fully resolved config: {:?}", &v);
+                v
+            })
     }
 
     /// Get the subset of the table for a module by its name
@@ -437,10 +459,31 @@ fn get_palette<'a>(
     }
 }
 
+/// Merge two TOML configs by mutating the first argument
+fn merge_toml(base: &mut Value, value: &Value) {
+    if let (Value::Table(base), Value::Table(value)) = (base, value) {
+        for (key, value) in value.iter() {
+            // Recurse further into base table if keys match to continue merging.
+            if let Some(base) = base.get_mut(key) {
+                merge_toml(base, value)
+            } else {
+                let _ = base.insert(key.clone(), value.clone());
+            }
+        }
+    } else {
+        log::warn!(
+            "Cannot merge TOML config of type {} into table, ignoring value",
+            value.type_str()
+        )
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use nu_ansi_term::Style;
+    use std::io::{self, Write};
+    use std::path::Path;
 
     // Small wrapper to allow deserializing Style without a struct with #[serde(deserialize_with=)]
     #[derive(Default, Clone, Debug, PartialEq)]
@@ -894,5 +937,100 @@ mod tests {
 
         // Test default behavior
         assert!(get_palette(&palettes, None).is_none());
+    }
+
+    #[test]
+    fn test_parse_single_config() {
+        let config = toml::toml! {
+            symbol = "T "
+            disabled = true
+            some_array = ["A"]
+        };
+
+        let actual = StarshipConfig::parse_configs(vec![toml::to_string(&config).unwrap()]);
+
+        assert_eq!(actual, Some(config));
+    }
+
+    #[test]
+    fn test_read_single_config_file() -> io::Result<()> {
+        let mut file = tempfile::NamedTempFile::new()?;
+        file.write_all(b"file contents")?;
+
+        let actual = read_configs(file.path());
+
+        assert_eq!(actual, vec!["file contents"]);
+        Ok(())
+    }
+
+    #[test]
+    fn test_read_multiple_config_files() -> io::Result<()> {
+        let mut file1 = tempfile::NamedTempFile::new()?;
+        file1.write_all(b"file1")?;
+
+        let mut file2 = tempfile::NamedTempFile::new()?;
+        file2.write_all(b"file2")?;
+
+        let mut file3 = tempfile::NamedTempFile::new()?;
+        file3.write_all(b"file3")?;
+
+        let actual = read_configs(
+            env::join_paths(
+                [
+                    file1.path(),
+                    file2.path(),
+                    // This path should be ignored while everything else is resolved
+                    Path::new("broken"),
+                    file3.path(),
+                ]
+                .iter(),
+            )
+            .unwrap(),
+        );
+
+        assert_eq!(actual, vec!["file1", "file2", "file3"]);
+        Ok(())
+    }
+
+    #[test]
+    fn test_parse_multiple_configs() {
+        let actual = StarshipConfig::parse_configs(vec![
+            toml::to_string(&toml::toml! {
+                disabled = false
+                some_map = { value = "indeed", addon = "yes" }
+            })
+            .unwrap(),
+            toml::to_string(&toml::toml! {
+                disabled = true
+                some_array = ["B"]
+            })
+            .unwrap(),
+            toml::to_string(&toml::toml! {
+                symbol = "T "
+                disabled = true
+                some_array = ["A"]
+                some_map = { value = "yes", style = "red" }
+            })
+            .unwrap(),
+        ]);
+
+        let expected = toml::toml! {
+            symbol = "T "
+            disabled = false
+            some_array = ["B"]
+            some_map = { value = "indeed", addon = "yes", style = "red" }
+        };
+
+        assert_eq!(actual, Some(expected));
+    }
+
+    #[test]
+    fn test_parse_no_config() {
+        assert_eq!(StarshipConfig::parse_configs(vec![]), None);
+    }
+
+    #[test]
+    fn test_read_no_config_files() {
+        assert!(read_configs("").is_empty());
     }
 }
