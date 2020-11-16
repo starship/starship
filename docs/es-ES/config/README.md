@@ -935,7 +935,7 @@ El módulo `gcloud` muestra la configuración actual para el CLI de [`gcloud`](h
 
 ### Ejemplos
 
-#### Display account and project
+#### Mostrar cuenta y proyecto
 
 ```toml
 # ~/.config/starship.toml
@@ -954,7 +954,7 @@ format = "[$symbol$active]($style) "
 style = "bold yellow"
 ```
 
-#### Display account and aliased region
+#### Mostrar los alias de cuenta y región
 
 ```toml
 # ~/.config/starship.toml
@@ -968,26 +968,26 @@ asia-northeast1 = "an1"
 
 ## Git Branch
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+El módulo `git_branch` muestra la rama activa del repositorio en su directorio actual.
 
 ### Opciones
 
-| Opción              | Por defecto                      | Descripción                                                                              |
-| ------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
-| `format`            | `"on [$symbol$branch]($style) "` | El formato del módulo. Use `"$branch"` to refer to the current branch name.              |
-| `symbol`            | `" "`                           | A format string representing the symbol of git branch.                                   |
-| `style`             | `"bold purple"`                  | El estilo del módulo.                                                                    |
-| `truncation_length` | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                   |
-| `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
-| `disabled`          | `false`                          | Disables the `git_branch` module.                                                        |
+| Opción              | Por defecto                      | Descripción                                                                                             |
+| ------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `format`            | `"on [$symbol$branch]($style) "` | El formato del módulo. Use `"$branch"` para referirse al nombre de la rama actual.                      |
+| `symbol`            | `" "`                           | Una cadena de formato que representa el símbolo de la rama git.                                         |
+| `style`             | `"bold purple"`                  | El estilo del módulo.                                                                                   |
+| `truncation_length` | `2^63 - 1`                       | Trunca una rama git a X grafemas.                                                                       |
+| `truncation_symbol` | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado. Puedes usar `""` para ningún símbolo. |
+| `disabled`          | `false`                          | Deshabilita el módulo `git_branch`.                                                                     |
 
 ### Variables
 
-| Variable  | Ejemplo  | Descripción                                                                                          |
-| --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| branch    | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
-| symbol    |          | Refleja el valor de la opción `symbol`                                                               |
-| style\* |          | Refleja el valor de la opción `style`                                                                |
+| Variable  | Ejemplo  | Descripción                                                                                                   |
+| --------- | -------- | ------------------------------------------------------------------------------------------------------------- |
+| branch    | `master` | El nombre de la rama actual, regresa a `HEAD` si no hay ninguna rama actual (por ejemplo, git detached HEAD). |
+| symbol    |          | Refleja el valor de la opción `symbol`                                                                        |
+| style\* |          | Refleja el valor de la opción `style`                                                                         |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1004,25 +1004,25 @@ truncation_symbol = ""
 
 ## Git commit
 
-The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
+El módulo `git_commit` muestra el hash de commit actual y también la etiqueta (si existe) del repositorio en su directorio actual.
 
 ### Opciones
 
-| Opción               | Por defecto                                            | Descripción                                           |
-| -------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
-| `commit_hash_length` | `7`                                                    | The length of the displayed git commit hash.          |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | El formato del módulo.                                |
-| `style`              | `"bold green"`                                         | El estilo del módulo.                                 |
-| `only_detached`      | `true`                                                 | Only show git commit hash when in detached HEAD state |
-| `tag_disabled`       | `true`                                                 | Disables showing tag info in `git_commit` module.     |
-| `tag_symbol`         | `"🏷 "`                                                 | Tag symbol prefixing the info shown                   |
-| `disabled`           | `false`                                                | Disables the `git_commit` module.                     |
+| Opción               | Por defecto                                            | Descripción                                                                  |
+| -------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| `commit_hash_length` | `7`                                                    | La longitud del hash del commit de git mostrado.                             |
+| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | El formato del módulo.                                                       |
+| `style`              | `"bold green"`                                         | El estilo del módulo.                                                        |
+| `only_detached`      | `true`                                                 | Mostrar solo el hash del commit de git cuando esté en estado "detached HEAD" |
+| `tag_disabled`       | `true`                                                 | Deshabilita mostrar información de etiquetas en el módulo `git_commit`.      |
+| `tag_symbol`         | `"🏷 "`                                                 | Símbolo de etiqueta prefijando la información mostrada                       |
+| `disabled`           | `false`                                                | Deshabilita el módulo `git_commit`.                                          |
 
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                           |
 | --------- | --------- | ------------------------------------- |
-| hash      | `b703eb3` | The current git commit hash           |
+| hash      | `b703eb3` | El hash actual del commitn de git     |
 | style\* |           | Refleja el valor de la opción `style` |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
@@ -1039,7 +1039,7 @@ tag_symbol = "🔖 "
 
 ## Git state
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+El módulo `git_state` se mostrará en directorios que son parte de un repositorio git, y donde hay una operación en curso, tales como: _REBASING_, _BISECTING_, etc. Si hay información de progreso (por ejemplo, REBASING 3/10), esa información será mostrada también.
 
 ### Opciones
 
@@ -1534,7 +1534,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `style`             | `"bold purple"`                  | El estilo del módulo.                                                                        |
 | `format`            | `"on [$symbol$branch]($style) "` | El formato del módulo.                                                                       |
 | `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to X graphemes                                                  |
-| `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
+| `truncation_symbol` | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado.                            |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
 ### Variables
