@@ -1483,19 +1483,19 @@ format = "via [🌕 $version](bold blue) "
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
 ### オプション
 
-| オプション       | デフォルト                                         | 説明                                                       |
-| ----------- | --------------------------------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | moduleのフォーマットです。                                         |
-| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
-| `style`     | `"bold dimmed white"`                         | モジュールのスタイルです。                                            |
-| `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
+| オプション       | デフォルト                                         | 説明                                                  |
+| ----------- | --------------------------------------------- | --------------------------------------------------- |
+| `threshold` | `75`                                          | この閾値を超えない限り、メモリ使用率は表示されません。                         |
+| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | moduleのフォーマットです。                                    |
+| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage. |
+| `style`     | `"bold dimmed white"`                         | モジュールのスタイルです。                                       |
+| `disabled`  | `true`                                        | Disables the `memory_usage` module.                 |
 
 ### 変数
 
