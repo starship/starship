@@ -1043,26 +1043,26 @@ El módulo `git_state` se mostrará en directorios que son parte de un repositor
 
 ### Opciones
 
-| Opción         | Por defecto                                                     | Descripción                                                                             |
-| -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `rebase`       | `"REBASING"`                                                    | A format string displayed when a `rebase` is in progress.                               |
-| `merge`        | `"MERGING"`                                                     | A format string displayed when a `merge` is in progress.                                |
-| `revert`       | `"REVERTING"`                                                   | A format string displayed when a `revert` is in progress.                               |
-| `cherry_pick`  | `"CHERRY-PICKING"`                                              | A format string displayed when a `cherry-pick` is in progress.                          |
-| `bisect`       | `"BISECTING"`                                                   | A format string displayed when a `bisect` is in progress.                               |
-| `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
-| `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
-| `style`        | `"bold yellow"`                                                 | El estilo del módulo.                                                                   |
-| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | El formato del módulo.                                                                  |
-| `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
+| Opción         | Por defecto                                                     | Descripción                                                                                         |
+| -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `rebase`       | `"REBASING"`                                                    | Una cadena de formato que se muestra cuando un `rebase` está en progreso.                           |
+| `merge`        | `"MERGING"`                                                     | Una cadena de formato que se muestra cuando un `merge` está en progreso.                            |
+| `revert`       | `"REVERTING"`                                                   | Una cadena de formato mostrada cuando un `revert` está en progreso.                                 |
+| `cherry_pick`  | `"CHERRY-PICKING"`                                              | Una cadena de formato que se muestra cuando un `cherry-pick` está en progreso.                      |
+| `bisect`       | `"BISECTING"`                                                   | Una cadena de formato que se muestra cuando un `bisect` está en progreso.                           |
+| `am`           | `"AM"`                                                          | Una cadena de formato que se muestra cuando un `apply-mailbox` (`git am`) está en progeso.          |
+| `am_or_rebase` | `"AM/REBASE"`                                                   | Una cadena de formato que se muestra cuando un ambiguo `apply-builbox` o `rebase` está en progreso. |
+| `style`        | `"bold yellow"`                                                 | El estilo del módulo.                                                                               |
+| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | El formato del módulo.                                                                              |
+| `disabled`     | `false`                                                         | Deshabilita el módulo `git_state`.                                                                  |
 
 ### Variables
 
 | Variable         | Ejemplo    | Descripción                           |
 | ---------------- | ---------- | ------------------------------------- |
-| state            | `REBASING` | The current state of the repo         |
-| progress_current | `1`        | The current operation progress        |
-| progress_total   | `2`        | The total operation progress          |
+| state            | `REBASING` | El estado actual del repositorio      |
+| progress_current | `1`        | El progreso de la operación actual    |
+| progress_total   | `2`        | El progreso total de la operación     |
 | style\*        |            | Refleja el valor de la opción `style` |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
@@ -1079,29 +1079,29 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ## Git status
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+El módulo `git_status` muestra símbolos que representan el estado del repositorio en su directorio actual.
 
 ### Opciones
 
-| Opción       | Por defecto                                     | Descripción                         |
-| ------------ | ----------------------------------------------- | ----------------------------------- |
-| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
-| `conflicted` | `"="`                                           | This branch has merge conflicts.    |
-| `ahead`      | `"⇡"`                                           | The format of `ahead`               |
-| `behind`     | `"⇣"`                                           | The format of `behind`              |
-| `diverged`   | `"⇕"`                                           | The format of `diverged`            |
-| `untracked`  | `"?"`                                           | The format of `untracked`           |
-| `stashed`    | `"$"`                                           | The format of `stashed`             |
-| `modified`   | `"!"`                                           | The format of `modified`            |
-| `staged`     | `"+"`                                           | The format of `staged`              |
-| `renamed`    | `"»"`                                           | The format of `renamed`             |
-| `deleted`    | `"✘"`                                           | The format of `deleted`             |
-| `style`      | `"bold red"`                                    | El estilo del módulo.               |
-| `disabled`   | `false`                                         | Disables the `git_status` module.   |
+| Opción       | Por defecto                                     | Descripción                              |
+| ------------ | ----------------------------------------------- | ---------------------------------------- |
+| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | El formato por defecto para `git_status` |
+| `conflicted` | `"="`                                           | Esta rama tiene conflictos de fusión.    |
+| `ahead`      | `"⇡"`                                           | El formato de `ahead`                    |
+| `behind`     | `"⇣"`                                           | El formato de `behind`                   |
+| `diverged`   | `"⇕"`                                           | El formato de `diverged`                 |
+| `untracked`  | `"?"`                                           | El formato de `untracked`                |
+| `stashed`    | `"$"`                                           | El formato de `stashed`                  |
+| `modified`   | `"!"`                                           | El formato de `modified`                 |
+| `staged`     | `"+"`                                           | El formato de `staged`                   |
+| `renamed`    | `"»"`                                           | El formato de `renamed`                  |
+| `deleted`    | `"✘"`                                           | El formato de `deleted`                  |
+| `style`      | `"bold red"`                                    | El estilo del módulo.                    |
+| `disabled`   | `false`                                         | Deshabilita el módulo `git_status`.      |
 
 ### Variables
 
-The following variables can be used in `format`:
+Las siguientes variables se pueden utilizar en `format`:
 
 | Variable       | Descripción                                                                                   |
 | -------------- | --------------------------------------------------------------------------------------------- |
