@@ -617,9 +617,9 @@ format = "via [🔰 $version](bold red) "
 
 El módulo `directory` muestra la ruta hasta el directorio actual, mostrando tres directorios padre como máximo. Tu directorio se truncará a la raíz del repositorio git en el que estés.
 
-When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+Cuando usas el estilo fish de la opción pwd, en lugar de ocultar la ruta truncada, verás una versión acortada del nombre de cada directorio basada en el número que activaste para la opción.
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repo y la opción establecida a `1`. Ahora verás `~/D/N/nixpkgs/pkgs`, mientras que antes habría sido `nixpkgs/pkgs`.
 
 ### Opciones
 
@@ -632,10 +632,10 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `disabled`          | `false`                                            | Deshabilita el módulo `directory`.                                    |
 | `read_only`         | `"🔒"`                                              | El símbolo que indica si el directorio actual es de sólo lectura.     |
 | `read_only_style`   | `"red"`                                            | El estilo para el símbolo de sólo lectura.                            |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                     |
+| `truncation_symbol` | `""`                                               | El símbolo a prefijar a las rutas truncadas. ej: "…/"                 |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
 
 | Advanced Option             | Por defecto | Descripción                                                                              |
 | --------------------------- | ----------- | ---------------------------------------------------------------------------------------- |
@@ -676,7 +676,7 @@ truncation_symbol = "…/"
 
 ## Docker Context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
+El módulo `docker_context` muestra el [contexto de Docker](https://docs.docker.com/engine/context/working-with-contexts/) actualmente activo si no está establecido en `default`.
 
 ### Opciones
 
@@ -709,9 +709,9 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+El módulo `dotnet` muestra la versión relevante de .NET Core SDK para el directorio actual. Si el SDK ha sido anclado en el directorio actual, se mostrará la versión fijada. De lo contrario, el módulo muestra la última versión instalada del SDK.
 
-This module will only be shown in your prompt when one or more of the following files are present in the current directory:
+Este módulo solo se mostrará en tu mensaje cuando uno o más de los siguientes archivos estén presentes en el directorio actual:
 
 - `global.json`
 - `project.json`
@@ -723,11 +723,11 @@ This module will only be shown in your prompt when one or more of the following 
 - `*.fsproj`
 - `*.xproj`
 
-You'll also need the .NET Core SDK installed in order to use it correctly.
+También necesitarás tener instalado .NET Core SDK para poder usarlo correctamente.
 
-Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+Internamente, este módulo utiliza su propio mecanismo para la detección de versiones. Normalmente es el doble de rápido que ejecutar `dotnet --version`, pero puede mostrar una versión incorrecta si tu proyecto .NET tiene un diseño de directorio inusual. Si la precisión es más importante que la velocidad, puede desactivar el mecanismo estableciendo `heurístico = false` en las opciones del módulo.
 
-The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) when there is a csproj file in the current directory.
+El módulo también mostrará el Target Framework Moniker ([https://docs.microsoft. om/es/dotnet/standard/frameworks#supported-target-framework-versions](https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions)) cuando exista un archivo csproj en el directorio actual.
 
 ### Opciones
 
@@ -763,7 +763,7 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `elixir` muestra la version instalada actualmente de Elixir y Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un archivo `mix.exs`.
 
@@ -798,22 +798,22 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `elm` muestra la versión actualmente instalada de Elm. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un fichero `elm.json`
 - El directorio actual contiene un fichero `elm-package.json`
-- The current directory contains a `.elm-version` file
-- The current directory contains a `elm-stuff` folder
-- The current directory contains a `*.elm` files
+- El directorio actual contiene un archivo `.elm-version`
+- El directorio actual contiene una carpeta `elm-stuff`
+- El directorio actual contiene archivos `*.elm`
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                     |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                          |
-| `symbol`   | `"🌳 "`                             | A format string representing the symbol of Elm. |
-| `style`    | `"cyan bold"`                      | El estilo del módulo.                           |
-| `disabled` | `false`                            | Disables the `elm` module.                      |
+| Opción     | Por defecto                        | Descripción                                             |
+| ---------- | ---------------------------------- | ------------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                  |
+| `symbol`   | `"🌳 "`                             | Una cadena de formato que representa el símbolo de Elm. |
+| `style`    | `"cyan bold"`                      | El estilo del módulo.                                   |
+| `disabled` | `false`                            | Deshabilita el módulo `elm`.                            |
 
 ### Variables
 
@@ -836,28 +836,28 @@ format = "via [ $version](cyan bold) "
 
 ## Variable de entorno
 
-The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+El módulo `env_var` muestra el valor actual de una variable de entorno seleccionada. El módulo se mostrará sólo si se cumplen cualquiera de las siguientes condiciones:
 
-- The `variable` configuration option matches an existing environment variable
-- The `variable` configuration option is not defined, but the `default` configuration option is
+- La opción de configuración de `variable` coincide con una variable de entorno existente
+- La opción de configuración de `variable` no está definida, pero la opción de configuración `predeterminada` se encuentra
 
 ### Opciones
 
-| Opción        | Por defecto                    | Descripción                                                                  |
-| ------------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`      |                                | The symbol used before displaying the variable value.                        |
-| `variable`    |                                | The environment variable to be displayed.                                    |
-| `por defecto` |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`      | `"with [$env_value]($style) "` | El formato del módulo.                                                       |
-| `disabled`    | `false`                        | Disables the `env_var` module.                                               |
+| Opción        | Por defecto                    | Descripción                                                                            |
+| ------------- | ------------------------------ | -------------------------------------------------------------------------------------- |
+| `symbol`      |                                | El símbolo usado antes de mostrar el valor de la variable.                             |
+| `variable`    |                                | La variable de entorno a mostrar.                                                      |
+| `por defecto` |                                | El valor por defecto que se mostrará cuando la variable seleccionada no está definida. |
+| `format`      | `"with [$env_value]($style) "` | El formato del módulo.                                                                 |
+| `disabled`    | `false`                        | Deshabilita el módulo `env_var`.                                                       |
 
 ### Variables
 
-| Variable  | Ejemplo                                     | Descripción                                |
-| --------- | ------------------------------------------- | ------------------------------------------ |
-| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
-| symbol    |                                             | Refleja el valor de la opción `symbol`     |
-| style\* | `black bold dimmed`                         | Refleja el valor de la opción `style`      |
+| Variable  | Ejemplo                               | Descripción                                 |
+| --------- | ------------------------------------- | ------------------------------------------- |
+| env_value | `Windows NT` (si _variable_ es `$OS`) | El valor de entorno de la opción `variable` |
+| symbol    |                                       | Refleja el valor de la opción `symbol`      |
+| style\* | `black bold dimmed`                   | Refleja el valor de la opción `style`       |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -873,25 +873,25 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `erlang` muestra la versión instalada de Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un fichero `rebar.config`.
 - El directorio actual contiene un fichero `erlang.mk`.
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                              |
-| ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `symbol`   | `" "`                             | The symbol used before displaying the version of erlang. |
-| `style`    | `"bold red"`                       | El estilo del módulo.                                    |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                   |
-| `disabled` | `false`                            | Disables the `erlang` module.                            |
+| Opción     | Por defecto                        | Descripción                                             |
+| ---------- | ---------------------------------- | ------------------------------------------------------- |
+| `symbol`   | `" "`                             | El símbolo usado antes de mostrar la versión de erlang. |
+| `style`    | `"bold red"`                       | El estilo del módulo.                                   |
+| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                  |
+| `disabled` | `false`                            | Deshabilita el módulo `erlang`.                         |
 
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v22.1.3` | The version of `erlang`                |
+| version   | `v22.1.3` | La versión de `erlang`                 |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -908,7 +908,7 @@ format = "via [e $version](bold red) "
 
 ## Gcloud
 
-The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+El módulo `gcloud` muestra la configuración actual para [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
 ### Opciones
 
