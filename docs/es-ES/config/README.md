@@ -174,7 +174,7 @@ El `format` predeterminado se utiliza para definir el formato del prompt, si est
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Que es equivalente a
 format = """
 $username\
 $hostname\
@@ -429,10 +429,10 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of CMake if any of the following conditions are met:
+El módulo `cmake` muestra la versión instalada de CMake si se cumple alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `CMakeLists.txt`
-- The current directory contains a `CMakeCache.txt` file
+- El directorio actual contiene un archivo `CMakeCache.txt`
 
 ### Opciones
 
@@ -474,12 +474,12 @@ Los usuarios de bash que necesiten la funcionalidad preexec-like pueden usar el 
 | `format`             | `"took [$duration]($style) "` | El formato del módulo.                                                |
 | `style`              | `"bold yellow"`               | El estilo del módulo.                                                 |
 | `disabled`           | `false`                       | Desactiva el módulo `cmd_duration`.                                   |
-| `show_notifications` | `false`                       | Show desktop notifications when command completes.                    |
-| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).                 |
+| `show_notifications` | `false`                       | Mostrar notificaciones de escritorio cuando se complete el comando.   |
+| `min_time_to_notify` | `45_000`                      | Duración más corta para la notificación (en milisegundos).            |
 
 ::: tip
 
-Showing desktop notifications requires starship to be built with `rust-notify` support. You check if your starship supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
+Mostrar notificaciones de escritorio requiere que se construya starship con soporte de `rust-notify`. Comprueba si tu starship soporta notificaciones ejecutando `STARSHIP_LOG=debug starship module cmd_duration -d 60000` cuando `show_notifications` está establecido en `true`.
 
 :::
 
@@ -504,11 +504,11 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+El módulo `conda` muestra el entorno conda actual, si `$CONDA_DEFAULT_ENV` está configurado.
 
 ::: tip
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+Esto no modifica el propio prompt de conda. En caso de querer suprimirlo, ejecuta `conda config --set changeps1 False`.
 
 :::
 
@@ -544,7 +544,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. The module will be shown if any of the following conditions are met:
+El módulo `crystal` muestra la versión actual instalada de Crystal. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un fichero `shard.yml`
 - El directorio actual contiene un fichero `.cr`
@@ -579,7 +579,7 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-The `dart` module shows the currently installed version of Dart. The module will be shown if any of the following conditions are met:
+El módulo `dart` muestra la versión actualmente instalada de Dart. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un archivo con la extensión `.dart`
 - El directorio actual contiene un directorio `.dart_tool`
@@ -763,7 +763,7 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. The module will be shown if any of the following conditions are met:
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un archivo `mix.exs`.
 
@@ -798,7 +798,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. The module will be shown if any of the following conditions are met:
+The `elm` module shows the currently installed version of Elm. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un fichero `elm.json`
 - El directorio actual contiene un fichero `elm-package.json`
@@ -819,7 +819,7 @@ The `elm` module shows the currently installed version of Elm. The module will b
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v0.19.1` | The version of `elm`                   |
+| version   | `v0.19.1` | La versión de `elm`                    |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -873,7 +873,7 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. The module will be shown if any of the following conditions are met:
+The `erlang` module shows the currently installed version of Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un fichero `rebar.config`.
 - El directorio actual contiene un fichero `erlang.mk`.
@@ -1162,7 +1162,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. The module will be shown if any of the following conditions are met:
+The `golang` module shows the currently installed version of Golang. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un fichero `go.mod`
 - El directorio actual contiene un fichero `go.sum`
@@ -1203,7 +1203,7 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of Helm. The module will be shown if any of the following conditions are met:
+The `helm` module shows the currently installed version of Helm. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un fichero `helmfile.yaml`
 - The current directory contains a `Chart.yaml` file
@@ -1273,7 +1273,7 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of Java. The module will be shown if any of the following conditions are met:
+The `java` module shows the currently installed version of Java. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
@@ -1342,7 +1342,7 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. The module will be shown if any of the following conditions are met:
+The `julia` module shows the currently installed version of Julia. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `Project.toml` file
 - The current directory contains a `Manifest.toml` file
@@ -1440,7 +1440,7 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of Lua. The module will be shown if any of the following conditions are met:
+The `lua` module shows the currently installed version of Lua. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `.lua-version` file
 - The current directory contains a `lua` directory
@@ -1560,7 +1560,7 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of Nim. The module will be shown if any of the following conditions are met:
+The `nim` module shows the currently installed version of Nim. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
@@ -1636,7 +1636,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
+The `nodejs` module shows the currently installed version of NodeJS. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
@@ -1674,7 +1674,7 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of OCaml. The module will be shown if any of the following conditions are met:
+The `ocaml` module shows the currently installed version of OCaml. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a file with `.opam` extension or `_opam` directory
 - The current directory contains a `esy.lock` directory
@@ -1793,7 +1793,7 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-The `perl` module shows the currently installed version of Perl. The module will be shown if any of the following conditions are met:
+The `perl` module shows the currently installed version of Perl. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `Makefile.PL` or `Build.PL` file
 - The current directory contains a `cpanfile` or `cpanfile.snapshot` file
@@ -1829,7 +1829,7 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. The module will be shown if any of the following conditions are met:
+The `php` module shows the currently installed version of PHP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
@@ -1865,7 +1865,7 @@ format = "via [🔹 $version](147 bold) "
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of PureScript version. The module will be shown if any of the following conditions are met:
+The `purescript` module shows the currently installed version of PureScript version. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
@@ -1904,7 +1904,7 @@ The `python` module shows the currently installed version of Python and the curr
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
-The module will be shown if any of the following conditions are met:
+El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `.python-version` file
 - The current directory contains a `requirements.txt` file
@@ -1963,7 +1963,7 @@ python_binary = "python3"
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
+The `ruby` module shows the currently installed version of Ruby. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
@@ -1999,7 +1999,7 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
+The `rust` module shows the currently installed version of Rust. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
@@ -2142,7 +2142,7 @@ disabled = false
 
 ## Swift
 
-The `swift` module shows the currently installed version of Swift. The module will be shown if any of the following conditions are met:
+The `swift` module shows the currently installed version of Swift. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2177,7 +2177,7 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). The module will be shown if any of the following conditions are met:
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` or `.hcl` extensions
@@ -2270,7 +2270,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+The `username` module shows active user's username. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current user is root
 - The current user isn't the same as the one that is logged in
@@ -2309,7 +2309,7 @@ show_always = true
 
 ## Zig
 
-The `zig` module shows the currently installed version of Zig. The module will be shown if any of the following conditions are met:
+The `zig` module shows the currently installed version of Zig. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - The current directory contains a `.zig` file
 
