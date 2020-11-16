@@ -101,7 +101,7 @@
   align="right" />
 
 
-**El símbolo del sistema minimalista, ultrarápido e infinitamente customizable para cualquier intérprete de comandos!**
+**¡El prompt minimalista, increíblemente rápido, e infinitamente personalizable para cualquier shell!**
 
 
 - **Rápido:** es rápido – _muy muy_ rápido! 🚀
@@ -199,7 +199,7 @@
 
    #### PowerShell
 
-    Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+    Añade lo siguiente al final de `Microsoft.PowerShell_profile.ps1`. Puede comprobar la ubicación de este archivo consultando la variable `$PROFILE` en PowerShell. Normalmente la ruta es `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` o `~/.config/powershell/Microsoft.PowerShell_profile.ps1` en -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
