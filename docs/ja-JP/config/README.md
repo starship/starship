@@ -117,7 +117,7 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 - (
 - )
 
-Note that `toml` has [its own escape syntax](https://github.com/toml-lang/toml#user-content-string). It is recommended to use a literal string (`''`) in your config. If you want to use a basic string (`""`), pay attention to escape the backslash `\`.
+`toml` は [独自のエスケープ構文](https://github.com/toml-lang/toml#user-content-string) を持っていることに注意してください。 It is recommended to use a literal string (`''`) in your config. If you want to use a basic string (`""`), pay attention to escape the backslash `\`.
 
 For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
 
@@ -1477,13 +1477,13 @@ format = "via [🌕 $version](bold blue) "
 
 ## Memory Usage
 
-The `memory_usage` module shows current system memory and swap usage.
+`memory_usage`モジュールは、現在のシステムメモリとスワップ使用量を示します。
 
-By default the swap usage is displayed if the total system swap is non-zero.
+デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1900,7 +1900,7 @@ format = "via [$symbol$version](bold white)"
 
 ## Python
 
-The `python` module shows the currently installed version of Python and the current Python virtual environment if one is activated.
+`python` モジュールは現在インストールされているPythonのバージョンと アクティブ化されている場合は現在のPython仮想環境を表示します。
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
