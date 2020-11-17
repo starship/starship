@@ -688,6 +688,33 @@ mod tests {
     }
 
     #[test]
+    fn table_get_styles_with_none() {
+        // Test that none on the end will result in None, overriding bg:none
+        let config = Value::from("fg:red bg:none none");
+        assert!(<Style>::from_config(&config).is_none());
+
+        // Test that none in front will result in None, overriding bg:none
+        let config = Value::from("none fg:red bg:none");
+        assert!(<Style>::from_config(&config).is_none());
+
+        // Test that none in the middle will result in None, overriding bg:none
+        let config = Value::from("fg:red none bg:none");
+        assert!(<Style>::from_config(&config).is_none());
+
+        // Test that fg:none will result in None
+        let config = Value::from("fg:none bg:black");
+        assert!(<Style>::from_config(&config).is_none());
+
+        // Test that bg:none will yield a style
+        let config = Value::from("fg:red bg:none");
+        assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.normal());
+
+        // Test that bg:none will yield a style
+        let config = Value::from("fg:red bg:none bold");
+        assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.bold());
+    }
+
+    #[test]
     fn table_get_styles_ordered() {
         // Test a background style with inverted order (also test hex + ANSI)
         let config = Value::from("bg:#050505 underline fg:120");
