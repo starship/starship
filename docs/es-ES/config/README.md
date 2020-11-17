@@ -1657,7 +1657,7 @@ The `nodejs` module shows the currently installed version of NodeJS. El módulo 
 
 | Variable  | Ejemplo    | Descripción                            |
 | --------- | ---------- | -------------------------------------- |
-| version   | `v13.12.0` | The version of `node`                  |
+| version   | `v13.12.0` | La versión de `node`                   |
 | symbol    |            | Refleja el valor de la opción `symbol` |
 | style\* |            | Refleja el valor de la opción `style`  |
 
@@ -2179,8 +2179,8 @@ format = "via [🏎  $version](red bold)"
 
 The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `.terraform` folder
-- Current directory contains a file with the `.tf` or `.hcl` extensions
+- El directorio actual contiene una carpeta `.terraform`
+- El directorio actual contiene un archivo con las extensiones `.tf` o `.hcl`
 
 ### Opciones
 
@@ -2204,7 +2204,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 
 ### Ejemplo
 
-#### With Version
+#### Con la versión
 
 ```toml
 # ~/.config/starship.toml
@@ -2213,7 +2213,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 format = "[🏎💨 $version$workspace]($style) "
 ```
 
-#### Without version
+#### Sin la versión
 
 ```toml
 # ~/.config/starship.toml
@@ -2250,7 +2250,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Ejemplo    | Descripción                           |
 | --------- | ---------- | ------------------------------------- |
-| time      | `13:08:10` | The current time.                     |
+| time      | `13:08:10` | La hora actual.                       |
 | style\* |            | Refleja el valor de la opción `style` |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
@@ -2270,12 +2270,12 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `username` muestra el nombre de usuario activo. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current user is root
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- El usuario actual es root
+- El usuario actual no es el mismo que el que está conectado
+- El usuario está actualmente conectado como una sesión SSH
+- La variable `show_always` se establece en true
 
 ### Opciones
 
@@ -2309,9 +2309,9 @@ show_always = true
 
 ## Zig
 
-The `zig` module shows the currently installed version of Zig. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `zig` muestra la versión instalada de Zig. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `.zig` file
+- El directorio actual contiene un archivo `.zig`
 
 ### Opciones
 
@@ -2320,13 +2320,13 @@ The `zig` module shows the currently installed version of Zig. El módulo se mue
 | `symbol`   | `"↯ "`                             | The symbol used before displaying the version of Zig. |
 | `style`    | `"bold yellow"`                    | El estilo del módulo.                                 |
 | `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                |
-| `disabled` | `false`                            | Disables the `zig` module.                            |
+| `disabled` | `false`                            | Deshabilita el módulo `zig`.                          |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v0.6.0` | The version of `zig`                   |
+| version   | `v0.6.0` | La versión de `zig`                    |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2388,11 +2388,11 @@ The order in which custom modules are shown can be individually set by including
 
 ### Variables
 
-| Variable  | Descripción                            |
-| --------- | -------------------------------------- |
-| output    | The output of shell command in `shell` |
-| symbol    | Refleja el valor de la opción `symbol` |
-| style\* | Refleja el valor de la opción `style`  |
+| Variable  | Descripción                               |
+| --------- | ----------------------------------------- |
+| output    | La salida del comando de shell en `shell` |
+| symbol    | Refleja el valor de la opción `symbol`    |
+| style\* | Refleja el valor de la opción `style`     |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -2431,8 +2431,8 @@ Automatic detection of shells and proper parameters addition are currently imple
 # ~/.config/starship.toml
 
 [custom.foo]
-command = "echo foo"  # shows output of command
-files = ["foo"]       # can specify filters
+command = "echo foo"  # muestra la salida del comando
+files = ["foo"]       # se pueden especificar filtros
 when = """ test "$HOME" == "$PWD" """
 format = " transcending [$output]($style)"
 
