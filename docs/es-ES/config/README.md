@@ -1764,19 +1764,19 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Opciones
 
-| Opción            | Por defecto                        | Descripción                                                |
-| ----------------- | ---------------------------------- | ---------------------------------------------------------- |
-| `format`          | `"via [$symbol$version]($style) "` | El formato del módulo.                                     |
-| `symbol`          | `"📦 "`                             | The symbol used before displaying the version the package. |
-| `style`           | `"bold 208"`                       | El estilo del módulo.                                      |
-| `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
-| `disabled`        | `false`                            | Disables the `package` module.                             |
+| Opción            | Por defecto                        | Descripción                                                                      |
+| ----------------- | ---------------------------------- | -------------------------------------------------------------------------------- |
+| `format`          | `"via [$symbol$version]($style) "` | El formato del módulo.                                                           |
+| `symbol`          | `"📦 "`                             | El símbolo usado antes de mostrar la versión del paquete.                        |
+| `style`           | `"bold 208"`                       | El estilo del módulo.                                                            |
+| `display_private` | `false`                            | Activar la visualización de la versión para los paquetes marcados como privados. |
+| `disabled`        | `false`                            | Deshabilita el módulo `package`.                                                 |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v1.0.0` | The version of your package            |
+| version   | `v1.0.0` | La versión de su paquete               |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -1793,28 +1793,28 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-The `perl` module shows the currently installed version of Perl. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `perl` muestra la versión actualmente instalada de Perl. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `Makefile.PL` or `Build.PL` file
-- The current directory contains a `cpanfile` or `cpanfile.snapshot` file
-- The current directory contains a `META.json` file or `META.yml` file
-- The current directory contains a `.perl-version` file
-- The current directory contains a `.pl`, `.pm` or `.pod`
+- El directorio actual contiene un archivo `Makefile.PL` o `Build.PL`
+- El directorio actual contiene un archivo `cpanfile` o `cpanfile.snapshot`
+- El directorio actual contiene un archivo `META.json` o `META.yml`
+- El directorio actual contiene un archivo `.perl-version`
+- El directorio actual contiene un `.pl`, `.pm` o `.pod`
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                           |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
-| `symbol`   | `"🐪 "`                             | The symbol used before displaying the version of Perl |
-| `style`    | `"bold 149"`                       | El estilo del módulo.                                 |
-| `disabled` | `false`                            | Disables the `perl` module.                           |
+| Opción     | Por defecto                        | Descripción                                          |
+| ---------- | ---------------------------------- | ---------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | La cadena de formato para el módulo.                 |
+| `symbol`   | `"🐪 "`                             | El símbolo usado antes de mostrar la versión de Perl |
+| `style`    | `"bold 149"`                       | El estilo del módulo.                                |
+| `disabled` | `false`                            | Deshabilita el módulo `perl`.                        |
 
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v5.26.1` | The version of `perl`                  |
+| version   | `v5.26.1` | La versión de `perl`                   |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -1829,26 +1829,26 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `php` muestra la versión instalada de PHP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `composer.json` file
-- The current directory contains a `.php-version` file
-- The current directory contains a `.php` file
+- El directorio actual contiene un archivo `composer.json`
+- El directorio actual contiene un archivo `.php-version`
+- El directorio actual contiene un archivo `.php`
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                           |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                |
-| `symbol`   | `"🐘 "`                             | The symbol used before displaying the version of PHP. |
-| `style`    | `"147 bold"`                       | El estilo del módulo.                                 |
-| `disabled` | `false`                            | Disables the `php` module.                            |
+| Opción     | Por defecto                        | Descripción                                          |
+| ---------- | ---------------------------------- | ---------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                               |
+| `symbol`   | `"🐘 "`                             | El símbolo usado antes de mostrar la versión de PHP. |
+| `style`    | `"147 bold"`                       | El estilo del módulo.                                |
+| `disabled` | `false`                            | Deshabilita el módulo `php`.                         |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v7.3.8` | The version of `php`                   |
+| version   | `v7.3.8` | La versión de `php`                    |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -1865,25 +1865,25 @@ format = "via [🔹 $version](147 bold) "
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of PureScript version. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `purescript` muestra la versión actualmente instalada de PureScript. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `spago.dhall` file
-- The current directory contains a \*.purs files
+- El directorio actual contiene un archivo `spago.dhall`
+- El directorio actual contiene un archivo \*.purs
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                                  |
-| ---------- | ---------------------------------- | ------------------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                       |
-| `symbol`   | `"<=> "`                     | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"`                     | El estilo del módulo.                                        |
-| `disabled` | `false`                            | Disables the `purescript` module.                            |
+| Opción     | Por defecto                        | Descripción                                                 |
+| ---------- | ---------------------------------- | ----------------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                      |
+| `symbol`   | `"<=> "`                     | El símbolo usado antes de mostrar la versión de PureScript. |
+| `style`    | `"bold white"`                     | El estilo del módulo.                                       |
+| `disabled` | `false`                            | Deshabilita el módulo `purescript`.                         |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `0.13.5` | The version of `purescript`            |
+| version   | `0.13.5` | La versión de `purescript`             |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -1902,7 +1902,7 @@ format = "via [$symbol$version](bold white)"
 
 The `python` module shows the currently installed version of Python and the current Python virtual environment if one is activated.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
+Si `pyenv_version_name` se establece en `true`, mostrará el nombre de la versión de pyenv. De lo contrario, se mostrará el número de versión de `python --version`.
 
 El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
@@ -2186,7 +2186,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 
 | Opción     | Por defecto                          | Descripción                                           |
 | ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
+| `format`   | `"via [$symbol$workspace]($style) "` | La cadena de formato para el módulo.                  |
 | `symbol`   | `"💠 "`                               | A format string shown before the terraform workspace. |
 | `style`    | `"bold 105"`                         | El estilo del módulo.                                 |
 | `disabled` | `false`                              | Disables the `terraform` module.                      |
@@ -2236,7 +2236,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establezca `disabl
 
 | Opción            | Por defecto             | Descripción                                                                                                                        |
 | ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
+| `format`          | `"at [$time]($style) "` | La cadena de formato para el módulo.                                                                                               |
 | `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
 | `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
 | `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
