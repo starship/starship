@@ -1113,23 +1113,23 @@ Las siguientes variables se pueden utilizar en `format`:
 | `modified`     | Muestra `modified` cuando hay modificaciones de archivo en el directorio de trabajo.                    |
 | `staged`       | Muestra `staged` cuando se ha añadido un nuevo archivo al área de "stash".                              |
 | `renamed`      | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de "stash".                      |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                           |
+| `deleted`      | Muestra `deleted` cuando un archivo ha sido añadido al área de "stash".                                 |
 | style\*      | Refleja el valor de la opción `style`                                                                   |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
-The following variables can be used in `diverged`:
+Las siguientes variables pueden ser usadas en `diverged`:
 
-| Variable       | Descripción                                    |
-| -------------- | ---------------------------------------------- |
-| `ahead_count`  | Number of commits ahead of the tracking branch |
-| `behind_count` | Number of commits behind the tracking branch   |
+| Variable       | Descripción                                             |
+| -------------- | ------------------------------------------------------- |
+| `ahead_count`  | Número de commits por delante de la rama de seguimiento |
+| `behind_count` | Número de commits detrás de la rama de seguimiento      |
 
-The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+Las siguientes variales pueden ser usadas en `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
-| Variable | Descripción              |
-| -------- | ------------------------ |
-| `count`  | Show the number of files |
+| Variable | Descripción                   |
+| -------- | ----------------------------- |
+| `count`  | Muestra el número de archivos |
 
 ### Ejemplo
 
@@ -1149,7 +1149,7 @@ renamed = "👅"
 deleted = "🗑"
 ```
 
-Show ahead/behind count of the branch being tracked
+Mostrar el recuento delante/detrás de la rama que está siendo rastreada
 
 ```toml
 # ~/.config/starship.toml
@@ -1162,31 +1162,31 @@ behind = "⇣${count}"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `golang` muestra la versión actualmente instalada de Golang. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un fichero `go.mod`
 - El directorio actual contiene un fichero `go.sum`
 - El directorio actual contiene un fichero `glide.yaml`
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
-- The current directory contains a `.go-version` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- El directorio actual contiene un archivo `Gopkg.yml`
+- El directorio actual contiene un archivo `Gopkg.lock`
+- El directorio actual contiene un archivo `.go-version`
+- El directorio actual contiene un directorio `Godeps`
+- El directorio actual contiene un archivo con la extensión `.go`
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                    |
-| ---------- | ---------------------------------- | ---------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                         |
-| `symbol`   | `"🐹 "`                             | A format string representing the symbol of Go. |
-| `style`    | `"bold cyan"`                      | El estilo del módulo.                          |
-| `disabled` | `false`                            | Disables the `golang` module.                  |
+| Opción     | Por defecto                        | Descripción                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                 |
+| `symbol`   | `"🐹 "`                             | Una cadena de formato que representa el símbolo de Go. |
+| `style`    | `"bold cyan"`                      | El estilo del módulo.                                  |
+| `disabled` | `false`                            | Deshabilita el módulo de `golang`.                     |
 
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v1.12.1` | The version of `go`                    |
+| version   | `v1.12.1` | La versión de `go`                     |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -1203,25 +1203,25 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of Helm. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `helm` muestra la versión instalada de Helm. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un fichero `helmfile.yaml`
-- The current directory contains a `Chart.yaml` file
+- El directorio actual contiene un archivo `Chart.yaml`
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                      |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                           |
-| `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
-| `style`    | `"bold white"`                     | El estilo del módulo.                            |
-| `disabled` | `false`                            | Disables the `helm` module.                      |
+| Opción     | Por defecto                        | Descripción                                              |
+| ---------- | ---------------------------------- | -------------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                   |
+| `symbol`   | `"⎈ "`                             | Una cadena de formato que representa el símbolo de Helm. |
+| `style`    | `"bold white"`                     | El estilo del módulo.                                    |
+| `disabled` | `false`                            | Deshabilita el módulo `helm`.                            |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v3.1.1` | The version of `helm`                  |
+| version   | `v3.1.1` | La versión de `helm`                   |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -1238,17 +1238,17 @@ format = "via [⎈ $version](bold white) "
 
 ## Hostname
 
-The `hostname` module shows the system hostname.
+El módulo `hostname` muestra el nombre de host del sistema.
 
 ### Opciones
 
-| Opción     | Por defecto                 | Descripción                                                                                                                          |
-| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
-| `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`   | `"[$hostname]($style) in "` | El formato del módulo.                                                                                                               |
-| `style`    | `"bold dimmed green"`       | El estilo del módulo.                                                                                                                |
-| `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
+| Opción     | Por defecto                 | Descripción                                                                                                                                                       |
+| ---------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only` | `true`                      | Mostrar sólo el nombre de host cuando esté conectado a una sesión SSH.                                                                                            |
+| `trim_at`  | `"."`                       | Cadena en la que el nombre de host se corta, después de la primera partida. `"."` se detendrá después del primer punto. `""` deshabilitará cualquier truncamiento |
+| `format`   | `"[$hostname]($style) in "` | El formato del módulo.                                                                                                                                            |
+| `style`    | `"bold dimmed green"`       | El estilo del módulo.                                                                                                                                             |
+| `disabled` | `false`                     | Deshabilita el módulo `hostname`.                                                                                                                                 |
 
 ### Variables
 
@@ -1273,25 +1273,25 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of Java. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `java` muestra la versión actualmente instalada de Java. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
-- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
+- El directorio actual contiene un archivo `pom.xml`, `build.gradle.kts`, `build.sbt` o `.java-version`
+- El directorio actual contiene un archivo con la extensión `.java`, `.class`, `.gradle` o `.jar`
 
 ### Opciones
 
-| Opción     | Por defecto                            | Descripción                                     |
-| ---------- | -------------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [${symbol}${version}]($style) "` | El formato del módulo.                          |
-| `symbol`   | `"☕ "`                                 | A format string representing the symbol of Java |
-| `style`    | `"red dimmed"`                         | El estilo del módulo.                           |
-| `disabled` | `false`                                | Disables the `java` module.                     |
+| Opción     | Por defecto                            | Descripción                                             |
+| ---------- | -------------------------------------- | ------------------------------------------------------- |
+| `format`   | `"via [${symbol}${version}]($style) "` | El formato del módulo.                                  |
+| `symbol`   | `"☕ "`                                 | Una cadena de formato que representa el símbolo de Java |
+| `style`    | `"red dimmed"`                         | El estilo del módulo.                                   |
+| `disabled` | `false`                                | Deshabilita el módulo `java`.                           |
 
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| version   | `v14`   | The version of `java`                  |
+| version   | `v14`   | La versión de `java`                   |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
