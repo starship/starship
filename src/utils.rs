@@ -68,6 +68,15 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             ),
             stderr: String::default(),
         }),
+        "cmd /C elixir.bat --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+Erlang/OTP 22 [erts-10.6.4] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1] [hipe]
+
+Elixir 1.10 (compiled with Erlang/OTP 22)\n",
+            ),
+            stderr: String::default(),
+        }),
         "elm --version" => Some(CommandOutput {
             stdout: String::from("0.19.1\n"),
             stderr: String::default(),

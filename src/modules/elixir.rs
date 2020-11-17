@@ -55,7 +55,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_elixir_version() -> Option<(String, String)> {
-    let output = utils::exec_cmd("elixir", &["--version"])?.stdout;
+    let output = if cfg!(target_os = "windows") {
+        utils::exec_cmd("cmd", &["/C", "elixir.bat", "--version"])?.stdout
+    } else {
+        utils::exec_cmd("elixir", &["--version"])?.stdout
+    };
 
     parse_elixir_version(&output)
 }
