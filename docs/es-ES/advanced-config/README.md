@@ -43,9 +43,9 @@ function set_win_title(){
 }
 ```
 
-Puedes usar variables para personalizar este titulo (`$USER`, `$HOSTNAME` y `$PWD` son opciones populares).
+Puedes usar variables para personalizar este título (`$USER`, `$HOSTNAME` y `$PWD` son opciones populares).
 
-En `bash`, establece que esta función sea la función precmd de Starship:
+En `Bash`, establece que esta función sea la función precmd de Starship:
 
 ```bash
 starship_precmd_user_func="set_win_title"
@@ -57,9 +57,9 @@ En `zsh`, añade esto al array `precmd_functions`:
 precmd_functions+=(set_win_title)
 ```
 
-Si te gusta el resultado, añade estas líneas a tu archivo de configuración del shell (`~/.bashrc` o `~/.zsrhc`) para hacerlo permanente.
+Si te gusta el resultado, añade estas líneas a tu archivo de configuración del intérprete de comandos (`~/.bashrc` o `~/.zsrhc`) para hacerlo permanente.
 
-Por ejemplo, si quieres mostrar tu directorio actual en el título de la pestaña de la terminal, añade el siguiente fragmento a tu `~/.ashrc` o `~/.zshrc`:
+Por ejemplo, si quieres mostrar tu directorio actual en el título de la pestaña de la terminal, añade el siguiente fragmento a tu `~/.bashrc` o `~/.zshrc`:
 
 ```bash
 function set_win_title(){
@@ -68,9 +68,9 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-## Estilo de cadenas de texto
+## Cadenas de Estilo
 
-Los estilos de cadenas de texto son una lista de palabras, separadas por espacios en blanco. Las palabras no son sensibles a mayúsculas (es decir, `negrita` y `NeGriTa` se consideran la misma cadena). Cada palabra puede ser una de las siguientes:
+Las cadenas de estilo son una lista de palabras, separadas por espacios en blanco. Las palabras no son sensibles a mayúsculas (es decir, `bold` y `BoLd` se consideran la misma cadena). Cada palabra puede ser una de las siguientes:
 
   - `bold`
   - `underline`
@@ -82,7 +82,7 @@ Los estilos de cadenas de texto son una lista de palabras, separadas por espacio
 
 donde `<color>` es un especificador de color (discutido a continuación). `fg:<color>` y `<color>` hacen actualmente lo mismo, aunque esto puede cambiar en el futuro. El orden de las palabras en la cadena no importa.
 
-El estilo `none` anula todas los otros estilos en una cadena de texto, por lo que, por ejemplo, `fg:red none fg:blue` creará una cadena de texto sin ningún tipo de estilo. Puede convertirse en un error usar `none` junto con otros estilos en el futuro.
+El token `none` anula todas las otras fichas en una cadena, por lo que, por ejemplo, `fg:red none fg:blue` creará una cadena sin ningún tipo de estilo. Puede convertirse en un error usar `none` junto con otros estilos en el futuro.
 
 Un especificador de color puede ser uno de los siguientes:
 
