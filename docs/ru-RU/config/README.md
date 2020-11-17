@@ -57,27 +57,27 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 ### Форматирование строк
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+Формат строк - это формат, с которым модуль печатает все переменные. Большинство модулей имеют запись `формата`, который настраивает формат отображения модуля. Вы можете использовать тексты, переменные и группы текста в строке формата.
 
 #### Переменная
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable only contains letters, numbers and `_`.
+Переменная содержит символ `$`, за которым следует имя переменной. Имя переменной содержит только буквы, цифры и `_`.
 
-For example:
+Например:
 
-- `$version` is a format string with a variable named `version`.
-- `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
-- `$git_branch $git_commit` has the two variables separated with a space.
+- `$version` это строка формата с именем `версии`.
+- `$git_branch$git_commit` это строка формата с двумя переменными `git_branch` и `git_commit`.
+- `$git_branch $git_commit` имеет две переменные, разделенные пробелом.
 
-#### Text Group
+#### Группа текста
 
-A text group is made up of two different parts.
+Текстовая группа состоит из двух различных частей.
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+Первая часть, которая заключена в `[]`, это [формат строки](#format-strings). Вы можете добавлять в него тексты, переменные, или даже вложенные текстовые группы.
 
 In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
 
-For example:
+Например:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
 - `[⬢ $version](bold green)` will print a symbol `⬢` followed by the content of variable `version`, with bold text colored green.
@@ -100,7 +100,7 @@ For example:
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-For example:
+Например:
 
 - `(@$region)` will show nothing if the variable `region` is `None`, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
