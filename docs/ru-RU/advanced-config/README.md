@@ -57,9 +57,9 @@ starship_precmd_user_func="set_win_title"
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+Если вам нравится результат, добавьте эти строки в конфигурационный файл оболочки (`~/.bashrc` или `~/.zsrhc`), чтобы оставить это навсегда.
 
-For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+Например, если вы хотите отобразить ваш текущий каталог в заголовке вкладки терминала, добавьте следующий сниппет в `~/. bashrc` или `~/.zshrc`:
 
 ```bash
 function set_win_title(){
