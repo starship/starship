@@ -8,9 +8,9 @@ Las configuraciones de esta sección están sujetos a cambios en futuras version
 
 :::
 
-## Comandos pre-prompt y pre-ejecucucióne personalizados en Bash
+## Comandos pre-prompt y pre-ejecucución personalizados en Bash
 
-Bash no posee un framework formal de preexec/precmd como la mayoría de las demás shells. Por lo tanto, es complicado proveer una personalización completa en `bash`. Sin embargo, Starship te da la posibilidad de insertar de forma limitada tus propias funciones en el proceso de renderizado del prompt:
+Bash no posee un framework oficial de preexec/precmd como la mayoría de los demás intérpretes de comandos. Por lo tanto, es complicado proveer una personalización completa en `bash`. Sin embargo, Starship te da la posibilidad de insertar de forma limitada tus propias funciones en el proceso de renderizado del prompt:
 
 - Para ejecutar una función personalizada previa al renderizado del prompt, defina una nueva función y asigne su nombre a `starship_precmd_user_func`. Por ejemplo, para renderizar un cohete antes del prompt, se puede realizar así:
 
