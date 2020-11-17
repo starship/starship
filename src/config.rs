@@ -381,7 +381,9 @@ pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
                         } else {
                             let parsed = parse_color_string(color_string);
                             if !col_fg && parsed.is_none() {
-                                Some(style)
+                                let mut new_style = style.clone();
+                                new_style.background = Option::None;
+                                Some(new_style)
                             } else {
                                 parsed.map(|ansi_color| {
                                     if col_fg {
@@ -716,6 +718,10 @@ mod tests {
 
         // Test that bg:none will yield a style
         let config = Value::from("fg:red bg:none bold");
+        assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.bold());
+
+        // Test that bg:none the previous background colour overwrites
+        let config = Value::from("fg:red bg:green bold bg:none");
         assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.bold());
     }
 
