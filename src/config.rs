@@ -381,7 +381,7 @@ pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
                         } else {
                             let parsed = parse_color_string(color_string);
                             if !col_fg && parsed.is_none() {
-                                let mut new_style = style.clone();
+                                let mut new_style = style;
                                 new_style.background = Option::None;
                                 Some(new_style)
                             } else {
