@@ -315,12 +315,12 @@ El módulo `battery` muestra la cantidad de batería y si está cargando o no. E
 <details>
 <summary>Hay otras opciones para algunos estados de la batería menos comunes.</summary>
 
-| Variable         | Descripción                                         |
-| ---------------- | --------------------------------------------------- |
-| `unknown_symbol` | The symbol shown when the battery state is unknown. |
-| `empty_symbol`   | The symbol shown when the battery state is empty.   |
+| Variable         | Descripción                                                              |
+| ---------------- | ------------------------------------------------------------------------ |
+| `unknown_symbol` | El símbolo que se muestra cuando el estado de la batería es desconocido. |
+| `empty_symbol`   | El símbolo que se muestra cuando el estado de la batería está vacío.     |
 
-Note: Battery indicator will be hidden if the status is `unknown` or `empty` unless you specify the option in the config.
+Nota: El indicador de batería se ocultará si el estado es `desconocido` o `vacío` a menos que especifique la opción en la configuración.
 
 </details>
 
@@ -637,9 +637,9 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repo 
 <details>
 <summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
 
-| Advanced Option             | Por defecto | Descripción                                                                              |
+| Opciones avanzadas          | Por defecto | Descripción                                                                              |
 | --------------------------- | ----------- | ---------------------------------------------------------------------------------------- |
-| `substitutions`             |             | A table of substitutions to be made to the path.                                         |
+| `substitutions`             |             | Una tabla de sustituciones que se deben hacer a la ruta.                                 |
 | `fish_style_pwd_dir_length` | `0`         | The number of characters to use when applying fish shell pwd path logic.                 |
 | `use_logical_path`          | `true`      | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
 
@@ -2421,7 +2421,7 @@ Por ejemplo, PowerShell requiere el parámetro `-Command` para ejecutar una sola
 
 Se recomiendan parámetros similares a `-NoProfile` en PowerShell para otros shells para evitar tiempo extra de carga de un perfil personalizado en cada invocación de starship.
 
-La detección automática de shells y la adición adecuada de parámetros están actualmente implementados, pero es posible que no todos los shells estén cubiertos. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
+La detección automática de shells y la adición adecuada de parámetros están actualmente implementados, pero es posible que no todos los shells estén cubiertos. [Por favor, abra un issue](https://github.com/starship/starship/issues/new/choose) con los detalles del intérprete de comandos y la configuración de starship si se encuentra en tal escenario.
 
 :::
 
