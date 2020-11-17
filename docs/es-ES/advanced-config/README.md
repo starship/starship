@@ -27,15 +27,15 @@ starship_precmd_user_func="blastoff"
 function blastoff(){
     echo "🚀"
 }
-trap blastoff DEBUG     # Trap DEBUG *before* running starship
+trap blastoff DEBUG     # Trampa DEBUG *antes* de la ejecución de Starship
 eval $(starship init bash)
 ```
 
-## Cambiar el título de la ventana
+## Cambiar el Título de la Ventana
 
-Algunas shells van a cambiar automáticamente el título de la ventana por ti. (por ejemplo, para mostrar tu directorio actual). Fish incluso lo hace de forma predeterminada. Starship no hace esto, pero es bastante sencillo añadir esta funcionalidad a `bash` o `zsh`.
+Algunos intérpretes de comandos van a cambiar automáticamente el título de la ventana por ti (p. ej., para mostrar tu directorio actual). Fish incluso lo hace por defecto. Starship no hace esto, pero es bastante sencillo añadir esta funcionalidad a `Bash` o `zsh`.
 
-Primero, define una función para el cambio de titulo de la ventana (idéntico en bash y zsh):
+Primero, define una función para el cambio de título de la ventana (idéntico en Bash y zsh):
 
 ```bash
 function set_win_title(){
