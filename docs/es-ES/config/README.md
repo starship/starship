@@ -1914,7 +1914,7 @@ El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 - El directorio actual contiene un archivo `tox.ini`
 - El directorio actual contiene un archivo `setup.py`
 - El directorio actual contiene un archivo `__init__.py`
-- A virtual environment is currently activated
+- Un entorno virtual está activado actualmente
 
 ### Opciones
 
@@ -1931,13 +1931,13 @@ El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 ### Variables
 
-| Variable     | Ejemplo         | Descripción                                |
-| ------------ | --------------- | ------------------------------------------ |
-| version      | `"v3.8.1"`      | The version of `python`                    |
-| symbol       | `"🐍 "`          | Refleja el valor de la opción `symbol`     |
-| style        | `"yellow bold"` | Refleja el valor de la opción `style`      |
-| pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `"venv"`        | The current `virtualenv` name              |
+| Variable     | Ejemplo         | Descripción                                 |
+| ------------ | --------------- | ------------------------------------------- |
+| version      | `"v3.8.1"`      | La versión de `python`                      |
+| symbol       | `"🐍 "`          | Refleja el valor de la opción `symbol`      |
+| style        | `"yellow bold"` | Refleja el valor de la opción `style`       |
+| pyenv_prefix | `"pyenv "`      | Ordena el valor de la opción `pyenv_prefix` |
+| virtualenv   | `"venv"`        | El nombre actual del `virtualenv`           |
 
 
 ### Ejemplo
@@ -1950,9 +1950,9 @@ symbol = "👾 "
 pyenv_version_name = true
 ```
 
-Using the `python3` binary to get the version.
+Usando el binario de `python3` para obtener la versión.
 
-Note - The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
+Nota - La variable `python_binary` cambia el binario que Starship ejecuta para obtener la versión de Python, no cambia los argumentos que se utilizan.
 
 ```toml
 # ~/.config/starship.toml
@@ -1963,20 +1963,20 @@ python_binary = "python3"
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `ruby` muestra la versión actualmente instalada de Ruby. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `Gemfile` file
-- The current directory contains a `.ruby-version` file
-- The current directory contains a `.rb` file
+- El directorio actual contiene un archivo `Gemfile`
+- El directorio actual contiene un archivo `.ruby-version`
+- El directorio actual contiene un archivo `.rb`
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                      |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                           |
-| `symbol`   | `"💎 "`                             | A format string representing the symbol of Ruby. |
-| `style`    | `"bold red"`                       | El estilo del módulo.                            |
-| `disabled` | `false`                            | Disables the `ruby` module.                      |
+| Opción     | Por defecto                        | Descripción                                              |
+| ---------- | ---------------------------------- | -------------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                   |
+| `symbol`   | `"💎 "`                             | Una cadena de formato que representa el símbolo de Ruby. |
+| `style`    | `"bold red"`                       | El estilo del módulo.                                    |
+| `disabled` | `false`                            | Deshabilita el módulo `ruby`.                            |
 
 ### Variables
 
@@ -1999,19 +1999,19 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `rust` muestra la versión instalada de Rust. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- El directorio actual contiene un archivo `Cargo.toml`
+- El directorio actual contiene un archivo con la extensión `.rs`
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                     |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                          |
-| `symbol`   | `"🦀 "`                             | A format string representing the symbol of Rust |
-| `style`    | `"bold red"`                       | El estilo del módulo.                           |
-| `disabled` | `false`                            | Disables the `rust` module.                     |
+| Opción     | Por defecto                        | Descripción                                             |
+| ---------- | ---------------------------------- | ------------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                  |
+| `symbol`   | `"🦀 "`                             | Una cadena de formato que representa el símbolo de Rust |
+| `style`    | `"bold red"`                       | El estilo del módulo.                                   |
+| `disabled` | `false`                            | Deshabilita el módulo `rust`.                           |
 
 ### Variables
 
@@ -2034,23 +2034,23 @@ format = "via [⚙️ $version](red bold)"
 
 ## SHLVL
 
-The `shlvl` module shows the current SHLVL ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
+El módulo `shlvl` muestra la variable de entorno actual SHLVL ("nivel de shell"), si está establecido en un número y conoce o supera el umbral especificado.
 
 ### Opciones
 
-| Opción      | Por defecto                  | Descripción                             |
-| ----------- | ---------------------------- | --------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                      |
-| `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                  |
-| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL. |
-| `style`     | `"bold yellow"`              | El estilo del módulo.                   |
-| `disabled`  | `true`                       | Disables the `shlvl` module.            |
+| Opción      | Por defecto                  | Descripción                                 |
+| ----------- | ---------------------------- | ------------------------------------------- |
+| `threshold` | `2`                          | Mostrar umbral.                             |
+| `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                      |
+| `symbol`    | `"↕️ "`                      | El símbolo usado para representar el SHLVL. |
+| `style`     | `"bold yellow"`              | El estilo del módulo.                       |
+| `disabled`  | `true`                       | Deshabilita el módulo `shlvl`.              |
 
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| shlvl     | `3`     | The current value of SHLVL             |
+| shlvl     | `3`     | El valor actual de SHLVL               |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -2069,22 +2069,22 @@ threshold = 3
 
 ## Singularity
 
-The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
+El módulo `singularity` muestra la imagen de singularity actual, si se encuentra dentro de un contenedor y `$SINGULARITY_NAME` está establecido.
 
 ### Opciones
 
-| Opción     | Por defecto                      | Descripción                                      |
-| ---------- | -------------------------------- | ------------------------------------------------ |
-| `format`   | `'[$symbol\[$env\]]($style) '` | El formato del módulo.                           |
-| `symbol`   | `""`                             | A format string displayed before the image name. |
-| `style`    | `"bold dimmed blue"`             | El estilo del módulo.                            |
-| `disabled` | `false`                          | Disables the `singularity` module.               |
+| Opción     | Por defecto                      | Descripción                                                         |
+| ---------- | -------------------------------- | ------------------------------------------------------------------- |
+| `format`   | `'[$symbol\[$env\]]($style) '` | El formato del módulo.                                              |
+| `symbol`   | `""`                             | Una cadena de formato que se muestra antes del nombre de la imagen. |
+| `style`    | `"bold dimmed blue"`             | El estilo del módulo.                                               |
+| `disabled` | `false`                          | Deshabilita el módulo `de singularidad`.                            |
 
 ### Variables
 
 | Variable  | Ejemplo      | Descripción                            |
 | --------- | ------------ | -------------------------------------- |
-| env       | `centos.img` | The current singularity image          |
+| env       | `centos.img` | La imagen de singularity actual        |
 | symbol    |              | Refleja el valor de la opción `symbol` |
 | style\* |              | Refleja el valor de la opción `style`  |
 
@@ -2101,7 +2101,7 @@ format = '[📦 \[$env\]]($style) '
 
 ## Status
 
-The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
+El módulo `status` muestra el código de salida del comando anterior. El módulo se mostrará sólo si el código de salida no es `0`.
 
 ::: tip
 
@@ -2109,18 +2109,18 @@ Este módulo está deshabilitado por defecto. Para activarlo, establezca `disabl
 
 ### Opciones
 
-| Opción     | Por defecto                | Descripción                                            |
-| ---------- | -------------------------- | ------------------------------------------------------ |
-| `format`   | `[$symbol$status]($style)` | The format of the module                               |
-| `symbol`   | `"✖"`                      | A format string representing the symbol for the status |
-| `style`    | `"bold red"`               | El estilo del módulo.                                  |
-| `disabled` | `true`                     | Disables the `status` module.                          |
+| Opción     | Por defecto                | Descripción                                                |
+| ---------- | -------------------------- | ---------------------------------------------------------- |
+| `format`   | `[$symbol$status]($style)` | El formato del módulo                                      |
+| `symbol`   | `"✖"`                      | Una cadena de formato que representa el símbolo del estado |
+| `style`    | `"bold red"`               | El estilo del módulo.                                      |
+| `disabled` | `true`                     | Deshabilita el módulo `status`.                            |
 
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| status    | `127`   | The exit code of the last command      |
+| status    | `127`   | El código de salida del último comando |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -2142,19 +2142,19 @@ disabled = false
 
 ## Swift
 
-The `swift` module shows the currently installed version of Swift. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `swift` muestra la versión actualmente instalada de Swift. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `Package.swift` file
-- The current directory contains a file with the `.swift` extension
+- El directorio actual contiene un archivo `Package.swift`
+- El directorio actual contiene un archivo con la extensión `.swift`
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                      |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                           |
-| `symbol`   | `"🐦 "`                             | A format string representing the symbol of Swift |
-| `style`    | `"bold 202"`                       | El estilo del módulo.                            |
-| `disabled` | `false`                            | Disables the `swift` module.                     |
+| Opción     | Por defecto                        | Descripción                                              |
+| ---------- | ---------------------------------- | -------------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                   |
+| `symbol`   | `"🐦 "`                             | Una cadena de formato que representa el símbolo de Swift |
+| `style`    | `"bold 202"`                       | El estilo del módulo.                                    |
+| `disabled` | `false`                            | Deshabilita el módulo `swift`.                           |
 
 ### Variables
 
@@ -2177,28 +2177,28 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `terraform` muestra el espacio de trabajo y la versión actual de terraform. Por defecto la versión de terraform no se muestra, ya que esto es lento en las versiones actuales de terraform cuando muchos plugins están en uso. Si aún deseas activarlo, [sigue el ejemplo que se muestra a continuación](#with-version). El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene una carpeta `.terraform`
 - El directorio actual contiene un archivo con las extensiones `.tf` o `.hcl`
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                           |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$workspace]($style) "` | La cadena de formato para el módulo.                  |
-| `symbol`   | `"💠 "`                               | A format string shown before the terraform workspace. |
-| `style`    | `"bold 105"`                         | El estilo del módulo.                                 |
-| `disabled` | `false`                              | Disables the `terraform` module.                      |
+| Opción     | Por defecto                          | Descripción                                                                     |
+| ---------- | ------------------------------------ | ------------------------------------------------------------------------------- |
+| `format`   | `"via [$symbol$workspace]($style) "` | La cadena de formato para el módulo.                                            |
+| `symbol`   | `"💠 "`                               | Una cadena de formato que se muestra antes del espacio de trabajo de terraform. |
+| `style`    | `"bold 105"`                         | El estilo del módulo.                                                           |
+| `disabled` | `false`                              | Deshabilita el módulo `terraform`.                                              |
 
 ### Variables
 
-| Variable  | Ejemplo       | Descripción                            |
-| --------- | ------------- | -------------------------------------- |
-| version   | `v0.12.24`    | The version of `terraform`             |
-| workspace | `por defecto` | The current terraform workspace        |
-| symbol    |               | Refleja el valor de la opción `symbol` |
-| style\* |               | Refleja el valor de la opción `style`  |
+| Variable  | Ejemplo       | Descripción                               |
+| --------- | ------------- | ----------------------------------------- |
+| version   | `v0.12.24`    | La versión de `terraform`                 |
+| workspace | `por defecto` | El espacio de trabajo actual de terraform |
+| symbol    |               | Refleja el valor de la opción `symbol`    |
+| style\* |               | Refleja el valor de la opción `style`     |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -2224,7 +2224,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Hora
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+El módulo `time` muestra la hora **local** actual. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
