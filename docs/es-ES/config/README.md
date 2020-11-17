@@ -1308,7 +1308,7 @@ symbol = "🌟 "
 
 ## Jobs
 
-El módulo `jobs` muestra el número actual de tareas en ejecución. El módulo se mostrará sólo si hay tareas en segundo plano ejecutándose. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
+El módulo `jobs` muestra el número actual de tareas en ejecución. El módulo se mostrará sólo si hay tareas en segundo plano ejecutándose. El módulo mostrará el número de tareas en ejecución si hay más de 1 tarea o más que el valor de `threshold` configurado, si existe.
 
 ### Opciones
 
@@ -1378,11 +1378,11 @@ symbol = "∴ "
 
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+Muestra el nombre del contexto actual de Kubernetes y, si se establece, el espacio de nombres del archivo kubeconfig. El espacio de nombres necesita establecerse en el archivo kubeconfig, esto puede hacerse mediante `kubectl config set-context starship-cluster --namespace astronaut`. Si se establece la variable env `$KUBECONFIG`, el módulo usará eso si no usará el `~/.kube/config`.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. Para activarlo, establezca `disabled` a `false` en su archivo de configuración.
 
 :::
 
@@ -1477,13 +1477,13 @@ format = "via [🌕 $version](bold blue) "
 
 ## Memory Usage
 
-The `memory_usage` module shows current system memory and swap usage.
+El módulo `memory_usage` muestra la memoria del sistema actual y el uso de memoria de intercambio.
 
-By default the swap usage is displayed if the total system swap is non-zero.
+Por defecto, el uso de swap se muestra si el intercambio total del sistema no es cero.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. Para activarlo, establezca `disabled` a `false` en su archivo de configuración.
 
 :::
 
@@ -2105,7 +2105,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. :::
+Este módulo está deshabilitado por defecto. Para activarlo, establezca `disabled` a `false` en su archivo de configuración. :::
 
 ### Opciones
 
@@ -2228,7 +2228,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. Para activarlo, establezca `disabled` a `false` en su archivo de configuración.
 
 :::
 
