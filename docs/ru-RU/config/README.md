@@ -9,14 +9,14 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Вся конфигурация Starship выполняется в этом файле [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Don't print a new line at the start of the prompt
+# Не добавлять пустую строку в начале ввода
 add_newline = false
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# Поменять символ "❯" на символ "➜"
+[character]      # Имя настраемого модуля - "character"
+symbol = "➜"      # Сегменту "symbol" присваеваем значение "➜"
 
-# Disable the package module, hiding it from the prompt completely
+# Отключить модуль пакетов, полностью скрывая его из терминала
 [package]
 disabled = true
 ```
@@ -27,21 +27,21 @@ disabled = true
 export STARSHIP_CONFIG=~/.starship
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+Аналогично в PowerShell (Windows) следует добавить эту строку в `$PROFILE`:
 
 ```ps1
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
 
-### Logging
+### Логгирование (Запись действий)
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+По умолчанию в starship записываются предупреждения и ошибки в файл с именем `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, где ключ сессии соответствует экземпляру терминала. Это, однако, может быть изменено с помощью переменной окружения `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+Аналогично в PowerShell (Windows) следует добавить эту строку в `$PROFILE`:
 
 ```ps1
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
@@ -51,11 +51,11 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 **Модуль**: Компонент строки, дающий информацию на основе контекстной информации вашей ОС. Например, модуль "nodejs" показывает установленную версию NodeJS на вашем компьютере, если вы находитесь в директории проекта NodeJS.
 
-**Variable**: Smaller sub-components that contains information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
+**Переменные**: Маленькие подкомпоненты, содержащие информацию, предоставленную модулем. Например, переменная "version" в модуле "nodejs" содержит текущую версию NodeJS.
 
-By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+По традициям, большинство модулей имеют префикс цвета терминала по умолчанию (например, `через` в "узлах") и пустое пространство как суффикс.
 
-### Format Strings
+### Форматирование строк
 
 Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
 
