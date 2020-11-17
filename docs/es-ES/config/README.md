@@ -1508,7 +1508,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establezca `disabl
 | symbol           | `🐏`           | Refleja el valor de la opción `symbol`                                             |
 | style\*        |               | Refleja el valor de la opción `style`                                              |
 
-\*: This variable can only be used as a part of a style string \*\*: The SWAP file information is only displayed if detected on the current system
+\*: Esta variable sólo puede utilizarse como parte de una cadena de estilo \*\*: La información del archivo SWAP sólo se muestra si se detecta en el sistema actual
 
 ### Ejemplo
 
@@ -1524,18 +1524,18 @@ style = "bold dimmed green"
 
 ## Mercurial Branch
 
-The `hg_branch` module shows the active branch of the repo in your current directory.
+El módulo `hg_branch` muestra la rama activa del repositorio en su directorio actual.
 
 ### Opciones
 
-| Opción              | Por defecto                      | Descripción                                                                                  |
-| ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
-| `style`             | `"bold purple"`                  | El estilo del módulo.                                                                        |
-| `format`            | `"on [$symbol$branch]($style) "` | El formato del módulo.                                                                       |
-| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to X graphemes                                                  |
-| `truncation_symbol` | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado.                            |
-| `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
+| Opción              | Por defecto                      | Descripción                                                                                         |
+| ------------------- | -------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`                           | El símbolo usado antes del marcador hg o nombre de la rama del repositorio en su directorio actual. |
+| `style`             | `"bold purple"`                  | El estilo del módulo.                                                                               |
+| `format`            | `"on [$symbol$branch]($style) "` | El formato del módulo.                                                                              |
+| `truncation_length` | `2^63 - 1`                       | Trunca el nombre de la rama hg a X grafemas                                                         |
+| `truncation_symbol` | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado.                                   |
+| `disabled`          | `true`                           | Deshabilita el módulo `hg_branch`.                                                                  |
 
 ### Variables
 
@@ -1560,21 +1560,21 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of Nim. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `nim` muestra la versión instalada de Nim. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `nim.cfg` file
-- The current directory contains a file with the `.nim` extension
-- The current directory contains a file with the `.nims` extension
-- The current directory contains a file with the `.nimble` extension
+- El directorio actual contiene un archivo `nim.cfg`
+- El directorio actual contiene un archivo con la extensión `.nim`
+- El directorio actual contiene un archivo con la extensión `.nims`
+- El directorio actual contiene un archivo con la extensión `.nimble`
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                           |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module                             |
-| `symbol`   | `"👑 "`                             | The symbol used before displaying the version of Nim. |
-| `style`    | `"bold yellow"`                    | El estilo del módulo.                                 |
-| `disabled` | `false`                            | Disables the `nim` module.                            |
+| Opción     | Por defecto                        | Descripción                                          |
+| ---------- | ---------------------------------- | ---------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo                                |
+| `symbol`   | `"👑 "`                             | El símbolo usado antes de mostrar la versión de Nim. |
+| `style`    | `"bold yellow"`                    | El estilo del módulo.                                |
+| `disabled` | `false`                            | Deshabilita el módulo `nim`.                         |
 
 ### Variables
 
@@ -1598,25 +1598,25 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
+El módulo `nix_shell` muestra el entorno nix-shell. El módulo se mostrará dentro de un entorno nix-shell.
 
 ### Opciones
 
-| Opción       | Por defecto                                    | Descripción                                           |
-| ------------ | ---------------------------------------------- | ----------------------------------------------------- |
-| `format`     | `'via [$symbol$state( \($name\))]($style) '` | El formato del módulo.                                |
-| `symbol`     | `"❄️ "`                                        | A format string representing the symbol of nix-shell. |
-| `style`      | `"bold blue"`                                  | El estilo del módulo.                                 |
-| `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
-| `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
-| `disabled`   | `false`                                        | Disables the `nix_shell` module.                      |
+| Opción       | Por defecto                                    | Descripción                                                                      |
+| ------------ | ---------------------------------------------- | -------------------------------------------------------------------------------- |
+| `format`     | `'via [$symbol$state( \($name\))]($style) '` | El formato del módulo.                                                           |
+| `symbol`     | `"❄️ "`                                        | Una cadena de formato que representa el símbolo de nix-shell.                    |
+| `style`      | `"bold blue"`                                  | El estilo del módulo.                                                            |
+| `impure_msg` | `"impure"`                                     | Una cadena de formato que se muestra cuando el intérprete de comandos es impuro. |
+| `pure_msg`   | `"pure"`                                       | Una cadena de formato que se muestra cuando el intérprete de comandos es puro.   |
+| `disabled`   | `false`                                        | Deshabilita el módulo `nix_shell`.                                               |
 
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| state     | `pure`  | The state of the nix-shell             |
-| name      | `lorri` | The name of the nix-shell              |
+| state     | `pure`  | El estado de nix-shell                 |
+| name      | `lorri` | El nombre de nix-shell                 |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -1636,7 +1636,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `nodejs` muestra la versión instalada de NodeJS. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un archivo `package.json`
 - El directorio actual contiene un archivo `.node-version`
@@ -1646,12 +1646,12 @@ The `nodejs` module shows the currently installed version of NodeJS. El módulo 
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                        |
-| ---------- | ---------------------------------- | -------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                             |
-| `symbol`   | `"⬢ "`                             | A format string representing the symbol of NodeJS. |
-| `style`    | `"bold green"`                     | El estilo del módulo.                              |
-| `disabled` | `false`                            | Disables the `nodejs` module.                      |
+| Opción     | Por defecto                        | Descripción                                                |
+| ---------- | ---------------------------------- | ---------------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                     |
+| `symbol`   | `"⬢ "`                             | Una cadena de formato que representa el símbolo de NodeJS. |
+| `style`    | `"bold green"`                     | El estilo del módulo.                                      |
+| `disabled` | `false`                            | Deshabilita el módulo `nodejs`.                            |
 
 ###  Variables
 
@@ -1674,29 +1674,29 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of OCaml. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `ocaml` muestra la versión actualmente instalada de OCaml. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a file with `.opam` extension or `_opam` directory
-- The current directory contains a `esy.lock` directory
-- The current directory contains a `dune` or `dune-project` file
-- The current directory contains a `jbuild` or `jbuild-ignore` file
-- The current directory contains a `.merlin` file
-- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+- El directorio actual contiene un archivo con extensión `.opam` o directorio `_opam`
+- El directorio actual contiene un directorio `esy.lock`
+- El directorio actual contiene un archivo `dune` o `dune-project`
+- El directorio actual contiene un archivo `jbuild` o `jbuild-ignore`
+- El directorio actual contiene un archivo `.merlin`
+- El directorio actual contiene un archivo con la extensión `.ml`, `.mli`, `.re` o `.rei`
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                             |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                       |
-| `symbol`   | `"🐫 "`                             | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"`                    | El estilo del módulo.                                   |
-| `disabled` | `false`                            | Disables the `ocaml` module.                            |
+| Opción     | Por defecto                        | Descripción                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | La cadena de formato para el módulo.                   |
+| `symbol`   | `"🐫 "`                             | El símbolo usado antes de mostrar la versión de OCaml. |
+| `style`    | `"bold yellow"`                    | El estilo del módulo.                                  |
+| `disabled` | `false`                            | Deshabilita el módulo `ocaml`.                         |
 
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v4.10.0` | The version of `ocaml`                 |
+| version   | `v4.10.0` | La versión de `ocaml`                  |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -1713,23 +1713,23 @@ format = "via [🐪 $version]($style) "
 
 ## OpenStack
 
-The `openstack` module shows the current OpenStack cloud and project. The module only active when the `OS_CLOUD` env var is set, in which case it will read `clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). to fetch the current project in use.
+El módulo `openstack` muestra la nube OpenStack actual y el proyecto. El módulo solo está activo cuando la variable env `OS_CLOUD` está definida en cuyo caso leerá el archivo `nubes. aml` desde cualquiera de las [ubicaciones por defecto](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files) para obtener el proyecto actual en uso.
 
 ### Opciones
 
-| Opción     | Por defecto                                         | Descripción                                                    |
-| ---------- | --------------------------------------------------- | -------------------------------------------------------------- |
-| `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | El formato del módulo.                                         |
-| `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
-| `style`    | `"bold yellow"`                                     | El estilo del módulo.                                          |
-| `disabled` | `false`                                             | Disables the `OpenStack` module.                               |
+| Opción     | Por defecto                                         | Descripción                                                 |
+| ---------- | --------------------------------------------------- | ----------------------------------------------------------- |
+| `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | El formato del módulo.                                      |
+| `symbol`   | `"☁️ "`                                             | El símbolo usado antes de mostrar la nube OpenStack actual. |
+| `style`    | `"bold yellow"`                                     | El estilo del módulo.                                       |
+| `disabled` | `false`                                             | Deshabilita el módulo `OpenStack`.                          |
 
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| cloud     | `corp`  | The current OpenStack cloud            |
-| project   | `dev`   | The current OpenStack project          |
+| cloud     | `corp`  | La nube OpenStack actual               |
+| project   | `dev`   | El proyecto OpenStack actual           |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
