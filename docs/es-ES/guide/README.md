@@ -112,7 +112,7 @@
 - **Fácil:** rápido de instalar – empieza a usarlo en minutos.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explora la documentación de Starship&nbsp;&nbsp;</strong></a>
+<a href="https://starship.rs/config/"><strong>Explora la documentación de Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -131,7 +131,7 @@
    #### Instalar la última versión
 
 
-   ##### Desde un binario precontruido, con Shell:
+   ##### Desde un binario preconstruido, con el intérprete de comandos:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
@@ -145,7 +145,7 @@
    ```
 
 
-   #### Instalar vía un gestor de paquetes
+   #### Instalar con un gestor de paquetes
 
 
    ##### Con [Homebew](https://brew.sh/):
