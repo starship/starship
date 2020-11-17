@@ -1900,34 +1900,34 @@ format = "via [$symbol$version](bold white)"
 
 ## Python
 
-The `python` module shows the currently installed version of Python and the current Python virtual environment if one is activated.
+El módulo `python` muestra la versión actualmente instalada de Python y el actual entorno virtual de Python si uno está activado.
 
 Si `pyenv_version_name` se establece en `true`, mostrará el nombre de la versión de pyenv. De lo contrario, se mostrará el número de versión de `python --version`.
 
 El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
-- The current directory contains a `Pipfile` file
-- The current directory contains a `tox.ini` file
-- The current directory contains a `setup.py` file
-- The current directory contains a `__init__.py` file
+- El directorio actual contiene un archivo `.python-version`
+- El directorio actual contiene un archivo `requirements.txt`
+- El directorio actual contiene un archivo `pyproject.toml`
+- El directorio actual contiene un archivo con la extensión `.py` (y `scan_for_pyfiles` es verdadero)
+- El directorio actual contiene un archivo `Pipfile`
+- El directorio actual contiene un archivo `tox.ini`
+- El directorio actual contiene un archivo `setup.py`
+- El directorio actual contiene un archivo `__init__.py`
 - A virtual environment is currently activated
 
 ### Opciones
 
-| Opción               | Por defecto                                                               | Descripción                                                                   |
-| -------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | El formato del módulo.                                                        |
-| `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                             |
-| `style`              | `"yellow bold"`                                                           | El estilo del módulo.                                                         |
-| `pyenv_version_name` | `false`                                                                   | Use pyenv to get Python version                                               |
-| `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used               |
-| `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.    |
-| `python_binary`      | `python`                                                                  | Configures the python binary that Starship executes when getting the version. |
-| `disabled`           | `false`                                                                   | Disables the `python` module.                                                 |
+| Opción               | Por defecto                                                               | Descripción                                                                        |
+| -------------------- | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | El formato del módulo.                                                             |
+| `symbol`             | `"🐍 "`                                                                    | Una cadena de formato que representa el símbolo de Python                          |
+| `style`              | `"yellow bold"`                                                           | El estilo del módulo.                                                              |
+| `pyenv_version_name` | `false`                                                                   | Usar pyenv para obtener la versión de Python                                       |
+| `pyenv_prefix`       | `pyenv`                                                                   | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv   |
+| `scan_for_pyfiles`   | `true`                                                                    | Si es falso, los archivos Python en el directorio actual no mostrarán este módulo. |
+| `python_binary`      | `python`                                                                  | Configura el binario de python que Starship ejecuta al obtener la versión.         |
+| `disabled`           | `false`                                                                   | Disables the `python` module.                                                      |
 
 ### Variables
 
