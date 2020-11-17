@@ -1312,19 +1312,19 @@ The `jobs` module shows the current number of jobs running. The module will be s
 
 ### Opciones
 
-| Opción      | Por defecto                   | Descripción                                      |
-| ----------- | ----------------------------- | ------------------------------------------------ |
-| `threshold` | `1`                           | Show number of jobs if exceeded.                 |
-| `format`    | `"[$symbol$number]($style) "` | El formato del módulo.                           |
-| `symbol`    | `"✦"`                         | A format string representing the number of jobs. |
-| `style`     | `"bold blue"`                 | El estilo del módulo.                            |
-| `disabled`  | `false`                       | Disables the `jobs` module.                      |
+| Opción      | Por defecto                   | Descripción                                               |
+| ----------- | ----------------------------- | --------------------------------------------------------- |
+| `threshold` | `1`                           | Muestra el número de "jobs" si se exceden.                |
+| `format`    | `"[$symbol$number]($style) "` | El formato del módulo.                                    |
+| `symbol`    | `"✦"`                         | Una cadena de formato que representa el número de "jobs". |
+| `style`     | `"bold blue"`                 | El estilo del módulo.                                     |
+| `disabled`  | `false`                       | Deshabilita el módulo `jobs`.                             |
 
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| number    | `1`     | The number of jobs                     |
+| number    | `1`     | El número de "jobs"                    |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -1342,26 +1342,26 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `Julia` muestra la versión actualmente instalada de Julia. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `Project.toml` file
-- The current directory contains a `Manifest.toml` file
-- The current directory contains a file with the `.jl` extension
+- El directorio actual contiene un archivo `Project.toml`
+- El directorio actual contiene un archivo `Manifest.toml`
+- El directorio actual contiene un archivo con la extensión `.jl`
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                       |
-| ---------- | ---------------------------------- | ------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                            |
-| `symbol`   | `"ஃ "`                             | A format string representing the symbol of Julia. |
-| `style`    | `"bold purple"`                    | El estilo del módulo.                             |
-| `disabled` | `false`                            | Disables the `julia` module.                      |
+| Opción     | Por defecto                        | Descripción                                               |
+| ---------- | ---------------------------------- | --------------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                    |
+| `symbol`   | `"ஃ "`                             | Una cadena de formato que representa el símbolo de Julia. |
+| `style`    | `"bold purple"`                    | El estilo del módulo.                                     |
+| `disabled` | `false`                            | Deshabilita el módulo `julia`.                            |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v1.4.0` | The version of `julia`                 |
+| version   | `v1.4.0` | La versión de `julia`                  |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -1388,22 +1388,22 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opciones
 
-| Opción            | Por defecto                                          | Descripción                                                           |
-| ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | El formato del módulo.                                                |
-| `style`           | `"cyan bold"`                                        | El estilo del módulo.                                                 |
-| `context_aliases` |                                                      | Table of context aliases to display.                                  |
-| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
+| Opción            | Por defecto                                          | Descripción                                                                 |
+| ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------------- |
+| `symbol`          | `"☸ "`                                               | Una cadena de formato que representa el símbolo mostrado antes del Cluster. |
+| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | El formato del módulo.                                                      |
+| `style`           | `"cyan bold"`                                        | El estilo del módulo.                                                       |
+| `context_aliases` |                                                      | Tabla de alias de contexto a mostrar.                                       |
+| `disabled`        | `true`                                               | Deshabilita el módulo `kubernetes`.                                         |
 
 ### Variables
 
-| Variable  | Ejemplo              | Descripción                              |
-| --------- | -------------------- | ---------------------------------------- |
-| context   | `starship-cluster`   | The current kubernetes context           |
-| namespace | `starship-namespace` | If set, the current kubernetes namespace |
-| symbol    |                      | Refleja el valor de la opción `symbol`   |
-| style\* |                      | Refleja el valor de la opción `style`    |
+| Variable  | Ejemplo              | Descripción                                                 |
+| --------- | -------------------- | ----------------------------------------------------------- |
+| context   | `starship-cluster`   | El contexto actual de kubernetes                            |
+| namespace | `starship-namespace` | Si se establece, el espacio de nombres actual de kubernetes |
+| symbol    |                      | Refleja el valor de la opción `symbol`                      |
+| style\* |                      | Refleja el valor de la opción `style`                       |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1421,13 +1421,13 @@ disabled = false
 
 ## Salto de línea
 
-The `line_break` module separates the prompt into two lines.
+El módulo `line_break` separa el indicador en dos líneas.
 
 ### Opciones
 
-| Opción     | Por defecto | Descripción                                                        |
-| ---------- | ----------- | ------------------------------------------------------------------ |
-| `disabled` | `false`     | Disables the `line_break` module, making the prompt a single line. |
+| Opción     | Por defecto | Descripción                                                                     |
+| ---------- | ----------- | ------------------------------------------------------------------------------- |
+| `disabled` | `false`     | Deshabilita el módulo `line_break`, haciendo que el mensaje sea una sola línea. |
 
 ### Ejemplo
 
@@ -1440,27 +1440,27 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of Lua. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `lua` muestra la versión instalada de Lua. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `.lua-version` file
-- The current directory contains a `lua` directory
-- The current directory contains a file with the `.lua` extension
+- El directorio actual contiene un archivo `.lua-version`
+- El directorio actual contiene un directorio `lua`
+- El directorio actual contiene un archivo con la extensión `.lua`
 
 ### Opciones
 
-| Opción       | Por defecto                        | Descripción                                                                |
-| ------------ | ---------------------------------- | -------------------------------------------------------------------------- |
-| `format`     | `"via [$symbol$version]($style) "` | El formato del módulo.                                                     |
-| `symbol`     | `"🌙 "`                             | A format string representing the symbol of Lua.                            |
-| `style`      | `"bold blue"`                      | El estilo del módulo.                                                      |
-| `lua_binary` | `"lua"`                            | Configures the lua binary that Starship executes when getting the version. |
-| `disabled`   | `false`                            | Disables the `lua` module.                                                 |
+| Opción       | Por defecto                        | Descripción                                                             |
+| ------------ | ---------------------------------- | ----------------------------------------------------------------------- |
+| `format`     | `"via [$symbol$version]($style) "` | El formato del módulo.                                                  |
+| `symbol`     | `"🌙 "`                             | Una cadena de formato que representa el símbolo de Lua.                 |
+| `style`      | `"bold blue"`                      | El estilo del módulo.                                                   |
+| `lua_binary` | `"lua"`                            | Configura el binario de lua que Starship ejecuta al obtener la versión. |
+| `disabled`   | `false`                            | Deshabilita el módulo `lua`.                                            |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v5.4.0` | The version of `lua`                   |
+| version   | `v5.4.0` | La versión de `lua`                    |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -1489,24 +1489,24 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opciones
 
-| Opción      | Por defecto                                   | Descripción                                              |
-| ----------- | --------------------------------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | El formato del módulo.                                   |
-| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
-| `style`     | `"bold dimmed white"`                         | El estilo del módulo.                                    |
-| `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
+| Opción      | Por defecto                                   | Descripción                                                   |
+| ----------- | --------------------------------------------- | ------------------------------------------------------------- |
+| `threshold` | `75`                                          | Ocultar el uso de memoria a menos que supere este porcentaje. |
+| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | El formato del módulo.                                        |
+| `symbol`    | `"🐏"`                                         | El símbolo usado antes de mostrar el uso de memoria.          |
+| `style`     | `"bold dimmed white"`                         | El estilo del módulo.                                         |
+| `disabled`  | `true`                                        | Deshabilita el módulo `memory_usage`.                         |
 
 ### Variables
 
-| Variable         | Ejemplo       | Descripción                                                        |
-| ---------------- | ------------- | ------------------------------------------------------------------ |
-| ram              | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
-| ram_pct          | `48%`         | The percentage of the current system memory.                       |
-| swap\*\*     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
-| swap_pct\*\* | `77%`         | The swap memory percentage of the current system swap memory file. |
-| symbol           | `🐏`           | Refleja el valor de la opción `symbol`                             |
-| style\*        |               | Refleja el valor de la opción `style`                              |
+| Variable         | Ejemplo       | Descripción                                                                        |
+| ---------------- | ------------- | ---------------------------------------------------------------------------------- |
+| ram              | `31GiB/65GiB` | La memoria RAM usada/total del sistema actual.                                     |
+| ram_pct          | `48%`         | El porcentaje de la memoria actual del sistema.                                    |
+| swap\*\*     | `1GiB/4GiB`   | El tamaño de la memoria de intercambio del archivo de memoria del sistema actual.  |
+| swap_pct\*\* | `77%`         | El porcentaje de memoria de intercambio del archivo de memoria del sistema actual. |
+| symbol           | `🐏`           | Refleja el valor de la opción `symbol`                                             |
+| style\*        |               | Refleja el valor de la opción `style`                                              |
 
 \*: This variable can only be used as a part of a style string \*\*: The SWAP file information is only displayed if detected on the current system
 
@@ -1541,7 +1541,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| branch    | `master` | The active mercurial branch            |
+| branch    | `master` | La rama de mercurial activa            |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -1580,7 +1580,7 @@ The `nim` module shows the currently installed version of Nim. El módulo se mue
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v1.2.0` | The version of `nimc`                  |
+| version   | `v1.2.0` | La versión de `nimc`                   |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -1638,11 +1638,11 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of NodeJS. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `package.json` file
-- The current directory contains a `.node-version` file
-- The current directory contains a `node_modules` directory
-- The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
-- The current directory contains a file with the `.ts` extension
+- El directorio actual contiene un archivo `package.json`
+- El directorio actual contiene un archivo `.node-version`
+- El directorio actual contiene un directorio `node_modules`
+- El directorio actual contiene un archivo con la extensión `.js`, `.mjs` o `.cjs`
+- El directorio actual contiene un archivo con la extensión `.ts`
 
 ### Opciones
 
