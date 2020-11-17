@@ -258,7 +258,7 @@ Por favor, revisa estos proyectos que inspiraron la creación de starship. 🙏
 
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - robbyrussel, tema multi intérprete de comandos escrito en JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** - Una prompt con iconos, personalizable y multi interfaz de línea de comandos basada en PowerLine.
+- **[reujab/silver](https://github.com/reujab/silver)** - Una prompt multi intérprete de comandos personalizable, basada en Powerline con iconos.
 
 <p align="center">
     <br>
