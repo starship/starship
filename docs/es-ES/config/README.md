@@ -1750,7 +1750,7 @@ symbol = "☁️ "
 
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
-- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
+- **npm** – La versión del paquete `npm` se extrae del `package.json` presente en el directorio actual
 - **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
 - **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
 - **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
@@ -2222,9 +2222,9 @@ format = "[🏎💨 $version$workspace]($style) "
 format = "[🏎💨 $workspace]($style) "
 ```
 
-## Hora
+## Time
 
-El módulo `time` muestra la hora **local** actual. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+El módulo `time` muestra la hora **local** actual. El valor de configuración de `format` es usado por la caja de [`chrono`](https://crates.io/crates/chrono) para controlar cómo se muestra la hora. Echa un vistazo a [los documentos de chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) para ver qué opciones están disponibles.
 
 ::: tip
 
@@ -2398,10 +2398,10 @@ The order in which custom modules are shown can be individually set by including
 
 #### Comando personalizado de shell
 
-`shell` accepts a non-empty list of strings, where:
+`shell` acepta una lista no vacía de cadenas, donde:
 
-- The first string is the path to the shell to use to execute the command.
-- Other following arguments are passed to the shell.
+- La primera cadena es la ruta al intérprete de comandos a usar para ejecutar el comando.
+- Otros argumentos siguientes que son pasados al shell.
 
 If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
 
