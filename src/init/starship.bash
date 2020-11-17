@@ -28,8 +28,11 @@ starship_preexec() {
 
 # Will be run before the prompt is drawn
 starship_precmd() {
+    local NUM_JOBS
     # Save the status, because commands in this pipeline will change $?
     STATUS=$?
+
+    NUM_JOBS=$(n=0; while read line; do [[ $line ]] && n=$((n+1));done <<< $(jobs -p) ; echo $n)
 
     # Run the bash precmd function, if it's set. If not set, evaluates to no-op
     "${starship_precmd_user_func-:}"
@@ -40,10 +43,10 @@ starship_precmd() {
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        PS1="$(::STARSHIP:: prompt --status=$STATUS --jobs="$(jobs -p | wc -l)" --cmd-duration=$STARSHIP_DURATION)"
+        PS1="$(::STARSHIP:: prompt --status=$STATUS --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
         unset STARSHIP_START_TIME
     else
-        PS1="$(::STARSHIP:: prompt --status=$STATUS --jobs="$(jobs -p | wc -l)")"
+        PS1="$(::STARSHIP:: prompt --status=$STATUS --jobs="$NUM_JOBS")"
     fi
     PREEXEC_READY=true  # Signal that we can safely restart the timer
 }
