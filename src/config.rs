@@ -375,16 +375,19 @@ pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
                     "bold" => Some(style.bold()),
                     "italic" => Some(style.italic()),
                     "dimmed" => Some(style.dimmed()),
-                    "none" => None,
-
-                    // Try to see if this token parses as a valid color string
-                    color_string => parse_color_string(color_string).map(|ansi_color| {
-                        if col_fg {
-                            style.fg(ansi_color)
-                        } else {
-                            style.on(ansi_color)
+                    color_string => {
+                        if color_string == "none" && col_fg { None }
+                        else {
+                            let parsed = parse_color_string(color_string);
+                            if !col_fg && parsed.is_none() { Some(style) }
+                            else {
+                                parsed.map(|ansi_color|
+                                    if col_fg { style.fg(ansi_color) }
+                                    else { style.on(ansi_color) }
+                                )
+                            }
                         }
-                    }),
+                    },
                 }
             })
         })
