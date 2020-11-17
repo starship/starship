@@ -1103,18 +1103,18 @@ El módulo `git_status` muestra símbolos que representan el estado del reposito
 
 Las siguientes variables se pueden utilizar en `format`:
 
-| Variable       | Descripción                                                                                   |
-| -------------- | --------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                   |
-| `ahead_behind` | Displays `diverged` `ahead` or `behind` format string based on the current status of the repo |
-| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                   |
-| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                 |
-| `stashed`      | Displays `stashed` when a stash exists for the local repository.                              |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.               |
-| `staged`       | Displays `staged` when a new file has been added to the staging area.                         |
-| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                    |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                 |
-| style\*      | Refleja el valor de la opción `style`                                                         |
+| Variable       | Descripción                                                                                             |
+| -------------- | ------------------------------------------------------------------------------------------------------- |
+| `all_status`   | Atajo para `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                              |
+| `ahead_behind` | Muestra la cadena de formato de `diverged` `ahead` o `behind` basado enel estado actual del repositorio |
+| `conflicted`   | Muestra `conflicted` cuando esta rama tiene conflictos de fusión.                                       |
+| `untracked`    | Muestra `untracked` cuando hay archivos sin rastrear en el directorio de trabajo.                       |
+| `stashed`      | Muestra `stashed` cuando existe un "stash" para el repositorio local.                                   |
+| `modified`     | Muestra `modified` cuando hay modificaciones de archivo en el directorio de trabajo.                    |
+| `staged`       | Muestra `staged` cuando se ha añadido un nuevo archivo al área de "stash".                              |
+| `renamed`      | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de "stash".                      |
+| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                           |
+| style\*      | Refleja el valor de la opción `style`                                                                   |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
