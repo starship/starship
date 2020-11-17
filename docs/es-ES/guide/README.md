@@ -2,7 +2,7 @@
   <img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship - Prompt multi interfaz de línea de comandos" />
+    alt="Starship - Prompt multi intérprete de comandos" />
 </p>
 
 <p align="center">
@@ -101,11 +101,11 @@
   align="right" />
 
 
-**¡El prompt minimalista, increíblemente rápido, e infinitamente personalizable para cualquier shell!**
+**¡El prompt minimalista, increíblemente rápido e infinitamente personalizable para cualquier intérprete de comandos!**
 
 
 - **Rápido:** es rápido – _muy muy_ rápido! 🚀
-- **Personalizable:** configura cada parte de tu intérprete de comandos.
+- **Personalizable:** configura cada parte de tu prompt.
 - **Universal:** funciona en cualquier intérprete de comandos, en cualquier sistema operativo.
 - **Inteligente:** muestra información relevante de un vistazo.
 - **Repleto de funciones**: con soporte para tus herramientas favoritas.
