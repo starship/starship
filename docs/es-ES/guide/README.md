@@ -101,7 +101,7 @@
   align="right" />
 
 
-**¡El prompt minimalista, increíblemente rápido e infinitamente personalizable para cualquier intérprete de comandos!**
+**¡El prompt minimalista, ultrarápido e infinitamente personalizable para cualquier intérprete de comandos!**
 
 
 - **Rápido:** es rápido – _realmente_ rápido! 🚀
