@@ -720,7 +720,7 @@ mod tests {
         let config = Value::from("fg:red bg:none bold");
         assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.bold());
 
-        // Test that bg:none the previous background colour overwrites
+        // Test that bg:none will overwrite the previous background colour
         let config = Value::from("fg:red bg:green bold bg:none");
         assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.bold());
     }
