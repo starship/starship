@@ -337,7 +337,7 @@ discharging_symbol = "💀"
 
 ### Indicador de batería
 
-La configuración de la opción `display` es usada para definir cuándo se debe mostrar el indicador de batería y cómo debe mostrarse. Si no se provee ningún valor para `display`  , el valor por defecto es el siguiente:
+La configuración de la opción `display` es usada para definir cuándo se debe mostrar el indicador de batería y cómo debe mostrarse. Si no se provee ningún valor para `display`, el valor por defecto es el siguiente:
 
 ```toml
 [[battery.display]]
@@ -375,8 +375,8 @@ El módulo `character` muestra un carácter (normalmente una flecha) tras el tex
 
 El carácter te dirá si el último comando funcionó o no. Se puede hacer de dos maneras:
 
-- cambiando el color (`red`/`green`)
-- cambiando la forma (`.`/`✖`)
+- Cambiando el color (`red`/`green`)
+- Cambiando la forma (`.`/`✖`)
 
 Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [este ejemplo](#with-custom-error-shape).
 
@@ -441,7 +441,7 @@ El módulo `cmake` muestra la versión instalada de CMake si se cumple alguna de
 | `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                         |
 | `symbol`   | `"喝 "`                             | El símbolo usado antes de la versión de cmake. |
 | `style`    | `"bold blue"`                      | El estilo del módulo.                          |
-| `disabled` | `false`                            | Deshabilita el módulo `cmake`.                 |
+| `disabled` | `false`                            | Desactiva el módulo `cmake`.                   |
 
 ### Variables
 
@@ -453,13 +453,13 @@ El módulo `cmake` muestra la versión instalada de CMake si se cumple alguna de
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
-## Tiempo de ejecución
+## Tiempo de Ejecución
 
-El módulo `cmd_duration` muestra cuánto tiempo tardó el último comando en ejecutarse. El módulo se mostrará solo si el comando llevó dos segundos o más, o el valor de `min_time`, si existe.
+El módulo `cmd_duration` muestra cuánto tiempo tardó el último comando en ejecutarse. El módulo se mostrará solo si el comando llevó dos segundos o más, o el valor de `min_time` si existe.
 
-::: warning No utilizar DEBUG en Bash
+::: aviso No utilizar DEBUG en Bash
 
-Si estás usando Starship con `bash`, no uses `DEBUG` después de ejecutar `eval $(starship init $0)`, o el módulo **se romperá**.
+Si estás usando Starship con `Bash`, no uses `DEBUG` después de ejecutar `eval $(starship init $0)`, o el módulo **se romperá**.
 
 :::
 
