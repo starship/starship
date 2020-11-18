@@ -715,8 +715,8 @@ Este módulo solo se mostrará en tu prompt cuando uno o más de los siguientes 
 
 - `global.json`
 - `project.json`
-- `Directoria.Build.props`
-- `Directorio.Build.targets`
+- `Directory.Build.props`
+- `Directory.Build.targets`
 - `Packages.props`
 - `*.sln`
 - `*.csproj`
@@ -737,7 +737,7 @@ El módulo también mostrará el Target Framework Moniker ([https://docs.microso
 | `symbol`    | `"•NET "`                                | El símbolo usado antes de mostrar la version de dotnet.                   |
 | `heuristic` | `true`                                   | Usa una detección de versiones más rápida para mantener a starship veloz. |
 | `style`     | `"bold blue"`                            | El estilo del módulo.                                                     |
-| `disabled`  | `false`                                  | Deshabilita el módulo `dotnet`.                                           |
+| `disabled`  | `false`                                  | Desactiva el módulo `dotnet`.                                             |
 
 ### Variables
 
@@ -774,7 +774,7 @@ El módulo `elixir` muestra la version instalada actualmente de Elixir y Erlang/
 | `symbol`   | `"💧 "`                                                    | El símbolo usado antes de mostrar la version de Elixir/Erlang. |
 | `style`    | `"bold purple"`                                           | El estilo del módulo.                                          |
 | `format`   | `'via [$symbol$version \(OTP $otp_version\)]($style) '` | El formato para el módulo elixir.                              |
-| `disabled` | `false`                                                   | Deshabilita el módulo `elixir`.                                |
+| `disabled` | `false`                                                   | Desactiva el módulo `elixir`.                                  |
 
 ### Variables
 
@@ -813,7 +813,7 @@ El módulo `elm` muestra la versión actualmente instalada de Elm. El módulo se
 | `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                  |
 | `symbol`   | `"🌳 "`                             | Una cadena de formato que representa el símbolo de Elm. |
 | `style`    | `"cyan bold"`                      | El estilo del módulo.                                   |
-| `disabled` | `false`                            | Deshabilita el módulo `elm`.                            |
+| `disabled` | `false`                            | Desactiva el módulo `elm`.                              |
 
 ### Variables
 
@@ -849,7 +849,7 @@ El módulo `env_var` muestra el valor actual de una variable de entorno seleccio
 | `variable`    |                                | La variable de entorno a mostrar.                                                      |
 | `por defecto` |                                | El valor por defecto que se mostrará cuando la variable seleccionada no está definida. |
 | `format`      | `"with [$env_value]($style) "` | El formato del módulo.                                                                 |
-| `disabled`    | `false`                        | Deshabilita el módulo `env_var`.                                                       |
+| `disabled`    | `false`                        | Desactiva el módulo `env_var`.                                                         |
 
 ### Variables
 
@@ -882,10 +882,10 @@ El módulo `erlang` muestra la versión instalada de Erlang/OTP. El módulo se m
 
 | Opción     | Por defecto                        | Descripción                                             |
 | ---------- | ---------------------------------- | ------------------------------------------------------- |
-| `symbol`   | `" "`                             | El símbolo usado antes de mostrar la versión de erlang. |
+| `symbol`   | `" "`                             | El símbolo usado antes de mostrar la versión de Erlang. |
 | `style`    | `"bold red"`                       | El estilo del módulo.                                   |
 | `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                  |
-| `disabled` | `false`                            | Deshabilita el módulo `erlang`.                         |
+| `disabled` | `false`                            | Desactiva el módulo `erlang`.                           |
 
 ### Variables
 
@@ -918,7 +918,7 @@ El módulo `gcloud` muestra la configuración actual para el CLI de [`gcloud`](h
 | `symbol`         | `"☁️ "`                                          | El símbolo usado antes de mostrar el perfil actual de GCP. |
 | `region_aliases` |                                                  | Tabla de alias de región a mostrar además del nombre GCP.  |
 | `style`          | `"bold blue"`                                    | El estilo del módulo.                                      |
-| `disabled`       | `false`                                          | Deshabilita el módulo `gcloud`.                            |
+| `disabled`       | `false`                                          | Desactiva el módulo `gcloud`.                              |
 
 ### Variables
 
@@ -979,7 +979,7 @@ El módulo `git_branch` muestra la rama activa del repositorio en su directorio 
 | `style`             | `"bold purple"`                  | El estilo del módulo.                                                                                   |
 | `truncation_length` | `2^63 - 1`                       | Trunca una rama git a X grafemas.                                                                       |
 | `truncation_symbol` | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado. Puedes usar `""` para ningún símbolo. |
-| `disabled`          | `false`                          | Deshabilita el módulo `git_branch`.                                                                     |
+| `disabled`          | `false`                          | Desactiva el módulo `git_branch`.                                                                       |
 
 ### Variables
 
@@ -1016,13 +1016,13 @@ El módulo `git_commit` muestra el hash de commit actual y también la etiqueta 
 | `only_detached`      | `true`                                                 | Mostrar solo el hash del commit de git cuando esté en estado "detached HEAD" |
 | `tag_disabled`       | `true`                                                 | Deshabilita mostrar información de etiquetas en el módulo `git_commit`.      |
 | `tag_symbol`         | `"🏷 "`                                                 | Símbolo de etiqueta prefijando la información mostrada                       |
-| `disabled`           | `false`                                                | Deshabilita el módulo `git_commit`.                                          |
+| `disabled`           | `false`                                                | Desactiva el módulo `git_commit`.                                            |
 
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                           |
 | --------- | --------- | ------------------------------------- |
-| hash      | `b703eb3` | El hash actual del commitn de git     |
+| hash      | `b703eb3` | El hash actual del commit de git      |
 | style\* |           | Refleja el valor de la opción `style` |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
@@ -1054,7 +1054,7 @@ El módulo `git_state` se mostrará en directorios que son parte de un repositor
 | `am_or_rebase` | `"AM/REBASE"`                                                   | Una cadena de formato que se muestra cuando un ambiguo `apply-builbox` o `rebase` está en progreso. |
 | `style`        | `"bold yellow"`                                                 | El estilo del módulo.                                                                               |
 | `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | El formato del módulo.                                                                              |
-| `disabled`     | `false`                                                         | Deshabilita el módulo `git_state`.                                                                  |
+| `disabled`     | `false`                                                         | Desactiva el módulo `git_state`.                                                                    |
 
 ### Variables
 
@@ -1097,24 +1097,24 @@ El módulo `git_status` muestra símbolos que representan el estado del reposito
 | `renamed`    | `"»"`                                           | El formato de `renamed`                  |
 | `deleted`    | `"✘"`                                           | El formato de `deleted`                  |
 | `style`      | `"bold red"`                                    | El estilo del módulo.                    |
-| `disabled`   | `false`                                         | Deshabilita el módulo `git_status`.      |
+| `disabled`   | `false`                                         | Desactiva el módulo `git_status`.        |
 
 ### Variables
 
 Las siguientes variables se pueden utilizar en `format`:
 
-| Variable       | Descripción                                                                                             |
-| -------------- | ------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Atajo para `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                              |
-| `ahead_behind` | Muestra la cadena de formato de `diverged` `ahead` o `behind` basado enel estado actual del repositorio |
-| `conflicted`   | Muestra `conflicted` cuando esta rama tiene conflictos de fusión.                                       |
-| `untracked`    | Muestra `untracked` cuando hay archivos sin rastrear en el directorio de trabajo.                       |
-| `stashed`      | Muestra `stashed` cuando existe un "stash" para el repositorio local.                                   |
-| `modified`     | Muestra `modified` cuando hay modificaciones de archivo en el directorio de trabajo.                    |
-| `staged`       | Muestra `staged` cuando se ha añadido un nuevo archivo al área de "stash".                              |
-| `renamed`      | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de "stash".                      |
-| `deleted`      | Muestra `deleted` cuando un archivo ha sido añadido al área de "stash".                                 |
-| style\*      | Refleja el valor de la opción `style`                                                                   |
+| Variable       | Descripción                                                                                              |
+| -------------- | -------------------------------------------------------------------------------------------------------- |
+| `all_status`   | Atajo para `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                               |
+| `ahead_behind` | Muestra la cadena de formato de `diverged` `ahead` o `behind` basado en el estado actual del repositorio |
+| `conflicted`   | Muestra `conflicted` cuando esta rama tiene conflictos de fusión.                                        |
+| `untracked`    | Muestra `untracked` cuando hay archivos sin rastrear en el directorio de trabajo.                        |
+| `stashed`      | Muestra `stashed` cuando existe un "stash" para el repositorio local.                                    |
+| `modified`     | Muestra `modified` cuando hay modificaciones de archivo en el directorio de trabajo.                     |
+| `staged`       | Muestra `staged` cuando se ha añadido un nuevo archivo al área de "stash".                               |
+| `renamed`      | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de "stash".                       |
+| `deleted`      | Muestra `deleted` cuando un archivo ha sido añadido al área de "stash".                                  |
+| style\*      | Refleja el valor de la opción `style`                                                                    |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1180,7 +1180,7 @@ El módulo `golang` muestra la versión actualmente instalada de Golang. El mód
 | `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                 |
 | `symbol`   | `"🐹 "`                             | Una cadena de formato que representa el símbolo de Go. |
 | `style`    | `"bold cyan"`                      | El estilo del módulo.                                  |
-| `disabled` | `false`                            | Deshabilita el módulo de `golang`.                     |
+| `disabled` | `false`                            | Desactiva el módulo de `golang`.                       |
 
 ### Variables
 
@@ -1215,7 +1215,7 @@ El módulo `helm` muestra la versión instalada de Helm. El módulo se muestra s
 | `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                   |
 | `symbol`   | `"⎈ "`                             | Una cadena de formato que representa el símbolo de Helm. |
 | `style`    | `"bold white"`                     | El estilo del módulo.                                    |
-| `disabled` | `false`                            | Deshabilita el módulo `helm`.                            |
+| `disabled` | `false`                            | Desactiva el módulo `helm`.                              |
 
 ### Variables
 
@@ -1248,7 +1248,7 @@ El módulo `hostname` muestra el nombre de host del sistema.
 | `trim_at`  | `"."`                       | Cadena en la que el nombre de host se corta, después de la primera partida. `"."` se detendrá después del primer punto. `""` deshabilitará cualquier truncamiento |
 | `format`   | `"[$hostname]($style) in "` | El formato del módulo.                                                                                                                                            |
 | `style`    | `"bold dimmed green"`       | El estilo del módulo.                                                                                                                                             |
-| `disabled` | `false`                     | Deshabilita el módulo `hostname`.                                                                                                                                 |
+| `disabled` | `false`                     | Desactiva el módulo `hostname`.                                                                                                                                   |
 
 ### Variables
 
@@ -1285,7 +1285,7 @@ El módulo `java` muestra la versión actualmente instalada de Java. El módulo 
 | `format`   | `"via [${symbol}${version}]($style) "` | El formato del módulo.                                  |
 | `symbol`   | `"☕ "`                                 | Una cadena de formato que representa el símbolo de Java |
 | `style`    | `"red dimmed"`                         | El estilo del módulo.                                   |
-| `disabled` | `false`                                | Deshabilita el módulo `java`.                           |
+| `disabled` | `false`                                | Desactiva el módulo `java`.                             |
 
 ### Variables
 
@@ -1308,23 +1308,23 @@ symbol = "🌟 "
 
 ## Jobs
 
-El módulo `jobs` muestra el número actual de tareas en ejecución. El módulo se mostrará sólo si hay tareas en segundo plano ejecutándose. El módulo mostrará el número de tareas en ejecución si hay más de 1 tarea o más que el valor de `threshold` configurado, si existe.
+El módulo `jobs` muestra el número actual de tareas en ejecución. El módulo se mostrará sólo si hay tareas en segundo plano ejecutándose. El módulo mostrará el número de tareas en ejecución si hay más de 1 tarea o más que el valor configurado de `threshold`, si existe.
 
 ### Opciones
 
 | Opción      | Por defecto                   | Descripción                                               |
 | ----------- | ----------------------------- | --------------------------------------------------------- |
-| `threshold` | `1`                           | Muestra el número de "jobs" si se exceden.                |
+| `threshold` | `1`                           | Muestra el número de tareas si se exceden.                |
 | `format`    | `"[$symbol$number]($style) "` | El formato del módulo.                                    |
-| `symbol`    | `"✦"`                         | Una cadena de formato que representa el número de "jobs". |
+| `symbol`    | `"✦"`                         | Una cadena de formato que representa el número de tareas. |
 | `style`     | `"bold blue"`                 | El estilo del módulo.                                     |
-| `disabled`  | `false`                       | Deshabilita el módulo `jobs`.                             |
+| `disabled`  | `false`                       | Desactiva el módulo `jobs`.                               |
 
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| number    | `1`     | El número de "jobs"                    |
+| number    | `1`     | El número de tareas                    |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
