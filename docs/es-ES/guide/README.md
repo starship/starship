@@ -104,7 +104,7 @@
 **¡El prompt minimalista, increíblemente rápido e infinitamente personalizable para cualquier intérprete de comandos!**
 
 
-- **Rápido:** es rápido – _muy muy_ rápido! 🚀
+- **Rápido:** es rápido – _realmente_ rápido! 🚀
 - **Personalizable:** configura cada parte de tu prompt.
 - **Universal:** funciona en cualquier intérprete de comandos, en cualquier sistema operativo.
 - **Inteligente:** muestra información relevante de un vistazo.
@@ -125,7 +125,7 @@
 
 ### Comenzar
 
-1. Instala el binario de **starship**:
+1. Instala el binario de **Starship**:
 
 
    #### Instalar la última versión
@@ -220,7 +220,7 @@
 
 ¡Siempre estamos buscando colaboradores de **todos los niveles y habilidades**! Si estas buscando una manera fácil de ayudar este proyecto, puedes intentar resolver un problema con la etiqueta "[good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)".
 
-Si quieres ayudar a colaborar a starship, por favor mira nuestra [Guía de Colaboradores](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Además, siéntete libre de entrar en nuestro [servidor de Discord](https://discord.gg/8Jzqu3T) y di "¡Hola!". 👋
+Si quieres ayudar a colaborar a Starship, por favor mira nuestra [Guía de Colaboradores](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Además, siéntete libre de entrar en nuestro [servidor de Discord](https://discord.gg/8Jzqu3T) y di "¡Hola!". 👋
 
 ### Desarrolladores
 
@@ -252,7 +252,7 @@ Apoya este proyecto con tu organización. Su logo se mostrará aquí con un enla
 
 ## 💭 Inspirado por
 
-Por favor, revisa estos proyectos que inspiraron la creación de starship. 🙏
+Por favor, revisa estos proyectos que inspiraron la creación de Starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Una prompt ZSH para astronautas.
 
