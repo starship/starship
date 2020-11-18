@@ -615,7 +615,7 @@ format = "via [🔰 $version](bold red) "
 
 ## Directory
 
-El módulo `directory` muestra la ruta hasta el directorio actual, mostrando tres directorios padre como máximo. Your directory will also be truncated to the root of the git repo that you're currently in.
+El módulo `directory` muestra la ruta hasta el directorio actual, mostrando tres directorios padre como máximo. Tu directorio se truncará a la raíz del repositorio git en el que te encuentres.
 
 Cuando usas el estilo fish de la opción pwd, en lugar de ocultar la ruta truncada, verás una versión acortada del nombre de cada directorio basada en el número que activaste para la opción.
 
@@ -629,7 +629,7 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 | `truncate_to_repo`  | `true`                                             | Truncar o no hasta la raíz del repositorio git en el que se esté.     |
 | `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | El formato del módulo.                                                |
 | `style`             | `"bold cyan"`                                      | El estilo del módulo.                                                 |
-| `disabled`          | `false`                                            | Deshabilita el módulo `directory`.                                    |
+| `disabled`          | `false`                                            | Desactiva el módulo `directory`.                                      |
 | `read_only`         | `"🔒"`                                              | El símbolo que indica si el directorio actual es de sólo lectura.     |
 | `read_only_style`   | `"red"`                                            | El estilo para el símbolo de sólo lectura.                            |
 | `truncation_symbol` | `""`                                               | El símbolo a prefijar a las rutas truncadas. ej: "…/"                 |
@@ -686,7 +686,7 @@ El módulo `docker_context` muestra el [contexto de Docker](https://docs.docker.
 | `symbol`          | `"🐳 "`                             | El símbolo usado antes de mostrar el contexto de Docker.                                |
 | `style`           | `"blue bold"`                      | El estilo del módulo.                                                                   |
 | `only_with_files` | `false`                            | Mostrar solo cuando hay un `docker-compose.yml` o `Dockerfile` en el directorio actual. |
-| `disabled`        | `true`                             | Deshabilita el módulo `docker_context`.                                                 |
+| `disabled`        | `true`                             | Desactiva el módulo `docker_context`.                                                   |
 
 ### Variables
 
@@ -711,7 +711,7 @@ format = "via [🐋 $context](blue bold)"
 
 El módulo `dotnet` muestra la versión relevante de .NET Core SDK para el directorio actual. Si el SDK ha sido anclado en el directorio actual, se mostrará la versión fijada. De lo contrario, el módulo muestra la última versión instalada del SDK.
 
-Este módulo solo se mostrará en tu mensaje cuando uno o más de los siguientes archivos estén presentes en el directorio actual:
+Este módulo solo se mostrará en tu prompt cuando uno o más de los siguientes archivos estén presentes en el directorio actual:
 
 - `global.json`
 - `project.json`
