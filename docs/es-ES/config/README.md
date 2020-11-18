@@ -143,11 +143,11 @@ Esta es la lista de opciones de configuración.
 
 ### Opciones
 
-| Opción         | Por defecto                    | Descripción                                                                   |
-| -------------- | ------------------------------ | ----------------------------------------------------------------------------- |
-| `format`       | [link](#default-prompt-format) | Configura el formato del prompt.                                              |
-| `scan_timeout` | `30`                           | Tiempo de espera tras el que starship escanea los archivos (en milisegundos). |
-| `add_newline`  | `true`                         | Añade una nueva línea antes del prompt.                                       |
+| Opción         | Por defecto                        | Descripción                                                                   |
+| -------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
+| `format`       | [ver aquí](#default-prompt-format) | Configura el formato del prompt.                                              |
+| `scan_timeout` | `30`                               | Tiempo de espera tras el que Starship escanea los archivos (en milisegundos). |
+| `add_newline`  | `true`                             | Añade una nueva línea antes del prompt.                                       |
 
 ### Ejemplo
 
@@ -167,9 +167,9 @@ scan_timeout = 10
 add_newline = false
 ```
 
-### Formato predeterminado del Prompt
+### Formato por Defecto del Prompt
 
-El `format` predeterminado se utiliza para definir el formato del prompt, si está vacío o no `format` se proporciona. El valor por defecto es el siguiente:
+La varieble `format` por defecto se utiliza para definir el formato del prompt, si está vacía o `format` no se proporciona. El valor por defecto es el siguiente:
 
 ```toml
 format = "$all"
@@ -231,7 +231,7 @@ $character"""
 
 ## AWS
 
-El módulo `aws` muestra la región actual de AWS y el perfil. Éste se basa en las variables de entorno `AWS_REGION`, `AWS_DEFAULT_REGION`, y `AWS_PROFILE` del fichero `~/.aws/config`.
+El módulo `aws` muestra la región y el perfil actual de AWS. Éste se basa en las variables de entorno `AWS_REGION`, `AWS_DEFAULT_REGION`, y `AWS_PROFILE` del fichero `~/.aws/config`.
 
 Cuando uses [aws-vault](https://github.com/99designs/aws-vault) el perfil se obtiene de la variable de entorno `AWS_VAULT`.
 
@@ -264,7 +264,7 @@ Cuando uses [aws-vault](https://github.com/99designs/aws-vault) el perfil se obt
 # ~/.config/starship.toml
 
 [aws]
-format = 'on [$symbol$profile(\($region\))]($style) '
+format = 'en [$symbol$profile(\($region\))]($style) '
 style = "bold blue"
 symbol = "🅰 "
 [aws.region_aliases]
@@ -278,7 +278,7 @@ us-east-1 = "va"
 # ~/.config/starship.toml
 
 [aws]
-format = "on [$symbol$region]($style) "
+format = "en [$symbol$region]($style) "
 style = "bold blue"
 symbol = "🅰 "
 [aws.region_aliases]
@@ -292,24 +292,24 @@ us-east-1 = "va"
 # ~/.config/starship.toml
 
 [aws]
-format = "on [$symbol$profile]($style) "
+format = "en [$symbol$profile]($style) "
 style = "bold blue"
 symbol = "🅰 "
 ```
 
 ## Battery
 
-El módulo `battery` muestra la cantidad de batería y si está cargando o no. El módulo es solo visible cuando la batería está por debajo del 10%.
+El módulo `battery` muestra la cantidad de batería y si se está cargando o no. El módulo es solo visible cuando la batería está por debajo del 10%.
 
 ### Opciones
 
 | Opción               | Por defecto                       | Descripción                                       |
 | -------------------- | --------------------------------- | ------------------------------------------------- |
 | `full_symbol`        | `"•"`                             | Se muestra cuando la batería está cargada.        |
-| `charging_symbol`    | `"⇡"`                             | Se muestra cuando la batería está cargando.       |
+| `charging_symbol`    | `"⇡"`                             | Se muestra cuando la batería se está cargando.    |
 | `discharging_symbol` | `"⇣"`                             | Se muestra cuando la batería se está descargando. |
 | `format`             | `"[$symbol$percentage]($style) "` | El formato del módulo.                            |
-| `display`            | [link](#battery-display)          | Define cuándo mostrar el indicador y el estilo.   |
+| `display`            | [ver aquí](#battery-display)      | Define cuándo mostrar el indicador y el estilo.   |
 | `disabled`           | `false`                           | Desactiva el módulo `battery`.                    |
 
 <details>
@@ -320,7 +320,7 @@ El módulo `battery` muestra la cantidad de batería y si está cargando o no. E
 | `unknown_symbol` | El símbolo que se muestra cuando el estado de la batería es desconocido. |
 | `empty_symbol`   | El símbolo que se muestra cuando el estado de la batería está vacío.     |
 
-Nota: El indicador de batería se ocultará si el estado es `desconocido` o `vacío` a menos que especifique la opción en la configuración.
+Nota: El indicador de batería se ocultará si el estado es `desconocido` o `vacío` a menos que se especifique la opción en la configuración.
 
 </details>
 
@@ -337,7 +337,7 @@ discharging_symbol = "💀"
 
 ### Indicador de batería
 
-La configuración de la opción `display` es usada para definir cuándo se debe mostrar el indicador de batería y cómo debe mostrarse. Si no se provee ningún valor para `display`  El valor por defecto es el siguiente:
+La configuración de la opción `display` es usada para definir cuándo se debe mostrar el indicador de batería y cómo debe mostrarse. Si no se provee ningún valor para `display`  , el valor por defecto es el siguiente:
 
 ```toml
 [[battery.display]]
