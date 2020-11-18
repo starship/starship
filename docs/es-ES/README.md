@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: '¡El prompt minimalista, increíblemente rápido, e infinitamente personalizable para cualquier shell!'
+tagline: '¡El prompt minimalista, ultrarápido e infinitamente personalizable para cualquier intérprete de comandos!'
 actionText: Comenzar →
 actionLink: ./guide/
 features:
@@ -30,7 +30,7 @@ description: Starship es el símbolo de sistema minimalista, ultrarápido e infi
 
 ### Instalación rápida
 
-1. Instalar el binario de **starship**:
+1. Instalar el binario de **Starship**:
 
 
    #### Instalar la última versión
