@@ -56,7 +56,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 Por convención, la mayoría de los módulos tienen un prefijo del color predeterminado de la terminal (por ejemplo, `vía` en "nodejs") y un espacio vacío como sufijo.
 
-### Formato de Cadenas de Texto
+### Cadenas de Formato
 
 Es el formato con el que un módulo imprime todas sus variables. La mayoría de los módulos tienen una entrada llamada `format` que configura el formato de visualización del módulo. Se puede utilizar textos, variables y grupos de texto.
 
@@ -66,7 +66,7 @@ Una variable contiene un símbolo `$` seguido por el nombre de la variable. El n
 
 Por ejemplo:
 
-- `$version` es un formato de cadena de texto con una variable llamada `version`.
+- `$version` es una cadena de formato con una variable llamada `version`.
 - `$git_branch$git_commit` es un formato de cadena de texto con dos variables nombradas `git_branch` y `git_commit`.
 - `$git_branch $git_commit` tiene las dos variables separadas por un espacio.
 
