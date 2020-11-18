@@ -371,7 +371,7 @@ style = "bold yellow"
 
 ## Character
 
-El módulo `character` muestra un carater (normalmente una flecha) tras el texto que introduces en el terminal.
+El módulo `character` muestra un carácter (normalmente una flecha) tras el texto que introduces en el terminal.
 
 El carácter te dirá si el último comando funcionó o no. Se puede hacer de dos maneras:
 
@@ -382,13 +382,13 @@ Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [
 
 ### Opciones
 
-| Opción           | Por defecto         | Descripción                                                                                |
-| ---------------- | ------------------- | ------------------------------------------------------------------------------------------ |
-| `format`         | `"$symbol "`        | La cadena de formato usada antes de la entrada de texto.                                   |
-| `success_symbol` | `"[❯](bold green)"` | La cadena de formato usada antes de la entrada de texto si el comando anterior tuvo éxito. |
-| `error_symbol`   | `"[❯](bold red)"`   | La cadena de formato usada antes de la entrada de texto si el comando anterior falló.      |
-| `vicmd_symbol`   | `"[❮](bold green)"` | El cadena de formato antes de la entrada de texto si la shell está en modo vim normal.     |
-| `disabled`       | `false`             | Desactiva el módulo `character`.                                                           |
+| Opción           | Por defecto         | Descripción                                                                                             |
+| ---------------- | ------------------- | ------------------------------------------------------------------------------------------------------- |
+| `format`         | `"$symbol "`        | La cadena de formato usada antes de la entrada de texto.                                                |
+| `success_symbol` | `"[❯](bold green)"` | La cadena de formato usada antes de la entrada de texto si el comando anterior tuvo éxito.              |
+| `error_symbol`   | `"[❯](bold red)"`   | La cadena de formato usada antes de la entrada de texto si el comando anterior falló.                   |
+| `vicmd_symbol`   | `"[❮](bold green)"` | El cadena de formato antes de la entrada de texto si el intérprete de comandos está en modo vim normal. |
+| `disabled`       | `false`             | Desactiva el módulo `character`.                                                                        |
 
 ### Variables
 
@@ -398,7 +398,7 @@ Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [
 
 ### Ejemplos
 
-#### Con forma de error personalizada
+#### Con formato de error personalizado
 
 ```toml
 # ~/.config/starship.toml
@@ -408,7 +408,7 @@ success_symbol = "[➜](bold green) "
 error_symbol = "[✗](bold red) "
 ```
 
-#### Sin forma de error personalizada
+#### Sin formato de error personalizado
 
 ```toml
 # ~/.config/starship.toml
@@ -418,7 +418,7 @@ success_symbol = "[➜](bold green) "
 error_symbol = "[➜](bold red) "
 ```
 
-#### Con forma vim personalizada
+#### Con formato de vim personalizado
 
 ```toml
 # ~/.config/starship.toml
