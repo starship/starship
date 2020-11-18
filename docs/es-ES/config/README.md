@@ -1382,7 +1382,7 @@ Muestra el nombre del contexto actual de Kubernetes y, si se establece, el espac
 
 ::: tip
 
-Este módulo está deshabilitado por defecto. Para activarlo, establezca `disabled` a `false` en su archivo de configuración.
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -1483,7 +1483,7 @@ Por defecto, el uso de swap se muestra si el intercambio total del sistema no es
 
 ::: tip
 
-Este módulo está deshabilitado por defecto. Para activarlo, establezca `disabled` a `false` en su archivo de configuración.
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -2011,7 +2011,7 @@ El módulo `rust` muestra la versión instalada de Rust. El módulo se muestra s
 | `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                  |
 | `symbol`   | `"🦀 "`                             | Una cadena de formato que representa el símbolo de Rust |
 | `style`    | `"bold red"`                       | El estilo del módulo.                                   |
-| `disabled` | `false`                            | Deshabilita el módulo `rust`.                           |
+| `disabled` | `false`                            | Desactiva el módulo `rust`.                             |
 
 ### Variables
 
@@ -2044,7 +2044,7 @@ El módulo `shlvl` muestra la variable de entorno actual SHLVL ("nivel de shell"
 | `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                      |
 | `symbol`    | `"↕️ "`                      | El símbolo usado para representar el SHLVL. |
 | `style`     | `"bold yellow"`              | El estilo del módulo.                       |
-| `disabled`  | `true`                       | Deshabilita el módulo `shlvl`.              |
+| `disabled`  | `true`                       | Desactiva el módulo `shlvl`.                |
 
 ### Variables
 
@@ -2078,7 +2078,7 @@ El módulo `singularity` muestra la imagen de singularity actual, si se encuentr
 | `format`   | `'[$symbol\[$env\]]($style) '` | El formato del módulo.                                              |
 | `symbol`   | `""`                             | Una cadena de formato que se muestra antes del nombre de la imagen. |
 | `style`    | `"bold dimmed blue"`             | El estilo del módulo.                                               |
-| `disabled` | `false`                          | Deshabilita el módulo `de singularidad`.                            |
+| `disabled` | `false`                          | Desactiva el módulo `singularity`.                                  |
 
 ### Variables
 
@@ -2105,7 +2105,7 @@ El módulo `status` muestra el código de salida del comando anterior. El módul
 
 ::: tip
 
-Este módulo está deshabilitado por defecto. Para activarlo, establezca `disabled` a `false` en su archivo de configuración. :::
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración. :::
 
 ### Opciones
 
@@ -2114,7 +2114,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establezca `disabl
 | `format`   | `[$symbol$status]($style)` | El formato del módulo                                      |
 | `symbol`   | `"✖"`                      | Una cadena de formato que representa el símbolo del estado |
 | `style`    | `"bold red"`               | El estilo del módulo.                                      |
-| `disabled` | `true`                     | Deshabilita el módulo `status`.                            |
+| `disabled` | `true`                     | Desactiva el módulo `status`.                              |
 
 ### Variables
 
@@ -2154,7 +2154,7 @@ El módulo `swift` muestra la versión actualmente instalada de Swift. El módul
 | `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                   |
 | `symbol`   | `"🐦 "`                             | Una cadena de formato que representa el símbolo de Swift |
 | `style`    | `"bold 202"`                       | El estilo del módulo.                                    |
-| `disabled` | `false`                            | Deshabilita el módulo `swift`.                           |
+| `disabled` | `false`                            | Desactiva el módulo `swift`.                             |
 
 ### Variables
 
@@ -2189,7 +2189,7 @@ El módulo `terraform` muestra el espacio de trabajo y la versión actual de ter
 | `format`   | `"via [$symbol$workspace]($style) "` | La cadena de formato para el módulo.                                            |
 | `symbol`   | `"💠 "`                               | Una cadena de formato que se muestra antes del espacio de trabajo de terraform. |
 | `style`    | `"bold 105"`                         | El estilo del módulo.                                                           |
-| `disabled` | `false`                              | Deshabilita el módulo `terraform`.                                              |
+| `disabled` | `false`                              | Desactiva el módulo `terraform`.                                                |
 
 ### Variables
 
@@ -2228,7 +2228,7 @@ El módulo `time` muestra la hora **local** actual. El valor de configuración d
 
 ::: tip
 
-Este módulo está deshabilitado por defecto. Para activarlo, establezca `disabled` a `false` en su archivo de configuración.
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -2241,7 +2241,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establezca `disabl
 | `time_format`     | see below               | La [cadena de formato de chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) utilizada para formatear la hora.                                          |
 | `style`           | `"bold yellow"`         | El estilo para la hora del módulo                                                                                                                                           |
 | `utc_time_offset` | `"local"`               | Establece el desplazamiento UTC a utilizar. Rango de -24 &lt; x &lt; 24. Permite a los flotantes acomodar los desplazamientos de zona horaria de 30/45 minutos. |
-| `disabled`        | `true`                  | Deshabilita el módulo `time`.                                                                                                                                               |
+| `disabled`        | `true`                  | Desactiva el módulo `time`.                                                                                                                                                 |
 | `time_range`      | `"-"`                   | Establece el intervalo de tiempo durante el cual se mostrará el módulo. Las horas deben especificarse en formato de 24 horas                                                |
 
 Si `use_12hr` es `true`, entonces `time_format` por defecto `"%r"`. De lo contrario, el valor por defecto es `"%T"`. Configurar manualmente `time_format` sobrescribirá la configuración `use_12hr`.
@@ -2285,7 +2285,7 @@ El módulo `username` muestra el nombre de usuario activo. El módulo se muestra
 | `style_user`  | `"bold yellow"`         | El estilo usado para usuarios no root.     |
 | `format`      | `"[$user]($style) in "` | El formato del módulo.                     |
 | `show_always` | `false`                 | Siempre muestra el módulo `username`.      |
-| `disabled`    | `false`                 | Deshabilita el módulo `username`.          |
+| `disabled`    | `false`                 | Desactiva el módulo `username`.            |
 
 ### Variables
 
@@ -2320,7 +2320,7 @@ El módulo `zig` muestra la versión instalada de Zig. El módulo se muestra si 
 | `symbol`   | `"↯ "`                             | El símbolo usado antes de mostrar la versión de Zig. |
 | `style`    | `"bold yellow"`                    | El estilo del módulo.                                |
 | `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                               |
-| `disabled` | `false`                            | Deshabilita el módulo `zig`.                         |
+| `disabled` | `false`                            | Desactiva el módulo `zig`.                           |
 
 ### Variables
 
@@ -2384,7 +2384,7 @@ El orden en el que se muestran los módulos personalizados se puede establecer i
 | `symbol`      | `""`                          | El símbolo usado antes de mostrar la salida del comando.                                                                            |
 | `style`       | `"bold green"`                | El estilo del módulo.                                                                                                               |
 | `format`      | `"[$symbol$output]($style) "` | El formato del módulo.                                                                                                              |
-| `disabled`    | `false`                       | Deshabilita este módulo `custom`.                                                                                                   |
+| `disabled`    | `false`                       | Desactiva este módulo `custom`.                                                                                                     |
 
 ### Variables
 
@@ -2421,7 +2421,7 @@ Por ejemplo, PowerShell requiere el parámetro `-Command` para ejecutar una sola
 
 Se recomiendan parámetros similares a `-NoProfile` en PowerShell para otros shells para evitar tiempo extra de carga de un perfil personalizado en cada invocación de starship.
 
-La detección automática de shells y la adición adecuada de parámetros están actualmente implementados, pero es posible que no todos los shells estén cubiertos. [Por favor, abra un issue](https://github.com/starship/starship/issues/new/choose) con los detalles del intérprete de comandos y la configuración de starship si se encuentra en tal escenario.
+La detección automática de shells y la adición adecuada de parámetros están actualmente implementados, pero es posible que no todos los shells estén cubiertos. Por favor, [abre un issue](https://github.com/starship/starship/issues/new/choose) con los detalles del intérprete de comandos y la configuración de Starship si te encuentras en tal escenario.
 
 :::
 
