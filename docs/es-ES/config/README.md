@@ -474,12 +474,12 @@ Los usuarios de bash que necesiten la funcionalidad como preexec pueden usar el 
 | `format`             | `"took [$duration]($style) "` | El formato del módulo.                                                |
 | `style`              | `"bold yellow"`               | El estilo del módulo.                                                 |
 | `disabled`           | `false`                       | Desactiva el módulo `cmd_duration`.                                   |
-| `show_notifications` | `false`                       | Mostrar notificaciones de escritorio cuando se complete el comando.   |
+| `show_notifications` | `false`                       | Muestra notificaciones de escritorio cuando se complete el comando.   |
 | `min_time_to_notify` | `45_000`                      | Duración más corta para la notificación (en milisegundos).            |
 
 ::: tip
 
-Mostrar notificaciones de escritorio requiere que se construya starship con soporte de `rust-notify`. Comprueba si tu starship soporta notificaciones ejecutando `STARSHIP_LOG=debug starship module cmd_duration -d 60000` cuando `show_notifications` está establecido en `true`.
+Mostrar notificaciones de escritorio requiere que se construya starship con soporte de `rust-notify`. Comprueba si tu Starship soporta notificaciones ejecutando `STARSHIP_LOG=debug starship module cmd_duration -d 60000` cuando `show_notifications` está establecido en `true`.
 
 :::
 
@@ -521,7 +521,7 @@ Esto no modifica el propio prompt de conda. En caso de querer suprimirlo, ejecut
 | `style`             | `"bold green"`                     | El estilo del módulo.                                                                                                                                                                                                   |
 | `format`            | `"[$symbol$environment]($style) "` | El formato del módulo.                                                                                                                                                                                                  |
 | `ignore_base`       | `true`                             | Ignora el entorno `base` cuando se activa.                                                                                                                                                                              |
-| `disabled`          | `false`                            | Deshabilita el módulo `conda`.                                                                                                                                                                                          |
+| `disabled`          | `false`                            | Desactiva el módulo `conda`.                                                                                                                                                                                            |
 
 ### Variables
 
@@ -592,7 +592,7 @@ El módulo `dart` muestra la versión actualmente instalada de Dart. El módulo 
 | `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                  |
 | `symbol`   | `"🎯 "`                             | Una cadena de formato que representa el símbolo de Dart |
 | `style`    | `"bold blue"`                      | El estilo del módulo.                                   |
-| `disabled` | `false`                            | Deshabilita el módulo `dart`.                           |
+| `disabled` | `false`                            | Desactiva el módulo `dart`.                             |
 
 ### Variables
 
@@ -615,11 +615,11 @@ format = "via [🔰 $version](bold red) "
 
 ## Directory
 
-El módulo `directory` muestra la ruta hasta el directorio actual, mostrando tres directorios padre como máximo. Tu directorio se truncará a la raíz del repositorio git en el que estés.
+El módulo `directory` muestra la ruta hasta el directorio actual, mostrando tres directorios padre como máximo. Your directory will also be truncated to the root of the git repo that you're currently in.
 
 Cuando usas el estilo fish de la opción pwd, en lugar de ocultar la ruta truncada, verás una versión acortada del nombre de cada directorio basada en el número que activaste para la opción.
 
-Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repo y la opción establecida a `1`. Ahora verás `~/D/N/nixpkgs/pkgs`, mientras que antes habría sido `nixpkgs/pkgs`.
+Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repositorio y la opción establecida a `1`. Ahora verás `~/D/N/nixpkgs/pkgs`, mientras que antes habría sido `nixpkgs/pkgs`.
 
 ### Opciones
 
