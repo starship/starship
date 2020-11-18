@@ -1355,7 +1355,7 @@ El módulo `Julia` muestra la versión actualmente instalada de Julia. El módul
 | `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                    |
 | `symbol`   | `"ஃ "`                             | Una cadena de formato que representa el símbolo de Julia. |
 | `style`    | `"bold purple"`                    | El estilo del módulo.                                     |
-| `disabled` | `false`                            | Deshabilita el módulo `julia`.                            |
+| `disabled` | `false`                            | Desactiva el módulo `julia`.                              |
 
 ### Variables
 
@@ -1378,7 +1378,7 @@ symbol = "∴ "
 
 ## Kubernetes
 
-Muestra el nombre del contexto actual de Kubernetes y, si se establece, el espacio de nombres del archivo kubeconfig. El espacio de nombres necesita establecerse en el archivo kubeconfig, esto puede hacerse mediante `kubectl config set-context starship-cluster --namespace astronaut`. Si se establece la variable env `$KUBECONFIG`, el módulo usará eso si no usará el `~/.kube/config`.
+Muestra el nombre del contexto actual de Kubernetes y, si se establece, el espacio de nombres del archivo kubeconfig. El espacio de nombres necesita establecerse en el archivo kubeconfig, esto puede hacerse mediante `kubectl config set-context starship-cluster --namespace astronaut`. Si se establece la variable de entorno `$KUBECONFIG`, el módulo usará eso si no usará el `~/.kube/config`.
 
 ::: tip
 
@@ -1394,7 +1394,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establezca `disabl
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | El formato del módulo.                                                      |
 | `style`           | `"cyan bold"`                                        | El estilo del módulo.                                                       |
 | `context_aliases` |                                                      | Tabla de alias de contexto a mostrar.                                       |
-| `disabled`        | `true`                                               | Deshabilita el módulo `kubernetes`.                                         |
+| `disabled`        | `true`                                               | Desactiva el módulo `kubernetes`.                                           |
 
 ### Variables
 
@@ -1454,7 +1454,7 @@ El módulo `lua` muestra la versión instalada de Lua. El módulo se muestra si 
 | `symbol`     | `"🌙 "`                             | Una cadena de formato que representa el símbolo de Lua.                 |
 | `style`      | `"bold blue"`                      | El estilo del módulo.                                                   |
 | `lua_binary` | `"lua"`                            | Configura el binario de lua que Starship ejecuta al obtener la versión. |
-| `disabled`   | `false`                            | Deshabilita el módulo `lua`.                                            |
+| `disabled`   | `false`                            | Desactiva el módulo `lua`.                                              |
 
 ### Variables
 
@@ -1495,7 +1495,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establezca `disabl
 | `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | El formato del módulo.                                        |
 | `symbol`    | `"🐏"`                                         | El símbolo usado antes de mostrar el uso de memoria.          |
 | `style`     | `"bold dimmed white"`                         | El estilo del módulo.                                         |
-| `disabled`  | `true`                                        | Deshabilita el módulo `memory_usage`.                         |
+| `disabled`  | `true`                                        | Desactiva el módulo `memory_usage`.                           |
 
 ### Variables
 
@@ -1535,7 +1535,7 @@ El módulo `hg_branch` muestra la rama activa del repositorio en su directorio a
 | `format`            | `"on [$symbol$branch]($style) "` | El formato del módulo.                                                                              |
 | `truncation_length` | `2^63 - 1`                       | Trunca el nombre de la rama hg a X grafemas                                                         |
 | `truncation_symbol` | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado.                                   |
-| `disabled`          | `true`                           | Deshabilita el módulo `hg_branch`.                                                                  |
+| `disabled`          | `true`                           | Desactiva el módulo `hg_branch`.                                                                    |
 
 ### Variables
 
@@ -1574,7 +1574,7 @@ El módulo `nim` muestra la versión instalada de Nim. El módulo se muestra si 
 | `format`   | `"via [$symbol$version]($style) "` | El formato del módulo                                |
 | `symbol`   | `"👑 "`                             | El símbolo usado antes de mostrar la versión de Nim. |
 | `style`    | `"bold yellow"`                    | El estilo del módulo.                                |
-| `disabled` | `false`                            | Deshabilita el módulo `nim`.                         |
+| `disabled` | `false`                            | Desactiva el módulo `nim`.                           |
 
 ### Variables
 
@@ -1609,7 +1609,7 @@ El módulo `nix_shell` muestra el entorno nix-shell. El módulo se mostrará den
 | `style`      | `"bold blue"`                                  | El estilo del módulo.                                                            |
 | `impure_msg` | `"impure"`                                     | Una cadena de formato que se muestra cuando el intérprete de comandos es impuro. |
 | `pure_msg`   | `"pure"`                                       | Una cadena de formato que se muestra cuando el intérprete de comandos es puro.   |
-| `disabled`   | `false`                                        | Deshabilita el módulo `nix_shell`.                                               |
+| `disabled`   | `false`                                        | Desactiva el módulo `nix_shell`.                                                 |
 
 ### Variables
 
@@ -1651,7 +1651,7 @@ El módulo `nodejs` muestra la versión instalada de NodeJS. El módulo se muest
 | `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                     |
 | `symbol`   | `"⬢ "`                             | Una cadena de formato que representa el símbolo de NodeJS. |
 | `style`    | `"bold green"`                     | El estilo del módulo.                                      |
-| `disabled` | `false`                            | Deshabilita el módulo `nodejs`.                            |
+| `disabled` | `false`                            | Desactiva el módulo `nodejs`.                              |
 
 ###  Variables
 
@@ -1690,7 +1690,7 @@ El módulo `ocaml` muestra la versión actualmente instalada de OCaml. El módul
 | `format`   | `"via [$symbol$version]($style) "` | La cadena de formato para el módulo.                   |
 | `symbol`   | `"🐫 "`                             | El símbolo usado antes de mostrar la versión de OCaml. |
 | `style`    | `"bold yellow"`                    | El estilo del módulo.                                  |
-| `disabled` | `false`                            | Deshabilita el módulo `ocaml`.                         |
+| `disabled` | `false`                            | Desactiva el módulo `ocaml`.                           |
 
 ### Variables
 
@@ -1722,7 +1722,7 @@ El módulo `openstack` muestra la nube OpenStack actual y el proyecto. El módul
 | `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | El formato del módulo.                                      |
 | `symbol`   | `"☁️ "`                                             | El símbolo usado antes de mostrar la nube OpenStack actual. |
 | `style`    | `"bold yellow"`                                     | El estilo del módulo.                                       |
-| `disabled` | `false`                                             | Deshabilita el módulo `OpenStack`.                          |
+| `disabled` | `false`                                             | Desactiva el módulo `OpenStack`.                            |
 
 ### Variables
 
@@ -1770,7 +1770,7 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 | `symbol`          | `"📦 "`                             | El símbolo usado antes de mostrar la versión del paquete.                        |
 | `style`           | `"bold 208"`                       | El estilo del módulo.                                                            |
 | `display_private` | `false`                            | Activar la visualización de la versión para los paquetes marcados como privados. |
-| `disabled`        | `false`                            | Deshabilita el módulo `package`.                                                 |
+| `disabled`        | `false`                            | Desactiva el módulo `package`.                                                   |
 
 ### Variables
 
@@ -1808,7 +1808,7 @@ El módulo `perl` muestra la versión actualmente instalada de Perl. El módulo 
 | `format`   | `"via [$symbol$version]($style) "` | La cadena de formato para el módulo.                 |
 | `symbol`   | `"🐪 "`                             | El símbolo usado antes de mostrar la versión de Perl |
 | `style`    | `"bold 149"`                       | El estilo del módulo.                                |
-| `disabled` | `false`                            | Deshabilita el módulo `perl`.                        |
+| `disabled` | `false`                            | Desactiva el módulo `perl`.                          |
 
 ### Variables
 
@@ -1842,7 +1842,7 @@ El módulo `php` muestra la versión instalada de PHP. El módulo se muestra si 
 | `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                               |
 | `symbol`   | `"🐘 "`                             | El símbolo usado antes de mostrar la versión de PHP. |
 | `style`    | `"147 bold"`                       | El estilo del módulo.                                |
-| `disabled` | `false`                            | Deshabilita el módulo `php`.                         |
+| `disabled` | `false`                            | Desactiva el módulo `php`.                           |
 
 ### Variables
 
@@ -1877,7 +1877,7 @@ El módulo `purescript` muestra la versión actualmente instalada de PureScript.
 | `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                      |
 | `symbol`   | `"<=> "`                     | El símbolo usado antes de mostrar la versión de PureScript. |
 | `style`    | `"bold white"`                     | El estilo del módulo.                                       |
-| `disabled` | `false`                            | Deshabilita el módulo `purescript`.                         |
+| `disabled` | `false`                            | Desactiva el módulo `purescript`.                           |
 
 ### Variables
 
@@ -1927,7 +1927,7 @@ El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 | `pyenv_prefix`       | `pyenv`                                                                   | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv   |
 | `scan_for_pyfiles`   | `true`                                                                    | Si es falso, los archivos Python en el directorio actual no mostrarán este módulo. |
 | `python_binary`      | `python`                                                                  | Configura el binario de python que Starship ejecuta al obtener la versión.         |
-| `disabled`           | `false`                                                                   | Disables the `python` module.                                                      |
+| `disabled`           | `false`                                                                   | Desactiva el módulo `python`.                                                      |
 
 ### Variables
 
@@ -1976,7 +1976,7 @@ El módulo `ruby` muestra la versión actualmente instalada de Ruby. El módulo 
 | `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                   |
 | `symbol`   | `"💎 "`                             | Una cadena de formato que representa el símbolo de Ruby. |
 | `style`    | `"bold red"`                       | El estilo del módulo.                                    |
-| `disabled` | `false`                            | Deshabilita el módulo `ruby`.                            |
+| `disabled` | `false`                            | Desactiva el módulo `ruby`.                              |
 
 ### Variables
 
