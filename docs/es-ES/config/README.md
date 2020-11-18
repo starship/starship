@@ -70,13 +70,13 @@ Por ejemplo:
 - `$git_branch$git_commit` es un formato de cadena de texto con dos variables nombradas `git_branch` y `git_commit`.
 - `$git_branch $git_commit` tiene las dos variables separadas por un espacio.
 
-#### Grupo de texto
+#### Grupo de Texto
 
 Un grupo de texto se compone de dos partes diferentes.
 
-La primera parte, que está encerrada en un `[]`, es un [formato de cadena de texto](#format-strings). Se puede agregar textos, variables, o incluso grupos de texto anidados.
+La primera parte, que está encerrada en un `[]`, es una [cadena de formato](#format-strings). Se puede agregar textos, variables, o incluso grupos de texto anidados.
 
-En la segunda parte, que está encerrada en un `()`, es un [formato de cadena de texto](#style-strings). Se puede utilizar el estilo de la primera parte.
+En la segunda parte, que está encerrada entre `()`, es una [cadena de estilo](#style-strings). Se puede utilizar el estilo de la primera parte.
 
 Por ejemplo:
 
