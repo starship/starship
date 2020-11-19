@@ -428,10 +428,10 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of CMake if any of the following conditions are met:
+Le module `cmake` affiche la version actuellement installée de CMake si l'une des conditions suivantes est remplie :
 
 - Le répertoire actuel contient un fichier `CMakeLists.txt`
-- The current directory contains a `CMakeCache.txt` file
+- Le répertoire actuel contient un fichier ` CMakeCache.txt`
 
 ### Options
 
@@ -466,15 +466,15 @@ Les utilisateurs de Bash qui ont besoin de fonctionnalité pré-exec peuvent uti
 
 ### Options
 
-| Option               | Default                       | Description                                                       |
-| -------------------- | ----------------------------- | ----------------------------------------------------------------- |
-| `min_time`           | `2_000`                       | Durée la plus courte quand afficher le temps (en millisecondes).  |
-| `show_milliseconds`  | `false`                       | Afficher les millisecondes en plus des secondes pendant la durée. |
-| `format`             | `"took [$duration]($style) "` | Format du module.                                                 |
-| `style`              | `"bold yellow"`               | Le style du module.                                               |
-| `disabled`           | `false`                       | Désactive le module `cmd_duration`.                               |
-| `show_notifications` | `false`                       | Show desktop notifications when command completes.                |
-| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).             |
+| Option               | Default                       | Description                                                            |
+| -------------------- | ----------------------------- | ---------------------------------------------------------------------- |
+| `min_time`           | `2_000`                       | Durée la plus courte quand afficher le temps (en millisecondes).       |
+| `show_milliseconds`  | `false`                       | Afficher les millisecondes en plus des secondes pendant la durée.      |
+| `format`             | `"took [$duration]($style) "` | Format du module.                                                      |
+| `style`              | `"bold yellow"`               | Le style du module.                                                    |
+| `disabled`           | `false`                       | Désactive le module `cmd_duration`.                                    |
+| `show_notifications` | `false`                       | Afficher les notifications du bureau lorsque la commande est terminée. |
+| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).                  |
 
 ::: tip
 
@@ -2395,11 +2395,11 @@ The order in which custom modules are shown can be individually set by including
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
-#### Custom command shell
+#### Commandes shell personnalisées
 
-`shell` accepts a non-empty list of strings, where:
+`shell` accepte une liste de chaînes non vide, où:
 
-- The first string is the path to the shell to use to execute the command.
+- La première chaîne est le chemin vers le shell à utiliser pour exécuter la commande.
 - Other following arguments are passed to the shell.
 
 If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
