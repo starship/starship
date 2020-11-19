@@ -166,7 +166,7 @@ scan_timeout = 10
 add_newline = false
 ```
 
-### Default Prompt Format
+### Формат оболочки по умолчанию
 
 The default `format` is used to define the format of the prompt, if empty or no `format` is provided. Значение по умолчанию:
 
@@ -244,12 +244,12 @@ $character"""
 | `style`          | `"bold yellow"`                                  | Стиль модуля.                                                  |
 | `disabled`       | `false`                                          | Отключение модуля `AWS`.                                       |
 
-### Variables
+### Переменные
 
 | Переменная | Пример           | Описание                             |
 | ---------- | ---------------- | ------------------------------------ |
-| region     | `ap-northeast-1` | The current AWS region               |
-| profile    | `astronauts`     | The current AWS profile              |
+| регион     | `ap-northeast-1` | The current AWS region               |
+| профиль    | `астронавты`     | The current AWS profile              |
 | symbol     |                  | Mirrors the value of option `symbol` |
 | style\*  |                  | Mirrors the value of option `style`  |
 
@@ -389,7 +389,7 @@ By default it only changes color. If you also want to change it's shape take a l
 | `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
 | `disabled`       | `false`             | Отключает модуль `character`.                                                    |
 
-### Variables
+### Переменные
 
 | Переменная | Пример | Описание                                                              |
 | ---------- | ------ | --------------------------------------------------------------------- |
@@ -442,7 +442,7 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 | `style`    | `"bold blue"`                      | Стиль модуля.                                |
 | `disabled` | `false`                            | Disables the `cmake` module.                 |
 
-### Variables
+### Переменные
 
 | Переменная | Пример    | Описание                             |
 | ---------- | --------- | ------------------------------------ |
@@ -482,7 +482,7 @@ Showing desktop notifications requires starship to be built with `rust-notify` s
 
 :::
 
-### Variables
+### Переменные
 
 | Переменная | Пример   | Описание                                |
 | ---------- | -------- | --------------------------------------- |
@@ -522,11 +522,11 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                                                                                                                                   |
 | `disabled`          | `false`                            | Отключает модуль `conda`.                                                                                                                                                                                    |
 
-### Variables
+### Переменные
 
 | Переменная  | Пример       | Описание                             |
 | ----------- | ------------ | ------------------------------------ |
-| environment | `astronauts` | The current conda environment        |
+| environment | `астронавты` | The current conda environment        |
 | symbol      |              | Mirrors the value of option `symbol` |
 | style\*   |              | Mirrors the value of option `style`  |
 
@@ -557,7 +557,7 @@ The `crystal` module shows the currently installed version of Crystal. The modul
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                              |
 | `disabled` | `false`                            | Отключает модуль `crystal`.                             |
 
-### Variables
+### Переменные
 
 | Переменная | Пример    | Описание                             |
 | ---------- | --------- | ------------------------------------ |
@@ -593,7 +593,7 @@ The `dart` module shows the currently installed version of Dart. The module will
 | `style`    | `"bold blue"`                      | Стиль модуля.                                   |
 | `disabled` | `false`                            | Disables the `dart` module.                     |
 
-### Variables
+### Переменные
 
 | Переменная | Пример   | Описание                             |
 | ---------- | -------- | ------------------------------------ |
@@ -654,7 +654,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 </details>
 
-### Variables
+### Переменные
 
 | Переменная | Пример                | Описание                            |
 | ---------- | --------------------- | ----------------------------------- |
@@ -687,7 +687,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
 | `disabled`        | `true`                             | Disables the `docker_context` module.                                                   |
 
-### Variables
+### Переменные
 
 | Переменная | Пример         | Описание                             |
 | ---------- | -------------- | ------------------------------------ |
@@ -738,7 +738,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | `style`     | `"bold blue"`                            | Стиль модуля.                                                     |
 | `disabled`  | `false`                                  | Отключает модуль `dotnet`.                                        |
 
-### Variables
+### Переменные
 
 | Переменная | Пример           | Описание                                                           |
 | ---------- | ---------------- | ------------------------------------------------------------------ |
@@ -775,7 +775,7 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 | `format`   | `'via [$symbol$version \(OTP $otp_version\)]($style) '` | The format for the module elixir.                             |
 | `disabled` | `false`                                                   | Отключает модуль `elixir`.                                    |
 
-### Variables
+### Переменные
 
 | Переменная  | Пример  | Описание                             |
 | ----------- | ------- | ------------------------------------ |
@@ -814,7 +814,7 @@ The `elm` module shows the currently installed version of Elm. The module will b
 | `style`    | `"cyan bold"`                      | Стиль модуля.                                   |
 | `disabled` | `false`                            | Отключает модуль `elm`.                         |
 
-### Variables
+### Переменные
 
 | Переменная | Пример    | Описание                             |
 | ---------- | --------- | ------------------------------------ |
@@ -850,7 +850,7 @@ The `env_var` module displays the current value of a selected environment variab
 | `format`   | `"with [$env_value]($style) "` | The format for the module.                                       |
 | `disabled` | `false`                        | Отключает модуль `env_var`.                                      |
 
-### Variables
+### Переменные
 
 | Переменная | Пример                                      | Описание                                   |
 | ---------- | ------------------------------------------- | ------------------------------------------ |
@@ -886,7 +886,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. The mod
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                               |
 | `disabled` | `false`                            | Disables the `erlang` module.                            |
 
-### Variables
+### Переменные
 
 | Переменная | Пример    | Описание                             |
 | ---------- | --------- | ------------------------------------ |
@@ -919,11 +919,11 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | `style`          | `"bold blue"`                                    | Стиль модуля.                                                   |
 | `disabled`       | `false`                                          | Disables the `gcloud` module.                                   |
 
-### Variables
+### Переменные
 
 | Переменная | Пример            | Описание                                                           |
 | ---------- | ----------------- | ------------------------------------------------------------------ |
-| region     | `us-central1`     | The current GCP region                                             |
+| регион     | `us-central1`     | The current GCP region                                             |
 | account    | `foo@example.com` | The current GCP profile                                            |
 | project    |                   | The current GCP project                                            |
 | active     | `default`         | The active config name written in `~/.config/gcloud/active_config` |
@@ -980,7 +980,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `truncation_symbol` | `"…"`                            | Символ, используемый для обозначения усечения названия ветки. You can use `""` for no symbol. |
 | `disabled`          | `false`                          | Отключает модуль `git_branch`.                                                                |
 
-### Variables
+### Переменные
 
 | Переменная | Пример   | Описание                                                                                             |
 | ---------- | -------- | ---------------------------------------------------------------------------------------------------- |
@@ -1017,7 +1017,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | `tag_symbol`         | `"🏷 "`                                                 | Tag symbol prefixing the info shown                                     |
 | `disabled`           | `false`                                                | Disables the `git_commit` module.                                       |
 
-### Variables
+### Переменные
 
 | Переменная | Пример    | Описание                            |
 | ---------- | --------- | ----------------------------------- |
@@ -1055,7 +1055,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | The format for the module.                                                              |
 | `disabled`     | `false`                                                         | Отключает модуль `git_state`.                                                           |
 
-### Variables
+### Переменные
 
 | Переменная       | Пример     | Описание                            |
 | ---------------- | ---------- | ----------------------------------- |
@@ -1098,7 +1098,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `style`      | `"bold red"`                                    | Стиль модуля.                       |
 | `disabled`   | `false`                                         | Отключает модуль `git_status`.      |
 
-### Variables
+### Переменные
 
 The following variables can be used in `format`:
 
@@ -1181,7 +1181,7 @@ The `golang` module shows the currently installed version of Golang. The module 
 | `style`    | `"bold cyan"`                      | Стиль модуля.                                  |
 | `disabled` | `false`                            | Отключает модуль `golang`.                     |
 
-### Variables
+### Переменные
 
 | Переменная | Пример    | Описание                             |
 | ---------- | --------- | ------------------------------------ |
@@ -1216,7 +1216,7 @@ The `helm` module shows the currently installed version of Helm. The module will
 | `style`    | `"bold white"`                     | Стиль модуля.                                    |
 | `disabled` | `false`                            | Disables the `helm` module.                      |
 
-### Variables
+### Переменные
 
 | Переменная | Пример   | Описание                             |
 | ---------- | -------- | ------------------------------------ |
@@ -1249,7 +1249,7 @@ The `hostname` module shows the system hostname.
 | `style`    | `"bold dimmed green"`       | Стиль модуля.                                                                                                                              |
 | `disabled` | `false`                     | Отключает модуль `hostname`.                                                                                                               |
 
-### Variables
+### Переменные
 
 | Переменная | Пример | Описание                             |
 | ---------- | ------ | ------------------------------------ |
@@ -1286,7 +1286,7 @@ The `java` module shows the currently installed version of Java. The module will
 | `style`    | `"red dimmed"`                         | Стиль модуля.                                   |
 | `disabled` | `false`                                | Отключает модуль `java`.                        |
 
-### Variables
+### Переменные
 
 | Переменная | Пример | Описание                             |
 | ---------- | ------ | ------------------------------------ |
@@ -1319,7 +1319,7 @@ The `jobs` module shows the current number of jobs running. The module will be s
 | `style`     | `"bold blue"`                 | Стиль модуля.                                    |
 | `disabled`  | `false`                       | Отключает модуль `jobs`.                         |
 
-### Variables
+### Переменные
 
 | Переменная | Пример | Описание                             |
 | ---------- | ------ | ------------------------------------ |
@@ -1356,7 +1356,7 @@ The `julia` module shows the currently installed version of Julia. The module wi
 | `style`    | `"bold purple"`                    | Стиль модуля.                                     |
 | `disabled` | `false`                            | Disables the `julia` module.                      |
 
-### Variables
+### Переменные
 
 | Переменная | Пример   | Описание                             |
 | ---------- | -------- | ------------------------------------ |
@@ -1395,7 +1395,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `context_aliases` |                                                      | Table of context aliases to display.                                  |
 | `disabled`        | `true`                                               | Отключает модуль `kubernetes`.                                        |
 
-### Variables
+### Переменные
 
 | Переменная | Пример               | Описание                                 |
 | ---------- | -------------------- | ---------------------------------------- |
@@ -1455,7 +1455,7 @@ The `lua` module shows the currently installed version of Lua. The module will b
 | `lua_binary` | `"lua"`                            | Configures the lua binary that Starship executes when getting the version. |
 | `disabled`   | `false`                            | Disables the `lua` module.                                                 |
 
-### Variables
+### Переменные
 
 | Переменная | Пример   | Описание                             |
 | ---------- | -------- | ------------------------------------ |
@@ -1496,7 +1496,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `style`     | `"bold dimmed white"`                         | Стиль модуля.                                            |
 | `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
 
-### Variables
+### Переменные
 
 | Переменная       | Пример        | Описание                                                           |
 | ---------------- | ------------- | ------------------------------------------------------------------ |
@@ -1536,7 +1536,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `truncation_symbol` | `"…"`                            | Символ, используемый для обозначения усечения названия ветки.                                |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
-### Variables
+### Переменные
 
 | Переменная | Пример   | Описание                             |
 | ---------- | -------- | ------------------------------------ |
@@ -1575,7 +1575,7 @@ The `nim` module shows the currently installed version of Nim. The module will b
 | `style`    | `"bold yellow"`                    | Стиль модуля.                                         |
 | `disabled` | `false`                            | Disables the `nim` module.                            |
 
-### Variables
+### Переменные
 
 | Переменная | Пример   | Описание                             |
 | ---------- | -------- | ------------------------------------ |
@@ -1610,7 +1610,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 | `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
 | `disabled`   | `false`                                        | Disables the `nix_shell` module.                      |
 
-### Variables
+### Переменные
 
 | Переменная | Пример  | Описание                             |
 | ---------- | ------- | ------------------------------------ |
@@ -1691,7 +1691,7 @@ The `ocaml` module shows the currently installed version of OCaml. The module wi
 | `style`    | `"bold yellow"`                    | Стиль модуля.                                           |
 | `disabled` | `false`                            | Disables the `ocaml` module.                            |
 
-### Variables
+### Переменные
 
 | Переменная | Пример    | Описание                             |
 | ---------- | --------- | ------------------------------------ |
@@ -1723,7 +1723,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | `style`    | `"bold yellow"`                                     | Стиль модуля.                                                  |
 | `disabled` | `false`                                             | Disables the `OpenStack` module.                               |
 
-### Variables
+### Переменные
 
 | Переменная | Пример | Описание                             |
 | ---------- | ------ | ------------------------------------ |
@@ -1771,7 +1771,7 @@ The `package` module is shown when the current directory is the repository for a
 | `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
 | `disabled`        | `false`                            | Disables the `package` module.                             |
 
-### Variables
+### Переменные
 
 | Переменная | Пример   | Описание                             |
 | ---------- | -------- | ------------------------------------ |
@@ -1809,7 +1809,7 @@ The `perl` module shows the currently installed version of Perl. The module will
 | `style`    | `"bold 149"`                       | Стиль модуля.                                         |
 | `disabled` | `false`                            | Disables the `perl` module.                           |
 
-### Variables
+### Переменные
 
 | Переменная | Пример    | Описание                             |
 | ---------- | --------- | ------------------------------------ |
@@ -1843,7 +1843,7 @@ The `php` module shows the currently installed version of PHP. The module will b
 | `style`    | `"147 bold"`                       | Стиль модуля.                                         |
 | `disabled` | `false`                            | Disables the `php` module.                            |
 
-### Variables
+### Переменные
 
 | Переменная | Пример   | Описание                             |
 | ---------- | -------- | ------------------------------------ |
@@ -1878,7 +1878,7 @@ The `purescript` module shows the currently installed version of PureScript vers
 | `style`    | `"bold white"`                     | Стиль модуля.                                                |
 | `disabled` | `false`                            | Disables the `purescript` module.                            |
 
-### Variables
+### Переменные
 
 | Переменная | Пример   | Описание                             |
 | ---------- | -------- | ------------------------------------ |
@@ -1928,7 +1928,7 @@ The module will be shown if any of the following conditions are met:
 | `python_binary`      | `python`                                                                  | Configures the python binary that Starship executes when getting the version. |
 | `disabled`           | `false`                                                                   | Disables the `python` module.                                                 |
 
-### Variables
+### Переменные
 
 | Переменная   | Пример          | Описание                                   |
 | ------------ | --------------- | ------------------------------------------ |
@@ -1977,7 +1977,7 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 | `style`    | `"bold red"`                       | Стиль модуля.                                    |
 | `disabled` | `false`                            | Disables the `ruby` module.                      |
 
-### Variables
+### Переменные
 
 | Переменная | Пример   | Описание                             |
 | ---------- | -------- | ------------------------------------ |
@@ -2012,7 +2012,7 @@ The `rust` module shows the currently installed version of Rust. The module will
 | `style`    | `"bold red"`                       | Стиль модуля.                                   |
 | `disabled` | `false`                            | Disables the `rust` module.                     |
 
-### Variables
+### Переменные
 
 | Переменная | Пример            | Описание                             |
 | ---------- | ----------------- | ------------------------------------ |
@@ -2045,7 +2045,7 @@ The `shlvl` module shows the current SHLVL ("shell level") environment variable,
 | `style`     | `"bold yellow"`              | Стиль модуля.                           |
 | `disabled`  | `true`                       | Disables the `shlvl` module.            |
 
-### Variables
+### Переменные
 
 | Переменная | Пример | Описание                             |
 | ---------- | ------ | ------------------------------------ |
@@ -2079,7 +2079,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 | `style`    | `"bold dimmed blue"`             | Стиль модуля.                                    |
 | `disabled` | `false`                          | Disables the `singularity` module.               |
 
-### Variables
+### Переменные
 
 | Переменная | Пример       | Описание                             |
 | ---------- | ------------ | ------------------------------------ |
@@ -2115,7 +2115,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `style`    | `"bold red"`               | Стиль модуля.                                          |
 | `disabled` | `true`                     | Disables the `status` module.                          |
 
-### Variables
+### Переменные
 
 | Переменная | Пример | Описание                             |
 | ---------- | ------ | ------------------------------------ |
@@ -2155,7 +2155,7 @@ The `swift` module shows the currently installed version of Swift. The module wi
 | `style`    | `"bold 202"`                       | Стиль модуля.                                    |
 | `disabled` | `false`                            | Disables the `swift` module.                     |
 
-### Variables
+### Переменные
 
 | Переменная | Пример   | Описание                             |
 | ---------- | -------- | ------------------------------------ |
@@ -2190,7 +2190,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 | `style`    | `"bold 105"`                         | Стиль модуля.                                         |
 | `disabled` | `false`                              | Disables the `terraform` module.                      |
 
-### Variables
+### Переменные
 
 | Переменная | Пример     | Описание                             |
 | ---------- | ---------- | ------------------------------------ |
@@ -2245,7 +2245,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
-### Variables
+### Переменные
 
 | Переменная | Пример     | Описание                            |
 | ---------- | ---------- | ----------------------------------- |
@@ -2286,7 +2286,7 @@ The `username` module shows active user's username. The module will be shown if 
 | `show_always` | `false`                 | Always shows the `username` module.   |
 | `disabled`    | `false`                 | Disables the `username` module.       |
 
-### Variables
+### Переменные
 
 | Переменная | Пример       | Описание                                                                                    |
 | ---------- | ------------ | ------------------------------------------------------------------------------------------- |
@@ -2321,7 +2321,7 @@ The `zig` module shows the currently installed version of Zig. The module will b
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                            |
 | `disabled` | `false`                            | Disables the `zig` module.                            |
 
-### Variables
+### Переменные
 
 | Переменная | Пример   | Описание                             |
 | ---------- | -------- | ------------------------------------ |
@@ -2385,7 +2385,7 @@ The order in which custom modules are shown can be individually set by including
 | `format`      | `"[$symbol$output]($style) "` | The format for the module.                                                                                                 |
 | `disabled`    | `false`                       | Disables this `custom` module.                                                                                             |
 
-### Variables
+### Переменные
 
 | Переменная | Описание                               |
 | ---------- | -------------------------------------- |
