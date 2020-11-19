@@ -75,7 +75,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 Первая часть, которая заключена в `[]`, это [формат строки](#format-strings). Вы можете добавлять в него тексты, переменные, или даже вложенные текстовые группы.
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
+Во второй части, которая заключена в `()`, это строка стиля [](#style-strings). This can be used style the first part.
 
 Например:
 
