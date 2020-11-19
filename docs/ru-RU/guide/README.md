@@ -121,7 +121,7 @@
 
 ### Требования
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Установленный и включённый [шрифт Powerline](https://www.nerdfonts.com/) (например, [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Начало работы
 
@@ -199,7 +199,7 @@
 
    #### PowerShell
 
-    Добавьте следующее в конец `Microsoft.PowerShell_profile.ps1`. Вы можете проверить местоположение этого файла, запросив переменную `$PROFILE` в PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+    Добавьте следующее в конец `Microsoft.PowerShell_profile.ps1`. Вы можете проверить местоположение этого файла, запросив переменную `$PROFILE` в PowerShell. Обычно он находится в `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` или `~/.config/powershell/Microsoft.PowerShell_profile.ps1` на -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
