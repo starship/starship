@@ -75,13 +75,13 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 Первая часть, которая заключена в `[]`, это [формат строки](#format-strings). Вы можете добавлять в него тексты, переменные, или даже вложенные текстовые группы.
 
-Во второй части, которая заключена в `()`, это строка стиля [](#style-strings). This can be used style the first part.
+Во второй части, которая заключена в `()`, это строка стиля [](#style-strings). Это может быть использовано в стиле первой части.
 
 Например:
 
-- `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⬢ $version](bold green)` will print a symbol `⬢` followed by the content of variable `version`, with bold text colored green.
-- `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
+- `[on](red bold)` будет печатать строку `on` жирным текстом красного цвета.
+- `[⬢ $version](bold green)` будет печатать символ `⬢` за которым следует содержимое переменной `версии`, с жирным шрифтом зеленого цвета.
+- `[a [b](red) c](green)` будет печатать `a b c` с `b` красного и `a` и `c` зеленого цвета соответсвенно.
 
 #### Строки стиля
 
@@ -96,14 +96,14 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 Обратите внимание на то, что, вид стиля зависит от вашего эмулятора терминала. Например, некоторые эмуляторы терминала будут использовать яркие цвета вместо жирного текста, и некоторые цветовые темы используют одинаковые значение для обычных и ярких цветов. Также, чтобы получить курсивный текст, ваш терминал должен поддерживать курсив.
 
-#### Conditional Format Strings
+#### Строки условного формата
 
-A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
+Строка условного формата, завернутая в `(` и `)` не будет отображаться, если все переменные внутри являются пустыми.
 
 Например:
 
-- `(@$region)` will show nothing if the variable `region` is `None`, otherwise `@` followed by the value of region.
-- `(some text)` will always show nothing since there are no variables wrapped in the braces.
+- `(@$region)` ничего не будет показывать, если переменная `регион` в значении `None`, иначе `@` будет использовать значение этой переменной.
+- `(некоторый текст)` всегда не показывает ничего, поскольку в скобках нет переменных.
 - When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. This works the same as `(\[$a$b\] )`.
 
 #### Escapable characters
