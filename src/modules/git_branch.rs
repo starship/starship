@@ -274,7 +274,9 @@ mod tests {
 
         let expected = Some(format!(
             "on {} ",
-            Color::Purple.bold().paint(format!("\u{e0a0} {}", "test_branch")),
+            Color::Purple
+                .bold()
+                .paint(format!("\u{e0a0} {}", "test_branch")),
         ));
 
         assert_eq!(expected, actual);
