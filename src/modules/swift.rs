@@ -53,11 +53,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn parse_swift_version(swift_version: &str) -> Option<String> {
-    let version = swift_version
-        // split into ["Apple", "Swift", "version", "5.2.2", ...]
-        .split_whitespace()
-        // return "5.2.2"
-        .nth(3)?;
+    // split into ["Apple", "Swift", "version", "5.2.2", ...] or
+    //            ["Swift", "version", "5.3-dev", ...]
+    let mut splited = swift_version.split_whitespace();
+    let _ = splited.position(|t| t == "version")?;
+    // return "5.2.2" or "5.3-dev"
+    let version = splited.next()?;
 
     Some(format!("v{}", version))
 }
@@ -74,6 +75,12 @@ mod tests {
     fn test_parse_swift_version() {
         let input = "Apple Swift version 5.2.2";
         assert_eq!(parse_swift_version(input), Some(String::from("v5.2.2")));
+    }
+
+    #[test]
+    fn test_parse_swift_version_without_org_name() {
+        let input = "Swift version 5.3-dev (LLVM ..., Swift ...)";
+        assert_eq!(parse_swift_version(input), Some(String::from("v5.3-dev")));
     }
 
     #[test]
