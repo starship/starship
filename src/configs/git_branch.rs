@@ -10,6 +10,7 @@ pub struct GitBranchConfig<'a> {
     pub truncation_length: i64,
     pub truncation_symbol: &'a str,
     pub only_attached: bool,
+    pub show_remote: bool,
     pub disabled: bool,
 }
 
@@ -22,6 +23,7 @@ impl<'a> RootModuleConfig<'a> for GitBranchConfig<'a> {
             truncation_length: std::i64::MAX,
             truncation_symbol: "…",
             only_attached: false,
+            show_remote: true,
             disabled: false,
         }
     }

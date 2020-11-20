@@ -45,6 +45,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         graphemes.truncate(trunc_len + 1)
     }
 
+    if config.show_remote {
+        if let Some(r) = repo.remote.as_ref() {
+            if !branch_name.eq(r) {
+                graphemes.push(":");
+                r.graphemes(true).for_each(|g| graphemes.push(g));
+            }
+        }
+    }
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {

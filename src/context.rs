@@ -171,11 +171,12 @@ impl<'a> Context<'a> {
                     .as_ref()
                     .and_then(|repo| repo.workdir().map(Path::to_path_buf));
                 let state = repository.as_ref().map(|repo| repo.state());
-
+                let remote = repository.as_ref().and_then(|repo| get_remote(repo));
                 Ok(Repo {
                     branch,
                     root,
                     state,
+                    remote,
                 })
             })
     }
@@ -310,6 +311,9 @@ pub struct Repo {
 
     /// State
     pub state: Option<RepositoryState>,
+
+    /// Remote branch name
+    pub remote: Option<String>,
 }
 
 // A struct of Criteria which will be used to verify current PathBuf is
@@ -374,6 +378,21 @@ fn get_current_branch(repository: &Repository) -> Option<String> {
     let shorthand = head.shorthand();
 
     shorthand.map(std::string::ToString::to_string)
+}
+
+fn get_remote(repository: &Repository) -> Option<String> {
+    if let Ok(head) = repository.head() {
+        if let Some(local_branch_ref) = head.name() {
+            let remote_ref = match repository.branch_upstream_name(local_branch_ref) {
+                Ok(remote_ref) => remote_ref.as_str()?.to_owned(),
+                Err(_) => return None,
+            };
+
+            let remote = remote_ref.split('/').last().map(|r| r.to_owned())?;
+            return Some(remote);
+        }
+    }
+    None
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]

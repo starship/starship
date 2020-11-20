@@ -1031,6 +1031,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `truncation_length` | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                   |
 | `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
 | `only_attached`      | `false`                                         | Only show the branch name when not in a detached HEAD state. |
+| `show_remote`       | `true`                           | Shows the remote tracking branch name if it is different than the local branch name.     |
 | `disabled`          | `false`                          | Disables the `git_branch` module.                                                        |
 
 ### Variables
