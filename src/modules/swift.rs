@@ -78,6 +78,12 @@ mod tests {
     }
 
     #[test]
+    fn test_parse_swift_version_without_org_name() {
+        let input = "Swift version 5.3-dev (LLVM ..., Swift ...)";
+        assert_eq!(parse_swift_version(input), Some(String::from("v5.3-dev")));
+    }
+
+    #[test]
     fn folder_without_swift_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("swift.txt"))?.sync_all()?;
