@@ -53,11 +53,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn parse_swift_version(swift_version: &str) -> Option<String> {
-    let version = swift_version
-        // split into ["Apple", "Swift", "version", "5.2.2", ...]
-        .split_whitespace()
-        // return "5.2.2"
-        .nth(3)?;
+    // split into ["Apple", "Swift", "version", "5.2.2", ...] or
+    //            ["Swift", "version", "5.3-dev", ...]
+    let mut splited = swift_version.split_whitespace();
+    let _ = splited.position(|t| t == "version")?;
+    // return "5.2.2" or "5.3-dev"
+    let version = splited.next()?;
 
     Some(format!("v{}", version))
 }
