@@ -171,7 +171,7 @@ impl<'a> Context<'a> {
                     .as_ref()
                     .and_then(|repo| repo.workdir().map(Path::to_path_buf));
                 let state = repository.as_ref().map(|repo| repo.state());
-                let remote = repository.as_ref().and_then(|repo| get_remote(repo));
+                let remote = repository.as_ref().and_then(|repo| get_remote_branch(repo));
                 Ok(Repo {
                     branch,
                     root,
@@ -380,7 +380,7 @@ fn get_current_branch(repository: &Repository) -> Option<String> {
     shorthand.map(std::string::ToString::to_string)
 }
 
-fn get_remote(repository: &Repository) -> Option<String> {
+fn get_remote_branch(repository: &Repository) -> Option<String> {
     if let Ok(head) = repository.head() {
         if let Some(local_branch_ref) = head.name() {
             let remote_ref = match repository.branch_upstream_name(local_branch_ref) {
