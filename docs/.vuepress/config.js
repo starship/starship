@@ -44,17 +44,6 @@ module.exports = {
     ["meta", { name: "twitter:description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell."}],
     ["meta", { name: "twitter:image", content: "https://starship.rs/icon.png"}],
     ["meta", { name: "twitter:alt", content: "Starship: Cross-Shell Prompt"}],
-
-    // Black Lives Matter
-    ["script", { type:"text/javascript", src:"https://makerbadge.s3.amazonaws.com/blmbadge.js" }],
-    ["script", {}, `BLMBadge.init({
-  layout:1,
-  theme:'dark',
-  promoText : 'Send a donation '+String.fromCodePoint(0x2192),
-  promoLink : 'https://minnesotafreedomfund.org/',
-  message : 'To be silent is to be complicit. Black lives matter.',
-  title : '#BlackLivesMatter'
-})`]
   ],
   theme: "default-prefers-color-scheme",
   themeConfig: {
