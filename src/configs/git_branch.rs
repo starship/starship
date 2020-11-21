@@ -11,19 +11,21 @@ pub struct GitBranchConfig<'a> {
     pub truncation_symbol: &'a str,
     pub only_attached: bool,
     pub show_remote: bool,
+    pub always_show_remote: bool,
     pub disabled: bool,
 }
 
 impl<'a> RootModuleConfig<'a> for GitBranchConfig<'a> {
     fn new() -> Self {
         GitBranchConfig {
-            format: "on [$symbol$branch]($style) ",
+            format: "on [$symbol$branch]($style)(:[$remote]($style)) ",
             symbol: " ",
             style: "bold purple",
             truncation_length: std::i64::MAX,
             truncation_symbol: "…",
             only_attached: false,
             show_remote: true,
+            always_show_remote: true,
             disabled: false,
         }
     }

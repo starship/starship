@@ -35,23 +35,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let branch_name = repo.branch.as_ref()?;
-
     let mut graphemes: Vec<&str> = branch_name.graphemes(true).collect();
-    let trunc_len = len.min(graphemes.len());
 
+    let mut remote_graphemes: Vec<&str> = Vec::new();
+    if let Some(remote_branch) = repo.remote.as_ref() {
+        remote_graphemes = remote_branch.graphemes(true).collect();
+    }
+
+    let trunc_len = len.min(graphemes.len());
     if trunc_len < graphemes.len() {
         // The truncation symbol should only be added if we truncate
         graphemes[trunc_len] = truncation_symbol;
         graphemes.truncate(trunc_len + 1)
     }
 
-    if config.show_remote {
-        if let Some(r) = repo.remote.as_ref() {
-            if !branch_name.eq(r) {
-                graphemes.push(":");
-                r.graphemes(true).for_each(|g| graphemes.push(g));
-            }
-        }
+    let trunc_len = len.min(remote_graphemes.len());
+    if trunc_len < remote_graphemes.len() {
+        // The truncation symbol should only be added if we truncate
+        remote_graphemes[trunc_len] = truncation_symbol;
+        remote_graphemes.truncate(trunc_len + 1);
     }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -66,6 +68,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "branch" => Some(Ok(graphemes.concat())),
+                "remote" => {
+                    if !remote_graphemes.is_empty() {
+                        Some(Ok(remote_graphemes.concat()))
+                    } else {
+                        None
+                    }
+                }
                 _ => None,
             })
             .parse(None)
