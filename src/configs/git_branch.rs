@@ -24,8 +24,7 @@ impl<'a> RootModuleConfig<'a> for GitBranchConfig<'a> {
             truncation_length: std::i64::MAX,
             truncation_symbol: "…",
             only_attached: false,
-            show_remote: true,
-            always_show_remote: true,
+            always_show_remote: false,
             disabled: false,
         }
     }
