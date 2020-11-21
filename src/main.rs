@@ -9,6 +9,9 @@ use starship::module::ALL_MODULES;
 use starship::*;
 
 fn main() {
+    // Configure the current terminal on windows to support ANSI escape sequences.
+    #[cfg(windows)]
+    let _ = ansi_term::enable_ansi_support();
     logger::init();
 
     let status_code_arg = Arg::with_name("status_code")
