@@ -56,14 +56,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         });
 
         let mut tag_name = String::new();
-        let mut oldest = Time::new(0,0);
+        let mut oldest = Time::new(0, 0);
         // Let's check if HEAD has some tag. If several, gets last created one...
         for (name, timestamp, reference) in tag_and_refs.rev() {
-            if commit_oid == reference.peel_to_commit().ok()?.id() {
-                if timestamp > oldest {
-                    tag_name = name;
-                    oldest = timestamp;
-                }
+            if commit_oid == reference.peel_to_commit().ok()?.id() && timestamp > oldest {
+                tag_name = name;
+                oldest = timestamp;
             }
         }
         // If we have tag...
