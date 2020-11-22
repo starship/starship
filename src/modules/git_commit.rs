@@ -1,5 +1,6 @@
 use super::{Context, Module, RootModuleConfig};
 use git2::Repository;
+use git2::Time;
 
 use crate::configs::git_commit::GitCommitConfig;
 use crate::formatter::StringFormatter;
@@ -47,17 +48,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let tag_names = git_repo.tag_names(None).ok()?;
         let tag_and_refs = tag_names.iter().flat_map(|name| {
             let full_tag = format!("refs/tags/{}", name.unwrap());
+            let tag_obj = git_repo.find_reference(&full_tag)?.peel_to_tag()?;
+            let sig_obj = tag_obj.tagger().unwrap();
             git_repo
                 .find_reference(&full_tag)
-                .map(|reference| (String::from(name.unwrap()), reference))
+                .map(|reference| (String::from(name.unwrap()), sig_obj.when(), reference))
         });
 
         let mut tag_name = String::new();
-        // Let's check if HEAD has some tag. If several, only gets first...
-        for (name, reference) in tag_and_refs {
+        let mut oldest = Time::new(0,0);
+        // Let's check if HEAD has some tag. If several, gets last created one...
+        for (name, timestamp, reference) in tag_and_refs.rev() {
             if commit_oid == reference.peel_to_commit().ok()?.id() {
-                tag_name = name;
-                break;
+                if timestamp > oldest {
+                    tag_name = name;
+                    oldest = timestamp;
+                }
             }
         }
         // If we have tag...
