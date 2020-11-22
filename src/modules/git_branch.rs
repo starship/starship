@@ -56,6 +56,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         remote_graphemes.truncate(trunc_len + 1);
     }
 
+    let show_remote = config.always_show_remote
+        || (!graphemes.eq(&remote_graphemes) && !remote_graphemes.is_empty());
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -69,7 +72,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "branch" => Some(Ok(graphemes.concat())),
                 "remote" => {
-                    if !remote_graphemes.is_empty() {
+                    if show_remote {
                         Some(Ok(remote_graphemes.concat()))
                     } else {
                         None
