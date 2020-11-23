@@ -38,15 +38,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let system = sys_info::mem_info();
-    if system.is_err() {
-        log::warn!(
-            "Unable to access memory usage information:\n{}",
-            system.unwrap_err()
-        );
-        return None;
-    }
-    let system = system.unwrap();
+    let system = match sys_info::mem_info() {
+        Ok(info) => info,
+        Err(err) => {
+            log::warn!("Unable to access memory usage information:\n{}", err);
+            return None;
+        }
+    };
 
     // avail includes reclaimable memory, but isn't supported on all platforms
     let avail_memory_kib = match system.avail {
