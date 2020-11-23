@@ -978,7 +978,8 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `style`             | `"bold purple"`                  | 此组件的样式。                                                       |
 | `truncation_length` | `2^63 - 1`                       | Truncates a git branch to X graphemes.                        |
 | `truncation_symbol` | `"…"`                            | 此字段的内容用来表示分支名称被截断。 You can use `""` for no symbol.            |
-| `disabled`          | `false`                          | 禁用 `git_branch` 组件。                                           |
+| `only_attached`     | `false`                          | Only show the branch name when not in a detached HEAD state.  |
+| `disabled`          | `false`                          | Disables the `git_branch` module.                             |
 
 ### Variables
 
