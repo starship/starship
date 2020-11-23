@@ -972,21 +972,23 @@ El módulo `git_branch` muestra la rama activa del repositorio en su directorio 
 
 ### Opciones
 
-| Opción              | Por defecto                      | Descripción                                                                                             |
-| ------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `format`            | `"on [$symbol$branch]($style) "` | El formato del módulo. Use `"$branch"` para referirse al nombre de la rama actual.                      |
-| `symbol`            | `" "`                           | Una cadena de formato que representa el símbolo de la rama git.                                         |
-| `style`             | `"bold purple"`                  | El estilo del módulo.                                                                                   |
-| `truncation_length` | `2^63 - 1`                       | Trunca una rama git a X grafemas.                                                                       |
-| `truncation_symbol` | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado. Puedes usar `""` para ningún símbolo. |
-| `only_attached`     | `false`                          | Only show the branch name when not in a detached HEAD state.                                            |
-| `disabled`          | `false`                          | Disables the `git_branch` module.                                                                       |
+| Opción               | Por defecto                      | Descripción                                                                                       |
+| -------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.              |
+| `format`             | `"on [$symbol$branch]($style) "` | El formato del módulo. Use `"$branch"` to refer to the current branch name.                       |
+| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                                            |
+| `style`              | `"bold purple"`                  | El estilo del módulo.                                                                             |
+| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                            |
+| `truncation_symbol`  | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado. You can use `""` for no symbol. |
+| `only_attached`      | `false`                          | Only show the branch name when not in a detached HEAD state.                                      |
+| `disabled`           | `false`                          | Disables the `git_branch` module.                                                                 |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                                                                                                   |
 | --------- | -------- | ------------------------------------------------------------------------------------------------------------- |
 | branch    | `master` | El nombre de la rama actual, regresa a `HEAD` si no hay ninguna rama actual (por ejemplo, git detached HEAD). |
+| remote    | `master` | The remote branch name.                                                                                       |
 | symbol    |          | Refleja el valor de la opción `symbol`                                                                        |
 | style\* |          | Refleja el valor de la opción `style`                                                                         |
 
