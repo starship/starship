@@ -978,7 +978,8 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `style`             | `"bold purple"`                  | Стиль модуля.                                                                                 |
 | `truncation_length` | `2^63 - 1`                       | Отрезает ветку git до X графемов.                                                             |
 | `truncation_symbol` | `"…"`                            | Символ, используемый для обозначения усечения названия ветки. You can use `""` for no symbol. |
-| `disabled`          | `false`                          | Отключает модуль `git_branch`.                                                                |
+| `only_attached`     | `false`                          | Only show the branch name when not in a detached HEAD state.                                  |
+| `disabled`          | `false`                          | Disables the `git_branch` module.                                                             |
 
 ### Переменные
 
