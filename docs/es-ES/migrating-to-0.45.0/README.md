@@ -111,7 +111,7 @@ error_symbol = "[✖](bold red)"
 
 *Nota:* El elemento `character` añade automáticamente un espacio, así que a diferencia del otras cadenas `format`, no añadimos uno en los ejemplos anteriores.
 
-#### Tiempo de ejecución
+#### Tiempo de Ejecución
 
 | Propiedad eliminada | Reemplazo |
 | ------------------- | --------- |
