@@ -250,7 +250,7 @@ fn get_pinned_sdk_version(json: &str) -> Option<Version> {
     }
 }
 
-fn get_local_dotnet_files<'a>(context: &'a Context) -> Result<Vec<DotNetFile>, std::io::Error> {
+fn get_local_dotnet_files(context: &Context) -> Result<Vec<DotNetFile>, std::io::Error> {
     Ok(context
         .dir_contents()?
         .files()
