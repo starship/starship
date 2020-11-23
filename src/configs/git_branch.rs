@@ -10,7 +10,6 @@ pub struct GitBranchConfig<'a> {
     pub truncation_length: i64,
     pub truncation_symbol: &'a str,
     pub only_attached: bool,
-    pub show_remote: bool,
     pub always_show_remote: bool,
     pub disabled: bool,
 }
