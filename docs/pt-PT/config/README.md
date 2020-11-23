@@ -971,21 +971,23 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Options
 
-| Option              | Default                          | Description                                                                              |
-| ------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
-| `format`            | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.          |
-| `symbol`            | `" "`                           | A format string representing the symbol of git branch.                                   |
-| `style`             | `"bold purple"`                  | The style for the module.                                                                |
-| `truncation_length` | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                   |
-| `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
-| `only_attached`     | `false`                          | Only show the branch name when not in a detached HEAD state.                             |
-| `disabled`          | `false`                          | Disables the `git_branch` module.                                                        |
+| Option               | Default                          | Description                                                                              |
+| -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
+| `format`             | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.          |
+| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                                   |
+| `style`              | `"bold purple"`                  | The style for the module.                                                                |
+| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                   |
+| `truncation_symbol`  | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
+| `only_attached`      | `false`                          | Only show the branch name when not in a detached HEAD state.                             |
+| `disabled`           | `false`                          | Disables the `git_branch` module.                                                        |
 
 ### Variables
 
 | Variable  | Example  | Description                                                                                          |
 | --------- | -------- | ---------------------------------------------------------------------------------------------------- |
 | branch    | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
+| remote    | `master` | The remote branch name.                                                                              |
 | symbol    |          | Mirrors the value of option `symbol`                                                                 |
 | style\* |          | Mirrors the value of option `style`                                                                  |
 
