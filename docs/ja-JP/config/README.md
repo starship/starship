@@ -979,7 +979,8 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `style`             | `"bold purple"`                  | モジュールのスタイルです。                                                         |
 | `truncation_length` | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                |
 | `truncation_symbol` | `"…"`                            | ブランチ名切り捨てられていることを示すための記号です。 You can use `""` for no symbol.           |
-| `disabled`          | `false`                          | `git_branch`モジュールを無効にします。                                             |
+| `only_attached`     | `false`                          | Only show the branch name when not in a detached HEAD state.          |
+| `disabled`          | `false`                          | Disables the `git_branch` module.                                     |
 
 ### 変数
 
