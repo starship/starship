@@ -979,7 +979,8 @@ El módulo `git_branch` muestra la rama activa del repositorio en su directorio 
 | `style`             | `"bold purple"`                  | El estilo del módulo.                                                                                   |
 | `truncation_length` | `2^63 - 1`                       | Trunca una rama git a X grafemas.                                                                       |
 | `truncation_symbol` | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado. Puedes usar `""` para ningún símbolo. |
-| `disabled`          | `false`                          | Desactiva el módulo `git_branch`.                                                                       |
+| `only_attached`     | `false`                          | Only show the branch name when not in a detached HEAD state.                                            |
+| `disabled`          | `false`                          | Disables the `git_branch` module.                                                                       |
 
 ### Variables
 
