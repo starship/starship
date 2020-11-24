@@ -390,12 +390,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "doc-comment"
-version = "0.3.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fea41bba32d969b513997752735605054bc0dfa92b4c56bf1189f2e174be7a10"
-
-[[package]]
 name = "dtoa"
 version = "0.4.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -704,15 +698,6 @@ dependencies = [
  "dbus",
  "mac-notification-sys",
  "winrt-notification",
-]
-
-[[package]]
-name = "ntapi"
-version = "0.3.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7a31937dea023539c72ddae0e3571deadc1414b300483fa7aaec176168cfa9d2"
-dependencies = [
- "winapi",
 ]
 
 [[package]]
@@ -1229,7 +1214,7 @@ dependencies = [
  "serde_json",
  "shell-words",
  "starship_module_config_derive",
- "sysinfo",
+ "sys-info",
  "tempfile",
  "term_size",
  "toml",
@@ -1303,18 +1288,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "sysinfo"
-version = "0.15.3"
+name = "sys-info"
+version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "67330cbee3b2a819e3365a773f05e884a136603687f812bf24db5b6c3d76b696"
+checksum = "e5cfbd84f86389198ade41b439f72a5b1b3a8ba728e61cd589e1720d0df44c39"
 dependencies = [
- "cfg-if 0.1.10",
- "doc-comment",
+ "cc",
  "libc",
- "ntapi",
- "once_cell",
- "rayon",
- "winapi",
 ]
 
 [[package]]
