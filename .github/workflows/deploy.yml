@@ -82,15 +82,15 @@ jobs:
           target: ${{ matrix.target }}
 
       - name: Setup | musl tools
-        if: matrix.target == 'x86_64-unknown-linux-musl'
+        if: contains( matrix.target, 'musl' )
         run: sudo apt install -y musl-tools
 
       - name: Build | Build
-        if: matrix.target != 'x86_64-unknown-linux-musl'
+        if: contains( matrix.target, 'musl' )
         run: cargo build --release --target ${{ matrix.target }}
 
       - name: Build | Build (musl)
-        if: matrix.target == 'x86_64-unknown-linux-musl'
+        if: contains( matrix.target, 'musl' )
         run: cargo build --release --features tls-vendored --target ${{ matrix.target }}
 
       - name: Post Setup | Prepare artifacts [Windows]
