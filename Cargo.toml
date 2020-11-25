@@ -41,7 +41,7 @@ log = { version = "0.4.11", features = ["std"] }
 # see: https://github.com/svartalf/rust-battery/issues/33
 battery = { version = "0.7.8", optional = true }
 path-slash = "0.1.3"
-unicode-segmentation = "1.7.0"
+unicode-segmentation = "1.7.1"
 gethostname = "0.2.1"
 once_cell = "1.5.2"
 chrono = "0.4"
