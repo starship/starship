@@ -114,6 +114,16 @@ fn describe_rebase<'a>(root: &'a PathBuf, rebase_config: &'a str) -> StateDescri
      */
 
     let dot_git = root.join(".git");
+    let dot_git = if let Ok(conf) = std::fs::read_to_string(&dot_git) {
+        let gitdir_re = regex::Regex::new(r"(?m)^gitdir: (.*)$").unwrap();
+        if let Some(caps) = gitdir_re.captures(&conf) {
+            root.join(caps.get(1).unwrap().as_str())
+        } else {
+            dot_git
+        }
+    } else {
+        dot_git
+    };
 
     let has_path = |relative_path: &str| {
         let path = dot_git.join(PathBuf::from(relative_path));
@@ -140,12 +150,17 @@ fn describe_rebase<'a>(root: &'a PathBuf, rebase_config: &'a str) -> StateDescri
     } else {
         None
     };
-    let progress = progress.unwrap_or((1, 1));
+
+    let (current, total) = if let Some((c, t)) = progress {
+        (Some(format!("{}", c)), Some(format!("{}", t)))
+    } else {
+        (None, None)
+    };
 
     StateDescription {
         label: rebase_config,
-        current: Some(format!("{}", progress.0)),
-        total: Some(format!("{}", progress.1)),
+        current,
+        total,
     }
 }
 
