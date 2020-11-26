@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: 轻量级、反应迅速，可定制的高颜值终端！
 actionText: 入门 →
 actionLink: ./guide/
 features:
