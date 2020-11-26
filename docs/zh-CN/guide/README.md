@@ -231,13 +231,13 @@
 
 成为项目资助者，并帮助我们维持我们的社区。 [[成为项目资助者](https://opencollective.com/starship/contribute)]
 
-#### Individuals
+#### 资助人
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
-#### Organizations
+#### 资助组织
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[成为项目资助者](https://opencollective.com/starship/contribute)]
+与您的组织一起支持该项目。 您的组织的徽标将显示在此处，并带有指向您的组织的网站的链接。 [[成为项目资助者](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
