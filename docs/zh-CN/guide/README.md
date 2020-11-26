@@ -104,11 +104,11 @@
 **轻量级、反应迅速，可定制的高颜值终端！**
 
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
+- **快：** 很快—— 真的真的非常快！ 🚀
+- **定制化：** 可定制各种各样的提示符。
+- **通用：** 适用于任何 Shell、任何操作系统。
+- **智能：** 一目了然地显示相关信息。
+- **功能丰富：** 支持所有你喜欢的工具。
 - **Easy:** quick to install – start using it in minutes.
 
 <p align="center">
