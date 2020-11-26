@@ -101,7 +101,7 @@
   align="right" />
 
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**轻量级、反应迅速，可定制的高颜值终端！**
 
 
 - **Fast:** it's fast – _really really_ fast! 🚀
