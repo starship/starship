@@ -125,24 +125,25 @@ fn extract_toolchain_from_rustup_override_list(stdout: &str, cwd: &Path) -> Opti
 
 fn find_rust_toolchain_file(context: &Context) -> Option<String> {
     // Look for 'rust-toolchain' as rustup does.
-    // https://github.com/rust-lang/rustup.rs/blob/d84e6e50126bccd84649e42482fc35a11d019401/src/config.rs#L320-L358
+    // https://github.com/rust-lang/rustup/blob/89912c4cf51645b9c152ab7380fd07574fec43a3/src/config.rs#L546-L616
 
-    fn read_target(path: &Path) -> Option<String> {
-        let content = fs::read_to_string(path).ok()?;
-        let line = content.lines().next()?.trim();
+    fn read_channel(path: &Path) -> Option<String> {
+        let contents = fs::read_to_string(path).ok()?;
 
-        if line.is_empty() || line == "[toolchain]" {
-            let value = toml::from_str::<toml::Value>(&content).ok()?;
-            let target = value
-                .as_table()?
-                .get("toolchain")?
-                .as_table()?
-                .get("channel")?
-                .as_str()?;
-
-            Some(target.trim().to_owned())
-        } else {
-            Some(line.to_owned())
+        match contents.lines().count() {
+            0 => None,
+            1 => Some(contents.trim().to_owned()),
+            _ => Some(
+                toml::from_str::<toml::Value>(&contents)
+                    .ok()?
+                    .as_table()?
+                    .get("toolchain")?
+                    .as_table()?
+                    .get("channel")?
+                    .as_str()?
+                    .trim()
+                    .to_owned(),
+            ),
         }
     }
 
@@ -150,14 +151,14 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
         .dir_contents()
         .map(|dir| dir.has_file("rust-toolchain"))
     {
-        if let Some(toolchain) = read_target(Path::new("rust-toolchain")) {
+        if let Some(toolchain) = read_channel(Path::new("rust-toolchain")) {
             return Some(toolchain);
         }
     }
 
     let mut dir = &*context.current_dir;
     loop {
-        if let Some(toolchain) = read_target(&dir.join("rust-toolchain")) {
+        if let Some(toolchain) = read_channel(&dir.join("rust-toolchain")) {
             return Some(toolchain);
         }
         dir = dir.parent()?;
