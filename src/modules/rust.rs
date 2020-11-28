@@ -127,24 +127,37 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
     // Look for 'rust-toolchain' as rustup does.
     // https://github.com/rust-lang/rustup.rs/blob/d84e6e50126bccd84649e42482fc35a11d019401/src/config.rs#L320-L358
 
-    fn read_first_line(path: &Path) -> Option<String> {
+    fn read_target(path: &Path) -> Option<String> {
         let content = fs::read_to_string(path).ok()?;
-        let line = content.lines().next()?;
-        Some(line.trim().to_owned())
+        let line = content.lines().next()?.trim();
+
+        if line.is_empty() || line == "[toolchain]" {
+            let value = toml::from_str::<toml::Value>(&content).ok()?;
+            let target = value
+                .as_table()?
+                .get("toolchain")?
+                .as_table()?
+                .get("channel")?
+                .as_str()?;
+
+            Some(target.trim().to_owned())
+        } else {
+            Some(line.to_owned())
+        }
     }
 
     if let Ok(true) = context
         .dir_contents()
         .map(|dir| dir.has_file("rust-toolchain"))
     {
-        if let Some(toolchain) = read_first_line(Path::new("rust-toolchain")) {
+        if let Some(toolchain) = read_target(Path::new("rust-toolchain")) {
             return Some(toolchain);
         }
     }
 
     let mut dir = &*context.current_dir;
     loop {
-        if let Some(toolchain) = read_first_line(&dir.join("rust-toolchain")) {
+        if let Some(toolchain) = read_target(&dir.join("rust-toolchain")) {
             return Some(toolchain);
         }
         dir = dir.parent()?;
@@ -200,6 +213,7 @@ enum RustupRunRustcVersionOutcome {
 #[cfg(test)]
 mod tests {
     use once_cell::sync::Lazy;
+    use std::io;
     use std::process::{ExitStatus, Output};
 
     use super::*;
@@ -308,5 +322,47 @@ mod tests {
 
         let version_without_hash = String::from("rustc 1.34.0");
         assert_eq!(format_rustc_version(version_without_hash), "v1.34.0");
+    }
+
+    #[test]
+    fn test_find_rust_toolchain_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        fs::write(dir.path().join("rust-toolchain"), "1.34.0")?;
+
+        let context = Context::new_with_dir(Default::default(), dir.path());
+
+        assert_eq!(
+            find_rust_toolchain_file(&context),
+            Some("1.34.0".to_owned())
+        );
+        dir.close()?;
+
+        let dir = tempfile::tempdir()?;
+        fs::write(
+            dir.path().join("rust-toolchain"),
+            "[toolchain]\nchannel = \"1.34.0\"",
+        )?;
+
+        let context = Context::new_with_dir(Default::default(), dir.path());
+
+        assert_eq!(
+            find_rust_toolchain_file(&context),
+            Some("1.34.0".to_owned())
+        );
+        dir.close()?;
+
+        let dir = tempfile::tempdir()?;
+        fs::write(
+            dir.path().join("rust-toolchain"),
+            "\n\n[toolchain]\n\n\nchannel = \"1.34.0\"",
+        )?;
+
+        let context = Context::new_with_dir(Default::default(), dir.path());
+
+        assert_eq!(
+            find_rust_toolchain_file(&context),
+            Some("1.34.0".to_owned())
+        );
+        dir.close()
     }
 }
