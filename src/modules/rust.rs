@@ -2,6 +2,8 @@ use std::fs;
 use std::path::Path;
 use std::process::{Command, Output};
 
+use serde::Deserialize;
+
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::rust::RustConfig;
@@ -127,6 +129,16 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
     // Look for 'rust-toolchain' as rustup does.
     // https://github.com/rust-lang/rustup/blob/89912c4cf51645b9c152ab7380fd07574fec43a3/src/config.rs#L546-L616
 
+    #[derive(Deserialize)]
+    struct OverrideFile {
+        toolchain: ToolchainSection,
+    }
+
+    #[derive(Deserialize)]
+    struct ToolchainSection {
+        channel: Option<String>,
+    }
+
     fn read_channel(path: &Path) -> Option<String> {
         let contents = fs::read_to_string(path).ok()?;
 
@@ -134,15 +146,10 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
             0 => None,
             1 => Some(contents.trim().to_owned()),
             _ => Some(
-                toml::from_str::<toml::Value>(&contents)
+                toml::from_str::<OverrideFile>(&contents)
                     .ok()?
-                    .as_table()?
-                    .get("toolchain")?
-                    .as_table()?
-                    .get("channel")?
-                    .as_str()?
-                    .trim()
-                    .to_owned(),
+                    .toolchain
+                    .channel?,
             ),
         }
     }
