@@ -222,16 +222,16 @@
 
 If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+如果您有兴趣贡献于 Starship，请查看我们的[贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 另外，你可以自由加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 。 👋
 
 ### 代码贡献者
 
-This project exists thanks to all the people who contribute. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
+这个项目的存在要感谢所有贡献者。 [[贡献说明](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)]
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
 ### 项目资助者
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+成为项目资助者，并帮助我们维持我们的社区。 [[成为项目资助者](https://opencollective.com/starship/contribute)]
 
 #### 资助人
 
@@ -239,7 +239,7 @@ Become a financial contributor and help us sustain our community. [[Contribute](
 
 #### 资助组织
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+与您的组织一起支持该项目。 您的组织的徽标将显示在此处，并带有指向您的组织的网站的链接。 [[成为项目资助者](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -254,7 +254,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 ## 💭该项目受以下项目启发
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+请参考这些曾经为 Starship 提供启发的工程。 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
 
