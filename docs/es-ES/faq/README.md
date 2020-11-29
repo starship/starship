@@ -10,15 +10,15 @@
   - **Configuración**: [archivos de configuración de matchai](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
-## How do I get command completion as shown in the demo GIF?
+## ¿Cómo obtengo el autocompletado del comando como se muestra en el GIF?
 
-Completion support is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+El soporte de completado es proporcionado por el intérprete de órdenes elegido. En el caso de la demo, la demo se realizó con [Fish Shell](https://fishshell.com/), que proporciona el completado por defecto. Si usas Z Shell (zsh), te sugeriría echar un vistazo a [zsh-autosuggeries,](https://github.com/zsh-users/zsh-autosuggestions).
 
-## Do top level `format` and `<module>.disabled` do the same thing?
+## ¿`prompt_order` y `<module>.disabled` hacen lo mismo?
 
 Sí, se pueden usar ambos para desactivar los módulos en el símbolo del sistema. Si todo lo que planeas es desactivar módulos, `<module>.disabled` es el método preferido por las siguientes razones:
 
-- Disabling modules is more explicit than omitting them from the top level `format`
+- Deshabilitar módulos es más explícito que omitirlos del nivel superior `format`
 - Los nuevos módulos se añadirán al símbolo del sistema en cuanto Starship se actualice
 
 ## La documentación dice que Starship es compatible con cualquier intérprete de comandos pero no soporta X Shell. ¿Por qué?
@@ -34,7 +34,7 @@ STATUS=$?
 # Calcula el número de tareas ejecutándose.
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Set the prompt to the output of `starship prompt`
+# Establece el prompt a la salida de `starship prompt`
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
@@ -56,37 +56,37 @@ Si obtienes un error como "_version 'GLIBC_2.18' not found (required by starship
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
 ```
 
-## Why don't I see a glyph symbol in my prompt?
+## ¿Por qué no veo un símbolo de glifo en mi prompt?
 
-The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
+La causa más común de esto es la mala configuración del sistema. Algunas distribuciones de Linux en particular no vienen con soporte de fuentes "listo para usare". Tienes que asegurar que:
 
-- Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
-- You have an emoji font installed. Most systems come with an emoji font by default, but some (notably Arch Linux) do not. You can usually install one through your system's package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
-- You are using a [Nerd Font](https://www.nerdfonts.com/).
+- Tu configuración regional está establecida con un valor UTF-8, como `de_DE.UTF-8` o `ja_JP.UTF-8`. Si `LC_ALL` no es un valor UTF-8, [necesitarás cambiarlo](https://www.tecmint.com/set-system-locales-in-linux/).
+- Tienes una fuente emoji instalada. La mayoría de los sistemas vienen con una fuente emoji por defecto, pero algunos (notablemente Arch Linux) no. Generalmente puedes instalar uno a través del gestor de paquetes del sistema --[noto emoji](https://www.google.com/get/noto/help/emoji/) es una elección popular.
+- Estás usando un [Nerd Font](https://www.nerdfonts.com/).
 
-To test your system, run the following commands in a terminal:
+Para probar tu sistema, ejecuta los siguientes comandos en un terminal:
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
 
-The first line should produce a [snake emoji](https://emojipedia.org/snake/), while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
+La primera línea debe producir un [emoji snake](https://emojipedia.org/snake/), mientras que la segunda debe producir un [símbolo de rama de powerline (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
 
-If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+Si cualquiera de los dos símbolos no se puede mostrar correctamente, tu sistema todavía está mal configurado. Desafortunadamente, obtener la configuración correcta de las fuentes es a veces difícil. Los usuarios en el Discord te pueden ayudar. Si ambos símbolos se muestran correctamente, pero todavía no los ves en starship, [¡envía un informe de error!](https://github.com/starship/starship/issues/new/choose)
 
-## How do I uninstall Starship?
+## ¿Cómo puedo desinstalar Starship?
 
-Starship is just as easy to uninstall as it is to install in the first place.
+Starship es tan fácil de desinstalar como de instalar en primer lugar.
 
-1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
-1. Delete the Starship binary.
+1. Elimina cualquier línea de tu configuración de shell (por ejemplo, `~/.bashrc`) usada para inicializar Starship.
+1. Elimina el binario de Starship.
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+Si Starship fue instalado usando un gestor de paquetes, por favor refiérere a sus documentos para instrucciones de desinstalación.
 
-If Starship was installed using the `curl | bash` script, the following command will delete the binary:
+Si Starship fue instalado usando el script `curl | bash`, el siguiente comando eliminará el binario:
 
 ```sh
-# Locate and delete the starship binary
+# Localiza y elimina el binario de starship
 rm "$(which starship)"
 ```

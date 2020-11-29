@@ -2,7 +2,7 @@
   <img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship - Prompt multi interfaz de línea de comandos" />
+    alt="Starship - Prompt multi intérprete de comandos" />
 </p>
 
 <p align="center">
@@ -101,18 +101,18 @@
   align="right" />
 
 
-**El símbolo del sistema minimalista, ultrarápido e infinitamente customizable para cualquier intérprete de comandos!**
+**¡El prompt minimalista, ultrarápido e infinitamente personalizable para cualquier intérprete de comandos!**
 
 
-- **Rápido:** es rápido – _muy muy_ rápido! 🚀
-- **Personalizable:** configura cada parte de tu intérprete de comandos.
+- **Rápido:** es rápido – _realmente_ rápido! 🚀
+- **Personalizable:** configura cada parte de tu prompt.
 - **Universal:** funciona en cualquier intérprete de comandos, en cualquier sistema operativo.
 - **Inteligente:** muestra información relevante de un vistazo.
 - **Repleto de funciones**: con soporte para tus herramientas favoritas.
 - **Fácil:** rápido de instalar – empieza a usarlo en minutos.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explora la documentación de Starship&nbsp;&nbsp;</strong></a>
+<a href="https://starship.rs/config/"><strong>Explora la documentación de Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -125,13 +125,13 @@
 
 ### Comenzar
 
-1. Instala el binario de **starship**:
+1. Instala el binario de **Starship**:
 
 
    #### Instalar la última versión
 
 
-   ##### Desde un binario precontruido, con Shell:
+   ##### Desde un binario preconstruido, con el intérprete de comandos:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
@@ -145,7 +145,7 @@
    ```
 
 
-   #### Instalar vía un gestor de paquetes
+   #### Instalar con un gestor de paquetes
 
 
    ##### Con [Homebew](https://brew.sh/):
@@ -199,7 +199,7 @@
 
    #### PowerShell
 
-   Añade el siguiente código al final de `~\Documentos\PowerShell\Microsoft.PowerShell_profile.ps1` (o `~/.config/powershell/Microsoft.PowerShell_profile.ps1` en *nix):
+    Añade lo siguiente al final de `Microsoft.PowerShell_profile.ps1`. Puedes comprobar la ubicación de este archivo consultando la variable `$PROFILE` en PowerShell. Normalmente la ruta es `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` o `~/.config/powershell/Microsoft.PowerShell_profile.ps1` en -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -218,9 +218,9 @@
 
 ## 🤝 Colaborando
 
-¡Siempre estamos buscando por colaboradores de **cualquier nivel**! Si estas buscando una manera fácil de ayudar este proyecto, puedes intentar resolver un problema con la etiqueta "[good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)".
+¡Siempre estamos buscando colaboradores de **todos los niveles y habilidades**! Si estas buscando una manera fácil de ayudar este proyecto, puedes intentar resolver un problema con la etiqueta "[good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)".
 
-Si quieres ayudar a colaborar a starship, por favor mira nuestra [Guía de Colaboradores](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Además, siéntete libre de entrar en nuestro [servidor de Discord](https://discord.gg/8Jzqu3T) y di "¡Hola!". 👋
+Si quieres ayudar a colaborar a Starship, por favor mira nuestra [Guía de Colaboradores](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Además, siéntete libre de entrar en nuestro [servidor de Discord](https://discord.gg/8Jzqu3T) y di "¡Hola!". 👋
 
 ### Desarrolladores
 
@@ -252,13 +252,13 @@ Apoya este proyecto con tu organización. Su logo se mostrará aquí con un enla
 
 ## 💭 Inspirado por
 
-Por favor, revisa estos proyectos que inspiraron la creación de starship. 🙏
+Por favor, revisa estos proyectos que inspiraron la creación de Starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Una prompt ZSH para astronautas.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - robbyrussel, tema multi interfaz de línea de comandos escrito en JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - robbyrussel, tema multi intérprete de comandos escrito en JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** - Una prompt con iconos, personalizable y multi interfaz de línea de comandos basada en PowerLine.
+- **[reujab/silver](https://github.com/reujab/silver)** - Una prompt multi intérprete de comandos personalizable, basada en Powerline con iconos.
 
 <p align="center">
     <br>
