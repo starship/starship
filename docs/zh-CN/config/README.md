@@ -27,13 +27,13 @@ disabled = true
 export STARSHIP_CONFIG=~/.starship
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+在 PowerShell (Windows) 中，在 `$PROFILE` 中添加下面的代码行能达到同样的效果：
 
 ```ps1
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
 
-### Logging
+### 日志
 
 By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
 
@@ -41,7 +41,7 @@ By default starship logs warnings and errors into a file named `~/.cache/starshi
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+在 PowerShell (Windows) 中，在 `$PROFILE` 中添加下面的代码行能达到同样的效果：
 
 ```ps1
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
