@@ -222,7 +222,7 @@ Wir laden Leute **aller Erfahrungsstufen** herzlich ein mitzumachen! Falls du di
 
 If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Falls du an Starship mitwirken willst, wirf bitte einen Blick auf den [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Schau auch gerne auf unserem [Discord server](https://discord.gg/8Jzqu3T) vorbei. 👋
 
 ### Code Contributors
 
@@ -254,7 +254,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 ## 💭 Inspiriert durch
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Schaut euch bitte auch die Projekte an, die die Entstehung von Starship inspiriert haben. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Ein ZSH-Prompt für Astronauten.
 
@@ -264,9 +264,9 @@ Please check out these previous works that helped inspire the creation of starsh
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship Raketen Icon">
 </p>
 
 ## 📝 Lizenz
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Unter der [ISC](https://github.com/starship/starship/blob/master/LICENSE) Lizens.
