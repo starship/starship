@@ -145,12 +145,12 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
         match contents.lines().count() {
             0 => None,
             1 => Some(contents),
-            _ => Some(
+            _ => {
                 toml::from_str::<OverrideFile>(&contents)
                     .ok()?
                     .toolchain
-                    .channel?,
-            ),
+                    .channel
+            }
         }
         .filter(|c| !c.trim().is_empty())
         .map(|c| c.trim().to_owned())
