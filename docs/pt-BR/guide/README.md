@@ -79,13 +79,15 @@
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
       alt="简体中文" /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/es"
+  <a 
+    href="https://github.com/starship/starship/blob/master/docs/es-ES/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png"
       alt="Español" /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/fr"
+  <a 
+    href="https://github.com/starship/starship/blob/master/docs/fr-FR/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
@@ -100,9 +102,7 @@
   width="50%"
   align="right" />
 
-
 **O prompt minimalista, extremamente rápido e infinitamente personalizável para qualquer shell!**
-
 
 - **Rápido:** É rápido – _muito muito_ rápido! 🚀
 - **Personalizável:** Configure todos os detalhes do seu prompt.
@@ -199,7 +199,7 @@
 
    #### PowerShell
 
-    Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -220,16 +220,18 @@
 
 Nós estamos sempre procurando contribuidores de **todos os níveis de conhecimento**! Se você está buscando um caminho mais fácil para começar no projeto, veja essas [boas issues para começar](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-Se você está interessado em ajudar contribuindo com o projeto, dê uma olhada no nosso [Guia de Contribuição](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Além disso, sinta-se à vontade para entrar no nosso [servidor no Discord](https://discord.gg/8Jzqu3T) e dizer oi. 👋
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ### Contribuidores de código
 
-Este projeto existe graças a todas as pessoas que contribuem. [[Contribuir](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
+This project exists thanks to all the people who contribute. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
 ### Contribuidores Financeiros
 
-Torne-se um contribuidor financeiro e nos ajude a sustentar a nossa comunidade. [[Contribuir](https://opencollective.com/starship/contribute)]
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
 
 #### Pessoas
 
@@ -237,7 +239,7 @@ Torne-se um contribuidor financeiro e nos ajude a sustentar a nossa comunidade. 
 
 #### Organizações
 
-Apoie este projeto com sua organização. Seu logotipo aparecerá aqui com um link para o seu site. [[Contribuir](https://opencollective.com/starship/contribute)]
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -252,7 +254,7 @@ Apoie este projeto com sua organização. Seu logotipo aparecerá aqui com um li
 
 ## 💭 Inspirado por
 
-Por favor, confira estes projetos anteriores que ajudaram a inspirar a criação do startship. 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Um prompt ZSH para astronautas.
 
@@ -262,9 +264,9 @@ Por favor, confira estes projetos anteriores que ajudaram a inspirar a criação
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Ícone de foguete do Starship">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
 ## 📝 Licença
 
-Todos os direitos reservados © 2019-Presente, [Contribuidores Starship](https://github.com/starship/starship/graphs/contributors).<br /> Este projeto está licenciado pelo [ISC](https://github.com/starship/starship/blob/master/LICENSE).
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
