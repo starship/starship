@@ -10,20 +10,30 @@ module.exports = {
       title: "Starship",
       description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
     },
+    "/es-ES/": {
+      lang: "es-ES",
+      title: "Starship",
+      description: "¡El prompt minimalista, ultrarápido e infinitamente personalizable para cualquier intérprete de comandos!"
+    },
+    "/fr-FR/": {
+      lang: "fr-FR",
+      title: "Starship",
+      description: "L'invite minimaliste, ultra-rapide et personnalisable à l'infini pour n'importe quel shell !"
+    },
     "/ru-RU/": {
       lang: "ru-RU",
       title: "Starship",
-      description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
+      description: "Минималистичная, быстрая и бесконечно настраиваемая командная строка для любой оболочки!"
     },
     "/ja-JP/": {
       lang: "ja-JP",
       title: "Starship",
-      description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
+      description: "シェル用の最小限の、非常に高速で、無限にカスタマイズ可能なプロンプトです！"
     },
     "/zh-CN/": {
       lang: "zh-CN",
       title: "Starship",
-      description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
+      description: "轻量级、反应迅速，可定制的高颜值终端！"
     },
     "/zh-TW/": {
       lang: "zh-TW",
@@ -104,6 +114,44 @@ module.exports = {
           ["/de-DE/advanced-config/", "Erweiterte Konfiguration"],
           ["/de-DE/faq/", "Häufig gestellte Fragen"],
           ["/de-DE/presets/", "Konfigurations-Beispiele"]
+        ]
+      },
+      "/es-ES/": {
+        // text for the language dropdown
+        selectText: "Idiomas",
+        // label for this locale in the language dropdown
+        label: "Español",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "Edita esta página en GitHub",
+        // Custom navbar values
+        nav: [{ text: "Configuración", link: "/es-ES/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/es-ES/",
+          ["/es-ES/guide/", "Guía"],
+          ["/es-ES/config/", "Configuración"],
+          ["/es-ES/advanced-config/", "Configuración Avanzada"],
+          ["/es-ES/faq/", "Preguntas frecuentes"],
+          ["/es-ES/presets/", "Ajustes predeterminados"]
+        ]
+      },
+      "/fr-FR/": {
+        // text for the language dropdown
+        selectText: "Langues",
+        // label for this locale in the language dropdown
+        label: "Français",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "Éditez cette page sur GitHub",
+        // Custom navbar values
+        nav: [{ text: "Configuration", link: "/fr-FR/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/fr-FR/",
+          ["/fr-FR/guide/", "Guide"],
+          ["/fr-FR/config/", "Configuration"],
+          ["/fr-FR/advanced-config/", "Configuration avancée"],
+          ["/fr-FR/faq/", "Foire aux questions"],
+          ["/fr-FR/presets/", "Paramètres par défaut"]
         ]
       },
       "/ru-RU/": {
