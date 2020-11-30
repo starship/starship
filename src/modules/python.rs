@@ -45,7 +45,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let python_version = if config.pyenv_version_name {
         utils::exec_cmd("pyenv", &["version-name"])?.stdout
     } else {
-        let version = get_python_version(&config.python_binary)?;
+        let version = config
+            .python_binary
+            .0
+            .iter()
+            .find_map(|binary| get_python_version(binary))?;
         format_python_version(&version)
     };
     let virtual_env = get_python_virtual_env(context);
@@ -164,6 +168,7 @@ mod tests {
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
         check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
         dir.close()
     }
 
@@ -175,6 +180,7 @@ mod tests {
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
         check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
         dir.close()
     }
 
@@ -186,6 +192,7 @@ mod tests {
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
         check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
         dir.close()
     }
 
@@ -197,6 +204,7 @@ mod tests {
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
         check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
         dir.close()
     }
 
@@ -208,6 +216,7 @@ mod tests {
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
         check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
         dir.close()
     }
 
@@ -219,6 +228,7 @@ mod tests {
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
         check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
         dir.close()
     }
 
@@ -230,6 +240,7 @@ mod tests {
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
         check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
         dir.close()
     }
 
@@ -241,6 +252,7 @@ mod tests {
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
         check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
         dir.close()
     }
 
@@ -269,6 +281,7 @@ mod tests {
 
         let config = toml::toml! {
             [python]
+            python_binary = "python2"
             scan_for_pyfiles = false
         };
 
@@ -289,6 +302,14 @@ mod tests {
             scan_for_pyfiles = false
         };
         check_pyenv_renders(&dir, Some(config_pyenv));
+
+        let config_multi = toml::toml! {
+            [python]
+            python_binary = ["python", "python3"]
+            scan_for_pyfiles = false
+        };
+        check_multiple_binaries_renders(&dir, Some(config_multi));
+
         dir.close()
     }
 
@@ -303,7 +324,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {} ",
-            Color::Yellow.bold().paint("🐍 v2.7.17 (my_venv)")
+            Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv)")
         ));
 
         assert_eq!(actual, expected);
@@ -321,7 +342,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {} ",
-            Color::Yellow.bold().paint("🐍 v2.7.17 (my_venv)")
+            Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv)")
         ));
 
         assert_eq!(actual, expected);
@@ -336,7 +357,7 @@ mod tests {
         venv_cfg.write_all(
             br#"
 home = something
-prompt = 'foo' 
+prompt = 'foo'
         "#,
         )?;
         venv_cfg.sync_all()?;
@@ -348,7 +369,7 @@ prompt = 'foo'
 
         let expected = Some(format!(
             "via {} ",
-            Color::Yellow.bold().paint("🐍 v2.7.17 (foo)")
+            Color::Yellow.bold().paint("🐍 v3.8.0 (foo)")
         ));
 
         assert_eq!(actual, expected);
@@ -358,7 +379,7 @@ prompt = 'foo'
     fn check_python2_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
         let config = starship_config.unwrap_or(toml::toml! {
             [python]
-            python_binary = "python"
+            python_binary = "python2"
         });
 
         let actual = ModuleRenderer::new("python")
@@ -374,6 +395,24 @@ prompt = 'foo'
         let config = starship_config.unwrap_or(toml::toml! {
              [python]
              python_binary = "python3"
+        });
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .config(config)
+            .collect();
+
+        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐍 v3.8.0")));
+        assert_eq!(expected, actual);
+    }
+
+    fn check_multiple_binaries_renders(
+        dir: &tempfile::TempDir,
+        starship_config: Option<toml::Value>,
+    ) {
+        let config = starship_config.unwrap_or(toml::toml! {
+             [python]
+             python_binary = ["python", "python3"]
         });
 
         let actual = ModuleRenderer::new("python")
