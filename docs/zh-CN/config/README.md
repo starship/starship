@@ -1920,16 +1920,24 @@ format = "via [$symbol$version](bold white)"
 
 ### 配置项
 
-| Option               | 默认值                                                                       | 描述                                                              |
-| -------------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | 组件格式化模板。                                                        |
-| `symbol`             | `"🐍 "`                                                                    | 用于表示Python的格式化字符串。                                              |
-| `style`              | `"yellow bold"`                                                           | 此组件的样式。                                                         |
-| `pyenv_version_name` | `false`                                                                   | 使用 pyenv 获取 Python 版本                                           |
-| `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used |
-| `scan_for_pyfiles`   | `true`                                                                    | 如果设置为false, 在本目录下的Python文件将不会在本组件中显示。                           |
-| `python_binary`      | `python`                                                                  | 配置在Starship运行时获取Python版本的二进制文件                                  |
-| `disabled`           | `false`                                                                   | 禁用 `python` 组件。                                                 |
+| Option               | 默认值                                                                       | 描述                                                                                     |
+| -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | 组件格式化模板。                                                                               |
+| `symbol`             | `"🐍 "`                                                                    | 用于表示Python的格式化字符串。                                                                     |
+| `style`              | `"yellow bold"`                                                           | 此组件的样式。                                                                                |
+| `pyenv_version_name` | `false`                                                                   | 使用 pyenv 获取 Python 版本                                                                  |
+| `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used                        |
+| `scan_for_pyfiles`   | `true`                                                                    | 如果设置为false, 在本目录下的Python文件将不会在本组件中显示。                                                  |
+| `python_binary`      | `["python", "python3, "python2"]`                                         | Configures the python binaries that Starship should executes when getting the version. |
+| `disabled`           | `false`                                                                   | 禁用 `python` 组件。                                                                        |
+
+::: tip
+
+The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
+
+The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `"python3"` will hide any Python version 2, see example below.
+
+:::
 
 ### Variables
 
@@ -1952,20 +1960,17 @@ symbol = "👾 "
 pyenv_version_name = true
 ```
 
-Using the `python3` binary to get the version.
-
-Note - The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
-
 ```toml
 # ~/.config/starship.toml
 
 [python]
+# Only use the `python3` binary to get the version.
 python_binary = "python3"
 ```
 
 ## Ruby
 
-`ruby` 组件显示当前安装的 Ruby 版本。 此组件将在符合以下任意条件之一时显示：
+The `ruby` module shows the currently installed version of Ruby. 此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含 `Gemfile` 文件
 - The current directory contains a `.ruby-version` file
@@ -2001,7 +2006,7 @@ symbol = "🔺 "
 
 ## Rust
 
-`rust` 组件显示当前安装的 Rust 版本。 此组件将在符合以下任意条件之一时显示：
+The `rust` module shows the currently installed version of Rust. 此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含 `Cargo.toml` 文件
 - 当前目录包含一个使用 `.rs` 扩展名的文件
@@ -2179,7 +2184,7 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-`terraform` 组件显示当前选定的 terraform 工作区和版本。 默认情况下不会显示 terraform 版本，因为当使用大量插件时，当前版本 terraform 查询版本号很慢。 If you still want to enable it, [follow the example shown below](#with-version). 此组件将在符合以下任意条件之一时显示：
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). 此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含 `.terraform` 目录
 - Current directory contains a file with the `.tf` or `.hcl` extensions
@@ -2226,7 +2231,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Time
 
-`time` 组件显示当前的 **本地** 时间。 `format` 字段值会提供给 [`chrono`](https://crates.io/crates/chrono) crate 用来控制时间显示方式。 请参阅 [chrono strftime 文档](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) 以了解可用格式选项。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -2246,7 +2251,7 @@ format = "[🏎💨 $workspace]($style) "
 | `disabled`        | `true`                  | 禁用 `time` 组件。                                                                                         |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. 否则，其默认值为 `"%T"`。 Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -2272,7 +2277,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-`username` 组件显示当前活跃的用户名。 此组件将在符合以下任意条件之一时显示：
+The `username` module shows active user's username. 此组件将在符合以下任意条件之一时显示：
 
 - 当前用户是 root
 - 当前用户与登录用户不相同
