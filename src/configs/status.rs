@@ -7,6 +7,7 @@ pub struct StatusConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
     pub style: &'a str,
+    pub meaning: bool,
     pub disabled: bool,
 }
 
@@ -16,6 +17,7 @@ impl<'a> RootModuleConfig<'a> for StatusConfig<'a> {
             format: "[$symbol$status]($style) ",
             symbol: "✖",
             style: "bold red",
+            meaning: false,
             disabled: true,
         }
     }

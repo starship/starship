@@ -2213,6 +2213,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `format`   | `[$symbol$status]($style) ` | The format of the module                               |
 | `symbol`   | `"✖"`                       | A format string representing the symbol for the status |
 | `style`    | `"bold red"`                | The style for the module.                              |
+| `meaning`  | `false`                     | Display code meaing instead of value                   |
 | `disabled` | `true`                      | Disables the `status` module.                          |
 
 ### Variables
