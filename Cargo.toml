@@ -33,7 +33,7 @@ ansi_term = "0.12.1"
 dirs-next = "2.0.0"
 git2 = { version = "0.13.12", default-features = false }
 toml = { version = "0.5.7", features = ["preserve_order"] }
-rust-ini = "0.16" 
+rust-ini = "0.16"
 serde_json = "1.0.59"
 rayon = "1.5.0"
 log = { version = "0.4.11", features = ["std"] }
@@ -59,7 +59,7 @@ unicode-width = "0.1.8"
 term_size = "0.3.2"
 quick-xml = "0.20.0"
 rand = "0.7.3"
-serde_derive = "1.0.115"
+serde = { version = "1.0.117", features = ["derive"] }
 indexmap = "1.6.0"
 notify-rust = { version = "4.0.0", optional = true }
 
