@@ -1278,8 +1278,8 @@ disabled = false
 
 El módulo `java` muestra la versión actualmente instalada de Java. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un archivo `pom.xml`, `build.gradle.kts`, `build.sbt` o `.java-version`
-- El directorio actual contiene un archivo con la extensión `.java`, `.class`, `.gradle` o `.jar`
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
+- The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
 
 ### Opciones
 
