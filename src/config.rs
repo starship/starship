@@ -375,16 +375,21 @@ pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
                     "bold" => Some(style.bold()),
                     "italic" => Some(style.italic()),
                     "dimmed" => Some(style.dimmed()),
+                    // When the string is supposed to be a color:
+                    // Decide if we yield none, reset background or set color.
                     color_string => {
                         if color_string == "none" && col_fg {
-                            None
+                            None // fg:none yields no style.
                         } else {
+                            // Either bg or valid color or both.
                             let parsed = parse_color_string(color_string);
+                            // bg + invalid color = reset the background to default.
                             if !col_fg && parsed.is_none() {
                                 let mut new_style = style;
                                 new_style.background = Option::None;
                                 Some(new_style)
                             } else {
+                                // Valid color, apply color to either bg or fg
                                 parsed.map(|ansi_color| {
                                     if col_fg {
                                         style.fg(ansi_color)
