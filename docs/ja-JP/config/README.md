@@ -1921,16 +1921,24 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 ### オプション
 
-| オプション                | デフォルト                                                                     | 説明                                                                            |
-| -------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | moduleのフォーマットです。                                                              |
-| `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                             |
-| `style`              | `"yellow bold"`                                                           | モジュールのスタイルです。                                                                 |
-| `pyenv_version_name` | `false`                                                                   | pyenvを使用してPythonバージョンを取得します                                                   |
-| `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used               |
-| `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.    |
-| `python_binary`      | `python`                                                                  | Configures the python binary that Starship executes when getting the version. |
-| `disabled`           | `false`                                                                   | `python`モジュールを無効にします。                                                         |
+| オプション                | デフォルト                                                                     | 説明                                                                                     |
+| -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | moduleのフォーマットです。                                                                       |
+| `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                                      |
+| `style`              | `"yellow bold"`                                                           | モジュールのスタイルです。                                                                          |
+| `pyenv_version_name` | `false`                                                                   | pyenvを使用してPythonバージョンを取得します                                                            |
+| `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used                        |
+| `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.             |
+| `python_binary`      | `["python", "python3, "python2"]`                                         | Configures the python binaries that Starship should executes when getting the version. |
+| `disabled`           | `false`                                                                   | `python`モジュールを無効にします。                                                                  |
+
+::: tip
+
+The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
+
+The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `"python3"` will hide any Python version 2, see example below.
+
+:::
 
 ### 変数
 
@@ -1953,20 +1961,17 @@ symbol = "👾 "
 pyenv_version_name = true
 ```
 
-Using the `python3` binary to get the version.
-
-Note - The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
-
 ```toml
 # ~/.config/starship.toml
 
 [python]
+# Only use the `python3` binary to get the version.
 python_binary = "python3"
 ```
 
 ## Ruby
 
-`ruby`モジュールは、現在インストールされているRubyのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `ruby` module shows the currently installed version of Ruby. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Gemfile`ファイルが含まれている
 - The current directory contains a `.ruby-version` file
@@ -2002,7 +2007,7 @@ symbol = "🔺 "
 
 ## Rust
 
-`rust`モジュールには、現在インストールされているRustのバージョンが表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `rust` module shows the currently installed version of Rust. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Cargo.toml`ファイルが含まれている
 - カレントディレクトリに`.rs`の拡張子のファイルが含まれている
@@ -2180,7 +2185,7 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-`terraform`モジュールには、現在選択されているterraformワークスペースとバージョンが表示されます。 デフォルトでは、Terraformのバージョンは表示されません。これは、多くのプラグインが使用されている場合、Terraformの現在のバージョンでは遅いためです。 If you still want to enable it, [follow the example shown below](#with-version). 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`.terraform`フォルダが含まれている
 - Current directory contains a file with the `.tf` or `.hcl` extensions
@@ -2227,7 +2232,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Time
 
-`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -2247,7 +2252,7 @@ format = "[🏎💨 $workspace]($style) "
 | `disabled`        | `true`                  | `time`モジュールを無効にします。                                                                                   |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. それ以外の場合、デフォルトは`"%T"`です。 Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### 変数
 
@@ -2273,7 +2278,7 @@ time_range = "10:00:00-14:00:00"
 
 ## ユーザー名
 
-`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `username` module shows active user's username. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントユーザーがroot
 - カレントユーザーが、ログインしているユーザーとは異なる
