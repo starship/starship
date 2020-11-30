@@ -988,7 +988,7 @@ El módulo `git_branch` muestra la rama activa del repositorio en su directorio 
 | Variable  | Ejemplo  | Descripción                                                                                                   |
 | --------- | -------- | ------------------------------------------------------------------------------------------------------------- |
 | branch    | `master` | El nombre de la rama actual, regresa a `HEAD` si no hay ninguna rama actual (por ejemplo, git detached HEAD). |
-| remote    | `master` | The remote branch name.                                                                                       |
+| remote    | `master` | El nombre de la rama remota.                                                                                  |
 | symbol    |          | Refleja el valor de la opción `symbol`                                                                        |
 | style\* |          | Refleja el valor de la opción `style`                                                                         |
 
