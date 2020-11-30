@@ -1971,7 +1971,7 @@ python_binary = "python3"
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `ruby` muestra la versión actualmente instalada de Ruby. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un archivo `Gemfile`
 - El directorio actual contiene un archivo `.ruby-version`
@@ -2007,7 +2007,7 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `rust` muestra la versión actualmente instalada de Rust. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un archivo `Cargo.toml`
 - El directorio actual contiene un archivo con la extensión `.rs`
@@ -2353,7 +2353,7 @@ symbol = "⚡️ "
 
 The `custom` modules show the output of some arbitrary commands.
 
-These modules will be shown if any of the following conditions are met:
+Estos módulos se mostrarán si se cumplen alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo cuyo nombre está en `files`
 - El directorio actual contiene un directorio cuyo nombre está en `directories`
