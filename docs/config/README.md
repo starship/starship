@@ -2027,6 +2027,15 @@ Starship will try executing each binary until it gets a result. Note you can
 only change the binary that Starship executes to get the version of Python not
 the arguments that are used.
 
+The default values and order for `python_binary` was chosen to first identify
+the Python version in a virtualenv/conda environments (which currently still
+add a `python`, no matter if it points to `python3` or `python2`). This has the
+side effect that if you have still a system Python verison 2 installed, it may
+be picked up before any Python version 3 (at least on Linux Distros that setup
+a `/usr/bin/python` symlink for Python 3). If you do not work with Python 2
+anymore but cannot remove the system Python version 2, changing this to
+`"python3"` will hide any Python version 2, see example below.
+
 :::
 
 ### Variables
