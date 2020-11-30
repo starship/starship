@@ -1920,16 +1920,24 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 ### 選項
 
-| Option               | 預設                                                                        | 說明                                                                            |
-| -------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | The format for the module.                                                    |
-| `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                             |
-| `style`              | `"yellow bold"`                                                           | 這個模組的風格。                                                                      |
-| `pyenv_version_name` | `false`                                                                   | 使用 pyenv 取得 Python 的版本。                                                       |
-| `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used               |
-| `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.    |
-| `python_binary`      | `python`                                                                  | Configures the python binary that Starship executes when getting the version. |
-| `disabled`           | `false`                                                                   | 停用 `python` 模組。                                                               |
+| Option               | 預設                                                                        | 說明                                                                                     |
+| -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | The format for the module.                                                             |
+| `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                                      |
+| `style`              | `"yellow bold"`                                                           | 這個模組的風格。                                                                               |
+| `pyenv_version_name` | `false`                                                                   | 使用 pyenv 取得 Python 的版本。                                                                |
+| `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used                        |
+| `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.             |
+| `python_binary`      | `["python", "python3, "python2"]`                                         | Configures the python binaries that Starship should executes when getting the version. |
+| `disabled`           | `false`                                                                   | 停用 `python` 模組。                                                                        |
+
+::: tip
+
+The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
+
+The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `"python3"` will hide any Python version 2, see example below.
+
+:::
 
 ### Variables
 
@@ -1952,20 +1960,17 @@ symbol = "👾 "
 pyenv_version_name = true
 ```
 
-Using the `python3` binary to get the version.
-
-Note - The `python_binary` variable changes the binary that Starship executes to get the version of Python, it doesn't change the arguments that are used.
-
 ```toml
 # ~/.config/starship.toml
 
 [python]
+# Only use the `python3` binary to get the version.
 python_binary = "python3"
 ```
 
 ## Ruby
 
-`ruby` 模組顯示現在安裝的 Ruby 版本。 這個模組在下列其中一個條件達成時顯示：
+The `ruby` module shows the currently installed version of Ruby. 這個模組在下列其中一個條件達成時顯示：
 
 - 目前資料夾中有一個 `Gemfile` 檔案
 - The current directory contains a `.ruby-version` file
@@ -2001,7 +2006,7 @@ symbol = "🔺 "
 
 ## Rust
 
-`rust` 模組顯示現在安裝的 Rust 版本。 這個模組在下列其中一個條件達成時顯示：
+The `rust` module shows the currently installed version of Rust. 這個模組在下列其中一個條件達成時顯示：
 
 - 目前資料夾中有一個 `Cargo.toml` 檔案
 - 現在資料夾中包含一個檔案具有 `.rs` 副檔名
@@ -2226,7 +2231,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## 時間
 
-`time` 模組顯示目前的**當地**時間. `format` 設定值被 [`chrono`](https://crates.io/crates/chrono) crate 用來控制時間如何顯示。 請看 [chrono 的 strftime 文件](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)來了解有那些選項可以使用。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -2246,7 +2251,7 @@ format = "[🏎💨 $workspace]($style) "
 | `disabled`        | `true`                  | 停用 `time` 模組。                                                                                         |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. 不然的話，它會被預設為 `"%T"`。 Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -2272,7 +2277,7 @@ time_range = "10:00:00-14:00:00"
 
 ## 使用者名稱
 
-`username` 模組顯示現在使用中的使用者名稱。 這個模組在下列其中一個條件達成時顯示：
+The `username` module shows active user's username. 這個模組在下列其中一個條件達成時顯示：
 
 - 目前使用者為 root
 - 目前使用者並非登入時的使用者
