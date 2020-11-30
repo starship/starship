@@ -1277,8 +1277,8 @@ disabled = false
 
 Модуль `java` показывает установленную версию Java. Модуль будет показан, если любое из следующих условий соблюдено:
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
-- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
+- The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
 
 ### Опции
 
