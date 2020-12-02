@@ -1,9 +1,9 @@
-## 🚀 Installation (extended)
+# 🚀 Advanced Installation
 
 To install starship, you need to do two things:
 
 1. Get the **starship** binary onto your computer
-1. Tell your shell to use the starship binary as its prompt
+1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
 
 For most users, the instructions on [the main page](/) will work great. However,
 for some more specialized platforms, different instructions are needed.
@@ -13,46 +13,40 @@ README.md file, so here are some installation instructions for other platforms
 from the community. Is yours not here? Please do add it here if you figure it
 out!
 
-1. Installing the **starship** binary:
+## With [Nix](https://nixos.wiki/wiki/Nix):
 
-   ##### From source on [crates.io](https://crates.io/):
+### Getting the Binary
 
-   ```sh
-   cargo install starship
-   ```
+#### Imperatively
 
-   ### With [Nix](https://nixos.wiki/wiki/Nix):
+```sh
+nix-env -iA nixos.starship
+```
 
-   #### Imperatively
+#### Declarative, single user, via [home-manager](home-manager)
 
-   ```sh
-   nix-env -iA nixos.starship
-   ```
+Add `pkgs.starship` to your `home.packages` in your `home.nix` file, then run
 
-   #### Declarative, single user, via [home-manager](home-manager)
+```sh
+home-manager switch
+```
 
-   Add `pkgs.starship` to your `home.packages` in your `home.nix` file, then run
+#### Declarative, system-wide, with NixOS
 
-   ```sh
-   home-manager switch
-   ```
+Add `pkgs.starship` to `environment.packages` in your `configuration.nix`,
+then run
 
-   #### Declarative, system-wide, with NixOS
+```sh
+sudo nixos-rebuild switch
+```
 
-   Add `pkgs.starship` to `environment.packages` in your `configuration.nix`,
-   then run
+### Modifying Init Scripts
 
-   ```sh
-   sudo nixos-rebuild switch
-   ```
+#### With Nix and home-manager, using zsh:
 
-2. Adding the init script to your shell's config file
+Add the following to `programs.zsh.initExtra` in your `home.nix` file, then
+run
 
-   ### With Nix and home-manager, using zsh:
-
-   Add the following to `programs.zsh.initExtra` in your `home.nix` file, then
-   run
-
-   ```sh
-   home-manager switch
-   ```
+```sh
+home-manager switch
+```
