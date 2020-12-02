@@ -91,6 +91,7 @@ module.exports = {
         sidebar: [
           "/",
           ["/guide/", "Guide"],
+          ["/installing/", "Advanced Installation"]
           ["/config/", "Configuration"],
           ["/advanced-config/", "Advanced Configuration"],
           ["/faq/", "Frequently Asked Questions"],
