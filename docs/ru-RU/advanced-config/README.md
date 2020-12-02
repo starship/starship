@@ -82,7 +82,7 @@ starship_precmd_user_func="set_win_title"
 
 где `<color>` является цветовым спецификатором (обсуждается ниже). `fg:<color>` и `<color>` в настоящее время делают одно и то же, хотя это может измениться в будущем. Порядок слов в строке не имеет значения.
 
-Токен `none` переопределяет все остальные токены в строке, например `fg:red none fg:blue` все равно создаст строку без стиля. Использование `none` в сочетании с другими токенами может стать ошибкой в будущем.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none`  sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
 Цветовой спецификатор может быть одним из следующих:
 
