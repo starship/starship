@@ -32,9 +32,10 @@ starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
     STATUS=$?
 
-    # Evaluate the number of jobs before running the preseved prompt command, so that tools
-    # like z/autojump, which background certain jobs, do not cause spurious background jobs
-    # to be displayed by starship. Also avoids forking to run `wc`, slightly improving perf
+    # Evaluate the number of jobs before running the preseved prompt command, so
+    # that backgrounded jobs in the preserved prompt command like z or autojump
+    # do not cause spurious background jobs. Also do this with a while loop
+    # to avoid having to fork a subshell to call wc.
     NUM_JOBS=$(n=0; while read line; do [[ $line ]] && n=$((n+1));done <<< $(jobs -p) ; echo $n)
 
     # Run the bash precmd function, if it's set. If not set, evaluates to no-op
