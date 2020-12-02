@@ -140,8 +140,8 @@
 
 ### Getting Started
 
-**Note**: due to the ploriferation of different platforms, only a subset of supported platforms are
-shown below. Can't see yours? Have a look at the [extra platform instructions](./INSTALL.md).
+**Note**: due to the proliferation of different platforms, only a subset of supported platforms are
+shown below. Can't see yours? Have a look at the [extra platform instructions](../docs/INSTALL.md).
 
 1. Install the **starship** binary:
 

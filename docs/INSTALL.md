@@ -1,5 +1,13 @@
 ## 🚀 Installation (extended)
 
+To install starship, you need to do two things:
+
+1. Get the **starship** binary
+1. Tell your shell to use the starship binary as its prompt
+
+For most users, the instructions on [the main page](/) will work great. However,
+for some more specialized platforms, different instructions are needed.
+
 There are so many platforms out there that they don't fit into a single
 README.md file, so here are some installation instructions for other platforms
 from the community. Is yours not here? Please do add it here if you figure it
