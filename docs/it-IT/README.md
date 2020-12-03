@@ -30,7 +30,7 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
 
 ### Installazione Veloce
 
-1. Install the **starship** binary:
+1. Installa il binario **starship**:
 
 
    #### Installa l'ultima Versione
