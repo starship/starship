@@ -1,18 +1,18 @@
 # Preset
 
-Here is a collection of community-submitted configuration presets for Starship. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+Ecco una raccolta dei preset di configurazione inviati dalla community per Starship. Se hai un preset da condividere, per favore [ invia un PR ](https://github.com/starship/starship/edit/master/docs/presets/README.md) aggiornando questo file! 😊
 
 ## Nerd Font Symbols
 
-This preset doesn't change anything except for the symbols used for each module. If emojis aren't your thing, this might catch your eye!
+Questo preset non cambia nulla tranne i simboli utilizzati per ogni modulo. Se gli emoji non fanno per te, questo potrebbe attirare la tua attenzione!
 
-![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
+![Screenshot dei preset di Nerd Font Symbols](/presets/nerd-font-symbols.png)
 
-### Prerequisites
+### Prerequisiti
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
+- Un [ Nerd Font ](https://www.nerdfonts.com/) installato e abilitato nel tuo terminale (l'esempio usa Fira Code Nerd Font)
 
-### Configuration
+### Configurazione
 
 ```toml
 [aws]
