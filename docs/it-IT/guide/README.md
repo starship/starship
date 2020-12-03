@@ -108,11 +108,11 @@
 - **Personalizzabile:** configura ogni aspetto del tuo prompt.
 - **Universale:** funziona su qualsiasi shell, con qualsiasi sistema operativo.
 - **Intelligente:** mostra le informazioni rilevanti a colpo d'occhio.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **Ricco di funzionalità:** supporta tutti i tuoi strumenti preferiti.
+- **Facile:** veloce da installare - inizia ad usarlo in pochi minuti.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Esplora la documentazione di Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -131,7 +131,7 @@
    #### Installa l'ultima Versione
 
 
-   ##### From prebuilt binary, with Shell:
+   ##### Da un binario precompilato, con Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
