@@ -117,18 +117,18 @@
 
 <a name="🚀-installation"></a>
 
-## 🚀 Installation
+## 🚀 Installazione
 
-### Prerequisites
+### Prerequisiti
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Un [Nerd Font](https://www.nerdfonts.com/) installato e abilitato nel tuo terminale (per esempio, prova [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Getting Started
+### Inizia
 
-1. Install the **starship** binary:
+1. Installa il binario **starship**:
 
 
-   #### Install Latest Version
+   #### Installa l'ultima Versione
 
 
    ##### From prebuilt binary, with Shell:
@@ -138,17 +138,17 @@
    ```
 
 
-   ##### From source on [crates.io](https://crates.io/):
+   ##### Da un sorgente su [crates.io](https://crates.io/):
 
    ```sh
    cargo install starship
    ```
 
 
-   #### Install via Package Manager
+   #### Installa via Package Manager
 
 
-   ##### With [Homebrew](https://brew.sh/):
+   ##### Con [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
