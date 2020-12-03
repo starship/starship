@@ -974,13 +974,13 @@ El módulo `git_branch` muestra la rama activa del repositorio en su directorio 
 
 | Opción               | Por defecto                      | Descripción                                                                                             |
 | -------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.                    |
+| `always_show_remote` | `false`                          | Muestra el nombre de la rama de seguimiento remoto, incluso si es igual al nombre de la rama local.     |
 | `format`             | `"on [$symbol$branch]($style) "` | El formato del módulo. Use `"$branch"` para referirse al nombre de la rama actual.                      |
 | `symbol`             | `" "`                           | Una cadena de formato que representa el símbolo de la rama git.                                         |
 | `style`              | `"bold purple"`                  | El estilo del módulo.                                                                                   |
 | `truncation_length`  | `2^63 - 1`                       | Trunca una rama git a X grafemas.                                                                       |
 | `truncation_symbol`  | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado. Puedes usar `""` para ningún símbolo. |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached HEAD state.                                            |
+| `only_attached`      | `false`                          | Muestra sólo el nombre de la rama cuando no esté en un estado detached HEAD.                            |
 | `disabled`           | `false`                          | Desactiva el módulo `git_branch`.                                                                       |
 
 ### Variables
