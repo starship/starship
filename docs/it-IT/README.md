@@ -94,7 +94,7 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
 
    #### Powershell
 
-   Aggiungi quanto segue alla fine di `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Aggiungi quanto segue alla fine di `Microsoft.PowerShell_profile.ps1`. Puoi controllare la posizione di questo file interrogando la variabile `$PROFILE` in PowerShell. In genere il percorso è `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` oppure `~/.config/powershell/Microsoft.PowerShell_profile.ps1` in -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -103,7 +103,7 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Aggiungi quanto segue alla fine di `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
