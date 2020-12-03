@@ -342,6 +342,8 @@ mod tests {
 
     #[test]
     fn test_latest_tag_shown_with_tag_enabled() -> io::Result<()> {
+        use std::{thread, time};
+
         let repo_dir = fixture_repo(FixtureProvider::GIT)?;
 
         let mut git_commit = Command::new("git")
@@ -353,9 +355,12 @@ mod tests {
         let commit_output = str::from_utf8(&git_commit).unwrap().trim();
 
         Command::new("git")
-            .args(&["tag", "v1", "-m", "Testing tags v1"])
+            .args(&["tag", "v2", "-m", "Testing tags v2"])
             .current_dir(&repo_dir.path())
             .output()?;
+
+        // Wait one second between tags
+        thread::sleep(time::Duration::from_millis(1000));
 
         Command::new("git")
             .args(&["tag", "v0", "-m", "Testing tags v0", "HEAD~1"])
@@ -363,7 +368,7 @@ mod tests {
             .output()?;
 
         Command::new("git")
-            .args(&["tag", "v2", "-m", "Testing tags v2"])
+            .args(&["tag", "v1", "-m", "Testing tags v1"])
             .current_dir(&repo_dir.path())
             .output()?;
 
