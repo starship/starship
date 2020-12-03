@@ -1,14 +1,14 @@
-# Advanced Configuration
+# Configurazione Avanzata
 
-While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
+Nonostante Starship sia una shell versatile, a volte devi fare qualche modifica in più in `starship.toml` per ottenere alcune cose. Questa pagina descrive alcune tecniche di configurazione avanzate utilizzate in Starship.
 
-::: warning
+::: Attenzione
 
-The configurations in this section are subject to change in future releases of Starship.
+Le configurazioni in questa sezione sono soggette a modifiche nelle future versioni di Starship.
 
 :::
 
-## Custom pre-prompt and pre-execution Commands in Bash
+## Comandi personalizzati di pre-prompt e pre-esecuzione per Bash
 
 Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
 
