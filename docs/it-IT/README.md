@@ -7,18 +7,18 @@ actionText: Inizia →
 actionLink: ./guide/
 features:
   - 
-    title: Compatibility First
+    title: Prima la compatibilità
     details: Funziona sulle shell e sui sistemi operativi più comuni. Usalo ovunque!
   - 
-    title: Rust-Powered
-    details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
+    title: Generato in Rust
+    details: Sfrutta la velocità e sicurezza migliori di Rust, per rendere il tuo prompt il più veloce e il più affidabile.
   - 
-    title: Customizable
-    details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
-footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+    title: Personalizzabile
+    details: Ogni più piccolo dettaglio è personalizzabile a piacere, per rendere questo messaggio prompt minimalista o ricco delle funzionalità che desideri.
+footer: Licenza ISC | Copyright © 2019-present Starship Collaboratori
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and PowerShell.
+description: Starship è il prompt minimalista, super veloce ed estremamente personalizzabile per qualsiasi shell! Mostra le informazioni di cui hai bisogno, rimanendo elegante e minimale. Installazione rapida disponibile per Bash, Fish, ZSH, Ion e PowerShell.
 ---
 
 <div class="center">
@@ -28,21 +28,21 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
   </video>
 </div>
 
-### Quick Install
+### Installazione Veloce
 
 1. Install the **starship** binary:
 
 
-   #### Install Latest Version
+   #### Installa l'ultima Versione
 
-   With Shell:
+   Con Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Install via Package Manager
+   #### Installa con Package Manager
 
    With [Homebrew](https://brew.sh/):
 
@@ -50,18 +50,18 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    brew install starship
    ```
 
-   With [Scoop](https://scoop.sh):
+   Con [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Aggiungi lo script di inizializzazione al file di configurazione della shell:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Aggiungi quanto segue alla fine di `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -72,7 +72,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Aggiungi quanto segue alla fine di `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -83,7 +83,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Aggiungi quanto segue alla fine di `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -94,7 +94,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Aggiungi quanto segue alla fine di `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
