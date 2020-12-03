@@ -1278,8 +1278,8 @@ disabled = false
 
 El módulo `java` muestra la versión actualmente instalada de Java. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
-- The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
+- El directorio actual contiene un archivo `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, o `build.boot`
+- El directorio actual contiene un archivo con la extensión `.java`, `.class`, `.gradle` o `.jar`, `.clj` o `.cljc`
 
 ### Opciones
 
@@ -1921,16 +1921,16 @@ El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 ### Opciones
 
-| Opción               | Por defecto                                                               | Descripción                                                                            |
-| -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | El formato del módulo.                                                                 |
-| `symbol`             | `"🐍 "`                                                                    | Una cadena de formato que representa el símbolo de Python                              |
-| `style`              | `"yellow bold"`                                                           | El estilo del módulo.                                                                  |
-| `pyenv_version_name` | `false`                                                                   | Usar pyenv para obtener la versión de Python                                           |
-| `pyenv_prefix`       | `pyenv`                                                                   | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv       |
-| `scan_for_pyfiles`   | `true`                                                                    | Si es falso, los archivos Python en el directorio actual no mostrarán este módulo.     |
-| `python_binary`      | `["python", "python3, "python2"]`                                         | Configures the python binaries that Starship should executes when getting the version. |
-| `disabled`           | `false`                                                                   | Desactiva el módulo `python`.                                                          |
+| Opción               | Por defecto                                                               | Descripción                                                                           |
+| -------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | El formato del módulo.                                                                |
+| `symbol`             | `"🐍 "`                                                                    | Una cadena de formato que representa el símbolo de Python                             |
+| `style`              | `"yellow bold"`                                                           | El estilo del módulo.                                                                 |
+| `pyenv_version_name` | `false`                                                                   | Usar pyenv para obtener la versión de Python                                          |
+| `pyenv_prefix`       | `pyenv`                                                                   | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv      |
+| `scan_for_pyfiles`   | `true`                                                                    | Si es falso, los archivos Python en el directorio actual no mostrarán este módulo.    |
+| `python_binary`      | `["python", "python3, "python2"]`                                         | Configura los binarios de python que Starship debería ejecutar al obtener la versión. |
+| `disabled`           | `false`                                                                   | Desactiva el módulo `python`.                                                         |
 
 ::: tip
 
