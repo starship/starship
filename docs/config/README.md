@@ -2208,21 +2208,35 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Option     | Default                     | Description                                            |
-| ---------- | --------------------------- | ------------------------------------------------------ |
-| `format`   | `[$symbol$status]($style) ` | The format of the module                               |
-| `symbol`   | `"✖"`                       | A format string representing the symbol for the status |
-| `style`    | `"bold red"`                | The style for the module.                              |
-| `meaning`  | `false`                     | Display code meaing instead of value                   |
-| `disabled` | `true`                      | Disables the `status` module.                          |
+| Option                    | Default                     | Description                                            |
+| ------------------------- | --------------------------- | ------------------------------------------------------ |
+| `format`                  | `[$symbol$status]($style) ` | The format of the module                               |
+| `program_error_symbol`    | `"🔴"`                       | The symbol displayed on program error                  |
+| `not_executable_symbol`   | `"🚫"`                       | The symbol displayed when file isn't executable        |
+| `not_found_symbol`        | `"🔍"`                       | The symbol displayed when the command can't be found   |
+| `sigint_symbol`           | `"🧱"`                       | The symbol displayed on SIGINT (Ctrl + c)              |
+| `signal_symbol`           | `"⚡"`                       | The symbol displayed on any signal |
+| `style`                   | `"bold red"`                | The style for the module.                              |
+| `disabled`                | `true`                      | Disables the `status` module.                          |
+
+
+                    "status" => Some(Ok(exit_code)),
+                    "status_int" => Some(Ok(exit_code)),
+                    "status_common_meaning" => Ok(status_common_meaning(exit_code_int)).transpose(),
+                    "status_signal_number" => Ok(status_signal_int(exit_code_int)).transpose(),
+                    "status_signal_name" => Ok(status_signal_name(exit_code_int)).transpose(),
 
 ### Variables
 
-| Variable | Example | Description                          |
-| -------- | ------- | ------------------------------------ |
-| status   | `127`   | The exit code of the last command    |
-| symbol   |         | Mirrors the value of option `symbol` |
-| style\*  |         | Mirrors the value of option `style`  |
+| Variable                | Example | Description                                                             |
+| ----------------------- | ------- | ----------------------------------------------------------------------- |
+| status                  | `127`   | The exit code of the last command                                       |
+| status_int              | `127`   | The exit code of the last command                                       |
+| status_common_meaning   | `ERROR` | Meaning of the code if not a signal                                     |
+| status_signal_number    | `9`     | Signal number corresponding to the exit code, only if signalled         |
+| status_signal_name      | `KILL`  | Name of the signal corresponding to the exit code, only if signalled    |
+| symbol                  |         | Mirrors the value of option `symbol`                                    |
+| style\*                 |         | Mirrors the value of option `style`                                     |
 
 \*: This variable can only be used as a part of a style string
 
