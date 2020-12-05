@@ -2211,20 +2211,14 @@ To enable it, set `disabled` to `false` in your configuration file.
 | Option                    | Default                     | Description                                            |
 | ------------------------- | --------------------------- | ------------------------------------------------------ |
 | `format`                  | `[$symbol$status]($style) ` | The format of the module                               |
-| `program_error_symbol`    | `"🔴"`                       | The symbol displayed on program error                  |
+| `symbol`                  | `"✖"`                       | The symbol displayed on program error                  |
 | `not_executable_symbol`   | `"🚫"`                       | The symbol displayed when file isn't executable        |
 | `not_found_symbol`        | `"🔍"`                       | The symbol displayed when the command can't be found   |
 | `sigint_symbol`           | `"🧱"`                       | The symbol displayed on SIGINT (Ctrl + c)              |
 | `signal_symbol`           | `"⚡"`                       | The symbol displayed on any signal |
 | `style`                   | `"bold red"`                | The style for the module.                              |
+| `map_symbol`              | `false`                     | Enable symbols mapping from exit code                  |
 | `disabled`                | `true`                      | Disables the `status` module.                          |
-
-
-                    "status" => Some(Ok(exit_code)),
-                    "status_int" => Some(Ok(exit_code)),
-                    "status_common_meaning" => Ok(status_common_meaning(exit_code_int)).transpose(),
-                    "status_signal_number" => Ok(status_signal_int(exit_code_int)).transpose(),
-                    "status_signal_name" => Ok(status_signal_name(exit_code_int)).transpose(),
 
 ### Variables
 

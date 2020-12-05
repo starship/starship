@@ -29,19 +29,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             Err(_) => return None,
         };
 
-        let scm = status_common_meaning(exit_code_int);
-        let ssname = status_signal_int(exit_code_int);
-        let ssnumber = status_signal_name(exit_code_int);
+        let common_meaning = status_common_meaning(exit_code_int);
+        let signal_name = status_signal_int(exit_code_int);
+        let signal_number = status_signal_name(exit_code_int);
 
         let parsed = StringFormatter::new(config.format).and_then(|formatter| {
             formatter
                 .map_meta(|var, _| match var {
                     "symbol" => match exit_code_int {
-                        126 => Some(config.not_executable_symbol),
-                        127 => Some(config.not_found_symbol),
-                        130 => Some(config.sigint_symbol),
-                        x if x > 128 && x < 256 => Some(config.signal_symbol),
-                        _ => Some(config.program_error_symbol),
+                        126 if config.map_symbol => Some(config.not_executable_symbol),
+                        127 if config.map_symbol => Some(config.not_found_symbol),
+                        130 if config.map_symbol => Some(config.sigint_symbol),
+                        x if x > 128 && x < 256 && config.map_symbol => Some(config.signal_symbol),
+                        _ => Some(config.symbol),
                     },
                     _ => None,
                 })
@@ -52,9 +52,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 .map(|variable| match variable {
                     "status" => Some(Ok(exit_code)),
                     "status_int" => Some(Ok(exit_code)),
-                    "status_common_meaning" => Ok(scm.as_deref()).transpose(),
-                    "status_signal_number" => Ok(ssname.as_deref()).transpose(),
-                    "status_signal_name" => Ok(ssnumber.as_deref()).transpose(),
+                    "status_common_meaning" => Ok(common_meaning.as_deref()).transpose(),
+                    "status_signal_number" => Ok(signal_name.as_deref()).transpose(),
+                    "status_signal_name" => Ok(signal_number.as_deref()).transpose(),
                     _ => None,
                 })
                 .parse(None)
@@ -179,11 +179,7 @@ mod tests {
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
                     [status]
-                    program_error_symbol = "✖"
-                    not_executable_symbol = "✖"
-                    not_found_symbol = "✖"
-                    sigint_symbol = "✖"
-                    signal_symbol = "✖"
+                    symbol = "✖"
                     disabled = false
                 })
                 .status(*status)
@@ -195,7 +191,7 @@ mod tests {
     }
 
     #[test]
-    fn signal_name_enabled() -> io::Result<()> {
+    fn signal_name() -> io::Result<()> {
         let exit_values = [1, 2, 126, 127, 130, 101];
         let exit_values_name = ["ERROR", "USAGE", "NOPERM", "NOTFOUND", "INT", "101"];
 
@@ -205,7 +201,6 @@ mod tests {
                 .config(toml::toml! {
                     [status]
                     format = "$status_common_meaning$status_signal_name"
-                    meaning = true
                     disabled = false
                 })
                 .status(*status)
@@ -227,11 +222,12 @@ mod tests {
                 .config(toml::toml! {
                     [status]
                     format = "$symbol"
-                    program_error_symbol = "🔴"
+                    symbol = "🔴"
                     not_executable_symbol = "🚫"
                     not_found_symbol = "🔍"
                     sigint_symbol = "🧱"
                     signal_symbol = "⚡"
+                    map_symbol = true
                     disabled = false
                 })
                 .status(*status)
