@@ -83,7 +83,7 @@ For example:
 - `[⬢ $version](bold green)` will print a symbol `⬢` followed by the content of variable `version`, with bold text colored green.
 - `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
 
-#### Style Strings
+#### Stile delle Stringhe
 
 Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
@@ -1648,13 +1648,13 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 
 ### Options
 
-| Option              | Default                            | Description                                                                                           |
-| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$version]($style) "` | The format for the module.                                                                            |
-| `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                    |
-| `style`             | `"bold green"`                     | The style for the module.                                                                             |
-| `disabled`          | `false`                            | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `bold red`                         | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
+| Option              | Default                            | Description                                                                                               |
+| ------------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$version]($style) "` | The format for the module.                                                                                |
+| `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                        |
+| `style`             | `"bold green"`                     | The style for the module.                                                                                 |
+| `disabled`          | `false`                            | Disables the `nodejs` module.                                                                             |
+| `not_capable_style` | `bold red`                         | Lo stile per il modulo quando una proprietà chiave in Packages.json non corrisponde alla versione NodeJS. |
 
 ###  Variables
 
