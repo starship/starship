@@ -174,7 +174,7 @@ La varieble `format` por defecto se utiliza para definir el formato del prompt, 
 ```toml
 format = "$all"
 
-# Que es equivalente a
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -218,8 +218,8 @@ $gcloud\
 $openstack\
 $env_var\
 $crystal\
-$cmd_duration\
 $custom\
+$cmd_duration\
 $line_break\
 $lua\
 $jobs\
