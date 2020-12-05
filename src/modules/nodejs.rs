@@ -4,6 +4,12 @@ use crate::configs::nodejs::NodejsConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
 
+use regex::Regex;
+use semver::Version;
+use semver::VersionReq;
+use serde_json as json;
+use std::path::PathBuf;
+
 /// Creates a module with the current Node.js version
 ///
 /// Will display the Node.js version if any of the following criteria are met:
@@ -31,6 +37,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("nodejs");
     let config = NodejsConfig::try_load(module.config);
     let nodejs_version = utils::exec_cmd("node", &["--version"])?.stdout;
+    let engines_version = get_engines_version(&context.current_dir);
+    let in_engines_range = check_engines_version(&nodejs_version, engines_version);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -38,7 +46,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
+                "style" => {
+                    if in_engines_range {
+                        Some(Ok(config.style))
+                    } else {
+                        Some(Ok(config.not_capable_style))
+                    }
+                }
                 _ => None,
             })
             .map(|variable| match variable {
@@ -59,12 +73,42 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
+fn get_engines_version(base_dir: &PathBuf) -> Option<String> {
+    let json_str = utils::read_file(base_dir.join("package.json")).ok()?;
+    let package_json: json::Value = json::from_str(&json_str).ok()?;
+    let raw_version = package_json.get("engines")?.get("node")?.as_str()?;
+    Some(raw_version.to_string())
+}
+
+fn check_engines_version(nodejs_version: &str, engines_version: Option<String>) -> bool {
+    if engines_version.is_none() {
+        return true;
+    }
+    let r = match VersionReq::parse(&engines_version.unwrap()) {
+        Ok(r) => r,
+        Err(_e) => return true,
+    };
+    let re = Regex::new(r"\d+\.\d+\.\d+").unwrap();
+    let version = re
+        .captures(nodejs_version)
+        .unwrap()
+        .get(0)
+        .unwrap()
+        .as_str();
+    let v = match Version::parse(version) {
+        Ok(v) => v,
+        Err(_e) => return true,
+    };
+    r.matches(&v)
+}
+
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
+    use std::io::Write;
 
     #[test]
     fn folder_without_node_files() -> io::Result<()> {
@@ -162,6 +206,44 @@ mod tests {
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
         let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn engines_node_version_match() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut file = File::create(dir.path().join("package.json"))?;
+        file.write_all(
+            b"{
+            \"engines\":{
+                \"node\":\">=12.0.0\"
+            }
+        }",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let expected = Some(format!("via {} ", Color::Green.bold().paint("⬢ v12.0.0")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn engines_node_version_not_match() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut file = File::create(dir.path().join("package.json"))?;
+        file.write_all(
+            b"{
+            \"engines\":{
+                \"node\":\"<12.0.0\"
+            }
+        }",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let expected = Some(format!("via {} ", Color::Red.bold().paint("⬢ v12.0.0")));
         assert_eq!(expected, actual);
         dir.close()
     }
