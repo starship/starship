@@ -17,7 +17,7 @@ impl<'a> RootModuleConfig<'a> for AwsConfig<'a> {
             format: "on [$symbol$profile(\\($region\\))]($style) ",
             symbol: "☁️  ",
             style: "bold yellow",
-            disabled: false,
+            disabled: true,
             region_aliases: HashMap::new(),
         }
     }
