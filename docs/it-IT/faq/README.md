@@ -62,31 +62,31 @@ La causa più comune è la configurazione errata del sistema. Alcune distribuzio
 
 - In locale sia impostato un valore UTF-8, come `de_DE.UTF-8` o `ja_JP.UTF-8`. Se `LC_ALL` non è un valore UTF-8, [dovrai cambiarlo](https://www.tecmint.com/set-system-locales-in-linux/).
 - Hai un font emoji installato. La maggior parte dei sistemi ha un font emoji per impostazione predefinita, ma alcuni (in particolare Arch Linux) non lo fanno. Di solito puoi installarne uno attraverso il gestore dei pacchetti del tuo sistema-[noto emoji](https://www.google.com/get/noto/help/emoji/) è uno dei popolari.
-- You are using a [Nerd Font](https://www.nerdfonts.com/).
+- Stai usando un [font Nerd](https://www.nerdfonts.com/).
 
-To test your system, run the following commands in a terminal:
+Per testare il sistema, eseguire i seguenti comandi in un terminale:
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
 
-The first line should produce a [snake emoji](https://emojipedia.org/snake/), while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
+La prima riga dovrebbe riprodurre una [emoji di un serpente](https://emojipedia.org/snake/), mentre la seconda dovrebbe riprodurre il [simbolo powerline di ramo (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
 
-If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+Se uno dei due simboli non viene visualizzato correttamente, il sistema è ancora mal configurato. Sfortunatamente, ottenere la configurazione dei caratteri corretta a volte è difficile. Gli utenti su Discord potrebbero essere in grado di aiutarti. Se entrambi i simboli vengono visualizzati correttamente, ma non li vedi ancora in starship, [segnala un bug!](https://github.com/starship/starship/issues/new/choose)
 
-## How do I uninstall Starship?
+## Come posso disinstallare Starship?
 
-Starship is just as easy to uninstall as it is to install in the first place.
+Starship è altrettanto facile da disinstallare come lo è da installare.
 
-1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
-1. Delete the Starship binary.
+1. Rimuovi qualsiasi riga utilizzata per inizializzare Starship nella configurazione della tua shell (ad es. `~/.bashrc`).
+1. Elimina il binario di Starship.
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+Se Starship è stato installato utilizzando un gestore di pacchetti, fai riferimento alla documentazione per le istruzioni di disinstallazione.
 
 If Starship was installed using the `curl | bash` script, the following command will delete the binary:
 
 ```sh
-# Locate and delete the starship binary
-rm "$(which starship)"
+# Individua ed elimina il binario di Starship
+rm "$(che starship)"
 ```
