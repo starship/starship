@@ -1648,12 +1648,13 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ### Опции
 
-| Параметр   | По умолчанию                       | Описание                                           |
-| ---------- | ---------------------------------- | -------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                         |
-| `symbol`   | `"⬢ "`                             | A format string representing the symbol of NodeJS. |
-| `style`    | `"bold green"`                     | Стиль модуля.                                      |
-| `disabled` | `false`                            | Отключает модуль `nodejs`.                         |
+| Параметр            | По умолчанию                       | Описание                                                                                              |
+| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$version]($style) "` | The format for the module.                                                                            |
+| `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                    |
+| `style`             | `"bold green"`                     | Стиль модуля.                                                                                         |
+| `disabled`          | `false`                            | Отключает модуль `nodejs`.                                                                            |
+| `not_capable_style` | `bold red`                         | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ###  Variables
 
