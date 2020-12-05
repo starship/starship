@@ -254,7 +254,7 @@ is read from the `AWS_VAULT` env var.
 | `symbol`         | `"☁️ "`                                        | The symbol used before displaying the current AWS profile.      |
 | `region_aliases` |                                                | Table of region aliases to display in addition to the AWS name. |
 | `style`          | `"bold yellow"`                                | The style for the module.                                       |
-| `disabled`       | `false`                                        | Disables the `AWS` module.                                      |
+| `disabled`       | `true`                                        | Disables the `AWS` module.                                      |
 
 ### Variables
 
