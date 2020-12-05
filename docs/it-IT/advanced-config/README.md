@@ -21,7 +21,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Per eseguire una funzione personalizzata prima dell'esecuzione di un comando, è possibile utilizzare il meccanismo trappola [`DEBUG`](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). However, you **must** trap the DEBUG signal *before* initializing Starship! Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
+- Per eseguire una funzione personalizzata prima dell'esecuzione di un comando, è possibile utilizzare il meccanismo trappola [`DEBUG`](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Tuttavia, **devi** intrappolare il segnale DEBUG *prima di* inizializzare Starship! Starship può preservare il valore trappola di DEBUG, ma se la trappola viene sovrascritta dopo l'avvio di Starship, alcune funzionalità non funzioneranno.
 
 ```bash
 function blastoff(){
@@ -31,11 +31,11 @@ trap blastoff DEBUG     # Trap DEBUG *before* running starship
 eval $(starship init bash)
 ```
 
-## Change Window Title
+## Cambia il Titolo della Finestra
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
+Alcune shell prompt cambieranno automaticamente il titolo della finestra (ad esempio per riflettere la directory di lavoro). Fish lo fa per impostazione predefinita. Starship non lo fa, ma è abbastanza semplice aggiungere questa funzionalità a `bash` o `zsh`.
 
-First, define a window title change function (identical in bash and zsh):
+Innanzitutto, bisogna definire una funzione per il cambio del titolo della finestra (identica sia per bash che zsh):
 
 ```bash
 function set_win_title(){
@@ -43,23 +43,23 @@ function set_win_title(){
 }
 ```
 
-You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
+Puoi usare delle variabili per personalizzare questo titolo (`$USER`, `$HOSTNAME`, e `$PWD` sono le scelte più popolari).
 
-In `bash`, set this function to be the precmd starship function:
+In `bash`, impostare questa funzione per essere la precmd Starship function:
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-In `zsh`, add this to the `precmd_functions` array:
+In `zsh`, aggiungi questo `precmd_functions` all'array:
 
 ```bash
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+Se ti piace il risultato, aggiungi queste righe al tuo file shell di configurazione (`~/. ashrc` o `~/.zshrc`) per renderlo permanente.
 
-For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+Ad esempio, se desideri visualizzare la directory corrente nel titolo della scheda del terminale, aggiungi la seguente snippet al tuo `~/. ashrc` or `~/.zshrc`:
 
 ```bash
 function set_win_title(){
@@ -68,7 +68,7 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-## Style Strings
+## Stile delle Stringhe
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
