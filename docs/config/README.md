@@ -2242,8 +2242,9 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 [status]
 style = "bg:blue"
-symbol = "💣 "
-format = '[\[$symbol$status\]]($style) '
+symbol = "🔴"
+format = '[\[$symbol $status_common_meaning$status_signal_name\]]($style) '
+map_symbol = true
 disabled = false
 
 ```
