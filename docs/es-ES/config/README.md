@@ -1649,12 +1649,13 @@ El módulo `nodejs` muestra la versión instalada de NodeJS. El módulo se muest
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                                |
-| ---------- | ---------------------------------- | ---------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                     |
-| `symbol`   | `"⬢ "`                             | Una cadena de formato que representa el símbolo de NodeJS. |
-| `style`    | `"bold green"`                     | El estilo del módulo.                                      |
-| `disabled` | `false`                            | Desactiva el módulo `nodejs`.                              |
+| Opción              | Por defecto                        | Descripción                                                                                           |
+| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$version]($style) "` | El formato del módulo.                                                                                |
+| `symbol`            | `"⬢ "`                             | Una cadena de formato que representa el símbolo de NodeJS.                                            |
+| `style`             | `"bold green"`                     | El estilo del módulo.                                                                                 |
+| `disabled`          | `false`                            | Desactiva el módulo `nodejs`.                                                                         |
+| `not_capable_style` | `bold red`                         | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ###  Variables
 
