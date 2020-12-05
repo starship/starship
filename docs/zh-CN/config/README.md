@@ -1648,12 +1648,13 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                                 |
-| ---------- | ---------------------------------- | -------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                           |
-| `symbol`   | `"⬢ "`                             | A format string representing the symbol of NodeJS. |
-| `style`    | `"bold green"`                     | 此组件的样式。                                            |
-| `disabled` | `false`                            | 禁用 `nodejs` 组件。                                    |
+| Option              | 默认值                                | 描述                                                                                                    |
+| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$version]($style) "` | 组件格式化模板。                                                                                              |
+| `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                    |
+| `style`             | `"bold green"`                     | 此组件的样式。                                                                                               |
+| `disabled`          | `false`                            | 禁用 `nodejs` 组件。                                                                                       |
+| `not_capable_style` | `bold red`                         | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ###  Variables
 
