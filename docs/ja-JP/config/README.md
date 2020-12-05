@@ -1649,12 +1649,13 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ### オプション
 
-| オプション      | デフォルト                              | 説明                                                 |
-| ---------- | ---------------------------------- | -------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                   |
-| `symbol`   | `"⬢ "`                             | A format string representing the symbol of NodeJS. |
-| `style`    | `"bold green"`                     | モジュールのスタイルです。                                      |
-| `disabled` | `false`                            | `nodejs`モジュールを無効にします。                              |
+| オプション               | デフォルト                              | 説明                                                                                                    |
+| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                                                                      |
+| `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                    |
+| `style`             | `"bold green"`                     | モジュールのスタイルです。                                                                                         |
+| `disabled`          | `false`                            | `nodejs`モジュールを無効にします。                                                                                 |
+| `not_capable_style` | `bold red`                         | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ###  Variables
 
