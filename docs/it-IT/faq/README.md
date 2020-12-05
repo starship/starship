@@ -1,22 +1,22 @@
 # FAQ
 
-## What is the configuration used in the demo GIF?
+## Qual è la configurazione utilizzata nella GIF demo?
 
-- **Terminal Emulator**: [iTerm2](https://iterm2.com/)
-  - **Theme**: Minimal
-  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+- **Terminale Emulato**: [iTerm2](https://iterm2.com/)
+  - **Tema**: Minimale
+  - **Schema Colore**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
   - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
 - **Shell**: [Fish Shell](https://fishshell.com/)
-  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
-  - **Prompt**: [Starship](https://starship.rs/)
+  - **Configurazione**: [matchai Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
+  - **Chiedi**: [Starship](https://starship.rs/)
 
-## How do I get command completion as shown in the demo GIF?
+## Come posso ottenere il completamento dei comandi come mostrato nella GIF demo?
 
-Completion support is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+Il supporto al completamento è fornito dalla vostra scelta di shell. Nel caso della demo, la demo è stata fatta con [Fish Shell](https://fishshell.com/), che fornisce i completamenti per impostazione predefinita. Se usi Z Shell (zsh), ti suggerirei di dare un'occhiata a [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
-## Do top level `format` and `<module>.disabled` do the same thing?
+## Il formato di primo livello `` e `<module>.disabled` fanno la stessa cosa?
 
-Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
+Sì, entrambi possono essere utilizzati per disabilitare i moduli nel prompt. Se tutto quello che pensi di fare è disabilitare i moduli, `<module>.disabled` è il modo preferito per per queste ragioni:
 
 - Disabling modules is more explicit than omitting them from the top level `format`
 - Newly created modules will be added to the prompt as Starship is updated
