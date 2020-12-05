@@ -70,7 +70,7 @@ starship_precmd_user_func="set_win_title"
 
 ## Stile delle Stringhe
 
-Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+Le stringhe di stile sono un elenco di parole, separate da spazi bianchi. Le parole non sono sensibili alle maiuscole (cioè `grassetto` e `BoLd` sono considerate la stessa stringa). Ogni parola può essere una delle seguenti:
 
   - `bold`
   - `underline`
@@ -80,13 +80,13 @@ Style strings are a list of words, separated by whitespace. The words are not ca
   - `<color>`
   - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing , though this may change in the future. The order of words in the string does not matter.
+dove `<color>` è un colore specifico (discusso in seguito). `fg:<color>` e `<color>` attualmente fanno la stessa cosa , anche se questo potrebbe cambiare in futuro. L'ordine delle parole nella stringa non conta.
 
-The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none`  sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
+Il token `none` sovrascrive tutti gli altri token in una stringa se non fa parte di uno specificatore `bg:`, così ad esempio `fg:red none fg:blue` creerà una stringa senza stile. `bg:none` imposta come colore di sfondo quello predefinito così `fg:red bg:none` è equivalente a `red` o `fg:red` e `bg:green fg:red bg:none` è equivalente a `fg:red` o `rosso`. Potrà diventare un errore usare `nessuno` in combinazione con altri token in futuro.
 
-A color specifier can be one of the following:
+Uno colore specifico può essere uno di questi:
 
- - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
+ - Uno dei colori standard del terminale: `nero`, `rosso`, `verde`, `blu`, `giallo`, `viola`, `ciano`, `bianco`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
  - A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
  - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
 
