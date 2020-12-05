@@ -173,7 +173,7 @@ Le `format` par défaut est utilisé pour définir le format de l'invite, si il 
 ```toml
 format = "$all"
 
-# Ce qui est equivalent a:
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -217,8 +217,8 @@ $gcloud\
 $openstack\
 $env_var\
 $crystal\
-$cmd_duration\
 $custom\
+$cmd_duration\
 $line_break\
 $lua\
 $jobs\
