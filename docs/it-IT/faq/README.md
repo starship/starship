@@ -18,29 +18,29 @@ Il supporto al completamento è fornito dalla vostra scelta di shell. Nel caso d
 
 Sì, entrambi possono essere utilizzati per disabilitare i moduli nel prompt. Se tutto quello che pensi di fare è disabilitare i moduli, `<module>.disabled` è il modo preferito per per queste ragioni:
 
-- Disabling modules is more explicit than omitting them from the top level `format`
-- Newly created modules will be added to the prompt as Starship is updated
+- Disabilitare i moduli è più esplicito che ometterli dal primo `formato` di livello
+- I nuovi moduli creati saranno aggiunti al prompt come Starship viene aggiornato
 
-## The docs say Starship is cross-shell, but it doesn't support X shell. Why?
+## La documentazione riposta che Starship è cross-shell, ma non supporta X shell. Perché?
 
-The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
+Il modo in cui Starship è costruito, dovrebbe rendere possibile aggiungere il supporto per qualsiasi shell. Il binario di Starship è apolide e indipendente dalla shell, fino a quando la tua shell supporterà prompt personalizzati, Starship può essere utilizzato.
 
-Here's a small example getting Starship working with bash:
+Ecco un piccolo esempio per avere Starship lavorando con bash:
 
 ```sh
-# Get the status code from the last command executed
+# Ottenere lo status code dall'ultimo comando eseguito
 STATUS=$?
 
-# Get the number of jobs running.
+# Ottieni il numero di processi in esecuzione.
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Set the prompt to the output of `starship prompt`
+# Imposta il prompt come output di `starship prompt`
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#Command-Duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
+L'implementazione [Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) integrata in Starship è leggermente più complessa per consentire funzionalità avanzate come il [modulo di durata dei comandi](https://starship.rs/config/#Command-Duration) e per garantire che Starship sia compatibile con le configurazioni Bash preinstallate.
 
-For a list of all flags accepted by `starship prompt`, use the following command:
+Per un elenco di tutti i flag accettati da `starship prompt`, utilizzare il seguente comando:
 
 ```sh
 starship prompt --help
