@@ -141,7 +141,7 @@
 ### Getting Started
 
 **Note**: due to the proliferation of different platforms, only a subset of supported platforms are
-shown below. Can't see yours? Have a look at the [extra platform instructions](../docs/INSTALL.md).
+shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
 
 1. Install the **starship** binary:
 
