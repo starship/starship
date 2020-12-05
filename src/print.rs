@@ -197,7 +197,7 @@ pub fn explain(args: ArgMatches) {
                 }
                 if escaping {
                     print!("{}", g);
-                    escaping = !("a" <= g && "z" >= g || "A" <= g && "Z" >= g);
+                    escaping = !(("a"..="z").contains(&g) || ("A"..="Z").contains(&g));
                     continue;
                 }
 

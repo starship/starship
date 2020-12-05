@@ -1,6 +1,7 @@
 use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module, RootModuleConfig};
+use git2::Repository;
 
 use crate::configs::git_branch::GitBranchConfig;
 use crate::formatter::StringFormatter;
@@ -25,16 +26,38 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let repo = context.get_repo().ok()?;
+
+    let repo_root = repo.root.as_ref()?;
+    let git_repo = Repository::open(repo_root).ok()?;
+    let is_detached = git_repo.head_detached().ok()?;
+    if config.only_attached && is_detached {
+        return None;
+    };
+
     let branch_name = repo.branch.as_ref()?;
-
     let mut graphemes: Vec<&str> = branch_name.graphemes(true).collect();
-    let trunc_len = len.min(graphemes.len());
 
+    let mut remote_graphemes: Vec<&str> = Vec::new();
+    if let Some(remote_branch) = repo.remote.as_ref() {
+        remote_graphemes = remote_branch.graphemes(true).collect();
+    }
+
+    let trunc_len = len.min(graphemes.len());
     if trunc_len < graphemes.len() {
         // The truncation symbol should only be added if we truncate
         graphemes[trunc_len] = truncation_symbol;
         graphemes.truncate(trunc_len + 1)
     }
+
+    let trunc_len = len.min(remote_graphemes.len());
+    if trunc_len < remote_graphemes.len() {
+        // The truncation symbol should only be added if we truncate
+        remote_graphemes[trunc_len] = truncation_symbol;
+        remote_graphemes.truncate(trunc_len + 1);
+    }
+
+    let show_remote = config.always_show_remote
+        || (!graphemes.eq(&remote_graphemes) && !remote_graphemes.is_empty());
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -48,6 +71,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "branch" => Some(Ok(graphemes.concat())),
+                "remote" => {
+                    if show_remote {
+                        Some(Ok(remote_graphemes.concat()))
+                    } else {
+                        None
+                    }
+                }
                 _ => None,
             })
             .parse(None)
@@ -241,6 +271,57 @@ mod tests {
             "on {} ",
             Color::Purple.bold().paint(format!("\u{e0a0} {}", "main")),
         ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn test_render_branch_only_attached_on_branch() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        Command::new("git")
+            .args(&["checkout", "-b", "test_branch"])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        let actual = ModuleRenderer::new("git_branch")
+            .config(toml::toml! {
+                [git_branch]
+                    only_attached = true
+            })
+            .path(&repo_dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "on {} ",
+            Color::Purple
+                .bold()
+                .paint(format!("\u{e0a0} {}", "test_branch")),
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn test_render_branch_only_attached_on_detached() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+
+        Command::new("git")
+            .args(&["checkout", "@~1"])
+            .current_dir(&repo_dir.path())
+            .output()?;
+
+        let actual = ModuleRenderer::new("git_branch")
+            .config(toml::toml! {
+                [git_branch]
+                    only_attached = true
+            })
+            .path(&repo_dir.path())
+            .collect();
+
+        let expected = None;
 
         assert_eq!(expected, actual);
         repo_dir.close()

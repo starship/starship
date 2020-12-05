@@ -31,7 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     //rustc doesn't let you do an "if" and an "if let" in the same if statement
     // if this changes in the future this can become a lot cleaner
-    let host = if config.trim_at != "" {
+    let host = if !config.trim_at.is_empty() {
         if let Some(index) = host.find(config.trim_at) {
             host.split_at(index).0
         } else {

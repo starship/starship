@@ -57,9 +57,9 @@ starship_precmd_user_func="set_win_title"
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+Если вам нравится результат, добавьте эти строки в конфигурационный файл оболочки (`~/.bashrc` или `~/.zsrhc`), чтобы оставить это навсегда.
 
-For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+Например, если вы хотите отобразить ваш текущий каталог в заголовке вкладки терминала, добавьте следующие строки в `~/. bashrc` или `~/.zshrc`:
 
 ```bash
 function set_win_title(){
@@ -86,7 +86,7 @@ starship_precmd_user_func="set_win_title"
 
 Цветовой спецификатор может быть одним из следующих:
 
- - Один из стандартных цветов терминалов: `black`, `red`, `green`, `blue`, `gellow`, `purple`, `cyan`, `white`. Вы можете по желанию добавить префикс `bright-`, чтобы получить яркую версию (например, `bright-white`).
+ - Некоторые из стандартных цветов терминалов: `black`, `red`, `green`, `blue`, `gellow`, `purple`, `cyan`, `white`. Вы можете по желанию добавить префикс `bright-`, чтобы получить яркую версию (например, `bright-white`).
  - `#`, за которой следует шестизначное шестнадцатеричное число. Это определяет [шестнадцатеричный код цвета RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
  - Число от 0 до 255. Это определяет [8-битный код цвета ANSI](https://i.stack.imgur.com/KTSQa.png).
 

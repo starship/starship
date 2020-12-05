@@ -101,15 +101,15 @@
   align="right" />
 
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**轻量级、反应迅速，可定制的高颜值终端！**
 
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **快：** 很快 —— 真的真的非常快！ 🚀
+- **定制化：** 可定制各种各样的提示符。
+- **通用：** 适用于任何 Shell、任何操作系统。
+- **智能：** 一目了然地显示相关信息。
+- **功能丰富：** 支持所有你喜欢的工具。
+- **易用：** 安装快速 —— 几分钟就可上手。
 
 <p align="center">
 <a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
@@ -121,7 +121,7 @@
 
 ### 前置要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- 安装一个 [Nerd Font](https://www.nerdfonts.com/) 的字体，并在终端启用（例如，可以尝试使用 [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads) 字体）。
 
 ### 开始安装
 
@@ -199,7 +199,7 @@
 
    #### PowerShell
 
-   将以下内容添加到`~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (或`~/.config/powershell/Microsoft.PowerShell_profile.ps1`，对于 *nix 系统)：
+    将以下内容添加到 `Microsoft.PowerShell_profile.ps1`。 你可以在 PowerShell 通过 `$PROFILE` 变量来查询文件的位置。 对于 -Nix 来说，通常文件路径是 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 或 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -218,26 +218,26 @@
 
 ## 🤝 贡献
 
-我们一直在寻找贡献者！你都可以参与贡献 ** 不论你的技能如何 **。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
+我们一直在寻找贡献者！你都可以参与贡献 **不论你的技能如何**。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
 
 如果您有兴趣贡献于 Starship，请查看我们的[贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 另外，你可以自由加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 。 👋
 
-### Code Contributors
+### 代码贡献者
 
-This project exists thanks to all the people who contribute. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
+这个项目的存在要感谢所有贡献者。 [[贡献说明](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)]
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
-### Financial Contributors
+### 项目资助者
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+成为项目资助者，并帮助我们维持我们的社区。 [[成为项目资助者](https://opencollective.com/starship/contribute)]
 
-#### Individuals
+#### 资助人
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
-#### Organizations
+#### 资助组织
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+与您的组织一起支持该项目。 您的组织的徽标将显示在此处，并带有指向您的组织的网站的链接。 [[成为项目资助者](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>

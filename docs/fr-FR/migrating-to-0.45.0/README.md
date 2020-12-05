@@ -125,7 +125,7 @@ error_symbol = "[✖](bold red)"
 ++ format = "took [$duration]($style) "
 ```
 
-#### Directory
+#### Dossier
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |

@@ -1,5 +1,4 @@
 use byte_unit::{Byte, ByteUnit};
-use sysinfo::{RefreshKind, SystemExt};
 
 use super::{Context, Module, RootModuleConfig, Shell};
 
@@ -39,9 +38,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let system = sysinfo::System::new_with_specifics(RefreshKind::new().with_memory());
-    let used_memory_kib = system.get_used_memory();
-    let total_memory_kib = system.get_total_memory();
+    let system = match sys_info::mem_info() {
+        Ok(info) => info,
+        Err(err) => {
+            log::warn!("Unable to access memory usage information:\n{}", err);
+            return None;
+        }
+    };
+
+    // avail includes reclaimable memory, but isn't supported on all platforms
+    let avail_memory_kib = match system.avail {
+        0 => system.free,
+        _ => system.avail,
+    };
+    let used_memory_kib = system.total - avail_memory_kib;
+    let total_memory_kib = system.total;
     let ram_used = (used_memory_kib as f64 / total_memory_kib as f64) * 100.;
     let ram_pct = format_pct(ram_used, pct_sign);
 
@@ -51,8 +62,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let ram = format_usage_total(used_memory_kib, total_memory_kib);
-    let total_swap_kib = system.get_total_swap();
-    let used_swap_kib = system.get_used_swap();
+    let total_swap_kib = system.swap_total;
+    let used_swap_kib = system.swap_total - system.swap_free;
     let percent_swap_used = (used_swap_kib as f64 / total_swap_kib as f64) * 100.;
     let swap_pct = format_pct(percent_swap_used, pct_sign);
     let swap = format_usage_total(used_swap_kib, total_swap_kib);

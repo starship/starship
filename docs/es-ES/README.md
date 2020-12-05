@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: '¡El prompt minimalista, increíblemente rápido, e infinitamente personalizable para cualquier shell!'
+tagline: '¡El prompt minimalista, ultrarápido e infinitamente personalizable para cualquier intérprete de comandos!'
 actionText: Comenzar →
 actionLink: ./guide/
 features:
@@ -30,7 +30,7 @@ description: Starship es el símbolo de sistema minimalista, ultrarápido e infi
 
 ### Instalación rápida
 
-1. Instalar el binario de **starship**:
+1. Instalar el binario de **Starship**:
 
 
    #### Instalar la última versión
@@ -94,11 +94,9 @@ description: Starship es el símbolo de sistema minimalista, ultrarápido e infi
 
    #### Powershell
 
-   Añade el siguiente código al final de `~\Documentos\PowerShell\Microsoft.PowerShell_profile.ps1` (o `~/.config/powershell/Microsoft.PowerShell_profile.ps1` en sistemas *nix):
+   Añade lo siguiente al final de `Microsoft.PowerShell_profile.ps1`. Puedes comprobar la ubicación de este archivo consultando la variable `$PROFILE` en PowerShell. Normalmente la ruta es `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` o `~/.config/powershell/Microsoft.PowerShell_profile.ps1` en -Nix.
 
    ```sh
-   # ~\Documentos\PowerShell\Profile.ps1
-
    Invoke-Expression (&starship init powershell)
    ```
 
