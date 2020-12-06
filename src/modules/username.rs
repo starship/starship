@@ -149,6 +149,18 @@ mod tests {
     }
 
     #[test]
+    fn ssh_connection_client() -> io::Result<()> {
+        let actual = ModuleRenderer::new("username")
+            .env("USER", "astronaut")
+            .env("SSH_CLIENT", "192.168.0.101 39323 22")
+            .collect();
+        let expected = Some(format!("{} in ", Color::Yellow.bold().paint("astronaut")));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
     fn show_always() -> io::Result<()> {
         let actual = ModuleRenderer::new("username")
             .env("USER", "astronaut")
