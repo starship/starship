@@ -2285,6 +2285,8 @@ The `username` module shows active user's username. 此组件将在符合以下�
 - 用户正通过 SSH 会话连接访问
 - 字段 `show_always` 被设置为 true
 
+::: tip SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value. :::
+
 ### 配置项
 
 | Option        | 默认值                     | 描述                  |
