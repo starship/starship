@@ -519,7 +519,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | `truncation_length` | `1`                                | 環境が`conda create -p [path]`で作成された場合、環境パスが切り捨てられるディレクトリ数。 `0`は切り捨てがないことを意味します。  [`directory`](#directory)もご覧ください。 |
 | `symbol`            | `"🅒 "`                             | 環境名の直前に使用されるシンボルです。                                                                                              |
 | `style`             | `"bold green"`                     | モジュールのスタイルです。                                                                                                    |
-| `format`            | `"[$symbol$environment]($style) "` | moduleのフォーマットです。                                                                                                 |
+| `format`            | `"via [$symbol$environment]($style) "` | moduleのフォーマットです。                                                                                                 |
 | `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                                       |
 | `disabled`          | `false`                            | `conda`モジュールを無効にします。                                                                                             |
 
