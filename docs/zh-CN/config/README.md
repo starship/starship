@@ -518,7 +518,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | `truncation_length` | `1`                                | 如果这个 conda 环境是通过 `conda create -p [path]` 创建的，环境路径的目录深度应该被截断到此数量。 `0` 表示不用截断。 另请参阅 [`directory`](#directory) 组件。 |
 | `symbol`            | `"🅒 "`                             | 在环境名之前显示的符号。                                                                                                     |
 | `style`             | `"bold green"`                     | 此组件的样式。                                                                                                          |
-| `format`            | `"via [$symbol$environment]($style) "` | 组件格式化模板。                                                                                                         |
+| `format`            | `"[$symbol$environment]($style) "` | 组件格式化模板。                                                                                                         |
 | `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                                       |
 | `disabled`          | `false`                            | 禁用 `conda` 组件。                                                                                                   |
 

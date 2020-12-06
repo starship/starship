@@ -518,7 +518,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | `truncation_length` | `1`                                | 如果環境變數由所`conda create -p [path]`產生時，環境變數的資料夾需要截斷的數目。 `0` 表示不截斷 也請參考 [`directory`](#directory)模組 |
 | `symbol`            | `"🅒 "`                             | 環境名稱前使用的符號。                                                                                     |
 | `style`             | `"bold green"`                     | 這個模組的風格。                                                                                        |
-| `format`            | `"via [$symbol$environment]($style) "` | The format for the module.                                                                      |
+| `format`            | `"[$symbol$environment]($style) "` | The format for the module.                                                                      |
 | `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                      |
 | `disabled`          | `false`                            | 停用 `conda` 模組。                                                                                  |
 
