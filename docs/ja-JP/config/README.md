@@ -2286,6 +2286,8 @@ The `username` module shows active user's username. 次の条件のいずれか�
 - ユーザーがSSHセッションとして接続されている
 - `show_always`変数がtrueに設定されている
 
+::: tip SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value. :::
+
 ### オプション
 
 | オプション         | デフォルト                   | 説明                        |
