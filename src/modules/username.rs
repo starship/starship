@@ -13,7 +13,6 @@ use crate::utils;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let user = context.get_env("USER");
     let logname = context.get_env("LOGNAME");
-    let ssh_connection = context.get_env("SSH_CONNECTION");
 
     const ROOT_UID: Option<u32> = Some(0);
     let user_uid = get_uid();
@@ -21,7 +20,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("username");
     let config: UsernameConfig = UsernameConfig::try_load(module.config);
 
-    if user != logname || ssh_connection.is_some() || user_uid == ROOT_UID || config.show_always {
+    if user != logname || is_ssh_connection(&context) || user_uid == ROOT_UID || config.show_always
+    {
         let username = user?;
         let parsed = StringFormatter::new(config.format).and_then(|formatter| {
             formatter
@@ -53,6 +53,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else {
         None
     }
+}
+
+fn is_ssh_connection(context: &Context) -> bool {
+    let ssh_env: Vec<&str> = vec!["SSH_CONNECTION", "SSH_CLIENT", "SSH_TTY"];
+    ssh_env
+        .into_iter()
+        .any(|env| context.get_env(env).is_some())
 }
 
 fn get_uid() -> Option<u32> {
@@ -122,6 +129,30 @@ mod tests {
         let actual = ModuleRenderer::new("username")
             .env("USER", "astronaut")
             .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
+            .collect();
+        let expected = Some(format!("{} in ", Color::Yellow.bold().paint("astronaut")));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn ssh_connection_tty() -> io::Result<()> {
+        let actual = ModuleRenderer::new("username")
+            .env("USER", "astronaut")
+            .env("SSH_TTY", "/dev/pts/0")
+            .collect();
+        let expected = Some(format!("{} in ", Color::Yellow.bold().paint("astronaut")));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn ssh_connection_client() -> io::Result<()> {
+        let actual = ModuleRenderer::new("username")
+            .env("USER", "astronaut")
+            .env("SSH_CLIENT", "192.168.0.101 39323 22")
             .collect();
         let expected = Some(format!("{} in ", Color::Yellow.bold().paint("astronaut")));
 
