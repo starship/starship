@@ -2285,6 +2285,8 @@ The `username` module shows active user's username. Das Modul wird gezeigt, wenn
 - Der Benutzer ist aktuell via SSH verbunden
 - Die Variable `show_always` ist auf true gesetzt
 
+::: tip SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value. :::
+
 ### Optionen
 
 | Option        | Standardwert            | Beschreibung                                   |
