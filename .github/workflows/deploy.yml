@@ -42,6 +42,7 @@ jobs:
         target:
           - x86_64-unknown-linux-gnu
           - x86_64-unknown-linux-musl
+          - i686-unknown-linux-musl
           - x86_64-apple-darwin
           - x86_64-pc-windows-msvc
         include:
@@ -51,6 +52,9 @@ jobs:
           - target: x86_64-unknown-linux-musl
             os: ubuntu-latest
             name: starship-x86_64-unknown-linux-musl.tar.gz
+          - target: i686-unknown-linux-musl
+            os: ubuntu-latest
+            name: starship-i686-unknown-linux-musl.tar.gz
           - target: x86_64-apple-darwin
             os: macOS-latest
             name: starship-x86_64-apple-darwin.tar.gz
@@ -80,16 +84,24 @@ jobs:
           target: ${{ matrix.target }}
 
       - name: Setup | musl tools
-        if: matrix.target == 'x86_64-unknown-linux-musl'
+        if: contains(matrix.target, 'musl')
         run: sudo apt install -y musl-tools
 
       - name: Build | Build
-        if: matrix.target != 'x86_64-unknown-linux-musl'
-        run: cargo build --release --target ${{ matrix.target }}
+        if: "! contains(matrix.target, 'musl')"
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --target ${{ matrix.target }}
+          use-cross: true
 
-      - name: Build | Build (musl)
-        if: matrix.target == 'x86_64-unknown-linux-musl'
-        run: cargo build --release --features tls-vendored --target ${{ matrix.target }}
+      - name: Build | Build [musl]
+        if: contains(matrix.target, 'musl')
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --features tls-vendored --target ${{ matrix.target }}
+          use-cross: true
 
       - name: Post Setup | Prepare artifacts [Windows]
         if: matrix.os == 'windows-latest'
