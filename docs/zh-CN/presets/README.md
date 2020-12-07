@@ -29,6 +29,9 @@ symbol = " "
 [dart]
 symbol = " "
 
+[directory]
+read_only = " "
+
 [docker]
 symbol = " "
 
