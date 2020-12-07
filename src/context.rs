@@ -396,9 +396,10 @@ fn get_remote_repository_info(repository: &Repository) -> Option<Remote> {
                 Err(_) => return None,
             };
 
-            let v = &mut remote_ref.rsplit('/').collect::<Vec<&str>>().into_iter();
-            let remote_branch = v.next()?.to_owned();
-            let remote_name = v.next()?.to_owned();
+            let mut v = remote_ref.splitn(4, "/");
+            let remote_name = v.nth(2)?.to_owned();
+            let remote_branch = v.last()?.to_owned();
+
             return Some(Remote {
                 branch: Some(remote_branch),
                 name: Some(remote_name),
