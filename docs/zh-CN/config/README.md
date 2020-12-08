@@ -984,12 +984,13 @@ asia-northeast1 = "an1"
 
 ### Variables
 
-| 字段        | 示例       | 描述                                                                                                   |
-| --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| branch    | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
-| remote    | `master` | The remote branch name.                                                                              |
-| symbol    |          | `symbol`对应值                                                                                          |
-| style\* |          | `style`对应值                                                                                           |
+| 字段            | 示例       | 描述                                                                                                   |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
+| remote_name   | `origin` | The remote name.                                                                                     |
+| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                     |
+| symbol        |          | `symbol`对应值                                                                                          |
+| style\*     |          | `style`对应值                                                                                           |
 
 \*: This variable can only be used as a part of a style string
 
