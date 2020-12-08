@@ -171,7 +171,9 @@ impl<'a> Context<'a> {
                     .as_ref()
                     .and_then(|repo| repo.workdir().map(Path::to_path_buf));
                 let state = repository.as_ref().map(|repo| repo.state());
-                let remote = repository.as_ref().and_then(|repo| get_remote_branch(repo));
+                let remote = repository
+                    .as_ref()
+                    .and_then(|repo| get_remote_repository_info(repo));
                 Ok(Repo {
                     branch,
                     root,
@@ -312,8 +314,14 @@ pub struct Repo {
     /// State
     pub state: Option<RepositoryState>,
 
-    /// Remote branch name
-    pub remote: Option<String>,
+    /// Remote repository
+    pub remote: Option<Remote>,
+}
+
+/// Remote repository
+pub struct Remote {
+    pub branch: Option<String>,
+    pub name: Option<String>,
 }
 
 // A struct of Criteria which will be used to verify current PathBuf is
@@ -380,7 +388,7 @@ fn get_current_branch(repository: &Repository) -> Option<String> {
     shorthand.map(std::string::ToString::to_string)
 }
 
-fn get_remote_branch(repository: &Repository) -> Option<String> {
+fn get_remote_repository_info(repository: &Repository) -> Option<Remote> {
     if let Ok(head) = repository.head() {
         if let Some(local_branch_ref) = head.name() {
             let remote_ref = match repository.branch_upstream_name(local_branch_ref) {
@@ -388,8 +396,14 @@ fn get_remote_branch(repository: &Repository) -> Option<String> {
                 Err(_) => return None,
             };
 
-            let remote = remote_ref.split('/').last().map(|r| r.to_owned())?;
-            return Some(remote);
+            let mut v = remote_ref.splitn(4, '/');
+            let remote_name = v.nth(2)?.to_owned();
+            let remote_branch = v.last()?.to_owned();
+
+            return Some(Remote {
+                branch: Some(remote_branch),
+                name: Some(remote_name),
+            });
         }
     }
     None
