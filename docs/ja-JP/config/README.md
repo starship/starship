@@ -985,12 +985,13 @@ asia-northeast1 = "an1"
 
 ### 変数
 
-| 変数        | 設定例      | 説明                                                                                                   |
-| --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| branch    | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
-| remote    | `master` | The remote branch name.                                                                              |
-| symbol    |          | オプション `記号` の値をミラーする                                                                                  |
-| style\* |          | オプション `style` の値をミラーする                                                                               |
+| 変数            | 設定例      | 説明                                                                                                   |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
+| remote_name   | `origin` | The remote name.                                                                                     |
+| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                     |
+| symbol        |          | オプション `記号` の値をミラーする                                                                                  |
+| style\*     |          | オプション `style` の値をミラーする                                                                               |
 
 \*: この変数はスタイル文字列の一部としてのみ使用できます
 
