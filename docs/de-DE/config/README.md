@@ -984,12 +984,13 @@ Das `git_branch`-Modul zeigt den aktiven Git-Branch des Repositories im aktuelle
 
 ### Variables
 
-| Variable  | Beispiel | Beschreibung                                                                                         |
-| --------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| branch    | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
-| remote    | `master` | The remote branch name.                                                                              |
-| symbol    |          | Mirrors the value of option `symbol`                                                                 |
-| style\* |          | Mirrors the value of option `style`                                                                  |
+| Variable      | Beispiel | Beschreibung                                                                                         |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
+| remote_name   | `origin` | The remote name.                                                                                     |
+| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                     |
+| symbol        |          | Mirrors the value of option `symbol`                                                                 |
+| style\*     |          | Mirrors the value of option `style`                                                                  |
 
 \*: This variable can only be used as a part of a style string
 
