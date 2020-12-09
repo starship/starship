@@ -121,24 +121,24 @@
 
 ### Voraussetzungen
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Eine [Nerd Schriftart](https://www.nerdfonts.com/) installiert und im Terminal aktiviert (zum Beispiel [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Erste Schritte
 
-1. Installiere die Binärversion von **starship**:
+1. Installiere **starship**:
 
 
    #### Neueste Version installieren
 
 
-   ##### Neuster GitHub Release mit Shell:
+   ##### Neuster GitHub Release über die Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   ##### Von Quellcode auf [crates.io](https://crates.io/):
+   ##### Per Quellcode über [crates.io](https://crates.io/):
 
    ```sh
    cargo install starship
