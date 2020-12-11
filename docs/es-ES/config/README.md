@@ -731,13 +731,13 @@ El módulo también mostrará el Target Framework Moniker ([https://docs.microso
 
 ### Opciones
 
-| Opción      | Por defecto                              | Descripción                                                               |
-| ----------- | ---------------------------------------- | ------------------------------------------------------------------------- |
-| `format`    | `"v[$symbol$version( 🎯 $tfm)]($style) "` | El formato del módulo.                                                    |
-| `symbol`    | `"•NET "`                                | El símbolo usado antes de mostrar la version de dotnet.                   |
-| `heuristic` | `true`                                   | Usa una detección de versiones más rápida para mantener a starship veloz. |
-| `style`     | `"bold blue"`                            | El estilo del módulo.                                                     |
-| `disabled`  | `false`                                  | Desactiva el módulo `dotnet`.                                             |
+| Opción      | Por defecto                             | Descripción                                                               |
+| ----------- | --------------------------------------- | ------------------------------------------------------------------------- |
+| `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "` | El formato del módulo.                                                    |
+| `symbol`    | `"•NET "`                               | El símbolo usado antes de mostrar la version de dotnet.                   |
+| `heuristic` | `true`                                  | Usa una detección de versiones más rápida para mantener a starship veloz. |
+| `style`     | `"bold blue"`                           | El estilo del módulo.                                                     |
+| `disabled`  | `false`                                 | Desactiva el módulo `dotnet`.                                             |
 
 ### Variables
 
