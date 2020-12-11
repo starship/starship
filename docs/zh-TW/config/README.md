@@ -730,13 +730,13 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### 選項
 
-| Option      | 預設                                       | 說明                           |
-| ----------- | ---------------------------------------- | ---------------------------- |
-| `format`    | `"v[$symbol$version( 🎯 $tfm)]($style) "` | The format for the module.   |
-| `symbol`    | `"•NET "`                                | 在顯示 dotnet 版本之前用的符號。         |
-| `heuristic` | `true`                                   | 使用更快速的版本偵測法來保持 starship 的速度。 |
-| `style`     | `"bold blue"`                            | 這個模組的風格。                     |
-| `disabled`  | `false`                                  | 停用 `dotnet` 模組。              |
+| Option      | 預設                                      | 說明                           |
+| ----------- | --------------------------------------- | ---------------------------- |
+| `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "` | The format for the module.   |
+| `symbol`    | `"•NET "`                               | 在顯示 dotnet 版本之前用的符號。         |
+| `heuristic` | `true`                                  | 使用更快速的版本偵測法來保持 starship 的速度。 |
+| `style`     | `"bold blue"`                           | 這個模組的風格。                     |
+| `disabled`  | `false`                                 | 停用 `dotnet` 模組。              |
 
 ### Variables
 
