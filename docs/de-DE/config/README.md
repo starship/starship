@@ -730,13 +730,13 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Optionen
 
-| Option      | Standardwert                             | Beschreibung                                                       |
-| ----------- | ---------------------------------------- | ------------------------------------------------------------------ |
-| `format`    | `"v[$symbol$version( 🎯 $tfm)]($style) "` | The format for the module.                                         |
-| `symbol`    | `"•NET "`                                | Symbol das vor der dotnet-Version angezeigt wird.                  |
-| `heuristic` | `true`                                   | Schnelle Versionserkennung nutzen um Starship bedienbar zu halten. |
-| `style`     | `"bold blue"`                            | Stil für dieses Modul.                                             |
-| `disabled`  | `false`                                  | Deaktiviert das `dotnet`-Modul.                                    |
+| Option      | Standardwert                            | Beschreibung                                                       |
+| ----------- | --------------------------------------- | ------------------------------------------------------------------ |
+| `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "` | The format for the module.                                         |
+| `symbol`    | `"•NET "`                               | Symbol das vor der dotnet-Version angezeigt wird.                  |
+| `heuristic` | `true`                                  | Schnelle Versionserkennung nutzen um Starship bedienbar zu halten. |
+| `style`     | `"bold blue"`                           | Stil für dieses Modul.                                             |
+| `disabled`  | `false`                                 | Deaktiviert das `dotnet`-Modul.                                    |
 
 ### Variables
 
