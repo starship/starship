@@ -3,6 +3,8 @@ use super::{Context, Module};
 use crate::config::RootModuleConfig;
 use crate::configs::shlvl::ShLvlConfig;
 use crate::formatter::StringFormatter;
+use std::borrow::Cow;
+use std::convert::TryInto;
 
 const SHLVL_ENV_VAR: &str = "SHLVL";
 
@@ -20,10 +22,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let shlvl_str = &shlvl.to_string();
 
+    let symbol = if config.repeat {
+        Cow::Owned(config.symbol.repeat(shlvl.try_into().unwrap_or(usize::MAX)))
+    } else {
+        Cow::Borrowed(config.symbol)
+    };
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
-                "symbol" => Some(config.symbol),
+                "symbol" => Some(symbol.as_ref()),
                 _ => None,
             })
             .map_style(|variable| match variable {
@@ -195,6 +203,24 @@ mod tests {
             .env(SHLVL_ENV_VAR, "2")
             .collect();
         let expected = Some(format!("↕️   going down {} GOING UP ", style().paint("2")));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn repeat() -> io::Result<()> {
+        let actual = ModuleRenderer::new("shlvl")
+            .config(toml::toml! {
+                [shlvl]
+                format = "[$symbol>]($style) "
+                symbol = "~"
+                repeat = true
+                disabled = false
+            })
+            .env(SHLVL_ENV_VAR, "3")
+            .collect();
+        let expected = Some(format!("{} ", style().paint("~~~>")));
 
         assert_eq!(expected, actual);
         Ok(())
