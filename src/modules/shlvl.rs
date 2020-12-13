@@ -22,8 +22,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let shlvl_str = &shlvl.to_string();
 
-    let symbol = if config.repeat {
-        Cow::Owned(config.symbol.repeat(shlvl.try_into().unwrap_or(usize::MAX)))
+    let repeat_count = if config.repeat {
+        shlvl.try_into().unwrap_or(1)
+    } else {
+        1
+    };
+    let symbol = if repeat_count != 1 {
+        Cow::Owned(config.symbol.repeat(repeat_count))
     } else {
         Cow::Borrowed(config.symbol)
     };
