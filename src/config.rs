@@ -5,6 +5,7 @@ use indexmap::IndexMap;
 
 use std::clone::Clone;
 use std::collections::HashMap;
+use std::io::ErrorKind;
 use std::marker::Sized;
 
 use std::env;
@@ -236,7 +237,13 @@ impl StarshipConfig {
                 Some(content)
             }
             Err(e) => {
-                log::debug!("Unable to read config file content: {}", &e);
+                let level = if e.kind() == ErrorKind::NotFound {
+                    log::Level::Debug
+                } else {
+                    log::Level::Error
+                };
+
+                log::log!(level, "Unable to read config file content: {}", &e);
                 None
             }
         }?;
