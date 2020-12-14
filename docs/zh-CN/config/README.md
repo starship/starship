@@ -2047,13 +2047,14 @@ The `shlvl` module shows the current SHLVL ("shell level") environment variable,
 
 ### 配置项
 
-| Option      | 默认值                          | 描述                                      |
-| ----------- | ---------------------------- | --------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                      |
-| `format`    | `"[$symbol$shlvl]($style) "` | 组件格式化模板。                                |
-| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL. |
-| `style`     | `"bold yellow"`              | 此组件的样式。                                 |
-| `disabled`  | `true`                       | Disables the `shlvl` module.            |
+| Option      | 默认值                          | 描述                                                          |
+| ----------- | ---------------------------- | ----------------------------------------------------------- |
+| `threshold` | `2`                          | Display threshold.                                          |
+| `format`    | `"[$symbol$shlvl]($style) "` | 组件格式化模板。                                                    |
+| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL.                     |
+| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current SHLVL amount. |
+| `style`     | `"bold yellow"`              | 此组件的样式。                                                     |
+| `disabled`  | `true`                       | Disables the `shlvl` module.                                |
 
 ### Variables
 
