@@ -2048,13 +2048,14 @@ El módulo `shlvl` muestra la variable de entorno actual SHLVL ("nivel de shell"
 
 ### Opciones
 
-| Opción      | Por defecto                  | Descripción                                 |
-| ----------- | ---------------------------- | ------------------------------------------- |
-| `threshold` | `2`                          | Mostrar umbral.                             |
-| `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                      |
-| `symbol`    | `"↕️ "`                      | El símbolo usado para representar el SHLVL. |
-| `style`     | `"bold yellow"`              | El estilo del módulo.                       |
-| `disabled`  | `true`                       | Desactiva el módulo `shlvl`.                |
+| Opción      | Por defecto                  | Descripción                                                 |
+| ----------- | ---------------------------- | ----------------------------------------------------------- |
+| `threshold` | `2`                          | Mostrar umbral.                                             |
+| `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                      |
+| `symbol`    | `"↕️ "`                      | El símbolo usado para representar el SHLVL.                 |
+| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current SHLVL amount. |
+| `style`     | `"bold yellow"`              | El estilo del módulo.                                       |
+| `disabled`  | `true`                       | Disables the `shlvl` module.                                |
 
 ### Variables
 
