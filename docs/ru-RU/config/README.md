@@ -2047,13 +2047,14 @@ The `shlvl` module shows the current SHLVL ("shell level") environment variable,
 
 ### Опции
 
-| Параметр    | По умолчанию                 | Описание                                |
-| ----------- | ---------------------------- | --------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                      |
-| `format`    | `"[$symbol$shlvl]($style) "` | Формат модуля.                          |
-| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL. |
-| `style`     | `"bold yellow"`              | Стиль модуля.                           |
-| `disabled`  | `true`                       | Disables the `shlvl` module.            |
+| Параметр    | По умолчанию                 | Описание                                                    |
+| ----------- | ---------------------------- | ----------------------------------------------------------- |
+| `threshold` | `2`                          | Display threshold.                                          |
+| `format`    | `"[$symbol$shlvl]($style) "` | Формат модуля.                                              |
+| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL.                     |
+| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current SHLVL amount. |
+| `style`     | `"bold yellow"`              | Стиль модуля.                                               |
+| `disabled`  | `true`                       | Disables the `shlvl` module.                                |
 
 ### Переменные
 
