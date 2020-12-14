@@ -12,7 +12,7 @@
 
 ## Come posso ottenere il completamento dei comandi come mostrato nella GIF demo?
 
-Il supporto al completamento è fornito dalla vostra scelta di shell. Nel caso della demo, la demo è stata fatta con [Fish Shell](https://fishshell.com/), che fornisce i completamenti per impostazione predefinita. Se usi Z Shell (zsh), ti suggerirei di dare un'occhiata a [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+Completion support, or autocomplete, is provided by your shell of choice. Nel caso della demo, la demo è stata fatta con [Fish Shell](https://fishshell.com/), che fornisce i completamenti per impostazione predefinita. Se usi Z Shell (zsh), ti suggerirei di dare un'occhiata a [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
 ## Il formato di primo livello `` e `<module>.disabled` fanno la stessa cosa?
 
@@ -21,7 +21,7 @@ Sì, entrambi possono essere utilizzati per disabilitare i moduli nel prompt. Se
 - Disabilitare i moduli è più esplicito che ometterli dal primo `formato` di livello
 - I nuovi moduli creati saranno aggiunti al prompt come Starship viene aggiornato
 
-## La documentazione riposta che Starship è cross-shell, ma non supporta X shell. Perché?
+## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
 
 Il modo in cui Starship è costruito, dovrebbe rendere possibile aggiungere il supporto per qualsiasi shell. Il binario di Starship è apolide e indipendente dalla shell, fino a quando la tua shell supporterà prompt personalizzati, Starship può essere utilizzato.
 
