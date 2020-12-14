@@ -2048,13 +2048,14 @@ The `shlvl` module shows the current SHLVL ("shell level") environment variable,
 
 ### オプション
 
-| オプション       | デフォルト                        | 説明                                      |
-| ----------- | ---------------------------- | --------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                      |
-| `format`    | `"[$symbol$shlvl]($style) "` | moduleのフォーマットです。                        |
-| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL. |
-| `style`     | `"bold yellow"`              | モジュールのスタイルです。                           |
-| `disabled`  | `true`                       | Disables the `shlvl` module.            |
+| オプション       | デフォルト                        | 説明                                                          |
+| ----------- | ---------------------------- | ----------------------------------------------------------- |
+| `threshold` | `2`                          | Display threshold.                                          |
+| `format`    | `"[$symbol$shlvl]($style) "` | moduleのフォーマットです。                                            |
+| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL.                     |
+| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current SHLVL amount. |
+| `style`     | `"bold yellow"`              | モジュールのスタイルです。                                               |
+| `disabled`  | `true`                       | Disables the `shlvl` module.                                |
 
 ### 変数
 
