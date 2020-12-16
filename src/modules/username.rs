@@ -56,10 +56,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn is_ssh_connection(context: &Context) -> bool {
-    let ssh_env: Vec<&str> = vec!["SSH_CONNECTION", "SSH_CLIENT", "SSH_TTY"];
-    ssh_env
-        .into_iter()
-        .any(|env| context.get_env(env).is_some())
+    let ssh_env = ["SSH_CONNECTION", "SSH_CLIENT", "SSH_TTY"];
+    ssh_env.iter().any(|env| context.get_env(env).is_some())
 }
 
 fn get_uid() -> Option<u32> {

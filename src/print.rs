@@ -147,11 +147,11 @@ pub fn explain(args: ArgMatches) {
         duration: String,
     }
 
-    let dont_print = vec!["line_break"];
+    static DONT_PRINT: &[&str] = &["line_break"];
 
     let modules = compute_modules(&context)
         .into_iter()
-        .filter(|module| !dont_print.contains(&module.get_name().as_str()))
+        .filter(|module| !DONT_PRINT.contains(&module.get_name().as_str()))
         // this contains empty modules which should not print
         .filter(|module| !module.is_empty())
         .map(|module| {
