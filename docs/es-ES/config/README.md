@@ -52,7 +52,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 **Módulo**: un componente en el promt que provee información basada en información contextual de tu sistema operativo. Por ejemplo, el módulo "nodejs" muestra la versión de NodeJS que tienes actualmente instalada en tu ordenador, si el directorio actual es un proyecto NodeJS.
 
-**Variable**: subcomponentes más pequeños que contienen información proporcionada por el módulo. Por ejemplo, la variable "version" en el módulo "nodejs" contiene la versión actual de NodeJS.
+**Variable**: Smaller sub-components that contain information provided by the module. Por ejemplo, la variable "version" en el módulo "nodejs" contiene la versión actual de NodeJS.
 
 Por convención, la mayoría de los módulos tienen un prefijo del color predeterminado de la terminal (por ejemplo, `vía` en "nodejs") y un espacio vacío como sufijo.
 
