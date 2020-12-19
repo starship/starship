@@ -162,6 +162,16 @@ fn extract_maven_version(file_contents: &str) -> Option<String> {
     None
 }
 
+fn extract_meson_version(file_contents: &str) -> Option<String> {
+    let file_contents = file_contents.split_ascii_whitespace().collect::<String>();
+
+    let re = Regex::new(r#"project\([^())]*version:'(?P<version>[^']+)'[^())]*\)"#).unwrap();
+    let caps = re.captures(&file_contents)?;
+
+    let formatted_version = format_version(&caps["version"]);
+    Some(formatted_version)
+}
+
 fn get_package_version(base_dir: &PathBuf, config: &PackageConfig) -> Option<String> {
     if let Ok(cargo_toml) = utils::read_file(base_dir.join("Cargo.toml")) {
         extract_cargo_version(&cargo_toml)
@@ -181,6 +191,8 @@ fn get_package_version(base_dir: &PathBuf, config: &PackageConfig) -> Option<Str
         extract_helm_package_version(&chart_file)
     } else if let Ok(pom_file) = utils::read_file(base_dir.join("pom.xml")) {
         extract_maven_version(&pom_file)
+    } else if let Ok(meson_build) = utils::read_file(base_dir.join("meson.build")) {
+        extract_meson_version(&meson_build)
     } else {
         None
     }
@@ -718,6 +730,28 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, "pom.xml", Some(&pom))?;
+        expect_output(&project_dir, None, None)?;
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_meson_version() -> io::Result<()> {
+        let config_name = "meson.build";
+        let config_content = "project('starship', 'rust', version: '0.1.0')".to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_meson_version_without_version() -> io::Result<()> {
+        let config_name = "meson.build";
+        let config_content = "project('starship', 'rust')".to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, None, None)?;
         project_dir.close()
     }
