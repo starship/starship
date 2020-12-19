@@ -78,18 +78,41 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::from("")
     };
 
-    let displayed_path = prefix + &truncated_dir_string;
-    let lock_symbol = String::from(config.read_only);
+    let path_vec = match &repo.root {
+        Some(repo_root) if !config.truncate_to_repo => {
+            let root_name = repo.root.as_ref()?;
+            let after = current_dir.as_path().strip_prefix(root_name.as_path()).ok()?;
+            let after_str = after.display().to_string();
+            let after_dir_num: Vec<&str> = after_str.split('/').collect();
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+            if (after_dir_num.len() as i64) < config.truncation_length {
+                let root = repo.root.as_ref()?.as_path().file_name()?.to_str()?;
+                let repo_path = contract_repo_path(current_dir, repo_root)?;
+                let before = truncated_dir_string.replace(&repo_path,"");
+                [prefix + &before,root.to_string(),"/".to_string() + &after.to_str()?]
+            }else{
+                ["".to_string(),"".to_string(),prefix + &truncated_dir_string]
+            }
+
+        }
+        _ => { ["".to_string(),"".to_string(),prefix + &truncated_dir_string] }
+    };
+
+    let lock_symbol = String::from(config.read_only);
+    let display_format = if path_vec[0].is_empty() && path_vec[1].is_empty() {config.format} else {config.highlight_repo_root_format};
+
+    let parsed = StringFormatter::new(display_format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
                 "read_only_style" => Some(Ok(config.read_only_style)),
+                "highlight_repo_root_style" => Some(Ok(config.highlight_repo_root_style)),
                 _ => None,
             })
             .map(|variable| match variable {
-                "path" => Some(Ok(&displayed_path)),
+                "path" => Some(Ok(&path_vec[2])),
+                "before_root_path" => Some(Ok(&path_vec[0])),
+                "repo_root" => Some(Ok(&path_vec[1])),
                 "read_only" => {
                     if is_readonly_dir(&context.current_dir) {
                         Some(Ok(&lock_symbol))
@@ -1426,5 +1449,60 @@ mod tests {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("…\\temp")));
         assert_eq!(expected, actual);
         Ok(())
+    }
+
+    #[test]
+    fn highlight_git_root_dir() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above").join("repo");
+        let dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 5
+                truncation_symbol = "…/"
+                truncate_to_repo = false
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{}…/above/{}repo{} ",
+            Color::Cyan.bold().prefix(),
+            Color::Red.prefix(),
+            Color::Cyan.paint("/src/sub/path")
+        ));
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn highlight_git_root_dir_config_change() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above").join("repo");
+        let dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 5
+                truncation_symbol = "…/"
+                truncate_to_repo = false
+                highlight_repo_root_style = "green"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{}{}repo{} ",
+            Color::Cyan.bold().paint("…/above/"),
+            Color::Green.prefix(),
+            Color::Cyan.bold().paint("/src/sub/path")
+        ));
+        assert_eq!(expected, actual);
+        tmp_dir.close()
     }
 }
