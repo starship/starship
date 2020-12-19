@@ -74,6 +74,8 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    starship init fish | source
    ```
 
+   Want to run Starship asynchronously? Install [fish-async-prompt](https://github.com/acomagu/fish-async-prompt) plugin.
+
    #### Zsh
 
    Add the following to the end of `~/.zshrc`:
