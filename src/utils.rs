@@ -137,7 +137,8 @@ active boot switches: -d:release\n",
             stdout: String::from("system\n"),
             stderr: String::default(),
         }),
-        "python --version" => Some(CommandOutput {
+        "python --version" => None,
+        "python2 --version" => Some(CommandOutput {
             stdout: String::default(),
             stderr: String::from("Python 2.7.17\n"),
         }),

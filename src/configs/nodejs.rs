@@ -8,6 +8,7 @@ pub struct NodejsConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    pub not_capable_style: &'a str,
 }
 
 impl<'a> RootModuleConfig<'a> for NodejsConfig<'a> {
@@ -17,6 +18,7 @@ impl<'a> RootModuleConfig<'a> for NodejsConfig<'a> {
             symbol: "⬢ ",
             style: "bold green",
             disabled: false,
+            not_capable_style: "bold red",
         }
     }
 }

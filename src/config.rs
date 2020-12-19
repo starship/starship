@@ -5,6 +5,7 @@ use indexmap::IndexMap;
 
 use std::clone::Clone;
 use std::collections::HashMap;
+use std::io::ErrorKind;
 use std::marker::Sized;
 
 use std::env;
@@ -236,7 +237,13 @@ impl StarshipConfig {
                 Some(content)
             }
             Err(e) => {
-                log::debug!("Unable to read config file content: {}", &e);
+                let level = if e.kind() == ErrorKind::NotFound {
+                    log::Level::Debug
+                } else {
+                    log::Level::Error
+                };
+
+                log::log!(level, "Unable to read config file content: {}", &e);
                 None
             }
         }?;
@@ -375,16 +382,31 @@ pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
                     "bold" => Some(style.bold()),
                     "italic" => Some(style.italic()),
                     "dimmed" => Some(style.dimmed()),
-                    "none" => None,
-
-                    // Try to see if this token parses as a valid color string
-                    color_string => parse_color_string(color_string).map(|ansi_color| {
-                        if col_fg {
-                            style.fg(ansi_color)
+                    // When the string is supposed to be a color:
+                    // Decide if we yield none, reset background or set color.
+                    color_string => {
+                        if color_string == "none" && col_fg {
+                            None // fg:none yields no style.
                         } else {
-                            style.on(ansi_color)
+                            // Either bg or valid color or both.
+                            let parsed = parse_color_string(color_string);
+                            // bg + invalid color = reset the background to default.
+                            if !col_fg && parsed.is_none() {
+                                let mut new_style = style;
+                                new_style.background = Option::None;
+                                Some(new_style)
+                            } else {
+                                // Valid color, apply color to either bg or fg
+                                parsed.map(|ansi_color| {
+                                    if col_fg {
+                                        style.fg(ansi_color)
+                                    } else {
+                                        style.on(ansi_color)
+                                    }
+                                })
+                            }
                         }
-                    }),
+                    }
                 }
             })
         })
@@ -682,6 +704,37 @@ mod tests {
         // Test a string that's nullified by `none` at the start
         let config = Value::from("none fg:red bg:green bold");
         assert!(<Style>::from_config(&config).is_none());
+    }
+
+    #[test]
+    fn table_get_styles_with_none() {
+        // Test that none on the end will result in None, overriding bg:none
+        let config = Value::from("fg:red bg:none none");
+        assert!(<Style>::from_config(&config).is_none());
+
+        // Test that none in front will result in None, overriding bg:none
+        let config = Value::from("none fg:red bg:none");
+        assert!(<Style>::from_config(&config).is_none());
+
+        // Test that none in the middle will result in None, overriding bg:none
+        let config = Value::from("fg:red none bg:none");
+        assert!(<Style>::from_config(&config).is_none());
+
+        // Test that fg:none will result in None
+        let config = Value::from("fg:none bg:black");
+        assert!(<Style>::from_config(&config).is_none());
+
+        // Test that bg:none will yield a style
+        let config = Value::from("fg:red bg:none");
+        assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.normal());
+
+        // Test that bg:none will yield a style
+        let config = Value::from("fg:red bg:none bold");
+        assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.bold());
+
+        // Test that bg:none will overwrite the previous background colour
+        let config = Value::from("fg:red bg:green bold bg:none");
+        assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.bold());
     }
 
     #[test]

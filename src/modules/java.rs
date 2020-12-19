@@ -11,13 +11,21 @@ const JAVA_VERSION_PATTERN: &str = "(?P<version>[\\d\\.]+)[^\\s]*\\s(?:built|fro
 /// Creates a module with the current Java version
 ///
 /// Will display the Java version if any of the following criteria are met:
-///     - Current directory contains a file with a `.java`, `.class`, `.gradle` or `.jar` extension
-///     - Current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
+///     - Current directory contains a file with a `.java`, `.class`, `.jar`, `.gradle`, `.clj`, or `.cljc` extension
+///     - Current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, or `build.boot` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_java_project = context
         .try_begin_scan()?
-        .set_files(&["pom.xml", "build.gradle.kts", "build.sbt", ".java-version"])
-        .set_extensions(&["java", "class", "jar", "gradle"])
+        .set_files(&[
+            "pom.xml",
+            "build.gradle.kts",
+            "build.sbt",
+            ".java-version",
+            "deps.edn",
+            "project.clj",
+            "build.boot",
+        ])
+        .set_extensions(&["java", "class", "jar", "gradle", "clj", "cljc"])
         .is_match();
 
     if !is_java_project {

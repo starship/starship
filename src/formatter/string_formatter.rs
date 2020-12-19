@@ -349,28 +349,31 @@ impl<'a> StringFormatter<'a> {
 
 impl<'a> VariableHolder<String> for StringFormatter<'a> {
     fn get_variables(&self) -> BTreeSet<String> {
-        BTreeSet::from_iter(self.variables.keys().cloned())
+        self.variables.keys().cloned().collect()
     }
 }
 
 impl<'a> StyleVariableHolder<String> for StringFormatter<'a> {
     fn get_style_variables(&self) -> BTreeSet<String> {
-        BTreeSet::from_iter(self.style_variables.keys().cloned())
+        self.style_variables.keys().cloned().collect()
     }
 }
 
 fn clone_without_meta<'a>(variables: &VariableMapType<'a>) -> VariableMapType<'a> {
-    VariableMapType::from_iter(variables.iter().map(|(key, value)| {
-        let value = match value {
-            Some(Ok(value)) => match value {
-                VariableValue::Meta(_) => None,
-                other => Some(Ok(other.clone())),
-            },
-            Some(Err(e)) => Some(Err(e.clone())),
-            None => None,
-        };
-        (key.clone(), value)
-    }))
+    variables
+        .iter()
+        .map(|(key, value)| {
+            let value = match value {
+                Some(Ok(value)) => match value {
+                    VariableValue::Meta(_) => None,
+                    other => Some(Ok(other.clone())),
+                },
+                Some(Err(e)) => Some(Err(e.clone())),
+                None => None,
+            };
+            (key.clone(), value)
+        })
+        .collect()
 }
 
 #[cfg(test)]

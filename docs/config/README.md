@@ -52,7 +52,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
-**Variable**: Smaller sub-components that contains information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
+**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
 
 By convention, most modules have a prefix of default terminal color (e.g. `via ` in "nodejs") and an empty space as a suffix.
 
@@ -226,8 +226,8 @@ $gcloud\
 $openstack\
 $env_var\
 $crystal\
-$cmd_duration\
 $custom\
+$cmd_duration\
 $line_break\
 $lua\
 $jobs\
@@ -542,7 +542,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | `truncation_length` | `1`                                | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
 | `symbol`            | `"🅒 "`                             | The symbol used before the environment name.                                                                                                                                                                |
 | `style`             | `"bold green"`                     | The style for the module.                                                                                                                                                                                   |
-| `format`            | `"[$symbol$environment]($style) "` | The format for the module.                                                                                                                                                                                  |
+| `format`            | `"via [$symbol$environment]($style) "` | The format for the module.                                                                                                                                                                                  |
 | `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                                                                                                                                  |
 | `disabled`          | `false`                            | Disables the `conda` module.                                                                                                                                                                                |
 
@@ -779,7 +779,7 @@ when there is a csproj file in the current directory.
 
 | Option      | Default                                   | Description                                              |
 | ----------- | ----------------------------------------- | -------------------------------------------------------- |
-| `format`    | `"v[$symbol$version( 🎯 $tfm)]($style) "` | The format for the module.                               |
+| `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "`  | The format for the module.                               |
 | `symbol`    | `"•NET "`                                 | The symbol used before displaying the version of dotnet. |
 | `heuristic` | `true`                                    | Use faster version detection to keep starship snappy.    |
 | `style`     | `"bold blue"`                             | The style for the module.                                |
@@ -1025,20 +1025,24 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 | Option              | Default                          | Description                                                                              |
 | ------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
+| `always_show_remote`| `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
 | `format`            | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.          |
 | `symbol`            | `" "`                           | A format string representing the symbol of git branch.                                   |
 | `style`             | `"bold purple"`                  | The style for the module.                                                                |
 | `truncation_length` | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                   |
 | `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
+| `only_attached`     | `false`                         | Only show the branch name when not in a detached HEAD state.                             |
 | `disabled`          | `false`                          | Disables the `git_branch` module.                                                        |
 
 ### Variables
 
-| Variable | Example  | Description                                                                                          |
-| -------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| branch   | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
-| symbol   |          | Mirrors the value of option `symbol`                                                                 |
-| style\*  |          | Mirrors the value of option `style`                                                                  |
+| Variable        | Example  | Description                                                                                          |
+| ----------------| -------- | ---------------------------------------------------------------------------------------------------- |
+| branch          | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
+| remote_name     | `origin` | The remote name.                                                                                     |
+| remote_branch   | `master` | The name of the branch tracked on `remote_name`.                                                     |
+| symbol          |          | Mirrors the value of option `symbol`                                                                 |
+| style\*         |          | Mirrors the value of option `style`                                                                  |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1333,8 +1337,8 @@ disabled = false
 The `java` module shows the currently installed version of Java.
 The module will be shown if any of the following conditions are met:
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt` or `.java-version` file
-- The current directory contains a file with the `.java`, `.class`, `.gradle` or `.jar` extension
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
+- The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
 
 ### Options
 
@@ -1724,6 +1728,7 @@ The module will be shown if any of the following conditions are met:
 | `symbol`   | `"⬢ "`                             | A format string representing the symbol of NodeJS. |
 | `style`    | `"bold green"`                     | The style for the module.                          |
 | `disabled` | `false`                            | Disables the `nodejs` module.                      |
+| `not_capable_style` | `bold red` | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ### Variables
 
@@ -2006,16 +2011,34 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option               | Default                                                                 | Description                                                                   |
-| -------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | The format for the module.                                                    |
-| `symbol`             | `"🐍 "`                                                                 | A format string representing the symbol of Python                             |
-| `style`              | `"yellow bold"`                                                         | The style for the module.                                                     |
-| `pyenv_version_name` | `false`                                                                 | Use pyenv to get Python version                                               |
-| `pyenv_prefix`       | `pyenv `                                                                | Prefix before pyenv version display, only used if pyenv is used               |
-| `scan_for_pyfiles`   | `true`                                                                  | If false, Python files in the current directory will not show this module.    |
-| `python_binary`      | `python`                                                                | Configures the python binary that Starship executes when getting the version. |
-| `disabled`           | `false`                                                                 | Disables the `python` module.                                                 |
+| Option               | Default                                                                 | Description                                                                            |
+| -------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | The format for the module.                                                             |
+| `symbol`             | `"🐍 "`                                                                 | A format string representing the symbol of Python                                      |
+| `style`              | `"yellow bold"`                                                         | The style for the module.                                                              |
+| `pyenv_version_name` | `false`                                                                 | Use pyenv to get Python version                                                        |
+| `pyenv_prefix`       | `pyenv `                                                                | Prefix before pyenv version display, only used if pyenv is used                        |
+| `scan_for_pyfiles`   | `true`                                                                  | If false, Python files in the current directory will not show this module.             |
+| `python_binary`      | `["python", "python3, "python2"]`                                       | Configures the python binaries that Starship should executes when getting the version. |
+| `disabled`           | `false`                                                                 | Disables the `python` module.                                                          |
+
+::: tip
+
+The `python_binary` variable accepts either a string or a list of strings.
+Starship will try executing each binary until it gets a result. Note you can
+only change the binary that Starship executes to get the version of Python not
+the arguments that are used.
+
+The default values and order for `python_binary` was chosen to first identify
+the Python version in a virtualenv/conda environments (which currently still
+add a `python`, no matter if it points to `python3` or `python2`). This has the
+side effect that if you still have a system Python 2 installed, it may be
+picked up before any Python 3 (at least on Linux Distros that always symlink
+`/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but
+cannot remove the system Python 2, changing this to `"python3"` will hide any
+Python version 2, see example below.
+
+:::
 
 ### Variables
 
@@ -2038,15 +2061,11 @@ symbol = "👾 "
 pyenv_version_name = true
 ```
 
-Using the `python3` binary to get the version.
-
-Note - The `python_binary` variable changes the binary that Starship executes
-to get the version of Python, it doesn't change the arguments that are used.
-
 ```toml
 # ~/.config/starship.toml
 
 [python]
+# Only use the `python3` binary to get the version.
 python_binary = "python3"
 ```
 
@@ -2135,6 +2154,7 @@ set to a number and meets or exceeds the specified threshold.
 | `threshold` | `2`                          | Display threshold.                      |
 | `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.              |
 | `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL. |
+| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current SHLVL amount. |
 | `style`     | `"bold yellow"`              | The style for the module.               |
 | `disabled`  | `true`                       | Disables the `shlvl` module.            |
 
@@ -2380,6 +2400,12 @@ The module will be shown if any of the following conditions are met:
 - The current user isn't the same as the one that is logged in
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
+
+::: tip
+SSH connection is detected by checking environment variables
+`SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up
+these variables, one workaround is to set one of them with a dummy value.
+:::
 
 ### Options
 

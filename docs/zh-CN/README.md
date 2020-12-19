@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: 轻量级、反应迅速，可定制的高颜值终端！
 actionText: 入门 →
 actionLink: ./guide/
 features:
@@ -94,11 +94,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` （对于 *nix 系统是`~/.config/powershell/Microsoft.PowerShell_profile.ps1`）的最后，添加以下内容：
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. 对于 -Nix 来说，通常文件路径是 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 或 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
 
    ```sh
-   # ~\Documents\PowerShell\Profile.ps1
-
    Invoke-Expression (&starship init powershell)
    ```
 

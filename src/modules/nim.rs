@@ -62,7 +62,7 @@ fn parse_nim_version(version_cmd_output: &str) -> Option<&str> {
         // First line has the version
         .next()?
         .split(' ')
-        .find(|&s| s.chars().all(|c| c >= '0' && c <= '9' || c == '.'))
+        .find(|&s| s.chars().all(|c| ('0'..='9').contains(&c) || c == '.'))
 }
 
 #[cfg(test)]
