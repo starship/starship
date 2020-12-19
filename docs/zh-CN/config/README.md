@@ -1763,6 +1763,7 @@ symbol = "☁️ "
 - **mix** - The `mix` package version is extracted from the `mix.exs` present
 - **helm** - The `helm` chart version is extracted from the `Chart.yaml` present
 - **maven** - The `maven` package version is extracted from the `pom.xml` present
+- **meson** - The `meson` package version is extracted from the `meson.build` present
 
 > ⚠ 此组件显示的是源代码在当前目录中的软件包的版本，而不是包管理器的版本。
 
