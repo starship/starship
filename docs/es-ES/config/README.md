@@ -1764,6 +1764,7 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 - **mix** - La versión del paquete `mix` se extrae del `mix.exs` presente
 - **helm** - La versión del gráfico `helm` se extrae del `Chart.yaml` presente
 - **maven** - La versión del paquete `maven` es extraída del `pom.xml` presente
+- **meson** - The `meson` package version is extracted from the `meson.build` present
 
 > ⚠️ La versión que se muestra es la del paquete cuyo código fuente está en tu directorio actual, no en tu gestor de paquetes.
 
