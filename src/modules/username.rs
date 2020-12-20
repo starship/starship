@@ -4,6 +4,13 @@ use crate::configs::username::UsernameConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
 
+const ROOT_UID: Option<u32> = Some(0);
+#[cfg(not(target_os = "windows"))]
+const USERNAME_ENV_VAR: &str = "USER";
+
+#[cfg(target_os = "windows")]
+const USERNAME_ENV_VAR: &str = "USERNAME";
+
 /// Creates a module with the current user's username
 ///
 /// Will display the username if any of the following criteria are met:
@@ -11,25 +18,26 @@ use crate::utils;
 ///     - The current user is root (UID = 0)
 ///     - The user is currently connected as an SSH session (`$SSH_CONNECTION`)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let user = context.get_env("USER");
+    let username = context.get_env(USERNAME_ENV_VAR)?;
     let logname = context.get_env("LOGNAME");
 
-    const ROOT_UID: Option<u32> = Some(0);
     let user_uid = get_uid();
+
+    let is_not_login = logname.is_some() && username != logname.unwrap_or_default();
+    let is_root = user_uid == ROOT_UID;
 
     let mut module = context.new_module("username");
     let config: UsernameConfig = UsernameConfig::try_load(module.config);
 
-    if user != logname || is_ssh_connection(&context) || user_uid == ROOT_UID || config.show_always
-    {
-        let username = user?;
+    if is_not_login || is_ssh_connection(&context) || is_root || config.show_always {
         let parsed = StringFormatter::new(config.format).and_then(|formatter| {
             formatter
                 .map_style(|variable| match variable {
                     "style" => {
-                        let module_style = match user_uid {
-                            Some(0) => config.style_root,
-                            _ => config.style_user,
+                        let module_style = if is_root {
+                            config.style_root
+                        } else {
+                            config.style_user
                         };
                         Some(Ok(module_style))
                     }
@@ -87,10 +95,21 @@ mod tests {
     }
 
     #[test]
+    fn no_logname_env_variable() -> io::Result<()> {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
     fn logname_equals_user() -> io::Result<()> {
         let actual = ModuleRenderer::new("username")
             .env("LOGNAME", "astronaut")
-            .env("USER", "astronaut")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
             .collect();
         let expected = None;
 
@@ -114,7 +133,7 @@ mod tests {
     fn current_user_not_logname() -> io::Result<()> {
         let actual = ModuleRenderer::new("username")
             .env("LOGNAME", "astronaut")
-            .env("USER", "cosmonaut")
+            .env(super::USERNAME_ENV_VAR, "cosmonaut")
             .collect();
         let expected = Some(format!("{} in ", Color::Yellow.bold().paint("cosmonaut")));
 
@@ -125,7 +144,7 @@ mod tests {
     #[test]
     fn ssh_connection() -> io::Result<()> {
         let actual = ModuleRenderer::new("username")
-            .env("USER", "astronaut")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
             .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
             .collect();
         let expected = Some(format!("{} in ", Color::Yellow.bold().paint("astronaut")));
@@ -137,7 +156,7 @@ mod tests {
     #[test]
     fn ssh_connection_tty() -> io::Result<()> {
         let actual = ModuleRenderer::new("username")
-            .env("USER", "astronaut")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
             .env("SSH_TTY", "/dev/pts/0")
             .collect();
         let expected = Some(format!("{} in ", Color::Yellow.bold().paint("astronaut")));
@@ -149,7 +168,7 @@ mod tests {
     #[test]
     fn ssh_connection_client() -> io::Result<()> {
         let actual = ModuleRenderer::new("username")
-            .env("USER", "astronaut")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
             .env("SSH_CLIENT", "192.168.0.101 39323 22")
             .collect();
         let expected = Some(format!("{} in ", Color::Yellow.bold().paint("astronaut")));
@@ -161,7 +180,7 @@ mod tests {
     #[test]
     fn show_always() -> io::Result<()> {
         let actual = ModuleRenderer::new("username")
-            .env("USER", "astronaut")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
             .config(toml::toml! {
                 [username]
                 show_always = true
