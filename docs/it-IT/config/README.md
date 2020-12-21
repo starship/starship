@@ -2078,7 +2078,7 @@ format = "$shlvl level(s) down"
 threshold = 3
 ```
 
-## Singularity
+## Singolarità
 
 The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
 
