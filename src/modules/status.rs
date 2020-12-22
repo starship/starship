@@ -48,6 +48,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             false => None,
         };
 
+        let hex_status = exit_code
+            .parse::<i32>()
+            .ok()
+            .map(|code| format!("0x{:X}", code));
+
         let parsed = StringFormatter::new(config.format).and_then(|formatter| {
             formatter
                 .map_meta(|var, _| match var {
@@ -78,6 +83,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     "common_meaning" => Ok(common_meaning.as_deref()).transpose(),
                     "signal_number" => Ok(signal_number.as_deref()).transpose(),
                     "signal_name" => Ok(signal_name.as_deref()).transpose(),
+                    "hex_status" => Some(Ok(hex_status.as_ref().map_or(exit_code, String::as_str))),
+                    "text_status" => to_text_status(exit_code).map(|s| Ok(s)),
                     _ => None,
                 })
                 .parse(None)
@@ -142,6 +149,55 @@ fn status_signal_name(signal: SignalNumber) -> Option<&'static str> {
         22 => Some("TTOU"),   // 128 + 22
         _ => None,
     }
+}
+
+#[cfg(not(windows))]
+fn to_text_status(exit_code: &str) -> &str {
+    ""
+}
+
+#[cfg(windows)]
+fn to_text_status(exit_code: &str) -> Option<&str> {
+    use winapi::shared::ntdef::NTSTATUS;
+    use winapi::shared::ntstatus::*;
+
+    exit_code
+        .parse::<NTSTATUS>()
+        .ok()
+        .and_then(|code| match code {
+            STATUS_ACCESS_VIOLATION => Some("ACCESS_VIOLATION"),
+            STATUS_IN_PAGE_ERROR => Some("IN_PAGE_ERROR"),
+            STATUS_INVALID_HANDLE => Some("INVALID_HANDLE"),
+            STATUS_INVALID_PARAMETER => Some("INVALID_PARAMETER"),
+            STATUS_NO_MEMORY => Some("NO_MEMORY"),
+            STATUS_ILLEGAL_INSTRUCTION => Some("ILLEGAL_INSTRUCTION"),
+            STATUS_NONCONTINUABLE_EXCEPTION => Some("NONCONTINUABLE_EXCEPTION"),
+            STATUS_INVALID_DISPOSITION => Some("INVALID_DISPOSITION"),
+            STATUS_ARRAY_BOUNDS_EXCEEDED => Some("ARRAY_BOUNDS_EXCEEDED"),
+            STATUS_FLOAT_DENORMAL_OPERAND => Some("FLOAT_DENORMAL_OPERAND"),
+            STATUS_FLOAT_DIVIDE_BY_ZERO => Some("FLOAT_DIVIDE_BY_ZERO"),
+            STATUS_FLOAT_INEXACT_RESULT => Some("FLOAT_INEXACT_RESULT"),
+            STATUS_FLOAT_INVALID_OPERATION => Some("FLOAT_INVALID_OPERATION"),
+            STATUS_FLOAT_OVERFLOW => Some("FLOAT_OVERFLOW"),
+            STATUS_FLOAT_STACK_CHECK => Some("FLOAT_STACK_CHECK"),
+            STATUS_FLOAT_UNDERFLOW => Some("FLOAT_UNDERFLOW"),
+            STATUS_INTEGER_DIVIDE_BY_ZERO => Some("INTEGER_DIVIDE_BY_ZERO"),
+            STATUS_INTEGER_OVERFLOW => Some("INTEGER_OVERFLOW"),
+            STATUS_PRIVILEGED_INSTRUCTION => Some("PRIVILEGED_INSTRUCTION"),
+            STATUS_STACK_OVERFLOW => Some("STACK_OVERFLOW"),
+            STATUS_DLL_NOT_FOUND => Some("DLL_NOT_FOUND"),
+            STATUS_ORDINAL_NOT_FOUND => Some("ORDINAL_NOT_FOUND"),
+            STATUS_ENTRYPOINT_NOT_FOUND => Some("ENTRYPOINT_NOT_FOUND"),
+            STATUS_CONTROL_C_EXIT => Some("CONTROL_C_EXIT"),
+            STATUS_DLL_INIT_FAILED => Some("DLL_INIT_FAILED"),
+            STATUS_FLOAT_MULTIPLE_FAULTS => Some("FLOAT_MULTIPLE_FAULTS"),
+            STATUS_FLOAT_MULTIPLE_TRAPS => Some("FLOAT_MULTIPLE_TRAPS"),
+            STATUS_REG_NAT_CONSUMPTION => Some("REG_NAT_CONSUMPTION"),
+            STATUS_HEAP_CORRUPTION => Some("HEAP_CORRUPTION"),
+            STATUS_STACK_BUFFER_OVERRUN => Some("STACK_BUFFER_OVERRUN"),
+            STATUS_ASSERTION_FAILURE => Some("ASSERTION_FAILURE"),
+            _ => None,
+        })
 }
 
 #[cfg(test)]
@@ -346,6 +402,60 @@ mod tests {
                     disabled = false
                 })
                 .status(*status)
+                .collect();
+            assert_eq!(expected, actual);
+        }
+
+        Ok(())
+    }
+
+    #[test]
+    fn failure_hex_status() -> io::Result<()> {
+        let exit_values = [1, 2, 130];
+
+        for status in exit_values.iter() {
+            let expected = Some(format!(
+                "{} ",
+                Color::Red.bold().paint(format!("✖0x{:X}", status))
+            ));
+            let actual = ModuleRenderer::new("status")
+                .config(toml::toml! {
+                    [status]
+                    disabled = false
+                    format = "[${symbol}${hex_status}]($style) "
+                })
+                .status(*status)
+                .collect();
+            assert_eq!(expected, actual);
+        }
+
+        Ok(())
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn failure_text_status_win() -> io::Result<()> {
+        use winapi::shared::ntstatus::*;
+        let exit_values = [
+            (0x1, ""),
+            (STATUS_CONTROL_C_EXIT, " (CONTROL_C_EXIT)"),
+            (STATUS_DLL_NOT_FOUND, " (DLL_NOT_FOUND)"),
+        ];
+
+        for &(status, expected_text) in exit_values.iter() {
+            let expected = Some(format!(
+                "{} ",
+                Color::Red
+                    .bold()
+                    .paint(format!("✖0x{:X}{}", status, expected_text))
+            ));
+            let actual = ModuleRenderer::new("status")
+                .config(toml::toml! {
+                    [status]
+                    disabled = false
+                    format = "[${symbol}${hex_status}( \\(${text_status}\\))]($style) "
+                })
+                .status(status)
                 .collect();
             assert_eq!(expected, actual);
         }
