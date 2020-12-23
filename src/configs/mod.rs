@@ -26,6 +26,7 @@ pub mod hostname;
 pub mod java;
 pub mod jobs;
 pub mod julia;
+pub mod kotlin;
 pub mod kubernetes;
 pub mod lua;
 pub mod memory_usage;
