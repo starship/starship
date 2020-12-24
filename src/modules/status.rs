@@ -3,6 +3,9 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::status::StatusConfig;
 use crate::formatter::StringFormatter;
 
+type ExitCode = u32;
+type SignalNumber = u32;
+
 /// Creates a module with the status of the last command
 ///
 /// Will display the status only if it is not 0
@@ -24,14 +27,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             return None;
         };
 
-        let exit_code_int: u32 = match exit_code.parse() {
+        let exit_code_int: ExitCode = match exit_code.parse() {
             Ok(i) => i,
             Err(_) => return None,
         };
 
         let common_meaning = status_common_meaning(exit_code_int);
-        let signal_name = status_signal_int(exit_code_int);
-        let signal_number = status_signal_name(exit_code_int);
+
+        let raw_signal_number = status_to_signal(exit_code_int);
+        let signal_number = raw_signal_number.map(|sn| sn.to_string());
+        let signal_number_name = raw_signal_number
+            .map(|sn| status_signal_name(sn).or_else(|| signal_number.as_deref()))
+            .flatten();
+
+        // If not a signal and not a common meaning, it should at least print the raw exit code number
+        let maybe_exit_code_number = match common_meaning.is_none() && signal_number_name.is_none()
+        {
+            true => Some(exit_code),
+            false => None,
+        };
 
         let parsed = StringFormatter::new(config.format).and_then(|formatter| {
             formatter
@@ -52,9 +66,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 .map(|variable| match variable {
                     "status" => Some(Ok(exit_code)),
                     "status_int" => Some(Ok(exit_code)),
+                    "status_maybe_int" => Ok(maybe_exit_code_number.as_deref()).transpose(),
                     "status_common_meaning" => Ok(common_meaning.as_deref()).transpose(),
-                    "status_signal_number" => Ok(signal_name.as_deref()).transpose(),
-                    "status_signal_name" => Ok(signal_number.as_deref()).transpose(),
+                    "status_signal_number" => Ok(signal_number.as_deref()).transpose(),
+                    "status_signal_name" => Ok(signal_number_name.as_deref()).transpose(),
                     _ => None,
                 })
                 .parse(None)
@@ -71,58 +86,54 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 }
 
-fn status_common_meaning(ex: u32) -> Option<String> {
+fn status_common_meaning(ex: ExitCode) -> Option<&'static str> {
     // Over 128 are Signal exit code
     if ex > 128 {
         return None;
     }
-    Some(match ex {
-        1 => "ERROR".to_string(),
-        2 => "USAGE".to_string(),
-        126 => "NOPERM".to_string(),
-        127 => "NOTFOUND".to_string(),
-        _ => ex.to_string(),
-    })
+    match ex {
+        1 => Some("ERROR"),
+        2 => Some("USAGE"),
+        126 => Some("NOPERM"),
+        127 => Some("NOTFOUND"),
+        _ => None,
+    }
 }
 
-fn status_signal_int(ex: u32) -> Option<String> {
+fn status_to_signal(ex: ExitCode) -> Option<SignalNumber> {
     if ex < 129 {
         return None;
     }
-    let ex = ex - 128;
-    Some(ex.to_string())
+    let sn = ex - 128;
+    Some(sn)
 }
 
-fn status_signal_name(ex: u32) -> Option<String> {
-    if ex < 129 {
-        return None;
+fn status_signal_name(signal: SignalNumber) -> Option<&'static str> {
+    match signal {
+        1 => Some("HUP"),     // 128 + 1
+        2 => Some("INT"),     // 128 + 2
+        3 => Some("QUIT"),    // 128 + 3
+        4 => Some("ILL"),     // 128 + 4
+        5 => Some("TRAP"),    // 128 + 5
+        6 => Some("IOT"),     // 128 + 6
+        7 => Some("BUS"),     // 128 + 7
+        8 => Some("FPE"),     // 128 + 8
+        9 => Some("KILL"),    // 128 + 9
+        10 => Some("USR1"),   // 128 + 10
+        11 => Some("SEGV"),   // 128 + 11
+        12 => Some("USR2"),   // 128 + 12
+        13 => Some("PIPE"),   // 128 + 13
+        14 => Some("ALRM"),   // 128 + 14
+        15 => Some("TERM"),   // 128 + 15
+        16 => Some("STKFLT"), // 128 + 16
+        17 => Some("CHLD"),   // 128 + 17
+        18 => Some("CONT"),   // 128 + 18
+        19 => Some("STOP"),   // 128 + 19
+        20 => Some("TSTP"),   // 128 + 20
+        21 => Some("TTIN"),   // 128 + 21
+        22 => Some("TTOU"),   // 128 + 22
+        _ => None,
     }
-    let ex = ex - 128;
-    Some(match ex {
-        1 => "HUP".to_string(),     // 128 + 1
-        2 => "INT".to_string(),     // 128 + 2
-        3 => "QUIT".to_string(),    // 128 + 3
-        4 => "ILL".to_string(),     // 128 + 4
-        5 => "TRAP".to_string(),    // 128 + 5
-        6 => "IOT".to_string(),     // 128 + 6
-        7 => "BUS".to_string(),     // 128 + 7
-        8 => "FPE".to_string(),     // 128 + 8
-        9 => "KILL".to_string(),    // 128 + 9
-        10 => "USR1".to_string(),   // 128 + 10
-        11 => "SEGV".to_string(),   // 128 + 11
-        12 => "USR2".to_string(),   // 128 + 12
-        13 => "PIPE".to_string(),   // 128 + 13
-        14 => "ALRM".to_string(),   // 128 + 14
-        15 => "TERM".to_string(),   // 128 + 15
-        16 => "STKFLT".to_string(), // 128 + 16
-        17 => "CHLD".to_string(),   // 128 + 17
-        18 => "CONT".to_string(),   // 128 + 18
-        19 => "STOP".to_string(),   // 128 + 19
-        20 => "TSTP".to_string(),   // 128 + 20
-        21 => "TTIN".to_string(),   // 128 + 21
-        22 => "TTOU".to_string(),   // 128 + 22
-        _ => ex.to_string(),
-    })
 }
 
 #[cfg(test)]
@@ -193,14 +204,42 @@ mod tests {
     #[test]
     fn signal_name() -> io::Result<()> {
         let exit_values = [1, 2, 126, 127, 130, 101];
-        let exit_values_name = ["ERROR", "USAGE", "NOPERM", "NOTFOUND", "INT", "101"];
+        let exit_values_name = [
+            Some("ERROR"),
+            Some("USAGE"),
+            Some("NOPERM"),
+            Some("NOTFOUND"),
+            Some("INT"),
+            None,
+        ];
 
         for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
-            let expected = Some(name.to_string());
+            let expected = name.map(|n| n.to_string());
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
                     [status]
                     format = "$status_common_meaning$status_signal_name"
+                    disabled = false
+                })
+                .status(*status)
+                .collect();
+            assert_eq!(expected, actual);
+        }
+
+        Ok(())
+    }
+
+    #[test]
+    fn maybe_exit_code_number() -> io::Result<()> {
+        let exit_values = [1, 2, 126, 127, 130, 101, 6];
+        let exit_values_name = [None, None, None, None, None, Some("101"), Some("6")];
+
+        for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
+            let expected = name.map(|n| n.to_string());
+            let actual = ModuleRenderer::new("status")
+                .config(toml::toml! {
+                    [status]
+                    format = "$status_maybe_int"
                     disabled = false
                 })
                 .status(*status)

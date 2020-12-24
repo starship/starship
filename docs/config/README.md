@@ -2229,6 +2229,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | status_common_meaning   | `ERROR` | Meaning of the code if not a signal                                     |
 | status_signal_number    | `9`     | Signal number corresponding to the exit code, only if signalled         |
 | status_signal_name      | `KILL`  | Name of the signal corresponding to the exit code, only if signalled    |
+| status_maybe_int        | `7`     | Contains the exit code number when no meaning has been found            |
 | symbol                  |         | Mirrors the value of option `symbol`                                    |
 | style\*                 |         | Mirrors the value of option `style`                                     |
 
@@ -2243,7 +2244,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 [status]
 style = "bg:blue"
 symbol = "🔴"
-format = '[\[$symbol $status_common_meaning$status_signal_name\]]($style) '
+format = '[\[$symbol $status_common_meaning$status_signal_name$status_maybe_int\]]($style) '
 map_symbol = true
 disabled = false
 
