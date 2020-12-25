@@ -205,6 +205,7 @@ fn main() {
             rand::thread_rng()
                 .sample_iter(&Alphanumeric)
                 .take(16)
+                .map(char::from)
                 .collect::<String>()
         ),
         (command, _) => unreachable!("Invalid subcommand: {}", command),
