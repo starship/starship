@@ -81,25 +81,43 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let path_vec = match &repo.root {
         Some(repo_root) if !config.truncate_to_repo => {
             let root_name = repo.root.as_ref()?;
-            let after = current_dir.as_path().strip_prefix(root_name.as_path()).ok()?;
+            let after = current_dir
+                .as_path()
+                .strip_prefix(root_name.as_path())
+                .ok()?;
             let after_str = after.display().to_string();
             let after_dir_num: Vec<&str> = after_str.split('/').collect();
 
             if (after_dir_num.len() as i64) < config.truncation_length {
                 let root = repo.root.as_ref()?.as_path().file_name()?.to_str()?;
                 let repo_path = contract_repo_path(current_dir, repo_root)?;
-                let before = truncated_dir_string.replace(&repo_path,"");
-                [prefix + &before,root.to_string(),"/".to_string() + &after.to_str()?]
-            }else{
-                ["".to_string(),"".to_string(),prefix + &truncated_dir_string]
+                let before = truncated_dir_string.replace(&repo_path, "");
+                [
+                    prefix + &before,
+                    root.to_string(),
+                    "/".to_string() + after.to_str()?,
+                ]
+            } else {
+                [
+                    "".to_string(),
+                    "".to_string(),
+                    prefix + &truncated_dir_string,
+                ]
             }
-
         }
-        _ => { ["".to_string(),"".to_string(),prefix + &truncated_dir_string] }
+        _ => [
+            "".to_string(),
+            "".to_string(),
+            prefix + &truncated_dir_string,
+        ],
     };
 
     let lock_symbol = String::from(config.read_only);
-    let display_format = if path_vec[0].is_empty() && path_vec[1].is_empty() {config.format} else {config.highlight_repo_root_format};
+    let display_format = if path_vec[0].is_empty() && path_vec[1].is_empty() {
+        config.format
+    } else {
+        config.highlight_repo_root_format
+    };
 
     let parsed = StringFormatter::new(display_format).and_then(|formatter| {
         formatter
