@@ -197,6 +197,7 @@ $golang\
 $helm\
 $java\
 $julia\
+$kotlin\
 $nim\
 $nodejs\
 $ocaml\
@@ -1379,13 +1380,56 @@ The `julia` module shows the currently installed version of Julia. Le module est
 symbol = "∴ "
 ```
 
+## Kotlin
+
+The `kotlin` module shows the currently installed version of Kotlin. Le module est affiché si l'une des ces conditions est remplie :
+
+- The current directory contains a `.kt` or a `.kts` file
+
+### Options
+
+| Option          | Défaut                             | Description                                                                   |
+| --------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
+| `format`        | `"via [$symbol$version]($style) "` | Format du module.                                                             |
+| `symbol`        | `"🅺 "`                             | A format string representing the symbol of Kotlin.                            |
+| `style`         | `"bold blue"`                      | Le style du module.                                                           |
+| `kotlin_binary` | `"kotlin"`                         | Configures the kotlin binary that Starship executes when getting the version. |
+| `disabled`      | `false`                            | Disables the `kotlin` module.                                                 |
+
+### Variables
+
+| Variable  | Exemple   | Description                            |
+| --------- | --------- | -------------------------------------- |
+| version   | `v1.4.21` | The version of `kotlin`                |
+| symbol    |           | Reflète la valeur de l'option `symbol` |
+| style\* |           | Reflète la valeur de l'option `style`  |
+
+\* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[kotlin]
+symbol = "🅺 "
+```
+
+```toml
+# ~/.config/starship.toml
+
+[kotlin]
+# Uses the Kotlin Compiler binary to get the installed version
+kotlin_binary = "kotlinc"
+```
+
 ## Kubernetes
 
 Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
-Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1486,7 +1530,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1565,7 +1609,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of Nim. Le module est affiché si l'une des ces conditions est remplie :
 
-- Le répertoire courant contient un fichier `nim.cfg`
+- The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1574,7 +1618,7 @@ The `nim` module shows the currently installed version of Nim. Le module est aff
 
 | Option     | Default                            | Description                                           |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Format du module                                      |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module                             |
 | `symbol`   | `"👑 "`                             | The symbol used before displaying the version of Nim. |
 | `style`    | `"bold yellow"`                    | Le style du module.                                   |
 | `disabled` | `false`                            | Disables the `nim` module.                            |
@@ -1641,7 +1685,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of NodeJS. Le module est affiché si l'une des ces conditions est remplie :
 
-- Le répertoire courant contient un fichier `package.json`
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
@@ -1721,7 +1765,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 ### Options
 
-| Option     | Default                                             | Description                                                    |
+| Option     | Défaut                                              | Description                                                    |
 | ---------- | --------------------------------------------------- | -------------------------------------------------------------- |
 | `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | Format du module.                                              |
 | `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
@@ -1836,7 +1880,7 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of PHP. Le module est affiché si l'une des ces conditions est remplie :
 
-- Le répertoire courant contient un fichier `composer.json`
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
@@ -1870,19 +1914,19 @@ format = "via [🔹 $version](147 bold) "
 
 ## PureScript
 
-Le module `purescript` affiche la version courante de Purescript installée. Le module est affiché si l'une des ces conditions est remplie :
+The `purescript` module shows the currently installed version of PureScript version. Le module est affiché si l'une des ces conditions est remplie :
 
-- Le répertoire courant contient un fichier `spago.dhall`
+- The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
 
 ### Options
 
-| Option     | Défaut                             | Description                                                   |
-| ---------- | ---------------------------------- | ------------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Format du module.                                             |
-| `symbol`   | `"<=> "`                     | Le symbole utilisé avant d'afficher la version de PureScript. |
-| `style`    | `"bold white"`                     | Le style du module.                                           |
-| `disabled` | `false`                            | Désactive le module `purescript`.                             |
+| Option     | Défaut                             | Description                                                  |
+| ---------- | ---------------------------------- | ------------------------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | Format du module.                                            |
+| `symbol`   | `"<=> "`                     | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"`                     | Le style du module.                                          |
+| `disabled` | `false`                            | Disables the `purescript` module.                            |
 
 ### Variables
 
@@ -1912,12 +1956,12 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `.python-version` file
-- Le répertoire courant contient un fichier `requirements.txt`
-- Le répertoire courant contient un fichier `pyproject.toml`
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `pyproject.toml` file
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - The current directory contains a `Pipfile` file
-- Le répertoire courant contient un fichier `tox.ini`
-- Le répertoire courant contient un fichier `setup.py`
+- The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
 - The current directory contains a `__init__.py` file
 - A virtual environment is currently activated
 
@@ -2116,7 +2160,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration. :::
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. :::
 
 ### Options
 
@@ -2239,21 +2283,21 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
 ### Options
 
-| Option            | Défaut                  | Description                                                                                                                                                        |
-| ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                                                  |
-| `use_12hr`        | `false`                 | Activer le format 12h                                                                                                                                              |
-| `time_format`     | voir plus bas           | Le [format chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) utilisé pour formater l'heure.                                                  |
-| `style`           | `"bold yellow"`         | Le style utilisé par le module                                                                                                                                     |
-| `utc_time_offset` | `"local"`               | Définir le décalage horaire UTC à utiliser. Range from -24 &lt; x &lt; 24. Accepte des nombres décimaux pour s'adapter aux décalages de 30/45 minutes. |
-| `disabled`        | `true`                  | Désactiver le module `time`.                                                                                                                                       |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                              |
+| Option            | Défaut                  | Description                                                                                                                        |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
+| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
+| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
 If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
@@ -2261,7 +2305,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Exemple    | Description                           |
 | --------- | ---------- | ------------------------------------- |
-| temps     | `13:08:10` | The current time.                     |
+| time      | `13:08:10` | The current time.                     |
 | style\* |            | Reflète la valeur de l'option `style` |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
@@ -2279,26 +2323,26 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Nom d'utilisateur
+## Username
 
 The `username` module shows active user's username. Le module est affiché si l'une des ces conditions est remplie :
 
-- L'utilisateur courant est root
-- L'utilisateur courant est différent de celui connecté
-- L'utilisateur est actuellement connecté à une session SSH
-- La variable `show_always` a comme valeur true
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: tip SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value. :::
 
 ### Options
 
-| Option        | Défaut                  | Description                                      |
-| ------------- | ----------------------- | ------------------------------------------------ |
-| `style_root`  | `"bold green"`          | Le style utilisé quand l'utilisateur est root.   |
-| `style_user`  | `"bold yellow"`         | Le style utilisé pour les utilisateurs non-root. |
-| `format`      | `"[$user]($style) in "` | Format du module.                                |
-| `show_always` | `false`                 | Toujours afficher le module `username`.          |
-| `disabled`    | `false`                 | Désactiver le module `username`.                 |
+| Option        | Défaut                  | Description                           |
+| ------------- | ----------------------- | ------------------------------------- |
+| `style_root`  | `"bold green"`          | The style used when the user is root. |
+| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
+| `format`      | `"[$user]($style) in "` | Format du module.                     |
+| `show_always` | `false`                 | Always shows the `username` module.   |
+| `disabled`    | `false`                 | Disables the `username` module.       |
 
 ### Variables
 
@@ -2413,7 +2457,7 @@ The order in which custom modules are shown can be individually set by including
 
 `shell` accepts a non-empty list of strings, where:
 
-- La première chaîne est le chemin vers le shell à utiliser pour exécuter la commande.
+- The first string is the path to the shell to use to execute the command.
 - Other following arguments are passed to the shell.
 
 If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
