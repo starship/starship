@@ -23,7 +23,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let user_uid = get_uid();
 
-    let is_not_login = logname.is_some() && username != logname.unwrap_or_default();
+    let is_not_login = logname.is_some() && username != logname.unwrap();
     let is_root = user_uid == ROOT_UID;
 
     let mut module = context.new_module("username");
