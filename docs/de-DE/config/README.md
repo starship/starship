@@ -197,6 +197,7 @@ $golang\
 $helm\
 $java\
 $julia\
+$kotlin\
 $nim\
 $nodejs\
 $ocaml\
@@ -1379,13 +1380,56 @@ The `julia` module shows the currently installed version of Julia. Das Modul wir
 symbol = "∴ "
 ```
 
+## Kotlin
+
+The `kotlin` module shows the currently installed version of Kotlin. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+
+- The current directory contains a `.kt` or a `.kts` file
+
+### Optionen
+
+| Option          | Standardwert                       | Beschreibung                                                                  |
+| --------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
+| `format`        | `"via [$symbol$version]($style) "` | The format for the module.                                                    |
+| `symbol`        | `"🅺 "`                             | A format string representing the symbol of Kotlin.                            |
+| `style`         | `"bold blue"`                      | Stil für dieses Modul.                                                        |
+| `kotlin_binary` | `"kotlin"`                         | Configures the kotlin binary that Starship executes when getting the version. |
+| `disabled`      | `false`                            | Disables the `kotlin` module.                                                 |
+
+### Variables
+
+| Variable  | Beispiel  | Beschreibung                         |
+| --------- | --------- | ------------------------------------ |
+| version   | `v1.4.21` | The version of `kotlin`              |
+| symbol    |           | Mirrors the value of option `symbol` |
+| style\* |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[kotlin]
+symbol = "🅺 "
+```
+
+```toml
+# ~/.config/starship.toml
+
+[kotlin]
+# Uses the Kotlin Compiler binary to get the installed version
+kotlin_binary = "kotlinc"
+```
+
 ## Kubernetes
 
 Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: Tipp
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1397,7 +1441,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
 | `style`           | `"cyan bold"`                                        | Stil für dieses Modul.                                                |
 | `context_aliases` |                                                      | Table of context aliases to display.                                  |
-| `disabled`        | `true`                                               | Deaktiviert das `kubernetes`-Modul.                                   |
+| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
 
 ### Variables
 
@@ -1422,15 +1466,15 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ```
 
-## Zeilenumbruch
+## Line Break
 
-Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
+The `line_break` module separates the prompt into two lines.
 
 ### Optionen
 
-| Option     | Standardwert | Beschreibung                                                           |
-| ---------- | ------------ | ---------------------------------------------------------------------- |
-| `disabled` | `false`      | Deaktiviert das `line_break`-Modul, wodurch der Prompt einzeilig wird. |
+| Option     | Standardwert | Beschreibung                                                       |
+| ---------- | ------------ | ------------------------------------------------------------------ |
+| `disabled` | `false`      | Disables the `line_break` module, making the prompt a single line. |
 
 ### Beispiel
 
@@ -1478,27 +1522,27 @@ The `lua` module shows the currently installed version of Lua. Das Modul wird ge
 format = "via [🌕 $version](bold blue) "
 ```
 
-## Speicherauslastung
+## Memory Usage
 
-Das `memory_usage` Modul zeigt den aktuellen Systemspeicher und die swap-Nutzung an.
+The `memory_usage` module shows current system memory and swap usage.
 
-Standardmäßig wird die swap-Nutzung angezeigt, wenn der gesamte System-swap nicht Null ist.
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: Tipp
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
 ### Optionen
 
-| Option      | Standartwert                                  | Beschreibung                                                          |
-| ----------- | --------------------------------------------- | --------------------------------------------------------------------- |
-| `threshold` | `75`                                          | Speicherauslastung ausblenden, wenn sie unter diesem Prozentsatz ist. |
-| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module.                                            |
-| `symbol`    | `"🐏"`                                         | Symbol das vor der Speicherauslastung angezeigt wird.                 |
-| `style`     | `"bold dimmed white"`                         | Stil für dieses Modul.                                                |
-| `disabled`  | `true`                                        | Deaktiviert das `memory_usage`-Modul.                                 |
+| Option      | Standartwert                                  | Beschreibung                                             |
+| ----------- | --------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module.                               |
+| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
+| `style`     | `"bold dimmed white"`                         | Stil für dieses Modul.                                   |
+| `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
 
 ### Variables
 
@@ -1565,7 +1609,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of Nim. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `nim.cfg`-Datei
+- The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1599,9 +1643,9 @@ style = "yellow"
 symbol = "🎣 "
 ```
 
-## Nix-Shell
+## Nix-shell
 
-Das `nix_shell`-Modul zeigt die nix-shell Umgebung an. Das Modul wird angezeigt, wenn es sich in einer nix-Shell-Umgebung befindet.
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### Optionen
 
@@ -1612,7 +1656,7 @@ Das `nix_shell`-Modul zeigt die nix-shell Umgebung an. Das Modul wird angezeigt,
 | `style`      | `"bold blue"`                                  | Stil für dieses Modul.                                |
 | `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
 | `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
-| `disabled`   | `false`                                        | Deaktiviert das `nix_shell`-Modul.                    |
+| `disabled`   | `false`                                        | Disables the `nix_shell` module.                      |
 
 ### Variables
 
@@ -1639,11 +1683,11 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-Das `nodejs`-Modul zeigt die aktuell installierte Version von NodeJS. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `nodejs` module shows the currently installed version of NodeJS. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `package.json`-Datei
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
-- Das aktuelle Verzeichnis enthält ein `node_modules`-Verzeichnis
+- The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts` extension
 
@@ -1654,7 +1698,7 @@ Das `nodejs`-Modul zeigt die aktuell installierte Version von NodeJS. Das Modul 
 | `format`            | `"via [$symbol$version]($style) "` | The format for the module.                                                                            |
 | `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                    |
 | `style`             | `"bold green"`                     | Stil für dieses Modul.                                                                                |
-| `disabled`          | `false`                            | Deaktiviert das `nodejs`-Modul.                                                                       |
+| `disabled`          | `false`                            | Disables the `nodejs` module.                                                                         |
 | `not_capable_style` | `bold red`                         | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ###  Variables
@@ -1721,7 +1765,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 ### Optionen
 
-| Option     | Standartwert                                        | Beschreibung                                                   |
+| Option     | Standardwert                                        | Beschreibung                                                   |
 | ---------- | --------------------------------------------------- | -------------------------------------------------------------- |
 | `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | The format for the module.                                     |
 | `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
@@ -1750,13 +1794,13 @@ style = "bold yellow"
 symbol = "☁️ "
 ```
 
-## Paketversion
+## Package Version
 
-Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository für ein Paket ist, und zeigt dessen aktuelle Version an. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
-- **npm** – Die `npm` Paketversion wird aus dem `package.json` gelesen, das sich im aktuellen Verzeichnis befindet
-- **Cargo** – Die `Cargo` Paketversion wird aus dem `Cargo.toml` gelesen, das sich im aktuellen Verzeichnis befindet
-- **poetry** – Die `poetry` Paketversion wird aus der `pyproject.toml` gelesen, das sich im aktuellen Verzeichnis befindet
+- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
+- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
 - **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 - **julia** - The package version is extracted from the `Project.toml` present
@@ -1769,13 +1813,13 @@ Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository
 
 ### Optionen
 
-| Option            | Standardwert                       | Beschreibung                                              |
-| ----------------- | ---------------------------------- | --------------------------------------------------------- |
-| `format`          | `"via [$symbol$version]($style) "` | The format for the module.                                |
-| `symbol`          | `"📦 "`                             | Symbol das vor der Paketversion angezeigt wird.           |
-| `style`           | `"bold 208"`                       | Stil für dieses Modul.                                    |
-| `display_private` | `false`                            | Enable displaying version for packages marked as private. |
-| `disabled`        | `false`                            | Deaktiviert das `package`-Modul.                          |
+| Option            | Standardwert                       | Beschreibung                                               |
+| ----------------- | ---------------------------------- | ---------------------------------------------------------- |
+| `format`          | `"via [$symbol$version]($style) "` | The format for the module.                                 |
+| `symbol`          | `"📦 "`                             | The symbol used before displaying the version the package. |
+| `style`           | `"bold 208"`                       | Stil für dieses Modul.                                     |
+| `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`                            | Disables the `package` module.                             |
 
 ### Variables
 
@@ -1834,20 +1878,20 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-Das `php`-Modul zeigt die aktuell installierte Version von PHP. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `php` module shows the currently installed version of PHP. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `composer.json`-Datei
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
-- Das aktuelle Verzeichnis enthält eine `.php`-Datei
+- The current directory contains a `.php` file
 
 ### Optionen
 
-| Option     | Standardwert                       | Beschreibung                                   |
-| ---------- | ---------------------------------- | ---------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                     |
-| `symbol`   | `"🐘 "`                             | Symbol das vor der PHP-Version angezeigt wird. |
-| `style`    | `"147 bold"`                       | Stil für dieses Modul.                         |
-| `disabled` | `false`                            | Deaktiviert das `php`-Modul.                   |
+| Option     | Standardwert                       | Beschreibung                                          |
+| ---------- | ---------------------------------- | ----------------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                            |
+| `symbol`   | `"🐘 "`                             | The symbol used before displaying the version of PHP. |
+| `style`    | `"147 bold"`                       | Stil für dieses Modul.                                |
+| `disabled` | `false`                            | Disables the `php` module.                            |
 
 ### Variables
 
@@ -1872,7 +1916,7 @@ format = "via [🔹 $version](147 bold) "
 
 The `purescript` module shows the currently installed version of PureScript version. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `spago.dhall`-Datei
+- The current directory contains a `spago.dhall` file
 - The current directory contains a \*.purs files
 
 ### Optionen
@@ -1911,15 +1955,15 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `.python-version`-Datei
-- Das aktuelle Verzeichnis enthält eine `requirements.txt`-Datei
-- Das aktuelle Verzeichnis enthält eine `pyproject.toml`-Datei
+- The current directory contains a `.python-version` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `pyproject.toml` file
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
-- Das aktuelle Verzeichnis enthält eine `Pipfile`-Datei
-- Das aktuelle Verzeichnis enthält eine `tox.ini`-Datei
-- Das aktuelle Verzeichnis enthält eine `setup.py`-Datei
+- The current directory contains a `Pipfile` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a `setup.py` file
 - The current directory contains a `__init__.py` file
-- Ein virtualenv ist momentan aktiv
+- A virtual environment is currently activated
 
 ### Optionen
 
@@ -1928,11 +1972,11 @@ Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 | `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | The format for the module.                                                             |
 | `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                                      |
 | `style`              | `"yellow bold"`                                                           | Stil für dieses Modul.                                                                 |
-| `pyenv_version_name` | `false`                                                                   | Verwende `pyenv` um die Python-Versionzu beziehen.                                     |
+| `pyenv_version_name` | `false`                                                                   | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used                        |
 | `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.             |
 | `python_binary`      | `["python", "python3, "python2"]`                                         | Configures the python binaries that Starship should executes when getting the version. |
-| `disabled`           | `false`                                                                   | Deaktiviert das `python`-Modul.                                                        |
+| `disabled`           | `false`                                                                   | Disables the `python` module.                                                          |
 
 ::: Tipp
 
@@ -1975,9 +2019,9 @@ python_binary = "python3"
 
 The `ruby` module shows the currently installed version of Ruby. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `Gemfile`-Datei
+- The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
-- Das aktuelle Verzeichnis enthält eine `.rb`-Datei
+- The current directory contains a `.rb` file
 
 ### Optionen
 
@@ -1986,7 +2030,7 @@ The `ruby` module shows the currently installed version of Ruby. Das Modul wird 
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
 | `symbol`   | `"💎 "`                             | A format string representing the symbol of Ruby. |
 | `style`    | `"bold red"`                       | Stil für dieses Modul.                           |
-| `disabled` | `false`                            | Deaktiviert das `ruby`-Modul.                    |
+| `disabled` | `false`                            | Disables the `ruby` module.                      |
 
 ### Variables
 
@@ -2011,8 +2055,8 @@ symbol = "🔺 "
 
 The `rust` module shows the currently installed version of Rust. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `Cargo.toml`-Datei
-- Das aktuelle Verzeichnis enthält eine Datei mit der `.rs`-Erweiterung
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### Optionen
 
@@ -2021,7 +2065,7 @@ The `rust` module shows the currently installed version of Rust. Das Modul wird 
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
 | `symbol`   | `"🦀 "`                             | A format string representing the symbol of Rust |
 | `style`    | `"bold red"`                       | Stil für dieses Modul.                          |
-| `disabled` | `false`                            | Deaktiviert das `rust`-Modul.                   |
+| `disabled` | `false`                            | Disables the `rust` module.                     |
 
 ### Variables
 
@@ -2116,7 +2160,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: Tipp
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren. :::
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. :::
 
 ### Optionen
 
@@ -2190,7 +2234,7 @@ format = "via [🏎  $version](red bold)"
 
 The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Das aktuelle Verzeichnis enthält eine `.terraform`-Datei
+- The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` or `.hcl` extensions
 
 ### Optionen
@@ -2200,7 +2244,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 | `format`   | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
 | `symbol`   | `"💠 "`                               | A format string shown before the terraform workspace. |
 | `style`    | `"bold 105"`                         | Stil für dieses Modul.                                |
-| `disabled` | `false`                              | Deaktiviert das `terraform` Modul.                    |
+| `disabled` | `false`                              | Disables the `terraform` module.                      |
 
 ### Variables
 
@@ -2239,21 +2283,21 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: Tipp
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
 ### Optionen
 
-| Option            | Standardwert            | Beschreibung                                                                                                                         |
-| ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                    |
-| `use_12hr`        | `false`                 | Aktiviert 12-Stunden-Format                                                                                                          |
-| `time_format`     | siehe unten             | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html).        |
-| `style`           | `"bold yellow"`         | Stil für dieses Modul                                                                                                                |
-| `utc_time_offset` | `"local"`               | Verwendetes Zeitzonen-Offset. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Deaktiviert das `time`-Modul.                                                                                                        |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                |
+| Option            | Standardwert            | Beschreibung                                                                                                                       |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
+| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
+| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
 If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
@@ -2261,7 +2305,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Beispiel   | Beschreibung                        |
 | --------- | ---------- | ----------------------------------- |
-| zeit      | `13:08:10` | The current time.                   |
+| time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 \*: This variable can only be used as a part of a style string
@@ -2283,22 +2327,22 @@ time_range = "10:00:00-14:00:00"
 
 The `username` module shows active user's username. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- Der aktuelle Benutzer ist root
-- Der aktuelle Benutzer ist nicht der eingeloggte Benutzer
-- Der Benutzer ist aktuell via SSH verbunden
-- Die Variable `show_always` ist auf true gesetzt
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: tip SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value. :::
 
 ### Optionen
 
-| Option        | Standardwert            | Beschreibung                                   |
-| ------------- | ----------------------- | ---------------------------------------------- |
-| `style_root`  | `"bold red"`            | Stil wenn der Benutzer unter root läuft.       |
-| `style_user`  | `"bold yellow"`         | Stil wenn der Benutzer nicht unter root läuft. |
-| `format`      | `"[$user]($style) in "` | The format for the module.                     |
-| `show_always` | `false`                 | Immer das `username` Modul anzeigen.           |
-| `disabled`    | `false`                 | Deavktiviert das `username` Modul.             |
+| Option        | Standardwert            | Beschreibung                          |
+| ------------- | ----------------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`            | The style used when the user is root. |
+| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
+| `format`      | `"[$user]($style) in "` | The format for the module.            |
+| `show_always` | `false`                 | Always shows the `username` module.   |
+| `disabled`    | `false`                 | Disables the `username` module.       |
 
 ### Variables
 
@@ -2385,19 +2429,19 @@ The order in which custom modules are shown can be individually set by including
 
 ### Optionen
 
-| Option         | Standardwert                  | Beschreibung                                                                                                               |
-| -------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`      |                               | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
-| `when`         |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`        |                               | [See below](#custom-command-shell)                                                                                         |
-| `beschreibung` | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
-| `files`        | `[]`                          | The files that will be searched in the working directory for a match.                                                      |
-| `directories`  | `[]`                          | The directories that will be searched in the working directory for a match.                                                |
-| `extensions`   | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
-| `symbol`       | `""`                          | The symbol used before displaying the command output.                                                                      |
-| `style`        | `"bold green"`                | Stil für dieses Modul.                                                                                                     |
-| `format`       | `"[$symbol$output]($style) "` | The format for the module.                                                                                                 |
-| `disabled`     | `false`                       | Disables this `custom` module.                                                                                             |
+| Option        | Standardwert                  | Beschreibung                                                                                                               |
+| ------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                               | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
+| `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                               | [See below](#custom-command-shell)                                                                                         |
+| `description` | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
+| `files`       | `[]`                          | The files that will be searched in the working directory for a match.                                                      |
+| `directories` | `[]`                          | The directories that will be searched in the working directory for a match.                                                |
+| `extensions`  | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
+| `symbol`      | `""`                          | The symbol used before displaying the command output.                                                                      |
+| `style`       | `"bold green"`                | Stil für dieses Modul.                                                                                                     |
+| `format`      | `"[$symbol$output]($style) "` | The format for the module.                                                                                                 |
+| `disabled`    | `false`                       | Disables this `custom` module.                                                                                             |
 
 ### Variables
 
