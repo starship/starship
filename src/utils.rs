@@ -89,6 +89,14 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("julia version 1.4.0\n"),
             stderr: String::default(),
         }),
+        "kotlin -version" => Some(CommandOutput {
+            stdout: String::from("Kotlin version 1.4.21-release-411 (JRE 14.0.1+7)\n"),
+            stderr: String::default(),
+        }),
+        "kotlinc -version" => Some(CommandOutput {
+            stdout: String::from("info: kotlinc-jvm 1.4.21 (JRE 14.0.1+7)\n"),
+            stderr: String::default(),
+        }),
         "lua -v" => Some(CommandOutput{
             stdout: String::from("Lua 5.4.0  Copyright (C) 1994-2020 Lua.org, PUC-Rio\n"),
             stderr: String::default(),
