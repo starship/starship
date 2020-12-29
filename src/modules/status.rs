@@ -3,7 +3,7 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::status::StatusConfig;
 use crate::formatter::StringFormatter;
 
-type ExitCode = u32;
+type ExitCode = i64;
 type SignalNumber = u32;
 
 /// Creates a module with the status of the last command
@@ -34,7 +34,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
         let common_meaning = status_common_meaning(exit_code_int);
 
-        let raw_signal_number = status_to_signal(exit_code_int);
+        let raw_signal_number = match config.recognize_signal_code {
+            true => status_to_signal(exit_code_int),
+            false => None,
+        };
         let signal_number = raw_signal_number.map(|sn| sn.to_string());
         let signal_number_name = raw_signal_number
             .map(|sn| status_signal_name(sn).or_else(|| signal_number.as_deref()))
@@ -53,8 +56,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     "symbol" => match exit_code_int {
                         126 if config.map_symbol => Some(config.not_executable_symbol),
                         127 if config.map_symbol => Some(config.not_found_symbol),
-                        130 if config.map_symbol => Some(config.sigint_symbol),
-                        x if x > 128 && x < 256 && config.map_symbol => Some(config.signal_symbol),
+                        130 if config.recognize_signal_code && config.map_symbol => {
+                            Some(config.sigint_symbol)
+                        }
+                        x if x > 128
+                            && x < 256
+                            && config.recognize_signal_code
+                            && config.map_symbol =>
+                        {
+                            Some(config.signal_symbol)
+                        }
                         _ => Some(config.symbol),
                     },
                     _ => None,
@@ -105,7 +116,7 @@ fn status_to_signal(ex: ExitCode) -> Option<SignalNumber> {
         return None;
     }
     let sn = ex - 128;
-    Some(sn)
+    Some(sn as u32)
 }
 
 fn status_signal_name(signal: SignalNumber) -> Option<&'static str> {
@@ -230,9 +241,48 @@ mod tests {
     }
 
     #[test]
+    fn exit_code_name_no_signal() -> io::Result<()> {
+        let exit_values = [1, 2, 126, 127, 130, 101, 132];
+        let exit_values_name = [
+            Some("ERROR"),
+            Some("USAGE"),
+            Some("NOPERM"),
+            Some("NOTFOUND"),
+            None,
+            None,
+            None,
+        ];
+
+        for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
+            let expected = name.map(|n| n.to_string());
+            let actual = ModuleRenderer::new("status")
+                .config(toml::toml! {
+                    [status]
+                    format = "$status_common_meaning$status_signal_name"
+                    recognize_signal_code = false
+                    disabled = false
+                })
+                .status(*status)
+                .collect();
+            assert_eq!(expected, actual);
+        }
+
+        Ok(())
+    }
+
+    #[test]
     fn maybe_exit_code_number() -> io::Result<()> {
-        let exit_values = [1, 2, 126, 127, 130, 101, 6];
-        let exit_values_name = [None, None, None, None, None, Some("101"), Some("6")];
+        let exit_values = [1, 2, 126, 127, 130, 101, 6, -3];
+        let exit_values_name = [
+            None,
+            None,
+            None,
+            None,
+            None,
+            Some("101"),
+            Some("6"),
+            Some("-3"),
+        ];
 
         for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
             let expected = name.map(|n| n.to_string());
@@ -266,6 +316,35 @@ mod tests {
                     not_found_symbol = "🔍"
                     sigint_symbol = "🧱"
                     signal_symbol = "⚡"
+                    recognize_signal_code = true
+                    map_symbol = true
+                    disabled = false
+                })
+                .status(*status)
+                .collect();
+            assert_eq!(expected, actual);
+        }
+
+        Ok(())
+    }
+
+    #[test]
+    fn special_symbols_no_signals() -> io::Result<()> {
+        let exit_values = [1, 126, 127, 130, 131];
+        let exit_values_name = ["🔴", "🚫", "🔍", "🔴", "🔴"];
+
+        for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
+            let expected = Some(name.to_string());
+            let actual = ModuleRenderer::new("status")
+                .config(toml::toml! {
+                    [status]
+                    format = "$symbol"
+                    symbol = "🔴"
+                    not_executable_symbol = "🚫"
+                    not_found_symbol = "🔍"
+                    sigint_symbol = "🧱"
+                    signal_symbol = "⚡"
+                    recognize_signal_code = false
                     map_symbol = true
                     disabled = false
                 })

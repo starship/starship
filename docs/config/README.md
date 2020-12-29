@@ -2217,6 +2217,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `sigint_symbol`           | `"🧱"`                       | The symbol displayed on SIGINT (Ctrl + c)              |
 | `signal_symbol`           | `"⚡"`                       | The symbol displayed on any signal |
 | `style`                   | `"bold red"`                | The style for the module.                              |
+| `recognize_signal_code`   | `true`                      | Enable signal mapping from exit code                   |
 | `map_symbol`              | `false`                     | Enable symbols mapping from exit code                  |
 | `disabled`                | `true`                      | Disables the `status` module.                          |
 
