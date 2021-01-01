@@ -18,11 +18,6 @@
 [aws]
 symbol = " "
 
-[battery]
-full_symbol = ""
-charging_symbol = ""
-discharging_symbol = ""
-
 [conda]
 symbol = " "
 
