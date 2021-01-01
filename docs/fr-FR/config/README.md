@@ -305,24 +305,15 @@ Le module `battery` montre à quel point la batterie de l'appareil est chargée 
 
 | Option               | Default                           | Description                                         |
 | -------------------- | --------------------------------- | --------------------------------------------------- |
-| `full_symbol`        | `"•"`                             | Le symbole affiché lorsque la batterie est pleine.  |
-| `charging_symbol`    | `"⇡"`                             | Le symbole affiché lorsque la batterie se charge.   |
-| `discharging_symbol` | `"⇣"`                             | Le symbole affiché lorsque la batterie se décharge. |
+| `full_symbol`        | `""`                             | Le symbole affiché lorsque la batterie est pleine.  |
+| `charging_symbol`    | `""`                             | Le symbole affiché lorsque la batterie se charge.   |
+| `discharging_symbol` | `""`                             | Le symbole affiché lorsque la batterie se décharge. |
+| `unknown_symbol`     | `""`                             | The symbol shown when the battery state is unknown. |
+| `empty_symbol`       | `""`                             | The symbol shown when the battery state is empty.   |
 | `format`             | `"[$symbol$percentage]($style) "` | Format du module.                                   |
-| `display`            | [lien](#battery-display)          | Affiche le seuil et le style du module.             |
-| `disabled`           | `false`                           | Désactive le module `battery`.                      |
+| `display`            | [lien](#battery-display)          | Display threshold and style for the module.         |
+| `disabled`           | `false`                           | Disables the `battery` module.                      |
 
-<details>
-<summary>Il existe aussi des options pour des états de batterie peu communs.</summary>
-
-| Variable         | Description                                                   |
-| ---------------- | ------------------------------------------------------------- |
-| `unknown_symbol` | Le symbole affiché lorsque l'état de la batterie est inconnu. |
-| `empty_symbol`   | Le symbole affiché lorsque la batterie est vide.              |
-
-Remarque : L'indicateur de batterie sera masqué si le statut est `unknown` ou `empty` sauf si vous spécifiez l'option dans la configuration.
-
-</details>
 
 ### Exemple
 
@@ -337,7 +328,7 @@ discharging_symbol = "💀"
 
 ### Indicateur de batterie
 
-L'option de configuration `display` est utilisée pour définir quand l'indicateur de batterie doit être affiché (seuil) et à quoi il ressemble (style). Si aucun `display` n'est fourni. La valeur par défaut est la suivante :
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. La valeur par défaut est la suivante :
 
 ```toml
 [[battery.display]]
@@ -347,12 +338,12 @@ style = "bold red"
 
 #### Options
 
-L'option `display` est une array de la table suivante.
+The `display` option is an array of the following table.
 
-| Option      | Description                                        |
-| ----------- | -------------------------------------------------- |
-| `threshold` | La limite supérieure pour l'option d'affichage.    |
-| `style`     | Le style de l'option display si elle est utilisée. |
+| Option      | Description                                     |
+| ----------- | ----------------------------------------------- |
+| `threshold` | The upper bound for the display option.         |
+| `style`     | The style used if the display option is in use. |
 
 #### Exemple
 
@@ -371,30 +362,30 @@ style = "bold yellow"
 
 ## Caractères
 
-Le module `character` affiche un caractère (habituellement une flèche) à côté de l'endroit où le texte est entré dans votre terminal.
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-Le caractère vous dira si la dernière commande a été réussie ou pas. Cela peut être fait de deux manières:
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - changement de couleur (`red`/`green`)
 - changement de forme (`❯`/`✖`)
 
-Par défaut, il ne change que la couleur. Si vous voulez également changer sa forme, jetez un œil à [cet exemple](#with-custom-error-shape).
+By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
 
 ### Options
 
-| Option           | Default             | Description                                                                   |
-| ---------------- | ------------------- | ----------------------------------------------------------------------------- |
-| `format`         | `"$symbol "`        | Le format utilisée avant l'entrée de texte.                                   |
-| `success_symbol` | `"[❯](bold green)"` | Le format utilisé avant l'entrée de texte si la commande précédente a réussi. |
-| `error_symbol`   | `"[❯](bold red)"`   | Le format utilisé avant l'entrée de texte si la commande précédente a échoué. |
-| `vicmd_symbol`   | `"[❮](bold green)"` | Le format utilisé avant l'entrée de texte si le shell est en mode vim normal. |
-| `disabled`       | `false`             | Désactive le module `character`.                                              |
+| Option           | Défaut              | Description                                                                      |
+| ---------------- | ------------------- | -------------------------------------------------------------------------------- |
+| `format`         | `"$symbol "`        | The format string used before the text input.                                    |
+| `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
+| `error_symbol`   | `"[❯](bold red)"`   | The format string used before the text input if the previous command failed.     |
+| `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
+| `disabled`       | `false`             | Disables the `character` module.                                                 |
 
 ### Variables
 
-| Variable | Exemple | Description                                                     |
-| -------- | ------- | --------------------------------------------------------------- |
-| symbol   |         | Reflète sois `success_symbol`, `error_symbol` ou `vicmd_symbol` |
+| Variable | Exemple | Description                                                           |
+| -------- | ------- | --------------------------------------------------------------------- |
+| symbol   |         | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
 
 ### Exemples
 
@@ -429,25 +420,25 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-Le module `cmake` affiche la version actuellement installée de CMake si l'une des conditions suivantes est remplie :
+The `cmake` module shows the currently installed version of CMake if any of the following conditions are met:
 
 - Le répertoire actuel contient un fichier `CMakeLists.txt`
 - Le répertoire actuel contient un fichier ` CMakeCache.txt`
 
 ### Options
 
-| Option     | Default                            | Description                                   |
-| ---------- | ---------------------------------- | --------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Format du module.                             |
-| `symbol`   | `"喝 "`                             | Le symbole utilisé avant la version de cmake. |
-| `style`    | `"bold blue"`                      | Le style du module.                           |
-| `disabled` | `false`                            | Désactive le module `cmake`.                  |
+| Option     | Défaut                             | Description                                  |
+| ---------- | ---------------------------------- | -------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | Format du module.                            |
+| `symbol`   | `"喝 "`                             | The symbol used before the version of cmake. |
+| `style`    | `"bold blue"`                      | Le style du module.                          |
+| `disabled` | `false`                            | Disables the `cmake` module.                 |
 
 ### Variables
 
 | Variable  | Exemple   | Description                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v3.17.3` | La version de cmake                    |
+| version   | `v3.17.3` | The version of cmake                   |
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
@@ -455,27 +446,27 @@ Le module `cmake` affiche la version actuellement installée de CMake si l'une d
 
 ## Temps d'exécution
 
-Le module `cmd_duration` montre le temps qu'a pris la dernière commande a pris pour s'exécuter. Le module ne sera affiché que si la commande a pris plus de deux secondes, ou si la valeur de configuration `min_time` existe.
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: attention, n'accrochez pas la trappe DEBUG en Bash
+::: warning Do not hook the DEBUG trap in Bash
 
-Si vous utilisez starship en `bash`, n'accrochez pas `DEBUG` après avoir exécuté `eval $(starship init $0)`, ou ce module **cassera**.
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-Les utilisateurs de Bash qui ont besoin de fonctionnalité pré-exec peuvent utiliser [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Définissez simplement les array `preexec_functions` et `precmd_functions` avant d'éxécuter `eval $(starship init $0)`, puis procédez comme d'habitude.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Option               | Default                       | Description                                                            |
-| -------------------- | ----------------------------- | ---------------------------------------------------------------------- |
-| `min_time`           | `2_000`                       | Durée la plus courte quand afficher le temps (en millisecondes).       |
-| `show_milliseconds`  | `false`                       | Afficher les millisecondes en plus des secondes pendant la durée.      |
-| `format`             | `"took [$duration]($style) "` | Format du module.                                                      |
-| `style`              | `"bold yellow"`               | Le style du module.                                                    |
-| `disabled`           | `false`                       | Désactive le module `cmd_duration`.                                    |
-| `show_notifications` | `false`                       | Afficher les notifications du bureau lorsque la commande est terminée. |
-| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).                  |
+| Option               | Défaut                        | Description                                                |
+| -------------------- | ----------------------------- | ---------------------------------------------------------- |
+| `min_time`           | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds`  | `false`                       | Show milliseconds in addition to seconds for the duration. |
+| `format`             | `"took [$duration]($style) "` | Format du module.                                          |
+| `style`              | `"bold yellow"`               | Le style du module.                                        |
+| `disabled`           | `false`                       | Disables the `cmd_duration` module.                        |
+| `show_notifications` | `false`                       | Show desktop notifications when command completes.         |
+| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).      |
 
 ::: tip
 
@@ -485,10 +476,10 @@ Showing desktop notifications requires starship to be built with `rust-notify` s
 
 ### Variables
 
-| Variable  | Exemple  | Description                                   |
-| --------- | -------- | --------------------------------------------- |
-| duration  | `16m40s` | Le temps nécessaire pour exécuter la commande |
-| style\* |          | Reflète la valeur de l'option `style`         |
+| Variable  | Exemple  | Description                             |
+| --------- | -------- | --------------------------------------- |
+| duration  | `16m40s` | The time it took to execute the command |
+| style\* |          | Reflète la valeur de l'option `style`   |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
@@ -504,32 +495,32 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-Le module `conda` affiche l'environnement conda actuel, si `$CONDA_DEFAULT_ENV` est défini.
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
-Cela ne supprime pas le modificateur d'invite de conda, vous pouvez exécuter `conda config --set changeps1 False`.
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
 ### Options
 
-| Option              | Default                                | Description                                                                                                                                                                                                                                   |
-| ------------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | Le nombre de répertoires dans lesquels le chemin d'environnement (Path) doit être tronqué, si l'environnement a été créé via `conda create -p [path]`. `0` ne signifie pas de troncature. Regardez aussi le module [`directory`](#directory). |
-| `symbol`            | `"🅒 "`                                 | Le symbole utilisé avant le nom d'environnement.                                                                                                                                                                                              |
-| `style`             | `"bold green"`                         | Le style du module.                                                                                                                                                                                                                           |
-| `format`            | `"via [$symbol$environment]($style) "` | Format du module.                                                                                                                                                                                                                             |
-| `ignore_base`       | `true`                                 | Ignore l'environnement `base` lorsqu'il est activé.                                                                                                                                                                                           |
-| `disabled`          | `false`                                | Désactive le module `conda`.                                                                                                                                                                                                                  |
+| Option              | Défaut                                 | Description                                                                                                                                                                                                 |
+| ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"🅒 "`                                 | The symbol used before the environment name.                                                                                                                                                                |
+| `style`             | `"bold green"`                         | Le style du module.                                                                                                                                                                                         |
+| `format`            | `"via [$symbol$environment]($style) "` | Format du module.                                                                                                                                                                                           |
+| `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
+| `disabled`          | `false`                                | Disables the `conda` module.                                                                                                                                                                                |
 
 ### Variables
 
-| Variable      | Exemple      | Description                            |
-| ------------- | ------------ | -------------------------------------- |
-| environnement | `astronauts` | La version courante de conda           |
-| symbol        |              | Reflète la valeur de l'option `symbol` |
-| style\*     |              | Reflète la valeur de l'option `style`  |
+| Variable    | Exemple      | Description                            |
+| ----------- | ------------ | -------------------------------------- |
+| environment | `astronauts` | The current conda environment          |
+| symbol      |              | Reflète la valeur de l'option `symbol` |
+| style\*   |              | Reflète la valeur de l'option `style`  |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
@@ -544,26 +535,26 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-Le module `crystal` affiche la version actuellement installée de Crystal. Le module est affiché si l'une des ces conditions est remplie :
+The `crystal` module shows the currently installed version of Crystal. Le module est affiché si l'une des ces conditions est remplie :
 
 - Le répertoire courant contient un fichier `shard.yml`
 - Le répertoire courant contient un fichier `.cr`
 
 ### Options
 
-| Option     | Default                            | Description                                                |
-| ---------- | ---------------------------------- | ---------------------------------------------------------- |
-| `symbol`   | `"🔮 "`                             | Le symbole utilisé avant d'afficher la version de crystal. |
-| `style`    | `"bold green"`                     | Le style du module.                                        |
-| `format`   | `"via [$symbol$version]($style) "` | Format du module.                                          |
-| `disabled` | `false`                            | Désactive le module `crystal`.                             |
+| Option     | Défaut                             | Description                                               |
+| ---------- | ---------------------------------- | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`                             | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"`                       | Le style du module.                                       |
+| `format`   | `"via [$symbol$version]($style) "` | Format du module.                                         |
+| `disabled` | `false`                            | Disables the `crystal` module.                            |
 
 ### Variables
 
 | Variable  | Exemple   | Description                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v0.32.1` | La version de `cristal`                |
-| symbole   |           | Reflète la valeur de l'option `symbol` |
+| version   | `v0.32.1` | The version of `crystal`               |
+| symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
@@ -579,7 +570,7 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-Le module `crystal` affiche la version courante installée de Dart. Le module est affiché si l'une des ces conditions est remplie :
+The `dart` module shows the currently installed version of Dart. Le module est affiché si l'une des ces conditions est remplie :
 
 - Le répertoire courant contient un fichier `.dart`
 - Le répertoire courant contient un répertoire `.dart_tool`
@@ -587,18 +578,18 @@ Le module `crystal` affiche la version courante installée de Dart. Le module es
 
 ### Options
 
-| Option     | Défaut                             | Description                                              |
-| ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Format du module.                                        |
-| `symbol`   | `"🎯 "`                             | Une chaîne de caractères représentant le symbole de Dart |
-| `style`    | `"bold blue"`                      | Le style du module.                                      |
-| `disabled` | `false`                            | Désactive le module `dart`.                              |
+| Option     | Défaut                             | Description                                     |
+| ---------- | ---------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol$version]($style) "` | Format du module.                               |
+| `symbol`   | `"🎯 "`                             | A format string representing the symbol of Dart |
+| `style`    | `"bold blue"`                      | Le style du module.                             |
+| `disabled` | `false`                            | Disables the `dart` module.                     |
 
 ### Variables
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v2.8.4` | La version de `dart`                   |
+| version   | `v2.8.4` | The version of `dart`                  |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
@@ -615,33 +606,33 @@ format = "via [🔰 $version](bold red) "
 
 ## Dossier
 
-Le mode `directory` montre le chemin de votre dossier actuel, tronqué au 3 dossiers parents. Votre répertoire sera également tronqué à la racine du repo git dans lequel vous vous trouvez actuellement.
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
-Quand vous utilisez le style pwd de fish, au lieu de cacher le chemin qui est troqué, vous verrez un nom raccourcis de chaque dossiers basés sur le nombre établi pour l'option.
+When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-Par exemple, donné `~/Dev/Nix/nixpkgs/pkgs` où `nixpkgs` est la racine du repo, et l'option définie à `1`. Vous verrez maintenant `~/D/N/nixpkgs/pkgs`, alors que vous auriez vu `nixpkgs/pkgs` avant.
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
 ### Options
 
-| Option              | Défaut                                             | Description                                                                           |
-| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | Le nombre de dossiers parents selon lesquels le répertoire courant doit être tronqué. |
-| `truncate_to_repo`  | `true`                                             | Si oui ou non tronquer à la racine du repo git dans lequel vous vous trouvez.         |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format du module.                                                                     |
-| `style`             | `"bold cyan"`                                      | Le style du module.                                                                   |
-| `disabled`          | `false`                                            | Désactive le module `directory`.                                                      |
-| `read_only`         | `"🔒"`                                              | Le symbole indiquant que le répertoire courant est en lecture seule.                  |
-| `read_only_style`   | `"red"`                                            | Le style du symbole en lecture seule.                                                 |
-| `truncation_symbol` | `""`                                               | Le symbole en préfixe aux chemins tronqués. eg: "…/"                                  |
+| Option              | Défaut                                             | Description                                                                      |
+| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
+| `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format du module.                                                                |
+| `style`             | `"bold cyan"`                                      | Le style du module.                                                              |
+| `disabled`          | `false`                                            | Disables the `directory` module.                                                 |
+| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                            |
+| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
+| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
 
 <details>
-<summary>Ce module possède quelques options de configuration avancées qui contrôlent l'affichage du répertoire.</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Options avancées            | Default | Description                                                                              |
-| --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
-| `substitutions`             |         | Table de substitutions à faire au chemin.                                                |
-| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
-| `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+| Advanced Option             | Défaut | Description                                                                              |
+| --------------------------- | ------ | ---------------------------------------------------------------------------------------- |
+| `substitutions`             |        | A table of substitutions to be made to the path.                                         |
+| `fish_style_pwd_dir_length` | `0`    | The number of characters to use when applying fish shell pwd path logic.                 |
+| `use_logical_path`          | `true` | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
 
@@ -659,7 +650,7 @@ Par exemple, donné `~/Dev/Nix/nixpkgs/pkgs` où `nixpkgs` est la racine du repo
 
 | Variable  | Exemple               | Description                           |
 | --------- | --------------------- | ------------------------------------- |
-| path      | `"D:/Projects"`       | Le chemin du répertoire courant       |
+| path      | `"D:/Projects"`       | The current directory path            |
 | style\* | `"black bold dimmed"` | Reflète la valeur de l'option `style` |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
@@ -680,13 +671,13 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Options
 
-| Option            | Default                            | Description                                                                             |
+| Option            | Défaut                             | Description                                                                             |
 | ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
 | `format`          | `"via [$symbol$context]($style) "` | Format du module.                                                                       |
 | `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                   |
 | `style`           | `"blue bold"`                      | Le style du module.                                                                     |
 | `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
-| `disabled`        | `true`                             | Désactive le module `docker_context`.                                                   |
+| `disabled`        | `true`                             | Disables the `docker_context` module.                                                   |
 
 ### Variables
 
@@ -731,19 +722,19 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Options
 
-| Option      | Default                                 | Description                                              |
+| Option      | Défaut                                  | Description                                              |
 | ----------- | --------------------------------------- | -------------------------------------------------------- |
 | `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "` | Format du module.                                        |
 | `symbol`    | `"•NET "`                               | The symbol used before displaying the version of dotnet. |
 | `heuristic` | `true`                                  | Use faster version detection to keep starship snappy.    |
 | `style`     | `"bold blue"`                           | Le style du module.                                      |
-| `disabled`  | `false`                                 | Désactive le module `dotnet`.                            |
+| `disabled`  | `false`                                 | Disables the `dotnet` module.                            |
 
 ### Variables
 
 | Variable  | Exemple          | Description                                                        |
 | --------- | ---------------- | ------------------------------------------------------------------ |
-| version   | `v3.1.201`       | La version du sdk `dotnet`                                         |
+| version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
 | symbol    |                  | Reflète la valeur de l'option `symbol`                             |
 | style\* |                  | Reflète la valeur de l'option `style`                              |
@@ -769,7 +760,7 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 ### Options
 
-| Option     | Default                                                   | Description                                                     |
+| Option     | Défaut                                                    | Description                                                     |
 | ---------- | --------------------------------------------------------- | --------------------------------------------------------------- |
 | `symbol`   | `"💧 "`                                                    | The symbol used before displaying the version of Elixir/Erlang. |
 | `style`    | `"bold purple"`                                           | Le style du module.                                             |
@@ -808,7 +799,7 @@ The `elm` module shows the currently installed version of Elm. Le module est aff
 
 ### Options
 
-| Option     | Default                            | Description                                     |
+| Option     | Défaut                             | Description                                     |
 | ---------- | ---------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | Format du module.                               |
 | `symbol`   | `"🌳 "`                             | A format string representing the symbol of Elm. |
@@ -843,11 +834,11 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Options
 
-| Option     | Default                        | Description                                                                  |
+| Option     | Défaut                         | Description                                                                  |
 | ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
 | `symbol`   |                                | The symbol used before displaying the variable value.                        |
 | `variable` |                                | The environment variable to be displayed.                                    |
-| `défaut`   |                                | The default value to be displayed when the selected variable is not defined. |
+| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
 | `format`   | `"with [$env_value]($style) "` | Format du module.                                                            |
 | `disabled` | `false`                        | Disables the `env_var` module.                                               |
 
@@ -880,10 +871,10 @@ The `erlang` module shows the currently installed version of Erlang/OTP. Le modu
 
 ### Options
 
-| Option     | Default                            | Description                                              |
+| Option     | Défaut                             | Description                                              |
 | ---------- | ---------------------------------- | -------------------------------------------------------- |
 | `symbol`   | `" "`                             | The symbol used before displaying the version of erlang. |
-| `style`    | `"bold green"`                     | Le style du module.                                      |
+| `style`    | `"bold red"`                       | Le style du module.                                      |
 | `format`   | `"via [$symbol$version]($style) "` | Format du module.                                        |
 | `disabled` | `false`                            | Disables the `erlang` module.                            |
 
@@ -912,7 +903,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### Options
 
-| Option           | Default                                          | Description                                                     |
+| Option           | Défaut                                           | Description                                                     |
 | ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
 | `format`         | `'on [$symbol$account(\($region\))]($style) '` | Format du module.                                               |
 | `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current GCP profile.      |
@@ -927,7 +918,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | region    | `us-central1`     | The current GCP region                                             |
 | account   | `foo@example.com` | The current GCP profile                                            |
 | project   |                   | The current GCP project                                            |
-| active    | `défaut`          | The active config name written in `~/.config/gcloud/active_config` |
+| active    | `default`         | The active config name written in `~/.config/gcloud/active_config` |
 | symbol    |                   | Reflète la valeur de l'option `symbol`                             |
 | style\* |                   | Reflète la valeur de l'option `style`                              |
 
@@ -972,7 +963,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Options
 
-| Option               | Default                          | Description                                                                              |
+| Option               | Défaut                           | Description                                                                              |
 | -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
 | `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
 | `format`             | `"on [$symbol$branch]($style) "` | Format du module. Use `"$branch"` to refer to the current branch name.                   |
@@ -1012,7 +1003,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Options
 
-| Option               | Default                                                | Description                                           |
+| Option               | Défaut                                                 | Description                                           |
 | -------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
 | `commit_hash_length` | `7`                                                    | The length of the displayed git commit hash.          |
 | `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | Format du module.                                     |
@@ -1100,7 +1091,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `staged`     | `"+"`                                           | The format of `staged`              |
 | `renamed`    | `"»"`                                           | The format of `renamed`             |
 | `deleted`    | `"✘"`                                           | The format of `deleted`             |
-| `style`      | `"bold green"`                                  | Le style du module.                 |
+| `style`      | `"bold red"`                                    | Le style du module.                 |
 | `disabled`   | `false`                                         | Disables the `git_status` module.   |
 
 ### Variables
@@ -1179,7 +1170,7 @@ The `golang` module shows the currently installed version of Golang. Le module e
 
 ### Options
 
-| Option     | Default                            | Description                                    |
+| Option     | Défaut                             | Description                                    |
 | ---------- | ---------------------------------- | ---------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | Format du module.                              |
 | `symbol`   | `"🐹 "`                             | A format string representing the symbol of Go. |
@@ -1214,7 +1205,7 @@ The `helm` module shows the currently installed version of Helm. Le module est a
 
 ### Options
 
-| Option     | Default                            | Description                                      |
+| Option     | Défaut                             | Description                                      |
 | ---------- | ---------------------------------- | ------------------------------------------------ |
 | `format`   | `"via [$symbol$version]($style) "` | Format du module.                                |
 | `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
@@ -1246,7 +1237,7 @@ The `hostname` module shows the system hostname.
 
 ### Options
 
-| Option     | Default                     | Description                                                                                                                          |
+| Option     | Défaut                      | Description                                                                                                                          |
 | ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
 | `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
@@ -1284,7 +1275,7 @@ The `java` module shows the currently installed version of Java. Le module est a
 
 ### Options
 
-| Option     | Default                                | Description                                     |
+| Option     | Défaut                                 | Description                                     |
 | ---------- | -------------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [${symbol}${version}]($style) "` | Format du module.                               |
 | `symbol`   | `"☕ "`                                 | A format string representing the symbol of Java |
@@ -1316,7 +1307,7 @@ The `jobs` module shows the current number of jobs running. The module will be s
 
 ### Options
 
-| Option      | Default                       | Description                                      |
+| Option      | Défaut                        | Description                                      |
 | ----------- | ----------------------------- | ------------------------------------------------ |
 | `threshold` | `1`                           | Show number of jobs if exceeded.                 |
 | `format`    | `"[$symbol$number]($style) "` | Format du module.                                |
@@ -1354,7 +1345,7 @@ The `julia` module shows the currently installed version of Julia. Le module est
 
 ### Options
 
-| Option     | Default                            | Description                                       |
+| Option     | Défaut                             | Description                                       |
 | ---------- | ---------------------------------- | ------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | Format du module.                                 |
 | `symbol`   | `"ஃ "`                             | A format string representing the symbol of Julia. |
@@ -1495,7 +1486,7 @@ The `lua` module shows the currently installed version of Lua. Le module est aff
 
 ### Options
 
-| Option       | Default                            | Description                                                                |
+| Option       | Défaut                             | Description                                                                |
 | ------------ | ---------------------------------- | -------------------------------------------------------------------------- |
 | `format`     | `"via [$symbol$version]($style) "` | Format du module.                                                          |
 | `symbol`     | `"🌙 "`                             | A format string representing the symbol of Lua.                            |
@@ -1536,7 +1527,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Option      | Default                                       | Description                                              |
+| Option      | Défaut                                        | Description                                              |
 | ----------- | --------------------------------------------- | -------------------------------------------------------- |
 | `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
 | `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | Format du module.                                        |
@@ -1575,7 +1566,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 
 ### Options
 
-| Option              | Default                          | Description                                                                                  |
+| Option              | Défaut                           | Description                                                                                  |
 | ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `style`             | `"bold purple"`                  | Le style du module.                                                                          |
@@ -1616,7 +1607,7 @@ The `nim` module shows the currently installed version of Nim. Le module est aff
 
 ### Options
 
-| Option     | Default                            | Description                                           |
+| Option     | Défaut                             | Description                                           |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module                             |
 | `symbol`   | `"👑 "`                             | The symbol used before displaying the version of Nim. |
@@ -1649,7 +1640,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 
 ### Options
 
-| Option       | Default                                        | Description                                           |
+| Option       | Défaut                                         | Description                                           |
 | ------------ | ---------------------------------------------- | ----------------------------------------------------- |
 | `format`     | `'via [$symbol$state( \($name\))]($style) '` | Format du module.                                     |
 | `symbol`     | `"❄️ "`                                        | A format string representing the symbol of nix-shell. |
@@ -1693,7 +1684,7 @@ The `nodejs` module shows the currently installed version of NodeJS. Le module e
 
 ### Options
 
-| Option              | Default                            | Description                                                                                           |
+| Option              | Défaut                             | Description                                                                                           |
 | ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol$version]($style) "` | Format du module.                                                                                     |
 | `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                    |
@@ -1733,7 +1724,7 @@ The `ocaml` module shows the currently installed version of OCaml. Le module est
 
 ### Options
 
-| Option     | Default                            | Description                                             |
+| Option     | Défaut                             | Description                                             |
 | ---------- | ---------------------------------- | ------------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                       |
 | `symbol`   | `"🐫 "`                             | The symbol used before displaying the version of OCaml. |
@@ -2029,7 +2020,7 @@ The `ruby` module shows the currently installed version of Ruby. Le module est a
 | ---------- | ---------------------------------- | ------------------------------------------------ |
 | `format`   | `"via [$symbol$version]($style) "` | Format du module.                                |
 | `symbol`   | `"💎 "`                             | A format string representing the symbol of Ruby. |
-| `style`    | `"bold green"`                     | Le style du module.                              |
+| `style`    | `"bold red"`                       | Le style du module.                              |
 | `disabled` | `false`                            | Disables the `ruby` module.                      |
 
 ### Variables
@@ -2064,7 +2055,7 @@ The `rust` module shows the currently installed version of Rust. Le module est a
 | ---------- | ---------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | Format du module.                               |
 | `symbol`   | `"🦀 "`                             | A format string representing the symbol of Rust |
-| `style`    | `"bold green"`                     | Le style du module.                             |
+| `style`    | `"bold red"`                       | Le style du module.                             |
 | `disabled` | `false`                            | Disables the `rust` module.                     |
 
 ### Variables
@@ -2168,7 +2159,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | ---------- | -------------------------- | ------------------------------------------------------ |
 | `format`   | `[$symbol$status]($style)` | The format of the module                               |
 | `symbol`   | `"✖"`                      | A format string representing the symbol for the status |
-| `style`    | `"bold green"`             | Le style du module.                                    |
+| `style`    | `"bold red"`               | Le style du module.                                    |
 | `disabled` | `true`                     | Disables the `status` module.                          |
 
 ### Variables
@@ -2251,7 +2242,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 | Variable  | Exemple    | Description                            |
 | --------- | ---------- | -------------------------------------- |
 | version   | `v0.12.24` | The version of `terraform`             |
-| workspace | `défaut`   | The current terraform workspace        |
+| workspace | `default`  | The current terraform workspace        |
 | symbol    |            | Reflète la valeur de l'option `symbol` |
 | style\* |            | Reflète la valeur de l'option `style`  |
 
@@ -2338,7 +2329,7 @@ The `username` module shows active user's username. Le module est affiché si l'
 
 | Option        | Défaut                  | Description                           |
 | ------------- | ----------------------- | ------------------------------------- |
-| `style_root`  | `"bold green"`          | The style used when the user is root. |
+| `style_root`  | `"bold red"`            | The style used when the user is root. |
 | `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
 | `format`      | `"[$user]($style) in "` | Format du module.                     |
 | `show_always` | `false`                 | Always shows the `username` module.   |
