@@ -18,11 +18,6 @@ This preset doesn't change anything except for the symbols used for each module.
 [aws]
 symbol = " "
 
-[battery]
-full_symbol = ""
-charging_symbol = ""
-discharging_symbol = ""
-
 [conda]
 symbol = " "
 
