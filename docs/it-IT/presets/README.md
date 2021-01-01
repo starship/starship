@@ -18,11 +18,6 @@ Questo preset non cambia nulla tranne i simboli utilizzati per ogni modulo. Se g
 [aws]
 symbol = " "
 
-[battery]
-full_symbol = ""
-charging_symbol = ""
-discharging_symbol = ""
-
 [conda]
 symbol = " "
 
