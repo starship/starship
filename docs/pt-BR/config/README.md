@@ -303,26 +303,17 @@ The `battery` module shows how charged the device's battery is and its current c
 
 ### Opções
 
-| Option               | Padrão                            | Descrição                                         |
-| -------------------- | --------------------------------- | ------------------------------------------------- |
-| `full_symbol`        | `"•"`                             | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`                             | The symbol shown when the battery is charging.    |
-| `discharging_symbol` | `"⇣"`                             | The symbol shown when the battery is discharging. |
-| `format`             | `"[$symbol$percentage]($style) "` | The format for the module.                        |
-| `display`            | [link](#battery-display)          | Display threshold and style for the module.       |
-| `disabled`           | `false`                           | Disables the `battery` module.                    |
+| Option               | Padrão                            | Descrição                                           |
+| -------------------- | --------------------------------- | --------------------------------------------------- |
+| `full_symbol`        | `""`                             | The symbol shown when the battery is full.          |
+| `charging_symbol`    | `""`                             | The symbol shown when the battery is charging.      |
+| `discharging_symbol` | `""`                             | The symbol shown when the battery is discharging.   |
+| `unknown_symbol`     | `""`                             | The symbol shown when the battery state is unknown. |
+| `empty_symbol`       | `""`                             | The symbol shown when the battery state is empty.   |
+| `format`             | `"[$symbol$percentage]($style) "` | The format for the module.                          |
+| `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
+| `disabled`           | `false`                           | Disables the `battery` module.                      |
 
-<details>
-<summary>There are also options for some uncommon battery states.</summary>
-
-| Variável         | Descrição                                           |
-| ---------------- | --------------------------------------------------- |
-| `unknown_symbol` | The symbol shown when the battery state is unknown. |
-| `empty_symbol`   | The symbol shown when the battery state is empty.   |
-
-Note: Battery indicator will be hidden if the status is `unknown` or `empty` unless you specify the option in the config.
-
-</details>
 
 ### Exemplo
 
@@ -388,7 +379,7 @@ By default it only changes color. If you also want to change it's shape take a l
 | `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
 | `error_symbol`   | `"[❯](bold red)"`   | The format string used before the text input if the previous command failed.     |
 | `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
-| `disabled`       | `false`             | Desabilita o módulo `character`.                                                 |
+| `disabled`       | `false`             | Disables the `character` module.                                                 |
 
 ### Variables
 
@@ -457,7 +448,7 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning Não utilize o DEBUG-trap no Bash
+::: warning Do not hook the DEBUG trap in Bash
 
 If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
