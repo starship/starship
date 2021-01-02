@@ -1,3 +1,3 @@
-fn main() -> shadow_rs::SdResult<()>{
+fn main() -> shadow_rs::SdResult<()> {
     shadow_rs::new()
 }
