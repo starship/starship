@@ -1,4 +1,9 @@
-use clap::{crate_authors, crate_version};
+#[macro_use]
+extern crate shadow_rs;
+
+shadow!(shadow);
+
+use clap::crate_authors;
 use std::io;
 use std::time::SystemTime;
 
@@ -61,10 +66,12 @@ fn main() {
         .long("print-full-init")
         .help("Print the main initialization script (as opposed to the init stub)");
 
+    let version = shadow::version();
+
     let mut app = App::new("starship")
         .about("The cross-shell prompt for astronauts. ☄🌌️")
         // pull the version number from Cargo.toml
-        .version(crate_version!())
+        .version(version.as_str())
         // pull the authors from Cargo.toml
         .author(crate_authors!())
         .after_help("https://github.com/starship/starship")
