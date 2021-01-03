@@ -39,28 +39,32 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target:
-          - x86_64-unknown-linux-gnu
-          - x86_64-unknown-linux-musl
-          - i686-unknown-linux-musl
-          - x86_64-apple-darwin
-          - x86_64-pc-windows-msvc
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
             name: starship-x86_64-unknown-linux-gnu.tar.gz
+            flags: "--features tls-vendored"
+
           - target: x86_64-unknown-linux-musl
             os: ubuntu-latest
             name: starship-x86_64-unknown-linux-musl.tar.gz
+            flags: "--features tls-vendored"
+
           - target: i686-unknown-linux-musl
             os: ubuntu-latest
             name: starship-i686-unknown-linux-musl.tar.gz
+            flags: "--features tls-vendored"
+
           - target: x86_64-apple-darwin
             os: macOS-latest
             name: starship-x86_64-apple-darwin.tar.gz
+            flags: ""
+
           - target: x86_64-pc-windows-msvc
             os: windows-latest
             name: starship-x86_64-pc-windows-msvc.zip
+            flags: ""
+
     runs-on: ${{ matrix.os }}
     steps:
       - name: Setup | Checkout
@@ -83,27 +87,14 @@ jobs:
           profile: minimal
           target: ${{ matrix.target }}
 
-      - name: Setup | musl tools
-        if: contains(matrix.target, 'musl')
-        run: sudo apt install -y musl-tools
-
       - name: Build | Build
-        if: "! contains(matrix.target, 'musl')"
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release --target ${{ matrix.target }}
+          args: --release ${{ matrix.flags }} --target ${{ matrix.target }}
           use-cross: true
 
-      - name: Build | Build [musl]
-        if: contains(matrix.target, 'musl')
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release --features tls-vendored --target ${{ matrix.target }}
-          use-cross: true
-
-      - name: Post Setup | Prepare artifacts [Windows]
+      - name: Post Build | Prepare artifacts [Windows]
         if: matrix.os == 'windows-latest'
         run: |
           cd target/${{ matrix.target }}/release
@@ -111,7 +102,7 @@ jobs:
           7z a ../../../${{ matrix.name }} starship.exe
           cd -
 
-      - name: Post Setup | Prepare artifacts [-nix]
+      - name: Post Build | Prepare artifacts [-nix]
         if: matrix.os != 'windows-latest'
         run: |
           cd target/${{ matrix.target }}/release
@@ -119,7 +110,7 @@ jobs:
           tar czvf ../../../${{ matrix.name }} starship
           cd -
 
-      - name: Post Setup | Upload artifacts
+      - name: Deploy | Upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.name }}
@@ -159,6 +150,7 @@ jobs:
           body_path: RELEASE.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   aur_release:
     runs-on: ubuntu-latest
     name: Create AUR release
