@@ -20,7 +20,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if config.only_with_files
         && !context
             .try_begin_scan()?
-            .set_files(&["docker-compose.yml", "Dockerfile"])
+            .set_files(&["docker-compose.yml", "docker-compose.yaml", "Dockerfile"])
             .is_match()
     {
         return None;
