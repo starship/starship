@@ -79,13 +79,15 @@
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
       alt="简体中文" /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/es"
+  <a 
+    href="https://github.com/starship/starship/blob/master/docs/es-ES/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png"
       alt="Espagnol" /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/fr"
+  <a 
+    href="https://github.com/starship/starship/blob/master/docs/fr-FR/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
@@ -100,9 +102,7 @@
   width="50%"
   align="right" />
 
-
 **L'invite minimaliste, ultra-rapide et personnalisable à l'infini pour n'importe quel shell !**
-
 
 - **Rapide** : il est rapide - _vraiment vraiment_ rapide ! 🚀
 - **Personnalisable:** configurer chaque élément de votre invite.
@@ -199,7 +199,7 @@
 
    #### PowerShell
 
-    Ajoutez ce qui suit à la fin de `Microsoft.PowerShell_profile.ps1`. Vous pouvez vérifier l'emplacement de ce fichier en regardant la variable `$PROFILE` dans PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Ajoutez ce qui suit à la fin de `Microsoft.PowerShell_profile.ps1`. Vous pouvez vérifier l'emplacement de ce fichier en regardant la variable `$PROFILE` dans PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -219,6 +219,8 @@
 ## 🤝Contribution
 
 Nous sommes toujours à la recherche de contributeurs de **tous niveaux de compétence**! Si vous cherchez à faciliter votre entrée dans le projet, essayez un [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
 Si vous êtes intéressé pour aider et contribuer à Starship, veuillez jeter un coup d'œil à notre [Guide de contribution](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Aussi, n'hésitez pas à vous rendre sur notre [serveur Discord](https://discord.gg/8Jzqu3T) pour dire bonjour. 👋
 
@@ -252,7 +254,7 @@ Soutenez ce projet avec votre organisation. Votre logo apparaîtra ici avec un l
 
 ## 💭Inspiré par
 
-Jetez un œil aux précédents projets qui ont inspiré la création de starship. 🙏
+Voyez ces travaux précédents qui ont contribué à inspirer la création de vaisseau. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Un invite de commandes ZSH pour les astronautes.
 
