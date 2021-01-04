@@ -1891,7 +1891,7 @@ package, and shows its current version. The module currently supports `npm`, `ca
 
 | Option            | Default                            | Description                                                |
 | ----------------- | ---------------------------------- | ---------------------------------------------------------- |
-| `format`          | `"via [$symbol$version]($style) "` | The format for the module.                                 |
+| `format`          | `"is [$symbol$version]($style) "`  | The format for the module.                                 |
 | `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
 | `style`           | `"bold 208"`                       | The style for the module.                                  |
 | `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
