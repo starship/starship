@@ -231,7 +231,7 @@ Questi progetto esiste grazie a tutte le persone che contribuiscono. [[Contribut
 
 ### Contributori Finanziari
 
-Diventa un contributore finanziario e aiutaci a sostenere la nostra comunità. [[Contribute](https://opencollective.com/starship/contribute)]
+Diventa un contributore finanziario e aiutaci a sostenere la nostra comunità. [[Contribuisci](https://opencollective.com/starship/contribute)]
 
 #### Privati
 
