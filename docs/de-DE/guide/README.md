@@ -102,7 +102,7 @@
   width="50%"
   align="right" />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**Minimale, super schnelle und unendlich anpassbare Prompt für jede Shell!**
 
 - **Fast:** it's fast – _really really_ fast! 🚀
 - **Customizable:** configure every aspect of your prompt.
@@ -231,7 +231,7 @@ Das Projekt existiert dank aller der, die Mitwirken. [[Mitmachen](https://github
 
 ### Finanzielle Unterstützung
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+Become a financial contributor and help us sustain our community. [[Mitmachen](https://opencollective.com/starship/contribute)]
 
 #### Individuals
 
@@ -239,7 +239,7 @@ Become a financial contributor and help us sustain our community. [[Contribute](
 
 #### Organisationen
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+Support this project with your organization. Your logo will show up here with a link to your website. [[Mitmachen](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
