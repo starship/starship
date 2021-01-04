@@ -2151,7 +2151,9 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. :::
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. 
+
+:::
 
 ### 配置项
 
