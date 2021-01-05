@@ -125,6 +125,8 @@
 
 ### 开始安装
 
+**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+
 1. 安装 **starship** 二进制文件：
 
 
@@ -138,17 +140,10 @@
    ```
 
 
-   ##### 直接从 [crates.io](https://crates.io/) 获取源代码编译：
-
-   ```sh
-   cargo install starship
-   ```
-
-
    #### 通过软件包管理器安装
 
 
-   ##### 使用 [Homebrew](https://brew.sh/)
+   ##### Example: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -161,7 +156,7 @@
    scoop install starship
    ```
 
-1. 将初始化脚本添加到您的 shell 的配置文件：
+2. 将初始化脚本添加到您的 shell 的配置文件：
 
 
    #### Bash
@@ -218,20 +213,20 @@
 
 ## 🤝 贡献
 
-我们一直在寻找贡献者！你都可以参与贡献 **不论你的技能如何**。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
 If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-如果您有兴趣贡献于 Starship，请查看我们的[贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 另外，你可以自由加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 。 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ### 代码贡献者
 
-这个项目的存在要感谢所有贡献者。 [[贡献说明](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)]
+This project exists thanks to all the people who contribute. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
 ### 项目资助者
 
-成为项目资助者，并帮助我们维持我们的社区。 [[成为项目资助者](https://opencollective.com/starship/contribute)]
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
 
 #### 资助人
 
@@ -239,7 +234,7 @@ If you are fluent in a non-English language, we greatly appreciate any help keep
 
 #### 资助组织
 
-与您的组织一起支持该项目。 您的组织的徽标将显示在此处，并带有指向您的组织的网站的链接。 [[成为项目资助者](https://opencollective.com/starship/contribute)]
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -254,7 +249,7 @@ If you are fluent in a non-English language, we greatly appreciate any help keep
 
 ## 💭该项目受以下项目启发
 
-请参考这些曾经为 Starship 提供启发的工程。 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
 
