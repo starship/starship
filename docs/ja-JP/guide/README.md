@@ -125,6 +125,8 @@
 
 ### 入門
 
+**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+
 1. **Starship** のバイナリをインストール
 
 
@@ -138,17 +140,10 @@
    ```
 
 
-   ##### [crates.io](https://crates.io/)からソースをインストール
-
-   ```sh
-   cargo install starship
-   ```
-
-
    #### パッケージマネージャー経由でインストール
 
 
-   ##### [ Homebrew ](https://brew.sh/)の場合：
+   ##### Example: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -161,7 +156,7 @@
    scoop install starship
    ```
 
-1. 初期化のためのスクリプトをシェルの設定ファイルに追加
+2. 初期化のためのスクリプトをシェルの設定ファイルに追加
 
 
    #### Bash
@@ -218,20 +213,20 @@
 
 ## 🤝 貢献
 
-私たちは常に**すべてのスキルレベル**の貢献者を探しています！ もし簡単にプロジェクトへ参加する方法をお探しなら、 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) に取り組んでみてください。
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
 If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-もしあなたが Starship への貢献に興味がある場合は、我々の[貢献ガイド](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)をご覧ください。 また、気軽に我々の[Discord サーバー](https://discord.gg/8Jzqu3T)へ顔を出してください。 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ### コードに貢献していただいた方々
 
-このプロジェクトは、貢献したすべての人々のおかげで存在します。 [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
+This project exists thanks to all the people who contribute. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
 ### 財政的な貢献をしていただいた方々
 
-財政的な貢献者になって、私たちのコミュニティを維持するのを助けていただけると嬉しいです。 [[Contribute](https://opencollective.com/starship/contribute)]
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
 
 #### 個人
 
@@ -239,7 +234,7 @@ If you are fluent in a non-English language, we greatly appreciate any help keep
 
 #### 組織
 
-あなたの組織でこのプロジェクトをサポートします。 あなたのロゴはあなたのウェブサイトへのリンクとここに表示されます。 [[Contribute](https://opencollective.com/starship/contribute)]
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -254,7 +249,7 @@ If you are fluent in a non-English language, we greatly appreciate any help keep
 
 ## 💭影響を受けたプロダクト
 
-よければStarship の作成に影響を与えた、これまでのプロジェクトをチェックしてください 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - 宇宙飛行士のための ZSH プロンプト。
 
@@ -269,4 +264,4 @@ If you are fluent in a non-English language, we greatly appreciate any help keep
 
 ## 📝 ライセンス
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> このプロジェクトは [ISC](https://github.com/starship/starship/blob/master/LICENSE) でライセンスされています。
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
