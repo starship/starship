@@ -967,9 +967,9 @@ dependencies = [
 
 [[package]]
 name = "rand"
-version = "0.8.0"
+version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a76330fb486679b4ace3670f117bbc9e16204005c4bde9c4bd372f45bed34f12"
+checksum = "c24fcd450d3fa2b592732565aa4f17a27a61c65ece4726353e000939b0edee34"
 dependencies = [
  "libc",
  "rand_chacha 0.3.0",
@@ -1273,7 +1273,7 @@ dependencies = [
  "pest",
  "pest_derive",
  "quick-xml",
- "rand 0.8.0",
+ "rand 0.8.1",
  "rayon",
  "regex",
  "rust-ini",
