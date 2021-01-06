@@ -178,11 +178,24 @@ Any tests that depend on File I/O should use [`sync_all()`](https://doc.rust-lan
 
 Any tests that use `tempfile::tempdir` should take care to call `dir.close()` after usage to ensure the lifecycle of the directory can be reasoned about. This includes `fixture_repo()` as it returns a TempDir that should be closed.
 
-## Running the Documentation Website Locally
+## Documentation
 
-If you are contributing to the design of Starship's website, the following section will help you get started.
+### Crowdin Translated Pages
 
-### Setup
+Many documentation pages have versions in non-English languages. These
+translated pages are managed by
+[Crowdin](https://crowdin.com/project/starship-prompt). Please do not edit
+these pages directly, even for changes that do not need to be translated (e.g.
+whitespace or emoji changes), since this can cause merges to fail.
+
+If you would like to contribute translations or corrections to the Crowdin
+generated pages, please visit our Crowdin site.
+
+### Running the Documentation Website Locally
+
+Changes to documentation can be viewed in a rendered state from the GitHub PR page
+(go to the CI section at the bottom of the page and look for "deploy preview", then
+click on "details"). If you want to view changes locally as well, follow these steps.
 
 After cloning the project, you can do the following to run the VuePress website on your local machine:
 

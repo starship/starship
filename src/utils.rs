@@ -2,6 +2,7 @@ use std::fs::File;
 use std::io::{Read, Result};
 use std::path::Path;
 use std::process::Command;
+use std::time::Instant;
 
 use crate::context::Shell;
 
@@ -86,6 +87,14 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
         }),
         "julia --version" => Some(CommandOutput {
             stdout: String::from("julia version 1.4.0\n"),
+            stderr: String::default(),
+        }),
+        "kotlin -version" => Some(CommandOutput {
+            stdout: String::from("Kotlin version 1.4.21-release-411 (JRE 14.0.1+7)\n"),
+            stderr: String::default(),
+        }),
+        "kotlinc -version" => Some(CommandOutput {
+            stdout: String::from("info: kotlinc-jvm 1.4.21 (JRE 14.0.1+7)\n"),
             stderr: String::default(),
         }),
         "lua -v" => Some(CommandOutput{
@@ -243,14 +252,31 @@ pub fn wrap_seq_for_shell(
 
 fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
     log::trace!("Executing command {:?} with args {:?}", cmd, args);
-    match Command::new(cmd).args(args).output() {
+
+    let full_path = match which::which(cmd) {
+        Ok(full_path) => {
+            log::trace!("Using {:?} as {:?}", full_path, cmd);
+            full_path
+        }
+        Err(e) => {
+            log::trace!("Unable to find {:?} in PATH, {:?}", cmd, e);
+            return None;
+        }
+    };
+
+    let start = Instant::now();
+    match Command::new(full_path).args(args).output() {
         Ok(output) => {
             let stdout_string = String::from_utf8(output.stdout).unwrap();
             let stderr_string = String::from_utf8(output.stderr).unwrap();
 
-            log::trace!("stdout: {:?}", stdout_string);
-            log::trace!("stderr: {:?}", stderr_string);
-            log::trace!("exit code: \"{:?}\"", output.status.code());
+            log::trace!(
+                "stdout: {:?}, stderr: {:?}, exit code: \"{:?}\", took {:?}",
+                stdout_string,
+                stderr_string,
+                output.status.code(),
+                start.elapsed()
+            );
 
             if !output.status.success() {
                 return None;

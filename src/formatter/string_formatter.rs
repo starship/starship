@@ -621,8 +621,10 @@ mod tests {
     #[test]
     fn test_variable_holder() {
         const FORMAT_STR: &str = "($a [($b) $c](none $s)) $d [t]($t)";
-        let expected_variables =
-            BTreeSet::from_iter(vec!["a", "b", "c", "d"].into_iter().map(String::from));
+        let expected_variables = vec!["a", "b", "c", "d"]
+            .into_iter()
+            .map(String::from)
+            .collect();
 
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
         let variables = formatter.get_variables();
@@ -632,7 +634,7 @@ mod tests {
     #[test]
     fn test_style_variable_holder() {
         const FORMAT_STR: &str = "($a [($b) $c](none $s)) $d [t]($t)";
-        let expected_variables = BTreeSet::from_iter(vec!["s", "t"].into_iter().map(String::from));
+        let expected_variables = vec!["s", "t"].into_iter().map(String::from).collect();
 
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
         let variables = formatter.get_style_variables();

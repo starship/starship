@@ -18,16 +18,14 @@ Este ajuste predeterminado no modifica nada excepto los símbolos usados para ca
 [aws]
 symbol = " "
 
-[battery]
-full_symbol = ""
-charging_symbol = ""
-discharging_symbol = ""
-
 [conda]
 symbol = " "
 
 [dart]
 symbol = " "
+
+[directory]
+read_only = " "
 
 [docker]
 symbol = " "

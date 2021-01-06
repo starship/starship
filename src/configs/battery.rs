@@ -7,8 +7,8 @@ pub struct BatteryConfig<'a> {
     pub full_symbol: &'a str,
     pub charging_symbol: &'a str,
     pub discharging_symbol: &'a str,
-    pub unknown_symbol: Option<&'a str>,
-    pub empty_symbol: Option<&'a str>,
+    pub unknown_symbol: &'a str,
+    pub empty_symbol: &'a str,
     pub display: Vec<BatteryDisplayConfig<'a>>,
     pub disabled: bool,
     pub format: &'a str,
@@ -17,11 +17,11 @@ pub struct BatteryConfig<'a> {
 impl<'a> RootModuleConfig<'a> for BatteryConfig<'a> {
     fn new() -> Self {
         BatteryConfig {
-            full_symbol: "•",
-            charging_symbol: "↑",
-            discharging_symbol: "↓",
-            unknown_symbol: None,
-            empty_symbol: None,
+            full_symbol: "",
+            charging_symbol: "",
+            discharging_symbol: "",
+            unknown_symbol: "",
+            empty_symbol: "",
             format: "[$symbol$percentage]($style) ",
             display: vec![BatteryDisplayConfig {
                 threshold: 10,

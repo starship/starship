@@ -18,16 +18,14 @@ Cette configuration ne modifie rien sauf les symboles utilisés pour chaque modu
 [aws]
 symbol = " "
 
-[battery]
-full_symbol = ""
-charging_symbol = ""
-discharging_symbol = ""
-
 [conda]
 symbol = " "
 
 [dart]
 symbol = " "
+
+[directory]
+read_only = " "
 
 [docker]
 symbol = " "

@@ -12,7 +12,7 @@
 
 ## How do I get command completion as shown in the demo GIF?
 
-Completion support is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
 ## Do top level `format` and `<module>.disabled` do the same thing?
 
@@ -21,7 +21,7 @@ Ja, beide können benutzt werden, um Module in der Prompt zu deaktivieren. Wenn 
 - Disabling modules is more explicit than omitting them from the top level `format`
 - Mit der Aktualisierung von Starship werden neu erstellte Module an die Eingabezeile angefügt
 
-## Laut Dokumentation ist Starship cross-shell, aber es läuft nicht auf shell X. Warum?
+## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
 
 Starship ist auf so eine Weise gebaut, das die Unterstützung so gut wie jeder Shell möglch sein sollte. Die Starship Binärdatei läuft völlig unabhängig von der Shell, und sollte auf jeder benutzt werden können, die eine Anpassung des Stils erlaubt.
 
