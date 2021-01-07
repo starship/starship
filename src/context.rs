@@ -74,10 +74,19 @@ impl<'a> Context<'a> {
             .map(|(a, b)| (*a, b.vals.first().cloned().unwrap().into_string().unwrap()))
             .collect();
 
-        // TODO: Currently gets the physical directory. Get the logical directory.
-        let current_dir = Context::expand_tilde(dir.into());
-
         let shell = Context::get_shell();
+
+        // TODO: Currently gets the physical directory. Get the logical directory.
+        let mut current_dir = Context::expand_tilde(dir.into());
+
+        // Handle Powershell prepending "Microsoft.PowerShell.Core\FileSystem::" to some paths
+        if shell == Shell::PowerShell {
+            if let Ok(no_prefix) =
+                current_dir.strip_prefix(r"Microsoft.PowerShell.Core\FileSystem::")
+            {
+                current_dir = PathBuf::from(no_prefix);
+            }
+        }
 
         Context {
             config,
@@ -495,5 +504,24 @@ mod tests {
         node.close()?;
 
         Ok(())
+    }
+
+    #[test]
+    fn powershell_prefix_stripping() {
+        use path_slash::PathExt;
+
+        let path_with_prefix = PathBuf::from(r"Microsoft.PowerShell.Core\FileSystem::/path");
+
+        // Test with powershell env variable
+        env::set_var("STARSHIP_SHELL", "powershell");
+        let context = Context::new_with_dir(clap::ArgMatches::default(), path_with_prefix.clone());
+        let actual = context.current_dir.as_path().to_slash().unwrap();
+        assert_eq!(actual, "path");
+
+        // Test with non-powershell env variable
+        env::set_var("STARSHIP_SHELL", "bash");
+        let context = Context::new_with_dir(clap::ArgMatches::default(), path_with_prefix.clone());
+        let actual = context.current_dir.as_path().to_slash().unwrap();
+        assert_eq!(actual, r"Microsoft.PowerShell.Core/FileSystem::/path");
     }
 }

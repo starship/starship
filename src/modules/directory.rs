@@ -13,7 +13,6 @@ use super::{Context, Module};
 use super::utils::directory::truncate;
 use crate::config::RootModuleConfig;
 use crate::configs::directory::DirectoryConfig;
-use crate::context::Shell;
 use crate::formatter::StringFormatter;
 
 const HOME_SYMBOL: &str = "~";
@@ -37,21 +36,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
 
-    let current_dir = &get_current_dir(&context, &config);
-
     let home_dir = dirs_next::home_dir().unwrap();
-    log::debug!("Current directory: {:?}", current_dir);
+    log::debug!("Current directory: {:?}", &context.current_dir);
 
     let repo = &context.get_repo().ok()?;
     let dir_string = match &repo.root {
         Some(repo_root) if config.truncate_to_repo && (repo_root != &home_dir) => {
             log::debug!("Repo root: {:?}", repo_root);
             // Contract the path to the git repo root
-            contract_repo_path(current_dir, repo_root)
-                .unwrap_or_else(|| contract_path(current_dir, &home_dir, HOME_SYMBOL))
+            contract_repo_path(&context.current_dir, repo_root)
+                .unwrap_or_else(|| contract_path(&context.current_dir, &home_dir, HOME_SYMBOL))
         }
         // Contract the path to the home directory
-        _ => contract_path(current_dir, &home_dir, HOME_SYMBOL),
+        _ => contract_path(&context.current_dir, &home_dir, HOME_SYMBOL),
     };
     log::debug!("Dir string: {}", dir_string);
 
@@ -65,7 +62,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         // fish-style path contraction together
         if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
             // If user is using fish style path, we need to add the segment first
-            let contracted_home_dir = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
+            let contracted_home_dir = contract_path(&context.current_dir, &home_dir, HOME_SYMBOL);
             to_fish_style(
                 config.fish_style_pwd_dir_length as usize,
                 contracted_home_dir,
@@ -117,39 +114,6 @@ fn is_truncated(path: &str) -> bool {
     !(path.starts_with(HOME_SYMBOL)
         || PathBuf::from(path).has_root()
         || (cfg!(target_os = "windows") && PathBuf::from(String::from(path) + r"\").has_root()))
-}
-
-fn get_current_dir(context: &Context, config: &DirectoryConfig) -> PathBuf {
-    // Using environment PWD is the standard approach for determining logical path
-    // If this is None for any reason, we fall back to reading the os-provided path
-    let physical_current_dir = if config.use_logical_path {
-        match context.get_env("PWD") {
-            Some(mut x) => {
-                // Prevent Powershell from prepending "Microsoft.PowerShell.Core\FileSystem::" to some paths
-                if cfg!(windows) && context.shell == Shell::PowerShell {
-                    if let Some(no_prefix) =
-                        x.strip_prefix(r"Microsoft.PowerShell.Core\FileSystem::")
-                    {
-                        x = no_prefix.to_string();
-                    }
-                }
-                Some(PathBuf::from(x))
-            }
-            None => {
-                log::debug!("Error getting PWD environment variable!");
-                None
-            }
-        }
-    } else {
-        match std::env::current_dir() {
-            Ok(x) => Some(x),
-            Err(e) => {
-                log::debug!("Error getting physical current directory: {}", e);
-                None
-            }
-        }
-    };
-    physical_current_dir.unwrap_or_else(|| PathBuf::from(&context.current_dir))
 }
 
 fn is_readonly_dir(path: &Path) -> bool {
@@ -435,52 +399,6 @@ mod tests {
             .to_string_lossy()
             .to_string();
         Ok((dir, path))
-    }
-
-    #[test]
-    fn windows_strip_prefix() {
-        let with_prefix = r"Microsoft.PowerShell.Core\FileSystem::/path";
-        let without_prefix = r"/path";
-
-        let actual = ModuleRenderer::new("directory")
-            // use a different physical path here as a sentinel value
-            .path("/")
-            .env("PWD", with_prefix)
-            .shell(Shell::PowerShell)
-            .config(toml::toml! {
-                [directory]
-                format = "$path"
-                truncation_length = 100
-            })
-            .collect()
-            .unwrap();
-        let expected = if cfg!(windows) {
-            without_prefix
-        } else {
-            with_prefix
-        };
-        let expected = Path::new(expected).to_slash().unwrap();
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn windows_strip_prefix_no_pwsh() {
-        let with_prefix = r"Microsoft.PowerShell.Core\FileSystem::/path";
-
-        let actual = ModuleRenderer::new("directory")
-            // use a different physical path here as a sentinel value
-            .path("/")
-            .env("PWD", with_prefix)
-            .shell(Shell::Bash)
-            .config(toml::toml! {
-                [directory]
-                format = "$path"
-                truncation_length = 100
-            })
-            .collect()
-            .unwrap();
-        let expected = Path::new(with_prefix).to_slash().unwrap();
-        assert_eq!(actual, expected);
     }
 
     #[cfg(not(target_os = "windows"))]
