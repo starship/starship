@@ -222,6 +222,7 @@ enum RustupRunRustcVersionOutcome {
 
 #[cfg(test)]
 mod tests {
+    use crate::context::Shell;
     use once_cell::sync::Lazy;
     use std::io;
     use std::process::{ExitStatus, Output};
@@ -339,7 +340,12 @@ mod tests {
         let dir = tempfile::tempdir()?;
         fs::write(dir.path().join("rust-toolchain"), "1.34.0")?;
 
-        let context = Context::new_with_dir(Default::default(), dir.path());
+        let context = Context::new_with_shell_and_path(
+            Default::default(),
+            Shell::Unknown,
+            dir.path().into(),
+            None,
+        );
 
         assert_eq!(
             find_rust_toolchain_file(&context),
@@ -353,7 +359,12 @@ mod tests {
             "[toolchain]\nchannel = \"1.34.0\"",
         )?;
 
-        let context = Context::new_with_dir(Default::default(), dir.path());
+        let context = Context::new_with_shell_and_path(
+            Default::default(),
+            Shell::Unknown,
+            dir.path().into(),
+            None,
+        );
 
         assert_eq!(
             find_rust_toolchain_file(&context),
@@ -367,7 +378,12 @@ mod tests {
             "\n\n[toolchain]\n\n\nchannel = \"1.34.0\"",
         )?;
 
-        let context = Context::new_with_dir(Default::default(), dir.path());
+        let context = Context::new_with_shell_and_path(
+            Default::default(),
+            Shell::Unknown,
+            dir.path().into(),
+            None,
+        );
 
         assert_eq!(
             find_rust_toolchain_file(&context),

@@ -1,5 +1,25 @@
 #!/usr/bin/env pwsh
 
+function Get-Cwd {
+    $cwd = Get-Location
+    $provider_prefix = "$($cwd.Provider.ModuleName)\$($cwd.Provider.Name)::"
+    return @{
+        # Resolve the actual/physical path
+        # NOTE: ProviderPath is only a physical filesystem path for the "FileSystem" provider
+        # E.g. `Dev:\` -> `C:\Users\Joe Bloggs\Dev\`
+        Path = $cwd.ProviderPath;
+        # Resolve the provider-logical path 
+        # NOTE: Attempt to trim any "provider prefix" from the path string.
+        # E.g. `Microsoft.PowerShell.Core\FileSystem::Dev:\` -> `Dev:\`
+        LogicalPath =
+            if ($cwd.Path.StartsWith($provider_prefix)) {
+                $cwd.Path.Substring($provider_prefix.Length)
+            } else {
+                $cwd.Path
+            };
+    }
+}
+
 function global:prompt {
     $origDollarQuestion = $global:?
     $origLastExitCode = $global:LASTEXITCODE
@@ -7,10 +27,7 @@ function global:prompt {
     $out = $null
     # @ makes sure the result is an array even if single or no values are returned
     $jobs = @(Get-Job | Where-Object { $_.State -eq 'Running' }).Count
-
-    $env:PWD = $PWD
-    $current_directory = (Convert-Path -LiteralPath $PWD)
-    
+    $cwd = (Get-Cwd)    
     # Whe start from the premise that the command executed correctly, which covers also the fresh console.
     $lastExitCodeForPrompt = 0
 
@@ -29,9 +46,9 @@ function global:prompt {
 
         $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalMilliseconds)
         # & ensures the path is interpreted as something to execute
-        $out = @(&::STARSHIP:: prompt "--path=$current_directory" --status=$lastExitCodeForPrompt --jobs=$jobs --cmd-duration=$duration)
+        $out = @(&::STARSHIP:: prompt --path=$($cwd.Path) --logical-path=$($cwd.LogicalPath) --status=$lastExitCodeForPrompt --jobs=$jobs --cmd-duration=$duration)
     } else {
-        $out = @(&::STARSHIP:: prompt "--path=$current_directory" --status=$lastExitCodeForPrompt --jobs=$jobs)
+        $out = @(&::STARSHIP:: prompt --path=$($cwd.Path) --logical-path=$($cwd.LogicalPath) --status=$lastExitCodeForPrompt --jobs=$jobs)
     }
     # Restore old output encoding
     [Console]::OutputEncoding = $origOutputEncoding

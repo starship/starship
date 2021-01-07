@@ -28,6 +28,13 @@ fn main() {
         .help("The path that the prompt should render for")
         .takes_value(true);
 
+    let logical_path_arg = Arg::with_name("logical_path")
+        .short("P")
+        .long("logical-path")
+        .value_name("LOGICAL_PATH")
+        .help("The logical/virtual path that the prompt should render for")
+        .takes_value(true);
+
     let shell_arg = Arg::with_name("shell")
 		.value_name("SHELL")
 		.help(
@@ -80,6 +87,7 @@ fn main() {
                 .about("Prints the full starship prompt")
                 .arg(&status_code_arg)
                 .arg(&path_arg)
+                .arg(&logical_path_arg)
                 .arg(&cmd_duration_arg)
                 .arg(&keymap_arg)
                 .arg(&jobs_arg),
@@ -101,6 +109,7 @@ fn main() {
                 )
                 .arg(&status_code_arg)
                 .arg(&path_arg)
+                .arg(&logical_path_arg)
                 .arg(&cmd_duration_arg)
                 .arg(&keymap_arg)
                 .arg(&jobs_arg),

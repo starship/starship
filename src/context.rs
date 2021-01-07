@@ -23,6 +23,10 @@ pub struct Context<'a> {
     /// The current working directory that starship is being called in.
     pub current_dir: PathBuf,
 
+    /// Optional logical_dir is set when the shell's current directory is not a valid file system
+    /// directory. Modules should use current_dir when they expect a valid file system path.
+    pub logical_dir: Option<PathBuf>,
+
     /// A struct containing directory contents in a lookup-optimised format.
     dir_contents: OnceCell<DirContents>,
 
@@ -41,12 +45,16 @@ pub struct Context<'a> {
 
 impl<'a> Context<'a> {
     /// Identify the current working directory and create an instance of Context
-    /// for it.
+    /// for it. "logical-path" is used when a shell allows the "current working directory"
+    /// to be something other than a file system path (like powershell provider specific paths).
     pub fn new(arguments: ArgMatches) -> Context {
-        // Retrieve the "path" flag. If unavailable, use the current directory instead.
+        let shell = Context::get_shell();
+
+        // Retrieve the "path" flag.
+        // If unavailable, use the current directory or PWD env variable instead.
         let path = arguments
             .value_of("path")
-            .map(From::from)
+            .map(PathBuf::from)
             .unwrap_or_else(|| {
                 env::var("PWD").map(PathBuf::from).unwrap_or_else(|err| {
                     log::debug!("Unable to get path from $PWD: {}", err);
@@ -54,14 +62,18 @@ impl<'a> Context<'a> {
                 })
             });
 
-        Context::new_with_dir(arguments, path)
+        let logical_path = arguments.value_of("logical_path").map(PathBuf::from);
+
+        Context::new_with_shell_and_path(arguments, shell, path, logical_path)
     }
 
     /// Create a new instance of Context for the provided directory
-    pub fn new_with_dir<T>(arguments: ArgMatches, dir: T) -> Context
-    where
-        T: Into<PathBuf>,
-    {
+    pub fn new_with_shell_and_path(
+        arguments: ArgMatches,
+        shell: Shell,
+        path: PathBuf,
+        logical_path: Option<PathBuf>,
+    ) -> Context {
         let config = StarshipConfig::initialize();
 
         // Unwrap the clap arguments into a simple hashtable
@@ -74,15 +86,11 @@ impl<'a> Context<'a> {
             .map(|(a, b)| (*a, b.vals.first().cloned().unwrap().into_string().unwrap()))
             .collect();
 
-        // TODO: Currently gets the physical directory. Get the logical directory.
-        let current_dir = Context::expand_tilde(dir.into());
-
-        let shell = Context::get_shell();
-
         Context {
             config,
             properties,
-            current_dir,
+            current_dir: Context::expand_tilde(path),
+            logical_dir: logical_path,
             dir_contents: OnceCell::new(),
             repo: OnceCell::new(),
             shell,

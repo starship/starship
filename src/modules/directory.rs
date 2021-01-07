@@ -13,17 +13,15 @@ use super::{Context, Module};
 use super::utils::directory::truncate;
 use crate::config::RootModuleConfig;
 use crate::configs::directory::DirectoryConfig;
-use crate::context::Shell;
 use crate::formatter::StringFormatter;
 
 const HOME_SYMBOL: &str = "~";
 
-/// Creates a module with the current directory
+/// Creates a module with the current logical or physical directory
 ///
 /// Will perform path contraction, substitution, and truncation.
 ///
 /// **Contraction**
-///
 /// - Paths beginning with the home directory or with a git repo right inside
 ///   the home directory will be contracted to `~`
 /// - Paths containing a git repo will contract to begin at the repo root
@@ -33,43 +31,52 @@ const HOME_SYMBOL: &str = "~";
 ///
 /// **Truncation**
 /// Paths will be limited in length to `3` path components by default.
+///
+/// **Logical vs Physical directory paths**
+/// The `logical_dir` is always displayed in preference over the `physical_dir`, if it is provided.
+/// The "read only" flag is always displayed based on the `physical_dir`.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
 
-    let current_dir = &get_current_dir(&context, &config);
-
     let home_dir = dirs_next::home_dir().unwrap();
-    log::debug!("Current directory: {:?}", current_dir);
+    let physical_dir = &context.current_dir;
+    let logical_dir = context.logical_dir.as_ref().unwrap_or(physical_dir);
 
-    let repo = &context.get_repo().ok()?;
-    let dir_string = match &repo.root {
-        Some(repo_root) if config.truncate_to_repo && (repo_root != &home_dir) => {
-            log::debug!("Repo root: {:?}", repo_root);
-            // Contract the path to the git repo root
-            contract_repo_path(current_dir, repo_root)
-                .unwrap_or_else(|| contract_path(current_dir, &home_dir, HOME_SYMBOL))
-        }
-        // Contract the path to the home directory
-        _ => contract_path(current_dir, &home_dir, HOME_SYMBOL),
+    log::debug!("Home dir: {:?}", &home_dir);
+    log::debug!("Physical dir: {:?}", &physical_dir);
+    log::debug!("Logical dir: {:?}", &logical_dir);
+
+    // Apply repository path or home directory contraction
+    let repo = if config.truncate_to_repo {
+        context.get_repo().ok()
+    } else {
+        None
     };
+    let dir_string = repo
+        .and_then(|r| r.root.as_ref())
+        .filter(|root| *root != &home_dir)
+        .and_then(|root| contract_repo_path(&logical_dir, root))
+        .unwrap_or_else(|| contract_path(&logical_dir, &home_dir, HOME_SYMBOL));
+
     log::debug!("Dir string: {}", dir_string);
 
-    let substituted_dir = substitute_path(dir_string, &config.substitutions);
+    // Apply path substitutions
+    let dir_string = substitute_path(dir_string, &config.substitutions);
 
     // Truncate the dir string to the maximum number of path components
-    let truncated_dir_string = truncate(substituted_dir, config.truncation_length as usize);
+    let dir_string = truncate(dir_string, config.truncation_length as usize);
 
-    let prefix = if is_truncated(&truncated_dir_string) {
+    let prefix = if is_truncated(&dir_string) {
         // Substitutions could have changed the prefix, so don't allow them and
         // fish-style path contraction together
         if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
             // If user is using fish style path, we need to add the segment first
-            let contracted_home_dir = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
+            let contracted_home_dir = contract_path(&physical_dir, &home_dir, HOME_SYMBOL);
             to_fish_style(
                 config.fish_style_pwd_dir_length as usize,
                 contracted_home_dir,
-                &truncated_dir_string,
+                &dir_string,
             )
         } else {
             String::from(config.truncation_symbol)
@@ -78,7 +85,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::from("")
     };
 
-    let displayed_path = prefix + &truncated_dir_string;
+    let displayed_path = prefix + &dir_string;
     let lock_symbol = String::from(config.read_only);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -91,7 +98,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "path" => Some(Ok(&displayed_path)),
                 "read_only" => {
-                    if is_readonly_dir(&context.current_dir) {
+                    if is_readonly_dir(&physical_dir) {
                         Some(Ok(&lock_symbol))
                     } else {
                         None
@@ -117,39 +124,6 @@ fn is_truncated(path: &str) -> bool {
     !(path.starts_with(HOME_SYMBOL)
         || PathBuf::from(path).has_root()
         || (cfg!(target_os = "windows") && PathBuf::from(String::from(path) + r"\").has_root()))
-}
-
-fn get_current_dir(context: &Context, config: &DirectoryConfig) -> PathBuf {
-    // Using environment PWD is the standard approach for determining logical path
-    // If this is None for any reason, we fall back to reading the os-provided path
-    let physical_current_dir = if config.use_logical_path {
-        match context.get_env("PWD") {
-            Some(mut x) => {
-                // Prevent Powershell from prepending "Microsoft.PowerShell.Core\FileSystem::" to some paths
-                if cfg!(windows) && context.shell == Shell::PowerShell {
-                    if let Some(no_prefix) =
-                        x.strip_prefix(r"Microsoft.PowerShell.Core\FileSystem::")
-                    {
-                        x = no_prefix.to_string();
-                    }
-                }
-                Some(PathBuf::from(x))
-            }
-            None => {
-                log::debug!("Error getting PWD environment variable!");
-                None
-            }
-        }
-    } else {
-        match std::env::current_dir() {
-            Ok(x) => Some(x),
-            Err(e) => {
-                log::debug!("Error getting physical current directory: {}", e);
-                None
-            }
-        }
-    };
-    physical_current_dir.unwrap_or_else(|| PathBuf::from(&context.current_dir))
 }
 
 fn is_readonly_dir(path: &Path) -> bool {
@@ -435,52 +409,6 @@ mod tests {
             .to_string_lossy()
             .to_string();
         Ok((dir, path))
-    }
-
-    #[test]
-    fn windows_strip_prefix() {
-        let with_prefix = r"Microsoft.PowerShell.Core\FileSystem::/path";
-        let without_prefix = r"/path";
-
-        let actual = ModuleRenderer::new("directory")
-            // use a different physical path here as a sentinel value
-            .path("/")
-            .env("PWD", with_prefix)
-            .shell(Shell::PowerShell)
-            .config(toml::toml! {
-                [directory]
-                format = "$path"
-                truncation_length = 100
-            })
-            .collect()
-            .unwrap();
-        let expected = if cfg!(windows) {
-            without_prefix
-        } else {
-            with_prefix
-        };
-        let expected = Path::new(expected).to_slash().unwrap();
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn windows_strip_prefix_no_pwsh() {
-        let with_prefix = r"Microsoft.PowerShell.Core\FileSystem::/path";
-
-        let actual = ModuleRenderer::new("directory")
-            // use a different physical path here as a sentinel value
-            .path("/")
-            .env("PWD", with_prefix)
-            .shell(Shell::Bash)
-            .config(toml::toml! {
-                [directory]
-                format = "$path"
-                truncation_length = 100
-            })
-            .collect()
-            .unwrap();
-        let expected = Path::new(with_prefix).to_slash().unwrap();
-        assert_eq!(actual, expected);
     }
 
     #[cfg(not(target_os = "windows"))]
@@ -1426,5 +1354,46 @@ mod tests {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("…\\temp")));
         assert_eq!(expected, actual);
         Ok(())
+    }
+
+    #[test]
+    fn logical_path_overrides_path() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let path = tmp_dir.path().join("src/meters/fuel-gauge");
+        fs::create_dir_all(&path)?;
+        let logical_path = Some("Logical:/fuel-gauge");
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint("Logical:/fuel-gauge")
+        ));
+
+        let actual = ModuleRenderer::new("directory")
+            .path(path)
+            .logical_path(logical_path)
+            .collect();
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn logical_path_defaults_to_path() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let path = tmp_dir.path().join("src/meters/fuel-gauge");
+        fs::create_dir_all(&path)?;
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint("src/meters/fuel-gauge")
+        ));
+
+        let actual = ModuleRenderer::new("directory")
+            .path(path)
+            .logical_path::<PathBuf>(None)
+            .collect();
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
     }
 }
