@@ -21,8 +21,11 @@ pub struct ModuleRenderer<'a> {
 impl<'a> ModuleRenderer<'a> {
     /// Creates a new ModuleRenderer
     pub fn new(name: &'a str) -> Self {
-        let mut context = Context::new_with_dir(clap::ArgMatches::default(), PathBuf::new());
-        context.shell = Shell::Unknown;
+        let mut context = Context::new_with_shell_and_dir(
+            clap::ArgMatches::default(),
+            Shell::Unknown,
+            PathBuf::new(),
+        );
         context.config = StarshipConfig { config: None };
 
         Self { name, context }

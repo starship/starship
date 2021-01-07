@@ -54,11 +54,13 @@ impl<'a> Context<'a> {
                 })
             });
 
-        Context::new_with_dir(arguments, path)
+        let shell = Context::get_shell();
+
+        Context::new_with_shell_and_dir(arguments, shell, path)
     }
 
     /// Create a new instance of Context for the provided directory
-    pub fn new_with_dir<T>(arguments: ArgMatches, dir: T) -> Context
+    pub fn new_with_shell_and_dir<T>(arguments: ArgMatches, shell: Shell, dir: T) -> Context
     where
         T: Into<PathBuf>,
     {
@@ -73,8 +75,6 @@ impl<'a> Context<'a> {
             .filter(|(_, v)| !v.vals.is_empty())
             .map(|(a, b)| (*a, b.vals.first().cloned().unwrap().into_string().unwrap()))
             .collect();
-
-        let shell = Context::get_shell();
 
         // TODO: Currently gets the physical directory. Get the logical directory.
         let mut current_dir = Context::expand_tilde(dir.into());
@@ -511,14 +511,20 @@ mod tests {
     fn powershell_prefix_stripping() {
         let path_with_prefix = PathBuf::from(r"Microsoft.PowerShell.Core\FileSystem::/path");
 
-        // Test with powershell env variable
-        env::set_var("STARSHIP_SHELL", "powershell");
-        let context = Context::new_with_dir(clap::ArgMatches::default(), path_with_prefix.clone());
+        // Powershell
+        let context = Context::new_with_shell_and_dir(
+            clap::ArgMatches::default(),
+            Shell::PowerShell,
+            path_with_prefix.clone(),
+        );
         assert_eq!(context.current_dir, Path::new(r"/path"));
 
-        // Test with non-powershell env variable
-        env::set_var("STARSHIP_SHELL", "bash");
-        let context = Context::new_with_dir(clap::ArgMatches::default(), path_with_prefix);
+        // Other
+        let context = Context::new_with_shell_and_dir(
+            clap::ArgMatches::default(),
+            Shell::Unknown,
+            path_with_prefix,
+        );
         assert_eq!(
             context.current_dir,
             Path::new(r"Microsoft.PowerShell.Core\FileSystem::/path")
